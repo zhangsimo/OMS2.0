@@ -28,7 +28,7 @@ export const logout = () => {
 //获取用户信息
 export const getUserInfo = (username) => {
   return axios.request({
-    url: '/staff/findByUsername',
+    url: api.passportApi + '/staff/findByUsername',
     method: 'get',
     params: {
       client: 'oms',
@@ -40,7 +40,7 @@ export const getUserInfo = (username) => {
 //修改密码
 export const changePwd = (data) => {
   return axios.request({
-    url: '/staff/changePwd',
+    url: api.passportApi + '/staff/changePwd',
     method: 'post',
     data
   })

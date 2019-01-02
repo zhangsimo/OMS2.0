@@ -99,7 +99,7 @@ export default [
         // mark: 'oms_goods_specifications',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '规格信息'
+          title: '规格管理'
         },
         component: () => import('@/view/business/goods/specificationsList.vue')
       },

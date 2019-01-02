@@ -146,7 +146,7 @@ class httpRequest {
   // 创建实例
   create () {
     let conf = {
-      baseURL: baseURL.passportApi,//omsApi,
+      baseURL: baseURL.omsApi,
       // timeout: 2000,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
