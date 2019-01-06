@@ -113,7 +113,7 @@ export default {
     },
     openedNames () {
       this.$nextTick(() => {
-        this.$refs.menu.updateOpened()
+        // this.$refs.menu.updateOpened()
       })
     }
   },

@@ -13,14 +13,11 @@
             <Select v-model="searchType" class="w120">
               <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
             </Select>
-            <Input v-model="searchValue" :placeholder="placeh" class="w200 mr20"></Input>
-            <Checkbox v-show="searchType == 'fullName'" v-model="fullNameState" class="mr15">模糊匹配</Checkbox>
-            <Button type="warning" @click="searchListFun()" class="mr20">查询</Button>
+            <Input v-model="searchValue" :placeholder="placeh" class="w200 mr20" clearable></Input>
+            <Checkbox v-show="searchType == 'fullname'" v-model="fullNameState" class="mr15">模糊匹配</Checkbox>
+            <Button type="warning" @click="search" class="mr20">查询</Button>
           </div>
         </div>
-      </div>
-      <div class="oper-bottom flex">
-        <Button type="primary" @click="add" class="ml20">新增</Button>
       </div>
     </section>
     <section class="con-box">
@@ -29,74 +26,23 @@
             @on-page-size-change="changeSize" show-sizer show-total></Page>
     </section>
 
-    <Modal v-model="modal" :title="data.id ? '编辑' : '新增'" width="400">
-      <Form :label-width="100">
-        <FormItem label="配件内码：" v-if="data.id">
-          <Input v-model="data.skuNo" class="w200" readonly/>
-        </FormItem>
-        <FormItem label="配件内码：" v-else>
-          <Input v-model="data.skuNo" class="w140" :readonly="skuIsValidate"/>
-          <Button type="ghost" size="small" @click="resetSku" class="ml20" v-if="skuIsValidate">重置</Button>
-          <Button type="primary" size="small" @click="checkSku" class="ml20" v-else>校验</Button>
-        </FormItem>
-
-        <FormItem label="配件名称：" v-if="skuIsValidate">
-          <Input v-model="data.skuName" class="w200" readonly/>
-        </FormItem>
-        <FormItem label="配件编码：" v-if="skuIsValidate">
-          <Input v-model="data.venderSkuNo" class="w200" readonly/>
-        </FormItem>
-        <FormItem label="供应商：" v-if="skuIsValidate">
-          <Select class='w200' v-model='data.supplyId' @on-change='supplierChange'>
-            <Option v-for='item in supplierArr' :value='item.id' :key='item.id'>{{item.name}}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="供应商编号：" v-if="skuIsValidate">
-          <Input v-model="data.supplyNo" class="w200" readonly/>
-        </FormItem>
-        <FormItem label="最小起订量：" v-if="skuIsValidate">
-          <InputNumber v-model="data.minQuantity" :min="1" class="w200"/>
-        </FormItem>
-      </Form>
-      <div slot='footer'>
-        <Button type='text' @click='modal = false'>取消</Button>
-        <Button type='primary' @click='submit'>确定</Button>
-      </div>
-    </Modal>
-
   </div>
 </template>
 <script>
 
-  import {findBySkuNo} from '_api/business/goodsApi'
-  import {queryAllSupplySku, findAllSupplyPartner, saveSupplySku, update, del} from '_api/business/supplySkuApi'
+  import {queryAll} from '_api/business/goodsApi'
 
   export default {
     name: 'goodsList',
     data() {
       return {
-        modal: false,
-        skuIsValidate: false,
-        data: {
-          id: null,
-          skuId: '',
-          skuNo: '',
-          skuName: '',
-          venderSkuNo: '',
-          supplyId: '',
-          supplyName: '',
-          supplyNo: '',
-          minQuantity: 1
-        },
-        supplierArr: [],
         fullNameState: false,
         searchValue: '',
-        searchType: 'fullName',
+        searchType: 'skuName',
         searchTypeArr: [
+          {value: 'skuName', name:'配件名称'},
           {value: 'skuNo', name: '配件内码'},
-          {value: 'venderSkuNo', name: '配件编码'},
-          {value: 'supplyNo', name: '供应商编号'},
-          {value: 'supplyName', name: '供应商名称'}
+          {value: 'venderSkuNo', name: '配件编码'}
         ],
         dateTime: '',
         page: {
@@ -107,66 +53,85 @@
         loading: false,
         columns: [
           {
-            title: '操作',
-            align: 'center',
-            minWidth: 120,
-            key: '',
-            render: (h, params) => {
-              return h('div', [
-                h('span', {
-                  class: 'pointer mr15',
-                  on: {
-                    click: () => {
-                      this.data = params.row
-                      this.modal = true
-                    }
-                  }
-                }, '编辑'),
-                h('span', {
-                  class: 'delete',
-                  on: {
-                    click: () => {
-                      let id = params.row.id
-                      if (!id) {
-                        this.$Message.warning('数据异常')
-                        return
-                      }
-                      this.del(id)
-                    }
-                  }
-                }, '删除')
-              ])
-            }
-          },
-          {
             title: '配件内码',
-            align: 'center',
+            align:'center',
             minWidth: 120,
-            key: 'skuNo'
+            key:'skuNo'
           },
           {
             title: '配件编码',
-            align: 'center',
+            align:'center',
             key: 'venderSkuNo',
             minWidth: 120
           },
           {
-            title: '供应商',
-            align: 'center',
-            key: 'supplyName',
+            title: '配件全称',
+            align:'center',
+            key: 'fullName',
+            minWidth: 170
+          },
+          {
+            title: '品牌名称',
+            align:'center',
+            key: 'brandName',
+            minWidth: 120
+          },
+          {
+            title: '厂牌名称',
+            align:'center',
+            key: 'applyBrandName',
+            minWidth: 120
+          },
+          {
+            title: '单位描述',
+            align:'center',
+            key: 'skuUnitDesc',
+            minWidth: 120
+          },
+          {
+            title: '规格',
+            align:'center',
+            key: 'specification',
             minWidth: 200
           },
           {
-            title: '供应商编号',
-            align: 'center',
-            key: 'supplyNo',
-            minWidth: 200
+            title: '颜色',
+            align:'center',
+            key: 'colour',
+            minWidth: 100
+          },
+          // {
+          //   title: '品质',
+          //   align:'center',
+          //   key: 'qualitySourceName',
+          //   minWidth: 170,
+          //   render:(h,params) => {
+          //     return h('span',params.row.qualitySourceName)
+          //   }
+          // },
+          {
+            title: '配件类型',
+            align:'center',
+            key: 'categoryName',
+            minWidth: 170
           },
           {
-            title: '最小起订量',
-            align: 'center',
-            key: 'minQuantity',
-            minWidth: 200
+            title: '旧件名称',
+            align:'center',
+            key: 'former',
+            minWidth: 170
+          },
+          {
+            title: '创建时间',
+            align:'center',
+            key: 'createTime',
+            minWidth: 170
+          },
+          {
+            title: '最后修改时间',
+            align:'center',
+            key: 'updateTime',
+            minWidth: 170
           }
         ],
         tbdata: []
@@ -176,83 +141,6 @@
       this.initStart()
     },
     methods: {
-      del(id) {
-        let stop = this.$loading()
-        del({id}).then(res => {
-          stop()
-          if (res.code == 0) {
-            this.$Message.success('删除成功')
-            this.getList()
-          }
-        }).catch(err => {
-          stop()
-        })
-      },
-      checkSku() {
-        this.data.skuNo = this.data.skuNo.trim()
-        if (!this.data.skuNo) {
-          this.$Message.warning('配件内码不能为空')
-          return
-        }
-        findBySkuNo(this.data.skuNo).then(res => {
-          if (res.code == 0 && res.data) {
-            this.data.skuName = res.data.name
-            this.data.skuId = res.data.id
-            this.data.venderSkuNo = res.data.venderSkuNo
-            this.skuIsValidate = true
-          }
-        })
-      },
-      resetSku() {
-        this.skuIsValidate = false
-        // this.data.supplyId = ''
-        // this.data.supplyNo = ''
-        // this.data.supplyName = ''
-        this.data.minQuantity = 1
-      },
-      add() {
-        this.data = {
-          id: null,
-          skuId: '',
-          skuNo: '',
-          skuName: '',
-          venderSkuNo: '',
-          supplyId: '',
-          supplyName: '',
-          supplyNo: '',
-          minQuantity: 1
-        }
-        this.supplierArr = []
-        this.skuIsValidate = false
-        this.modal = true
-        findAllSupplyPartner({}).then(res => {
-          this.supplierArr = res.data || []
-          let supplier = this.supplierArr[0] || {}
-          this.data.supplyName = supplier.name || ''
-          this.data.supplyNo = supplier.code || ''
-          this.data.supplyId = supplier.id || ''
-        })
-      },
-      submit() {
-        console.log(JSON.stringify(this.data))
-        let action = this.data.id ? update : saveSupplySku
-        let stop = this.$loading()
-        action(this.data).then(res => {
-          stop()
-          if (res.code == 0) {
-            this.$Message.success(this.data.id ? '编辑成功' : '新增成功')
-            this.modal = false
-            this.searchListFun()
-          }
-        }).catch(err => {
-          stop()
-        })
-      },
-      supplierChange(id) {
-        let supplier = this.supplierArr.filter(item => item.id == id)[0] || {}
-        this.data.supplyName = supplier.name
-        this.data.supplyNo = supplier.code
-      },
       initStart() {
         this.getList()
       },
@@ -265,6 +153,9 @@
         }
         let searchValue = this.searchValue.trim()
         if (searchValue) {
+          if (this.searchType == 'fullName' && !this.fullNameState) {
+            searchValue = `###${searchValue}###`
+          }
           params[this.searchType] = searchValue
         }
 
@@ -272,7 +163,7 @@
         params.size = this.page.size
 
         this.loading = true
-        queryAllSupplySku({params}).then(res => {
+        queryAll({params}).then(res => {
           this.loading = false
           if (res.code == 0) {
             this.tbdata = res.data || []
@@ -293,9 +184,9 @@
       //搜索
       selectDate(date) {
         this.dateTime = date
-        this.searchListFun()
+        this.search()
       },
-      searchListFun() {
+      search() {
         this.page.num = 1
         this.getList()
       }

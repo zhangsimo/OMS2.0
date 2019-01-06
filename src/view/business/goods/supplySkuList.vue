@@ -3,24 +3,23 @@
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
-          <div class="db">
-            <span>日期：</span>
-            <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
-                        class="w200 mr20"></DatePicker>
-          </div>
+          <!--<div class="db">-->
+            <!--<span>日期：</span>-->
+            <!--<DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"-->
+                        <!--class="w200 mr20"></DatePicker>-->
+          <!--</div>-->
           <div class="db">
             <span>查询条件：</span>
             <Select v-model="searchType" class="w120">
               <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
             </Select>
-            <Input v-model="searchValue" :placeholder="placeh" class="w200 mr20"></Input>
-            <Checkbox v-show="searchType == 'fullName'" v-model="fullNameState" class="mr15">模糊匹配</Checkbox>
-            <Button type="warning" @click="searchListFun()" class="mr20">查询</Button>
+            <Input v-model="searchValue" :placeholder="placeh" class="w200 mr20" clearable></Input>
+            <Button type="warning" @click="search" class="mr20">查询</Button>
           </div>
         </div>
       </div>
       <div class="oper-bottom flex">
-        <Button type="primary" @click="add" class="ml20">新增</Button>
+        <Button type="primary" @click="add" class="">新增</Button>
       </div>
     </section>
     <section class="con-box">
@@ -94,14 +93,13 @@
           minQuantity: 1
         },
         supplierArr: [],
-        fullNameState: false,
         searchValue: '',
-        searchType: 'fullName',
+        searchType: 'skuNo',
         searchTypeArr: [
           {value: 'skuNo', name: '配件内码'},
           {value: 'venderSkuNo', name: '配件编码'},
-          {value: 'supplyNo', name: '供应商编号'},
-          {value: 'supplyName', name: '供应商名称'}
+          {value: 'supplyName', name: '供应商名称'},
+          {value: 'supplyNo', name: '供应商编号'}
         ],
         dateTime: '',
         page: {
@@ -127,7 +125,7 @@
                       this.modal = true
                     }
                   }
-                }, '编辑'),
+                }, '修改最小起订量'),
                 h('span', {
                   class: 'delete',
                   on: {
@@ -137,7 +135,13 @@
                         this.$Message.warning('数据异常')
                         return
                       }
-                      this.del(id)
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '确定要删除吗？',
+                        onOk: () => {
+                          this.del(id)
+                        }
+                      })
                     }
                   }
                 }, '删除')
@@ -248,7 +252,7 @@
           if (res.code == 0) {
             this.$Message.success(this.data.id ? '编辑成功' : '新增成功')
             this.modal = false
-            this.searchListFun()
+            this.search()
           }
         }).catch(err => {
           stop()
@@ -299,9 +303,9 @@
       //搜索
       selectDate(date) {
         this.dateTime = date
-        this.searchListFun()
+        this.search()
       },
-      searchListFun() {
+      search() {
         this.page.num = 1
         this.getList()
       }
