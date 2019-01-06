@@ -2,7 +2,7 @@
   <div class="user-avator-dropdown">
     <Dropdown @on-click="handleClick">
       <!--<Avatar :src="userAvator"/>-->
-      <router-link to="/home">您好，{{userData.staffName}}</router-link>
+      <span>您好，{{userData.staffName}}</span>
       <Icon :size="12" type="arrow-down-b"></Icon>
       <DropdownMenu slot="list">
         <DropdownItem name="changePwd">修改密码</DropdownItem>

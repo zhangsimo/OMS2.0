@@ -54,6 +54,16 @@ export default [
     component: Main,
     children: [
       {
+        path: '/goods/goodsList',
+        name: 'goodsList',
+        // mark: 'oms_goods_info',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '商品信息'
+        },
+        component: () => import('@/view/business/goods/goodsList.vue')
+      },
+      {
         path: '/goods/categoryList',
         name: 'categoryList',
         // mark: 'oms_goods_category',
@@ -64,6 +74,26 @@ export default [
         component: () => import('@/view/business/goods/categoryList.vue')
       },
       {
+        path: '/goods/supplierList',
+        name: 'supplierList',
+        // mark: 'oms_goods_category',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '供应商信息'
+        },
+        component: () => import('@/view/business/goods/supplierList.vue')
+      },
+      {
+        path: '/goods/supplySkuList',
+        name: 'supplySkuList',
+        // mark: 'oms_goods_category',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '直供商品'
+        },
+        component: () => import('@/view/business/goods/supplySkuList.vue')
+      },
+      {
         path: '/goods/brandList',
         name: 'brandList',
         // mark: 'oms_goods_brand',
@@ -72,16 +102,6 @@ export default [
           title: '品牌信息'
         },
         component: () => import('@/view/business/goods/brandList.vue')
-      },
-      {
-        path: '/goods/goodsList',
-        name: 'goodsList',
-        // mark: 'oms_goods_info',
-        meta: {
-          icon: 'arrow-graph-up-right',
-          title: '商品信息'
-        },
-        component: () => import('@/view/business/goods/goodsList.vue')
       },
       {
         path: '/goods/barcodeList',
@@ -119,7 +139,7 @@ export default [
         // mark: 'oms_goods_sync',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '价格管理'
+          title: '商品同步'
         },
         component: () => import('@/view/business/goods/goodsSync.vue')
       }

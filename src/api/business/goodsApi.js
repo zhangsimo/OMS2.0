@@ -1,5 +1,14 @@
 import axios from '@/libs/api.request'
 
+// 根据skuNo查询sku
+export function findBySkuNo (skuNo) {
+  return axios.request({
+    url: '/Sku/findBySkuNo',
+    method: 'get',
+    params: {skuNo}
+  })
+}
+
 // 查询sku
 export function queryAll ({params}) {
   return axios.request({
@@ -17,3 +26,4 @@ export function save (data) {
     data
   })
 }
+

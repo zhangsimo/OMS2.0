@@ -29,7 +29,7 @@
             @on-page-size-change="changeSize" show-sizer show-total></Page>
     </section>
 
-    <Modal v-model="modal" :title="data.id ? '编辑' : '新增'" width="400">
+    <Modal v-model="modal" :title="data.id ? '修改最小起订量' : '新增'" width="400">
       <Form :label-width="100">
         <FormItem label="配件内码：" v-if="data.id">
           <Input v-model="data.skuNo" class="w200" readonly/>
@@ -40,20 +40,25 @@
           <Button type="primary" size="small" @click="checkSku" class="ml20" v-else>校验</Button>
         </FormItem>
 
-        <FormItem label="配件名称：" v-if="skuIsValidate">
+        <FormItem label="配件名称：" v-if="skuIsValidate && !data.id">
           <Input v-model="data.skuName" class="w200" readonly/>
         </FormItem>
-        <FormItem label="配件编码：" v-if="skuIsValidate">
+
+        <FormItem label="配件编码：" v-if="skuIsValidate && !data.id">
           <Input v-model="data.venderSkuNo" class="w200" readonly/>
         </FormItem>
+
         <FormItem label="供应商：" v-if="skuIsValidate">
-          <Select class='w200' v-model='data.supplyId' @on-change='supplierChange'>
+          <Input v-model="data.supplyName" class="w200" readonly v-if="data.id"/>
+          <Select class='w200' v-model='data.supplyId' @on-change='supplierChange' v-else>
             <Option v-for='item in supplierArr' :value='item.id' :key='item.id'>{{item.name}}</Option>
           </Select>
         </FormItem>
+
         <FormItem label="供应商编号：" v-if="skuIsValidate">
           <Input v-model="data.supplyNo" class="w200" readonly/>
         </FormItem>
+
         <FormItem label="最小起订量：" v-if="skuIsValidate">
           <InputNumber v-model="data.minQuantity" :min="1" class="w200"/>
         </FormItem>
@@ -72,7 +77,7 @@
   import {queryAllSupplySku, findAllSupplyPartner, saveSupplySku, update, del} from '_api/business/supplySkuApi'
 
   export default {
-    name: 'goodsList',
+    name: 'supplySkuList',
     data() {
       return {
         modal: false,
@@ -118,6 +123,7 @@
                   on: {
                     click: () => {
                       this.data = params.row
+                      this.skuIsValidate = true
                       this.modal = true
                     }
                   }
