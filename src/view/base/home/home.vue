@@ -25,6 +25,7 @@
         <!--<example style="height: 310px;"/>-->
       <!--</Card>-->
     <!--</Row>-->
+    <p style="text-align: center;padding-top: 100px;font-size: 50px">欢迎使用 OMS<br>极配订单管理系统</p>
   </div>
 </template>
 

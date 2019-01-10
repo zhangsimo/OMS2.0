@@ -17,9 +17,9 @@
         </template>
       </Menu>
     </div>
-      <div class="menu-collapsed" v-show="collapsed" :list="menuList">
+      <div class="menu-collapsed" v-show="collapsed" :list="menuList" >
         <template v-for="item in menuList">
-          <collapsed-menu v-if="item.children && item.children.length > 1" @on-click="handleSelect" hide-title :root-icon-size="rootIconSize" :icon-size="iconSize" :theme="theme" :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
+          <collapsed-menu  v-if="item.children && item.children.length > 1" @on-click="handleSelect" hide-title :root-icon-size="rootIconSize" :icon-size="iconSize" :theme="theme" :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
           <Tooltip v-else :content="item.meta.title || item.children[0].meta.title" placement="right" :key="`drop-menu-${item.name}`">
             <a @click="handleSelect(getNameOrHref(item, true))" class="drop-menu-a" :style="{textAlign: 'center'}"><Icon :size="rootIconSize" :color="textColor" :type="item.icon || item.children[0].icon"/></a>
           </Tooltip>
@@ -81,7 +81,6 @@ export default {
   },
   methods: {
     handleSelect (name) {
-      // console.log('handleSelect',name);
       this.$emit('on-select', name)
     },
     getOpenedNamesByActiveName (name) {
@@ -91,7 +90,6 @@ export default {
   computed: {
     openMenuFun(){
       const openName = []
-      // console.log(this.$route.matched)
       this.$route.matched.forEach((v,i) => {
         if(i<this.$route.matched.length-1&&v.name){
           openName.push(v.name)
@@ -113,7 +111,7 @@ export default {
     },
     openedNames () {
       this.$nextTick(() => {
-        // this.$refs.menu.updateOpened()
+        //this.$refs.menu.updateOpened()
       })
     }
   },

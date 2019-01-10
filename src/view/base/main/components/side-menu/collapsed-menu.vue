@@ -8,6 +8,8 @@
           <DropdownItem :key="`drop-${child.children[0].name}`" :name="child.children[0].name"><span class="menu-title">{{ showTitle(child.children[0]) }}</span></DropdownItem>
         </template>
           <DropdownItem v-else :key="`drop-${child.name}`" :name="child.name"><span class="menu-title">{{ showTitle(child) }}</span></DropdownItem>
+
+
       </template>
     </DropdownMenu>
   </Dropdown>
@@ -30,9 +32,13 @@ export default {
   },
   methods: {
     handleClick (name) {
-      console.log('handleClick',name,this)
+      //console.log(name)
+      //return false
       this.$emit('on-click', name)
     }
+  },
+  mounted(){
+    console.log()
   }
 }
 </script>

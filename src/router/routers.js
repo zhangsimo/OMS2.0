@@ -68,6 +68,7 @@ export default [
         name: 'categoryList',
         // mark: 'oms_goods_category',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '商品分类'
         },
@@ -98,6 +99,7 @@ export default [
         name: 'brandList',
         // mark: 'oms_goods_brand',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '品牌信息'
         },
@@ -108,6 +110,7 @@ export default [
         name: 'barcodeList',
         // mark: 'oms_goods_barcode',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '条码管理'
         },
@@ -128,6 +131,7 @@ export default [
         name: 'priceList',
         // mark: 'oms_goods_price',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '价格管理'
         },
@@ -138,6 +142,7 @@ export default [
         name: 'goodsSync',
         // mark: 'oms_goods_sync',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '商品同步'
         },
@@ -151,6 +156,7 @@ export default [
     // mark: 'gpart_oms_orders',
     redirect: '/multilevel/level_2_1',
     meta: {
+      // hideInMenu: true,
       icon: 'ios-paper',
       title: '订单管理'
     },
@@ -161,6 +167,7 @@ export default [
         name: 'orderApprove',
         // mark: 'oms_orders_approve',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '订单审核'
         },
@@ -171,10 +178,71 @@ export default [
         name: 'orderLink',
         // mark: 'oms_orders_link',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '订单链路'
         },
         component: () => import('@/view/business/orders/orderLink.vue')
+      },
+      {
+        path: '/orders/directOrder',
+        name: 'directOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '定向订单'
+        },
+        component: () => import('@/view/business/orders/directOrder.vue')
+      },
+      {
+        path: '/orders/mallOrder',
+        name: 'mallOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '电商转单'
+        },
+        component: () => import('@/view/business/orders/mallOrder.vue')
+      },
+      {
+        path: '/orders/supplierOrder',
+        name: 'supplierOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '直供订单'
+        },
+        component: () => import('@/view/business/orders/supplierOrder.vue')
+      },
+      {
+        path: '/orders/storeOrder',
+        name: 'storeOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '门店订单'
+        },
+        component: () => import('@/view/business/orders/storeOrder.vue')
+      },
+      {
+        path: '/orders/inquiryOrder',
+        name: 'inquiryOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '询价订单'
+        },
+        component: () => import('@/view/business/orders/inquiryOrder.vue')
+      },
+      {
+        path: '/orders/inquiryBackOrder',
+        name: 'inquiryBackOrder',
+        // mark: 'oms_orders_link',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '报价回单'
+        },
+        component: () => import('@/view/business/orders/inquiryBackOrder.vue')
       }
     ]
   },
@@ -183,6 +251,7 @@ export default [
     name: 'policy',
     // mark: 'gpart_oms_policy',
     meta: {
+      hideInMenu: true,
       icon: 'ios-toggle',
       title: '策略管理'
     },
@@ -217,6 +286,28 @@ export default [
           title: '短信策略'
         },
         component: () => import('@/view/business/policy/smsPolicy.vue')
+      }
+    ]
+  },
+  {
+    path: '',
+    name: 'baseSetting',
+    // mark: 'gpart_oms_policy',
+    meta: {
+      icon: 'gear-b',
+      title: '基础设置'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/baseSetting/storeArea',
+        name: 'storeArea',
+        // mark: 'oms_policy_approve',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '门店区域管理'
+        },
+        component: () => import('@/view/business/baseSetting/storeArea.vue')
       }
     ]
   },

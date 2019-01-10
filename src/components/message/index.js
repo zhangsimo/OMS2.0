@@ -6,7 +6,7 @@ const prefixKey = 'ivu_message_key_';
 
 const defaults = {
   top: 24,
-  duration: 4
+  duration: 3
 };
 
 let messageInstance;

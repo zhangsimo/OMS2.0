@@ -35,7 +35,7 @@
         </FormItem>
         <FormItem label="配件内码：" v-else>
           <Input v-model="data.skuNo" class="w140" :readonly="skuIsValidate"/>
-          <Button type="ghost" size="small" @click="resetSku" class="ml20" v-if="skuIsValidate">重置</Button>
+          <Button size="small" @click="resetSku" class="ml20" v-if="skuIsValidate">重置</Button>
           <Button type="primary" size="small" @click="checkSku" class="ml20" v-else>校验</Button>
         </FormItem>
 
@@ -64,7 +64,7 @@
       </Form>
       <div slot='footer'>
         <Button type='text' @click='modal = false'>取消</Button>
-        <Button type='primary' @click='submit'>确定</Button>
+        <Button type='primary' :disabled="!skuIsValidate" @click='submit'>确定</Button>
       </div>
     </Modal>
 
@@ -244,7 +244,8 @@
         })
       },
       submit() {
-        console.log(JSON.stringify(this.data))
+        // console.log(JSON.stringify(this.data))
+
         let action = this.data.id ? update : saveSupplySku
         let stop = this.$loading()
         action(this.data).then(res => {
