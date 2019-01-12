@@ -53,11 +53,10 @@
         refreshTree: true,
         modal: false,
         searchValue: '',
-        searchType: 'shortName',
+        searchType: 'name',
         searchTypeArr: [
-          {value: 'shortName', name: '门店名称'},
-          {value: 'storeNo', name: '门店编码'},
-          {value: 'areaName', name: '区域名称'}
+          {value: 'name', name: '门店名称'},
+          {value: 'storeNo', name: '门店编码'}
         ],
         page: {
           num: 1,
@@ -83,7 +82,7 @@
                     click: () => {
                       //let areaIds = ["310000000000", "310100000000", "310101000000", "310104000000", "320000000000", "320100000000", "320102000000", "320104000000"]
                       this.storeId = params.row.id
-                      this.show(areaIds)
+                      this.show(null)
                     }
                   }
                 }, '绑定区域')
@@ -92,8 +91,14 @@
                   class: 'pointer delete',
                   on: {
                     click: () => {
-                      this.storeId = params.row.id
-                      this.deleteArea(areaIds)
+                      this.$Modal.confirm({
+                        title: '提示',
+                        content: '确定要解除绑定吗？',
+                        onOk: () => {
+                          this.storeId = params.row.id
+                          this.deleteArea(areaIds)
+                        }
+                      })
                     }
                   }
                 }, '解除绑定')
@@ -113,13 +118,51 @@
             minWidth: 120
           },
           {
-            title: '区域',
+            title: '服务区域',
             align: 'center',
             key: '',
             minWidth: 200,
             render: (h, params) => {
-              let areaName = params.row.areaSet.map(item => item.fullName).join('，')
-              return h('span', areaName)
+              let areaSet = params.row.areaSet || [], map = {}
+              areaSet.map(item => {
+                if (item.grade == '3') {
+                  let tmp = map[item.parentId]
+                  if (!tmp) {
+                    tmp = map[item.parentId] = []
+                  }
+                  let name = item.name
+                  let city = item.city
+                  let province = item.province
+
+                  if (tmp.indexOf(province) == -1) {
+                    tmp.push(province)
+                  }
+                  if (tmp.indexOf(city) == -1) {
+                    tmp.push(city)
+                  }
+                  if (tmp.indexOf(name) == -1) {
+                    tmp.push(name)
+                  }
+                  map[item.parentId] = tmp
+                }
+              })
+
+              if (Object.keys(map).length == 0) {
+                return h('span', '')
+              }
+
+              let name = []
+              for (let key in map) {
+                let item = map[key]
+                let tmp = item.shift()
+                tmp += item.shift()
+                tmp += '：' + item.shift()
+                item.unshift(tmp)
+                name.push(item.join('、'))
+              }
+
+              // let areaName = areaSet.map(item => item.fullName).join('，')
+              return h('span', name.join('；'))
             }
           }
         ],
@@ -145,18 +188,36 @@
             item.childs = []
           })
           this.areaTreeOData = tmp
+          // this.areaTree = tmp
         }
       })
       this.getList()
     },
     methods: {
+      clearChilds() {
+        this.areaTree.map(item => {
+          item.loading = false
+          if (item.expand) {
+            item.expand = false
+          }
+          if (item.checked) {
+            item.checked = false
+          }
+          item.childs = []
+        })
+      },
       show(areaIds) {
         this.stopLoading = this.$loading()
-        this.areaTree = []
+        // this.areaTree = []
         if (!areaIds || areaIds.length == 0) {
-          this.areaTree = this.areaTreeOData.concat([])
+          this.areaTree = Object.assign([], this.areaTreeOData)
           this.modal = true
           this.stopLoading && this.stopLoading()
+          this.clearChilds()
+          this.refreshTree = false
+          this.$nextTick(() => {
+            this.refreshTree = true
+          })
           return
         }
         this.areaIds = []
@@ -263,14 +324,14 @@
       },
       submit() {
         let areaIds = ''
-        let nodes = this.$refs.tree.flatState//getCheckedNodes()
-        nodes = nodes.filter(item => item.node.checked || item.node.indeterminate).map(item => item.node)
+        let nodes = this.$refs.tree.getCheckedNodes()//flatState
+        // nodes = nodes.filter(item => item.node.checked || item.node.indeterminate).map(item => item.node)
         if (nodes.some(item => item.grade == '3')) {
           //nodes = nodes.filter(item => item.grade == '3')
           areaIds = nodes.map(item => item.id)
-          console.log(areaIds)
+          // console.log(areaIds)
         } else {
-          this.$Message.warning('请选择区县级')
+          this.$Message.warning('请精确至区县级')
           return
         }
 
