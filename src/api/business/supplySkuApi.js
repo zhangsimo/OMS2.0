@@ -2,7 +2,7 @@ import axios from '@/libs/api.request'
 
 export function findAllSupplyPartner(data) {
   return axios.request({
-    url: '/partner/findAllSupplyPartner',
+    url: '/supplyPartner/findAllSupplyPartner',
     method: 'get',
     params: data.params,
     data: data.initBody

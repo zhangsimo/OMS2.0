@@ -59,7 +59,11 @@
         </FormItem>
 
         <FormItem label="最小起订量：" v-if="skuIsValidate">
-          <InputNumber v-model="data.minQuantity" :min="1" class="w200"/>
+          <InputNumber v-model="data.minQuantity" :min="1" :precision="0" :step="1" class="w200"/>
+        </FormItem>
+
+        <FormItem label="采购单价：" v-if="skuIsValidate">
+          <InputNumber v-model="data.purchasePrice" :min="1" class="w200"/>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -90,7 +94,8 @@
           supplyId: '',
           supplyName: '',
           supplyNo: '',
-          minQuantity: 1
+          minQuantity: 1,
+          purchasePrice: 1
         },
         supplierArr: [],
         searchValue: '',
@@ -112,7 +117,7 @@
           {
             title: '操作',
             align: 'center',
-            minWidth: 120,
+            width: 200,
             key: '',
             render: (h, params) => {
               return h('div', [
@@ -125,7 +130,7 @@
                       this.modal = true
                     }
                   }
-                }, '修改最小起订量'),
+                }, '修改'),
                 h('span', {
                   class: 'delete',
                   on: {
@@ -173,6 +178,12 @@
             minWidth: 200
           },
           {
+            title: '采购单价',
+            align: 'center',
+            key: 'purchasePrice',
+            minWidth: 120
+          },
+          {
             title: '最小起订量',
             align: 'center',
             key: 'minQuantity',
@@ -204,25 +215,28 @@
           this.$Message.warning('配件内码不能为空')
           return
         }
+        let stop = this.$loading()
         findBySkuNo(this.data.skuNo).then(res => {
+          stop()
           if (res.code == 0 && res.data) {
             this.data.skuName = res.data.name
             this.data.skuId = res.data.id
             this.data.venderSkuNo = res.data.venderSkuNo
             this.skuIsValidate = true
           }
+        }).catch(err => {
+          stop()
         })
       },
       resetSku() {
         this.skuIsValidate = false
-        // this.data.supplyId = ''
-        // this.data.supplyNo = ''
-        // this.data.supplyName = ''
+        this.data.skuId = ''
+        this.data.skuNo = ''
         this.data.minQuantity = 1
+        this.data.purchasePrice = 1
       },
       add() {
         this.data = {
-          id: null,
           skuId: '',
           skuNo: '',
           skuName: '',
@@ -230,7 +244,8 @@
           supplyId: '',
           supplyName: '',
           supplyNo: '',
-          minQuantity: 1
+          minQuantity: 1,
+          purchasePrice: 1
         }
         this.supplierArr = []
         this.skuIsValidate = false
@@ -239,19 +254,23 @@
           this.supplierArr = res.data || []
           let supplier = this.supplierArr[0] || {}
           this.data.supplyName = supplier.name || ''
-          this.data.supplyNo = supplier.code || ''
+          this.data.supplyNo = supplier.supplyNo || ''
           this.data.supplyId = supplier.id || ''
         })
       },
       submit() {
         // console.log(JSON.stringify(this.data))
 
+        let purchasePrice = this.data.purchasePrice
+        purchasePrice = purchasePrice.toFixed(2) - 0
+        this.data.purchasePrice = purchasePrice
+
         let action = this.data.id ? update : saveSupplySku
         let stop = this.$loading()
         action(this.data).then(res => {
           stop()
           if (res.code == 0) {
-            this.$Message.success(this.data.id ? '编辑成功' : '新增成功')
+            this.$Message.success(this.data.id ? '修改成功' : '新增成功')
             this.modal = false
             this.search()
           }
@@ -262,7 +281,7 @@
       supplierChange(id) {
         let supplier = this.supplierArr.filter(item => item.id == id)[0] || {}
         this.data.supplyName = supplier.name
-        this.data.supplyNo = supplier.code
+        this.data.supplyNo = supplier.supplyNo
       },
       initStart() {
         this.getList()
