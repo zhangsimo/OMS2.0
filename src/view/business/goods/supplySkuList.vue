@@ -125,7 +125,7 @@
                   class: 'pointer mr15',
                   on: {
                     click: () => {
-                      this.data = params.row
+                      this.data = Object.assign({}, params.row)
                       this.skuIsValidate = true
                       this.modal = true
                     }
