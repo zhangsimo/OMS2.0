@@ -23,8 +23,13 @@
 </template>
 
 <script>
+
+  import {queryAllQuoteBill} from '_api/business/orderApi'
+  import orderLine from './orderLine'
+
   export default {
     name: "inquiryBackOrder",
+    components: {orderLine},
     data() {
       return {
         searchValue: '',
@@ -41,6 +46,16 @@
         loading: false,
         columns: [
           {
+            title: '明细',
+            align: 'center',
+            type: 'expand',
+            width: 70,
+            render: (h, params) => {
+              let tbdata = params.row.orderLines || []
+              return h(orderLine, {props: {tbdata}})
+            }
+          },
+          {
             title: '报价单号',
             align: 'center',
             minWidth: 120,
@@ -53,13 +68,19 @@
             minWidth: 120
           },
           {
-            title: '制单时间',
+            title: '回单时间',
             align: 'center',
             key: 'createTime',
             minWidth: 120
+          },
+          {
+            title: '备注',
+            align: 'center',
+            key: 'memo',
+            minWidth: 120
           }
         ],
-        tbdata: [{orderNo: 'BJDD-2019011099000001', originNo: 'IQDD-2019011099000001', createTime: '2019-01-09 12:34:56'}]
+        tbdata: []
       }
     },
     mounted() {
@@ -76,14 +97,14 @@
         params.page = this.page.num - 1
         params.size = this.page.size
 
-        // this.loading = true
-        // queryAll({params}).then(res => {
-        //   this.loading = false
-        //   if (res.code == 0) {
-        //     this.tbdata = res.data.content || []
-        //     this.page.total = res.data.totalElements
-        //   }
-        // })
+        this.loading = true
+        queryAllQuoteBill(params).then(res => {
+          this.loading = false
+          if (res.code == 0) {
+            this.tbdata = res.data.content || []
+            this.page.total = res.data.totalElements
+          }
+        })
       },
       //分页
       changePage(p) {

@@ -23,6 +23,10 @@
 </template>
 
 <script>
+
+  import {queryAllTransferOrder} from '_api/business/orderApi'
+  import orderLine from './orderLine'
+
   export default {
     name: "mallOrder",
     data() {
@@ -30,8 +34,8 @@
         searchValue: '',
         searchType: 'orderNo',
         searchTypeArr: [
-          {value: 'orderNo', name: '电商单号'},
-          {value: 'originNo', name: '电商原始单号'}
+          {value: 'orderNo', name: '转单单号'},
+          {value: 'originNo', name: '源订单号'}
         ],
         page: {
           num: 1,
@@ -41,27 +45,83 @@
         loading: false,
         columns: [
           {
-            title: '电商单号',
+            title: '明细',
+            align: 'center',
+            type: 'expand',
+            width: 70,
+            render: (h, params) => {
+              let tbdata = params.row.orderLines || []
+              return h(orderLine, {props: {tbdata}})
+            }
+          },
+          {
+            title: '转单单号',
             align: 'center',
             minWidth: 120,
             key: 'orderNo'
           },
           {
-            title: '电商原始单号',
+            title: '源订单号',
             align: 'center',
             key: 'originNo',
             minWidth: 120
           },
           {
-            title: '制单时间',
+            title: '客户编码',
+            align: 'center',
+            key: 'partnerNo',
+            minWidth: 120
+          },
+          {
+            title: '门店编号',
+            align: 'center',
+            key: 'storeNo',
+            minWidth: 120
+          },
+          // {
+          //   title: '订单金额',
+          //   align: 'center',
+          //   key: 'amount',
+          //   minWidth: 120
+          // },
+          {
+            title: '转单时间',
             align: 'center',
             key: 'createTime',
             minWidth: 120
+          },
+          {
+            title: '联系人',
+            align: 'center',
+            key: 'deliveryLinkman',
+            minWidth: 120
+          },
+          {
+            title: '收货人',
+            align: 'center',
+            key: 'deliveryName',
+            minWidth: 120
+          },
+          {
+            title: '联系方式',
+            align: 'center',
+            key: 'deliveryTel',
+            minWidth: 120
+          },
+          {
+            title: '收货地址',
+            align: 'center',
+            key: 'deliveryAddress',
+            minWidth: 120
+          },
+          {
+            title: '备注',
+            align: 'center',
+            key: 'memo',
+            minWidth: 120
           }
         ],
-        tbdata: [
-          {orderNo: 'MLDD-2019011099000001', originNo: 'JPDD-2019011099000001', createTime: '2019-01-09 12:34:56'}
-        ]
+        tbdata: []
       }
     },
     mounted() {
@@ -78,14 +138,14 @@
         params.page = this.page.num - 1
         params.size = this.page.size
 
-        // this.loading = true
-        // queryAll({params}).then(res => {
-        //   this.loading = false
-        //   if (res.code == 0) {
-        //     this.tbdata = res.data.content || []
-        //     this.page.total = res.data.totalElements
-        //   }
-        // })
+        this.loading = true
+        queryAllTransferOrder(params).then(res => {
+          this.loading = false
+          if (res.code == 0) {
+            this.tbdata = res.data.content || []
+            this.page.total = res.data.totalElements
+          }
+        })
       },
       //分页
       changePage(p) {

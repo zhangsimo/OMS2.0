@@ -36,14 +36,6 @@
 
 <script>
 
-  /**
-   * 门店分页  get   /queryAll
-   * 门店不分页  get  /store/findAll
-   *
-   * 行政区域  get  /area/findAll  参数 id 和 grade
-   * (初始化，id 为传空，grade 传1，查询所有省级，其他时候，grade 传 空，ID 不为空，查询所有子下级
-   */
-
   import {queryAll, findAllArea, saveArea, deleteArea} from '_api/business/storeAreaApi'
 
   export default {
@@ -188,32 +180,22 @@
             item.childs = []
           })
           this.areaTreeOData = tmp
-          // this.areaTree = tmp
         }
       })
       this.getList()
     },
     methods: {
-      clearChilds() {
-        this.areaTree.map(item => {
-          item.loading = false
-          if (item.expand) {
-            item.expand = false
-          }
-          if (item.checked) {
-            item.checked = false
-          }
-          item.childs = []
-        })
-      },
       show(areaIds) {
         this.stopLoading = this.$loading()
-        // this.areaTree = []
+        this.areaTree = []
         if (!areaIds || areaIds.length == 0) {
-          this.areaTree = Object.assign([], this.areaTreeOData)
+
+          this.areaTreeOData.map(item => {
+            this.areaTree.push(Object.assign({}, item))
+          })
+
           this.modal = true
           this.stopLoading && this.stopLoading()
-          this.clearChilds()
           this.refreshTree = false
           this.$nextTick(() => {
             this.refreshTree = true
