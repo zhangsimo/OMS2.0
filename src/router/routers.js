@@ -92,7 +92,7 @@ export default [
           icon: 'arrow-graph-up-right',
           title: '直供商品'
         },
-        component: () => import('@/view/business/goods/supplySkuList.vue')
+        component: () => import('@/view/business/goods/supplierSkuList.vue')
       },
       {
         path: '/goods/brandList',
@@ -305,9 +305,19 @@ export default [
         // mark: 'oms_policy_approve',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '门店区域管理'
+          title: '极配门店区域管理'
         },
         component: () => import('@/view/business/baseSetting/storeArea.vue')
+      },
+      {
+        path: '/baseSetting/hsStoreSupplier',
+        name: 'hsStoreSupplier',
+        // mark: 'oms_policy_approve',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '华胜门店经销商管理'
+        },
+        component: () => import('@/view/business/baseSetting/hsStoreSupplier.vue')
       }
     ]
   },

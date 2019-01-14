@@ -77,7 +77,7 @@
 <script>
 
   import {findBySkuNo} from '_api/business/goodsApi'
-  import {queryAllSupplySku, findAllSupplyPartner, saveSupplySku, update, del} from '_api/business/supplySkuApi'
+  import {queryAllSupplySku, findAllSupplyPartner, saveSupplySku, update, del} from '_api/business/supplierSkuApi'
 
   export default {
     name: 'supplySkuList',
