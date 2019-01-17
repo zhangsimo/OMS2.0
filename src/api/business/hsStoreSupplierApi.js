@@ -10,11 +10,14 @@ import axios from '@/libs/api.request'
  * 华胜门店  get  /store/findByStoreNo  storeNo  cropId
  *
  * 主要这三个参数 parentSupplyId  supplyNo storeNo
+ *
+ *  /supplyStore/findPartners
+ *
  */
 
 export function queryAll(params) {
   return axios.request({
-    url: '/supplyStore/queryAll',
+    url: '/store/queryAll',
     method: 'get',
     params
   })

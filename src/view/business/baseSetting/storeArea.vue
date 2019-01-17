@@ -143,18 +143,32 @@
                 return h('span', '')
               }
 
-              let name = []
+              let provs = []
               for (let key in map) {
                 let item = map[key]
                 let tmp = item.shift()
-                tmp += item.shift()
-                tmp += '：' + item.shift()
-                item.unshift(tmp)
-                name.push(item.join('、'))
+                tmp += item.shift() + '：'
+
+                provs.push(
+                  h('span', {
+                    class: 'prov-city'
+                  }, tmp)
+                )
+
+                let areas = []
+                areas.push(
+                  h('span', {
+                    style: 'dis'
+                  }, item.join('、'))
+                )
+                // let group = h('div', areas)
+
+                provs.push(areas)
               }
 
               // let areaName = areaSet.map(item => item.fullName).join('，')
-              return h('span', name.join('；'))
+              // return h('span', name.join('；'))
+              return h('div', provs)
             }
           }
         ],
@@ -349,14 +363,15 @@
         })
       },
       getList() {
-        const params = {}
+        const params = {
+          page: this.page.num - 1,
+          size: this.page.size,
+          cropId: 1
+        }
         let searchValue = this.searchValue.trim()
         if (searchValue) {
           params[this.searchType] = searchValue
         }
-
-        params.page = this.page.num - 1
-        params.size = this.page.size
 
         this.loading = true
         queryAll({params}).then(res => {
@@ -396,6 +411,15 @@
   }
 </script>
 
-<style scoped>
-
+<style>
+  .prov-city {
+    display: inline-block;
+    border-radius: 10px 0 0 10px;
+    text-align: center;
+    padding: 0 0 0 7px;
+    margin: 2px 2px 2px 10px;
+    width: auto;
+    background: #ccc;
+    color: #333333;
+  }
 </style>

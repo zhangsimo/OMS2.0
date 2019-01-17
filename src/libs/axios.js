@@ -1,10 +1,11 @@
 import Axios from 'axios'
 import qs from 'qs'
 import baseURL from '_conf/url'
-import Message from "_c/message"
 import Cookies from 'js-cookie'
 import { TOKEN_KEY, REFRESH_TOKEN_KEY, LOCATION_KEY, isTokenExpired } from '@/libs/util'
+
 let lock = true
+
 class httpRequest {
   constructor () {
     this.options = {
@@ -103,11 +104,11 @@ class httpRequest {
             Cookies.remove(TOKEN_KEY)
             Cookies.remove(LOCATION_KEY)
             window.location.href = '/#/login'
-            Message.error('未登录，或登录失效，请登录')
+            globalVue.$Message.error('未登录，或登录失效，请登录')
           } else {
             if (data.message && this.showErrorQueue[url]) {
               delete this.showErrorQueue[url]
-              Message.error(data.message)
+              globalVue.$Message.error(data.message)
             }
           }
           return false
@@ -128,7 +129,7 @@ class httpRequest {
           if(error.response.data.code===9403){
             errtip = '没有权限访问!'
           }
-          Message.error(errtip)
+          globalVue.$Message.error(errtip)
           setTimeout(function () {
             Cookies.remove(TOKEN_KEY)
             Cookies.remove(LOCATION_KEY)
@@ -138,7 +139,7 @@ class httpRequest {
         }
       }
       //Message.error('服务内部错误')
-      Message.error(error.message)
+      globalVue.$Message.error(error.message)
       // 对响应错误做点什么
       return Promise.reject(error)
     })

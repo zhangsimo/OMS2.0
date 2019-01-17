@@ -59,11 +59,11 @@
         </FormItem>
 
         <FormItem label="最小起订量：" v-if="skuIsValidate">
-          <InputNumber v-model="data.minQuantity" :min="1" :precision="0" :step="1" class="w200"/>
+          <InputNumber v-model="data.minQuantity" :min="1" :max="999999" :precision="0" :step="1" class="w200"/>
         </FormItem>
 
         <FormItem label="采购单价：" v-if="skuIsValidate">
-          <InputNumber v-model="data.purchasePrice" :min="1" class="w200"/>
+          <InputNumber v-model="data.purchasePrice" :min="1" :max="999999" class="w200"/>
         </FormItem>
       </Form>
       <div slot='footer'>

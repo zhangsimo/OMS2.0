@@ -14,21 +14,15 @@ import './index.less'
 import '@/assets/icons/iconfont.css'
 import '@/mock'
 import 'babel-polyfill'
-import Message from "_c/message"
-
-// import contentmenu from 'v-contextmenu'
-// import 'v-contextmenu/dist/index.css'
-//
-// Vue.use(contentmenu)
-
-// 实际打包时应该不引入mock
-// import env from '@/config/env'
-// env === 'development' ? require('mock') : ''
+import gpart from 'gpart-common'
 
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
 Vue.config.productionTip = false
+
+Vue.use(gpart)
+
 /**
  * @description 全局注册应用配置
  */
@@ -40,9 +34,9 @@ Vue.prototype.hasPermission = (mark) => {
   return store.state.user.access.indexOf(mark) > -1
 }
 
-Vue.prototype.$Message = Message
+Vue.prototype.$Message = gpart.GpartMessage
 Vue.prototype.$loading = (msg) => {
-  return Message.loading({
+  return gpart.GpartMessage.loading({
     content: msg || '处理中，请稍后...',
     duration: 0
   })
@@ -54,7 +48,7 @@ Vue.prototype.$loading = (msg) => {
 importDirective(Vue)
 
 /* eslint-disable no-new */
-new Vue({
+window.globalVue = new Vue({
   el: '#app',
   router,
   i18n,
