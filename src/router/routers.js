@@ -178,7 +178,7 @@ export default [
         name: 'orderLink',
         // mark: 'oms_orders_link',
         meta: {
-          hideInMenu: true,
+          // hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '订单链路'
         },

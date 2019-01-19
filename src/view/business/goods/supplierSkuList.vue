@@ -175,7 +175,7 @@
             title: '供应商编号',
             align: 'center',
             key: 'supplyNo',
-            minWidth: 200
+            minWidth: 120
           },
           {
             title: '采购单价',
@@ -187,7 +187,7 @@
             title: '最小起订量',
             align: 'center',
             key: 'minQuantity',
-            minWidth: 200
+            minWidth: 120
           }
         ],
         tbdata: []
