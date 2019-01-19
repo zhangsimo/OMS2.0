@@ -3,24 +3,49 @@
     <section class="con-box" style="position: relative;height: 600px;min-width: 1000px">
       <canvas id="canvas" width="1000" height="500">don't support</canvas>
       <div id="container"></div>
-      <Icon class="refresh" type="loop" size="26" @click="refresh"></Icon>
+      <Icon class="refresh" type="loop" size="26" @click="getData"></Icon>
     </section>
+
+    <Modal v-model="showLines" :title="title" width="530" ok-text="关闭" cancel-text="">
+      <div v-if="orderNo" class="pb15">
+        <span>订单号：</span>
+        <Select v-model="orderNo" class="w240" @on-change="orderNoChange">
+          <Option v-for="item in orderNoArr" :value="item.value" :key="item.value">{{ item.value }}</Option>
+        </Select>
+      </div>
+      <OrderLine :tbdata="lines"></OrderLine>
+    </Modal>
+
   </div>
 </template>
 <script>
 
+  import {routekin} from '_api/business/orderApi'
+  import OrderLine from './orderLine'
+
   export default {
     name: 'orderLink',
+    components: {OrderLine},
     data() {
       return {
         nodePointerMap: {},
         elIndex: 0,
         container: null,
-        ctx: null
+        ctx: null,
+        id: '',
+        dataMap: {},
+        showLines: false,
+        title: '',
+        lines: [],
+        orderMap: {},
+        orderNoArr: [],
+        orderNo: ''
       }
     },
-    components: {},
     activated() {
+      if (this.id && this.id != this.$route.query.id) {
+        this.getData()
+      }
     },
     mounted() {
       this.container = document.querySelector('#container')
@@ -29,34 +54,150 @@
       this.ready()
     },
     methods: {
-      click(id) {
-        alert(id)
+      orderNoChange() {
+        this.lines = this.orderMap[this.orderNo]
       },
-      refresh() {
+      click(id, name) {
+        this.orderNoArr = []
+        this.orderNo = ''
+
+        let title = ''
+
+        if (name.indexOf('门店') > -1) {
+
+          let storeMap = this.dataMap.storeMap
+          for (let key in storeMap) {
+            this.orderNoArr.push({value: key})
+          }
+          this.orderMap = storeMap
+
+          this.orderNo = this.orderNoArr[0].value
+          this.orderNoChange()
+          title = name
+
+        } else if (name.indexOf('直供') > -1) {
+          let supplyMap = this.dataMap.supplyMap
+          for (let key in supplyMap) {
+            this.orderNoArr.push({value: key})
+          }
+          this.orderMap = supplyMap
+
+          this.orderNo = this.orderNoArr[0].value
+          this.orderNoChange()
+          title = name
+
+        } else if (name.indexOf('询价') > -1) {
+          let inqueryMap = this.dataMap.inqueryMap
+          for (let key in inqueryMap) {
+            this.orderNoArr.push({value: key})
+          }
+          this.orderMap = inqueryMap
+
+          this.orderNo = this.orderNoArr[0].value
+          this.orderNoChange()
+          title = name
+
+        } else {
+          this.lines = this.dataMap[id]
+          title = `明细 - （${name}：${id}）`
+        }
+
+        this.title = title
+        this.showLines = true
+      },
+      getData() {
+        this.id = this.$route.query.id
+
         this.ctx.clearRect(0, 0, 1000, 500)
         this.container.innerHTML = ''
         this.nodePointerMap = {}
         this.elIndex = 0
 
-        let loading = this.$loading('正在刷新...')
-        setTimeout(() => {
+        let loading = this.$loading('加载中...')
+
+        routekin({id: this.id}).then(res => {
           loading()
-          this.hs()
-        }, 1500)
+          if (res.code == 0) {
+            res = res.data || {}
+            this.dataMap = {}
+            let direct = res.DIRECT_ORDER || ''
+            let supply = res.SUPPLY_ORDER || ''
+            let store = res.STORE_ORDER || ''
+            let inquery = res.INQUERY_BILL || ''
+
+
+            let hsOrderNo = '', directOrderNo = '', supplierOrderNo = '', supplierOrderSize = '',
+              storeOrderNo = '', storeOrderSize = '', inqueryOrderNo = '', inqueryOrderSize = '', quoteOrderNo = ''
+
+            if (direct) {
+              hsOrderNo = direct.originNo || ''
+              directOrderNo = [...(direct.orderNo || '')].reverse().join('')
+              let orderLines = direct.orderLines || []
+
+              this.dataMap[directOrderNo] = orderLines
+              this.dataMap[hsOrderNo] = orderLines
+            }
+
+            if (supply && supply.length > 0) {
+              let supplyMap = {}
+              supplierOrderSize = supply.length
+              supply.map(item => {
+                let orderNo = [...(item.orderNo || '')].reverse().join('')
+                if (!supplierOrderNo) {
+                  supplierOrderNo = orderNo
+                }
+                supplyMap[orderNo] = item.orderLines || []
+              })
+              this.dataMap.supplyMap = supplyMap
+            }
+
+            if (store && store.length > 0) {
+              let storeMap = {}
+              storeOrderSize = store.length
+              store.map(item => {
+                let orderNo = [...(item.orderNo || '')].reverse().join('')
+                if (!storeOrderNo) {
+                  storeOrderNo = orderNo
+                }
+                storeMap[orderNo] = item.orderLines || []
+              })
+              this.dataMap.storeMap = storeMap
+            }
+
+            if (inquery && inquery.length > 0) {
+              let inqueryMap = {}
+              inqueryOrderSize = inquery.length
+              inquery.map(item => {
+                let orderNo = [...(item.orderNo || '')].reverse().join('')
+                if (!inqueryOrderNo) {
+                  inqueryOrderNo = orderNo
+                }
+                inqueryMap[orderNo] = item.orderLines || []
+              })
+              this.dataMap.inqueryMap = inqueryMap
+            }
+
+
+            this.hs(hsOrderNo, directOrderNo, supplierOrderNo, supplierOrderSize, storeOrderNo, storeOrderSize, inqueryOrderNo, inqueryOrderSize, quoteOrderNo)
+          }
+        }).catch(err => {
+          loading()
+        })
       },
       ready() {
-        this.hs()
+        this.getData()
+        // this.hs()
         // this.mall()
       },
-      hs() {
+      hs(hsOrderNo, directOrderNo, supplierOrderNo, supplierOrderSize, storeOrderNo, storeOrderSize, inqueryOrderNo, inqueryOrderSize, quoteOrderNo) {
 
-        let hs = this.node(20, 250, '华胜订单:HSOD-2018102565000001')
-        let dr = this.node(300, 250, '定向订单:DDOD-2018102565000001')
+        let hs = this.node(20, 250, '华胜订单:' + hsOrderNo)
+        let dr = this.node(300, 250, '定向订单:' + directOrderNo)
 
-        let supplier = this.node(580, 120, '直供订单:SPOD-2018102565000001', true, 3)
-        let store = this.node(580, 250, '门店订单:DDOD-2018102565000001', true, 10)
-        let inquiry = this.node(580, 380, '询价订单:IQOD-2018102565000001', false)
-        let quote = this.node(350, 450, '报价回单:IQOD-2018102565000001')
+        let supplier = this.node(580, 120, '直供订单:' + supplierOrderNo, true, supplierOrderSize)
+        let store = this.node(580, 250, '门店订单:' + storeOrderNo, true, storeOrderSize)
+        let inquiry = this.node(580, 380, '询价订单:' + inqueryOrderNo, false, inqueryOrderSize)
+        let quote = this.node(350, 450, '报价回单:' + quoteOrderNo)
 
         this.line(hs, dr)
         this.line(dr, supplier)
@@ -81,6 +222,11 @@
         let texts = text.split(':')
         let name = texts[0]
         text = texts[1]
+        if (!text) {
+          return false
+        }
+
+        let id = text
 
         if (count && count > 1) {
           text += '-(' + count + ')'
@@ -93,7 +239,6 @@
           y: y + 15
         }
 
-        let id = 'node-' + this.elIndex
         let span = document.createElement('span')
         span.id = id
         span.innerText = text
@@ -105,7 +250,7 @@
         }
 
         span.onclick = () => {
-          this.click(id)
+          this.click(id, name)
         }
 
         span.style.top = y + 'px'
@@ -137,6 +282,8 @@
         span.appendChild(nameSpan)
 
         this.nodePointerMap[id] = centerPointer
+
+        console.log(this.nodePointerMap)
 
         return span
       },

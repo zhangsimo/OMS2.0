@@ -58,13 +58,19 @@
             title: '询价单号',
             align: 'center',
             minWidth: 120,
-            key: 'orderNo'
+            key: 'orderNo',
+            render: (h, params) => {
+              return h('span', [...(params.row.orderNo || '')].reverse().join(''))
+            }
           },
           {
             title: '定向单号',
             align: 'center',
             key: 'originNo',
-            minWidth: 120
+            minWidth: 120,
+            render: (h, params) => {
+              return h('span', [...(params.row.originNo || '')].reverse().join(''))
+            }
           },
           {
             title: '推送状态',
@@ -73,7 +79,7 @@
             minWidth: 120
           },
           {
-            title: '制单时间',
+            title: '生成时间',
             align: 'center',
             key: 'createTime',
             minWidth: 120

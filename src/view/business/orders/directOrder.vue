@@ -58,10 +58,21 @@
           {
             title: '定向单号',
             align: 'center',
-            minWidth: 120,
+            minWidth: 180,
             key: '',
             render: (h, params) => {
-              return h('span', [...(params.row.orderNo || '')].reverse().join(''))
+              let id = params.row.id
+              return h('span', {
+                class: 'pointer',
+                on: {
+                  click: () => {
+                    this.$router.push({
+                      name: 'orderLink',
+                      query: {id}
+                    })
+                  }
+                }
+              }, [...(params.row.orderNo || '')].reverse().join(''))
             }
           },
           {
@@ -77,15 +88,37 @@
             minWidth: 120
           },
           {
-            title: '制单人',
+            title: '订单状态',
             align: 'center',
-            key: 'createUname',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.status || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
           },
           {
-            title: '制单时间',
+            title: '推送状态',
             align: 'center',
-            key: 'createTime',
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.orderPushStatus || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
+          },
+          {
+            title: '推送时间',
+            align: 'center',
+            key: 'orderPushTime',
             minWidth: 120
           },
           {

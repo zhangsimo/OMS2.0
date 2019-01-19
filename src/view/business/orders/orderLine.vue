@@ -5,7 +5,7 @@
 <script>
 
   export default {
-    name: "orderLine",
+    name: "OrderLine",
     props: {
       tbdata: Array
     },
@@ -34,6 +34,7 @@
       }
     },
     mounted() {
+      console.log(this.tbdata)
     },
     methods: {
     },

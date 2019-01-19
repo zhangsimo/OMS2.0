@@ -65,3 +65,12 @@ export function queryAllTransferOrder(params) {
     params
   })
 }
+
+
+export function routekin(params) {
+  return axios.request({
+    url: api.omsOrderApi + '/directBill/routekin',
+    method: 'get',
+    params
+  })
+}

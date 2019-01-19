@@ -57,31 +57,53 @@
           {
             title: '直供单号',
             align: 'center',
-            minWidth: 120,
-            key: 'orderNo'
+            minWidth: 180,
+            key: 'orderNo',
+            render: (h, params) => {
+              return h('span', [...(params.row.orderNo || '')].reverse().join(''))
+            }
           },
           {
             title: '定向单号',
             align: 'center',
             key: 'originNo',
-            minWidth: 120
+            minWidth: 180,
+            render: (h, params) => {
+              return h('span', [...(params.row.originNo || '')].reverse().join(''))
+            }
           },
           {
-            title: '供应商名称',
+            title: '订单状态',
             align: 'center',
-            key: 'supplyName',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.status || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
           },
           {
-            title: '供应商编号',
+            title: '推送状态',
             align: 'center',
-            key: 'supplyNo',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.orderPushStatus || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
           },
           {
-            title: '制单时间',
+            title: '推送时间',
             align: 'center',
-            key: 'createTime',
+            key: 'orderPushTime',
             minWidth: 120
           },
           {
