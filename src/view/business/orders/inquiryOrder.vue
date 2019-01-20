@@ -75,13 +75,21 @@
           {
             title: '推送状态',
             align: 'center',
-            key: 'orderPushStatus',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.orderPushStatus || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
           },
           {
-            title: '生成时间',
+            title: '推送时间',
             align: 'center',
-            key: 'createTime',
+            key: 'orderPushTime',
             minWidth: 120
           },
           {

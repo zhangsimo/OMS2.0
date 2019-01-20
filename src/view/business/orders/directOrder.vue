@@ -76,7 +76,7 @@
             }
           },
           {
-            title: '原始单号',
+            title: '华胜单号',
             align: 'center',
             key: 'originNo',
             minWidth: 120
@@ -87,13 +87,27 @@
             key: 'storeNo',
             minWidth: 120
           },
+          // {
+          //   title: '订单状态',
+          //   align: 'center',
+          //   key: '',
+          //   minWidth: 120,
+          //   render: (h, params) => {
+          //     let status = JSON.parse(params.row.status || '{}')
+          //     let cls = 'text-state-warn'
+          //     if (status.value == 1) {
+          //       cls = 'text-state-ok'
+          //     }
+          //     return h('span', {class: cls}, status.name)
+          //   }
+          // },
           {
-            title: '订单状态',
+            title: '拆单状态',
             align: 'center',
             key: '',
             minWidth: 120,
             render: (h, params) => {
-              let status = JSON.parse(params.row.status || '{}')
+              let status = JSON.parse(params.row.routeResult || '{}')
               let cls = 'text-state-warn'
               if (status.value == 1) {
                 cls = 'text-state-ok'
@@ -102,23 +116,15 @@
             }
           },
           {
-            title: '推送状态',
+            title: '接收时间',
             align: 'center',
-            key: '',
-            minWidth: 120,
-            render: (h, params) => {
-              let status = JSON.parse(params.row.orderPushStatus || '{}')
-              let cls = 'text-state-warn'
-              if (status.value == 1) {
-                cls = 'text-state-ok'
-              }
-              return h('span', {class: cls}, status.name)
-            }
+            key: 'captureTime',
+            minWidth: 120
           },
           {
-            title: '推送时间',
+            title: '下单时间',
             align: 'center',
-            key: 'orderPushTime',
+            key: 'createTime',
             minWidth: 120
           },
           {

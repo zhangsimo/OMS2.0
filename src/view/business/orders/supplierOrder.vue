@@ -72,20 +72,20 @@
               return h('span', [...(params.row.originNo || '')].reverse().join(''))
             }
           },
-          {
-            title: '订单状态',
-            align: 'center',
-            key: '',
-            minWidth: 120,
-            render: (h, params) => {
-              let status = JSON.parse(params.row.status || '{}')
-              let cls = 'text-state-warn'
-              if (status.value == 1) {
-                cls = 'text-state-ok'
-              }
-              return h('span', {class: cls}, status.name)
-            }
-          },
+          // {
+          //   title: '订单状态',
+          //   align: 'center',
+          //   key: '',
+          //   minWidth: 120,
+          //   render: (h, params) => {
+          //     let status = JSON.parse(params.row.status || '{}')
+          //     let cls = 'text-state-warn'
+          //     if (status.value == 1) {
+          //       cls = 'text-state-ok'
+          //     }
+          //     return h('span', {class: cls}, status.name)
+          //   }
+          // },
           {
             title: '推送状态',
             align: 'center',

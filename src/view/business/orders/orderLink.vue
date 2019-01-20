@@ -315,7 +315,7 @@
       node(x, y, text, status, count, time) {
 
         let timeKey = {
-          '华胜订单': '下单订单',
+          '华胜订单': '下单时间',
           '定向订单': '接收时间',
           '直供订单': '推送时间',
           '门店订单': '推送时间',
@@ -344,7 +344,7 @@
         // let textWidth = ctx.measureText(text).width + 20
 
         let centerPointer = {
-          x: x + 105,//textWidth / 2,
+          x: x + 110,//textWidth / 2,
           y: y + 40
         }
 
@@ -471,7 +471,7 @@
     box-shadow: 2px 2px 5px 2px #aaa;
     border-radius: 5px;
     height: 80px;
-    width: 210px;
+    width: 215px;
     line-height: 20px;
     padding: 10px 0;
     text-align: center;
@@ -489,9 +489,16 @@
   .node .name {
     position: absolute;
     display: inline-block;
-    top: 105%;
-    left: 0;
-    right: 0;
+    top: -20px;
+    left: 50%;
+    margin-left: -40px;
+    /*right: 0;*/
+    background: #ddd;
+    color: #666666;
+    padding: 0;
+    width: 80px;
+    border-radius: 15px 15px 0 0;
+    /*box-shadow: 0 2px 2px 0 #999;*/
     text-align: center;
     z-index: 0;
   }
