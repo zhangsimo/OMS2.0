@@ -119,11 +119,27 @@ export const getHomeRoute = routers => {
  * @description 如果该newRoute已经存在则不再添加
  */
 export const getNewTagList = (list, newRoute) => {
-  const {name, path, meta} = newRoute
+  const { name, path, meta, query} = newRoute
   let newList = [...list]
-  if (newList.findIndex(item => item.name === name) >= 0) return newList
-  else newList.push({name, path, meta})
+  if (newList.findIndex(item => item.name === name) >= 0) {
+    newList.forEach((v,i) => {
+      if(v.name === name){
+        if(JSON.stringify(v.query)===JSON.stringify(query)){
+          return newList
+        }else{
+          v.query = query
+          //newList.splice(i,1)
+          //newList.push({ name, path, meta,query })
+        }
+      }
+    })
+  }
+  //if (newList.findIndex(item => item.name === name) >= 0) return newList
+  else {
+    newList.push({name, path, meta, query})
+  }
   return newList
+
 }
 
 /**

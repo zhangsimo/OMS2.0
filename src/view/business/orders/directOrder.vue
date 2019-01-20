@@ -68,7 +68,7 @@
                   click: () => {
                     this.$router.push({
                       name: 'orderLink',
-                      query: {id}
+                      query: {id, type: 'hs'}
                     })
                   }
                 }

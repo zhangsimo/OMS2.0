@@ -67,9 +67,17 @@ export function queryAllTransferOrder(params) {
 }
 
 
-export function routekin(params) {
+export function directBillRoutekin(params) {
   return axios.request({
     url: api.omsOrderApi + '/directBill/routekin',
+    method: 'get',
+    params
+  })
+}
+
+export function transferOrderRoutekin(params) {
+  return axios.request({
+    url: api.omsOrderApi + '/transferOrder/routekin',
     method: 'get',
     params
   })

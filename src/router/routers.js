@@ -79,6 +79,7 @@ export default [
         name: 'supplierList',
         // mark: 'oms_goods_category',
         meta: {
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '供应商信息'
         },
@@ -178,7 +179,7 @@ export default [
         name: 'orderLink',
         // mark: 'oms_orders_link',
         meta: {
-          // hideInMenu: true,
+          hideInMenu: true,
           icon: 'arrow-graph-up-right',
           title: '订单链路'
         },
@@ -295,17 +296,27 @@ export default [
     // mark: 'gpart_oms_policy',
     meta: {
       icon: 'gear-b',
-      title: '基础设置'
+      title: '门店管理'
     },
     component: Main,
     children: [
+      // {
+      //   path: '/baseSetting/jpHsRelationship',
+      //   name: 'jpHsRelationship',
+      //   // mark: 'oms_policy_approve',
+      //   meta: {
+      //     icon: 'arrow-graph-up-right',
+      //     title: '极配华胜门店关系'
+      //   },
+      //   component: () => import('@/view/business/baseSetting/storeArea.vue')
+      // },
       {
         path: '/baseSetting/storeArea',
         name: 'storeArea',
         // mark: 'oms_policy_approve',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '极配门店区域管理'
+          title: '极配门店管理'
         },
         component: () => import('@/view/business/baseSetting/storeArea.vue')
       },

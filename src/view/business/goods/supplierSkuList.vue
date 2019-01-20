@@ -65,6 +65,10 @@
         <FormItem label="采购单价：" v-if="skuIsValidate">
           <InputNumber v-model="data.purchasePrice" :min="1" :max="999999" class="w200"/>
         </FormItem>
+
+        <FormItem label="采购单价：" v-if="skuIsValidate">
+          <InputNumber v-model="data.salesPrice" :min="1" :max="999999" class="w200"/>
+        </FormItem>
       </Form>
       <div slot='footer'>
         <Button type='text' @click='modal = false'>取消</Button>
@@ -95,7 +99,8 @@
           supplyName: '',
           supplyNo: '',
           minQuantity: 1,
-          purchasePrice: 1
+          purchasePrice: 1,
+          salesPrice: 1
         },
         supplierArr: [],
         searchValue: '',
@@ -178,6 +183,12 @@
             minWidth: 120
           },
           {
+            title: '销售价',
+            align: 'center',
+            key: 'salesPrice',
+            minWidth: 120
+          },
+          {
             title: '采购单价',
             align: 'center',
             key: 'purchasePrice',
@@ -234,6 +245,7 @@
         this.data.skuNo = ''
         this.data.minQuantity = 1
         this.data.purchasePrice = 1
+        this.data.salesPrice = 1
       },
       add() {
         this.data = {
@@ -245,7 +257,8 @@
           supplyName: '',
           supplyNo: '',
           minQuantity: 1,
-          purchasePrice: 1
+          purchasePrice: 1,
+          salesPrice: 1
         }
         this.supplierArr = []
         this.skuIsValidate = false
@@ -264,6 +277,10 @@
         let purchasePrice = this.data.purchasePrice
         purchasePrice = purchasePrice.toFixed(2) - 0
         this.data.purchasePrice = purchasePrice
+
+        let salesPrice = this.data.salesPrice
+        salesPrice = salesPrice.toFixed(2) - 0
+        this.data.salesPrice = salesPrice
 
         let action = this.data.id ? update : saveSupplySku
         let stop = this.$loading()

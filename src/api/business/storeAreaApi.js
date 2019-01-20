@@ -9,6 +9,14 @@ export function queryAll(data) {
   })
 }
 
+export function saveStore(data) {
+  return axios.request({
+    url: '/store/save',
+    method: 'post',
+    data: data
+  })
+}
+
 export function findAllArea(params) {
   return axios.request({
     url: '/area/findAll',

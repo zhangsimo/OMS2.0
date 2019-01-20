@@ -134,7 +134,11 @@
         else if (this.$route.name === name) this.$router.push({name: nextName})
       },
       handleClick(item) {
-        this.turnToPage(item.name)
+        // this.turnToPage(item.name)
+        this.$router.push({
+          name: item.name,
+          query: item.query
+        })
       }
     },
     watch: {

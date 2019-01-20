@@ -31,12 +31,39 @@
       </div>
     </Modal>
 
+    <Modal v-model="storeModal" title="编辑" width="400">
+      <Form :label-width="100">
+
+        <FormItem label="门店名称：">
+          <Input v-model="store.shortName" class="w200" readonly/>
+        </FormItem>
+
+        <FormItem label="门店编号：">
+          <Input v-model="store.storeNo" class="w200" readonly/>
+        </FormItem>
+
+        <FormItem label="门店电话：">
+          <Input v-model="store.tel" :max="20" class="w200" placeholder="门店电话"/>
+        </FormItem>
+
+        <FormItem label="门店地址：">
+          <Input v-model="store.address" type="textarea" placeholder="门店地址"
+                 :autosize="{minRows: 2,maxRows: 5}" :max="99" class="w200"/>
+        </FormItem>
+
+      </Form>
+      <div slot='footer'>
+        <Button type='text' @click='storeModal = false'>取消</Button>
+        <Button type='primary' @click='saveStore'>确定</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 
-  import {queryAll, findAllArea, saveArea, deleteArea} from '_api/business/storeAreaApi'
+  import {queryAll, saveStore, findAllArea, saveArea, deleteArea} from '_api/business/storeAreaApi'
 
   export default {
     name: "storeArea",
@@ -50,6 +77,14 @@
           {value: 'name', name: '门店名称'},
           {value: 'storeNo', name: '门店编码'}
         ],
+        storeModal: false,
+        store: {
+          id: '',
+          shortName: '',
+          storeNo: '',
+          tel: '',
+          address: ''
+        },
         page: {
           num: 1,
           size: 10,
@@ -60,54 +95,82 @@
           {
             title: '操作',
             align: 'center',
-            width: 120,
+            width: 150,
             key: '',
             render: (h, params) => {
-              let areaSet = params.row.areaSet || []
+              let opts = [
+                h('span', {
+                  class: 'pointer mr20',
+                  on: {
+                    click: () => {
+                      this.store = Object.assign({}, params.row)
+                      this.storeModal = true
+                    }
+                  }
+                }, '编辑')
+              ]
 
+              let areaSet = params.row.areaSet || []
               let areaIds = params.row.areaSet.map(item => item.id + '')
 
               if (areaSet.length == 0) {
-                return h('span', {
-                  class: 'pointer',
-                  on: {
-                    click: () => {
-                      //let areaIds = ["310000000000", "310100000000", "310101000000", "310104000000", "320000000000", "320100000000", "320102000000", "320104000000"]
-                      this.storeId = params.row.id
-                      this.show(null)
+                opts.push(
+                  h('span', {
+                    class: 'pointer',
+                    on: {
+                      click: () => {
+                        //let areaIds = ["310000000000", "310100000000", "310101000000", "310104000000", "320000000000", "320100000000", "320102000000", "320104000000"]
+                        this.storeId = params.row.id
+                        this.show(null)
+                      }
                     }
-                  }
-                }, '绑定区域')
+                  }, '绑定区域')
+                )
               } else {
-                return h('span', {
-                  class: 'pointer delete',
-                  on: {
-                    click: () => {
-                      this.$Modal.confirm({
-                        title: '提示',
-                        content: '确定要解除绑定吗？',
-                        onOk: () => {
-                          this.storeId = params.row.id
-                          this.deleteArea(areaIds)
-                        }
-                      })
+                opts.push(
+                  h('span', {
+                    class: 'pointer delete',
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: '提示',
+                          content: '确定要解除绑定吗？',
+                          onOk: () => {
+                            this.storeId = params.row.id
+                            this.deleteArea(areaIds)
+                          }
+                        })
+                      }
                     }
-                  }
-                }, '解除绑定')
+                  }, '解除绑定')
+                )
               }
+              return h('div', opts)
             }
           },
           {
             title: '门店',
             align: 'center',
-            minWidth: 120,
+            width: 150,
             key: 'shortName'
           },
           {
             title: '门店编号',
             align: 'center',
             key: 'storeNo',
-            minWidth: 120
+            width: 120
+          },
+          {
+            title: '门店地址',
+            align: 'center',
+            key: 'address',
+            width: 200
+          },
+          {
+            title: '门店电话',
+            align: 'center',
+            key: 'tel',
+            width: 120
           },
           {
             title: '服务区域',
@@ -199,6 +262,32 @@
       this.getList()
     },
     methods: {
+      saveStore() {
+        let stop = this.$loading()
+        this.store.tel = this.store.tel.trim()
+        this.store.address = this.store.address.trim()
+
+        if (!this.store.id) {
+          this.$Message.warning('数据异常，id不能为空')
+          return
+        }
+
+        let data = {
+          id: this.store.id,
+          tel: this.store.tel,
+          address: this.store.address
+        }
+
+        saveStore(data).then(res => {
+          stop()
+          if (res.code == 0) {
+            this.getList()
+            this.storeModal = false
+          }
+        }).catch(err => {
+          stop()
+        })
+      },
       show(areaIds) {
         this.stopLoading = this.$loading()
         this.areaTree = []

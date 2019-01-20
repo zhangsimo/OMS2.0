@@ -58,7 +58,21 @@
             title: '转单单号',
             align: 'center',
             minWidth: 120,
-            key: 'orderNo'
+            key: '',
+            render: (h, params) => {
+              let id = params.row.id
+              return h('span', {
+                class: 'pointer',
+                on: {
+                  click: () => {
+                    this.$router.push({
+                      name: 'orderLink',
+                      query: {id, type: 'mall'}
+                    })
+                  }
+                }
+              }, [...(params.row.orderNo || '')].reverse().join(''))
+            }
           },
           {
             title: '源订单号',
