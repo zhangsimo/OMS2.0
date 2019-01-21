@@ -87,6 +87,20 @@
             }
           },
           {
+            title: '推送结果',
+            align: 'center',
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.orderPushResult || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
+          },
+          {
             title: '推送时间',
             align: 'center',
             key: 'orderPushTime',

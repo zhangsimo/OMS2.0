@@ -20,7 +20,7 @@
             @on-page-size-change="changeSize" show-sizer show-total></Page>
     </section>
 
-    <Modal v-model="modal" title="修改区域" width="400" height="500">
+    <Modal v-model="modal" title="绑定区域" width="400" height="500">
 
       <Tree v-if="refreshTree" ref="tree" style="max-height: 500px;overflow-y: auto" :data="areaTree" @on-check-change="checkChange"
             children-key="childs" show-checkbox :check-strictly="true" :load-data="loadAreaData"/>
