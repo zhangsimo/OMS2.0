@@ -93,10 +93,10 @@
           title = name
         } else {
           this.lines = this.dataMap[id]
-          title = `明细 - （${name}：${id}）`
+          title = `（${name}：${id}）`
         }
 
-        this.title = title
+        this.title = '明细 - ' + title
         this.showLines = true
       },
       getData() {

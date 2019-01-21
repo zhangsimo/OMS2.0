@@ -265,7 +265,7 @@
 
       },
       getList() {
-        let params = {cropId: 3}
+        let params = {cropId: 0}
         let searchValue = this.searchValue.trim()
         if (searchValue) {
           params[this.searchType] = searchValue

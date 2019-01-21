@@ -82,6 +82,12 @@
             minWidth: 120
           },
           {
+            title: '华胜门店',
+            align: 'center',
+            key: 'storeName',
+            minWidth: 120
+          },
+          {
             title: '门店编号',
             align: 'center',
             key: 'storeNo',

@@ -62,11 +62,11 @@
           <InputNumber v-model="data.minQuantity" :min="1" :max="999999" :precision="0" :step="1" class="w200"/>
         </FormItem>
 
-        <FormItem label="采购单价：" v-if="skuIsValidate">
+        <FormItem label="采购价：" v-if="skuIsValidate">
           <InputNumber v-model="data.purchasePrice" :min="1" :max="999999" class="w200"/>
         </FormItem>
 
-        <FormItem label="采购单价：" v-if="skuIsValidate">
+        <FormItem label="门店价：" v-if="skuIsValidate">
           <InputNumber v-model="data.salesPrice" :min="1" :max="999999" class="w200"/>
         </FormItem>
       </Form>
@@ -183,13 +183,13 @@
             minWidth: 120
           },
           {
-            title: '销售价',
+            title: '门店价',
             align: 'center',
             key: 'salesPrice',
             minWidth: 120
           },
           {
-            title: '采购单价',
+            title: '采购价',
             align: 'center',
             key: 'purchasePrice',
             minWidth: 120

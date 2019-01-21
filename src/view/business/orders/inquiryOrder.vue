@@ -92,12 +92,12 @@
             key: 'orderPushTime',
             minWidth: 120
           },
-          {
-            title: '备注',
-            align: 'center',
-            key: 'memo',
-            minWidth: 120
-          }
+          // {
+          //   title: '备注',
+          //   align: 'center',
+          //   key: 'memo',
+          //   minWidth: 120
+          // }
         ],
         tbdata: []
       }
