@@ -57,12 +57,40 @@
       </div>
     </Modal>
 
+    <Modal v-model="storeModal" title="编辑" width="400">
+      <Form :label-width="100">
+
+        <FormItem label="门店名称：">
+          <Input v-model="store.shortName" class="w200" readonly/>
+        </FormItem>
+
+        <FormItem label="门店编号：">
+          <Input v-model="store.storeNo" class="w200" readonly/>
+        </FormItem>
+
+        <FormItem label="门店电话：">
+          <Input v-model="store.tel" :max="20" class="w200" placeholder="门店电话"/>
+        </FormItem>
+
+        <FormItem label="门店地址：">
+          <Input v-model="store.address" type="textarea" placeholder="门店地址"
+                 :autosize="{minRows: 2,maxRows: 5}" :max="99" class="w200"/>
+        </FormItem>
+
+      </Form>
+      <div slot='footer'>
+        <Button type='text' @click='storeModal = false'>取消</Button>
+        <Button type='primary' @click='saveStore'>确定</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
 <script>
 
   import {queryAll, findAllSupplyPartner, findByStoreNo, save, del} from '_api/business/hsStoreSupplierApi'
+  import {saveStore} from '_api/business/storeAreaApi'
 
   export default {
     name: "hsStoreSupplier",
@@ -88,6 +116,16 @@
         supplierArr: [],
         supplierMap: {},
         supplierArr2: [],
+
+        storeModal: false,
+        store: {
+          id: '',
+          shortName: '',
+          storeNo: '',
+          tel: '',
+          address: ''
+        },
+
         data: {
           storeName: '',
           storeNo: '',
@@ -99,32 +137,56 @@
           {
             title: '操作',
             align: 'center',
-            width: 120,
+            width: 150,
             key: '',
             render: (h, params) => {
-              return h('span', {
-                class: 'pointer',
-                on: {
-                  click: () => {
-                    let storeName = params.row.shortName
-                    let storeNo = params.row.storeNo
-                    this.add(storeName, storeNo)
+              let opts = [
+                h('span', {
+                  class: 'pointer mr20',
+                  on: {
+                    click: () => {
+                      this.store = Object.assign({}, params.row)
+                      this.storeModal = true
+                    }
                   }
-                }
-              }, '添加经销商')
+                }, '编辑'),
+                h('span', {
+                  class: 'pointer',
+                  on: {
+                    click: () => {
+                      let storeName = params.row.shortName
+                      let storeNo = params.row.storeNo
+                      this.add(storeName, storeNo)
+                    }
+                  }
+                }, '添加经销商')
+              ]
+              return h('div', opts)
             }
           },
           {
             title: '华胜门店',
             align: 'center',
-            minWidth: 120,
+            width: 200,
             key: 'shortName'
           },
           {
             title: '门店编号',
             align: 'center',
             key: 'storeNo',
-            minWidth: 120
+            width: 120
+          },
+          {
+            title: '门店地址',
+            align: 'center',
+            key: 'address',
+            width: 200
+          },
+          {
+            title: '门店电话',
+            align: 'center',
+            key: 'tel',
+            width: 120
           },
           {
             title: '经销商',
@@ -198,6 +260,37 @@
       })
     },
     methods: {
+      saveStore() {
+        if (!this.store.id) {
+          this.$Message.warning('数据异常，id不能为空')
+          return
+        }
+
+        this.store.tel = (this.store.tel || '').trim()
+        this.store.address = (this.store.address || '').trim()
+
+        if (!this.store.tel || !this.store.address) {
+          this.$Message.warning('门店电话或门店地址不能为空')
+          return
+        }
+
+        let data = {
+          id: this.store.id,
+          tel: this.store.tel,
+          address: this.store.address
+        }
+
+        let stop = this.$loading()
+        saveStore(data).then(res => {
+          stop()
+          if (res.code == 0) {
+            this.getList()
+            this.storeModal = false
+          }
+        }).catch(err => {
+          stop()
+        })
+      },
       add(storeName, storeNo) {
         this.data = {
           storeName,

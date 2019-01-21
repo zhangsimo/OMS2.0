@@ -326,7 +326,7 @@ export default [
         // mark: 'oms_policy_approve',
         meta: {
           icon: 'arrow-graph-up-right',
-          title: '华胜门店经销商管理'
+          title: '华胜门店管理'
         },
         component: () => import('@/view/business/baseSetting/hsStoreSupplier.vue')
       }

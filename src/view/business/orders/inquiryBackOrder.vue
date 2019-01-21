@@ -59,13 +59,19 @@
             title: '报价单号',
             align: 'center',
             minWidth: 120,
-            key: 'orderNo'
+            key: '',
+            render: (h, params) => {
+              return h('span', [...(params.row.orderNo || '')].reverse().join(''))
+            }
           },
           {
             title: '询价单号',
             align: 'center',
-            key: 'originNo',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              return h('span', [...(params.row.originNo || '')].reverse().join(''))
+            }
           },
           {
             title: '回单时间',

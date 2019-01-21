@@ -149,9 +149,9 @@
             }
           },
           {
-            title: '门店',
+            title: '极配门店',
             align: 'center',
-            width: 150,
+            width: 200,
             key: 'shortName'
           },
           {
@@ -263,12 +263,16 @@
     },
     methods: {
       saveStore() {
-        let stop = this.$loading()
-        this.store.tel = this.store.tel.trim()
-        this.store.address = this.store.address.trim()
-
         if (!this.store.id) {
           this.$Message.warning('数据异常，id不能为空')
+          return
+        }
+
+        this.store.tel = (this.store.tel || '').trim()
+        this.store.address = (this.store.address || '').trim()
+
+        if (!this.store.tel || !this.store.address) {
+          this.$Message.warning('门店电话或门店地址不能为空')
           return
         }
 
@@ -278,6 +282,7 @@
           address: this.store.address
         }
 
+        let stop = this.$loading()
         saveStore(data).then(res => {
           stop()
           if (res.code == 0) {

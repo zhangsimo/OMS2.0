@@ -58,13 +58,19 @@
             title: '门店单号',
             align: 'center',
             minWidth: 120,
-            key: 'orderNo'
+            key: '',
+            render: (h, params) => {
+              return h('span', [...(params.row.orderNo || '')].reverse().join(''))
+            }
           },
           {
             title: '定向/电商单号',
             align: 'center',
-            key: 'originNo',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              return h('span', [...(params.row.originNo || '')].reverse().join(''))
+            }
           },
           {
             title: '门店名称',

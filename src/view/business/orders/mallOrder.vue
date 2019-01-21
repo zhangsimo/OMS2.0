@@ -77,8 +77,11 @@
           {
             title: '源订单号',
             align: 'center',
-            key: 'originNo',
-            minWidth: 120
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              return h('span', [...(params.row.originNo || '')].reverse().join(''))
+            }
           },
           {
             title: '客户编码',
