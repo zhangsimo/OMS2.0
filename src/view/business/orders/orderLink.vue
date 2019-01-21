@@ -5,6 +5,7 @@
       <canvas id="canvas" width="1000" height="500">don't support</canvas>
       <div id="container"></div>
       <Icon class="refresh" type="loop" size="26" @click="getData" title="刷新"></Icon>
+      <span v-if="errorTip" class="error-tip">{{errorTip}}</span>
     </section>
 
     <Modal v-model="showLines" :title="title" width="530" ok-text="关闭" cancel-text="">
@@ -29,6 +30,7 @@
     components: {OrderLine},
     data() {
       return {
+        errorTip: '',
         nodePointerMap: {},
         elIndex: 0,
         container: null,
@@ -113,16 +115,20 @@
 
         routekin({id: this.id}).then(res => {
           loading()
-          if (res.code == 0) {
+          if (res.code == 0 && res.data) {
+            this.errorTip = ''
             res = res.data || {}
             if (this.type == 'hs') {
               this.parseHs(res)
             } else {
               this.parseMall(res)
             }
+          } else {
+            this.errorTip = '数据异常'
           }
         }).catch(err => {
           loading()
+          this.errorTip = '网络异常'
         })
       },
       parseHs(res) {
@@ -383,9 +389,11 @@
         }
 
         if (orderResult) {
-          let resultCls = ['r-succ', 'r-fail', 'r-error'], tmp = '<span class="result">'
+          let resultCls = ['r-succ', 'r-fail', 'r-error'],
+            titles = ['成功', '失败', '错误'],
+            tmp = '<span class="result">'
           orderResult.map((item, index) => {
-            tmp += `<span class="${resultCls[index]}">${item}</span>`
+            tmp += `<span class="${resultCls[index]}" title="${titles[index]}">${item}</span>`
           })
           innerHTML += tmp + '</span>'
         } else {
@@ -624,5 +632,17 @@
     &:hover {
       color: #666;
     }
+  }
+  .error-tip {
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    right: 0;
+    left: 0;
+    color: #999;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 200px;
   }
 </style>
