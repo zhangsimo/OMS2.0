@@ -589,7 +589,9 @@
       display: inline-block;
       min-width: 20px;
       float: right;
+      padding: 0 5px;
       margin-left: 5px;
+      margin-top: 2px;
       border-radius: 15px;
     }
     .r-succ {
