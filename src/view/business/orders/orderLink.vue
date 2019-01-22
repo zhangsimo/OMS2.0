@@ -393,7 +393,7 @@
         span.id = id
 
         let orderPushStatus1 = {'1': 'node succ', '2': 'node warn', '3': 'node fail'}
-        let orderRouteStatus = {'0': 'node warn', '1': 'node succ'}
+        let orderRouteStatus = {'0': 'node warn', '1': 'node succ', '2': 'node fail'}
 
         status = JSON.parse(status || '{}')
         let innerHTML = `<span class="title">${text}</span><br/>${timeKey[name]}：${time || ''}<br/>`
