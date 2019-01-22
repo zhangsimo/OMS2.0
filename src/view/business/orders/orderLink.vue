@@ -85,7 +85,7 @@
           for (let key in orderLinesMap) {
             let item = orderLinesMap[key]
             let name = `${key} （${item.statusText}）`
-            if (item.value != 0) {
+            if (item.status != 0) {
               name = `${key} （${item.statusText} - ${item.resultText}）`
             }
             this.orderNoArr.push({value: key, name})
