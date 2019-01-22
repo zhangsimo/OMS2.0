@@ -315,6 +315,8 @@
           })
           result.storePushResult = '4'
 
+          result.storeOrderResult = [succ, fail, error]
+
           this.dataMap.storeMap = storeMap
         }
 
