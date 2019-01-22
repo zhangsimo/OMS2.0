@@ -35,12 +35,12 @@ const audit = {
 }
 
 const pro = {
-  tokenApi: 'https://api.g-part.cn',
-  wmsApi: 'https://api.g-part.cn/wms-order-provider',
-  omsApi: 'https://api.g-part.cn/oms-product-provider',
-  omsOrderApi: 'https://api.g-part.cn/oms-order-provider',
-  passportApi: 'https://api.g-part.cn/gpart-passport-provider',
-  essentialApi: 'https://api.g-part.cn/gpart-essential-provider'
+  tokenApi: 'https://api.g-parts.cn',
+  wmsApi: 'https://api.g-parts.cn/wms-order-provider',
+  omsApi: 'https://api.g-parts.cn/oms-product-provider',
+  omsOrderApi: 'https://api.g-parts.cn/oms-order-provider',
+  passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
+  essentialApi: 'https://api.g-parts.cn/gpart-essential-provider'
 }
 
 let urlObj = {dev, test, audit, pro}
