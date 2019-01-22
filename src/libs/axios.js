@@ -2,7 +2,7 @@ import Axios from 'axios'
 import qs from 'qs'
 import baseURL from '_conf/url'
 import Cookies from 'js-cookie'
-import { TOKEN_KEY, REFRESH_TOKEN_KEY, LOCATION_KEY, isTokenExpired } from '@/libs/util'
+import { TOKEN_KEY, REFRESH_TOKEN_KEY, isTokenExpired } from '@/libs/util'
 
 let lock = true
 
@@ -73,7 +73,6 @@ class httpRequest {
           // else{
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-            config.params['location'] = localStorage.getItem(LOCATION_KEY)
           // }
       }else{
         if(config.url.includes('/token')){
@@ -102,7 +101,6 @@ class httpRequest {
           // 后端服务在个别情况下回报201，待确认
           if (data.code === 401) {
             Cookies.remove(TOKEN_KEY)
-            Cookies.remove(LOCATION_KEY)
             window.location.href = '/#/login'
             globalVue.$Message.error('未登录，或登录失效，请登录')
           } else {
@@ -132,7 +130,6 @@ class httpRequest {
           globalVue.$Message.error(errtip)
           setTimeout(function () {
             Cookies.remove(TOKEN_KEY)
-            Cookies.remove(LOCATION_KEY)
             window.location.href = '/#/login'
           },1500)
           return false
