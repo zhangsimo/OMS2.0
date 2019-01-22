@@ -57,17 +57,17 @@
           {
             title: '门店单号',
             align: 'center',
-            minWidth: 120,
+            minWidth: 210,
             key: '',
             render: (h, params) => {
               return h('span', [...(params.row.orderNo || '')].reverse().join(''))
             }
           },
           {
-            title: '定向/电商单号',
+            title: '定向/转单单号',
             align: 'center',
             key: '',
-            minWidth: 120,
+            minWidth: 210,
             render: (h, params) => {
               return h('span', [...(params.row.originNo || '')].reverse().join(''))
             }
@@ -75,7 +75,7 @@
           {
             title: '门店名称',
             align: 'center',
-            key: 'storeName',
+            key: 'storeShortName',
             minWidth: 120
           },
           {
@@ -104,6 +104,11 @@
             key: '',
             minWidth: 120,
             render: (h, params) => {
+              let pushStatus = JSON.parse(params.row.orderPushStatus || '{}').value
+              if (pushStatus != 1) {
+                return h('span', '-')
+              }
+
               let status = JSON.parse(params.row.orderPushResult || '{}')
               let cls = 'text-state-warn'
               if (status.value == 1) {
@@ -115,8 +120,15 @@
           {
             title: '推送时间',
             align: 'center',
-            key: 'orderPushTime',
-            minWidth: 120
+            key: '',
+            minWidth: 150,
+            render: (h, params) => {
+              let pushStatus = JSON.parse(params.row.orderPushStatus || '{}').value
+              if (pushStatus != 1) {
+                return h('span', '-')
+              }
+              return h('span', params.row.orderPushTime)
+            }
           },
         ],
         tbdata: []

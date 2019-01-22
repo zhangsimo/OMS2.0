@@ -58,7 +58,7 @@
           {
             title: '定向单号',
             align: 'center',
-            minWidth: 180,
+            minWidth: 210,
             key: '',
             render: (h, params) => {
               let id = params.row.id
@@ -79,12 +79,12 @@
             title: '华胜单号',
             align: 'center',
             key: 'originNo',
-            minWidth: 120
+            minWidth: 210
           },
           {
-            title: '华胜门店',
+            title: '门店名称',
             align: 'center',
-            key: 'storeName',
+            key: 'deliveryLinkman',
             minWidth: 120
           },
           {
@@ -125,13 +125,13 @@
             title: '接收时间',
             align: 'center',
             key: 'captureTime',
-            minWidth: 120
+            minWidth: 150
           },
           {
             title: '下单时间',
             align: 'center',
             key: 'createTime',
-            minWidth: 120
+            minWidth: 150
           },
           {
             title: '备注',

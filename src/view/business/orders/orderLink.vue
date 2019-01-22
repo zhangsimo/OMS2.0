@@ -1,8 +1,8 @@
 <template>
   <div>
-    <section class="con-box" style="position: relative;height: 600px;min-width: 1000px">
+    <section class="con-box" style="position: relative;height: 800px;min-width: 1000px">
       <b style="position: absolute;top: 20px;left: 20px">订单链路</b>
-      <canvas id="canvas" width="1000" height="500">don't support</canvas>
+      <canvas id="canvas" width="1000" height="700">don't support</canvas>
       <div id="container"></div>
       <Icon class="refresh" type="loop" size="26" @click="getData" title="刷新"></Icon>
       <span v-if="errorTip" class="error-tip">{{errorTip}}</span>
@@ -72,7 +72,8 @@
         let nameKey = {
           '门店订单': 'storeMap',
           '直供订单': 'supplyMap',
-          '询价订单': 'inqueryMap'
+          '询价订单': 'inqueryMap',
+          '报价回单': 'quoteMap'
         }
         this.orderNoArr = []
         this.orderNo = ''
@@ -87,6 +88,9 @@
             let name = `${key} （${item.statusText}）`
             if (item.status != 0) {
               name = `${key} （${item.statusText} - ${item.resultText}）`
+            }
+            if (!item.statusText) {
+              name = key
             }
             this.orderNoArr.push({value: key, name})
           }
@@ -115,8 +119,8 @@
 
         routekin({id: this.id}).then(res => {
           loading()
+          this.errorTip = ''
           if (res.code == 0 && res.data) {
-            this.errorTip = ''
             res = res.data || {}
             if (this.type == 'hs') {
               this.parseHs(res)
@@ -159,7 +163,11 @@
           inqueryOrderPushTime: '',
           inqueryOrderResult: '',
 
-          quoteOrderNo: ''
+          quoteOrderNo: '',
+          quoteOrderSize: '',
+          quotePushResult: '',
+          quoteOrderPushTime: '',
+          quoteOrderResult: ''
         }
 
         this.dataMap = {}
@@ -167,12 +175,14 @@
         let supply = res.SUPPLY_ORDER || ''
         let store = res.STORE_ORDER || ''
         let inquery = res.INQUERY_BILL || ''
+        let quote = res.QUOTE_BILL || ''
 
-        let tmpMap = {supply, store, inquery},
+        let tmpMap = {supply, store, inquery, quote},
           tmpKeyMap = {
             supply: ['supplierOrderNo', 'supplierOrderSize', 'supplyMap', 'supplierPushResult', 'supplierOrderPushTime', 'supplierOrderResult'],
             store: ['storeOrderNo', 'storeOrderSize', 'storeMap', 'storePushResult', 'storeOrderPushTime', 'storeOrderResult'],
-            inquery: ['inqueryOrderNo', 'inqueryOrderSize', 'inqueryMap', 'inqueryPushResult', 'inqueryOrderPushTime', 'inqueryOrderResult']
+            inquery: ['inqueryOrderNo', 'inqueryOrderSize', 'inqueryMap', 'inqueryPushResult', 'inqueryOrderPushTime', 'inqueryOrderResult'],
+            quote: ['quoteOrderNo', 'quoteOrderSize', 'quoteMap', 'quotePushResult', 'quoteOrderPushTime', 'quoteOrderResult']
           }
 
 
@@ -191,7 +201,7 @@
         for (let key in tmpMap) {
           let data = tmpMap[key], keys = tmpKeyMap[key]
           if (data && data.length > 0) {
-            let map1 = {}, orderPushResult = '', succ = 0, fail = 0, error = 0
+            let map1 = {}, succ = 0, fail = 0, error = 0
             result[keys[1]] = data.length
 
             data.map(item => {
@@ -202,6 +212,9 @@
 
               if (!result[keys[4]]) {
                 result[keys[4]] = item.orderPushTime
+              }
+              if (keys[4] == 'quoteOrderPushTime') {
+                result[keys[4]] = item.createTime
               }
 
               let orderResult = JSON.parse(item.orderPushResult || '{}')
@@ -215,18 +228,9 @@
 
               let status = JSON.parse(item.orderPushStatus || '{}')
               map1[orderNo] = {lines: item.orderLines || [], status: status.value, statusText: status.name, resultText: orderResult.name}
-
-              let r = status.value
-              if (r != '1') {// && r != ''
-                orderPushResult = r
-                result[keys[3]] = item.orderPushStatus
-              }
-              if (orderPushResult != '1' && orderPushResult != '2') {
-                orderPushResult = '3'
-                result[keys[3]] = item.orderPushStatus
-              }
-              result[keys[3]] = '4'
             })
+
+            result[keys[3]] = '4'
 
             result[keys[5]] = [succ, fail, error]
 
@@ -252,51 +256,64 @@
         this.hs(result)
       },
       parseMall(res) {
-
         let result = {
           mallOrderNo: '',
+          createTime: '',
 
           transferOrderNo: '',
-          transferPushResult: '',
+          transferRouteResult: '',
+          captureTime: '',
 
           storeOrderNo: '',
           storeOrderSize: '',
           storePushResult: '',
+          storeOrderPushTime: '',
+          storeOrderResult: '',
         }
 
         this.dataMap = {}
-        let direct = res.DIRECT_ORDER || ''
+        let transfer = res.TRANSFER_ORDER || ''
         let store = res.STORE_ORDER || ''
 
-        if (direct) {
-          result.hsOrderNo = direct.originNo || ''
-          result.directOrderNo = this.reverse(direct.orderNo)
-          result.transferPushResult = direct.routeResult
-          let orderLines = direct.orderLines || []
+        if (transfer) {
+          result.mallOrderNo = transfer.originNo || ''
+          result.transferOrderNo = this.reverse(transfer.orderNo)
+          result.transferRouteResult = transfer.routeResult
+          result.createTime = transfer.createTime
+          result.captureTime = transfer.captureTime
 
+          let orderLines = transfer.orderLines || []
           this.dataMap[result.directOrderNo] = orderLines
           this.dataMap[result.hsOrderNo] = orderLines
         }
 
         if (store && store.length > 0) {
-          let storeMap = {}, orderPushResult = 'SUCC'
+          let storeMap = {}, succ = 0, fail = 0, error = 0
           result.storeOrderSize = store.length
           store.map(item => {
             let orderNo = this.reverse(item.orderNo)
             if (!result.storeOrderNo) {
               result.storeOrderNo = orderNo
             }
-            storeMap[orderNo] = item.orderLines || []
 
-            let r = item.orderPushResult
-            if (r != 'SUCC') {// && r != ''
-              orderPushResult = r
+
+            if (!result.storeOrderPushTime) {
+              result.storeOrderPushTime = item.orderPushTime
             }
-            if (orderPushResult != 'SUCC' && orderPushResult != 'FAIL') {
-              orderPushResult = 'ERROR'
+
+            let orderResult = JSON.parse(item.orderPushResult || '{}')
+            if (orderResult.value == 1) {
+              succ++
+            } else if (orderResult.value == 2) {
+              fail++
+            } else if (orderResult.value == 3) {
+              error++
             }
+
+            let status = JSON.parse(item.orderPushStatus || '{}')
+            storeMap[orderNo] = {lines: item.orderLines || [], status: status.value, statusText: status.name, resultText: orderResult.name}
           })
-          result.storePushResult = orderPushResult
+          result.storePushResult = '4'
 
           this.dataMap.storeMap = storeMap
         }
@@ -311,10 +328,10 @@
         let hs = this.node(20, 250, '华胜订单:' + data.hsOrderNo, '{"name": "已接收", "value": 1}', 1, data.createTime)
         let dr = this.node(300, 250, '定向订单:' + data.directOrderNo, data.directRouteResult, 1, data.captureTime)
 
-        let supplier = this.node(580, 120, '直供订单:' + data.supplierOrderNo, data.supplierPushResult, data.supplierOrderSize, data.supplierOrderPushTime, data.supplierOrderResult)
+        let supplier = this.node(580, 100, '直供订单:' + data.supplierOrderNo, data.supplierPushResult, data.supplierOrderSize, data.supplierOrderPushTime, data.supplierOrderResult)
         let store = this.node(580, 250, '门店订单:' + data.storeOrderNo, data.storePushResult, data.storeOrderSize, data.storeOrderPushTime, data.storeOrderResult)
-        let inquiry = this.node(580, 380, '询价订单:' + data.inqueryOrderNo, data.inqueryPushResult, data.inqueryOrderSize, data.inqueryOrderPushTime, data.inqueryOrderResult)
-        let quote = this.node(350, 450, '报价回单:' + data.quoteOrderNo)
+        let inquiry = this.node(580, 400, '询价订单:' + data.inqueryOrderNo, data.inqueryPushResult, data.inqueryOrderSize, data.inqueryOrderPushTime, data.inqueryOrderResult)
+        let quote = this.node(300, 400, '报价回单:' + data.quoteOrderNo, '{"name": "报价完成", "value": 1}', data.quoteOrderSize, data.quoteOrderPushTime)
 
         this.line(hs, dr)
         this.line(dr, supplier)
@@ -327,9 +344,9 @@
         }
       },
       mall(data) {
-        let mall = this.node(20, 250, '电商订单:' + data.mallOrderNo)
-        let trnasfer = this.node(300, 250, '电商转单:' + data.transferOrderNo, result.transferPushResult)
-        let store = this.node(580, 250, '门店订单:' + data.storeOrderNo, data.storePushResult, data.storeOrderSize)
+        let mall = this.node(20, 250, '电商订单:' + data.mallOrderNo, '{"name": "已接收", "value": 1}', 1, data.createTime)
+        let trnasfer = this.node(300, 250, '电商转单:' + data.transferOrderNo, data.transferRouteResult, 1, data.captureTime)
+        let store = this.node(580, 250, '门店订单:' + data.storeOrderNo, data.storePushResult, data.storeOrderSize, data.storeOrderPushTime, data.storeOrderResult)
 
         this.line(mall, trnasfer)
         this.line(trnasfer, store)
@@ -342,7 +359,7 @@
           '直供订单': '推送时间',
           '门店订单': '推送时间',
           '询价订单': '推送时间',
-          '报价回单': '推送时间',
+          '报价回单': '报价时间',
           '电商订单': '下单订单',
           '电商转单': '接收时间'
         }
@@ -366,23 +383,19 @@
         // let textWidth = ctx.measureText(text).width + 20
 
         let centerPointer = {
-          x: x + 110,//textWidth / 2,
+          x: x + 110,
           y: y + 40
         }
 
         let span = document.createElement('span')
         span.id = id
 
-        // let orderRouteStatus = {'PENDING': 'node warn', 'COMPLETE': 'node succ'}
         let orderPushStatus1 = {'1': 'node succ', '2': 'node warn', '3': 'node fail'}
-        let orderPushStatus2 = {'PENDING': 'node warn', 'COMPLETE': 'node succ'}
         let orderRouteStatus = {'0': 'node warn', '1': 'node succ'}
-        // let orderPushStatus1 = {'1': 'node succ', '2': 'node warn', '3': 'node fail'}
-        // let orderPushStatus2 = {'0': 'node warn', '1': 'node succ'}
 
         status = JSON.parse(status || '{}')
         let innerHTML = `<span class="title">${text}</span><br/>${timeKey[name]}：${time || ''}<br/>`
-        if (name == '定向订单') {
+        if (name == '定向订单' || name == '电商转单') {
           span.className = orderRouteStatus[status.value] || 'node'
         } else {
           span.className = orderPushStatus1[status.value] || 'node'
@@ -477,8 +490,8 @@
 
         let bgSpan = document.createElement('span')
         bgSpan.className = 'arrow-p'
-        bgSpan.style.top = (cy - 10) + 'px'
-        bgSpan.style.left = (cx - 10) + 'px'
+        bgSpan.style.top = (cy - 8) + 'px'
+        bgSpan.style.left = (cx - 8) + 'px'
         bgSpan.style.zIndex = -2
         bgSpan.style.transform = 'rotate(' + r + 'deg)'
         this.container.appendChild(bgSpan)
@@ -500,7 +513,6 @@
     right: 0;
     margin-left: -500px;
     z-index: 1;
-    /*box-shadow: 2px 2px 5px 1px #aaa;*/
   }
 
   #container {
@@ -508,7 +520,7 @@
     left: 50%;
     right: 0;
     width: 1000px;
-    height: 500px;
+    height: 700px;
     margin-left: -500px;
     z-index: 2;
     font-family: "Microsoft YaHei";
@@ -532,6 +544,7 @@
     }
     .title {
       font-weight: bold;
+      color: #333333;
     }
   }
   .node .name {
@@ -540,13 +553,11 @@
     top: -20px;
     left: 50%;
     margin-left: -40px;
-    /*right: 0;*/
     background: #ddd;
     color: #666666;
     padding: 0;
     width: 80px;
     border-radius: 15px 15px 0 0;
-    /*box-shadow: 0 2px 2px 0 #999;*/
     text-align: center;
     z-index: 0;
   }
@@ -576,23 +587,20 @@
   }
 
   .result {
-    /*position: absolute;*/
     display: inline-block;
-    /*right: 5px;*/
-    /*bottom: -10px;*/
     color: #fff;
     height: 20px;
     line-height: 20px;
     text-align: center;
-    /*z-index: 0;*/
     span {
+      float: right;
       display: inline-block;
       min-width: 20px;
-      float: right;
       padding: 0 5px;
       margin-left: 5px;
       margin-top: 2px;
       border-radius: 15px;
+      /*box-shadow: 2px 2px 3px 1px #888;*/
     }
     .r-succ {
       background: #4caf50;
@@ -608,18 +616,18 @@
   .arrow-p {
     position: absolute;
     display: inline-block;
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
   }
   .arrow-p:after {
     content: '';
     position: absolute;
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    top: 9.5px;
+    width: 8px;
+    height: 8px;
+    top: 8px;
     left: 0;
-    border: 1px solid #aaa;
+    border: 1px #aaa solid;
     border-bottom-width: 0;
     border-left-width: 0;
   }
@@ -638,13 +646,13 @@
   .error-tip {
     position: absolute;
     display: inline-block;
-    top: 0;
+    top: 100px;
     right: 0;
     left: 0;
     color: #999;
     font-size: 25px;
     font-weight: bold;
     text-align: center;
-    padding-top: 200px;
+    padding-top: 100px;
   }
 </style>

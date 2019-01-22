@@ -58,7 +58,7 @@
           {
             title: '报价单号',
             align: 'center',
-            minWidth: 120,
+            minWidth: 210,
             key: '',
             render: (h, params) => {
               return h('span', [...(params.row.orderNo || '')].reverse().join(''))
@@ -68,7 +68,7 @@
             title: '询价单号',
             align: 'center',
             key: '',
-            minWidth: 120,
+            minWidth: 210,
             render: (h, params) => {
               return h('span', [...(params.row.originNo || '')].reverse().join(''))
             }
@@ -77,7 +77,7 @@
             title: '回单时间',
             align: 'center',
             key: 'createTime',
-            minWidth: 120
+            minWidth: 150
           },
           {
             title: '备注',
