@@ -136,7 +136,7 @@
         const params = {}
         let searchValue = this.searchValue.trim()
         if (searchValue) {
-          params[this.searchType] = searchValue
+          params[this.searchType] = [...searchValue].reverse().join('')
         }
 
         params.page = this.page.num - 1

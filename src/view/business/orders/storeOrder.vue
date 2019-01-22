@@ -35,7 +35,7 @@
         searchType: 'orderNo',
         searchTypeArr: [
           {value: 'orderNo', name: '门店单号'},
-          {value: 'originNo', name: '定向/电商单号'}
+          {value: 'originNo', name: '定向/转单单号'}
         ],
         page: {
           num: 1,
@@ -142,7 +142,7 @@
         const params = {}
         let searchValue = this.searchValue.trim()
         if (searchValue) {
-          params[this.searchType] = searchValue
+          params[this.searchType] = [...searchValue].reverse().join('')
         }
 
         params.page = this.page.num - 1
