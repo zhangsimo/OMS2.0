@@ -283,8 +283,8 @@
           result.captureTime = transfer.captureTime
 
           let orderLines = transfer.orderLines || []
-          this.dataMap[result.directOrderNo] = orderLines
-          this.dataMap[result.hsOrderNo] = orderLines
+          this.dataMap[result.mallOrderNo] = orderLines
+          this.dataMap[result.transferOrderNo] = orderLines
         }
 
         if (store && store.length > 0) {
