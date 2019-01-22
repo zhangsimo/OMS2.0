@@ -35,7 +35,7 @@
         searchType: 'orderNo',
         searchTypeArr: [
           {value: 'orderNo', name: '转单单号'},
-          {value: 'originNo', name: '源订单号'}
+          {value: 'originNo', name: '电商单号'}
         ],
         page: {
           num: 1,
@@ -57,7 +57,7 @@
           {
             title: '转单单号',
             align: 'center',
-            minWidth: 120,
+            minWidth: 210,
             key: '',
             render: (h, params) => {
               let id = params.row.id
@@ -75,26 +75,23 @@
             }
           },
           {
-            title: '源订单号',
+            title: '电商单号',
             align: 'center',
-            key: '',
-            minWidth: 120,
-            render: (h, params) => {
-              return h('span', [...(params.row.originNo || '')].reverse().join(''))
-            }
+            key: 'originNo',
+            minWidth: 210
           },
-          {
-            title: '客户编码',
-            align: 'center',
-            key: 'partnerNo',
-            minWidth: 120
-          },
-          {
-            title: '门店编号',
-            align: 'center',
-            key: 'storeNo',
-            minWidth: 120
-          },
+          // {
+          //   title: '客户编码',
+          //   align: 'center',
+          //   key: 'partnerNo',
+          //   minWidth: 120
+          // },
+          // {
+          //   title: '门店编号',
+          //   align: 'center',
+          //   key: 'storeNo',
+          //   minWidth: 120
+          // },
           // {
           //   title: '订单金额',
           //   align: 'center',
@@ -102,10 +99,30 @@
           //   minWidth: 120
           // },
           {
-            title: '转单时间',
+            title: '转单状态',
+            align: 'center',
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.routeResult || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 1) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
+          },
+          {
+            title: '接收时间',
+            align: 'center',
+            key: 'captureTime',
+            minWidth: 150
+          },
+          {
+            title: '下单时间',
             align: 'center',
             key: 'createTime',
-            minWidth: 120
+            minWidth: 150
           },
           {
             title: '联系人',
@@ -113,18 +130,18 @@
             key: 'deliveryLinkman',
             minWidth: 120
           },
-          {
-            title: '收货人',
-            align: 'center',
-            key: 'deliveryName',
-            minWidth: 120
-          },
-          {
-            title: '联系方式',
-            align: 'center',
-            key: 'deliveryTel',
-            minWidth: 120
-          },
+          // {
+          //   title: '收货人',
+          //   align: 'center',
+          //   key: 'deliveryName',
+          //   minWidth: 120
+          // },
+          // {
+          //   title: '联系方式',
+          //   align: 'center',
+          //   key: 'deliveryTel',
+          //   minWidth: 120
+          // },
           {
             title: '收货地址',
             align: 'center',
@@ -149,6 +166,9 @@
         const params = {}
         let searchValue = this.searchValue.trim()
         if (searchValue) {
+          if (this.searchType == 'orderNo') {
+            searchValue = [...searchValue].reverse().join('')
+          }
           params[this.searchType] = searchValue
         }
 

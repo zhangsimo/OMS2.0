@@ -57,7 +57,7 @@
           {
             title: '询价单号',
             align: 'center',
-            minWidth: 120,
+            minWidth: 210,
             key: 'orderNo',
             render: (h, params) => {
               return h('span', [...(params.row.orderNo || '')].reverse().join(''))
@@ -67,7 +67,7 @@
             title: '定向单号',
             align: 'center',
             key: 'originNo',
-            minWidth: 120,
+            minWidth: 210,
             render: (h, params) => {
               return h('span', [...(params.row.originNo || '')].reverse().join(''))
             }
@@ -92,6 +92,11 @@
             key: '',
             minWidth: 120,
             render: (h, params) => {
+              let pushStatus = JSON.parse(params.row.orderPushStatus || '{}').value
+              if (pushStatus != 1) {
+                return h('span', '-')
+              }
+
               let status = JSON.parse(params.row.orderPushResult || '{}')
               let cls = 'text-state-warn'
               if (status.value == 1) {
@@ -104,7 +109,14 @@
             title: '推送时间',
             align: 'center',
             key: 'orderPushTime',
-            minWidth: 120
+            minWidth: 150,
+            render: (h, params) => {
+              let pushStatus = JSON.parse(params.row.orderPushStatus || '{}').value
+              if (pushStatus != 1) {
+                return h('span', '-')
+              }
+              return h('span', params.row.orderPushTime)
+            }
           },
           // {
           //   title: '备注',
@@ -124,7 +136,7 @@
         const params = {}
         let searchValue = this.searchValue.trim()
         if (searchValue) {
-          params[this.searchType] = searchValue
+          params[this.searchType] = [...searchValue].reverse().join('')
         }
 
         params.page = this.page.num - 1
