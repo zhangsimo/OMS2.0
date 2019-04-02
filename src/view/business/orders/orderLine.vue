@@ -1,5 +1,5 @@
 <template>
-  <Table size="small" width="500" border :stripe="true" :columns="columns" :data="tbdata"></Table>
+  <Table size="small" width="610" border :stripe="true" :columns="columns" :data="tbdata"></Table>
 </template>
 
 <script>
@@ -28,13 +28,29 @@
             title: '数量',
             align: 'center',
             key: 'qty',
+            minWidth: 120,
+            // render: (h, params) => {
+            //   let text = params.row.qty + ' ' + (params.row.unitId || '')
+            //   return h('span', {}, text)
+            // }
+          },
+          {
+            title: '单位',
+            align: 'center',
+            key: 'unitId',
+            minWidth: 120
+          },
+          {
+            title: '规格',
+            align: 'center',
+            key: 'spec',
             minWidth: 120
           }
         ]
       }
     },
     mounted() {
-      console.log(this.tbdata)
+      // console.log(this.tbdata)
     },
     methods: {
     },
