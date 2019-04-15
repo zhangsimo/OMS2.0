@@ -31,6 +31,18 @@
       </div>
     </Modal>
 
+    <Modal v-model="hsModal" title="绑定华胜门店" width="400" height="500">
+
+      <Select v-model="hsSelected" class="w340" multiple filterable>
+        <Option v-for="item in hsData" :value="item.value" :key="item.value">{{ item.name }}</Option>
+      </Select>
+
+      <div slot='footer'>
+        <Button type='text' @click='hsModal = false'>取消</Button>
+        <Button type='primary' @click='hsSubmit'>保存</Button>
+      </div>
+    </Modal>
+
     <Modal v-model="storeModal" title="编辑" width="400">
       <Form :label-width="100">
 
@@ -63,12 +75,15 @@
 
 <script>
 
-  import {queryAll, saveStore, findAllArea, saveArea, deleteArea} from '_api/business/storeAreaApi'
+  import {queryAll, saveStore, findAllArea, saveArea, deleteArea, saveHsStore} from '_api/business/storeAreaApi'
 
   export default {
     name: "storeArea",
     data() {
       return {
+        hsModal: false,
+        hsSelected: [],
+        hsData: [],
         refreshTree: true,
         modal: false,
         searchValue: '',
@@ -111,7 +126,6 @@
               ]
 
               let areaSet = params.row.areaSet || []
-              let areaIds = params.row.areaSet.map(item => item.id + '')
 
               if (areaSet.length == 0) {
                 opts.push(
@@ -134,24 +148,63 @@
                       click: () => {
                         this.$Modal.confirm({
                           title: '提示',
-                          content: '确定要解除绑定吗？',
+                          content: '确定要解绑区域吗？',
                           onOk: () => {
                             this.storeId = params.row.id
+                            let areaIds = params.row.areaSet.map(item => item.id + '')
                             this.deleteArea(areaIds)
                           }
                         })
                       }
                     }
-                  }, '解除绑定')
+                  }, '解绑区域')
                 )
               }
+
+              let storeSet = params.row.storeSet || []
+              if (storeSet.length == 0) {
+                opts.push(
+                  h('span', {
+                    class: 'pointer',
+                    style: 'display: inline-block',
+                    on: {
+                      click: () => {
+                        this.hsSelected = []
+                        this.storeId = params.row.id
+                        this.hsModal = true
+                      }
+                    }
+                  }, '绑定华胜门店')
+                )
+              } else {
+                opts.push(
+                  h('span', {
+                    class: 'pointer delete',
+                    style: 'display: inline-block',
+                    on: {
+                      click: () => {
+                        this.$Modal.confirm({
+                          title: '提示',
+                          content: '确定要解绑华胜门店吗？',
+                          onOk: () => {
+                            this.storeId = params.row.id
+                            let storeIds = params.row.storeSet.map(item => item.id + '')
+                            this.deleteArea(storeIds, '0')
+                          }
+                        })
+                      }
+                    }
+                  }, '解绑华胜门店')
+                )
+              }
+
               return h('div', opts)
             }
           },
           {
             title: '极配门店',
             align: 'center',
-            width: 200,
+            width: 160,
             key: 'shortName'
           },
           {
@@ -170,7 +223,18 @@
             title: '门店电话',
             align: 'center',
             key: 'tel',
-            width: 120
+            width: 130
+          },
+          {
+            title: '服务华胜门店',
+            align: 'center',
+            key: '',
+            width: 180,
+            render: (h, params) => {
+              let storeSet = params.row.storeSet || [], map = {}
+              storeSet = storeSet.map(item => item.shortName)
+              return h('span', storeSet.join('，'))
+            }
           },
           {
             title: '服务区域',
@@ -247,6 +311,26 @@
         stopLoading: null
       }
     },
+    beforeMount () {
+      const params = {
+        page: 0,
+        size: 300,
+        cropId: 0
+      }
+      this.loading = true
+      queryAll({params}).then(res => {
+        this.loading = false
+        if (res.code == 0) {
+          let tmp = res.data.content || []
+          this.hsData = tmp.map(item => {
+            return {
+              value: item.id,
+              name: item.shortName
+            }
+          })
+        }
+      })
+    },
     mounted() {
       findAllArea({id: '', grade: '1'}).then(res => {
         if (res.code === 0) {
@@ -262,6 +346,24 @@
       this.getList()
     },
     methods: {
+      hsSubmit () {
+        console.log(this.hsSelected)
+        let data = {
+          areaIds: this.hsSelected,
+          storeId: this.storeId,
+          cropId:0
+        }
+        let stop = this.$loading()
+        saveHsStore(data).then(res => {
+          stop()
+          if (res.code == 0) {
+            this.getList()
+            this.hsModal = false
+          }
+        }).catch(err => {
+          stop()
+        })
+      },
       saveStore() {
         if (!this.store.id) {
           this.$Message.warning('数据异常，id不能为空')
@@ -400,8 +502,11 @@
       checkChange(checks) {
         this.checks = checks
       },
-      deleteArea(areaIds) {
+      deleteArea(areaIds, cropId) {
         let data = {areaIds, storeId: this.storeId}
+        if (cropId) {
+          data.cropId = cropId
+        }
         let stop = this.$loading()
         deleteArea(data).then(res => {
           stop()
