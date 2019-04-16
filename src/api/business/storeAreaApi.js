@@ -33,6 +33,14 @@ export function saveArea(data) {
   })
 }
 
+export function saveHsStore(data) {
+  return axios.request({
+    url: '/areaStore/saveHsStore',
+    method: 'post',
+    data
+  })
+}
+
 export function deleteArea(data) {
   return axios.request({
     url: '/areaStore/delete',
