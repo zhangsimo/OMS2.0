@@ -28,7 +28,7 @@
 
         <FormItem label="门店名称：">
 <!--          <Input v-model="store.name" class="w200"/>-->
-          <Select v-model="store.id" class="w200" filterable @on-change="storeChange">
+          <Select ref="storeSelector" v-model="store.id" class="w200" filterable @on-change="storeChange">
             <Option v-for="item in hsData" :value="item.value" :key="item.value">{{ item.name }}</Option>
           </Select>
         </FormItem>
@@ -259,6 +259,8 @@
         })
       },
       add() {
+        this.storeModalTitle = '新增门店'
+        this.storeModal = true
         this.store = {
           id: '',
           name: '',
@@ -270,8 +272,7 @@
           city: '',
           address: ''
         }
-        this.storeModalTitle = '新增门店'
-        this.storeModal = true
+        this.$refs.storeSelector.query = ''
       },
       del(id) {
 
