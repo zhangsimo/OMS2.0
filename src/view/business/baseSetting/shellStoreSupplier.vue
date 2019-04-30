@@ -37,9 +37,9 @@
           <Input v-model="store.storeNo" class="w200" readonly/>
         </FormItem>
 
-        <FormItem label="公司Code：">
-          <Input v-model="store.companiesNo" class="w200" readonly/>
-        </FormItem>
+<!--        <FormItem label="公司Code：">-->
+<!--          <Input v-model="store.companiesNo" class="w200" readonly/>-->
+<!--        </FormItem>-->
 
         <FormItem label="门店联系人：">
           <Input v-model="store.contactName" :maxlength="10" class="w200" placeholder="门店联系人"/>
@@ -172,7 +172,8 @@
             minWidth: 120
           }
         ],
-        tbdata: []
+        tbdata: [],
+        running: false
       }
     },
     beforeMount () {
@@ -213,6 +214,9 @@
         this.store.city = data[1].label
       },
       saveStore() {
+        if (this.running) {
+          return
+        }
         if (!this.store.name) {
           this.$Message.warning('请选择门店')
           return
@@ -222,20 +226,22 @@
           this.$Message.warning('请输入门店联系人')
           return
         }
+
+        this.store.tel = (this.store.tel || '').trim()
+        let tel = /^[1][3,4,5,7,8][0-9]{9}$/
+        if (!tel.test(this.store.tel)) {
+          this.$Message.warning('门店电话应为11位的手机号码')
+          return
+        }
+
         if (!this.store.province) {
           this.$Message.warning('请选择所在城市')
           return
         }
-        // if (!this.store.id) {
-        //   this.$Message.warning('数据异常，id不能为空')
-        //   return
-        // }
 
-        this.store.tel = (this.store.tel || '').trim()
         this.store.address = (this.store.address || '').trim()
-
-        if (!this.store.tel || !this.store.address) {
-          this.$Message.warning('门店电话或门店地址不能为空')
+        if (!this.store.address) {
+          this.$Message.warning('门店地址不能为空')
           return
         }
 
@@ -247,14 +253,17 @@
         // console.log(this.store)
         // return;
 
+        this.running = true
         let stop = this.$loading()
         saveStore(this.store).then(res => {
+          this.running = false
           stop()
           if (res.code == 0) {
             this.getList()
             this.storeModal = false
           }
         }).catch(err => {
+          this.running = false
           stop()
         })
       },
