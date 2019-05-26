@@ -113,6 +113,30 @@
             }
           },
           {
+            title: 'erp推送状态',
+            align: 'center',
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.erpPushStatus || '{}')
+              let cls = 'text-state-warn'
+              if (status.value == 3) {
+                cls = 'text-state-ok'
+              }
+              return h('span', {class: cls}, status.name)
+            }
+          },
+          {
+            title: '订单类型',
+            align: 'center',
+            key: '',
+            minWidth: 120,
+            render: (h, params) => {
+              let status = JSON.parse(params.row.mallOrderType || '{}')
+              return h('span', status.name)
+            }
+          },
+          {
             title: '接收时间',
             align: 'center',
             key: 'captureTime',
