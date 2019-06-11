@@ -329,6 +329,15 @@ export default [
           title: '华胜门店管理'
         },
         component: () => import('@/view/business/baseSetting/hsStoreSupplier.vue')
+      },
+      {
+        path: '/baseSetting/shellStoreSupplier',
+        name: 'shellStoreSupplier',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '壳牌门店管理'
+        },
+        component: () => import('@/view/business/baseSetting/shellStoreSupplier.vue')
       }
     ]
   },
