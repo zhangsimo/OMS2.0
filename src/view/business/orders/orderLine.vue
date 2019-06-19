@@ -37,8 +37,11 @@
           {
             title: '单位',
             align: 'center',
-            key: 'unitId',
-            minWidth: 100
+            key: '',
+            minWidth: 100,
+            render: (h, params) => {
+              return h('span', params.row.minSalesUnit || params.row.unitId)
+            }
           },
           {
             title: '规格',
