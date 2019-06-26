@@ -7,7 +7,8 @@
   export default {
     name: "OrderLine",
     props: {
-      tbdata: Array
+      tbdata: Array,
+      parent: ''
     },
     data() {
       return {
@@ -68,6 +69,12 @@
             minWidth: 100
           }
         ]
+      }
+    },
+    beforeMount () {
+      if (this.parent === 'directOrder') {
+        this.columns.pop()
+        this.columns.pop()
       }
     },
     mounted() {
