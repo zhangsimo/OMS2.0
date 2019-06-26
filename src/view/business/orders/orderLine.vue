@@ -7,7 +7,8 @@
   export default {
     name: "OrderLine",
     props: {
-      tbdata: Array
+      tbdata: Array,
+      parent: ''
     },
     data() {
       return {
@@ -37,8 +38,11 @@
           {
             title: '单位',
             align: 'center',
-            key: 'unitId',
-            minWidth: 100
+            key: '',
+            minWidth: 100,
+            render: (h, params) => {
+              return h('span', params.row.minSalesUnit || params.row.unitId)
+            }
           },
           {
             title: '规格',
@@ -65,6 +69,12 @@
             minWidth: 100
           }
         ]
+      }
+    },
+    beforeMount () {
+      if (this.parent === 'directOrder') {
+        this.columns.pop()
+        this.columns.pop()
       }
     },
     mounted() {

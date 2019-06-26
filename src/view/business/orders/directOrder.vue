@@ -52,7 +52,7 @@
             width: 70,
             render: (h, params) => {
               let tbdata = params.row.orderLines || []
-              return h(orderLine, {props: {tbdata}})
+              return h(orderLine, {props: {tbdata, parent: 'directOrder'}})
             }
           },
           {

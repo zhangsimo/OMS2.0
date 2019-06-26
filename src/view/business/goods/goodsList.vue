@@ -27,9 +27,12 @@
     </section>
 
     <Modal v-model="modal" :title="'修改最小销售规格'" width="400">
-      <Form :label-width="100">
-        <FormItem label="最小销售规格：">
+      <Form :label-width="120">
+        <FormItem label="最小销售规格：" required>
           <InputNumber v-model="minSalesSpec" :min="0" :max="999999" :precision="0" :step="1" class="w200"/>
+        </FormItem>
+        <FormItem label="最小销售单位：">
+          <Input v-model="minSalesUnit" placeholder="例如：箱" class="w200"/>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -51,6 +54,7 @@
       return {
         modal: false,
         minSalesSpec: 0,
+        minSalesUnit: '',
         skuId: '',
         fullNameState: false,
         searchValue: '',
@@ -82,10 +86,11 @@
                       this.skuId = params.row.id
                       let minSalesSpec = params.row.minSalesSpec
                       this.minSalesSpec = !minSalesSpec ? 0 : minSalesSpec
+                      this.minSalesUnit = params.row.minSalesUnit || ''
                       this.modal = true
                     }
                   }
-                }, '修改最小销售规格')
+                }, '修改')
               ])
             }
           },
@@ -175,6 +180,12 @@
             align: 'center',
             key: 'minSalesSpec',
             minWidth: 120
+          },
+          {
+            title: '最小销售单位',
+            align: 'center',
+            key: 'minSalesUnit',
+            minWidth: 120
           }
         ],
         tbdata: []
@@ -194,9 +205,15 @@
           this.$Message.warning('最小销售规格不能为空')
           return
         }
+        this.minSalesUnit = this.minSalesUnit.trim()
+        // if (!this.minSalesUnit) {
+        //   this.$Message.warning('最小销售单位不能为空')
+        //   return
+        // }
         let data = {
           id: this.skuId,
-          minSalesSpec: this.minSalesSpec
+          minSalesSpec: this.minSalesSpec,
+          minSalesUnit: this.minSalesUnit
         }
         let stop = this.$loading()
         update(data).then(res => {
