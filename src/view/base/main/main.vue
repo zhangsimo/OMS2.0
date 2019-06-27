@@ -130,8 +130,12 @@
       handleCloseTag(res, type, name) {
         const nextName = getNextName(this.tagNavList, name);
         this.setTagNavList(res)
-        if (type === 'all') this.turnToPage('home')
-        else if (this.$route.name === name) this.$router.push({name: nextName})
+        if (type === 'all') {
+          this.turnToPage('home')
+        }
+        else if (this.$route.name === name) {
+          this.$router.push({name: nextName.res, query: nextName.query})
+        }
       },
       handleClick(item) {
         // this.turnToPage(item.name)

@@ -26,17 +26,36 @@
             @on-page-size-change="changeSize" show-sizer show-total></Page>
     </section>
 
+    <Modal v-model="modal" :title="'修改最小销售规格'" width="400">
+      <Form :label-width="120">
+        <FormItem label="最小销售规格：" required>
+          <InputNumber v-model="minSalesSpec" :min="0" :max="999999" :precision="0" :step="1" class="w200"/>
+        </FormItem>
+        <FormItem label="最小销售单位：">
+          <Input v-model="minSalesUnit" placeholder="例如：箱" class="w200"/>
+        </FormItem>
+      </Form>
+      <div slot='footer'>
+        <Button type='text' @click='modal = false'>取消</Button>
+        <Button type='primary' @click='submit'>确定</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 <script>
 
-  import {queryAll} from '_api/business/goodsApi'
+  import {queryAll, update} from '_api/business/goodsApi'
   import Message from 'gpart-common'
 
   export default {
     name: 'goodsList',
     data() {
       return {
+        modal: false,
+        minSalesSpec: 0,
+        minSalesUnit: '',
+        skuId: '',
         fullNameState: false,
         searchValue: '',
         searchType: 'skuName',
@@ -53,6 +72,28 @@
         },
         loading: false,
         columns: [
+          {
+            title: '操作',
+            align: 'center',
+            width: 200,
+            key: '',
+            render: (h, params) => {
+              return h('div', [
+                h('span', {
+                  class: 'pointer',
+                  on: {
+                    click: () => {
+                      this.skuId = params.row.id
+                      let minSalesSpec = params.row.minSalesSpec
+                      this.minSalesSpec = !minSalesSpec ? 0 : minSalesSpec
+                      this.minSalesUnit = params.row.minSalesUnit || ''
+                      this.modal = true
+                    }
+                  }
+                }, '修改')
+              ])
+            }
+          },
           {
             title: '配件内码',
             align:'center',
@@ -116,23 +157,35 @@
             key: 'categoryName',
             minWidth: 170
           },
+          // {
+          //   title: '旧件名称',
+          //   align:'center',
+          //   key: 'former',
+          //   minWidth: 170
+          // },
+          // {
+          //   title: '创建时间',
+          //   align:'center',
+          //   key: 'createTime',
+          //   minWidth: 170
+          // },
+          // {
+          //   title: '最后修改时间',
+          //   align:'center',
+          //   key: 'updateTime',
+          //   minWidth: 170
+          // },
           {
-            title: '旧件名称',
-            align:'center',
-            key: 'former',
-            minWidth: 170
+            title: '最小销售规格',
+            align: 'center',
+            key: 'minSalesSpec',
+            minWidth: 120
           },
           {
-            title: '创建时间',
-            align:'center',
-            key: 'createTime',
-            minWidth: 170
-          },
-          {
-            title: '最后修改时间',
-            align:'center',
-            key: 'updateTime',
-            minWidth: 170
+            title: '最小销售单位',
+            align: 'center',
+            key: 'minSalesUnit',
+            minWidth: 120
           }
         ],
         tbdata: []
@@ -146,6 +199,34 @@
     methods: {
       initStart() {
         this.getList()
+      },
+      submit () {
+        if (this.minSalesSpec === null) {
+          this.$Message.warning('最小销售规格不能为空')
+          return
+        }
+        this.minSalesUnit = this.minSalesUnit.trim()
+        // if (!this.minSalesUnit) {
+        //   this.$Message.warning('最小销售单位不能为空')
+        //   return
+        // }
+        let data = {
+          id: this.skuId,
+          minSalesSpec: this.minSalesSpec,
+          minSalesUnit: this.minSalesUnit
+        }
+        let stop = this.$loading()
+        update(data).then(res => {
+          stop()
+          this.modal = false
+          if (res.code === 0) {
+            this.$Message.success('修改成功')
+            this.getList()
+          }
+        }).catch(() => {
+          stop()
+          this.modal = false
+        })
       },
       //初始化
       getList() {

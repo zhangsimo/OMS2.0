@@ -69,6 +69,10 @@
         <FormItem label="门店价：" v-if="skuIsValidate">
           <InputNumber v-model="data.salesPrice" :min="1" :max="999999" class="w200"/>
         </FormItem>
+
+<!--        <FormItem label="最小销售规格：" v-if="skuIsValidate">-->
+<!--          <InputNumber v-model="data.minSalesSpec" :min="0" :max="999999" :precision="0" :step="1" class="w200"/>-->
+<!--        </FormItem>-->
       </Form>
       <div slot='footer'>
         <Button type='text' @click='modal = false'>取消</Button>
@@ -100,6 +104,7 @@
           supplyNo: '',
           minQuantity: 1,
           purchasePrice: 1,
+          // minSalesSpec: 1,
           salesPrice: 1
         },
         supplierArr: [],
@@ -131,6 +136,7 @@
                   on: {
                     click: () => {
                       this.data = Object.assign({}, params.row)
+                      // this.data.minSalesSpec = this.data.minSalesSpec === null ? 1 : this.data.minSalesSpec
                       this.skuIsValidate = true
                       this.modal = true
                     }
@@ -199,7 +205,13 @@
             align: 'center',
             key: 'minQuantity',
             minWidth: 120
-          }
+          },
+          // {
+          //   title: '最小销售规格',
+          //   align: 'center',
+          //   key: 'minSalesSpec',
+          //   minWidth: 120
+          // }
         ],
         tbdata: []
       }
@@ -246,6 +258,7 @@
         this.data.minQuantity = 1
         this.data.purchasePrice = 1
         this.data.salesPrice = 1
+        // this.data.minSalesSpec = 1
       },
       add() {
         this.data = {
@@ -258,6 +271,7 @@
           supplyNo: '',
           minQuantity: 1,
           purchasePrice: 1,
+          // minSalesSpec: 1,
           salesPrice: 1
         }
         this.supplierArr = []
@@ -273,6 +287,11 @@
       },
       submit() {
         // console.log(JSON.stringify(this.data))
+        if (this.data.minQuantity === null || this.data.purchasePrice === null || this.data.salesPrice === null) { //  || this.data.minSalesSpec === null
+          this.$Message.warning('请填写完整')
+          return
+        }
+
 
         let purchasePrice = this.data.purchasePrice
         purchasePrice = purchasePrice.toFixed(2) - 0
