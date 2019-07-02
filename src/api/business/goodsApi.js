@@ -27,3 +27,12 @@ export function save (data) {
   })
 }
 
+// 最小销售规格
+export function update (params) {
+  return axios.request({
+    url: '/Sku/update',
+    method: 'post',
+    params
+  })
+}
+
