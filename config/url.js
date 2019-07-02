@@ -39,7 +39,7 @@ const pro = {
   wmsApi: 'https://api.g-part.cn/wms-order-provider',
   omsApi: 'https://api.g-part.cn/oms-product-provider',
   omsOrderApi: 'https://api.g-part.cn/oms-order-provider',
-  passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
+  passportApi: 'https://api.g-part.cn/gpart-passport-provider',
   essentialApi: 'https://api.g-part.cn/gpart-essential-provider'
 }
 
