@@ -52,6 +52,8 @@
   import './main.less'
   import Message_index from "./components/message/message"
 
+  import CUR_VERSION from '@/config/version'
+
   export default {
     name: 'Main',
     components: {
@@ -70,7 +72,7 @@
         maxLogo,
         isFullscreen: false,
         keyWord: '',
-        omsVersion: '0.0.1'
+        omsVersion: CUR_VERSION
       }
     },
     computed: {
