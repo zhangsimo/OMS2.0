@@ -46,7 +46,6 @@
 <script>
 
   import {queryAll, update} from '_api/business/goodsApi'
-  import Message from 'gpart-common'
 
   export default {
     name: 'goodsList',
@@ -192,8 +191,6 @@
       }
     },
     mounted() {
-      // console.log(Message)
-      // Message.Message.warning('123')
       this.initStart()
     },
     methods: {
