@@ -16,7 +16,7 @@ router.beforeEach((to, from, next) => {
 
   // _hmt.push(['_trackPageview', pageURL]) 必须是以"/"（斜杠）开头的相对路径
   if (to.path) {
-    window._hmt.push(['_trackPageview', to.fullPath])
+    window._hmt && window._hmt.push(['_trackPageview', to.fullPath])
   }
 
   iView.LoadingBar.start()
