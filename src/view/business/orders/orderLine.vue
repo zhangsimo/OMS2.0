@@ -51,6 +51,12 @@
             minWidth: 150
           },
           {
+            title: '适用车牌',
+            align: 'center',
+            key: 'carModelName',
+            minWidth: 150
+          },
+          {
             title: '单价',
             align: 'center',
             key: 'price',
