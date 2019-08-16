@@ -14,14 +14,12 @@ import './index.less'
 import '@/assets/icons/iconfont.css'
 import '@/mock'
 import 'babel-polyfill'
-import gpart from 'gpart-common'
+import Message from './components/message'
 
 Vue.use(iView, {
   i18n: (key, value) => i18n.t(key, value)
 })
 Vue.config.productionTip = false
-
-Vue.use(gpart)
 
 /**
  * @description 全局注册应用配置
@@ -34,9 +32,9 @@ Vue.prototype.hasPermission = (mark) => {
   return store.state.user.access.indexOf(mark) > -1
 }
 
-Vue.prototype.$Message = gpart.GpartMessage
+Vue.prototype.$Message = Message
 Vue.prototype.$loading = (msg) => {
-  return gpart.GpartMessage.loading({
+  return Message.loading({
     content: msg || '处理中，请稍后...',
     duration: 0
   })

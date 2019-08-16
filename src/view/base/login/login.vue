@@ -5,6 +5,7 @@
 
 <script>
   import {mapActions} from 'vuex'
+  import GpartLoginPage from '_c/login'
 
   export default {
     data () {
@@ -12,6 +13,7 @@
         loginPageTitle: '欢迎使用极配订单管理系统'
       }
     },
+    components: {GpartLoginPage},
     methods: {
       ...mapActions([
         'handleLogin',
