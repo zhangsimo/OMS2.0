@@ -1,5 +1,5 @@
 <template>
-  <Table size="small" width="910" border :stripe="true" :columns="columns" :data="tbdata"></Table>
+  <Table size="small" width="1000" border :stripe="true" :columns="columns" :data="tbdata"></Table>
 </template>
 
 <script>
@@ -13,6 +13,12 @@
     data() {
       return {
         columns: [
+          {
+            title: '供应商/门店',
+            align: 'center',
+            key: 'supplierName',
+            minWidth: 150
+          },
           {
             title: '配件内码',
             align: 'center',
@@ -81,6 +87,8 @@
       if (this.parent === 'directOrder') {
         this.columns.pop()
         this.columns.pop()
+      }else{
+        this.columns.shift()
       }
     },
     mounted() {
