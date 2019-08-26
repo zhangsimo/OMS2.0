@@ -169,8 +169,44 @@
           {
             title: '收货地址',
             align: 'center',
+            tooltip:true,
+            ellipsis:true,
             key: 'deliveryAddress',
-            minWidth: 120
+            minWidth: 200,
+            render: (h, params) => {
+              return h('Tooltip',{
+                props:{
+                  placement:"top"
+                }
+              },[
+                h("div",{
+                  style: {
+                    display: 'inline-block',
+                    width: params.column._width*0.8+'px',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                  },
+                },params.row.deliveryAddress),
+                h("div",{
+                  slot:"content"
+                }, params.row.deliveryAddress)
+              ])
+              // return h('div', [
+              //   h('span', {
+              //     style: {
+              //       display: 'inline-block',
+              //       width: '100%',
+              //       overflow: 'hidden',
+              //       textOverflow: 'ellipsis',
+              //       whiteSpace: 'nowrap'
+              //     },
+              //     domProps: {
+              //       title: params.row.deliveryAddress
+              //     }
+              //   }, params.row.deliveryAddress)
+              // ])
+            }
           },
           {
             title: '备注',
