@@ -116,11 +116,4 @@ export function orderDownload(params) {
   return `${api.omsOrderApi}/directBill/download?access_token=${token}&key=${params}`
 }
 
-//sku同步
-export function skuSync(params) {
-  return axios.request({
-    url: `${api.omsApi}/sync/sku`,
-    method: 'get',
-    params,
-  })
-}
+
