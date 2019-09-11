@@ -338,6 +338,26 @@ export default [
           title: '壳牌门店管理'
         },
         component: () => import('@/view/business/baseSetting/shellStoreSupplier.vue')
+      },
+      {
+        path: '/baseSetting/setArea',
+        name: 'setArea',
+        // mark: 'oms_policy_approve',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '区域管理'
+        },
+        component: () => import('@/view/business/baseSetting/setArea.vue')
+      },
+      {
+        path: '/baseSetting/setAreaStore',
+        name: 'setAreaStore',
+        // mark: 'oms_policy_approve',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '区域门店管理'
+        },
+        component: () => import('@/view/business/baseSetting/setAreaStore.vue')
       }
     ]
   },
@@ -360,7 +380,7 @@ export default [
           title: 'SKU同步'
         },
         component: () => import('@/view/system/skuSynchronization.vue')
-      }
+      },
     ]
   },
   {

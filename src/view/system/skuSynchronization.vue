@@ -21,7 +21,7 @@
 
 <script>
   import {getDateNoTime} from "../../libs/tools";
-  import {skuSync} from "../../api/business/orderApi";
+  import {skuSync} from "../../api/system/systemApi";
 
   export default {
 		name: "skuSynchronization",
@@ -52,6 +52,9 @@
   .tip-text{
     color: #f90;
     vertical-align: middle;
+    i{
+      vertical-align: middle;
+    }
   }
   .top-wrap{
     .ivu-tooltip-inner{
