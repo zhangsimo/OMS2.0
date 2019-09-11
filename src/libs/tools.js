@@ -96,7 +96,35 @@ const getDate = (timeStamp, startType) => {
   const second = getHandledValue(d.getSeconds())
   let resStr = ''
   if (startType === 'year') resStr = year + '-' + month + '-' + date + ' ' + hours + ':' + minutes + ':' + second
-  else resStr = month + '-' + date + ' ' + hours + ':' + minutes
+  else if(startType === 'date'){
+    resStr = year + '-' + month + '-' + date
+  } else resStr = month + '-' + date + ' ' + hours + ':' + minutes
+  return resStr
+}
+
+//时间戳转时间
+export const getRelativeDate = timeStamp => {
+  // 判断当前传入的时间戳是秒格式还是毫秒
+  const IS_MILLISECOND = isMillisecond(timeStamp)
+  // 如果是毫秒格式则转为秒格式
+  if (IS_MILLISECOND) Math.floor(timeStamp /= 1000)
+  // 传入的时间戳可以是数值或字符串类型，这里统一转为数值类型
+  timeStamp = Number(timeStamp)
+  let resStr = ''
+  resStr = getDate(timeStamp, 'year')
+  return resStr
+}
+
+//时间戳转时间
+export const getDateNoTime = timeStamp => {
+  // 判断当前传入的时间戳是秒格式还是毫秒
+  const IS_MILLISECOND = isMillisecond(timeStamp)
+  // 如果是毫秒格式则转为秒格式
+  if (IS_MILLISECOND) Math.floor(timeStamp /= 1000)
+  // 传入的时间戳可以是数值或字符串类型，这里统一转为数值类型
+  timeStamp = Number(timeStamp)
+  let resStr = ''
+  resStr = getDate(timeStamp, 'date')
   return resStr
 }
 

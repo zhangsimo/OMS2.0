@@ -1,5 +1,6 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
+import Cookies from 'js-cookie';
 
 
 /**
@@ -82,3 +83,37 @@ export function transferOrderRoutekin(params) {
     params
   })
 }
+
+//获取门店区域
+export function getStoreArea(params) {
+  return axios.request({
+    url: api.omsApi + '/storeArea/findAll',
+    method: 'get',
+    params,
+  })
+}
+
+//获取门店
+export function getStoreList(params) {
+  return axios.request({
+    url: api.omsApi + '/store/findAll',
+    method: 'get',
+    params,
+  })
+}
+
+//定向订单导出
+export function orderExport(params) {
+  return axios.request({
+    url: api.omsOrderApi + '/directBill/export',
+    method: 'get',
+    params,
+  })
+}
+
+export function orderDownload(params) {
+  let token = Cookies.get('token');
+  return `${api.omsOrderApi}/directBill/download?access_token=${token}&key=${params}`
+}
+
+
