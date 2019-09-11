@@ -1,5 +1,5 @@
 <template>
-  <Table size="small" width="1000" border :stripe="true" :columns="columns" :data="tbdata"></Table>
+  <Table size="small" width="1100" border :stripe="true" :columns="columns" :data="tbdata"></Table>
 </template>
 
 <script>
@@ -69,6 +69,12 @@
             minWidth: 100
           },
           {
+            title: '总价',
+            align: 'center',
+            key: 'amount',
+            minWidth: 100
+          },
+          {
             title: '门店价',
             align: 'center',
             key: 'salesPrice',
@@ -88,6 +94,7 @@
         this.columns.pop()
         this.columns.pop()
       }else{
+        this.columns = this.columns.filter(item=>item.title!='总价')
         this.columns.shift()
       }
     },

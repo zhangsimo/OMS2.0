@@ -342,6 +342,28 @@ export default [
     ]
   },
   {
+    path: '',
+    name: 'systemSetting',
+    // mark: 'gpart_oms_policy',
+    meta: {
+      icon: 'settings',
+      title: '系统设置'
+    },
+    component: Main,
+    children: [
+      {
+        path: '/systemSetting/skuSynchronization',
+        name: 'skuSynchronization',
+        // mark: 'oms_policy_approve',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: 'SKU同步'
+        },
+        component: () => import('@/view/system/skuSynchronization.vue')
+      }
+    ]
+  },
+  {
     path: '/401',
     name: 'error_401',
     component: () => import('@/view/base/error-page/401.vue')
