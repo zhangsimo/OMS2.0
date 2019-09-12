@@ -8,7 +8,7 @@
       <span v-if="errorTip" class="error-tip">{{errorTip}}</span>
     </section>
 
-    <Modal v-model="showLines" :title="title" width="940" ok-text="关闭" cancel-text="">
+    <Modal v-model="showLines" :title="title" width="1140" ok-text="关闭" cancel-text="">
       <div v-if="orderNo" class="pb15">
         <span>订单号：</span>
         <Select v-model="orderNo" class="w320" @on-change="orderNoChange">
