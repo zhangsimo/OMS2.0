@@ -44,8 +44,8 @@
     </section>
     <section class="con-box">
       <Table size="small" :loading="loading" border :stripe="true" :columns="columns" :data="areaList"></Table>
-      <!--<Page class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
-            <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
+      <Page class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
+            @on-page-size-change="changeSize" show-sizer show-total></Page>
     </section>
     <Modal v-model="modal" title="新增" width="400">
       <div v-if="areaArrData.length==0">
@@ -283,7 +283,12 @@
         areaList:[],
         storeData:[],
         areaArrData:[],
-        selectedArea:''
+        selectedArea:'',
+        page: {
+          num: 1,
+          size: 10,
+          total: 0
+        },
       }
     },
     mounted(){
@@ -313,9 +318,12 @@
         if(this.areaType){
           params.cropId = this.areaType
         }
+        params.page = this.page.num - 1
+        params.size = this.page.size
         getStoreAreaLineList(params).then(res => {
           if(res.code==0){
             this.areaList = res.data||[]
+            this.page.total = res.totalElements
           }
         })
       },
@@ -390,7 +398,17 @@
             })
           }
         });
-      }
+      },
+      //分页
+      changePage(p) {
+        this.page.num = p
+        this.getAreaListFun()
+      },
+      changeSize(size) {
+        this.page.num = 1
+        this.page.size = size
+        this.getAreaListFun()
+      },
     }
 	}
 </script>
