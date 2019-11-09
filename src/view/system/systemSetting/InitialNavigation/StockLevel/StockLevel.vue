@@ -69,7 +69,7 @@
                   :loading="customer.loading"
                   :stripe="true"
                   :columns="customer.columns"
-                  :data="customer.tbdata"
+                  :data="tbdataArr"
                   @on-selection-change="selection"
                 ></Table>
               </div>
@@ -90,7 +90,7 @@
           </Split>
         </section>
         <Modal v-model="modal" title="配件选择" :footer-hide="true" width="1020">
-          <Dia-log></Dia-log>
+          <Dia-log @getMsg="getMsg2"></Dia-log>
         </Modal>
       </main>
 </template>
@@ -121,5 +121,4 @@
   .leftnav{
     padding-bottom: 200px;
   }
-
 </style>

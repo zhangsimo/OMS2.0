@@ -87,3 +87,43 @@ export function Add(data) {
     data
   })
 }
+
+//保存按钮
+// stockLevelPart/save
+export function stockLevelPartSave(data) {
+  return axios.request({
+    url: `${api.wmsApi}/stockLevelPart/save`,
+    method: 'post',
+    data
+  })
+}
+
+// *========= 配件提成 ==========*
+//table表格
+export function findPageByDynamicQuery(data) {
+  return axios.request({
+    url: `${api.wmsApi}/deductPart/findPageByDynamicQuery`,
+    method: 'post',
+    data:data.data,
+    params: data.params
+  })
+}
+
+//删除配件
+// delete
+export function DeleteAccessories(data) {
+  return axios.request({
+    url: `${api.wmsApi}/deductPart/delete`,
+    method: 'post',
+    data:data
+  })
+}
+//保存配件
+// /deductPart/saveOrUpdate
+export function saveOrUpdate(data) {
+  return axios.request({
+    url: `${api.wmsApi}/deductPart/saveOrUpdate`,
+    method: 'post',
+    data:data
+  })
+}

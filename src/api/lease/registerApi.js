@@ -1,10 +1,10 @@
 import axios from '@/libs/api.request'
-import api from '_conf/url'
+import api from "_conf/url";
+
 // 注册管理全部信息及分页
 export function getMessagelist (data) {
   return axios.request({
-    // url: '/trialRegister/queryAll',
-    url: 'trialRegister/queryAll',
+    url: `${api.omsApi}/trialRegister/queryAll`,
     method: 'post',
     data:data.data,
     params:data.params
@@ -15,7 +15,7 @@ export function getMessagelist (data) {
 //查询所有操作类型信息
 export function findAllTenantType() {
   return axios.request({
-    url: '/trialRegister/findAllTenantType',
+    url: `${api.omsApi}/trialRegister/findAllTenantType`,
     method: 'post'
   })
 }
@@ -23,7 +23,7 @@ export function findAllTenantType() {
 //数据字典里审核租户信息
 export function Reviewtenant(name) {
   return axios.request({
-    url: 'http://192.168.30.234:9200/dictionaries/findByCodeAllItem?dictCode=CS001',
+    url: `${api.omsProduct}/dictionaries/findByCodeAllItem?dictCode=CS001`,
     method: 'get',
     name
   })
@@ -32,7 +32,7 @@ export function Reviewtenant(name) {
 //数据字典里查询租户类型
 export function findByCode(params) {
   return axios.request({
-    url: `${api.omsApi}/dictionaries/findByCode`,
+    url: `${api.omsProduct}/dictionaries/findByCode`,
     method: 'get',
     params
   })
@@ -41,7 +41,7 @@ export function findByCode(params) {
 //审核状态
 export function SHstate() {
   return axios.request({
-    url: 'trialRegister/findAllStatus',
+    url: `${api.omsProduct}/trialRegister/findAllStatus`,
     method: 'get'
   })
 }
@@ -49,7 +49,7 @@ export function SHstate() {
 //更新注册信息
 export function trialRegister(params) {
   return axios.request({
-    url: 'trialRegister/save',
+    url: `${api.omsApi}/trialRegister/save`,
     method: 'post',
     params
   })
@@ -59,7 +59,7 @@ export function trialRegister(params) {
 //租户管理全部信息及分页
 export function TenanInformation(data) {
   return axios.request({
-    url: '/tenant/queryAll',
+    url: `${api.omsApi}/tenant/queryAll`,
     method: 'post',
     data:data.data,
     params:data.params
@@ -78,7 +78,7 @@ export function area(params) {
 // http://192.168.30.181:9240/leaseOrder/queryAll?tenantId=0
 export function aaa(params) {
   return axios.request({
-    url: 'http://192.168.30.181:9240/leaseOrder/queryAll',
+    url: `http://192.168.30.181:9240/leaseOrder/queryAll`,
     method: 'get',
     contentType: "application/json; charset=utf-8",
     params
@@ -88,7 +88,7 @@ export function aaa(params) {
 //租户管理的类型
 export function FindByItemCode(params) {
   return axios.request({
-    url: 'http://192.168.30.21:9200/dictionariesItem/findByItemCode',
+    url: `${api.omsProduct}/dictionariesItem/findByItemCode`,
     method: 'get',
     data: params
   })
@@ -97,7 +97,7 @@ export function FindByItemCode(params) {
 //租户管理修改确定按钮
 export function Confirm(data) {
   return axios.request({
-    url: 'tenant/save',
+    url: `${api.omsApi}tenant/save`,
     method: 'post',
     data
   })
@@ -106,7 +106,7 @@ export function Confirm(data) {
 //查看产品
 export function Product(data) {
   return axios.request({
-    url: 'http://192.168.30.84:9240/leaseProduct/queryAll',
+    url: `${api.omsApi}/leaseProduct/queryAll`,
     method: 'get',
     data,
     params:data.params
@@ -117,7 +117,7 @@ export function Product(data) {
 //查看订单
 export function Order(data) {
   return axios.request({
-    url: 'leaseOrder/findAll',
+    url: `${api.omsApi}/leaseOrder/findAll`,
     method: 'post',
     data,
     params:data.params
@@ -127,7 +127,7 @@ export function Order(data) {
 //查看费用
 export function Money(data) {
   return axios.request({
-    url: 'http://192.168.30.84:9240/leaseOrder/findById',
+    url: `${api.omsApi}/leaseOrder/findById`,
     method: 'post',
     data,
     params:data.params

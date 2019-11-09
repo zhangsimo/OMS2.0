@@ -14,11 +14,12 @@ export function classification(data) {
 
 //查询配件管理
 // /attribute/queryAll
-export function attributeQueryall(params) {
+export function attributeQueryall(data) {
   return axios.request({
     url: `${api.wmsApi}/attribute/queryAll`,
-    method: 'get',
-    params
+    method: 'post',
+    params:data.params,
+    data: data.data
   })
 }
 
