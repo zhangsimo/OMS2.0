@@ -204,7 +204,6 @@
             },
             //选中一条信息
             pitchSupplier(currentRow){
-                console.log(currentRow)
                 this.pitchSupplierOne = currentRow
             },
             //修改状态禁用
@@ -222,7 +221,6 @@
             },
             //确认添加一条信息
             addNewSupplier(){
-                console.log(this.clientList)
                 this.$refs.child.handleSubmit( async () => {
                     let data = this.clientList
                     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0

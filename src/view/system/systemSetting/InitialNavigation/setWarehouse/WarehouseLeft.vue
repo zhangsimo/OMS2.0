@@ -3,22 +3,22 @@
     <div class='left'>
       <span class="mr10">仓库定义:</span>
       <Button class="mr10" @click="addWarehouse"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>
-      <Button class="mr10" ><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>
+      <Button class="mr10" @click="changeWarehouse"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>
     </div>
     <div class="houseTitle">
-      <ul>
-        <li v-for="item in list" :key="item.id">
+      <ul ref="lists">
+        <li v-for="(item,index) in list" :key="item.id">
         <div class="line"></div>
         <div class="vertical"></div>
-          <span class="oneWarhouse" @click="getWareHouseId(item)">
+          <span class="oneWarhouse"  @click="getWareHouseId(item , index)" :class="{active:index===number}">
        <Icon class="iconfont iconyuejieduizhangicon icons"/> {{item.name}}
           </span>
       </li>
       </ul>
     </div>
     <Modal v-model="showNewWareHouse" title="仓库定义">
-      <Form :model='warehouseData' :label-width="130">
-        <FormItem label='仓库名称：' >
+      <Form :model='warehouseData' :label-width="130" :rules='rules' ref="formValidate">
+        <FormItem label='仓库名称：' prop="name">
           <Input v-model='warehouseData.name' style="width: 250px" ></Input>
         </FormItem>
          <Row>
@@ -47,7 +47,7 @@
         </Row>
       </Form>
       <div slot='footer'>
-        <Button type='primary' @click="add">确定</Button>
+        <Button type='primary' @click="add('formValidate')">确定</Button>
         <Button type='default' @click="showNewWareHouse =false">取消</Button>
       </div>
     </Modal>
@@ -63,7 +63,13 @@
             return {
                 list:'',
                 showNewWareHouse: false,
-                warehouseData:{}
+                warehouseData:{},
+                rules:{
+                    name: [
+                        {required: true, message: '不能为空', trigger: 'blur'}
+                    ]
+                },
+                number:''
             }
         },
         created(){
@@ -76,18 +82,33 @@
                  this.list = res.data
              }
           },
-            getWareHouseId(data){
-             console.log(data,123)
+            getWareHouseId(data,index){
+                this.warehouseData = JSON.parse(JSON.stringify(data))
+                this.number =  index
             },
             addWarehouse(){
+                this.warehouseData ={}
              this.showNewWareHouse =true
             },
-            add(){
-             let data = this.warehouseData
-                getNewWarehouse(data).then( res => {
-                    console.log(data)
+            add (name) {
+                this.$refs[name].validate((valid) => {
+                    if (valid) {
+                        let data = this.warehouseData
+                        getNewWarehouse(data).then( res => {
+                            this.getList()
+                            this.showNewWareHouse =false
+                        })
+                    } else {
+                        this.$Message.error('信息填写完整!');
+                    }
                 })
-
+            },
+            changeWarehouse(){
+                if (Object.keys(this.warehouseData).length == 0  ){
+                    this.$Message.error('至少选项一个仓库')
+                    return false
+                }
+                this.showNewWareHouse =true
             }
         }
     }
@@ -129,6 +150,9 @@ ul {
     cursor:pointer;
   }
   .oneWarhouse:hover {
+    color: #40a6ff;
+  }
+  .active {
     color: #40a6ff;
   }
 }
