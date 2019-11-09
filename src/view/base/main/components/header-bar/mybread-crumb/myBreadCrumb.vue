@@ -1,9 +1,10 @@
 <template>
-  <custom-bread-crumb show-icon  :list="levelList"></custom-bread-crumb>
+  <custom-bread-crumb show-icon  :list="levelList" v-if="levelList.length>0"></custom-bread-crumb>
 </template>
 
 <script>
 import customBreadCrumb from '../custom-bread-crumb/'
+import routes from '@/router/routers'
 export default {
   name: 'myBreadCrumb',
   components: {
@@ -19,16 +20,31 @@ export default {
   },
   methods: {
     getBreadcrumb () {
-      let matched = this.$route.matched.filter((item, index) => {
-        if ( index > 0 ) {
-          return item.name
-        }
-      })
-      const first = matched[0]
-      if (first && first.name === 'home') {
-        matched = []
+      if (this.$route.name !== 'home') {
+        this.getSecondsCrumb()
+      }else{
+        this.levelList=[]
       }
-      this.levelList = matched
+    },
+    getSecondsCrumb(){
+      const activName = this.$route.meta.activeName
+      if (activName) {
+        let leveArr = routes.filter(item => item.name==this.$route.matched[0].name)
+        if(leveArr.length>0){
+          if(leveArr[0].children&&leveArr[0].children.length>0){
+            let secondObj = leveArr[0].children.filter(item => item.name==activName)
+            let arrData = []
+            this.$route.matched.forEach(item => {
+              arrData.push(item)
+            })
+
+            arrData.splice(1,0,secondObj[0])
+            this.levelList = arrData
+          }
+        }
+      }else{
+        this.levelList = this.$route.matched
+      }
     }
   },
   watch: {

@@ -1,0 +1,26 @@
+.customerSM {
+  height: 560px;
+}
+.customerSM .con-box {
+  height: 520px;
+}
+.l-table {
+  overflow-y: auto;
+  height: 520px;
+  padding-right: 5px;
+}
+.r-table {
+  flex: auto;
+  overflow-y: auto;
+  height: 512px;
+  padding-left: 10px;
+}
+.modal-form .modal-row {
+  padding: 10px 0;
+}
+.modal-form label.modal-text {
+  display: inline-block;
+  width: 80px;
+  text-align: right;
+  padding: 0 5px;
+}

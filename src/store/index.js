@@ -8,11 +8,23 @@ import getters from './getters.js'
 
 Vue.use(Vuex)
 
+const context = require.context('./mod', false, /\.ts$/);
+const moduleStores = {};
+context.keys().forEach(key => {
+  const fileName = key.slice(2, -3);
+  const fileModule = context(key).default;
+  moduleStores[fileName] = {
+    ...fileModule,
+    namespaced: true,
+  }
+})
+
 export default new Vuex.Store({
   modules: {
     user,
     app,
-    common
+    common,
+    ...moduleStores,
   },
   getters
 })

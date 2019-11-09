@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div class="content-oper">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
             <span>日期：</span>
             <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
-                        class="w200 mr20"></DatePicker>
+                        class="w200 mr20">
+            </DatePicker>
           </div>
           <div class="db">
             <span>查询条件：</span>

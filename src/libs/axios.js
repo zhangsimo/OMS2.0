@@ -73,6 +73,12 @@ class httpRequest {
           // else{
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
+            if(config.params.tenantId == undefined) {
+              config.params.tenantId = 0
+              if(localStorage.tenantId != undefined) {
+                config.params.tenantId = localStorage.tenantId;
+              }
+            }
           // }
       }else{
         if(config.url.includes('/token')){
@@ -136,7 +142,13 @@ class httpRequest {
         }
       }
       //Message.error('服务内部错误')
-      globalVue.$Message.error(error.message)
+      if(error.response.config.url.includes('/token')){
+        globalVue.$Message.error(error.response.data.data.errorMessage)
+      }else{
+        globalVue.$Message.error(error.message)
+      }
+
+
       // 对响应错误做点什么
       return Promise.reject(error)
     })

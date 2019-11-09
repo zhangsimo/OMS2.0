@@ -1,0 +1,48 @@
+.tenant-res {
+  padding: 10px;
+  background-color: #fff;
+  height: 510px;
+}
+.tenant-res .right {
+  flex: auto;
+}
+.tenant-main,
+.tenant-top {
+  border: solid 1px #e5e5e5;
+  display: flex;
+}
+.tenant-top {
+  border-bottom: none;
+  height: 50px;
+}
+.tenant-main {
+  height: 490px;
+}
+.tenant-main .left {
+  overflow: auto;
+}
+.tenant-main .tab-warp {
+  overflow-y: auto;
+}
+.db.left.title {
+  border: none;
+  border-bottom: solid 1px #e5e5e5;
+}
+.tree-warp {
+  padding-left: 10px;
+}
+.btn-title {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+.left-warp,
+.right-warp {
+  height: 490px;
+}
+.title-warp {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  border-bottom: solid 1px #e5e5e5;
+}

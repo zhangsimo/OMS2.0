@@ -12,99 +12,129 @@
 }
 .tags-nav{
   position: relative;
-  border-top: 1px solid #F0F0F0;
-  border-bottom: 1px solid #F0F0F0;
+  .ivu-tag{
+    margin: 0px;
+  }
   .no-select;
   .size;
   .close-con{
     position: absolute;
     right: 0;
     top: 0;
-    margin-top: 21px;
-    width: 32px;
     background: #fff;
     text-align: center;
-    z-index: 10;
-    border-top: 1px solid #e9eaec;
+    z-index: 2;
     .ivu-btn-text:focus{
       box-shadow: none;
     }
   }
+  .close-con{
+    text-align: center;
+    line-height: 30px;
+    border: 1px solid #e9eaec;
+    width: 30px;
+    height: 30px;
+    color: #666;
+    .ivu-icon{
+
+      padding: 0px;
+      border: 0px;
+
+    }
+    .ivu-dropdown{
+      margin: 0;
+    }
+    .ivu-dropdown-rel{
+      vertical-align: top;
+    }
+  }
   .tag-item{
     position: relative;
-    padding: 5px 10px 3px;
-    height: auto;
-    border-radius: 0px;
+    height: 30px;
+    border-radius: 3px;
     background: #fff;
     overflow: visible;
-    margin-top: 20px;
-    margin-right: 0;
-    margin-left: -1px;
-    i{
-      border-radius: 50%;
-      border: 1px solid #859ba6;
-      width: 12px;
-      height: 12px;
-      line-height: 10px;
-      text-align: center;
-      transform: scale(1.1);
-      color: #000;
+    margin-left: 5px;
+    line-height: 29px;
+    cursor: pointer;
+    transition: all .3s ease 0s;
+    .ivu-tag-text{
+      color: #999;
+      font-size: 14px;
+    }
+    i.ivu-icon-ios-close{
+      font-size: 12px;
       opacity: 1;
-      position: absolute;
-      right: 0px;
-      top: -8px;
-      background: #fff;
+      color: #999;
+      &:before{
+        content:'\F379'
+      }
+    }
+    &:hover{
+      border-color: #fd5c5c;
+      box-shadow: 0px 3px 3px rgba(253,92,92,.15);
+      .ivu-tag-text,
+      i{
+        color:#fd5c5c;
+      }
     }
   }
   .tag-item.tag-item-selected{
-    border-top:5px solid #e82f2f;
-    margin-top: 12px;
-    padding-top: 8px;
-    background: #fafafa;
+    background: #fd5c5c;
     .ivu-tag-text{
-      color: #e82f2f;
+      color: #fff;
     }
     i{
-      top: -4px;
-      border-color: #e82f2f;
-      color: #e82f2f;
+      color: #fff;
     }
   }
   .btn-con{
     position: absolute;
     top: 0px;
     background: #fff;
-    padding-top: 2px;
-    z-index: 10;
-    border-top: 1px solid #e9eaec;
+    z-index: 2;
+    .ivu-btn-text{
+      margin: 0px;
+    }
     button{
-      padding: 4px 10px 3px;
       text-align: center;
       box-shadow: none;
-      margin-top: 1px;
+      width: 30px;
+      height: 30px;
+      border: 1px solid #e9eaec;
+      color: #666;
     }
     &.left-btn{
       left: 0px;
-      border-left: 1px solid #e9eaec;
-      margin-top: 21px;
+      box-shadow: 2px -2px 6px rgba(0,0,0,.1);
+      &.noActive{
+        box-shadow: none;
+        button{
+          color: #e7e7e7;
+        }
+      }
     }
     &.right-btn{
-      right: 32px;
-      border-left: 1px solid #e9eaec;
-      border-right: 1px solid #e9eaec;
-      margin-top: 21px;
+      right: 30px;
+      box-shadow: -3px -2px 6px rgba(0,0,0,.2);
+      &.noActive{
+        box-shadow: none;
+        button{
+          color: #e7e7e7;
+        }
+      }
     }
   }
   .scroll-outer{
     position: absolute;
-    left: 28px;
+    left: 30px;
     right: 61px;
     top: 0;
     bottom: 0;
+    height: 30px;
     .scroll-body{
       height: ~"calc(100% - 1px)";
       display: inline-block;
-      padding: 1px 2px 0;
       position: absolute;
       overflow: visible;
       white-space: nowrap;

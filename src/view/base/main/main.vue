@@ -1,34 +1,38 @@
 <template>
   <Layout style="height: 100%" class="main">
-    <Sider hide-trigger collapsible :width="250" :collapsed-width="50" v-model="collapsed">
+    <Sider hide-trigger collapsible :width="200" :collapsed-width="60" v-model="collapsed">
       <side-menu :accordion="false" :active-name="activeNameFun" :collapsed="collapsed" @on-select="turnToPage"
                  :menu-list="menuList">
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        <div class="logo-con">
-          <img v-show="!collapsed" :src="maxLogo" key="max-logo"/>
-          <!--<img v-show="collapsed" :src="minLogo" key="min-logo" />-->
+        <div class="logo-con" v-show="!collapsed">
+          OMS管理系统
         </div>
-        <div class="left-search" v-show="!collapsed">
-          <span>极配订单管理系统</span>
+        <div class="logo-con" style="font-size: 18px" v-show="collapsed">
+          OMS
         </div>
+        <!--<div class="left-search" v-show="!collapsed">-->
+          <!--<span>极配订单管理系统</span>-->
+        <!--</div>-->
       </side-menu>
     </Sider>
     <Layout style="overflow: hidden">
       <Header class="header-con">
         <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-          <span class="fs12">版本号：{{omsVersion}}</span>
-          <!--<fullscreen v-model="isFullscreen" style="margin-right: 10px;"/>-->
           <user :user-avator="userAvator" :user-data="userData"/>
+          <!--<span class="fs12">版本号：{{omsVersion}}</span>-->
+          <fullscreen v-model="isFullscreen" style="margin-right: 20px;"/>
+          <other-item></other-item>
           <!--<message_index></message_index>-->
         </header-bar>
       </Header>
-      <Content style="position: relative">
+      <Content class="ivu-layout-wrap" style="position: relative">
         <Layout>
           <div class="tag-nav-wrapper">
             <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag"/>
           </div>
+          <!--<my-bread-crumb></my-bread-crumb>-->
           <Content class="content-wrapper"
-                   style="position: absolute;top: 54px;left: 0;right: 0;bottom: 0;overflow-y: auto">
+                   style="position: absolute;top: 67px;left: 0;right: 0;bottom: 0;overflow-y: auto">
             <keep-alive :include="cacheList">
               <router-view/>
             </keep-alive>
@@ -53,10 +57,14 @@
   import Message_index from "./components/message/message"
 
   import CUR_VERSION from '@/config/version'
+  import OtherItem from './components/other-item/other-item'
+  import MyBreadCrumb from './components/header-bar/mybread-crumb/myBreadCrumb'
 
   export default {
     name: 'Main',
     components: {
+      MyBreadCrumb,
+      OtherItem,
       Message_index,
       SideMenu,
       HeaderBar,

@@ -1,18 +1,33 @@
 import env from './env'
 
 const dev = {
-  tokenApi: 'https://api.g-parts.cn', // 登录接口API
-  // wmsApi:'http://localhost:9600', // wms微服务API
-  wmsApi: 'https://api.g-parts.cn/wms-order-provider',
-  // omsApi:'http://localhost:9200', // oms微服务API
-  // omsApi:'http://192.168.30.129:9200', // wms微服务API  管智
-  // omsApi:'http://192.168.30.191:9200', // wms微服务API  姜琦
-  omsApi: 'http://192.168.30.182:9200', // wms微服务API  宏杰
-  // omsApi:'http://192.168.30.179:9200', // wms微服务API  韩永
-  // omsOrderApi:'http://192.168.30.182:9220', // wms微服务API  宏杰
-  omsOrderApi: 'http://192.168.30.179:9220', // wms微服务API  韩永
-  // omsApi:'http://192.168.21.207:9200', // wms微服务API  操昆
-  passportApi: 'https://api.g-parts.cn/gpart-passport-provider', // passport微服务API
+  tokenApi: 'http://192.168.2.47:5600', // 登录接口API
+  // tokenApi: 'https://api.g-parts.cn', // 登录接口API
+  // wmsApi: 'https://api.g-parts.cn/wms-order-provider',
+  // omsApi: 'http://192.168.30.92:9240', // 张佳岩
+  // omsApi: 'http://192.168.30.21:9240', // 付玮琳
+  // wmsApi: 'http://192.168.30.84:9250', // 谢建明
+  // omsProduct: 'http://192.168.84.209:9200', // 谢建明
+  omsProduct: "http://192.168.30.234:9200", // 陈舒
+  omsApi: 'http://192.168.30.234:9240', // 陈舒
+  wmsApi: 'http://192.168.30.234:9250', // 陈舒
+  /**oms系统接口设定 */
+  authApi: 'http://192.168.2.47:5200', // 系统资源 5200
+  // omsProduct: '', // 9200
+  // omsOrder: '', // 9210
+  // omsEdit: '', // 9220
+  // omsTask: '', // 9230
+  // omsApi: '', // 9240
+  // wmsApi: '', // 9250
+  // omsBatch: '', // 9260
+  // omsSettle: '', // 9270
+  /**oms财务接口 */
+  // financeCore: '', // 9300
+  // financeReport: '', // 9310
+  // financeAccount: '', // 9320
+  // financeEdit: '', // 9330
+  //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
+  passportApi: 'http://192.168.2.47:5200', // passport微服务API
   essentialApi: 'https://api.g-parts.cn/gpart-essential-provider' // 基础服务API
 }
 
