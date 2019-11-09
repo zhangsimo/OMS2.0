@@ -172,7 +172,11 @@ const data = function() {
     //默认为编码
     Type: 0,
     //多选数组
-    checkboxArr: []
+    checkboxArr: [],
+    //从子组件获取的数组
+    getArr: [],
+    //合并的数组
+    tbdataArr:[]
   }
 };
 
@@ -242,8 +246,12 @@ const methods = {
       })
     }
   },
-  // 保存客户
-  saveCustomer() {},
+  // 保存配件
+  saveCustomer() {
+    stockLevelPartSave(this.getArr).then(res => {
+
+    })
+  },
   /**============配件============ */
   // 翻页-配件价格
   changePagePagePart(p) {
@@ -297,9 +305,15 @@ const methods = {
   selection(a){
     this.checkboxArr = a
     console.log(this.checkboxArr)
+  },
+  //子组件的参数
+  getMsg2(a){
+    this.getArr = a
+    this.tbdataArr = [...this.customer.tbdata,...this.getArr]
+    console.log(this.tbdataArr)
   }
 };
-import {stockLevel,stockLevelSave,RightqueryAll,Delete} from '../../../../../api/system/systemSetting/Initialization'
+import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
 import DiaLog from '../../../../../components/Accessories/dialog';
 const components = {
   DiaLog

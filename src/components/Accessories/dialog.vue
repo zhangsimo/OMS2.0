@@ -33,9 +33,9 @@
       </div>
       <div slot="right" class="right tab-warp">
         <div class="p10">
-          <Button class="mr10">
+          <Button class="mr10" @click="Choose">
               <span class="center">
-                <Icon custom="iconfont iconbaocunicon icons" />保存
+                <Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />选择
               </span>
           </Button>
         </div>
@@ -47,6 +47,7 @@
           :stripe="true"
           :columns="columns"
           :data="tbdata"
+          @on-current-change="selection"
         ></Table>
         <div class="page-warp">
             <Page
@@ -75,9 +76,11 @@
   const getTree = tree => {
     if (isArray(tree) && tree.length > 0) {
       tree.forEach(tel => {
-        tel.expand = false;
+        // tel.expand = false;
         tel.title = tel.name;
-        [tel.children, tel.childs] = [tel.childs, []];
+        if(tel.disabled) {
+          Reflect.deleteProperty(tel, 'disabled');
+        }
         getTree(tel.children);
       });
     } else {
@@ -212,7 +215,13 @@ export default {
       tbdata: [],
       // tenantres
       // 分页
-      page: { num: 1, size: 10, total: 100 }
+      page: { num: 1, size: 10, total: 100 },
+      //选择的数组
+      chooseArr:[],
+      //选中的数据
+      rowMessage:null,
+      //判断是否重复的数组
+      norepeatArr:[]
     };
   },
   mounted() {
@@ -224,8 +233,13 @@ export default {
     })
   },
   methods: {
+    //选中某一行
+    selection(row){
+      this.rowMessage = row
+      // console.log(this.rowMessage)
+    },
     // 查询
-    query() {
+    query(){
       this.page.num = 1
       this.rightgetList()
     },
@@ -254,30 +268,47 @@ export default {
     },
     rightgetList() {
       let params = {}
+      let data = {}
       if (this.code) {
-        params.queryCode = this.code
+        data.queryCode = this.code
       }
       if (this.fullname){
-        params.fullName = this.fullname
+        data.fullName = this.fullname
       }
       if (this.carType) {
-        params.applyCarModel = this.carType
+        data.applyCarModel = this.carType
       }
       if(this.pinyin){
-        params.namePy = this.pinyin
+        data.namePy = this.pinyin
       }
       if(this.selectTypes){
-        params.partBrandId = this.selectTypes
+        data.partBrandId = this.selectTypes
       }
       params.page = this.page.num - 1
       params.size = this.page.size
-      attributeQueryall(params).then(res => {
+      attributeQueryall({params:params,data:data}).then(res => {
         if(res.code === 0){
           this.tbdata = res.data.content || []
           this.page.total = res.data.totalElements
         }
       })
+    },
+    //选择按钮
+    Choose(){
+      if(this.rowMessage === null){
+        this.$Message.warning('请选择要添加的对象')
+      }else{
+          let res = this.chooseArr.every(el => el.id !== this.rowMessage.id)
+          if(res){
+            this.chooseArr.push(this.rowMessage)
+            console.log(this.chooseArr)
+            this.$emit('getMsg',this.chooseArr)
+        }else{
+            this.$Message.warning('该对象已加入')
+          }
+      }
     }
+
   }
 };
 </script>

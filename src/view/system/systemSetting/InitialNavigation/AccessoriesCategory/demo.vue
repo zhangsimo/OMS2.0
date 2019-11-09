@@ -1,11 +1,12 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="Tbdata">
     <template>
       <div style="height: 100%">
         <vxe-table
           :data="Tbdata"
           :loading="Loading"
           :tree-config="{children: 'children'}"
+          @cell-click="selection"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="code" title="分类编码"></vxe-table-column>
@@ -83,21 +84,22 @@
                 //     }],
                 tableData: this.Tbdata,
                 Loading:true,
-                page: {
-                    num: 1,
-                    size: 10,
-                    total: 0
-                },
+                rowMessage: '',
+                STATE: ''
             }
         },
         mounted () {
             // var Ctor = Vue.extend(this.tableData);
             // new Ctor().$mount('#app')
-            console.log(this.Tbdata,1231231)
-
         },
         methods: {
-
+          selection(row){
+            this.rowMessage = row.row
+            this.STATE = this.rowMessage.isDisabled
+            // console.log(this.rowMessage)
+            // console.log(this.STATE)
+            this.$emit('getMsg',[this.rowMessage,this.STATE])
+          }
         }
     }
 </script>
