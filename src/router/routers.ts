@@ -1526,6 +1526,34 @@ export default [
               )
           },
           {
+            path:
+              "/systemSetting/InitialNavigation/storeManagement/storeManagement",
+            name: "storeManagement",
+            // mark: '59',
+            meta: {
+              hideInMenu: true,
+              title: "门店设置"
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/InitialNavigation/storeManagement/storeManagement.vue"
+                )
+          },
+          {
+            path:
+              "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
+            name: "setWarehouse",
+            // mark: '59',
+            meta: {
+              hideInMenu: true,
+              title: "仓库设置"
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/InitialNavigation/setWarehouse/setWarehouse.vue"
+                )
+          },
+          {
             path: "/system/staff/management",
             name: "staffManagement",
             // mark: '59',

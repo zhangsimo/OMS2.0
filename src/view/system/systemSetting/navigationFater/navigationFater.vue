@@ -2,7 +2,7 @@
   <div class="oper-box">
     <div class="bigbox">
       <Row :gutter="20">
-        <Col span="6" v-for="(item,index) in Arr">
+        <Col span="6" v-for="(item,index) in Arr" :key="index">
           <div class="items">
             <div class="item_header">{{ item.title }}</div>
             <div class="item_body">
@@ -34,7 +34,7 @@
               this.$router.push()
                   return
             case "门店设置":
-              this.$router.push()
+                this.$router.push({name:'storeManagement'})
                   return
             case "销售提成设置":
               this.$router.push()
@@ -58,7 +58,7 @@
               this.$router.push({name: 'StockLevel'})
               return
             case "仓库设置":
-              this.$router.push()
+                this.$router.push({name:'setWarehouse'})
               return
             case "结算账户":
               this.$router.push()
