@@ -13,7 +13,8 @@ export default {
     avatorImgPath: '',
     token: getToken(),
     access: '',
-    userData: ''
+    userData: '',
+    treePid:''
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -34,6 +35,9 @@ export default {
     setToken(state, token) {
       state.token = token
       setToken(token)
+    },
+    setTreePid(state, data) {
+      state.treePid = data
     }
   },
   actions: {
