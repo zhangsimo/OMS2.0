@@ -122,41 +122,6 @@
                 align:'left',
                 key: 'deductRate',
                 minWidth: 120,
-                // render: (h, params) => {
-                //   const vm = this;
-                //   if (params.row.isEdit) {
-                //     return h("input", {
-                //       class: "edit",
-                //       domProps: {
-                //         autofocus: "autofocus",
-                //         value: params.row.deductRate
-                //       },
-                //       on: {
-                //         input(event) {
-                //           params.row.deductRate = event.target.value;
-                //           vm.tbdata[params.index] = params.row;
-                //           // vm.upOrSaveArr.push()
-                //         },
-                //         blur() {
-                //           params.row.isEdit = false;
-                //         }
-                //       }
-                //     });
-                //   } else {
-                //     return h(
-                //       "div",
-                //       {
-                //         class: "edit",
-                //         on: {
-                //           dblclick(event) {
-                //             params.row.isEdit = !params.row.isEdit;
-                //           }
-                //         }
-                //       },
-                //       params.row.deductRate
-                //     );
-                //   }
-                // },
                 render:(h,params) => {
                   // console.log(params.row.remark)
                   const vm = this
@@ -257,7 +222,7 @@
         //保存
         Save(){
           saveOrUpdate(this.tbdata).then(res => {
-
+            this.getList()
           })
         },
         //分页
@@ -307,11 +272,19 @@
         },
         //获取子组件数据
         getMsg2(a){
-          this.getArr = a
-          
+          console.log(a)
+          let newA = a.map(item => {
+            return {
+              partCode: item.code,
+              partName: item.partBrandName
+            }
+          })
+          this.getArr = newA
           this.tbdata = [...this.tbdata,...this.getArr]
-          // let aaa = from(new Set(this.tbdata))
-          // console.log(aaa)
+          this.tbdata.map(item => {
+
+          })
+          console.log(this.tbdata)
         },
         //多选框
         multiple(a){

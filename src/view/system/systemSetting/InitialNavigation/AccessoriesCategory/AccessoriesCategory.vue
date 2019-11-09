@@ -152,7 +152,7 @@
             // console.log(this.rowMessage.code)
             // console.log(this.rowMessage)
             this.Name2 = this.rowMessage.name
-            // this.superior1 = this.rowMessage.code
+            this.superior1 = ''
           }
         },
         //保存

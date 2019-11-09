@@ -120,5 +120,6 @@
   }
   .leftnav{
     padding-bottom: 200px;
+    height: 600px;
   }
 </style>
