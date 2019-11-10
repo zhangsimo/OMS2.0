@@ -253,11 +253,9 @@
           }
           params.page = this.page.num - 1
           params.size = this.page.size
+          this.loading = true
           findPageByDynamicQuery({params:params,data:data}).then(res => {
-            // if(res.code === 0){
-            //   this.page.total = res.data.totalElements
-            //   this.tbdata = res.data.content || []
-            // }
+            this.loading = false
             if (res.code === 0) {
               this.page.total = res.data.totalElements
               this.tbdata = res.data.content.map(el => {

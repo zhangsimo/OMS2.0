@@ -127,5 +127,13 @@
 </script>
 
 <style scoped>
-
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .icons {
+    padding-right: 5px;
+    font-size: 12px!important;
+  }
 </style>

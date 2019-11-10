@@ -1,13 +1,300 @@
 <template>
-    <div>自定义分类</div>
+    <div>
+      <section class="oper-box">
+        <el-tabs :tab-position="tabPosition" style="height: 650px">
+          <el-tab-pane label="产品线分类">
+            <section>
+              <div class="oper-top flex">
+                <div class="wlf">
+                  <div class="db">
+                    <Button class="mr10 w90" @click="addProduct"><span class="center"><Icon type="md-add" />新增</span></Button>
+                    <Button class="mr10 w90" @click="saveProduct"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="con-box">
+              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingProduct" border :stripe="true" :columns="columnsProduct" :data="tbdataProduct" @on-row-click="selectionProduct"></Table>
+            </section>
+          </el-tab-pane>
+          <el-tab-pane label="维修性质分类">
+            <section>
+              <div class="oper-top flex">
+                <div class="wlf">
+                  <div class="db">
+                    <Button class="mr10 w90" @click="addNature"><span class="center"><Icon type="md-add" />新增</span></Button>
+                    <Button class="mr10 w90" @click="saveNature"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="con-box">
+              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingNature" border :stripe="true" :columns="columnsNature" :data="tbdataNature" @on-row-click="selectionNature"></Table>
+            </section>
+          </el-tab-pane>
+        </el-tabs>
+      </section>
+    </div>
 </template>
 
 <script>
     export default {
-        name: "CustomClassification"
+        name: "CustomClassification",
+        data(){
+          return {
+            tabPosition: 'left',
+            //产品
+            columnsProduct: [
+              {
+                title: "序号",
+                align: "left",
+                type: "index",
+                Width: 80,
+              },
+              {
+                title: "产品线分类",
+                align: "left",
+                Width: 150,
+                // render: (h, params) => {
+                //   const vm = this;
+                //   if (params.row.isEdit) {
+                //     return h("input", {
+                //       class: "edit",
+                //       domProps: {
+                //         autofocus: "autofocus",
+                //         value: params.row.name
+                //       },
+                //       on: {
+                //         input(event) {
+                //           params.row.name = event.target.value;
+                //           vm.level.tbdata[params.index] = params.row;
+                //           // vm.upOrSaveArr.push()
+                //         },
+                //         blur() {
+                //           params.row.isEdit = false;
+                //         }
+                //       }
+                //     });
+                //   } else {
+                //     return h(
+                //       "div",
+                //       {
+                //         class: "edit",
+                //         on: {
+                //           dblclick(event) {
+                //             params.row.isEdit = !params.row.isEdit;
+                //           }
+                //         }
+                //       },
+                //       params.row.name
+                //     );
+                //   }
+                // },,
+                render:(h,params) => {
+                  // console.log(params.row.remark)
+                  const vm = this
+                  return h('Input',{
+                    //给div绑定value属性
+                    props: {
+                      value:params.row.remark
+                    },
+                    //给div绑定样式
+                    style:{
+                      width:'100%'
+                    },
+                    //给div绑定点击事件　　
+                    on: {
+                      input(event) {
+                        params.row.remark = event;
+                        vm.tbdata[params.index] = params.row;
+                        // vm.upOrSaveArr.push()
+                      },
+                    },
+                  })
+                },
+                minWidth: 200
+              },
+              {
+                title: "状态",
+                align: "left",
+                // key: "isDisable",
+                minWidth: 80,
+                render:(h,params) => {
+                  let vm = this;
+                  return h('Select', {
+                      props: {
+                        value: params.row.isDisable
+                      },
+                      style: {
+                        width: "100%"
+                      },
+                      on: {
+                        'on-change': (event) => {
+                          params.row.isDisable = event;
+                          vm.level.tbdata[params.index] = params.row;
+                        }
+                      },
+                    },
+                    [
+                      h('Option', {
+                        props: {
+                          value: 0
+                        }
+                      }, '启用'),
+                      h('Option', {
+                        props: {
+                          value: 1
+                        }
+                      }, '禁用')
+                    ])
+                }
+              },
+            ],
+            tbdataProduct :[],
+            loadingProduct: false,
+            //性质
+            columnsNature: [
+              {
+                title: "序号",
+                align: "left",
+                type: "index",
+                Width: 150,
+              },
+              {
+                title: "维修性质分类",
+                align: "left",
+                Width: 150,
+                // render: (h, params) => {
+                //   const vm = this;
+                //   if (params.row.isEdit) {
+                //     return h("input", {
+                //       class: "edit",
+                //       domProps: {
+                //         autofocus: "autofocus",
+                //         value: params.row.name
+                //       },
+                //       on: {
+                //         input(event) {
+                //           params.row.name = event.target.value;
+                //           vm.level.tbdata[params.index] = params.row;
+                //           // vm.upOrSaveArr.push()
+                //         },
+                //         blur() {
+                //           params.row.isEdit = false;
+                //         }
+                //       }
+                //     });
+                //   } else {
+                //     return h(
+                //       "div",
+                //       {
+                //         class: "edit",
+                //         on: {
+                //           dblclick(event) {
+                //             params.row.isEdit = !params.row.isEdit;
+                //           }
+                //         }
+                //       },
+                //       params.row.name
+                //     );
+                //   }
+                // },
+                render: (h, params) => {
+                  // console.log(params.row.remark)
+                  const vm = this
+                  return h('Input', {
+                    //给div绑定value属性
+                    props: {
+                      value: params.row.remark
+                    },
+                    //给div绑定样式
+                    style: {
+                      width: '100%'
+                    },
+                    //给div绑定点击事件　　
+                    on: {
+                      input(event) {
+                        params.row.remark = event;
+                        vm.tbdata[params.index] = params.row;
+                        // vm.upOrSaveArr.push()
+                      },
+                    },
+                  })
+                },
+                minWidth: 200
+              },
+              {
+                title: "状态",
+                align: "left",
+                // key: "isDisable",
+                minWidth: 80,
+                render:(h,params) => {
+                  let vm = this;
+                  return h('Select', {
+                      props: {
+                        value: params.row.isDisable
+                      },
+                      style: {
+                        width: "100%"
+                      },
+                      on: {
+                        'on-change': (event) => {
+                          params.row.isDisable = event;
+                          vm.level.tbdata[params.index] = params.row;
+                        }
+                      },
+                    },
+                    [
+                      h('Option', {
+                        props: {
+                          value: 0
+                        }
+                      }, '启用'),
+                      h('Option', {
+                        props: {
+                          value: 1
+                        }
+                      }, '禁用')
+                    ])
+                }
+              },
+            ],
+            tbdataNature :[],
+            loadingNature: false,
+          }
+        },
+      methods:{
+        selectionProduct(){},
+        //产品线分类新增
+        addProduct(){
+          this.tbdataProduct.push({ name: " ", oid: Date.now() });
+        },
+        //产品线分类保存
+        saveProduct(){},
+        //产品线分类新增
+        addNature(){
+          this.tbdataNature.push({ name: " ", oid: Date.now() });
+        },
+        //产品线分类保存
+        saveNature(){},
+      }
     }
 </script>
 
 <style scoped>
-
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icons {
+  padding-right: 5px;
+  font-size: 12px!important;
+  }
+  .scroll{
+    height: 580px;
+  }
+  .scroll >>> .ivu-table{
+    overflow-y: auto!important;
+  }
 </style>
