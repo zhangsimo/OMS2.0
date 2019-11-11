@@ -23,10 +23,10 @@ export function transTime(long: any): string {
  * @param arr 原数组
  * @param key 判断的键默认id
  */
-export function arrRemoval(arr: Array<any>, key: string = "id"): Array<any> {
+export function arrRemoval<T>(arr: Array<T>, key: string = "id"): Array<T> {
   let obj: Kv = {};
-  let resarr: Array<any> = [];
-  resarr = arr.reduce((item: Array<any>, next: Kv) => {
+  let resarr: Array<T> = [];
+  resarr = arr.reduce((item: Array<T>, next: Kv) => {
     obj[next[key]] ? "" : (obj[next[key]] = true && item.push(next));
     return item;
   }, []);
