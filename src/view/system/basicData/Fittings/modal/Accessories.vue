@@ -925,6 +925,12 @@ export default class Accessories extends Vue {
           this.proModal = false;
           this.handleReset('proModalform');
           this.update = false;
+          let parent:any = this.$parent;
+          if(parent.isSys) {
+            parent.initCloudPartInfo();
+          } else {
+            parent.initLocalPartInfo();
+          }
           self.$Message.success('保存成功');
         }
       }

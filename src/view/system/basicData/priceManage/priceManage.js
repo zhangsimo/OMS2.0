@@ -212,7 +212,7 @@ const methods = {
     this.$refs.curs.fullname = "";
     this.$refs.curs.code = "";
     this.$refs.curs.mobile = "";
-    this.$refs.curs.page = { num: 1, size: 10, total: 100 };
+    this.$refs.curs.page = { num: 1, size: 10, total: 0 };
     let params = {};
     let data = {};
     if(this.customer.fullname) {
@@ -301,12 +301,12 @@ const methods = {
     }
     this.customer.page = {
       num: 1,
-      total: 100,
+      total: 0,
       size: 10
     };
     this.part.page = {
       num: 1,
-      total: 100,
+      total: 0,
       size: 10
     };
     this.getCus();
@@ -351,7 +351,7 @@ const methods = {
     this.$refs.curs.fullname = "";
     this.$refs.curs.code = "";
     this.$refs.curs.mobile = "";
-    this.$refs.curs.page = { num: 1, size: 10, total: 100 };
+    this.$refs.curs.page = { num: 1, size: 10, total: 0 };
     this.modal = true;
   },
   // 添加客户
