@@ -29,7 +29,7 @@
     <section class="con-box dia-main">
       <Split v-model="split">
       <div slot="left" class="left pt10 pb10 pl10">
-        <Tree :data="treeData" show-checkbox></Tree>
+        <Tree :data="treeData" show-checkbox @on-select-change="getTree"></Tree>
       </div>
       <div slot="right" class="right tab-warp">
         <div class="p10">
@@ -221,7 +221,8 @@ export default {
       //选中的数据
       rowMessage:null,
       //判断是否重复的数组
-      norepeatArr:[]
+      norepeatArr:[],
+      TreeName: ''
     };
   },
   mounted() {
@@ -233,6 +234,12 @@ export default {
     })
   },
   methods: {
+    //点击树形图的
+    getTree(a){
+      this.TreeName = a[0].name
+      // console.log(this.TreeName)
+      this.rightgetList()
+    },
     //选中某一行
     selection(row){
       this.rowMessage = row
@@ -274,6 +281,9 @@ export default {
       }
       if (this.fullname){
         data.fullName = this.fullname
+      }
+      if(this.TreeName){
+        data.fullName = this.TreeName
       }
       if (this.carType) {
         data.applyCarModel = this.carType

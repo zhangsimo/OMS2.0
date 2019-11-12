@@ -36,7 +36,7 @@
 <script>
   import {findPageByDynamicQuery,DeleteAccessories,saveOrUpdate} from '../../../../../api/system/systemSetting/Initialization'
   import DiaLog from '../../../../../components/Accessories/dialog';
-  // import {arrRemoval} from '../../../../../utils/tools'
+  import {arrRemoval} from '../../../../../utils/tools'
     export default {
         name: "AccessoriesCommission",
         components:{
@@ -91,6 +91,7 @@
                   let vm = this;
                   return h('Select', {
                       props: {
+                        transfer: true,
                         value: params.row.type
                       },
                       style: {
@@ -122,41 +123,6 @@
                 align:'left',
                 key: 'deductRate',
                 minWidth: 120,
-                // render: (h, params) => {
-                //   const vm = this;
-                //   if (params.row.isEdit) {
-                //     return h("input", {
-                //       class: "edit",
-                //       domProps: {
-                //         autofocus: "autofocus",
-                //         value: params.row.deductRate
-                //       },
-                //       on: {
-                //         input(event) {
-                //           params.row.deductRate = event.target.value;
-                //           vm.tbdata[params.index] = params.row;
-                //           // vm.upOrSaveArr.push()
-                //         },
-                //         blur() {
-                //           params.row.isEdit = false;
-                //         }
-                //       }
-                //     });
-                //   } else {
-                //     return h(
-                //       "div",
-                //       {
-                //         class: "edit",
-                //         on: {
-                //           dblclick(event) {
-                //             params.row.isEdit = !params.row.isEdit;
-                //           }
-                //         }
-                //       },
-                //       params.row.deductRate
-                //     );
-                //   }
-                // },
                 render:(h,params) => {
                   // console.log(params.row.remark)
                   const vm = this
@@ -234,7 +200,7 @@
               total: 0
             },
             modal: false,
-            checkboxArr:[]
+            checkboxArr:null
           }
       },
       methods:{
@@ -250,14 +216,18 @@
         },
         //移除
         Remove(){
-          DeleteAccessories(this.checkboxArr).then(res => {
-            this.getList()
-          })
+          if(this.checkboxArr === null){
+            this.$Message.warning('请选择要删除的对象')
+          }else{
+            DeleteAccessories(this.checkboxArr).then(res => {
+              this.getList()
+            })
+          }
         },
         //保存
         Save(){
           saveOrUpdate(this.tbdata).then(res => {
-
+            this.getList()
           })
         },
         //分页
@@ -288,11 +258,9 @@
           }
           params.page = this.page.num - 1
           params.size = this.page.size
+          this.loading = true
           findPageByDynamicQuery({params:params,data:data}).then(res => {
-            // if(res.code === 0){
-            //   this.page.total = res.data.totalElements
-            //   this.tbdata = res.data.content || []
-            // }
+            this.loading = false
             if (res.code === 0) {
               this.page.total = res.data.totalElements
               this.tbdata = res.data.content.map(el => {
@@ -307,17 +275,30 @@
         },
         //获取子组件数据
         getMsg2(a){
-          this.getArr = a
-          
+          // console.log(a)
+          let newA = a.map(item => {
+            return {
+              partCode: item.code,
+              partName: item.partBrandName,
+            }
+          })
+          this.getArr = newA
+          console.log(this.getArr)
           this.tbdata = [...this.tbdata,...this.getArr]
-          // let aaa = from(new Set(this.tbdata))
-          // console.log(aaa)
+          this.tbdata = this.unique(this.tbdata)
+          console.log(this.tbdata)
         },
         //多选框
         multiple(a){
           console.log(a)
           this.checkboxArr = a
-        }
+        },
+        //去重方法
+        unique(arr) { // 根据唯一标识orderId来对数组进行过滤
+          const res = new Map();  //定义常量 res,值为一个Map对象实例
+          //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1111
+          return arr.filter((arr) => !res.has(arr.partName) && res.set(arr.partName, 1111))
+        },
       },
       mounted(){
         this.getList()

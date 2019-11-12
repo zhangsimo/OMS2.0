@@ -26,6 +26,7 @@
                   :stripe="true"
                   :columns="level.columns"
                   :data="level.tbdata"
+                  @on-row-click="selction"
                 ></Table>
               </div>
             </div>
@@ -69,7 +70,7 @@
                   :loading="customer.loading"
                   :stripe="true"
                   :columns="customer.columns"
-                  :data="tbdataArr"
+                  :data="customer.tbdata"
                   @on-selection-change="selection"
                 ></Table>
               </div>
@@ -120,5 +121,6 @@
   }
   .leftnav{
     padding-bottom: 200px;
+    height: 600px;
   }
 </style>

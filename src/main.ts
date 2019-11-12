@@ -20,6 +20,11 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
+//引入element-ui
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css';
+
+Vue.use(ElementUI)
 Vue.use(VXETable)
 Vue.use(iView)
 Vue.config.productionTip = false

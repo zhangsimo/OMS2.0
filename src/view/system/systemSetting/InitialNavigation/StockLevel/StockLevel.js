@@ -176,7 +176,9 @@ const data = function() {
     //从子组件获取的数组
     getArr: [],
     //合并的数组
-    tbdataArr:[]
+    tbdataArr:[],
+    //后台所需id
+    levelId:''
   }
 };
 
@@ -248,8 +250,8 @@ const methods = {
   },
   // 保存配件
   saveCustomer() {
-    stockLevelPartSave(this.getArr).then(res => {
-
+    stockLevelPartSave(this.customer.tbdata).then(res => {
+      this.rightgetList()
     })
   },
   /**============配件============ */
@@ -284,11 +286,16 @@ const methods = {
   //右边内容初始化
   rightgetList(){
     let params = {}
+    // let data = {}
+
     if(this.Type === 0 && this.customer.fullname !== ''){
       params.partCode = this.customer.fullname
     }
     if(this.Type === 1 && this.customer.fullname !== ''){
       params.partName = this.customer.fullname
+    }
+    if(this.levelId){
+      params.levelId = this.levelId
     }
     params.page = this.customer.page.num - 1
     params.size = this.customer.page.size
@@ -297,6 +304,7 @@ const methods = {
       this.customer.loading = false
       if (res.code === 0){
         this.customer.tbdata = res.data.content || []
+        console.log(this.customer.tbdata)
         this.customer.page.total = res.data.totalElements
       }
     })
@@ -308,10 +316,39 @@ const methods = {
   },
   //子组件的参数
   getMsg2(a){
-    this.getArr = a
-    this.tbdataArr = [...this.customer.tbdata,...this.getArr]
-    console.log(this.tbdataArr)
-  }
+    let newA = a.map(item => {
+      return {
+        partCode: item.code,
+        partName: item.partBrandName,
+        partId: item.id
+      }
+    })
+    this.getArr = newA
+
+    this.customer.tbdata = [...this.customer.tbdata,...this.getArr]
+    this.customer.tbdata = this.unique(this.customer.tbdata)
+  },
+  //左边内容单某行
+  selction(a){
+    console.log(a)
+    let arrr = []
+    arrr.push(a)
+    // console.log(arrr)
+   let arrrr =  arrr.map(item => {
+      return {
+        levelId : item.id
+      }
+    })
+    // console.log(arrrr)
+    this.levelId = arrrr.levelId
+    this.rightgetList()
+  },
+  //去重方法
+  unique(arr) { // 根据唯一标识orderId来对数组进行过滤
+    const res = new Map();  //定义常量 res,值为一个Map对象实例
+    //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
+    return arr.filter((arr) => !res.has(arr.name) && res.set(arr.name, 1))
+  },
 };
 import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
 import DiaLog from '../../../../../components/Accessories/dialog';
