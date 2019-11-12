@@ -127,3 +127,6 @@ export function savePart(data={}) {
     data
   });
 }
+
+// 导入地址
+export const upxlxs = `${api.wmsApi}/attribute/import`;

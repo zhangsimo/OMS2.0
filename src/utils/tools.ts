@@ -148,3 +148,22 @@ export function editRow(
     );
   };
 }
+
+/**
+ * 校验手机号
+ * @param {any} rule any
+ * @param {string} value 手机号
+ * @param {Function} callback 回调函数
+ */
+export function checkPhone(rule:any, value:string, callback:Function) {
+  if (!value) {
+    callback(new Error("手机号不能为空"));
+  } else {
+    const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/;
+    if (!reg.test(value)) {
+      callback(new Error("请输入正确的手机号"));
+    } else {
+      callback();
+    }
+  }
+};

@@ -1,4 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
 // @ts-ignore
 import * as api from "_api/system/partManager";
 // @ts-ignore
@@ -206,7 +208,11 @@ export default class Fittings extends Vue {
   private currRow: any = null;
   // 按钮可用
   private isCanbutton:boolean = false;
-
+  // 上传 请求头
+  private headers = {
+    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+  }
+  private upurl = api.upxlxs;
   /**===================Mounted======================== */
   private mounted() {
     if(this.isSys) {
@@ -219,6 +225,7 @@ export default class Fittings extends Vue {
   }
 
   /**===================Methods======================== */
+
   // 还原参数
   private restParams() {
     let page = {
@@ -407,6 +414,8 @@ export default class Fittings extends Vue {
   }
   // 导入
   private importOpen() { }
+  // 下载模板
+  private downTemplate() {}
   // 刷新
   private refresh() {
     this.initLocalPartInfo();
@@ -464,5 +473,24 @@ export default class Fittings extends Vue {
   // 刷新-平台
   private couldRefresh() {
     this.initCloudPartInfo();
+  }
+  // 上传前
+  private handleBeforeUpload() {
+    let refs:any =  this.$refs;
+    refs.upload.clearFiles();
+  }
+  // 上传成功
+  private handleSuccess(res, file){
+    let self:any = this;
+    if(res.code == 0) {
+      self.$Message.success('导入成功');
+      if(this.isSys) {
+        this.initCloudPartInfo();
+      } else {
+        this.initLocalPartInfo();
+      }
+    } else {
+      self.$Message.error(res.message);
+    }
   }
 }

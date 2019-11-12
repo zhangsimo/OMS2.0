@@ -93,7 +93,7 @@
         </div>
       </Split>
     </section>
-    <Modal title="客服信息" v-model="modal" width="600px">
+    <Modal title="客服信息" v-model="modal" width="600px" @on-visible-change="changeVisible">
       <Form :model="modalData" ref="formValidate" :label-width="100" :rules="ruleValidate">
         <Row>
           <Col span="12">
@@ -148,7 +148,28 @@
         </Row>
         <Row>
           <Col>
-            <FormItem label="微信二维码:" inline>
+            <FormItem label="微信二维码:" inline prop="upload">
+              <Upload
+                ref="upload"
+                :show-upload-list="false"
+                :action="wxImgUrl"
+                :format="['jpg','jpeg','png']"
+                :headers="headers"
+                :before-upload="handleBeforeUpload"
+                :on-success="handleSuccess"
+              >
+                <div class="upwarp" style="width: 58px;height:58px;line-height: 58px;">
+                  <Icon type="md-image" size="24" color="#dfdfdf" v-if="!modalData.src" />
+                  <img
+                    class="wechatimg"
+                    width="56px"
+                    height="56px"
+                    :src="modalData.src"
+                    alt="二维码"
+                    v-else
+                  />
+                </div>
+              </Upload>
             </FormItem>
           </Col>
         </Row>

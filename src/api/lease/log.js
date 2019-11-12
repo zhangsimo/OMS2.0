@@ -63,3 +63,9 @@ export function know(data) {
     data
   });
 }
+
+// 图片上传地址
+export const putImgUrl = `${api.omsApi}/sysUpdateLog/uploadImg`;
+
+// 获取图片
+export const getfile = `${api.omsApi}/sysUpdateLog/getFile=`;

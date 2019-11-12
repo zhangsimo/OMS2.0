@@ -41,7 +41,7 @@
           <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
         </div>
         <div slot="right" class="right table-warp">
-          <div class="btn-title" v-if="tabIndex === 0">
+          <div class="btn-title" v-if="tabIndex === 0 || isSys">
             <Button class="mr10 w90" @click="add">
               <span class="center">
                 <Icon type="md-add" />新增
@@ -62,11 +62,21 @@
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>
             </Button>
-            <Button class="mr10 w90" @click="importOpen">
-              <span class="center">
-                <Icon custom="iconfont icondaoruicon icons" />导入
-              </span>
-            </Button>
+            <Upload
+              ref="upload"
+              :show-upload-list="false"
+              :action="upurl"
+              :format="['xlsx','xls','csv']"
+              :headers="headers"
+              :before-upload="handleBeforeUpload"
+              :on-success="handleSuccess"
+            >
+              <Button class="mr10 w90" @click="importOpen">
+                <span class="center">
+                  <Icon custom="iconfont icondaoruicon icons" />导入
+                </span>
+              </Button>
+            </Upload>
             <Button class="mr10 w90" @click="refresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
@@ -80,6 +90,11 @@
             <Button class="mr10 w90" @click="changeSale" v-else>
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />可售
+              </span>
+            </Button>
+            <Button class="mr10 w90" @click="downTemplate">
+              <span class="center">
+                <Icon custom="iconfont iconxiazaiicon icons" />下载模板
               </span>
             </Button>
           </div>

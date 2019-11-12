@@ -21,7 +21,8 @@
     </section>
     <!--上部-->
     <section class="con-box">
-      <vue-ueditor-wrap v-model="ueContent" :config="myConfig"></vue-ueditor-wrap>
+      <editor-bar v-model="ueContent" :isClear="isClear"></editor-bar>
+      <!-- <vue-ueditor-wrap v-model="ueContent" :config="myConfig"></vue-ueditor-wrap> -->
     </section>
   </main>
 </template>

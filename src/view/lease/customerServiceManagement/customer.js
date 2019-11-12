@@ -1,3 +1,5 @@
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
 import * as api from "_api/lease/customerSM";
 const sexEnum = {
   0: "男",
@@ -43,9 +45,25 @@ let checkwx = (rule, value, callback) => {
   }
 };
 
+let checWxUrl = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error("微信二维码不能为空"));
+  } else {
+    if (!value.length <= 0) {
+      callback(new Error("请输入正确的微信号"));
+    } else {
+      callback();
+    }
+  }
+};
+
 const data = () => {
   return {
     split: 0.5,
+    headers: {
+      Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+    },
+    wxImgUrl: api.wxImgUrl,
     // 显示弹窗
     modal: false,
     // 弹窗数据
@@ -92,6 +110,13 @@ const data = () => {
           required: true,
           validator: checkwx,
           trigger: "blur"
+        }
+      ],
+      upload: [
+        {
+          required: true,
+          validator: checWxUrl,
+          trigger: "change"
         }
       ]
     },
@@ -367,6 +392,16 @@ const methods = {
     this.pageR.page.size = size;
     this.queryTenant();
   },
+  // 上传前
+  handleBeforeUpload() {
+    this.$refs.upload.clearFiles();
+  },
+  // 上传成功
+  handleSuccess(res, file){
+    if(res.code == 0) {
+      this.modalData.src = api.getfile+res.data.wechatPhoto
+    }
+  },
   // 弹窗保存-保存/修改客服信息
   ok(name) {
     this.$refs[name].validate(async (valid) => {
@@ -397,6 +432,9 @@ const methods = {
   // 弹窗取消
   cancel() {
     this.modal = false;
+  },
+  changeVisible() {
+    this.$refs.formValidate.resetFields();
   },
   // 选择客服列表(左侧)行
   selectedRow(currentRow) {
