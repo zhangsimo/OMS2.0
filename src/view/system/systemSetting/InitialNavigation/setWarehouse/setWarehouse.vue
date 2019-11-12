@@ -6,7 +6,7 @@
         <WarehouseLeft></WarehouseLeft>
       </div>
       <div slot="right" class="demo-split-pane">
-        Right Pane
+        <WarehouseRight></WarehouseRight>
       </div>
     </Split>
   </div>
@@ -15,10 +15,12 @@
 
 <script>
   import WarehouseLeft from "./WarehouseLeft";
+  import WarehouseRight from "./WarehouseRight";
     export default {
         name: "setWarehouse",
         components:{
             WarehouseLeft,
+            WarehouseRight
         },
         data () {
             return {

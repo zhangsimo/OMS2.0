@@ -84,6 +84,7 @@
           },
             getWareHouseId(data,index){
                 this.warehouseData = JSON.parse(JSON.stringify(data))
+                this.$store.commit('setStoreId',data)
                 this.number =  index
             },
             addWarehouse(){
@@ -155,5 +156,10 @@ ul {
   .active {
     color: #40a6ff;
   }
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
