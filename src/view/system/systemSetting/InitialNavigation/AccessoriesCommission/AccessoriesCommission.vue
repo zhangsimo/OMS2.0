@@ -36,7 +36,7 @@
 <script>
   import {findPageByDynamicQuery,DeleteAccessories,saveOrUpdate} from '../../../../../api/system/systemSetting/Initialization'
   import DiaLog from '../../../../../components/Accessories/dialog';
-  // import {arrRemoval} from '../../../../../utils/tools'
+  import {arrRemoval} from '../../../../../utils/tools'
     export default {
         name: "AccessoriesCommission",
         components:{
@@ -91,6 +91,7 @@
                   let vm = this;
                   return h('Select', {
                       props: {
+                        transfer: true,
                         value: params.row.type
                       },
                       style: {
@@ -199,7 +200,7 @@
               total: 0
             },
             modal: false,
-            checkboxArr:[]
+            checkboxArr:null
           }
       },
       methods:{
@@ -215,9 +216,13 @@
         },
         //移除
         Remove(){
-          DeleteAccessories(this.checkboxArr).then(res => {
-            this.getList()
-          })
+          if(this.checkboxArr === null){
+            this.$Message.warning('请选择要删除的对象')
+          }else{
+            DeleteAccessories(this.checkboxArr).then(res => {
+              this.getList()
+            })
+          }
         },
         //保存
         Save(){
@@ -270,25 +275,30 @@
         },
         //获取子组件数据
         getMsg2(a){
-          console.log(a)
+          // console.log(a)
           let newA = a.map(item => {
             return {
               partCode: item.code,
-              partName: item.partBrandName
+              partName: item.partBrandName,
             }
           })
           this.getArr = newA
+          console.log(this.getArr)
           this.tbdata = [...this.tbdata,...this.getArr]
-          this.tbdata.map(item => {
-
-          })
+          this.tbdata = this.unique(this.tbdata)
           console.log(this.tbdata)
         },
         //多选框
         multiple(a){
           console.log(a)
           this.checkboxArr = a
-        }
+        },
+        //去重方法
+        unique(arr) { // 根据唯一标识orderId来对数组进行过滤
+          const res = new Map();  //定义常量 res,值为一个Map对象实例
+          //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1111
+          return arr.filter((arr) => !res.has(arr.partName) && res.set(arr.partName, 1111))
+        },
       },
       mounted(){
         this.getList()

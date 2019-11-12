@@ -241,4 +241,7 @@
 .virtual-tree-icon.visible {
   visibility: visible;
 }
+.audit_nav2 {
+    padding: 10px 120px!important;
+  }
 </style>

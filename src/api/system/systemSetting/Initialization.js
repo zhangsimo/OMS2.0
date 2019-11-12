@@ -127,3 +127,23 @@ export function saveOrUpdate(data) {
     data:data
   })
 }
+
+// *========= 自定义分类设置 ==========*
+// /dictionaries/findByCustomAll
+export function findByCustomAll(params) {
+  return axios.request({
+    url: `${api.omsProduct}/dictionaries/findByCustomAll`,
+    method: 'get',
+    params
+  })
+}
+
+//保存
+// /dictionaries/saveCustom
+export function saveCustom(data) {
+  return axios.request({
+    url: `${api.omsProduct}/dictionariesItem/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}

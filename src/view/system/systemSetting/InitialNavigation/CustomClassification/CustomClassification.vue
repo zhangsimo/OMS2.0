@@ -14,7 +14,7 @@
               </div>
             </section>
             <section class="con-box">
-              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingProduct" border :stripe="true" :columns="columnsProduct" :data="tbdataProduct" @on-row-click="selectionProduct"></Table>
+              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingProduct" border :stripe="true" :columns="columnsProduct" :data="tbdataProduct"></Table>
             </section>
           </el-tab-pane>
           <el-tab-pane label="维修性质分类">
@@ -29,7 +29,7 @@
               </div>
             </section>
             <section class="con-box">
-              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingNature" border :stripe="true" :columns="columnsNature" :data="tbdataNature" @on-row-click="selectionNature"></Table>
+              <Table class="table-highlight-row scroll" size="small" highlight-row :loading="loadingNature" border :stripe="true" :columns="columnsNature" :data="tbdataNature"></Table>
             </section>
           </el-tab-pane>
         </el-tabs>
@@ -38,7 +38,8 @@
 </template>
 
 <script>
-    export default {
+  import { findByCustomAll,saveCustom } from '../../../../../api/system/systemSetting/Initialization'
+  export default {
         name: "CustomClassification",
         data(){
           return {
@@ -96,7 +97,7 @@
                   return h('Input',{
                     //给div绑定value属性
                     props: {
-                      value:params.row.remark
+                      value:params.row.itemName
                     },
                     //给div绑定样式
                     style:{
@@ -105,8 +106,8 @@
                     //给div绑定点击事件　　
                     on: {
                       input(event) {
-                        params.row.remark = event;
-                        vm.tbdata[params.index] = params.row;
+                        params.row.itemName = event;
+                        vm.tbdataProduct[params.index] = params.row;
                         // vm.upOrSaveArr.push()
                       },
                     },
@@ -131,7 +132,7 @@
                       on: {
                         'on-change': (event) => {
                           params.row.isDisable = event;
-                          vm.level.tbdata[params.index] = params.row;
+                          vm.tbdataProduct[params.index] = params.row;
                         }
                       },
                     },
@@ -164,48 +165,13 @@
                 title: "维修性质分类",
                 align: "left",
                 Width: 150,
-                // render: (h, params) => {
-                //   const vm = this;
-                //   if (params.row.isEdit) {
-                //     return h("input", {
-                //       class: "edit",
-                //       domProps: {
-                //         autofocus: "autofocus",
-                //         value: params.row.name
-                //       },
-                //       on: {
-                //         input(event) {
-                //           params.row.name = event.target.value;
-                //           vm.level.tbdata[params.index] = params.row;
-                //           // vm.upOrSaveArr.push()
-                //         },
-                //         blur() {
-                //           params.row.isEdit = false;
-                //         }
-                //       }
-                //     });
-                //   } else {
-                //     return h(
-                //       "div",
-                //       {
-                //         class: "edit",
-                //         on: {
-                //           dblclick(event) {
-                //             params.row.isEdit = !params.row.isEdit;
-                //           }
-                //         }
-                //       },
-                //       params.row.name
-                //     );
-                //   }
-                // },
                 render: (h, params) => {
                   // console.log(params.row.remark)
                   const vm = this
                   return h('Input', {
                     //给div绑定value属性
                     props: {
-                      value: params.row.remark
+                      value: params.row.itemName
                     },
                     //给div绑定样式
                     style: {
@@ -214,8 +180,8 @@
                     //给div绑定点击事件　　
                     on: {
                       input(event) {
-                        params.row.remark = event;
-                        vm.tbdata[params.index] = params.row;
+                        params.row.itemName = event;
+                        vm.tbdataNature[params.index] = params.row;
                         // vm.upOrSaveArr.push()
                       },
                     },
@@ -240,7 +206,7 @@
                       on: {
                         'on-change': (event) => {
                           params.row.isDisable = event;
-                          vm.level.tbdata[params.index] = params.row;
+                          vm.tbdataNature[params.index] = params.row;
                         }
                       },
                     },
@@ -270,14 +236,54 @@
           this.tbdataProduct.push({ name: " ", oid: Date.now() });
         },
         //产品线分类保存
-        saveProduct(){},
-        //产品线分类新增
+        async saveProduct(){
+          let data = this.tbdataProduct.map(el =>{
+            let item = {}
+            if(el.id){
+              item.id = el.id
+            }
+            item.itemName = el.itemName;
+            item.isDisable = el.isDisable
+            item.dictCode = 'CUSTOM_001'
+            return item;
+          })
+          console.log(data)
+          await saveCustom(data)
+          this.getList()
+        },
+        //维修性质分类新增
         addNature(){
           this.tbdataNature.push({ name: " ", oid: Date.now() });
         },
-        //产品线分类保存
-        saveNature(){},
-      }
+        //维修性质分类保存
+       async saveNature(){
+          let data = this.tbdataNature.map(el =>{
+            let item = {}
+            if(el.id){
+              item.id = el.id
+            }
+            item.itemName = el.itemName;
+            item.isDisable = el.isDisable
+            item.dictCode = 'CUSTOM_002'
+            return item;
+          })
+          console.log(data)
+          await saveCustom(data)
+          this.getList()
+        },
+        getList(){
+          let data = {}
+          findByCustomAll(data).then(res => {
+            if(res.code === 0){
+              this.tbdataProduct = res.data[1].itemVOS
+              this.tbdataNature = res.data[0].itemVOS
+            }
+          })
+        }
+      },
+    mounted(){
+      this.getList()
+    }
     }
 </script>
 
