@@ -250,13 +250,19 @@
                 clientList:{},
                 supplierTypeOne: '', //供应商类型
                 pitchSupplierOne:'',
+                supplier:''
             }
         },
         created(){
-           this.getlist()
+           // this.getlist()
             this.getAdress()
            this.getsupplierTypeList()
         },
+      computed: {
+          newsupplierId() {
+              return this.$store.state.user.supplierId;
+          }
+      },
         methods:{
             //获取全部表格数据
             async getlist(){
@@ -268,6 +274,7 @@
                 // this.$set(data,this.salesmanDuty,this.fasttipsTitle)
                 data[this.fasttipsType] = this.fasttipsTitle
                 data.supplierType = this.supplierTypeOne
+                data.supplierTypeFirst = this.supplier.id
          let res = await getSupplierformation(data)
                 if (res.code == 0){
                     this.loading = false
@@ -337,7 +344,16 @@
                 this.clientList =this.pitchSupplierOne
                 this.clientDataShow = true
             }
-        }
+        },
+      watch:{
+          newsupplierId:{
+              handler(v,ov){
+                  this.supplier = v
+                  this.getlist()
+              },
+              deep:true
+          }
+      }
     }
 </script>
 

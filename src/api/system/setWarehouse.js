@@ -43,3 +43,12 @@ export function getAddWarehouse (data) {
     method: 'put',
   })
 }
+
+//新增右侧仓位
+export function getAdd (data) {
+  return axios.request({
+    url: `${api.wmsApi}/storeLocation/locations/add`,
+    method: 'post',
+    data
+  })
+}

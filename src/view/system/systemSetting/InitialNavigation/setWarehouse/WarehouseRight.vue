@@ -2,7 +2,7 @@
     <div>
       <div class="warehouseHeader">
         <span class="mr10">仓位定义:</span>
-        <Button type="default" class="mr10"><Icon type="md-add"/> 新增仓位</Button>
+        <Button class="mr10" @click="openNewWarehouse" ><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增仓位</span></Button>
         <Button class="mr10 w90" @click="save">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
@@ -55,19 +55,24 @@
         <Table class="table-highlight-row"  :loading="loading" size="small" highlight-row  border :stripe="true" :columns="columns1" :data="warehouseList" height="330"></Table>
       </div>
 <!--      新增模态框-->
-      <Modal title="仓位定义" v-model="warehouseIsShow">
+      <Modal title="仓位定义" v-model="warehouseIsShow" width="800">
+        <AddNewWarehouse :data="newWarehouseOne" :wareHouse="storeId" ref="child"></AddNewWarehouse>
         <div slot='footer'>
-          <Button type='primary' @click="addNewSupplier">确定</Button>
-          <Button type='default' @click='clientDataShow = false'>取消</Button>
+          <Button type='primary' @click="sureNew" >确定</Button>
+          <Button type='default' >取消</Button>
         </div>
       </Modal>
     </div>
 </template>
 
 <script>
-  import {getWarehouseList , getAddWarehouse,getSaveWarehouse} from  '@/api/system/setWarehouse'
+  import {getWarehouseList , getAddWarehouse,getSaveWarehouse,getAdd} from  '@/api/system/setWarehouse'
+  import AddNewWarehouse from "./AddNewWarehouse";
     export default {
         name: "WarehouseRight",
+        components:{
+            AddNewWarehouse
+        },
         data(){
             return {
                 loading:true,
@@ -98,7 +103,7 @@
                         key: '',
                     },
                 ],
-                warehouseIsShow:true,
+                warehouseIsShow:false,
                 warehouseList:[],
                 validRules: {
                     name: [
@@ -106,7 +111,8 @@
                     ],
                 },
                 storeId:'',
-                oneWarehouse:''
+                oneWarehouse:'',
+                newWarehouseOne:{}
             }
         },
         computed: {
@@ -117,7 +123,7 @@
         methods:{
           async  getAllWarehouseList(){
               this.loading =true
-              let id = this.storeId
+              let id = this.storeId.id
               let res = await getWarehouseList(id)
               if(res.code == 0 ){
                   this.warehouseList = res.data
@@ -146,12 +152,31 @@
                       this.getAllWarehouseList()
                   }
               })
+            },
+            //打开新增
+            openNewWarehouse(){
+              this.newWarehouseOne = {}
+              this.warehouseIsShow = true
+            },
+            //确认新增
+            sureNew(){
+              this.$refs.child.handleSubmit( ()=> {
+                  this.newWarehouseOne.storeId = this.storeId.id
+                  getAdd(this.newWarehouseOne).then( res => {
+                      if(res.code == 0){
+                          this.warehouseIsShow = false
+                          this.getAllWarehouseList()
+                      }
+                  })
+
+              })
             }
         },
         watch:{
             newstoreId:{
                 handler(v,ov){
-                    this.storeId = v.id
+                    this.storeId = v
+                    console.log(v)
                     this.getAllWarehouseList()
                 },
                 deep:true

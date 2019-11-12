@@ -13,8 +13,10 @@ export default {
     avatorImgPath: '',
     token: getToken(),
     access: '',
-    userData: '',
-    treePid:''
+    userData: '', //账号信息
+    treePid:'',
+    storeId:'',
+    supplierId:''
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -38,6 +40,12 @@ export default {
     },
     setTreePid(state, data) {
       state.treePid = data
+    },
+    setStoreId(state, data) {
+      state.storeId = data
+    },
+    setsupplierId(state ,data) {
+      state.supplierId = data
     }
   },
   actions: {
