@@ -14,7 +14,8 @@ export default {
     token: getToken(),
     access: '',
     userData: '',
-    treePid:''
+    treePid:'',
+    changeDialog:''//控制配件调用
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -38,6 +39,9 @@ export default {
     },
     setTreePid(state, data) {
       state.treePid = data
+    },
+    setDialog(state ,data) {
+      state.changeDialog = data
     }
   },
   actions: {
