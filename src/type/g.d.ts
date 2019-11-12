@@ -10,6 +10,11 @@ interface SelectTypes {
     label: string,
     [params: string]: any
 }
+interface Option {
+    value: string|number,
+    label: string,
+    [param:string]:any,
+}
 
 /**
  * 表格头部
@@ -24,6 +29,15 @@ interface Tableth {
     children?: Array<Tableth>,
     render?: Function,
     [params: string]: any,
+}
+
+/**
+ * 分页
+ */
+interface Page {
+    num: number,
+    total: number,
+    size: number
 }
 
 /**
