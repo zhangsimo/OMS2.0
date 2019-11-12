@@ -48,11 +48,19 @@
       </div>
         <div class="warehouseHeader">
           <span class="mr10">员工配置:</span>
-          <Button class="mr10 w130"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />添加员工</span></Button>
-          <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconlajitongicon icons" />删除</span></Button>
+          <Button class="mr10 w130" @click="openNewSaffect"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />添加员工</span></Button>
+          <Button class="mr10 w90" @click="deleSaffectList"><span class="center"><Icon custom="iconfont iconlajitongicon icons" />删除</span></Button>
         </div>
       <div style="padding: 10px">
-        <Table class="table-highlight-row"  :loading="loading" size="small" highlight-row  border :stripe="true" :columns="columns1" :data="warehouseList" height="330"></Table>
+        <Table class="table-highlight-row"
+               :loading="loading" size="small"
+               highlight-row  border
+               :stripe="true"
+               :columns="columns1"
+               :data="saffectList"
+               height="330"
+               @on-selection-change = deleSaffect
+        ></Table>
       </div>
 <!--      新增模态框-->
       <Modal title="仓位定义" v-model="warehouseIsShow" width="800">
@@ -62,11 +70,31 @@
           <Button type='default' >取消</Button>
         </div>
       </Modal>
+
+<!--      员工选择-->
+      <Modal title="员工选择" v-model="saffectShow">
+        <Table class="table-highlight-row"
+               :loading="saffectLoading" size="small"
+               highlight-row  border
+               :stripe="true"
+               :columns="columns2"
+               :data="allsaffect"
+               height="230"
+               @on-selection-change = getNewseaffact
+        ></Table>
+
+        <div slot='footer'>
+          <Button type='primary' @click="sureNewSaffect" >确定</Button>
+          <Button type='default' >取消</Button>
+        </div>
+      </Modal>
+
     </div>
 </template>
 
 <script>
-  import {getWarehouseList , getAddWarehouse,getSaveWarehouse,getAdd} from  '@/api/system/setWarehouse'
+  import {getWarehouseList , getAddWarehouse,getSaveWarehouse,getAdd ,getStaffList ,getdeleSaffect,getAllseffactList,addNewseffact} from  '@/api/system/setWarehouse'
+
   import AddNewWarehouse from "./AddNewWarehouse";
     export default {
         name: "WarehouseRight",
@@ -90,21 +118,43 @@
                     {
                         title: '员工名称',
                         align: 'center',
-                        key: '',
+                        key: 'empName',
                     },
                     {
                         title: '建档人',
                         align: 'center',
-                        key: '',
+                        key: 'createUname',
                     },
                     {
                         title: '建档时间',
                         align: 'center',
-                        key: '',
+                        key: 'createTime',
+                    },
+                ],
+                columns2:[
+                    {
+                        type: 'selection',
+                        align: 'center'
+                    },
+                    {
+                        title: '员工姓名',
+                        align: 'center',
+                        key: 'userName',
+                    },
+                    {
+                        title: '手机号',
+                        align: 'center',
+                        key: 'phone',
                     },
                 ],
                 warehouseIsShow:false,
+                saffectLoading:true,
                 warehouseList:[],
+                page:{
+                    num:1,
+                    size:9999,
+                    total: 0
+                },
                 validRules: {
                     name: [
                         { required: true, message: '不能为空' },
@@ -112,7 +162,12 @@
                 },
                 storeId:'',
                 oneWarehouse:'',
-                newWarehouseOne:{}
+                newWarehouseOne:{},
+                saffectList:[],
+                pitchOnSaffect:[],
+                saffectShow: false,
+                allsaffect:[],
+                Newseaffact:[]
             }
         },
         computed: {
@@ -121,6 +176,7 @@
             }
         },
         methods:{
+            //获取仓位
           async  getAllWarehouseList(){
               this.loading =true
               let id = this.storeId.id
@@ -130,13 +186,20 @@
                   this.loading = false
               }
             },
+            //获取右侧员工
+           async getAllSaffect(){
+              let id = this.storeId.id
+              let res = await  getStaffList(id)
+               if(res.code == 0){
+                   this.saffectList = res.data
+               }
+            },
             //获取当前点击的信息
             clOnewList(data){
               this.oneWarehouse = data.row
             },
             //保存
             save(){
-              console.log(this.warehouseList)
                 getSaveWarehouse(this.warehouseList).then( res => {
                     if(res.code == 0){
                         this.getAllWarehouseList()
@@ -147,7 +210,6 @@
             changeType(){
               let id = this.oneWarehouse.id
               getAddWarehouse({id:id}).then( res => {
-                  console.log(res)
                   if(res.code == 0){
                       this.getAllWarehouseList()
                   }
@@ -155,6 +217,10 @@
             },
             //打开新增
             openNewWarehouse(){
+                if(!this.storeId.id){
+                    this.$Message.error('请选择仓库')
+                    return false
+                }
               this.newWarehouseOne = {}
               this.warehouseIsShow = true
             },
@@ -170,14 +236,83 @@
                   })
 
               })
+            },
+            //删除员工
+            deleSaffectList(){
+              if (this.pitchOnSaffect.length < 1){
+                  this.$Message.error('请至少选择一个员工')
+                  return false
+              }else {
+                  let list = []
+                  this.pitchOnSaffect.forEach(item => {
+                      list.push(item.id)
+                  })
+                  getdeleSaffect(list).then( res => {
+                      if(res.code ==0){
+                         this.getAllSaffect()
+                      }
+                  })
+              }
+            },
+            //获取选中的员工
+            deleSaffect(selection){
+                this.pitchOnSaffect = selection
+            },
+            //打开新员工选择
+            openNewSaffect(){
+              if(!this.storeId.id){
+                  this.$Message.error('请选择仓库')
+                    return false
+              }
+              this.saffectShow = true
+              this.saffectLoading = true
+                let data ={}
+                data.size = this.page.size
+                data.page = this.page.num -1
+                getAllseffactList(data).then( res => {
+                    if(res.code ==0){
+                        this.saffectLoading = false
+                        let all = res.data.content
+                        this.saffectList.forEach( item=> {
+                          all = all.filter( el => el.id != item.empId)
+                        })
+                        this.allsaffect = all
+
+                    }
+                })
+            },
+            //点击获取选择的新员工
+            getNewseaffact(selection){
+              this.Newseaffact = selection
+            },
+            //确认新员工选择
+            sureNewSaffect(){
+              if(this.Newseaffact.length > 0){
+                      let data = []
+                  this.Newseaffact.forEach( item => {
+                      data.push( {
+                          empId : item.id,
+                          empName : item.userName,
+                          storeId : this.storeId.id
+                      })
+                  })
+                  addNewseffact(data).then( res => {
+                      if (res.code == 0){
+                          this.getAllSaffect()
+                          this.saffectShow = false
+                      }
+                  })
+              }
+
             }
+
         },
         watch:{
             newstoreId:{
                 handler(v,ov){
                     this.storeId = v
-                    console.log(v)
                     this.getAllWarehouseList()
+                    this.getAllSaffect()
                 },
                 deep:true
             }
