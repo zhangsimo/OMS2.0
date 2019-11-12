@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取当前页信息
 export function getStaffList (params) {
   return axios.request({
-    url: `${api.wmsApi}/tenantUsers/queryAll?`,
+    url: `${api.authApi}/tenantUsers/queryAll?`,
     method: 'get',
     params
   })

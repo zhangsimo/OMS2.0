@@ -13,9 +13,10 @@ export default {
     avatorImgPath: '',
     token: getToken(),
     access: '',
-    userData: '',
+    userData: '', //账号信息
     treePid:'',
-    changeDialog:''//控制配件调用
+    storeId:'',
+    supplierId:''
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -40,8 +41,11 @@ export default {
     setTreePid(state, data) {
       state.treePid = data
     },
-    setDialog(state ,data) {
-      state.changeDialog = data
+    setStoreId(state, data) {
+      state.storeId = data
+    },
+    setsupplierId(state ,data) {
+      state.supplierId = data
     }
   },
   actions: {

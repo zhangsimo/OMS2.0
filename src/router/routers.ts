@@ -1262,15 +1262,15 @@ export default [
             // component: () => import()
           },
           {
-            path: "/demo",
-            name: "demo",
+            path: "ProductLA",
+            name: "ProductLA",
             // mark: "49",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: " 产品线分配"
             },
-            // component: () => import('@/view/system/demo/demo')
+            component: () => import('@/view/system/basicData/ProductLA/ProductLA.vue')
           },
           {
             path: "/essentialData/commoditiesInShortSupply",
@@ -1369,15 +1369,15 @@ export default [
               import("@/view/system/essentialData/logistics/logistics.vue")
           },
           {
-            path: "",
-            name: "",
+            path: "FittingReplacement",
+            name: "FittingReplacement",
             mark: "58",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: " 配件替换"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/system/basicData/FittingReplacement/FittingReplacement.vue")
           },
           {
             path: "/system/basicdata/mixture",

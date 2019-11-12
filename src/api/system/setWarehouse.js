@@ -43,3 +43,49 @@ export function getAddWarehouse (data) {
     method: 'put',
   })
 }
+
+//新增右侧仓位
+export function getAdd (data) {
+  return axios.request({
+    url: `${api.wmsApi}/storeLocation/locations/add`,
+    method: 'post',
+    data
+  })
+}
+
+//右侧员工list
+export function getStaffList (params) {
+  return axios.request({
+    url: `${api.wmsApi}/storeMember/${params}`,
+    method: 'get',
+  })
+}
+
+//右侧员工删除
+export function getdeleSaffect (data) {
+  return axios.request({
+    url: `${api.wmsApi}/storeMember/storeMembers`,
+    method: 'put',
+    data
+  })
+}
+
+
+//获取全部员工
+export function getAllseffactList (params) {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/queryAll?`,
+    method: 'get',
+    params
+  })
+}
+
+
+//新增员工
+export function addNewseffact (data) {
+  return axios.request({
+    url: `${api.wmsApi}/storeMember/storeMembers`,
+    method: 'post',
+    data
+  })
+}
