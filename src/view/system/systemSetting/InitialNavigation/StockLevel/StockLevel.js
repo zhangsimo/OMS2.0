@@ -241,7 +241,7 @@ const methods = {
     }
 
   },
-  // 删除客户
+  // 删除配件
   removeCustomer() {
     if(this.checkboxArr.length === 0){
       this.$Message.warning('请选择要删除的对象')
@@ -253,11 +253,21 @@ const methods = {
       Delete(needArr).then(res => {
         this.rightgetList()
         this.$Message.warning('删除成功')
+        this.checkboxArr = []
       })
     }
   },
   // 保存配件
   saveCustomer() {
+
+    // this.customer.tbdata.forEach( item => {
+    //   console.log(item.levelId)
+    //   if(item.levelId == ar.levelId){
+    //     console.log(12312312321321312321321312321312)
+    //     return false
+    //   }
+    // })
+
     this.customer.page.num = 1;
      this.getArr.forEach(item => {
       item.levelId = this.levelId
@@ -352,7 +362,6 @@ const methods = {
     console.log(a)
     let arrr = []
     arrr.push(a)
-    // console.log(arrr)
    let arrrr =  arrr.map(item => {
       return {
         levelId : item.id
@@ -360,9 +369,10 @@ const methods = {
     })
     // console.log(arrrr)
     this.levelId = arrrr[0].levelId
-    // console.log(this.levelId)
-    this.rightgetList()
-
+    if(this.levelId){
+      this.rightgetList()
+      this.$refs.Msg.chooseArr = []
+    }
   },
   //去重方法
   unique(arr) { // 根据唯一标识orderId来对数组进行过滤
@@ -372,7 +382,7 @@ const methods = {
   },
   //Model的关闭
   closedTap(){
-    this.chooseArr = []
+    // this.$refs.Msg.chooseArr = []
   }
 };
 import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'

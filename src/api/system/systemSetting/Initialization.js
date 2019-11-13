@@ -159,7 +159,7 @@ export function partMatching(params) {
 }
 
 // 配比清单保存
-export function partMatchingDetailSave(data) {
+export function partMatchingSave(data) {
   return axios.request({
     url: `${api.wmsApi}/partMatching/save`,
     method: 'post',
@@ -182,6 +182,16 @@ export function partMatchingDetail(params) {
 export function partMatchingdelete(data) {
   return axios.request({
     url: `${api.wmsApi}/partMatchingDetail/delete`,
+    method: 'post',
+    data:data
+  })
+}
+
+//新增配比清单详情
+// /partMatchingDetail/save
+export function partMatchingDetailSave(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partMatchingDetail/save`,
     method: 'post',
     data:data
   })

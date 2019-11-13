@@ -1,6 +1,6 @@
 const data = function() {
   return {
-    split: 0.33,
+    split: 0.3,
     // modal显示
     modal: false,
     // tab索引
@@ -19,40 +19,25 @@ const data = function() {
           title: "配件编码",
           align: "left",
           Width: 100,
-          render: (h, params) => {
-            const vm = this;
-            if (params.row.isEdit) {
-              return h("input", {
-                class: "edit",
-                domProps: {
-                  autofocus: "autofocus",
-                  value: params.row.partCode
-                },
-                on: {
-                  input(event) {
-                    params.row.partCode = event.target.value;
-                    vm.level.tbdata[params.index] = params.row;
-                    // vm.upOrSaveArr.push()
-                  },
-                  blur() {
-                    params.row.isEdit = false;
-                  }
+          render:(h,params) => {
+            const vm = this
+            return h('Input',{
+              //给div绑定value属性
+              props: {
+                value:params.row.partCode
+              },
+              //给div绑定样式
+              style:{
+                width:'100%'
+              },
+              //给div绑定点击事件　　
+              on: {
+                input(event) {
+                  params.row.partCode = event;
+                  vm.level.tbdata[params.index] = params.row;
                 }
-              });
-            } else {
-              return h(
-                "div",
-                {
-                  class: "edit",
-                  on: {
-                    dblclick(event) {
-                      params.row.isEdit = !params.row.isEdit;
-                    }
-                  }
-                },
-                params.row.partCode
-              );
-            }
+              },
+            })
           },
           minWidth: 150
         },
@@ -60,40 +45,25 @@ const data = function() {
           title: "配件名称",
           align: "left",
           Width: 150,
-          render: (h, params) => {
-            const vm = this;
-            if (params.row.isEdit) {
-              return h("input", {
-                class: "edit",
-                domProps: {
-                  autofocus: "autofocus",
-                  value: params.row.partName
-                },
-                on: {
-                  input(event) {
-                    params.row.partName = event.target.value;
-                    vm.level.tbdata[params.index] = params.row;
-                    // vm.upOrSaveArr.push()
-                  },
-                  blur() {
-                    params.row.isEdit = false;
-                  }
+          render:(h,params) => {
+            const vm = this
+            return h('Input',{
+              //给div绑定value属性
+              props: {
+                value:params.row.partName
+              },
+              //给div绑定样式
+              style:{
+                width:'100%'
+              },
+              //给div绑定点击事件　　
+              on: {
+                input(event) {
+                  params.row.partName = event;
+                  vm.level.tbdata[params.index] = params.row;
                 }
-              });
-            } else {
-              return h(
-                "div",
-                {
-                  class: "edit",
-                  on: {
-                    dblclick(event) {
-                      params.row.isEdit = !params.row.isEdit;
-                    }
-                  }
-                },
-                params.row.partName
-              );
-            }
+              },
+            })
           },
           minWidth: 150
         },
@@ -189,7 +159,7 @@ const data = function() {
               on: {
                 input(event) {
                   params.row.qty = event;
-                  vm.tbdata[params.index] = params.row;
+                  vm.customer.tbdata[params.index] = params.row;
                 }
               },
             })
@@ -205,7 +175,7 @@ const data = function() {
             return h('Input',{
               //给div绑定value属性
               props: {
-                value:params.row.deductRate
+                value:params.row.ratio
               },
               //给div绑定样式
               style:{
@@ -214,11 +184,11 @@ const data = function() {
               //给div绑定点击事件　　
               on: {
                 input(event) {
-                  params.row.deductRate = event;
-                  vm.tbdata[params.index] = params.row;
+                  params.row.ratio = event;
+                  vm.customer.tbdata[params.index] = params.row;
                 },
-                'on-change': (e) => {
-                  if (e.target.value) {
+                'on-blur': (e) => {
+                  if (0 > e.target.value || e.target.value > 1 ) {
                     this.$Message.warning('请输入0-1数值')
                   }
                 }
@@ -230,7 +200,27 @@ const data = function() {
           title: "备注",
           align: "left",
           key: "remark",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,params) => {
+            const vm = this
+            return h('Input',{
+              //给div绑定value属性
+              props: {
+                value:params.row.remark
+              },
+              //给div绑定样式
+              style:{
+                width:'100%'
+              },
+              //给div绑定点击事件　　
+              on: {
+                input(event) {
+                  params.row.remark = event;
+                  vm.tbdata[params.index] = params.row;
+                }
+              },
+            })
+          }
         },
         {
           title: "操作人",
@@ -270,8 +260,10 @@ const data = function() {
     Type: 0,
     //多选数组
     checkboxArr: [],
-    //从子组件获取的数组
+    //从子组件获取的数组左
     getArr: [],
+    //从子组件获取的数组右
+    getArrRight: [],
     //合并的数组
     tbdataArr:[],
     //后台所需id
@@ -289,6 +281,8 @@ const methods = {
   /**==============左侧============= */
   // 配比清单保存
   async save() {
+    // console.log(this.level.tbdata)
+    this.level.tbdata = this.unique(this.level.tbdata)
     let data = this.level.tbdata.map(el => {
       let item = {};
       if(el.id) {
@@ -300,8 +294,8 @@ const methods = {
       item.partId = el.partId
       return item;
     });
-    console.log(data)
-   await partMatchingDetailSave(data);
+    // console.log(data)
+   await partMatchingSave(data);
     this.leftgetList()
   },
   // 新增
@@ -345,10 +339,11 @@ const methods = {
     if(this.checkboxArr.length === 0){
       this.$Message.warning('请选择要删除的对象')
     }else{
-      let needArr = this.checkboxArr.map((ele,index) => {
+      let needArr =[]
+       needArr = this.checkboxArr.map((ele,index) => {
         return  ele.id
       })
-      console.log(needArr)
+      console.log(needArr,2313)
       partMatchingdelete(needArr).then(res => {
         this.rightgetList()
         this.$Message.warning('删除成功')
@@ -356,16 +351,16 @@ const methods = {
     }
   },
   // 保存配件
-  saveCustomer() {
-    this.customer.page.num = 1;
-     this.customer.tbdata.forEach(item => {
-      item.levelId = this.levelId
+  saveCustomer(){
+      this.customer.page.num = 1;
+      this.customer.tbdata.forEach(item => {
+        item.parentId = this.levelId
       })
+    // console.log(this.customer.tbdata)
     this.customer.tbdata = this.unique(this.customer.tbdata)
-    console.log(this.customer.tbdata)
-    // stockLevelPartSave(this.customer.tbdata).then(res => {
-    //   this.rightgetList()
-    // })
+    partMatchingDetailSave(this.customer.tbdata).then(res => {
+      this.rightgetList()
+    })
   },
   /**============配件============ */
   // 翻页-配件价格
@@ -408,7 +403,7 @@ const methods = {
         params.partName = this.customer.fullname
       }
       if(this.levelId){
-        params.levelId = this.levelId
+        params.parentId = this.levelId
       }
       params.page = this.customer.page.num - 1
       params.size = this.customer.page.size
@@ -430,6 +425,7 @@ const methods = {
   },
   //子组件的参数
   getMsg2(a){
+    console.log(a)
     let newA = a.map(item => {
       return {
         partCode: item.code,
@@ -442,13 +438,26 @@ const methods = {
     this.level.tbdata = this.unique(this.level.tbdata)
     // console.log(this.getArr)
   },
-  //父组件右部分获取子组件的参数
+  // 父组件右部分获取子组件的参数
   getMsgTwo(a){
-    console.log(a)
+    // console.log(a)
+    let newA = a.map(item => {
+      return {
+        partCode: item.code,
+        partName: item.partBrandName,
+        partId: item.id,
+        fullName: item.fullName,
+        remark:item.remarks
+      }
+    })
+    this.getArrRight = newA
+    console.log(this.getArrRight)
+    this.customer.tbdata = [...this.customer.tbdata,...this.getArrRight]
+    this.customer.tbdata = this.unique(this.customer.tbdata)
   },
   //左边内容单某行
   selction(a){
-    console.log(a)
+    // console.log(a)
     let arrr = []
     arrr.push(a)
     // console.log(arrr)
@@ -460,8 +469,10 @@ const methods = {
     console.log(arrrr)
     this.levelId = arrrr[0].levelId
     console.log(this.levelId)
-    this.rightgetList()
-
+    if(this.levelId){
+      this.rightgetList()
+      this.$refs.Msg.chooseArr = []
+    }
   },
   //去重方法
   unique(arr) { // 根据唯一标识orderId来对数组进行过滤
@@ -471,10 +482,10 @@ const methods = {
   },
   //Model的关闭
   closedTap(){
-    this.chooseArr = []
+    this.$refs.Msg.chooseArr = []
   }
 };
-import {partMatching,partMatchingDetailSave,partMatchingDetail,partMatchingdelete} from '../../../../api/system/systemSetting/Initialization'
+import {partMatching,partMatchingSave,partMatchingDetail,partMatchingdelete,partMatchingDetailSave} from '../../../../api/system/systemSetting/Initialization'
 import DiaLog from '../../../../components/Accessories/dialog';
 const components = {
   DiaLog

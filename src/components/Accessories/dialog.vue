@@ -38,11 +38,6 @@
                 <Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />选择
               </span>
           </Button>
-          <!--<Button class="mr10" @click="cancel">-->
-              <!--<span class="center">-->
-                <!--<Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />取消-->
-              <!--</span>-->
-          <!--</Button>-->
         </div>
         <Table
           border
@@ -330,6 +325,7 @@ export default {
             this.$emit('getMsg',this.chooseArr)
             this.$emit('getMsgTwo',this.chooseArr)
           }else{
+            // this.rowMessage =[]
               this.$Message.warning('该对象已加入')
           }
       }

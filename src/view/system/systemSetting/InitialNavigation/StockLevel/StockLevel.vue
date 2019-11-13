@@ -91,7 +91,7 @@
           </Split>
         </section>
         <Modal v-model="modal" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">
-          <Dia-log @getMsg="getMsg2"></Dia-log>
+          <Dia-log @getMsg="getMsg2" ref="Msg"></Dia-log>
         </Modal>
       </main>
 </template>

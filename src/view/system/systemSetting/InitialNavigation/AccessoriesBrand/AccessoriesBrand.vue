@@ -4,13 +4,13 @@
           <Split v-model="split">
             <div slot="left" class="demo-split-pane">
               <div class="db btn-title">
-                <p class="mr10">云配件品质：</p>
-                <Button class="mr10 w90"><span class="center"><Icon type="md-add" />新增品质</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改品质</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用品质</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>
+                <p class="mr10" style="font-weight: bold">云配件品质：</p>
+                <!--<Button class="mr10 w90"><span class="center"><Icon type="md-add" />新增品质</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改品质</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用品质</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>-->
               </div>
-              <div class="con-box">
+              <div class="pl10 pr10">
                 <Table
                   border
                   highlight-row
@@ -25,14 +25,14 @@
             </div>
             <div slot="right" class="demo-split-pane">
               <div class="db btn-title">
-                <p class="mr10">云配件品牌：</p>
-                <Button class="mr10 w90"><span class="center"><Icon type="md-add" />新增品牌</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改品牌</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用品质</span></Button>
-                <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>
-                <Button class="mr10 w145"><span class="center"><Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />上传配件品牌图片</span></Button>
+                <p class="mr10" style="font-weight: bold">云配件品牌：</p>
+                <!--<Button class="mr10 w90"><span class="center"><Icon type="md-add" />新增品牌</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改品牌</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用品质</span></Button>-->
+                <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>-->
+                <!--<Button class="mr10 w145"><span class="center"><Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />上传配件品牌图片</span></Button>-->
               </div>
-              <div class="con-box">
+              <div class="pl10 pr10">
                 <Table
                   border
                   highlight-row
@@ -47,14 +47,14 @@
             </div>
           </Split>
         </div>
-        <div class="bottom">
+        <div class="bottom pt10">
           <div class="db btn-title">
-            <p class="mr10">本地关注品牌：</p>
-            <Button class="mr10 w120"><span class="center"><Icon type="md-add" />新增关注品牌</span></Button>
+            <p class="mr10" style="font-weight: bold">本地关注品牌：</p>
+            <Button class="mr10 w120" @click="AddAttention"><span class="center"><Icon type="md-add" />新增关注品牌</span></Button>
             <Button class="mr10 w120"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消关注品牌</span></Button>
             <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
           </div>
-          <div class="con-box">
+          <div class="pl10 pr10">
             <Table
               border
               highlight-row
@@ -67,15 +67,24 @@
             ></Table>
           </div>
         </div>
+
+        <Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-visible-change="closedTap">
+          <Atten-tion></Atten-tion>
+        </Modal>
       </div>
 </template>
 
 <script>
+  import AttenTion from './attention'
     export default {
         name: "AccessoriesBrand",
+      components: {
+        AttenTion
+      },
       data(){
           return {
             split: 0.4,
+            modal:false, //添加关注弹框
             topLeft:{
               loading: false,
               tbdata:[],
@@ -239,7 +248,13 @@
           //品牌表格的每行点击事件
         selctionTopRight(a){},
         //关注品牌的每行点击事件
-        selctionBottom(a){}
+        selctionBottom(a){},
+        //modal的关闭按钮事件
+        closedTap(){},
+        //点击添加关注按钮
+        AddAttention(){
+          this.modal = true
+        }
       }
     }
 </script>
