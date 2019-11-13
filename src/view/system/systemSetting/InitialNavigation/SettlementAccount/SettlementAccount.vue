@@ -19,26 +19,24 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="del">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable" v-if="buttonOn">
-              <span class="center">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="onOffAccount">
+              <span class="center" v-if="buttonOn">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>
-            </Button>
-            <Button class="mr10 w90" :disabled="buttonDisable" v-else>
-              <span class="center">
+              <span class="center" v-else>
                 <Icon custom="iconfont iconqiyongicon icons" />启用
               </span>
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable">
+            <Button class="mr10 w90" @click="refresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
               </span>
@@ -58,6 +56,7 @@
         :stripe="true"
         :columns="tbhead"
         :data="tbdata"
+        @on-current-change="currRow"
       ></Table>
     </section>
     <Modal v-model="modal" :title="title" width="600">
@@ -80,16 +79,16 @@
             >
           </RadioGroup>
         </FormItem>
-        <vxe-table border :data="modalData">
+        <vxe-table border :data="formData.mode">
           <vxe-table-column title=" " min-width="186">
             <template v-slot="{ row, rowIndex}">
               <Button type="text" @click="insert">新增</Button>
               <Button type="text" @click="remove(rowIndex)">删除</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column title="结算方式" min-width="380" filed="modal">
+          <vxe-table-column title="结算方式" min-width="380" filed="id">
             <template v-slot="{ row }">
-              <select class="vxe-default-select" v-model="row.modal">
+              <select class="vxe-default-select" v-model="row.id">
                 <option
                   v-for="item in SettlementMode"
                   :key="item.value"
@@ -102,12 +101,12 @@
         </vxe-table>
       </Form>
       <div slot="footer">
-        <Button class="mr10 w120">
+        <Button class="mr10 w120" @click="submit('formData', 'add')">
           <span class="center">
             <Icon custom="iconfont iconxinzengicon icons" />保存并新增
           </span>
         </Button>
-        <Button type="primary">保存</Button>
+        <Button type="primary" @click="submit('formData', 'save')">保存</Button>
       </div>
     </Modal>
   </main>
