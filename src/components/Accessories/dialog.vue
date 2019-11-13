@@ -38,6 +38,11 @@
                 <Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />选择
               </span>
           </Button>
+          <!--<Button class="mr10" @click="cancel">-->
+              <!--<span class="center">-->
+                <!--<Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />取消-->
+              <!--</span>-->
+          <!--</Button>-->
         </div>
         <Table
           border
@@ -217,13 +222,20 @@ export default {
       // 分页
       page: { num: 1, size: 10, total: 100 },
       //选择的数组
-      chooseArr:[],
+      chooseArr: [],
       //选中的数据
       rowMessage:null,
       //判断是否重复的数组
       norepeatArr:[],
       TreeName: ''
     };
+  },
+  // 接受父组件的数据
+  // props: ['msgArr'],
+  computed: {
+    newpid() {
+      return this.$store.state.user.changeDialog;
+    }
   },
   mounted() {
     this.leftgetList()
@@ -253,7 +265,10 @@ export default {
     // 选择
     selected() {},
     // 取消
-    cancel() {},
+    // cancel() {
+    //   this.chooseArr = []
+    //   console.log(this.chooseArr)
+    // },
     // 翻页
     changePage(p) {
       this.page.num = p;
@@ -313,12 +328,20 @@ export default {
             this.chooseArr.push(this.rowMessage)
             console.log(this.chooseArr)
             this.$emit('getMsg',this.chooseArr)
-        }else{
-            this.$Message.warning('该对象已加入')
+            this.$emit('getMsgTwo',this.chooseArr)
+          }else{
+              this.$Message.warning('该对象已加入')
           }
       }
     }
-
+  },
+  watch:{
+    newpid:{
+      handler(v,ov){
+        this.rightgetList()
+      },
+      deep:true
+    }
   }
 };
 </script>

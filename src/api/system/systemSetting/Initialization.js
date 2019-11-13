@@ -147,3 +147,42 @@ export function saveCustom(data) {
     data
   })
 }
+
+// *========= 配比清单 ==========*Choose
+// 配比清单左内容
+export function partMatching(params) {
+  return axios.request({
+    url: `${api.wmsApi}/partMatching/queryAll`,
+    method: 'get',
+    params
+  })
+}
+
+// 配比清单保存
+export function partMatchingDetailSave(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partMatching/save`,
+    method: 'post',
+    data
+  })
+}
+
+// 配比清单右边内容
+// /partMatchingDetail/queryAll
+export function partMatchingDetail(params) {
+  return axios.request({
+    url: `${api.wmsApi}/partMatchingDetail/queryAll`,
+    method: 'get',
+    params
+  })
+}
+
+// 删除配比清单备货
+// /partMatchingDetail/delete
+export function partMatchingdelete(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partMatchingDetail/delete`,
+    method: 'post',
+    data:data
+  })
+}

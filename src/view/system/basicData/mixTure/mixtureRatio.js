@@ -16,9 +16,9 @@ const data = function() {
           minWidth: 80,
         },
         {
-          title: "级别名称",
+          title: "配件编码",
           align: "left",
-          Width: 150,
+          Width: 100,
           render: (h, params) => {
             const vm = this;
             if (params.row.isEdit) {
@@ -26,11 +26,11 @@ const data = function() {
                 class: "edit",
                 domProps: {
                   autofocus: "autofocus",
-                  value: params.row.name
+                  value: params.row.partCode
                 },
                 on: {
                   input(event) {
-                    params.row.name = event.target.value;
+                    params.row.partCode = event.target.value;
                     vm.level.tbdata[params.index] = params.row;
                     // vm.upOrSaveArr.push()
                   },
@@ -50,11 +50,52 @@ const data = function() {
                     }
                   }
                 },
-                params.row.name
+                params.row.partCode
               );
             }
           },
-          minWidth: 200
+          minWidth: 150
+        },
+        {
+          title: "配件名称",
+          align: "left",
+          Width: 150,
+          render: (h, params) => {
+            const vm = this;
+            if (params.row.isEdit) {
+              return h("input", {
+                class: "edit",
+                domProps: {
+                  autofocus: "autofocus",
+                  value: params.row.partName
+                },
+                on: {
+                  input(event) {
+                    params.row.partName = event.target.value;
+                    vm.level.tbdata[params.index] = params.row;
+                    // vm.upOrSaveArr.push()
+                  },
+                  blur() {
+                    params.row.isEdit = false;
+                  }
+                }
+              });
+            } else {
+              return h(
+                "div",
+                {
+                  class: "edit",
+                  on: {
+                    dblclick(event) {
+                      params.row.isEdit = !params.row.isEdit;
+                    }
+                  }
+                },
+                params.row.partName
+              );
+            }
+          },
+          minWidth: 150
         },
         {
           title: "状态",
@@ -65,14 +106,14 @@ const data = function() {
             let vm = this;
             return h('Select', {
                 props: {
-                  value: params.row.isDisable
+                  value: params.row.isDisabled
                 },
                 style: {
                   width: "100%"
                 },
                 on: {
                   'on-change': (event) => {
-                    params.row.isDisable = event;
+                    params.row.isDisabled = event;
                     vm.level.tbdata[params.index] = params.row;
                   }
                 },
@@ -130,6 +171,62 @@ const data = function() {
           minWidth: 120
         },
         {
+          title: "数量",
+          align: "left",
+          minWidth: 120,
+          render:(h,params) => {
+            const vm = this
+            return h('Input',{
+              //给div绑定value属性
+              props: {
+                value:params.row.qty
+              },
+              //给div绑定样式
+              style:{
+                width:'100%'
+              },
+              //给div绑定点击事件　　
+              on: {
+                input(event) {
+                  params.row.qty = event;
+                  vm.tbdata[params.index] = params.row;
+                }
+              },
+            })
+          }
+        },
+        {
+          title: '成本比例（0-1）',
+          align:'left',
+          key: 'deductRate',
+          minWidth: 120,
+          render:(h,params) => {
+            const vm = this
+            return h('Input',{
+              //给div绑定value属性
+              props: {
+                value:params.row.deductRate
+              },
+              //给div绑定样式
+              style:{
+                width:'100%'
+              },
+              //给div绑定点击事件　　
+              on: {
+                input(event) {
+                  params.row.deductRate = event;
+                  vm.tbdata[params.index] = params.row;
+                },
+                'on-change': (e) => {
+                  if (e.target.value) {
+                    this.$Message.warning('请输入0-1数值')
+                  }
+                }
+              },
+            })
+          }
+        },
+        {
           title: "备注",
           align: "left",
           key: "remark",
@@ -179,7 +276,8 @@ const data = function() {
     tbdataArr:[],
     //后台所需id
     levelId:'',
-    num:1
+    num:1,
+    model_left: false, //左边弹框
   }
 };
 
@@ -189,24 +287,27 @@ const mounted = function() {
 
 const methods = {
   /**==============左侧============= */
-  // 保存
+  // 配比清单保存
   async save() {
     let data = this.level.tbdata.map(el => {
       let item = {};
       if(el.id) {
         item.id = el.id;
       }
-      item.name = el.name;
-      item.isDisable = el.isDisable;
+      item.partName = el.partName;
+      item.isDisabled = el.isDisabled;
+      item.partCode = el.partCode
+      item.partId = el.partId
       return item;
     });
     console.log(data)
-   await stockLevelSave(data);
+   await partMatchingDetailSave(data);
     this.leftgetList()
   },
   // 新增
   add() {
-    this.level.tbdata.push({ name: " ", isEdit: false, oid: Date.now() });
+    // this.level.tbdata.push({ name: " ", isEdit: false, oid: Date.now() });
+    this.model_left = true
   },
   // 删除
   remove() {},
@@ -214,7 +315,7 @@ const methods = {
   setTab(index) {
     this.tabIndex = index;
   },
-  /**============客户信息============ */
+  /**============ 配件信息 ============ */
   // 翻页-客户信息
   changePageCus(p) {
     this.customer.page.num = p;
@@ -235,13 +336,11 @@ const methods = {
       this.modal = true;
       this.num += this.num
       this.$store.commit('setDialog',this.num )
-      this.getArr = []
     }else{
-      this.$Message.warning('请选择备货级别设置')
+      this.$Message.warning('请选择备配比清单')
     }
-
   },
-  // 删除客户
+  // 删除配件
   removeCustomer() {
     if(this.checkboxArr.length === 0){
       this.$Message.warning('请选择要删除的对象')
@@ -249,8 +348,8 @@ const methods = {
       let needArr = this.checkboxArr.map((ele,index) => {
         return  ele.id
       })
-      // console.log(needArr)
-      Delete(needArr).then(res => {
+      console.log(needArr)
+      partMatchingdelete(needArr).then(res => {
         this.rightgetList()
         this.$Message.warning('删除成功')
       })
@@ -259,15 +358,14 @@ const methods = {
   // 保存配件
   saveCustomer() {
     this.customer.page.num = 1;
-     this.getArr.forEach(item => {
+     this.customer.tbdata.forEach(item => {
       item.levelId = this.levelId
       })
-    let repeatArr = this.unique(this.getArr)
-    console.log(repeatArr)
-    stockLevelPartSave(repeatArr).then(res => {
-      this.getArr = []
-      this.rightgetList()
-    })
+    this.customer.tbdata = this.unique(this.customer.tbdata)
+    console.log(this.customer.tbdata)
+    // stockLevelPartSave(this.customer.tbdata).then(res => {
+    //   this.rightgetList()
+    // })
   },
   /**============配件============ */
   // 翻页-配件价格
@@ -288,7 +386,7 @@ const methods = {
   leftgetList(){
     let params = {}
     this.level.loading = true
-    stockLevel(params).then(res => {
+    partMatching(params).then(res => {
       this.level.loading = false
       if (res.code === 0) {
         this.level.tbdata = res.data.map(el => {
@@ -316,7 +414,7 @@ const methods = {
       params.size = this.customer.page.size
 
       this.customer.loading = true
-      RightqueryAll(params).then(res => {
+    partMatchingDetail(params).then(res => {
         this.customer.loading = false
         if (res.code === 0){
           this.customer.tbdata = res.data.content || []
@@ -337,15 +435,16 @@ const methods = {
         partCode: item.code,
         partName: item.partBrandName,
         partId: item.id,
-        fullName:item.fullName,
-        remark:item.remarks
       }
     })
     this.getArr = newA
-
-    this.customer.tbdata = [...this.customer.tbdata,...this.getArr]
-    this.customer.tbdata = this.unique(this.customer.tbdata)
-    // console.log(this.customer.tbdata)
+    this.level.tbdata = [...this.level.tbdata,...this.getArr]
+    this.level.tbdata = this.unique(this.level.tbdata)
+    // console.log(this.getArr)
+  },
+  //父组件右部分获取子组件的参数
+  getMsgTwo(a){
+    console.log(a)
   },
   //左边内容单某行
   selction(a){
@@ -358,9 +457,9 @@ const methods = {
         levelId : item.id
       }
     })
-    // console.log(arrrr)
+    console.log(arrrr)
     this.levelId = arrrr[0].levelId
-    // console.log(this.levelId)
+    console.log(this.levelId)
     this.rightgetList()
 
   },
@@ -375,8 +474,8 @@ const methods = {
     this.chooseArr = []
   }
 };
-import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
-import DiaLog from '../../../../../components/Accessories/dialog';
+import {partMatching,partMatchingDetailSave,partMatchingDetail,partMatchingdelete} from '../../../../api/system/systemSetting/Initialization'
+import DiaLog from '../../../../components/Accessories/dialog';
 const components = {
   DiaLog
 }
