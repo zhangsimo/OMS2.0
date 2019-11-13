@@ -73,6 +73,24 @@
 }
 .main .content-wrapper {
   padding: 2px 20px;
+  display: flex;
+  flex-flow: column;
+}
+.main .content-wrapper .content-oper-flex {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+}
+.main .content-wrapper .content-oper-flex .con-box {
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+}
+.main .content-wrapper .content-oper-flex .con-box .inner-box {
+  flex: 1;
+}
+.main .content-wrapper .content-oper-flex .con-box .con-split {
+  height: 100%;
 }
 .main .ivu-layout-wrap {
   background: #f7f7f7;
@@ -123,6 +141,15 @@
 .page {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
 }
+.icons {
+  padding-right: 5px;
+  font-size: 12px !important;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .ivu-modal .ivu-modal-content {
   border-radius: 5px 5px 2px 2px;
 }
@@ -152,9 +179,12 @@
 .ivu-btn .iconfont {
   font-size: 12px;
 }
+.ivu-form .ivu-form-item-label {
+  padding-right: 4px!important;
+}
 .ivu-table * {
   color: #666;
-  font-size: 14px;
+  font-size: 12px;
 }
 .ivu-table th {
   height: 40px!important;
@@ -171,6 +201,7 @@
   border-radius: 50%;
   position: relative;
   cursor: pointer;
+  background: #ffffff;
 }
 .ivu-table .table-radio:hover {
   border-color: #40a6ff;
@@ -185,12 +216,6 @@
   top: 50%;
   margin: -3px 0 0 -3px;
   border-radius: 50%;
-}
-.ivu-table .ivu-table-row-highlight .table-radio {
-  border-color: #40a6ff;
-}
-.ivu-table .ivu-table-row-highlight .table-radio:after {
-  background: #40a6ff;
 }
 .ivu-table .ivu-checkbox-inner {
   width: 14px;
@@ -214,9 +239,6 @@
 .ivu-table .ivu-checkbox-focus {
   box-shadow: 0 0 0 2px rgba(64, 166, 255, 0.2);
 }
-.ivu-table .ivu-table-row-highlight td {
-  background-color: #fff;
-}
 .ivu-table .blue {
   color: #40a6ff;
 }
@@ -227,8 +249,17 @@
   background-color: #2399ff;
   border-color: #2399ff ;
 }
-.ivu-table-stripe.ivu-table .ivu-table-body tr.ivu-table-row-highlight:nth-child(2n) td {
+.table-highlight-row .ivu-table-row-highlight td {
+  background-color: #fff;
+}
+.table-highlight-row .ivu-table-stripe.ivu-table .ivu-table-body tr.ivu-table-row-highlight:nth-child(2n) td {
   background-color: #f7fbff;
+}
+.table-highlight-row .ivu-table-row-highlight .table-radio {
+  border-color: #40a6ff;
+}
+.table-highlight-row .ivu-table-row-highlight .table-radio:after {
+  background: #40a6ff;
 }
 .ivu-btn-default.ivu-btn:hover {
   color: #656565;

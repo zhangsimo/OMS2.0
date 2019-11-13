@@ -1073,14 +1073,14 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/",
+            path: "",
             name: "",
             // mark: 'oms_orders_approve',
             meta: {
               // hideInMenu: true,
               title: "结算账户"
-            }
-            // component: () => import()
+            },
+            // component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
           },
           {
             path: "/",
@@ -1440,6 +1440,16 @@ export default [
               import(
                 "@/view/system/systemSetting/InitialNavigation/sysetmset/sysetmset.vue"
               )
+          },
+          {
+            path: "/system/systemSetting/navigationFater/SettlementAccount",
+            name: "SettlementAccount",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "结算账户"
+            },
+            component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
           },
           {
             path:
