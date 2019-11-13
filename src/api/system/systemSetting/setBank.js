@@ -10,3 +10,20 @@ export function getBankList (params) {
   })
 }
 
+//审核
+export function getAudit (data) {
+  return axios.request({
+    url: `${api.wmsApi}/settleAccount/initAccount`,
+    method: 'put',
+    data
+  })
+}
+
+//保存
+export function saveAudit (data) {
+  return axios.request({
+    url: `${api.wmsApi}/settleAccount/accounts`,
+    method: 'post',
+    data
+  })
+}
