@@ -272,7 +272,7 @@
                 data.page = this.page.num - 1
                 data.size = this.page.size
                 // this.$set(data,this.salesmanDuty,this.fasttipsTitle)
-                data[this.fasttipsType] = this.fasttipsTitle
+                data[this.fasttipsType] = this.fasttipsTitle || ''
                 data.supplierType = this.supplierTypeOne
                 data.supplierTypeFirst = this.supplier.id
          let res = await getSupplierformation(data)

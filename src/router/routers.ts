@@ -1554,6 +1554,20 @@ export default [
                 )
           },
           {
+            path:
+              "/systemSetting/InitialNavigation/setBank",
+            name: "setBank",
+            // mark: '59',
+            meta: {
+              hideInMenu: true,
+              title: "初期现金银行"
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
+                )
+          },
+          {
             path: "/system/staff/management",
             name: "staffManagement",
             // mark: '59',
