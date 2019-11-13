@@ -12,8 +12,22 @@ interface SelectTypes {
 }
 interface Option {
     value: string|number,
-    label: string,
+    label: string|number,
     [param:string]:any,
+}
+
+/**
+ * 表格校验
+ */
+interface ruleItem {
+    required: boolean,
+    message: string,
+    trigger: string|Array<string>,
+    validator?(rule:any, value:any, callback:Function): any
+}
+
+interface ruleValidate {
+    [prop: string]: Array<ruleItem>
 }
 
 /**
