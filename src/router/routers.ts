@@ -1368,17 +1368,17 @@ export default [
             component: () =>
               import("@/view/system/essentialData/logistics/logistics.vue")
           },
-          {
-            path: "FittingReplacement",
-            name: "FittingReplacement",
-            mark: "58",
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 配件替换"
-            },
-            component: () => import("@/view/system/basicData/FittingReplacement/FittingReplacement.vue")
-          },
+          // {
+          //   path: "FittingReplacement",
+          //   name: "FittingReplacement",
+          //   mark: "58",
+          //   meta: {
+          //     // hideInMenu: true,
+          //     icon: "arrow-graph-up-right",
+          //     title: " 配件替换"
+          //   },
+          //   component: () => import("@/view/system/basicData/FittingReplacement/FittingReplacement.vue")
+          // },
           {
             path: "/system/basicdata/mixture",
             name: "mixtureRatio",
