@@ -1296,15 +1296,15 @@ export default [
               import("@/view/system/basicData/priceManage/priceManage.vue")
           },
           {
-            path: "",
-            name: "",
+            path: "activityManage",
+            name: "activityManage",
             mark: "52",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: " 活动管理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/system/basicData/activityManage/activityManage.vue")
           },
           {
             path: "/essentialData/clientManagement",
