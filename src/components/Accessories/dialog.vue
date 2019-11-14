@@ -324,12 +324,17 @@ export default {
             console.log(this.chooseArr)
             this.$emit('getMsg',this.chooseArr)
             this.$emit('getMsgTwo',this.chooseArr)
+            // this.chooseArr = []
           }else{
-            // this.rowMessage =[]
               this.$Message.warning('该对象已加入')
           }
       }
-    }
+    },
+    unique(arr) { // 根据唯一标识orderId来对数组进行过滤
+      const res = new Map();  //定义常量 res,值为一个Map对象实例
+      //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
+      return arr.filter((arr) => !res.has(arr.partId) && res.set(arr.partId, 1))
+    },
   },
   watch:{
     newpid:{

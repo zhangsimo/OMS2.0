@@ -1073,14 +1073,14 @@ export default [
         component: parentView,
         children: [
           {
-            path: "",
+            path: "/",
             name: "",
             // mark: 'oms_orders_approve',
             meta: {
               // hideInMenu: true,
               title: "结算账户"
-            },
-            // component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
+            }
+            // component: () => import()
           },
           {
             path: "/",
@@ -1442,16 +1442,6 @@ export default [
               )
           },
           {
-            path: "/system/systemSetting/navigationFater/SettlementAccount",
-            name: "SettlementAccount",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "结算账户"
-            },
-            component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
-          },
-          {
             path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
@@ -1564,20 +1554,6 @@ export default [
                 )
           },
           {
-            path:
-              "/systemSetting/InitialNavigation/setBank",
-            name: "setBank",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "初期现金银行"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
-                )
-          },
-          {
             path: "/system/staff/management",
             name: "staffManagement",
             // mark: '59',
@@ -1612,23 +1588,43 @@ export default [
           }
         ]
       },
+      // {
+      //   path: "",
+      //   name: "allotThree",
+      //   meta: {
+      //     title: "基本信息"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       mark: "63",
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "基本信息"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // },
       {
-        path: "",
-        name: "allotThree",
+        path: "/system/systemSetting/accountInformation/accountInformation",
+        name: 'allotThree',
         meta: {
-          title: "账号"
+          notCache: true,
+          title: "基本信息"
         },
         component: parentView,
         children: [
           {
-            path: "/",
-            name: "",
-            mark: "63",
+            path: "/system/systemSetting/accountInformation/accountInformation",
+            name: "/accountInformation",
             meta: {
-              // hideInMenu: true,
+              notCache: true,
               title: "基本信息"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/system/systemSetting/accountInformation/accountInformation.vue")
           }
         ]
       }

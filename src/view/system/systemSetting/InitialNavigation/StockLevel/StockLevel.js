@@ -259,15 +259,6 @@ const methods = {
   },
   // 保存配件
   saveCustomer() {
-
-    // this.customer.tbdata.forEach( item => {
-    //   console.log(item.levelId)
-    //   if(item.levelId == ar.levelId){
-    //     console.log(12312312321321312321321312321312)
-    //     return false
-    //   }
-    // })
-
     this.customer.page.num = 1;
      this.getArr.forEach(item => {
       item.levelId = this.levelId
@@ -353,6 +344,7 @@ const methods = {
     })
     this.getArr = newA
 
+   // this.getArr.Map( item => {})
     this.customer.tbdata = [...this.customer.tbdata,...this.getArr]
     this.customer.tbdata = this.unique(this.customer.tbdata)
     // console.log(this.customer.tbdata)

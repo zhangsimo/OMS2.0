@@ -1,10 +1,10 @@
 <template>
     <div class="pb20">
       <div class="db pb10 pl10 pr10">
-        <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+        <Button class="mr10 w90" @click="Save"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消</span></Button>
       </div>
-      <div class="pl10 pr10">
+      <div class="pl10 pr10 tableBox">
         <Table
           border
           highlight-row
@@ -13,17 +13,19 @@
           :stripe="true"
           :columns="columns"
           :data="tbdata"
-          @on-row-click="selctionTopRight"
+          @on-selection-change="selctionTopRight"
         ></Table>
       </div>
     </div>
 </template>
 
 <script>
+  import {findByOrgid} from '../../../../../api/system/systemSetting/Initialization'
     export default {
         name: "attention",
       data(){
           return {
+            selectionArr:null,
               loading: false,
               tbdata:[],
               columns: [
@@ -45,37 +47,37 @@
                     {
                       title: "编码",
                       align: "center",
-                      key: "",
+                      key: "name",
                       minWidth: 100
                     },
                     {
                       title: "名称",
                       align: "center",
-                      key: "",
+                      key: "code",
                       minWidth: 100
                     },
                     {
                       title: "代码",
                       align: "center",
-                      key: "",
+                      key: "oldId",
                       minWidth: 100
                     },
                     {
                       title: "生产产家",
                       align: "center",
-                      key: "",
+                      key: "manufacture",
                       minWidth: 100
                     },
                     {
                       title: "备注",
                       align: "center",
-                      key: "",
+                      key: "remark",
                       minWidth: 100
                     },
                     {
                       title: "是否禁用",
                       align: "center",
-                      key: "",
+                      key: "disabled",
                       minWidth: 100
                     }
                   ]
@@ -84,10 +86,34 @@
           }
       },
       methods:{
-          //表格点击某行的事件
-        selctionTopRight(){
-
+          //表格选择某行的事件
+        selctionTopRight(a){
+         this.selectionArr = a
+          console.log(a)
+          this.selectionArr.map(item => {
+              item.parentId = item.id
+              delete item.id
+          })
+          // console.log(this.selectionArr)
+        },
+        // 初始化内容
+        getList(){
+          let data = {}
+          findByOrgid(data).then(res => {
+            this.tbdata = res.data
+          })
+        },
+        //保存
+        Save(){
+          if(this.selectionArr === null){
+            this.$Message.warning('请选择要加入的内容')
+          }else{
+            this.$emit('childrenMsg',this.selectionArr)
+          }
         }
+      },
+      mounted(){
+          this.getList()
       }
     }
 </script>
@@ -101,5 +127,9 @@
   .icons {
     padding-right: 5px;
     font-size: 12px!important;
+  }
+  .tableBox{
+    height: 550px;
+    overflow-y: auto;
   }
 </style>

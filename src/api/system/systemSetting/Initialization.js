@@ -148,7 +148,7 @@ export function saveCustom(data) {
   })
 }
 
-// *========= 配比清单 ==========*Choose
+// *========= 配比清单 ==========*
 // 配比清单左内容
 export function partMatching(params) {
   return axios.request({
@@ -192,6 +192,56 @@ export function partMatchingdelete(data) {
 export function partMatchingDetailSave(data) {
   return axios.request({
     url: `${api.wmsApi}/partMatchingDetail/save`,
+    method: 'post',
+    data:data
+  })
+}
+
+// *========= 配件品牌 ==========*
+// /partBrand/findAll
+// 配件品牌/品质查询
+export function findAllByTree(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partBrand/findAllByTree`,
+    method: 'post',
+    data:data
+  })
+}
+
+//已关注品牌
+// /partBrandOrg/findAll
+export function partBrandOrg(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partBrandOrg/findAll`,
+    method: 'post',
+    data:data
+  })
+}
+
+//新增关注品牌
+// /partBrandOrg/findByOrgid
+export function findByOrgid(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partBrandOrg/findByOrgid`,
+    method: 'post',
+    data:data
+  })
+}
+
+//保存关注品牌
+// /partBrandOrg/saveOrUpdate
+export function partBrandOrgSaveOrUpdate(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partBrandOrg/saveOrUpdate`,
+    method: 'post',
+    data:data
+  })
+}
+//删除关注品牌
+// /partBrandOrg/deleteAll
+export function partBrandOrgDeleteAll(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partBrandOrg/deleteAll`,
     method: 'post',
     data:data
   })

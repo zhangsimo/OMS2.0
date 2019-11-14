@@ -67,7 +67,7 @@
               this.$router.push()
               return
             case "初期现金银行":
-              this.$router.push({ name: "setBank",})
+              this.$router.push()
               return
             case "初期应收应付":
               this.$router.push({name: 'receiptPayment'})

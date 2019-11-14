@@ -10,7 +10,7 @@
                 <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用品质</span></Button>-->
                 <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>-->
               </div>
-              <div class="pl10 pr10">
+              <div class="pl10 pr10 Tablebox">
                 <Table
                   border
                   highlight-row
@@ -32,7 +32,7 @@
                 <!--<Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用品质</span></Button>-->
                 <!--<Button class="mr10 w145"><span class="center"><Icon custom="iconfont iconxuanzetichengchengyuanicon icons" />上传配件品牌图片</span></Button>-->
               </div>
-              <div class="pl10 pr10">
+              <div class="pl10 pr10 Tablebox">
                 <Table
                   border
                   highlight-row
@@ -41,7 +41,7 @@
                   :stripe="true"
                   :columns="topRight.columns"
                   :data="topRight.tbdata"
-                  @on-row-click="selctionTopRight"
+                  @on-row-click="selctionBottom"
                 ></Table>
               </div>
             </div>
@@ -51,10 +51,10 @@
           <div class="db btn-title">
             <p class="mr10" style="font-weight: bold">本地关注品牌：</p>
             <Button class="mr10 w120" @click="AddAttention"><span class="center"><Icon type="md-add" />新增关注品牌</span></Button>
-            <Button class="mr10 w120"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消关注品牌</span></Button>
-            <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
+            <Button class="mr10 w120" @click="cancel"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消关注品牌</span></Button>
+            <Button class="mr10 w90" @click="Save"><span class="center"><Icon custom="iconfont iconbaocunicon icons" />保存</span></Button>
           </div>
-          <div class="pl10 pr10">
+          <div class="pl10 pr10 Tablebox">
             <Table
               border
               highlight-row
@@ -63,18 +63,19 @@
               :stripe="true"
               :columns="Bottom.columns"
               :data="Bottom.tbdata"
-              @on-row-click="selctionBottom"
+              @on-selection-change="selctionTopRight"
             ></Table>
           </div>
         </div>
 
         <Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-visible-change="closedTap">
-          <Atten-tion></Atten-tion>
+          <Atten-tion @childrenMsg="getMsg"></Atten-tion>
         </Modal>
       </div>
 </template>
 
 <script>
+  import {findAllByTree,partBrandOrg,partBrandFindAllByTree,partBrandOrgSaveOrUpdate,partBrandOrgDeleteAll} from '../../../../../api/system/systemSetting/Initialization'
   import AttenTion from './attention'
     export default {
         name: "AccessoriesBrand",
@@ -83,6 +84,7 @@
       },
       data(){
           return {
+            getArr:[], //定义一个获取子组件数组
             split: 0.4,
             modal:false, //添加关注弹框
             topLeft:{
@@ -102,24 +104,24 @@
                     {
                       title: "编码",
                       align: "center",
-                      key: "",
+                      key: "code",
                       minWidth: 120
                     },
                     {
                       title: "名称",
                       align: "center",
-                      key: "",
+                      key: "name",
                       minWidth: 120
                     },
                     {
                       title: "是否禁用",
                       align: "center",
-                      key: "code",
+                      key: "disabled",
                       minWidth: 120
                     }
                   ]
                 }
-              ],
+              ]
             },
             topRight: {
               loading: false,
@@ -138,48 +140,49 @@
                     {
                       title: "编码",
                       align: "center",
-                      key: "",
+                      key: "code",
                       minWidth: 100
                     },
                     {
                       title: "名称",
                       align: "center",
-                      key: "",
+                      key: "name",
                       minWidth: 100
                     },
                     {
                       title: "代码",
                       align: "center",
-                      key: "",
+                      key: "oldId",
                       minWidth: 100
                     },
                     {
                       title: "图片",
                       align: "center",
-                      key: "",
+                      key: "imageUrl",
                       minWidth: 100
                     },
                     {
                       title: "生产产家",
                       align: "center",
-                      key: "",
+                      key: "manufacture",
                       minWidth: 100
                     },
                     {
                       title: "备注",
                       align: "center",
-                      key: "",
+                      key: "remark",
                       minWidth: 100
                     },
                     {
                       title: "是否禁用",
                       align: "center",
-                      key: "",
+                      key: "disabled",
                       minWidth: 100
                     }
                   ]
                 }
               ],
+              newArr:[] //表格新数组，用于赋值
             },
             Bottom: {
               loading: false,
@@ -203,37 +206,37 @@
                     {
                       title: "编码",
                       align: "center",
-                      key: "",
+                      key: "code",
                       minWidth: 100
                     },
                     {
                       title: "名称",
                       align: "center",
-                      key: "",
+                      key: "name",
                       minWidth: 100
                     },
                     {
                       title: "代码",
                       align: "center",
-                      key: "",
+                      key: "oldId",
                       minWidth: 100
                     },
                     {
                       title: "生产产家",
                       align: "center",
-                      key: "",
+                      key: "manufacture",
                       minWidth: 100
                     },
                     {
                       title: "备注",
                       align: "center",
-                      key: "",
+                      key: "remark",
                       minWidth: 100
                     },
                     {
                       title: "是否禁用",
                       align: "center",
-                      key: "",
+                      key: "disabled",
                       minWidth: 100
                     }
                   ]
@@ -244,17 +247,60 @@
       },
       methods:{
           //品质表格的每行点击事件
-        selctionTopLeft(a){},
+        selctionTopLeft(a){
+          this.topRight.tbdata = a.children
+          // console.log(this.topRight.tbdata)
+        },
           //品牌表格的每行点击事件
         selctionTopRight(a){},
         //关注品牌的每行点击事件
-        selctionBottom(a){},
+        selctionBottom(a){
+          console.log(a)
+        },
         //modal的关闭按钮事件
         closedTap(){},
         //点击添加关注按钮
         AddAttention(){
           this.modal = true
+        },
+        //初始化上半部分
+        getListTop(){
+          let data = {}
+          // data.id = this.id
+          findAllByTree(data).then(res => {
+              this.topLeft.tbdata = res.data || []
+          })
+        },
+        //初始化下半部分
+        getListBottom(){
+          let data = {}
+          partBrandOrg(data).then(res => {
+            this.Bottom.tbdata = res.data
+          })
+        },
+        // 子组件的数组
+        getMsg(a){
+          this.getArr = a
+          this.Bottom.tbdata = [...this.Bottom.tbdata,...this.getArr]
+        },
+        //保存关注品牌
+        Save(){
+          let data = this.Bottom.tbdata
+          partBrandOrgSaveOrUpdate(data).then(res => {
+            this.getListBottom()
+          })
+        },
+        // 取消关注品牌
+        cancel(){
+          let data = {}
+          partBrandOrgDeleteAll().then(res => {
+              this.getListBottom()
+          })
         }
+    },
+      mounted(){
+        this.getListTop()
+        this.getListBottom()
       }
     }
 </script>
@@ -287,4 +333,8 @@
   padding-right: 5px;
   font-size: 12px!important;
 }
+  .Tablebox{
+    height: 320px;
+    overflow-y: auto;
+  }
 </style>
