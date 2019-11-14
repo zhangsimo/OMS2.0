@@ -1,5 +1,6 @@
-// import * as api from "_api/lease/customerSM";
 import { Vue, Component } from 'vue-property-decorator'
+// @ts-ignore
+import * as api from "_api/system/ProductLA.js";
 
 @Component
 export default class ProductLA extends Vue {
@@ -47,31 +48,26 @@ export default class ProductLA extends Vue {
         {
             title: "分配状态",
             key: "meterCompany",
-            slot: "meterCompany",
             minWidth: 120
         },
         {
             title: "角色",
             key: "meterCompany",
-            slot: "meterCompany",
             minWidth: 240
         },
         {
             title: "员工名称",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "userName",
             minWidth: 120
         },
         {
             title: "电话号码",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "phone",
             minWidth: 120
         },
         {
             title: "备注",
             key: "meterCompany",
-            slot: "meterCompany",
             minWidth: 240
         },
     ]
@@ -182,17 +178,57 @@ export default class ProductLA extends Vue {
     private distPartListData = []
 
     // mounted
-    private mounted() {}
+    private async mounted() {
+        const roles = await api.getRoles()
+        if(roles.code == 0) {
+            this.roleOptions = roles.data.content.map((el:any) => {
+                return {
+                    label: el.displayName,
+                    value: el.id
+                }
+            })
+            this.roleOptions.unshift({label: "全部", value: '0'})
+        }
+
+        this.getStaff();
+    }
 
     // methods
+    //获取员工表
+    private async getStaff() {
+        this.employeeLoading = true;
+        let params:any = {}
+        params.size = this.employeePage.size;
+        params.page = this.employeePage.num -1;
+        if(this.employeeSelecteOption == '0') {
+            params.userName = this.employeeSelectContent.trim();
+        }
+        if(this.employeeSelecteOption == '1') {
+            params.phone = this.employeeSelectContent.trim();
+        }
+        let res = await api.getStaffList(params);
+        if(res.code == 0) {
+            this.employeeLoading = false;
+            this.employeeData = res.data.content;
+            this.employeePage.total = res.data.totalElements
+        }
+    }
+
+    // 员工列表查询
+    private queryStaff() {
+        this.getStaff();
+    }
+
     //  翻页-员工列表
     private employeeChangePage(p: number) {
         this.employeePage.num = p;
+        this.getStaff();
     }
     // 修改每页显示条数-员工列表
     private employeeChangeSize(size: number) {
         this.employeePage.num = 1;
         this.employeePage.size = size;
+        this.getStaff();
     }
     //  翻页-待分配列表
     private waitPartListChangePage(p: number) {

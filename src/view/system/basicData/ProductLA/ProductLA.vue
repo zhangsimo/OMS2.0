@@ -43,7 +43,7 @@
             </Select>
           </div>
           <div class="db">
-            <Button class="mr10 w90" type="warning">
+            <Button class="mr10 w90" type="warning" @click="queryStaff">
               <span class="center">
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
