@@ -11,9 +11,9 @@
             <Row>
               <Col span="11">
                 <FormItem label="配件品质：" prop="qualityTypeId">
-                  <Select v-model="formValidate.qualityTypeId">
+                  <Select @on-change="seletBandAll" v-model="formValidate.qualityTypeId">
                     <Option
-                      v-for="item in brandAll"
+                      v-for="item in qualitites"
                       :value="item.value"
                       :key="item.value"
                     >{{item.label}}</Option>
@@ -24,7 +24,7 @@
                 <FormItem label="配件品牌：" prop="partBrandId">
                   <Select v-model="formValidate.partBrandId">
                     <Option
-                      v-for="item in qualitites"
+                      v-for="item in brandAll"
                       :value="item.value"
                       :key="item.value"
                     >{{item.label}}</Option>
@@ -645,7 +645,7 @@ export default class Accessories extends Vue {
     }
   }
   private async mounted() {
-    let res = await api.getPartBrand();
+    let res = await api.getPartBrand({parentId: 0});
     if (res.code == 0) {
       res.data.forEach((el: any) => {
         el.label = el.name;
@@ -691,6 +691,19 @@ export default class Accessories extends Vue {
     let res:any = await api.getPartName(data);
     if(res.code == 0) {
       this.tbdata = res.data;
+    }
+  }
+
+  // 选择品质
+  private async seletBandAll(label:string) {
+    let res = await api.getPartBrand({parentId: label});
+    this.brandAll = [];
+    if (res.code == 0) {
+      res.data.forEach((el: any) => {
+        el.label = el.name;
+        el.value = el.id;
+        this.brandAll.push(el);
+      })
     }
   }
 

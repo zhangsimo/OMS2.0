@@ -71,7 +71,7 @@
               :before-upload="handleBeforeUpload"
               :on-success="handleSuccess"
             >
-              <Button class="mr10 w90" @click="importOpen">
+              <Button class="mr10 w90">
                 <span class="center">
                   <Icon custom="iconfont icondaoruicon icons" />导入
                 </span>
