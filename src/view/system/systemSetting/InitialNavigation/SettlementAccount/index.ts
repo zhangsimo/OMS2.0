@@ -206,11 +206,12 @@ export default class SettlementAccount extends Vue {
                 let res:any = await api.addOrUpAccount(data);
                 if(res.code == 0) {
                     this.$Message.success('保存成功');
-                }
-                if(type == 'save') {
-                    this.modal = false;
-                } else {
-                    this.add();
+                    this.refresh();
+                    if(type == 'save') {
+                        this.modal = false;
+                    } else {
+                        this.add();
+                    }
                 }
             }
         })
@@ -219,10 +220,14 @@ export default class SettlementAccount extends Vue {
     private setFormDataMode() {
         this.formData.mode = [];
         Array.isArray(this.SelectRow.settleType) && this.SelectRow.settleType.forEach((el:any) => {
-            this.formData.mode.push({id: el.customId, oid: el.id});
+            this.formData.mode.push({
+                id: el.customId, 
+                oid: el.id,
+                accountId: el.accountId,
+            });
         })
-        if(this.formData.mode.length < 0) {
-            this.formData.mode.push({});
+        if(this.formData.mode.length <= 0) {
+            this.formData.mode = [{}];
         }
     }
 
@@ -247,24 +252,25 @@ export default class SettlementAccount extends Vue {
                         customName: item.itemName,
                         customId: item.itemCode,
                     }
-                    // if(!this.isNew) {
-                    //     obj.id = item.id;
-                    // }
+                    if(el.oid) {
+                        obj.accountId = el.accountId;
+                        obj.id = el.oid;
+                    }
                     data.settleTypeAdd.push(obj);
                 }
             }
         })
-        this.formData.deleteItems.forEach((id:string) => {
+        this.formData.deleteItems.forEach((el:any) => {
             for(let i = 0; i < this.itemVOS.length; i++) {
                 let item:any = this.itemVOS[i];
-                if(id == item.itemCode) {
+                if(el.code == item.itemCode) {
                     let obj:any = {
                         name: this.formData.name,
                         customName: item.itemName,
                         customId: item.itemCode,
                     }
                     if(!this.isNew) {
-                        obj.id = item.id;
+                        obj.id = el.oid;
                     }
                     data.settleTypeDelete.push(obj);
                 }
@@ -288,7 +294,7 @@ export default class SettlementAccount extends Vue {
         if(this.formData.mode.length <= 1) return;
         let obj = this.formData.mode.splice(index, 1)[0];
         if(obj.oid) {
-            this.formData.deleteItems.push(obj.id);
+            this.formData.deleteItems.push({oid: obj.oid, code: obj.id});
         }
     }
 }
