@@ -173,9 +173,12 @@ export default class ProductLA extends Vue {
         size: 10
     }
     /**待分配列表加载状态 */
-    waitPartListLoading:boolean = false;
+    private waitPartListLoading:boolean = false;
     /**已分配列表数据 */
     private distPartListData = []
+    /**移入移出按钮是否可用 */
+    private buttonOnDisable:boolean = true;
+    private buttonOffDisable:boolean = true;
 
     // mounted
     private async mounted() {
