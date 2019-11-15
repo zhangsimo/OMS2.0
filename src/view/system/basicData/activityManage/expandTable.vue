@@ -65,16 +65,5 @@
     };
 </script>
 <style lang="less">
-    .expand-table{
-        margin-bottom: 16px;
-        table {
-            th {
-                background-color: #fff !important;
-            }
-        }
-    }
-    .border {
-        border: 1px solid #ccc;
-        border-top: none;
-    }
+    @import url("./expandTable.less");
 </style>

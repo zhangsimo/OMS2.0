@@ -13,14 +13,20 @@
           <div class="db mr10">
             <span>创建时间：</span>
             <Date-picker
+             @on-change="getBeginDate"
+             :value="startTime"
               class="w200 mr20"
               type="date"
               placeholder="选择开始日期"
+              :options='startTimeOption'
             ></Date-picker>
             <Date-picker
+              @on-change="getEndDate"
+               :value="endTime"
               class="w200 mr20"
               type="date"
               placeholder="选择结束日期"
+              :options="endTimeOption"
             ></Date-picker>
           </div>
           <div class="db">
@@ -245,6 +251,10 @@ export default {
           label: "已取消"
         }
       ],
+      startTime: '',
+      endTime: '',
+      startTimeOption:{},
+      endTimeOption:{},
       style: 'display: none',
       style1: 'display: none',
       tabValue: "name1",
@@ -326,6 +336,7 @@ export default {
         }
       ],
       data1: [],
+      checkedData:[],
       // 活动信息数据
       getDataObj: {
         beginDate: "",
@@ -689,6 +700,11 @@ export default {
       ]
     };
   },
+  created () {
+    this.getActApplicationForm()
+    this.getActTable()
+    this.getExpiredTable()
+  },
   methods: {
     // 活动申请页面
     getActApplicationForm () {
@@ -724,14 +740,24 @@ export default {
     },
     
     // 获取活动信息开始日期
-    getBeginDate(item) {
-      console.log(item);
-      this.getDataObj.beginDate = item;
+    getBeginDate(startTime) {
+      console.log(startTime);
+      this.endTimeOption = {
+        disabledDate(endTime) {
+            return endTime < new Date(startTime)
+        }
+      }
+      this.getDataObj.beginDate = startTime;
     },
     // 获取活动信息结束日期
-    getEndDate(item) {
-      console.log(item);
-      this.getDataObj.endDate = item;
+    getEndDate(endTime) {
+      console.log(endTime);
+      this.startTimeOption = {
+          disabledDate(startTime) {
+              return startTime > new Date(endTime) || startTime > Date.now()
+          }
+      }
+      this.getDataObj.endDate = endTime;
     },
     // 获取活动信息指定公司
     onSelectChange (v) {
@@ -752,6 +778,8 @@ export default {
     // 单击表格数据
     onRowClick (tableDate) {
       // 活动申请页面第二个表格数据
+      console.log(tableData)
+      this.checkedData = [tableDate]
       getActApplyTable(this.tableFormDate).then(res => {
         // console.log(res)
         this.data4 = res.data
@@ -772,6 +800,11 @@ export default {
     },
     cancelApply() {
       //取消申请
+      let len = this.checkedData
+      if (len <= 0) {
+        this.$Message.info('请选择一条活动')
+        return
+      }
       cancelActApply(this.tableFormDate).then(res => {
         // console.log(res)
       })
@@ -840,22 +873,9 @@ export default {
       return sums;
     }
   },
-  created () {
-    this.getActApplicationForm()
-    this.getActTable()
-    this.getExpiredTable()
-  }
 };
 </script>
 
 <style lang="less">
-.place {
-  line-height: 40px;
-  padding-left: 10px;
-  border: 1px solid #eee;
-}
-.ivu-table-expanded-cell {
-  padding: 0px !important;
-  padding-left: 60px !important;
-}
+@import url("./index.less");
 </style>
