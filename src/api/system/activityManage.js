@@ -71,6 +71,13 @@ export function cancelAct(data) {
     data
   });
 }
+// 活动导入接口
+export function actImport() {
+  return axios.request({
+    url: `${api.omsApi}/activity/importExcel`,
+    method: "post",
+  });
+}
 // 审核活动申请接口
 export function auditActivity(data) {
   return axios.request({

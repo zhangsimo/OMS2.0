@@ -223,7 +223,8 @@ import {
   getActivityIfo,
   getExpiredActTable,
   cancelAct,
-  getActApplyTable
+  getActApplyTable,
+  actImport
 } from "../../../../api/system/activityManage.js";
 export default {
   name: "activityManage",
@@ -438,10 +439,10 @@ export default {
         }
       ],
       data2:[],
+      checkedData2:[],
       actIfoTableData:{
         id: ''
       },
-      actTableRowClickData:[],
       // 过期活动数据
       columns3: [
         {
@@ -811,22 +812,25 @@ export default {
     },
     // 取消活动
     cancelActivity () {
-      console.log('被点击了')
-      this.$Message.success('成功了')
-      //   cancelAct(this.actIfoTableData).then(res => {
-      //   console.log(res)
-      //   if (res.code === 0) {
-      //     this.getActTable()
-      //     this.$Message.config('操作成功')
-      //   }
-      // })
+      let len = this.checkedData2
+      if (len <= 0) {
+        this.$Message.info('请选择一条活动')
+        return
+      }
+      cancelAct(this.actIfoTableData).then(res => {
+        console.log(res)
+        if (res.code === 0) {
+          this.getActTable()
+          this.$Message.success('操作成功')
+        }
+      })
 
     },
     // 活动信息表格获取行数据
     onRowClick2 (rowValue) {
       console.log(rowValue)
       this.actIfoTableData.id = rowValue.id
-      this.actTableRowClickData = rowValue
+      this.checkedData2 = [rowValue]
     },
     // 分页
     changePage() {},
