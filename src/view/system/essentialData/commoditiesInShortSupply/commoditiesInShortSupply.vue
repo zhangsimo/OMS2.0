@@ -2,27 +2,40 @@
 <div class="commodbigbox">
   <div class="oper-top">
     <span class="mr10">查询项：</span>
-    <Select v-model="searchType1" class="w100 mr10">
-      <Option v-for="item in List" :value="item.value" :key="item.value">{{ item.name }}</Option>
+    <Select v-model="searchType" class="w100 mr10">
+      <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
-    <Input  class="mr10"  style="width: 150px" />
-    <Button type="warning" class="mr20" ><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
-    <Button type="warning" class="mr20"  >新增紧俏品</Button>
+    <Input  class="mr10" v-model="query" style="width: 150px" />
+    <span class="mr10">品牌:</span>
+    <Select v-model="band" style="width:140px" class="mr20">
+      <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    </Select>
+    <Button type="warning" class="mr20" @click="queryTight"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+    <Button type="warning" class="mr20" @click="addNew">新增紧俏品</Button>
     <Button type="default" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
-    <Button type="default"  class="mr10 w90"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
+    <Button type="default"  class="mr10 w90" @click="deleteTight"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
     <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
-
+    <Button class="mr10">
+      <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
+    </Button>
   </div>
   <div class="tableCenter">
-    <Table stripe  :columns="columns" :data="List" size="small" :loading="Loading" border ></Table>
-    <Page class="mr10" :total="page.total"  :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"></Page>
+    <Table stripe  :columns="columns" :data="List" size="small"  :loading="Loading" border @on-selection-change="picthTight"></Table>
+    <Page class="mr10" :total="page.total"
+          :page-size="page.size"
+          :current="page.num"
+          show-sizer
+          show-total
+          class-name="page-con"
+          @on-change="selectNum"
+          @on-page-size-change="selectPage"
+    ></Page>
   </div>
 
 <!--  新增紧俏品-->
-  <Modal v-model="addCommodShow" title="新增紧俏品">
+  <Modal v-model="addCommodShow" title="新增紧俏品" width="1000">
+    <Fittings></Fittings>
     <div slot='footer'>
-      <Button type='primary' >确定</Button>
-      <Button type='default' >取消</Button>
     </div>
   </Modal>
 
@@ -37,8 +50,15 @@
 </template>
 
 <script>
-    export default {
+  import {getTightProductList , getDeleteTight} from  '@/api/system/essentialData/commoditiesInShortSupply'
+  import * as api from "_api/system/partManager";
+  import Fittings from './Fittings/Fittings.vue'
+
+  export default {
         name: "commoditiesInShortSupply",
+      components:{
+          Fittings,
+      },
         data(){
             return {
                 columns:[
@@ -58,12 +78,12 @@
                     {
                         title: '配件内编码',
                         align: 'center',
-                        key: 'name',
+                        key: 'partId',
                     },
                     {
                         title: '编码',
                         align: 'center',
-                        key: 'name',
+                        key: 'code',
                     },
                     {
                         title: '名称',
@@ -73,57 +93,57 @@
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'name',
+                        key: 'partBrandName',
                     },
                     {
                         title: '品质',
                         align: 'center',
-                        key: 'name',
+                        key: 'qualityTypeName',
                     },
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'name',
+                        key: 'applyCarModel',
                     },
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'name',
+                        key: 'unit',
                     },
                     {
                         title: '规格',
                         align: 'center',
-                        key: 'name',
+                        key: 'spec',
                     },
                     {
                         title: '可售数量',
                         align: 'center',
-                        key: 'name',
+                        key: 'num',
                     },
                     {
                         title: '库存数量',
                         align: 'center',
-                        key: 'name',
+                        key: 'num',
                     },
                     {
                         title: '在途数量',
                         align: 'center',
-                        key: 'name',
+                        key: 'num',
                     },
                     {
                         title: '创建日期',
                         align: 'center',
-                        key: 'name',
+                        key: 'createTime',
                     },
                     {
                         title: '过期日期',
                         align: 'center',
-                        key: 'name',
+                        key: 'pastTime',
                     },
                     {
                         title: '创建人',
                         align: 'center',
-                        key: 'name',
+                        key: 'createUname',
                     },
 
                 ],
@@ -133,13 +153,126 @@
                     total:0
                 },
                 Loading: false,
+                typeList:[
+                    {
+                        value: "0",
+                        label: "编码"
+                    },
+                    {
+                        value: "1",
+                        label: "名称"
+                    },
+                    {
+                        value: "2",
+                        label: "车型"
+                    },
+                    {
+                        value: "3",
+                        label: "拼音"
+                    }
+                ],
                 List:[
                     {name:'zs',
-                        value:18}
+                        value:18},
+                    {name:'zs',
+                        value:18},
+                    {name:'zs',
+                        value:18},
                 ],
-                searchType1:'',
+                searchType:'',
                 addCommodShow:false,
-                allAddCommodShow:true
+                allAddCommodShow:false,
+                query:'',//搜索
+                band:'' ,//品牌
+                bands:[
+                    {value: "0",label: "全部"}
+                ],
+                pitchOn:[]
+            }
+        },
+        mounted(){
+            this.getList()
+            this.getBand()
+        },
+        methods:{
+            //获取全部紧俏品
+          async  getList(){
+              let data = {}
+              this.Loading = true
+              data.size = this.page.page
+              data.page = this.page.num -1
+              if (this.band != "0") {
+                  data.partBrandId = this.band;
+              }
+              switch (this.searchType) {
+                  case "0":
+                      data.queryCode = this.query;
+                      break;
+                  case "1":
+                      data.fullName = this.query;
+                      break;
+                  case "2":
+                      data.applyCarModel = this.query;
+                      break;
+                  case "3":
+                      data.namePy = this.query;
+                      break;
+                  default:
+                      break;
+              }
+              let res  = await getTightProductList(data)
+              if(res.code == 0){
+                  let arr = res.data.content
+                arr = arr.map( item => {
+                   return  item = {...item,...item.attributeVO}
+                  })
+                  this.List = arr
+                  this.page.total = res.data.totalElements
+                  this.Loading = false
+              }
+            },
+            //获取品牌
+            async getBand() {
+                let res = await api.getPartBrand();
+                if (res.code == 0) {
+                    res.data.forEach( el  => {
+                        if (el.parentId != '0') {
+                            el.label = el.name;
+                            el.value = el.id;
+                            this.bands.push(el);
+                        }
+                    })
+                }
+            },
+            //搜索
+            queryTight(){
+                this.getList()
+            },
+            //选中紧俏品
+            picthTight(selection){
+              this.pitchOn = selection
+                console.log(selection)
+            },
+            //删除
+            deleteTight(){
+                getDeleteTight().then( res => {
+
+                })
+            },
+            //分页
+            selectNum(data){
+              this.page.num = data
+                this.getList()
+            },
+            //切换条数
+            selectPage(data){
+              this.page.num = 1
+                this.page.page = data
+                this.getList()
+            },
+            //新增紧俏品
+            addNew(){
+                this.addCommodShow = true
             }
         }
     }
