@@ -23,9 +23,45 @@ export function getRoles() {
 
 // 获取员工列表
 export function getStaffList (params) {
-    return axios.request({
-      url: `${api.authApi}/tenantUsers/queryAll?`,
-      method: 'get',
-      params
-    })
-  }
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/findAllTenantUsers`,
+    method: 'get',
+    params
+  })
+}
+
+// 待分配配件
+export function findByEmp (params) {
+  return axios.request({
+    url: `${api.wmsApi}/attribute/findByEmp`,
+    method: 'get',
+    params
+  })
+}
+
+// 已分配配件
+export function findAttByEmpId (params) {
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/findAttByEmpId`,
+    method: 'get',
+    params
+  })
+}
+
+// 批量给员工添加配件
+export function employeeAddPart (data) {
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/save`,
+    method: 'post',
+    data
+  })
+}
+
+// 批量给员工删除配件
+export function employeeDeletePart (data) {
+  return axios.request({
+    url: `${api.wmsApi}/employeeAttribute/delete`,
+    method: 'post',
+    data
+  })
+}
