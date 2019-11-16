@@ -145,12 +145,12 @@
             ></Page>
           </div>
           <div class="trans-btn w110">
-            <Button class="ml10 w90">
+            <Button class="ml10 w90" :disabled="buttonOnDisable">
               <span class="center">
                 <Icon custom="iconfont iconziyuan14 icons" />移入
               </span>
             </Button>
-            <Button class="ml10 mt30 w90">
+            <Button class="ml10 mt30 w90" :disabled="buttonOffDisable">
               <span class="center">
                 <Icon custom="iconfont iconfanhuiicon icons" />移出
               </span>
