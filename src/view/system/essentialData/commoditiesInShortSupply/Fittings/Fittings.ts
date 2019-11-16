@@ -8,6 +8,8 @@ import * as tools from "_utils/tools";
 // @ts-ignore
 import accessories from './modal/Accessories';
 
+import {getSaveNewTight , getCloudList , getLocalList , getGmList} from '@/api/system/essentialData/commoditiesInShortSupply'
+
 @Component({
   components: {
     accessories
@@ -49,10 +51,16 @@ export default class Fittings extends Vue {
       key: "brandName",
       children: [
         {
+          type: 'selection',
+          minWidth: 60,
+          align: 'center'
+        },
+        {
           title: "序号",
           type: "index",
           minWidth: 80
         },
+
         {
           title: "内码",
           key: "id",
@@ -163,6 +171,14 @@ export default class Fittings extends Vue {
       ]
     },
   ];
+  //日期控件不可选择
+  private  options3: any = {
+    disabledDate (date) {
+      return date && date.valueOf() < Date.now() - 86400000;
+    }
+  }
+
+  private  expireDate: string = '' //过期时间
   // local表格
   private local: any = {
     // 表头
@@ -205,7 +221,7 @@ export default class Fittings extends Vue {
   // tab索引
   private tabIndex: number = 0;
   // 选中的行
-  private currRow: any = null;
+  private currRow: any = [];
   // 按钮可用
   private isCanbutton:boolean = false;
   // 上传 请求头
@@ -288,7 +304,7 @@ export default class Fittings extends Vue {
     if (this.selectTreeId) {
       data.carTypeIdThr = this.selectTreeId;
     }
-    let res: any = await api.attrQueryAllPage(params, data);
+    let res: any = await getLocalList(params, data);
     if (res.code == 0) {
       this.local.tbdata = res.data.content;
       this.local.page.total = res.data.totalElements;
@@ -327,9 +343,9 @@ export default class Fittings extends Vue {
     }
     let res: any;
     if(this.isSys) {
-      res = await api.sysAll(params, data);
+      res = await getGmList(params, data);
     } else {
-      res = await api.attrQueryAll(params, data);
+      res = await getCloudList(params, data);
     }
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
@@ -392,25 +408,38 @@ export default class Fittings extends Vue {
     accessories.id = partid;
     accessories.proModal = true;
   }
-  // 启用 禁用
+  //修改时间
+  private changTime(data){
+    this.expireDate = data
+  }
+
+  // 选择数据
   private async changeDisable() {
     let self:any = this;
-    let id = this.currRow.id;
-    let res:any = await api.toggleDis(id);
-    let success:string = '';
-    if(this.isDisable) {
-      success = '禁用成功';
-    } else {
-      success = '启用成功';
+    if(!self.expireDate){
+      self.$Message.error('请先选中结束日期')
+      return false
     }
-    if(res.code == 0) {
-      self.$Message.success(success);
+    if(self.currRow.length < 1){
+      self.$Message.error('至少选中一条信息')
+      return false
     }
-    if(this.isSys) {
-      this.initCloudPartInfo();
-    } else {
-      this.initLocalPartInfo();
-    }
+    let data:any = []
+    let time:any = self.expireDate +' '+ '23:59:59'
+    self.currRow.forEach( item => data.push({pastTime: time,partId: item.id}))
+    let res:any = await getSaveNewTight(data)
+      if(res.code == 0){
+        this.$emit('getNewList' , res)
+        if(this.isSys) {
+          this.initCloudPartInfo();
+        } else {
+          this.initLocalPartInfo();
+        }
+      }
+  }
+  //关闭新增页面
+  private closeShow(){
+    this.$emit('setShow', this.currRow )
   }
   // 导入
   private importOpen() { }
@@ -442,10 +471,11 @@ export default class Fittings extends Vue {
   }
   // 单选行
   private selectRow(row: any) {
+    console.log(row)
     this.currRow = row;
-    this.isCanbutton = true;
-    this.isDisable = row.disabled == 0 ? true : false;
-    this.isSale = row.isSell == 0 ? true : false;
+    // this.isCanbutton = true;
+    // this.isDisable = row.disabled == 0 ? true : false;
+    // this.isSale = row.isSell == 0 ? true : false;
   }
   // 翻页-本地
   private changePagelocal(p: number) {

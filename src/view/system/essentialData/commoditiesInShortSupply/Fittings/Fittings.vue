@@ -41,69 +41,11 @@
           <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
         </div>
         <div slot="right" class="right table-warp">
-          <div class="btn-title" v-if="tabIndex === 0 || isSys">
-<!--            <Button class="mr10 w90" @click="add">-->
-<!--              <span class="center">-->
-<!--                <Icon type="md-add" />新增-->
-<!--              </span>-->
-<!--            </Button>-->
-<!--            <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconbianjixiugaiicon icons" />修改-->
-<!--              </span>-->
-<!--            </Button>-->
-            <Button class="mr10 w90" @click="changeDisable" v-if="!isDisable">
-              <span class="center">
-                <Icon custom="iconfont iconqiyongicon icons" />启用
-              </span>
-            </Button>
-            <Button class="mr10 w90" @click="changeDisable" v-else>
-              <span class="center">
-                <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
-              </span>
-            </Button>
-<!--            <Upload-->
-<!--              ref="upload"-->
-<!--              :show-upload-list="false"-->
-<!--              :action="upurl"-->
-<!--              :format="['xlsx','xls','csv']"-->
-<!--              :headers="headers"-->
-<!--              :before-upload="handleBeforeUpload"-->
-<!--              :on-success="handleSuccess"-->
-<!--            >-->
-<!--              <Button class="mr10 w90" @click="importOpen">-->
-<!--                <span class="center">-->
-<!--                  <Icon custom="iconfont icondaoruicon icons" />导入-->
-<!--                </span>-->
-<!--              </Button>-->
-<!--            </Upload>-->
-<!--            <Button class="mr10 w90" @click="refresh">-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconshuaxinicon icons" />刷新-->
-<!--              </span>-->
-<!--            </Button>-->
-<!--            <Button class="mr10 w90" @click="changeSale" v-if="isSale">-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售-->
-<!--              </span>-->
-<!--            </Button>-->
-<!--            <Button class="mr10 w90" @click="changeSale" v-else>-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconqiyongicon icons" />可售-->
-<!--              </span>-->
-<!--            </Button>-->
-<!--            <Button class="mr10 w90" @click="downTemplate">-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconxiazaiicon icons" />下载模板-->
-<!--              </span>-->
-<!--            </Button>-->
-          </div>
-<!--          <div class="btn-title" v-else>-->
-<!--            <Button class="mr10 w90" @click="couldRefresh">-->
-<!--              <span class="center">-->
-<!--                <Icon custom="iconfont iconshuaxinicon icons" />刷新-->
-<!--              </span>-->
-<!--            </Button>-->
+          <div class="btn-title">
+            <span class="mr10">过期时间:</span>
+            <DatePicker type="date"   @on-change="changTime" :options="options3" placeholder="选择时间" style="width: 180px" class="mr10"></DatePicker>
+            <Button @click="changeDisable" class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
+            <Button  type='default' @click="closeShow"><Icon type="md-close"/> 取消</Button>
           </div>
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
@@ -114,27 +56,25 @@
           <div class="tabs-warp" v-if="tabIndex == 0">
               <Table
               border
-              highlight-row
               size="small"
               height="500"
               :loading="local.loading"
               :stripe="true"
               :columns="local.columns"
               :data="local.tbdata"
-              @on-current-change="selectRow"
+              @on-selection-change="selectRow"
             ></Table>
           </div>
           <div class="tabs-warp" v-else>
             <Table
               border
-              highlight-row
               height="500"
               size="small"
               :loading="cloud.loading"
               :stripe="true"
               :columns="cloud.columns"
               :data="cloud.tbdata"
-              @on-current-change="selectRow"
+              @on-selection-change="selectRow"
             ></Table>
           </div>
           <div class="page-warp">
