@@ -1652,6 +1652,17 @@ export default [
             },
             component: () => import("@/view/system/systemSetting/accountInformation/recharge/recharge.vue")
           },
+          {
+            path: "/accountInformation/ProductsBuy",
+            name: "ProductsBuy",
+            // mark: '45',
+            meta: {
+              hideInMenu: true,
+              icon: "gear-b",
+              title: "产品购买"
+            },
+            component: () => import("@/view/system/systemSetting/accountInformation/ProductsBuy/ProductsBuy.vue")
+          },
         ]
       }
     ]

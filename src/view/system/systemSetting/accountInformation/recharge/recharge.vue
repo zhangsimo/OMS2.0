@@ -7,11 +7,22 @@
         <div class="boxContent">
           <div class="thisRow">
             <div class="label"><label>剩余华币:</label></div>
-            <div></div>
+            <div><span style="color: #40a6ff;font-size: 16px;font-weight: bold">{{ number }} </span>个</div>
           </div>
           <div class="thisRow">
-            <div class="lavbl"><label>选择套餐:</label></div>
-            <div></div>
+            <div class="label" style="margin-top: 10px"><label>选择套餐:</label></div>
+            <div>
+              <ul class="item">
+                <li v-for="(item,index) in combo" :key="index" class="discountBox items" @click="selectClass(index)" :class="[activeted?'weixuan':'xuan']">
+                  <p style="font-size: 16px;font-weight: bold;"> {{ item.originalPrice }}</p>
+                  <p style="padding-top: 5px"> 售价{{ item.presentPrice }}</p>
+                  <p class="zhekou" v-if="item.originalPrice !== item.presentPrice ">
+                    <img v-if="selectClassA === index" class="zhekou_img" src="../../../../../assets/images/recharge/unselected.png" alt="">
+                    <img v-else class="zhekou_img" src="../../../../../assets/images/recharge/selected.png" alt="">
+                  </p>
+                </li>
+              </ul>
+            </div>
           </div>
           <div class="thisRow">
             <div class="label"><label>支付金额:</label></div>
@@ -27,7 +38,29 @@
 
 <script>
     export default {
-        name: "recharge"
+        name: "recharge",
+      data(){
+          return {
+            number: 520,
+            combo:[
+              {originalPrice: '¥ 20',presentPrice: '¥ 20'},
+              {originalPrice: '¥100',presentPrice: '¥110'},
+              {originalPrice: '¥500',presentPrice: '¥600'},
+              {originalPrice: '¥1000',presentPrice: '¥1300'},
+              {originalPrice: '¥2000',presentPrice: '¥2800'}
+            ],
+            selectClassA: '',
+            activeted: true,
+          }
+      },
+      methods:{
+        record(){},
+        selectClass(index){
+          // console.log(index)
+          this.selectClassA = index
+          this.activeted = false
+        }
+      }
     }
 </script>
 

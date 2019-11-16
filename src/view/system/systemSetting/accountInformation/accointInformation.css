@@ -41,7 +41,7 @@
   align-items: center;
 }
 .navationTwo > label{
-  width: 250px;
+  width: 200px;
 }
 .boxBottom{
   height: 50px;
@@ -70,5 +70,46 @@
 }
 .thisRow{
   display: flex;
-  padding: 10px 15px;
+  padding: 15px 15px;
 }
+.discountBox{
+  width: 214px;
+  height: 70px;
+  border-radius: 2px;
+  border: solid 1px #40a6ff;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5faff;
+  color: #40a6ff;
+}
+.item{
+  width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.weixuan{
+  background-color: #f5faff;
+  color: #40a6ff;
+}
+.xuan{
+  background-color: #40a6ff;
+  color: #ffffff;
+}
+.items{
+  margin: 6px;
+  position: relative;
+  cursor: pointer;
+}
+.zhekou {
+position: absolute;
+  top: 0;
+  left: 0;
+}
+.zhekou_img{
+  width: 24px;
+  height: 25px;
+}
+
