@@ -59,10 +59,6 @@ export function getGmList (params,data) {
 }
 
 //批量上传
-export function getFile (data) {
-  return axios.request({
-    url: `${api.wmsApi}/tightPart/import`,
-    method: 'post',
-    data
-  })
-}
+export const getup = `${api.wmsApi}/tightPart/import`;
+
+

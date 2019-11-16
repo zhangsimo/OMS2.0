@@ -14,7 +14,19 @@
     <Button type="warning" class="mr20" @click="addNew">新增紧俏品</Button>
 <!--    <Button type="default" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>-->
     <Button type="default"  class="mr10 w90" @click="deleteTight"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
-    <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
+    <Upload
+      ref="upload"
+      style="display: inline-block"
+      :show-upload-list="false"
+      :action="upurl"
+      :headers="headers"
+      :format="['xlsx','xls']"
+      :on-format-error="onFormatError"
+      :on-success="onSuccess"
+      :before-upload ='beforeUpload'
+    >
+      <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
+    </Upload>
     <Button class="mr10">
       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
     </Button>
@@ -50,9 +62,12 @@
 </template>
 
 <script>
-  import {getTightProductList , getDeleteTight} from  '@/api/system/essentialData/commoditiesInShortSupply'
+  import {getTightProductList , getDeleteTight, getup} from  '@/api/system/essentialData/commoditiesInShortSupply.js'
   import * as api from "_api/system/partManager";
   import Fittings from './Fittings/Fittings.vue'
+  import Cookies from 'js-cookie'
+  import { TOKEN_KEY } from '@/libs/util'
+
 
   export default {
         name: "commoditiesInShortSupply",
@@ -61,6 +76,9 @@
       },
         data(){
             return {
+                headers:  {
+                    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+                },
                 columns:[
                     {
                      key:'',
@@ -178,6 +196,7 @@
                         value:18},
                 ],
                 searchType:'',
+                upurl:getup,//批量导入地址
                 addCommodShow:false,
                 allAddCommodShow:false,
                 query:'',//搜索
@@ -291,6 +310,20 @@
             // 关闭新增
             closeCommodShow(){
                 this.addCommodShow = false
+            },
+            //批量上传失败
+            onFormatError(file) {
+                // console.log(file)
+                this.$Message.error('只支持xls xlsx后缀的文件')
+            },
+            // 上传成功函数
+            onSuccess (response) {
+              this.$Message.success(response.data[0])
+
+            },
+            //上传之前清空
+            beforeUpload(){
+              this.$refs.upload.clearFiles()
             }
         }
     }
