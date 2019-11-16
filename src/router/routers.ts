@@ -1080,7 +1080,7 @@ export default [
               // hideInMenu: true,
               title: "结算账户"
             },
-            // component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
+            component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
           },
           {
             path: "/",
@@ -1613,23 +1613,45 @@ export default [
         ]
       },
       {
-        path: "",
-        name: "allotThree",
+        path: "/system/systemSetting/accountInformation/accountInformation",
+        name: 'allotThree',
         meta: {
-          title: "账号"
+          notCache: true,
+          title: "基本信息"
         },
         component: parentView,
         children: [
           {
-            path: "/",
-            name: "",
-            mark: "63",
+            path: "/system/systemSetting/accountInformation/accountInformation",
+            name: "/accountInformation",
             meta: {
-              // hideInMenu: true,
+              notCache: true,
               title: "基本信息"
-            }
-            // component: () => import()
-          }
+            },
+            component: () => import("@/view/system/systemSetting/accountInformation/accountInformation.vue")
+          },
+          {
+            path: "/accountInformation/record",
+            name: "record",
+            // mark: '45',
+            meta: {
+              hideInMenu: true,
+              // icon: "gear-b",
+              title: "充值消费记录"
+            },
+            component: () => import("@/view/system/systemSetting/accountInformation/record/record.vue")
+          },
+          {
+            path: "/accountInformation/recharge",
+            name: "recharge",
+            // mark: '45',
+            meta: {
+              hideInMenu: true,
+              icon: "gear-b",
+              title: "华币充值"
+            },
+            component: () => import("@/view/system/systemSetting/accountInformation/recharge/recharge.vue")
+          },
         ]
       }
     ]

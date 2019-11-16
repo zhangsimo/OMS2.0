@@ -63,13 +63,13 @@
               :stripe="true"
               :columns="Bottom.columns"
               :data="Bottom.tbdata"
-              @on-selection-change="selctionTopRight"
+              @on-selection-change="selctionTopBottom"
             ></Table>
           </div>
         </div>
 
-        <Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-visible-change="closedTap">
-          <Atten-tion @childrenMsg="getMsg"></Atten-tion>
+        <Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-cancel="closedTap" >
+          <Atten-tion @childrenMsg="getMsg" ref="FatherMsg"></Atten-tion>
         </Modal>
       </div>
 </template>
@@ -84,6 +84,7 @@
       },
       data(){
           return {
+            checkBox: [],
             getArr:[], //定义一个获取子组件数组
             split: 0.4,
             modal:false, //添加关注弹框
@@ -258,7 +259,9 @@
           console.log(a)
         },
         //modal的关闭按钮事件
-        closedTap(){},
+        closedTap(){
+          this.$refs.FatherMsg.handleSelectAll(false)
+        },
         //点击添加关注按钮
         AddAttention(){
           this.modal = true
@@ -282,6 +285,7 @@
         getMsg(a){
           this.getArr = a
           this.Bottom.tbdata = [...this.Bottom.tbdata,...this.getArr]
+          this.Bottom.tbdata = this.unique(this.Bottom.tbdata)
         },
         //保存关注品牌
         Save(){
@@ -292,10 +296,21 @@
         },
         // 取消关注品牌
         cancel(){
-          let data = {}
-          partBrandOrgDeleteAll().then(res => {
+          let data = this.checkBox
+          partBrandOrgDeleteAll(data).then(res => {
               this.getListBottom()
           })
+        },
+        //关注品牌的多选框
+        selctionTopBottom(a){
+          this.checkBox = a
+          console.log(a)
+        },
+        //去重方法
+        unique(arr) { // 根据唯一标识orderId来对数组进行过滤
+          const res = new Map();  //定义常量 res,值为一个Map对象实例
+          //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1112
+          return arr.filter((arr) => !res.has(arr.parentId) && res.set(arr.parentId, 1112))
         }
     },
       mounted(){

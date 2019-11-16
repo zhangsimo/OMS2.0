@@ -1,5 +1,5 @@
 <template>
-  <div class="bigbox">
+  <div class="bigbox2">
       <div class="header">
         <Button type="warning" class="mr10" @click="read"><Icon custom="iconfont iconziyuan2 icons"/>标记为已读</Button>
         <Button class="mr10" @click="back"><Icon custom="iconfont iconfanhuiicon icons"/>返回</Button>
@@ -91,5 +91,5 @@
 </script>
 
 <style scoped>
-  @import "index.css";
+  @import "./index.css";
 </style>
