@@ -45,8 +45,8 @@
             case "配件品牌":
               this.$router.push({name: 'AccessoriesBrand'})
                 return
-            case "品牌成型":
-              this.$router.push()
+            case "品牌车型":
+              this.$router.push({name: 'brandCarModel'})
               return
             case "配件分类":
               this.$router.push({name: 'AccessoriesCategory'})

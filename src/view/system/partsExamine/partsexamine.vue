@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="content-oper content-oper-flex">
     <section class="oper-box">
     <div class="oper-top flex">

@@ -1509,6 +1509,21 @@ export default [
           },
           {
             path:
+              "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
+            name: "brandCarModel",
+            // mark: '59',
+            meta: {
+              hideInMenu: true,
+              title: "品牌车型",
+              activeName:'navigationFater'
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/InitialNavigation/brandCarModel/brandCar.vue"
+                )
+          },
+          {
+            path:
               "/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment",
             name: "receiptPayment",
             // mark: '59',
