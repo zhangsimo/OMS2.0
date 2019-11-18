@@ -10,9 +10,9 @@
             <span>用户信息</span>
           </div>
           <div class="navone_two">
-            <div>手机号：</div>
-            <div>用户名：</div>
-            <div>公司：</div>
+            <div>手机号：{{ Msg.recordMobile }}</div>
+            <div>用户名：{{ Msg.createUname }}</div>
+            <div>公司：{{ Msg.orgname }}</div>
           </div>
         </div>
         <div class="navone mt30">
@@ -20,9 +20,9 @@
             <span>问题描述</span>
           </div>
           <div class="navone_two">
-            <div>来源：</div>
-            <div>反馈日期：</div>
-            <div>功能标题：</div>
+            <div>来源：{{ Msg.questionSource }}</div>
+            <div>反馈日期：{{ Msg.createTime }}</div>
+            <div>功能标题：{{ Msg.funcName}}</div>
           </div>
         </div>
         <div class="navtwo mt30">
@@ -38,8 +38,8 @@
             <span>处理情况</span>
           </div>
           <div class="navone_two">
-            <div>处理人：</div>
-            <div>处理日期：</div>
+            <div>处理人：{{Msg.settlor}}</div>
+            <div>处理日期：{{Msg.settleDate}}</div>
             <div></div>
           </div>
         </div>
@@ -48,7 +48,7 @@
             <span>回复：</span>
           </div>
           <div class="navone_two">
-            <div>好的！我会处理的</div>
+            <div>{{ Msg.settleContent}}</div>
           </div>
         </div>
       </div>
@@ -61,20 +61,28 @@
         name: "feedback_management",
       data(){
           return{
-              id: this.$route.query
+              id: this.$route.query.json.id,
+              Msg: this.$route.query.json
           }
       },
       methods:{
           back(){
             this.$router.push({name: 'FeedbackManagementOne'})
+            this.Msg = null
           },
         read(){
-          ready({id:this.id}).then(res =>{
+            let data = {}
+            data.id = this.id
+          ready(data).then(res =>{
             this.$Message.warning('标记已读成功')
           })
         },
         getList(){
-          findItem({id: this.id}).then(res => {
+            // console.log(this.$route.query.json)
+          //   console.log(this.id)
+          let data = {}
+          data.id = this.id
+          findItem(data).then(res => {
           })
         }
       },
@@ -85,7 +93,7 @@
       this.getList()
     },
     beforeCreate(){
-      this.id = this.$route.query
+      this.Msg = this.$route.query.json
     }
   }
 </script>

@@ -36,6 +36,7 @@
         name: "FeedbackManagementOne",
         data(){
           return {
+            json:{},
             List: [
               {name:"全部",value:9999},
               {name:"待处理",value:0},
@@ -145,9 +146,10 @@
         },
       methods:{
         selection(a){
+          this.json = a
           // console.log(a)
           this.ID = a.id
-          console.log(this.ID)
+          // console.log(this.ID)
         },
         changePage(p) {
         // console.log(p)
@@ -190,7 +192,9 @@
         },
         show(){
           if(this.ID){
-            this.$router.push({name: 'feedback_management',query:this.ID})
+            console.log(this.json)
+            this.$router.push({name: 'feedback_management',query:{json: this.json}})
+
           }
         }
       },

@@ -16,10 +16,10 @@
             <label>商户名称:</label><span>{{ tenantName }}</span>
           </div>
           <div class="navationTwo">
-            <label>服务到期日期:</label><span>{{ maturity }}</span>
+            <label>服务到期日期:</label><span>{{ maturity }} 剩余{{ remainingDays }}天</span>
           </div>
           <div class="navationTwo">
-            <label>华币数量:</label><span>{{ amount }}</span>
+            <label>华币数量:</label><span>剩余{{ amount }}个</span>
           </div>
           <div class="navationTwo">
             <label>负责人:</label><span>{{ principal }}</span>
@@ -59,14 +59,17 @@
         name: "accountInformation",
       data(){
           return {
-            tenantNumber: '15110484810',
-            tenantName: '小雪儿',
-            maturity: '2020年3月19日 剩余 2000天',
-            amount: '剩余3360个',
-            principal: '老赵',
+            tenantNumber: '',
+            tenantName: '',
+            maturity: '',
+            remainingDays: '',
+            amount: '',
+            principal: '',
             phone: '13934891494',
             BranchNumber: '19',
-            versions: '连锁版'
+            versions: '连锁版',
+            basicModule:[],
+            UpgradeModule: []
           }
       },
       methods: {
@@ -85,8 +88,17 @@
       mounted(){
           let data = {}
         tenantInfo(data).then( res => {
-
-        } )
+            this.tenantNumber = res.data.code
+            this.tenantName = res.data.tenantName
+            this.maturity = res.data.endDate
+            this.remainingDays = res.data.remainDay
+            this.amount = res.data.remainCoin
+            this.principal = res.data.salesMan
+            this.phone = res.data.mobile
+            this.BranchNumber = res.data.orgQty
+            // this.versions = res.data
+            this.basicModule = res.data
+        })
       }
     }
 </script>
