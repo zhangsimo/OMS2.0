@@ -12,15 +12,27 @@
     </Select>
     <Button type="warning" class="mr20" @click="queryTight"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
     <Button type="warning" class="mr20" @click="addNew">新增紧俏品</Button>
-    <Button type="default" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+<!--    <Button type="default" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>-->
     <Button type="default"  class="mr10 w90" @click="deleteTight"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
-    <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
+    <Upload
+      ref="upload"
+      style="display: inline-block"
+      :show-upload-list="false"
+      :action="upurl"
+      :headers="headers"
+      :format="['xlsx','xls']"
+      :on-format-error="onFormatError"
+      :on-success="onSuccess"
+      :before-upload ='beforeUpload'
+    >
+      <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
+    </Upload>
     <Button class="mr10">
       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
     </Button>
   </div>
   <div class="tableCenter">
-    <Table stripe  :columns="columns" :data="List" size="small"  :loading="Loading" border @on-selection-change="picthTight"></Table>
+    <Table stripe :columns="columns" :data="List" size="small"  :loading="Loading" border @on-selection-change="picthTight"></Table>
     <Page class="mr10" :total="page.total"
           :page-size="page.size"
           :current="page.num"
@@ -34,7 +46,7 @@
 
 <!--  新增紧俏品-->
   <Modal v-model="addCommodShow" title="新增紧俏品" width="1000">
-    <Fittings></Fittings>
+    <Fittings @getNewList="getListAget" @setShow="closeCommodShow"></Fittings>
     <div slot='footer'>
     </div>
   </Modal>
@@ -50,9 +62,12 @@
 </template>
 
 <script>
-  import {getTightProductList , getDeleteTight} from  '@/api/system/essentialData/commoditiesInShortSupply'
+  import {getTightProductList , getDeleteTight, getup} from  '@/api/system/essentialData/commoditiesInShortSupply.js'
   import * as api from "_api/system/partManager";
   import Fittings from './Fittings/Fittings.vue'
+  import Cookies from 'js-cookie'
+  import { TOKEN_KEY } from '@/libs/util'
+
 
   export default {
         name: "commoditiesInShortSupply",
@@ -61,13 +76,14 @@
       },
         data(){
             return {
+                headers:  {
+                    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+                },
                 columns:[
-                    {title:'选择',
+                    {
                      key:'',
+                        type: 'selection',
                      align:'center',
-                    render:(h ,params) =>{
-                      return  h('checkbox',{})
-                    },
                     },
                     {
                         title: '序号',
@@ -180,6 +196,7 @@
                         value:18},
                 ],
                 searchType:'',
+                upurl:getup,//批量导入地址
                 addCommodShow:false,
                 allAddCommodShow:false,
                 query:'',//搜索
@@ -223,8 +240,9 @@
               let res  = await getTightProductList(data)
               if(res.code == 0){
                   let arr = res.data.content
-                arr = arr.map( item => {
-                   return  item = {...item,...item.attributeVO}
+               arr =  arr.map( item => {
+                     item.codeId = item.id
+                  return    item = {...item,...item.attributeVO}
                   })
                   this.List = arr
                   this.page.total = res.data.totalElements
@@ -255,8 +273,18 @@
             },
             //删除
             deleteTight(){
-                getDeleteTight().then( res => {
-
+              if (this.pitchOn.length < 1){
+                  this.$message.error('至少选择一条信息')
+                  return false
+              }
+              let data = []
+                this.pitchOn.forEach( item => {
+                    data.push(item.codeId)
+                })
+                getDeleteTight(data).then( res => {
+                  if(res.code == 0){
+                      this.getList()
+                  }
                 })
             },
             //分页
@@ -273,6 +301,29 @@
             //新增紧俏品
             addNew(){
                 this.addCommodShow = true
+            },
+            //新增刷新
+            getListAget(){
+                this.getList()
+                this.addCommodShow = false
+            },
+            // 关闭新增
+            closeCommodShow(){
+                this.addCommodShow = false
+            },
+            //批量上传失败
+            onFormatError(file) {
+                // console.log(file)
+                this.$Message.error('只支持xls xlsx后缀的文件')
+            },
+            // 上传成功函数
+            onSuccess (response) {
+              this.$Message.success(response.data[0])
+
+            },
+            //上传之前清空
+            beforeUpload(){
+              this.$refs.upload.clearFiles()
             }
         }
     }
