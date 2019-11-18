@@ -4,10 +4,9 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询：</span>
-            <Button type="default" @click="search" class="mr10">已启用</Button>
-            <Button type="default" @click="search" class="mr10">已禁用</Button>
-            <Button type="default" @click="search" class="mr10">全部</Button>
+            <span>品牌名称：</span>
+            <Input class="w200 mr10" v-model="searchValue"></Input>
+            <Button @click="search" type="warning" class="mr10">查询</Button>
           </div>
         </div>
       </div>
@@ -17,27 +16,27 @@
         <div class="con-split brand-car-model" ref="paneLeft">
           <Split v-model="split1" min="400" max="500">
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
-              <div class="car-model-hd">
-                <!--<Button type="default" @click="brandBtnClick('add')" class="mr10"><Icon type="md-add" size="14" />新增品牌</Button>-->
-                <!--<Button :disabled="carBrandTabelClickData==''" type="default" @click="brandBtnClick('edit')" class="mr10"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改品牌</Button>-->
-                <Button :disabled="carBrandTabelClickData==''" type="default" @click="search" class="mr10"><i class="iconfont mr5 iconjinzhijinyongicon"></i>禁用品牌</Button>
-              </div>
+              <!--<div class="car-model-hd">-->
+                <!--&lt;!&ndash;<Button type="default" @click="brandBtnClick('add')" class="mr10"><Icon type="md-add" size="14" />新增品牌</Button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<Button :disabled="carBrandTabelClickData==''" type="default" @click="brandBtnClick('edit')" class="mr10"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改品牌</Button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<Button :disabled="carBrandTabelClickData==''" type="default" @click="search" class="mr10"><i class="iconfont mr5 iconjinzhijinyongicon"></i>禁用品牌</Button>&ndash;&gt;-->
+              <!--</div>-->
               <Table :loading="brandLoading" :height="heightWrap/2"  @on-current-change="carBrandTabelClick" size="small" highlight-row  border :stripe="true" :columns="carBrand" :data="tbdata"></Table>
               <div class="car-system">
                 <!--<div class="car-model-hd">-->
                   <!--<Button @click="systemBtnClick('add')" type="default" class="mr10"><Icon type="md-add" size="14" />新增车系</Button>-->
                   <!--<Button :disabled="carSystemTabelClickData==''" type="default" @click="systemBtnClick('edit')" class="mr10"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改车系</Button>-->
                 <!--</div>-->
-                <Table :height="heightWrap/2-51"  @on-current-change="carSystemTabelClick" size="small" highlight-row  border :stripe="true" :columns="carSystem" :data="tbdata"></Table>
+                <Table :loading="carSystemLoading" :height="heightWrap/2"  @on-current-change="carSystemTabelClick" size="small" highlight-row  border :stripe="true" :columns="carSystem" :data="carSystemData"></Table>
               </div>
             </div>
             <div slot="right" class="con-split-pane-right pl5">
-              <div class="car-model-hd">
-                <!--<Button type="default" @click="typeBtnClick('add')" class="mr10"><Icon type="md-add" size="14" />新增车型</Button>-->
-                <!--<Button :disabled="carTypeTabelClickData==''" type="default" @click="typeBtnClick('edit')" class="mr10"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改修改</Button>-->
-                <Button :disabled="carTypeTabelClickData==''" type="default" @click="search" class="mr10"><i class="iconfont mr5 iconjinzhijinyongicon"></i>禁用车型</Button>
-              </div>
-              <Table :loading="carModelLoading" :height="heightWrap-52"  @on-current-change="carTypeTabelClick" size="small" highlight-row  border :stripe="true" :columns="carModel" :data="carModeldata" :span-method="handleSpan"></Table>
+              <!--<div class="car-model-hd">-->
+                <!--&lt;!&ndash;<Button type="default" @click="typeBtnClick('add')" class="mr10"><Icon type="md-add" size="14" />新增车型</Button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<Button :disabled="carTypeTabelClickData==''" type="default" @click="typeBtnClick('edit')" class="mr10"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改修改</Button>&ndash;&gt;-->
+                <!--&lt;!&ndash;<Button :disabled="carTypeTabelClickData==''" type="default" @click="search" class="mr10"><i class="iconfont mr5 iconjinzhijinyongicon"></i>禁用车型</Button>&ndash;&gt;-->
+              <!--</div>-->
+              <Table :loading="carModelLoading" :height="heightWrap"  @on-current-change="carTypeTabelClick" size="small" highlight-row  border :stripe="true" :columns="carModel" :data="carModeldata" :span-method="handleSpan"></Table>
             </div>
           </Split>
         </div>
@@ -151,7 +150,9 @@
         split1:0.4,//左右模块分割
         heightWrap:0,//左侧可是区域高度
         brandLoading:false,
+        carSystemLoading:false,
         carModelLoading:false,
+        searchValue:'',
         //分页对象
         page:{
           size:10,
@@ -179,8 +180,10 @@
               {
                 title: '是否禁用',
                 align: 'center',
-                key: 'tenantCompanyName',
-                minWidth: 60
+                minWidth: 60,
+                render:(h,params) => {
+                  return h('span',params.row.disabled?'禁用':'启用')
+                }
               },
             ]
           },
@@ -200,14 +203,17 @@
               {
                 title: '名称',
                 align: 'center',
-                key: 'tenantCompanyName',
+                key: 'carLineName',
                 minWidth: 150
               },
               {
                 title: '是否禁用',
                 align: 'center',
-                key: 'tenantCompanyName',
-                minWidth: 60
+                key: 'isDisabled',
+                minWidth: 60,
+                render:(h,params) => {
+                  return h('span',params.row.disabled?'禁用':'启用')
+                }
               },
             ]
           },
@@ -228,12 +234,15 @@
                 title: '厂商',
                 align: 'center',
                 key: 'carBrandName',
-                minWidth: 80
+                minWidth: 80,
+                render:(h,params) => {
+                  return h('span',this.carBrandTabelClickData.nameCn)
+                }
               },
               {
                 title: '车系',
                 align: 'center',
-                key: 'tenantCompanyName',
+                key: 'carLineName',
                 minWidth: 80
               },
               {
@@ -246,7 +255,10 @@
                 title: '是否禁用',
                 align: 'center',
                 key: 'tenantCompanyName',
-                minWidth: 60
+                minWidth: 60,
+                render:(h,params) => {
+                  return h('span',params.row.disabled?'禁用':'启用')
+                }
               },
             ]
           },

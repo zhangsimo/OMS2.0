@@ -1,8 +1,13 @@
-import {getCarBrandAll,getCarModel} from "_api/system/systemSetting/Initialization";
+import {getCarBrandAll,getCarModel,getCarSeries} from "_api/system/systemSetting/Initialization";
 
 export const mixBrandCar = {
   data(){
     return {
+      page: {
+        num: 1,
+        size: 10,
+        total: 0
+      },
       //====品牌===
       carBrandObj:{
           carBrandLayer:false,//品牌弹层
@@ -45,6 +50,8 @@ export const mixBrandCar = {
           { required: true, message: '车系不能为空', trigger: 'blur'}
         ],
       },
+      //车系list数据
+      carSystemData:[],
 
       //====车型===
       carTypeObj:{
@@ -65,12 +72,14 @@ export const mixBrandCar = {
           { required: true, message: '品牌车型不能为空', trigger: 'blur'}
         ],
       },
+      //车型list数据
       carModeldata:[],
 
 
 
       //快速查询状态
       status:'',
+      arrlen:0
       //
 
 
@@ -83,10 +92,17 @@ export const mixBrandCar = {
     getList(){
       this.brandLoading = true
       let req = {}
-      req.status = this.status
+      let searchValue = this.searchValue.trim()
+      if(searchValue){
+        req.brandName = searchValue
+      }
+      req.page = 1;
+      req.pageSize = 40;
       getCarBrandAll(req).then(res => {
         this.brandLoading = false
-        this.tbdata = res.data.data.list||[]
+        if(res.code==0){
+          this.tbdata = res.data.content||[]
+        }
       })
     },
     //修改or新增品牌
@@ -126,15 +142,36 @@ export const mixBrandCar = {
     //点击品牌table选中数据
     carBrandTabelClick(v){
       this.carBrandTabelClickData = v;
-      this.carModelLoading = true
-      getCarModel({"nameEn":v.nameEn}).then(res => {
-        this.carModelLoading = false
-        this.carModeldata = res.data.data.list
+      this.carSystemLoading = true;
+      //获取车型
+      let req = {}
+      req.nameEn = v.nameEn
+      getCarSeries(req).then(res => {
+        this.carSystemLoading = false
+        this.carSystemData = res.data||[];
+        this.carModeldata = [];
       })
+
     },
     //点击车系table选中数据
     carSystemTabelClick(v){
       this.carSystemTabelClickData = v;
+      this.carModelLoading = true
+      let req = {}
+      req.carLineName = v.carLineName;
+      req.page = 1;
+      req.pageSize = 40;
+      getCarModel(req).then(res => {
+        this.carModelLoading = false
+        // this.carModeldata = res.data||[]
+        let arrData = res.data.content||[]
+        let arr2 = []
+        for(let k in arrData){
+          arr2.push(...arrData[k])
+        }
+        this.carModeldata = arr2
+        this.arrlen = this.carModeldata.length||0
+      })
     },
     //点击车型table选中数据
     carTypeTabelClick(v){
@@ -145,9 +182,32 @@ export const mixBrandCar = {
     },
     //合并单元格
     handleSpan ({ row, column, rowIndex, columnIndex }) {
-      if (rowIndex === 0 && columnIndex === 0) {
-        return [1, 2];
+      if (rowIndex === 0 && columnIndex === 2) {
+        return {
+          rowspan: this.arrlen,
+          colspan: 1
+        };
+      }else if(rowIndex === 0 && columnIndex === 1){
+        return {
+          rowspan: this.arrlen,
+          colspan: 1
+        };
+      }else if(rowIndex != 0 && columnIndex === 1){
+        return {
+          rowspan: 0,
+          colspan: 0
+        };
       }
-    }
+      else if (rowIndex != 0 && columnIndex === 2) {
+        return {
+          rowspan: 0,
+          colspan: 0
+        };
+      }
+    },
+    search(){
+      this.page.page
+      this.getList()
+    },
   }
 }

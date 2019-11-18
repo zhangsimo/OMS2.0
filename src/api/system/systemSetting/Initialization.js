@@ -265,3 +265,12 @@ export function getCarModel(data) {
     data:data
   })
 }
+
+//获取车系
+export function getCarSeries(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getCarSeries`,
+    method: 'post',
+    data:data
+  })
+}
