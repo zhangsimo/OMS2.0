@@ -1,0 +1,115 @@
+/*最大的盒子*/
+.bigbox2{
+  width: 100%;
+  height: 900px;
+  background: #ffffff;
+}
+/*头部*/
+.header{
+  width: 100%;
+  padding: 20px 20px 20px
+}
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icons {
+  padding-right: 5px;
+  font-size: 12px!important;
+}
+.boxnav{
+  padding: 0 20px;
+}
+.navone2{
+  height: auto;
+  border: 1px solid #e5e5e5;
+}
+.navone_one2{
+  height: 40px;
+  background: #f6f8f9;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+.navationTwo{
+  height: 40px;
+  border-bottom: 1px solid #e5e5e5;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+}
+.navationTwo > label{
+  width: 200px;
+}
+.boxBottom{
+  height: 50px;
+  display: flex;
+  align-items: center;
+  color: #666666;
+  padding-left: 40px;
+}
+
+/*充值记录*/
+.headerRecharge{
+  width: 100%;
+  height: 50px;
+  background-color: #fffaeb;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+}
+.boxContent{
+  margin: 20px 15px;
+  padding: 10px;
+  border: 1px solid #e5e5e5;
+}
+.label{
+  width: 75px;
+}
+.thisRow{
+  display: flex;
+  padding: 15px 15px;
+}
+.discountBox{
+  width: 214px;
+  height: 70px;
+  border-radius: 2px;
+  border: solid 1px #40a6ff;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5faff;
+  color: #40a6ff;
+}
+.item{
+  width: 800px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.weixuan{
+  background-color: #f5faff;
+  color: #40a6ff;
+}
+.xuan{
+  background-color: #40a6ff;
+  color: #ffffff;
+}
+.items{
+  margin: 6px;
+  position: relative;
+  cursor: pointer;
+}
+.zhekou {
+position: absolute;
+  top: 0;
+  left: 0;
+}
+.zhekou_img{
+  width: 24px;
+  height: 25px;
+}
+

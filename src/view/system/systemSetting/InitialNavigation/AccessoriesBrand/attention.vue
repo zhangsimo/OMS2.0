@@ -2,10 +2,11 @@
     <div class="pb20">
       <div class="db pb10 pl10 pr10">
         <Button class="mr10 w90" @click="Save"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-        <Button class="mr10 w90"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消</span></Button>
+        <Button class="mr10 w90" @click="handleSelectAll(false)"><span class="center"><Icon custom="iconfont iconshanchuicon icons" />取消</span></Button>
       </div>
       <div class="pl10 pr10 tableBox">
         <Table
+          ref="selection"
           border
           highlight-row
           size="small"
@@ -110,6 +111,10 @@
           }else{
             this.$emit('childrenMsg',this.selectionArr)
           }
+        },
+        //取消全选
+        handleSelectAll(status){
+          this.$refs.selection.selectAll(status);
         }
       },
       mounted(){

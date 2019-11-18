@@ -246,3 +246,22 @@ export function partBrandOrgDeleteAll(data) {
     data:data
   })
 }
+
+//*===========品牌车型==============*
+//获取所有车品牌
+export function getCarBrandAll(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getBrands`,
+    method: 'post',
+    data:data
+  })
+}
+
+//获取车型
+export function getCarModel(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getCarModel`,
+    method: 'post',
+    data:data
+  })
+}
