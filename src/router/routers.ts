@@ -1324,6 +1324,20 @@ export default [
               )
           },
           {
+            path: "/essentialData/ lineOfCredit",
+            name: "LineOfCredit",
+            // mark: '55',
+            meta: {
+              // hideInMenu: true,
+              icon: "arrow-graph-up-right",
+              title: " 信用额度调整查询"
+            },
+            component: () =>
+              import(
+                "@/view/system/essentialData/lineOfCredit/lineOfCredit.vue"
+                )
+          },
+          {
             path: "/essentialData/supplierManagement/",
             name: "supplierManagement",
             // mark: "56",
