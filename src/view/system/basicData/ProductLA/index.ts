@@ -1,6 +1,8 @@
 import { Vue, Component } from 'vue-property-decorator'
 // @ts-ignore
 import * as api from "_api/system/ProductLA.js";
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
 
 @Component
 export default class ProductLA extends Vue {
@@ -37,9 +39,9 @@ export default class ProductLA extends Vue {
     /**角色选项 */
     private roleOptions: Array<Option> = []
     /**角色选项选中的项 */
-    private roleSelectOption:string = ""
+    private roleSelectOption: string = ""
     /**员工表表头 */
-    private employeeTableHead:Array<Tableth> = [
+    private employeeTableHead: Array<Tableth> = [
         {
             title: "序号",
             minWidth: 50,
@@ -47,12 +49,20 @@ export default class ProductLA extends Vue {
         },
         {
             title: "分配状态",
-            key: "meterCompany",
-            minWidth: 120
+            minWidth: 120,
+            render: (h, params) => {
+                var val = '';
+                if (params.row.allocation == 0) {
+                    val = "已分配"
+                } else {
+                    val = "未分配"
+                }
+                return h('span', val);
+            }
         },
         {
             title: "角色",
-            key: "meterCompany",
+            key: "roleName",
             minWidth: 240
         },
         {
@@ -67,20 +77,22 @@ export default class ProductLA extends Vue {
         },
         {
             title: "备注",
-            key: "meterCompany",
+            key: "remark",
             minWidth: 240
         },
     ]
     /**员工表数据 */
     private employeeData = []
     /**员工表分页 */
-    employeePage: Page = {
+    private employeePage: Page = {
         num: 1,
         total: 0,
         size: 10
     }
     /**员工表加载状态 */
-    employeeLoading:boolean = false;
+    private employeeLoading: boolean = false;
+    /**选择的员工id */
+    private employeeId: string = '';
     /**待分配列表查询选项 */
     private waitPartTransListOptions: Array<Option> = [
         {
@@ -93,7 +105,7 @@ export default class ProductLA extends Vue {
         },
         {
             value: '2',
-            label: '编码尾号',
+            label: '车型',
         },
         {
             value: '3',
@@ -103,9 +115,9 @@ export default class ProductLA extends Vue {
     /**待分配列表选中的分配状态选项 */
     private waitPartTransListSelecteOption: string = ""
     /**待分配列表查询内容 */
-    private waitPartTransListContent:string = ""
+    private waitPartTransListContent: string = ""
     /**待分配列表表头 */
-    private waitPartListTableHead:Array<Tableth> = [
+    private waitPartListTableHead: Array<Tableth> = [
         {
             title: "序号",
             minWidth: 50,
@@ -117,80 +129,82 @@ export default class ProductLA extends Vue {
         },
         {
             title: "品质",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "qualityTypeName",
             minWidth: 180
         },
         {
             title: "品牌",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "partBrandName",
             minWidth: 120
         },
         {
             title: "编码",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "code",
             minWidth: 120
         },
         {
             title: "名称",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "name",
             minWidth: 100
         },
         {
             title: "全称",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "fullName",
             minWidth: 120
         },
         {
             title: "单位",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "unit",
             minWidth: 80
         },
         {
             title: "规格",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "spec",
             minWidth: 80
         },
         {
             title: "型号",
-            key: "meterCompany",
-            slot: "meterCompany",
+            key: "model",
             minWidth: 100
         },
     ]
     /**待分配列表数据 */
     private waitPartListData = []
     /**待分配列表分页 */
-    private waitPartListPage:Page = {
+    private waitPartListPage: Page = {
         num: 1,
         total: 0,
         size: 10
     }
     /**待分配列表加载状态 */
-    private waitPartListLoading:boolean = false;
+    private waitPartListLoading: boolean = false;
     /**已分配列表数据 */
     private distPartListData = []
     /**移入移出按钮是否可用 */
-    private buttonOnDisable:boolean = true;
-    private buttonOffDisable:boolean = true;
+    private buttonOnDisable: boolean = true;
+    private buttonOffDisable: boolean = true;
+    /**待分配查询按钮是否可用 */
+    private buttonWaitQuery: boolean = true;
+    private selectionWaitPartArr:Array<any> = [];
+    private selectionDistPartArr:Array<any> = [];
+    // 上传 请求头
+    private headers = {
+        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+    }
+    // 上传地址
+    private upurl:string = "";
 
     // mounted
     private async mounted() {
         const roles = await api.getRoles()
-        if(roles.code == 0) {
-            this.roleOptions = roles.data.content.map((el:any) => {
+        if (roles.code == 0) {
+            this.roleOptions = roles.data.content.map((el: any) => {
                 return {
                     label: el.displayName,
-                    value: el.id
+                    value: el.displayName
                 }
             })
-            this.roleOptions.unshift({label: "全部", value: '0'})
+            this.roleOptions.unshift({ label: "全部", value: '全部' })
         }
 
         this.getStaff();
@@ -200,17 +214,27 @@ export default class ProductLA extends Vue {
     //获取员工表
     private async getStaff() {
         this.employeeLoading = true;
-        let params:any = {}
+        let params: any = {}
         params.size = this.employeePage.size;
-        params.page = this.employeePage.num -1;
-        if(this.employeeSelecteOption == '0') {
+        params.page = this.employeePage.num - 1;
+        if (this.employeeSelecteOption == '0') {
             params.userName = this.employeeSelectContent.trim();
         }
-        if(this.employeeSelecteOption == '1') {
+        if (this.employeeSelecteOption == '1') {
             params.phone = this.employeeSelectContent.trim();
         }
+        if (this.DistributionStateSelecteOption != '0') {
+            if (this.DistributionStateSelecteOption == '1') {
+                params.allocation = 1;
+            } else {
+                params.allocation = 0;
+            }
+        }
+        if (this.roleSelectOption != "全部") {
+            params.roleName = this.roleSelectOption;
+        }
         let res = await api.getStaffList(params);
-        if(res.code == 0) {
+        if (res.code == 0) {
             this.employeeLoading = false;
             this.employeeData = res.data.content;
             this.employeePage.total = res.data.totalElements
@@ -233,13 +257,131 @@ export default class ProductLA extends Vue {
         this.employeePage.size = size;
         this.getStaff();
     }
+
+    // 选取员工列表
+    private currentRow(row: any) {
+        let id: string = row.id;
+        this.employeeId = id;
+        this.buttonWaitQuery = false;
+        this.getwaitEmps();
+        this.getEmps();
+    }
+
+    // 获取待分配列表
+    private async getwaitEmps() {
+        let params: any = { id: this.employeeId }
+        params.size = this.waitPartListPage.size;
+        params.page = this.waitPartListPage.num - 1;
+        switch (this.waitPartTransListSelecteOption) {
+            case "0":
+                params.queryCode = this.waitPartTransListContent;
+                break;
+            case "1":
+                params.fullName = this.waitPartTransListContent;
+                break;
+            case "2":
+                params.applyCarModel = this.waitPartTransListContent;
+                break;
+            case "3":
+                params.namePy = this.waitPartTransListContent;
+                break;
+            default:
+                break;
+        }
+        let res: any = await api.findByEmp(params);
+        if(res.code == 0) {
+            this.waitPartListData = res.data.content;
+            this.waitPartListPage.total = res.data.totalElements;
+        }
+    }
+
+    // 获取已分配列表
+    private async getEmps() {
+        let params: any = { empId: this.employeeId }
+        let res: any = await api.findAttByEmpId(params);
+        if(res.code == 0) {
+            this.distPartListData = res.data;
+        }
+    }
+
+    // 查询待分配列表
+    private queryWaitPart() {
+        this.getwaitEmps();
+    }
+
     //  翻页-待分配列表
     private waitPartListChangePage(p: number) {
-        this.employeePage.num = p;
+        this.waitPartListPage.num = p;
+        this.getwaitEmps();
     }
     // 修改每页显示条数-待分配列表
     private waitPartListChangeSize(size: number) {
-        this.employeePage.num = 1;
-        this.employeePage.size = size;
+        this.waitPartListPage.num = 1;
+        this.waitPartListPage.size = size;
+        this.getwaitEmps();
+    }
+
+    // 选择待选
+    private selectWaitPart(selection) {
+        this.selectionWaitPartArr = selection;
+    }
+
+    // 选择已分配
+    private selectDistPart(selection) {
+        this.selectionDistPartArr = selection;
+    }
+
+    // 移入
+    private async moveOn() {
+        if(this.selectionWaitPartArr.length <=0 ) {
+            return this.$Message.error('请选择配件')
+        }
+        let data:any = this.selectionWaitPartArr.map((el:any) => {
+            return {
+                attId: el.id,
+                empId: this.employeeId,
+            }
+        })
+        let res:any = await api.employeeAddPart(data);
+        if(res.code == 0) {
+            this.$Message.success('移入成功')
+        }
+        this.getwaitEmps();
+        this.getEmps();
+    }
+
+    // 移出
+    private async moveOff() {
+        if(this.selectionDistPartArr.length <=0 ) {
+            return this.$Message.error('请选择配件')
+        }
+        let data:any = this.selectionDistPartArr.map((el:any) => {
+            return {
+                id: el.empAttributeId,
+                attId: el.id,
+                empId: this.employeeId,
+            }
+        })
+        let res:any = await api.employeeDeletePart(data);
+        if(res.code == 0) {
+            this.$Message.success('移出成功')
+        }
+        this.getwaitEmps();
+        this.getEmps();
+    }
+
+    // 上传前
+    private handleBeforeUpload() {
+        let refs:any =  this.$refs;
+        refs.upload.clearFiles();
+    }
+    // 上传成功
+    private handleSuccess(res, file){
+        let self:any = this;
+        if(res.code == 0) {
+            self.$Message.success('导入成功');
+            this.getwaitEmps();
+            this.getEmps();
+        }
     }
 }

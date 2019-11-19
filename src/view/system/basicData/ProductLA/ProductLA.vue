@@ -50,9 +50,19 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10">
-              <span class="center"><Icon custom="iconfont icondaoruicon icons" />批量导入产品线分配关系</span>
-            </Button>
+            <Upload
+              ref="upload"
+              :show-upload-list="false"
+              :action="upurl"
+              :format="['xlsx','xls','csv']"
+              :headers="headers"
+              :before-upload="handleBeforeUpload"
+              :on-success="handleSuccess"
+            >
+              <Button class="mr10">
+                <span class="center"><Icon custom="iconfont icondaoruicon icons" />批量导入产品线分配关系</span>
+              </Button>
+            </Upload>
           </div>
           <div class="db">
             <Button class="mr10">
@@ -70,12 +80,14 @@
           <Table
             class="table"
             border
+            highlight-row
             size="small"
             :loading="employeeLoading"
             :stripe="true"
             :columns="employeeTableHead"
             :data="employeeData"
             height="160"
+            @on-current-change="currentRow"
           ></Table>
           <Page
             class-name="page-con"
@@ -115,7 +127,7 @@
                 />
               </div>
               <div class="db">
-                <Button class="mr10 w90" type="warning">
+                <Button class="mr10 w90" type="warning" @click="queryWaitPart" :disabled="buttonWaitQuery">
                   <span class="center">
                     <Icon custom="iconfont iconchaxunicon icons" />查询
                   </span>
@@ -131,6 +143,7 @@
               :columns="waitPartListTableHead"
               :data="waitPartListData"
               height="160"
+              @on-selection-change="selectWaitPart"
             ></Table>
             <Page
               class-name="page-con"
@@ -145,12 +158,12 @@
             ></Page>
           </div>
           <div class="trans-btn w110">
-            <Button class="ml10 w90" :disabled="buttonOnDisable">
+            <Button class="ml10 w90" @click="moveOn">
               <span class="center">
                 <Icon custom="iconfont iconziyuan14 icons" />移入
               </span>
             </Button>
-            <Button class="ml10 mt30 w90" :disabled="buttonOffDisable">
+            <Button class="ml10 mt30 w90" @click="moveOff">
               <span class="center">
                 <Icon custom="iconfont iconfanhuiicon icons" />移出
               </span>
@@ -166,6 +179,7 @@
               :columns="waitPartListTableHead"
               :data="distPartListData"
               height="280"
+              @on-selection-change="selectDistPart"
             ></Table>
           </div>
         </div>
