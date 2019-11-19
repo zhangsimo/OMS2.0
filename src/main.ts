@@ -41,6 +41,14 @@ Vue.prototype._ = _;
 Vue.prototype.hasPermission = (mark:any) => {
   return store.state.user.access.indexOf(mark) > -1
 }
+//全局过滤
+Vue.filter("priceFilters",function(value){
+  if(!value){
+    value = 0
+  }
+  value = parseFloat(value).toFixed(2);
+  return value;
+});
 
 // 自定义组件
 const requireComponents = require.context('_c/base', true, /\.vue/);
