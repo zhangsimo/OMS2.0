@@ -154,9 +154,9 @@ export default [
   },
   {
     path: "",
-    name: "salesManagement",
+    name: "orders",
     mark: "2",
-    redirect: "",
+    redirect: "/orders/directOrder",
     meta: {
       // hideInMenu: true,
       icon: "ios-paper",
@@ -165,45 +165,67 @@ export default [
     component: Main,
     children: [
       {
-        path: "/salesManagement/salesOrder",
-        name: "salesOrder",
+        path: "/orders/orderApprove",
+        name: "orderApprove",
         mark: "15",
         meta: {
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
           title: "销售订单"
         },
-        component: () => import("@/view/salesManagement/salesOrder/salesOrder.vue")
+        component: () => import("@/view/business/orders/orderApprove.vue")
       },
       {
-        path: "/salesManagement/sellReturn",
-        name: "sellReturn",
+        path: "/orders/orderLink",
+        name: "orderLink",
+        mark: "16",
+        meta: {
+          // hideInMenu: true,
+          icon: "arrow-graph-up-right",
+          title: "销售出库"
+          // activeName:'directOrder'
+        },
+        component: () => import("@/view/business/orders/orderLink.vue")
+      },
+      {
+        path: "/orders/directOrder",
+        name: "directOrder",
         mark: "17",
         meta: {
           icon: "arrow-graph-up-right",
           title: "销售退货"
         },
-        component: () => import("@/view/salesManagement/sellReturn/sellReturn.vue")
+        component: () => import("@/view/business/orders/directOrder.vue")
       },
       {
-        path: "/salesManagement/presell",
-        name: "presell",
-        // mark: "18",
+        path: "/orders/mallOrder",
+        name: "mallOrder",
+        mark: "18",
         meta: {
           icon: "arrow-graph-up-right",
           title: "预售单"
         },
-        component: () => import("@/view/salesManagement/presell/presell.vue")
+        component: () => import("@/view/business/orders/mallOrder.vue")
       },
       {
-        path: "/salesManagement/acceptance",
-        name: "acceptance",
+        path: "/orders/supplierOrder",
+        name: "supplierOrder",
         mark: "19",
         meta: {
           icon: "arrow-graph-up-right",
           title: "预售单受理"
         },
-        component: () => import("@/view/salesManagement/acceptance/acceptance.vue")
+        component: () => import("@/view/business/orders/supplierOrder.vue")
+      },
+      {
+        path: "/orders/storeOrder",
+        name: "storeOrder",
+        mark: "20",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "打包发货"
+        },
+        component: () => import("@/view/business/orders/storeOrder.vue")
       }
     ]
   },
@@ -1058,7 +1080,7 @@ export default [
               // hideInMenu: true,
               title: "结算账户"
             },
-            component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
+            // component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
           },
           {
             path: "/",
@@ -1274,15 +1296,15 @@ export default [
               import("@/view/system/basicData/priceManage/priceManage.vue")
           },
           {
-            path: "activityManage",
-            name: "activityManage",
+            path: "",
+            name: "",
             mark: "52",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: " 活动管理"
-            },
-            component: () => import("@/view/system/basicData/activityManage/activityManage.vue")
+            }
+            // component: () => import()
           },
           {
             path: "/essentialData/clientManagement",
@@ -1431,20 +1453,6 @@ export default [
           },
           {
             path:
-              "/systemSetting/InitialNavigation/inventory",
-            name: "inventory",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "期初库存"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/inventory/inventory.vue"
-              )
-          },
-          {
-            path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
             // mark: '59',
@@ -1501,21 +1509,6 @@ export default [
           },
           {
             path:
-              "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
-            name: "brandCarModel",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "品牌车型",
-              activeName: 'navigationFater'
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/brandCarModel/brandCar.vue"
-              )
-          },
-          {
-            path:
               "/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment",
             name: "receiptPayment",
             // mark: '59',
@@ -1554,7 +1547,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/storeManagement/storeManagement.vue"
-              )
+                )
           },
           {
             path:
@@ -1568,7 +1561,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/setWarehouse/setWarehouse.vue"
-              )
+                )
           },
           {
             path:
@@ -1582,7 +1575,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
-              )
+                )
           },
           {
             path: "/system/staff/management",
@@ -1598,7 +1591,7 @@ export default [
               )
           },
           {
-            path: "/system/partsExamine",
+            path:"/system/partsExamine",
             name: "partsExamine",
             // mark: '59',
             meta: {
@@ -1620,56 +1613,23 @@ export default [
         ]
       },
       {
-        path: "/system/systemSetting/accountInformation/accountInformation",
-        name: 'allotThree',
+        path: "",
+        name: "allotThree",
         meta: {
-          notCache: true,
-          title: "基本信息"
+          title: "账号"
         },
         component: parentView,
         children: [
           {
-            path: "/system/systemSetting/accountInformation/accountInformation",
-            name: "/accountInformation",
+            path: "/",
+            name: "",
+            mark: "63",
             meta: {
-              notCache: true,
+              // hideInMenu: true,
               title: "基本信息"
-            },
-            component: () => import("@/view/system/systemSetting/accountInformation/accountInformation.vue")
-          },
-          {
-            path: "/accountInformation/record",
-            name: "record",
-            // mark: '45',
-            meta: {
-              hideInMenu: true,
-              // icon: "gear-b",
-              title: "充值消费记录"
-            },
-            component: () => import("@/view/system/systemSetting/accountInformation/record/record.vue")
-          },
-          {
-            path: "/accountInformation/recharge",
-            name: "recharge",
-            // mark: '45',
-            meta: {
-              hideInMenu: true,
-              icon: "gear-b",
-              title: "华币充值"
-            },
-            component: () => import("@/view/system/systemSetting/accountInformation/recharge/recharge.vue")
-          },
-          {
-            path: "/accountInformation/ProductsBuy",
-            name: "ProductsBuy",
-            // mark: '45',
-            meta: {
-              hideInMenu: true,
-              icon: "gear-b",
-              title: "产品购买"
-            },
-            component: () => import("@/view/system/systemSetting/accountInformation/ProductsBuy/ProductsBuy.vue")
-          },
+            }
+            // component: () => import()
+          }
         ]
       }
     ]
