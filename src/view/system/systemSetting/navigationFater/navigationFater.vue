@@ -64,7 +64,7 @@
               this.$router.push()
               return
             case "初期库存":
-              this.$router.push()
+              this.$router.push({name: 'inventory'})
               return
             case "初期现金银行":
               this.$router.push()
