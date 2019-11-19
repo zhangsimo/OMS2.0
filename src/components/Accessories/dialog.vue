@@ -222,7 +222,7 @@ export default {
       rowMessage:null,
       //判断是否重复的数组
       norepeatArr:[],
-      TreeName: ''
+      TreeName : ''
     };
   },
   // 接受父组件的数据
@@ -254,6 +254,7 @@ export default {
     },
     // 查询
     query(){
+      this.TreeName = ''
       this.page.num = 1
       this.rightgetList()
     },
