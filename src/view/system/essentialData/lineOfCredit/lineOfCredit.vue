@@ -110,8 +110,8 @@
             }
         },
         methods: {
-          getvalue(data) {
-            this.Date = data
+          getvalue(date) {
+            this.Date = date
             window.console.log(data)
           },
           getDate(val) {
