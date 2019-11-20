@@ -85,7 +85,7 @@
             this.modal = true
             let dataa = {}
             dataa.price = this.payMoney
-            dataa.serviceId = '201911191752030001'
+            dataa.orderNo = '201911191752030001'
             generationQR(dataa).then(res => {
 
             })

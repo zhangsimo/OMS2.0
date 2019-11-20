@@ -2,53 +2,79 @@
   <div class="bigbox2">
     <div class="headerRecharge">
       <p class="mr10">到期日期:
-        <span style="font-weight: bold;padding: 0 5px;color: #40a6ff">{{ status }}</span>
-          (剩余: <span style="font-weight: bold;padding: 0 3px 0 5px;color:#ff6700">{{ remainingDays }}</span>天)</p>
+        <span style="font-weight: bold;padding: 0 5px;color: #40a6ff">{{ getMsg.expiryDate }}</span>
+          (剩余: <span style="font-weight: bold;padding: 0 3px 0 5px;color:#ff6700">{{ getMsg.remainDay }}</span>天)</p>
       <Button class="mr10" @click="record"><span class="center"><Icon custom="iconfont iconziyuan10 icons" />充值消费记录</span></Button>
     </div>
     <div class="boxContent">
       <div class="thisRow">
         <div class="label"><label>产品名称:</label></div>
-        <div class="skyblueClass">{{ productName }}</div>
+        <div class="skyblueClass">{{ getMsg.name }}</div>
       </div>
       <div class="thisRow">
         <div class="label"><label>充值天数:</label></div>
-        <div><span class="skyblueClass">{{ days }} </span>天</div>
+        <div><span class="skyblueClass">{{ getMsg.cycle }} </span>天</div>
       </div>
       <div class="thisRow">
         <div class="label"><label>产品描述:</label></div>
-        <div>{{ productDescription }}</div>
+        <div>{{ getMsg.remark }}</div>
       </div>
       <div class="thisRow">
         <div class="label"><label>支付金额:</label></div>
-        <div><span class="skyblueClass">{{ payMoney }}</span> 元</div>
+        <div><span class="skyblueClass">{{ getMsg.salesPrice }}</span> 元</div>
       </div>
       <div class="thisRow">
         <div class="label"><label></label></div>
-        <div><Button type="warning">确认购买</Button></div>
+        <div><Button type="warning" @click="pay">确认购买</Button></div>
       </div>
     </div>
+
+    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" >
+      <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{getMsg.salesPrice}}</span> 元</div>
+      <div class="modal"><img class="image" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574059290282&di=cfb384a5d560c01318477cbf828f4c72&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fc8807656f986d5352a7f9e6c436a50ea44e3b19c2396-QzGPTm_fw658" alt=""></div>
+      <div class="modal" style="color: #bbbbbb;padding-bottom: 50px">用微信扫此二维码（10分钟有效）</div>
+    </Modal>
 
   </div>
 </template>
 
 <script>
+  // tenantInfogenerateOrder
+  import { tenantInfogenerateOrder,generationQR } from '../../../../../api/system/account/account'
     export default {
         name: "ProductsBuy",
       data(){
           return {
-            status: '未够买',
-            remainingDays: 0,
-            productName: '微信平台',
-            days: 30,
-            productDescription: '针对微信开发的功能模块，实现明确客户需求，客户数据实时掌控，销售更精准、更明确、更高效！',
-            payMoney: 0.01
+            getMsg: '',
+            modal: false,
+            orderNum: ''
           }
       },
       methods: {
         record(){
           this.$router.push('/accountInformation/record')
+        },
+        pay(){
+          tenantInfogenerateOrder().then(res => {
+              if(res.code === 0 ){
+                 this.orderNum = res.data.orderNum
+              }
+          })
+          let data = {}
+          data.price = this.getMsg.salesPrice
+          data.orderNo = this.orderNum
+          generationQR(data).then(res => {
+
+          })
+          this.modal = true
         }
+      },
+      mounted(){
+        this.getMsg = this.$route.query
+      },
+      activated(){
+          this.getMsg = this.$route.query
+          console.log(this.getMsg)
       }
     }
 </script>
@@ -61,5 +87,15 @@
     color: #40a6ff;
     font-size: 16px;
     font-weight: bold;
+  }
+  .modal{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+  .image{
+    width: 160px;
+    height: 160px;
   }
 </style>

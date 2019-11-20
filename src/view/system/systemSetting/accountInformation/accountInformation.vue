@@ -16,10 +16,10 @@
             <label>商户名称:</label><span>{{ tenantName }}</span>
           </div>
           <div class="navationTwo">
-            <label>服务到期日期:</label><span>{{ maturity }} 剩余{{ remainingDays }}天</span>
+            <label>服务到期日期:</label><span>{{ maturity }} 剩余 <span style="color:#40a6ff;font-weight: bold;padding: 0 5px">{{ remainingDays }}</span>天</span>
           </div>
           <div class="navationTwo">
-            <label>华币数量:</label><span>剩余{{ amount }}个</span>
+            <label>华币数量:</label><span>剩余 <span style="color: #40a6ff;font-weight: bold;padding: 0 5px">{{ amount }}</span>个</span>
           </div>
           <div class="navationTwo">
             <label>负责人:</label><span>{{ principal }}</span>
@@ -50,7 +50,7 @@
             <label>升级模块</label>
             <span>
               <ul class="List">
-                 <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" :content="有效期至"><Button shape="circle" :type="[item.flag === 1? 'warning':'default']" class="colorWhite">{{ item.name }}</Button></Poptip></li>
+                 <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" :content="'有效期至:'+ item.expiryDate"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>
              </ul>
             </span>
           </div>
@@ -58,7 +58,6 @@
       </div>
       <div class="boxBottom">
         <span>注:灰色为未够买产品,点击即可购买!</span>
-        <Button typ="warning" @click="ProductsBuy">产品购买</Button>
       </div>
     </div>
 </template>
@@ -80,8 +79,8 @@
             versions: '',
             basicModule:[],
             UpgradeModule: [],
-            hslArray: []
-
+            hslArray: [],
+            sendMsg:{}
           }
       },
       methods: {
@@ -94,8 +93,16 @@
           this.$router.push('/accountInformation/record')
         },
         //购买产品
-        ProductsBuy(){
-          this.$router.push('/accountInformation/ProductsBuy')
+        ProductsBuy(item){
+          // console.log(item)
+          this.sendMsg = item
+          console.log(this.sendMsg)
+          if(item.flag !== 1){
+            this.$router.push({
+              path: '/accountInformation/ProductsBuy',
+              query: this.sendMsg
+            })
+          }
         },
         // //随机颜色
         // randomRgb(item) {
