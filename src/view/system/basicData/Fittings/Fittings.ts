@@ -266,22 +266,38 @@ export default class Fittings extends Vue {
     let data: Kv = {};
     params.page = this.local.page.num - 1;
     params.size = this.local.page.size;
+    // switch (this.queryValue) {
+    //   case "0":
+    //     data.queryCode = this.query;
+    //     break;
+    //   case "1":
+    //     data.fullName = this.query;
+    //     break;
+    //   case "2":
+    //     data.applyCarModel = this.query;
+    //     break;
+    //   case "3":
+    //     data.namePy = this.query;
+    //     break;
+    //   default:
+    //     break;
+    // }
     switch (this.queryValue) {
-      case "0":
-        data.queryCode = this.query;
-        break;
-      case "1":
-        data.fullName = this.query;
-        break;
-      case "2":
-        data.applyCarModel = this.query;
-        break;
-      case "3":
-        data.namePy = this.query;
-        break;
-      default:
-        break;
-    }
+        case "0":
+          data.partCode = this.query;
+          break;
+        case "1":
+          data.fullName = this.query;
+          break;
+        case "2":
+          data.applyCarModel = this.query;
+          break;
+        case "3":
+          data.keyWord = this.query;
+          break;
+        default:
+          break;
+      }
     if (this.band != "0") {
       data.partBrandId = this.band;
     }

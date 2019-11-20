@@ -49,6 +49,15 @@ export function getPartBrand(data = {}) {
   });
 }
 
+// wb品质/品牌查询
+export function getWbPartBrand(data = {}) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    method: "post",
+    data
+  });
+}
+
 // 启用
 export function toggleDis(id) {
   return axios.request({
