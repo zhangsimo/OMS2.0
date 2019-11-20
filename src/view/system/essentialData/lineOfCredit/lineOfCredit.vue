@@ -3,9 +3,9 @@
       <section class="Creditbox">
             <div class="db mr10">
               <span>快速查询：</span>
-              <quickDate @quickDate="getDate" class="mr10"></quickDate>
+              <quickDate @quickDate="getvalue" class="mr10"></quickDate>
               <span>开始日期：</span>
-              <DatePicker @on-change="getValue" type="daterange" placement="bottom-start" placeholder="选择日期"
+              <DatePicker @on-change="getDate" type="daterange" placement="bottom-start" placeholder="选择日期"
                           class="w200 mr20">
               </DatePicker>
               <Button type="warning" class="mr10 w90"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
@@ -19,6 +19,7 @@
 
 <script>
     import quickDate from '@/components/getDate/dateget'
+    import { getTableList } from '@/api/system/essentialData/lineOfCredit'
     export default {
         name: "lineOfCredit",
         components:{
@@ -37,87 +38,106 @@
                     {
                         title: '客户名称',
                         align: 'center',
-                        key: ''
+                        key: 'guestName'
                     },
                     {
                         title: '调整时间',
                         align: 'center',
-                        key: ''
+                        key: 'applyDate'
                     },
                     {
                         title: '调整人',
                         align: 'center',
-                        key: ''
+                        key: 'applyMan'
                     },
                     {
                         title: '调整时应付',
                         align: 'center',
-                        key: ''
+                        key: 'payableAmt'
                     },
                     {
                         title: '调整时应收',
                         align: 'center',
-                        key: ''
+                        key: 'receivableAmt'
                     },
                     {
                         title: '调整时应收应付合计',
                         align: 'center',
-                        key: '',
+                        key: 'sumAmt',
                         width: '125px'
                     },
                     {
                         title: '应收30天金额',
                         align: 'center',
-                        key: ''
+                        key: 'thirtyAmt'
                     },
                     {
                         title: '应收30-60天',
                         align: 'center',
-                        key: ''
+                        key: 'sixtyAmt'
                     },
                     {
                         title: '应收60天以上',
                         align: 'center',
-                        key: ''
+                        key: 'moreSixtyAmt'
                     },
                     {
                         title: '调整前临时额度',
                         align: 'center',
-                        key: ''
+                        key: 'beforeAdjustTempQuota'
                     },
                     {
                         title: '调整后临时额度',
                         align: 'center',
-                        key: ''
+                        key: 'tempQuotaTotal'
                     },
                     {
                         title: '临时额度开始时间',
                         align: 'center',
-                        key: ''
+                        key: 'tempStart'
                     },
                     {
                         title: '临时额度结束时间',
                         align: 'center',
-                        key: ''
+                        key: 'tempEnd'
                     },
                     {
                         title: '调整后剩余额度',
                         align: 'center',
-                        key: ''
-                    }
+                        key: 'afterAdjustQuota'
+                    },
                 ],
-                staffList: [],
-                Date: '',
+                staffList:[],
+                Date: {
+                  startTime: '',
+                  endTime: ''
+                }
             }
         },
+        created() {
+           this.getTable()
+        },
         methods: {
-          getDate(val) {
-            this.Date = val
-            console.log(val)
+          async getTable() {
+            let res = await getTableList()
+            this.staffList = res.data
+            // console.log(res)
+            // console.log(res.data)
           },
-          getValue(val) {
-            this.Date = val
-            console.log(val)
+          getvalue(date) {
+            this.Date.startTime = date[0]
+            this.Date.endTime = date[1]
+            this.getTable(Date)
+            console.log(this.staffList)
+            console.log(1)
+            console.log(date)
+          },
+          getDate(val) {
+            this.Date.startTime = val[0]
+            this.Date.startTime = val[1]
+            this.getTable(Date)
+            console.log(this.staffList)
+            console.log(2)
           }
         }
     }
