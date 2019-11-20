@@ -125,7 +125,7 @@
           getvalue(date) {
             this.Date.startTime = date[0]
             this.Date.endTime = date[1]
-            this.getTable(Date)
+            this.getTable(this.Date)
           },
           getDate(val) {
             this.Date.startTime = val[0] +  " " + "00:00:00"
