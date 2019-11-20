@@ -178,6 +178,7 @@ export default class ProductLA extends Vue {
     }
     /**待分配列表加载状态 */
     private waitPartListLoading: boolean = false;
+    private distPartLoading:boolean = false;
     /**已分配列表数据 */
     private distPartListData = []
     /**移入移出按钮是否可用 */
@@ -270,6 +271,7 @@ export default class ProductLA extends Vue {
     // 获取待分配列表
     private async getwaitEmps() {
         this.waitPartListData = [];
+        this.waitPartListLoading = true;
         let params: any = { id: this.employeeId }
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
@@ -291,6 +293,7 @@ export default class ProductLA extends Vue {
         }
         let res: any = await api.findByEmp(params);
         if(res.code == 0) {
+            this.waitPartListLoading = false;
             this.waitPartListData = res.data.content;
             this.waitPartListPage.total = res.data.totalElements;
         }
@@ -298,10 +301,12 @@ export default class ProductLA extends Vue {
 
     // 获取已分配列表
     private async getEmps() {
+        this.distPartLoading = true;
         this.distPartListData = [];
         let params: any = { empId: this.employeeId }
         let res: any = await api.findAttByEmpId(params);
         if(res.code == 0) {
+            this.distPartLoading = false;
             this.distPartListData = res.data;
         }
     }
@@ -345,6 +350,7 @@ export default class ProductLA extends Vue {
                 partBrandCode: el.partBrandCode,
             }
         })
+        this.selectionWaitPartArr = [];
         let res:any = await api.employeeAddPart(data);
         if(res.code == 0) {
             this.$Message.success('移入成功')
@@ -365,6 +371,7 @@ export default class ProductLA extends Vue {
                 empId: this.employeeId,
             }
         })
+        this.selectionDistPartArr = [];
         let res:any = await api.employeeDeletePart(data);
         if(res.code == 0) {
             this.$Message.success('移出成功')
