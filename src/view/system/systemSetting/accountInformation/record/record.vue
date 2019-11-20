@@ -5,7 +5,7 @@
           <div class="wlf">
             <div class="db mr10">
               <span>快速查询：</span>
-              <quickDate></quickDate>
+              <quickDate @quickDate="getData"></quickDate>
             </div>
             <div class="db flex">
               <span>开始日期：</span>
@@ -36,7 +36,8 @@
 
 <script>
   import quickDate from '../../../../../components/getDate/dateget'
-    export default {
+  import { findPageByDynamicQuery } from '../../../../../api/system/account/account'
+  export default {
         name: "record",
       components: { quickDate },
       data(){
@@ -46,23 +47,24 @@
               name: '全部'
             },
               {
-                value: 0,
+                value: 1,
                 name: '功能购买'
               },
               {
-                value: 1,
+                value: 2,
                 name: '充值华币'
               },
               {
-                value: 2,
+                value: 3,
                 name: '调用接口'
               },
               {
-                value: 3,
+                value: 4,
                 name: '赠送华币'
               }],
             productName: '',
             searchType2: 9999,
+            loading:true,
             columns: [
               {
                 title: '序号',
@@ -74,18 +76,18 @@
                 title: '产品名称',
                 align:'left',
                 minWidth: 100,
-                key:''
+                key:'productName'
               },
               {
                 title: '购买/调用结果',
                 align:'left',
-                key: '',
+                key: 'callStatus',
                 minWidth: 120
               },
               {
                 title: '支付金额',
                 align:'left',
-                key: '',
+                key: 'costPrice',
                 minWidth: 170
               },
               {
@@ -97,13 +99,13 @@
               {
                 title: '华币剩余数量',
                 align:'left',
-                key: 'cityName',
+                key: 'costCoin',
                 minWidth: 120
               },
               {
                 title: '时间',
                 align:'left',
-                key: 'status',
+                key: 'createTime',
                 minWidth: 120
               }
             ],
@@ -113,10 +115,16 @@
               size: 10,
               total: 0
             },
-            dateTime:[]
+            dateTime:[],
+            selectOne:null
           }
       },
       methods:{
+          //表格选中某行的数据
+        selection(a){
+            console.log(a)
+        },
+        //选中的日期
         selectDate(date){
           this.dateTime = date
           console.log(this.dateTime)
@@ -133,6 +141,46 @@
           this.page.size = size
           this.getList()
         },
+        //初始化
+        getList(){
+          let params = {}
+          params.page = this.page.num - 1
+          params.size = this.page.size
+          let data = {}
+          if(this.selectOne !== null || this.selectOne !== ''){
+            data.startTime = this.selectOne[0] + " 00:00:00"
+            data.endTime = this.selectOne[1] + " 23:59:59"
+          }
+          if(this.dateTime[0]){
+            data.startTime = this.dateTime[0] + " 00:00:00"
+            data.endTime = this.dateTime[1] + " 23:59:59"
+          }
+          if(this.searchType2 !== 9999){
+            data.type = this.searchType2
+          }
+          if(this.productName){
+            data.productName = this.productName
+          }
+          findPageByDynamicQuery({data:data,params:params}).then(res => {
+              if(res.code === 0){
+                this.loading = false
+                this.tbdata = res.data.content
+                this.page.total = res.data.totalElements
+              }
+          })
+        },
+        //从子组件拿来的数据
+        getData(A){
+          console.log(A)
+          this.selectOne = A
+        },
+        //搜索
+        search(){
+          this.getList()
+        }
+      },
+    mounted(){
+          this.getList()
       }
     }
 </script>

@@ -39,7 +39,10 @@
                         key: 'isGift',
                         render: (h, params) => {
                             return h('Checkbox', {
-                            props: {value: true}, 
+                            props: {
+                                value:params.row.isGift == 0 ? false : true,
+                                disabled: true
+                                }, 
                             on: {
                                 'on-change': (e) => {
                                 console.log(e)

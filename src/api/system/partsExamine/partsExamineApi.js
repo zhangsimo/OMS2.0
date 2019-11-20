@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取配件审核标定
 export function getExamineList(params) {
   return axios.request({
-    url: `${api.wmsApi}/attributeApproval/queryAll`,
+    url: `${api.wmsApi}/partApply/queryAll`,
     method: 'get',
     params
   })
@@ -13,7 +13,7 @@ export function getExamineList(params) {
 //获取配件审核标定
 export function getExamineDetail(params) {
   return axios.request({
-    url: `${api.wmsApi}/attributeApproval/findById`,
+    url: `${api.wmsApi}/partApply/findById`,
     method: 'get',
     params
   })

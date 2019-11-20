@@ -59,7 +59,7 @@
         </div>
 
 <!--      申请信用额度-->
-      <Modal v-model="CreditLineApplicationShow" title="申请信用额度" width="900">
+      <Modal v-model="CreditLineApplicationShow" title="申请信用额度" width="1100">
         <CreditLineApplication :data="creaditList"></CreditLineApplication>
         <div slot='footer'>
           <Button type='primary' >确定</Button>
