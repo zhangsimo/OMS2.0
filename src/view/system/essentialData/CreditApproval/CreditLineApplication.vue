@@ -1,4 +1,5 @@
 <template>
+  <div style="height: 475px;overflow: hidden;overflow-y: scroll">
     <Form :model="data" ref="form" :label-width="130" :ruls="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
@@ -96,6 +97,25 @@
         <Input  v-model='data.fullName' style="width: 650px"  disabled></Input>
       </FormItem>
     </Form>
+    <div>
+      <p class="title">近6个月及以上业绩情况</p>
+      <div class=boxheight>
+        <Table :columns="columns" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+      </div>
+    </div>
+    <div>
+      <p class="title">近6个月额度调整记录</p>
+      <div class=boxheight>
+        <Table :columns="columns2" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+      </div>
+    </div>
+    <div>
+      <p class="title">未清销售订单</p>
+      <div class=boxheight>
+        <Table :columns="columns3" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -117,7 +137,125 @@
                     fullName:[
                         {required: true, message: '申请额度说明必填', trigger: 'change'}
                     ]
-                }
+                },
+                columns:[
+                    {
+                        title:'期间',
+                        align: 'center',
+                        key:'tiem'
+                    },
+                    {
+                        title:'销售金额',
+                        align: 'center',
+                        key:'money'
+                    },
+                    {
+                        title:'已回款金额',
+                        align: 'center',
+                        key:'backmoney'
+                    },
+                    {
+                        title:'未回款金额',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'采购金额',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'已付款金额',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'未付款金额',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'往来净额',
+                        align: 'center',
+                        key:'allmoney'
+                    },
+                ],
+                columns2:[
+                    {
+                        title:'调整生效日',
+                        align: 'center',
+                        key:'tiem'
+                    },
+                    {
+                        title:'增加固定额度',
+                        align: 'center',
+                        key:'money'
+                    },
+                    {
+                        title:'增加临时额度',
+                        align: 'center',
+                        key:'backmoney'
+                    },
+                    {
+                        title:'增加后固定额度',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'增加后临时额度',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'临时额度开始日期',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'临时额度结束日期',
+                        align: 'center',
+                        key:'name'
+                    },
+                    {
+                        title:'申请原因',
+                        align: 'center',
+                        key:'allmoney'
+                    },
+                ],
+                columns3:[
+                  {
+                    type: 'index',
+                    width: 60,
+                    align: 'center',
+                    title: '序号'
+                  },
+                  {
+                    title:'订单号',
+                    align: 'center',
+                    key:'name'
+                  },
+                  {
+                    title:'订单日期',
+                    align: 'center',
+                    key:'money'
+                  },
+                  {
+                    title:'订单金额',
+                    align: 'center',
+                    key:'backmoney'
+                  },
+                ],
+                performance:[
+                    {tiem:2019-1,
+                    money:100,
+                    backmoney:200,
+                    allmoney:-233},
+                    {tiem:2019-1,
+                        money:200,
+                        backmoney:300,
+                        allmoney:433},
+
+                ]
             }
         },
         methods:{
@@ -133,12 +271,63 @@
                     }
                 })
             },
+            //6个月合并总价
+            handleSummary ({ columns, data }) {
+                const sums = {};
+                columns.forEach((column, index) => {
+                    const key = column.key;
+                    if (index === 0) {
+                        sums[key] = {
+                            key,
+                            value: '合计'
+                        };
+                        return;
+                    }
+                    const values = data.map(item => Number(item[key]));
+                    let v = ''
+                    data.forEach( item => {
+                        v += +item.allmoney
+                    })
+                    if (!values.every(value => isNaN(value))) {
+                        const v = values.reduce((prev, curr) => {
+                            const value = Number(curr);
+                            if (!isNaN(value)) {
+                                return prev + curr;
+                            } else {
+                                return prev;
+                            }
+                        }, 0);
+                        if (key == "allmoney") {
+                            sums[key] = {
+                                key,
+                                value: v + ' 元'
+                            }
+                        } else {
+                            sums[key] = {
+                                key,
+                                value: ''
+                            }
+                        }
+                    } else {
+                        sums[key] = {
+                            key,
+                            value: ''
+                        };
+                    }
+                });
+
+                return sums;
+            }
         }
 
 
     }
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+.title {
+  line-height: 30px;
+  border-bottom: 1px #e0e0e0 solid;
+  margin: 10px 0;
+}
 </style>

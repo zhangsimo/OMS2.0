@@ -20,7 +20,7 @@
         <span>审核日期：</span>
         <DatePicker @on-change="selectDate" type="daterange" placeholder="年/月/日 - 年/月/日" class="w200 mr10"></DatePicker>
         <Button type="warning" @click="search" class="mr10 w90"><Icon type="ios-search" size="14" /> 查询</Button>
-        <Button v-if="selectTable.approval==0" type="default" @click="approval" class="mr10 w90"><i class="iconfont mr5 iconshenheicon"></i>配件审核</Button>
+        <Button v-if="selectTable.auditSign==0" type="default" @click="approval" class="mr10 w90"><i class="iconfont mr5 iconshenheicon"></i>配件审核</Button>
       </div>
     </div>
     </div>
@@ -141,29 +141,6 @@
               <Col span="11">
                 <FormItem label="备注：" prop="remarks">
                   <Input v-model="formValidate.remarks"></Input>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="22">
-                <FormItem label="单位换算：" class="x11">
-                  <div class="flex">
-                    <div>
-                      <div class="unit-item w300" v-for="v in valueVOS">
-                        <Select class="w80" v-model="v.unit1">
-                          <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
-                        </Select>
-                        <Input class="w80" v-model="v.inputNum"></Input>
-                        <Select class="w80" v-model="v.unit2">
-                          <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
-                        </Select>
-                      </div>
-                    </div>
-                    <div>
-                      <Button class="ml30" @click="addValueVOS" type="default"><Icon type="md-add" size="14"/> 新增</Button>
-                      <Button class="ml10" @click="delValueVOS" type="primary"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
-                    </div>
-                  </div>
                 </FormItem>
               </Col>
             </Row>
@@ -469,7 +446,7 @@
             children:[
               {
                 title: '所属体系',
-                key: 'venderSkuNo',
+                key: 'tenantName',
                 minWidth: 70,
               },
               {
@@ -479,7 +456,7 @@
               },
               {
                 title: '配件编码',
-                key: 'brandCode',
+                key: 'code',
                 minWidth: 70,
               },
               {
@@ -489,32 +466,32 @@
               },
               {
                 title: '配件品质',
-                key: 'qualityTypeName',
+                key: 'qualityTypeId',
                 minWidth: 70,
               },
               {
                 title: '品牌车型',
-                key: 'applyCarModel',
+                key: 'carModelName',
                 minWidth: 70,
               },
               {
                 title: '配件类别一级',
-                key: 'carTypeIdFir',
+                key: 'carTypeF',
                 minWidth: 70,
               },
               {
                 title: '配件类别二级',
-                key: 'carTypeIdSen',
+                key: 'carTypeS',
                 minWidth: 70,
               },
               {
                 title: '配件类别三级',
-                key: 'carTypeIdThr',
+                key: 'carTypeT',
                 minWidth: 70,
               },
               {
                 title: '单位',
-                key: 'unit',
+                key: 'unitId',
                 minWidth: 70,
               },
               {
@@ -527,7 +504,7 @@
                 key: 'approval',
                 minWidth: 70,
                 render:(h,params) => {
-                  let approval = params.row.approval||0
+                  let approval = params.row.auditSign||0
                   let className = ''
                   let apptxt = '待审批'
                   if(approval==1){
@@ -561,12 +538,12 @@
               },
               {
                 title: '审核人',
-                key: 'updateUname',
+                key: 'auditor',
                 minWidth: 70,
               },
               {
                 title: '审核日期',
-                key: 'approvalTime',
+                key: 'auditDate',
                 minWidth: 70,
               },
             ]
@@ -694,16 +671,19 @@
       //初始化
       getList() {
         const params = {}
+        //快速查询输入条件
         let searchValue = this.searchValue.trim()
         if(searchValue){
           params[this.purchaseType]= searchValue
         }
+        //审核日期
         if (this.dateTime[0]) {
           params.startTime = this.dateTime[0] + " 00:00:00"
           params.endTime = this.dateTime[1] + " 23:59:59"
         }
+        //配件审核状态
         if (this.approvalType!=9999) {
-          params.approval = this.approvalType
+          //params.approval = this.approvalType
         }
 
         params.page = this.page.num - 1
@@ -774,11 +754,12 @@
 
       //表格单选选中
       selectTabelData(v){
+        console.log(v)
         this.selectTable = v
       },
       //新增单位换算列表
       addValueVOS(){
-        let objItem = Object.assign({},this.valueVo)
+        let objItem = {...this.valueVo}
         this.valueVOS.push(objItem)
       },
       //删除单位换算列表
@@ -808,7 +789,7 @@
       },
       //新增规格
       addSpec(){
-        let objData = Object.assign({},this.newSpecObj)
+        let objData = {...this.newSpecObj}
         this.formValidate.specVOList.push(objData)
       },
       delSpec(){

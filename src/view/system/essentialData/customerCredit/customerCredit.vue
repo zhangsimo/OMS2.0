@@ -17,7 +17,7 @@
                申请信用额度
               </span>
         </Button>
-        <Button class=" mr10">
+        <Button class=" mr10" @click="opensurveyShow">
               <span class="center">
                申请信用调查
               </span>
@@ -27,7 +27,7 @@
                修改信用调查
               </span>
         </Button>
-        <Button class=" mr10">
+        <Button class=" mr10" @click="openAdjustment">
               <span class="center">
                额度调整
               </span>
@@ -45,13 +45,13 @@
         <div class="creditTitle">
 
             <Row :gutter="10">
-              <Col span="12">
+              <Col span="12" style="padding-top: 10px">
                 <div style="margin-bottom: 10px">客户信用额度记录表</div>
-                <Table :columns="columns1" border stripe size="small" ></Table>
+                <Table :columns="columns1" border stripe size="small" height="200" ></Table>
               </Col>
-              <Col span="12">
+              <Col span="12"  style="padding-top: 10px">
                 <div style="margin-bottom: 10px">客户信用额度记录表</div>
-                <Table :columns="columns2" border stripe size="small" ></Table>
+                <Table :columns="columns2" border stripe size="small" height="200" ></Table>
               </Col>
             </Row>
 
@@ -303,8 +303,17 @@
         methods:{
             selectNum(){},
             selectPage(){},
+            //申请信用额度
             addLimit(){
                 this.CreditLineApplicationShow = true
+            },
+            //申请信用调查
+            opensurveyShow(){
+                this.surveyShow = true
+            },
+            //额度调用
+            openAdjustment(){
+                this.adjustment = true
             }
         }
     }

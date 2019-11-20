@@ -4,7 +4,7 @@ import api from "_conf/url";
 // 活动申请信息页面获取数据接口
 export function getActApplicationTable() {
   return axios.request({
-    url: `${api.omsApi}/activity/findAll`,
+    url: `${api.wmsApi}/activity/findAll`,
     method: "get"
   });
 }
@@ -12,7 +12,7 @@ export function getActApplicationTable() {
 // 根据条件查询申请信息
 export function getSelectActApply(params) {
   return axios.request({
-    url: `${api.omsApi}/activity/findAll`,
+    url: `${api.wmsApi}/activity/findAll`,
     method: "get",
     params
   });
@@ -20,7 +20,7 @@ export function getSelectActApply(params) {
 // 活动申请页面第二个表格数据接口
 export function getActApplyTable(params) {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/queryAll`,
+    url: `${api.wmsApi}/activityDetail/queryAll`,
     method: "get",
     params
   });
@@ -29,7 +29,7 @@ export function getActApplyTable(params) {
 // 活动信息页面获取数据接口
 export function getActivityIfo() {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/queryAll`,
+    url: `${api.wmsApi}/activityDetail/queryAll`,
     method: "get"
   });
 }
@@ -37,7 +37,7 @@ export function getActivityIfo() {
 // 过期活动信息页面获取数据接口
 export function getExpiredActTable() {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/findAll`,
+    url: `${api.wmsApi}/activityDetail/findAll`,
     method: "get"
   });
 }
@@ -45,7 +45,7 @@ export function getExpiredActTable() {
 // 根据条件查询活动信息接口
 export function getActivityList(params) {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/queryAll`,
+    url: `${api.wmsApi}/activityDetail/queryAll`,
     method: "get",
     params
   });
@@ -54,7 +54,7 @@ export function getActivityList(params) {
 // 根据条件查询过期活动信息接口
 export function getExpiredActivityList(params) {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/findAll`,
+    url: `${api.wmsApi}/activityDetail/findAll`,
     method: "get",
     params
   });
@@ -62,7 +62,7 @@ export function getExpiredActivityList(params) {
 // 取消活动申请接口
 export function cancelActApply(data) {
   return axios.request({
-    url: `${api.omsApi}/activity/cancelActivity`,
+    url: `${api.wmsApi}/activity/cancelActivity`,
     method: "post",
     data
   });
@@ -70,7 +70,7 @@ export function cancelActApply(data) {
 // 编辑并提交接口
 export function editAndSubmit(params) {
   return axios.request({
-    url: `${api.omsApi}/activityDetail/findByApplyId`,
+    url: `${api.wmsApi}/activityDetail/findByApplyId`,
     method: "get",
     params
   });
@@ -80,18 +80,18 @@ export function editAndSubmit(params) {
 export function cancelAct(data) {
   console.log(data)
   return axios.request({
-    url: `${api.omsApi}/activityDetail/cancelActivity`,
+    url: `${api.wmsApi}/activityDetail/cancelActivity`,
     method: "post",
     data
   });
 }
 // 活动导入接口
-export const upxlxs = `${api.omsApi}/activity/importExcel`;
+export const upxlxs = `${api.wmsApi}/activity/importExcel`;
 
 // 导入活动保存草稿接口
 export function saveDraft(data) {
   return axios.request({
-    url: `${api.omsApi}/activity/save`,
+    url: `${api.wmsApi}/activity/save`,
     method: "post",
     data
   });
@@ -99,7 +99,7 @@ export function saveDraft(data) {
 // 导入活动并提交接口
 export function saveSubmit(data) {
   return axios.request({
-    url: `${api.omsApi}/activity/saveActivity`,
+    url: `${api.wmsApi}/activity/saveActivity`,
     method: "post",
     data
   });
@@ -108,8 +108,17 @@ export function saveSubmit(data) {
 // 审核活动申请接口
 export function auditActivity(data) {
   return axios.request({
-    url: `${api.omsApi}/activity/auditActivity`,
+    url: `${api.wmsApi}/activity/auditActivity`,
     method: "post",
     data
+  });
+}
+
+// 指定公司接口
+export function selectCompany(params) {
+  return axios.request({
+    url: `${api.passportApi}/group/findRootByPid`,
+    method: "get",
+    params
   });
 }

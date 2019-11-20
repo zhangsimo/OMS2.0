@@ -318,8 +318,11 @@
             },
             // 上传成功函数
             onSuccess (response) {
-              this.$Message.success(response.data[0])
-
+              if(response.code != 0 ){
+                  this.$Message.success(response.message)
+              }else {
+                  this.$Message.success(response.message)
+              }
             },
             //上传之前清空
             beforeUpload(){

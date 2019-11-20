@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div class="actManage">
     <!-- 活动申请信息头部 -->
     <section class="oper-box">
       <div class="oper-top flex" v-if="tabValue === 'name1'">
         <div class="wlf">
           <div class="db mr10">
             <span>申请状态：</span>
-            <Select class="w100 mr10">
-              <Option v-for="item in list" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <Select class="w100 mr10" v-model="getDataObj.state" clearable>
+              <Option v-for="item in applyStatusOption" :value="item.value" :key="item.value">{{item.label}}</Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -33,15 +33,16 @@
             <Button type="warning" class="mr10 w90" @click="selectActApply">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
-            <Button type="warning" class="mr10 w90" @click="showApplication">申请活动</Button>
+            <Button type="warning" class="mr10 w90" @click="showApplication('apply')">申请活动</Button>
             <Button @click="cancelApply" type="warning" class="mr10 w90">取消申请</Button>
             <Button
               type="warning"
               class="mr10"
-              @click="showApplication"
-              :style="style1"
+              @click="showApplication('edit')"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
             >编辑/重新提交</Button>
-            <Button :style="style" type="warning" class="mr10 w90" @click="showReview">审核</Button>
+            <Button type="warning" class="mr10 w90" @click="showReview" 
+              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'">审核</Button>
           </div>
         </div>
       </div>
@@ -53,21 +54,25 @@
         <div class="wlf">
           <div class="db mr">
             <span>指定公司：</span>
-            <Select class="w100 mr10" @on-change="onSelectChange">
-              <Option v-for="item in list" :value="item.value" :key="item.value">{{item.value}}</Option>
+            <Select class="w100 mr10" v-model="getDataObj.orgname" clearable>
+              <Option v-for="item in companyListOptions" :value="item.name? item.name: '未知'" :key="item.id">{{item.name}}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>活动时间：</span>
             <Date-picker
+              :value="startTime"
               @on-change="getBeginDate"
-              class="w200 mr20"
+              :options='startTimeOption'
+              class="w200 mr10"
               type="date"
               placeholder="选择开始日期"
             ></Date-picker>
             <Date-picker
               @on-change="getEndDate"
-              class="w200 mr20"
+              :value="endTime"
+              :options='endTimeOption'
+              class="w200"
               type="date"
               placeholder="选择结束日期"
             ></Date-picker>
@@ -93,6 +98,8 @@
           <div class="db mr10">
             <span>活动时间：</span>
             <Date-picker
+              :value="startTime"
+              :options='startTimeOption'
               @on-change="getBeginDate"
               class="w200 mr20"
               type="date"
@@ -100,6 +107,8 @@
             ></Date-picker>
             <Date-picker
               @on-change="getEndDate"
+              :options='endTimeOption'
+              :value="endTime"
               class="w200 mr20"
               type="date"
               placeholder="选择结束日期"
@@ -124,25 +133,31 @@
             :summary-method="handleSummary"
             highlight-row
             :columns="columns1"
-            height="367px"
             border
             :data="data1"
+            max-height="290"
           ></Table>
-          <Table show-summary :summary-method="handleSummary" :columns="columns4" :data="data4" border></Table>
+          <Table show-summary :summary-method="handleSummary" :columns="columns4" :data="data4" border max-height="290"></Table>
         </TabPane>
         <TabPane label="活动信息" name="name2">
-          <Table show-summary :summary-method="handleSummary" @on-row-click="onRowClick2" highlight-row :data="data2" :columns="columns2" border></Table>
+          <Table max-height="600" show-summary :summary-method="handleSummary" @on-row-click="onRowClick2" highlight-row :data="data2" :columns="columns2" border></Table>
         </TabPane>
         <TabPane label="过期活动" name="name3">
-          <Table show-summary :summary-method="handleSummary" :columns="columns3" :data="data3" border></Table>
+          <Table max-height="630" show-summary :summary-method="handleSummary" :columns="columns3" :data="data3" border></Table>
         </TabPane>
       </Tabs>
     </section>
 
     <!-- 申请活动弹框 -->
-    <Modal width="900" v-model="applicationDialog" title="申请活动" :mask-closable="false">
+    <Modal 
+      width="900" 
+      v-model="applicationDialog" 
+      title="申请活动" 
+      :mask-closable="false"
+      @on-cancel="closeDialog">
       <div>
-        <div class="header-box clearfix mb20">
+        <div style="height:150px; padding-top: 30px">
+          <div class="header-box clearfix mb20">
           <span>
             是否厂家提供
             <Checkbox v-model="single"></Checkbox>
@@ -153,7 +168,7 @@
           </span>
         </div>
         <div class="mb20" style="width: 300px">
-          <Form ref="formValidate" :rules="textRules" :label-width="50">
+          <Form ref="formValidate" :rules="textRules" :label-width="50" :model="formValidate">
             <FormItem label="备注" prop="remark">
               <Input
                 v-model="formValidate.remark"
@@ -163,11 +178,13 @@
             </FormItem>
           </Form>
         </div>
+      </div>
         <hr />
         <div class="place mt10">
           <Upload
             ref='upload'
-            :action="upurl" 
+            :action="upurl"
+            :show-upload-list="false"
             :format="['xlsx','xls']"
             :on-format-error="onFormatError"
             :headers="headers"
@@ -181,95 +198,16 @@
         </div>
         <div>
           <!-- 弹窗表格部分 -->
-          <Table highlight-row size="small" border :stripe="true" :columns="columns5" :data="data5" height="200" @on-row-click="onRowClick3"></Table>
+          <Table highlight-row border :columns="columns5" :data="data5" height="300" @on-row-click="onRowClick3"></Table>
         </div>
-      </div>
-      <div>
-        <Page
-          class-name="page-con"
-          :current="page.numb"
-          :total="page.total"
-          :page-size="page.size"
-          @on-change="changePage"
-          @on-page-size-change="changeSize"
-          show-sizer
-          show-total
-          show-elevator
-          class="mr10"
-        ></Page>
       </div>
       <div slot="footer">
         <Button type="primary" @click="saveActApplly">保存</Button>
         <Button type="primary" @click="saveAndSubmit">保存并提交</Button>
-        <Button type="default" @click="applicationDialog = false">取消</Button>
+        <Button type="default" @click="closeDialog">取消</Button>
       </div>
     </Modal>
 
-    <!-- 编辑并提交弹框 -->
-       <Modal width="900" v-model="applicationDialog" title="申请活动" :mask-closable="false">
-      <div>
-        <div class="header-box clearfix mb20">
-          <span>
-            是否厂家提供
-            <Checkbox v-model="single"></Checkbox>
-          </span>
-          <span>
-            是否低于成本
-            <Checkbox v-model="single2"></Checkbox>
-          </span>
-        </div>
-        <div class="mb20" style="width: 300px">
-          <Form ref="formValidate" :rules="textRules" :label-width="50">
-            <FormItem label="备注" prop="remark">
-              <Input
-                v-model="formValidate.remark"
-                type="textarea"
-                :autosize="{minRows: 2,maxRows: 5}"
-              ></Input>
-            </FormItem>
-          </Form>
-        </div>
-        <hr />
-        <div class="place mt10">
-          <Upload
-            ref='upload'
-            :action="upurl" 
-            :format="['xlsx','xls']"
-            :on-format-error="onFormatError"
-            :headers="headers"
-            :before-upload="handleBeforeUpload"
-            :on-success="onSuccess"
-            style="display: inline-block">
-            <Button type="primary" class="w90 mr10">活动导入</Button>
-          </Upload>
-          <Button type="default" class="w90 mr10" @click="deleteDate5">删除</Button>
-          <Button type="default" class="w90 mr10">下载模板</Button>
-        </div>
-        <div>
-          <!-- 弹窗表格部分 -->
-          <Table highlight-row size="small" border :stripe="true" :columns="columns5" :data="data6" height="200" @on-row-click="onRowClick3"></Table>
-        </div>
-      </div>
-      <div>
-        <Page
-          class-name="page-con"
-          :current="page.numb"
-          :total="page.total"
-          :page-size="page.size"
-          @on-change="changePage"
-          @on-page-size-change="changeSize"
-          show-sizer
-          show-total
-          show-elevator
-          class="mr10"
-        ></Page>
-      </div>
-      <div slot="footer">
-        <Button type="primary" @click="saveActApplly">保存</Button>
-        <Button type="primary" @click="saveAndSubmit">保存并提交</Button>
-        <Button type="default" @click="applicationDialog = false">取消</Button>
-      </div>
-    </Modal>
     <!-- 审核弹出框 -->
     <Modal v-model="reViewDialog" title="审核" :mask-closable="false">
       <div style="text-align: center; height: 200px">
@@ -279,7 +217,7 @@
         </RadioGroup>
       </div>
       <div slot="footer">
-        <Button type="primary" @click="reViewDialog = false">确定</Button>
+        <Button type="primary" @click="reViewAct">确定</Button>
         <Button type="default" @click="reViewDialog = false">取消</Button>
       </div>
     </Modal>
@@ -302,7 +240,9 @@ import {
   getSelectActApply,
   saveDraft,
   saveSubmit,
-  editAndSubmit
+  editAndSubmit,
+  selectCompany,
+  auditActivity
 } from "../../../../api/system/activityManage.js";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
@@ -313,49 +253,37 @@ export default {
   name: "activityManage",
   data() {
     return {
-      list: [
+      applyStatusOption: [
         {
-          value: 1,
+          value: '草稿',
           label: "草稿"
         },
         {
-          value: 2,
+          value: '待审核',
           label: "待审核"
         },
         {
-          value: 3,
+          value: '已通过',
           label: "已通过"
         },
         {
-          value: 4,
+          value: '不通过',
           label: "不通过"
         },
         {
-          value: 5,
+          value: '已取消',
           label: "已取消"
         }
       ],
-      radioCheck:{
-      },
+      radioCheck: '',
       startTime: '',
       endTime: '',
       startTimeOption:{},
       endTimeOption:{},
-      style: 'display: none',
-      style1: 'display: none',
       tabValue: "name1",
-      page: {
-        total: 0,
-        size: 10,
-        numb: 1
-      },
-      editDialogDate:{
-        isBelowCost: '',
-        isVender: ''
-      },
       reViewDialog: false,
       editDialog: false,
-      // 活动申请信息数据
+      // 详细活动信息/编辑并提交数据回显需要的参数
       tableFormDate:{
         id: '',
         applyId: '',
@@ -432,7 +360,9 @@ export default {
         beginDate: "",
         endDate: "",
         orgname: "",
-        partName: ""
+        partName: "",
+        state: '',
+        id: ''
       },
       columns2: [
         {
@@ -531,6 +461,8 @@ export default {
         }
       ],
       data2:[],
+      // 公司列表信息
+      companyListOptions:[],
       checkedData2:[],
       actIfoTableData:{
         id: ''
@@ -749,12 +681,14 @@ export default {
         remark: "",
       },
       textRules: {
-        remark: [{ required: true, message: "不能为空", trigger: "blur" }]
+        remark: [
+          { required: true, message: '不能为空', trigger: 'blur' },
+        ]
       },
       upurl: upxlxs,
       headers: headers,
       applicationDialog: false,
-      applyEdit: false,
+      applyEditDialog: false,
 
       columns5: [
         {
@@ -809,15 +743,13 @@ export default {
       data6:[]
     };
   },
-  created () {
+  mounted () {
+    this.companyIfo()
     this.getActApplicationForm()
-    this.getActTable()
-    this.getExpiredTable()
   },
   methods: {
     // 活动申请页面
     getActApplicationForm () {
-      // console.log('发请求了')
       getActApplicationTable().then(res => {
         // console.log(res)
         if (res.code === 0) {
@@ -828,7 +760,8 @@ export default {
     // 根据条件查询活动申请
     selectActApply () {
       getSelectActApply(this.getDataObj).then(res => {
-          this.data1 = res.data
+        this.data1 = res.data
+        this.data4 = []
       })
     },
     // 活动信息页面
@@ -840,6 +773,48 @@ export default {
         }
       })
     },
+    newArr (arr) {
+      // console.log(arr)
+      return arr.reduce((pre,cur) => {
+        // console.log(pre, cur)
+        let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
+        return pre.concat( flag? this.newArr(cur.childs): cur)
+      },[])
+    },
+    toList (arr) {
+        // console.log(arr)v
+        return arr.reduce((ret, v) => {
+            // console.log(ret, v)
+            let item = this.deepClone(v)
+            delete item.childs
+            this.companyListOptions.push(item)
+            let flag = Array.isArray(v.childs) && v.childs.length > 0
+            return ret.concat(flag ? this.toList(v.childs) : v)
+        }, [])
+    },
+    deepClone (obj) {
+      let ret
+      ret = JSON.stringify(obj)
+      ret = JSON.parse(ret)
+      return ret
+    },
+    // 公司店面信息查询
+    companyIfo () {
+      let user = this.$store.state.user.userData
+      // console.log(user.tenantId)
+      selectCompany({pId: user.tenantId}).then(res=> {
+        // console.log(res)
+        if (res.code === 0) {
+          let data = res.data
+          let item = this.deepClone(data)
+          delete item.childs
+          // console.log(item)
+          this.companyListOptions.push(item)
+          this.toList(data.childs)
+          // console.log(this.companyListOptions)
+        }
+      })
+    },
     // 过期活动页面
     getExpiredTable () {
       getExpiredActTable().then(res => {
@@ -847,20 +822,19 @@ export default {
         this.data3 = res.data
       })
     },
-    // 活动信息查询
+    // 根据条件查询活动信息
     getActivity() {
       getActivityList(this.getDataObj).then(res => {
         // console.log(res);
         this.data2 = res.data;
       });
     },
-    
     // 获取活动信息开始日期
     getBeginDate(startTime) {
       // console.log(startTime);
       this.endTimeOption = {
         disabledDate(endTime) {
-            return endTime < new Date(startTime)
+          return endTime < new Date(startTime)
         }
       }
       this.getDataObj.beginDate = startTime;
@@ -875,10 +849,6 @@ export default {
       }
       this.getDataObj.endDate = endTime;
     },
-    // 获取活动信息指定公司
-    onSelectChange (v) {
-      console.log(v)
-    },
     // 过期活动查询
     getExpiredActivityIfo () {
       getExpiredActivityList(this.getDataObj).then(res => {
@@ -891,43 +861,40 @@ export default {
       this.expiredDateForm.beginDate = item1[0];
       this.expiredDateForm.endDate = item1[1];
     },
-    // 单击表格数据
+    // 单击活动申请信息表格数据
     onRowClick (rowValue1) {
-      // 活动申请页面第二个表格数据
-      console.log(rowValue1)
-      this.tableFormDate.id = rowValue1.id
-      this.tableFormDate.applyId = rowValue1.applyId
-      this.tableFormDate.state = rowValue1.state
-      this.editDialogDate.isBelowCost = rowValue1.isBelowCost
-      this.editDialogDate.isVender = rowValue1.isVender
+      // console.log(rowValue1)
       this.checkedData = [rowValue1]
-      getActApplyTable(this.tableFormDate).then(res => {
+      let item = this.checkedData[0]
+      this.tableFormDate.id = item.id
+      this.tableFormDate.applyId = item.applyId
+      if (item.state == "已取消") {
+        this.data4 = []
+        return
+      } else{
+        getActApplyTable({applyId: this.tableFormDate.applyId}).then(res => {
         // console.log(res)
         this.data4 = res.data
-      })
-      switch(rowValue1.state){
-        case "待审核":
-          this.style = 'display: inline'
-          this.style1 = 'display: none'
-          break
-        case "草稿":
-          this.style1 = 'display: inline'
-          this.style = 'display: none'
+        })
       }
+      
     },
+    // 取消申请
     cancelApply() {
-      //取消申请
       let len = this.checkedData.length
       if (len <= 0) {
         this.$Message.info('请选择一条申请')
         return
       }
-    cancelActApply(this.tableFormDate).then(res => {
+      let item = this.checkedData[0]
+      this.actIfoTableData.id = item.id
+      cancelActApply(this.actIfoTableData).then(res => {
       // console.log(res)
-      if (code === 0) {
-        this.getActApplicationForm()
-        this.$Message.success('操作成功')
-      }
+        if (res.code === 0) {
+          this.$Message.success('操作成功')
+          this.data4 = []
+          this.getActApplicationForm()
+        }
       })
     },
     // 取消活动
@@ -939,89 +906,177 @@ export default {
       }
       cancelAct(this.actIfoTableData).then(res => {
         // console.log(res)
+        if (res.code === 0) {
           this.$Message.success('操作成功')
           this.getActTable()
+        }
       })
     },
-    // 活动信息表格获取行数据
+    // 单击活动信息表格获取行数据
     onRowClick2 (rowValue2) {
-      console.log(rowValue2)
+      // console.log(rowValue2)
       this.actIfoTableData.id = rowValue2.id
       this.checkedData2 = [rowValue2]
     },
-    onRowClick3(rowValue3) {
-      this.actIfoTableData = roValue3
+    // 弹出申请活动窗口
+    showApplication(status) {
+      if(status == 'edit'){
+        this.applicationDialog = true;
+        let item = this.checkedData[0]
+        this.single = item.isBelowCost === 0 ? false: true
+        this.single2 = item.isVender === 0 ? false: true
+        this.formValidate.remark = item.remark
+        editAndSubmit({applyId: this.tableFormDate.applyId}).then(res => {
+          // console.log(res)
+          if (res.code === 0) {
+            this.data5 = res.data
+          }
+        })
+      } else {
+        this.applicationDialog = true;
+        this.tableFormDate = []
+      }
     },
-    // 分页
-    changePage() {},
-    // 条数
-    changeSize() {},
-    showApplication() {
-      // 弹出申请活动窗口
-      this.applicationDialog = true;
-      editAndSubmit(this.tableFormDate).then(res => {
-        console.log(res)
-        if (res.code === 0) {
-          this.data6 = res.data
-          this.formValidate.remark = res.data.remark
-          this.single = this.editDialogDate.isVender
-          this.single2 = this.editDialogDate.isBelowCost
-        }
-
-      })
+    // 关闭活动窗口
+    closeDialog () {
+      this.applicationDialog = false
+      this.formValidate.remark = ""
+      this.single = false
+      this.single2 = false
+      this.data5 = []
     },
     // 活动导入
     handleBeforeUpload (file) { //上传之前判断
     },
     // 成功函数
     onSuccess (response) {
-      console.log(response)
-      this.data5 = response.data
-      
+      if (response.code === 0) {
+       this.data5 = response.data
+      } else {
+       this.$Message.error(response.message)
+      }
     },
     onFormatError(file) {
-      // console.log(file)
       this.$Message.error('只支持xls xlsx后缀的文件')
+    },
+    // 删除活动配件的一项
+    deleteDate5 () {
+      let idx = this.data5.findIndex(item => item.id === this.actIfoTableData.id)
+      this.data5.splice(idx, 1)
+    },
+    // 点击活动配件某一项
+    onRowClick3(rowValue3) {
+      this.actIfoTableData = rowValue3
     },
     // 活动申请保存按钮
     saveActApplly () {
-      if (this.formValidate.remark === null) {
+      if (this.formValidate.remark.trim() === "") {
         this.$Message.error('备注不能为空')
       } else if (this.data5.length === 0) {
         this.$Message.error('至少导入一条活动配件')
         return
       } else {
         saveDraft({
+          id: this.tableFormDate.id,
           remark: this.formValidate.remark,
-          isBelowCost: this.single = false ? 0 : 1 ,
-          isVender: this.single2 = false ? 0 : 1 ,
+          isBelowCost: this.single === false ? 0 : 1 ,
+          isVender: this.single2 === false ? 0 : 1 ,
           details: this.data5
         }).then(res => {
-          console.log(res)
+          if(res.code === 0) {
+            this.applicationDialog = false
+            this.getActApplicationForm()
+            this.$Message.success(res.message)
+            this.formValidate.remark = ""
+            this.single = false
+            this.single2 = false
+            this.data5 = []
+            this.data4 = []
+          }
         })
-      }
+      } 
     },
     // 活动申请保存并提交按钮
     saveAndSubmit(){
-      if (this.formValidate.remark === null) {
+      if (this.formValidate.remark === "") {
         this.$Message.error('备注不能为空')
       } else if (this.data5.length === 0) {
         this.$Message.error('至少导入一条活动配件')
         return
       } else {
-        saveSubmit().then(res => {
-          console.log(res)
+        saveSubmit({
+          id: this.tableFormDate.id,
+          remark: this.formValidate.remark,
+          isBelowCost: this.single == false ? 0 : 1 ,
+          isVender: this.single2 == false ? 0 : 1 ,
+          details: this.data5
+        }).then(res => {
+          if (res.code === 0) {
+            this.applicationDialog = false
+            this.getActApplicationForm()
+            this.$Message.success(res.message)
+            this.formValidate.remark = ""
+            this.single = false
+            this.single2 = false
+            this.data5 = []
+            this.data4 = []
+          }
         })
       }
     },
+    // 审核窗口
     showReview() {
-      // 弹出审核窗口
       this.reViewDialog = true;
     },
+    // 审核窗口确定按钮
+    reViewAct () {
+      if (this.radioCheck == ""){
+        this.$Message.warning('请选择通过或者不通过')
+        return
+      }
+      this.reViewDialog = false
+      let item = this.checkedData[0]
+      this.tableFormDate.id = item.id
+      auditActivity({
+        id: this.tableFormDate.id,
+        auditState: this.radioCheck == '审核通过' ? 1 : 0
+      }).then(res => {
+        if(res.code === 0) {
+          this.$Message.success(res.data)
+          this.getActApplicationForm()
+          this.data4 = []
+        }
+      })
+    },
+    //点击tabs切换时
     handleClickTab(item) {
-      //点击tabs切换时
-      // console.log(item)
       this.tabValue = item
+      switch (item) {
+        case 'name1':
+          this.getActApplicationForm()
+          this.checkedData = []
+          this.data4 = []
+          this.getDataObj.beginDate = ""
+          this.getDataObj.endDate = ""
+          this.getDataObj.state = ""
+          this.getDataObj.partName = ""
+          this.getDataObj.orgname = ""
+        case 'name2':
+          this.getActApplicationForm()
+          this.getActTable()
+          this.getDataObj.beginDate = ""
+          this.getDataObj.endDate = ""
+          this.getDataObj.state = ""
+          this.getDataObj.partName = ""
+          this.getDataObj.orgname = ""
+        case 'name3':
+          this.getExpiredTable()
+          this.getDataObj.beginDate = ""
+          this.getDataObj.endDate = ""
+          this.getDataObj.state = ""
+          this.getDataObj.partName = ""
+          this.getDataObj.orgname = ""
+      }
     },
     handleSummary({ columns, data }) {
       // console.log(columns, data);

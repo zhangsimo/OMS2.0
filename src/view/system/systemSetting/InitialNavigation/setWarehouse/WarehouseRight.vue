@@ -25,10 +25,13 @@
           resizable
           align="center"
           size="mini"
+          ref="xTable"
           :loading="loading"
           highlight-current-row
           highlight-hover-row
           :edit-rules="validRules"
+          :mouse-config="{selected: true}"
+          :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
           @current-change="clOnewList"
           height="330"
           :data="warehouseList"
@@ -113,7 +116,8 @@
                     },
                     {
                         type: 'selection',
-                        align: 'center'
+                        align: 'center',
+                        width:'50px'
                     },
                     {
                         title: '员工名称',
@@ -200,11 +204,19 @@
             },
             //保存
             save(){
-                getSaveWarehouse(this.warehouseList).then( res => {
-                    if(res.code == 0){
-                        this.getAllWarehouseList()
+                this.$refs.xTable.validate(valid => {
+                    if (valid) {
+                        getSaveWarehouse(this.warehouseList).then( res => {
+                            if(res.code == 0){
+                                this.$Message.success('验证成功')
+                                this.getAllWarehouseList()
+                            }
+                        })
+                    } else {
+                        this.$Message.error('验证不通过')
                     }
                 })
+
             },
             //切换状态
             changeType(){

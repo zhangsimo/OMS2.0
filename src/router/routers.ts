@@ -1324,6 +1324,20 @@ export default [
               )
           },
           {
+            path: "/essentialData/ lineOfCredit",
+            name: "LineOfCredit",
+            // mark: '55',
+            meta: {
+              // hideInMenu: true,
+              icon: "arrow-graph-up-right",
+              title: " 信用额度调整查询"
+            },
+            component: () =>
+              import(
+                "@/view/system/essentialData/lineOfCredit/lineOfCredit.vue"
+                )
+          },
+          {
             path: "/essentialData/supplierManagement/",
             name: "supplierManagement",
             // mark: "56",
@@ -1431,6 +1445,20 @@ export default [
           },
           {
             path:
+              "/systemSetting/InitialNavigation/inventory",
+            name: "inventory",
+            // mark: '59',
+            meta: {
+              hideInMenu: true,
+              title: "期初库存"
+            },
+            component: () =>
+              import(
+                "@/view/system/systemSetting/InitialNavigation/inventory/inventory.vue"
+              )
+          },
+          {
+            path:
               "/system/systemSetting/InitialNavigation/StockLevel/StockLevel",
             name: "StockLevel",
             // mark: '59',
@@ -1493,12 +1521,12 @@ export default [
             meta: {
               hideInMenu: true,
               title: "品牌车型",
-              activeName:'navigationFater'
+              activeName: 'navigationFater'
             },
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/brandCarModel/brandCar.vue"
-                )
+              )
           },
           {
             path:
@@ -1540,7 +1568,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/storeManagement/storeManagement.vue"
-                )
+              )
           },
           {
             path:
@@ -1554,7 +1582,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/setWarehouse/setWarehouse.vue"
-                )
+              )
           },
           {
             path:
@@ -1568,7 +1596,7 @@ export default [
             component: () =>
               import(
                 "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
-                )
+              )
           },
           {
             path: "/system/staff/management",
@@ -1584,7 +1612,7 @@ export default [
               )
           },
           {
-            path:"/system/partsExamine",
+            path: "/system/partsExamine",
             name: "partsExamine",
             // mark: '59',
             meta: {
