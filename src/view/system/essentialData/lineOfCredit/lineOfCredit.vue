@@ -8,7 +8,7 @@
               <DatePicker @on-change="getDate" type="daterange" placement="bottom-start" placeholder="选择日期"
                           class="w200 mr20">
               </DatePicker>
-              <Button type="warning" class="mr10 w90"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+              <Button @click="query(Date)" type="warning" class="mr10 w90"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
         </div>
       </section>
       <div>
@@ -111,7 +111,7 @@
                 Date: {
                   startTime: '',
                   endTime: ''
-                }
+                },
             }
         },
         created() {
@@ -125,19 +125,21 @@
             // console.log(res.data)
           },
           getvalue(date) {
-            this.Date.startTime = date[0]
-            this.Date.endTime = date[1]
-            this.getTable(Date)
-            console.log(this.staffList)
-            console.log(1)
-            console.log(date)
+            this.Date.startTime = date[0] + " " + "23:59:59"
+            this.Date.endTime = date[1] + " " + "23:59:59"
+            // console.log(1)
+            // console.log(this.Date)
           },
           getDate(val) {
-            this.Date.startTime = val[0]
-            this.Date.startTime = val[1]
+            this.Date.startTime = val[0] +  " " + "23:59:59"
+            this.Date.endTime = val[1] +  " " + "23:59:59"
+            // console.log(val)
+            // console.log(this.Date)
+            // console.log(2)
+          },
+          query(Date) {
+            console.log(this.Date)
             this.getTable(Date)
-            console.log(this.staffList)
-            console.log(2)
           }
         }
     }
