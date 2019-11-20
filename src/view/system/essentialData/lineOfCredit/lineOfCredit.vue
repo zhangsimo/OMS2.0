@@ -121,7 +121,6 @@
           async getTable() {
             let res = await getTableList()
             this.staffList = res.data
-            console.log(res.data)
           },
           getvalue(date) {
             this.Date.startTime = date[0]
