@@ -19,6 +19,7 @@
 
 <script>
     import quickDate from '@/components/getDate/dateget'
+    import { getTableList } from '@/api/system/essentialData/lineOfCredit'
     export default {
         name: "lineOfCredit",
         components:{
@@ -37,86 +38,106 @@
                     {
                         title: '客户名称',
                         align: 'center',
-                        key: ''
+                        key: 'guestName'
                     },
                     {
                         title: '调整时间',
                         align: 'center',
-                        key: ''
+                        key: 'applyDate'
                     },
                     {
                         title: '调整人',
                         align: 'center',
-                        key: ''
+                        key: 'applyMan'
                     },
                     {
                         title: '调整时应付',
                         align: 'center',
-                        key: ''
+                        key: 'payableAmt'
                     },
                     {
                         title: '调整时应收',
                         align: 'center',
-                        key: ''
+                        key: 'receivableAmt'
                     },
                     {
                         title: '调整时应收应付合计',
                         align: 'center',
-                        key: '',
+                        key: 'sumAmt',
                         width: '125px'
                     },
                     {
                         title: '应收30天金额',
                         align: 'center',
-                        key: ''
+                        key: 'thirtyAmt'
                     },
                     {
                         title: '应收30-60天',
                         align: 'center',
-                        key: ''
+                        key: 'sixtyAmt'
                     },
                     {
                         title: '应收60天以上',
                         align: 'center',
-                        key: ''
+                        key: 'moreSixtyAmt'
                     },
                     {
                         title: '调整前临时额度',
                         align: 'center',
-                        key: ''
+                        key: 'beforeAdjustTempQuota'
                     },
                     {
                         title: '调整后临时额度',
                         align: 'center',
-                        key: ''
+                        key: 'tempQuotaTotal'
                     },
                     {
                         title: '临时额度开始时间',
                         align: 'center',
-                        key: ''
+                        key: 'tempStart'
                     },
                     {
                         title: '临时额度结束时间',
                         align: 'center',
-                        key: ''
+                        key: 'tempEnd'
                     },
                     {
                         title: '调整后剩余额度',
                         align: 'center',
-                        key: ''
+                        key: 'afterAdjustQuota'
                     },
                 ],
-                Date: ''
+                staffList:[],
+                Date: {
+                  startTime: '',
+                  endTime: ''
+                }
             }
         },
+        created() {
+           this.getTable()
+        },
         methods: {
+          async getTable() {
+            let res = await getTableList()
+            this.staffList = res.data
+            // console.log(res)
+            // console.log(res.data)
+          },
           getvalue(date) {
-            this.Date = date
-            window.console.log(data)
+            this.Date.startTime = date[0]
+            this.Date.endTime = date[1]
+            this.getTable(Date)
+            console.log(this.staffList)
+            console.log(1)
+            console.log(date)
           },
           getDate(val) {
-            this.Date = val
-            window.console.log(val)
+            this.Date.startTime = val[0]
+            this.Date.startTime = val[1]
+            this.getTable(Date)
+            console.log(this.staffList)
+            console.log(2)
           }
         }
     }
