@@ -122,23 +122,23 @@
             let res = await getTableList()
             this.staffList = res.data
             // console.log(res)
-            // console.log(res.data)
+            console.log(res.data)
           },
           getvalue(date) {
-            this.Date.startTime = date[0] + " " + "23:59:59"
-            this.Date.endTime = date[1] + " " + "23:59:59"
-            // console.log(1)
-            // console.log(this.Date)
+            this.Date.startTime = date[0]
+            this.Date.endTime = date[1]
+            console.log(this.Date)
+            this.getTable(Date)
           },
           getDate(val) {
-            this.Date.startTime = val[0] +  " " + "23:59:59"
+            this.Date.startTime = val[0] +  " " + "00:00:00"
             this.Date.endTime = val[1] +  " " + "23:59:59"
             // console.log(val)
             // console.log(this.Date)
             // console.log(2)
           },
           query(Date) {
-            console.log(this.Date)
+            // console.log(this.Date)
             this.getTable(Date)
           }
         }
