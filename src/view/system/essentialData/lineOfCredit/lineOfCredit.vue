@@ -84,9 +84,9 @@
                     {
                         title: '调整前临时额度',
                         align: 'center',
-                        key: 'beforeAdjustTempQuota',
+                        key: 'tempQuotaTotal',
                         render: (h,params) => {
-                          if(params.row.beforeAdjustTempQuota == null) {
+                          if(params.row.tempQuotaTotal == null) {
                             return h('div',{},0)
                           }
                         }
