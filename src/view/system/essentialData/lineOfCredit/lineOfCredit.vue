@@ -4,7 +4,7 @@
             <div class="db mr10">
               <span>快速查询：</span>
               <quickDate @quickDate="getvalue" class="mr10"></quickDate>
-              <span>开始日期：</span>
+              <span>查询日期：</span>
               <DatePicker @on-change="getDate" type="daterange" placement="bottom-start" placeholder="选择日期"
                           class="w200 mr20">
               </DatePicker>
