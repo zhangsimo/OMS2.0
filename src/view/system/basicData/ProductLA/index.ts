@@ -129,42 +129,42 @@ export default class ProductLA extends Vue {
         },
         {
             title: "品质",
-            key: "qualityTypeName",
+            key: "quality",
             minWidth: 180
         },
         {
             title: "品牌",
-            key: "partBrandName",
+            key: "partBrand",
             minWidth: 120
         },
         {
             title: "编码",
-            key: "code",
+            key: "partCode",
             minWidth: 120
         },
         {
             title: "名称",
-            key: "name",
+            key: "partStandardName",
             minWidth: 100
         },
         {
             title: "全称",
             key: "fullName",
-            minWidth: 120
+            minWidth: 200
         },
         {
             title: "单位",
-            key: "unit",
+            key: "minUnit",
             minWidth: 80
         },
         {
             title: "规格",
-            key: "spec",
+            key: "specifications",
             minWidth: 80
         },
         {
             title: "型号",
-            key: "model",
+            key: "",
             minWidth: 100
         },
     ]
@@ -269,12 +269,13 @@ export default class ProductLA extends Vue {
 
     // 获取待分配列表
     private async getwaitEmps() {
+        this.waitPartListData = [];
         let params: any = { id: this.employeeId }
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
         switch (this.waitPartTransListSelecteOption) {
             case "0":
-                params.queryCode = this.waitPartTransListContent;
+                params.partCode = this.waitPartTransListContent;
                 break;
             case "1":
                 params.fullName = this.waitPartTransListContent;
@@ -283,7 +284,7 @@ export default class ProductLA extends Vue {
                 params.applyCarModel = this.waitPartTransListContent;
                 break;
             case "3":
-                params.namePy = this.waitPartTransListContent;
+                params.keyWord = this.waitPartTransListContent;
                 break;
             default:
                 break;
@@ -297,6 +298,7 @@ export default class ProductLA extends Vue {
 
     // 获取已分配列表
     private async getEmps() {
+        this.distPartListData = [];
         let params: any = { empId: this.employeeId }
         let res: any = await api.findAttByEmpId(params);
         if(res.code == 0) {
@@ -338,8 +340,9 @@ export default class ProductLA extends Vue {
         }
         let data:any = this.selectionWaitPartArr.map((el:any) => {
             return {
-                attId: el.id,
+                partCode: el.partCode,
                 empId: this.employeeId,
+                partBrandCode: el.partBrandCode,
             }
         })
         let res:any = await api.employeeAddPart(data);

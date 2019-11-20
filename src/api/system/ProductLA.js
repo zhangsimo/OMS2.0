@@ -33,7 +33,7 @@ export function getStaffList (params) {
 // 待分配配件
 export function findByEmp (params) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/findByEmp`,
+    url: `${api.wmsApi}/wbParts/findByEmp`,
     method: 'get',
     params
   })
@@ -42,7 +42,7 @@ export function findByEmp (params) {
 // 已分配配件
 export function findAttByEmpId (params) {
   return axios.request({
-    url: `${api.wmsApi}/employeeAttribute/findAttByEmpId`,
+    url: `${api.wmsApi}/wbParts/findPartsByEmpId`,
     method: 'get',
     params
   })
