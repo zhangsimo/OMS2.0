@@ -140,7 +140,7 @@ export function getdictCode() {
 // 配件名称
 export function getPartName(data={}) {
   return axios.request({
-    url: `${api.wmsApi}/partName/findAll`,
+    url: `${api.wmsApi}/wbPub/getPartStandardName`,
     method: "post",
     data
   });

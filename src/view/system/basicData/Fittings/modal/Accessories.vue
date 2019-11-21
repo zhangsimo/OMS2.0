@@ -214,7 +214,7 @@
         <Button type="default" @click="proModal = false; handleReset('proModalform')">取消</Button>
       </div>
     </Modal>
-    <Modal v-model="linkModal" title="配件名称查询" width="1000">
+    <Modal v-model="linkModal" title="配件名称查询" width="1000" @on-visible-change="resPart">
       <div class="partCheck-hd">
         <Input class="w200 mr10" v-model="content"></Input>
         <Button class="mr10" type="primary" @click="queryTree">
@@ -244,7 +244,19 @@
             :stripe="true"
             :columns="columnsPart"
             :data="tbdata"
+            height="520"
           ></Table>
+          <Page
+            class-name="page-con"
+            :current="part.page.num"
+            :total="part.page.total"
+            :page-size="part.page.size"
+            @on-change="changePartPage"
+            @on-page-size-change="changePartSize"
+            show-sizer
+            show-total
+            show-elevator
+          ></Page>
         </div>
       </div>
       <div slot="footer">
@@ -494,17 +506,17 @@ export default class Accessories extends Vue {
     },
     {
       title: "配件名称",
-      key: "name",
+      key: "",
       align: "center",
       children: [
         {
           title: "标准名称",
-          key: "nameStd",
+          key: "name",
           minWidth: 200
         },
         {
           title: "方向",
-          key: "orgname",
+          key: "direction",
           minWidth: 120
         },
         {
@@ -646,30 +658,27 @@ export default class Accessories extends Vue {
   private partTypeFT:Array<Kv> = [];
   private partTypeSD:Array<Kv> = [];
   private partTypeTH:Array<Kv> = [];
+  // 分页
+  private part = {
+    page: {
+      num: 1,
+      total: 0,
+      size: 10
+    }
+  }
   /**===============mounted============= */
   // 初始化配件分类
+    // 初始化配件分类
   private async treeInit() {
-    let res: any = await api.findAllByTree();
+    let res: any = await api.findWbAllByTree();
     if (res.code == 0) {
-      this.treeData = res.data;
+      this.treeData = res.data.content;
       this.partTypeFT = this._.cloneDeep(res.data);
-      tools.transTree(this.treeData);
+      tools.transTree(this.treeData, 'typeName');
       this.treeDataOrgin = this._.cloneDeep(this.treeData);
     }
   }
   private async mounted() {
-    // let res = await api.getPartBrand({parentId: 0});
-    // if (res.code == 0) {
-    //   res.data.forEach((el: any) => {
-    //     el.label = el.name;
-    //     el.value = el.id;
-    //     if (el.parentId != '0') {
-    //       this.brandAll.push(el);
-    //     } else {
-    //       this.qualitites.push(el);
-    //     }
-    //   })
-    // }
     let res = await api.getWbPartBrand();
     if (res.code == 0) {
       for(let quality of res.data.content) {
@@ -715,14 +724,20 @@ export default class Accessories extends Vue {
 
   /**============methods============== */
   /**获取配件名称 */
-  private async getPartsName(id?: string) {
+  private typeId:string = '';
+  private partSnameCn:string = '';
+  private async getPartsName() {
     let data:Kv = {}
-    if(id) {
-      data.type = id
+    if(this.typeId) {
+      data.typeId = this.typeId
+    }
+    if(this.partSnameCn) {
+      data.nameCn = this.partSnameCn;
     }
     let res:any = await api.getPartName(data);
     if(res.code == 0) {
-      this.tbdata = res.data;
+      this.tbdata = res.data.content;
+      this.part.page.total = res.data.total;
     }
   }
 
@@ -848,7 +863,8 @@ export default class Accessories extends Vue {
   }
   // 选择树
   private selectTree(tree: Tree[], data: Tree) {
-    this.getPartsName(data.id);
+    this.typeId = data.id;
+    this.getPartsName();
   }
   // 选中表格名称行
   private selectTabelData(row: any) {
@@ -886,12 +902,8 @@ export default class Accessories extends Vue {
   }
   // 树形搜索
   private queryTree() {
-    let content:string = this.content;
-    if(!content) {
-      this.treeData = this._.cloneDeep(this.treeDataOrgin);
-    } else {
-      tools.findTree(this.treeData, content);
-    }
+    this.partSnameCn = this.content;
+    this.getPartsName();
   }
   // 选择一级
   private selectOne(id: string) {
@@ -918,6 +930,16 @@ export default class Accessories extends Vue {
   }
   // 选择三级
   private selectThree(id: string) {}
+
+  private changePartPage(p: number) {
+    this.part.page.num = p;
+    this.getPartsName();
+  }
+  private changePartSize(size: number) {
+    this.part.page.num = 1;
+    this.part.page.size = size;
+    this.getPartsName();
+  }
 
   // 新增配件名称
   private addpartCnname(name: string) {
@@ -1012,6 +1034,10 @@ export default class Accessories extends Vue {
     })
   }
 
+  private resPart() {
+    this.treeData = this._.cloneDeep(this.treeDataOrgin);
+  }
+
   /**========watch========== */
   @Watch('update')
   private changeShow(newval:boolean, oldval:boolean) {
@@ -1045,9 +1071,17 @@ export default class Accessories extends Vue {
   display: flex;
   .part-left {
     width: 220px;
+    .partCheck-left-tree {
+      height: 520px;
+      overflow-y: auto;
+    }
   }
   .part-right {
     width: 780px;
+  }
+  .page-con {
+    margin: 10px;
+    text-align: right;
   }
 }
 .partCheck-hd{
