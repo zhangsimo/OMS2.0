@@ -49,10 +49,37 @@ export function getPartBrand(data = {}) {
   });
 }
 
+// wb配件类型树
+export function findWbAllByTree(data = { pageSize: 1000, page: 0 }) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getCarClassifys`,
+    method: "post",
+    data
+  });
+}
+
 // wb品质/品牌查询
-export function getWbPartBrand(data = {}) {
+export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
   return axios.request({
     url: `${api.wmsApi}/wbPub/getPartBrand`,
+    method: "post",
+    data
+  });
+}
+
+// wb配件资料
+export function getwbParts(params) {
+  return axios.request({
+    url: `${api.wmsApi}/wbParts/queryAll`,
+    method: "get",
+    params
+  });
+}
+
+// wb审批接口
+export function approval(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partApply/approval`,
     method: "post",
     data
   });

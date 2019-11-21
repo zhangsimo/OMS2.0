@@ -50,7 +50,7 @@
                   <Select v-model="formValidate.unit"  @on-change="changeSelectUnit">
                     <Option
                       v-for="item in dictCodeAll"
-                      :value="item.itemCode"
+                      :value="item.itemName"
                       :key="item.itemName"
                       :disabled="item.disabled"
                     >{{item.itemName}}</Option>
@@ -173,27 +173,40 @@
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
           </div>
-          <Table
-            height="300"
-            size="small"
-            :loading="loading"
+          <vxe-table
+            max-height="360"
+            ref="xTable"
             border
-            :stripe="true"
-            :columns="columnsTab"
+            :auto-resize="true"
             :data="formValidate.specVOList"
-          >
-            <template slot-scope="{ row, index }" slot="meterCompany">
-              <span v-if="index===0">{{formValidate.unitname}}</span>
-              <Select @on-change="changeSelect" v-else :transfer="true" class="w80" v-model="formValidate.specVOList[index].meterCompany">
-                <Option
-                  v-for="item in dictCodeAll"
-                  :value="item.itemCode"
-                  :key="item.itemName"
-                  :disabled="item.disabled"
-                >{{item.itemName}}</Option>
-              </Select>
-            </template>
-          </Table>
+            :edit-config="{trigger: 'click', mode: 'cell', showStatus: true,}">
+            <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
+            <vxe-table-column field="meterCompany" width="100" title="计量单位">
+              <template v-slot="{row, rowIndex}">
+                <span v-if="rowIndex === 0">{{row.meterCompany}}</span>
+                <Select v-else @on-change="changeSelect" :transfer="true" class="w80" v-model="row.meterCompany"> <!--formValidate.specVOList[index].meterCompany-->
+                  <Option
+                    v-for="item in dictCodeAll"
+                    :value="item.itemName"
+                    :key="item.itemName"
+                    :disabled="item.disabled"
+                  >{{item.itemName}}</Option>
+                </Select>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="companyNum" title="单位数量" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="longNum" title="长" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="wide" title="宽" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="high" title="高" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="volume" title="体积" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="weight" title="重量" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="volumeRong" title="容积" :edit-render="{name: 'input'}"></vxe-table-column>
+            <vxe-table-column field="isMinCompany" title="最小起量单位">
+              <template v-slot="{row}">
+                <Checkbox disabled v-model="row.isMinCompany"></Checkbox>
+              </template>
+            </vxe-table-column>
+          </vxe-table>
         </TabPane>
       </Tabs>
       <div slot="footer">
@@ -210,9 +223,9 @@
         <Button class="mr10" type="default" @click="selectPartName">
           <Icon type="md-checkmark" />选择
         </Button>
-        <Button type="default" @click="addPartModal = true">
+        <!-- <Button type="default" @click="addPartModal = true">
           <Icon type="md-add" />新增配件名称
-        </Button>
+        </Button> -->
       </div>
       <div class="part-main">
         <div class="part-left">
@@ -421,31 +434,6 @@ export default class Accessories extends Vue {
       minWidth: 50
     },
     {
-      title: "设为起订单位",
-      key: "name",
-      minWidth: 90,
-      render: (h: any, params: any) => {
-        let com = params.row.isMaxCompany;
-        return h("Checkbox", {
-          props: {
-            value: com === 0 ? false : true
-          },
-          on: {
-            'on-change': (e:boolean) => {
-              this.formValidate.specVOList.forEach((el:any) => {
-                this.$set(el, 'isMaxCompany', 0);
-              });
-              if(e) {
-                this.formValidate.specVOList[params.index].isMaxCompany = 1;
-              } else {
-                this.formValidate.specVOList[params.index].isMaxCompany = 0;
-              }
-            }
-          }
-        });
-      }
-    },
-    {
       title: "最小起量单位",
       key: "name",
       minWidth: 90,
@@ -457,6 +445,9 @@ export default class Accessories extends Vue {
           },
           on: {
             'on-change': (e:boolean) => {
+              this.formValidate.specVOList.forEach((el:any) => {
+                this.$set(el, 'isMinCompany', 0);
+              });
               if(e) {
                 this.formValidate.specVOList[params.index].isMinCompany = 1;
               } else {
@@ -466,7 +457,29 @@ export default class Accessories extends Vue {
           }
         });
       }
-    }
+    },
+    // {
+    //   title: "最小起量单位",
+    //   key: "name",
+    //   minWidth: 90,
+    //   render: (h: any, params: any) => {
+    //     let com = params.row.isMinCompany;
+    //     return h("Checkbox", {
+    //       props: {
+    //         value: com === 0 ? false : true
+    //       },
+    //       on: {
+    //         'on-change': (e:boolean) => {
+    //           if(e) {
+    //             this.formValidate.specVOList[params.index].isMinCompany = 1;
+    //           } else {
+    //             this.formValidate.specVOList[params.index].isMinCompany = 0;
+    //           }
+    //         }
+    //       }
+    //     });
+    //   }
+    // }
   ];
   /**规格表加载 */
   private loading: boolean = false;
@@ -582,7 +595,7 @@ export default class Accessories extends Vue {
     carTypeIdSen: "",
     carTypeIdThr: "",
     specVOList: new Array(), //规格list
-    valueVOS: new Array() //单位换算list
+    valueVOS: new Array(), //单位换算list
   };
   /**校验 */
   private ruleValidate:Kv = {
@@ -645,17 +658,36 @@ export default class Accessories extends Vue {
     }
   }
   private async mounted() {
-    let res = await api.getPartBrand({parentId: 0});
+    // let res = await api.getPartBrand({parentId: 0});
+    // if (res.code == 0) {
+    //   res.data.forEach((el: any) => {
+    //     el.label = el.name;
+    //     el.value = el.id;
+    //     if (el.parentId != '0') {
+    //       this.brandAll.push(el);
+    //     } else {
+    //       this.qualitites.push(el);
+    //     }
+    //   })
+    // }
+    let res = await api.getWbPartBrand();
     if (res.code == 0) {
-      res.data.forEach((el: any) => {
-        el.label = el.name;
-        el.value = el.id;
-        if (el.parentId != '0') {
-          this.brandAll.push(el);
-        } else {
-          this.qualitites.push(el);
+      for(let quality of res.data.content) {
+        let qua = {
+          label: quality.quality,
+          value: quality.qualityCode,
+          children: quality.children,
         }
-      })
+        this.qualitites.push(qua);
+        if(quality.children.length <= 0) {
+          break;
+        }
+        // quality.children.forEach((el:any) => {
+        //   el.label = el.name;
+        //   el.value = el.code;
+        //   this.brandAll.push(el);
+        // })
+      }
     }
 
     let model:any = await api.findCarModel();
@@ -696,15 +728,18 @@ export default class Accessories extends Vue {
 
   // 选择品质
   private async seletBandAll(label:string) {
-    let res = await api.getPartBrand({parentId: label});
+    let quality:any = {};
     this.brandAll = [];
-    if (res.code == 0) {
-      res.data.forEach((el: any) => {
-        el.label = el.name;
-        el.value = el.id;
-        this.brandAll.push(el);
-      })
-    }
+    this.qualitites.forEach((el:any) => {
+      if(el.value === label) {
+        quality = el;
+      }
+    })
+    quality.children.forEach((el:any) => {
+      el.label = el.name;
+      el.value = el.id;
+      this.brandAll.push(el);
+    })
   }
 
   // 选择车型
@@ -723,9 +758,9 @@ export default class Accessories extends Vue {
     let res:any = await api.findbyidInfo(this.id);
     if(res.code == 0) {
       let data = res.data;
-      if(data.carTypeIdFir == '1') {
-        this.yp = true;
-      }
+      // if(data.carTypeIdFir == '1') {
+      //   this.yp = true;
+      // }
       this.formValidate.id = data.id;
       this.formValidate.tenantId = data.tenantId;
       this.formValidate.qualityTypeId = data.qualityTypeId;
@@ -762,15 +797,19 @@ export default class Accessories extends Vue {
   //新增规格
   private addSpec() {
     let objData = this._.cloneDeep(this.newSpecObj);
+    if(this.formValidate.specVOList.length <= 0) {
+      objData.isMinCompany = 1;
+    }
     this.formValidate.specVOList.push(objData);
   }
   // 删除规格
   private delSpec() {
+    if(this.formValidate.specVOList.length <= 1) return;
     let vo:any = this.formValidate.specVOList.pop();
     if(vo) {
       let meterCompany:string = vo.meterCompany;
       this.dictCodeAll.forEach((el:any) => {
-        if(el.itemCode === meterCompany) {
+        if(el.itemName === meterCompany) {
           el.disabled = false;
         }
       })
@@ -782,7 +821,7 @@ export default class Accessories extends Vue {
     this.dictCodeAll.forEach((el:any) => {
       el.disabled = false;
       this.formValidate.specVOList.forEach((vo:any) => {
-          if(vo.meterCompany === el.itemCode) {
+          if(vo.meterCompany === el.itemName) {
             el.disabled = true;
           }
       })
@@ -790,13 +829,22 @@ export default class Accessories extends Vue {
     this.dictCodeAll.push();
   }
   changeSelectUnit(item:string) {
-    this.dictCodeAll.forEach((el:any) => {
-      if(el.itemCode === item) {
+    this.dictCodeAll = this.dictCodeAll.map((el:any) => {
+      if(el.itemName === item) {
         el.disabled = true;
         this.formValidate.unitname = el.itemName;
       }
+      return el;
     })
-    this.dictCodeAll.push();
+    if(this.formValidate.specVOList.length <= 0) {
+      let objData = this._.cloneDeep(this.newSpecObj);
+      objData.isMinCompany = 1;
+      objData.meterCompany = this.formValidate.unitname;
+      this.formValidate.specVOList.push(objData);
+    } else {
+      this.formValidate.specVOList[0].meterCompany = this.formValidate.unitname;
+      this.formValidate.specVOList.push();
+    }
   }
   // 选择树
   private selectTree(tree: Tree[], data: Tree) {
@@ -809,7 +857,7 @@ export default class Accessories extends Vue {
     this.formValidate.carTypeIdFir = row.partTypeF;
     this.formValidate.carTypeIdSen = row.partTypeS;
     this.formValidate.carTypeIdThr = row.partTypeT;
-    this.yp = this.partnamerow.partTypeF && this.partnamerow.partTypeF == 0;
+    // this.yp = this.partnamerow.partTypeF && this.partnamerow.partTypeF == 0;
   }
   // 选择
   private selectPartName() {
@@ -901,14 +949,18 @@ export default class Accessories extends Vue {
           oemCode: this.formValidate.oemCode,
           spec: this.formValidate.spec,
           model: this.formValidate.model,
-          commonCode: this.formValidate.commonCode,
-          explain: this.formValidate.explain,
-          produceFactory: this.formValidate.produceFactory,
-          origin: this.formValidate.origin,
-          remarks: this.formValidate.remarks,
-          applyCarbrandId: this.formValidate.applyCarbrandId,
+          commonId: this.formValidate.commonCode,
+          explains: this.formValidate.explain,
+          manufacture: this.formValidate.produceFactory,
+          prdtPlace: this.formValidate.origin,
+          direction: this.formValidate.remarks,
+          carModelName: this.formValidate.applyCarbrandId,
           applyCarModel: this.formValidate.applyCarModel,
-          attributeSpecVOS: this.formValidate.specVOList,
+          specVOS: this.formValidate.specVOList.map((el:any) => {
+            let obj = this._.cloneDeep(el);
+            obj.isMinCompany = el.isMinCompany ? 1 : 0;
+            return obj;
+          }),
           fullName: this.fullName,
         };
         if(this.update) {
@@ -933,17 +985,18 @@ export default class Accessories extends Vue {
         if(this.yp) {
           data.attributeValueVOS = this.formValidate.valueVOS;
         }
-        let res:any = await api.savePart(data);
+        let res:any = await api.approval(data);
         if(res.code == 0) {
           this.proModal = false;
           this.handleReset('proModalform');
           this.update = false;
           let parent:any = this.$parent;
-          if(parent.isSys) {
-            parent.initCloudPartInfo();
-          } else {
-            parent.initLocalPartInfo();
-          }
+          // if(parent.isSys) {
+          //   parent.initCloudPartInfo();
+          // } else {
+          //   parent.initLocalPartInfo();
+          // }
+          parent.initCloudPartInfo();
           self.$Message.success('保存成功');
         }
       }
@@ -952,7 +1005,11 @@ export default class Accessories extends Vue {
   // 重置
   private handleReset(name: string) {
     let form: any = this.$refs[name];
+    this.formValidate.specVOList = new Array();
     form.resetFields();
+    this.dictCodeAll.forEach((el:any) => {
+      el.disabled = false;
+    })
   }
 
   /**========watch========== */
@@ -968,7 +1025,7 @@ export default class Accessories extends Vue {
     let objData:any = this._.cloneDeep(this.newSpecObj);
     objData.meterCompany = this.formValidate.unit;
     this.dictCodeAll.forEach((el:any) => {
-      if(el.itemCode === objData.meterCompany) {
+      if(el.itemName === objData.meterCompany) {
         el.disabled = true;
       }
     })
