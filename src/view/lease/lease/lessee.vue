@@ -591,9 +591,9 @@
         },
       methods: {
           //时间
- lt9(v) {
+    lt9(v) {
     return v > 9 ? v: ('0' + v)
-  },
+    },
         transTime(long) {
     if (!long) return ''
     let date = new Date(long)
