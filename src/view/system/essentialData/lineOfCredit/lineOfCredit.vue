@@ -127,10 +127,6 @@
                   startTime: '',
                   endTime: ''
                 },
-                queryDate: {
-                  startTime: '',
-                  endTime: ''
-                }
             }
         },
         created() {
@@ -156,7 +152,7 @@
             this.queryDate.endTime = val[1] +  " " + "23:59:59"
           },
           query() {
-            this.getTable(this.queryDate)
+            this.getTable(this.Date)
           }
         }
     }
