@@ -53,3 +53,12 @@ export function findPageByDynamicQuery(data) {
   })
 }
 // *========= 产品购买===========*
+// 生成订单
+// /tenantInfo/generateOrder
+export function tenantInfogenerateOrder(data) {
+  return axios.request({
+    url: `${api.wmsApi}/tenantInfo/generateOrder`,
+    method: 'post',
+    data
+  })
+}

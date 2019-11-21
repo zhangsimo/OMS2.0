@@ -4,11 +4,11 @@
             <div class="db mr10">
               <span>快速查询：</span>
               <quickDate @quickDate="getvalue" class="mr10"></quickDate>
-              <span>查询日期：</span>
+              <span>调整日期：</span>
               <DatePicker @on-change="getDate" type="daterange" placement="bottom-start" placeholder="选择日期"
                           class="w200 mr20">
               </DatePicker>
-              <Button @click="query(Date)" type="warning" class="mr10 w90"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+              <Button @click="query" type="warning" class="mr10 w90"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
         </div>
       </section>
       <div>
@@ -84,12 +84,22 @@
                     {
                         title: '调整前临时额度',
                         align: 'center',
-                        key: 'beforeAdjustTempQuota'
+                        key: 'tempQuotaTotal',
+                        render: (h,params) => {
+                          if(params.row.tempQuotaTotal == null) {
+                            return h('div',{},0)
+                          }
+                        }
                     },
                     {
                         title: '调整后临时额度',
                         align: 'center',
-                        key: 'tempQuotaTotal'
+                        key: 'tempQuotaTotal',
+                        render: (h,params) => {
+                          if(params.row.tempQuotaTotal == null) {
+                            return h('div',{},0)
+                          }
+                        }
                     },
                     {
                         title: '临时额度开始时间',
@@ -104,7 +114,12 @@
                     {
                         title: '调整后剩余额度',
                         align: 'center',
-                        key: 'afterAdjustQuota'
+                        key: 'afterAdjustQuota',
+                        render: (h,params) => {
+                          if(params.row.afterAdjustQuota == null) {
+                            return h('div',{},0)
+                          }
+                        }
                     },
                 ],
                 staffList:[],
@@ -118,9 +133,14 @@
            this.getTable()
         },
         methods: {
-          async getTable() {
-            let res = await getTableList()
-            this.staffList = res.data
+          async getTable(date) {
+            let { code, data } = await getTableList(date)
+            if (code === 0) {
+              this.staffList = data
+              this.loading = false
+            } else {
+              this.loading = true
+            }
           },
           getvalue(date) {
             this.Date.startTime = date[0]
@@ -128,11 +148,11 @@
             this.getTable(this.Date)
           },
           getDate(val) {
-            this.Date.startTime = val[0] +  " " + "00:00:00"
-            this.Date.endTime = val[1] +  " " + "23:59:59"
+            this.queryDate.startTime = val[0] +  " " + "00:00:00"
+            this.queryDate.endTime = val[1] +  " " + "23:59:59"
           },
-          query(Date) {
-            this.getTable(Date)
+          query() {
+            this.getTable(this.Date)
           }
         }
     }

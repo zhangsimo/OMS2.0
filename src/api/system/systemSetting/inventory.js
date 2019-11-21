@@ -10,7 +10,7 @@ export function getList (params) {
   });
 }
 //保存
-export function saveList (data={}) {
+export function saveList (data) {
   return axios.request({
     url: `${api.omsOrder}/enterMain/main/saveOrUpdate`,
     method: 'post',
