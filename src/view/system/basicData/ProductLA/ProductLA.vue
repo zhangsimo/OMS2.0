@@ -175,6 +175,7 @@
               class="table"
               border
               size="small"
+              :loading="distPartLoading"
               :stripe="true"
               :columns="waitPartListTableHead"
               :data="distPartListData"

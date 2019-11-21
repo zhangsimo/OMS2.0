@@ -3,11 +3,11 @@
     <Form :model="data" ref="form" :label-width="130" :ruls="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
-        <span class="mr20">华盛集团XXX汽配店</span>
+        <span class="mr20">{{ data.fullName }}</span>
         <span>申请人:</span>
-        <span class="mr20">XXXXXX</span>
+        <span class="mr20">{{ data.applyMan}}</span>
         <span>申请时间:</span>
-        <span class="mr20">2019-11-11</span>
+        <span class="mr20">{{ data.applyDate }}</span>
         <span>最高受信固定额度:</span>
         <span>100W</span>
       </div>
@@ -122,7 +122,7 @@
     export default {
         name: "CreditLineApplication",
         props:{
-            data:''
+            data: ''
         },
         data(){
             return {

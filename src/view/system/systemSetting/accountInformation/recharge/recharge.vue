@@ -14,9 +14,9 @@
             <div>
               <ul class="item">
                 <li v-for="(item,index) in combo" :key="index" class="discountBox itemss" @click="selectClass(index,item)" :class="[selectClassA !== index?'weixuan':'xuan']">
-                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.originalPrice }}</p>
-                  <p style="padding-top: 5px"> 售价 ￥{{ item.presentPrice }}</p>
-                  <p class="zhekou" v-if="item.originalPrice !== item.presentPrice ">
+                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.sellPrice }}</p>
+                  <p style="padding-top: 5px"> 售价 ￥{{ item.sellPrice }}</p>
+                  <p class="zhekou" v-if="item.sellPrice !== item.sellPrice ">
                     <img v-if="selectClassA !== index" class="zhekou_img" src="../../../../../assets/images/recharge/unselected.png" alt="">
                     <img v-else class="zhekou_img" src="../../../../../assets/images/recharge/selected.png" alt="">
                   </p>
@@ -26,7 +26,7 @@
           </div>
           <div class="thisRow">
             <div class="label"><label>支付金额:</label></div>
-            <div>{{ payMoney }}</div>
+            <div>{{ payMoney }}({{ remark }})</div>
           </div>
           <div class="thisRow">
             <div class="label"><label></label></div>
@@ -42,21 +42,23 @@
 </template>
 
 <script>
-    export default {
+  import {rechargeCoinInfo,generateOrder,generationQR} from '../../../../../api/system/account/account'
+  export default {
         name: "recharge",
       data(){
           return {
-            number: 520,
+            number: '',
             combo:[
-              {originalPrice: '20',presentPrice: '20'},
-              {originalPrice: '100',presentPrice: '110'},
-              {originalPrice: '500',presentPrice: '600'},
-              {originalPrice: '1000',presentPrice: '1300'},
-              {originalPrice: '2000',presentPrice: '2800'}
+              // {originalPrice: '20',presentPrice: '20'},
+              // {originalPrice: '100',presentPrice: '110'},
+              // {originalPrice: '500',presentPrice: '600'},
+              // {originalPrice: '1000',presentPrice: '1300'},
+              // {originalPrice: '2000',presentPrice: '2800'}
             ],
             selectClassA: null,
             payMoney: '',
-            modal: false
+            modal: false,
+            remark:''
           }
       },
       methods:{
@@ -68,15 +70,38 @@
         selectClass(index,item){
           // console.log(item)
           this.selectClassA = index
-          this.payMoney = item.originalPrice
+          this.payMoney = item.sellPrice
+          this.remark = item.remark
         },
         Pay(){
           if (this.selectClassA !== null){
+            //生成订单的接口
+            // let data = {}
+            // generateOrder(data).then(res => {
+            //     if(res.code === 0){
+            //       // this.modal = true
+            //     }
+            // })
             this.modal = true
+            let dataa = {}
+            dataa.price = this.payMoney
+            dataa.orderNo = '201911191752030001'
+            generationQR(dataa).then(res => {
+
+            })
           } else {
             this.$Message.warning('请选择套餐！')
           }
         }
+      },
+      mounted(){
+          let params = {}
+        rechargeCoinInfo(params).then(res => {
+            if(res.code === 0){
+              this.combo = res.data.coins
+              this.number = res.data.remainCoin
+            }
+        })
       }
     }
 </script>
