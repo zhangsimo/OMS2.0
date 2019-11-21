@@ -304,6 +304,7 @@
         toImage() {
           if(this.canvas){
               this.clear()
+              this.info = ''
           }
             this.screenshot = true
             // 第一个参数是需要生成截图的元素,第二个是自己需要配置的参数,宽高等
