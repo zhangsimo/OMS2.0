@@ -1,5 +1,6 @@
 <template>
   <div class="content-oper content-oper-flex">
+    <!-- 头部 -->
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -17,7 +18,7 @@
           <div class="db">
 
             <Button type="default" @click="search" class="mr10">
-              </i><Icon type="ios-more" />更多
+              <i class="iconfont mr5 iconchaxunicon"></i>更多
             </Button>
           </div>
           <div class="db">
@@ -57,12 +58,12 @@
         </div>
       </div>
     </section>
-
+    <!-- main -->
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500">
-            <!-- split 左 -->
+            <!--main split 左 -->
             <div slot="left" class="con-split-pane-left" style="height: 100%;">
               <div class="pane-made-hd">采购订单列表</div>
               <Table
@@ -84,8 +85,8 @@
                 show-total
               ></Page>
             </div>
-            <!-- split 右 -->
-            <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+            <!--main split 右 -->
+            <div slot="right" class="con-split-pane-right pl5 goods-list-form" style="height: 100%;">
               <div class="pane-made-hd">本年采购总金额:</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
@@ -162,7 +163,7 @@
                       <Button size="small" class="mr10" @click="addPro">订单调整</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">收货信息</Button>
+                      <Button size="small" class="mr10" @click="showGoods">收货信息</Button>
                     </div>
                     <div class="fl mb5">
                       <Button size="small" class="mr10" @click="addPro">采购金额填写</Button>
@@ -225,17 +226,44 @@
         </div>
       </div>
     </section>
+    <!-- 对话框 -->
+    <Modal
+        title="高级查询"
+        v-model="serchN"
+        :styles="{top: '20px'}">
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+        <p>Content of dialog</p>
+    </Modal>
+    <!-- 收货信息 -->
+    <Modal v-model="isShow" title="收货信息" width="1500" >
+      <goods-info></goods-info>
+      <div slot="footer"></div>
+    </Modal>
   </div>
 </template>
 <script>
 import '../../lease/product/lease.less'
 import QuickDate from "_c/getDate/dateget";
-
+import goodsInfo from '../../../components/goodsInfo/goodsInfo'
 export default {
   name: "categoryList",
-  components: { QuickDate },
+  components: { QuickDate, goodsInfo},
   data() {
     return {
+      //serch对话框
+      serchN: false,
+      // 右侧表单数据双向绑定
+      formPlan: {
+        supplyName: '', //供应商
+        buyer: '', //采购员
+        PaperType: '',//票据类型
+        closeType: '',//结算方式
+        enterStorage: '',//入库仓
+        remarks : '',//备注
+        beforePay: '',//预付款
+        orderNum: ''//订单号
+      },
       split1: 0.2,
       columns: [
         {
@@ -341,7 +369,8 @@ export default {
       leftTableHeight: 0,
       //右侧表格高度
       rightTableHeight:0,
-    };
+      isShow:false
+    }
   },
   activated() {},
   mounted() {
@@ -357,13 +386,26 @@ export default {
     });
   },
   methods: {
-
+    search() {
+      this.serchN = true
+    },
+    showGoods() {
+      this.isShow = true
+    },
   },
   computed: {}
 };
 </script>
 
 <style lang="less" scoped>
+.vertical-center-modal{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .ivu-modal{
+            top: 0;
+        }
+    }
 .goods-list-form {
   * {
     font-size: 12px !important;
