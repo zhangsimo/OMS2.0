@@ -348,6 +348,8 @@ export default class ProductLA extends Vue {
                 partCode: el.partCode,
                 empId: this.employeeId,
                 partBrandCode: el.partBrandCode,
+                partId: el.id,
+                partInnerId: el.code,
             }
         })
         this.selectionWaitPartArr = [];

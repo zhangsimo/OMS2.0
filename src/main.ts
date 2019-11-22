@@ -20,6 +20,10 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
+import loadmore from "./directive/loadmore";
+// @ts-ignore
+Vue.use(loadmore);
+
 //引入element-ui
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';

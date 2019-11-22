@@ -18,9 +18,6 @@
 .tenant-main {
   height: 490px;
 }
-.tenant-main .left {
-  overflow: auto;
-}
 .tenant-main .tab-warp {
   overflow-y: auto;
 }
@@ -30,6 +27,8 @@
 }
 .tree-warp {
   padding-left: 10px;
+  height: 430px;
+  overflow: auto;
 }
 .btn-title {
   display: flex;
