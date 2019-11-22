@@ -1383,18 +1383,14 @@ export default [
             component: () => import("@/view/system/basicData/mixTure/mixtureRatio.vue")
           },
           {
-            path: "/essentialData/dictionaries",
-            name: "dictionaries",
-            // mark: '61',
+            path: "/lease/dataDictionary/",
+            name: "dataDictionary",
+            // mark: 'gpart_oms_policy',
             meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 数据字典"
+              icon: "gear-b",
+              title: "数据字典"
             },
-            component: () =>
-              import(
-                "@/view/system/essentialData/dicitonaries/dictionaries.vue"
-              )
+            component: () => import('@/view/lease/dataDictionary/dataDictionary.vue'),
           }
         ]
       },
@@ -1838,16 +1834,7 @@ export default [
             "@/view/lease/customerServiceManagement/customerServiceManagement.vue"
           )
       },
-      {
-        path: "/lease/dataDictionary/",
-        name: "dataDictionary",
-        // mark: 'gpart_oms_policy',
-        meta: {
-          icon: "gear-b",
-          title: "数字字典"
-        },
-        component: () => import('@/view/lease/dataDictionary/dataDictionary.vue'),
-      }
+
     ]
   },
   {

@@ -244,11 +244,18 @@
                 moreQueryShow:false,
                 clientDataShow:false,
                 clientList:{},
+                supplier:''//客户信息
+
             }
         },
         created(){
-           this.getlist()
+           // this.getlist()
             this.getAdress()
+        },
+        computed: {
+            newsupplierId() {
+                return this.$store.state.user.managementId;
+            }
         },
         methods:{
             //获取全部表格数据
@@ -260,6 +267,8 @@
                 data.code = this.coding
                 data.fullName = this.customerName
                 data.contactorTel = this.tel
+                data.lever = this.supplier.lever
+                data.leverId = this.supplier.id
          let res = await getCustomerInformation(data)
                 if (res.code == 0){
                     this.loading = false
@@ -282,7 +291,6 @@
             getAdress(){
                 area().then(res => {
                     if(res.code == 0){
-                        console.log(res)
                         this.provinceArr = res.data
                     }
                 })
@@ -360,6 +368,15 @@
                     console.log(res)
                     this.clientDataShow = true
                 })
+            }
+        },
+        watch:{
+            newsupplierId:{
+                handler(v,ov){
+                    this.supplier = v
+                    this.getlist()
+                },
+                deep:true
             }
         }
     }

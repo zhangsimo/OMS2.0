@@ -60,7 +60,8 @@
 .orderList {
   line-height: 30px;
   padding-left: 10px;
-  border-bottom: 1px solid #dcdee2;
+  /*border-bottom: 1px solid #dcdee2;*/
+  background-color: #f8f8f8;
 
 }
   .orderCenter{

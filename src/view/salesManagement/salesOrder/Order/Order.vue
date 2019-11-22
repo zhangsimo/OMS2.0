@@ -6,7 +6,7 @@
         <Select v-model="orderType" style="width:100px" class="mr10">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
-        <Button type="default"  class="mr10">...更多</Button>
+        <Button type="default"  class="mr10"><Icon type="ios-more" />更多</Button>
         <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
         <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>

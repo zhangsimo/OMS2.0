@@ -82,7 +82,6 @@
             },
             //点击获取当前信息
             changeOneList(data){
-                console.log(data)
                 this.newOne = JSON.parse(JSON.stringify(data[0]))
                 this.$store.commit('setsupplierId',JSON.parse(JSON.stringify(data[0])) )
             },
