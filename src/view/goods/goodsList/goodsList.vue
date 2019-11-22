@@ -143,10 +143,12 @@
               <vxe-table
                 border
                 resizable
+                show-footer
                 @edit-closed="editClosedEvent"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
+                :footer-method="addFooter"
                 :edit-config="{trigger: 'dblclick', mode: 'cell'}">
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -158,8 +160,24 @@
                 <vxe-table-column field="num6" title="门店库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="采购在途库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="滞销库存" width="100"></vxe-table-column>
-                <vxe-table-column field="id" title="计划采购数量" :edit-render="{name: 'input'}" width="120"></vxe-table-column>
-                <vxe-table-column field="num6" title="计划采购金额" :edit-render="{name: 'input'}" width="120"></vxe-table-column>
+                <vxe-table-column field="num" title="计划采购数量" :edit-render="{name: 'input'}" width="120">
+                  <template v-slot:edit="{ row }">
+                    <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="price" title="计划采购单价" :edit-render="{name: 'input'}" width="120">
+                  <template v-slot:edit="{ row }">
+                    <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
+                  </template>
+                  <template v-slot="{ row }">
+                    {{parseFloat(row.price).toFixed(2)}}
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column title="计划采购金额" width="120">
+                  <template v-slot="{ row }">
+                  {{parseFloat(row.price*row.num).toFixed(2)}}
+                </template>
+                </vxe-table-column>
                 <vxe-table-column field="num6" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="不含税单价" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="不含税金额" width="100"></vxe-table-column>
@@ -174,10 +192,10 @@
                 <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
-              <div ref="planPage">
-                <Page size="mini" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
-                      @on-page-size-change="changeSize" show-sizer show-total></Page>
-              </div>
+              <!--<div ref="planPage">-->
+                <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
+                      <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
+              <!--</div>-->
             </div>
           </Split>
         </div>
@@ -510,16 +528,16 @@
       }
     },
     mounted() {
-      this.initStart()
+      //this.initStart()
       this.$nextTick(()=>{
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.planForm.offsetHeight;
         let planBtnH = this.$refs.planBtn.offsetHeight;
-        let planPageH = this.$refs.planPage.offsetHeight;
+        // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH-70;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH-planFormH-planBtnH-planPageH-58;
+        this.rightTableHeight = wrapH-planFormH-planBtnH-65;
       })
     },
     methods: {

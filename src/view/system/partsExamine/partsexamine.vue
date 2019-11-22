@@ -40,19 +40,19 @@
       </div>
       <Tabs type="card" :animated="false">
         <TabPane label="基本信息">
-          <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="110">
+          <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
             <Row>
               <Col span="11">
                 <FormItem label="配件品质：" prop="qualityTypeId">
-                  <Select v-model="formValidate.qualityTypeId">
-                    <Option v-for="item in brandAll" :value="item.id" :key="item.id" v-if="item.parentId==0">{{item.name}}</Option>
+                  <Select @on-change="qualityGetBrand" v-model="formValidate.qualityTypeId">
+                    <Option v-for="item in qualityArr" :value="item.qualityCode" :key="item.qualityCode">{{item.quality}}</Option>
                   </Select>
                 </FormItem>
               </Col>
               <Col span="11">
                 <FormItem label="配件品牌：" prop="partBrandId">
                   <Select v-model="formValidate.partBrandId">
-                    <Option v-for="item in brandAll" :value="item.id" :key="item.id" v-if="item.parentId!=0">{{item.name}}</Option>
+                    <Option v-for="item in brandArr" :value="item.code" :key="item.code" >{{item.name}}</Option>
                   </Select>
                 </FormItem>
               </Col>
@@ -65,7 +65,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="名称：" prop="name">
-                  <Input @on-click="showName" icon="ios-clock-outline" v-model="formValidate.name" ></Input>
+                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" ></Input>
                 </FormItem>
               </Col>
             </Row>
@@ -98,10 +98,16 @@
             <Row>
               <Col span="22">
                 <FormItem label="适用车型：" prop="applyCarbrandId">
-                  <Select class="w140 mr5"  v-model="formValidate.applyCarbrandId">
-                    <Option v-for="item in carModelAll" :value="item.id" :key="item.id">{{item.carBrandZh}}</Option>
+                  <Select @on-change="getCarSystem" class="w140 mr5"  v-model="carObj.selectCarBrand">
+                    <Option v-for="item in carObj.carBrandData" :value="item.nameEn" :key="item.nameEn">{{item.nameCn}}</Option>
                   </Select>
-                  <Input class="w350" v-model="formValidate.explain"></Input>
+                  <Select @on-change="getCarModelFun" class="w150 mr5"  v-model="carObj.selectCarSystem">
+                    <Option v-for="(item,index) in carObj.carSystemData" :value="item.carLineName" :key="index">{{item.carLineName}}</Option>
+                  </Select>
+                  <Select class="w200"  v-model="formValidate.applyCarbrandId">
+                    <Option v-for="item in carObj.carModelData" :value="item.carModelName" :key="item.carModelName">{{item.carModelName}}</Option>
+                  </Select>
+                  <!--<Input class="w350" v-model="formValidate.explain"></Input>-->
                 </FormItem>
               </Col>
             </Row>
@@ -135,7 +141,7 @@
             <Row>
               <Col span="11">
                 <FormItem label="自定义分类：" prop="customClassName">
-                  <Input @on-click="customModalFun" icon="ios-clock-outline" v-model="formValidate.customClassName"></Input>
+                  <Input @on-click="customModalFun" icon="ios-more" v-model="formValidate.customClassName"></Input>
                 </FormItem>
               </Col>
               <Col span="11">
@@ -144,7 +150,35 @@
                 </FormItem>
               </Col>
             </Row>
+            <!--<Row>-->
+              <!--<Col span="22">-->
+                <!--<FormItem label="单位换算：" class="x11">-->
+                  <!--<div class="flex">-->
+                    <!--<div>-->
+                      <!--<div class="unit-item w300" v-for="v in valueVOS">-->
+                        <!--<Select class="w80" v-model="v.unit1">-->
+                          <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
+                        <!--</Select>-->
+                        <!--<Input class="w80" v-model="v.inputNum"></Input>-->
+                        <!--<Select class="w80" v-model="v.unit2">-->
+                          <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
+                        <!--</Select>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                    <!--<div>-->
+                      <!--<Button class="ml30" @click="addValueVOS" type="default"><Icon type="md-add" size="14"/> 新增</Button>-->
+                      <!--<Button class="ml10" @click="delValueVOS" type="primary"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>-->
+                    <!--</div>-->
+                  <!--</div>-->
+                <!--</FormItem>-->
+              <!--</Col>-->
+            <!--</Row>-->
           </Form>
+          <div class="tc">
+            <Button class="mr10" type='warning' @click='submit("proModalForm")'>审核通过</Button>
+            <Button class="mr10" type='primary' @click='submit("proModalForm")'>审核不通过</Button>
+            <Button type='default' @click='proModal = false'>取消</Button>
+          </div>
         </TabPane>
         <TabPane label="包装规格">
           <div class="pb10">
@@ -159,36 +193,40 @@
               </Select>
             </template>
           </Table>
+          <div class="tc pt20">
+            <Button class="mr10" type='primary' @click='submit("proModal")'>保存</Button>
+            <Button type='default' @click='proModal = false'>取消</Button>
+          </div>
         </TabPane>
       </Tabs>
       <div slot='footer'>
-        <Button type='primary' @click='submit("proModal")'>确定</Button>
-        <Button type='default' @click='proModal = false'>取消</Button>
+
       </div>
     </Modal>
-    <Modal v-model="linkModal" title="配件名称查询" width="1000">
-      <div class="partCheck-hd">
-        <Input class="w200 mr10" v-model="formValidate.name"></Input>
-        <Button class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
-        <Button class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
-        <Button type='default'><Icon type="md-add" /> 新增配件名称</Button>
-      </div>
-      <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">系统分类</div>
-          <div class="partCheck-left-tree">
-            <Tree :data="treeData" show-checkbox @on-check-change="selectTree"></Tree>
-          </div>
-        </div>
-        <div class="fr partCheck-right">
-          <Table :height="heightWrap" @on-current-change="selectTabelData" size="small" highlight-row :loading="loading" border :stripe="true" :columns="columnsPart" :data="tbdata"></Table>
-        </div>
-      </div>
-      <div slot='footer'>
-        <Button type='primary' @click='submit("proModal")'>确定</Button>
-        <Button type='default' @click='proModal = false'>取消</Button>
-      </div>
-    </Modal>
+    <!--<Modal v-model="linkModal" title="配件名称查询" width="1000">-->
+      <!--<div class="partCheck-hd">-->
+        <!--<Input class="w200 mr10" v-model="formValidate.name"></Input>-->
+        <!--<Button class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>-->
+        <!--<Button class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>-->
+        <!--&lt;!&ndash;<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>&ndash;&gt;-->
+      <!--</div>-->
+      <!--<div class="partCheck-main clearfix">-->
+        <!--<div class="partCheck-left fl">-->
+          <!--<div class="partCheck-left-tit">系统分类</div>-->
+          <!--<div class="partCheck-left-tree">-->
+            <!--<Tree :data="treeData" @on-select-change="selectTree"></Tree>-->
+          <!--</div>-->
+        <!--</div>-->
+        <!--<div class="fr partCheck-right" style="width: 758px">-->
+          <!--<Table height="389" @on-current-change="selectTabelData" size="small" highlight-row :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div slot='footer'>-->
+        <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
+        <!--<Button type='default' @click='proModal = false'>取消</Button>-->
+      <!--</div>-->
+    <!--</Modal>-->
+    <search-part-name @selectSearchName="getSearchPartName" ref="searchPartName"></search-part-name>
     <Modal v-model="customModal" title="自定义分类" width="500">
       <div class="partCheck-hd">
         <Button @click="submitCustom" class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
@@ -199,8 +237,8 @@
           <p class="custom-type-hd">{{v.dictName}}：</p>
           <div>
             <span
-              class="tag-span"
-              :class="{'active':customClassName==v1.itemName}"
+              class="tag-span mr10 mb10"
+              :class="{'active':customClassId==v1.id}"
               @click="handleTag(v1)"
               @on-change="handleTag(v1)"
               v-for="v1 in v.itemVOS">{{v1.itemName}}</span>
@@ -211,17 +249,76 @@
 
       </div>
     </Modal>
+
+    <Modal v-model="addPartModal" title="新增配件名称" width="500">
+      <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="110">
+        <Row>
+          <Col span="20">
+            <FormItem label="标准名称：" prop="name">
+              <Input @on-click="showName" v-model="formValidate.name" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="20">
+            <FormItem label="别名：" prop="name">
+              <Input @on-click="showName" v-model="formValidate.name" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="20">
+            <FormItem label="配件一级分类：" prop="name">
+              <Select v-model="formValidate.unit">
+                <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="20">
+            <FormItem label="配件二级分类：" prop="name">
+              <Select v-model="formValidate.unit">
+                <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="20">
+            <FormItem label="配件三级分类：" prop="name">
+              <Select v-model="formValidate.unit">
+                <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="20">
+            <FormItem label="补充说明：" prop="code">
+              <Input v-model="formValidate.code"></Input>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <div slot='footer'>
+        <Button type='primary' @click='submit("addPartModal")'>确定</Button>
+        <Button type='default' @click='addPartModal = false'>取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
   import '../../lease/product/lease.less'
   import './partsLayer.less'
-  import {getExamineList,getExamineDetail,getAllBrand,getAllCar,getAllCustom} from '../../../api/system/partsExamine/partsExamineApi'
+  import {getExamineList,getExamineDetail,getAllBrand,getAllCar,getAllCustom,getCarClassifys} from '../../../api/system/partsExamine/partsExamineApi'
   import {getDataDictionaryTable} from '../../../api/system/dataDictionary/dataDictionaryApi'
   import {minxParts} from './mixParts'
+  import SearchPartName from "./compontent/searchPartName";
 
   export default {
     name: 'mixtureRatio',
+    components: {SearchPartName},
     inject:['reload'],
     mixins:[minxParts],
     data() {
@@ -266,6 +363,7 @@
         }
       }
       return {
+        //快速查询
         purchaseType:'queryCode',
         purchaseTypeArr:[
           {
@@ -285,6 +383,7 @@
             'value':'namePy'
           },
         ],
+        //审核状态查询
         approvalType:0,
         approvalTypeArr:[
           {
@@ -304,13 +403,23 @@
             'value':9999
           },
         ],
+        //是否禁用
         prohibit:false,
+        //是否禁售
         forbidsale:false,
+        //配件名称查询层
         linkModal: false,
+        //配件资料层
         proModal:false,
+        //自定义分类层
         customModal:false,
+        //新增配件名称层
+        addPartModal:false,
+        //快速查询输入值
         searchValue: '',
+        //审核日期查询
         dateTime: '',
+        //配件资料层form数据
         formValidate: {
           qualityTypeId: '',//品质
           partBrandId: '',//品牌
@@ -326,33 +435,37 @@
           produceFactory:'',//生产厂家
           origin:'',//产地
           fullName:'',//配件全称
-          customClassName:'',
+          customClassName:'',//选中的自定义分类Name
           remarks:'',//备注
           specVOList:[],//规格list
           valueVOS:[],//单位换算list
         },
         ruleValidate: {
-          qualityTypeName: [
-            { required: true, message: '产品名称不能为空', trigger: 'blur' }
+          qualityTypeId: [
+            { required: true, message: '配件品质不能为空', trigger: 'change' }
           ],
-          partNameId: [
-            { required: true,validator:price2, trigger: 'blur'}
+          partBrandId: [
+            { required: true, message: '配件品牌不能为空', trigger: 'blur'}
           ],
-          isCycle: [
-            { required: true, message: '有效期不能为空', trigger: 'blur' }
+          code: [
+            { required: true, message: '编码不能为空', trigger: 'blur' }
           ],
-          address:[
-            { required: true, message: '接口地址不能为空', trigger: 'blur' }
+          name:[
+            { required: true, message: '名称不能为空', trigger: 'blur' }
           ],
-          coin:[
-            { required: true, validator:price, trigger: ['blur','change'] }
+          unit:[
+            { required: true, message: '单位不能为空', trigger: 'blur'}
           ]
         },
-        brandAll:[],//所有品牌，品质
+        qualityArr:[],//所有品质
+        brandArr:[],//所有品牌
+
         dictCodeAll:[],//所有单位
         carModelAll:[],//所有车型
         customAll:[],//自定义分类
-        customClassName:'',
+        customClassName:'',//选中的自定义分类,判断当前高亮
+        customClassId:'',//选中的自定义分类id
+        //单位换算存在的list
         valueVOS:[
           {
             'unit1':'',
@@ -360,11 +473,13 @@
             'unit2':''
           },
         ],
+        //单位换算item obj
         valueVo:{
           'unit1':'',
           'inputNum':'',
           'unit2':''
         },
+        //配件查询名称层系统分类树形数据
         treeData: [
           {
             title: '授权管理',
@@ -427,12 +542,14 @@
             ]
           }
         ],
+        //分页obj
         page: {
           num: 1,
           size: 10,
           total: 0
         },
         loading: false,
+        //配件标定审核list表头
         columns: [
           {
             title: '序号',
@@ -550,6 +667,7 @@
           },
         ],
         tbdata: [],//审批数据
+        //配件资料层包装规格表头
         columnsTab: [
           {
             title: '序号',
@@ -624,11 +742,15 @@
             }
           },
         ],
-        Tabdata: [],//规格数据
+        //规格数据
+        Tabdata: [],
+        //新增规格obj
         newSpecObj:{
           id:'1'
         },
+        //配件审核标定点击选中的table数据
         selectTable:{},
+        //高度
         heightWrap:0
       }
     },
@@ -638,35 +760,6 @@
     methods: {
       initStart() {
         this.getList()
-      },
-      submit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            let objReq = {}
-            objReq.name = this.formValidate.name
-            objReq.type = this.formValidate.type
-            objReq.remark = this.formValidate.remark
-            objReq.disable = this.formValidate.disable
-            if(objReq.type===0){
-              objReq.salesPrice = this.formValidate.salesPrice
-              objReq.isCycle = this.formValidate.isCycle
-            }else{
-              objReq.address = this.formValidate.address
-              objReq.coin = this.formValidate.coin
-            }
-            if(this.formValidate.id){
-              objReq.id = this.formValidate.id
-            }
-
-            saveProduct(objReq).then(res => {
-              if(res.code==0){
-                this.proModal = false
-                this.$Message.success("添加成功")
-                this.getList()
-              }
-            })
-          }
-        })
       },
       //初始化
       getList() {
@@ -701,12 +794,11 @@
       //新增产品
       approval(){
         this.proModal = true
+        //拉取适用车型品牌
+        this.getCarBrand();
+        //获取系统分类
         //获取所有品质
-        getAllBrand({}).then(res => {
-          if(res.code==0){
-            this.brandAll = res.data.content||[]
-          }
-        })
+        this.getQuiltyAndBrand();
         //获取配件单位
         getDataDictionaryTable({"dictCode":"UNIT_CODE_001"}).then(res =>{
           if(res.code==0){
@@ -722,15 +814,15 @@
 
         getExamineDetail({id:this.selectTable.id}).then(res => {
           if(res.code==0){
-            this.formValidate = res.data||[]
+            // this.formValidate = res.data||[];
+            // this.$set(this.formValidate,'specVOList',[])
           }
         })
-
       },
 
-
+      //配件名称查询层显示
       showName(){
-        this.linkModal = true
+        this.$refs.searchPartName.showLayer();
       },
       //分页
       changePage(p) {
@@ -742,7 +834,7 @@
         this.page.size = size
         this.getList()
       },
-      //搜索
+      //选择的时间
       selectDate(date) {
         this.dateTime = date
         this.search()
@@ -779,6 +871,7 @@
       },
       handleTag(v){
         this.customClassName = v.itemName
+        this.customClassId = v.id
       },
       //选择自定义分类
       submitCustom(){
@@ -791,6 +884,7 @@
       addSpec(){
         let objData = {...this.newSpecObj}
         this.formValidate.specVOList.push(objData)
+        console.log(this.formValidate.specVOList)
       },
       delSpec(){
         this.formValidate.specVOList.pop()

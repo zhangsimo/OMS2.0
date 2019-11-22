@@ -25,18 +25,45 @@ export const mixGoodsData = {
         ],
       },
       tableData:[
-        {id:1},
-        {id:1}
+        {id:1,num:0,price:0},
+        {id:1,num:0,price:0},
       ]
     }
   },
   methods:{
     editActivedEvent ({ row, column }, event) {
-      console.log(`打开 ${column.title} 列编辑`)
+      //console.log(`打开 ${column.title} 列编辑`)
     },
     editClosedEvent ({ row, column }, event) {
-      console.log(row,event,column)
+      //console.log(row,event,column)
       //console.log(`关闭 ${column} 列编辑`)
-    }
+    },
+    addFooter({ columns, data }){
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['num', 'price'].includes(column.property)) {
+            return this.sum(data,column.property)
+          }
+          return null
+        })
+      ]
+    },
+    sum(data,type){
+      let total = 0
+      data.map(item => {
+        let value = item[type]
+        if(!value){
+          value = 0
+        }
+        total+=parseFloat(value)
+      })
+      if(type=='price'){
+        return total.toFixed(2);
+      }
+      return total
+    },
   }
 }
