@@ -109,18 +109,23 @@
               height="330"
             ></Table>
           </div>
-          <div class="mt10 mb10"> 
-            <Page
-              @on-page-size-change="onPageSizeChange"
-              @on-change="onChange"
-              :current="pageList.page"
-              :total="pageList.total" 
-              :page-size="pageList.pageSize" 
-              :page-size-opts="pageList.pageSizeOpts"
-              show-total
-              show-sizer
-              />
-          </div>
+            <Row>
+              <Col span="12">
+                <Page
+                  @on-page-size-change="onPageSizeChange"
+                  @on-change="onChange"
+                  :current="pageList.page"
+                  :page-size="pageList.pageSize" 
+                  :page-size-opts="pageList.pageSizeOpts"
+                  show-sizer
+                  />
+              </Col>
+              <Col span="12">
+                共{{this.pageList.total}}条
+                每页{{this.pageList.size}}条
+              </Col>
+            </Row>
+            
           <Table
               show-summary
               :summary-method="handleSummary"
