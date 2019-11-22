@@ -1,0 +1,213 @@
+<template>
+  <div>
+    <Modal v-model="proModal" title="配件资料" width="700">
+      <div class="pb10 tr">
+        <Checkbox v-model="prohibit">是否禁用</Checkbox>
+        <Checkbox v-model="forbidsale">是否禁售</Checkbox>
+      </div>
+      <Tabs type="card" :animated="false">
+        <TabPane label="基本信息">
+          <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
+            <Row>
+              <Col span="11">
+                <FormItem label="配件品质：" prop="qualityTypeId">
+                  <Select @on-change="qualityGetBrand" v-model="formValidate.qualityTypeId">
+                    <Option v-for="item in qualityArr" :value="item.qualityCode" :key="item.qualityCode">{{item.quality}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="配件品牌：" prop="partBrandId">
+                  <Select v-model="formValidate.partBrandId">
+                    <Option v-for="item in brandArr" :value="item.id" :key="item.code" >{{item.name}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="编码：" prop="code">
+                  <Input v-model="formValidate.code"></Input>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="名称：" prop="name">
+                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" ></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="单位：" prop="unit">
+                  <Select v-model="formValidate.unit">
+                    <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="OE码：" prop="oemCode">
+                  <Input v-model="formValidate.oemCode"></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="规格：" prop="spec">
+                  <Input v-model="formValidate.spec"></Input>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="型号：" prop="model">
+                  <Input v-model="formValidate.model"></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="22">
+                <FormItem label="适用车型：" prop="applyCarbrandId">
+                  <Select @on-open-change="getCarBrand" @on-change="getCarModelFun" class="w140 mr5"  v-model="carObj.selectCarBrand">
+                    <Option v-for="item in carObj.carBrandData" :value="item.nameEn" :key="item.nameEn">{{item.nameCn}}</Option>
+                  </Select>
+                  <!--<Select @on-change="getCarModelFun" class="w150 mr5"  v-model="carObj.selectCarSystem">-->
+                    <!--<Option v-for="(item,index) in carObj.carSystemData" :value="item.carLineName" :key="index">{{item.carLineName}}</Option>-->
+                  <!--</Select>-->
+                  <Select class="w350"  v-model="formValidate.applyCarbrandId">
+                    <Option v-for="item in carObj.carModelData" :value="item.carModelName" :key="item.carModelName">{{item.carModelName}}</Option>
+                  </Select>
+                  <!--<Input class="w350" v-model="formValidate.explain"></Input>-->
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="22">
+                <FormItem label="通用编码：" prop="commonCode">
+                  <Input v-model="formValidate.commonCode"></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="生产厂家：" prop="produceFactory">
+                  <Input v-model="formValidate.produceFactory"></Input>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="产地：" prop="origin">
+                  <Input v-model="formValidate.origin"></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="22">
+                <FormItem label="配件全称：" prop="fullName">
+                  <Input v-model="formValidate.fullName"></Input>
+                  配件全称 = 名称+规格+车型+品牌
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="11">
+                <FormItem label="自定义分类：" prop="customClassName">
+                  <Input @on-click="customModalFun" icon="ios-more" v-model="formValidate.customClassName"></Input>
+                </FormItem>
+              </Col>
+              <Col span="11">
+                <FormItem label="备注：" prop="remarks">
+                  <Input v-model="formValidate.remarks"></Input>
+                </FormItem>
+              </Col>
+            </Row>
+            <!--<Row>-->
+            <!--<Col span="22">-->
+            <!--<FormItem label="单位换算：" class="x11">-->
+            <!--<div class="flex">-->
+            <!--<div>-->
+            <!--<div class="unit-item w300" v-for="v in valueVOS">-->
+            <!--<Select class="w80" v-model="v.unit1">-->
+            <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
+            <!--</Select>-->
+            <!--<Input class="w80" v-model="v.inputNum"></Input>-->
+            <!--<Select class="w80" v-model="v.unit2">-->
+            <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
+            <!--</Select>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--<div>-->
+            <!--<Button class="ml30" @click="addValueVOS" type="default"><Icon type="md-add" size="14"/> 新增</Button>-->
+            <!--<Button class="ml10" @click="delValueVOS" type="primary"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</FormItem>-->
+            <!--</Col>-->
+            <!--</Row>-->
+          </Form>
+          <div class="tc">
+            <Button class="mr10" type='warning' @click='submit("proModalForm")'>审核通过</Button>
+            <Button class="mr10" type='primary' @click='submit("proModalForm")'>审核不通过</Button>
+            <Button type='default' @click='proModal = false'>取消</Button>
+          </div>
+        </TabPane>
+        <TabPane label="包装规格">
+          <div class="pb10">
+            <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
+            <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
+          </div>
+          <Table height="300" size="small" :loading="loading" border :stripe="true" :columns="columnsTab" :data="formValidate.specVOList">
+            <template slot-scope="{ row, index }" slot="meterCompany">
+              <span v-if="index===0">{{formValidate.unit}}</span>
+              <Select v-else class="w80" v-model="unit2">
+                <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+              </Select>
+            </template>
+          </Table>
+          <div class="tc pt20">
+            <Button class="mr10" type='primary' @click='submit("proModal")'>保存</Button>
+            <Button type='default' @click='proModal = false'>取消</Button>
+          </div>
+        </TabPane>
+      </Tabs>
+      <div slot='footer'>
+      </div>
+    </Modal>
+    <search-part-name @selectSearchName="getSearchPartName" ref="searchPartName"></search-part-name>
+    <Modal v-model="customModal" title="自定义分类" width="500">
+      <div class="partCheck-hd">
+        <Button @click="submitCustom" class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
+        <Button @click="customModal=false" type='default'><Icon type="md-close"/> 取消</Button>
+      </div>
+      <div class="custom-main">
+        <div class="custom-item" v-for="v in customAll">
+          <p class="custom-type-hd">{{v.dictName}}：</p>
+          <div>
+            <span
+              class="tag-span mr10 mb10"
+              :class="{'active':customClassId==v1.id}"
+              @click="handleTag(v1)"
+              @on-change="handleTag(v1)"
+              v-for="v1 in v.itemVOS">{{v1.itemName}}</span>
+          </div>
+        </div>
+      </div>
+      <div slot='footer'>
+
+      </div>
+    </Modal>
+  </div>
+</template>
+
+<script>
+
+  import {mixPartInfo} from "./mixPartInfo";
+  import SearchPartName from "./searchPartName";
+
+  export default {
+		name: "partInfo",
+    components: {SearchPartName},
+    mixins:[mixPartInfo],
+
+	}
+</script>
+
+<style scoped>
+
+</style>

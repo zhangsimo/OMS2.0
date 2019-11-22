@@ -4,52 +4,14 @@ import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExami
 export const minxParts = {
   data(){
     return {
-      //配件资料层车型obj
-      carObj:{
-        selectCarBrand:'',
-        carBrandData:[],
-        selectCarSystem:'',
-        carSystemData:[],
-        selectCarModel:'',
-        carModelData:[]
-      },
+
     }
   },
   mounted(){
     // this.getCarBrand()
   },
   methods:{
-    getCarBrand(){
-      let req = {}
-      req.page = 1;
-      req.pageSize = 500;
-      getCarBrandAll(req).then(res => {
-        this.carObj.carBrandData = res.data.content
-      })
-    },
-    getCarSystem(){
-      let req = {}
-      req.nameEn = this.carObj.selectCarBrand
-      getCarSeries(req).then(res => {
-        this.carObj.carSystemData = res.data;
-        this.carObj.carModelData = [];
-        this.carObj.selectCarModel = '';
-      })
-    },
-    getCarModelFun(){
-      let req = {}
-      req.carLineName = this.carObj.selectCarSystem;
-      req.page = 1;
-      req.pageSize = 200;
-      getCarModel(req).then(res => {
-        let arrData = res.data.content||[]
-        let arr2 = []
-        for(let k in arrData){
-          arr2.push(...arrData[k])
-        }
-        this.carObj.carModelData = arr2
-      })
-    },
+
     //提交审批
     submit (name) {
       this.$refs[name].validate((valid) => {
@@ -82,24 +44,6 @@ export const minxParts = {
         }
       })
     },
-    //获取品牌品质
-    getQuiltyAndBrand(){
-      getAllBrand({page: 1,pageSize: 200}).then(res => {
-        if(res.code==0){
-          this.qualityArr = res.data.content||{}
-        }
-      })
-    },
-    //根据品质获取品牌
-    qualityGetBrand(){
-      let arrData = this.qualityArr.filter(item => item.qualityCode==this.formValidate.qualityTypeId)
-      if(arrData.length>0){
-        this.brandArr = arrData[0].children
-      }
-    },
-    //获取选中配件名称
-    getSearchPartName(v){
-      this.formValidate.name = v.name
-    }
+
   }
 }

@@ -49,7 +49,7 @@ export function getAllCustom() {
 //提交审批
 export function setApproval(data) {
   return axios.request({
-    url: `${api.omsProduct}/partApply/approval`,
+    url: `${api.wmsApi}/partApply/approval`,
     method: 'post',
     data
   })
