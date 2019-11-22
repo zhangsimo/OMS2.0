@@ -84,22 +84,19 @@
                     {
                         title: '调整前临时额度',
                         align: 'center',
-                        key: 'tempQuotaTotal',
                         render: (h,params) => {
-                          if(params.row.tempQuotaTotal == null) {
-                            return h('div',{},0)
-                          }
-                        }
+                            let tex = params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal
+                            return h('span',{},tex)
+                    }
                     },
                     {
                         title: '调整后临时额度',
                         align: 'center',
                         key: 'tempQuotaTotal',
                         render: (h,params) => {
-                          if(params.row.tempQuotaTotal == null) {
-                            return h('div',{},0)
-                          }
-                        }
+                            let tex = params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal
+                            return h('span',{},tex)
+                    }
                     },
                     {
                         title: '临时额度开始时间',
@@ -116,10 +113,9 @@
                         align: 'center',
                         key: 'afterAdjustQuota',
                         render: (h,params) => {
-                          if(params.row.afterAdjustQuota == null) {
-                            return h('div',{},0)
-                          }
-                        }
+                            let tex = params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal
+                            return h('span',{},tex)
+                    }
                     },
                 ],
                 staffList:[],
