@@ -183,7 +183,7 @@
       title="新增采购订单">
       <section>
         <div>
-          <Button class=" mr10" style="border: none" @click="addPurchaseOrderDialog = true">
+          <Button class=" mr10" style="border: none" @click="savePre">
             <span class="center" style="color: #27A2D2">
               <i class="iconfont iconbaocunicon"></i>保存
             </span>
@@ -207,14 +207,14 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="ticketType">
+                <Select v-model="billTypeId">
                   <Option v-for="item in ticketTypeList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settlementMethod">
+                <Select v-model="settleTypeId">
                   <Option v-for="item in settlementMethodList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -325,13 +325,23 @@ import {
   generateOrder,
   PjType,
   JsStyle,
-  activeCompany
+  activeCompany,
+  savePreOrder,
+  PrePrice
 } from "../../../api/business/brandListApi"
   export default {
     name: 'brandList',
     data() {
       return {
-        purchaseQuantity:'',
+        // 新增采购订单保存按钮需要的数据
+        guestId: "", //往来单位id
+        storeId: "", //仓库id
+        orderManId: "", //采购员id
+        orderMan: "",
+        orderTypeId: 1, //订单类型
+        billTypeId:"", //票据类型
+        settleTypeId: "", //结算方式
+        purchaseQuantity:'', 
         // 根据条件查询数据集合处
         conditionData: {
           character: '',
@@ -534,7 +544,7 @@ import {
             align: "center"
           },
           {
-            title: "预定数量",
+            title: "预订数量",
             key: "preQty",
             align: "center"
           },
@@ -720,6 +730,14 @@ import {
       this.getActivatedList()
     },
     methods: {
+      // 新增采购订单保存数据
+      savePre(){
+        savePreOrder({
+
+        }).then(res => {
+
+        })
+      },
       // 获取票据类型方法
       getPjType(){
         PjType().then(res =>{
@@ -732,6 +750,8 @@ import {
       getActiveCompany(){
         activeCompany().then(res => {
           if(res.code === 0) {
+            // console.log(res)
+            this.guestId = res.data.id
             this.transitUnitList = res.data
           }
         })
@@ -809,7 +829,9 @@ import {
       // 公司信息获取
       companyIfo () {
           let user = this.$store.state.user.userData
-          // console.log(user.tenantId)
+          // console.log(user)
+          this.billTypeId = user.id
+          this.orderMan = user.staffName
           selectCompany({pId: user.tenantId}).then(res=> {
           // console.log(res)
           if (res.code === 0) {
@@ -852,6 +874,12 @@ import {
         console.log(row)
         this.data4 = row
         this.data5 = row
+        let prePri = {}
+        prePri.id = row.id
+        prePri.partId = row.partId
+        PrePrice(prePri).then(res => {
+
+        })
       },
       // 待采购订单全选
       onSelectAll (row) {

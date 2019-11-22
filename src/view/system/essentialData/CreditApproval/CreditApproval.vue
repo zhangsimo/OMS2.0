@@ -2,27 +2,8 @@
   <div class="all-box">
   <div class="oper-top">
       <span class="ml10">快速查询：</span>
-      <!-- <Select v-model="searchType1" class="w100 mr10" clearable>
-        <Option v-for="item in List" :value="item.value" :key="item.value">{{ item.name }}</Option>
-      </Select> -->
       <dateget class="mr10" @quickDate="quickDate"></dateget>
       <span class="mr10">申请日期：</span>
-      <!-- <Date-picker
-        @on-change="getBeginDate"
-        :options='startTimeOption'
-        :value="dateObj.startApplyTime"
-        class="w200 mr10"
-        type="datetime"
-        placeholder="选择开始日期"
-      ></Date-picker>
-      <Date-picker
-        @on-change="getEndDate"
-        :options="endTimeOption"
-        :value="dateObj.endApplyTime"
-        class="w200 mr20"
-        type="datetime"
-        placeholder="选择结束日期"
-      ></Date-picker> -->
       <Date-picker
         type="daterange" 
         class="w200 mr20" 
@@ -31,9 +12,6 @@
         placeholder="请选择日期"
         >
         </Date-picker>
-      <!-- <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
-                  class="w200 mr20">
-      </DatePicker> -->
       <Button type="warning" class="mr20" @click="serchCredit"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
       <Button type="default" class="mr10" @click="openDetail"><Icon custom="iconfont iconshenheicon icons"/>查看明细</Button>
     </div>
@@ -43,14 +21,6 @@
     <div class="flowImg">
       <div style=" border: 1px solid #eee;">
         <p class="flowImg-title">额度审批流程</p>
-        <!-- <div class="flow">
-          <div class="titlecenter">
-            <p class="oneHeight">额度审批流程</p>
-            <p class="oneHeight">审批人</p>
-            <p class="oneHeight">审批意见</p>
-            <p class="oneHeight">审批时间</p>
-          </div>
-        </div> -->
         <div>
           <Row class="expand-row">
             <Col class="mr50 " span="2">
@@ -152,16 +122,18 @@
                 }
               },
               // 申请日期数据
-                dateList: {},
+                dateList: {
+                  startApplyTime:"",
+                  endApplyTime:"",
+                  startTime: "",
+                  endTime: ""
+                },
                 dateArray: [],
                 // 快速查询数据
-                List:[
-                    {name:'昨日', value:'yesterday'},
-                    {name:'今日', value:'today'},
-                    {name:'上周', value:'lastWeek'},
-                    {name:'本周', value:'week'},
-                ],
-                quickList: {},
+                quickList: {
+                  startTime:"",
+                  endTime:""
+                },
                 quickArray: [],
                 searchType1:'',
                 // 表格数据
@@ -270,39 +242,37 @@
           },
           // 根据条件查询数据
           serchCredit () {
-            if (this.dateArray[0]){
+              if(this.dateArray[0]){
+              this.dateList.startApplyTime = this.dateArray[0] + " " + "00:00:00"
+              this.dateList.endApplyTime = this.dateArray[1] + " " + "23:59:59"
+              }else{
+              this.dateList.startTime = this.quickArray[0] || ''
+              this.dateList.endTime = this.quickArray[1] || ''
+              }
               conditionalQuery(this.dateList).then(res => {
                 if(res.code === 0){
                   this.creditList = res.data
                 }
-              })
-            } else if (this.quickArray[0]) {
-              conditionalQuery(this.quickList).then(res => {
-                if (res.code === 0) {
-                  this.creditList = res.data
-                }
-              })
-            } else {
-              this.getCredit()
-            }
+            }) 
           },
           // 获取快速查询
           quickDate (item) {
             // console.log(item)
             this.quickArray = item
-            this.quickList.startTime = item[0]
-            this.quickList.endTime = item[1]
+            // this.quickList.startTime = item[0]
+            // this.quickList.endTime = item[1]
+            // console.log(this.quickList)
           },
           // 获取日期
           dateChange (value) {
             // console.log(value)
-            this.dateArray = [value]
-            if(value[0] === ""){
-              this.dateList = {}
-            }else {
-              this.dateList.startApplyTime = value[0] + " " + "00:00:00"
-              this.dateList.endApplyTime = value[1] + " " + "23:59:59"
-            }
+            this.dateArray = value
+            // if(value[0] === ""){
+            //   this.dateList = {}
+            // }else {
+            //   this.dateList.startApplyTime = value[0] + " " + "00:00:00"
+            //   this.dateList.endApplyTime = value[1] + " " + "23:59:59"
+            // }
           },
           handleSummary({ columns, data }) {
             // console.log(columns, data);
@@ -326,11 +296,11 @@
           },
           // 查看明细
           openDetail(){
-            // if (this.creditData.id === '') {
-            //   this.$Message.error('请选择一条数据')
-            // } else {
+            if (this.creditData.id === '') {
+              this.$Message.error('请选择一条数据')
+            } else {
               this.CreditLineApplicationShow = true
-            // }
+            }
           },
           // 单击表格行获取行数据
           onRowClick (value) {

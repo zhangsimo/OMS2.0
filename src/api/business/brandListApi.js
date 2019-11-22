@@ -74,3 +74,19 @@ export function selectCompany(params) {
       method: "post",
     });
   }
+  // 新增采购订单保存接口
+  export function savePreOrder(data) {
+    return axios.request({
+      url: `${api.wmsApi}/preOrderMain/save`,
+      method: "post",
+      data
+    });
+  }
+  // 采购单价接口
+  export function PrePrice(data) {
+    return axios.request({
+      url: `${api.wmsApi}/preOrderDetail/findRecentPrice`,
+      method: "post",
+      data
+    });
+  }
