@@ -13,7 +13,7 @@ export function getStaffList (params) {
 // 新增用户信息
 export function editUser (data) {
   return axios.request({
-    url: `${api.wmsApi}/tenantUsers/save`,
+    url: `${api.authApi}/tenantUsers/save`,
     method: 'post',
     data
   })
@@ -22,7 +22,7 @@ export function editUser (data) {
 //修改用户信息
 export function changeeditUser (data) {
   return axios.request({
-    url: `${api.wmsApi}/tenantUsers/update`,
+    url: `${api.authApi}/tenantUsers/update`,
     method: 'post',
     data
   })
@@ -31,7 +31,7 @@ export function changeeditUser (data) {
 //获取兼职公司全部信息
 export function getCompanyList (params) {
   return axios.request({
-    url: `${api.wmsApi}/sysOrgEmporg/findListPageAll`,
+    url: `${api.authApi}/sysOrgEmporg/findListPageAll`,
     method: 'get',
     params
   })
@@ -40,7 +40,7 @@ export function getCompanyList (params) {
 //开通账号
 export function putNewCompany (data) {
   return axios.request({
-    url: `${api.wmsApi}/staff/TenantUsersSave`,
+    url: `${api.authApi}/staff/TenantUsersSave`,
     method: 'post',
     data
   })
@@ -49,7 +49,7 @@ export function putNewCompany (data) {
 // 重置密码
 export function restpasswd (data) {
   return axios.request({
-    url: `${api.wmsApi}/staff/TenantUsersResetPwd`,
+    url: `${api.authApi}/staff/TenantUsersResetPwd`,
     method: 'post',
     data
   })

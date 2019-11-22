@@ -49,10 +49,46 @@ export function getPartBrand(data = {}) {
   });
 }
 
+// wb配件类型树
+export function findWbAllByTree(data = { pageSize: 1000, page: 0 }) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getCarClassifys`,
+    method: "post",
+    data
+  });
+}
+
 // wb品质/品牌查询
-export function getWbPartBrand(data = {}) {
+export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
   return axios.request({
     url: `${api.wmsApi}/wbPub/getPartBrand`,
+    method: "post",
+    data
+  });
+}
+
+// wb配件资料
+export function getwbParts(params) {
+  return axios.request({
+    url: `${api.wmsApi}/wbParts/queryAll`,
+    method: "get",
+    params
+  });
+}
+
+// wb品牌
+export function getwbBands(data = { pageSize: 100, page: 0 }) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getBrands`,
+    method: "post",
+    data
+  });
+}
+
+// wb审批接口
+export function approval(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partApply/saveByPart`,
     method: "post",
     data
   });
@@ -88,7 +124,7 @@ export function findbyidInfo(id) {
 // 适用车型
 export function findCarModel(data = {}) {
   return axios.request({
-    url: `${api.wmsApi}/carModel/findAll`,
+    url: `${api.wmsApi}/wbPub/getCarModel`,
     method: "post",
     data,
   });
@@ -113,7 +149,7 @@ export function getdictCode() {
 // 配件名称
 export function getPartName(data={}) {
   return axios.request({
-    url: `${api.wmsApi}/partName/findAll`,
+    url: `${api.wmsApi}/wbPub/getPartStandardName`,
     method: "post",
     data
   });

@@ -22,7 +22,7 @@ export function getExamineDetail(params) {
 //获取全部配件品牌
 export function getAllBrand(data) {
   return axios.request({
-    url: `${api.wmsApi}/partBrand/findPageByDynamicQuery`,
+    url: `${api.wmsApi}/wbPub/getPartBrand`,
     method: 'post',
     data
   })
@@ -44,3 +44,33 @@ export function getAllCustom() {
     method: 'get'
   })
 }
+
+
+//提交审批
+export function setApproval(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partApply/approval`,
+    method: 'post',
+    data
+  })
+}
+
+//获取系统分类
+export function getCarClassifys(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getCarClassifys`,
+    method: 'post',
+    data
+  })
+}
+
+//获取标准名称
+export function getCarPartName(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getPartStandardName`,
+    method: 'post',
+    data
+  })
+}
+
+

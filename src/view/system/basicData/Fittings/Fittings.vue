@@ -1,5 +1,5 @@
 <template>
-  <main class="Fittings-res">
+  <main class="Fittings-res page">
     <!--上部-->
     <section class="oper-box">
       <div class="oper-top flex">
@@ -19,7 +19,7 @@
           </div>
           <div class="db mr10">
             <span>品牌:</span>
-            <Select v-model="band" style="width:140px">
+            <Select v-model="band" style="width:140px" filterable>
               <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -47,7 +47,7 @@
                 <Icon type="md-add" />新增
               </span>
             </Button>
-            <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
+            <!-- <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
@@ -76,13 +76,13 @@
                   <Icon custom="iconfont icondaoruicon icons" />导入
                 </span>
               </Button>
-            </Upload>
-            <Button class="mr10 w90" @click="refresh">
+            </Upload> -->
+            <!-- <Button class="mr10 w90" @click="refresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
               </span>
-            </Button>
-            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
+            </Button> -->
+            <!-- <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售
               </span>
@@ -96,23 +96,28 @@
               <span class="center">
                 <Icon custom="iconfont iconxiazaiicon icons" />下载模板
               </span>
-            </Button>
-          </div>
-          <div class="btn-title" v-else>
+            </Button> -->
             <Button class="mr10 w90" @click="couldRefresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
               </span>
             </Button>
           </div>
+          <!-- <div class="btn-title" v-else>
+            <Button class="mr10 w90" @click="couldRefresh">
+              <span class="center">
+                <Icon custom="iconfont iconshuaxinicon icons" />刷新
+              </span>
+            </Button>
+          </div> -->
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
               <li v-if="!isSys" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
-              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">云配件资料</li>
+              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件资料</li>
             </ul>
           </div>
           <div class="tabs-warp" v-if="tabIndex == 0">
-              <Table
+            <Table
               border
               highlight-row
               size="small"
@@ -120,6 +125,7 @@
               :stripe="true"
               :columns="local.columns"
               :data="local.tbdata"
+              height="500"
               @on-current-change="selectRow"
             ></Table>
           </div>
@@ -133,6 +139,7 @@
               :columns="cloud.columns"
               :data="cloud.tbdata"
               @on-current-change="selectRow"
+              height="500"
             ></Table>
           </div>
           <div class="page-warp">

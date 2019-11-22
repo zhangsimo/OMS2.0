@@ -14,19 +14,19 @@
       <Row>
         <Col span="8">
           <FormItem label='调整前固定额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='data.creditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整前临时额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='data.tempCreditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
 
         </Col>
         <Col span="8">
           <FormItem label='申请增加固定额度:' >
-            <Input v-model='data.fullName' style="width: 150px" ></Input>
+            <Input v-model='increase' style="width: 150px" @on-blur="increaseBlur"></Input>
           </FormItem>
           <FormItem label='申请增加临时额度:' >
-            <Input v-model='data.fullName' style="width: 150px" ></Input>
+            <Input v-model='temporary' style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
             <DatePicker :value="value1" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px"></DatePicker>
@@ -34,10 +34,10 @@
         </Col>
         <Col span="8">
           <FormItem label='调整后固定额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input :value='+increase+data.creditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整后临时额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  :value='+temporary + data.tempCreditLimit' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
             <DatePicker :value="value2" format="yyyy/MM/dd"  :options="dateOptions"  style="width: 150px"></DatePicker>
@@ -47,7 +47,7 @@
       <Row>
         <Col span="8">
         <FormItem label='调整前额度合计:' >
-          <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+          <Input  v-model='data.creditLimit + data.tempCreditLimit' style="width: 150px" disabled  ></Input>
         </FormItem>
         <FormItem label='当前应付账款:' >
           <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
@@ -55,7 +55,7 @@
         </Col>
         <Col span="8">
           <FormItem label='申请增加额度合计:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  :value='(+increase)+(+temporary)' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前应收账款:' >
             <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
@@ -66,7 +66,7 @@
         </Col>
         <Col span="8">
           <FormItem label='调整后累计额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  :value='(+increase+data.creditLimit) + (+temporary + data.tempCreditLimit)' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前欠款总额:' >
             <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
@@ -119,6 +119,8 @@
 </template>
 
 <script>
+  // guestAdjustadjustInfo
+  import { guestAdjustadjustInfo } from '../../../../api/system/CustomerManagement/CustomerManagement'
     export default {
         name: "CreditLineApplication",
         props:{
@@ -126,6 +128,8 @@
         },
         data(){
             return {
+              increase: 0, //申请增加额度
+              temporary:0, //申请临时额度
                 dateOptions: {
                     disabledDate (date) {
                         return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
@@ -190,7 +194,6 @@
                         money:200,
                         backmoney:300,
                         allmoney:433},
-
                 ]
             }
         },
@@ -254,9 +257,31 @@
 
                 return sums;
             },
+          //申请增加额度失去焦点
+          increaseBlur(){
+            var reg = /^\+?[1-9]\d*$/;
+            if(!reg.test(this.increase)){
+              this.$Message.error('请输入大于0的正整数!')
+              this.increase = 0
+            }
+            if(+this.increase+this.data.creditLimit > 1000000){
+              this.$Message.error('不能超过最高授信额度100万!')
+              this.increase = 0
+            }
+          },
+          //临时额度失去焦点
+          increaseBlur22(){
+            var reg = /^\+?[1-9]\d*$/;
+            if(!reg.test(this.temporary)){
+              this.$Message.error('请输入大于0的正整数!')
+              this.temporary = 0
+            }
+            if(+this.temporary + this.data.tempCreditLimit > 1000000){
+              this.$Message.error('不能超过最高授信额度100万!')
+              this.temporary = 0
+            }
+          }
         }
-
-
     }
 </script>
 

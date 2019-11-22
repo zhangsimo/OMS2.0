@@ -58,7 +58,7 @@
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
                       <Col span="19"><Input v-model="formPlan.supplyName" placeholder="请选择供应商"></Input></Col>
-                      <Col span="5"><Button @click="linkProMadel" class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
+                      <Col span="5"><Button @click="addSuppler" class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                     </Row>
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
@@ -143,10 +143,12 @@
               <vxe-table
                 border
                 resizable
+                show-footer
                 @edit-closed="editClosedEvent"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
+                :footer-method="addFooter"
                 :edit-config="{trigger: 'dblclick', mode: 'cell'}">
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -158,8 +160,24 @@
                 <vxe-table-column field="num6" title="门店库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="采购在途库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="滞销库存" width="100"></vxe-table-column>
-                <vxe-table-column field="id" title="计划采购数量" :edit-render="{name: 'input'}" width="120"></vxe-table-column>
-                <vxe-table-column field="num6" title="计划采购金额" :edit-render="{name: 'input'}" width="120"></vxe-table-column>
+                <vxe-table-column field="num" title="计划采购数量" :edit-render="{name: 'input'}" width="120">
+                  <template v-slot:edit="{ row }">
+                    <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="price" title="计划采购单价" :edit-render="{name: 'input'}" width="120">
+                  <template v-slot:edit="{ row }">
+                    <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
+                  </template>
+                  <template v-slot="{ row }">
+                    {{parseFloat(row.price).toFixed(2)}}
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column title="计划采购金额" width="120">
+                  <template v-slot="{ row }">
+                  {{parseFloat(row.price*row.num).toFixed(2)}}
+                </template>
+                </vxe-table-column>
                 <vxe-table-column field="num6" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="不含税单价" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="不含税金额" width="100"></vxe-table-column>
@@ -174,116 +192,18 @@
                 <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
-              <div ref="planPage">
-                <Page size="mini" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
-                      @on-page-size-change="changeSize" show-sizer show-total></Page>
-              </div>
+              <!--<div ref="planPage">-->
+                <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
+                      <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
+              <!--</div>-->
             </div>
           </Split>
         </div>
       </div>
-
-
-
     </section>
-
-    <Modal v-model="linkModal" title="产品资源" width="1250">
-      <div class="lease-model-body">
-        <Split v-model="split1" min="400" max="500">
-          <div slot="left" class="lease-model-left">
-            <div class="model-left-hd flex">
-              <Button @click="search" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
-              <Button @click="inHideShow(false)" class="mr10"><i class="iconfont iconkuodaicon"></i></Button>
-              <Button @click="inHideShow(true)" class="mr10"><i class="iconfont iconsuoxiaoicon"></i></Button>
-              <Input v-model="searchValue" placeholder="请填写产品名称" class="w150 mr10" clearable></Input>
-              <Button type="warning" @click="search" class="w90"><i class="iconfont mr5 iconchaxunicon"></i>查询</Button>
-            </div>
-            <Tree :data="treeData" show-checkbox></Tree>
-          </div>
-          <div slot="right" class="demo-split-pane">
-            <div class="model-left-hd flex">
-              <Input v-model="searchValue" class="w150 mr10" clearable></Input>
-              <Input v-model="searchValue" placeholder="资源ID" class="w150 mr10" clearable></Input>
-              <Button type="default" @click="search" class="mr10 w90"><i class="iconfont mr5 iconshuaxinicon"></i>刷新</Button>
-              <Button type="default" @click="search" class="mr10 w90"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
-              <Button type="default" @click="search" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
-              <Button type="default" @click="search" class="w90"><Icon type="md-close" />取消</Button>
-            </div>
-          </div>
-        </Split>
-      </div>
-      <div slot='footer'>
-        <Button type='primary' @click='submit'>确定</Button>
-        <Button type='default' @click='linkModal = false'>取消</Button>
-      </div>
-    </Modal>
-
-    <Modal v-model="proModal" :title="proModalTit" width="600">
-      <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="110">
-        <Row>
-          <Col span="11">
-            <FormItem label="产品名称" prop="name">
-              <Input v-model="formValidate.name"></Input>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="产品类型" prop="type">
-              <Select v-model="formValidate.type">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row v-if="formValidate.type==1">
-          <Col span="22">
-            <FormItem label="接口地址" prop="address">
-              <Input v-model="formValidate.address"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row v-if="formValidate.type==1">
-          <Col span="11">
-            <FormItem label="单次扣减华币" prop="coin">
-              <Input v-model="formValidate.coin" ></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row v-if="formValidate.type!=1">
-          <Col span="11">
-            <FormItem label="销售价" prop="salesPrice">
-              <Input v-model="formValidate.salesPrice"></Input>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="有效期(天)" prop="isCycle">
-              <Input v-model="formValidate.isCycle"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="22">
-            <FormItem label="产品描述" prop="remark">
-              <Input v-model="formValidate.remark" type="textarea" :autosize="{minRows: 2,maxRows: 5}"></Input>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="是否禁用" prop="disable">
-              <Select v-model="formValidate.disable" placeholder="Select your city">
-                <Option value='0'>是</Option>
-                <Option value='1'>否</Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-      <div slot='footer'>
-        <Button type='primary' @click='submit("proModal")'>确定</Button>
-        <Button type='default' @click='proModal = false'>取消</Button>
-      </div>
-    </Modal>
-
+    <search-part-name ref="searchPartName"></search-part-name>
+    <select-part-com ref="selectPartCom"></select-part-com>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
 <script>
@@ -293,10 +213,13 @@
   import QuickDate from '../../../components/getDate/dateget'
   import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
+  import SearchPartName from "../../system/partsExamine/component/searchPartName";
+  import SelectPartCom from "./components/selectPartCom";
+  import SelectSupplier from "./components/selectSupplier";
 
   export default {
     name: 'goodsList',
-    components: {QuickDate},
+    components: {SelectSupplier, SelectPartCom, SearchPartName, QuickDate},
     inject:['reload'],
     mixins:[mixGoodsData],
     data() {
@@ -510,16 +433,16 @@
       }
     },
     mounted() {
-      this.initStart()
+      //this.initStart()
       this.$nextTick(()=>{
         let wrapH = this.$refs.paneLeft.offsetHeight;
         let planFormH = this.$refs.planForm.offsetHeight;
         let planBtnH = this.$refs.planBtn.offsetHeight;
-        let planPageH = this.$refs.planPage.offsetHeight;
+        // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH-70;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH-planFormH-planBtnH-planPageH-58;
+        this.rightTableHeight = wrapH-planFormH-planBtnH-65;
       })
     },
     methods: {
@@ -574,14 +497,13 @@
 
         })
       },
-      //新增产品
+      //选择供应商
+      addSuppler(){
+        this.$refs.selectSupplier.init()
+      },
+      //添加配件
       addPro(){
-        this.proModal = true
-        this.proModalTit = '新增产品'
-        this.$refs['proModal'].resetFields();
-        if(this.formValidate.id){
-          delete this.formValidate.id
-        }
+        this.$refs.selectPartCom.init()
       },
       //编辑产品
       editPro(){

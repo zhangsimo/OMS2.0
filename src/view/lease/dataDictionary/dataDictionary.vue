@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper content-oper-flex">
+  <div class="content-oper content-oper-flex" style="height: 100%">
     <section class="con-box">
       <div class="con-split con-datadictionary-split" ref="paneLeft">
         <Split v-model="split" min="200" max="500">

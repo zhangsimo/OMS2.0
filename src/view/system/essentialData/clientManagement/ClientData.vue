@@ -493,10 +493,10 @@
                 }
             },
             //获取客户属性
-          async  getList(){
+          async getList(){
                  let data ={}
                 data =['CS00105','CS00106','CS00107','CS00112']
-              let res = await  getDigitalDictionary(data)
+              let res = await getDigitalDictionary(data)
               console.log(res)
               if(res.code == 0){
                   this.dataList = res.data

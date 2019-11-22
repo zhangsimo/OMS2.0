@@ -21,3 +21,40 @@ export function guestCreditHistory(params) {
     params
   })
 }
+// /guestAdjust/adjustInfo
+export function guestAdjustadjustInfo(params) {
+  return axios.request({
+    url: `${api.wmsApi}/guestAdjust/adjustInfo`,
+    method: 'post',
+    params
+  })
+}
+//信用额度保存
+// /guestResearch/saveOrUpdate
+export function saveOrUpdate(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guestResearch/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}
+
+//调整额度
+// /receivable/payable/adjustment
+export function adjustment(params) {
+  return axios.request({
+    url: `${api.omsSettle}/receivable/payable/adjustment`,
+    method: 'get',
+    params
+  })
+}
+
+// /guestAdjust/save
+//调整确定
+export function save(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guestAdjust/save`,
+    method: 'post',
+    data
+  })
+}
