@@ -326,11 +326,11 @@
           },
           // 查看明细
           openDetail(){
-            if (this.creditData.id === '') {
-              this.$Message.error('请选择一条数据')
-            } else {
+            // if (this.creditData.id === '') {
+            //   this.$Message.error('请选择一条数据')
+            // } else {
               this.CreditLineApplicationShow = true
-            }
+            // }
           },
           // 单击表格行获取行数据
           onRowClick (value) {
