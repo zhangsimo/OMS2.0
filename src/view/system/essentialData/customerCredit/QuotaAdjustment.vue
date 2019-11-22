@@ -2,7 +2,7 @@
   <div style="height: 300px;overflow: hidden;overflow-y: scroll">
     <Form :model="data" :label-width="150">
       <FormItem label='调整日期:' >
-        <span>{{ date }}</span>
+        <span>{{ datetoday }}</span>
       </FormItem>
       <FormItem label='客户名称:' >
         <span>{{data.fullName}}</span>
@@ -46,30 +46,14 @@
         name: "QuotaAdjustment",
         props:{
             data:'',
-          dataMsg:''
+            dataMsg:'',
+          datetoday:''
         },
       data(){
           return {
-            date: ''
+
           }
-      },
-     mounted(){
-       const ToDayStr = () => {
-         var returnStr = '';
-         var date = new Date();      //当前时间
-         var year = date.getFullYear();
-         var month = date.getMonth() + 1;
-         var day = date.getDate();
-         //var hour = date.getHours();
-         //var minutes = date.getMinutes();
-         //var second = date.getSeconds();
-         month = month < 10 ? "0" + month : month;
-         day = day < 10 ? "0" + day : day;
-         returnStr = year + "年" + month + "月" + day + "日"
-         return returnStr;
-       }
-       this.date = ToDayStr()
-     }
+      }
     }
 </script>
 

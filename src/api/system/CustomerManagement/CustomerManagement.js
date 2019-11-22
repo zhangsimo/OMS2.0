@@ -58,3 +58,15 @@ export function save(data) {
     data
   })
 }
+
+// 申请额度部分字段所需接口
+// /guestAdjust/adjustInfo
+export function guestAdjust(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guestAdjust/adjustInfo`,
+    method: 'post',
+    data
+  })
+}
+
+// 申请确定按钮的接口
