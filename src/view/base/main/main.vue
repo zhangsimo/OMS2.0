@@ -63,10 +63,13 @@
                 </div>
                 <div>
                   <Row style="text-align: center">
-                    <Col span="12">
+                    <Col span="8">
                       <Button type="success" @click="drawWithInfo">标记</Button>
                     </Col>
-                    <Col span="12">
+                    <Col span="8">
+                      <ColorPicker v-model="penColor" recommend  />
+                    </Col>
+                    <Col span="8">
                       <Button type="error" @click="clear">清除</Button>
                     </Col>
                   </Row>
@@ -152,7 +155,8 @@
           info:'',//判定标记
           img:'', //实例化canvas图片
           canvas:'',//实例化canvas
-          query:[]//点击的问题
+          query:[],//点击的问题
+          penColor:'#F30606'
 
       }
     },
@@ -229,7 +233,7 @@
             this.canvasMoveUse = true;
             const canvasX = e.clientX - e.target.offsetLeft ;
             const canvasY =( e.clientY - e.target.offsetTop + document.documentElement.scrollTop - 50 );
-            this.ctx.strokeStyle = "red";
+            this.ctx.strokeStyle = this.penColor;
             this.ctx.beginPath() // 移动的起点
             this.ctx.moveTo(canvasX, canvasY);
 
