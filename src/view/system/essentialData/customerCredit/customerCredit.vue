@@ -60,9 +60,9 @@
 
 <!--      申请信用额度-->
       <Modal v-model="CreditLineApplicationShow" title="申请信用额度" width="1100">
-        <CreditLineApplication :data="creaditList"></CreditLineApplication>
+        <CreditLineApplication :data="creaditList" :sendMsg="applicationArr" :payable="payable" :quality="quality"></CreditLineApplication>
         <div slot='footer'>
-          <Button type='primary' >确定</Button>
+          <Button type='primary' @click="Determined">确定</Button>
           <Button type='default' >取消</Button>
         </div>
       </Modal>
@@ -84,10 +84,10 @@
       </Modal>
 <!--      额度调整-->
       <Modal v-model="adjustment" title="客户信用额度调整表">
-        <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg"></QuotaAdjustment>
+        <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today"></QuotaAdjustment>
         <div slot='footer'>
           <Button type='primary' @click="adjustmentconfirm">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancelChange">取消</Button>
         </div>
       </Modal>
     </div>
@@ -97,7 +97,7 @@
   import CreditLineApplication from "./CreditLineApplication";
   import QuotaAdjustment from "./QuotaAdjustment";
   import SurveyList from "./SurveyList";
-  import {queryCreditList,guestCreditHistory,saveOrUpdate,adjustment,save} from '../../../../api/system/CustomerManagement/CustomerManagement'
+  import {queryCreditList,guestCreditHistory,saveOrUpdate,adjustment,save,guestAdjust} from '../../../../api/system/CustomerManagement/CustomerManagement'
   import { getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
   export default {
         name: "customerCredit",
@@ -365,10 +365,25 @@
                 rowMessage:'', //当前的客户信息
                 costList: '', //数据字典数据
                 researchStatus: '' ,//保存当前的申请状态
-                adjustmentMsg: ''  //给子组件的调整信息
+                adjustmentMsg: '' , //给子组件的调整信息
+                today: ''   ,//发送子组件的当前日期
+                applicationArr: [],//申请信用额度的传给子组件的数组
+                payable: '' ,//传给子组件的应收应付
+                quality:'',//某个值
+                total: '' ,//调整后剩余额度
+                totalSuma: ''
             }
         },
         methods:{
+          // totalSum(suma){
+          //   console.log(suma)
+          //   this.totalSuma = suma
+          // },
+          // total(sum) {
+          //   // console.log(sum)
+          //   this.total = sum
+          // },
+          // @total="total" @totalSum="totalSum"
           //搜索
           search(){
             this.page.num = 1
@@ -386,7 +401,7 @@
             this.Limitstate = JSON.parse(row.auditSign).value
             this.rowMessage = row
              this.creaditList = this.rowMessage
-            // console.log(this.creaditList)
+            console.log(this.creaditList,'rowMessage')
             this.researchStatus = JSON.parse(row.researchStatus).value
             // console.log(this.researchStatus)
             console.log(this.rowMessage)
@@ -408,6 +423,7 @@
                     this.$Message.warning('禁止额度申请中，请联系管理员!')
                 }else{
                     this.CreditLineApplicationShow = true
+                    this.alertBox()
               }
             }else{
               this.$Message.warning('请选择要申请的客户！')
@@ -466,6 +482,16 @@
               this.costList = res.data
             }
           },
+          // 信用等级
+          async informationTwo(){
+            let data ={}
+            data =['CS00112']
+            let res = await getDigitalDictionary(data)
+            console.log(res.data.CS00112)
+            if(res.code === 0){
+              this.quality = res.data.CS00112
+            }
+          },
           //确定按钮
           confirm(){
             let data = {}
@@ -488,6 +514,7 @@
             params.guestId = this.rowMessage.guestId
             params.orgId = this.rowMessage.orgid
             adjustment(params).then(res => {
+              console.log(res.data)
               if(res.code === 0){
                   this.adjustmentMsg = res.data
               }
@@ -496,19 +523,101 @@
           //调整信用额度的确定
           adjustmentconfirm(){
                 let data = {}
+                data.guestId = this.creaditList.guestId
+                // data.applyDate = this.today
+                data.payableAmt = this.adjustmentMsg.payableAmt
+                data.receivableAmt = this.adjustmentMsg.receivableAmt
+                data.sumAmt = this.adjustmentMsg.sumAmt
+                data.thirtyAmt = this.adjustmentMsg.thirtyAmt
+                data.sixtyAmt = this.adjustmentMsg.sixtyAmt
+                data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt
+                data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal
                 this.creaditList.isForbid ? this.creaditList.isForbid = 1 : this.creaditList.isForbid = 0
-                data = {...this.creaditList,...this.adjustmentMsg}
-                // console.log(this.adjustmentMsg)
+                data.isForbid = this.creaditList.isForbid
+                data.quotaReason = this.creaditList.quotaReason
+                data.totalQuota = +this.creaditList.creditLimit + this.creaditList.tempCreditLimit
+                data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit
+                data.tempQuotaTotal = this.creaditList.tempCreditLimit
+                data.tempStart = this.creaditList.tempStart
+                data.tempEnd = this.creaditList.tempEnd
+                data.orgId = this.creaditList.orgid
+                data.adjustType = 1
                 data.afterAdjustQuota = this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal
-                // console.log(data,123)
+                console.log(data,123)
                 save(data).then(res => {
-                  console.log(res);
+                  // console.log(res);
                 })
+          },
+          //调整取消框
+          cancelChange(){
+            this.adjustment = false
+          },
+          //子组件的参数
+          getMsg(msg){
+            console.log(msg)
+            // this.today = a
+          },
+          //申请信用额度弹框
+          alertBox(){
+            let dataa = {}
+            dataa.guestId = this.creaditList.guestId
+            dataa.orgId = this.creaditList.orgid
+            guestAdjust(dataa).then(res => {
+                if(res.code === 0){
+                    this.applicationArr = res.data
+                    this.payable = res.data.payable
+                    console.log(this.payable,"应收应付")
+                  console.log(this.applicationArr,"申请增加信用额度")
+                }
+            })
+          },
+          //确定申请
+          Determined(){
+            let data = {}
+            data.guestId = this.creaditList.guestId
+            data.orgId = this.creaditList.orgid
+            data.fixationQuotaTotal = +this.creaditList.applyQuota+this.creaditList.creditLimit
+            data.tempQuotaTotal = +this.creaditList.tempQuota + this.creaditList.tempCreditLimit
+            data.applyQuota = this.creaditList.applyQuota
+            data.tempQuota = this.creaditList.tempQuota
+            data.tempStart = this.creaditList.tempStart
+            data.tempEnd = this.creaditList.tempEnd
+            data.payableAmt = this.payable.payableAmt
+            data.tgrade = this.creaditList.tgrade
+            data.thirtyAmt = this.payable.thirtyAmt
+            data.sixtyAmt = this.payable.sixtyAmt
+            data.moreSixtyAmt = this.payable.moreSixtyAmt
+            data.afterAdjustQuota = this.creaditList.totalSum
+            data.quotaReason = this.creaditList.quotaReason
+            data.receivableAmt = this.payable.receivableAmt
+            data.totalQuota = (+this.creaditList.applyQuota+this.creaditList.creditLimit) + (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit)
+            data.addTotalQuota = this.creaditList.tototo
+            data.adjustType = 0
+            save(data).then(res => {
+
+            })
           }
         },
       mounted(){
           this.getListTop()
           this.information()
+          this.informationTwo()
+        const ToDayStr = () => {
+          var returnStr = '';
+          var date = new Date();      //当前时间
+          var year = date.getFullYear();
+          var month = date.getMonth() + 1;
+          var day = date.getDate();
+          //var hour = date.getHours();
+          //var minutes = date.getMinutes();
+          //var second = date.getSeconds();
+          month = month < 10 ? "0" + month : month;
+          day = day < 10 ? "0" + day : day;
+          returnStr = year + "-" + month + "-" + day
+          return returnStr;
+        }
+        this.today = ToDayStr()
+        // console.log(this.today)
       }
     }
 </script>
