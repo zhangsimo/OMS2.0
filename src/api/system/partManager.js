@@ -76,10 +76,19 @@ export function getwbParts(params) {
   });
 }
 
+// wb品牌
+export function getwbBands(data = { pageSize: 100, page: 0 }) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getBrands`,
+    method: "post",
+    data
+  });
+}
+
 // wb审批接口
 export function approval(data) {
   return axios.request({
-    url: `${api.wmsApi}/partApply/approval`,
+    url: `${api.wmsApi}/partApply/saveByPart`,
     method: "post",
     data
   });
@@ -115,7 +124,7 @@ export function findbyidInfo(id) {
 // 适用车型
 export function findCarModel(data = {}) {
   return axios.request({
-    url: `${api.wmsApi}/carModel/findAll`,
+    url: `${api.wmsApi}/wbPub/getCarModel`,
     method: "post",
     data,
   });

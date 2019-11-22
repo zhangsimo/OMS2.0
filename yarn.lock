@@ -924,6 +924,13 @@
   dependencies:
     "@types/estree" "*"
 
+"@types/uuid@^3.4.6":
+  version "3.4.6"
+  resolved "http://r.cnpmjs.org/@types/uuid/download/@types/uuid-3.4.6.tgz#d2c4c48eb85a757bf2927f75f939942d521e3016"
+  integrity sha1-0sTEjrhadXvykn91+TmULVIeMBY=
+  dependencies:
+    "@types/node" "*"
+
 "@types/vue-i18n@^7.0.0":
   version "7.0.0"
   resolved "https://registry.npm.taobao.org/@types/vue-i18n/download/@types/vue-i18n-7.0.0.tgz#ace0de742b3a0398b6fa6b3956d6e583377c3081"
@@ -8538,9 +8545,9 @@ utils-merge@1.0.1:
   resolved "https://registry.npm.taobao.org/utils-merge/download/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
 
-uuid@^3.0.1, uuid@^3.3.2:
+uuid@^3.0.1, uuid@^3.3.2, uuid@^3.3.3:
   version "3.3.3"
-  resolved "https://registry.npm.taobao.org/uuid/download/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
+  resolved "http://r.cnpmjs.org/uuid/download/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
   integrity sha1-RWjwIW54dg7h2/Ok0s9T4iQRKGY=
 
 v-click-outside-x@^3.7.1:

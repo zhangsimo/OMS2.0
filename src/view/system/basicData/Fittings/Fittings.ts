@@ -408,29 +408,7 @@ export default class Fittings extends Vue {
   // 新增
   private add() {
     let accessories: any = this.$refs.accessories;
-    accessories.update = false;
     accessories.proModal = true;
-    // accessories.formValidate =  {
-    //   qualityTypeId: "", //品质
-    //   partBrandId: "", //品牌
-    //   code: "", //配件编码
-    //   name: "", //配件名称
-    //   unit: "", //配件单位
-    //   unitname: "", // 配件单位名称
-    //   oemCode: "", //oe码
-    //   spec: "", //规格
-    //   model: "", //型号
-    //   applyCarbrandId: "", //适用车型Id
-    //   explain: "", //车型说明
-    //   commonCode: "", //通用编码
-    //   produceFactory: "", //生产厂家
-    //   origin: "", //产地
-    //   fullName: "", //配件全称
-    //   customClassName: "",
-    //   remarks: "", //备注
-    //   specVOList: new Array(), //规格list
-    //   valueVOS: new Array() //单位换算list
-    // }
   }
   // 修改
   private change() {
