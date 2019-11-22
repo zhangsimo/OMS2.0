@@ -6,7 +6,7 @@
         <div class="wlf">
           <div class="db mr10">
             <span>快速查询：</span>
-            <Select v-model="conditionData.quickSelect" class="w100 mr10" clearable>
+            <Select v-model="conditionData.character" class="w100 mr10" clearable>
               <Option v-for="item in quickArray" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -22,7 +22,7 @@
             </Date-picker>
           </div>
           <div class="db mr10">
-            <Select v-model="conditionData.status" class="w100 mr10">
+            <Select v-model="conditionData.status" class="w100 mr10" clearable>
               <Option value="1" label="待受理"></Option>
               <Option value="3" label="已受理"></Option>
               <Option value="2" label="部分受理"></Option>
@@ -68,18 +68,18 @@
             </Date-picker>
           </div>
           <div class="db mr10">
-            <Select v-model="company" class="w200 mr10" placeholder="选择公司">
-              <Option v-for="item in companyList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Select v-model="conditionData.company" class="w200 mr10" placeholder="选择公司" filterable clearable>
+              <Option v-for="item in companyListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>品牌：</span>
-              <Select v-model="brand" class="w100 mr10" placeholder="选择品牌">
+              <Select v-model="brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
                 <Option v-for="item in brandList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
           </div>
           <div class="db">
-            <Button type="warning" class="mr20"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+            <Button type="warning" class="mr20" @click="searchData"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
             <Button class=" mr10" style="border: none" @click="addPurchaseOrderDialog = true">
               <span class="center" style="color: #27A2D2">
                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>生成采购订单
@@ -109,27 +109,31 @@
               height="330"
             ></Table>
           </div>
+
             <Row>
               <Col span="12">
-                <Page
+                <div><Page
                   @on-page-size-change="onPageSizeChange"
                   @on-change="onChange"
                   :current="pageList.page"
+                  :total="this.pageList.total"
                   :page-size="pageList.pageSize" 
                   :page-size-opts="pageList.pageSizeOpts"
                   show-sizer
-                  />
+                  /></div>
               </Col>
               <Col span="12">
-                共{{this.pageList.total}}条
-                每页{{this.pageList.size}}条
+                <div style="text-align: right">
+                  每页{{this.pageList.size}}条,
+                  共{{this.pageList.total}}条
+                </div>
+                  
               </Col>
             </Row>
             
           <Table
               show-summary
               :summary-method="handleSummary"
-              highlight-row
               :columns="columns2"
               border
               :data="data2"
@@ -145,16 +149,27 @@
             border
             :data="data3"
             ></Table>
-          <div class="mt10 mb10"> 
-            <Page
-              :current="pageList.page"
-              :total="pageList.total" 
-              :page-size="pageList.pageSize" 
-              :page-size-opts="pageList.pageSizeOpts"
-              show-total
-              show-sizer
-              />
-          </div>
+          <Row>
+              <Col span="12">
+                <div>
+                  <Page
+                    @on-page-size-change="onPageSizeChange"
+                    @on-change="onChange"
+                    :current="pageList.page"
+                    :total="this.pageList.total"
+                    :page-size="pageList.pageSize" 
+                    :page-size-opts="pageList.pageSizeOpts"
+                    show-sizer
+                  />
+                </div>
+              </Col>
+              <Col span="12">
+                <div style="text-align: right">
+                  每页{{this.pageList.size}}条,
+                  共{{this.pageList.total}}条
+                </div>
+              </Col>
+            </Row>
         </TabPane>
       </Tabs>
     </section>
@@ -305,7 +320,8 @@ import {
   getBrandList,
   getPageList,
   selectCompany,
-  searchBrandList
+  searchBrandList,
+  pendingPurchase
 } from "../../../api/business/brandListApi"
   export default {
     name: 'brandList',
@@ -313,8 +329,8 @@ import {
       return {
         // 根据条件查询数据集合处
         conditionData: {
-          quickSelect: "",
-          status: "1",
+          character: '',
+          status: '1',
           company: '',
           brand: '',
 
@@ -342,7 +358,6 @@ import {
             value: "本年"
           }
         ],
-        quickSelect: "",
         // 快速查询数据2
         quickArray2: [
           {
@@ -371,7 +386,6 @@ import {
             value: "上年"
           }
         ],
-        quickSelect2: "",
         // 日期数据
         options3: {
           disabledDate (date) {
@@ -680,7 +694,15 @@ import {
       this.getBrand()
       this.companyIfo()
     },
+    activated () {
+      this.getActivatedList()
+    },
     methods: {
+      getActivatedList () {
+        if(!this.conditionData){
+          this.getBrand()
+        }
+      },
       // 获取页面数据
       getBrand () {
         getBrandList().then(res => {
@@ -691,22 +713,26 @@ import {
           }
         })
       },
-      // 快速查询数据
-      quickDate (item) {
-        // console.log(item)
-        this.quickArray = item
-        this.quickList.startTime = item[0]
-        this.quickList.endTime = item[1]
+      // 获取代采购页面数据
+      getPendingPurchaseList(){
+        pendingPurchase().then(res => {
+          if(res.code === 0) {
+            this.data3 = res.data.content
+            this.pageList.total = res.data.totalElements
+          }
+        })
       },
       // 获取日期
       dateChange (value) {
         // console.log(value)
-        this.dateArray = [value]
+        // this.dateArray = [value]
         if(value[0] === ""){
-          this.dateList = {}
+          this.conditionData.commitTimeStart = ""
+          this.conditionData.commitTimeEnd = ""
+          this.dateArray = [value]
         }else {
-          this.dateList.commitTimeStart = value[0] + " " + "00:00:00"
-          this.dateList.commitTimeEnd = value[1] + " " + "23:59:59"
+          this.conditionData.commitTimeStart = value[0] + " " + "00:00:00"
+          this.conditionData.commitTimeEnd = value[1] + " " + "23:59:59"
         }
       },
       newArr (arr) {
@@ -753,23 +779,20 @@ import {
     },
     // 查询
     searchData () {
-      if (this.dateList){
-        searchBrandList(this.dateList).then(res => {
-        if(res.code === 0){
-          this.data = res.data.content
-        } 
-      })
-      }else {
         searchBrandList(this.conditionData).then(res => {
           if(res.code === 0){
             this.data = res.data.content
           } 
         })
-      }
     },
       // 点击tabs切换头部
       handleClickTab(item) {
         this.tabValue = item
+        if(item === "name2"){
+          this.getPendingPurchaseList()
+        }else{
+          this.getBrand()
+        }
       },
       // 预订单受理表格单击
       onRowClick(value) {
@@ -848,3 +871,10 @@ import {
     },
   }
 </script>
+
+<style lang="less">
+  .ivu-row {
+    margin: 10px 0px ;
+    line-height: 30px;
+  }
+</style>

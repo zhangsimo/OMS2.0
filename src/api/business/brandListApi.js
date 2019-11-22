@@ -27,7 +27,14 @@ export function searchBrandList (data) {
         data
     })
   }
-
+// 待采购配件页面接口
+export function pendingPurchase (data={}) {
+  return axios.request({
+      url: `${api.omsOrder}/preOrderDetail/queryAllPrePart`,
+      method: 'post',
+      data
+  })
+}
 //   公司信息数据接口
 export function selectCompany(params) {
     return axios.request({
