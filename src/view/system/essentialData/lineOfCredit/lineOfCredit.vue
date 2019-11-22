@@ -92,7 +92,6 @@
                     {
                         title: '调整后临时额度',
                         align: 'center',
-                        key: 'tempQuotaTotal',
                         render: (h,params) => {
                             let tex = params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal
                             return h('span',{},tex)
@@ -111,9 +110,8 @@
                     {
                         title: '调整后剩余额度',
                         align: 'center',
-                        key: 'afterAdjustQuota',
                         render: (h,params) => {
-                            let tex = params.row.tempQuotaTotal == null ? 0 : params.row.tempQuotaTotal
+                            let tex = params.row.afterAdjustQuota == null ? 0 : params.row.afterAdjustQuota
                             return h('span',{},tex)
                     }
                     },
