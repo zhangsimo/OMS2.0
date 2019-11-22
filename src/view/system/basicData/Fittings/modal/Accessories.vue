@@ -1010,8 +1010,10 @@ export default class Accessories extends Vue {
     this.customModal = true;
   }
   // 选择自定义分类tag
+  customType:string = "";
   private handleTag(v: any) {
     this.customClassName = v.itemName;
+    this.customType = v.itemCode
   }
   //选择自定义分类
   private submitCustom() {
@@ -1112,6 +1114,9 @@ export default class Accessories extends Vue {
             this.formValidate.carBrand = wb.value;
             break;
           }
+        }
+        if(this.customType) {
+          data.customType = this.customType;
         }
         if (this.update) {
           data.id = this.formValidate.id;
