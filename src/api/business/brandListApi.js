@@ -35,11 +35,42 @@ export function pendingPurchase (data={}) {
       data
   })
 }
+// 生成待采购订单
+export function generateOrder (data) {
+  return axios.request({
+      url: `${api.omsOrder}/preOrderDetail/updatePrePart`,
+      method: 'post',
+      data
+  })
+}
+
 //   公司信息数据接口
 export function selectCompany(params) {
     return axios.request({
       url: `${api.passportApi}/group/findRootByPid`,
       method: "get",
       params
+    });
+  }
+
+  // 票据类型接口
+  export function PjType() {
+    return axios.request({
+      url: `${api.omsProduct}/dictionariesItem/findByDictCode?dictCode=CS00107`,
+      method: "get",
+    });
+  }
+  // 结算方式接口
+  export function JsStyle() {
+    return axios.request({
+      url: `${api.omsProduct}/dictionariesItem/findByDictCode?dictCode=CS00106`,
+      method: "get",
+    });
+  }
+  // 查询往来单位
+  export function activeCompany() {
+    return axios.request({
+      url: `${api.wmsApi}/guest/findAllSupplier`,
+      method: "post",
     });
   }

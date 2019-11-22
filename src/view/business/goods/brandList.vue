@@ -80,7 +80,7 @@
           </div>
           <div class="db">
             <Button type="warning" class="mr20" @click="searchData"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
-            <Button class=" mr10" style="border: none" @click="addPurchaseOrderDialog = true">
+            <Button class=" mr10" style="border: none" @click="showGeneratePurchaseOrder">
               <span class="center" style="color: #27A2D2">
                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>生成采购订单
               </span>
@@ -142,6 +142,8 @@
         </TabPane>
         <TabPane label="待采购配件" name="name2">
           <Table
+            @on-select="onSelect"
+            @on-select-all="onSelectAll"
             show-summary
             :summary-method="handleSummary"
             highlight-row
@@ -196,8 +198,8 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit">
-                  <Option v-for="item in transitUnitList" :key="item.id">{{item.value}}</Option>
+                <Select v-model="transitUnit" filterable clearable>
+                  <Option v-for="item in transitUnitList" :key="item.id">{{item.fullName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -206,14 +208,14 @@
             <Col span="12">
               <FormItem label="票据类型：">
                 <Select v-model="ticketType">
-                  <Option v-for="item in ticketTypeList" :key="item.id">{{item.value}}</Option>
+                  <Option v-for="item in ticketTypeList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
                 <Select v-model="settlementMethod">
-                  <Option v-for="item in settlementMethodList" :key="item.id">{{item.value}}</Option>
+                  <Option v-for="item in settlementMethodList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -229,7 +231,6 @@
       </section>
       <section>
         <Table
-          highlight-row
           :columns="columns4"
           border
           :data="data4"
@@ -302,7 +303,6 @@
       </section>
       <section>
         <Table
-          highlight-row
           :columns="columns4"
           border
           :data="data4"
@@ -321,12 +321,17 @@ import {
   getPageList,
   selectCompany,
   searchBrandList,
-  pendingPurchase
+  pendingPurchase,
+  generateOrder,
+  PjType,
+  JsStyle,
+  activeCompany
 } from "../../../api/business/brandListApi"
   export default {
     name: 'brandList',
     data() {
       return {
+        purchaseQuantity:'',
         // 根据条件查询数据集合处
         conditionData: {
           character: '',
@@ -443,7 +448,11 @@ import {
               let status = JSON.parse(JsonString)
               // console.log(auditsign)
               if (status.name === "待受理"){
-                return h('span', {}, "受理")
+                return h('Button', {
+                  methods:{
+
+                  }
+                }, "受理")
               }
               
             }
@@ -566,7 +575,7 @@ import {
           },
           {
             title: "品牌",
-            key: "partBrandName",
+            key: "brand",
             align: "center"
           },
           {
@@ -576,17 +585,17 @@ import {
           },
           {
             title: "单位",
-            key: "caozuo",
+            key: "unit",
             align: "center"
           },
           {
             title: "预定数量",
-            key: "applyDate",
+            key: "preQty",
             align: "center"
           },
           {
             title: "受理数量",
-            key: "applyMan",
+            key: "acceptQty",
             align: "center"
           },
           {
@@ -596,7 +605,7 @@ import {
           },
           {
             title: "预定单号",
-            key: "company",
+            key: "orderNo",
             align: "center"
           },
           {
@@ -606,7 +615,7 @@ import {
           },
           {
             title: "期望到货日期",
-            key: "remark",
+            key: "expectedArrivalDate",
             align: "center"
           }
         ],
@@ -624,7 +633,7 @@ import {
             width: 60,
             align: 'center',
             render (h, params) {
-              return h('a', {}, "删除")
+              return h('Button', {}, "删除")
             }
           },
           {
@@ -639,29 +648,29 @@ import {
           },
           {
             title: "品牌",
-            key: "partBrandName",
+            key: "brand",
             align: "center"
           },
           {
             title: "单位",
-            key: "caozuo",
+            key: "unit",
             align: "center"
           },
           {
             title: "采购数量",
-            key: "applyDate",
+            key: "orderQty",
             align: "center",
             render (h, params) {
               return h('Input', {
                 props: {
-                  purchaseQuantity: ""
+                  value:params.row.acceptQty
                 }
-              },)
+              })
             }
           },
           {
             title: "采购单价",
-            key: "applyMan",
+            key: "orderPrice",
             align: "center",
             render (h, params) {
               return h('Input', {
@@ -686,6 +695,16 @@ import {
         settlementMethodList: {},
         // 生成直发采购订单
         directPurchaseOrderDialog: false,
+        generateOrder:[],
+        generateBrand: {
+          id: "",
+          // partCode: "",
+          // partName: "",
+          // brand: "",
+          // unit: "",
+          // orderQty: "",
+          // orderPrice: ""
+        },
         // 直发门店
         straightHairStore: ""
       }
@@ -693,11 +712,38 @@ import {
     mounted() {
       this.getBrand()
       this.companyIfo()
+      this.getPjType()
+      this.getJsStyle()
+      this.getActiveCompany()
     },
     activated () {
       this.getActivatedList()
     },
     methods: {
+      // 获取票据类型方法
+      getPjType(){
+        PjType().then(res =>{
+          if(res.code === 0){
+            this.ticketTypeList = res.data
+          }
+        })
+      },
+      // 往来单位
+      getActiveCompany(){
+        activeCompany().then(res => {
+          if(res.code === 0) {
+            this.transitUnitList = res.data
+          }
+        })
+      },
+      // 获取结算方式
+      getJsStyle(){
+        JsStyle().then(res => {
+          if(res.code === 0){
+            this.settlementMethodList = res.data
+          }
+        })
+      },
       getActivatedList () {
         if(!this.conditionData){
           this.getBrand()
@@ -743,40 +789,40 @@ import {
         return pre.concat( flag? this.newArr(cur.childs): cur)
       },[])
     },
-    toList (arr) {
-      // console.log(arr)v
-      return arr.reduce((ret, v) => {
-          // console.log(ret, v)
-          let item = this.deepClone(v)
-          delete item.childs
-          this.companyListOptions.push(item)
-          let flag = Array.isArray(v.childs) && v.childs.length > 0
-          return ret.concat(flag ? this.toList(v.childs) : v)
-      }, [])
-    },
-    deepClone (obj) {
-      let ret
-      ret = JSON.stringify(obj)
-      ret = JSON.parse(ret)
-      return ret
-    },
+      toList (arr) {
+        // console.log(arr)v
+        return arr.reduce((ret, v) => {
+            // console.log(ret, v)
+            let item = this.deepClone(v)
+            delete item.childs
+            this.companyListOptions.push(item)
+            let flag = Array.isArray(v.childs) && v.childs.length > 0
+            return ret.concat(flag ? this.toList(v.childs) : v)
+        }, [])
+      },
+      deepClone (obj) {
+        let ret
+        ret = JSON.stringify(obj)
+        ret = JSON.parse(ret)
+        return ret
+      },
       // 公司信息获取
       companyIfo () {
-        let user = this.$store.state.user.userData
-        // console.log(user.tenantId)
-        selectCompany({pId: user.tenantId}).then(res=> {
-        // console.log(res)
-        if (res.code === 0) {
-          let data = res.data
-          let item = this.deepClone(data)
-          delete item.childs
-          // console.log(item)
-          this.companyListOptions.push(item)
-          this.toList(data.childs)
-          // console.log(this.companyListOptions)
-        }
-      })
-    },
+          let user = this.$store.state.user.userData
+          // console.log(user.tenantId)
+          selectCompany({pId: user.tenantId}).then(res=> {
+          // console.log(res)
+          if (res.code === 0) {
+            let data = res.data
+            let item = this.deepClone(data)
+            delete item.childs
+            // console.log(item)
+            this.companyListOptions.push(item)
+            this.toList(data.childs)
+            // console.log(this.companyListOptions)
+          }
+        })
+      },
     // 查询
     searchData () {
         searchBrandList(this.conditionData).then(res => {
@@ -790,14 +836,32 @@ import {
         this.tabValue = item
         if(item === "name2"){
           this.getPendingPurchaseList()
+
         }else{
           this.getBrand()
+          this.data2 = []
         }
       },
       // 预订单受理表格单击
       onRowClick(value) {
         // console.log(value)
         this.data2 = value.detailVOList
+      },
+      // 待采购订单多选单击
+      onSelect(row){
+        console.log(row)
+        this.data4 = row
+        this.data5 = row
+      },
+      // 待采购订单全选
+      onSelectAll (row) {
+        console.log(row)
+        this.data4 = row
+        this.data5 = row
+      },
+      // 待采购页面生成采购订单按钮
+      showGeneratePurchaseOrder () {
+          this.addPurchaseOrderDialog = true
       },
       // 页码切换
       onChange (value) {
