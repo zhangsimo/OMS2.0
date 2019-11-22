@@ -15,7 +15,7 @@ const dev = {
   /**oms系统接口设定 */
   authApi: 'http://192.168.2.47:5200', // 系统资源 5200
   // omsProduct: '', // 9200
-  // omsOrder: '', // 9210
+  omsOrder: 'http://192.168.30.21:9210', // 9210
   // omsEdit: '', // 9220
   // omsTask: '', // 9230
   // omsApi: '', // 9240
