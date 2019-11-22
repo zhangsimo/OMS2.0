@@ -22,12 +22,12 @@
                申请信用调查
               </span>
         </Button>
-        <Button class=" mr10" v-show="this.state === 1 && this.Limitstate === 2">
+        <Button class=" mr10" v-show="this.state === 1 && this.researchStatus === 2" @click="opensurveyShow">
               <span class="center">
                修改信用调查
               </span>
         </Button>
-        <Button class=" mr10" @click="openAdjustment" v-show="this.state === 1 && this.Limitstate === 2">
+        <Button class=" mr10" @click="openAdjustment" v-show="this.state === 1 && this.researchStatus === 2">
               <span class="center">
                额度调整
               </span>
@@ -35,7 +35,6 @@
       </div>
       <div class="customerCredit-title">
         <div style="width: 3000px;padding-right: 10px">
-          <!--<Table :stripe="true"  :columns="columns" :data="creditList" size="small" :loading="Loading" border @on-row-click="selection" class="table-highlight-row" highlight-row></Table>-->
           <Table class="table-highlight-row" size="small" highlight-row :loading="Loading" border :stripe="true" :columns="columns" :data="creditList" @on-row-click="selection" height="350"></Table>
         </div>
       </div>
@@ -67,20 +66,27 @@
           <Button type='default' >取消</Button>
         </div>
       </Modal>
-<!--      申请信用调查-->
-
+      <!--      申请信用调查-->
       <Modal v-model="surveyShow" title="信用调查表" width="900">
-        <SurveyList :data="surveyAllList"></SurveyList>
+        <SurveyList :data="creaditList" :dataMsg="costList"></SurveyList>
         <div slot='footer'>
-          <Button type='primary' >确定</Button>
+          <Button type='primary' @click="confirm">确定</Button>
+          <Button type='default' @click="cancel">取消</Button>
+        </div>
+      </Modal>
+      <!--      修改信用调查-->
+      <Modal v-model="surveyShow" title="信用调查表" width="900">
+        <SurveyList :data="creaditList" :dataMsg="costList"></SurveyList>
+        <div slot='footer'>
+          <Button type='primary' @click="confirm">确定</Button>
           <Button type='default' >取消</Button>
         </div>
       </Modal>
 <!--      额度调整-->
       <Modal v-model="adjustment" title="客户信用额度调整表">
-        <QuotaAdjustment :data="adjustmentOne"></QuotaAdjustment>
+        <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg"></QuotaAdjustment>
         <div slot='footer'>
-          <Button type='primary' >确定</Button>
+          <Button type='primary' @click="adjustmentconfirm">确定</Button>
           <Button type='default' >取消</Button>
         </div>
       </Modal>
@@ -91,8 +97,9 @@
   import CreditLineApplication from "./CreditLineApplication";
   import QuotaAdjustment from "./QuotaAdjustment";
   import SurveyList from "./SurveyList";
-  import {queryCreditList,guestCreditHistory} from '../../../../api/system/CustomerManagement/CustomerManagement'
-    export default {
+  import {queryCreditList,guestCreditHistory,saveOrUpdate,adjustment,save} from '../../../../api/system/CustomerManagement/CustomerManagement'
+  import { getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  export default {
         name: "customerCredit",
         components:{
             CreditLineApplication,
@@ -184,23 +191,54 @@
                             {
                                 title: '授权采购',
                                 align: 'center',
-                                key: 'salesMan   '
+                                key: 'salesman   '
                             },
                             {
                                 title: '采购员电话',
                                 align: 'center',
-                                key: 'salesManTel'
+                                key: 'salesmanTel'
                             },
                         ]
                     },
-                    {
-                        title:'业务信息',
-                        align:'centre',
+                  {
+                    title:'业务信息',
+                    align:'center',
+                    children: [
+                      {
+                        title: '回款方式',
+                        align: 'center',
+                        key: 'cashModeName'
+                      },
+                      {
+                        title: '对账日期',
+                        align: 'center',
+                        key: 'accountDate'
+                      },
+                      {
+                        title: '信用级别',
+                        align: 'center',
+                        key: 'tgradeName'
+                      },
+                      {
+                        title: '信用积分',
+                        align: 'guestIntegrals',
+                        key: ''
+                      },
+                      {
+                        title: '备注',
+                        align: 'center',
+                        key: 'remark'
+                      },
+                    ]
+                  },
+                  {
+                        title:'审核信息',
+                        align:'center',
                         children: [
                             {
                                 title: '制单人',
                                 align: 'center',
-                                key: ' createUname'
+                                key: 'createUname'
                             },
                             {
                                 title: '制单日期',
@@ -218,7 +256,23 @@
                                 key: 'auditDate'
                             },
                         ]
-                    }
+                    },
+                  {
+                    title:'修改信息',
+                    align:'center',
+                    children: [
+                      {
+                        title: '修改人',
+                        align: 'center',
+                        key: 'updateUname'
+                      },
+                      {
+                        title: '修改日期',
+                        align: 'center',
+                        key: 'updateTime'
+                      }
+                    ]
+                  }
                 ],
                 columns1:[
                     {
@@ -308,7 +362,10 @@
                 ID: '', //保存当前行id
                 state: -1,//保存当前行的客户调查状态
                 Limitstate: '', //保存当前的额度状态
-                rowMessage:'' //当前的客户信息
+                rowMessage:'', //当前的客户信息
+                costList: '', //数据字典数据
+                researchStatus: '' ,//保存当前的申请状态
+                adjustmentMsg: ''  //给子组件的调整信息
             }
         },
         methods:{
@@ -327,10 +384,12 @@
             this.state = row.isGuestResearch
             this.ID = row.guestId
             this.Limitstate = JSON.parse(row.auditSign).value
-            // console.log(this.Limitstate)
             this.rowMessage = row
              this.creaditList = this.rowMessage
-            console.log(this.creaditList)
+            // console.log(this.creaditList)
+            this.researchStatus = JSON.parse(row.researchStatus).value
+            // console.log(this.researchStatus)
+            console.log(this.rowMessage)
             this.credit()
           },
             selectPage(size){
@@ -342,7 +401,7 @@
             //申请信用额度
             addLimit(){
             if(this.ID){
-              console.log(1112)
+              // console.log(1112)
                 if(this.Limitstate === 1){
                     this.$Message.warning('正在审批中，请等待审批完成!')
                 }else if(this.Limitstate === 3){
@@ -361,6 +420,7 @@
             //额度调用
             openAdjustment(){
                 this.adjustment = true
+                this.adjustmenttt()
             },
             //初始化top部分
           getListTop(){
@@ -371,7 +431,7 @@
               params.fullName = this.Name
             }
             if(this.salesman){
-              params.salesMan = this.salesman
+              params.salesman = this.salesman
             }
             if(this.telephone){
               params.salesmanTel = this.telephone
@@ -395,10 +455,60 @@
                     this.alterArr = res.data.changeVOList || []
                 }
             })
+          },
+          //数据字典
+          async information(){
+            let data ={}
+            data =['CS00106','CS00118','CS00117']
+            let res = await getDigitalDictionary(data)
+            // console.log(res.data)
+            if(res.code === 0){
+              this.costList = res.data
+            }
+          },
+          //确定按钮
+          confirm(){
+            let data = {}
+            data = this.creaditList
+            data.guestId = this.ID
+            saveOrUpdate(data).then(res => {
+                if(res.code === 0){
+                    this.getListTop()
+                    this.surveyShow = false
+                }
+            })
+          },
+          //取消a按钮
+          cancel(){
+            this.surveyShow = false
+          },
+          //调整额度的接口
+          adjustmenttt(){
+            let params = {}
+            params.guestId = this.rowMessage.guestId
+            params.orgId = this.rowMessage.orgid
+            adjustment(params).then(res => {
+              if(res.code === 0){
+                  this.adjustmentMsg = res.data
+              }
+            })
+          },
+          //调整信用额度的确定
+          adjustmentconfirm(){
+                let data = {}
+                this.creaditList.isForbid ? this.creaditList.isForbid = 1 : this.creaditList.isForbid = 0
+                data = {...this.creaditList,...this.adjustmentMsg}
+                // console.log(this.adjustmentMsg)
+                data.afterAdjustQuota = this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal
+                // console.log(data,123)
+                save(data).then(res => {
+                  console.log(res);
+                })
           }
         },
       mounted(){
           this.getListTop()
+          this.information()
       }
     }
 </script>
