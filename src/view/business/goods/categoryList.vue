@@ -1,10 +1,11 @@
 <template>
   <div class="content-oper content-oper-flex">
+    <!-- 头部 -->
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <span>快速查询: </span>
+            <span>快速查询:</span>
             <quick-date class="mr10"></quick-date>
             <Select v-model="purchaseType" class="w90 mr10">
               <Option
@@ -15,9 +16,8 @@
             </Select>
           </div>
           <div class="db">
-
             <Button type="default" @click="search" class="mr10">
-              </i><Icon type="ios-more" />更多
+              <i class="iconfont mr5 iconchaxunicon"></i>更多
             </Button>
           </div>
           <div class="db">
@@ -57,12 +57,12 @@
         </div>
       </div>
     </section>
-
+    <!-- main -->
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500">
-            <!-- split 左 -->
+            <!--main split 左 -->
             <div slot="left" class="con-split-pane-left" style="height: 100%;">
               <div class="pane-made-hd">采购订单列表</div>
               <Table
@@ -84,8 +84,12 @@
                 show-total
               ></Page>
             </div>
-            <!-- split 右 -->
-            <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+            <!--main split 右 -->
+            <div
+              slot="right"
+              class="con-split-pane-right pl5 goods-list-form"
+              style="height: 100%;"
+            >
               <div class="pane-made-hd">本年采购总金额:</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
@@ -162,10 +166,10 @@
                       <Button size="small" class="mr10" @click="addPro">订单调整</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">收货信息</Button>
+                      <Button size="small" class="mr10" @click="showGoods">收货信息</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">采购金额填写</Button>
+                        <Button size="small" class="mr10" @click="sumMod = true">采购金额填写</Button>
                     </div>
                   </div>
                   <div class="t-price">采购计划金额：120000.00</div>
@@ -225,17 +229,103 @@
         </div>
       </div>
     </section>
+    <!-- 更多对话框 -->
+    <Modal title="高级查询" v-model="serchN" :styles="{top: '50px', width: '500px'}">
+      <div class="data ml30 pl25">
+        <Row class="mb30">
+          <span>订货日期: </span>
+          <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
+        </Row>
+        <Row class="mb30">
+          <span>创建日期: </span>
+          <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
+        </Row>
+        <Row class="mb30">
+          <span>提交日期: </span>
+          <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
+        </Row>
+      </div>
+      <Form
+        ref="formInline"
+        :model="formInline"
+        :rules="ruleInline"
+        :label-width="80"
+        class="ml10 pl25"
+      >
+        <FormItem prop="user" label="供 应 商: ">
+          <Input type="text" placeholder="请选择供应商..." class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem prop="password" label="订单单号: ">
+          <Input type="text" class="w300 ml5" size="large"></Input>
+        </FormItem>
+        <FormItem prop="password" label="配件编码: ">
+          <Input type="text" class="w300 ml5" size="large"></Input>
+        </FormItem>
+        <FormItem label="品牌: ">
+          <Input type="password" class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem label="提交人: ">
+          <Input type="password" class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem label="创建人: ">
+          <Input type="password" class="w300 ml5"></Input>
+          <Radio v-model="single">Radio</Radio>
+        </FormItem>
+      </Form>
+    </Modal>
+    <!-- 采购金额对话框 -->
+     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
+      <Form
+        ref="formInline"
+        :model="formInline"
+        :rules="ruleInline"
+        :label-width="100"
+        class="ml10 pl25"
+      >
+        <FormItem prop="user" label="合计采购金额: ">
+          <Input type="text"  class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem label="折扣金额: ">
+          <Input type="password" placeholder="请输入" class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem label="返利金额: ">
+          <Input type="password" placeholder="请输入" class="w300 ml5"></Input>
+        </FormItem>
+        <FormItem label="实际应付金额: ">
+          <Input type="password" class="w300 ml5"></Input>
+        </FormItem>
+      </Form>
+    </Modal>
+    <!-- 收货信息 -->
+    <Modal v-model="isShow" title="收货信息" width="1000">
+      <goods-info></goods-info>
+      <div slot="footer"></div>
+    </Modal>
   </div>
 </template>
 <script>
-import '../../lease/product/lease.less'
+import "../../lease/product/lease.less";
 import QuickDate from "_c/getDate/dateget";
-
+import goodsInfo from "../../../components/goodsInfo/goodsInfo";
 export default {
   name: "categoryList",
-  components: { QuickDate },
+  components: { QuickDate, goodsInfo },
   data() {
     return {
+      //serch对话框
+      sumMod: false,
+      serchN: false,
+      // 右侧表单数据双向绑定
+      formPlan: {
+        supplyName: "", //供应商
+        buyer: "", //采购员
+        PaperType: "", //票据类型
+        closeType: "", //结算方式
+        enterStorage: "", //入库仓
+        remarks: "", //备注
+        beforePay: "", //预付款
+        orderNum: "" //订单号
+      },
       split1: 0.2,
       columns: [
         {
@@ -300,7 +390,10 @@ export default {
           align: "center"
         }
       ],
-      tableData: [{ id: "1", sss: "33", ddd: '33' }, { id: "1", sss: "22", ddd: '33' }],
+      tableData: [
+        { id: "1", sss: "33", ddd: "33" },
+        { id: "1", sss: "22", ddd: "33" }
+      ],
       page: {
         num: 1,
         size: 10,
@@ -340,7 +433,8 @@ export default {
       //左侧表格高度
       leftTableHeight: 0,
       //右侧表格高度
-      rightTableHeight:0,
+      rightTableHeight: 0,
+      isShow: false
     };
   },
   activated() {},
@@ -353,17 +447,33 @@ export default {
       //获取左侧侧表格高度
       this.leftTableHeight = wrapH - 70;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH;
+      this.rightTableHeight = wrapH - planFormH - planBtnH + 80;
     });
   },
   methods: {
-
+    search() {
+      this.serchN = true;
+    },
+    showGoods() {
+      this.isShow = true;
+    }
   },
   computed: {}
 };
 </script>
 
 <style lang="less" scoped>
+.ivu-btn .ivu-btn-text {
+  border: 1px solid #ccc;
+}
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .ivu-modal {
+    top: 0;
+  }
+}
 .goods-list-form {
   * {
     font-size: 12px !important;
