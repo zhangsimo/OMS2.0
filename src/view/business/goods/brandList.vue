@@ -337,7 +337,7 @@ import {
         guestId: "", //往来单位id
         storeId: "", //仓库id
         orderManId: "", //采购员id
-        orderMan: "",
+        orderMan: "", //采购员
         orderTypeId: 1, //订单类型
         billTypeId:"", //票据类型
         settleTypeId: "", //结算方式
@@ -733,7 +733,15 @@ import {
       // 新增采购订单保存数据
       savePre(){
         savePreOrder({
-
+         guestId:  this.guestId, 
+         storeId: this.storeId,
+         orderManId:this.orderManId,
+          orderMan:this.orderMan,
+          orderTypeId:this.orderTypeId,
+          billTypeId:this.billTypeId,
+          settleTypeId:this.settleTypeId,
+          details:this.data4
+          
         }).then(res => {
 
         })
@@ -871,14 +879,16 @@ import {
       },
       // 待采购订单多选单击
       onSelect(row){
-        console.log(row)
+        // console.log(row)
         this.data4 = row
         this.data5 = row
+        let item = row[0]
         let prePri = {}
-        prePri.id = row.id
-        prePri.partId = row.partId
-        PrePrice(prePri).then(res => {
-
+        prePri.id = item.id
+        prePri.partId = item.partId
+        // console.log(prePri)
+        PrePrice([prePri]
+        ).then(res => {
         })
       },
       // 待采购订单全选

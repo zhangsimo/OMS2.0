@@ -77,7 +77,7 @@ export function selectCompany(params) {
   // 新增采购订单保存接口
   export function savePreOrder(data) {
     return axios.request({
-      url: `${api.wmsApi}/preOrderMain/save`,
+      url: `${api.omsOrder}/preOrderMain/save`,
       method: "post",
       data
     });
@@ -85,7 +85,7 @@ export function selectCompany(params) {
   // 采购单价接口
   export function PrePrice(data) {
     return axios.request({
-      url: `${api.wmsApi}/preOrderDetail/findRecentPrice`,
+      url: `${api.omsOrder}/preOrderDetail/findRecentPrice`,
       method: "post",
       data
     });
