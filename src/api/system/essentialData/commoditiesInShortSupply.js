@@ -28,27 +28,26 @@ export function getSaveNewTight (data) {
   })
 }
 
-//本地配件接口
+//维保接口
 export function getLocalList (params,data) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/findTightAllPage`,
+    url: `${api.wmsApi}/wbParts/queryTightAll`,
     method: 'post',
     params,
     data
   })
 }
 
-//云端配件接口
-export function getCloudList (params,data) {
+//wb云端配件接口
+export function getCloudList (params) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/findTightPage`,
-    method: 'post',
-    params,
-    data
-  })
+    url: `${api.wmsApi}/wbParts/queryTightAll`,
+    method: "get",
+    params
+  });
 }
 
-//管理员配件
+//管理员配件 不用
 export function getGmList (params,data) {
   return axios.request({
     url: `${api.wmsApi}/attribute/queryTightAll`,

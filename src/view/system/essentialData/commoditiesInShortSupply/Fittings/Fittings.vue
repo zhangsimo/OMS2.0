@@ -1,5 +1,5 @@
 <template>
-  <main class="Fittings-res">
+  <main class="Fittings-res page">
     <!--上部-->
     <section class="oper-box">
       <div class="oper-top flex">
@@ -19,7 +19,7 @@
           </div>
           <div class="db mr10">
             <span>品牌:</span>
-            <Select v-model="band" style="width:140px">
+            <Select v-model="band" style="width:140px" filterable>
               <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -50,11 +50,11 @@
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
               <li v-if="!isSys" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
-              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">云配件资料</li>
+              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件资料</li>
             </ul>
           </div>
           <div class="tabs-warp" v-if="tabIndex == 0">
-              <Table
+            <Table
               border
               size="small"
               height="500"
