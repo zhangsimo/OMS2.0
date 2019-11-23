@@ -86,14 +86,14 @@ export default [
         component: () => import("@/view/business/goods/supplierList.vue")
       },
       {
-        path: "/goods/supplySkuList",
-        name: "supplySkuList",
+        path: "/goods/bookingSheet/bookingSheet",
+        name: "bookingSheet",
         mark: "13",
         meta: {
           icon: "arrow-graph-up-right",
           title: "预订单"
         },
-        component: () => import("@/view/business/goods/supplierSkuList.vue")
+        component: () => import("@/view/business/goods/bookingSheet/bookingSheet.vue")
       },
       {
         path: "/goods/brandList",

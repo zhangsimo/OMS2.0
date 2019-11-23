@@ -218,7 +218,7 @@
       </div>
       <div slot="footer">
         <Button type="primary" @click="reViewAct">确定</Button>
-        <Button type="default" @click="reViewDialog = false">取消</Button>
+        <Button type="default" @click="closeReview">取消</Button>
       </div>
     </Modal>
 
@@ -1048,6 +1048,11 @@ export default {
         }
       })
     },
+    // 关闭审核窗口
+    closeReview(){
+      this.reViewDialog = false;
+      this.radioCheck = ''
+    },
     //点击tabs切换时
     handleClickTab(item) {
       this.tabValue = item
@@ -1056,26 +1061,14 @@ export default {
           this.getActApplicationForm()
           this.checkedData = []
           this.data4 = []
-          this.getDataObj.beginDate = ""
-          this.getDataObj.endDate = ""
-          this.getDataObj.state = ""
-          this.getDataObj.partName = ""
-          this.getDataObj.orgname = ""
+          this.resetFiles()
         case 'name2':
           this.getActApplicationForm()
           this.getActTable()
-          this.getDataObj.beginDate = ""
-          this.getDataObj.endDate = ""
-          this.getDataObj.state = ""
-          this.getDataObj.partName = ""
-          this.getDataObj.orgname = ""
+          this.resetFiles()
         case 'name3':
           this.getExpiredTable()
-          this.getDataObj.beginDate = ""
-          this.getDataObj.endDate = ""
-          this.getDataObj.state = ""
-          this.getDataObj.partName = ""
-          this.getDataObj.orgname = ""
+          this.resetFiles()
       }
     },
     handleSummary({ columns, data }) {
@@ -1104,6 +1097,14 @@ export default {
       });
 
       return sums;
+    },
+    // 重置信息
+    resetFiles() {
+        this.getDataObj.beginDate = ""
+        this.getDataObj.endDate = ""
+        this.getDataObj.state = ""
+        this.getDataObj.partName = ""
+        this.getDataObj.orgname = ""
     }
   },
 };
