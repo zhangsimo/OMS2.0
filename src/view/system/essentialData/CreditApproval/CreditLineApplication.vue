@@ -3,41 +3,41 @@
     <Form :model="data" ref="form" :label-width="130" :ruls="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
-        <span class="mr20">华盛集团XXX汽配店</span>
+        <span class="mr20">{{customerIfo[0].auditor}}</span>
         <span>申请人:</span>
-        <span class="mr20">XXXXXX</span>
+        <span class="mr20">{{customerIfo[0].applyMan}}</span>
         <span>申请时间:</span>
-        <span class="mr20">2019-11-11</span>
+        <span class="mr20">{{customerIfo[0].applyDate}}</span>
         <span>最高受信固定额度:</span>
         <span>100W</span>
       </div>
       <Row>
         <Col span="8">
           <FormItem label='调整前固定额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='customerDetails[0].creditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整前临时额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='customerDetails[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
 
         </Col>
         <Col span="8">
           <FormItem label='申请增加固定额度:' >
-            <Input v-model='data.fullName' style="width: 150px" disabled></Input>
+            <Input v-model='customerDetails[0].applyQuota' style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label='申请增加临时额度:' >
-            <Input v-model='data.fullName' style="width: 150px" disabled></Input>
+            <Input v-model='customerDetails[0].tempQuota' style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
-            <DatePicker :value="value1" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px" disabled></DatePicker>
+            <DatePicker :value="customerDetails[0].tempStart" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px" disabled></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='调整后固定额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='+customerDetails[0].applyQuota+customerDetails[0].creditLimit' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整后临时额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='+customerDetails[0].tempQuota + customerDetails[0].tempCreditLimit' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
             <DatePicker :value="value2" format="yyyy/MM/dd"  :options="dateOptions"  style="width: 150px" disabled></DatePicker>
@@ -47,82 +47,95 @@
       <Row>
         <Col span="8">
         <FormItem label='调整前额度合计:' >
-          <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+          <Input  v-model='customerDetails[0].creditLimit + customerIfo[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
         </FormItem>
         <FormItem label='当前应付账款:' >
-          <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+          <Input  v-model='customerDetails[0].payableAmt' style="width: 150px" disabled ></Input>
         </FormItem>
+        <FormItem label='信用等级:' >
+            <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
+            <Select style="width:150px">
+              <Option v-for="item in customerDetails" :value="item.id" :key="item.id">{{ item.tgrade }}</Option>
+            </Select>
+          </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='申请增加额度合计:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  v-model='customerDetails[0].addTotalQuota' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前应收账款:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].receivableAmt' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整前剩余额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].afterAdjustQuota' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='调整后累计额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled  ></Input>
+            <Input  :value='(+customerDetails[0].applyQuota+customerDetails[0].creditLimit) + (+customerDetails[0].tempQuota + customerDetails[0].tempCreditLimit)' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前欠款总额:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].sumAmt' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整后剩余额度:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='data.fullNmae' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="8">
           <FormItem label='当前应收30天内:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].thirtyAmt' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='当前应收30-60天:' >
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].sixtyAmt' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='当前应收60天以上:'>
-            <Input  v-model='data.fullName' style="width: 150px" disabled ></Input>
+            <Input  v-model='customerDetails[0].moreSixtyAmt' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
       </Row>
       <FormItem label='申请额度说明:' prop="fullName">
-        <Input  v-model='data.fullName' style="width: 650px"  disabled></Input>
+        <Input  v-model='customerIfo[0].adjustReason' style="width: 650px"  disabled></Input>
       </FormItem>
     </Form>
     <div>
       <p class="title">近6个月及以上业绩情况</p>
       <div class=boxheight>
-        <Table :columns="columns" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns" :data="sixMonthPerformance " border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
       </div>
     </div>
     <div>
       <p class="title">近6个月额度调整记录</p>
       <div class=boxheight>
-        <Table :columns="columns2" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns2" :data="customerDetails" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
       </div>
     </div>
     <div>
       <p class="title">未清销售订单</p>
       <div class=boxheight>
-        <Table :columns="columns3" :data="performance" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns3" :data="sellOrderList" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { getCustomerDetails } from '../../../../api/system/essentialData/clientManagement'
     export default {
         name: "CreditLineApplication",
         props:{
-            data:''
+            data:'',
+            customerIfo: Array,
+            customerDetails:Array,
+            sellOrderList:Array,
+            sixMonthPerformance:Array
+        },
+        mounted(){ 
         },
         data(){
             return {
@@ -142,84 +155,89 @@
                     {
                         title:'期间',
                         align: 'center',
-                        key:'tiem'
+                        key:'period'
                     },
                     {
                         title:'销售金额',
                         align: 'center',
-                        key:'money'
+                        key:'salesAmt'
                     },
                     {
                         title:'已回款金额',
                         align: 'center',
-                        key:'backmoney'
+                        key:'paidAmt'
                     },
                     {
                         title:'未回款金额',
                         align: 'center',
-                        key:'name'
+                        key:'uncollectedAmt'
                     },
                     {
                         title:'采购金额',
                         align: 'center',
-                        key:'name'
+                        key:'purchaseAmt'
                     },
                     {
                         title:'已付款金额',
                         align: 'center',
-                        key:'name'
+                        key:'alreadyPaidAmt'
                     },
                     {
                         title:'未付款金额',
                         align: 'center',
-                        key:'name'
+                        key:'unpaidAmt'
                     },
                     {
                         title:'往来净额',
                         align: 'center',
-                        key:'allmoney'
+                        key:'totalAmt'
                     },
                 ],
                 columns2:[
+                  {
+                    title: '序号',
+                    align: 'center',
+                    type: 'index'
+                  },
                     {
                         title:'调整生效日',
                         align: 'center',
-                        key:'tiem'
+                        key:'auditDate'
                     },
                     {
                         title:'增加固定额度',
                         align: 'center',
-                        key:'money'
+                        key:'applyQuota'
                     },
                     {
                         title:'增加临时额度',
                         align: 'center',
-                        key:'backmoney'
+                        key:'tempQuota'
                     },
                     {
                         title:'增加后固定额度',
                         align: 'center',
-                        key:'name'
+                        key:'fixationQuotaTotal'
                     },
                     {
                         title:'增加后临时额度',
                         align: 'center',
-                        key:'name'
+                        key:'tempQuotaTotal'
                     },
                     {
                         title:'临时额度开始日期',
                         align: 'center',
-                        key:'name'
+                        key:'tempStart'
                     },
                     {
                         title:'临时额度结束日期',
                         align: 'center',
-                        key:'name'
+                        key:'tempEnd'
                     },
                     {
                         title:'申请原因',
                         align: 'center',
-                        key:'name'
+                        key:'quotaReason'
                     },
                 ],
                 columns3:[
@@ -232,33 +250,19 @@
                   {
                     title:'订单号',
                     align: 'center',
-                    key:'name'
+                    key:'serviceId'
                   },
                   {
                     title:'订单日期',
                     align: 'center',
-                    key:'money'
+                    key:'orderDate'
                   },
                   {
                     title:'订单金额',
                     align: 'center',
-                    key:'backmoney'
+                    key:'orderAmt'
                   },
                 ],
-                performance:[
-                  {
-                    tiem:2019-1,
-                    money:100,
-                    backmoney:200,
-                    allmoney:-233
-                  },
-                  {
-                    tiem:2019-1,
-                    money:200,
-                    backmoney:300,
-                    allmoney:433
-                  },
-                ]
             }
         },
         methods:{
@@ -321,9 +325,7 @@
 
                 return sums;
             }
-        }
-
-
+        },
     }
 </script>
 

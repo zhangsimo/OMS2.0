@@ -1,10 +1,16 @@
 <template>
-    <div>预订单</div>
+    <div>
+        <section>
+            <dateget></dateget>
+        </section>
+    </div>
 </template>
 
 <script>
+import dateget from '../../../../components/getDate/dateget'
 export default {
-    name: 'bookingSheet'
+    name: 'bookingSheet',
+    components:{dateget}
 }
 </script>
 

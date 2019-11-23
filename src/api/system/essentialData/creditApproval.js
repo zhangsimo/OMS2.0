@@ -19,3 +19,10 @@ return axios.request({
 })
 }
 // 查看明细接口
+export function viewDetails (params) {
+  return axios.request({
+      url: `${api.wmsApi}/guestAdjust/guestCreditHistory`,
+      method: 'get',
+      params
+  })
+  }

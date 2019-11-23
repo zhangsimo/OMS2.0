@@ -91,7 +91,13 @@
     </div>
 <!--信用额度查看-->
     <Modal v-model="CreditLineApplicationShow" title="客户信用额度表" width="900" :mask-closable="false">
-      <CreditLineApplication :data="creaditList"></CreditLineApplication>
+      <CreditLineApplication 
+      :data="creaditList" 
+      :customerIfo="customerIfo" 
+      :customerDetails="customerDetails"
+      :sixsixMonthPerformance="sixMonthPerformance"
+      :sellOrderList="sellOrderList"
+      ></CreditLineApplication>
       <div slot='footer'>
         <!-- <Button type='primary' >确定</Button> -->
         <Button type='default' @click="CreditLineApplicationShow = false">关闭</Button>
@@ -106,7 +112,9 @@
   import '../../../../components/getDate/index'
   import {
     getCreditApprovalTable,
-    conditionalQuery
+    conditionalQuery,
+    viewDetails,
+    guestAdjust
     } from '../../../../api/system/essentialData/creditApproval'
     export default {
         name: "CreditApproval",
@@ -121,6 +129,12 @@
                   return date && date.valueOf() > Date.now();
                 }
               },
+              // 客户信息数据
+                customerIfo: [],
+                // 客户数据明细
+                customerDetails:[],
+                sixMonthPerformance:[],
+                sellOrderList:[],
               // 申请日期数据
                 dateList: {
                   startApplyTime:"",
@@ -218,7 +232,9 @@
                 ],
                 creditList:[],
                 creditData:{
-                  id: ''
+                  guestId: '',
+                  adjustType:0,
+                  orgId: ''
                 },
                 CreditLineApplicationShow:false,
                 creaditList:{},
@@ -296,16 +312,24 @@
           },
           // 查看明细
           openDetail(){
-            if (this.creditData.id === '') {
+            if (this.creditData.guestId === '') {
               this.$Message.error('请选择一条数据')
             } else {
               this.CreditLineApplicationShow = true
+              viewDetails(this.creditData).then(res => {
+                if(res.code === 0){
+                  this.customerIfo = res.data.changeVOList
+                  this.customerDetails = res.data.guestAdjustVOList
+                  this.sixMonthPerformance = res.data.sixMonthPerformance
+                  this.sellOrderList = res.data.sellOrderList
+                }
+              })
             }
           },
           // 单击表格行获取行数据
           onRowClick (value) {
             // console.log(value)
-            this.creditData.id = value.id
+            this.creditData.guestId = value.guestId
           }
         }
     }
