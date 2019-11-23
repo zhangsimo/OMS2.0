@@ -3,20 +3,13 @@
 .part-main {
     height: @h;
 }
-.oper-box {
-  line-height: 57px;
-}
-.tabs-warp {
-  padding: 0 10px;
-}
-.page-warp {
-  margin-top: 10px;
-}
-.page-con {
-  float: right;
+.wlf {
+  padding-left: 10px;
+  padding-bottom: 10px;
+
 }
 .tree-warp {
-    height: 684px;
+    height: 664px;
     border: solid 1px #ddd;
     border-right: none;
 
@@ -33,6 +26,8 @@
 
     .tree {
         padding-left: 10px;
+        height: 604px;
+        overflow-y: auto;
     }
 }
 
@@ -41,7 +36,7 @@
 }
 
 .table-warp {
-    height: 684px;
+    height: 664px;
     border: solid 1px #ddd;
     border-left: none;
 
@@ -123,11 +118,13 @@
     }
 
     .tag-span {
+        display: inline-block;
         cursor: pointer;
         background: #f8f8f8;
         border: 1px solid #e8e8e8;
         padding: 4px 10px;
         border-radius: 2px;
+        margin: 5px;
 
         &.active {
             background: #fd5c5c;
