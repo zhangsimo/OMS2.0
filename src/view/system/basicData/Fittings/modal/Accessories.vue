@@ -1089,7 +1089,7 @@ export default class Accessories extends Vue {
           qualityTypeId: this.formValidate.qualityTypeId,
           partBrandId: this.formValidate.partBrandId,
           code: this.formValidate.code,
-          unit: this.formValidate.unit,
+          unitId: this.formValidate.unit,
           name: this.formValidate.name,
           oemCode: this.formValidate.oemCode,
           spec: this.formValidate.spec,
