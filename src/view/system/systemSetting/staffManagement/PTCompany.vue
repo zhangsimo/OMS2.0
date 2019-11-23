@@ -10,8 +10,7 @@
       </div>
       <div class="companyList">
         <Table :columns="columns" border :loading="loading" stripe :data="companyList" height="440" size="small"
-               @on-select="selectRow"
-               @on-select-cancel="cancelSelectRow"
+               @on-selection-change="selectRow"
                @on-select-all="seleteAll"
                @on-select-all-cancel="cancelAll"></Table>
       </div>
@@ -84,13 +83,13 @@
                 if (res.code == 0){
                     this.companyList = res.data.content
                     this.page.total = res.data.totalElements
-                    this.selectedArr.forEach( item => {
-                        this.allCompanyList.forEach( el => {
-                            if (item.orgid == el.orgid){
-                                item._checked = true
-                            }
-                        })
-                    })
+                    // this.selectedArr.forEach( item => {
+                    //     this.allCompanyList.forEach( el => {
+                    //         if (item.orgid == el.orgid){
+                    //             item._checked = true
+                    //         }
+                    //     })
+                    // })
                 }
               })
           },
@@ -112,22 +111,11 @@
             },
             //选择航
             selectRow(selection, row) {
-              this.selectedArr.push(row)
-            },
-            // 取消选择行
-            cancelSelectRow(selection, row) {
-                this.selectedArr =  this.selectedArr.filter( item => { return  item.id != row.id})
-                console.log(this.selectedArr)
+              this.selectedArr= selection
             },
             // 全选
             seleteAll(selection) {
-                let arr = selection
-                let arr1 = [...this.selectedArr]
-                arr = arr.filter(item => {
-                    let arrlist = arr1.map(v => v.id)
-                    return !arrlist.includes(item.id)
-                })
-                this.selectedArr = arr
+                this.selectedArr = selection
             },
             // 取消全选
             cancelAll(selection) {

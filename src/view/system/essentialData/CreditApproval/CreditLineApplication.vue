@@ -219,7 +219,7 @@
                     {
                         title:'申请原因',
                         align: 'center',
-                        key:'allmoney'
+                        key:'name'
                     },
                 ],
                 columns3:[
@@ -246,15 +246,18 @@
                   },
                 ],
                 performance:[
-                    {tiem:2019-1,
+                  {
+                    tiem:2019-1,
                     money:100,
                     backmoney:200,
-                    allmoney:-233},
-                    {tiem:2019-1,
-                        money:200,
-                        backmoney:300,
-                        allmoney:433},
-
+                    allmoney:-233
+                  },
+                  {
+                    tiem:2019-1,
+                    money:200,
+                    backmoney:300,
+                    allmoney:433
+                  },
                 ]
             }
         },

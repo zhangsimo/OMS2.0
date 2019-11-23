@@ -16,7 +16,8 @@ export default {
     userData: '', //账号信息
     treePid:'',
     storeId:'',
-    supplierId:''
+    supplierId:'',
+    managementId:'',
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -46,6 +47,9 @@ export default {
     },
     setsupplierId(state ,data) {
       state.supplierId = data
+    },
+    setManagementId(state , data) {
+      state.managementId = data
     }
   },
   actions: {

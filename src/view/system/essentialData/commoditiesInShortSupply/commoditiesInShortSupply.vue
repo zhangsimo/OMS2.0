@@ -94,27 +94,27 @@
                     {
                         title: '配件内编码',
                         align: 'center',
-                        key: 'partId',
+                        key: 'code',
                     },
                     {
                         title: '编码',
                         align: 'center',
-                        key: 'code',
+                        key: 'partCode',
                     },
                     {
                         title: '名称',
                         align: 'center',
-                        key: 'name',
+                        key: 'partStandardName',
                     },
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'partBrandName',
+                        key: 'partBrand',
                     },
                     {
                         title: '品质',
                         align: 'center',
-                        key: 'qualityTypeName',
+                        key: 'quality',
                     },
                     {
                         title: '品牌车型',
@@ -124,12 +124,12 @@
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'unit',
+                        key: 'minUnit',
                     },
                     {
                         title: '规格',
                         align: 'center',
-                        key: 'spec',
+                        key: 'specifications',
                     },
                     {
                         title: '可售数量',
