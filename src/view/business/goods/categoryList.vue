@@ -241,15 +241,15 @@
     <Modal title="高级查询" v-model="serchN" :styles="{top: '50px', width: '500px'}">
       <div class="data ml30 pl25">
         <Row class="mb30">
-          <span>订货日期:</span>
+          <span>订货日期: </span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>创建日期:</span>
+          <span>创建日期: </span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>提交日期:</span>
+          <span>提交日期: </span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
       </div>
@@ -280,6 +280,10 @@
           <Radio v-model="single">Radio</Radio>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button class="mr15" type="primary">确定</Button>
+        <Button >取消</Button>
+      </div>
     </Modal>
     <!-- 采购金额对话框 -->
     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
@@ -303,6 +307,10 @@
           <Input type="password" class="w300 ml5"></Input>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="primary" >保存</Button>
+        <Button type="default" >取消</Button>
+      </div>
     </Modal>
     <!-- 收货信息 -->
     <Modal v-model="isShow" title="收货信息" width="1000">
