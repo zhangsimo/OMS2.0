@@ -318,7 +318,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 费用登记 对话框 -->
-    <Modal v-model="isCost" title="费用登记" @on-cancel="cancel">
+    <Modal v-model="isCost" title="费用登记" width="1000">
       <div class="costBox clearfix con-split">
         <div class="fl">
           <div class="leftT">
@@ -344,11 +344,17 @@
               border
               resizable
               :data="tableData">
-              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column field="name" title="操作" width="60"></vxe-table-column>
-              <vxe-table-column field="sex" title="往来单位" width="100"></vxe-table-column>
-              <vxe-table-column field="age" title="编码" width="100"></vxe-table-column>
+              <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
+              <vxe-table-column field="name" title="操作" width="80"></vxe-table-column>
+              <vxe-table-column field="sex" title="往来单位" width="130"></vxe-table-column>
+              <vxe-table-column field="age" title="编码" width="130"></vxe-table-column>
             </vxe-table>
+          </div>
+        </div>
+        <div class="fr w480 h600">
+          <div class="right">
+            <Button type="primary" size="small" class="mr10">保存</Button>
+            <Button size="small">取消</Button>
           </div>
         </div>
       </div>
