@@ -52,7 +52,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10">费用登记</Button>
+            <Button @click="showCost" class="mr10">费用登记</Button>
           </div>
         </div>
       </div>
@@ -237,19 +237,19 @@
         </div>
       </div>
     </section>
-    <!-- 更多对话框 -->
+    <!-- 更多 对话框 -->
     <Modal title="高级查询" v-model="serchN" :styles="{top: '50px', width: '500px'}">
       <div class="data ml30 pl25">
         <Row class="mb30">
-          <span>订货日期: </span>
+          <span>订货日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>创建日期: </span>
+          <span>创建日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>提交日期: </span>
+          <span>提交日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
       </div>
@@ -282,10 +282,10 @@
       </Form>
       <div slot="footer">
         <Button class="mr15" type="primary">确定</Button>
-        <Button >取消</Button>
+        <Button>取消</Button>
       </div>
     </Modal>
-    <!-- 采购金额对话框 -->
+    <!-- 采购金额 对话框 -->
     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
       <Form
         ref="formInline"
@@ -308,13 +308,47 @@
         </FormItem>
       </Form>
       <div slot="footer">
-        <Button type="primary" >保存</Button>
-        <Button type="default" >取消</Button>
+        <Button type="primary">保存</Button>
+        <Button type="default">取消</Button>
       </div>
     </Modal>
-    <!-- 收货信息 -->
+    <!-- 收货信息 对话框 -->
     <Modal v-model="isShow" title="收货信息" width="1000">
       <goods-info></goods-info>
+      <div slot="footer"></div>
+    </Modal>
+    <!-- 费用登记 对话框 -->
+    <Modal v-model="isCost" title="费用登记" @on-cancel="cancel">
+      <div class="costBox clearfix con-split">
+        <div class="fl">
+          <div class="leftT">
+            <Select v-model="model2" size="small" style="width:100px" class="mr15">
+              <Option
+                v-for="item in cityList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Input
+              v-model="value"
+              placeholder="Enter something..."
+              style="width: 250px"
+              size="small"
+              class="mr15"
+            />
+            <Button type="primary" size="small">查询</Button>
+          </div>
+          <div class="pane-made-hd mt15">往来单位列表</div>
+          <div class="w420">
+            <vxe-table :data="tableData">
+              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column field="name" title="操作"></vxe-table-column>
+              <vxe-table-column field="sex" title="往来单位"></vxe-table-column>
+              <vxe-table-column field="age" title="编码"></vxe-table-column>
+            </vxe-table>
+          </div>
+        </div>
+      </div>
       <div slot="footer"></div>
     </Modal>
   </div>
@@ -328,6 +362,8 @@ export default {
   components: { QuickDate, goodsInfo },
   data() {
     return {
+      //Cost 对话框
+      isCost: false,
       //serch对话框
       sumMod: false,
       serchN: false,
@@ -450,7 +486,34 @@ export default {
       leftTableHeight: 0,
       //右侧表格高度
       rightTableHeight: 0,
-      isShow: false
+      isShow: false,
+      //下拉框数据
+      cityList: [
+        {
+          value: "New York",
+          label: "New York"
+        },
+        {
+          value: "London",
+          label: "London"
+        },
+        {
+          value: "Sydney",
+          label: "Sydney"
+        },
+        {
+          value: "Ottawa",
+          label: "Ottawa"
+        },
+        {
+          value: "Paris",
+          label: "Paris"
+        },
+        {
+          value: "Canberra",
+          label: "Canberra"
+        }
+      ]
     };
   },
   activated() {},
@@ -467,6 +530,10 @@ export default {
     });
   },
   methods: {
+    //展示费用登记
+    showCost() {
+      this.isCost = true;
+    },
     search() {
       this.serchN = true;
     },
