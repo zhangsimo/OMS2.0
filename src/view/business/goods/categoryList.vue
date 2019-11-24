@@ -169,7 +169,7 @@
                       <Button size="small" class="mr10" @click="showGoods">收货信息</Button>
                     </div>
                     <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="sumMod = true">采购金额填写</Button>
+                      <Button size="small" class="mr10" @click="sumMod = true">采购金额填写</Button>
                     </div>
                   </div>
                   <div class="t-price">采购计划金额：120000.00</div>
@@ -195,16 +195,24 @@
                     title="采购数量"
                     :edit-render="{name: 'input'}"
                     width="100"
-                  ></vxe-table-column>
+                  >
+                    <template v-slot:edit="{ row }">
+                      <InputNumber :max="9999" :min="0" v-model="row.sss"></InputNumber>
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column
                     field="ddd"
                     title="采购单价"
                     :edit-render="{name: 'input'}"
                     width="100"
-                  ></vxe-table-column>
+                  >
+                    <template v-slot:edit="{ row }">
+                      <InputNumber :max="9999" :min="0" v-model="row.ddd"></InputNumber>
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column title="采购金额" width="100">
                     <template v-slot="{ row }">
-                      <span>{{ parseFloat(row.sss)*parseFloat(row.ddd) }} 元</span>
+                      <span>{{ parseFloat(row.sss*row.ddd).toFixed(2) }} 元</span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column
@@ -233,15 +241,15 @@
     <Modal title="高级查询" v-model="serchN" :styles="{top: '50px', width: '500px'}">
       <div class="data ml30 pl25">
         <Row class="mb30">
-          <span>订货日期: </span>
+          <span>订货日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>创建日期: </span>
+          <span>创建日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
         <Row class="mb30">
-          <span>提交日期: </span>
+          <span>提交日期:</span>
           <DatePicker type="daterange" placement="bottom-end" style="width: 300px"></DatePicker>
         </Row>
       </div>
@@ -274,7 +282,7 @@
       </Form>
     </Modal>
     <!-- 采购金额对话框 -->
-     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
+    <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
       <Form
         ref="formInline"
         :model="formInline"
@@ -283,7 +291,7 @@
         class="ml10 pl25"
       >
         <FormItem prop="user" label="合计采购金额: ">
-          <Input type="text"  class="w300 ml5"></Input>
+          <Input type="text" class="w300 ml5"></Input>
         </FormItem>
         <FormItem label="折扣金额: ">
           <Input type="password" placeholder="请输入" class="w300 ml5"></Input>
