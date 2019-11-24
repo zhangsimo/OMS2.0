@@ -340,11 +340,14 @@
           </div>
           <div class="pane-made-hd mt15">往来单位列表</div>
           <div class="w420">
-            <vxe-table :data="tableData">
+            <vxe-table
+              border
+              resizable
+              :data="tableData">
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column field="name" title="操作"></vxe-table-column>
-              <vxe-table-column field="sex" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="age" title="编码"></vxe-table-column>
+              <vxe-table-column field="name" title="操作" width="60"></vxe-table-column>
+              <vxe-table-column field="sex" title="往来单位" width="100"></vxe-table-column>
+              <vxe-table-column field="age" title="编码" width="100"></vxe-table-column>
             </vxe-table>
           </div>
         </div>
