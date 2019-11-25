@@ -1,11 +1,19 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件名称查询" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
-        <Input class="w200 mr10" v-model="partName"></Input>
+        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
+          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
+        </Select>
+        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+
+        <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
+          <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
+        </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
-        <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
+        <Button class="mr10" type='default' @click="throwData"><Icon type="md-close" /> 取消</Button>
+        <Button type='default' @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
         <div class="partCheck-left fl">
@@ -25,13 +33,19 @@
         <!--<Button type='default' @click='proModal = false'>取消</Button>-->
       </div>
     </Modal>
+    <part-info ref="partInfo"></part-info>
   </div>
 </template>
 
 <script>
   import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
+  import PartInfo from "../../../../components/partInfo/partInfo";
+  import {mixSelectPartCom} from "./mixSelectPartCom";
+
   export default {
     name: "selectPartCom",
+    mixins:[mixSelectPartCom],
+    components: {PartInfo},
     data(){
       return {
         loading:false,
@@ -40,6 +54,8 @@
         searchPartLayer:false,//配件名称查询层
         partName:'',//配件名称查询名字
         treeData:[],//系统分类树形数据
+        //查询选择
+
         //配件名称查询层表头
         columnsPart:[
           {
@@ -152,6 +168,11 @@
         this.page.size = size
         this.getList()
       },
+      //申请配件按钮
+      applyPart(){
+        this.searchPartLayer = false;
+        this.$refs.partInfo.init();
+      }
     }
   }
 </script>
