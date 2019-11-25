@@ -52,7 +52,7 @@
         <div class="wlf">
           <div class="db mr10">
             <span>快速查询：</span>
-            <Select v-model="conditionData.character" class="w100 mr10" clearable>
+            <Select v-model="penPurchaseData.character" class="w100 mr10" clearable>
               <Option v-for="item in quickArray2" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -68,24 +68,24 @@
             </Date-picker>
           </div>
           <div class="db mr10">
-            <Select v-model="conditionData.company" class="w200 mr10" placeholder="选择公司" filterable clearable>
+            <Select v-model="penPurchaseData.company" class="w200 mr10" placeholder="选择公司" filterable clearable>
               <Option v-for="item in companyListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>品牌：</span>
-              <Select v-model="conditionData.brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
+              <Select v-model="penPurchaseData.brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
                 <Option v-for="item in brandList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
           </div>
           <div class="db">
-            <Button type="warning" class="mr20" @click="searchData"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+            <Button type="warning" class="mr20" @click="penPurchaseSearch"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
             <Button class=" mr10" style="border: none" @click="showGeneratePurchaseOrder">
               <span class="center" style="color: #27A2D2">
                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>生成采购订单
               </span>
             </Button>
-            <Button class=" mr10" style="border: none" @click="directPurchaseOrderDialog = true">
+            <Button class=" mr10" style="border: none" @click="showZhiFa">
               <span class="center" style="color: #27A2D2" >
                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>生成直发采购订单
               </span>
@@ -107,7 +107,11 @@
               border
               :data="data"
               height="330"
-            ></Table>
+            >
+            <template slot-scope="{ row, index }" slot="action">
+              <Button type="default" @click.stop="showAcceptance($event, index)" v-if="row.status.value == 1">受理</Button>
+            </template>
+            </Table>
           </div>
 
             <Row>
@@ -179,23 +183,12 @@
 
     <!-- 新增采购订单窗口 -->
     <Modal
+      :mask-closable="false"
       width="700px"
       v-model="addPurchaseOrderDialog"
       title="新增采购订单">
       <section>
-        <div>
-          <Button class=" mr10" style="border: none" @click="savePre">
-            <span class="center" style="color: #27A2D2">
-              <i class="iconfont iconbaocunicon"></i>保存
-            </span>
-          </Button>
-          <Button class=" mr10" style="border: none">
-            <span class="center" style="color: #27A2D2" >
-              <i class="iconfont iconlajitongicon"></i>删除
-            </span>
-          </Button>
-        </div>
-        <Form :label-width="80">
+        <Form :label-width="80" ref="purchaseOrderList">
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
@@ -224,7 +217,7 @@
           <Row>
             <Col span="24">
               <FormItem label="备注：">
-                <Input type="textarea"></Input>
+                <Input type="textarea" v-model="remark"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -235,11 +228,15 @@
           :columns="columns4"
           border
           :data="data4"
-        ></Table>
+        >
+        <template slot-scope="{ row, index }" slot="del">
+          <Button type="default" size="small" @click="remove(index)">删除</Button>
+        </template>
+        </Table>
       </section>
       <div slot="footer">
-        <Button type="primary">确定</Button>
-        <Button type="default">取消</Button>
+        <Button type="primary" @click="savePre">确定</Button>
+        <Button type="default" @click="addPurchaseOrderDialog = false">取消</Button>
       </div>
     </Modal>
 
@@ -250,18 +247,6 @@
       title="新增采购订单"
       >
       <section>
-        <div>
-          <Button class=" mr10" style="border: none">
-            <span class="center" style="color: #27A2D2">
-              <i class="iconfont iconbaocunicon"></i>保存
-            </span>
-          </Button>
-          <Button class=" mr10" style="border: none">
-            <span class="center" style="color: #27A2D2" >
-              <i class="iconfont iconlajitongicon"></i>删除
-            </span>
-          </Button>
-        </div>
         <Form :label-width="80">
           <Row>
             <Col span="24">
@@ -291,7 +276,7 @@
           <Row>
             <Col span="12">
               <FormItem label="直发门店：">
-                <Input v-model="straightHairStore"></Input>
+                <Input v-model="straightHairStore" disabled></Input>
               </FormItem>
             </Col>
             <Col span="12">
@@ -311,7 +296,7 @@
       </section>
       <div slot="footer">
         <Button type="primary">确定</Button>
-        <Button type="default">取消</Button>
+        <Button type="default" @click="cancelZhiFa">取消</Button>
       </div>
     </Modal>
   </div>
@@ -327,16 +312,38 @@ import {
   PjType,
   JsStyle,
   activeCompany,
-  savePreOrder
+  savePreOrder,
+  accept,
+  pendingPurchaseSearch,
 } from "../../../api/business/brandListApi"
   export default {
     name: 'brandList',
     data() {
       return {
-        // 根据条件查询数据集合处
+        // 新增采购订单参数
+        guestId:"",
+        storeId:"1",
+        orderManId:"",
+        orderMan:"",
+        orderTypeID:"1",
+        billTypeId:"",
+        settleTypeId:"",
+        remark:"",
+        transitUnit:"",
+        billTypeName:"",
+        settleTypeName:"",
+        // 受理参数
+        acceptObj:{},
+        // 预订单条件查询数据集合处
         conditionData: {
           character: '', // 快速查询
           status: '1',  //受理状态
+          company: '', //公司选择
+          brand: '', //品牌
+        },
+        // 代采购条件查询
+        penPurchaseData: {
+          character: '', // 快速查询
           company: '', //公司选择
           brand: '', //品牌
         },
@@ -440,22 +447,8 @@ import {
           },
           {
             title: "操作",
+            slot:"action",
             align: "center",
-            render (h, params) {
-              let JsonString = params.row.status
-              let status = JSON.parse(JsonString)
-              // console.log(auditsign)
-              if (status.name === "待受理"){
-                return h('Button', {
-                  on:{
-                    click:(e) => {
-                      console.log(e)
-                    }
-                  }
-                }, "受理")
-              }
-              
-            }
           },
           {
             title: "公司",
@@ -472,10 +465,8 @@ import {
             key: "status",
             align: "center",
             render (h, params) {
-              let JsonString = params.row.status
-              let status = JSON.parse(JsonString)
               // console.log(auditsign)
-              return h('span', {}, status.name)
+              return h('span', {}, params.row.status.name)
             }
           },
           {
@@ -541,7 +532,24 @@ import {
           {
             title: "受理数量",
             key: "acceptQty",
-            align: "center"
+            align: "center",
+            render: (h, params) =>{
+              let _this = this
+              // console.log(params)
+              return h('InputNumber', {
+                props: {
+                  min: 0,
+                  value: params.row.acceptQty
+                },
+                 on: {
+                  'on-change': (e) => {
+                    console.log(e)
+                    params.row.acceptQty = e;
+                    _this.data2[params.index] = params.row
+                  }
+                }
+              },)
+            }
           },
           {
             title: "备注",
@@ -632,9 +640,10 @@ import {
             title: "操作",
             width: 60,
             align: 'center',
-            render (h, params) {
-              return h('Button', {}, "删除")
-            }
+            slot: 'del'
+            // render: (h, params) =>{
+            //   return h('Button', {}, "删除")
+            // }
           },
           {
             title: "配件编码",
@@ -660,10 +669,18 @@ import {
             title: "采购数量",
             key: "orderQty",
             align: "center",
-            render (h, params) {
-              return h('Input', {
+            render: (h, params) =>{
+              return h('InputNumber', {
                 props: {
+                  min: params.row.acceptQty,
                   value:params.row.acceptQty
+                },
+                on: {
+                  'on-change': e => {
+                    console.log(e)
+                    params.row.acceptQty = e
+                    this.data4[params.index] = params.row;
+                  }
                 }
               })
             }
@@ -672,7 +689,7 @@ import {
             title: "采购单价",
             key: "orderPrice",
             align: "center",
-            render (h, params) {
+            render: (h, params) =>{
               return h('Input', {
                 props: {
                   value:params.row.orderPrice
@@ -706,23 +723,32 @@ import {
       this.getPjType()
       this.getJsStyle()
       this.getActiveCompany()
+      // this.getBrandIfoList()
     },
     methods: {
       // 新增采购订单保存数据
       savePre(){
-        savePreOrder({
-         guestId:  this.guestId, 
-         storeId: this.storeId,
-         orderManId:this.orderManId,
-          orderMan:this.orderMan,
-          orderTypeId:this.orderTypeId,
-          billTypeId:this.billTypeId,
-          settleTypeId:this.settleTypeId,
-          details:this.data4
-          
-        }).then(res => {
-
-        })
+        if(this.transitUnit === "" || this.billTypeName === "" || this.settleTypeName === ""){
+          this.$Message.error('请完善单据信息后在保存')
+        }else{
+          // console.log(this.data4)
+          // return
+          savePreOrder({
+            guestId:  this.guestId, 
+            storeId: this.storeId,
+            orderManId:this.orderManId,
+              orderMan:this.orderMan,
+              orderTypeId:this.orderTypeId,
+              billTypeId:this.billTypeId,
+              settleTypeId:this.settleTypeId,
+              details:this.data4
+            }).then(res => {
+              if(res.code === 0){
+                this.$Message.success(res.data)
+                this.getPendingPurchaseList()
+              }
+          })
+        }
       },
       // 获取票据类型方法
       getPjType(){
@@ -737,9 +763,9 @@ import {
       // 往来单位
       getActiveCompany(){
         activeCompany().then(res => {
+          // console.log(res)
           if(res.code === 0) {
-            // console.log(res)
-            this.guestId = res.data.id
+            this.guestId = res.data[0].id
             this.transitUnitList = res.data
           }
         })
@@ -760,15 +786,45 @@ import {
           // console.log(res)
           if(res.code === 0) {
             this.data = res.data.content
+            this.data.map((item) => {
+              item.status = JSON.parse(item.status)
+            })
+            // console.log(this.data)
             this.pageList.total = res.data.totalElements
           }
         })
+      },
+      // 预订单受理按钮
+      showAcceptance (e, index) {
+        // console.log(e, index)
+        this.$Modal.confirm({
+            title: '提示',
+            content: '是否确定受理',
+            onCancel: () => {
+                this.$Message.info('Clicked cancel');
+            },
+             onOk: () => {
+                // this.$Message.info('Clicked ok');
+                let aceeptOptionList = {}
+                aceeptOptionList.id = this.acceptObj.id
+                aceeptOptionList.detailVOList = this.data2
+                console.log(aceeptOptionList , 123)
+                // return
+                accept(aceeptOptionList).then(res => {
+                  if (res.code === 0) {
+                    this.data2 = []
+                    this.getBrand()
+                  }
+                })
+            },
+        });
       },
       // 获取代采购页面数据
       getPendingPurchaseList(){
         pendingPurchase().then(res => {
           if(res.code === 0) {
             this.data3 = res.data.content
+            
             this.pageList.total = res.data.totalElements
           }
         })
@@ -780,20 +836,24 @@ import {
         if(value[0] === ""){
           this.conditionData.commitTimeStart = ""
           this.conditionData.commitTimeEnd = ""
+          this.penPurchaseData.commitTimeStart = ""
+          this.penPurchaseData.commitTimeEnd = ""
           this.dateArray = [value]
         }else {
           this.conditionData.commitTimeStart = value[0] + " " + "00:00:00"
           this.conditionData.commitTimeEnd = value[1] + " " + "23:59:59"
+          this.penPurchaseData.commitTimeStart = value[0] + " " + "00:00:00"
+          this.penPurchaseData.commitTimeEnd = value[1] + " " + "23:59:59"
         }
       },
       newArr (arr) {
-      // console.log(arr)
-      return arr.reduce((pre,cur) => {
-        // console.log(pre, cur)
-        let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
-        return pre.concat( flag? this.newArr(cur.childs): cur)
-      },[])
-    },
+        // console.log(arr)
+        return arr.reduce((pre,cur) => {
+          // console.log(pre, cur)
+          let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
+          return pre.concat( flag? this.newArr(cur.childs): cur)
+        },[])
+      },
       toList (arr) {
         // console.log(arr)v
         return arr.reduce((ret, v) => {
@@ -815,7 +875,7 @@ import {
       companyIfo () {
           let user = this.$store.state.user.userData
           // console.log(user)
-          this.billTypeId = user.id
+          this.orderManId = user.id
           this.orderMan = user.staffName
           selectCompany({pId: user.tenantId}).then(res=> {
           // console.log(res)
@@ -835,9 +895,21 @@ import {
         searchBrandList(this.conditionData).then(res => {
           if(res.code === 0){
             this.data = res.data.content
-            this.data3 = res.data.content
+            this.data.map((item) => {
+              item.status = JSON.parse(item.status)
+            })
+            this.pageList.total = res.data.totalElements
           } 
         })
+    },
+    // 待采购查询
+    penPurchaseSearch(){
+      pendingPurchaseSearch(this.penPurchaseData).then(res => {
+        if(res.code === 0){
+          this.data3 = res.data.content
+          this.pageList.total = res.data.totalElements
+        }
+      })
     },
       // 点击tabs切换头部
       handleClickTab(item) {
@@ -853,25 +925,27 @@ import {
       // 预订单受理表格单击
       onRowClick(value) {
         // console.log(value)
+        this.acceptObj = value
         this.data2 = value.detailVOList
       },
       // 待采购订单单选
       onSelect(row){
-        // console.log(row)
+        console.log(row)
         this.generateBrand = row
         this.data4 = row
         
       },
       // 待采购订单全选
       onSelectAll (row) {
-        // console.log(row)
+        console.log(row)
         this.generateBrand = row
         this.data4 = row
       },
-      // 代采购订单单击取消
-      onSelectCancel(row){
+      // 代采购订单单选取消
+      onSelectCancel(){
         this.generateBrand = []
       },
+      // 代采购订单全选取消
       onSelectAllCancel(){
         this.generateBrand = []
       },
@@ -883,6 +957,22 @@ import {
           this.addPurchaseOrderDialog = true
         }
       },
+      // 直发采购订单
+      showZhiFa(){
+        if(this.generateBrand.length < 1){
+          this.$Message.error("请选择代采购的配件！")
+        }else{
+          this.directPurchaseOrderDialog = true
+        }
+      },
+      // 直发取消按钮
+      cancelZhiFa(){
+        this.directPurchaseOrderDialog = false
+      },
+      // 代采购删除按钮
+      remove (index) {
+          this.data4.splice(index, 1);
+      },
       // 页码切换
       onChange (value) {
         // console.log(`当前页码${value}`)
@@ -890,6 +980,9 @@ import {
         getPageList(this.pageList).then(res => {
           if (res.code === 0) {
             this.data = res.data.content
+            this.data.map((item) => {
+              item.status = JSON.parse(item.status)
+            })
           }
         })
         this.data2 = []
@@ -901,6 +994,9 @@ import {
         getPageList(this.pageList).then(res => {
           if (res.code === 0) {
             this.data = res.data.content
+            this.data.map((item) => {
+              item.status = JSON.parse(item.status)
+            })
           }
         })
         this.data2 = []
@@ -919,17 +1015,49 @@ import {
             return;
           }
           if (key === "acceptQty") {
-            sums[key] = {
-              key,
-              value: data.length
-            };
+            const values = data.map(item => Number(item[key]));
+            if (!values.every(value => isNaN(value))) {
+                const v = values.reduce((prev, curr) => {
+                    const value = Number(curr);
+                    if (!isNaN(value)) {
+                        return prev + curr;
+                    } else {
+                        return prev;
+                    }
+                }, 0);
+                sums[key] = {
+                    key,
+                    value: v + '个'
+                };
+            } else {
+                sums[key] = {
+                    key,
+                    value: 'N/A'
+                };
+            }
             return;
           }
           if (key === "preQty") {
-            sums[key] = {
-              key,
-              value: data.length
-            };
+            const values = data.map(item => Number(item[key]));
+            if (!values.every(value => isNaN(value))) {
+                const v = values.reduce((prev, curr) => {
+                    const value = Number(curr);
+                    if (!isNaN(value)) {
+                        return prev + curr;
+                    } else {
+                        return prev;
+                    }
+                }, 0);
+                sums[key] = {
+                    key,
+                    value: v + '个'
+                };
+            } else {
+                sums[key] = {
+                    key,
+                    value: 'N/A'
+                };
+            }
             return;
           }
           sums[key] = {
