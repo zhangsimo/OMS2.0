@@ -72,6 +72,7 @@
                 border
                 :stripe="true"
                 :columns="columns"
+                :data="Leftdata"
               ></Table>
               <Page
                 simple
@@ -318,7 +319,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 费用登记 对话框 -->
-    <Modal v-model="isCost" title="费用登记" width="1000">
+    <Modal v-model="isCost" title="费用登记" width="1100">
       <div class="costBox clearfix con-split">
         <div class="fl">
           <div class="leftT">
@@ -339,22 +340,51 @@
             <Button type="primary" size="small">查询</Button>
           </div>
           <div class="pane-made-hd mt15">往来单位列表</div>
-          <div class="w420">
-            <vxe-table
-              border
-              resizable
-              :data="tableData">
+          <div class="w420 h600">
+            <vxe-table border resizable height="auto" :data="tableData">
               <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
               <vxe-table-column field="name" title="操作" width="80"></vxe-table-column>
               <vxe-table-column field="sex" title="往来单位" width="130"></vxe-table-column>
               <vxe-table-column field="age" title="编码" width="130"></vxe-table-column>
             </vxe-table>
           </div>
+          <Page :total="40" size="small" show-elevator show-sizer show-total simple />
         </div>
-        <div class="fr w480 h600">
-          <div class="right">
+        <div class="fr h600 right">
+          <div class="mb15">
             <Button type="primary" size="small" class="mr10">保存</Button>
             <Button size="small">取消</Button>
+          </div>
+          <div>
+            <vxe-table
+              border
+              resizable
+              size="mini"
+              :data="tableData"
+              height="auto"
+              highlight-current-row
+              :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            >
+              >
+              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column width="60" title="操作"></vxe-table-column>
+              <vxe-table-column field="name" title="往来单位" width="80"></vxe-table-column>
+              <vxe-table-column field="role" title="收支项目" width="80" :edit-render="{name: 'input'}">
+                <template v-slot:edit="{ row }">
+                  <Select v-model="model2" size="small" style="width:100px">
+                    <Option
+                      v-for="item in cityList"
+                      :value="item.value"
+                      :key="item.value"
+                    >{{ item.label }}</Option>
+                  </Select>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="sex" title="应付金额" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="备注" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="创建人" width="80"></vxe-table-column>
+              <vxe-table-column field="num6" title="创建日期" width="80"></vxe-table-column>
+            </vxe-table>
           </div>
         </div>
       </div>
@@ -387,6 +417,10 @@ export default {
         beforePay: "", //预付款
         orderNum: "" //订单号
       },
+      //左侧表格数据
+      Leftdata: [
+
+      ],
       split1: 0.2,
       columns: [
         {
@@ -555,17 +589,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ivu-btn .ivu-btn-text {
-  border: 1px solid #ccc;
-}
-.vertical-center-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .ivu-modal {
-    top: 0;
-  }
-}
 .goods-list-form {
   * {
     font-size: 12px !important;
