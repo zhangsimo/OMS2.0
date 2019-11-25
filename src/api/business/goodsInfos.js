@@ -27,7 +27,7 @@ export function getDic () {
 //发货物流下拉框
 export function logistics  () {
   return axios.request({
-      url: `http://192.168.30.21:9250//guest/findAllLogistics`,
+      url: `http://192.168.30.21:9250/guest/findAllLogistics`,
       method: 'get',
   })
 }
