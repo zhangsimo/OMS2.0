@@ -27,5 +27,13 @@ export function ready(params) {
   })
 }
 
-
+//反馈管理新增接口
+// /feedbackRecord/save
+export function feedbackRecord(data) {
+  return axios.request({
+    url: `${api.omsApi}/feedbackRecord/save`,
+    method: 'post',
+    data
+  })
+}
 

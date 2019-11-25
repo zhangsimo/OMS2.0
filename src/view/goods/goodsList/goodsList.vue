@@ -162,7 +162,7 @@
                 <vxe-table-column field="num6" title="滞销库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num" title="计划采购数量" :edit-render="{name: 'input'}" width="120">
                   <template v-slot:edit="{ row }">
-                    <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
+                    <InputNumber :max="9999" :min="0" v-model="row.num"></InputNumber>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="price" title="计划采购单价" :edit-render="{name: 'input'}" width="120">
@@ -170,12 +170,12 @@
                     <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
                   </template>
                   <template v-slot="{ row }">
-                    {{parseFloat(row.price).toFixed(2)}}
+                    {{row.price|priceFilters}}
                   </template>
                 </vxe-table-column>
                 <vxe-table-column title="计划采购金额" width="120">
                   <template v-slot="{ row }">
-                  {{parseFloat(row.price*row.num).toFixed(2)}}
+                  {{row.price*row.num|priceFilters}}
                 </template>
                 </vxe-table-column>
                 <vxe-table-column field="num6" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
@@ -201,8 +201,7 @@
         </div>
       </div>
     </section>
-    <search-part-name ref="searchPartName"></search-part-name>
-    <select-part-com ref="selectPartCom"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
     <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
@@ -213,13 +212,12 @@
   import QuickDate from '../../../components/getDate/dateget'
   import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
-  import SearchPartName from "../../system/partsExamine/component/searchPartName";
   import SelectPartCom from "./components/selectPartCom";
   import SelectSupplier from "./components/selectSupplier";
 
   export default {
     name: 'goodsList',
-    components: {SelectSupplier, SelectPartCom, SearchPartName, QuickDate},
+    components: {SelectSupplier, SelectPartCom, QuickDate},
     inject:['reload'],
     mixins:[mixGoodsData],
     data() {

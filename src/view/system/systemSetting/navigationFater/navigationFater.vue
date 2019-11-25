@@ -31,13 +31,13 @@
           // console.log(this.Arr[index].title)
           switch (this.Arr[index].title) {
             case "业务参数":
-              this.$router.push()
+              this.$router.push({name:'sysetmset'})
                   return
             case "门店设置":
                 this.$router.push({name:'storeManagement'})
                   return
             case "销售提成设置":
-              this.$router.push()
+              this.$router.push({name: ''})
                 return
             case "配件提成":
               this.$router.push({name: 'AccessoriesCommission'})
@@ -61,17 +61,17 @@
                 this.$router.push({name:'setWarehouse'})
               return
             case "结算账户":
-              this.$router.push()
+              this.$router.push({name:'SettlementAccount'})
               return
             case "初期库存":
               this.$router.push({name: 'inventory'})
               return
             case "初期现金银行":
-              this.$router.push()
+              this.$router.push({name: 'setBank'})
               return
-            case "初期应收应付":
-              this.$router.push({name: 'receiptPayment'})
-              return
+            // case "初期应收应付":
+            //   this.$router.push({name: 'receiptPayment'})
+            //   return
           }
         }
       },

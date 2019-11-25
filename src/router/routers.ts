@@ -59,18 +59,48 @@ export default [
         // mark: '11',
         meta: {
           icon: "arrow-graph-up-right",
-          title: "计划采购"
+          title: "采购计划"
+        },
+        component: () => import("@/view/goods/goodsList/goodsList.vue")
+      },
+      {
+        path: "/goods/goodsList",
+        name: "goodsList2",
+        // mark: '11',
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "计划采购订单"
+        },
+        component: () => import("@/view/goods/goodsList/goodsList.vue")
+      },
+      {
+        path: "/goods/goodsList",
+        name: "goodsList3",
+        // mark: '11',
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "国际采购订单"
+        },
+        component: () => import("@/view/goods/goodsList/goodsList.vue")
+      },
+      {
+        path: "/goods/goodsList",
+        name: "goodsList4",
+        // mark: '11',
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "临时采购订单"
         },
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
       {
         path: "/goods/categoryList",
         name: "categoryList",
-        mark: "10",
+        // mark: "10",
         meta: {
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
-          title: "采购订单"
+          title: "外采订单"
         },
         component: () => import("@/view/business/goods/categoryList.vue")
       },
@@ -221,7 +251,7 @@ export default [
       {
         path: "",
         name: "allotOne",
-        mark: "21",
+        // mark: "21",
         redirect: "/allot/one/apply",
         meta: {
           title: "调拨单"
@@ -229,46 +259,46 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/allot/one/apply",
-            name: "oneApply",
-            mark: "23",
+            path: "/AlotManagement/transferringOrder/applyFor",
+            name: "applyFor",
+            // mark: "23",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/applyFor/applyFor.vue")
           },
           {
-            path: "/allot/one/accept",
-            name: "oneAccept",
+            path: "/AlotManagement/transferringOrder/Acceptances",
+            name: "Acceptances",
             mark: "27",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请受理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/Acceptances/Acceptances.vue")
           },
           {
-            path: "/allot/one/delivery",
-            name: "oneDelivery",
-            mark: "28",
+            path: "/AlotManagement/transferringOrder/stockRemoval",
+            name: "stockRemoval",
+            // mark: "28",
             meta: {
               // hideInMenu: true,
               title: "调拨出库"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/stockRemoval/stockRemoval.vue")
           },
           {
-            path: "/allot/one/inStorage",
-            name: "oneInStorage",
-            mark: "29",
+            path: "/AlotManagement/transferringOrder/putStorage",
+            name: "putStorage",
+            // mark: "29",
             meta: {
               // hideInMenu: true,
               title: "调拨入库"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/putStorage/putStorage.vue")
           }
         ]
       },
@@ -1229,15 +1259,15 @@ export default [
               import("@/view/system/basicData/Fittings/Fittings.vue")
           },
           {
-            path: "",
-            name: "",
+            path: "/system/partsExamine",
+            name: "partsExamine",
             mark: "50",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: " 配件审核与标定"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/system/partsExamine/partsexamine.vue")
           },
           {
             path: "ProductLA",
@@ -1607,16 +1637,16 @@ export default [
                 "@/view/system/systemSetting/staffManagement/staffManagement.vue"
               )
           },
-          {
-            path: "/system/partsExamine",
-            name: "partsExamine",
-            // mark: '59',
-            meta: {
-              // hideInMenu: true,
-              title: ' 配件审核与标定'
-            },
-            component: () => import("@/view/system/partsExamine/partsexamine.vue")
-          },
+          // {
+          //   path: "/system/partsExamine",
+          //   name: "partsExamine",
+          //   // mark: '59',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     title: ' 配件审核与标定'
+          //   },
+          //   component: () => import("@/view/system/partsExamine/partsexamine.vue")
+          // },
           {
             path: "/",
             name: "",
