@@ -1,7 +1,7 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
 
-// 收货信息初始化
+// 收货信息初始化 192.168.30.21.9210
 export function getGoodsInfo (data={}) {
     return axios.request({
         url: `${api.omsApi}/logisticsRecord/findByGuestLog`,
@@ -9,6 +9,14 @@ export function getGoodsInfo (data={}) {
         data
     })
   }
+//查询按钮
+export function queryGoodsInfo (data={}) {
+  return axios.request({
+      url: `${api.omsApi}/logisticsRecord/findByGuestLog`,
+      method: 'post',
+      data
+  })
+}
 //保存按钮
   export function saveGoodsInfo (data={}) {
     return axios.request({

@@ -3,7 +3,7 @@
     <!-- <Modal v-model="showInfo" title="收货信息" width="1000" > -->
     <div class="header">
       <!-- 查询收货信息上 -->
-      <Form ref="formOne" :model="formDateTop"  inline>
+      <Form ref="formDateTop" :model="formDateTop"  inline>
         <!-- <FormItem>
             <Input type="text" placeholder="客户名称"></Input>
         </FormItem>-->
@@ -83,19 +83,19 @@
             </Select>
           </FormItem>
           <FormItem label="运输费用：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.transportCost" class="w200"></Input>
           </FormItem>
           <FormItem label="结算方式：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.settleType" class="w200"></Input>
           </FormItem>
           <FormItem label="发货备注：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.remark" class="w200"></Input>
           </FormItem>
           <FormItem label="业务单号：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.businessNum" class="w200"></Input>
           </FormItem>
-          <FormItem label="失联单号：">
-            <Input class="w200"></Input>
+          <FormItem label="关联单号：">
+            <Input v-model="formDateRight.relationNum" class="w200"></Input>
           </FormItem>
         </Form>
       </div>
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,getDic,logistics } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,getDic,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
@@ -159,12 +159,16 @@ export default {
     //获取字典
     let dic = await getDic()
     this.dictArr = dic.data
-    console.log(dic)
+    // console.log(dic)
     // console.log(dic)
     //获取物流下拉框
     let log = await logistics()
     this.logisArr = log.data
-    console.log(log)
+    // console.log(log)
+
+    //保存信息
+    // let save = await saveGoodsInfo(this.formDateRight)
+    // console.log(save)
   },
   mounted() {
 
@@ -172,11 +176,16 @@ export default {
   methods: {
     //查询
     searchInfo() {
-
+      queryGoodsInfo(this.formDateTop)
     },
     //保存
-    saveInfo() {
-      saveGoodsInfo(this.formDateRight)
+    async saveInfo() {
+      let res = await saveGoodsInfo(this.formDateRight)
+      if (res.code == 0) {
+        this.$Message.success(res.data)
+        this.$refs.formTwo.resetFields()
+        console.log(res)
+      }
     },
     echoDate({row}) {
       this.formDateRight.receiveComp = row.receiveCompName
