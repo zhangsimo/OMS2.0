@@ -104,7 +104,7 @@
                     <Button size="small" class="mr10" @click="addPro">导入</Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconlajitongicon"></i> 删除</Button>
+                    <Button size="small" class="mr10" @click="delTableData"><i class="iconfont mr5 iconlajitongicon"></i> 删除</Button>
                   </div>
                   <div class="fl mb5">
                     │
@@ -144,7 +144,8 @@
                 border
                 resizable
                 show-footer
-                @edit-closed="editClosedEvent"
+                @select-change="selectVxeData"
+
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"

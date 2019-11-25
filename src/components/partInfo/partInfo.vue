@@ -1,7 +1,7 @@
 <template>
   <div>
     <Modal v-model="proModal" title="配件资料" width="700">
-      <div class="pb10 tr">
+      <div class="pb10 tr" v-if="!isAddPart">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
@@ -192,7 +192,11 @@
           <!--</div>-->
         </TabPane>
       </Tabs>
-      <div slot='footer'>
+      <div slot='footer' v-if="isAddPart">
+        <Button class="mr10" type='warning' @click='submit("proModalForm",1)'>保存</Button>
+        <Button type='default' @click='proModal = false'>取消</Button>
+      </div>
+      <div slot='footer' v-else>
         <Button class="mr10" type='warning' @click='submit("proModalForm",1)'>审核通过</Button>
         <Button class="mr10" type='primary' @click='submit("proModalForm",2)'>审核不通过</Button>
         <Button type='default' @click='proModal = false'>取消</Button>
@@ -231,12 +235,32 @@
 
   export default {
 		name: "partInfo",
+    props:{
+		  isAddPart:false
+    },
     components: {SearchPartName},
     mixins:[mixPartInfo],
 
 	}
 </script>
 
-<style scoped>
-
+<style scoped lang="less">
+  .custom-main{
+    border-top: 1px solid #ddd;
+    .custom-type-hd{
+      padding: 10px 0 6px;
+    }
+    .tag-span{
+      cursor: pointer;
+      background: #f8f8f8;
+      border: 1px solid #e8e8e8;
+      padding: 4px 10px;
+      border-radius: 2px;
+      &.active{
+        background: #fd5c5c;
+        border-color: #fd5c5c;
+        color: #fff;
+      }
+    }
+  }
 </style>
