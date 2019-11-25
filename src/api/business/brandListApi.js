@@ -82,11 +82,3 @@ export function selectCompany(params) {
       data
     });
   }
-  // 采购单价接口
-  export function PrePrice(data) {
-    return axios.request({
-      url: `${api.omsOrder}/preOrderDetail/findRecentPrice`,
-      method: "post",
-      data
-    });
-  }

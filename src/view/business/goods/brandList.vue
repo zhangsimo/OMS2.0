@@ -52,7 +52,7 @@
         <div class="wlf">
           <div class="db mr10">
             <span>快速查询：</span>
-            <Select v-model="quickSelect2" class="w100 mr10" clearable>
+            <Select v-model="conditionData.character" class="w100 mr10" clearable>
               <Option v-for="item in quickArray2" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -74,7 +74,7 @@
           </div>
           <div class="db mr10">
             <span>品牌：</span>
-              <Select v-model="brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
+              <Select v-model="conditionData.brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
                 <Option v-for="item in brandList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
           </div>
@@ -101,7 +101,7 @@
         <TabPane label="预订单列表" name="name1">
           <div>
             <Table
-            @on-row-click="onRowClick"
+              @on-row-click="onRowClick"
               highlight-row
               :columns="columns"
               border
@@ -144,9 +144,10 @@
           <Table
             @on-select="onSelect"
             @on-select-all="onSelectAll"
+            @on-select-cancel="onSelectCancel"
+            @on-select-all-cancel="onSelectAllCancel"
             show-summary
             :summary-method="handleSummary"
-            highlight-row
             :columns="columns3"
             border
             :data="data3"
@@ -207,14 +208,14 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeId">
+                <Select v-model="billTypeName">
                   <Option v-for="item in ticketTypeList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeId">
+                <Select v-model="settleTypeName">
                   <Option v-for="item in settlementMethodList" :key="item.id">{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -326,29 +327,18 @@ import {
   PjType,
   JsStyle,
   activeCompany,
-  savePreOrder,
-  PrePrice
+  savePreOrder
 } from "../../../api/business/brandListApi"
   export default {
     name: 'brandList',
     data() {
       return {
-        // 新增采购订单保存按钮需要的数据
-        guestId: "", //往来单位id
-        storeId: "", //仓库id
-        orderManId: "", //采购员id
-        orderMan: "", //采购员
-        orderTypeId: 1, //订单类型
-        billTypeId:"", //票据类型
-        settleTypeId: "", //结算方式
-        purchaseQuantity:'', 
         // 根据条件查询数据集合处
         conditionData: {
-          character: '',
-          status: '1',
-          company: '',
-          brand: '',
-
+          character: '', // 快速查询
+          status: '1',  //受理状态
+          company: '', //公司选择
+          brand: '', //品牌
         },
         // 快速查询数据1
         quickArray: [
@@ -401,6 +391,7 @@ import {
             value: "上年"
           }
         ],
+        querySelect2:"",
         // 日期数据
         options3: {
           disabledDate (date) {
@@ -409,8 +400,6 @@ import {
         },
         dateList: {},
         dateArray: [],
-        // 受理状态
-        acceptStatus: "",
         // 选择公司数据
         companyListOptions: [],
         company: '',
@@ -451,7 +440,6 @@ import {
           },
           {
             title: "操作",
-            key: "caozuo",
             align: "center",
             render (h, params) {
               let JsonString = params.row.status
@@ -459,8 +447,10 @@ import {
               // console.log(auditsign)
               if (status.name === "待受理"){
                 return h('Button', {
-                  methods:{
-
+                  on:{
+                    click:(e) => {
+                      console.log(e)
+                    }
                   }
                 }, "受理")
               }
@@ -685,7 +675,7 @@ import {
             render (h, params) {
               return h('Input', {
                 props: {
-                  purchasePrices: ""
+                  value:params.row.orderPrice
                 }
               },)
             }
@@ -705,16 +695,7 @@ import {
         settlementMethodList: {},
         // 生成直发采购订单
         directPurchaseOrderDialog: false,
-        generateOrder:[],
-        generateBrand: {
-          id: "",
-          // partCode: "",
-          // partName: "",
-          // brand: "",
-          // unit: "",
-          // orderQty: "",
-          // orderPrice: ""
-        },
+        generateBrand: [],
         // 直发门店
         straightHairStore: ""
       }
@@ -725,9 +706,6 @@ import {
       this.getPjType()
       this.getJsStyle()
       this.getActiveCompany()
-    },
-    activated () {
-      this.getActivatedList()
     },
     methods: {
       // 新增采购订单保存数据
@@ -751,6 +729,8 @@ import {
         PjType().then(res =>{
           if(res.code === 0){
             this.ticketTypeList = res.data
+            this.billTypeId = res.data.id
+            this.billTypeName = res.data.itemName
           }
         })
       },
@@ -769,13 +749,10 @@ import {
         JsStyle().then(res => {
           if(res.code === 0){
             this.settlementMethodList = res.data
+            this.settleTypeId = res.data.id
+            this.settleTypeName = res.data.Name
           }
         })
-      },
-      getActivatedList () {
-        if(!this.conditionData){
-          this.getBrand()
-        }
       },
       // 获取页面数据
       getBrand () {
@@ -858,6 +835,7 @@ import {
         searchBrandList(this.conditionData).then(res => {
           if(res.code === 0){
             this.data = res.data.content
+            this.data3 = res.data.content
           } 
         })
     },
@@ -877,29 +855,33 @@ import {
         // console.log(value)
         this.data2 = value.detailVOList
       },
-      // 待采购订单多选单击
+      // 待采购订单单选
       onSelect(row){
         // console.log(row)
+        this.generateBrand = row
         this.data4 = row
-        this.data5 = row
-        let item = row[0]
-        let prePri = {}
-        prePri.id = item.id
-        prePri.partId = item.partId
-        // console.log(prePri)
-        PrePrice([prePri]
-        ).then(res => {
-        })
+        
       },
       // 待采购订单全选
       onSelectAll (row) {
-        console.log(row)
+        // console.log(row)
+        this.generateBrand = row
         this.data4 = row
-        this.data5 = row
+      },
+      // 代采购订单单击取消
+      onSelectCancel(row){
+        this.generateBrand = []
+      },
+      onSelectAllCancel(){
+        this.generateBrand = []
       },
       // 待采购页面生成采购订单按钮
       showGeneratePurchaseOrder () {
+        if(this.generateBrand.length < 1){
+          this.$Message.error("请选择代采购的配件！")
+        }else{
           this.addPurchaseOrderDialog = true
+        }
       },
       // 页码切换
       onChange (value) {
@@ -936,14 +918,14 @@ import {
             };
             return;
           }
-          if (key === "serviceId") {
+          if (key === "acceptQty") {
             sums[key] = {
               key,
               value: data.length
             };
             return;
           }
-          if (key === "serviceId") {
+          if (key === "preQty") {
             sums[key] = {
               key,
               value: data.length
