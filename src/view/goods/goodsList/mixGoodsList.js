@@ -65,5 +65,9 @@ export const mixGoodsData = {
       }
       return total
     },
+    //添加配件数据
+    getPartNameList(v){
+      console.log(v)
+    }
   }
 }

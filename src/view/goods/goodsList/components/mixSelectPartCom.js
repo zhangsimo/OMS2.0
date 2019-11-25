@@ -275,8 +275,7 @@ export const mixSelectPartCom  = {
     },
     throwData(){
       if(this.selectTableItem.length>0){
-        console.log(this.selectTableItem)
-        this.$emit('selectSearchName',this.selectTableItem);
+        this.$emit('selectPartName',this.selectTableItem);
         this.searchPartLayer = false;
       }else{
         this.$Message.error("请选择数据")

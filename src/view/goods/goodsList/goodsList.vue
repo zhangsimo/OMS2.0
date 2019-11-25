@@ -201,7 +201,7 @@
         </div>
       </div>
     </section>
-    <select-part-com ref="selectPartCom" :is-show-add-part-btn="true"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
     <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
