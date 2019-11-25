@@ -201,8 +201,7 @@
         </div>
       </div>
     </section>
-    <search-part-name ref="searchPartName"></search-part-name>
-    <select-part-com ref="selectPartCom"></select-part-com>
+    <select-part-com ref="selectPartCom" :is-show-add-part-btn="true"></select-part-com>
     <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
@@ -213,13 +212,12 @@
   import QuickDate from '../../../components/getDate/dateget'
   import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
-  import SearchPartName from "_c/partInfo/searchPartName";
   import SelectPartCom from "./components/selectPartCom";
   import SelectSupplier from "./components/selectSupplier";
 
   export default {
     name: 'goodsList',
-    components: {SelectSupplier, SelectPartCom, SearchPartName, QuickDate},
+    components: {SelectSupplier, SelectPartCom, QuickDate},
     inject:['reload'],
     mixins:[mixGoodsData],
     data() {
