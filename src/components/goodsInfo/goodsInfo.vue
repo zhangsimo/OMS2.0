@@ -3,7 +3,7 @@
     <!-- <Modal v-model="showInfo" title="收货信息" width="1000" > -->
     <div class="header">
       <!-- 查询收货信息上 -->
-      <Form ref="formOne" :model="formDate"  inline>
+      <Form ref="formOne" :model="formDateTop"  inline>
         <!-- <FormItem>
             <Input type="text" placeholder="客户名称"></Input>
         </FormItem>-->
@@ -19,12 +19,12 @@
         <FormItem>
           <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
-        <Button type="primary mr15">查询</Button>
-        <Button type="primary mr15">保存</Button>
+        <Button type="primary mr15" @click="searchInfo">查询</Button>
+        <Button type="primary mr15" @click="saveInfo">保存</Button>
         <Button>取消</Button>
       </Form>
     </div>
-    <div class="main">
+    <div class="main clearfix">
       <!-- 表格 收货信息 左 -->
       <div class="fl  w300">
         <div class="bgc p5">收货信息</div>
@@ -48,25 +48,27 @@
         </vxe-table>
       </div>
       <!-- 收货信息 右 -->
-      <div class="bgc p5  mb15">收货信息</div>
+      <div>
+        <div class="bgc p5  mb15">收货信息</div>
       <div class="sForm">
         <Form
           inline
+          :model="formDateRight"
           :show-message="false"
           ref="formTwo"
           :label-width="100"
         >
           <FormItem label="收货单位：">
-            <Input v-model="formDateRight.receiveCompName" class="w200"></Input>
+            <Input v-model="formDateRight.receiveComp" class="w200"></Input>
           </FormItem>
           <FormItem label="收货地址：">
-            <Input v-model="formDateRight.address" class="w200"></Input>
+            <Input v-model="formDateRight.receiveAddress" class="w200"></Input>
           </FormItem>
           <FormItem label="收货人：">
-            <Input v-model="formDateRight.receiveMan" class="w200"></Input>
+            <Input v-model="formDateRight.receiver" class="w200"></Input>
           </FormItem>
           <FormItem label="联系电话：">
-            <Input v-model="formDateRight.receiveManTel" class="w200"></Input>
+            <Input v-model="formDateRight.receiverMobile" class="w200"></Input>
           </FormItem>
           <!-- 发货信息 右-->
           <div class="bgc p5 mb15 mt15">发货信息</div>
@@ -101,13 +103,15 @@
           </FormItem>
         </Form>
       </div>
+      </div>
+
     </div>
     <!-- </Modal> -->
   </div>
 </template>
 
 <script>
-import { getGoodsInfo } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,getDic,logistics } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
@@ -122,11 +126,12 @@ export default {
        //表单数据 右 收货信息与发货信息
       formDateRight: {
         //收货信息
-        receiveCompName: "",//收货单位
-        receiveMan: "",//收货人
-        address: "",//收货地址
-        receiveManTel: "",//联系电话
+        receiveComp: "",//收货单位名称
+        receiver: "",//收货人
+        receiveAddress: "",//收货单位地址
+        receiverMobile: "",//联系电话
         //发货信息
+        address: "",//收货详细地址
         deliveryType: "",//配送方式
         transportCost: "",//运输费用
         remark: "",//备注
@@ -146,19 +151,34 @@ export default {
   async created() {
     let res = await getGoodsInfo()
     this.tableData = res.data
-    // getGoodsInfo().then(res => {
-    //   console.log(res)
-    // })
+    console.log(11111111111111)
+    //获取字典
+    let dic = await getDic()
+    console.log(222222222222)
+    // console.log(dic)
+
+    //获取物流下拉框
+    let tt = await logistics()
+    console.log(tt)
   },
   mounted() {
 
   },
   methods: {
+    //查询
+    searchInfo() {
+
+    },
+    //保存
+    saveInfo() {
+      saveGoodsInfo(this.formDateRight)
+    },
     echoDate({row}) {
-      this.formDateRight.receiveCompName = row.receiveCompName
-      this.formDateRight.receiveMan = row.receiveMan
+      this.formDateRight.receiveComp = row.receiveCompName
+      this.formDateRight.receiver = row.receiveMan
+      this.formDateRight.receiveAddress = row.address
       this.formDateRight.address = row.address
-      this.formDateRight.receiveManTel = row.receiveManTel
+      this.formDateRight.receiverMobile = row.receiveManTel
     }
   },
   computed: {}
