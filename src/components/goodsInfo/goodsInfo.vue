@@ -143,23 +143,30 @@ export default {
       //表格 数据
       tableData: [
 
+      ],
+      //配送方式字典下拉框
+      dict: [
+
+      ],
+      //发货物流下拉框
+      logis: [
+
       ]
     };
   },
   components: {},
   activated() {},
   async created() {
+    //初始化数据左边表格
     let res = await getGoodsInfo()
     this.tableData = res.data
-    console.log(11111111111111)
     //获取字典
     let dic = await getDic()
-    console.log(222222222222)
-    // console.log(dic)
-
+    this.dict = dic.data
+    console.log(dic)
     //获取物流下拉框
-    let tt = await logistics()
-    console.log(tt)
+    let log = await logistics()
+    this.logis = log.data
   },
   mounted() {
 
