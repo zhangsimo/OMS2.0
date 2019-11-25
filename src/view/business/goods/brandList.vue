@@ -186,7 +186,8 @@
       :mask-closable="false"
       width="700px"
       v-model="addPurchaseOrderDialog"
-      title="新增采购订单">
+      title="新增采购订单"
+      @on-cancel="closedPurchaseOrderDialog">
       <section>
         <Form :label-width="80" ref="purchaseOrderList">
           <Row>
@@ -236,7 +237,7 @@
       </section>
       <div slot="footer">
         <Button type="primary" @click="savePre">确定</Button>
-        <Button type="default" @click="addPurchaseOrderDialog = false">取消</Button>
+        <Button type="default" @click="closedPurchaseOrderDialog">取消</Button>
       </div>
     </Modal>
 
@@ -957,13 +958,32 @@ import {
           this.addPurchaseOrderDialog = true
         }
       },
+      closedPurchaseOrderDialog () { //关闭生成采购按钮
+        this.addPurchaseOrderDialog = false
+        this.data4 = []
+      },
       // 直发采购订单
       showZhiFa(){
-        if(this.generateBrand.length < 1){
+        let value
+        if (this.data4.length > 0) {
+          value = this.data4[0].company
+          // value = 'this.data4[0].company'
+          let flag = this.data4.every(item => item.company == value)
+          if (flag) {
+            this.directPurchaseOrderDialog = true
+            this.straightHairStore = value
+          } else {
+            this.$Message.error("请选择相同公司下的预定配件")
+          }
+
+        } else {
           this.$Message.error("请选择代采购的配件！")
-        }else{
-          this.directPurchaseOrderDialog = true
         }
+        // if(this.generateBrand.length < 1){
+        //   this.$Message.error("请选择代采购的配件！")
+        // }else{
+        //   this.directPurchaseOrderDialog = true
+        // }
       },
       // 直发取消按钮
       cancelZhiFa(){
