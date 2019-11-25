@@ -221,7 +221,7 @@ export default [
       {
         path: "",
         name: "allotOne",
-        mark: "21",
+        // mark: "21",
         redirect: "/allot/one/apply",
         meta: {
           title: "调拨单"
@@ -229,46 +229,46 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/allot/one/apply",
-            name: "oneApply",
-            mark: "23",
+            path: "/AlotManagement/transferringOrder/applyFor",
+            name: "applyFor",
+            // mark: "23",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/applyFor/applyFor.vue")
           },
           {
-            path: "/allot/one/accept",
-            name: "oneAccept",
+            path: "/AlotManagement/transferringOrder/Acceptances",
+            name: "Acceptances",
             mark: "27",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
               title: "调拨申请受理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/Acceptances/Acceptances.vue")
           },
           {
-            path: "/allot/one/delivery",
-            name: "oneDelivery",
-            mark: "28",
+            path: "/AlotManagement/transferringOrder/stockRemoval",
+            name: "stockRemoval",
+            // mark: "28",
             meta: {
               // hideInMenu: true,
               title: "调拨出库"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/stockRemoval/stockRemoval.vue")
           },
           {
-            path: "/allot/one/inStorage",
-            name: "oneInStorage",
-            mark: "29",
+            path: "/AlotManagement/transferringOrder/putStorage",
+            name: "putStorage",
+            // mark: "29",
             meta: {
               // hideInMenu: true,
               title: "调拨入库"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/putStorage/putStorage.vue")
           }
         ]
       },
