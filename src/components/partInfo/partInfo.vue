@@ -5,7 +5,7 @@
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
-      <Tabs type="card" :animated="false">
+      <Tabs type="card" @on-click="changeTab" :animated="false">
         <TabPane label="基本信息">
           <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
             <Row>
@@ -18,7 +18,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="配件品牌：" prop="partBrandId">
-                  <Select v-model="formValidate.partBrandId">
+                  <Select @on-change="getFullName" v-model="formValidate.partBrandId">
                     <Option v-for="item in brandArr" :value="item.id" :key="item.code" >{{item.name}}</Option>
                   </Select>
                 </FormItem>
@@ -38,8 +38,8 @@
             </Row>
             <Row>
               <Col span="11">
-                <FormItem label="单位：" prop="unit">
-                  <Select v-model="formValidate.unit">
+                <FormItem label="单位：" prop="unitId">
+                  <Select v-model="formValidate.unitId" @on-change="changeUnit">
                     <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
                   </Select>
                 </FormItem>
@@ -53,7 +53,7 @@
             <Row>
               <Col span="11">
                 <FormItem label="规格：" prop="spec">
-                  <Input v-model="formValidate.spec"></Input>
+                  <Input @input="getFullName" v-model="formValidate.spec"></Input>
                 </FormItem>
               </Col>
               <Col span="11">
@@ -65,14 +65,11 @@
             <Row>
               <Col span="22">
                 <FormItem label="适用车型：" prop="applyCarbrandId">
-                  <Select @on-open-change="getCarBrand" @on-change="getCarModelFun" class="w140 mr5"  v-model="carObj.selectCarBrand">
-                    <Option v-for="item in carObj.carBrandData" :value="item.nameEn" :key="item.nameEn">{{item.nameCn}}</Option>
+                  <Select @on-change="getCarModelFun" class="w140 mr5"  v-model="formValidate.carBrandName">
+                    <Option v-for="item in carObj.carBrandData" :value="item.id" :key="item.id">{{item.nameCn}}</Option>
                   </Select>
-                  <!--<Select @on-change="getCarModelFun" class="w150 mr5"  v-model="carObj.selectCarSystem">-->
-                    <!--<Option v-for="(item,index) in carObj.carSystemData" :value="item.carLineName" :key="index">{{item.carLineName}}</Option>-->
-                  <!--</Select>-->
-                  <Select class="w350"  v-model="formValidate.applyCarbrandId">
-                    <Option v-for="item in carObj.carModelData" :value="item.carModelName" :key="item.carModelName">{{item.carModelName}}</Option>
+                  <Select class="w350" @on-change="getFullName"  v-model="formValidate.carModelName">
+                    <Option v-for="item in carObj.carModelData" :value="item.carModelName" :key="item.id">{{item.carModelName}}</Option>
                   </Select>
                   <!--<Input class="w350" v-model="formValidate.explain"></Input>-->
                 </FormItem>
@@ -80,28 +77,28 @@
             </Row>
             <Row>
               <Col span="22">
-                <FormItem label="通用编码：" prop="commonCode">
-                  <Input v-model="formValidate.commonCode"></Input>
+                <FormItem label="通用编码：" prop="commonId">
+                  <Input v-model="formValidate.commonId"></Input>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span="11">
-                <FormItem label="生产厂家：" prop="produceFactory">
-                  <Input v-model="formValidate.produceFactory"></Input>
+                <FormItem label="生产厂家：" prop="manufacture">
+                  <Input v-model="formValidate.manufacture"></Input>
                 </FormItem>
               </Col>
               <Col span="11">
-                <FormItem label="产地：" prop="origin">
-                  <Input v-model="formValidate.origin"></Input>
+                <FormItem label="产地：" prop="prdtPlace">
+                  <Input v-model="formValidate.prdtPlace"></Input>
                 </FormItem>
               </Col>
             </Row>
             <Row>
               <Col span="22">
                 <FormItem label="配件全称：" prop="fullName">
-                  <Input v-model="formValidate.fullName"></Input>
-                  配件全称 = 名称+规格+车型+品牌
+                  <Input readonly v-model="formValidate.fullName"></Input>
+                  <!--配件全称 = 名称+规格+车型+品牌-->
                 </FormItem>
               </Col>
             </Row>
@@ -112,8 +109,8 @@
                 </FormItem>
               </Col>
               <Col span="11">
-                <FormItem label="备注：" prop="remarks">
-                  <Input v-model="formValidate.remarks"></Input>
+                <FormItem label="备注：" prop="direction">
+                  <Input v-model="formValidate.direction"></Input>
                 </FormItem>
               </Col>
             </Row>
@@ -141,32 +138,64 @@
             <!--</Col>-->
             <!--</Row>-->
           </Form>
-          <div class="tc">
-            <Button class="mr10" type='warning' @click='submit("proModalForm")'>审核通过</Button>
-            <Button class="mr10" type='primary' @click='submit("proModalForm")'>审核不通过</Button>
-            <Button type='default' @click='proModal = false'>取消</Button>
-          </div>
+          <!--<div class="tc">-->
+            <!--<Button class="mr10" type='warning' @click='submit("proModalForm",1)'>审核通过</Button>-->
+            <!--<Button class="mr10" type='primary' @click='submit("proModalForm",2)'>审核不通过</Button>-->
+            <!--<Button type='default' @click='proModal = false'>取消</Button>-->
+          <!--</div>-->
         </TabPane>
         <TabPane label="包装规格">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
           </div>
-          <Table height="300" size="small" :loading="loading" border :stripe="true" :columns="columnsTab" :data="formValidate.specVOList">
-            <template slot-scope="{ row, index }" slot="meterCompany">
-              <span v-if="index===0">{{formValidate.unit}}</span>
-              <Select v-else class="w80" v-model="unit2">
-                <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
-              </Select>
-            </template>
-          </Table>
-          <div class="tc pt20">
-            <Button class="mr10" type='primary' @click='submit("proModal")'>保存</Button>
-            <Button type='default' @click='proModal = false'>取消</Button>
-          </div>
+          <!--<Table height="300" size="small" :loading="loading" border :stripe="true" :columns="columnsTab" :data="formValidate.specVOS">-->
+            <!--<template slot-scope="{ row, index }" slot="meterCompany">-->
+              <!--<span v-if="index===0">{{formValidate.unitId}}</span>-->
+              <!--<Select @on-change="changeSpec(index,row)" v-else class="w80" v-model="row.meterCompany">-->
+                <!--<Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>-->
+              <!--</Select>-->
+            <!--</template>-->
+          <!--</Table>-->
+          <vxe-table
+            ref="vxeTable"
+            border
+            size="mini"
+            height="300"
+            :data="formValidate.specVOS"
+            :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+            <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+            <vxe-table-column field="meterCompany" title="计量单位" width="102">
+              <template v-slot="{ row,rowIndex }">
+                <span v-if="rowIndex==0">{{row.meterCompany}}</span>
+                <Select v-else class="w80" v-model="row.meterCompany">
+                  <Option v-for="item in dictCodeAll" :value="item.itemName" :key="item.itemName">{{item.itemName}}</Option>
+                </Select>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="companyNum" title="单位数量" width="90"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="longNum" title="长(cm)" width="80"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="wide" title="宽(cm)" width="80"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="high" title="高(cm)" width="80"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="volume" title="体积(cm³)" width="95"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="weight" title="重量(kg)" width="95"></vxe-table-column>
+            <vxe-table-column :edit-render="{name: 'input'}" field="volumeRong" title="容积(ml)" width="95"></vxe-table-column>
+            <vxe-table-column fixed="right" field="checkboxsing" title="最小计量单位" width="100">
+              <template v-slot="{ row,rowIndex }">
+                <Checkbox v-model="row.checkboxsing" @on-change="changeCheckbox(rowIndex)"></Checkbox>
+              </template>
+            </vxe-table-column>
+          </vxe-table>
+          <!--<div class="tc pt20">-->
+            <!--<Button class="mr10" type='primary' @click='submit("proModal")'>保存</Button>-->
+            <!--<Button type='default' @click='proModal = false'>取消</Button>-->
+          <!--</div>-->
         </TabPane>
       </Tabs>
       <div slot='footer'>
+        <Button class="mr10" type='warning' @click='submit("proModalForm",1)'>审核通过</Button>
+        <Button class="mr10" type='primary' @click='submit("proModalForm",2)'>审核不通过</Button>
+        <Button type='default' @click='proModal = false'>取消</Button>
       </div>
     </Modal>
     <search-part-name @selectSearchName="getSearchPartName" ref="searchPartName"></search-part-name>
@@ -181,7 +210,7 @@
           <div>
             <span
               class="tag-span mr10 mb10"
-              :class="{'active':customClassId==v1.id}"
+              :class="{'active':customClassName.id==v1.id}"
               @click="handleTag(v1)"
               @on-change="handleTag(v1)"
               v-for="v1 in v.itemVOS">{{v1.itemName}}</span>
