@@ -120,14 +120,16 @@
                   return h('div', [
                     h('Button', {
                       props: {
-                        type: 'warning',
-                        size: 'small'
+                        type: 'info',
+                        size: 'small',
                       },
                       style: {
-                        // color: color
+                        color: "white"
                       },
+                      class: className,
                       on: {
-                        click: () => {
+                        click: (e) => {
+                          this.ID = params.row.id;
                           this.show()
                         }
                       }
@@ -210,4 +212,9 @@
 <style scoped>
   @import "index.css";
   @import "zhsh.css";
+</style>
+<style>
+  .ivu-table .white span{
+    color: white!important;
+  }
 </style>
