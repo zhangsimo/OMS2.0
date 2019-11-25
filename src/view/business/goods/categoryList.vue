@@ -21,7 +21,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addPro">
+            <Button class="mr10" >
               <Icon type="md-add" />新增
             </Button>
           </div>
@@ -31,23 +31,23 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="editPro">
+            <Button class="mr10" >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10">
+            <Button  class="mr10">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10">
+            <Button  class="mr10">
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
 
           <div class="db">
-            <Button @click="linkProMadel" class="mr10">
+            <Button  class="mr10">
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
           </div>
@@ -80,7 +80,6 @@
                 :current="page.num"
                 :total="100"
                 :page-size="page.size"
-                @on-change="changePage"
                 show-sizer
                 show-total
               ></Page>
@@ -98,7 +97,6 @@
                   :show-message="false"
                   ref="formPlan"
                   :model="formPlan"
-                  :rules="rulePlan"
                   :label-width="100"
                 >
                   <FormItem label="供应商：" prop="supplyName">
@@ -107,7 +105,7 @@
                         <Input placeholder="请选择供应商"></Input>
                       </Col>
                       <Col span="5">
-                        <Button @click="linkProMadel" class="ml5" size="small" type="default">
+                        <Button  class="ml5" size="small" type="default">
                           <i class="iconfont iconxuanzetichengchengyuanicon"></i>
                         </Button>
                       </Col>
@@ -151,20 +149,20 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">
+                      <Button size="small" class="mr10" >
                         <Icon type="md-add" />添加配件
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">
+                      <Button size="small" class="mr10" >
                         <Icon type="ios-trash" />删除配件
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">导入配件</Button>
+                      <Button size="small" class="mr10">导入配件</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro">订单调整</Button>
+                      <Button size="small" class="mr10" >订单调整</Button>
                     </div>
                     <div class="fl mb5">
                       <Button size="small" class="mr10" @click="showGoods">收货信息</Button>
@@ -179,7 +177,6 @@
                 <vxe-table
                   border
                   resizable
-                  @edit-closed="editClosedEvent"
                   size="mini"
                   :height="rightTableHeight"
                   :data="tableData"
@@ -187,7 +184,11 @@
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                  <vxe-table-column field="name" title="操作" width="100"></vxe-table-column>
+                  <vxe-table-column field="name" title="操作" width="100">
+                    <template v-slot="{ row }">
+                      <a href="javascript:;" @click="showDetail">查看</a>
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column field="role" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="sex" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="num6" title="品牌" width="100"></vxe-table-column>
@@ -255,9 +256,6 @@
         </Row>
       </div>
       <Form
-        ref="formInline"
-        :model="formInline"
-        :rules="ruleInline"
         :label-width="80"
         class="ml10 pl25"
       >
@@ -278,7 +276,7 @@
         </FormItem>
         <FormItem label="创建人: ">
           <Input type="password" class="w300 ml5"></Input>
-          <Radio v-model="single">Radio</Radio>
+          <Radio >Radio</Radio>
         </FormItem>
       </Form>
       <div slot="footer">
@@ -289,9 +287,6 @@
     <!-- 采购金额 对话框 -->
     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
       <Form
-        ref="formInline"
-        :model="formInline"
-        :rules="ruleInline"
         :label-width="100"
         class="ml10 pl25"
       >
@@ -323,7 +318,7 @@
       <div class="costBox clearfix con-split">
         <div class="fl">
           <div class="leftT">
-            <Select v-model="model2" size="small" style="width:100px" class="mr15">
+            <Select  size="small" style="width:100px" class="mr15">
               <Option
                 v-for="item in cityList"
                 :value="item.value"
@@ -331,7 +326,6 @@
               >{{ item.label }}</Option>
             </Select>
             <Input
-              v-model="value"
               placeholder="Enter something..."
               style="width: 250px"
               size="small"
@@ -367,11 +361,15 @@
             >
               >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column width="60" title="操作"></vxe-table-column>
+              <vxe-table-column width="60" title="操作">
+                <template v-slot="{ row }">
+                  <a href="javascript:;">删除</a>
+                </template>
+              </vxe-table-column>
               <vxe-table-column field="name" title="往来单位" width="80"></vxe-table-column>
               <vxe-table-column field="role" title="收支项目" width="80" :edit-render="{name: 'input'}">
                 <template v-slot:edit="{ row }">
-                  <Select v-model="model2" size="small" style="width:100px">
+                  <Select  size="small" style="width:100px">
                     <Option
                       v-for="item in cityList"
                       :value="item.value"
@@ -390,6 +388,74 @@
       </div>
       <div slot="footer"></div>
     </Modal>
+    <!-- 查看明细对话框 -->
+     <Modal
+        v-model="detail"
+        width="1000"
+        >
+        <Tabs :animated="false">
+        <TabPane label="本店库存">
+          <vxe-table
+          size="mini"
+          highlight-current-row
+          stripe
+          height="500"
+          border
+          resizable
+          highlight-hover-row
+          :data="tableData">
+          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column field="name" title="配件编码" width="230"></vxe-table-column>
+          <vxe-table-column field="sex" title="Sex" width="230"></vxe-table-column>
+          <vxe-table-column field="age" title="Age" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="Address" show-overflow width="230"></vxe-table-column>
+        </vxe-table>
+          </TabPane>
+        <TabPane label="连锁库存">
+          <vxe-table
+          size="mini"
+          highlight-current-row
+          stripe
+          height="500"
+          border
+          resizable
+          highlight-hover-row
+          :data="tableData">
+          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column field="name" title="公司名称" width="230"></vxe-table-column>
+          <vxe-table-column field="sex" title="仓库" width="230"></vxe-table-column>
+          <vxe-table-column field="age" title="库存数量" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="可售数量" show-overflow width="230"></vxe-table-column>
+        </vxe-table>
+        </TabPane>
+        <TabPane label="采购记录">
+          <vxe-table
+          size="mini"
+          highlight-current-row
+          stripe
+          height="500"
+          border
+          resizable
+          highlight-hover-row
+          :data="tableData">
+          <vxe-table-column type="index" title="序号" width="80"></vxe-table-column>
+          <vxe-table-column field="name" title="配件编码" width="230"></vxe-table-column>
+          <vxe-table-column field="sex" title="配件名称" width="230"></vxe-table-column>
+          <vxe-table-column field="age" title="仓库" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="单位" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="采购数量" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="税点" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="含税单价" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="不含税单价" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="参考销价" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="供应商" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="第一供应商" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="入库单号" width="230"></vxe-table-column>
+          <vxe-table-column field="address" title="入库日期" width="230"></vxe-table-column>
+        </vxe-table>
+        </TabPane>
+    </Tabs>
+    </Modal>
   </div>
 </template>
 <script>
@@ -401,6 +467,8 @@ export default {
   components: { QuickDate, goodsInfo },
   data() {
     return {
+      //展示查看明细对话框
+      detail: false,
       //Cost 对话框
       isCost: false,
       //serch对话框
@@ -418,9 +486,7 @@ export default {
         orderNum: "" //订单号
       },
       //左侧表格数据
-      Leftdata: [
-
-      ],
+      Leftdata: [],
       split1: 0.2,
       columns: [
         {
@@ -576,6 +642,10 @@ export default {
     //展示费用登记
     showCost() {
       this.isCost = true;
+    },
+    //展示查看明细
+    showDetail() {
+      this.detail = true
     },
     search() {
       this.serchN = true;

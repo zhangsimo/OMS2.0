@@ -2,21 +2,22 @@
   <div class="goodsInfo">
     <!-- <Modal v-model="showInfo" title="收货信息" width="1000" > -->
     <div class="header">
-      <Form ref="formOne" :model="formInfo" inline>
+      <!-- 查询收货信息上 -->
+      <Form ref="formOne" :model="formDate"  inline>
         <!-- <FormItem>
             <Input type="text" placeholder="客户名称"></Input>
         </FormItem>-->
         <FormItem>
-          <Input type="text" placeholder="收货单位"></Input>
+          <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" placeholder="收货地址"></Input>
+          <Input type="text" v-model="formDateTop.address" placeholder="收货地址"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" placeholder="收货人"></Input>
+          <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" placeholder="联系电话"></Input>
+          <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
         <Button type="primary mr15">查询</Button>
         <Button type="primary mr15">保存</Button>
@@ -24,7 +25,7 @@
       </Form>
     </div>
     <div class="main">
-      <!-- 收货信息 左 -->
+      <!-- 表格 收货信息 左 -->
       <div class="fl  w300">
         <div class="bgc p5">收货信息</div>
         <vxe-table
@@ -33,16 +34,17 @@
           size="mini"
           height="400"
           :data="tableData"
+          @current-change="echoDate"
           highlight-current-row
           :radio-config="{labelField: '', trigger: 'row'}"
         >
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
-          <vxe-table-column field="name" title="客户" width="100"></vxe-table-column>
-          <vxe-table-column field="role" title="收货单位" width="100"></vxe-table-column>
-          <vxe-table-column field="sex" title="收货地址" width="100"></vxe-table-column>
-          <vxe-table-column field="num6" title="收货人" width="100"></vxe-table-column>
-          <vxe-table-column field="num6" title="联系电话" width="100"></vxe-table-column>
+          <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
+          <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>
+          <vxe-table-column field="address" title="收货地址" width="100"></vxe-table-column>
+          <vxe-table-column field="receiveMan" title="收货人" width="100"></vxe-table-column>
+          <vxe-table-column field="receiveManTel" title="联系电话" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <!-- 收货信息 右 -->
@@ -52,21 +54,19 @@
           inline
           :show-message="false"
           ref="formTwo"
-          :model="formInfo"
-          :rules="ruleInfo"
           :label-width="100"
         >
           <FormItem label="收货单位：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.receiveCompName" class="w200"></Input>
           </FormItem>
           <FormItem label="收货地址：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.address" class="w200"></Input>
           </FormItem>
           <FormItem label="收货人：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.receiveMan" class="w200"></Input>
           </FormItem>
           <FormItem label="联系电话：">
-            <Input class="w200"></Input>
+            <Input v-model="formDateRight.receiveManTel" class="w200"></Input>
           </FormItem>
           <!-- 发货信息 右-->
           <div class="bgc p5 mb15 mt15">发货信息</div>
@@ -107,18 +107,60 @@
 </template>
 
 <script>
+import { getGoodsInfo } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
     return {
-      //对话框 v-modal
-      tableData: [{ name: "hh", role: "gg" }, { name: "hh", role: "gg" }]
+      //表单数据 上
+      formDateTop: {
+        receiveCompName: "",//收货单位
+        receiveMan: "",//收货人
+        address: "",//收货地址
+        receiveManTel: ""//联系电话
+      },
+       //表单数据 右 收货信息与发货信息
+      formDateRight: {
+        //收货信息
+        receiveCompName: "",//收货单位
+        receiveMan: "",//收货人
+        address: "",//收货地址
+        receiveManTel: "",//联系电话
+        //发货信息
+        deliveryType: "",//配送方式
+        transportCost: "",//运输费用
+        remark: "",//备注
+        relationNum: "",//光联单号
+        deliveryLogistics: "",//发货物流
+        settleType: "",//结算方式
+        businessNum: "",//业务单号
+      },
+      //表格 数据
+      tableData: [
+
+      ]
     };
   },
   components: {},
   activated() {},
-  mounted() {},
-  methods: {},
+  async created() {
+    let res = await getGoodsInfo()
+    this.tableData = res.data
+    // getGoodsInfo().then(res => {
+    //   console.log(res)
+    // })
+  },
+  mounted() {
+
+  },
+  methods: {
+    echoDate({row}) {
+      this.formDateRight.receiveCompName = row.receiveCompName
+      this.formDateRight.receiveMan = row.receiveMan
+      this.formDateRight.address = row.address
+      this.formDateRight.receiveManTel = row.receiveManTel
+    }
+  },
   computed: {}
 };
 </script>
