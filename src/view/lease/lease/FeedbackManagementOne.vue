@@ -128,8 +128,8 @@
                       },
                       class: className,
                       on: {
-                        click: (e) => {
-                          this.ID = params.row.id;
+                        click: () => {
+                          this.json = params.row;
                           this.show()
                         }
                       }
@@ -196,7 +196,6 @@
           if(this.ID){
             console.log(this.json)
             this.$router.push({name: 'feedback_management',query:{json: this.json}})
-
           }
         }
       },
