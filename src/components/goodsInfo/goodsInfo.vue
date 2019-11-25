@@ -183,7 +183,7 @@ export default {
       let res = await saveGoodsInfo(this.formDateRight)
       if (res.code == 0) {
         this.$Message.success(res.data)
-        this.$refs.formTwo.resetFields()
+        // this.$refs.formTwo.resetFields()
         console.log(res)
       }
     },
