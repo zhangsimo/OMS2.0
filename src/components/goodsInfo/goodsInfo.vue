@@ -73,17 +73,13 @@
           <!-- 发货信息 右-->
           <div class="bgc p5 mb15 mt15">发货信息</div>
           <FormItem label="配送方式：">
-            <Select class="w200">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+            <Select v-model="formDateRight.deliveryType" class="w200">
+              <Option v-for="item in dictArr" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
             </Select>
           </FormItem>
           <FormItem label="发货物流：">
-            <Select class="w200">
-              <Option value="beijing">New York</Option>
-              <Option value="shanghai">London</Option>
-              <Option value="shenzhen">Sydney</Option>
+            <Select v-model="formDateRight.deliveryLogistics" class="w200">
+              <Option v-for="item in logisArr" :value="item.defaultLogistics" :key="item.id">{{ item.defaultLogistics }}</Option>
             </Select>
           </FormItem>
           <FormItem label="运输费用：">
@@ -145,11 +141,11 @@ export default {
 
       ],
       //配送方式字典下拉框
-      dict: [
+      dictArr: [
 
       ],
       //发货物流下拉框
-      logis: [
+      logisArr: [
 
       ]
     };
@@ -162,11 +158,13 @@ export default {
     this.tableData = res.data
     //获取字典
     let dic = await getDic()
-    this.dict = dic.data
+    this.dictArr = dic.data
     console.log(dic)
+    // console.log(dic)
     //获取物流下拉框
     let log = await logistics()
-    this.logis = log.data
+    this.logisArr = log.data
+    console.log(log)
   },
   mounted() {
 
