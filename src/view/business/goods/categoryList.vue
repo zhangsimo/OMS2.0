@@ -52,7 +52,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10">费用登记</Button>
+            <Button @click="showCost" class="mr10">费用登记</Button>
           </div>
         </div>
       </div>
@@ -72,6 +72,7 @@
                 border
                 :stripe="true"
                 :columns="columns"
+                :data="Leftdata"
               ></Table>
               <Page
                 simple
@@ -237,7 +238,7 @@
         </div>
       </div>
     </section>
-    <!-- 更多对话框 -->
+    <!-- 更多 对话框 -->
     <Modal title="高级查询" v-model="serchN" :styles="{top: '50px', width: '500px'}">
       <div class="data ml30 pl25">
         <Row class="mb30">
@@ -280,8 +281,12 @@
           <Radio v-model="single">Radio</Radio>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button class="mr15" type="primary">确定</Button>
+        <Button>取消</Button>
+      </div>
     </Modal>
-    <!-- 采购金额对话框 -->
+    <!-- 采购金额 对话框 -->
     <Modal title="采购金额填写" v-model="sumMod" :styles="{top: '50px', width: '500px'}">
       <Form
         ref="formInline"
@@ -303,10 +308,86 @@
           <Input type="password" class="w300 ml5"></Input>
         </FormItem>
       </Form>
+      <div slot="footer">
+        <Button type="primary">保存</Button>
+        <Button type="default">取消</Button>
+      </div>
     </Modal>
-    <!-- 收货信息 -->
+    <!-- 收货信息 对话框 -->
     <Modal v-model="isShow" title="收货信息" width="1000">
       <goods-info></goods-info>
+      <div slot="footer"></div>
+    </Modal>
+    <!-- 费用登记 对话框 -->
+    <Modal v-model="isCost" title="费用登记" width="1100">
+      <div class="costBox clearfix con-split">
+        <div class="fl">
+          <div class="leftT">
+            <Select v-model="model2" size="small" style="width:100px" class="mr15">
+              <Option
+                v-for="item in cityList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Input
+              v-model="value"
+              placeholder="Enter something..."
+              style="width: 250px"
+              size="small"
+              class="mr15"
+            />
+            <Button type="primary" size="small">查询</Button>
+          </div>
+          <div class="pane-made-hd mt15">往来单位列表</div>
+          <div class="w420 h600">
+            <vxe-table border resizable height="auto" :data="tableData">
+              <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
+              <vxe-table-column field="name" title="操作" width="80"></vxe-table-column>
+              <vxe-table-column field="sex" title="往来单位" width="130"></vxe-table-column>
+              <vxe-table-column field="age" title="编码" width="130"></vxe-table-column>
+            </vxe-table>
+          </div>
+          <Page :total="40" size="small" show-elevator show-sizer show-total simple />
+        </div>
+        <div class="fr h600 right">
+          <div class="mb15">
+            <Button type="primary" size="small" class="mr10">保存</Button>
+            <Button size="small">取消</Button>
+          </div>
+          <div>
+            <vxe-table
+              border
+              resizable
+              size="mini"
+              :data="tableData"
+              height="auto"
+              highlight-current-row
+              :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            >
+              >
+              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column width="60" title="操作"></vxe-table-column>
+              <vxe-table-column field="name" title="往来单位" width="80"></vxe-table-column>
+              <vxe-table-column field="role" title="收支项目" width="80" :edit-render="{name: 'input'}">
+                <template v-slot:edit="{ row }">
+                  <Select v-model="model2" size="small" style="width:100px">
+                    <Option
+                      v-for="item in cityList"
+                      :value="item.value"
+                      :key="item.value"
+                    >{{ item.label }}</Option>
+                  </Select>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="sex" title="应付金额" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="备注" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="创建人" width="80"></vxe-table-column>
+              <vxe-table-column field="num6" title="创建日期" width="80"></vxe-table-column>
+            </vxe-table>
+          </div>
+        </div>
+      </div>
       <div slot="footer"></div>
     </Modal>
   </div>
@@ -320,6 +401,8 @@ export default {
   components: { QuickDate, goodsInfo },
   data() {
     return {
+      //Cost 对话框
+      isCost: false,
       //serch对话框
       sumMod: false,
       serchN: false,
@@ -334,6 +417,10 @@ export default {
         beforePay: "", //预付款
         orderNum: "" //订单号
       },
+      //左侧表格数据
+      Leftdata: [
+
+      ],
       split1: 0.2,
       columns: [
         {
@@ -442,7 +529,34 @@ export default {
       leftTableHeight: 0,
       //右侧表格高度
       rightTableHeight: 0,
-      isShow: false
+      isShow: false,
+      //下拉框数据
+      cityList: [
+        {
+          value: "New York",
+          label: "New York"
+        },
+        {
+          value: "London",
+          label: "London"
+        },
+        {
+          value: "Sydney",
+          label: "Sydney"
+        },
+        {
+          value: "Ottawa",
+          label: "Ottawa"
+        },
+        {
+          value: "Paris",
+          label: "Paris"
+        },
+        {
+          value: "Canberra",
+          label: "Canberra"
+        }
+      ]
     };
   },
   activated() {},
@@ -459,6 +573,10 @@ export default {
     });
   },
   methods: {
+    //展示费用登记
+    showCost() {
+      this.isCost = true;
+    },
     search() {
       this.serchN = true;
     },
@@ -471,17 +589,6 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.ivu-btn .ivu-btn-text {
-  border: 1px solid #ccc;
-}
-.vertical-center-modal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  .ivu-modal {
-    top: 0;
-  }
-}
 .goods-list-form {
   * {
     font-size: 12px !important;
