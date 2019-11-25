@@ -120,14 +120,16 @@
                   return h('div', [
                     h('Button', {
                       props: {
-                        type: 'warning',
-                        size: 'small'
+                        type: 'info',
+                        size: 'small',
                       },
                       style: {
-                        // color: color
+                        color: "white"
                       },
+                      class: className,
                       on: {
                         click: () => {
+                          this.json = params.row;
                           this.show()
                         }
                       }
@@ -194,7 +196,6 @@
           if(this.ID){
             console.log(this.json)
             this.$router.push({name: 'feedback_management',query:{json: this.json}})
-
           }
         }
       },
@@ -210,4 +211,9 @@
 <style scoped>
   @import "index.css";
   @import "zhsh.css";
+</style>
+<style>
+  .ivu-table .white span{
+    color: white!important;
+  }
 </style>

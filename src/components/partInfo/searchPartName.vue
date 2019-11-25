@@ -175,23 +175,4 @@
     height: 350px;
     overflow-y: auto;
   }
-
-  .custom-main{
-    border-top: 1px solid #ddd;
-    .custom-type-hd{
-      padding: 10px 0 6px;
-    }
-    .tag-span{
-      cursor: pointer;
-      background: #f8f8f8;
-      border: 1px solid #e8e8e8;
-      padding: 4px 10px;
-      border-radius: 2px;
-      &.active{
-        background: #fd5c5c;
-        border-color: #fd5c5c;
-        color: #fff;
-      }
-    }
-  }
 </style>

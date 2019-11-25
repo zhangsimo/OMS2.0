@@ -27,16 +27,30 @@ export const mixGoodsData = {
       tableData:[
         {id:1,num:0,price:0},
         {id:1,num:0,price:0},
-      ]
+      ],
+      //待删除数据
+      delArr:[]
     }
   },
   methods:{
-    editActivedEvent ({ row, column }, event) {
-      //console.log(`打开 ${column.title} 列编辑`)
+    //采购计划列表选中数据
+    selectVxeData({selection,rowIndex,reserves}){
+      console.log(selection)
+      this.delArr = selection
     },
-    editClosedEvent ({ row, column }, event) {
-      //console.log(row,event,column)
-      //console.log(`关闭 ${column} 列编辑`)
+    delTableData(){
+      if(this.delArr.length==0){
+        this.$message.error("选择要删除的数据");
+      }else{
+        this.delArr.map(item => {
+          this.tableData.map((v2,i) => {
+            if(item.id==v2.id){
+              this.tableData.splice(i,1)
+            }
+          })
+        });
+        this.delArr = []
+      }
     },
     addFooter({ columns, data }){
       return [
@@ -65,5 +79,10 @@ export const mixGoodsData = {
       }
       return total
     },
+    //添加配件数据
+    getPartNameList(v){
+      console.log(v)
+      this.tableData = this.tableData.concat(v)
+    }
   }
 }

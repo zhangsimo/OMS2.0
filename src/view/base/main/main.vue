@@ -106,6 +106,9 @@
   import MyBreadCrumb from './components/header-bar/mybread-crumb/myBreadCrumb'
   import html2canvas from 'html2canvas'
 
+  import { feedbackRecord } from '../../../api/lease/FeedbackManagement'
+
+
   export default {
     name: 'Main',
     components: {
@@ -330,8 +333,27 @@
           let image = this.canvas.toDataURL("image/png")
           let list = this.$route
               image = image.replace(/^data:image\/(png|jpg);base64,/, "")
-            console.log(this.query)
-
+            // console.log(this.query)
+            // console.log(this.$route.meta.title)
+            // console.log(image)
+            // console.log(this.value17)
+            // console.log(window.location.pathname)
+          var type = this.query.map(item => {
+            return item.name
+          })
+        var type2 =  type.join(",")
+          // console.log(type)
+          let data = {}
+          data.funcAction = window.location.pathname
+          data.funcName = this.$route.meta.title
+          data.questionContent = this.value17
+          data.questionType = type2
+          console.log(data)
+          feedbackRecord(data).then(res => {
+            if(res.code === 0){
+                this.$Message.warning('反馈成功')
+            }
+          })
         }
     },
     watch: {

@@ -202,9 +202,9 @@
             <!--</div>-->
           <!--</div>-->
         <!--</section>-->
-        <!--<search-part-name ref="searchPartName"></search-part-name>-->
-        <!--<select-part-com ref="selectPartCom"></select-part-com>-->
-        <!--<select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>-->
+        <!--&lt;!&ndash;<search-part-name ref="searchPartName"></search-part-name>&ndash;&gt;-->
+        <!--&lt;!&ndash;<select-part-com ref="selectPartCom"></select-part-com>&ndash;&gt;-->
+        <!--&lt;!&ndash;<select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>&ndash;&gt;-->
       <!--</div>-->
 
     </div>

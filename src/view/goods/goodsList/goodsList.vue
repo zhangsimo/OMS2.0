@@ -104,7 +104,7 @@
                     <Button size="small" class="mr10" @click="addPro">导入</Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconlajitongicon"></i> 删除</Button>
+                    <Button size="small" class="mr10" @click="delTableData"><i class="iconfont mr5 iconlajitongicon"></i> 删除</Button>
                   </div>
                   <div class="fl mb5">
                     │
@@ -144,7 +144,8 @@
                 border
                 resizable
                 show-footer
-                @edit-closed="editClosedEvent"
+                @select-change="selectVxeData"
+
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
@@ -201,8 +202,7 @@
         </div>
       </div>
     </section>
-    <search-part-name ref="searchPartName"></search-part-name>
-    <select-part-com ref="selectPartCom"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
     <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
@@ -213,13 +213,12 @@
   import QuickDate from '../../../components/getDate/dateget'
   import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
-  import SearchPartName from "_c/partInfo/searchPartName";
   import SelectPartCom from "./components/selectPartCom";
   import SelectSupplier from "./components/selectSupplier";
 
   export default {
     name: 'goodsList',
-    components: {SelectSupplier, SelectPartCom, SearchPartName, QuickDate},
+    components: {SelectSupplier, SelectPartCom, QuickDate},
     inject:['reload'],
     mixins:[mixGoodsData],
     data() {
