@@ -1,7 +1,8 @@
-import {getAllBrand,getCarClassifys} from "_api/system/partsExamine/partsExamineApi";
+import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
 import {getwbParts} from "_api/system/partManager";
 
 export const mixSelectPartCom  = {
+  inject:['reload'],
   data(){
     return {
       loading:false,
@@ -295,6 +296,15 @@ export const mixSelectPartCom  = {
     applyPart(){
       this.searchPartLayer = false;
       this.$refs.partInfo.init();
+    },
+    //提交申请配件
+    addPartFun(obj){
+      //添加未审核属性
+      obj.auditSign = 0
+      savePartInfo(obj).then(res => {
+        this.$Message.success("保存成功！")
+        this.reload();
+      })
     }
   }
 }

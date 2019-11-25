@@ -74,3 +74,13 @@ export function getCarPartName(data) {
 }
 
 
+//申请配件保存
+export function savePartInfo(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partApply/save`,
+    method: 'post',
+    data
+  })
+}
+
+

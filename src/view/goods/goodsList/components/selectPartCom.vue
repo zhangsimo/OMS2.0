@@ -33,7 +33,7 @@
         <!--<Button type='default' @click='proModal = false'>取消</Button>-->
       </div>
     </Modal>
-    <part-info ref="partInfo"></part-info>
+    <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
   </div>
 </template>
 
