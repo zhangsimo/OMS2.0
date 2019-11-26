@@ -550,7 +550,7 @@ import {
                 },
                  on: {
                   'on-change': (e) => {
-                    console.log(e)
+                    // console.log(e)
                     params.row.acceptQty = e;
                     _this.data2[params.index] = params.row
                   }
@@ -635,6 +635,7 @@ import {
           }
         ],
         data3: [],
+        selectionArr:[],
         // 新增采购订单表格数据
         columns4: [
           {
@@ -677,16 +678,17 @@ import {
             key: "orderQty",
             align: "center",
             render: (h, params) =>{
+              let _this = this
               return h('InputNumber', {
                 props: {
-                  min: params.row.acceptQty,
+                  min: 1,
                   value:params.row.acceptQty
                 },
                 on: {
-                  'on-change': e => {
-                    console.log(e)
+                  'on-change': (e) => {
+                    // console.log(e)
                     params.row.acceptQty = e
-                    this.data4[params.index] = params.row;
+                    _this.data4[params.index] = params.row;
                   }
                 }
               })
@@ -752,6 +754,7 @@ import {
               reamrk: this.reamrk
             }).then(res => {
               if(res.code === 0){
+                this.addPurchaseOrderDialog = false
                 this.$Message.success(res.data)
                 this.getPendingPurchaseList()
               }
@@ -926,7 +929,7 @@ import {
         this.tabValue = item
         if(item === "name2"){
           this.getPendingPurchaseList()
-
+          this.data4 = []
         }else{
           this.getBrand()
           this.data2 = []
@@ -940,15 +943,16 @@ import {
         this.data2 = value.detailVOList
       },
       // 待采购订单单选
-      onSelect(row){
-        console.log(row)
+      onSelect(row, selection){
+        // console.log(selection)
         this.generateBrand = row
         this.data4 = row
         
       },
       // 待采购订单全选
-      onSelectAll (row) {
-        console.log(row)
+      onSelectAll (selection) {
+        // console.log(selection)
+        this.selectionArr = selection
         this.generateBrand = row
         this.data4 = row
       },
@@ -964,7 +968,7 @@ import {
       },
       // 待采购页面生成采购订单按钮
       showGeneratePurchaseOrder () {
-        if(this.generateBrand.length < 1){
+        if(this.data4.length < 1){
           this.$Message.error("请选择代采购的配件！")
         }else{
           this.addPurchaseOrderDialog = true
@@ -982,6 +986,10 @@ import {
           // value = 'this.data4[0].company'
           let flag = this.data4.every(item => item.company == value)
           if (flag) {
+            this.data4 = this.data4.map(item => {
+              item.minAcceptQty = item.acceptQty
+              return item
+            })
             this.directPurchaseOrderDialog = true
             this.straightHairStore = value
           } else {
