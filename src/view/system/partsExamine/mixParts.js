@@ -38,11 +38,7 @@ export const minxParts = {
         {
           'label':'未通过',
           'value':2
-        },
-        {
-          'label':'全部',
-          'value':9999
-        },
+        }
       ],
 
       //新增配件名称层
@@ -224,9 +220,7 @@ export const minxParts = {
         params.endTime = this.dateTime[1] + " 23:59:59"
       }
       //配件审核状态
-      if (this.approvalType!=9999) {
-        //params.approval = this.approvalType
-      }
+      params.auditSign = this.approvalType
 
       params.page = this.page.num - 1
       params.size = this.page.size
