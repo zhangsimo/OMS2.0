@@ -22,6 +22,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
+  //omsSotck:'',//9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310
@@ -33,13 +34,18 @@ const dev = {
 }
 
 const test = {
+  omsTask:'https://tsapi2.g-parts.cn/oms-task-provider',
+  omsEdit:'https://tsapi2.g-parts.cn/oms-edi-provider',
   omsApi:'https://tsapi2.g-parts.cn/oms-lease-provider',
   tokenApi: 'https://tsapi2.g-parts.cn',
   wmsApi: 'https://tsapi2.g-parts.cn/wms-system-provider',
   omsProduct: 'https://tsapi2.g-parts.cn/oms-product-provider',
   omsOrder: 'https://tsapi2.g-parts.cn/oms-order-provider',
   passportApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
-  essentialApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider'
+  essentialApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider',
+  omsBatch: 'https://tsapi2.g-parts.cn/gpart-batch-provider',
+  omsSettle:'https://tsapi2.g-parts.cn/gpart-settlement-provider',
+  omsSotck:'https://tsapi2.g-parts.cn/gpart-sotck-provider',
 }
 
 const audit = {
