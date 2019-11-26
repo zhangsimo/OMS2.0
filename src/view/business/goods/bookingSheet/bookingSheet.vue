@@ -67,7 +67,7 @@
                                 <Row class="mt10">
                                     <Col span="8">
                                         <span style="color: red">业务员：</span>
-                                        <Input v-model="formItem.input" style="width: 150px"></Input>                                        
+                                        <Input v-model="formItem.input" style="width: 150px" disabled></Input>                                        
                                     </Col>
                                     <Col span="6" style="text-align: right">
                                         <span>预定单号：</span>
@@ -107,6 +107,9 @@
                                     <i class="iconfont iconxinzengicon"></i>导入配件
                                 </span>
                             </Button>
+                        </div>
+                        <div class="rbContent">
+                            <Table :columns="columnsBKorder" :data="dataBKorder" border></Table>
                         </div>
                     </div>
                 </div>
@@ -201,7 +204,59 @@ export default {
                 input: '',
                 text: '',
                 number:''
-            }
+            },
+            // 右分割板表格
+            columnsBKorder: [
+                {
+                    type: 'index',
+                    title: '序号',
+                    align: 'center'
+                },
+                {
+                    type: 'selection',
+                    align: 'center'
+                },
+                {
+                    title: '配件编码',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '配件名称',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '品牌',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '单位',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '预定数量',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '备注',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: '受理数量',
+                    key: 'status',
+                    align: 'center'
+                },
+                {
+                    title: 'OE码',
+                    key: 'status',
+                    align: 'center'
+                }
+            ],
         }
     },
     methods:{
