@@ -78,7 +78,7 @@ export function area(params) {
 // http://192.168.30.181:9240/leaseOrder/queryAll?tenantId=0
 export function aaa(params) {
   return axios.request({
-    url: `http://192.168.30.181:9240/leaseOrder/queryAll`,
+    url: `${api.omsApi}/leaseOrder/queryAll`,
     method: 'get',
     contentType: "application/json; charset=utf-8",
     params
