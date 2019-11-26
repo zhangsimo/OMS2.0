@@ -809,7 +809,7 @@ import {
                 let aceeptOptionList = {}
                 aceeptOptionList.id = this.acceptObj.id
                 aceeptOptionList.detailVOList = this.data2
-                console.log(aceeptOptionList , 123)
+                // console.log(aceeptOptionList , 123)
                 // return
                 accept(aceeptOptionList).then(res => {
                   if (res.code === 0) {
@@ -1047,7 +1047,7 @@ import {
                 }, 0);
                 sums[key] = {
                     key,
-                    value: v + '个'
+                    value: v
                 };
             } else {
                 sums[key] = {
@@ -1070,7 +1070,7 @@ import {
                 }, 0);
                 sums[key] = {
                     key,
-                    value: v + '个'
+                    value: v
                 };
             } else {
                 sums[key] = {
