@@ -1,12 +1,8 @@
 <template>
   <div class="goodsInfo">
-    <!-- <Modal v-model="showInfo" title="收货信息" width="1000" > -->
     <div class="header">
       <!-- 查询收货信息上 -->
       <Form ref="formDateTop" :model="formDateTop"  inline>
-        <!-- <FormItem>
-            <Input type="text" placeholder="客户名称"></Input>
-        </FormItem>-->
         <FormItem>
           <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"></Input>
         </FormItem>
@@ -36,7 +32,7 @@
           :data="tableData"
           @current-change="echoDate"
           highlight-current-row
-          :radio-config="{labelField: '', trigger: 'row'}"
+          :radio-config="{trigger: 'row'}"
         >
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
@@ -74,12 +70,15 @@
           <div class="bgc p5 mb15 mt15">发货信息</div>
           <FormItem label="配送方式：">
             <Select v-model="formDateRight.deliveryType" class="w200">
-              <Option v-for="item in dictArr" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              <Option  value="1" >自配</Option>
+              <Option  value="2" >客户自提</Option>
+              <Option  value="3" >快递</Option>
+              <Option  value="4" >物流</Option>
             </Select>
           </FormItem>
           <FormItem label="发货物流：">
             <Select v-model="formDateRight.deliveryLogistics" class="w200">
-              <Option v-for="item in logisArr" :value="item.defaultLogistics" :key="item.id">{{ item.defaultLogistics }}</Option>
+              <Option @on-change="logCom(item.logisticsComp)" v-for="item in logisArr" :value="item.id" :key="item.id">{{ item.defaultLogistics }}</Option>
             </Select>
           </FormItem>
           <FormItem label="运输费用：">
@@ -107,7 +106,7 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,getDic,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,getDic,logistics } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
@@ -116,7 +115,7 @@ export default {
       formDateTop: {
         receiveCompName: "",//收货单位
         receiveMan: "",//收货人
-        address: "",//收货地址
+        streetAddress: "",//详细收货地址
         receiveManTel: ""//联系电话
       },
        //表单数据 右 收货信息与发货信息
@@ -127,7 +126,7 @@ export default {
         receiveAddress: "",//收货单位地址
         receiverMobile: "",//联系电话
         //发货信息
-        address: "",//收货详细地址
+        streetAddress: "",//收货详细地址
         deliveryType: "",//配送方式
         transportCost: "",//运输费用
         remark: "",//备注
@@ -135,6 +134,17 @@ export default {
         deliveryLogistics: "",//发货物流
         settleType: "",//结算方式
         businessNum: "",//业务单号
+
+        //其它要带上的数据
+          //初始化中的数据
+        id: '',//保存带的id
+        logisticsId: '',//初始化数据中的id
+        guestId: '',
+        provinceId: '',
+        cityId: '',
+        countyId: '',
+          //物流中的数据
+        logisticsComp: '',//物流公司名字
       },
       //表格 数据
       tableData: [
@@ -151,32 +161,29 @@ export default {
     };
   },
   components: {},
-  activated() {},
   async created() {
     //初始化数据左边表格
     let res = await getGoodsInfo()
     this.tableData = res.data
-    //获取字典
-    let dic = await getDic()
-    this.dictArr = dic.data
-    // console.log(dic)
-    // console.log(dic)
+    console.log(res)
+
     //获取物流下拉框
     let log = await logistics()
     this.logisArr = log.data
-    // console.log(log)
-
-    //保存信息
-    // let save = await saveGoodsInfo(this.formDateRight)
-    // console.log(save)
+    console.log(log)
   },
   mounted() {
 
   },
   methods: {
+    //加上物流公司的名称
+    logCom(val) {
+      this.formDateRight.logisticsComp = val
+    },
     //查询
-    searchInfo() {
-      queryGoodsInfo(this.formDateTop)
+    async searchInfo() {
+      let res = await queryGoodsInfo(this.formDateTop)
+      console.log(res)
     },
     //保存
     async saveInfo() {
@@ -188,11 +195,38 @@ export default {
       }
     },
     echoDate({row}) {
-      this.formDateRight.receiveComp = row.receiveCompName
-      this.formDateRight.receiver = row.receiveMan
-      this.formDateRight.receiveAddress = row.address
-      this.formDateRight.address = row.address
-      this.formDateRight.receiverMobile = row.receiveManTel
+      if (row.logisticsRecordVO && row.logisticsRecordVO.receiveComp) {
+        this.formDateRight.receiveComp = row.logisticsRecordVO.receiveComp
+      } else {
+        this.formDateRight.receiveComp = row.receiveComp
+      }
+      if (row.logisticsRecordVO && row.logisticsRecordVO.receiver) {
+        this.formDateRight.receiver = row.logisticsRecordVO.receiver
+      } else {
+        this.formDateRight.receiver = row.receiver
+      }
+      if (row.logisticsRecordVO && row.logisticsRecordVO.receiveAddress) {
+        this.formDateRight.receiveAddress = row.logisticsRecordVO.receiveAddress
+      } else {
+        this.formDateRight.receiveAddress = row.receiveAddress
+      }
+      if (row.logisticsRecordVO && row.logisticsRecordVO.receiverMobile) {
+        this.formDateRight.receiverMobile = row.logisticsRecordVO.receiverMobile
+      } else {
+        this.formDateRight.receiverMobile = row.receiverMobile
+      }
+
+      // this.formDateRight.receiver = row.receiveMan
+      // this.formDateRight.receiveAddress = row.address
+      // this.formDateRight.receiverMobile = row.receiveManTel
+      //其它数据
+      this.formDateRight.logisticsId = row.id
+      this.formDateRight.guestId = row.guestId
+      this.formDateRight.provinceId = row.provinceId
+      this.formDateRight.cityId = row.cityId
+      this.formDateRight.countyId = row.countyId
+      this.formDateRight.streetAddress = row.streetAddress
+      this.formDateRight.id = row.logisticsRecordVO.id
     }
   },
   computed: {}
