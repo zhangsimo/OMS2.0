@@ -494,7 +494,7 @@
       //快速查询日期
       getDataQuick(v){
         console.log(v)
-      }
+      },
 
     },
   }

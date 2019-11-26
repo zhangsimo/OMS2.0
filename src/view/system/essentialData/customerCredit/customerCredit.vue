@@ -63,7 +63,7 @@
         <CreditLineApplication :data="creaditList" :sendMsg="applicationArr" :payable="payable" :quality="quality"></CreditLineApplication>
         <div slot='footer'>
           <Button type='primary' @click="Determined">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancel2">取消</Button>
         </div>
       </Modal>
       <!--      申请信用调查-->
@@ -79,7 +79,7 @@
         <SurveyList :data="creaditList" :dataMsg="costList"></SurveyList>
         <div slot='footer'>
           <Button type='primary' @click="confirm">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancel">取消</Button>
         </div>
       </Modal>
 <!--      额度调整-->
@@ -596,6 +596,10 @@
             save(data).then(res => {
 
             })
+          },
+          //确定取消
+          cancel2(){
+            this.CreditLineApplicationShow = false
           }
         },
       mounted(){

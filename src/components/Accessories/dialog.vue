@@ -319,16 +319,14 @@ export default {
       if(this.rowMessage === null){
         this.$Message.warning('请选择要添加的对象')
       }else{
-          let res = this.chooseArr.every(el => el.id !== this.rowMessage.id)
-          if(res){
+           if(this.chooseArr.some( item => item.id == this.rowMessage.id)){
+             return this.$Message.warning('不能重复添加')
+           }
             this.chooseArr.push(this.rowMessage)
-            console.log(this.chooseArr)
             this.$emit('getMsg',this.chooseArr)
             this.$emit('getMsgTwo',this.chooseArr)
             // this.chooseArr = []
-          }else{
-              this.$Message.warning('该对象已加入')
-          }
+
       }
     },
     unique(arr) { // 根据唯一标识orderId来对数组进行过滤
