@@ -34,12 +34,11 @@ const dev = {
 }
 
 const test = {
-
   omsTask:'https://tsapi2.g-parts.cn/oms-task-provider',
   omsEdit:'https://tsapi2.g-parts.cn/oms-edi-provider',
   omsApi:'https://tsapi2.g-parts.cn/oms-lease-provider',
   tokenApi: 'https://tsapi2.g-parts.cn',
-  wmsApi: 'https://tsapi2.g-parts.cn/wms-system-provider',
+  wmsApi: 'https://tsapi2.g-parts.cn/oms-system-provider',
   omsProduct: 'https://tsapi2.g-parts.cn/oms-product-provider',
   omsOrder: 'https://tsapi2.g-parts.cn/oms-order-provider',
   passportApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
