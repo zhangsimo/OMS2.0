@@ -40,7 +40,8 @@
                     total:0,
                     size:10,
                     num:1
-                }
+                },
+                tableData:[]
             }
         },
         methods:{
