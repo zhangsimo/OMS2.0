@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,getDic,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
