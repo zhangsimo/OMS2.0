@@ -1,13 +1,18 @@
 <template>
   <Dropdown @on-click="handleClick" transer placement="right-start">
-    <a class="drop-menu-a" type="text" :style="{textAlign: !hideTitle ? 'left' : ''}"><Icon :size="rootIconSize" :color="textColor" :type="parentItem.icon"/><span class="menu-title" v-if="!hideTitle">{{ showTitle(parentItem) }}</span><Icon v-if="!hideTitle" :size="10" :color="textColor" type="chevron-right" style="float: right;margin-top: 4px;"/></a>
+    <a class="drop-menu-a" :class="{'active':parentItem.name==this.$route.matched[0].name}" type="text" :style="{textAlign: !hideTitle ? 'left' : ''}">
+      <Icon :size="rootIconSize" :type="parentItem.icon"/>
+      <span class="menu-title" v-if="!hideTitle">{{ showTitle(parentItem) }}</span>
+      <Icon v-if="!hideTitle" :size="10" :color="textColor" type="chevron-right" style="float: right;margin-top: 4px;"/></a>
     <DropdownMenu slot="list">
       <template v-for="child in children">
         <collapsed-menu v-if="showChildren(child)" :icon-size="iconSize" :parent-item="child" :key="`drop-${child.name}`"></collapsed-menu>
+
         <template v-else-if="child.children&&child.children.length===1">
           <DropdownItem :key="`drop-${child.children[0].name}`" :name="child.children[0].name"><span class="menu-title">{{ showTitle(child.children[0]) }}</span></DropdownItem>
         </template>
-          <DropdownItem v-else :key="`drop-${child.name}`" :name="child.name"><span class="menu-title">{{ showTitle(child) }}</span></DropdownItem>
+
+          <DropdownItem v-else :key="`drop-${child.name}`" :name="child.name" :class="{'child-item-active':child.name==activeName}"><span class="menu-title">{{ showTitle(child) }}</span></DropdownItem>
 
 
       </template>
@@ -28,6 +33,10 @@ export default {
     rootIconSize: {
       type: Number,
       default: 16
+    },
+    activeName:{
+      type:String,
+      default:''
     }
   },
   methods: {
@@ -38,7 +47,6 @@ export default {
     }
   },
   mounted(){
-    console.log()
   }
 }
 </script>

@@ -1,11 +1,14 @@
 <template>
-  <div class="custom-bread-crumb">
+  <div class="custom-bread-crumb pt10 pb10">
     <Breadcrumb :style="{fontSize: `${fontSize}px`}">
+      <span class="fl red">
+        <Icon type="md-pin"/>
+      </span>
       <template v-for="(item, index) in list">
         <span class="breaditem" :key="item.path">
           <span v-if='item.redirect==="noredirect"||index==list.length-1' class="no-redirect">{{item.meta.title}}</span>
           <router-link v-else :to="item.redirect||item.path">{{item.meta.title}}</router-link>
-          <span class="breadcrumbIcon">/</span>
+          <span class="breadcrumbIcon">&gt;</span>
         </span>
       </template>
     </Breadcrumb>

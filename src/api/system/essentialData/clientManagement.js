@@ -1,0 +1,58 @@
+import api from '_conf/url'
+import axios from '@/libs/api.request'
+
+//获取当前页信息
+export function getClientTreeList (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guestType/guestTypeList`,
+    method: 'get',
+    params
+  })
+}
+
+
+//新增客户分类
+export function getAddClient (data) {
+  return axios.request({
+    url: `${api.wmsApi}/guestType/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}
+
+//右侧list
+export function getCustomerInformation (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/queryGuestList`,
+    method: 'get',
+    params
+  })
+}
+
+
+//获取数字字典内的信息
+export function getDigitalDictionary (data) {
+  return axios.request({
+    url: `${api.omsProduct}/dictionariesItem/findByDictCodeList?`,
+    method: 'post',
+    data
+  })
+}
+
+//新增客户资料
+export function getNewClient (data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/saveGuestInfo?`,
+    method: 'post',
+    data
+  })
+}
+
+//获取点击到客户详细资料
+export function getCustomerDetails (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findById`,
+    method: 'get',
+    params
+  })
+}

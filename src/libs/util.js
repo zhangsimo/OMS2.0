@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie'
 // cookie保存的天数
-import config from '@/config'
+import config from '../config/index'
 import {forEach, hasOneOf} from '@/libs/tools'
 
 export const TOKEN_KEY = 'token'

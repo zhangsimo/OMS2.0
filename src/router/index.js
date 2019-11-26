@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routers'
 import store from '@/store'
-import iView from 'iview'
+import iView, { LoadingBar } from 'view-design'
 import { getToken, canTurnTo } from '@/libs/util'
 
 Vue.use(Router)
@@ -16,17 +16,19 @@ router.beforeEach((to, from, next) => {
 
   // _hmt.push(['_trackPageview', pageURL]) 必须是以"/"（斜杠）开头的相对路径
   if (to.path) {
+     // @ts-ignore
     window._hmt && window._hmt.push(['_trackPageview', to.fullPath])
   }
 
-  iView.LoadingBar.start()
+  LoadingBar.start()
   const token = getToken()
   if (!token && to.name !== LOGIN_PAGE_NAME) {
     // 未登录且要跳转的页面不是登录页
     next({
       name: LOGIN_PAGE_NAME // 跳转到登录页
     })
-  } else if (!token && to.name === LOGIN_PAGE_NAME) {
+  } 
+  else if (!token && to.name === LOGIN_PAGE_NAME) {
     // 未登陆且要跳转的页面是登录页
     next() // 跳转
   } else if (token && to.name === LOGIN_PAGE_NAME) {
@@ -47,7 +49,7 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-  iView.LoadingBar.finish()
+  LoadingBar.finish()
   window.scrollTo(0, 0)
 })
 

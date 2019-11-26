@@ -13,7 +13,11 @@ export default {
     avatorImgPath: '',
     token: getToken(),
     access: '',
-    userData: ''
+    userData: '', //账号信息
+    treePid:'',
+    storeId:'',
+    supplierId:'',
+    managementId:'',
   },
   mutations: {
     setAvator(state, avatorPath) {
@@ -34,6 +38,18 @@ export default {
     setToken(state, token) {
       state.token = token
       setToken(token)
+    },
+    setTreePid(state, data) {
+      state.treePid = data
+    },
+    setStoreId(state, data) {
+      state.storeId = data
+    },
+    setsupplierId(state ,data) {
+      state.supplierId = data
+    },
+    setManagementId(state , data) {
+      state.managementId = data
     }
   },
   actions: {
@@ -97,7 +113,8 @@ export default {
 
           commit('setUserId', data.id)
           commit('setUserData', data)
-
+          console.log(data.tenantId);
+          localStorage.tenantId = data.tenantId
           resolve(data)
         }).catch(err => {
           reject(err)
