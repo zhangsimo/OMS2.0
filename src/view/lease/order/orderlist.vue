@@ -34,7 +34,7 @@
             <Button type="warning" @click="search" class="mr10 w90"><Icon type="ios-search" size="14" /> 查询</Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="getDay30"><Icon type="md-time" size="14" /> 即将到期(30天内)</Button>
+            <Button class="mr10" @click="get30Day"><Icon type="md-time" size="14" /> 即将到期(30天内)</Button>
             <Button class="mr10 w90" @click="noPay"><Icon type="md-card" size="14"/> 未付款</Button>
             <Button class="mr10" v-if="selectTableDataStatus==0" @click="closeNoPayOrder"><Icon type="md-close" size="14" /> 关闭未付款订单</Button>
           </div>
@@ -50,7 +50,7 @@
 </template>
 <script>
   // import './lease.less'
-  import {getLeaseOrderlist} from '../../../api/lease/leaseApi'
+  import {getLeaseOrderlist,getExpire30list,closeNoPayOrder} from '../../../api/lease/leaseApi'
 
   export default {
     name: 'orderlist',
@@ -113,7 +113,7 @@
             title: '订单单号',
             align:'center',
             key: 'orderNum',
-            minWidth: 120
+            minWidth: 200
           },
           {
             title: '订单时间',
@@ -133,9 +133,8 @@
             key: 'colour',
             minWidth: 100,
             render:(h,params) => {
-              let objType = params.row.type||""
-              objType = JSON.parse(objType)
-              return h('span',objType.name)
+              let objType = params.row.type||0
+              return h('span',objType===1?'接口调用':'功能模块')
             }
           },
           {
@@ -179,9 +178,14 @@
             key: 'createTime',
             minWidth: 170,
             render:(h,params) => {
-              let objType = params.row.paymentType||""
-              objType = JSON.parse(objType)
-              return h('span',objType.name)
+              let objType = params.row.paymentType||0
+              let text = "支付宝"
+              if(objType==1){
+                text = "微信"
+              }else if(objType==2){
+                text = "现金"
+              }
+              return h('span',text)
             }
           },
           {
@@ -190,19 +194,12 @@
             key: 'status',
             minWidth: 170,
             render:(h,params) => {
-              let objType = params.row.status||""
-              objType = JSON.parse(objType)
-              return h('span',objType.name)
+              let objType = params.row.status||0
+              return h('span',objType==1?'失败':'成功')
             }
           }
         ],
-        tbdata: [
-          {id:1,fullName:'审批通过',status:1},
-          {id:2,fullName:'审批未通过',status:2},
-          {id:3},
-          {id:3},
-          {id:3},
-        ]
+        tbdata: []
       }
     },
     mounted() {
@@ -212,16 +209,6 @@
     methods: {
       initStart() {
         this.getList()
-      },
-      submit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-
-            this.$Message.success('Success!');
-          } else {
-            this.$Message.error('Fail!');
-          }
-        })
       },
       //初始化
       getList() {
@@ -254,8 +241,20 @@
         getLeaseOrderlist(params).then(res => {
           this.loading = false
           if (res.code == 0) {
-            this.tbdata = res.data || []
-            this.page.total = res.totalElements
+            this.tbdata = res.data.content || []
+            this.page.total = res.data.totalElements
+          }
+        })
+      },
+
+      //获取30天到期订单
+      get30Day(){
+        this.loading = true
+        getExpire30list({}).then(res=>{
+          this.loading = false
+          if (res.code == 0) {
+            this.tbdata = res.data.content || []
+            this.page.total = res.data.totalElements
           }
         })
       },
@@ -282,7 +281,12 @@
       //关闭未付款订单按钮
       closeNoPayOrder(){
         if(this.selectTableData){
-          console.log(this.selectTableData)
+          closeNoPayOrder({id:this.selectTableData.id}).then(res => {
+            if (res.code == 0) {
+              this.$message.success('修改成功');
+              this.search();
+            }
+          })
         }else{
           this.$Message.error("请至少选中一条记录")
         }
@@ -297,18 +301,6 @@
         this.isPayment = 0
         this.search()
       },
-      //获取30天内的订单
-    },
-    computed: {
-      placeh() {
-        let returnText = ""
-        this.searchTypeArr.filter((item) => {
-          if (item.value == this.searchType) {
-            returnText = "请填写" + item.name
-          }
-        })
-        return returnText
-      }
     },
   }
 </script>

@@ -1,3 +1,5 @@
+import {getPurchaseInit} from "_api/purchasing/purchasePlan";
+
 export const mixGoodsData = {
   data(){
     return {
@@ -5,11 +7,11 @@ export const mixGoodsData = {
       formPlan: {
         supplyName: '',//供应商
         planDate: '',//计划日期
-        planner: '',//计划人
+        planner: this.$store.state.user.userData.staffName||'',//计划人
         remark: '',//备注
         billType: '',//票据类型
         hairShop: '',//直发门店
-        planOrderNum: '',//计划单号
+        planOrderNum: '新计划采购',//计划单号
         otherPrice: 0,//其他费用
         totalPrice:0,//合计总金额
       },
@@ -31,6 +33,11 @@ export const mixGoodsData = {
       //待删除数据
       delArr:[]
     }
+  },
+  mounted(){
+    getPurchaseInit({}).then(res => {
+
+    })
   },
   methods:{
     //采购计划列表选中数据
@@ -83,6 +90,16 @@ export const mixGoodsData = {
     getPartNameList(v){
       console.log(v)
       this.tableData = this.tableData.concat(v)
+    },
+    //获取供应商
+    getSupplierName(v){
+      this.formPlan.supplyName = v.fullName||""
+      console.log(v)
+    },
+    //选择日期
+    setDataFun(v){
+      this.formValidate.planDate = v
+      console.log(this.formValidate.planDate)
     }
-  }
+  },
 }

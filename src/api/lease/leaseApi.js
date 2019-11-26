@@ -2,18 +2,18 @@ import axios from '@/libs/api.request'
 import api from '_conf/url'
 
 // 查询租赁产品列表
-export function getLeaseProlist (params) {
+export function getLeaseProlist (data) {
   return axios.request({
-    url: `${api.omsApi}/leaseProduct/queryAll`,
-    method: 'get',
-    params
+    url: `${api.omsApi}/tenantProduct/findPageByDynamicQuery`,
+    method: 'post',
+    data
   })
 }
 
 // 新增修改产品
 export function saveProduct (data) {
   return axios.request({
-    url: `${api.omsApi}/leaseProduct/save`,
+    url: `${api.omsApi}/tenantProduct/saveOrUpdate`,
     method: 'post',
     data
   })
@@ -39,11 +39,29 @@ export function deleteAndChange (data) {
 
 
 //查询租赁订单列表
-export function getLeaseOrderlist (params) {
+export function getLeaseOrderlist (data) {
   return axios.request({
-    url: `${api.omsApi}/leaseOrder/findAll`,
+    url: `${api.omsApi}/tenantOrder/findPageByDynamicQuery`,
     method: 'post',
-    params
+    data
+  })
+}
+
+//查询30天内到期订单
+export function getExpire30list (data) {
+  return axios.request({
+    url: `${api.omsApi}/tenantOrder/findPageByExpiring`,
+    method: 'post',
+    data
+  })
+}
+
+//关闭未付款订单
+export function closeNoPayOrder (data) {
+  return axios.request({
+    url: `${api.omsApi}/tenantOrder/close`,
+    method: 'post',
+    data
   })
 }
 
