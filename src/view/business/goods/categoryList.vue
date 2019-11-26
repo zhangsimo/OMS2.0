@@ -99,13 +99,13 @@
                   :model="formPlan"
                   :label-width="100"
                 >
-                  <FormItem label="供应商：" prop="supplyName">
+                  <FormItem label="供应商：">
                     <Row class="w160">
                       <Col span="19">
                         <Input placeholder="请选择供应商"></Input>
                       </Col>
                       <Col span="5">
-                        <Button  class="ml5" size="small" type="default">
+                        <Button @click="showSupp" class="ml5" size="small" type="default">
                           <i class="iconfont iconxuanzetichengchengyuanicon"></i>
                         </Button>
                       </Col>
@@ -149,7 +149,7 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" >
+                      <Button size="small" class="mr10" @click="showParts">
                         <Icon type="md-add" />添加配件
                       </Button>
                     </div>
@@ -186,7 +186,7 @@
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                   <vxe-table-column field="name" title="操作" width="100">
                     <template v-slot="{ row }">
-                      <a href="javascript:;" @click="showDetail">查看</a>
+                      <a :style="{color: '#606266'}" href="javascript:;" @click="showDetail">查看</a>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="role" title="配件编码" width="100"></vxe-table-column>
@@ -259,13 +259,13 @@
         :label-width="80"
         class="ml10 pl25"
       >
-        <FormItem prop="user" label="供 应 商: ">
+        <FormItem  label="供 应 商: ">
           <Input type="text" placeholder="请选择供应商..." class="w300 ml5"></Input>
         </FormItem>
-        <FormItem prop="password" label="订单单号: ">
+        <FormItem  label="订单单号: ">
           <Input type="text" class="w300 ml5" size="large"></Input>
         </FormItem>
-        <FormItem prop="password" label="配件编码: ">
+        <FormItem  label="配件编码: ">
           <Input type="text" class="w300 ml5" size="large"></Input>
         </FormItem>
         <FormItem label="品牌: ">
@@ -290,7 +290,7 @@
         :label-width="100"
         class="ml10 pl25"
       >
-        <FormItem prop="user" label="合计采购金额: ">
+        <FormItem  label="合计采购金额: ">
           <Input type="text" class="w300 ml5"></Input>
         </FormItem>
         <FormItem label="折扣金额: ">
@@ -314,7 +314,7 @@
       <div slot="footer"></div>
     </Modal>
     <!-- 费用登记 对话框 -->
-    <Modal v-model="isCost" title="费用登记" width="1100">
+    <Modal v-model="isCost" title="费用登记" width="1000">
       <div class="costBox clearfix con-split">
         <div class="fl">
           <div class="leftT">
@@ -366,8 +366,8 @@
                   <a href="javascript:;">删除</a>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="name" title="往来单位" width="80"></vxe-table-column>
-              <vxe-table-column field="role" title="收支项目" width="80" :edit-render="{name: 'input'}">
+              <vxe-table-column field="name" title="往来单位" width="60"></vxe-table-column>
+              <vxe-table-column field="role" title="收支项目" width="60" :edit-render="{name: 'input'}">
                 <template v-slot:edit="{ row }">
                   <Select  size="small" style="width:100px">
                     <Option
@@ -378,9 +378,9 @@
                   </Select>
                 </template>
               </vxe-table-column>
-              <vxe-table-column field="sex" title="应付金额" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="num6" title="备注" width="80" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="num6" title="创建人" width="80"></vxe-table-column>
+              <vxe-table-column field="sex" title="应付金额" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="备注" width="60" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="num6" title="创建人" width="60"></vxe-table-column>
               <vxe-table-column field="num6" title="创建日期" width="80"></vxe-table-column>
             </vxe-table>
           </div>
@@ -455,18 +455,26 @@
         </vxe-table>
         </TabPane>
     </Tabs>
+    <div slot="footer"></div>
     </Modal>
+    <!-- 添加配件对话框 -->
+    <select-part-com ref="Parts" :is-show-add-part-btn="true"></select-part-com>
+    <!-- 选择供应商 -->
+    <suppliyer ref="suppli"></suppliyer>
   </div>
 </template>
 <script>
 import "../../lease/product/lease.less";
 import QuickDate from "_c/getDate/dateget";
 import goodsInfo from "../../../components/goodsInfo/goodsInfo";
+import SelectPartCom from "../../goods/goodsList/components/selectPartCom";
+import suppliyer from "@/components/goodsInfo/suppliyer"
 export default {
   name: "categoryList",
-  components: { QuickDate, goodsInfo },
+  components: { QuickDate,goodsInfo,SelectPartCom,suppliyer },
   data() {
     return {
+
       //展示查看明细对话框
       detail: false,
       //Cost 对话框
@@ -639,6 +647,14 @@ export default {
     });
   },
   methods: {
+    //显示选择供应商对话框 并初始化
+    async showSupp() {
+      this.$refs.suppli.init()
+    },
+    //添加配件
+    showParts() {
+      this.$refs.Parts.init()
+    },
     //展示费用登记
     showCost() {
       this.isCost = true;

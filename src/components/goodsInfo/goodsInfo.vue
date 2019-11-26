@@ -22,7 +22,7 @@
     </div>
     <div class="main clearfix">
       <!-- 表格 收货信息 左 -->
-      <div class="fl w300 mr10">
+      <div class="fl mr10" :style="{width: '320px'}">
         <div class="bgc p5">收货信息</div>
         <vxe-table
           border
@@ -211,9 +211,9 @@ export default {
         this.formDateRight.receiverMobile = row.logisticsRecordVO.receiverMobile
       } else {
         this.formDateRight.receiveComp = row.receiveCompName
-        this.formDateRight.receiver = row.receiver
-        this.formDateRight.receiveAddress = row.receiveAddress
-        this.formDateRight.receiverMobile = row.receiverMobile
+        this.formDateRight.receiver = row.receiveMan
+        this.formDateRight.receiveAddress = row.streetAddress
+        this.formDateRight.receiverMobile = row.receiveManTel
       }
       //其它数据
       this.formDateRight.logisticsId = row.id
