@@ -1,13 +1,13 @@
 <template>
     <main class="bigBox">
-      <Tabs type="card">
-        <TabPane  label="销售订单">
+      <Tabs type="card" name="orderbox">
+        <TabPane  label="销售订单" tab="orderbox">
         <div class="marketBox">
           <Order></Order>
         </div>
         </TabPane>
-        <TabPane  label="配件信息"><div></div></TabPane>
-        <TabPane  label="报价列表"><div></div></TabPane>
+        <TabPane  label="配件信息" tab="orderbox"><div></div></TabPane>
+        <TabPane  label="报价列表" tab="orderbox"><div></div></TabPane>
       </Tabs>
     </main>
 </template>

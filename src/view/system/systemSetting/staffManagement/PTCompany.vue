@@ -83,13 +83,7 @@
                 if (res.code == 0){
                     this.companyList = res.data.content
                     this.page.total = res.data.totalElements
-                    // this.selectedArr.forEach( item => {
-                    //     this.allCompanyList.forEach( el => {
-                    //         if (item.orgid == el.orgid){
-                    //             item._checked = true
-                    //         }
-                    //     })
-                    // })
+
                 }
               })
           },
@@ -122,12 +116,12 @@
                 this.selectedArr = []
             },
             addCompany(){
-              if(this.allCompanyList.length < 1){
+              if(this.selectedArr.length < 1){
                   this.$Message.error('至少选择一个公司')
                   return false
               }
               let companyList = ''
-                this.allCompanyList.forEach( item => {
+                this.selectedArr.forEach( item => {
                     companyList += item.orgid + ','
                 })
                 companyList = companyList.substring(0 ,companyList.length -1 )

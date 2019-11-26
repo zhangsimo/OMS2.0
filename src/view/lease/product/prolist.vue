@@ -467,7 +467,7 @@
           this.selectTable = {}
           this.loading = false
           if (res.code == 0) {
-            this.tbdata = res.data || []
+            this.tbdata = res.data.content || []
             this.page.total = res.totalElements
           }
 
