@@ -34,6 +34,7 @@ const dev = {
 }
 
 const test = {
+
   omsTask:'https://tsapi2.g-parts.cn/oms-task-provider',
   omsEdit:'https://tsapi2.g-parts.cn/oms-edi-provider',
   omsApi:'https://tsapi2.g-parts.cn/oms-lease-provider',
@@ -43,6 +44,7 @@ const test = {
   omsOrder: 'https://tsapi2.g-parts.cn/oms-order-provider',
   passportApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
   essentialApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider',
+  authApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
   omsBatch: 'https://tsapi2.g-parts.cn/gpart-batch-provider',
   omsSettle:'https://tsapi2.g-parts.cn/gpart-settlement-provider',
   omsSotck:'https://tsapi2.g-parts.cn/gpart-sotck-provider',
