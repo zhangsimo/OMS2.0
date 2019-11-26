@@ -3,9 +3,11 @@ import { Vue, Component } from "vue-property-decorator";
 // import * as api from "_api/system/partManager";
 
 import QuickDate from '_c/getDate/dateget';
+import SelectSupplier from "./components/selectSupplier.vue";
 @Component({
     components: {
-        QuickDate
+        QuickDate,
+        SelectSupplier
     }
 })
 export default class PlannedPurchaseOrder extends Vue {
@@ -154,6 +156,9 @@ export default class PlannedPurchaseOrder extends Vue {
         orderDate: [{required: true, message: "请选择订货日期", trigger: "change"}],
     }
 
+    // 采购订单表格数据
+    private tableData:Array<any> = [{id:1,num:0,price:0},{id:2,num:0,price:0},];
+
     // 采购订单列表-翻页
     private purchaseOrderTableChangePage(p:number) {
         this.purchaseOrderTable.page.num = p;
@@ -195,6 +200,59 @@ export default class PlannedPurchaseOrder extends Vue {
     private selectTabelData(v:any) {
         this.selectTableRow = v
     }
+
+    private editActivedEvent ({ row, column }, event) {
+      //console.log(`打开 ${column.title} 列编辑`)
+    }
+
+    private editClosedEvent ({ row, column }, event) {
+      //console.log(row,event,column)
+      //console.log(`关闭 ${column} 列编辑`)
+    }
+
+    // 底部合计
+    private addFooter({ columns, data }){
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['num', 'price'].includes(column.property) || columnIndex === 8) {
+            return this.sum(data,column.property, columnIndex)
+          }
+          return null
+        })
+      ]
+    }
+    // 合计
+    private sum(data,type,columnIndex){
+      let total = 0
+      data.map(item => {
+        let value = item[type]
+        if(!value){
+          value = 0
+        }
+        total+=parseFloat(value)
+      })
+      if(type=='price'){
+        return total.toFixed(2);
+      }
+      if(columnIndex === 8) {
+        let totals = 0;
+        let sumarr = data.map(el => {
+          return el.num * el.price;
+        })
+        totals = sumarr.reduce((total, el) => total += el, 0);
+        return totals.toFixed(2);
+      }
+      return total
+    }
+
+    // 选择供应商
+    private addSuppler(){
+      let selectSupplier:any = this.$refs.selectSupplier;
+      selectSupplier.init();
+    };
 
     private mounted() {
         this.$nextTick(()=>{

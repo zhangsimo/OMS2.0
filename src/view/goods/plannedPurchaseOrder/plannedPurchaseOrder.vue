@@ -101,16 +101,14 @@
                   ref="formPlan"
                   :model="formPlan"
                   :rules="rulePlan"
-                  :label-width="100"
+                  :label-width="120"
                 >
                   <FormItem label="供应商：" prop="supplier">
                     <Row class="w160">
                       <Col span="19"
-                        ><Input
-                          v-model="formPlan.supplier"
-                          placeholder="请选择供应商"
-                        />
-                      ></Col>
+                        ><Input v-model="formPlan.supplier"
+                        placeholder="请选择供应商" /></Col
+                      >
                       <Col span="5"
                         ><Button
                           @click="addSuppler"
@@ -124,39 +122,69 @@
                     </Row>
                   </FormItem>
                   <FormItem label="采购员：" prop="purchaser">
-                    <Input class="w160" v-model="formPlan.purchaser"/>
+                    <Input class="w160" placeholder="请输入采购员" v-model="formPlan.purchaser" />
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
                     <Select class="w160" v-model="formPlan.billType">
-                      <Option v-for="item in pjTypes" :key="item.value" :value="item.value">{{item.label}}</Option>
+                      <Option
+                        v-for="item in pjTypes"
+                        :key="item.value"
+                        :value="item.value"
+                        >{{ item.label }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="结算方式：" prop="settlement">
                     <Select class="w160" v-model="formPlan.settlement">
-                      <Option v-for="item in settleMethods" :key="item.value" :value="item.value">{{item.label}}</Option>
+                      <Option
+                        v-for="item in settleMethods"
+                        :key="item.value"
+                        :value="item.value"
+                        >{{ item.label }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="入库仓：" prop="warehouse">
                     <Select class="w160" v-model="formPlan.warehouse">
-                      <Option v-for="item in inStores" :key="item.value" :value="item.value">{{item.label}}</Option>
+                      <Option
+                        v-for="item in inStores"
+                        :key="item.value"
+                        :value="item.value"
+                        >{{ item.label }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
-                    <DatePicker type="date" placeholder="请选择订货日期" v-model="formPlan.orderDate"></DatePicker>
+                    <DatePicker
+                      style="width: 160px"
+                      type="date"
+                      placeholder="请选择订货日期"
+                      v-model="formPlan.orderDate"
+                    ></DatePicker>
                   </FormItem>
                   <FormItem label="预计到货日期：">
-                    <DatePicker type="date" placeholder="请选择预计到货日期" v-model="formPlan.estimatedArrivalDate"></DatePicker>
+                    <DatePicker
+                      style="width: 160px"
+                      type="date"
+                      placeholder="请选择预计到货日期"
+                      v-model="formPlan.estimatedArrivalDate"
+                    ></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input class="w160" v-model="formPlan.mark"/>
+                    <Input placeholder="请输入备注" class="w160" v-model="formPlan.mark" />
                   </FormItem>
                   <FormItem label="直发门店：">
                     <Select class="w160" v-model="formPlan.sendStore">
-                      <Option v-for="item in putStores" :key="item.value" :value="item.value">{{item.label}}</Option>
+                      <Option
+                        v-for="item in putStores"
+                        :key="item.value"
+                        :value="item.value"
+                        >{{ item.label }}</Option
+                      >
                     </Select>
                   </FormItem>
                   <FormItem label="订单号：">
-                    <Input class="w160" v-model="formPlan.orderId"/>
+                    <Input placeholder="请输入订单号" class="w160" v-model="formPlan.orderId" />
                   </FormItem>
                 </Form>
               </div>
@@ -209,6 +237,11 @@
                   title="序号"
                 ></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column title="操作" width="80">
+                  <template v-slot="{ row }">
+                    <Button type="text" >查看</Button>
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="name"
                   title="配件编码"
@@ -225,33 +258,8 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="num6"
-                  title="连锁库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="num6"
-                  title="总部库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="num6"
-                  title="门店库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="num6"
-                  title="采购在途库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="num6"
-                  title="滞销库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
                   field="num"
-                  title="计划采购数量"
+                  title="采购数量"
                   :edit-render="{ name: 'input' }"
                   width="120"
                 >
@@ -265,7 +273,7 @@
                 </vxe-table-column>
                 <vxe-table-column
                   field="price"
-                  title="计划采购单价"
+                  title="采购单价"
                   :edit-render="{ name: 'input' }"
                   width="120"
                 >
@@ -280,7 +288,7 @@
                     {{ row.price | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column title="计划采购金额" width="120">
+                <vxe-table-column title="采购金额" filed="totalprice" width="120">
                   <template v-slot="{ row }">
                     {{ (row.price * row.num) | priceFilters }}
                   </template>
@@ -299,26 +307,6 @@
                 <vxe-table-column
                   field="date12"
                   title="不含税金额"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="date12"
-                  title="最近采购单价"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="date12"
-                  title="单价差"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="date12"
-                  title="库存上限"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="date12"
-                  title="库存下限"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
@@ -348,7 +336,12 @@
                 ></vxe-table-column>
                 <vxe-table-column
                   field="date12"
-                  title="计划取消数量"
+                  title="订单取消数量"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="date12"
+                  title="验收数量"
                   width="100"
                 ></vxe-table-column>
               </vxe-table>
@@ -357,11 +350,13 @@
         </div>
       </div>
     </section>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
   </div>
 </template>
 
 <script src="./index.ts"></script>
 
 <style lang="less" scoped>
+@import url('../../lease/product/lease.less');
 @import url("./index");
 </style>

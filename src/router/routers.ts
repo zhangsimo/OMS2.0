@@ -43,7 +43,7 @@ export default [
     ]
   },
   {
-    path: "",
+    path: "/goods",
     name: "goods",
     // mark: '1',
     redirect: "/multilevel/level_2_1",
