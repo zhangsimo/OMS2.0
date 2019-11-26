@@ -2,18 +2,18 @@
   <div class="goodsInfo">
     <div class="header">
       <!-- 查询收货信息上 -->
-      <Form ref="formDateTop" :model="formDateTop"  inline>
+      <Form ref="formDateTop" :model="formDateRight"  inline>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"></Input>
+          <Input type="text" v-model="formDateRight.receiveCompName" placeholder="收货单位"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.address" placeholder="收货地址"></Input>
+          <Input type="text" v-model="formDateRight.streetAddress" placeholder="收货地址"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人"></Input>
+          <Input type="text" v-model="formDateRight.receiveMan" placeholder="收货人"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
+          <Input type="text" v-model="formDateRight.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
         <Button type="primary mr15" @click="searchInfo">查询</Button>
         <Button type="primary mr15" @click="saveInfo">保存</Button>
@@ -112,14 +112,18 @@ export default {
   data() {
     return {
       //表单数据 上
-      formDateTop: {
-        receiveCompName: "",//收货单位
-        receiveMan: "",//收货人
-        streetAddress: "",//详细收货地址
-        receiveManTel: ""//联系电话
-      },
+      // formDateTop: {
+      //   receiveCompName: "",//收货单位
+      //   receiveMan: "",//收货人
+      //   streetAddress: "",//详细收货地址
+      //   receiveManTel: ""//联系电话
+      // },
        //表单数据 右 收货信息与发货信息
       formDateRight: {
+        //表单数据 上 查询
+        receiveCompName: "",//收货单位
+        receiveMan: "",//收货人
+        receiveManTel: "",//联系电话
         //收货信息
         receiveComp: "",//收货单位名称
         receiver: "",//收货人
@@ -195,30 +199,18 @@ export default {
       }
     },
     echoDate({row}) {
-      if (row.logisticsRecordVO && row.logisticsRecordVO.receiveComp) {
+      if (row.logisticsRecordVO) {
         this.formDateRight.receiveComp = row.logisticsRecordVO.receiveComp
-      } else {
-        this.formDateRight.receiveComp = row.receiveComp
-      }
-      if (row.logisticsRecordVO && row.logisticsRecordVO.receiver) {
         this.formDateRight.receiver = row.logisticsRecordVO.receiver
-      } else {
-        this.formDateRight.receiver = row.receiver
-      }
-      if (row.logisticsRecordVO && row.logisticsRecordVO.receiveAddress) {
         this.formDateRight.receiveAddress = row.logisticsRecordVO.receiveAddress
-      } else {
-        this.formDateRight.receiveAddress = row.receiveAddress
-      }
-      if (row.logisticsRecordVO && row.logisticsRecordVO.receiverMobile) {
         this.formDateRight.receiverMobile = row.logisticsRecordVO.receiverMobile
+        this.formDateRight.id = row.logisticsRecordVO.id
       } else {
+        this.formDateRight.receiveComp = row.receiveCompName
+        this.formDateRight.receiver = row.receiver
+        this.formDateRight.receiveAddress = row.receiveAddress
         this.formDateRight.receiverMobile = row.receiverMobile
       }
-
-      // this.formDateRight.receiver = row.receiveMan
-      // this.formDateRight.receiveAddress = row.address
-      // this.formDateRight.receiverMobile = row.receiveManTel
       //其它数据
       this.formDateRight.logisticsId = row.id
       this.formDateRight.guestId = row.guestId
@@ -226,8 +218,8 @@ export default {
       this.formDateRight.cityId = row.cityId
       this.formDateRight.countyId = row.countyId
       this.formDateRight.streetAddress = row.streetAddress
-      this.formDateRight.id = row.logisticsRecordVO.id
-    }
+    },
+    //保存
   },
   computed: {}
 };
