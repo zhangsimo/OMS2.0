@@ -12,7 +12,7 @@ export function getGoodsInfo (data={}) {
 //查询按钮
 export function queryGoodsInfo (data={}) {
   return axios.request({
-      url: `${api.omsApi}/logisticsRecord/findByGuestLog`,
+      url: `http://192.168.30.234:9210/logisticsRecord/findByGuestLog`,
       method: 'post',
       data
   })
@@ -20,7 +20,7 @@ export function queryGoodsInfo (data={}) {
 //保存按钮
   export function saveGoodsInfo (data={}) {
     return axios.request({
-        url: `${api.omsApi}/logisticsRecord/save`,
+        url: `http://192.168.30.234:9210/logisticsRecord/save`,
         method: 'post',
         data
     })
