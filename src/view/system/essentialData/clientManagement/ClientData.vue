@@ -16,8 +16,8 @@
    </div>
 <!--   切换栏-->
    <div class="tabList">
-     <Tabs type="card">
-       <TabPane label="基本信息">
+     <Tabs type="card" name="clientBox">
+       <TabPane label="基本信息" tab="clientBox">
          <div style="display: flex">
            <div style="flex-flow: row nowrap;width: 100%" >
              <FormItem label='客户属性:'  prop="guestProperty">
@@ -117,7 +117,7 @@
            需求打包发货
         </span>
        </TabPane>
-       <TabPane label="其他信息">
+       <TabPane label="其他信息" tab="clientBox">
          <div>
            <p style="margin-bottom: 10px">财务信息</p>
              <div>
@@ -170,7 +170,7 @@
            </div>
          </div>
        </TabPane>
-       <TabPane label="收货地址">
+       <TabPane label="收货地址" tab="clientBox">
          <div>
           <div class="place">
             <a class="mr10" @click="addPlace"><Icon custom="iconfont iconxinzengicon icons"/> 新增 </a>
@@ -187,7 +187,7 @@
            </div>
          </Modal>
        </TabPane>
-       <TabPane label="关联客户">
+       <TabPane label="关联客户" tab="clientBox">
          <div>
            <div class="place">
              <span> 客户名称:</span>
@@ -234,7 +234,7 @@
            </div>
          </div>
        </TabPane>
-       <TabPane label="开票信息">
+       <TabPane label="开票信息" tab="clientBox">
          <div>
            <div class="place">
              <a class="mr10" @click="addInoice"><Icon custom="iconfont iconxinzengicon icons"/> 新增 </a>
