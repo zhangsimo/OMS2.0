@@ -2,18 +2,18 @@
   <div class="goodsInfo">
     <div class="header">
       <!-- 查询收货信息上 -->
-      <Form ref="formDateTop" :model="formDateRight"  inline>
+      <Form ref="formOne" :model="formDateTop"  inline>
         <FormItem>
-          <Input type="text" v-model="formDateRight.receiveCompName" placeholder="收货单位"></Input>
+          <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateRight.streetAddress" placeholder="收货地址"></Input>
+          <Input type="text" v-model="formDateTop.streetAddress" placeholder="收货地址"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateRight.receiveMan" placeholder="收货人"></Input>
+          <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人"></Input>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateRight.receiveManTel" placeholder="联系电话"></Input>
+          <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
         <Button type="primary mr15" @click="searchInfo">查询</Button>
         <Button type="primary mr15" @click="saveInfo">保存</Button>
@@ -22,7 +22,7 @@
     </div>
     <div class="main clearfix">
       <!-- 表格 收货信息 左 -->
-      <div class="fl  w300">
+      <div class="fl w300 mr10">
         <div class="bgc p5">收货信息</div>
         <vxe-table
           border
@@ -106,18 +106,18 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,getDic,logistics } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,getDic,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
     return {
-      //表单数据 上
-      // formDateTop: {
-      //   receiveCompName: "",//收货单位
-      //   receiveMan: "",//收货人
-      //   streetAddress: "",//详细收货地址
-      //   receiveManTel: ""//联系电话
-      // },
+      //表单数据查询 上
+      formDateTop: {
+        receiveCompName: null,//收货单位
+        receiveMan: null,//收货人
+        streetAddress: null,//详细收货地址
+        receiveManTel: null//联系电话
+      },
        //表单数据 右 收货信息与发货信息
       formDateRight: {
         //表单数据 上 查询
@@ -186,11 +186,16 @@ export default {
     },
     //查询
     async searchInfo() {
+        this.formDateTop.receiveCompName= null,//收货单位
+        this.formDateTop.receiveMan= null,//收货人
+        this.formDateTop.streetAddress= null,//详细收货地址
+        this.formDateTop.receiveManTel= null//联系电话
       let res = await queryGoodsInfo(this.formDateTop)
       console.log(res)
     },
     //保存
     async saveInfo() {
+      this.saveId(this.tableData)
       let res = await saveGoodsInfo(this.formDateRight)
       if (res.code == 0) {
         this.$Message.success(res.data)
@@ -204,7 +209,6 @@ export default {
         this.formDateRight.receiver = row.logisticsRecordVO.receiver
         this.formDateRight.receiveAddress = row.logisticsRecordVO.receiveAddress
         this.formDateRight.receiverMobile = row.logisticsRecordVO.receiverMobile
-        this.formDateRight.id = row.logisticsRecordVO.id
       } else {
         this.formDateRight.receiveComp = row.receiveCompName
         this.formDateRight.receiver = row.receiver
@@ -219,7 +223,14 @@ export default {
       this.formDateRight.countyId = row.countyId
       this.formDateRight.streetAddress = row.streetAddress
     },
-    //保存
+    //传入保存id
+    saveId(row) {
+      row.forEach(item => {
+        if(item.logisticsRecordVO) {
+          this.formDateRight.id = item.logisticsRecordVO.id
+        }
+      })
+    }
   },
   computed: {}
 };
