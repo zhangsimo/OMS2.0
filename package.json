@@ -50,8 +50,9 @@
     "vuex": "^3.0.1",
     "vuex-class": "^0.3.2",
     "vxe-table": "^2.6.16",
+    "vxe-utils": "^1.7.2",
     "wangeditor": "^3.1.1",
-    "xe-utils": "^2.2.11"
+    "xe-utils": "^2.2.14"
   },
   "devDependencies": {
     "@types/chai": "^4.2.4",

@@ -16,7 +16,9 @@ import '@/mock'
 import 'babel-polyfill'
 import Message from './components/message'
 import './assets/iconfonts/iconfont.css'
-import 'xe-utils'
+import XEUtils from 'xe-utils'
+
+import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
@@ -32,6 +34,8 @@ Vue.use(ElementUI)
 Vue.use(VXETable)
 Vue.use(iView)
 Vue.config.productionTip = false
+Vue.use(VXEUtils, XEUtils)
+
 
 /**
  * @description 全局注册应用配置
