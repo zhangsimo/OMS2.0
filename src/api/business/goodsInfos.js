@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 收货信息初始化 192.168.30.21.9210
 export function getGoodsInfo (data={}) {
     return axios.request({
-        url: `${api.omsApi}/logisticsRecord/findByGuestLog`,
+        url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
         method: 'post',
         data
     })
@@ -12,7 +12,7 @@ export function getGoodsInfo (data={}) {
 //查询按钮
 export function queryGoodsInfo (data={}) {
   return axios.request({
-      url: `${api.omsApi}/logisticsRecord/findByGuestLog`,
+      url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
       method: 'post',
       data
   })
@@ -20,22 +20,22 @@ export function queryGoodsInfo (data={}) {
 //保存按钮
   export function saveGoodsInfo (data={}) {
     return axios.request({
-        url: `${api.omsApi}/logisticsRecord/save`,
+        url: `${api.omsOrder}/logisticsRecord/save`,
         method: 'post',
         data
     })
   }
 //获取配送方式字典 配送方式下拉框
-export function getDic () {
-  return axios.request({
-      url: `http://192.168.30.21:9200/dictionariesItem/findByDictCode?dictCode=SYS_PS_001`,
-      method: 'get',
-  })
-}
+// export function getDic () {
+//   return axios.request({
+//       url: `http://192.168.30.21:9200/dictionariesItem/findByDictCode?dictCode=SYS_PS_001`,
+//       method: 'get',
+//   })
+// }
 //发货物流下拉框
 export function logistics  () {
   return axios.request({
-      url: `http://192.168.30.21:9250/guest/findAllLogistics`,
+      url: `${api.wmsApi}/guest/findAllLogistics`,
       method: 'get',
   })
 }
