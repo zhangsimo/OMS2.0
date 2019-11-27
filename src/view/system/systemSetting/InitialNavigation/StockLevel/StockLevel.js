@@ -333,19 +333,17 @@ const methods = {
   },
   //子组件的参数
   getMsg2(a){
-    let newA = a.map(item => {
-      return {
-        partCode: item.code,
-        partName: item.partBrandName,
-        partId: item.id,
-        fullName:item.fullName,
-        remark:item.remarks
-      }
+    a.map(item => {
+        item.partCode =  item.code,
+        item.partName = item.partBrandName,
+        item.partId = item.id,
+        item.fullName = item.fullName,
+        item.remark = item.remarks
     })
-    this.getArr = newA
+    this.getArr = a
 
    // this.getArr.Map( item => {})
-    this.customer.tbdata = [...this.customer.tbdata,...this.getArr]
+    this.customer.tbdata = [...this.customer.tbdata,...a]
     this.customer.tbdata = this.unique(this.customer.tbdata)
     // console.log(this.customer.tbdata)
   },

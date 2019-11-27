@@ -275,7 +275,7 @@
         },
         //获取子组件数据
         getMsg2(a){
-          console.log(a , 'a')
+          // console.log(a , 'a')
            a.map(item => {
               item.partCode =  item.code,
               item.partName = item.partBrandName
