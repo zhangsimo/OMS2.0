@@ -580,7 +580,17 @@
                 title: '付款方式',
                 align:'center',
                 minWidth: 180,
-                key:''
+                key:'paymentType',
+                render:(h,params) => {
+                  let zi = ''
+                  if(params.row.paymentType === 0){
+                    zi = "支付宝"
+                  }
+                  if(params.row.paymentType === 1){
+                    zi = "微信"
+                  }
+                  return h('span',zi)
+                }
               },
               {
                 title: '付款金额',
@@ -591,7 +601,7 @@
               {
                 title: '付款时间',
                 align:'center',
-                key: 'lesseeID',
+                key: 'paymentDate',
                 minWidth: 180
               }
             ],
