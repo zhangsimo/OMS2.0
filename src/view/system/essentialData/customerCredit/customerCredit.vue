@@ -517,6 +517,7 @@
               console.log(res.data)
               if(res.code === 0){
                   this.adjustmentMsg = res.data
+                  console.log(this.adjustmentMsg)
               }
             })
           },

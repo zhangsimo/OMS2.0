@@ -97,7 +97,7 @@ export function FindByItemCode(params) {
 //租户管理修改确定按钮
 export function Confirm(data) {
   return axios.request({
-    url: `${api.omsApi}tenant/save`,
+    url: `${api.omsApi}/tenant/save`,
     method: 'post',
     data
   })
@@ -106,9 +106,9 @@ export function Confirm(data) {
 //查看产品
 export function Product(data) {
   return axios.request({
-    url: `${api.omsApi}/leaseProduct/queryAll`,
-    method: 'get',
-    data,
+    url: `${api.omsApi}/tenantProduct/findPageByDynamicQuery`,
+    method: 'post',
+    data:data.data,
     params:data.params
   })
 }
@@ -117,9 +117,9 @@ export function Product(data) {
 //查看订单
 export function Order(data) {
   return axios.request({
-    url: `${api.omsApi}/leaseOrder/findAll`,
+    url: `${api.omsApi}/tenantOrder/findPageByDynamicQuery`,
     method: 'post',
-    data,
+    data:data.data,
     params:data.params
   })
 }
@@ -127,9 +127,9 @@ export function Order(data) {
 //查看费用
 export function Money(data) {
   return axios.request({
-    url: `${api.omsApi}/leaseOrder/findById`,
+    url: `${api.omsApi}/tenantOrder/findById`,
     method: 'post',
-    data,
+    data:data.data,
     params:data.params
   })
 }

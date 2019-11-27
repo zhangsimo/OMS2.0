@@ -352,6 +352,7 @@
           feedbackRecord(data).then(res => {
             if(res.code === 0){
                 this.$Message.warning('反馈成功')
+                this.screenshot = false
             }
           })
         }
