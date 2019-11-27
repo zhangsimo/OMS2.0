@@ -47,7 +47,7 @@
       <Row>
         <Col span="8">
         <FormItem label='调整前额度合计:' >
-          <Input  v-model='customerDetails[0].creditLimit + customerIfo[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
+          <Input  :v-model='customerDetails[0].creditLimit + customerIfo[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
         </FormItem>
         <FormItem label='当前应付账款:' >
           <Input  v-model='customerDetails[0].payableAmt' style="width: 150px" disabled ></Input>
@@ -135,7 +135,7 @@ import { getCustomerDetails } from '../../../../api/system/essentialData/clientM
             sellOrderList:Array,
             sixMonthPerformance:Array
         },
-        mounted(){ 
+        mounted(){
         },
         data(){
             return {
