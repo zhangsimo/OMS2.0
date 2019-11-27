@@ -70,7 +70,7 @@
             <a class="mr20 iconfont iconchaxunicon" @click="inquireShop2"> 查询</a>
           </div>
           <div class="companyList">
-            <Table :columns="columns2" :data="companyList" height="200" size="small" ></Table>
+            <Table :columns="columns2" border :data="companyList" height="200" size="small" ></Table>
           </div>
           <Page :total="page2.total" :page-size="page2.size" :current="page2.num" show-sizer show-total class-name="page-con"
                 @on-change="selectNum2" @on-page-size-change="selectPage2" style="float: right"></Page>
