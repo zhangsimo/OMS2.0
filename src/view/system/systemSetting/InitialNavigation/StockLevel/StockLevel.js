@@ -232,10 +232,12 @@ const methods = {
   // 添加配件
   addCustomer() {
     if(this.levelId){
-      this.modal = true;
-      this.num += this.num
-      this.$store.commit('setDialog',this.num )
-      this.getArr = []
+      // this.modal = true;
+      // this.num += this.num
+      // this.$store.commit('setDialog',this.num )
+      // console.log(this.$refs.MsgThree)
+      this.$refs.MsgThree.init()
+      // this.getArr = []
     }else{
       this.$Message.warning('请选择备货级别设置')
     }
@@ -260,12 +262,13 @@ const methods = {
   // 保存配件
   saveCustomer() {
     this.customer.page.num = 1;
-     this.getArr.forEach(item => {
+     this.getArr.map(item => {
       item.levelId = this.levelId
+       delete item.id
       })
-    let repeatArr = this.unique(this.getArr)
-    console.log(repeatArr)
-    stockLevelPartSave(repeatArr).then(res => {
+    // let repeatArr = this.unique(this.getArr)
+    // console.log(repeatArr)
+    stockLevelPartSave(this.getArr).then(res => {
       this.getArr = []
       this.rightgetList()
     })
@@ -333,12 +336,13 @@ const methods = {
   },
   //子组件的参数
   getMsg2(a){
+    console.log(a)
     a.map(item => {
         item.partCode =  item.code,
-        item.partName = item.partBrandName,
+        item.partName = item.partStandardName,
         item.partId = item.id,
         item.fullName = item.fullName,
-        item.remark = item.remarks
+        item.remark = item.remark
     })
     this.getArr = a
 
@@ -361,7 +365,7 @@ const methods = {
     this.levelId = arrrr[0].levelId
     if(this.levelId){
       this.rightgetList()
-      this.$refs.Msg.chooseArr = []
+      // this.$refs.Msg.chooseArr = []
     }
   },
   //去重方法
@@ -377,8 +381,10 @@ const methods = {
 };
 import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
 import DiaLog from '../../../../../components/Accessories/dialog';
+import selectPartCom from '../../../../goods/goodsList/components/selectPartCom'
 const components = {
-  DiaLog
+  DiaLog,
+  selectPartCom
 }
 
 export default {
