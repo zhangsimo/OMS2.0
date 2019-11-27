@@ -63,6 +63,7 @@
   }
   .demo-split-pane1{
     padding: 10px;
+    height: 100%;
   }
   .demo-split-pane{
     height: 100%;
