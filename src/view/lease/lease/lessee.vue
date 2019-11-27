@@ -458,12 +458,12 @@
                 title: '开通时间',
                 align:'center',
                 minWidth: 168,
-                key:''
+                key:'paymentDate'
               },
               {
                 title: '结束时间',
                 align:'center',
-                key: '',
+                key: 'expiryDate',
                 minWidth: 168
               }
             ],
@@ -492,38 +492,48 @@
                 // key: 'type',
                 minWidth: 100,
                 render:(h,params) => {
-                  let type = JSON.parse(params.row.type||{})
-                  // console.log(paymentType.name)
-                  return h('span',type.name)
+                  let zi = ''
+                  if(params.row.type === 0){
+                    zi = "功能模块"
+                  }
+                  if(params.row.type === 1){
+                    zi = "接口调用"
+                  }
+                  return h('span',zi)
                 }
               },
               {
                 title: '开通时间',
                 align:'center',
-                key: 'startDate',
+                key: 'createTime',
                 minWidth: 170
               },
               {
                 title: '结束时间',
                 align:'center',
-                key: 'endDate',
+                key: 'expiryDate',
                 minWidth: 170
               },
               {
                 title: '是否付款',
                 align:'center',
-                // key: 'isPayment',
+                key: 'isPayment',
                 minWidth: 100,
                 render:(h,params) => {
-                  let isPayment = JSON.parse(params.row.isPayment||{})
-                  // console.log(paymentType.name)
-                  return h('span',isPayment.name)
+                  let zi = ''
+                  if(params.row.isPayment === 0){
+                    zi = "未付款"
+                  }
+                  if(params.row.isPayment === 2){
+                    zi = "已关闭"
+                  }
+                  return h('span',zi)
                 }
               },
               {
                 title: '付款时间',
                 align:'center',
-                key: 'paymentDate',
+                key: 'orderDate',
                 minWidth: 170
               },
               {
@@ -532,20 +542,30 @@
                 key: 'paymentType',
                 minWidth: 100,
                 render:(h,params) => {
-                  let paymentType = JSON.parse(params.row.paymentType||{})
-                  // console.log(paymentType.name)
-                  return h('span',paymentType.name)
+                  let zi = ''
+                  if(params.row.isPayment === 0){
+                    zi = "支付宝"
+                  }
+                  if(params.row.isPayment === 1){
+                    zi = "微信"
+                  }
+                  return h('span',zi)
                 }
               },
               {
                 title: '订单状态 ',
                 align:'center',
-                // key: 'status',
+                key: 'status',
                 minWidth: 100,
                 render:(h,params) => {
-                  let status = JSON.parse(params.row.status||{})
-                  // console.log(paymentType.name)
-                  return h('span',status.name)
+                  let zi = ''
+                  if(params.row.isPayment === 0){
+                    zi = "成功"
+                  }
+                  if(params.row.isPayment === 1){
+                    zi = "失败"
+                  }
+                  return h('span',zi)
                 }
               }
             ],
@@ -729,6 +749,7 @@
           params.page = this.page2.num - 1
           params.size = this.page2.size
           let data = {}
+          data.tenantId = this.choose.tenantId
           Product({data:data,params:params}).then(res =>{
             if(res.code === 0){
               this.loading2 = false
@@ -754,6 +775,7 @@
           params.page = this.page3.num - 1
           params.size = this.page3.size
           let data = {}
+          data.tenantId = this.choose.tenantId
           Order({params:params,data:data}).then(res => {
             this.loading = false
             if(res.code === 0){
@@ -775,10 +797,11 @@
         CheckMoney(){
           this.loading4 = true
           let params = {}
-          let tenantID = this.choose.tenantId
+          // let tenantID = this.choose.tenantId
           params.page = this.page4.num - 1
           params.size = this.page4.size
           let data = {}
+          data.tenantId = this.choose.tenantId
           Money({params:params,data:data}).then(res => {
             this.loading4 = false
             if(res.code === 0){

@@ -91,13 +91,16 @@
       </Split>
     </section>
 
-    <Modal v-model="model_left" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">
-      <Dia-log @getMsg="getMsg2" ref="Msg"></Dia-log>
-    </Modal>
-
-    <Modal v-model="modal" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">
-    <Dia-log @getMsgTwo="getMsgTwo" ref="Msg"></Dia-log>
-  </Modal>
+    <!--<Modal v-model="model_left" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">-->
+      <!--&lt;!&ndash;<Dia-log @getMsg="getMsg2" ref="Msg"></Dia-log>&ndash;&gt;-->
+    <!--</Modal>-->
+    <!--左部分-->
+    <select-part-com @selectPartName="getMsg2" ref="Msg1"></select-part-com>
+    <!--<Modal v-model="modal" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">-->
+    <!--&lt;!&ndash;<Dia-log @getMsgTwo="getMsgTwo" ref="Msg"></Dia-log>&ndash;&gt;-->
+  <!--</Modal>-->
+    <!--右部分-->
+    <select-part-com @selectPartName="getMsgTwo" ref="Msg2"></select-part-com>
   </main>
 </template>
 

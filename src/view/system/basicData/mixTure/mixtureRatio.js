@@ -301,7 +301,8 @@ const methods = {
   // 新增
   add() {
     // this.level.tbdata.push({ name: " ", isEdit: false, oid: Date.now() });
-    this.model_left = true
+    // this.model_left = true
+    this.$refs.Msg1.init()
   },
   // 删除
   remove() {},
@@ -327,7 +328,8 @@ const methods = {
   // 添加配件
   addCustomer() {
     if(this.levelId){
-      this.modal = true;
+      // this.modal = true;
+      this.$refs.Msg2.init()
       this.num += this.num
       this.$store.commit('setDialog',this.num )
     }else{
@@ -468,10 +470,10 @@ const methods = {
     })
     console.log(arrrr)
     this.levelId = arrrr[0].levelId
-    console.log(this.levelId)
+    // console.log(this.levelId)
     if(this.levelId){
       this.rightgetList()
-      this.$refs.Msg.chooseArr = []
+      this.$refs.Msg1.chooseArr = []
     }
   },
   //去重方法
@@ -487,8 +489,10 @@ const methods = {
 };
 import {partMatching,partMatchingSave,partMatchingDetail,partMatchingdelete,partMatchingDetailSave} from '../../../../api/system/systemSetting/Initialization'
 import DiaLog from '../../../../components/Accessories/dialog';
+import selectPartCom from '../../../goods/goodsList/components/selectPartCom'
 const components = {
-  DiaLog
+  DiaLog,
+  selectPartCom
 }
 
 export default {
