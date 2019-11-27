@@ -302,22 +302,22 @@
           {
             title: '创建人',
             align:'center',
-            key: 'qualitySourceName',
+            key: 'createUname',
             minWidth: 100,
           },
           {
             title: '创建时间',
-            key: 'categoryName',
+            key: 'createTime',
             minWidth: 170
           },
           {
             title: '修改人',
-            key: 'former',
+            key: 'updateUname',
             minWidth: 100
           },
           {
             title: '修改时间',
-            key: 'createTime',
+            key: 'updateTime',
             minWidth: 170
           }
         ],
