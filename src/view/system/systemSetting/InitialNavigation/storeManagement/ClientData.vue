@@ -2,41 +2,41 @@
   <div style="height: 500px;overflow:hidden;overflow-y: scroll">
  <Form :label-width="80"  :model='data' :rules="rules" ref="form">
    <div class="tabList">
-             <FormItem label='LOGO图片:'  >
-               <div class="demo-upload-list" v-for="item in uploadList">
-                 <template v-if="item.status === 'finished'">
-                   <img :src="item.url">
-                   <div class="demo-upload-list-cover">
-                     <Icon type="ios-eye-outline" @click="handleView(item.name)"></Icon>
-                     <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>
-                   </div>
-                 </template>
-                 <template v-else>
-                   <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>
-                 </template>
-               </div>
-               <Upload
-                 v-ref:upload
-                 :show-upload-list="false"
-                 :default-file-list="defaultList"
-                 :on-success="handleSuccess"
-                 :format="['jpg','jpeg','png']"
-                 :max-size="2048"
-                 :on-format-error="handleFormatError"
-                 :on-exceeded-size="handleMaxSize"
-                 :before-upload="handleBeforeUpload"
-                 multiple
-                 type="drag"
-                 action="//jsonplaceholder.typicode.com/posts/"
-                 style="display: inline-block;width:58px;">
-                 <div style="width: 58px;height:58px;line-height: 58px;">
-                   <img src="../../../../../assets/images/upImg.svg" width="58">
-                 </div>
-               </Upload>
-               <Modal title="查看图片" :visible.sync="visible">
-                 <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-               </Modal>
-             </FormItem>
+<!--             <FormItem label='LOGO图片:'  >-->
+<!--               <div class="demo-upload-list" v-for="item in uploadList">-->
+<!--                 <template v-if="item.status === 'finished'">-->
+<!--                   <img :src="item.url">-->
+<!--                   <div class="demo-upload-list-cover">-->
+<!--                     <Icon type="ios-eye-outline" @click="handleView(item.name)"></Icon>-->
+<!--                     <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>-->
+<!--                   </div>-->
+<!--                 </template>-->
+<!--                 <template v-else>-->
+<!--                   <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>-->
+<!--                 </template>-->
+<!--               </div>-->
+<!--               <Upload-->
+<!--                 v-ref:upload-->
+<!--                 :show-upload-list="false"-->
+<!--                 :default-file-list="defaultList"-->
+<!--                 :on-success="handleSuccess"-->
+<!--                 :format="['jpg','jpeg','png']"-->
+<!--                 :max-size="2048"-->
+<!--                 :on-format-error="handleFormatError"-->
+<!--                 :on-exceeded-size="handleMaxSize"-->
+<!--                 :before-upload="handleBeforeUpload"-->
+<!--                 multiple-->
+<!--                 type="drag"-->
+<!--                 action="//jsonplaceholder.typicode.com/posts/"-->
+<!--                 style="display: inline-block;width:58px;">-->
+<!--                 <div style="width: 58px;height:58px;line-height: 58px;">-->
+<!--                   <img src="../../../../../assets/images/upImg.svg" width="58">-->
+<!--                 </div>-->
+<!--               </Upload>-->
+<!--               <Modal title="查看图片" :visible.sync="visible">-->
+<!--                 <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">-->
+<!--               </Modal>-->
+<!--             </FormItem>-->
          <FormItem label='企业号:' prop="firm">
            <Input v-model='data.firm' style="width: 580px" ></Input>
          </FormItem>
@@ -108,7 +108,7 @@
      <Row>
        <Col span="12">
          <FormItem label='开店日期:' prop="Time">
-           <DatePicker   type="date" v-model="data.Time" @on-change="changeTime" placeholder="请选择日期"  style="width: 280px"></DatePicker>
+           <DatePicker v-model="data.Time"  type="date"   placeholder="请选择日期"  style="width: 280px"></DatePicker>
          </FormItem>
        </Col>
        <Col span="12">
@@ -228,7 +228,6 @@
             }
         },
         created(){
-          this.getList()
         },
         methods:{
             //清除内容
@@ -279,7 +278,8 @@
                 return check;
             },
             changeTime(data ,res){
-                this.data.softOpenDate = data
+                console.log(data,123)
+                // this.data.softOpenDate = data
             }
         }
     }

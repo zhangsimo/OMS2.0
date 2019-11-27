@@ -27,9 +27,7 @@
             <Icon custom="iconfont iconjinzhijinyongicon icons"/>禁用
           </span>
         </Button>
-
       </div>
-
       <div class="tabeBox" >
       <div>
         <Table class="table-highlight-row"  :loading="loading" size="small" highlight-row  border :stripe="true" :columns="columns" :data="managementList" @on-current-change="pitchSupplier"></Table>
@@ -144,9 +142,7 @@
                 ],
                 managementList:[],
                 clientDataShow:false,
-                clientList:{
-                    Date:''
-                },
+                clientList:{},
                 supplierTypeOne: '', //供应商类型
                 pitchSupplierOne:'',
                 Pid: '',
@@ -154,7 +150,6 @@
             }
         },
         created(){
-           this.getlist()
             this.getAdress()
         },
       computed: {
@@ -170,13 +165,16 @@
                 data.page = this.page.num - 1
                 data.size = this.page.size
                 data.name = this.fasttipsTitle
-                data.companyId= this.Pid
+                if (this.Pid.lever == 1){
+                  data.supplierTypeFirst = this.Pid.id
+                }else{
+                  data.supplierTypeSecond = this.Pid.id
+                }
          let res = await getSupplierformation(data)
                 if (res.code == 0){
-                    console.log(res)
                     this.loading = false
-                    this.managementList = res.data
-                    this.page.total = res.totalElements
+                    this.managementList = res.data.content
+                    this.page.total = res.data.totalElements
                 }
             },
             //获取地址
@@ -221,16 +219,21 @@
             },
             //确认添加一条信息
             addNewSupplier(){
-                this.$refs.child.handleSubmit( async () => {
-                    let data = this.clientList
-                    data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
-                    data.isClient ? data.isClient =1 : data.isClient = 0
-                    let res = await  getNewSupplier(data)
-                    if(res.code == 0){
-                        this.getlist()
-                    }
-                    this.clientDataShow = false
-                })
+                // this.$refs.child.handleSubmit( async () => {
+                //     let data = this.clientList
+                //     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
+                //     data.isClient ? data.isClient =1 : data.isClient = 0
+                //     console.log(data)
+                //     let  d = new Date(data.Time);
+                //          d=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
+                //          data.Time = d
+                //
+                //     let res = await  getNewSupplier(data)
+                //     if(res.code == 0){
+                //         this.getlist()
+                //     }
+                //     this.clientDataShow = false
+                // })
             },
             //修改客户资料
             changeClient(){
@@ -247,7 +250,7 @@
       watch:{
           newpid:{
               handler(v,ov){
-                  this.Pid = v.id
+                  this.Pid = v
                   this.getlist()
               },
               deep:true
