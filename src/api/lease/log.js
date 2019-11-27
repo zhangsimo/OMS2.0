@@ -65,7 +65,10 @@ export function know(data) {
 }
 
 // 图片上传地址
-export const putImgUrl = `${api.omsApi}/sysUpdateLog/uploadImg`;
+export const putImgUrl = api.uploadApi;
 
-// 获取图片
-export const getfile = `${api.omsApi}/sysUpdateLog/getFile=`;
+// 下载
+export const downurl = api.downApi;
+
+// 
+export const getfile = api.getFileApi;
