@@ -87,7 +87,7 @@
                         <Button size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                     </div>
                   </div>
@@ -136,7 +136,16 @@
             <Button type='default' >取消</Button>
           </div>
         </Modal>
-        <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></Select-part-com>
+        <!--选择配件-->
+        <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>
+        <!--编辑收货信息-->
+        <Modal v-model="GainInformation" title="编辑收获信息" width="1200px">
+          <goods-info></goods-info>
+          <div slot='footer'>
+            <Button type='primary' @click="Determined">确定</Button>
+            <Button type='default' >取消</Button>
+          </div>
+        </Modal>
       </div>
 
     </div>
@@ -146,6 +155,7 @@
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
   import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+  import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
     export default {
@@ -153,7 +163,8 @@
       components: {
         QuickDate,
         More,
-        SelectPartCom
+        SelectPartCom,
+        GoodsInfo
       },
       data() {
         return {
@@ -287,6 +298,7 @@
             tbdata: [],
           },
           advanced: false, //更多模块的弹框
+          GainInformation: false //编辑收获信息
         }
       },
       methods: {
@@ -329,7 +341,11 @@
         //更多弹框的确定按钮
         Determined(){},
         //子组件的参数
-        getPartNameList(){}
+        getPartNameList(){},
+        //编辑收货信息弹框显示
+        GoodsInfoModal(){
+          this.GainInformation = true
+        }
       },
       mounted(){
         this.$nextTick(()=>{
