@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取当前页信息树形图
 export function getSupplierTreeList (params) {
   return axios.request({
-    url: `${api.wmsApi}/supplierType/findType`,
+    url: `${api.wmsApi}/supplierType/findAll`,
     method: 'get',
     params
   })
