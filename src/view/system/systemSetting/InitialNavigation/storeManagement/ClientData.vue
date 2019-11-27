@@ -7,7 +7,7 @@
                  ref="upload"
                  :show-upload-list="false"
                  :action="wxImgUrl"
-                 :format="['jpg','jpeg','png']"
+                 :format="['jpg','jpeg','png', 'gif']"
                  :headers="headers"
                  :before-upload="handleBeforeUpload"
                  :on-success="handleSuccess"
@@ -219,12 +219,9 @@
             },
             // 上传成功
             handleSuccess(res, file){
-                console.log(res)
-                console.log(api)
                 if(res.code == 0) {
                     this.uploadSrc =api.getfile+res.data.url
                     this.data.src = api.getfile+res.data.url
-                    console.log(this.data.src)
                 }
             },
             //清除内容
