@@ -60,4 +60,8 @@ export function getGmList (params,data) {
 //批量上传
 export const getup = `${api.wmsApi}/tightPart/import`;
 
-
+//下载模板
+export function down(id) {
+  let url = `${api.downApi}/file/get?fileId=` + id;
+  window.open(url, '_balnk');
+}
