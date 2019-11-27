@@ -6,12 +6,14 @@ import QuickDate from '_c/getDate/dateget';
 import SelectSupplier from "./components/selectSupplier.vue";
 import PurchaseAmount from "./components/PurchaseAmount.vue";
 import GoodsInfo from './components/GoodsInfo.vue';
+import MoreSearch from './components/MoreSearch.vue';
 @Component({
     components: {
         QuickDate,
         SelectSupplier,
         PurchaseAmount,
-        GoodsInfo
+        GoodsInfo,
+        MoreSearch
     }
 })
 export default class PlannedPurchaseOrder extends Vue {
@@ -179,9 +181,6 @@ export default class PlannedPurchaseOrder extends Vue {
         console.log(v);
     }
 
-    // 更多
-    private more() {}
-
     // 新增
     private addPro() {}
 
@@ -252,25 +251,32 @@ export default class PlannedPurchaseOrder extends Vue {
       return total
     }
 
-    // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息)
+    // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
     private showModel(name) {
       let ref:any = this.$refs[name];
       ref.init();
     }
 
+    // 调节大小
+    private getDomHeight() {
+      this.$nextTick(()=>{
+        let paneLeft:any = this.$refs.paneLeft;
+        let planForm:any = this.$refs.planForm;
+        let planBtn:any = this.$refs.planBtn;
+        let wrapH = paneLeft.offsetHeight;
+        let planFormH = planForm.offsetHeight;
+        let planBtnH = planBtn.offsetHeight;
+        // let planPageH = this.$refs.planPage.offsetHeight;
+        //获取左侧侧表格高度
+        this.leftTableHeight = wrapH-70;
+        //获取右侧表格高度
+        this.rightTableHeight = wrapH-planFormH-planBtnH-38;
+      })
+    }
+
     private mounted() {
-        this.$nextTick(()=>{
-          let paneLeft:any = this.$refs.paneLeft;
-          let planForm:any = this.$refs.planForm;
-          let planBtn:any = this.$refs.planBtn;
-          let wrapH = paneLeft.offsetHeight;
-          let planFormH = planForm.offsetHeight;
-          let planBtnH = planBtn.offsetHeight;
-          // let planPageH = this.$refs.planPage.offsetHeight;
-          //获取左侧侧表格高度
-          this.leftTableHeight = wrapH-70;
-          //获取右侧表格高度
-          this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-        })
+      setTimeout(()=>{
+        this.getDomHeight();
+      },0);
     }
 }

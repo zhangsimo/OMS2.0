@@ -16,7 +16,7 @@
             </Select>
           </div>
           <div class="db">
-            <Button type="default" @click="more" class="mr10"
+            <Button type="default" @click="showModel('moreSearch')" class="mr10"
               ><i class="iconfont mr5 iconchaxunicon"></i>更多</Button
             >
           </div>
@@ -57,7 +57,7 @@
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
-          <Split v-model="split1" min="200" max="500">
+          <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <div
               slot="left"
               class="con-split-pane-left"
@@ -352,6 +352,8 @@
         </div>
       </div>
     </section>
+    <!-- 更多 -->
+    <more-search ref="moreSearch"></more-search>
     <!-- 供应商资料 -->
     <select-supplier ref="selectSupplier" headerTit="供应商资料"></select-supplier>
     <!-- 采购金额 -->
