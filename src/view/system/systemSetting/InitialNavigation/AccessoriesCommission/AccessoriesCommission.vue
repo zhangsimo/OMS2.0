@@ -269,28 +269,33 @@
                 return el;
               });
               // this.tbdataArr.concat(this.tbdata)
-              console.log(this.tbdata)
+              // console.log(this.tbdata)
             }
           })
         },
         //获取子组件数据
         getMsg2(a){
-          // console.log(a)
-          let newA = a.map(item => {
-            return {
-              partCode: item.code,
-              partName: item.partBrandName,
-            }
+          // console.log(a , 'a')
+           a.map(item => {
+              item.partCode =  item.code,
+              item.partName = item.partBrandName
           })
-          this.getArr = newA
-          console.log(this.getArr)
-          this.tbdata = [...this.tbdata,...this.getArr]
-          this.tbdata = this.unique(this.tbdata)
-          console.log(this.tbdata)
+          this.getArr = a
+
+          this.tbdata = [...this.tbdata,...a]
+          var result = []
+          var obj = {}
+          for(var i =0; i<this.tbdata.length; i++){
+                   if(!obj[this.tbdata[i].id]){
+                        result.push(this.tbdata[i]);
+                        obj[this.tbdata[i].id] = true;
+                     }
+                }
+          this.tbdata = result
         },
         //多选框
         multiple(a){
-          console.log(a)
+          // console.log(a)
           this.checkboxArr = a
         },
         //去重方法

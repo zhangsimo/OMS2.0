@@ -50,31 +50,31 @@
                     调拨申请信息
                   </div>
                   <div class="clearfix purchase" ref="planForm">
-                    <Form inline :show-message="false" ref="formPlan" :model="formPlan" :label-width="100">
+                    <Form inline :show-message="false" ref="formPlan" :label-width="100">
                       <FormItem label="调出方：" prop="supplyName" class="fs12">
                         <Row class="w500">
-                          <Col span="22"><Input v-model="formPlan.supplyName" placeholder="请选择调出方"></Input></Col>
+                          <Col span="22"><Input placeholder="请选择调出方"></Input></Col>
                           <Col span="2"><Button class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
                       <FormItem label="调入仓库：" prop="billType">
-                        <Select class="w160" v-model="formPlan.billType">
+                        <Select class="w160" >
                           <Option value="beijing">主仓</Option>
                           <Option value="shanghai">嘻嘻</Option>
                           <Option value="shenzhen">哈哈</Option>
                         </Select>
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
-                        <Input class="w160" v-model="formValidate.planDate"></Input>
+                        <Input class="w160" ></Input>
                       </FormItem>
                       <FormItem label="备注：" prop="remark">
-                        <Input class="w500" v-model="formPlan.remark"></Input>
+                        <Input class="w500" ></Input>
                       </FormItem>
                       <FormItem label="申请人：" prop="planner" >
-                        <Input class="w160" v-model="formPlan.planner"></Input>
+                        <Input class="w160" ></Input>
                       </FormItem>
                       <FormItem label="申请单号：" prop="planOrderNum" class="ml50">
-                        <Input class="w160" v-model="formPlan.planOrderNum"></Input>
+                        <Input class="w160" ></Input>
                       </FormItem>
                     </Form>
                   </div>
@@ -84,10 +84,10 @@
                         <Button size="small" class="mr10" @click="addPro"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                     </div>
                   </div>
@@ -129,14 +129,23 @@
           </div>
         </section>
         <!--更多弹框-->
-        <Modal v-model="advanced" title="高级查询" width="450px">
-
+        <Modal v-model="advanced" title="高级查询" width="600px">
+              <More></More>
           <div slot='footer'>
             <Button type='primary' @click="Determined">确定</Button>
             <Button type='default' >取消</Button>
           </div>
         </Modal>
-
+        <!--选择配件-->
+        <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>
+        <!--编辑收货信息-->
+        <Modal v-model="GainInformation" title="编辑收获信息" width="1200px">
+          <goods-info></goods-info>
+          <div slot='footer'>
+            <Button type='primary' @click="Determined">确定</Button>
+            <Button type='default' >取消</Button>
+          </div>
+        </Modal>
       </div>
 
     </div>
@@ -144,12 +153,19 @@
 
 <script>
   import QuickDate from '../../../../components/getDate/dateget'
-  // import
+  import More from './compontents/More'
+  import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+  import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
     export default {
       name: "applyFor",
-      components: {QuickDate},
+      components: {
+        QuickDate,
+        More,
+        SelectPartCom,
+        GoodsInfo
+      },
       data() {
         return {
           split1:0.2,
@@ -220,8 +236,6 @@
             tbdata: []
           },
           tableData:[],
-          formPlan: '',
-          formValidate: '',
           //左侧表格高度
           leftTableHeight:0,
           //右侧表格高度
@@ -282,15 +296,20 @@
               }
             ],
             tbdata: [],
-            advanced: false, //更多模块的弹框
           },
+          advanced: false, //更多模块的弹框
+          GainInformation: false //编辑收获信息
         }
       },
       methods: {
         //更多按钮
-        more(){},
+        more(){
+          this.advanced = true
+        },
         //新增按钮
-        addPro(){},
+        addPro(){
+          this.$refs.SelectPartCom.init()
+        },
         //保存按钮
         Save(){},
         // 提交
@@ -313,12 +332,20 @@
         },
         //split 分割
         getDataQuick(v){
-          console.log(v)
+          // console.log(v)
         },
         //footer计算
         addFooter(){},
         //表格编辑状态下被关闭的事件
-        editClosedEvent(){}
+        editClosedEvent(){},
+        //更多弹框的确定按钮
+        Determined(){},
+        //子组件的参数
+        getPartNameList(){},
+        //编辑收货信息弹框显示
+        GoodsInfoModal(){
+          this.GainInformation = true
+        }
       },
       mounted(){
         this.$nextTick(()=>{
