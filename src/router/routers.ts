@@ -43,7 +43,7 @@ export default [
     ]
   },
   {
-    path: "",
+    path: "/goods",
     name: "goods",
     // mark: '1',
     redirect: "/multilevel/level_2_1",
@@ -64,14 +64,14 @@ export default [
         component: () => import("@/view/goods/goodsList/goodsList.vue")
       },
       {
-        path: "/goods/goodsList",
-        name: "goodsList2",
+        path: "plannedPurchaseOrder",
+        name: "plannedPurchaseOrder",
         // mark: '11',
         meta: {
           icon: "arrow-graph-up-right",
           title: "计划采购订单"
         },
-        component: () => import("@/view/goods/goodsList/goodsList.vue")
+        component: () => import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
       },
       {
         path: "/goods/goodsList",

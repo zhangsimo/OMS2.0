@@ -65,3 +65,5 @@ export function employeeDeletePart (data) {
     data
   })
 }
+
+export const upxlxs = `${api.wmsApi}/employeeAttribute/import`;
