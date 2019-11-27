@@ -143,7 +143,6 @@ export const mixGoodsData = {
           let objReq = {}
           objReq.guestId = this.formValidate.guestId
           objReq.orderDate = this.formValidate.planDate
-return
           saveDraft(objReq).then(res => {
             if(res.code==0){
               this.proModal = false

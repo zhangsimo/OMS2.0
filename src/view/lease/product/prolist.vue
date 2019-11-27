@@ -429,7 +429,7 @@
             objReq.name = this.formValidate.name
             objReq.type = this.formValidate.type
             objReq.remark = this.formValidate.remark
-            objReq.disable = this.formValidate.disable
+            objReq.isDisabled = this.formValidate.disable
             if(objReq.type===0){
               objReq.salesPrice = this.formValidate.salesPrice
               objReq.isCycle = this.formValidate.isCycle
@@ -492,6 +492,7 @@
           this.formValidate.coin = this.selectTable.coin
           this.formValidate.id = this.selectTable.id
           this.formValidate.disable = this.selectTable.isDisabled
+          console.log(this.formValidate.disable)
         }else{
           this.$Message.error("请选择要修改的数据！")
         }
