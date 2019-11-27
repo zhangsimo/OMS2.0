@@ -39,7 +39,7 @@
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
-          <Split v-model="split1" min="200" max="500">
+          <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">
                 采购计划单列表
@@ -63,7 +63,7 @@
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
                     <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
-                    <DatePicker @on-change="setDataFun" class="w160" type="date" placeholder="选择日期"></DatePicker>
+                    <DatePicker @on-change="setDataFun" v-model="formPlan.planDate" class="w160" type="date" placeholder="选择日期"></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner" >
                     <Input class="w160" readonly v-model="formPlan.planner"></Input>

@@ -22,7 +22,7 @@ export const mixGoodsData = {
           { required: true, message: '供应商不能为空', trigger: 'blur' }
         ],
         planDate: [
-          { required: true, message: '计划采购日期不能为空', trigger: 'blur' },
+          { required: true, type: 'date', message: '计划采购日期不能为空', trigger: 'change' },
         ],
         planner: [
           { required: true, message: '计划员不能为空', trigger: 'blur' }
@@ -132,7 +132,7 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v){
-      //this.formValidate.planDate = v
+      // this.formValidate.planDate = v
       console.log(this.formValidate.planDate)
     },
     //保存采购计划信息
