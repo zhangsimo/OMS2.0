@@ -327,7 +327,9 @@
         //表格编辑状态下被关闭的事件
         editClosedEvent(){},
         //更多弹框的确定按钮
-        Determined(){}
+        Determined(){},
+        //子组件的参数
+        getPartNameList(){}
       },
       mounted(){
         this.$nextTick(()=>{

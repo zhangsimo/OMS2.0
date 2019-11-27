@@ -40,7 +40,7 @@
               this.$router.push({name: ''})
                 return
             case "配件提成":
-              this.$router.push({name: 'AccessoriesCommission'})
+              // this.$router.push({name: 'AccessoriesCommission'})
                 return
             case "配件品牌":
               this.$router.push({name: 'AccessoriesBrand'})

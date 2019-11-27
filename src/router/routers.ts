@@ -1520,10 +1520,10 @@ export default [
               hideInMenu: true,
               title: "配件提成"
             },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/AccessoriesCommission/AccessoriesCommission.vue"
-              )
+            // component: () =>
+            //   import(
+            //     "@/view/system/systemSetting/InitialNavigation/AccessoriesCommission/AccessoriesCommission.vue"
+            //   )
           },
           {
             path:
