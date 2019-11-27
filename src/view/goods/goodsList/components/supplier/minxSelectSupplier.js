@@ -11,7 +11,7 @@ export const mixSelectSupplier ={
       fullName:'',//供应商名称
       code:'',//编码
       contactorTel:'',//电话
-      isDisable:false,
+      isDisable:false,//显示禁用
 
       treeData:[],//供应商分类树形数据
       //供应商名称查询层表头
@@ -121,8 +121,13 @@ export const mixSelectSupplier ={
       if(this.contactorTel.trim()){
         req.contactorTel = this.contactorTel.trim()
       }
-      // req.page = this.page.num
-      // req.size = this.page.size
+      if(this.selectTreeItem){
+        req.supplierTypeFirst = this.selectTreeItem.id
+      }
+      req.isDisabled = this.isDisable?1:0
+
+      req.page = this.page.num
+      req.size = this.page.size
       getSupplierList(req).then(res => {
         this.loading = false;
         this.partData = res.data||[];

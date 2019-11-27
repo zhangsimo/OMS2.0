@@ -144,7 +144,7 @@
             <!--<Button type='default' @click='proModal = false'>取消</Button>-->
           <!--</div>-->
         </TabPane>
-        <TabPane label="包装规格" tab="partSpecTab">
+        <TabPane label="包装规格" tab="partInfoTab">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>

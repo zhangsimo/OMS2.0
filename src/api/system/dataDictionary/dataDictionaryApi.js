@@ -13,7 +13,7 @@ export function getDataDictionaryType (params) {
 // 拉取字典详情
 export function getDataDictionaryTable (params) {
   return axios.request({
-    url: `${api.omsProduct}/dictionariesItem/findByDictCode`,
+    url: `${api.omsProduct}/dictionariesItem/findBydictCode`,
     method: 'get',
     params
   })
