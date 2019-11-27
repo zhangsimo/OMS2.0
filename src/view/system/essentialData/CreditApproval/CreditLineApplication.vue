@@ -14,19 +14,19 @@
       <Row>
         <Col span="8">
           <FormItem label='调整前固定额度:' >
-            <Input  v-model='customerDetails[0].creditLimit' style="width: 150px" disabled  ></Input>
+            <Input  :value='customerDetails[0].creditLimit ||0' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整前临时额度:' >
-            <Input  v-model='customerDetails[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
+            <Input  :value='customerDetails[0].tempCreditLimit || 0' style="width: 150px" disabled  ></Input>
           </FormItem>
 
         </Col>
         <Col span="8">
           <FormItem label='申请增加固定额度:' >
-            <Input v-model='customerDetails[0].applyQuota' style="width: 150px" disabled></Input>
+            <Input :value='customerDetails[0].applyQuota' style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label='申请增加临时额度:' >
-            <Input v-model='customerDetails[0].tempQuota' style="width: 150px" disabled></Input>
+            <Input :value='customerDetails[0].tempQuota' style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
             <DatePicker :value="customerDetails[0].tempStart" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px" disabled></DatePicker>
@@ -34,10 +34,10 @@
         </Col>
         <Col span="8">
           <FormItem label='调整后固定额度:' >
-            <Input  v-model='+customerDetails[0].applyQuota+customerDetails[0].creditLimit' style="width: 150px" disabled  ></Input>
+            <Input  :value='+customerDetails[0].applyQuota+customerDetails[0].creditLimit || 0' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='调整后临时额度:' >
-            <Input  v-model='+customerDetails[0].tempQuota + customerDetails[0].tempCreditLimit' style="width: 150px" disabled ></Input>
+            <Input  :value='+customerDetails[0].tempQuota + customerDetails[0].tempCreditLimit || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
             <DatePicker :value="value2" format="yyyy/MM/dd"  :options="dateOptions"  style="width: 150px" disabled></DatePicker>
@@ -47,10 +47,10 @@
       <Row>
         <Col span="8">
         <FormItem label='调整前额度合计:' >
-          <Input  :v-model='customerDetails[0].creditLimit + customerIfo[0].tempCreditLimit' style="width: 150px" disabled  ></Input>
+          <Input  :value='customerDetails[0].creditLimit + customerIfo[0].tempCreditLimit || 0' style="width: 150px" disabled  ></Input>
         </FormItem>
         <FormItem label='当前应付账款:' >
-          <Input  v-model='customerDetails[0].payableAmt' style="width: 150px" disabled ></Input>
+          <Input  :value='customerDetails[0].payableAmt' style="width: 150px" disabled ></Input>
         </FormItem>
         <FormItem label='信用等级:' >
             <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
@@ -61,13 +61,13 @@
         </Col>
         <Col span="8">
           <FormItem label='申请增加额度合计:' >
-            <Input  v-model='customerDetails[0].addTotalQuota' style="width: 150px" disabled  ></Input>
+            <Input  :value='customerDetails[0].addTotalQuota || 0' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前应收账款:' >
-            <Input  v-model='customerDetails[0].receivableAmt' style="width: 150px" disabled ></Input>
+            <Input  :value='customerDetails[0].receivableAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整前剩余额度:' >
-            <Input  v-model='customerDetails[0].afterAdjustQuota' style="width: 150px" disabled ></Input>
+            <Input  :value='customerDetails[0].afterAdjustQuota || 0' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
@@ -75,10 +75,10 @@
             <Input  :value='(+customerDetails[0].applyQuota+customerDetails[0].creditLimit) + (+customerDetails[0].tempQuota + customerDetails[0].tempCreditLimit)' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前欠款总额:' >
-            <Input  v-model='customerDetails[0].sumAmt' style="width: 150px" disabled ></Input>
+            <Input  :value='customerDetails[0].sumAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整后剩余额度:' >
-            <Input  v-model='data.fullNmae' style="width: 150px" disabled ></Input>
+            <Input  :value='data.fullNmae ||0' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
       </Row>
