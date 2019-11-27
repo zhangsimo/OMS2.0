@@ -1,9 +1,7 @@
-import VueUeditorWrap from "vue-ueditor-wrap"; // ES6 Module
 import EditorBar from "_c/wangEnduit/Weditor";
 import * as api from "_api/lease/log";
 
 const components = {
-  VueUeditorWrap,
   EditorBar
 };
 

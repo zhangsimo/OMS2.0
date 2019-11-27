@@ -65,7 +65,7 @@
             </Upload>
           </div>
           <div class="db">
-            <Button class="mr10">
+            <Button class="mr10" @click="down">
               <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
             </Button>
           </div>

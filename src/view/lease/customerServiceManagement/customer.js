@@ -50,7 +50,7 @@ let checWxUrl = (rule, value, callback) => {
     callback(new Error("微信二维码不能为空"));
   } else {
     if (!value.length <= 0) {
-      callback(new Error("请输入正确的微信号"));
+      callback(new Error("请上传微信二维码"));
     } else {
       callback();
     }
@@ -67,7 +67,18 @@ const data = () => {
     // 显示弹窗
     modal: false,
     // 弹窗数据
-    initmodalData: null,
+    initmodalData: {
+      name: "",
+      sex: 0,
+      mobile: "",
+      birthday: "", //生日
+      qq: "",
+      wechat: "",
+      email: "",
+      signature: "", // 签名
+      src: "", // 二维码图片
+      id: "",
+    },
     new: true, // true新增,false修改
     modalData: {
       name: "",
@@ -202,7 +213,6 @@ const data = () => {
 };
 
 const mounted = function() {
-  this.initmodalData = { ...this.modalData };
   this.initCustomer();
 };
 
@@ -280,7 +290,7 @@ const methods = {
   },
   // 新增
   add() {
-    this.modalData = { ...this.initmodalData };
+    this.modalData = this._.cloneDeep(this.initmodalData);
     this.new = true;
     this.modal = true;
   },
@@ -290,6 +300,7 @@ const methods = {
       this.$Message.error("必须选择客服进行修改");
       return;
     }
+    this.$refs.formValidate.resetFields();
     this.modalData.id = this.tableL.currentRow.id;
     this.modalData.name = this.tableL.currentRow.name;
     this.modalData.sex = this.tableL.currentRow.sex;
@@ -299,6 +310,7 @@ const methods = {
     this.modalData.wechat = this.tableL.currentRow.wechat;
     this.modalData.email = this.tableL.currentRow.email;
     this.modalData.signature = this.tableL.currentRow.sign;
+    this.modalData.src = this.tableL.currentRow.wechatPhoto;
     this.new = false;
     this.modal = true;
   },
@@ -399,7 +411,7 @@ const methods = {
   // 上传成功
   handleSuccess(res, file){
     if(res.code == 0) {
-      this.modalData.src = api.getfile+res.data.wechatPhoto
+      this.modalData.src = api.getfile+res.data.url
     }
   },
   // 弹窗保存-保存/修改客服信息
@@ -418,6 +430,7 @@ const methods = {
           data.wechat = this.modalData.wechat;
           data.email = this.modalData.email;
           data.sign = this.modalData.signature;
+          data.wechatPhoto = this.modalData.src;
           let res = await api.saveCustomer(data);
           if(res.code === 0) {
             this.$Message.success('保存成功');
@@ -434,7 +447,9 @@ const methods = {
     this.modal = false;
   },
   changeVisible() {
-    this.$refs.formValidate.resetFields();
+    if(this.new) {
+      this.$refs.formValidate.resetFields();
+    }
   },
   // 选择客服列表(左侧)行
   selectedRow(currentRow) {

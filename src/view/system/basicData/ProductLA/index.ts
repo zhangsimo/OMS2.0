@@ -193,7 +193,7 @@ export default class ProductLA extends Vue {
         Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
     }
     // 上传地址
-    private upurl:string = "";
+    private upurl:string = api.upxlxs;
 
     // mounted
     private async mounted() {
@@ -392,8 +392,14 @@ export default class ProductLA extends Vue {
         let self:any = this;
         if(res.code == 0) {
             self.$Message.success('导入成功');
-            this.getwaitEmps();
-            this.getEmps();
+            // this.getwaitEmps();
+            // this.getEmps();
+        } else {
+            self.$Message.error(res.message);
         }
+    }
+
+    private down() {
+        api.down('1100000000');
     }
 }

@@ -58,7 +58,7 @@
       seteditor() {
         // http://192.168.2.125:8080/admin/storage/create
         this.editor = new E(this.$refs.toolbar, this.$refs.editor)
-        this.editor.customConfig.uploadImgShowBase64 = true // base 64 存储图片
+        this.editor.customConfig.uploadImgShowBase64 = false // base 64 存储图片
         this.editor.customConfig.showLinkImg = false;
         this.editor.customConfig.uploadImgServer = api.putImgUrl// 配置服务器端地址
         this.editor.customConfig.uploadImgHeaders = {
@@ -87,7 +87,7 @@
           'emoticon', // 表情
           'image', // 插入图片
           'table', // 表格
-          'video', // 插入视频
+          // 'video', // 插入视频
           'code', // 插入代码
           'undo', // 撤销
           'redo', // 重复
@@ -116,7 +116,8 @@
             // for (let i = 0; i < 1; i++) {
               // console.log(result)
               if(result.code == 0) {
-                let url = api.getfile+result.data.content;
+                console.log(api.getfile)
+                let url = api.getfile+result.data.url;
                 insertImg(url);
               }
             // }

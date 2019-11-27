@@ -27,7 +27,7 @@
     >
       <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
     </Upload>
-    <Button class="mr10">
+    <Button class="mr10" @click="downTemplate">
       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
     </Button>
   </div>
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-  import {getTightProductList , getDeleteTight, getup} from  '@/api/system/essentialData/commoditiesInShortSupply.js'
+  import {getTightProductList , getDeleteTight, getup,down} from  '@/api/system/essentialData/commoditiesInShortSupply.js'
   import * as api from "_api/system/partManager";
   import Fittings from './Fittings/Fittings.vue'
   import Cookies from 'js-cookie'
@@ -327,6 +327,10 @@
             //上传之前清空
             beforeUpload(){
               this.$refs.upload.clearFiles()
+            },
+            //下载文档
+            downTemplate(){
+                down('1100000000')
             }
         }
     }

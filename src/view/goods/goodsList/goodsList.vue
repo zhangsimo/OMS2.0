@@ -39,7 +39,7 @@
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
-          <Split v-model="split1" min="200" max="500">
+          <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">
                 采购计划单列表
@@ -63,7 +63,7 @@
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
                     <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
-                    <DatePicker @on-change="setDataFun" class="w160" type="date" placeholder="选择日期"></DatePicker>
+                    <DatePicker @on-change="setDataFun" v-model="formPlan.planDate" class="w160" type="date" placeholder="选择日期"></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner" >
                     <Input class="w160" readonly v-model="formPlan.planner"></Input>
@@ -73,16 +73,12 @@
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
                     <Select class="w160" v-model="formPlan.billType">
-                      <Option value="beijing">New York</Option>
-                      <Option value="shanghai">London</Option>
-                      <Option value="shenzhen">Sydney</Option>
+                      <Option v-for="item in invoiceMap" :value="item.value" :key="item.value">{{item.label}}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="直发门店：" prop="hairShop">
                     <Select class="w160" v-model="formPlan.hairShop">
-                      <Option value="beijing">New York</Option>
-                      <Option value="shanghai">London</Option>
-                      <Option value="shenzhen">Sydney</Option>
+                      <Option v-for="item in companyMap" :value="item.value" :key="item.value">{{item.label}}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="计划单号：" prop="planOrderNum">
@@ -278,6 +274,7 @@
         //高级搜索层
         advancedSearch:false,
 
+
         linkModal: false,
         proModal:false,
         proModalTit:'',
@@ -408,35 +405,7 @@
       initStart() {
         this.getList()
       },
-      submit (name) {
-        this.$refs[name].validate((valid) => {
-          if (valid) {
-            let objReq = {}
-            objReq.name = this.formValidate.name
-            objReq.type = this.formValidate.type
-            objReq.remark = this.formValidate.remark
-            objReq.disable = this.formValidate.disable
-            if(objReq.type===0){
-              objReq.salesPrice = this.formValidate.salesPrice
-              objReq.isCycle = this.formValidate.isCycle
-            }else{
-              objReq.address = this.formValidate.address
-              objReq.coin = this.formValidate.coin
-            }
-            if(this.formValidate.id){
-              objReq.id = this.formValidate.id
-            }
 
-            saveProduct(objReq).then(res => {
-              if(res.code==0){
-                this.proModal = false
-                this.$Message.success("添加成功")
-                this.getList()
-              }
-            })
-          }
-        })
-      },
       //初始化
       getList() {
         const params = {}

@@ -56,7 +56,8 @@ export function changeCT(data) {
 }
 
 // 二维码上传地址
-export const wxImgUrl = `${api.omsApi}/customer/uploadImg`;
+// export const wxImgUrl = `${api.omsApi}/customer/uploadImg`;
+export const wxImgUrl = `${api.uploadApi}`;
 
 // 获取图片
-export const getfile = `${api.omsApi}/customer/getFile?fileName=`;
+export const getfile = `${api.getFileApi}`;

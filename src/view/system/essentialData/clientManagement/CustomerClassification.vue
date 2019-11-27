@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div style="height: 100%">
       <div class="mb20">
         <Button class=" mr10" @click="addClientType">
               <span class="center">
@@ -12,7 +12,7 @@
               </span>
         </Button>
       </div>
-      <div>
+      <div class="treeBox">
         <Tree v-if="treeDiagramList" :data="treeDiagramList" @on-select-change='changeOneList'></Tree>
       </div>
       <Modal v-model="modalShow" :title="title"  >
@@ -150,6 +150,17 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.treeBox{
+  height: 90%;
+  overflow: hidden;
+  overflow-y: scroll;
+
+}
+.treeBox::-webkit-scrollbar {display:none}
+.treeBox { -ms-overflow-style: none; }
+.treeBox::-webkit-scrollbar { width: 0 !important }
+.treeBox { overflow: -moz-scrollbars-none; }
+
 
 </style>

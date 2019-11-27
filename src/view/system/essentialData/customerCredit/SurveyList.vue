@@ -62,20 +62,38 @@
       <Row>
         <Col span="12">
           <FormItem label="经营执照扫描:">
-            <Input v-model='data.businessName' style="width: 150px;float: left" ></Input>
-            <Upload style="float: left;line-height: 29px;margin-left: 10px" action="//jsonplaceholder.typicode.com/posts/" accept="image/png">
+            <Input v-model='data.businessName' style="width: 150px;float: left"  disabled></Input>
+            <Upload style="float: left;line-height: 29px;margin-left: 10px"
+                    ref="upload"
+                    :show-upload-list="false"
+                    :action="wxImgUrl"
+                    :format="['jpg','jpeg','png']"
+                    :headers="headers"
+                    :before-upload="handleBeforeUpload"
+                    :on-success="handleSuccess"
+            >
               <Button class="uploadbtn">上传</Button>
             </Upload>
-            <a href="" class="download">下载</a>
+            <a target="view__blank" :href="data.businessName" class="download" download="" v-if="data.businessName">下载</a>
+            <a class="download" v-else>下载</a>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="购物合同扫描:">
-            <Input v-model='data.purchaseName' style="width: 150px;float: left" ></Input>
-            <Upload style="float: left;line-height: 29px;margin-left: 10px" action="//jsonplaceholder.typicode.com/posts/" accept="image/png">
+            <Input v-model='data.purchaseName' style="width: 150px;float: left" disabled></Input>
+            <Upload style="float: left;line-height: 29px;margin-left: 10px"
+                    ref="upload2"
+                    :show-upload-list="false"
+                    :action="wxImgUrl"
+                    :format="['jpg','jpeg','png']"
+                    :headers="headers"
+                    :before-upload="handleBeforeUpload2"
+                    :on-success="handleSuccess2"
+            >
               <Button class="uploadbtn">上传</Button>
             </Upload>
-            <a href="" class="download">下载</a>
+            <a target="view__blank" :href="data.purchaseName" class="download" v-if="data.purchaseName">下载</a>
+            <a v-else class="download">下载</a>
           </FormItem>
         </Col>
       </Row>
@@ -142,7 +160,10 @@
 </template>
 
 <script>
-  import { } from '../../../../api/system/CustomerManagement/CustomerManagement'
+  import * as api from "_api/lease/customerSM";
+  import Cookies from 'js-cookie'
+  import { TOKEN_KEY } from '@/libs/util'
+
   export default {
         name: "SurveyList",
         props:{
@@ -151,28 +172,56 @@
         },
         data(){
             return {
+              wxImgUrl: api.wxImgUrl,//图片地址
+              headers: {
+                Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+              }, //获取token
             }
         },
-    methods:{
-      verify(){
+    methods: {
+      verify() {
         var reg = /^\+?[1-9]\d*$/;
-        if(!reg.test(this.data.applyTrustMoney)){
+        if (!reg.test(this.data.applyTrustMoney)) {
           this.$Message.error('请输入大于0的正整数!')
         }
-        if(this.data.applyTrustMoney > 10000){
+        if (this.data.applyTrustMoney > 10000) {
           this.$message.error('首次申请额度不能大于10000')
         }
       },
-      ChangeTime(value){
+      ChangeTime(value) {
         // console.log(value)
         this.data.operationStart = value
-       },
-      ChangeTime2(value){
+      },
+      ChangeTime2(value) {
         // console.log(value,2312312312)
         this.data.operationEnd = value
       },
-      ChangeTime3(value){
+      ChangeTime3(value) {
         this.data.registerDate = value
+      },
+      // 上传前
+      handleBeforeUpload() {
+        this.$refs.upload.clearFiles();
+      },
+      // 上传成功
+      handleSuccess(res, file) {
+        console.log(res)
+        if (res.code == 0) {
+          this.data.businessName = api.getfile + res.data.url
+          console.log(this.data.businessName)
+        }
+        // 二
+      },
+      // 上传前
+      handleBeforeUpload2() {
+        this.$refs.upload.clearFiles();
+      },
+      // 上传成功
+      handleSuccess2(res, file) {
+        console.log(res)
+        if (res.code == 0) {
+          this.data.purchaseName = api.getfile + res.data.url
+        }
       }
     }
     }

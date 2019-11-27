@@ -148,7 +148,7 @@
         </Row>
         <Row>
           <Col>
-            <FormItem label="微信二维码:" inline prop="upload">
+            <FormItem label="微信二维码:" inline prop="src">
               <Upload
                 ref="upload"
                 :show-upload-list="false"
