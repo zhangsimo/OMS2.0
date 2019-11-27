@@ -41,7 +41,7 @@ export function findByCode(params) {
 //审核状态
 export function SHstate() {
   return axios.request({
-    url: `${api.omsProduct}/trialRegister/findAllStatus`,
+    url: `${api.omsApi}/trialRegister/findAllStatus`,
     method: 'get'
   })
 }

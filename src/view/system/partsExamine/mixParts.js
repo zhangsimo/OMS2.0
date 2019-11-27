@@ -36,7 +36,7 @@ export const minxParts = {
           'value':0
         },
         {
-          'label':'未通过',
+          'label':'不通过',
           'value':2
         }
       ],
