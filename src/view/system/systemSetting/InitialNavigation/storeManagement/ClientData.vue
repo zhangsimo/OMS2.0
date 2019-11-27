@@ -2,41 +2,29 @@
   <div style="height: 500px;overflow:hidden;overflow-y: scroll">
  <Form :label-width="80"  :model='data' :rules="rules" ref="form">
    <div class="tabList">
-<!--             <FormItem label='LOGO图片:'  >-->
-<!--               <div class="demo-upload-list" v-for="item in uploadList">-->
-<!--                 <template v-if="item.status === 'finished'">-->
-<!--                   <img :src="item.url">-->
-<!--                   <div class="demo-upload-list-cover">-->
-<!--                     <Icon type="ios-eye-outline" @click="handleView(item.name)"></Icon>-->
-<!--                     <Icon type="ios-trash-outline" @click="handleRemove(item)"></Icon>-->
-<!--                   </div>-->
-<!--                 </template>-->
-<!--                 <template v-else>-->
-<!--                   <Progress v-if="item.showProgress" :percent="item.percentage" hide-info></Progress>-->
-<!--                 </template>-->
-<!--               </div>-->
-<!--               <Upload-->
-<!--                 v-ref:upload-->
-<!--                 :show-upload-list="false"-->
-<!--                 :default-file-list="defaultList"-->
-<!--                 :on-success="handleSuccess"-->
-<!--                 :format="['jpg','jpeg','png']"-->
-<!--                 :max-size="2048"-->
-<!--                 :on-format-error="handleFormatError"-->
-<!--                 :on-exceeded-size="handleMaxSize"-->
-<!--                 :before-upload="handleBeforeUpload"-->
-<!--                 multiple-->
-<!--                 type="drag"-->
-<!--                 action="//jsonplaceholder.typicode.com/posts/"-->
-<!--                 style="display: inline-block;width:58px;">-->
-<!--                 <div style="width: 58px;height:58px;line-height: 58px;">-->
-<!--                   <img src="../../../../../assets/images/upImg.svg" width="58">-->
-<!--                 </div>-->
-<!--               </Upload>-->
-<!--               <Modal title="查看图片" :visible.sync="visible">-->
-<!--                 <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">-->
-<!--               </Modal>-->
-<!--             </FormItem>-->
+             <FormItem label='LOGO图片:'  >
+               <Upload
+                 ref="upload"
+                 :show-upload-list="false"
+                 :action="wxImgUrl"
+                 :format="['jpg','jpeg','png']"
+                 :headers="headers"
+                 :before-upload="handleBeforeUpload"
+                 :on-success="handleSuccess"
+               >
+                 <div class="upwarp" style="width: 58px;height:58px;line-height: 58px;">
+                   <Icon type="md-image" size="24" color="#dfdfdf" v-if="!uploadSrc" />
+                   <img
+                     class="wechatimg"
+                     width="56px"
+                     height="56px"
+                     :src="uploadSrc"
+                     alt="LOGO图片"
+                     v-else
+                   />
+                 </div>
+               </Upload>
+             </FormItem>
          <FormItem label='企业号:' prop="firm">
            <Input v-model='data.firm' style="width: 580px" ></Input>
          </FormItem>
@@ -154,8 +142,10 @@
 </template>
 
 <script>
-
-  export default {
+    import * as api from "_api/lease/customerSM";
+    import Cookies from 'js-cookie'
+    import { TOKEN_KEY } from '@/libs/util'
+    export default {
         name: "Data",
         components:{
         },
@@ -175,17 +165,10 @@
                 }
             };
             return {
-                defaultList: [
-                    {
-                        'name': 'a42bdcc1178e62b4694c830f028db5c0',
-                        'url': 'https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar'
-                    },
-                    {
-                        'name': 'bc7521e033abdd1e92222d733590f104',
-                        'url': 'https://o5wwk8baw.qnssl.com/bc7521e033abdd1e92222d733590f104/avatar'
-                    }
-                ],
-                imgName: '',
+                wxImgUrl: api.wxImgUrl,//图片地址
+                headers: {
+                    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+                }, //获取token
                 visible: false,
                 clientDisable:true,
                 rules:{
@@ -224,12 +207,26 @@
                     ],
 
                 },
-                uploadList:''
+                uploadSrc:''
             }
         },
         created(){
         },
         methods:{
+            // 上传前
+            handleBeforeUpload() {
+                this.$refs.upload.clearFiles();
+            },
+            // 上传成功
+            handleSuccess(res, file){
+                console.log(res)
+                console.log(api)
+                if(res.code == 0) {
+                    this.uploadSrc =api.getfile+res.data.url
+                    this.data.src = api.getfile+res.data.url
+                    console.log(this.data.src)
+                }
+            },
             //清除内容
             resetFields() {
                 this.$refs.form.resetFields()
@@ -244,43 +241,6 @@
                     }
                 })
             },
-            handleView (name) {
-                this.imgName = name;
-                this.visible = true;
-            },
-            handleRemove (file) {
-                const fileList = this.$refs.upload.fileList;
-                this.$refs.upload.fileList.splice(fileList.indexOf(file), 1);
-            },
-            handleSuccess (res, file) {
-                file.url = 'https://o5wwk8baw.qnssl.com/7eb99afb9d5f317c912f08b5212fd69a/avatar';
-                file.name = '7eb99afb9d5f317c912f08b5212fd69a';
-            },
-            handleFormatError (file) {
-                this.$Notice.warning({
-                    title: 'The file format is incorrect',
-                    desc: 'File format of ' + file.name + ' is incorrect, please select jpg or png.'
-                });
-            },
-            handleMaxSize (file) {
-                this.$Notice.warning({
-                    title: 'Exceeding file size limit',
-                    desc: 'File  ' + file.name + ' is too large, no more than 2M.'
-                });
-            },
-            handleBeforeUpload () {
-                const check = this.uploadList.length < 5;
-                if (!check) {
-                    this.$Notice.warning({
-                        title: 'Up to five pictures can be uploaded.'
-                    });
-                }
-                return check;
-            },
-            changeTime(data ,res){
-                console.log(data,123)
-                // this.data.softOpenDate = data
-            }
         }
     }
 </script>
@@ -296,5 +256,17 @@
 }
 .staff-name {
   width: 200px;
+}
+.upwarp {
+  border-radius: 10px;
+  border: dashed 1px #dfdfdf;
+  text-align: center;
+  cursor: pointer;
+  object-fit: contain;
+}
+.wechatimg {
+  display: inline-block;
+  font-size: 10px;
+  text-align: center;
 }
 </style>
