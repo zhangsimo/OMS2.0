@@ -50,7 +50,7 @@ let checWxUrl = (rule, value, callback) => {
     callback(new Error("微信二维码不能为空"));
   } else {
     if (!value.length <= 0) {
-      callback(new Error("请输入正确的微信号"));
+      callback(new Error("请上传微信二维码"));
     } else {
       callback();
     }
@@ -202,7 +202,7 @@ const data = () => {
 };
 
 const mounted = function() {
-  this.initmodalData = { ...this.modalData };
+  this.initmodalData = this._.cloneDeep(this.modalData);
   this.initCustomer();
 };
 
@@ -280,7 +280,7 @@ const methods = {
   },
   // 新增
   add() {
-    this.modalData = { ...this.initmodalData };
+    this.modalData = this._.cloneDeep(this.initmodalData);
     this.new = true;
     this.modal = true;
   },
@@ -296,11 +296,14 @@ const methods = {
     this.modalData.birthday = this.tableL.currentRow.birthday;
     this.modalData.mobile = this.tableL.currentRow.mobile;
     this.modalData.qq = this.tableL.currentRow.qq;
+    console.log(this.modalData.qq, this.tableL.currentRow.qq)
     this.modalData.wechat = this.tableL.currentRow.wechat;
     this.modalData.email = this.tableL.currentRow.email;
     this.modalData.signature = this.tableL.currentRow.sign;
+    this.modalData.src = this.tableL.currentRow.wechatPhoto;
     this.new = false;
     this.modal = true;
+    console.log(this.modalData, this.tableL.currentRow)
   },
   // 保存
   async save() {
@@ -399,7 +402,7 @@ const methods = {
   // 上传成功
   handleSuccess(res, file){
     if(res.code == 0) {
-      this.modalData.src = api.getfile+res.data.wechatPhoto
+      this.modalData.src = api.getfile+res.data.url
     }
   },
   // 弹窗保存-保存/修改客服信息
@@ -418,6 +421,7 @@ const methods = {
           data.wechat = this.modalData.wechat;
           data.email = this.modalData.email;
           data.sign = this.modalData.signature;
+          data.wechatPhoto = this.modalData.src;
           let res = await api.saveCustomer(data);
           if(res.code === 0) {
             this.$Message.success('保存成功');

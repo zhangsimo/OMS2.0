@@ -398,4 +398,8 @@ export default class ProductLA extends Vue {
             self.$Message.error(res.message);
         }
     }
+
+    private down() {
+        api.down('1100000000');
+    }
 }

@@ -29,8 +29,11 @@ const dev = {
   // financeAccount: '', // 9320
   // financeEdit: '', // 9330
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
+  uploadApi: 'http://192.168.2.47:5100/file/uploadFile',
+  getFileApi: 'https://devoms2.g-parts.cn',
+  downApi: 'http://api2.g-parts.cn/gpart-oss-provider',
   passportApi: 'http://192.168.2.47:5200', // passport微服务API
-  essentialApi: 'https://api.g-parts.cn/gpart-essential-provider' // 基础服务API
+  essentialApi: 'https://api2.g-parts.cn/gpart-essential-provider' // 基础服务API
 }
 
 const test = {
@@ -47,6 +50,9 @@ const test = {
   omsBatch: 'https://tsapi2.g-parts.cn/gpart-batch-provider',
   omsSettle:'https://tsapi2.g-parts.cn/gpart-settlement-provider',
   omsSotck:'https://tsapi2.g-parts.cn/gpart-sotck-provider',
+  uploadApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile',
+  getFileApi: 'https://tsoms2.g-parts.cn',
+  downApi: 'https://tsapi2.g-parts.cn/gpart-oss-provider',
 }
 
 const audit = {

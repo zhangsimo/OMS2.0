@@ -1,5 +1,6 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
+import fetchs from 'axios'; 
 
 // 数据字典
 export function getdictCode(code) {
@@ -64,6 +65,11 @@ export function employeeDeletePart (data) {
     method: 'post',
     data
   })
+}
+
+export function down(id) {
+  let url = `${api.downApi}/file/get?fileId=` + id;
+  window.open(url, '_balnk');
 }
 
 export const upxlxs = `${api.wmsApi}/employeeAttribute/import`;
