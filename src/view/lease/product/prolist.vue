@@ -266,9 +266,8 @@
             key: 'type',
             minWidth: 100,
             render:(h,params) => {
-              let objType = params.row.type||""
-              objType = JSON.parse(objType)
-              return h('span',objType.name)
+              let objType = params.row.type||0
+              return h('span',this.proTypeListItem(objType))
             }
           },
           {
@@ -291,9 +290,8 @@
             key: 'disable',
             minWidth: 70,
             render:(h,params) => {
-              let objType = params.row.disable||""
-              objType = JSON.parse(objType)
-              return h('span',objType.name)
+              let objType = params.row.isDisabled||0
+              return h('span',objType==1?'否':'是')
             }
           },
           {
@@ -439,7 +437,7 @@
               objReq.address = this.formValidate.address
               objReq.coin = this.formValidate.coin
             }
-            if(this.formValidate.id){
+            if(this.proModalTit == '编辑产品'){
               objReq.id = this.formValidate.id
             }
 
@@ -468,7 +466,7 @@
           this.loading = false
           if (res.code == 0) {
             this.tbdata = res.data.content || []
-            this.page.total = res.totalElements
+            this.page.total = res.data.totalElements
           }
 
         })
@@ -478,9 +476,6 @@
         this.proModal = true
         this.proModalTit = '新增产品'
         this.$refs['proModal'].resetFields();
-        if(this.formValidate.id){
-          delete this.formValidate.id
-        }
       },
       //编辑产品
       editPro(){
@@ -489,14 +484,14 @@
           this.proModal = true
           this.proModalTit = '编辑产品'
           this.formValidate.name = this.selectTable.name
-          this.formValidate.type = JSON.parse(this.selectTable.type||"").value||0
+          this.formValidate.type = this.selectTable.type
           this.formValidate.salesPrice = this.selectTable.salesPrice
           this.formValidate.isCycle = this.selectTable.isCycle
           this.formValidate.remark = this.selectTable.remark
           this.formValidate.address = this.selectTable.address
           this.formValidate.coin = this.selectTable.coin
           this.formValidate.id = this.selectTable.id
-          this.formValidate.disable = this.formValidate.disable
+          this.formValidate.disable = this.selectTable.isDisabled
         }else{
           this.$Message.error("请选择要修改的数据！")
         }
@@ -513,7 +508,7 @@
           })
           this.getProductDetailFun()
         }else{
-          this.$Message.error("请选择要修改的数据！")
+          this.$Message.error("请选择要关联的数据！")
         }
       },
       getProductDetailFun(){
@@ -633,6 +628,9 @@
           this.$Message.error("请选择要关联的资源！")
         }
 
+      },
+      proTypeListItem(v){
+        return proTypeList(v)
       }
     },
     computed: {
