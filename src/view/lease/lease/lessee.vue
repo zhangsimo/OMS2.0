@@ -28,7 +28,7 @@
               </Select>
             </div>
             <div class="db flex">
-              <div>
+              <div class="aaaa">
                 <Input v-model="lesseeID" placeholder="请输入租户ID" style="width: 100px" class="mr10"></Input>
                 <Input v-model="lesseeName" placeholder="请输入租户名称" style="width: 120px" class="mr10"></Input>
                 <Input v-model="lesseePhone" placeholder="请输入租户手机号" style="width: 130px" class="mr10"></Input>
@@ -89,7 +89,7 @@
           <div><label>推荐员：</label><Input v-model="Recommended_member" style="width: 150px"></Input></div>
         </div>
         <div>
-          <div>
+          <div class="xue">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" class="flex">
               <label class="difficult">省份：</label>
             <FormItem prop="province" style="margin-right: 15px">
@@ -109,11 +109,11 @@
         <div>
           <div><label>开通时间：</label>
             <!--<Date-picker v-model="startDate" type="datetime" style="width: 150px"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="startDate" ></Date-picker>
+            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" :options="options3" v-model="startDate" ></Date-picker>
           </div>
           <div><label>结束时间：</label>
             <!--<Date-picker type="datetime" v-model="endDate" style="width: 150px"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="endDate"></Date-picker>
+            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="endDate" :options="options3"></Date-picker>
           </div>
         </div>
         <div>
@@ -124,7 +124,7 @@
           <div><label>下次付费时间：</label>
             <!--<Date-picker type="datetime" v-model="nextPayTime" style="width: 150px"></Date-picker>-->
             <!--<Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime"></Date-picker>
+            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime" :options="options4"></Date-picker>
           </div>
           <div><label>下次付费金额：</label><Input v-model="nextPayMoney" style="width: 150px"></Input></div>
         </div>
@@ -181,6 +181,16 @@
         name: "lessee",
         data(){
           return{
+            options3: {
+              disabledDate (date) {
+                return date && date.valueOf() < Date.now() - 86400000;
+              }
+            },
+            options4: {
+              disabledDate (date) {
+                return date && date.valueOf() < Date.now() - 86400000;
+              }
+            },
             cityId:'',
             List: [{
               value: 9999,
@@ -432,9 +442,16 @@
                 minWidth: 168,
                 key:'type',
                 render:(h,params) => {
-                  let type = JSON.parse(params.row.type||{})
+                  console.log(params.row)
+                  let zi = ''
+                  if(params.row.type === 0){
+                    zi = "功能模块"
+                  }
+                  if(params.row.type === 1){
+                    zi = "接口调用"
+                  }
                   // console.log(paymentType.name)
-                  return h('span',type.name)
+                  return h('span',zi)
                 }
               },
               {
@@ -684,8 +701,10 @@
           params.nextRenewDate = this.transTime(this.nextPayTime)
           params.id = this.Message.id
             Confirm(params).then(res =>{
-              this.getList()
-              this.changeAlert = false
+              if(res.code === 0){
+                this.getList()
+                this.changeAlert = false
+              }
           })
 
         },
@@ -706,15 +725,16 @@
           this.loading2 = true
           // console.log(this.choose.tenantId)
           let params = {}
-          let tenantID = this.choose.tenantId
+          // let tenantID = this.choose.tenantId
           params.page = this.page2.num - 1
           params.size = this.page2.size
-          Product({tenantId:tenantID,params}).then(res =>{
+          let data = {}
+          Product({data:data,params:params}).then(res =>{
             if(res.code === 0){
               this.loading2 = false
-              this.page2.total = res.totalElements
+              this.page2.total = res.data.totalElements
               // console.log(res.totalElements)
-              this.tbdata2 = res.data||[]
+              this.tbdata2 = res.data.content || []
             }
           })
         },
@@ -731,14 +751,14 @@
         CheckOrder(){
           this.loading = true
           let params = {}
-          let tenantID = this.choose.tenantId
           params.page = this.page3.num - 1
           params.size = this.page3.size
-          Order({tenantId:tenantID,params}).then(res => {
+          let data = {}
+          Order({params:params,data:data}).then(res => {
             this.loading = false
             if(res.code === 0){
-              this.page3.total = res.totalElements
-              this.tbdata3 = res.data||[]
+              this.page3.total = res.data.totalElements
+              this.tbdata3 = res.data.content || []
             }
           })
         },
@@ -758,7 +778,8 @@
           let tenantID = this.choose.tenantId
           params.page = this.page4.num - 1
           params.size = this.page4.size
-          Money({tenantId:tenantID,params}).then(res => {
+          let data = {}
+          Money({params:params,data:data}).then(res => {
             this.loading4 = false
             if(res.code === 0){
               this.page4.total = res.totalElements
@@ -854,7 +875,7 @@
             this.address = this.Message.address
             this.mobile = this.Message.mobile
             this.tenantId = this.Message.managerIdentity
-            this.startDate = this.Message.startDate
+            this.startDate = new Data()// this.Message.startDate
             this.endDate = this.Message.endDate
             this.formValidate2.province = this.Message.provinceId
             this.formValidate2.city = this.Message.cityId
@@ -901,4 +922,12 @@
 <style scoped>
   @import "index.css";
   @import "Modify_user.css";
+</style>
+<style scoped>
+  .xue >>> .ivu-form-item{
+  margin-bottom: 0!important;
+  }
+  .xue >>> .ivu-form-item-content{
+    height: 33px;
+  }
 </style>
