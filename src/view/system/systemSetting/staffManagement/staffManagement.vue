@@ -14,8 +14,9 @@
       <div class="staff-change">
        <a class="mr10" @click="findRootGroup"><Icon custom="iconfont iconxinzengicon icons"/> 新增 </a>
         <a class="mr10" @click="changStaffList"><Icon custom="iconfont iconbianjixiugaiicon icons"/> 修改</a>
-        <a class="mr10" @click =changeDimission><Icon custom="iconfont iconbianjixiugaiicon icons"/> 离职</a>
-        <a class="mr10" @click="giveUser"><Icon custom="iconfont iconziyuan1 icons"/> 开通账号</a>
+        <a class="mr10" @click =changeDimission v-if="!oneStaffChange.office"><Icon custom="iconfont iconlizhiicon icons"/> 离职</a>
+        <a class="mr10" @click =changeDimission v-if="oneStaffChange.office"><Icon type="md-person-add" /> 复职</a>
+        <a class="mr10" @click="giveUser" v-if="!oneStaffChange.office"><Icon custom="iconfont iconziyuan1 icons"/> 开通账号</a>
         <a class="mr10" @click="restPassword"><Icon custom="iconfont iconziyuan1 icons"/> 重置密码</a>
         <i-button  type="warning" class="staff-btn mr10" @click="openCompany"><Icon custom="iconfont iconxuanzetichengchengyuanicon" /> 新增兼职公司</i-button>
         <i-button  type="warning" class="staff-btn mr10" @click="lookCompany"><Icon custom="iconfont iconchaxunicon" />查看兼职公司</i-button>
@@ -95,8 +96,8 @@
         data() {
             return {
                 isDimission :[
-                    {name: '是' , value:0},
-                    {name: '否' , value:1}
+                    {name: '是' , value:1},
+                    {name: '否' , value:0}
                 ],
                 shopCode:'',
                 loading: true,
@@ -282,10 +283,10 @@
               this.getAllStaffList()
           },
           inquireStaff(){
-              if(this.staffphoneNumber && !(/^1[3456789]\d{9}$/.test(this.staffphoneNumber))){
-                  this.$Message.warning("手机号码有误，请重填");
-                  return false;
-              }
+              // if(this.staffphoneNumber && !(/^1[3456789]\d{9}$/.test(this.staffphoneNumber))){
+              //     this.$Message.warning("手机号码有误，请重填");
+              //     return false;
+              // }
               this.page.num = 1
               this.getAllStaffList()
           },
@@ -344,7 +345,6 @@
                          stop()
                          if(res.code ==0){
                              this.$Message.success(res.message)
-                             this. cancel()
                              this.getAllStaffList()
                          }
                      }).catch(err => {
@@ -389,8 +389,22 @@
           },
           //员工离职
           changeDimission(){
-                this.changStaffList()
-              this.title='员工离职'
+              if(!this.oneStaffChange){
+                  this.$Message.error('请至选择一条员工信息')
+                  return false
+              }
+              let stop = this.$loading()
+              this.oneStaffChange.office =  this.oneStaffChange.office == 0 ? 1 :0
+              editUser(this.oneStaffChange).then( res => {
+                  stop()
+                  if(res.code ==0){
+                      this.$Message.success('修改成功')
+                      this.getAllStaffList()
+                  }
+              }).catch(err => {
+                  stop()
+              })
+
           },
           //重置密码
           restPassword(){
@@ -430,7 +444,9 @@
                   data.tenantUid  = this.oneStaffChange.id
                   putNewCompany(data).then( res => {
                       stop()
-
+                  if(res.code == 0){
+                      this.$Message.success('开通成功')
+                  }
                   })
                   this.setPasswordShow = false
               })
@@ -501,6 +517,11 @@
   .staff-name {
     height: 30px;
     width: 140px;
+  }
+  .center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .staff-phone-number{
     height: 30px;

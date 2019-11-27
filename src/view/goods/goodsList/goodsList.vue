@@ -10,28 +10,28 @@
             </Select>
           </div>
           <div class="db">
-            <Button type="default" @click="search" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
+            <Button type="default" @click="advancedSearch=true" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addPro"><Icon type="md-add"/> 新增</Button>
+            <Button class="mr10"><Icon type="md-add"/> 新增</Button>
           </div>
           <div class="db">
             <Button type="default" @click='submit("formPlan")' class="mr10"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="editPro"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+            <Button class="mr10" ><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
+            <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10"><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button>
+            <Button class="mr10"><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+            <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
           </div>
           <div class="db">
-            <Button @click="linkProMadel" class="mr10"><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button>
+            <Button class="mr10"><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button>
           </div>
         </div>
       </div>
@@ -62,10 +62,11 @@
                     </Row>
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
-                    <Input class="w160" v-model="formValidate.planDate"></Input>
+                    <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
+                    <DatePicker @on-change="setDataFun" class="w160" type="date" placeholder="选择日期"></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner" >
-                    <Input class="w160" v-model="formPlan.planner"></Input>
+                    <Input class="w160" readonly v-model="formPlan.planner"></Input>
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
                     <Input class="w160" v-model="formPlan.remark"></Input>
@@ -85,7 +86,7 @@
                     </Select>
                   </FormItem>
                   <FormItem label="计划单号：" prop="planOrderNum">
-                    <Input class="w160" v-model="formPlan.planOrderNum"></Input>
+                    <Input class="w160" readonly v-model="formPlan.planOrderNum"></Input>
                   </FormItem>
                   <FormItem label="其他费用：" prop="otherPrice">
                     <Input class="w160" v-model="formPlan.otherPrice"></Input>
@@ -202,8 +203,16 @@
         </div>
       </div>
     </section>
+    <!--添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
-    <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
+    <!--选择供应商-->
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+
+    <Drawer title="高级查询" v-model="advancedSearch" width="720">
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+      <p>Some contents...</p>
+    </Drawer>
   </div>
 </template>
 <script>
@@ -214,7 +223,7 @@
   import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
   import SelectPartCom from "./components/selectPartCom";
-  import SelectSupplier from "./components/selectSupplier";
+  import SelectSupplier from "./components/supplier/selectSupplier";
 
   export default {
     name: 'goodsList',
@@ -263,9 +272,11 @@
         }
       }
       return {
+        //快速订单查询状态
         purchaseType:0,
         purchaseTypeArr:purchaseTypeList()||[],
-
+        //高级搜索层
+        advancedSearch:false,
 
         linkModal: false,
         proModal:false,
@@ -273,68 +284,7 @@
         split1:0.2,
         searchValue: '',
         dateTime: '',
-        treeData: [
-          {
-            title: '授权管理',
-            expand: true,
-            children: [
-              {
-                title: 'parent 1-1',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-1-1'
-                  },
-                  {
-                    title: 'leaf 1-1-2'
-                  }
-                ]
-              },
-              {
-                title: 'parent 1-2',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-2-1'
-                  },
-                  {
-                    title: 'leaf 1-2-1'
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            title: '授权管理',
-            expand: true,
-            children: [
-              {
-                title: 'parent 1-1',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-1-1'
-                  },
-                  {
-                    title: 'leaf 1-1-2'
-                  }
-                ]
-              },
-              {
-                title: 'parent 1-2',
-                expand: true,
-                children: [
-                  {
-                    title: 'leaf 1-2-1'
-                  },
-                  {
-                    title: 'leaf 1-2-1'
-                  }
-                ]
-              }
-            ]
-          }
-        ],
+
 
         formValidate: {
           name: '',
@@ -432,19 +382,29 @@
       }
     },
     mounted() {
-      //this.initStart()
-      this.$nextTick(()=>{
-        let wrapH = this.$refs.paneLeft.offsetHeight;
-        let planFormH = this.$refs.planForm.offsetHeight;
-        let planBtnH = this.$refs.planBtn.offsetHeight;
-        // let planPageH = this.$refs.planPage.offsetHeight;
-        //获取左侧侧表格高度
-        this.leftTableHeight = wrapH-70;
-        //获取右侧表格高度
-        this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-      })
+      setTimeout(()=>{
+        this.getDomHeight();
+      },0);
+
+      window.onresize = () => {
+        this.getDomHeight();
+      }
+
     },
     methods: {
+      //获取表格高度
+      getDomHeight(){
+        this.$nextTick(()=>{
+          let wrapH = this.$refs.paneLeft.offsetHeight;
+          let planFormH = this.$refs.planForm.offsetHeight;
+          let planBtnH = this.$refs.planBtn.offsetHeight;
+          // let planPageH = this.$refs.planPage.offsetHeight;
+          //获取左侧侧表格高度
+          this.leftTableHeight = wrapH-70;
+          //获取右侧表格高度
+          this.rightTableHeight = wrapH-planFormH-planBtnH-38;
+        })
+      },
       initStart() {
         this.getList()
       },
@@ -504,33 +464,8 @@
       addPro(){
         this.$refs.selectPartCom.init()
       },
-      //编辑产品
-      editPro(){
-        this.$refs['proModal'].resetFields();
-        if(this.selectTable.id){
-          this.proModal = true
-          this.proModalTit = '编辑产品'
-          this.formValidate.name = this.selectTable.name
-          this.formValidate.type = this.selectTable.type
-          this.formValidate.salesPrice = this.selectTable.salesPrice
-          this.formValidate.isCycle = this.selectTable.isCycle
-          this.formValidate.remark = this.selectTable.remark
-          this.formValidate.address = this.selectTable.address
-          this.formValidate.coin = this.selectTable.coin
-          this.formValidate.id = this.selectTable.id
-          this.formValidate.disable = this.formValidate.disable.toString()
-        }else{
-          this.$Message.error("请选择要修改的数据！")
-        }
-      },
-      //相关产品资源
-      linkProMadel(){
-        if(this.selectTable.id){
-          this.linkModal = true
-        }else{
-          this.$Message.error("请选择要修改的数据！")
-        }
-      },
+
+
 
       //分页
       changePage(p) {
@@ -551,37 +486,16 @@
         this.page.num = 1
         this.getList()
       },
-      //树形展开收缩
-      inHideShow(isB){
-        this.hideShow(isB,this.treeData)
-      },
-      hideShow(isB,treeData){
-        treeData.map((item)=>{
-          item.expand = !isB
-          if(item.children&&item.children.length>0){
-            this.hideShow(isB,item.children)
-          }
-        })
-      },
+
       //表格单选选中
       selectTabelData(v){
         this.selectTable = v
       },
+      //快速查询日期
       getDataQuick(v){
         console.log(v)
-      }
+      },
 
-    },
-    computed: {
-      placeh() {
-        let returnText = ""
-        this.searchTypeArr.filter((item) => {
-          if (item.value == this.searchType) {
-            returnText = "请填写" + item.name
-          }
-        })
-        return returnText
-      }
     },
   }
 </script>

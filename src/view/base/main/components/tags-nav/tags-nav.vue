@@ -111,7 +111,6 @@ export default {
     initBg(){
       let that = this
       this.$nextTick(()=>{
-        console.log(that.$refs.scrollOuter.offsetWidth,that.$refs.scrollBody.offsetWidth)
         if(that.$refs.scrollOuter.offsetWidth < that.$refs.scrollBody.offsetWidth){
           that.noRightActive = false
           that.noLeftActive = false

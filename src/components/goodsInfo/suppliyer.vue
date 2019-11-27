@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" :title="headerTit" width="1000">
+    <Modal v-model="searchPartLayer" title="供应商资料" width="1000">
       <div class="partCheck-hd">
         <Input class="w100 mr10" v-model="partName" placeholder="名称"></Input>
         <Input class="w100 mr10" v-model="partName" placeholder="编码"></Input>
@@ -33,17 +33,37 @@
 </template>
 
 <script>
-  import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
+//获取全部配件品牌
+// export function getAllBrand(data) {
+//   return axios.request({
+//     url: `${api.wmsApi}/wbPub/getPartBrand`,
+//     method: 'post',
+//     data
+//   })
+// }
+//获取系统分类
+// export function getCarClassifys(data) {
+//   return axios.request({
+//     url: `${api.wmsApi}/wbPub/getCarClassifys`,
+//     method: 'post',
+//     data
+//   })
+// }
+//获取标准名称
+// export function getCarPartName(data) {
+//   return axios.request({
+//     url: `${api.wmsApi}/wbPub/getPartStandardName`,
+//     method: 'post',
+//     data
+//   })
+// }
+  // import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
   export default {
-    name: "selectSupplier",
-    props:{
-      headerTit:''
-    },
+    name: "suppliyer",
     data(){
       return {
         loading:false,
         treeLoading:false,
-
         searchPartLayer:false,//配件名称查询层
         partName:'',//配件名称查询名字
         treeData:[],//系统分类树形数据
