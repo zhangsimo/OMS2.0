@@ -67,7 +67,18 @@ const data = () => {
     // 显示弹窗
     modal: false,
     // 弹窗数据
-    initmodalData: null,
+    initmodalData: {
+      name: "",
+      sex: 0,
+      mobile: "",
+      birthday: "", //生日
+      qq: "",
+      wechat: "",
+      email: "",
+      signature: "", // 签名
+      src: "", // 二维码图片
+      id: "",
+    },
     new: true, // true新增,false修改
     modalData: {
       name: "",
@@ -202,7 +213,6 @@ const data = () => {
 };
 
 const mounted = function() {
-  this.initmodalData = this._.cloneDeep(this.modalData);
   this.initCustomer();
 };
 
@@ -290,20 +300,19 @@ const methods = {
       this.$Message.error("必须选择客服进行修改");
       return;
     }
+    this.$refs.formValidate.resetFields();
     this.modalData.id = this.tableL.currentRow.id;
     this.modalData.name = this.tableL.currentRow.name;
     this.modalData.sex = this.tableL.currentRow.sex;
     this.modalData.birthday = this.tableL.currentRow.birthday;
     this.modalData.mobile = this.tableL.currentRow.mobile;
     this.modalData.qq = this.tableL.currentRow.qq;
-    console.log(this.modalData.qq, this.tableL.currentRow.qq)
     this.modalData.wechat = this.tableL.currentRow.wechat;
     this.modalData.email = this.tableL.currentRow.email;
     this.modalData.signature = this.tableL.currentRow.sign;
     this.modalData.src = this.tableL.currentRow.wechatPhoto;
     this.new = false;
     this.modal = true;
-    console.log(this.modalData, this.tableL.currentRow)
   },
   // 保存
   async save() {
@@ -438,7 +447,9 @@ const methods = {
     this.modal = false;
   },
   changeVisible() {
-    this.$refs.formValidate.resetFields();
+    if(this.new) {
+      this.$refs.formValidate.resetFields();
+    }
   },
   // 选择客服列表(左侧)行
   selectedRow(currentRow) {
