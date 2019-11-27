@@ -2,7 +2,7 @@
   <div class="content-oper content-oper-flex">
     <section class="oper-box">
       <div class="oper-top flex">
-        <div class="wlf">
+        <div class="wlf wlf-center">
           <div class="db">
             <span>快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
@@ -50,7 +50,7 @@
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
-          <div class="db">本年采购总金额：200000.00元</div>
+          <div class="db"><span>本年采购总金额：200000.00元</span></div>
         </div>
       </div>
     </section>
@@ -111,7 +111,7 @@
                       >
                       <Col span="5"
                         ><Button
-                          @click="addSuppler"
+                          @click="showModel('selectSupplier')"
                           class="ml5"
                           size="small"
                           type="default"
@@ -192,27 +192,29 @@
                 <div class="clearfix">
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon type="md-add" /> 选择采购计划</Button
+                      > 选择采购计划</Button
                     >
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon type="md-add" /> 删除配件</Button
+                      ><Icon custom="iconfont iconlajitongicon icons" /> 删除配件</Button
                     >
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon type="md-add" /> 订单调整</Button
+                      >订单调整</Button
                     >
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon type="md-add" /> 收货信息</Button
+                      @click="showModel('goodsInfo')"
+                      >收货信息</Button
                     >
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon type="md-add" /> 采购金额填写</Button
+                      @click="showModel('purchaseAmount')"
+                      >采购金额填写</Button
                     >
                   </div>
                 </div>
@@ -350,7 +352,12 @@
         </div>
       </div>
     </section>
-    <select-supplier ref="selectSupplier" header-tit="供应商资料"></select-supplier>
+    <!-- 供应商资料 -->
+    <select-supplier ref="selectSupplier" headerTit="供应商资料"></select-supplier>
+    <!-- 采购金额 -->
+    <purchase-amount ref="purchaseAmount"></purchase-amount>
+    <!-- 收货信息 -->
+    <goods-info ref="goodsInfo"></goods-info>
   </div>
 </template>
 

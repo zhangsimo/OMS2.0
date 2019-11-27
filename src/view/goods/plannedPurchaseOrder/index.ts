@@ -4,10 +4,14 @@ import { Vue, Component } from "vue-property-decorator";
 
 import QuickDate from '_c/getDate/dateget';
 import SelectSupplier from "./components/selectSupplier.vue";
+import PurchaseAmount from "./components/PurchaseAmount.vue";
+import GoodsInfo from './components/GoodsInfo.vue';
 @Component({
     components: {
         QuickDate,
-        SelectSupplier
+        SelectSupplier,
+        PurchaseAmount,
+        GoodsInfo
     }
 })
 export default class PlannedPurchaseOrder extends Vue {
@@ -248,11 +252,11 @@ export default class PlannedPurchaseOrder extends Vue {
       return total
     }
 
-    // 选择供应商
-    private addSuppler(){
-      let selectSupplier:any = this.$refs.selectSupplier;
-      selectSupplier.init();
-    };
+    // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息)
+    private showModel(name) {
+      let ref:any = this.$refs[name];
+      ref.init();
+    }
 
     private mounted() {
         this.$nextTick(()=>{

@@ -14,3 +14,7 @@
 .goods-list-form .t-price {
   white-space: nowrap;
 }
+.wlf-center {
+  display: flex;
+  align-items: center;
+}
