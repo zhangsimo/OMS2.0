@@ -10,10 +10,10 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="phone" placeholder="请输入手机号！" style="width: 180px" />
+            <Input v-model="phone" placeholder="请输入手机号" style="width: 180px" />
           </div>
           <div class="db mr10">
-            <Input v-model="company" placeholder="请输入公司名称！" style="width: 180px" />
+            <Input v-model="company" placeholder="请输入公司名称" style="width: 180px" />
           </div>
           <div class="db">
             <Button type="warning" class="mr10" @click="search"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
