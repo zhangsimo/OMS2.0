@@ -338,12 +338,17 @@
             // console.log(image)
             // console.log(this.value17)
             // console.log(window.location.pathname)
+          // base64编码的图片
+          //转换图片文件
+          var imgFile = this.dataURLtoFile(image);
+          console.log(imgFile)
           var type = this.query.map(item => {
             return item.name
           })
         var type2 =  type.join(",")
           // console.log(type)
           let data = {}
+          // data.fileUrl = image
           data.funcAction = window.location.pathname
           data.funcName = this.$route.meta.title
           data.questionContent = this.value17
@@ -355,8 +360,32 @@
                 this.screenshot = false
             }
           })
+        },
+      // base转为文件
+      // base64ImgtoFile(dataurl, filename = 'file') {
+      //   let arr = dataurl.split(',')
+      //   let mime = arr[0].match(/:(.*?);/)[1]
+      //   let suffix = mime.split('/')[1]
+      //   let bstr = atob(arr[1])
+      //   let n = bstr.length
+      //   let u8arr = new Uint8Array(n)
+      //   while (n--) {
+      //     u8arr[n] = bstr.charCodeAt(n)
+      //   }
+      //   return new File([u8arr], `${filename}.${suffix}`, {
+      //     type: mime
+      //   })
+      // },
+      dataURLtoFile(dataurl, filename) {//将base64转换为文件
+        var arr = ("data:image/png;base64,"+dataurl).split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+          }
+          return new File([u8arr], filename, {type:mime});
         }
-    },
+
+  },
     watch: {
       '$route'(newRoute) {
         this.setBreadCrumb(newRoute.matched)

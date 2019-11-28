@@ -127,7 +127,7 @@ export function Order(data) {
 //查看费用
 export function Money(data) {
   return axios.request({
-    url: `${api.omsApi}/tenantOrder/findById`,
+    url: `${api.wmsApi}/sysCoinRecord/findPageByDynamicQuery`,
     method: 'post',
     data:data.data,
     params:data.params
