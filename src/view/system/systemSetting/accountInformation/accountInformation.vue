@@ -22,7 +22,7 @@
             <label>华币数量:</label><span>剩余 <span style="color: #40a6ff;font-weight: bold;padding: 0 5px">{{ amount }}</span>个</span>
           </div>
           <div class="navationTwo">
-            <label>负责人:</label><span>{{ principal }}</span>
+            <label>负责人:</label><span>{{ salesMan }}</span>
           </div>
           <div class="navationTwo">
             <label>联系电话:</label><span>{{ phone }}</span>
@@ -31,7 +31,7 @@
             <label>分店数量:</label><span>{{ BranchNumber }}</span>
           </div>
           <div class="navationTwo">
-            <label>版本:</label><span>{{ versions }}</span>
+            <label>版本:</label><span>“非1.0版本”</span>
           </div>
         </div>
         <div class="navone2 mt30">
