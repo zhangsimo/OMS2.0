@@ -41,3 +41,7 @@ export function getNewSupplier (data) {
   })
 }
 
+//批量导入地址
+export const getup = `${api.wmsApi}/guest/importExcel`;
+
+

@@ -6,7 +6,7 @@
             <Option v-for="item in fasttipsList" :key="item.id" :value="item.id" >{{ item.name}}</Option>
           </Select>
         <Input v-model="fasttipsTitle"  style="width: 150px" class="mr10"/>
-        <span>供应商类型:</span>
+        <span class="mr5">供应商类型:</span>
         <Select v-model="supplierTypeOne" style="width:120px" class="mr10">
           <Option v-for="item in supplierType.CS00110" :key="item.itemCode" :value="item.id" >{{ item.itemName}}</Option>
         </Select>
@@ -27,6 +27,19 @@
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
         </Button>
+        <Upload
+          ref="upload"
+          style="display: inline-block"
+          :show-upload-list="false"
+          :action="upurl"
+          :headers="headers"
+          :format="['xlsx','xls']"
+          :on-format-error="onFormatError"
+          :on-success="onSuccess"
+          :before-upload ='beforeUpload'
+        >
+          <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 导入</Button>
+        </Upload>
       </div>
       <div class="tabeBox" >
       <div style="width: 3000px">
@@ -59,10 +72,11 @@
 
 <script>
   import ClientData from './ClientData'
-  import {getSupplierformation , getNewSupplier} from '@/api/system/essentialData/supplierManagement'
+  import {getSupplierformation , getNewSupplier,getup} from '@/api/system/essentialData/supplierManagement'
   import {area} from '@/api/lease/registerApi'
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
-
+  import Cookies from 'js-cookie'
+  import { TOKEN_KEY } from '@/libs/util'
 
   export default {
         name: "CustomerData",
@@ -250,11 +264,15 @@
                 clientList:{},
                 supplierTypeOne: '', //供应商类型
                 pitchSupplierOne:'',
-                supplier:''
+                supplier:'', //左侧id
+                headers:  {
+                    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+                },//请求头
+                upurl:getup,//批量导入地址
+
             }
         },
         created(){
-           // this.getlist()
             this.getAdress()
            this.getsupplierTypeList()
         },
@@ -313,6 +331,7 @@
             },
             //搜索
             queryList(){
+                this.supplier=''
                 this.getlist()
             },
             //选中一条信息
@@ -343,7 +362,24 @@
                 this.pitchSupplierOne.isClient == 1? this.pitchSupplierOne.isClient = true : this.pitchSupplierOne.isClient = false
                 this.clientList =this.pitchSupplierOne
                 this.clientDataShow = true
-            }
+            },
+            //批量上传失败
+            onFormatError(file) {
+                // console.log(file)
+                this.$Message.error('只支持xls xlsx后缀的文件')
+            },
+            // 上传成功函数
+            onSuccess (response) {
+                if(response.code != 0 ){
+                    this.$Message.success(response.message)
+                }else {
+                    this.$Message.success(response.message)
+                }
+            },
+            //上传之前清空
+            beforeUpload(){
+                this.$refs.upload.clearFiles()
+            },
         },
       watch:{
           newsupplierId:{

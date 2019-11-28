@@ -51,13 +51,7 @@
     </div>
   </Modal>
 
-<!--  批量导入紧俏品-->
-  <Modal v-model="allAddCommodShow" title="紧俏品导入">
-    <div slot='footer'>
-      <Button type='primary' >确定</Button>
-      <Button type='default' >取消</Button>
-    </div>
-  </Modal>
+
 </div>
 </template>
 

@@ -49,7 +49,7 @@ let checWxUrl = (rule, value, callback) => {
   if (!value) {
     callback(new Error("微信二维码不能为空"));
   } else {
-    if (!value.length <= 0) {
+    if (value.length <= 0) {
       callback(new Error("请上传微信二维码"));
     } else {
       callback();
@@ -123,7 +123,7 @@ const data = () => {
           trigger: "blur"
         }
       ],
-      upload: [
+      src: [
         {
           required: true,
           validator: checWxUrl,

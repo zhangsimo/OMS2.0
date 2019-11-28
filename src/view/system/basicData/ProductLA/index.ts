@@ -16,7 +16,7 @@ export default class ProductLA extends Vue {
         label: '电话号码',
     },]
     /**员工表选中的查询选项 */
-    private employeeSelecteOption: string = ""
+    private employeeSelecteOption: string = "0"
     /**员工表查询内容 */
     private employeeSelectContent: string = ""
     /**分配状态选项 */
@@ -113,7 +113,7 @@ export default class ProductLA extends Vue {
         },
     ]
     /**待分配列表选中的分配状态选项 */
-    private waitPartTransListSelecteOption: string = ""
+    private waitPartTransListSelecteOption: string = "0"
     /**待分配列表查询内容 */
     private waitPartTransListContent: string = ""
     /**待分配列表表头 */
@@ -218,11 +218,13 @@ export default class ProductLA extends Vue {
         let params: any = {}
         params.size = this.employeePage.size;
         params.page = this.employeePage.num - 1;
-        if (this.employeeSelecteOption == '0') {
-            params.userName = this.employeeSelectContent.trim();
-        }
-        if (this.employeeSelecteOption == '1') {
-            params.phone = this.employeeSelectContent.trim();
+        if(this.employeeSelectContent.trim().length > 0) {
+            if (this.employeeSelecteOption == '0') {
+                params.userName = this.employeeSelectContent.trim();
+            }
+            if (this.employeeSelecteOption == '1') {
+                params.phone = this.employeeSelectContent.trim();
+            }
         }
         if (this.DistributionStateSelecteOption != '0') {
             if (this.DistributionStateSelecteOption == '1') {
@@ -239,6 +241,8 @@ export default class ProductLA extends Vue {
             this.employeeLoading = false;
             this.employeeData = res.data.content;
             this.employeePage.total = res.data.totalElements
+        } else {
+            this.employeeLoading = false;
         }
     }
 
@@ -275,21 +279,23 @@ export default class ProductLA extends Vue {
         let params: any = { id: this.employeeId }
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
-        switch (this.waitPartTransListSelecteOption) {
-            case "0":
-                params.partCode = this.waitPartTransListContent;
-                break;
-            case "1":
-                params.fullName = this.waitPartTransListContent;
-                break;
-            case "2":
-                params.applyCarModel = this.waitPartTransListContent;
-                break;
-            case "3":
-                params.keyWord = this.waitPartTransListContent;
-                break;
-            default:
-                break;
+        if(this.waitPartTransListContent.trim().length > 0) {
+            switch (this.waitPartTransListSelecteOption) {
+                case "0":
+                    params.partCode = this.waitPartTransListContent;
+                    break;
+                case "1":
+                    params.fullName = this.waitPartTransListContent;
+                    break;
+                case "2":
+                    params.applyCarModel = this.waitPartTransListContent;
+                    break;
+                case "3":
+                    params.keyWord = this.waitPartTransListContent;
+                    break;
+                default:
+                    break;
+            }
         }
         let res: any = await api.findByEmp(params);
         if(res.code == 0) {

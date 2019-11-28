@@ -5,7 +5,11 @@
         <div class="wlf wlf-center">
           <div class="db">
             <span>快速查询：</span>
+          </div>
+          <div class="db">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+          </div>
+          <div class="db">
             <Select v-model="purchaseType" class="w90 mr10">
               <Option
                 v-for="item in purchaseTypeArr"
@@ -46,7 +50,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="expenseReg" class="mr10"
+            <Button @click="showModel('feeRegistration')" class="mr10"
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
@@ -106,9 +110,10 @@
                   <FormItem label="供应商：" prop="supplier">
                     <Row class="w160">
                       <Col span="19"
-                        ><Input v-model="formPlan.supplier"
-                        placeholder="请选择供应商" /></Col
-                      >
+                        ><Input
+                          v-model="formPlan.supplier"
+                          placeholder="请选择供应商"
+                      /></Col>
                       <Col span="5"
                         ><Button
                           @click="showModel('selectSupplier')"
@@ -122,7 +127,11 @@
                     </Row>
                   </FormItem>
                   <FormItem label="采购员：" prop="purchaser">
-                    <Input class="w160" placeholder="请输入采购员" v-model="formPlan.purchaser" />
+                    <Input
+                      class="w160"
+                      placeholder="请输入采购员"
+                      v-model="formPlan.purchaser"
+                    />
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
                     <Select class="w160" v-model="formPlan.billType">
@@ -171,7 +180,11 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input placeholder="请输入备注" class="w160" v-model="formPlan.mark" />
+                    <Input
+                      placeholder="请输入备注"
+                      class="w160"
+                      v-model="formPlan.mark"
+                    />
                   </FormItem>
                   <FormItem label="直发门店：">
                     <Select class="w160" v-model="formPlan.sendStore">
@@ -184,35 +197,40 @@
                     </Select>
                   </FormItem>
                   <FormItem label="订单号：">
-                    <Input placeholder="请输入订单号" class="w160" v-model="formPlan.orderId" />
+                    <Input
+                      placeholder="请输入订单号"
+                      class="w160"
+                      v-model="formPlan.orderId"
+                    />
                   </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"
-                      > 选择采购计划</Button
-                    >
+                    <Button size="small" class="mr10" @click="showModel('procurementModal')">选择采购计划</Button>
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
-                      ><Icon custom="iconfont iconlajitongicon icons" /> 删除配件</Button
+                      ><Icon custom="iconfont iconlajitongicon icons" />
+                      删除配件</Button
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"
-                      >订单调整</Button
-                    >
+                    <Button size="small" class="mr10">订单调整</Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"
+                    <Button
+                      size="small"
+                      class="mr10"
                       @click="showModel('goodsInfo')"
                       >收货信息</Button
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"
+                    <Button
+                      size="small"
+                      class="mr10"
                       @click="showModel('purchaseAmount')"
                       >采购金额填写</Button
                     >
@@ -241,7 +259,7 @@
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column title="操作" width="80">
                   <template v-slot="{ row }">
-                    <Button type="text" >查看</Button>
+                    <Button type="text">查看</Button>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -290,7 +308,11 @@
                     {{ row.price | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column title="采购金额" filed="totalprice" width="120">
+                <vxe-table-column
+                  title="采购金额"
+                  filed="totalprice"
+                  width="120"
+                >
                   <template v-slot="{ row }">
                     {{ (row.price * row.num) | priceFilters }}
                   </template>
@@ -354,8 +376,15 @@
     </section>
     <!-- 更多 -->
     <more-search ref="moreSearch"></more-search>
+    <!-- 费用登记 -->
+    <fee-registration ref="feeRegistration"></fee-registration>
     <!-- 供应商资料 -->
-    <select-supplier ref="selectSupplier" headerTit="供应商资料"></select-supplier>
+    <select-supplier
+      ref="selectSupplier"
+      headerTit="供应商资料"
+    ></select-supplier>
+    <!-- 选择采购计划单 -->
+    <procurement-modal ref="procurementModal"></procurement-modal>
     <!-- 采购金额 -->
     <purchase-amount ref="purchaseAmount"></purchase-amount>
     <!-- 收货信息 -->
@@ -366,6 +395,6 @@
 <script src="./index.ts"></script>
 
 <style lang="less" scoped>
-@import url('../../lease/product/lease.less');
+@import url("../../lease/product/lease.less");
 @import url("./index");
 </style>

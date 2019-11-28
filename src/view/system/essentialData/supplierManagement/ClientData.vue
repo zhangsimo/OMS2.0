@@ -20,12 +20,12 @@
        <TabPane label="基本信息">
          <div style="display: flex">
            <div style="flex-flow: row nowrap;width: 100%" >
-             <FormItem label='客户简称:' prop="shortName" >
+             <FormItem label='供应商简称:' prop="shortName" >
                <Input v-model='data.shortName' style="width: 180px" ></Input>
              </FormItem>
            </div>
          </div>
-         <FormItem label='客户全称:' prop="fullName">
+         <FormItem label='供应商全称:' prop="fullName">
            <Input v-model='data.fullName' style="width: 480px" ></Input>
          </FormItem>
          <div style="display: flex">
@@ -189,6 +189,7 @@
 <script>
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 
+
   export default {
         name: "Data",
         components:{
@@ -209,6 +210,7 @@
                 }
             };
             return {
+
                 list:[
                     {
                         label: 123,
