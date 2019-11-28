@@ -29,7 +29,7 @@
           <div class="navone_one">
             <span>反馈图片</span>
           </div>
-          <div class="navone_three">
+          <div class="navone_three" @click="SHow">
             <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572496871409&di=751d2e1e8dcdb65b768376837c1d3c81&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D183179797%2C2678753605%26fm%3D214%26gp%3D0.jpg" style="width: 90px;height: 90px" alt="">
           </div>
         </div>
@@ -48,10 +48,16 @@
             <span>回复：</span>
           </div>
           <div class="navone_two">
-            <div>{{ Msg.settleContent}}</div>
+            <Input v-model="Msg.settleContent" style="width: 970px" />
           </div>
         </div>
       </div>
+
+    <Modal
+      v-model="modal10"
+      class-name="vertical-center-modal" footer-hide>
+      <img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1572496871409&di=751d2e1e8dcdb65b768376837c1d3c81&imgtype=jpg&src=http%3A%2F%2Fimg2.imgtn.bdimg.com%2Fit%2Fu%3D183179797%2C2678753605%26fm%3D214%26gp%3D0.jpg" style="width:100%;height: 100%" alt="">
+    </Modal>
   </div>
 </template>
 
@@ -62,7 +68,8 @@
       data(){
           return{
               id: this.$route.query.json.id,
-              Msg: this.$route.query.json
+              Msg: this.$route.query.json,
+            modal10: false
           }
       },
       methods:{
@@ -73,6 +80,7 @@
         read(){
             let data = {}
             data.id = this.id
+            data.settleContent = this.Msg.settleContent
           ready(data).then(res =>{
             this.$Message.warning('标记已读成功')
           })
@@ -84,6 +92,9 @@
           data.id = this.id
           findItem(data).then(res => {
           })
+        },
+        SHow(){
+            this.modal10 = true
         }
       },
     mounted(){
@@ -100,4 +111,11 @@
 
 <style scoped>
   @import "./index.css";
+</style>
+<style scoped>
+  .vertical-center-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>

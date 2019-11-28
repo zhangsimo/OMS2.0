@@ -249,6 +249,7 @@
           })
           console.log(data)
           await saveCustom(data)
+          this.$Message.success('保存成功')
           this.getList()
         },
         //维修性质分类新增
@@ -269,6 +270,7 @@
           })
           console.log(data)
           await saveCustom(data)
+         this.$Message.success('保存成功')
           this.getList()
         },
         getList(){

@@ -138,7 +138,7 @@
                         {required: true, message: '开户银行不能为空', trigger: 'blur'}
                     ],
                     settTypeId:[
-                        {required: true, message: '必选', trigger: 'change'}
+                        {required: true,type: 'number', message: '必选', trigger: 'change'}
                     ]
                 },
             }

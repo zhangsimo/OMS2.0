@@ -3,7 +3,7 @@
     <div class="costBox clearfix con-split">
       <div class="fl mr10">
         <div class="leftT mb15">
-          <Select size="small" style="width:100px" class="mr15">
+          <Select  style="width:100px" class="mr15">
             <Option
               v-for="item in cityList"
               :value="item.value"
@@ -14,10 +14,10 @@
           <Input
             placeholder="请输入查询内容"
             style="width: 200px"
-            size="small"
+            
             class="mr15"
           />
-          <Button type="primary" size="small">查询</Button>
+          <Button type="primary" >查询</Button>
         </div>
         <div class="pane-made-hd">往来单位列表</div>
         <div class="w420 h600">
@@ -46,7 +46,7 @@
         </div>
         <Page
           :total="40"
-          size="small"
+          
           show-elevator
           show-sizer
           show-total
@@ -55,8 +55,8 @@
       </div>
       <div class="fr h600 right">
         <div class="mb15">
-          <Button type="primary" size="small" class="mr10">保存</Button>
-          <Button size="small">取消</Button>
+          <Button type="primary"  class="mr10">保存</Button>
+          <Button >取消</Button>
         </div>
         <div class="pt30">
           <vxe-table
@@ -91,7 +91,7 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <Select size="small" style="width:100px">
+                <Select  style="width:100px">
                   <Option
                     v-for="item in cityList"
                     :value="item.value"

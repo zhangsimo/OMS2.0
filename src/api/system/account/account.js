@@ -28,6 +28,7 @@ export function generationQR(data) {
   return axios.request({
     url: `${api.wmsApi}/wxPay/generationQR`,
     method: 'post',
+    responseType: 'blob',
     data
   })
 }

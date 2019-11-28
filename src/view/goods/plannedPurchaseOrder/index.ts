@@ -9,6 +9,8 @@ import GoodsInfo from './components/GoodsInfo.vue';
 import MoreSearch from './components/MoreSearch.vue';
 import FeeRegistration from './components/FeeRegistration.vue';
 import ProcurementModal from './components/ProcurementModal.vue';
+import AdjustModel from './components/AdjustModel.vue';
+import TabsModel from './components/TabsModel.vue';
 @Component({
   components: {
     QuickDate,
@@ -18,6 +20,8 @@ import ProcurementModal from './components/ProcurementModal.vue';
     MoreSearch,
     FeeRegistration,
     ProcurementModal,
+    AdjustModel,
+    TabsModel,
   }
 })
 export default class PlannedPurchaseOrder extends Vue {

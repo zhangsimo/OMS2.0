@@ -260,6 +260,7 @@
         },
         created(){
           this.getList()
+            console.log(this.treelist ,12312312123123)
         },
         methods:{
             //获取客户属性

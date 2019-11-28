@@ -451,7 +451,9 @@ export default class Fittings extends Vue {
     }
     let data:any = []
     let time:any = self.expireDate +' '+ '23:59:59'
-    self.currRow.forEach( item => data.push({pastTime: time,partId: item.id}))
+    self.currRow.forEach( item => {
+      data.push({pastTime: time,partId: item.id , partInnerId:item.code ,partCode: item.partCode , partBrandCode: item.partBrandCode})
+    })
     let res:any = await getSaveNewTight(data)
       if(res.code == 0){
         this.$emit('getNewList' , res)
@@ -496,6 +498,7 @@ export default class Fittings extends Vue {
   }
   // 单选行
   private selectRow(row: any) {
+    console.log(row)
     this.currRow = row;
     // this.isCanbutton = true;
     // this.isDisable = row.disabled == 0 ? true : false;

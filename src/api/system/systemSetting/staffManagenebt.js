@@ -28,10 +28,19 @@ export function changeeditUser (data) {
   })
 }
 
-//获取兼职公司全部信息
+//新增兼职公司全部信息
 export function getCompanyList (params) {
   return axios.request({
     url: `${api.authApi}/sysOrgEmporg/findListPageAll`,
+    method: 'get',
+    params
+  })
+}
+
+//查看兼职公司信息
+export function findCompanyList (params) {
+  return axios.request({
+    url: `${api.authApi}/sysOrgEmporg/findListPage`,
     method: 'get',
     params
   })

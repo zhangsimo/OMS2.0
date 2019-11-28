@@ -147,7 +147,7 @@
           params.page = this.page.num - 1
           params.size = this.page.size
           let data = {}
-          if(this.selectOne !== null || this.selectOne !== ''){
+          if(this.selectOne){
             data.startTime = this.selectOne[0] + " 00:00:00"
             data.endTime = this.selectOne[1] + " 23:59:59"
           }
