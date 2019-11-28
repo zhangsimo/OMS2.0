@@ -208,7 +208,7 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"> 选择采购计划</Button>
+                    <Button size="small" class="mr10" @click="showModel('procurementModal')">选择采购计划</Button>
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10"
@@ -383,6 +383,8 @@
       ref="selectSupplier"
       headerTit="供应商资料"
     ></select-supplier>
+    <!-- 选择采购计划单 -->
+    <procurement-modal ref="procurementModal"></procurement-modal>
     <!-- 采购金额 -->
     <purchase-amount ref="purchaseAmount"></purchase-amount>
     <!-- 收货信息 -->
