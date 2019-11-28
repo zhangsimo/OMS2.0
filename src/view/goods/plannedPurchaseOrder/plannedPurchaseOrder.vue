@@ -217,7 +217,7 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10">订单调整</Button>
+                    <Button size="small" class="mr10" @click="showModel('adjustModel')">订单调整</Button>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -389,6 +389,8 @@
     <purchase-amount ref="purchaseAmount"></purchase-amount>
     <!-- 收货信息 -->
     <goods-info ref="goodsInfo"></goods-info>
+    <!-- 订单调整 -->
+    <adjust-model ref="adjustModel"></adjust-model>
   </div>
 </template>
 
