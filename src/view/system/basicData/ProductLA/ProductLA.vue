@@ -109,7 +109,7 @@
             <p>待分配列表</p>
             <div class="button-warp">
               <div class="db mr10">
-                <span>查询项:</span>
+                <span>查询项: </span>
                 <Select v-model="waitPartTransListSelecteOption" style="width:120px">
                   <Option
                     v-for="item in waitPartTransListOptions"
