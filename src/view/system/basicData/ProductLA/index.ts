@@ -103,10 +103,10 @@ export default class ProductLA extends Vue {
             value: '1',
             label: '配件名称',
         },
-        // {
-        //     value: '2',
-        //     label: '车型',
-        // },
+        {
+            value: '2',
+            label: '车型',
+        },
         {
             value: '3',
             label: '首字拼音',
