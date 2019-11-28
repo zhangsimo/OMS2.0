@@ -7,13 +7,15 @@ import SelectSupplier from "./components/selectSupplier.vue";
 import PurchaseAmount from "./components/PurchaseAmount.vue";
 import GoodsInfo from './components/GoodsInfo.vue';
 import MoreSearch from './components/MoreSearch.vue';
+import FeeRegistration from './components/FeeRegistration.vue';
 @Component({
     components: {
         QuickDate,
         SelectSupplier,
         PurchaseAmount,
         GoodsInfo,
-        MoreSearch
+        MoreSearch,
+        FeeRegistration,
     }
 })
 export default class PlannedPurchaseOrder extends Vue {
