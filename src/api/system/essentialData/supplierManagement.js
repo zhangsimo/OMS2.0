@@ -44,4 +44,8 @@ export function getNewSupplier (data) {
 //批量导入地址
 export const getup = `${api.wmsApi}/guest/importExcel`;
 
+export function down(id) {
+  let url = `${api.downApi}/file/get?fileId=` + id;
+  window.open(url, '_balnk');
+}
 

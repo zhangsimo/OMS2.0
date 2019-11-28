@@ -61,7 +61,7 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" class="mr10"><Icon type="md-add"/> 添加配件</Button>
+            <Button size="small" class="mr10" @click="addMountings "><Icon type="md-add"/> 添加配件</Button>
           </div>
           <div class="fl mb5">
             <Button size="small" class="mr10" ><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
@@ -81,7 +81,7 @@
             <Button size="small" class="mr10"> 选择入库单</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10"> 编辑发货信息</Button>
+            <Button size="small" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
           </div>
         </div>
       </div>
@@ -143,18 +143,36 @@
         </div>
       </Modal>
 
+      <!--  编辑发货地址 -->
+      <Modal v-model="addressShow" title="收货信息"  width="1000">
+        <goods-info></goods-info>
+        <div slot='footer'>
+          <Button type='primary' @click = changeShippingAddress>确定</Button>
+          <Button type='default' @click='addressShow = false'>取消</Button>
+        </div>
+      </Modal>
 
+<!--      添加配件-->
+      <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
+<!--      选择客户-->
+      <Select-the-customer></Select-the-customer>
     </div>
 </template>
 
 <script>
 import ClientData from "../../../system/essentialData/clientManagement/ClientData";
+import goodsInfo from "../../../../components/goodsInfo/goodsInfo";
+import selectPartCom from "../components/selectPartCom";
+import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import {area} from '@/api/lease/registerApi'
 
     export default {
         name: "OrderRight",
         components:{
-            ClientData
+            ClientData,
+            goodsInfo,
+            selectPartCom,
+            SelectTheCustomer
         },
         data(){
             return {
@@ -179,7 +197,11 @@ import {area} from '@/api/lease/registerApi'
                 provinceArr:{},//获取数据字典地址
                 treeDiagramList:[], //新增客户树形图信息
                 clientDataShow:false, //新增客户模态框关闭
+                addressShow:false,//收货地址显示
             }
+        },
+        mounted(){
+         this.getAdress()
         },
         methods:{
             //打开新增客户
@@ -187,7 +209,7 @@ import {area} from '@/api/lease/registerApi'
                 this.clientList ={}
                 this.clientDataShow = true
             },
-            //获取地址
+            //获取数据字典地址
             getAdress(){
                 area().then(res => {
                     if(res.code == 0){
@@ -199,7 +221,6 @@ import {area} from '@/api/lease/registerApi'
             addNewClient(){},
             //计算表格数据
             footerMethod ({ columns, data }) {
-                console.log(columns ,123)
                 return [
                     columns.map((column, columnIndex) => {
                         if (columnIndex === 0) {
@@ -211,7 +232,22 @@ import {area} from '@/api/lease/registerApi'
                         return null
                     })
                 ]
+            },
+            //打开收货地址
+            openAddressShow(){
+               this.addressShow =true
+            },
+            //确认收货地址
+            changeShippingAddress(){},
+            //添加配件
+            addMountings(){
+                this.$refs.selectPartCom.init()
+            },
+            //配件返回的参数
+            getPartNameList(){
+
             }
+
         }
     }
 </script>

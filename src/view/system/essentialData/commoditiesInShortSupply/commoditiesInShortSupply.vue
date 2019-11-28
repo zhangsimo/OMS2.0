@@ -83,10 +83,10 @@
                         title: '序号',
                         type: 'index',
                         align: 'center',
-                        key: 'name'
+                        key: ''
                     },
                     {
-                        title: '配件内编码',
+                        title: '配件内码',
                         align: 'center',
                         key: 'code',
                     },
@@ -103,7 +103,7 @@
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'partBrand',
+                        key: 'adapterCarBrand',
                     },
                     {
                         title: '品质',
@@ -113,7 +113,12 @@
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'applyCarModel',
+                        key: '',
+                        render: (h, params) => {
+                            let text = ''
+                            text = params.row.adapterCarBrand + ' ' +params.row.adapterCarModel
+                            return h('span',{},text)
+                        }
                     },
                     {
                         title: '单位',
@@ -128,17 +133,17 @@
                     {
                         title: '可售数量',
                         align: 'center',
-                        key: 'num',
+                        key: 'outableQty',
                     },
                     {
                         title: '库存数量',
                         align: 'center',
-                        key: 'num',
+                        key: 'orderQty',
                     },
                     {
                         title: '在途数量',
                         align: 'center',
-                        key: 'num',
+                        key: 'onRoadQty',
                     },
                     {
                         title: '创建日期',
@@ -236,7 +241,7 @@
                   let arr = res.data.content
                arr =  arr.map( item => {
                      item.codeId = item.id
-                  return    item = {...item,...item.attributeVO}
+                  return    item = {...item,...item.wbPartsOutputVO}
                   })
                   this.List = arr
                   this.page.total = res.data.totalElements

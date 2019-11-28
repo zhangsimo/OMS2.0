@@ -40,6 +40,9 @@
         >
           <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 导入</Button>
         </Upload>
+        <Button class="mr10" @click="downTemplate">
+          <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
+        </Button>
       </div>
       <div class="tabeBox" >
       <div style="width: 3000px">
@@ -72,7 +75,7 @@
 
 <script>
   import ClientData from './ClientData'
-  import {getSupplierformation , getNewSupplier,getup} from '@/api/system/essentialData/supplierManagement'
+  import {getSupplierformation , getNewSupplier,getup,down} from '@/api/system/essentialData/supplierManagement'
   import {area} from '@/api/lease/registerApi'
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
   import Cookies from 'js-cookie'
@@ -380,6 +383,10 @@
             beforeUpload(){
                 this.$refs.upload.clearFiles()
             },
+            //下载模板
+            downTemplate(){
+                down('1100000000')
+            }
         },
       watch:{
           newsupplierId:{
