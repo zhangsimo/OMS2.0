@@ -315,7 +315,8 @@ export default class Fittings extends Vue {
     //   default:
     //     break;
     // }
-    switch (this.queryValue) {
+    if(this.query.trim().length > 0) {
+      switch (this.queryValue) {
         case "0":
           data.partCode = this.query;
           break;
@@ -331,6 +332,7 @@ export default class Fittings extends Vue {
         default:
           break;
       }
+    }
     if (this.band != "0") {
       // data.partBrandId = this.band;
       data.brandCode = this.band;
