@@ -319,6 +319,14 @@ export const mixPartInfo = {
           objReq.qualityTypeId = this.formValidate.qualityTypeId
           //品牌
           objReq.partBrandId = this.formValidate.partBrandId
+          //获取品牌code
+          //配件品牌名
+          let brandCodeFilter = this.brandArr.filter(item => item.id==this.formValidate.partBrandId)
+          let brandCode = ''
+          if(brandCodeFilter.length>0){
+            brandCode = brandCodeFilter[0].code
+          }
+          objReq.brandPartCode = brandCode
           //编码
           objReq.code = this.formValidate.code
           //产品名

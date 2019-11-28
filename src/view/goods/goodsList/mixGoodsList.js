@@ -75,6 +75,7 @@ export const mixGoodsData = {
       console.log(selection)
       this.delArr = selection
     },
+    //删除选中数据
     delTableData(){
       if(this.delArr.length==0){
         this.$message.error("选择要删除的数据");
@@ -89,6 +90,7 @@ export const mixGoodsData = {
         this.delArr = []
       }
     },
+    //计算合计
     addFooter({ columns, data }){
       return [
         columns.map((column, columnIndex) => {
