@@ -14,9 +14,9 @@
             <div>
               <ul class="item">
                 <li v-for="(item,index) in combo" :key="index" class="discountBox itemss" @click="selectClass(index,item)" :class="[selectClassA !== index?'weixuan':'xuan']">
-                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.price }}</p>
+                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.sellPrice }}</p>
                   <p style="padding-top: 5px"> 售价 ￥{{ item.totalCoin }}</p>
-                  <p class="zhekou" v-if="item.price !== item.price ">
+                  <p class="zhekou" v-if="item.sellPrice !== item.totalCoin">
                     <img v-if="selectClassA !== index" class="zhekou_img" src="../../../../../assets/images/recharge/unselected.png" alt="">
                     <img v-else class="zhekou_img" src="../../../../../assets/images/recharge/selected.png" alt="">
                   </p>
@@ -35,7 +35,7 @@
         </div>
       <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" >
         <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{payMoney}}</span> 元</div>
-        <div class="modal"><img class="image" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1574059290282&di=cfb384a5d560c01318477cbf828f4c72&imgtype=0&src=http%3A%2F%2Fhbimg.b0.upaiyun.com%2Fc8807656f986d5352a7f9e6c436a50ea44e3b19c2396-QzGPTm_fw658" alt=""></div>
+        <div class="modal"><img class="image" :src="this.flowPic" alt=""></div>
         <div class="modal" style="color: #bbbbbb;padding-bottom: 50px">用微信扫此二维码（10分钟有效）</div>
       </Modal>
     </div>
@@ -59,7 +59,8 @@
             payMoney: '',
             modal: false,
             remark:'',
-            totalCoin:''
+            totalCoin:'',
+            flowPic: ''
           }
       },
       methods:{
@@ -71,7 +72,7 @@
         selectClass(index,item){
           // console.log(item)
           this.selectClassA = index
-          this.payMoney = item.price
+          this.payMoney = item.sellPrice
           this.remark = item.remark
           this.totalCoin = item.totalCoin
         },
@@ -79,17 +80,22 @@
           if (this.selectClassA !== null){
             //生成订单的接口
             let data = {}
+            data.sellPrice = this.payMoney
+            data.totalCoin = this.totalCoin
             generateOrder(data).then(res => {
-          //       if(res.code === 0){
-          //       this.modal = true
-          //       let dataa = {}
-          //       dataa.price = this.payMoney
-          //       dataa.orderNo = '201911191752030001'
-          //   generationQR(dataa).then(res => {
-          //
+                if(res.code === 0){
+                  let num = res.data.orderNum
+                  let dataa = {}
+                  dataa.price = this.payMoney
+                  dataa.orderNum = num
+                  generationQR(dataa).then(res => {
+                    let url = window.URL.createObjectURL(res)
+                    console.log(url,123)
+                    this.flowPic = url;
+                    this.modal = true
             })
-          // }
-          //   })
+            }
+            })
 
           } else {
             this.$Message.warning('请选择套餐！')

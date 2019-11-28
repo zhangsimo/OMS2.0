@@ -39,12 +39,12 @@
 </template>
 
 <script>
-  import QRCode from 'qrcodejs2'
+  // import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
   import { tenantInfogenerateOrder,generationQR } from '../../../../../api/system/account/account'
     export default {
         name: "ProductsBuy",
-      components: {QRCode},
+      // components: {QRCode},
       data(){
           return {
             getMsg: '',
@@ -64,29 +64,31 @@
                 console.log(aaa,2323)
                 let data = {}
                 data.price = this.getMsg.salesPrice
-                data.orderNo = aaa
+                data.orderNum = aaa
                 generationQR(data).then(res => {
-                  console.log(res)
-                  this.erweima = res.data.code_url
-                  console.log(this.erweima)
+                  console.log(res,1)
+                  if(res.code === 0){
+                    this.erweima = res.data.code_url
+                    console.log(this.erweima ,123123)
+                    this.modal = true
+                  }
                 })
-                this.modal = true
               }
           })
         },
-        qrcodeScan () {//生成二维码
-          let qrcode = new QRCode('qrcode', {
-            width: 200,  // 二维码宽度
-            height: 200, // 二维码高度
-            text:  `http:// + ${this.erweima}`,
-            correctLevel : QRCode.CorrectLevel.M
-          })
-          console.log(qrcode)
-        },
+        // qrcodeScan () {//生成二维码
+        //   let qrcode = new QRCode('qrcode', {
+        //     width: 200,  // 二维码宽度
+        //     height: 200, // 二维码高度
+        //     text:  `http:// + ${this.erweima}`,
+        //     correctLevel : QRCode.CorrectLevel.M
+        //   })
+        //   console.log(qrcode)
+        // },
       },
       mounted(){
         this.getMsg = this.$route.query
-        this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
+        // this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
       },
       activated(){
           this.getMsg = this.$route.query

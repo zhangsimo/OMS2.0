@@ -50,7 +50,14 @@
             <label>升级模块</label>
             <span>
               <ul class="List">
-                <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover"  :content="'有效期至:'+ item.expiryDate"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>
+                <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index">
+                  <Poptip trigger="hover"  :content="'有效期至:'+ item.expiryDate" v-if="item.expiryDate">
+                    <Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button>
+                  </Poptip>
+                    <Button v-else shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button>
+
+
+                </li>
                 <!--<li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" v-else :content="无有效期"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>-->
              </ul>
             </span>
