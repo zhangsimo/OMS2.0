@@ -80,7 +80,7 @@
 </template>
 
 <script>
-  import {getStaffList , editUser , changeeditUser, getCompanyList , putNewCompany, restpasswd} from '@/api/system/systemSetting/staffManagenebt'
+  import {getStaffList , editUser , changeeditUser, getCompanyList ,findCompanyList, putNewCompany, restpasswd} from '@/api/system/systemSetting/staffManagenebt'
   import {transTime} from '../utils'
   import addStaff from "./addStaff";
   import setPassword from "./setpassword";
@@ -412,16 +412,24 @@
                   this.$Message.error('请至选择一条员工信息')
                   return false
               }
+              if(this.oneStaffChange.openSystem == 1){
+                  this.$Message.error('未开通账号')
+                  return false
+              }
               this.prassword = true
           },
           //确认重置密码
           submitPassword(){
                 this.prassword =false
               let stop = this.$loading()
+
               let data = {}
               data.tenantUid = this.oneStaffChange.id
               restpasswd(data).then( res => {
                   stop()
+                  if(res.code == 0){
+                      this.$Message.success('重置成功')
+                  }
               })
           },
           //开通账号
@@ -489,7 +497,7 @@
               data.tenantCompanyName = this.compentName
               data.id = this.oneStaffChange.id
               data.allCompanyList = this.oneStaffChange.allCompanyList || ''
-              getCompanyList(data).then( res => {
+              findCompanyList(data).then( res => {
                   if (res.code == 0){
                       this.companyList = res.data.content
                       this.page2.total = res.data.totalElements
