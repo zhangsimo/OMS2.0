@@ -391,6 +391,8 @@
     <goods-info ref="goodsInfo"></goods-info>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel"></adjust-model>
+    <!-- 查看 -->
+    <tabs-model ref="tabsModel"></tabs-model>
   </div>
 </template>
 

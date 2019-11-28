@@ -34,7 +34,7 @@
       <FormItem label="供 应 商: ">
         <Input
           type="text"
-          placeholder="请选择供应商..."
+          placeholder="请输入供应商"
           class="w300 ml5"
         />
       </FormItem>
