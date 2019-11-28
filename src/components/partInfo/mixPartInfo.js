@@ -317,16 +317,19 @@ export const mixPartInfo = {
           let objReq = {}
           //品质
           objReq.qualityTypeId = this.formValidate.qualityTypeId
+          //品质名称
+          let arrData = this.qualityArr.filter(item => item.qualityCode==this.formValidate.qualityTypeId)
+          if(arrData.length>0){
+            objReq.qualityName = arrData[0].quality
+          }
           //品牌
           objReq.partBrandId = this.formValidate.partBrandId
           //获取品牌code
-          //配件品牌名
           let brandCodeFilter = this.brandArr.filter(item => item.id==this.formValidate.partBrandId)
-          let brandCode = ''
           if(brandCodeFilter.length>0){
-            brandCode = brandCodeFilter[0].code
+            objReq.brandPartCode = brandCodeFilter[0].code
+            objReq.partBrandName = brandCodeFilter[0].name
           }
-          objReq.brandPartCode = brandCode
           //编码
           objReq.code = this.formValidate.code
           //产品名
@@ -372,8 +375,6 @@ export const mixPartInfo = {
           //禁用禁售
           objReq.disabled = this.prohibit?1:0
           objReq.isStopSell = this.forbidsale?1:0
-          // console.log(objReq)
-          // return
           this.$emit('throwData',objReq)
         }
       })
