@@ -31,7 +31,7 @@
             <label>分店数量:</label><span>{{ BranchNumber }}</span>
           </div>
           <div class="navationTwo">
-            <label>版本:</label><span>“非1.0版本”</span>
+            <label>版本:</label><span>非1.0版本</span>
           </div>
         </div>
         <div class="navone2 mt30">
@@ -50,7 +50,8 @@
             <label>升级模块</label>
             <span>
               <ul class="List">
-                 <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" :content="'有效期至:'+ item.expiryDate"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>
+                <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover"  :content="'有效期至:'+ item.expiryDate"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>
+                <!--<li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" v-else :content="无有效期"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>-->
              </ul>
             </span>
           </div>
