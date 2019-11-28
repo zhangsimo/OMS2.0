@@ -86,7 +86,6 @@
             changeOneList(data){
                 this.newOne = JSON.parse(JSON.stringify(data[0]))
                 this.$store.commit('setManagementId',JSON.parse(JSON.stringify(data[0])) )
-
             },
             //新增客户分类
             addClientType(){

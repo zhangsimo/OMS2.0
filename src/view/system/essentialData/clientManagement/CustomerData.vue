@@ -316,6 +316,7 @@
             },
             //搜索
             queryList(){
+                this.supplier=''
                 this.getlist()
             },
             //打开新增客户
@@ -350,7 +351,6 @@
             },
             //获取点中的数据
             pitchOneCoustomer(currentRow){
-                console.log(currentRow)
                 this.clientList = currentRow
             },
             //点击打开修改
