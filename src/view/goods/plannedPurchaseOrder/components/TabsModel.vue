@@ -53,7 +53,7 @@ import { Vue, Component } from "vue-property-decorator";
 
 @Component
 export default class TabsModel extends Vue {
-  private show: boolean = true;
+  private show: boolean = false;
 
   private loading: boolean = false;
 
