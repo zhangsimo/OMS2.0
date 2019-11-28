@@ -22,7 +22,7 @@
             <label>华币数量:</label><span>剩余 <span style="color: #40a6ff;font-weight: bold;padding: 0 5px">{{ amount }}</span>个</span>
           </div>
           <div class="navationTwo">
-            <label>负责人:</label><span>{{ salesMan }}</span>
+            <label>负责人:</label><span>{{ principal }}</span>
           </div>
           <div class="navationTwo">
             <label>联系电话:</label><span>{{ phone }}</span>

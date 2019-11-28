@@ -78,7 +78,8 @@
           let qrcode = new QRCode('qrcode', {
             width: 200,  // 二维码宽度
             height: 200, // 二维码高度
-            text: 'https://mp.csdn.net'
+            text:  `http:// + ${this.erweima}`,
+            correctLevel : QRCode.CorrectLevel.M
           })
           console.log(qrcode)
         },

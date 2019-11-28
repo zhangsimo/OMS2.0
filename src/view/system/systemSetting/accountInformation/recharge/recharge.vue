@@ -14,9 +14,9 @@
             <div>
               <ul class="item">
                 <li v-for="(item,index) in combo" :key="index" class="discountBox itemss" @click="selectClass(index,item)" :class="[selectClassA !== index?'weixuan':'xuan']">
-                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.sellPrice }}</p>
-                  <p style="padding-top: 5px"> 售价 ￥{{ item.sellPrice }}</p>
-                  <p class="zhekou" v-if="item.sellPrice !== item.sellPrice ">
+                  <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.price }}</p>
+                  <p style="padding-top: 5px"> 售价 ￥{{ item.totalCoin }}</p>
+                  <p class="zhekou" v-if="item.price !== item.price ">
                     <img v-if="selectClassA !== index" class="zhekou_img" src="../../../../../assets/images/recharge/unselected.png" alt="">
                     <img v-else class="zhekou_img" src="../../../../../assets/images/recharge/selected.png" alt="">
                   </p>
@@ -58,7 +58,8 @@
             selectClassA: null,
             payMoney: '',
             modal: false,
-            remark:''
+            remark:'',
+            totalCoin:''
           }
       },
       methods:{
@@ -70,25 +71,26 @@
         selectClass(index,item){
           // console.log(item)
           this.selectClassA = index
-          this.payMoney = item.sellPrice
+          this.payMoney = item.price
           this.remark = item.remark
+          this.totalCoin = item.totalCoin
         },
         Pay(){
           if (this.selectClassA !== null){
             //生成订单的接口
-            // let data = {}
-            // generateOrder(data).then(res => {
-            //     if(res.code === 0){
-            //       // this.modal = true
-            //     }
-            // })
-            this.modal = true
-            let dataa = {}
-            dataa.price = this.payMoney
-            dataa.orderNo = '201911191752030001'
-            generationQR(dataa).then(res => {
-
+            let data = {}
+            generateOrder(data).then(res => {
+          //       if(res.code === 0){
+          //       this.modal = true
+          //       let dataa = {}
+          //       dataa.price = this.payMoney
+          //       dataa.orderNo = '201911191752030001'
+          //   generationQR(dataa).then(res => {
+          //
             })
+          // }
+          //   })
+
           } else {
             this.$Message.warning('请选择套餐！')
           }

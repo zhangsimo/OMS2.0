@@ -580,13 +580,13 @@
                 title: '付款方式',
                 align:'center',
                 minWidth: 180,
-                key:'paymentType',
+                key:'type',
                 render:(h,params) => {
                   let zi = ''
-                  if(params.row.paymentType === 0){
+                  if(params.row.type === 0){
                     zi = "支付宝"
                   }
-                  if(params.row.paymentType === 1){
+                  if(params.row.type === 1){
                     zi = "微信"
                   }
                   return h('span',zi)
@@ -815,8 +815,8 @@
           Money({params:params,data:data}).then(res => {
             this.loading4 = false
             if(res.code === 0){
-              this.page4.total = res.totalElements
-              this.tbdata4 = res.data||[]
+              this.page4.total = res.data.totalElements
+              this.tbdata4 = res.data.content||[]
               // console.log(this.tbdata3)
             }
           })
