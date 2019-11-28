@@ -9,7 +9,7 @@
             <Input v-model="name" placeholder="请输入姓名" style="width: 140px;" class="mr10" />
           </div>
           <div class="db">
-            <span>手机号姓名:</span>
+            <span>手机号:</span>
             <Input v-model="mobile" placeholder="请输入手机号" style="width: 140px;" class="mr10" />
           </div>
           <div class="db center">

@@ -16,7 +16,7 @@ export default class ProductLA extends Vue {
         label: '电话号码',
     },]
     /**员工表选中的查询选项 */
-    private employeeSelecteOption: string = ""
+    private employeeSelecteOption: string = "0"
     /**员工表查询内容 */
     private employeeSelectContent: string = ""
     /**分配状态选项 */
@@ -103,17 +103,17 @@ export default class ProductLA extends Vue {
             value: '1',
             label: '配件名称',
         },
-        {
-            value: '2',
-            label: '车型',
-        },
+        // {
+        //     value: '2',
+        //     label: '车型',
+        // },
         {
             value: '3',
             label: '首字拼音',
         },
     ]
     /**待分配列表选中的分配状态选项 */
-    private waitPartTransListSelecteOption: string = ""
+    private waitPartTransListSelecteOption: string = "0"
     /**待分配列表查询内容 */
     private waitPartTransListContent: string = ""
     /**待分配列表表头 */

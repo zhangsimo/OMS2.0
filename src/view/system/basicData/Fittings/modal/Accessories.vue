@@ -105,7 +105,7 @@
                    <Select
                     class="w140 ml5 mr5"
                     v-model="formValidate.nameEn"
-                    @on-change="getcarModelall"
+                    @on-change="changcarmodel"
                   >
                     <Option
                       v-for="item in wbBansarr"
@@ -168,7 +168,7 @@
                     @on-click="customModalFun"
                     icon="ios-clock-outline"
                     v-model="formValidate.customClassName"
-                  ></Input>
+                  />
                 </FormItem>
               </Col>
               <Col span="11">
@@ -388,7 +388,7 @@
           <div>
             <span
               class="tag-span"
-              :class="{ active: customClassName == v1.itemName }"
+              :class="{ active: customClassName == v1.id }"
               @click="handleTag(v1)"
               @on-change="handleTag(v1)"
               v-for="(v1, index) in v.itemVOS"
@@ -790,6 +790,10 @@ export default class Accessories extends Vue {
       this.carModelAll = [];
     }
   }
+  private changcarmodel() {
+    this.carModelAll = new Array();
+    this.getcarModelall()
+  }
   private async getcarModelall() {
     let data: any = {
       ...this.carModelPage,
@@ -1012,7 +1016,7 @@ export default class Accessories extends Vue {
   // 选择自定义分类tag
   customType:string = "";
   private handleTag(v: any) {
-    this.customClassName = v.itemName;
+    this.customClassName = v.id;
     this.customType = v.itemCode
   }
   //选择自定义分类

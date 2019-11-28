@@ -218,7 +218,7 @@ export default class Fittings extends Vue {
     },
   }
   private split: number = 0.33;
-  private queryValue: string = ""; // 选中的查询条件
+  private queryValue: string = "0"; // 选中的查询条件
   private query: string = ""; // 查询条件文字
   private band: string = ""; // 选中的品牌
   private selectTreeId: string = ""; // 选中的树形菜单
