@@ -23,38 +23,37 @@
             <Button
               type="default"
               class="mr10"
-              @click="showModel('moreSearch')"
             >
               <Icon type="ios-more" />更多</Button
             >
           </div>
           <div class="db">
-            <Button class="mr10" @click="addPro"
+            <Button class="mr10"
               ><Icon type="md-add" /> 新增</Button
             >
           </div>
           <div class="db">
-            <Button type="default" @click="saveHandle" class="mr10"
+            <Button type="default"  class="mr10"
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
           <div class="db">
-            <Button class="mr10" @click="submit"
+            <Button class="mr10"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>
           <div class="db">
-            <Button @click="showModel('feeRegistration')" class="mr10"
+            <Button class="mr10"
               ><i class="iconfont mr5 iconshenheicon"></i> 退货入库</Button
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10"
+            <Button  class="mr10"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
           <div class="db">
-            <Button @click="print" class="mr10"
+            <Button  class="mr10"
               ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
             >
           </div>
@@ -64,7 +63,7 @@
     <section class="con-box">
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
-          <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+          <Split v-model="split1" min="300" max="500">
             <div
               slot="left"
               class="con-split-pane-left"
@@ -74,8 +73,7 @@
                 销售退货列表
               </div>
               <Table
-                :height="leftTableHeight"
-                @on-current-change="selectTabelData"
+                height="660"
                 size="small"
                 highlight-row
                 border
@@ -84,21 +82,12 @@
                 :columns="sellOrderTable.columns"
                 :data="sellOrderTable.tbdata"
               ></Table>
-              <Page
-                simple
-                class-name="fl pt10"
-                size="small"
-                :current="sellOrderTable.page.num"
-                :total="sellOrderTable.page.total"
-                :page-size="sellOrderTable.page.size"
-                @on-change="sellOrderTableChangePage"
-                @on-page-size-change="sellOrderTableChangeSize"
-                show-sizer
-                show-total
-              >
-              </Page>
+
+
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
+                    @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
-            <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+            <div slot="right" class="con-split-pane-right pl5 goods-list-form"  style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">
                 销售退货信息
               </div>
@@ -107,10 +96,9 @@
                   inline
                   ref="formPlan"
                   :model="formPlan"
-                  :rules="rulePlan"
                   :label-width="120"
                 >
-                  <FormItem label="客户：" prop="supplier">
+                  <FormItem label="客户：" >
                     <Row class="w160">
                       <Col span="19"
                         ><Input
@@ -119,7 +107,7 @@
                       /></Col>
                       <Col span="5"
                         ><Button
-                         @click="CustomerShowModal"
+                         @click="CustomerShowModel"
                           class="ml5"
                           size="small"
                           type="default"
@@ -129,14 +117,14 @@
                       ></Col>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="purchaser">
+                  <FormItem label="退货员：" >
                     <Input
                       class="w160"
                       placeholder="请输入退货员"
                       v-model="formPlan.purchaser"
                     />
                   </FormItem>
-                  <FormItem label="退货日期：" prop="orderDate">
+                  <FormItem label="退货日期：">
                     <DatePicker
                       style="width: 160px"
                       type="date"
@@ -147,7 +135,7 @@
                   <FormItem label="往来单号：">
                     <Input class="w160" v-model="formPlan.orderId" />
                   </FormItem>
-                  <FormItem label="退货原因：" prop="ReturnType">
+                  <FormItem label="退货原因：" >
                     <Select class="w160" v-model="formPlan.ReturnType">
                       <Option
                         v-for="item in thTypes"
@@ -158,7 +146,7 @@
                     </Select>
                   </FormItem>
 
-                  <FormItem label="结算方式：" prop="settlement">
+                  <FormItem label="结算方式：" >
                     <Select class="w160" v-model="formPlan.settlement">
                       <Option
                         v-for="item in settleMethods"
@@ -175,7 +163,7 @@
                       v-model="formPlan.mark"
                     />
                   </FormItem>
-                  <FormItem label="入库仓：" prop="warehouse">
+                  <FormItem label="入库仓：">
                     <Select class="w160" v-model="formPlan.warehouse">
                       <Option
                         v-for="item in inStores"
@@ -196,7 +184,7 @@
                     <Button
                       size="small"
                       class="mr10"
-                      @click="showModel('salesOutbound')"
+                      @click="SalesOutboundShowModel"
                     >
                       选择销售出库单</Button
                     >
@@ -212,12 +200,9 @@
               <vxe-table
                 border
                 resizable
-                show-footer
-                @edit-closed="editClosedEvent"
                 size="mini"
-                :height="rightTableHeight"
+                height='500'
                 :data="tableData"
-                :footer-method="addFooter"
                 :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
               >
                 <vxe-table-column
@@ -338,19 +323,161 @@
         </div>
       </div>
     </section>
-    <!-- 更多 -->
-    <more-search ref="moreSearch"></more-search>
     <!-- 退货入库 -->
     <return-treasury ref="returnTreasury"></return-treasury>
 <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer"></select-the-customer>
-
+    <!--更多 搜索-->
+    <More-query></More-query>
     <!-- 选择销售出库单 -->
-    <sales-outbound ref="salesOutbound"></sales-outbound>
+    <Sales-outbound ref="salesOutbound"></Sales-outbound>
   </div>
 </template>
 
-<script src="./index.ts"></script>
+<script>
+  import QuickDate from '_c/getDate/dateget';
+  import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
+  import SalesOutbound from './components/SalesOutbound.vue';
+  import ReturnTreasury from './components/ReturnTreasury.vue';
+  import MoreQuery from "../commonality/MoreQuery";
+  export default {
+    name:'sellReturn',
+    components: {
+      QuickDate,
+      selectTheCustomer,
+      SalesOutbound,
+      ReturnTreasury,
+      MoreQuery
+    },
+    data(){
+      return {
+        page:{
+          total:0,
+          size:10,
+          num:1
+        },
+        purchaseTypeArr:[
+          {
+            'label':'所有',
+            'value':0
+          },
+          {
+            'label':'草稿',
+            'value':1
+          },
+          {
+            'label':'待入库',
+            'value':2
+          },
+          {
+            'label':'已入库',
+            'value':3
+          },
+          {
+            'label':'已作废',
+            'value':4
+          },
+        ],//快速查询订单状态选项
+        purchaseType:'',//快速查询选中
+        sellOrderTable:{
+          loading: false,
+          columns: [
+            {
+              title: '序号',
+              minWidth: 50,
+              key:'id'
+            },
+            {
+              title: '状态',
+              key: 'status',
+              minWidth: 70
+            },
+            {
+              title: '客户',
+              key: 'name',
+              minWidth: 170
+            },
+            {
+              title: '退货日期',
+              key: 'sellDate',
+              minWidth: 120
+            },
+            {
+              title: '退货员',
+              key: 'sellPerson',
+              minWidth: 120
+            },
+
+            {
+              title: '退货单号',
+              key: 'disable',
+              minWidth: 200
+            },
+            {
+              title: '打印次数',
+              key: 'printNum',
+              minWidth: 120
+            },
+            {
+              title: '创建人',
+              key: 'createPerson',
+              minWidth: 100
+            },
+            {
+              title: '创建日期',
+              align:'center',
+              key: 'createDate',
+              minWidth: 170
+            },
+            {
+              title: '提交人',
+              key: 'submitPerson',
+              minWidth: 100
+            },
+            {
+              title: '提交日期',
+              align:'center',
+              key: 'submitDate',
+              minWidth: 170
+            },
+
+          ],
+          tbdata: [],
+
+        }, //表格属性
+        formPlan:{},//表单对象
+        split1:0.2,//左右框
+        inStores:[],// 入库仓
+        settleMethods:[],//结算方式
+        tableData:[],//右侧表格list
+        thTypes:[],//退货
+      }
+    },
+    methods:{
+      //打开新增客户
+      CustomerShowModel(){
+        this.$refs.selectTheCustomer.openModel()
+      },
+      //选择销售出库单
+       SalesOutboundShowModel(){
+        console.log(this.$refs.salesOutbound)
+        this.$refs.salesOutbound.openModal()
+       },
+      // 快速查询日期
+       getDataQuick(v) {
+       console.log(v);
+      },
+      //切换页面
+      selectNum(){},
+      //切换页数
+      selectPage(){},
+      //点击获取当前信息
+      clickOnesList(data){
+        console.log(data.row)
+      }
+    }
+  }
+</script>
 
 <style lang="less" scoped>
 @import url("../../lease/product/lease.less");

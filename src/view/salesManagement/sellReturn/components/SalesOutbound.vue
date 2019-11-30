@@ -3,12 +3,7 @@
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="formInfo" inline>
-          <!-- <FormItem>
-            <Input type="text" placeholder="客户名称"/>
-        </FormItem>-->
-
           出库日期：
-
           <FormItem>
             <DatePicker
               style="width: 115px"
@@ -179,60 +174,53 @@
           ></vxe-table-column>
         </vxe-table>
         <Page
-          :current="SalesOutboundTable.page.num"
-          :total="SalesOutboundTable.page.total"
-          :page-size="SalesOutboundTable.page.size"
-          @on-change="SalesOutboundTableChangePage"
-          @on-page-size-change="SalesOutboundTableChangeSize"
+          :current="page.num"
+          :total="page.total"
+          :page-size="page.size"
           size="small"
           show-elevator
           show-sizer
-          class="mt10"
+          class="mt10 fr mr10"
         />
       </div>
+    </div>
+    <div slot='footer'>
+      <Button type='primary'>确定</Button>
+      <Button type='default' @click="showInfo=false">取消</Button>
     </div>
   </Modal>
 </template>
 
-<script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-
-@Component
-export default class SalesOutbound extends Vue {
-  private showInfo: boolean = false;
-  // 销售出库订单信息——表单
-  private Outform = {
-    startDate: "", //开始日期
-    endDate: "", //结束日期
-    orderId: "", //业务单号
-    outOrderId: "", //出库单号
-    fittingsCode: "" //配件编码
-  };
-
-  private  tableDataTop: Array<Tableth> = []
-  private  tableDataBottom: Array<Tableth> = []
-  // 销售出库单列表
-  private SalesOutboundTable = {
-    loading: false,
-    page: {
-      num: 1,
-      size: 10,
-      total: 0
+<script>
+  export default {
+    name:'SalesOutBound',
+  data(){
+    return {
+      showInfo: false, // 销售出库订单信息——表单
+      Outform :{},
+      startDate: "", //开始日期
+      endDate: "", //结束日期
+      orderId: "", //业务单号
+      outOrderId: "", //出库单号
+      fittingsCode: "", //配件编码
+      tableDataTop:[],//上面表格数据
+      tableDataBottom:[], //下面表格数据
+      SalesOutboundTable:{  // 销售出库单列表
+        loading: false,
+      },
+        page: {
+          num: 1,
+          size: 10,
+          total: 0
+        }
     }
-  };
-  private init() {
-    this.showInfo = true;
-  }
-  // 销售出库订单列表-翻页
-  private SalesOutboundChangePage(p: number) {
-    this.SalesOutboundTable.page.num = p;
-  }
 
-  // 销售出库订单列表-修改页码
-  private SalesOutboundTableChangeSize(size: number) {
-    this.SalesOutboundTable.page.num = 1;
-    this.SalesOutboundTable.page.size = size;
-  }
+  },
+  methods:{
+    openModal() {
+      this.showInfo = true;
+    }
+}
 
 }
 </script>
