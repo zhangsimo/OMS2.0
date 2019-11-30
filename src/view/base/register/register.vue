@@ -42,7 +42,9 @@
                 <div class="fr ml10"> <a href="javascript:void(0)" @click="getCo"><span style="color: white!important;cursor: pointer;">获取验证码</span></a> </div>
               </FormItem>
                <FormItem prop="username" style="margin-bottom: 20px">
-                <Select  clearable style="width:300px" size="large"></Select>
+                <Select  clearable style="width:300px" size="large" v-model="modell">
+                  <Option v-for="item in type" :value="item.dictCode" :key="item.dictCode">{{ item.dictName }}</Option>
+                </Select>
               </FormItem>
               <Row>
                 <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" class="flex zzzz">
@@ -68,7 +70,7 @@
 
                 </div>
               <FormItem>
-                <Button style="width: 300px" @click="handleSubmit" size="large" :loading="loading" class="login-con-submit mt10" long>注册</Button>
+                <Button style="width: 300px" @click="registerA" size="large" :loading="loading" class="login-con-submit mt10" long>注册</Button>
               </FormItem>
               <div class="flex">
                     <div class="ml5" style="color: #7c1c1a">已有账号?</div>
@@ -78,7 +80,6 @@
                   </div>
 
             </Form>
-            <!--<login-form @on-success-valid="handleSubmit"></login-form>-->
           </div>
         </div>
         <p class="login-right-tip">不卖假件<i>·</i>不用假件</p>
@@ -88,8 +89,8 @@
 </template>
 
 <script>
-  import { area } from '../../../api/lease/registerApi'
-  import { getCode } from './register'
+  import { sendMessage , findByDynamicQuery ,findByDictCode ,register} from '../../../api/lease/registerLogin'
+  // import { getCode } from './register'
   // import SlideValidate from './slide-validate'
   import Message from '_c/message'
 
@@ -132,7 +133,9 @@
                 ]
             },
         single:false,
-        loading:false
+        loading:false,
+        type: [],//类型
+        modell:'', //下拉框
       }
     },
     methods: {
@@ -140,8 +143,9 @@
       getCo() {
         let tel = {}
         tel.mobile =this.form.mobile
-        getCode(tel).then(res => {
-          console.log(res)
+        // console.log(this.form.mobile)
+        sendMessage(tel).then(res => {
+          // console.log(res)
         })
       },
       //已有账号去登录
@@ -151,22 +155,22 @@
       register() {
         this.$router.push("/register")
       },
-      // handleSubmit () {
-      //   this.form.username = this.form.username.trim()
-      //   this.loading = true
-      //   this.$refs.registerForm.validate((valid) => {
-      //     if (valid) {
-      //       let username = this.form.username
-      //       let password = this.form.password
-      //       this.$emit('on-commit', {username, password, errCallback: this.errCallback})
-      //     } else {
-      //       this.loading = false
-      //     }
-      //   })
-      // },
-      // errCallback() {
-      //   this.loading = false
-      // },
+      handleSubmit () {
+        this.form.username = this.form.username.trim()
+        this.loading = true
+        this.$refs.registerForm.validate((valid) => {
+          if (valid) {
+            let username = this.form.username
+            let password = this.form.password
+            this.$emit('on-commit', {username, password, errCallback: this.errCallback})
+          } else {
+            this.loading = false
+          }
+        })
+      },
+      errCallback() {
+        this.loading = false
+      },
       addFavorite() {
         var url = window.location;
         var title = document.title;
@@ -204,15 +208,48 @@
             prefs.setCharPref('browser.startup.homepage', vrl);
           }
         }
-      }
+      },
+      // 省份城市
+      citya(){
+        let params = {}
+        findByDynamicQuery(params).then(res => {
+          // console.log(res)
+          if(res.code === 0){
+            this.provinceArr = res.data
+          }
+        })
+      },
+      //数据字典
+      findBy(){
+        findByDictCode().then(res => {
+          if(res.code === 0){
+            this.type = res.data
+            // console.log(this.type)
+          }
+        })
+      },
+      //注册
+      registerA(){
+        let formData = new FormData();
+        formData.append('companyName', this.form.companyName);
+        formData.append('mobile', this.form.mobile);
+        formData.append('code', this.form.username);
+        formData.append('type', this.modell);
+        formData.append('provinceId', this.formValidate.province);
+        formData.append('cityId', this.formValidate.city);
 
+        // console.log(formData);
+        register(formData).then(res => {
+            if(res.code === 0){
+              this.$Message.success('注册成功')
+             this.$router.push("/login")
+            }
+        })
+      }
     },
     mounted(){
-      //省
-      // area().then(res =>{
-      //   // console.log(res)
-      //   this.provinceArr = res.data
-      // })
+      this.citya()
+      this.findBy()
     }
   }
 </script>

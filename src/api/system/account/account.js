@@ -64,3 +64,14 @@ export function tenantInfogenerateOrder(data) {
     data
   })
 }
+
+// wxPay/queryOrder
+//关闭按钮
+export function queryOrder(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wxPay/queryOrder`,
+    method: 'post',
+    data:data.data,
+    params:data.params
+  })
+}

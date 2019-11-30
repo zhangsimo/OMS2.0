@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 获取验证码 判断手机号
 export function getCode (params) {
     return axios.request({
-        url: `${api.omsApi}/verificationCode/sendMessage `,
+        url: `${api.omsApi}/verificationCode/sendMessage`,
         method: 'get',
         params
     })
