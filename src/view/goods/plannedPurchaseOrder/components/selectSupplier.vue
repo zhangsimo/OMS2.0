@@ -2,9 +2,9 @@
   <div>
     <Modal v-model="searchPartLayer" :title="headerTit" width="1000">
       <div class="partCheck-hd">
-        <Input class="w100 mr10" v-model="supplierName" placeholder="名称" />
-        <Input class="w100 mr10" v-model="supplierCode" placeholder="编码" />
-        <Input class="w100 mr10" v-model="supplierTel" placeholder="电话" />
+        <Input class="w100 mr10" v-model="fullName" placeholder="名称" />
+        <Input class="w100 mr10" v-model="code" placeholder="编码" />
+        <Input class="w100 mr10" v-model="contactorTel" placeholder="电话" />
         │
         <Checkbox class="mr20 ml10" v-model="single"> 显示禁用</Checkbox>
         <Button @click="search" class="mr10" type="primary"
@@ -14,6 +14,7 @@
           ><Icon type="md-checkmark" /> 选择</Button
         >
         <Button class="mr10" type="default"
+          @click="cancel"
           ><Icon type="md-close" /> 取消</Button
         >
         <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
@@ -63,7 +64,9 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-// import * as api from "_api/system/partManager";
+// @ts-ignore
+import * as api from "_api/procurement/plan";
+
 @Component
 export default class SelectSupplier extends Vue {
   @Prop(String)
@@ -73,9 +76,9 @@ export default class SelectSupplier extends Vue {
   private treeLoading: boolean = false;
 
   private searchPartLayer: boolean = false; // 配件名称查询层
-  private supplierName: string = ""; // 供应商名称查询
-  private supplierCode: string = ""; // 供应商编码查询
-  private supplierTel: string | number = ""; // 供应商电话询
+  private fullName: string = ""; // 供应商名称查询
+  private code: string = ""; // 供应商编码查询
+  private contactorTel: string | number = ""; // 供应商电话询
   private single: boolean = false; // 是否显示禁用
   private treeData: Array<Tree> = new Array(); //系统分类树形数据
   //配件名称查询层表头
@@ -87,62 +90,77 @@ export default class SelectSupplier extends Vue {
     },
     {
       title: "供应商名称",
-      key: "groupName",
+      key: "fullName",
       minWidth: 120
     },
     {
       title: "编码",
-      key: "groupName",
+      key: "code",
       minWidth: 120
     },
     {
       title: "简称",
-      key: "groupName",
+      key: "shortName",
       minWidth: 100
     },
     {
       title: "状态",
-      key: "groupName",
-      minWidth: 80
+      key: "auditSign",
+      minWidth: 80,
+      render: (h, params) => {
+        let auditSign:any;
+        let val:string = '';
+        try {
+          auditSign = JSON.parse(params.row.auditSign);
+          val = auditSign.name;
+          return h('span', val);
+        } catch(e) {
+          return h('span', val);
+        }
+      }
     },
     {
       title: "联系人",
-      key: "groupName",
+      key: "contactor",
       minWidth: 80
     },
     {
       title: "联系人手机号",
-      key: "groupName",
+      key: "contactorTel",
       minWidth: 120
     },
     {
       title: "业务员",
-      key: "groupName",
+      key: "salesman",
       minWidth: 80
     },
     {
       title: "业务员电话",
-      key: "groupName",
+      key: "salesmanTel",
       minWidth: 120
     },
     {
       title: "票据类型",
-      key: "groupName",
+      key: "billTypeName",
       minWidth: 80
     },
     {
       title: "结算方式",
-      key: "groupName",
+      key: "settTypeName",
       minWidth: 100
     },
     {
       title: "是否内部供应商",
-      key: "groupName",
-      minWidth: 120
+      key: "isSupplier",
+      minWidth: 120,
+      render: (h, p) => {
+        let val:string = p.row.isSupplier ? '是' : '否';
+        return h('span', val);
+      }
     },
     {
       title: "优势品牌/产品",
-      key: "groupName",
+      key: "advantageCarbrandId",
       minWidth: 120
     }
   ];
@@ -160,13 +178,17 @@ export default class SelectSupplier extends Vue {
   };
 
   //获取系统分类
-  private getCarClassifysFun() {
+  private async getCarClassifysFun() {
     this.treeLoading = true;
+    let res: any = await api.getSupplierType();
+    if (res.code == 0) {
+      this.treeLoading = false;
+      this.treeData = this.resetData(res.data);
+    }
   }
   //树形数组递归加入新属性
   private resetData(treeData) {
     treeData.map(item => {
-      item.title = item.typeName;
       if (item.children && item.children.length > 0) {
         item.children = this.resetData(item.children);
       }
@@ -175,18 +197,48 @@ export default class SelectSupplier extends Vue {
   }
 
   // 获取表格数据
-  private getList() {}
+  private async getList() {
+    this.loading = true;
+    let params: any = {};
+    params.page = this.page.num - 1;
+    params.size = this.page.size;
+    let arr = [
+      'fullName',
+      'code',
+      'contactorTel',
+    ];
+    arr.forEach(key => {
+      if(this[key].trim().length > 0) {
+        params[key] = this[key];
+      }
+    })
+    params.isDisabled = this.single ? 1 : 0;
+    if (this.selectTreeItem) {
+      params.supplierTypeFirst = this.selectTreeItem.id;
+    }
+    let res = await api.getSupplier(params);
+    if (res.code == 0) {
+      this.loading = false;
+      this.partData = res.data.content;
+      this.page.total = res.data.totalElements;
+    }
+  }
 
+  // 搜索
   private search() {
     this.page.num = 1;
     this.getList();
   }
   //系统分类树形节点点击数据
   private selectTree(v) {
+    this.selectTreeItem = v[0];
+    this.getList();
   }
   //显示层
   private init() {
     this.searchPartLayer = true;
+    this.getCarClassifysFun();
+    this.getList();
   }
   //配件表格点击的行
   private selectTabelData(v) {
@@ -199,8 +251,8 @@ export default class SelectSupplier extends Vue {
   }
   // 取消
   private cancel() {
-      this.selectTableItem = null;
-      this.searchPartLayer = false;
+    this.selectTableItem = null;
+    this.searchPartLayer = false;
   }
   //分页
   private changePage(p) {

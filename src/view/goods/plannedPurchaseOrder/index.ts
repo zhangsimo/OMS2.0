@@ -1,8 +1,9 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-// import * as api from "_api/system/partManager";
+import * as api from "_api/procurement/plan";
+import * as tools from "../../../utils/tools";
 
-import QuickDate from '_c/getDate/dateget';
+import QuickDate from '_c/getDate/dateget.vue';
 import SelectSupplier from "./components/selectSupplier.vue";
 import PurchaseAmount from "./components/PurchaseAmount.vue";
 import GoodsInfo from './components/GoodsInfo.vue';
@@ -11,6 +12,11 @@ import FeeRegistration from './components/FeeRegistration.vue';
 import ProcurementModal from './components/ProcurementModal.vue';
 import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
+
+enum orderState {
+  '草稿', '待发货', '待收货', '部分入库', '全部入库', '已退回', '关闭'
+}
+
 @Component({
   components: {
     QuickDate,
@@ -25,43 +31,43 @@ import TabsModel from './components/TabsModel.vue';
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
-  private split1: number = 0.2
+  private split1: number = 0.2;
   //左侧表格高度
   private leftTableHeight: number = 0;
   //右侧表格高度
   private rightTableHeight: number = 0;
 
   // 快速查询订单状态
-  private purchaseType: string = "";
+  private purchaseType: string|number = "";
   // 快速查询订单状态选项
   private purchaseTypeArr: Array<Option> = [
     {
       'label': '所有',
-      'value': 0
+      'value': 999
     },
     {
       'label': '草稿',
-      'value': 1
+      'value': 0
     },
     {
       'label': '审批中',
-      'value': 2
+      'value': 1
     },
     {
       'label': '已审批',
-      'value': 3
+      'value': 2
     },
     {
       'label': '已完成',
-      'value': 4
+      'value': 3
     },
     {
       'label': '不通过',
-      'value': 5
+      'value': 4
     },
     {
       'label': '已作废',
-      'value': 6
+      'value': -1
     },
   ]
 
@@ -75,74 +81,71 @@ export default class PlannedPurchaseOrder extends Vue {
       {
         title: '序号',
         minWidth: 50,
-        key: 'id'
+        type: 'index',
       },
       {
         title: '状态',
-        key: 'venderSkuNo',
-        minWidth: 70
+        key: 'billStatusId',
+        minWidth: 80,
+        render: (h, p) => {
+          let val:string = orderState[p.row.billStatusId];
+          return h('span', val);
+        }
       },
       {
         title: '供应商',
-        key: 'name',
+        key: 'guest',
         minWidth: 170
       },
       {
-        title: '创建日期',
-        key: 'address',
-        minWidth: 120
-      },
-      {
-        title: '创建人',
-        key: 'isCycle',
+        title: '采购员',
+        key: 'orderMan',
         minWidth: 140
       },
       {
-        title: '计划员',
-        key: 'salesPrice',
+        title: '订单单号',
+        key: 'serviceId',
+        minWidth: 140
+      },
+      {
+        title: '创建人',
+        key: 'createUname',
         minWidth: 120
       },
       {
-        title: '计划单号',
-        key: 'disable',
+        title: '创建日期',
+        key: 'createTime',
         minWidth: 200
       },
       {
+        title: '打印次数',
+        key: 'printCount',
+        minWidth: 100
+      },
+      {
         title: '提交人',
-        key: 'remark',
+        key: 'updateUname',
         minWidth: 100
       },
       {
         title: '提交日期',
         align: 'center',
-        key: 'qualitySourceName',
-        minWidth: 170
+        key: 'auditDate',
+        minWidth: 140
       },
-      {
-        title: '打印次数',
-        key: 'categoryName',
-        minWidth: 170
-      }
     ],
     tbdata: new Array(),
     page: {
       num: 1,
       size: 10,
-      total: 0
+      total: 0,
     }
   }
 
   // 票据类型
-  private pjTypes: Array<Option> = [
-    { label: '增票', value: '0' },
-    { label: '普票', value: '1' },
-    { label: '收据', value: '2' },
-  ];
+  private pjTypes: Array<Option> = new Array();
   // 结算方式
-  private settleMethods: Array<Option> = [
-    { label: '现结', value: '0' },
-    { label: '月结', value: '1' },
-  ];
+  private settleMethods: Array<Option> = new Array();
   // 入库仓
   private inStores: Array<Option> = [];
   // 直发门店
@@ -150,47 +153,70 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单信息——表单
   private formPlan = {
-    supplier: "", // 供应商
-    purchaser: "", // 采购员
-    billType: "0", // 票据类型
-    settlement: "",  // 结算方式
-    warehouse: "", // 入库仓
+    guest: "", // 供应商
+    orderMan: "", // 采购员
+    billTypeId: "", // 票据类型
+    settleTypeId: "",  // 结算方式
+    storeName: "", // 入库仓
     orderDate: "", // 订货日期
-    estimatedArrivalDate: "", // 预计到货日期
-    mark: "", // 备注
-    sendStore: "", // 直发门店
-    orderId: "", // 订单号
+    planArriveDate: "", // 预计到货日期
+    remark: "", // 备注
+    companyName: "", // 直发门店
+    serviceId: "", // 订单号
   }
   private rulePlan: ruleValidate = {
-    supplier: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
-    purchaser: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
-    billType: [{ required: true, message: "请选票据类型", trigger: "change" }],
-    settlement: [{ required: true, message: "请选择结算方式", trigger: "change" }],
-    warehouse: [{ required: true, message: "请选择入库仓", trigger: "change" }],
+    guest: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
+    orderMan: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
+    billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
+    settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
+    storeName: [{ required: true, message: "请选择入库仓", trigger: "change" }],
     orderDate: [{ required: true, message: "请选择订货日期", trigger: "change" }],
   }
 
-  // 采购订单表格数据
-  private tableData: Array<any> = [{ id: 1, num: 0, price: 0 }, { id: 2, num: 0, price: 0 },];
+  // 采购订单信息表格数据
+  private tableData: Array<any> = new Array();
 
   // 采购订单列表-翻页
   private purchaseOrderTableChangePage(p: number) {
     this.purchaseOrderTable.page.num = p;
+    this.getListData();
   }
 
   // 采购订单列表-修改页码
   private purchaseOrderTableChangeSize(size: number) {
     this.purchaseOrderTable.page.num = 1;
     this.purchaseOrderTable.page.size = size;
+    this.getListData();
   }
 
   // 快速查询日期
+  private quickDate:Array<string> = new Array();
   private getDataQuick(v: Array<string>) {
-    console.log(v);
+    this.quickDate = v;
+    this.getListData();
+  }
+  // 快速查询状态
+  private changeState() {
+    this.getListData();
   }
 
   // 新增
-  private addPro() { }
+  //---- 判断是否能新增
+  private isAdd: boolean = true;
+  //---- 新增的采购订单列表数据
+  private PTrow: any = {
+    billStatusId: '0',
+    createTime: tools.transTime(new Date()),
+  }
+  //---- 新增方法
+  private addPro() {
+    if (!this.isAdd) {
+      return this.$Message.error('请先保存数据');
+    }
+    this.isAdd = false;
+    this.purchaseOrderTable.tbdata.push(this.PTrow);
+    this.tableData.push({});
+  }
 
   // 保存
   private saveHandle() { }
@@ -204,12 +230,10 @@ export default class PlannedPurchaseOrder extends Vue {
   // 打印
   private print() { }
 
-  // 费用登记
-  private expenseReg() { }
-
   //表格单选选中
   private selectTabelData(v: any) {
-    this.selectTableRow = v
+    this.selectTableRow = v;
+    this.tableData = v.details || [];
   }
 
   private editActivedEvent({ row, column }, event) {
@@ -228,7 +252,7 @@ export default class PlannedPurchaseOrder extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['num', 'price'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice'].includes(column.property) || columnIndex === 8) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -245,13 +269,13 @@ export default class PlannedPurchaseOrder extends Vue {
       }
       total += parseFloat(value)
     })
-    if (type == 'price') {
+    if (type == 'orderPrice') {
       return total.toFixed(2);
     }
     if (columnIndex === 8) {
       let totals = 0;
       let sumarr = data.map(el => {
-        return el.num * el.price;
+        return el.orderQty * el.orderPrice;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       return totals.toFixed(2);
@@ -282,9 +306,73 @@ export default class PlannedPurchaseOrder extends Vue {
     })
   }
 
+  // 初始化字典
+  private async init() {
+    let res: any = await api.optGroupInit();
+    if (res.code == 0) {
+      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, storeMap } = res.data;
+      // 票据类型
+      for (let el in invoiceMap) {
+        this.pjTypes.push({ value: invoiceMap[el], label: el })
+      }
+      // 结算方式
+      for (let el in settlementMap) {
+        this.settleMethods.push({ value: settlementMap[el], label: el })
+      }
+      // 入库仓
+      for (let el in storeMap) {
+        this.inStores.push({ value: storeMap[el], label: el })
+      }
+      // 直发门店
+      for (let el in companyMap) {
+        this.putStores.push({ value: companyMap[el], label: el })
+      }
+    }
+  }
+
+  // 初始化主数据
+  //---- 判断是否是高级查询
+  private isMore: boolean = false;
+  //---- 初始方法
+  private async getListData() {
+    let params: any = {}
+    let data:any = {}
+    params.size = this.purchaseOrderTable.page.size;
+    params.page = this.purchaseOrderTable.page.num - 1;
+    if(this.quickDate.length > 0) {
+      data.startTime = this.quickDate[0];
+      data.endTime = this.quickDate[1];
+    }
+    if(this.purchaseType != 999) {
+      data.flag = this.purchaseType;
+    }
+    let res: any;
+    if (!this.isMore) {
+      res = await api.findPageByDynamicQuery(params, data)
+    } else {
+      res = await api.queryByConditions(params, data)
+    }
+    if (res.code == 0) {
+      this.purchaseOrderTable.page.total = res.data.totalElements;
+      this.purchaseOrderTable.tbdata = res.data.content;
+    }
+  }
+
+  // 选择供应商
+  private selectSupplierName(row: any) {
+    this.formPlan.guest = row.fullName;
+  }
+
+  // 操作-查看
+  private watch(row: any) {
+    this.showModel('tabsModel');
+  }
+
   private mounted() {
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
+    this.init();
+    this.getListData();
   }
 }
