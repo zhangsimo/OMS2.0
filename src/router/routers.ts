@@ -22,6 +22,15 @@ export default [
     component: () => import("@/view/base/login/login.vue")
   },
   {
+    path: "/register",
+    name: "register",
+    meta: {
+      title: "register - 注册",
+      hideInMenu: true
+    },
+    component: () => import("@/view/base/register/register.vue")
+  },
+  {
     path: "/",
     redirect: "/home",
     component: Main,
@@ -1726,7 +1735,7 @@ export default [
     children: [
       {
         path: "/lease/register",
-        name: "register",
+        name: "registers",
         // mark: '40',
         meta: {
           icon: "",

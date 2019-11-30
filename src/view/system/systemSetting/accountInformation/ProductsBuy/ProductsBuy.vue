@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  // import QRCode from 'qrcodejs2'
+  import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
   import { tenantInfogenerateOrder,generationQR } from '../../../../../api/system/account/account'
     export default {
@@ -76,19 +76,19 @@
               }
           })
         },
-        // qrcodeScan () {//生成二维码
-        //   let qrcode = new QRCode('qrcode', {
-        //     width: 200,  // 二维码宽度
-        //     height: 200, // 二维码高度
-        //     text:  `http:// + ${this.erweima}`,
-        //     correctLevel : QRCode.CorrectLevel.M
-        //   })
-        //   console.log(qrcode)
-        // },
+        qrcodeScan () {//生成二维码
+          let qrcode = new QRCode('qrcode', {
+            width: 200,  // 二维码宽度
+            height: 200, // 二维码高度
+            text:  `http:// + ${this.erweima}`,
+            correctLevel : QRCode.CorrectLevel.M
+          })
+          console.log(qrcode)
+        },
       },
       mounted(){
         this.getMsg = this.$route.query
-        // this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
+        this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
       },
       activated(){
           this.getMsg = this.$route.query

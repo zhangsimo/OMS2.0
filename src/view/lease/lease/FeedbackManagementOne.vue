@@ -156,7 +156,7 @@
         changePage(p) {
         // console.log(p)
         this.page.num = p
-        // this.getList()
+        this.getList()
       },
         changeSize(size) {
         // console.log(size)
