@@ -36,7 +36,7 @@
   import getDate from '@/components/getDate/dateget'
   import OrderLeft from "./OrderLeft";
   import OrderRight from "./OrderRight";
-  import MoreQuery from "./MoreQuery";
+  import MoreQuery from "../../commonality/MoreQuery";
 
     export default {
         name: "Order",

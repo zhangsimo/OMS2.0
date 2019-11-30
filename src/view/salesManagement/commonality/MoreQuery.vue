@@ -11,9 +11,11 @@
         <FormItem label="提交日期:">
           <DatePicker type="daterange" placement="bottom" placeholder="选择日期" style="width: 200px"></DatePicker>
         </FormItem>
-        <Select v-model="model11" filterable>
+        <FormItem label="客户:">
+        <Select v-model="data.cell" filterable>
           <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
+        </FormItem>
       </Form>
     </div>
     <div slot='footer'>
@@ -28,7 +30,8 @@
         name: "MoreQuery",
         data(){
             return {
-                moreQueryShow: true
+                moreQueryShow: true,//模态框是否展示
+                cityList:[],//客户下拉框
             }
         }
     }
