@@ -3,14 +3,14 @@ import { Vue, Component } from "vue-property-decorator";
 // import * as api from "_api/system/partManager";
 
 import QuickDate from '_c/getDate/dateget';
-import SelectTheCustomer from '../commonality/SelectTheCustomer'
+import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
 import SalesOutbound from './components/SalesOutbound.vue';
 import MoreSearch from './components/MoreSearch.vue';
 import ReturnTreasury from './components/ReturnTreasury.vue';
 @Component({
     components: {
         QuickDate,
-      SelectTheCustomer,
+      selectTheCustomer,
         SalesOutbound,
         MoreSearch,
         ReturnTreasury,
