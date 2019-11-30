@@ -11,7 +11,7 @@
         <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
         <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
-        <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+        <Button class="mr10" @click="printTable"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
         <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
         <Button class=""><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
       </div>
@@ -22,12 +22,13 @@
               <OrderLeft></OrderLeft>
             </div>
             <div slot="right" class="demo-split-pane">
-              <OrderRight></OrderRight>
+              <OrderRight ref="right"></OrderRight>
             </div>
           </Split>
         </div>
-
+        <More-query :data="queryList"></More-query>
       </div>
+
     </div>
 </template>
 
@@ -35,12 +36,15 @@
   import getDate from '@/components/getDate/dateget'
   import OrderLeft from "./OrderLeft";
   import OrderRight from "./OrderRight";
+  import MoreQuery from "./MoreQuery";
+
     export default {
         name: "Order",
         components:{
             getDate,
             OrderLeft,
-            OrderRight
+            OrderRight,
+            MoreQuery
         },
         data(){
           return {
@@ -54,7 +58,8 @@
                   {value:4,name:'已出库'},
                   {value:5,name:'已作废'},
               ],
-              split1: 0.2
+              split1: 0.2,
+              queryList:{},//更多查询
 
           }
         },
@@ -62,6 +67,10 @@
             //获取时间
             getvalue(date){
                 console.log(date)
+            },
+            //打印表格
+            printTable(){
+                this.$refs.right.printEvent()
             }
         }
     }

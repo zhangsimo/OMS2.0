@@ -31,6 +31,7 @@
                 :loading="Loading"
                 align="center"
                 :data="tableData"
+                :auto-resize="true"
                 height="500"
                 >
                 <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
@@ -50,9 +51,40 @@
                     style="float: right;margin-top: 10px"/>
             </div>
             <div slot="right" class="demo-split-pane">
-              <div>
-                21213123123
+              <div style="overflow: hidden;overflow-x: scroll">
+                <vxe-table
+                  border
+                  resizable
+                  :data="tableData"
+                  border
+                  stripe
+                  size="mini"
+                  align="center"
+                  resizable
+                  :auto-resize="true"
+                  highlight-hover-row
+                  highlight-current-row
+                  show-overflow
+                  height="500"
+                  style="width: 1500px"
+                 >
+                  <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+                  <vxe-table-column field="name" title="名称"  show-overflow></vxe-table-column>
+                  <vxe-table-column field="name" title="编码"></vxe-table-column>
+                  <vxe-table-column field="name" title="状态"></vxe-table-column>
+                  <vxe-table-column field="name" title="票据类型"></vxe-table-column>
+                  <vxe-table-column field="name" title="结算方式"></vxe-table-column>
+                  <vxe-table-column field="name" title="联系人"></vxe-table-column>
+                  <vxe-table-column field="name" title="联系人手机号"></vxe-table-column>
+                  <vxe-table-column field="name" title="业务员"></vxe-table-column>
+                  <vxe-table-column field="name" title="业务员电话"></vxe-table-column>
+                  <vxe-table-column field="name" title="是否内部供应商"></vxe-table-column>
+                  <vxe-table-column field="name" title="优势品牌/产品"></vxe-table-column>
+                </vxe-table>
               </div>
+              <Page size="small" :total="page1.total" :page-size="page1.size" :current="page1.num"   :page-size-opts="page1.sizeOpts"
+                    show-sizer show-total
+                    style="float: right;margin-top: 10px"/>
             </div>
           </Split>
         </div>
@@ -60,7 +92,7 @@
     </div>
     <div slot='footer'>
       <Button type='primary'>确定</Button>
-      <Button type='default'>取消</Button>
+      <Button type='default' @click="addressShow=false">取消</Button>
     </div>
   </Modal>
 </template>
@@ -70,7 +102,7 @@
         name: "SelectTheCustomer",
         data(){
             return {
-                addressShow: true,
+                addressShow: false,
                 clientName:'' ,//名称
                 clientCode:'',//编码
                 clientPhone:'',//电话
@@ -93,7 +125,20 @@
                     size:50,
                     sizeOpts:[50,60,70,80,90,100]
                 },
-
+                page1:{
+                    num:1,
+                    total:0,
+                    size:20,
+                    sizeOpts:[20,40,60,80,100]
+                },
+                tableData:[
+                    {name:23}
+                ]
+            }
+        },
+        methods:{
+            openModel(){
+                this.addressShow =true
             }
         }
     }

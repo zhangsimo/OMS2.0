@@ -12,8 +12,8 @@
       <div class="clearfix purchase" ref="planForm">
             <FormItem label="客户：" >
               <Row  style="width: 310px">
-                <Input style="width: 240px" v-model="formPlan.planDate"></Input>
-                <Button  class="ml5" size="small" type="default"><Icon type="md-checkmark" /></Button>
+                <Input style="width: 240px" v-model="formPlan.planDate" disabled></Input>
+                <Button  class="ml5" size="small" type="default" @click="openAddCustomer"><Icon type="md-checkmark" /></Button>
                 <Button  class="ml5" size="small" type="default" @click="openAddNewClient"><Icon type="md-add" /></Button>
               </Row>
             </FormItem>
@@ -92,6 +92,7 @@
           size="mini"
           resizable
           stripe
+          ref="xTable"
           show-footer
           :footer-method="footerMethod"
           showOverflow="true"
@@ -155,7 +156,7 @@
 <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
 <!--      选择客户-->
-      <Select-the-customer></Select-the-customer>
+      <Select-the-customer ref="AddCustomerModel"></Select-the-customer>
     </div>
 </template>
 
@@ -246,8 +247,15 @@ import {area} from '@/api/lease/registerApi'
             //配件返回的参数
             getPartNameList(){
 
-            }
-
+            },
+            //打开客户选择
+            openAddCustomer(){
+                this.$refs.AddCustomerModel.openModel()
+            },
+            //打印表格
+            printEvent () {
+                this.$refs.xTable.print()
+            },
         }
     }
 </script>
