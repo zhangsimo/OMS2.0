@@ -39,7 +39,7 @@
 </template>
 
 <script>
-  import QRCode from 'qrcodejs2'
+  // import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
   import { tenantInfogenerateOrder,generationQR } from '../../../../../api/system/account/account'
     export default {

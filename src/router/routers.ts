@@ -21,6 +21,7 @@ export default [
     },
     component: () => import("@/view/base/login/login.vue")
   },
+
   {
     path: "/register",
     name: "register",
@@ -1908,6 +1909,76 @@ export default [
       }
     ]
   },
+  {
+    path: '/gpart_auth_center',
+    name: 'auth',
+    // mark: 'gpart_auth_center',
+    redirect: '/multilevel/level_2_1',
+    meta: {
+      icon: 'gear-b',
+      title: '权限中心',
+      // access: []
+    },
+    component: Main,
+    children: [
+      {
+        path: '/auth/staff',
+        name: 'staff',
+        // mark: 'auth_staff',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '登录用户',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/user/user.vue')
+      },
+      {
+        path: '/auth/group',
+        name: 'group',
+        // mark: 'auth_group',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '组织管理',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/group/group.vue')
+      },
+      {
+        path: '/auth/role',
+        name: 'role',
+        // mark: 'auth_role',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '角色管理',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/roles/roles.vue')
+      },
+      {
+        path: '/auth/resource',
+        name: 'resource',
+        // mark: 'auth_resource',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '资源管理',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/resource/resource.vue')
+      },
+      {
+        path: '/auth/lessee',
+        name: 'lessee',
+        // mark: 'tenantUsers',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '租户员工',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/lessee/lessee.vue')
+      },
+    ]
+  },
+
   {
     path: "/401",
     name: "error_401",
