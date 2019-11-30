@@ -14,7 +14,7 @@
       </strong>
     </div>
     <div class="login-right">
-      <p class="login-right-top"><a href="javascript:void(0)">设为首页</a><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>
+      <p class="login-right-top"><a href="javascript:void(0)" @click="register">点击注册</a><a href="javascript:void(0)">设为首页</a><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>
       </p>
       <div class="login-con">
         <h3 class="login-con-header">极配正品</h3>
@@ -85,6 +85,9 @@
       }
     },
     methods: {
+      register() {
+        this.$router.push("/register")
+      },
       handleSubmit () {
         this.form.username = this.form.username.trim()
         this.loading = true

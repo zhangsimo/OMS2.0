@@ -378,19 +378,19 @@
                 align:'left',
                 key: 'managerIdentity',
                 minWidth: 120,
-                // render:(h,params) => {
+                render:(h,params) => {
                 //   // console.log(params)
-                //   let Identity = params.row.tenantId
+                  let Identity = params.row.managerIdentity
                 //   // console.log(params.row.tenantId)
-                //   let zi = ''
-                //   if(Identity === 0){
-                //     zi = "老板"
-                //   }
-                //   if(Identity === 1){
-                //     zi = "员工"
-                //   }
-                //   return h('span',zi)
-                // }
+                  let zi = ''
+                  if(Identity === 0){
+                    zi = "老板"
+                  }
+                  if(Identity === 1){
+                    zi = "员工"
+                  }
+                  return h('span',zi)
+                }
               },
               {
                 title: '联系电话',
@@ -400,7 +400,7 @@
               },
               {
                 title: '联系地址',
-                align:'center',
+                align:'left',
                 key: 'address',
                 minWidth: 200
               },
