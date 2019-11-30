@@ -27,8 +27,8 @@
           </Split>
         </div>
         <More-query :data="queryList"></More-query>
+        <Print-show ref="printBox"></Print-show>
       </div>
-
     </div>
 </template>
 
@@ -37,6 +37,7 @@
   import OrderLeft from "./OrderLeft";
   import OrderRight from "./OrderRight";
   import MoreQuery from "../../commonality/MoreQuery";
+  import PrintShow from "../../commonality/PrintShow";
 
     export default {
         name: "Order",
@@ -44,7 +45,8 @@
             getDate,
             OrderLeft,
             OrderRight,
-            MoreQuery
+            MoreQuery,
+            PrintShow
         },
         data(){
           return {
@@ -70,7 +72,7 @@
             },
             //打印表格
             printTable(){
-                this.$refs.right.printEvent()
+                this.$refs.printBox.openModal()
             }
         }
     }
