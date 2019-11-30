@@ -343,7 +343,7 @@
     <!-- 退货入库 -->
     <return-treasury ref="returnTreasury"></return-treasury>
 <!--    选择客户-->
-    <Select-the-customer ref="selectTheCustomer"></Select-the-customer>
+    <select-the-customer ref="selectTheCustomer"></select-the-customer>
 
     <!-- 选择销售出库单 -->
     <sales-outbound ref="salesOutbound"></sales-outbound>
