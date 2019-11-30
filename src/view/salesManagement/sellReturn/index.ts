@@ -3,14 +3,14 @@ import { Vue, Component } from "vue-property-decorator";
 // import * as api from "_api/system/partManager";
 
 import QuickDate from '_c/getDate/dateget';
-import SelectCustomer from "./components/selectCustomer.vue";
+import SelectTheCustomer from '../commonality/SelectTheCustomer'
 import SalesOutbound from './components/SalesOutbound.vue';
 import MoreSearch from './components/MoreSearch.vue';
 import ReturnTreasury from './components/ReturnTreasury.vue';
 @Component({
     components: {
         QuickDate,
-        SelectCustomer,
+      SelectTheCustomer,
         SalesOutbound,
         MoreSearch,
         ReturnTreasury,
@@ -217,43 +217,9 @@ export default class SellReturn extends Vue {
       //console.log(row,event,column)
       //console.log(`关闭 ${column} 列编辑`)
     }
-
-    // 底部合计
-    private addFooter({ columns, data }){
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '合计'
-          }
-          if (['num', 'price'].includes(column.property) || columnIndex === 8) {
-            return this.sum(data,column.property, columnIndex)
-          }
-          return null
-        })
-      ]
-    }
-    // 合计
-    private sum(data,type,columnIndex){
-      let total = 0
-      data.map(item => {
-        let value = item[type]
-        if(!value){
-          value = 0
-        }
-        total+=parseFloat(value)
-      })
-      if(type=='price'){
-        return total.toFixed(2);
-      }
-      if(columnIndex === 8) {
-        let totals = 0;
-        let sumarr = data.map(el => {
-          return el.num * el.price;
-        })
-        totals = sumarr.reduce((total, el) => total += el, 0);
-        return totals.toFixed(2);
-      }
-      return total
+    //显示客户资料
+    private CustomerShowModal(){
+      this.$refs.selectTheCustomer.openModel()
     }
 
     // 显示和初始化弹窗(选择供应商 销售退货金额填写 收货信息 更多)
@@ -263,8 +229,8 @@ export default class SellReturn extends Vue {
     }
 
     // 调节大小
-    private getDomHeight() {
-      this.$nextTick(()=>{
+     private getDomHeight() {
+       this.$nextTick(()=>{
         let paneLeft:any = this.$refs.paneLeft;
         let planForm:any = this.$refs.planForm;
         let planBtn:any = this.$refs.planBtn;

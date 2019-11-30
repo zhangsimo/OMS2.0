@@ -119,7 +119,7 @@
                       /></Col>
                       <Col span="5"
                         ><Button
-                          @click="showModel('selectCustomer')"
+                         @click="CustomerShowModal"
                           class="ml5"
                           size="small"
                           type="default"
@@ -342,11 +342,8 @@
     <more-search ref="moreSearch"></more-search>
     <!-- 退货入库 -->
     <return-treasury ref="returnTreasury"></return-treasury>
-    <!-- 供应商资料 -->
-    <select-customer
-      ref="selectCustomer"
-      headerTit="选择客户"
-    ></select-customer>
+<!--    选择客户-->
+    <Select-the-customer ref="selectTheCustomer"></Select-the-customer>
 
     <!-- 选择销售出库单 -->
     <sales-outbound ref="salesOutbound"></sales-outbound>
