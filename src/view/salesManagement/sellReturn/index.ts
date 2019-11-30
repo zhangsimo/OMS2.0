@@ -219,7 +219,8 @@ export default class SellReturn extends Vue {
     }
     //显示客户资料
     private CustomerShowModal(){
-      this.$refs.selectTheCustomer.openModel()
+    let coustomer:any =  this.$refs.selectTheCustomer
+      coustomer.openModel()
     }
 
     // 显示和初始化弹窗(选择供应商 销售退货金额填写 收货信息 更多)
