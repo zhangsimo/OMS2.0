@@ -97,13 +97,15 @@
                   ref="formPlan"
                   :model="formPlan"
                   :label-width="120"
+                  :rules="ruleValidate"
                 >
-                  <FormItem label="客户：" >
+                  <FormItem label="客户："  prop="name">
                     <Row class="w160">
                       <Col span="19"
                         ><Input
                           v-model="formPlan.supplier"
                           placeholder="请选择客户"
+
                       /></Col>
                       <Col span="5"
                         ><Button
@@ -323,8 +325,7 @@
         </div>
       </div>
     </section>
-    <!-- 退货入库 -->
-    <return-treasury ref="returnTreasury"></return-treasury>
+
 <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer"></select-the-customer>
     <!--更多 搜索-->
@@ -338,7 +339,6 @@
   import QuickDate from '_c/getDate/dateget';
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import SalesOutbound from './components/SalesOutbound.vue';
-  import ReturnTreasury from './components/ReturnTreasury.vue';
   import MoreQuery from "../commonality/MoreQuery";
   export default {
     name:'sellReturn',
@@ -346,7 +346,6 @@
       QuickDate,
       selectTheCustomer,
       SalesOutbound,
-      ReturnTreasury,
       MoreQuery
     },
     data(){
@@ -451,6 +450,11 @@
         settleMethods:[],//结算方式
         tableData:[],//右侧表格list
         thTypes:[],//退货
+   ruleValidate:{
+     name: [
+       { required: true, message: 'The name cannot be empty', trigger: 'blur' }
+     ],
+   }
       }
     },
     methods:{
@@ -460,7 +464,7 @@
       },
       //选择销售出库单
        SalesOutboundShowModel(){
-        console.log(this.$refs.salesOutbound)
+        // console.log(this.$refs.salesOutbound)
         this.$refs.salesOutbound.openModal()
        },
       // 快速查询日期
