@@ -12,7 +12,7 @@
           highlight-hover-row
           highlight-current-row
           style="width: 1000px"
-          height="500"
+          height="593"
           :data="tableData">
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="name" title="状态"></vxe-table-column>

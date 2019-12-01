@@ -6,7 +6,7 @@
         <Select v-model="orderType" style="width:100px" class="mr10">
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
-        <Button type="default"  class="mr10"><Icon type="ios-more" />更多</Button>
+        <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
         <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
         <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
@@ -26,7 +26,9 @@
             </div>
           </Split>
         </div>
-        <More-query :data="queryList"></More-query>
+<!--        更多搜索-->
+        <More-query :data="queryList" ref="morequeryModal"></More-query>
+<!--        打印-->
         <Print-show ref="printBox"></Print-show>
       </div>
     </div>
@@ -73,6 +75,10 @@
             //打印表格
             printTable(){
                 this.$refs.printBox.openModal()
+            },
+            //打开更多搜索
+            openQueryModal(){
+                this.$refs.morequeryModal.openModal()
             }
         }
     }

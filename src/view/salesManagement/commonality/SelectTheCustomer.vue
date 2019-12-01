@@ -100,7 +100,8 @@
                 },
                 tableData:[
                     {name:23}
-                ]
+                ],
+                single:'',//是否禁用
             }
         },
         methods:{

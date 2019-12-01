@@ -12,7 +12,7 @@
       <div class="clearfix purchase" ref="planForm">
             <FormItem label="客户：" >
               <Row  style="width: 310px">
-                <Input style="width: 240px" v-model="formPlan.planDate" disabled></Input>
+                <Input style="width: 240px" v-model="formPlan.asd" disabled></Input>
                 <Button  class="ml5" size="small" type="default" @click="openAddCustomer"><Icon type="md-checkmark" /></Button>
                 <Button  class="ml5" size="small" type="default" @click="openAddNewClient"><Icon type="md-add" /></Button>
               </Row>
@@ -75,10 +75,10 @@
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10"> 选择活动</Button>
+            <Button size="small" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10"> 选择入库单</Button>
+            <Button size="small" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
           </div>
           <div class="fl mb5">
             <Button size="small" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
@@ -157,6 +157,10 @@
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
 <!--      选择客户-->
       <Select-the-customer ref="AddCustomerModel"></Select-the-customer>
+<!--      选择入库单-->
+      <Godown-entry ref="GodownEntryModal"></Godown-entry>
+<!--      选择活动-->
+      <Activity ref="activity"></Activity>
     </div>
 </template>
 
@@ -165,6 +169,8 @@ import ClientData from "../../../system/essentialData/clientManagement/ClientDat
 import goodsInfo from "../../../../components/goodsInfo/goodsInfo";
 import selectPartCom from "../components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
+import GodownEntry from "../../commonality/GodownEntry";
+import Activity from "../../commonality/Activity";
 import {area} from '@/api/lease/registerApi'
 
     export default {
@@ -173,7 +179,9 @@ import {area} from '@/api/lease/registerApi'
             ClientData,
             goodsInfo,
             selectPartCom,
-            SelectTheCustomer
+            SelectTheCustomer,
+            GodownEntry,
+            Activity
         },
         data(){
             return {
@@ -252,10 +260,15 @@ import {area} from '@/api/lease/registerApi'
             openAddCustomer(){
                 this.$refs.AddCustomerModel.openModel()
             },
-            //打印表格
-            printEvent () {
-                this.$refs.xTable.print()
+            //打开选择入库单
+            openGodownEntryModal(){
+                this.$refs.GodownEntryModal.openModal()
             },
+            //打开活动
+            openActivityModal(){
+                this.$refs.activity.openModal()
+            }
+
         }
     }
 </script>
