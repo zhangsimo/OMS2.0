@@ -15,7 +15,7 @@
                 <Button type="default" @click="more()" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="addPro"><Icon type="md-add"/> 新增</Button>
+                <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
                 <Button type="default" @click='Save()' class="mr10"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
@@ -306,7 +306,9 @@
         more(){
           this.advanced = true
         },
-        //新增按钮
+        // 新增按钮
+        addProoo(){},
+        //添加配件按钮
         addPro(){
           this.$refs.SelectPartCom.init()
         },
