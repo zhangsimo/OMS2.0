@@ -47,9 +47,9 @@ export function findCompanyList (params) {
 }
 
 //开通账号
-export function putNewCompany (data) {
+export function putNewCompany (data ,id) {
   return axios.request({
-    url: `${api.authApi}/staff/TenantUsersSave`,
+    url: `${api.authApi}/staff/TenantUsersSave?groupId=${id}`,
     method: 'post',
     data
   })

@@ -450,7 +450,7 @@
                   data.passwd = '000000'
                   data.groupId = this.oneStaffChange.groupId
                   data.tenantUid  = this.oneStaffChange.id
-                  putNewCompany(data).then( res => {
+                  putNewCompany(data ,  this.$store.state.user.userData.groupId).then( res => {
                       stop()
                   if(res.code == 0){
                       this.$Message.success('开通成功')
