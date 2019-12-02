@@ -291,11 +291,11 @@
                 // let el = data
                 this.oneWarehouse = data.row;
                 this.mid = data.row.id;
-                console.log(this.mid,77777)
-                console.log(this.oneWarehouse, "选择表一的数据");
+                // console.log(this.mid,77777)
+                // console.log(this.oneWarehouse, "选择表一的数据");
 
                 this.twoList = data.row.details;
-                console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
+                // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
             },
             //获取仓库下拉选择信息
             async getStoreHoure() {
@@ -309,7 +309,7 @@
                     this.storeList = res.data;
                     // console.log(this.storeList,"默认仓库选项")
                 } else {
-                    console.log('22')
+                    // console.log('22')
                 }
             },
 
@@ -415,7 +415,7 @@
             },
             //接收抛出来的数据
             getPartList(v) {
-                console.log(v, 222)
+                // console.log(v, 222)
             },
             // 上传前
             handleBeforeUpload() {

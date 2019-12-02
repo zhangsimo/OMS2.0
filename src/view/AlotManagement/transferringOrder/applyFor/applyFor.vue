@@ -18,13 +18,13 @@
                 <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='Save()' class="mr10"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button type="default" @click='Save()' class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="editPro"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button class="mr10" @click="editPro" :disabled="buttonDisable"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button @click="cancellation" class="mr10" :disabled="buttonDisable"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -53,41 +53,41 @@
                     <Form inline :show-message="false" ref="formPlan" :label-width="100">
                       <FormItem label="调出方：" prop="supplyName" class="fs12">
                         <Row class="w500">
-                          <Col span="22"><Input placeholder="请选择调出方"></Input></Col>
-                          <Col span="2"><Button class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
+                          <Col span="22"><Input placeholder="请选择调出方" :disabled="buttonDisable"></Input></Col>
+                          <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
                       <FormItem label="调入仓库：" prop="billType">
-                        <Select class="w160" >
+                        <Select class="w160" :disabled="buttonDisable">
                           <Option value="beijing">主仓</Option>
                           <Option value="shanghai">嘻嘻</Option>
                           <Option value="shenzhen">哈哈</Option>
                         </Select>
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
-                        <Input class="w160" ></Input>
+                        <Input class="w160" :disabled="buttonDisable"></Input>
                       </FormItem>
-                      <FormItem label="备注：" prop="remark">
-                        <Input class="w500" ></Input>
+                      <FormItem label="备注：" prop="remark" >
+                        <Input class="w500" :disabled="buttonDisable"></Input>
                       </FormItem>
-                      <FormItem label="申请人：" prop="planner" >
-                        <Input class="w160" ></Input>
+                      <FormItem label="申请人：" prop="planner">
+                        <Input class="w160" :disabled="buttonDisable"></Input>
                       </FormItem>
                       <FormItem label="申请单号：" prop="planOrderNum" class="ml50">
-                        <Input class="w160" ></Input>
+                        <Input class="w160" :disabled="buttonDisable"></Input>
                       </FormItem>
                     </Form>
                   </div>
                   <div class="flex plan-cz-btn" ref="planBtn">
                     <div class="clearfix">
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro"><Icon type="md-add"/> 添加配件</Button>
+                        <Button size="small" class="mr10" @click="addPro" :disabled="buttonDisable"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="GoodsInfoModal"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                     </div>
                   </div>
@@ -147,7 +147,8 @@
           </div>
         </Modal>
       </div>
-
+      <!--供应商资料-->
+      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     </div>
 </template>
 
@@ -156,6 +157,7 @@
   import More from './compontents/More'
   import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
   import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
+  import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
     export default {
@@ -164,10 +166,12 @@
         QuickDate,
         More,
         SelectPartCom,
-        GoodsInfo
+        GoodsInfo,
+        SelectSupplier
       },
       data() {
         return {
+          buttonDisable: true,
           split1:0.2,
           purchaseType: 9999,
           purchaseTypeArr:[
@@ -347,6 +351,14 @@
         //编辑收货信息弹框显示
         GoodsInfoModal(){
           this.GainInformation = true
+        },
+        //供应商弹框
+        addSuppler(){
+          this.$refs.selectSupplier.init()
+        },
+        //供应商子组件内容
+        getSupplierName(a){
+          console.log(a)
         }
       },
       mounted(){

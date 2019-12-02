@@ -437,14 +437,14 @@ export default [
         component: () => import("@/view/business/policy/smsPolicy.vue")
       },
       {
-        path: "/policy/smsPolicy",
-        name: "smsPolicy",
-        mark: "36",
+        path: "/policy/moveStorehouse",
+        name: "moveStorehouse",
+        // mark: "36",
         meta: {
           icon: "arrow-graph-up-right",
           title: "移仓单"
-        }
-        // component: () => import('@/view/business/policy/smsPolicy.vue')
+        },
+        component: () => import('@/view/business/policy/moveStorehouse/moveStorehouse.vue')
       },
       {
         path: "/policy/smsPolicy",
@@ -963,133 +963,22 @@ export default [
     component: Main,
     children: [
       {
-        path: "",
-        name: "reportFormProcurement ",
+        path: "/settlementManagement/paymentmanage",
+        name: "settlementManagement-paymentmanage",
         redirect: "",
         meta: {
-          title: "对账与结账"
+          title: "应收应付管理"
         },
-        component: parentView,
-        children: [
-          {
-            path: "",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 未对账业务单"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/inStorage",
-            name: "reportFormProcurement-inStorage",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: "月结对账"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/salesReturn ",
-            name: "reportFormProcurement-salesReturn",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: "合并对账单"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/ranking ",
-            name: "reportFormProcurement-ranking",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 应收应付结算"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/brand ",
-            name: "reportFormProcurement-brand",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: "总部应收应付结算"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/accessories ",
-            name: "reportFormProcurement-accessories",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: "其它应收单"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/reportFormProcurement/accessoriesType ",
-            name: "reportFormProcurement-accessoriesType",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: "其它应付单"
-            }
-            // component: () => import()
-          }
-        ]
+        component: () => import("@/view/settlementManagement/paymentmanage/index.vue")
       },
       {
-        path: "",
-        name: "marketFrom",
+        path: "/settlementManagement/DailyFundReview",
+        name: "settlementManagement-DailyFundReview",
         redirect: "",
         meta: {
-          title: "其它收支业务"
+          title: "每日资金审核"
         },
-        component: parentView,
-        children: [
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "费用支出单"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: " 其它收入单"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "内部转账单"
-            }
-            // component: () => import()
-          }
-        ]
+        component: () => import("@/view/settlementManagement/DailyFundReview/index.vue")
       },
       {
         path: "/settlementManagement/bill",
@@ -1107,7 +996,7 @@ export default [
               // hideInMenu: true,
               title: "收付款查询"
             },
-            component: () => import("@/view/bill/CollectionPayment.vue")
+            component: () => import("@/view/settlementManagement/bill/CollectionPayment.vue")
           },
           {
             path: "/settlementManagement/bill/Allocationwarehousing",
@@ -1117,37 +1006,37 @@ export default [
               // hideInMenu: true,
               title: "内部调拨入库明细"
             },
-            component: () => import("@/view/bill/Allocationwarehousing.vue")
+            component: () => import("@/view/settlementManagement/bill/Allocationwarehousing.vue")
           },
           {
-            path: "/settlementManagement/bill/Allocationstock",
+            path: "/settlementManagement/settlementManagement/bill/Allocationstock",
             name: "bill-Allocationstock",
             // mark: 'oms_orders_approve',
             meta: {
               // hideInMenu: true,
               title: "内部调拨出库明细"
             },
-            component: () => import("@/view/bill/Allocationstock.vue")
+            component: () => import("@/view/settlementManagement/bill/Allocationstock.vue")
           },
           {
-            path: "/settlementManagement/bill/External",
+            path: "/settlementManagement/settlementManagement/bill/External",
             name: "bill_External",
             // mark: 'oms_orders_approve',
             meta: {
               // hideInMenu: true,
               title: "外采入库单明细"
             },
-            component: () => import("@/view/bill/External.vue")
+            component: () => import("@/view/settlementManagement/bill/External.vue")
           },
           {
-            path: "/settlementManagement/bill/stock",
+            path: "/settlementManagement/settlementManagement/bill/stock",
             name: "bill_stock",
             // mark: 'oms_orders_approve',
             meta: {
               // hideInMenu: true,
               title: "出库单明细"
             },
-            component: () => import("@/view/bill/stock.vue")
+            component: () => import("@/view/settlementManagement/bill/stock.vue")
           },
           {
             path: "/settlementManagement/bill/Sales",
@@ -1157,7 +1046,7 @@ export default [
               // hideInMenu: true,
               title: "销售订单明细"
             },
-            component: () => import("@/view/bill/Sales.vue")
+            component: () => import("@/view/settlementManagement/bill/Sales.vue")
           },
           {
             path: "/settlementManagement/bill/Onway",
@@ -1167,7 +1056,7 @@ export default [
               // hideInMenu: true,
               title: "在途库存明细"
             },
-            component: () => import("@/view/bill/Onway.vue")
+            component: () => import("@/view/settlementManagement/bill/Onway.vue")
           }
         ]
       },
@@ -1570,7 +1459,7 @@ export default [
           },
           {
             path:
-              "/systemSetting/InitialNavigation/inventory",
+              "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
             // mark: '59',
             meta: {
@@ -1579,7 +1468,7 @@ export default [
             },
             component: () =>
               import(
-                "@/view/system/systemSetting/InitialNavigation/inventory/inventory.vue"
+                "@/view/system/systemSetting/InitialNavigation/inventory/components/inventory.vue"
               )
           },
           {

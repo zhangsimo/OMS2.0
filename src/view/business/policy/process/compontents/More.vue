@@ -1,34 +1,36 @@
 <template>
     <div class="navbox">
-      <Row>
+      <Row class="mt15">
         <Col span="12">
           <span class="w40">创建日期：</span>
-          <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px"></DatePicker>
+          <DatePicker type="date" @on-change="establish" style="width: 180px"></DatePicker>
         </Col>
         <Col span="12">
+          <span class="w40">至：</span>
+          <DatePicker type="date" @on-change="establish" style="width: 180px"></DatePicker>
+        </Col>
+      </Row>
+      <Row class="mt15">
+        <Col span="12">
           <span class="w40">提交日期：</span>
-          <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px"></DatePicker>
+          <DatePicker type="date" @on-change="submit" style="width: 180px"></DatePicker>
+        </Col>
+        <Col span="12">
+          <span class="w40">至：</span>
+          <DatePicker type="date" @on-change="submit" style="width: 180px"></DatePicker>
         </Col>
       </Row>
       <row class="mt15">
-        <span class="ml5">调 出 方：</span>
-        <Input v-model="callout" icon="ios-clock-outline" placeholder="请选择调出方！" style="width: 450px" />
+        <span class="ml5">成品编码：</span>
+        <Input v-model="callout" style="width: 400px" />
       </row>
       <row class="mt15">
-        <span>申请单号：</span>
-        <Input v-model="numbers" placeholder="请输入申请单号！" style="width: 450px" />
+        <span>半成品编码：</span>
+        <Input v-model="numbers" style="width: 350px" />
       </row>
       <row class="mt15">
-        <span>配件编码：</span>
-        <Input v-model="coding" placeholder="请输入配件编码！" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span class="ml5">配 件 人：</span>
-        <Input v-model="Accessories" placeholder="请输入配件人！" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span>配件名称：</span>
-        <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+        <span>单号：</span>
+        <Input v-model="coding" style="width: 400px" />
       </row>
     </div>
 </template>
@@ -38,10 +40,9 @@
         name: "More",
       data(){
           return {
-            callout: '', //调出方
-            numbers: '', //申请单号
-            coding: '', //编码
-            Accessories: '', //配件人
+            callout: '', //成品编码
+            numbers: '', //半成品编码
+            coding: '', //单号
             Name: '', //配件名称
           }
       },
