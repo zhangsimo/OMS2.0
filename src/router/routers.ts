@@ -388,9 +388,9 @@ export default [
     ]
   },
   {
-    path: "",
-    name: "stockControl",
-    mark: "4",
+    path: "/business/policy",
+    name: "policy",
+    // mark: "4",
     meta: {
       icon: "ios-toggle",
       title: "库存管理"
@@ -398,14 +398,23 @@ export default [
     component: Main,
     children: [
       {
-        path: "/policy/approvePolicy",
-        name: "approvePolicy",
-        mark: "33",
+        path: "/policy/stockSearch",
+        name: "stockSearch",
+        // mark: "33",
         meta: {
           icon: "arrow-graph-up-right",
           title: "库存查询"
         },
-        component: () => import("@/view/business/policy/approvePolicy.vue")
+        component: () => import("@/view/business/policy/stockSearch/stockSearch.vue")
+      },
+      {
+        path:"/policy/process",
+        name:"process",
+        meta:{
+          icon: "arrow-graph-up-right",
+          title:"加工单",
+        },
+        component:()=>import("@/view/business/policy/process/process.vue")
       },
       {
         path: "/policy/purchasePolicy",
@@ -447,16 +456,16 @@ export default [
         },
         component: () => import("@/view/business/policy/smsPolicy.vue")
       },
-      {
-        path: "/policy/smsPolicy",
-        name: "smsPolicy",
-        mark: "38",
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "加工单"
-        }
-        // component: () => import('@/view/business/policy/smsPolicy.vue')
-      },
+      // {
+      //   path: "/policy/smsPolicy",
+      //   name: "smsPolicy",
+      //   mark: "38",
+      //   meta: {
+      //     icon: "arrow-graph-up-right",
+      //     title: "加工单"
+      //   }
+      //   // component: () => import('@/view/business/policy/smsPolicy.vue')
+      // },
       {
         path: "/policy/smsPolicy",
         name: "smsPolicy",
