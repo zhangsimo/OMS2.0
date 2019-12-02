@@ -20,22 +20,24 @@
               <Input v-model="searchForm.partName" placeholder="配件名称/拼音" class="w200 mr10"></Input>
             </div>
             <div class="db">
-              <Select class="w120 mr10" v-model="searchForm.partBrandValue"  placeholder="品牌">
+              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌">
                 <!-- <Option value="9999" v-for="item in partBrandList">品牌</Option> -->
                 <Option
-                v-for="item in partBrandList"
-                :value="item.partBrandValue"
-                :key="item.partBrandValue"
-              >{{ item.partBrandName}}</Option>
+                  v-for="item in partBrandList"
+                  :value="item.partBrandValue"
+                  :key="item.partBrandValue"
+                >{{ item.partBrandName}}
+                </Option>
               </Select>
             </div>
             <div class="db">
               <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
                 <Option
-                v-for="item in storeList"
-                :value="item.storeId"
-                :key="item.storeId"
-              >{{ item.storeName}}</Option>
+                  v-for="item in storeList"
+                  :value="item.storeId"
+                  :key="item.storeId"
+                >{{ item.storeName}}
+                </Option>
               </Select>
             </div>
             <div class="db">
@@ -77,20 +79,22 @@
             </div>
             <div class="db">
               <Select class="w120 mr10" v-model="searchForm1.partBrandValue" placeholder="品牌">
-                  <Option
-                v-for="item in partBrandList"
-                :value="item.partBrandValue"
-                :key="item.partBrandValue"
-              >{{ item.partBrandName}}</Option>
+                <Option
+                  v-for="item in partBrandList"
+                  :value="item.partBrandValue"
+                  :key="item.partBrandValue"
+                >{{ item.partBrandName}}
+                </Option>
               </Select>
             </div>
             <div class="db">
               <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
                 <Option
-                v-for="item in storeList"
-                :value="item.storeId"
-                :key="item.storeId"
-              >{{ item.storeName}}</Option>
+                  v-for="item in storeList"
+                  :value="item.storeId"
+                  :key="item.storeId"
+                >{{ item.storeName}}
+                </Option>
               </Select>
             </div>
             <div class="db">
@@ -132,7 +136,7 @@
           show-total
           show-elevator
         ></Page>
-         <Page
+        <Page
           v-else
           class-name="page-con"
           :current="contentTwo.page.num"
@@ -147,68 +151,60 @@
       </div>
       <!--      点击查看显示-->
       <enter-stock ref="look" :mainData="selectTableData"></enter-stock>
-<!--      <div class="look" v-if="look">-->
-<!--        <ul>-->
-<!--          <li>入库明细</li>-->
-<!--          <li>出库明细</li>-->
-<!--          <li>订单占用</li>-->
-<!--        </ul>-->
-<!--      </div>-->
+      <!--      <div class="look" v-if="look">-->
+      <!--        <ul>-->
+      <!--          <li>入库明细</li>-->
+      <!--          <li>出库明细</li>-->
+      <!--          <li>订单占用</li>-->
+      <!--        </ul>-->
+      <!--      </div>-->
     </section>
   </div>
 </template>
 <script>
     import {getAllStock, getLotStock} from "@/api/business/stockSearch";
-    import  EnterStock from "./enterStock";
+    import EnterStock from "./enterStock";
     import {getwarehouse} from "@/api/system/setWarehouse";
+    import * as api from "_api/system/partManager";
 
     export default {
         name: "stockSearch",
-        components:{EnterStock},
+        components: {EnterStock},
         data() {
             return {
                 // 品牌选项
-                partBrandList:[
-                  {partBrandName:'小花',partBrandValue:1 },
-                  {partBrandName:'小草',partBrandValue:2 },
-                  {partBrandName:'小树',partBrandValue:3 },
-                  {partBrandName:'小花',partBrandValue:4 }
+                partBrandList: [
+                    {partBrandName: '全部', partBrandValue: 1}
                 ],
                 //默认仓库选项
-                storeList:[
-                  {storeName:'小花',storeId:1 },
-                  {storeName:'小草',storeId:2 },
-                  {storeName:'小树',storeId:3 },
-                  {storeName:'小花',storeId:4 }
+                storeList: [
+                    {storeName: '小花', storeId: 1},
+                    {storeName: '小草', storeId: 2},
+                    {storeName: '小树', storeId: 3},
+                    {storeName: '小花', storeId: 4}
                 ],
                 //汇总库存查询条件表单
-                searchForm:{
-                  partBrandValue:'',   //品牌id
-                  partCode:'',         //配件编码
-                  storeId:'',            //仓库id
-                  partName:'',         //配件名称
-                  shelf:'',            //仓位
-                  stockQty:'',         //库存
+                searchForm: {
+                    partBrandValue: '',   //品牌id
+                    partCode: '',         //配件编码
+                    storeId: '',            //仓库id
+                    partName: '',         //配件名称
+                    shelf: '',            //仓位
+                    stockQty: '',         //库存
                 },
-                 //批次库存查询条件表单
-                searchForm1:{
-                  partBrandValue:'',   //品牌id
-                  partCode:'',         //配件编码
-                  storeId:'',            //仓库id
-                  partName:'',         //配件名称
-                  shelf:'',            //仓位
-                  stockQty:'',         //库存
+                //批次库存查询条件表单
+                searchForm1: {
+                    partBrandValue: '',   //品牌id
+                    partCode: '',         //配件编码
+                    storeId: '',            //仓库id
+                    partName: '',         //配件名称
+                    shelf: '',            //仓位
+                    stockQty: '',         //库存
                 },
                 curronly: false,
                 storeName: '999',
                 // tab索引
                 tabIndex: 0,
-
-                // partCode:'', //配件编码
-                // partName:'', //配件名称
-                // shelf:'', //仓位
-                // stockQty:'',//库存
-                // 存放点击选中的数据
                 selectTableData: '',
                 //查看框
                 look: false,
@@ -507,18 +503,19 @@
             }
         },
         created() {
-          this.serch()
+            this.serch()
+            this.getBand() //获取品牌
         },
         methods: {
             //搜索
-            serch(){
-                if(this.tabIndex==0){
-                  let searchTableList = Object.assign({},this.contentOne.page,this.searchForm)
-                  this.getAllStocks(searchTableList)
-                }else if(this.tabIndex==1){
-                  let searchTableList = Object.assign({},this.contentTwo.page,this.searchForm1)
-                  this.getLotStocks(searchTableList)
-                }else{
+            serch() {
+                if (this.tabIndex == 0) {
+                    let searchTableList = Object.assign({}, this.contentOne.page, this.searchForm)
+                    this.getAllStocks(searchTableList)
+                } else if (this.tabIndex == 1) {
+                    let searchTableList = Object.assign({}, this.contentTwo.page, this.searchForm1)
+                    this.getLotStocks(searchTableList)
+                } else {
                     alert('无法请求')
                     return false
                 }
@@ -544,7 +541,7 @@
                 if (res.code == 0) {
                     this.contentTwo.dataTwo = res.data.content
 
-                    console.log(this.contentTwo.dataTwo,777)
+                    console.log(this.contentTwo.dataTwo, 777)
                 }
             },
             // tab切换
@@ -571,7 +568,7 @@
                 this.getCus();
             },
             changePageCus() {
-              this.serch()
+                this.serch()
             },
             //安全库存弹窗
             sfy() {
@@ -582,7 +579,8 @@
                 let res = await getwarehouse({});
                 if (res.code == 0) {
                     res.data.map(item => {
-                        item.store = item.id;
+                        item.storeId = item.id;
+                        item.storeName=item.storeName
                     })
                     this.storeList = res.data;
                     // console.log(this.storeList,"默认仓库选项")
@@ -591,14 +589,27 @@
                 }
             },
             //显示零库存
-            showQty(){
-              if(this.tabIndex==0){
-                this.getAllStocks()
-              }
-              if(this.tabIndex==1){
-                this.getLotStocks()
-              }
-            }
+            showQty() {
+                if (this.tabIndex == 0) {
+                    this.getAllStocks()
+                }
+                if (this.tabIndex == 1) {
+                    this.getLotStocks()
+                }
+            },
+            //获取品牌
+            async getBand() {
+                let res = await api.getPartBrand();
+                if (res.code == 0) {
+                    res.data.forEach(el => {
+                        if (el.parentId != '0') {
+                            el.partBrandName = el.name;
+                            el.partBrandValue = el.id;
+                            this.partBrandList.push(el);
+                        }
+                    })
+                }
+            },
         }
     }
 </script>
@@ -637,22 +648,26 @@
       color: #fd5c5c;
     }
   }
+
   .page-warp {
     padding-right: 20px;
   }
+
   .look-nav {
     text-align: center;
     height: 40px;
     margin-top: 20px;
   }
+
   .mt20 {
     margin-top: 20px;
   }
-  .look{
+
+  .look {
     width: 100px;
     height: 100px;
     position: fixed;
-    top:50%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%);
   }

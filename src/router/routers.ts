@@ -437,14 +437,14 @@ export default [
         component: () => import("@/view/business/policy/smsPolicy.vue")
       },
       {
-        path: "/policy/smsPolicy",
-        name: "smsPolicy",
-        mark: "36",
+        path: "/policy/moveStorehouse",
+        name: "moveStorehouse",
+        // mark: "36",
         meta: {
           icon: "arrow-graph-up-right",
           title: "移仓单"
-        }
-        // component: () => import('@/view/business/policy/smsPolicy.vue')
+        },
+        component: () => import('@/view/business/policy/moveStorehouse/moveStorehouse.vue')
       },
       {
         path: "/policy/smsPolicy",
@@ -1459,7 +1459,7 @@ export default [
           },
           {
             path:
-              "/systemSetting/InitialNavigation/inventory",
+              "/systemSetting/InitialNavigation/inventory/components",
             name: "inventory",
             // mark: '59',
             meta: {
@@ -1468,7 +1468,7 @@ export default [
             },
             component: () =>
               import(
-                "@/view/system/systemSetting/InitialNavigation/inventory/inventory.vue"
+                "@/view/system/systemSetting/InitialNavigation/inventory/components/inventory.vue"
               )
           },
           {
