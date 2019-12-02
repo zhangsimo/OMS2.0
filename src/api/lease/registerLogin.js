@@ -7,7 +7,7 @@ import api from '_conf/url'
 // 发送短信验证码
 export function sendMessage(params) {
   return axios.request({
-    url: `${api.omsApi}/noToken/verificationCode/sendMessage`,
+    url: `${api.omsApi}/noAuth/verificationCode/sendMessage`,
     method: 'get',
     params
   })
@@ -17,7 +17,7 @@ export function sendMessage(params) {
 // /noToken/register/findByDynamicQuery
 export function findByDynamicQuery(params) {
   return axios.request({
-    url: `${api.omsProduct}/noToken/register/findByDynamicQuery`,
+    url: `${api.omsProduct}/noAuth/register/findByDynamicQuery`,
     method: 'get',
     params
   })
@@ -27,7 +27,7 @@ export function findByDynamicQuery(params) {
 // /noToken/register/findByDictCode
 export function findByDictCode(params) {
   return axios.request({
-    url: `${api.omsProduct}/noToken/register/findByDictCode?dictCode=CS001`,
+    url: `${api.omsProduct}/noAuth/register/findByDictCode?dictCode=CS001`,
     method: 'get',
     params
   })
@@ -37,7 +37,7 @@ export function findByDictCode(params) {
 // 注册按钮
 export function register(data) {
   return axios.request({
-    url: `${api.omsApi}/noToken/verificationCode/register`,
+    url: `${api.omsApi}/noAuth/verificationCode/register`,
     method: 'post',
     data
   })
