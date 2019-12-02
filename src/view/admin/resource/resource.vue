@@ -123,7 +123,7 @@
             attrs: {
               title: '添加下级资源',
             },
-            class: 'pointer ml15',
+            class: 'ivu-icon ivu-icon-ios-add-circle pointer ml15',
             on: {
               click: () => { this.addClick(data.id, data.displayName) }
             }
@@ -136,7 +136,7 @@
             attrs: {
               title: '修改',
             },
-            class: 'pointer ml15',
+            class: 'iconfont iconbianjixiugaiicon  icons pointer ml15',
             on: {
               click: () => {
                 let pnode = root[node.parent].node
@@ -154,7 +154,7 @@
             attrs: {
               title: '删除',
             },
-            class: 'delete ml15',
+            class: 'iconfont iconlajitongicon icons pointer ml15',
             on: {
               click: () => {
                 if (childCount > 0) {
