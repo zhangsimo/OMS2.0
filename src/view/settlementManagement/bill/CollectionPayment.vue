@@ -8,7 +8,7 @@
             <quickDate class="mr10"></quickDate>
           </div>
           <div class="db ml20">
-            <span>制单日期：</span>
+            <span>对账期间：</span>
             <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
             <span class="ml5 mr5">至</span>
             <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
@@ -24,20 +24,20 @@
             </i-select>
           </div>
           <div class="db ml20">
-            <span>供应商：</span>
+            <span>往来单位：</span>
             <input type="text" class="h30" value="车享汽配" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
-          </div>
-          <div class="db">
-            <span>往来类型：</span>
-            <i-select :model.sync="model1" style="width:200px">
-              <i-option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-            </i-select>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
+            </button>
+          </div>
+          <div class="db ml10">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
+              <i class="iconfont iconcaidan"></i>
+              <span>更多</span>
             </button>
           </div>
           <div class="db ml10">
@@ -49,8 +49,14 @@
     <section class="con-box">
       <div class="inner-box">
         <i-table border :columns="columns" :data="data"></i-table>
-        <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <i-table border :columns="columns1" :data="data1" class="mt10"></i-table>
+        <Tabs active-key="key1" class="mt10">
+          <Tab-pane label="收款单记录" key="key1">
+            <i-table border :columns="columns1" :data="data1" class="mt10"></i-table>
+          </Tab-pane>
+          <Tab-pane label="付款单记录" key="key2">
+            <i-table border :columns="columns2" :data="data2" class="mt10"></i-table>
+          </Tab-pane>
+        </Tabs>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -129,53 +135,59 @@ export default {
           className: 'tc'
         },
         {
-          title: '分店名称',
+          title: '公司名称',
           key: 'companyname',
           className: 'tc'
         },
         {
-          title: '订单号',
-          key: 'Orderid',
+          title: '对账单号',
+          key: 'reconciliationid',
           className: 'tc'
         },
         {
-          title: '来源',
-          key: 'source',
+          title: '对账单收付款单号',
+          key: 'collectionpaymentid',
+          width: 120,
           className: 'tc'
         },
         {
-          title: '客户',
-          key: 'Customer',
+          title: '往来单位',
+          key: 'currentcompany',
           className: 'tc'
         },
         {
-          title: '客户编码',
-          key: 'CustomerCode',
+          title: '收付类型',
+          key: 'payment',
           className: 'tc'
         },
         {
-          title: '往来类型',
-          key: 'Dealingstype',
+          title: '收付款金额',
+          key: 'paymoney',
           className: 'tc'
         },
         {
-          title: '仓库',
-          key: 'Warehouse',
+          title: '已冲减/已审核',
+          key: 'offset',
           className: 'tc'
         },
         {
-          title: '制单人',
-          key: 'Single',
+          title: '未冲减/未审核',
+          key: 'notoffset',
           className: 'tc'
         },
         {
-          title: '制单日期',
-          key: 'Singledata',
+          title: '收款目的',
+          key: 'purpose',
           className: 'tc'
         },
         {
-          title: '金额',
-          key: 'money',
+          title: '收付款人',
+          key: 'person',
+          className: 'tc'
+        },
+        {
+          title: '收付款时间',
+          key: 'time',
           className: 'tc'
         },
         {
@@ -184,8 +196,18 @@ export default {
           className: 'tc'
         },
         {
-          title: '单据状态',
-          key: 'billstate',
+          title: '审核状态',
+          key: 'reviewed',
+          className: 'tc'
+        },
+        {
+          title: '审核人',
+          key: 'reviewedperson',
+          className: 'tc'
+        },
+        {
+          title: '审核日期',
+          key: 'revieweddate',
           className: 'tc'
         }
       ],
@@ -197,98 +219,150 @@ export default {
           className: 'tc'
         },
         {
-          title: '配件内码',
-          key: 'partsInternal',
+          title: '收款单号',
+          key: 'receivablesid',
           className: 'tc'
         },
         {
-          title: '配件编码',
-          key: 'partsCode',
+          title: '收款时间',
+          key: 'receivablestime',
           className: 'tc'
         },
         {
-          title: '配件名称',
-          key: 'partsname',
+          title: '收款方式',
+          key: 'receivablestype',
           width: 120,
           className: 'tc'
         },
         {
-          title: '品牌',
-          key: 'brand',
+          title: '收款账户',
+          key: 'receivablesaccount',
           className: 'tc'
         },
         {
-          title: '车型',
-          key: 'Vehicle',
+          title: '收款金额',
+          key: 'receivablesmoney',
           className: 'tc'
         },
         {
-          title: 'OEM码',
-          key: 'OEMCode',
+          title: '审核状态',
+          key: 'reviewedstate',
           className: 'tc'
         },
         {
-          title: '数量',
-          key: 'number',
+          title: '审核人',
+          key: 'person',
           className: 'tc'
         },
         {
-          title: '单价',
-          key: 'price',
+          title: '审核日期',
+          key: 'revieweddate',
           className: 'tc'
         },
         {
-          title: '金额',
-          key: 'money',
+          title: '备注',
+          key: 'remarks',
+          className: 'tc'
+        }
+      ],
+      columns2: [
+        {
+          title: '序号',
+          key: 'id',
+          width: 40,
+          className: 'tc'
+        },
+        {
+          title: '付款单号',
+          key: 'payid',
+          className: 'tc'
+        },
+        {
+          title: '付款时间',
+          key: 'paytime',
+          className: 'tc'
+        },
+        {
+          title: '付款方式',
+          key: 'paytype',
+          width: 120,
+          className: 'tc'
+        },
+        {
+          title: '付款账户',
+          key: 'payaccount',
+          className: 'tc'
+        },
+        {
+          title: '付款金额',
+          key: 'paymoney',
+          className: 'tc'
+        },
+        {
+          title: '审核状态',
+          key: 'reviewedstate',
+          className: 'tc'
+        },
+        {
+          title: '审核人',
+          key: 'person',
+          className: 'tc'
+        },
+        {
+          title: '审核日期',
+          key: 'revieweddate',
+          className: 'tc'
+        },
+        {
+          title: '备注',
+          key: 'remarks',
           className: 'tc'
         }
       ],
       data: [
         {
           id: '1',
-          companyname: '上海佳配总部',
-          Orderid: 'CGRDS000-20190500001',
-          source: '人工开单',
-          Customer: '法雷奥汽车零部件贸易（上海）有限公司',
-          CustomerCode:'145',
-          Dealingstype: '内部客户',
-          Warehouse:'品牌仓',
-          Single:'陈凤彩',
-          Singledata:'2019-5-6 17:57',
-          money: '45.00',
-          billstate: '作废',
-          remarks: ''
-        },
-        {
-          id: '合计',
-          money: '15'
+          companyname: '上海虹梅南路店',
+          reconciliationid: 'XS201941445452313',
+          collectionpaymentid: '454455454',
+          currentcompany: '华胜215店',
+          payment: '收',
+          paymoney: '35648',
+          offset:'121',
+          notoffset: '0',
+          purpose:'预收款',
+          person:'张三',
+          time:'2019-09-19',
+          remarks: '',
+          reviewed: '已审',
+          reviewedperson: '王五',
+          revieweddate:'2019/10/10'
         }
       ],
       data1: [
         {
           id: '1',
-          partsInternal: '18009602',
-          partsCode: '03H103483',
-          partsname: '气门室盖密封垫',
-          brand: '原厂品牌',
-          Vehicle: 'Q7',
-          number: '2',
-          price: '45',
-          money: '￥90.00'
+          receivablesid: 'XS201941445452313',
+          receivablestime: '2019/10/10',
+          receivablestype: '现金',
+          receivablesaccount: '佳配零部件',
+          receivablesmoney: '35648',
+          reviewedstate:'已审',
+          person:'张三',
+          revieweddate:'2019-09-19'
         }
       ],
-      typelist: [
+      data2: [
         {
-          value: 'Warehousing',
-          label: '内部客户'
-        },
-        {
-          value: 'Return',
-          label: '外部客户'
-        },
-        {
-          value: 'huasheng',
-          label: '华胜'
+          id: '1',
+          payid: 'XS201941445452313',
+          paytime: '2019/10/10',
+          paytype: '现金',
+          payaccount: '佳配零部件',
+          paymoney: '35648',
+          reviewedstate:'已审',
+          person:'张三',
+          revieweddate:'2019-09-19'
         }
       ]
     };
