@@ -10,9 +10,9 @@
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db">
-            <Select v-model="purchaseType" class="w90 mr10">
+            <Select v-model="salesType" class="w90 mr10">
               <Option
-                v-for="item in purchaseTypeArr"
+                v-for="item in salesTypeArr"
                 :value="item.value"
                 :key="item.value"
                 >{{ item.label }}</Option
@@ -355,7 +355,7 @@
           size:10,
           num:1
         },
-        purchaseTypeArr:[
+        salesTypeArr:[
           {
             'label':'所有',
             'value':0
@@ -377,7 +377,7 @@
             'value':4
           },
         ],//快速查询订单状态选项
-        purchaseType:'',//快速查询选中
+        salesType:'',//快速查询选中
         sellOrderTable:{
           loading: false,
           columns: [
