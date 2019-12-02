@@ -115,7 +115,7 @@
                 h('Icon', {
                   props: {size: 16, type: 'edit'},
                   attrs: {title: '修改'},
-                  class: 'iconfont iconbianjixiugaiicon  icons pointer ml15 pointer',
+                  class: 'iconfont iconbianjixiugaiicon  icons pointer ml15',
                   on: {
                     click: () => {
                       this.edit(params.row.username)

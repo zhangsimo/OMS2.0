@@ -378,7 +378,7 @@
       },
       findRootGroup() {
         let stop = this.$loading()
-        findRootGroup({}).then(res => {
+        findRootGroup({groupId:this.$store.state.user.userData.groupId}).then(res => {
           stop()
           if (res.code == 0) {
             res.data.expand = true

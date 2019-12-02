@@ -87,7 +87,7 @@
                   attrs: {
                     title: '修改',
                   },
-                  class: 'pointer',
+                  class: 'iconfont iconbianjixiugaiicon  icons pointer',
                   on: {
                     click: () => {
                       this.edit(params.row)
@@ -102,7 +102,7 @@
                   attrs: {
                     title: '删除',
                   },
-                  class: 'delete ml15',
+                  class: 'iconfont iconlajitongicon icons pointer ml15',
                   on: {
                     click: () => {
                       this.del(params.row.id)
