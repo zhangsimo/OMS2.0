@@ -184,48 +184,49 @@
 
 <script>
   export default {
-    name:'SalesOutBound',
-  data(){
-    return {
-      showInfo: false, // 销售出库订单信息——表单
-      Outform :{
-      startDate: "", //开始日期
-      endDate: "", //结束日期
-      orderId: "", //业务单号
-      outOrderId: "", //出库单号
-      fittingsCode: "", //配件编码
-      },
-      tableDataTop:[
-        {index:1,role:123,sex:456}
-      ],//上面表格数据
-      tableDataBottom:[], //下面表格数据
-      SalesOutboundTable:{  // 销售出库单列表
-        loading: false,
-      },
+    name: 'SalesOutBound',
+    data() {
+      return {
+        showInfo: false, // 销售出库订单信息——表单
+        Outform: {
+          startDate: "", //开始日期
+          endDate: "", //结束日期
+          orderId: "", //业务单号
+          outOrderId: "", //出库单号
+          fittingsCode: "", //配件编码
+        },
+        tableDataTop: [
+          {index: 1, role: 123, sex: 456}
+        ],//上面表格数据
+        tableDataBottom: [], //下面表格数据
+        SalesOutboundTable: {  // 销售出库单列表
+          loading: false,
+        },
         page: {
           num: 1,
           size: 10,
           total: 0
         }
+      }
+
+    },
+    methods: {
+      openModal() {
+        this.showInfo = true;
+      }
     }
 
-  },
-  methods:{
-    openModal() {
-      this.showInfo = true;
-    }
-}
-
-}
+  }
 </script>
 
 <style lang="less" scoped>
-.bgc {
-  color: #000;
-  background-color: #e8e8e8;
-}
-.h40 {
-  line-height: 40px;
-  padding-left: 5px;
-}
+  .bgc {
+    color: #000;
+    background-color: #e8e8e8;
+  }
+
+  .h40 {
+    line-height: 40px;
+    padding-left: 5px;
+  }
 </style>
