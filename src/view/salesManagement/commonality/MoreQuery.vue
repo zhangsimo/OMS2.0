@@ -45,6 +45,7 @@
 </template>
 
 <script>
+  import {getClient} from '@/api/salesManagment/salesOrder'
     export default {
         name: "MoreQuery",
         props:{
@@ -56,9 +57,16 @@
                 cityList:[],//客户下拉框
             }
         },
+        mounted(){
+            this.getAllClient()
+        },
         methods:{
             openModal(){
                 this.moreQueryShow = true
+            },
+           async getAllClient(){
+                let res = await getClient()
+               console.log(res,999)
             }
         }
     }

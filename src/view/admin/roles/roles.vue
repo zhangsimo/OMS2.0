@@ -183,7 +183,6 @@
             name = searchValue
           }
         }
-        console.log(displayName, name,this.page.size, this.page.num - 1)
         queryRolesByPage(displayName, name, this.page.size, this.page.num - 1).then(res => {
           this.loading = false
           if (res.code == 0) {
