@@ -97,7 +97,7 @@
           ></vxe-table-column>
         </vxe-table>
         <!-- 销售出库单下 -->
-        <div class="bgc mt5 pr10 h40">订单数量共4条</div>
+        <div class="mt5 pr10 h40">订单数量共4条</div>
         <vxe-table
           height='140'
           border
@@ -195,7 +195,9 @@
       outOrderId: "", //出库单号
       fittingsCode: "", //配件编码
       },
-      tableDataTop:[],//上面表格数据
+      tableDataTop:[
+        {index:1,role:123,sex:456}
+      ],//上面表格数据
       tableDataBottom:[], //下面表格数据
       SalesOutboundTable:{  // 销售出库单列表
         loading: false,

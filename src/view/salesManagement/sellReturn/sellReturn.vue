@@ -23,6 +23,7 @@
             <Button
               type="default"
               class="mr10"
+              @click=" moreQueryShowModal"
             >
               <Icon type="ios-more" />更多</Button
             >
@@ -326,10 +327,10 @@
       </div>
     </section>
 
-<!--    选择客户-->
+  <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer"></select-the-customer>
     <!--更多 搜索-->
-    <More-query></More-query>
+    <More-query :data="moreQueryList" ref="moreQuery"></More-query>
     <!-- 选择销售出库单 -->
     <Sales-outbound ref="salesOutbound"></Sales-outbound>
   </div>
@@ -339,7 +340,7 @@
   import QuickDate from '_c/getDate/dateget';
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import SalesOutbound from './components/SalesOutbound.vue';
-  import MoreQuery from "../commonality/MoreQuery";
+  import MoreQuery from "../commonality/MoreQuery.vue";
   export default {
     name:'sellReturn',
     components: {
@@ -355,6 +356,7 @@
           size:10,
           num:1
         },
+        moreQueryList:{},//更多查询
         salesTypeArr:[
           {
             'label':'所有',
@@ -448,10 +450,14 @@
         split1:0.2,//左右框
         inStores:[],// 入库仓
         settleMethods:[],//结算方式
-        tableData:[],//右侧表格list
+        tableData:[
+          {index:1,role:123,sex:456},
+          {index:2,role:123,sex:456},
+          {index:3,role:123,sex:456},
+        ],//右侧表格list
         thTypes:[],//退货
-   ruleValidate:{
-     name: [
+       ruleValidate:{
+       name: [
        { required: true, message: 'The name cannot be empty', trigger: 'blur' }
      ],
    }
@@ -467,6 +473,10 @@
         // console.log(this.$refs.salesOutbound)
         this.$refs.salesOutbound.openModal()
        },
+      //选择更多
+      moreQueryShowModal(){
+        this.$refs.moreQuery.openModal()
+      },
       // 快速查询日期
        getDataQuick(v) {
        console.log(v);
