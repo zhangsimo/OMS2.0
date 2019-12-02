@@ -46,7 +46,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data"></i-table>
+        <i-table border :columns="columns" :data="data" class="waytable"></i-table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -319,7 +319,7 @@ export default {
   },
   methods: {
     Dealings() {
-      this.$refs.selectDealings.init()
+      this.$refs.selectDealings.openModel()
     },
     ok (){},
     cancel (){}
@@ -341,5 +341,11 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: right;
+}
+.inner-box {
+  overflow-x: scroll;
+}
+.waytable {
+  width: 3000px;
 }
 </style>
