@@ -933,10 +933,10 @@ export default [
     ]
   },
   {
-    path: "",
+    path: "/settlementManagement",
     name: "settlementManagement",
     mark: "6",
-    redirect: "/reportForm",
+    // redirect: "/reportForm",
     meta: {
       icon: "ios-paper",
       title: "结算管理"
@@ -1069,6 +1069,86 @@ export default [
               title: "内部转账单"
             }
             // component: () => import()
+          }
+        ]
+      },
+      {
+        path: "/settlementManagement/bill",
+        name: "settlementManagement-bill",
+        meta: {
+          title: "单据查询"
+        },
+        component: parentView,
+        children: [
+          {
+            path: "/settlementManagement/bill/CollectionPayment",
+            name: "bill-CollectionPayment",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "收付款查询"
+            },
+            component: () => import("@/view/bill/CollectionPayment.vue")
+          },
+          {
+            path: "/settlementManagement/bill/Allocationwarehousing",
+            name: "bill-Allocationwarehousing",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "内部调拨入库明细"
+            },
+            component: () => import("@/view/bill/Allocationwarehousing.vue")
+          },
+          {
+            path: "/settlementManagement/bill/Allocationstock",
+            name: "bill-Allocationstock",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "内部调拨出库明细"
+            },
+            component: () => import("@/view/bill/Allocationstock.vue")
+          },
+          {
+            path: "/settlementManagement/bill/External",
+            name: "bill_External",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "外采入库单明细"
+            },
+            component: () => import("@/view/bill/External.vue")
+          },
+          {
+            path: "/settlementManagement/bill/stock",
+            name: "bill_stock",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "出库单明细"
+            },
+            component: () => import("@/view/bill/stock.vue")
+          },
+          {
+            path: "/settlementManagement/bill/Sales",
+            name: "bill_Sales",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "销售订单明细"
+            },
+            component: () => import("@/view/bill/Sales.vue")
+          },
+          {
+            path: "/settlementManagement/bill/Onway",
+            name: "bill_Onway",
+            // mark: 'oms_orders_approve',
+            meta: {
+              // hideInMenu: true,
+              title: "在途库存明细"
+            },
+            component: () => import("@/view/bill/Onway.vue")
           }
         ]
       },
