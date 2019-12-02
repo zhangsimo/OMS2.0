@@ -6,11 +6,11 @@
       <FormItem label='组织名称:' prop='name'>
         <Input placeholder="请填写组织名称" v-model='data.name' ></Input>
       </FormItem>
-      <FormItem label='公司名称：' >
-        <i-select  style="width:200px" @on-change="changId">
-          <i-option v-for="item in company" :value="item.id">{{ item.tenantCompanyName }}</i-option>
-        </i-select>
-      </FormItem>
+<!--      <FormItem label='公司名称：' >-->
+<!--        <i-select  style="width:200px" @on-change="changId">-->
+<!--          <i-option v-for="item in company" :value="item.id">{{ item.tenantCompanyName }}</i-option>-->
+<!--        </i-select>-->
+<!--      </FormItem>-->
     </Form>
 </template>
 <script>

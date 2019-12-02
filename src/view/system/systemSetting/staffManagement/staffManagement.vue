@@ -327,7 +327,7 @@
                   let stop = this.$loading()
                   this.modalShow = false
                  if(this.title == '新增员工'){
-                     editUser(this.newStaff).then( res => {
+                     editUser(this.newStaff , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
                              this.$Message.success(res.message)

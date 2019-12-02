@@ -396,7 +396,6 @@ export default class Fittings extends Vue {
     let res: any = await getCloudList({...params, ...data});
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
-      console.log(res.data.content)
       res.data.content.map( item => {
         if (item.isTight ==0){
           item._disabled= true
@@ -504,7 +503,6 @@ export default class Fittings extends Vue {
   }
   // 单选行
   private selectRow(row: any) {
-    console.log(row)
     this.currRow = row;
     // this.isCanbutton = true;
     // this.isDisable = row.disabled == 0 ? true : false;
