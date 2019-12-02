@@ -19,7 +19,7 @@
         <div class="demo-split">
           <Split v-model="split1">
             <div slot="left" class="demo-split-pane">
-              <OrderLeft></OrderLeft>
+              <OrderLeft :queryTime="queryTime" :orderType ='orderType'></OrderLeft>
             </div>
             <div slot="right" class="demo-split-pane">
               <OrderRight ref="right"></OrderRight>
@@ -63,14 +63,17 @@
                   {value:5,name:'已作废'},
               ],
               split1: 0.2,
-              queryList:{},//更多查询
+              queryList:{
+                  isdisabad:true
+              },//更多查询
+              queryTime:'',//快速查询时间
 
           }
         },
         methods:{
             //获取时间
             getvalue(date){
-                console.log(date)
+                this.queryTime = date
             },
             //打印表格
             printTable(){

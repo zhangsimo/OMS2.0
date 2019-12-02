@@ -3,10 +3,10 @@
     v-model="moreQueryShow"
     title="高级查询"
    >
-    <div>
+    <div class="box">
       <Form ref="formInline" :model="data" :label-width="100">
         <FormItem label="创建日期:">
-          <DatePicker type="daterange" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="data.creatDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
           <DatePicker type="daterange" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
@@ -35,7 +35,6 @@
           <Input v-model="data.text"    placeholder="请输入配件名称" style="width: 350px" />
         </FormItem>
         <Checkbox v-model="data.isdisabad" class="ml100 ">显示个人单据</Checkbox>
-
       </Form>
     </div>
     <div slot='footer'>
@@ -66,5 +65,7 @@
 </script>
 
 <style scoped>
-
+.box >>> .ivu-form-item {
+  margin-bottom: 8px;
+}
 </style>

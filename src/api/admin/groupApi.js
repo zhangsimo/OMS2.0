@@ -3,10 +3,11 @@ import api from '_conf/url'
 
 
 // 查询组织
-export function findRootGroup () {
+export function findRootGroup (params) {
   return axios.request({
     url: `${api.authApi}/group/findRootGroup?`,
-    method: 'get'
+    method: 'get',
+    params
   })
 }
 
