@@ -336,7 +336,7 @@ export default {
   },
   methods: {
     Dealings() {
-      this.$refs.selectDealings.init()
+      this.$refs.selectDealings.openModel()
     },
     ok (){},
     cancel (){}
