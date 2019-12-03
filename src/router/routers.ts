@@ -427,14 +427,14 @@ export default [
         component: () => import("@/view/business/policy/purchasePolicy.vue")
       },
       {
-        path: "/policy/smsPolicy",
-        name: "smsPolicy",
-        mark: "35",
+        path: "/policy/market",
+        name: "market",
+        // mark: "35",
         meta: {
           icon: "arrow-graph-up-right",
           title: "销售单"
         },
-        component: () => import("@/view/business/policy/smsPolicy.vue")
+        component: () => import("@/view/business/policy/market/market.vue")
       },
       {
         path: "/policy/moveStorehouse",
@@ -447,14 +447,14 @@ export default [
         component: () => import('@/view/business/policy/moveStorehouse/moveStorehouse.vue')
       },
       {
-        path: "/policy/smsPolicy",
-        name: "smsPolicy",
+        path: "/policy/takeStock",
+        name: "takeStock",
         mark: "37",
         meta: {
           icon: "arrow-graph-up-right",
           title: "盘点单"
         },
-        component: () => import("@/view/business/policy/smsPolicy.vue")
+        component: () => import("@/view/business/policy/takeStock/takeStock.vue")
       },
       // {
       //   path: "/policy/smsPolicy",
