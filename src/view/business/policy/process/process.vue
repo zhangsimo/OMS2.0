@@ -47,14 +47,14 @@
     <div v-if="tabIndex==0">
       <section class="con-box">
         <div class="inner-box">
-          <div class="con-split" ref="paneLeft">
+          <div class="con-split hei" ref="paneLeft">
             <Split v-model="split1" min="200" max="500">
               <!--            左边-->
               <div slot="left" class="con-split-pane-left">
                 <div class="pane-made-hd center p10">
                   <h5>配件组装列表</h5>
                 </div>
-                <Table height="600" @on-current-change="selectTabelData" size="small" highlight-row border
+                <Table height="670" @on-current-change="selectTabelData" size="small" highlight-row border
                        :stripe="true"
                        :columns="Left.columns" :data="Left.tbdata"></Table>
                 <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100"
@@ -114,9 +114,9 @@
                   <vxe-table-column field="sex" title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="date12" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="date12" title="组装数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="备注" width="120"></vxe-table-column>
+                  <vxe-table-column field="date12" title="备注" width="100"></vxe-table-column>
                   <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="品牌车型" width="120"></vxe-table-column>
+                  <vxe-table-column field="date12" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="date12" title="OE码" width="120"></vxe-table-column>
                   <vxe-table-column field="date12" title="规格" width="120"></vxe-table-column>
                   <vxe-table-column field="date12" title="方向" width="120"></vxe-table-column>
@@ -158,14 +158,14 @@
     <div v-else>
       <section class="con-box">
         <div class="inner-box">
-          <div class="con-split" ref="paneLeft">
+          <div class="con-split hei" ref="paneLeft">
             <Split v-model="split1" min="200" max="500">
               <!--            左边-->
               <div slot="left" class="con-split-pane-left">
                 <div class="pane-made-hd center p10">
                   <h5>配件组装列表</h5>
                 </div>
-                <Table height="600" @on-current-change="selectTabelData" size="small" highlight-row border
+                <Table height="670" @on-current-change="selectTabelData" size="small" highlight-row border
                        :stripe="true"
                        :columns="Left.columns" :data="Left.tbdata"></Table>
                 <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100"
@@ -288,6 +288,7 @@
 <script>
     import More from './compontents/More'
     import "../../../goods/goodsList/goodsList.less";
+    import './index.less';
     import './lease.less';
 
     export default {
@@ -479,50 +480,7 @@
     }
 </script>
 
-<style lang="less" scoped>
-  .tabs-ulwarp {
-    padding-top: 17px;
-    border-bottom: solid 1px #ddd;
-  }
-
-  .tabs {
-    list-style: none;
-    display: flex;
-
-    li {
-      margin: 0;
-      margin-right: 4px;
-      height: 31px;
-      padding: 5px 16px 4px;
-      border: 1px solid #ddd;
-      border-bottom: 0;
-      border-radius: 2px 2px 0 0;
-      -webkit-transition: all 0.3s ease-in-out;
-      transition: all 0.3s ease-in-out;
-      background: #f8f8f8;
-      cursor: pointer;
-    }
-
-    li.tab-active {
-      height: 32px;
-      padding-bottom: 5px;
-      background: #fff;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-      border-color: #ddd;
-      color: #fd5c5c;
-    }
-  }
-
-  .page-warp {
-    padding-right: 20px;
-  }
-
-  .look-nav {
-    text-align: center;
-    height: 40px;
-    margin-top: 20px;
-  }
+<style scoped>
 
   .con-box {
     height: 600px;
@@ -531,9 +489,24 @@
   .w550 {
     width: 580px;
   }
-
-  .mt20 {
-    margin-top: 20px;
+  .ivu-split-horizontal{
+    height: 630px;
   }
+  .ivu-table-tip{
+    height: 665px;
+  }
+  .con-box[data-v-49eda4e0]{
+    height: 770px;
+  }
+  .ivu-split-trigger-vertical{
+    height: 770px;
+  }
+  .hei{
+    height: 740px;
+  }
+  .con-box[data-v-49eda4e0][data-v-49eda4e0]{
+    height: 750px;
+  }
+
 
 </style>

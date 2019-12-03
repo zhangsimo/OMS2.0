@@ -64,6 +64,3 @@
   }
 </style>
 
-<style scoped>
-
-</style>
