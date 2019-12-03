@@ -5,19 +5,17 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10"></quickDate>
+            <quickDate class="mr10" ref="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>制单日期：</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
-            <span class="ml5 mr5">至</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select :model.sync="model1" class="w150">
+            <i-select  v-model="model1" class="w150">
               <i-option
-                v-for="item in companyList"
+                v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</i-option>
@@ -85,6 +83,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
 import {getOrderlist} from '@/api/bill/saleOrder'
+import {creat} from './../components'
 export default {
   components: {
     quickDate,
@@ -92,24 +91,7 @@ export default {
   },
   data() {
     return {
-      companyList: [
-        {
-          value: "company1",
-          label: "佳配总部"
-        },
-        {
-          value: "company2",
-          label: "上海虹梅南路店"
-        },
-        {
-          value: "company3",
-          label: "杭州华展店"
-        },
-        {
-          value: "company4",
-          label: "郑州天荣店"
-        }
-      ],
+      Branchstore: [],
       model1: "",
       modal1: false,
       statelist: [
@@ -294,7 +276,14 @@ export default {
       ]
     };
   },
-  created () {
+  async created () {
+    let arr = await creat (this.$store)
+    // getreceivable().then(res=>{
+    //   console.log(res)
+    // })
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
     getOrderlist({}).then(res=>{
       console.log(res)
     })

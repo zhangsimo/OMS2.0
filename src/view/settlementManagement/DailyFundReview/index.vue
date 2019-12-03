@@ -5,19 +5,17 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10"></quickDate>
+            <quickDate class="mr10" ref="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>查询期间：</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
-            <span class="ml5 mr5">至</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select :model.sync="model1" class="w150">
+            <i-select v-model="model1" class="w150">
               <i-option
-                v-for="item in companyList"
+                v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</i-option>
@@ -68,10 +66,18 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
+import {creat} from './../components'
 export default {
   components: {
     selectDealings,
     quickDate
+  },
+  async mounted () {
+    // console.log(this.$refs.quickDate.val)
+    let arr = await creat (this.$refs.quickDate.val,this.$store)
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
   },
   data() {
     return {
@@ -243,7 +249,185 @@ export default {
           className: 'tc'
         }
       ],
+      columns1: [
+        {
+          title: '序号',
+          key: 'id',
+          width: 40,
+          className: 'tc'
+        },
+        {
+          title: '收款单号',
+          key: 'receiptid',
+          className: 'tc'
+        },
+        {
+          title: '对账单单号',
+          key: 'reconciliationid',
+          className: 'tc'
+        },
+        {
+          title: '往来单位',
+          key: 'source',
+          className: 'tc'
+        },
+        {
+          title: '收付类型',
+          key: 'Customer',
+          className: 'tc'
+        },
+        {
+          title: '核销方式',
+          key: 'CustomerCode',
+          className: 'tc'
+        },
+        {
+          title: '对账应收',
+          key: 'Dealingstype',
+          className: 'tc'
+        },
+        {
+          title: '应收返利',
+          key: 'Warehouse',
+          className: 'tc'
+        },
+        {
+          title: '应收坏账',
+          key: 'Single',
+          className: 'tc'
+        },
+        {
+          title: '对账应付',
+          key: 'Singledata',
+          className: 'tc'
+        },
+        {
+          title: '应付返利',
+          key: 'money',
+          className: 'tc'
+        },
+        {
+          title: '应付坏账',
+          key: 'remarks',
+          className: 'tc'
+        },
+        {
+          title: '其他应收款',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '预收账款',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '收款合计',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '现金',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: 'A卡',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: 'B卡',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: 'C卡',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: 'D卡',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '基本开户A',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '基本开户B',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '一般户A',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '一般户B',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '运费',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '手续费',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '利息收入',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '利息支出',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '代收代付',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '收款所属门店',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '收款人',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '收款日期',
+          key: 'billstate',
+          className: 'tc'
+        },
+        {
+          title: '备注',
+          key: 'billstate',
+          className: 'tc'
+        }
+      ],
+      Branchstore: [],
+      value: [],
+      model1: '',
+      data1: [],
+      data2: []
     };
+  },
+  methods: {
+    Dealings() {
+      this.$refs.selectDealings.openModel();
+    },
   }
 };
 </script>
