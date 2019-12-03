@@ -12,30 +12,36 @@
       </Row>
       <row class="mt15">
         <span class="ml5">调 出 方：</span>
-        <Input v-model="callout" icon="ios-clock-outline" placeholder="请选择调出方！" style="width: 450px" />
+        <Input v-model="callout" icon="md-checkmark" placeholder="请选择调出方" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>申请单号：</span>
-        <Input v-model="numbers" placeholder="请输入申请单号！" style="width: 450px" />
+        <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件编码：</span>
-        <Input v-model="coding" placeholder="请输入配件编码！" style="width: 450px" />
+        <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
       </row>
       <row class="mt15">
         <span class="ml5">配 件 人：</span>
-        <Input v-model="Accessories" placeholder="请输入配件人！" style="width: 450px" />
+        <Input v-model="Accessories" placeholder="请输入配件人" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件名称：</span>
         <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
       </row>
+
+      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     </div>
 </template>
 
 <script>
+  import SelectSupplier from "../../../../goods/goodsList/components/supplier/selectSupplier";
     export default {
         name: "More",
+      components: {
+        SelectSupplier
+      },
       data(){
           return {
             callout: '', //调出方

@@ -12,7 +12,7 @@
                 </Select>
               </div>
               <div class="db">
-                <Button type="default" @click="more()" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
+                <Button type="default" @click="more" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
               </div>
               <div class="db">
                 <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
@@ -40,9 +40,9 @@
                   <div class="pane-made-hd">
                     调拨申请列表
                   </div>
-                  <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata"></Table>
-                  <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePage"
-                        @on-page-size-change="changeSize" show-sizer show-total>
+                  <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                  <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
+                        @on-page-size-change="changeSizeLeft" show-sizer show-total>
                   </Page>
                 </div>
                 <div slot="right" class="con-split-pane-right pl5 goods-list-form">
@@ -53,28 +53,26 @@
                     <Form inline :show-message="false" ref="formPlan" :label-width="100">
                       <FormItem label="调出方：" prop="supplyName" class="fs12">
                         <Row class="w500">
-                          <Col span="22"><Input placeholder="请选择调出方" :disabled="buttonDisable"></Input></Col>
+                          <Col span="22"><Input placeholder="请选择调出方" v-model="this.rowData.guestName" disabled=""></Input></Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="billType">
+                      <FormItem label="调入仓库：" prop="billType" v-model="this.rowData.storeId">
                         <Select class="w160" :disabled="buttonDisable">
-                          <Option value="beijing">主仓</Option>
-                          <Option value="shanghai">嘻嘻</Option>
-                          <Option value="shenzhen">哈哈</Option>
+                          <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
-                        <Input class="w160" :disabled="buttonDisable"></Input>
+                        <Input class="w160" :disabled="buttonDisable" v-model="this.rowData.orderDate"></Input>
                       </FormItem>
                       <FormItem label="备注：" prop="remark" >
-                        <Input class="w500" :disabled="buttonDisable"></Input>
+                        <Input class="w500" :disabled="buttonDisable" v-model="this.rowData.remark"></Input>
                       </FormItem>
-                      <FormItem label="申请人：" prop="planner">
-                        <Input class="w160" :disabled="buttonDisable"></Input>
+                      <FormItem label="创建人：" prop="planner">
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="this.rowData.createUname"></Input>
                       </FormItem>
-                      <FormItem label="申请单号：" prop="planOrderNum" class="ml50">
-                        <Input class="w160" :disabled="buttonDisable"></Input>
+                      <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="this.rowData.serviceId"></Input>
                       </FormItem>
                     </Form>
                   </div>
@@ -98,26 +96,26 @@
                     @edit-closed="editClosedEvent"
                     size="mini"
                     :height="rightTableHeight"
-                    :data="tableData"
+                    :data="Right.tbdata"
                     :footer-method="addFooter"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
                     <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                     <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                    <vxe-table-column field="name" title="配件编码" width="100"></vxe-table-column>
-                    <vxe-table-column field="role" title="配件名称" width="100"></vxe-table-column>
-                    <vxe-table-column field="sex" title="品牌" width="100"></vxe-table-column>
-                    <vxe-table-column field="num6" title="申请数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="num6" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
-                    <vxe-table-column field="num6" title="品牌车型" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="单位" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="OE码" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="规格" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="紧销品" width="100" type="checkbox"></vxe-table-column>
-                    <vxe-table-column field="date12" title="受理数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="取消数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="出库数量" width="100"></vxe-table-column>
-                    <vxe-table-column field="date12" title="入库数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                    <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+                    <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                    <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
+                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
+                    <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
+                    <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                    <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                    <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
+                    <vxe-table-column field="" title="紧销品" width="100" type="checkbox"></vxe-table-column>
+                    <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
                   </vxe-table>
                   <div ref="planPage">
                   <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
@@ -160,6 +158,7 @@
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
+  import { queryAll,findById,queryByOrgid,findByAllot } from '../../../../api/AlotManagement/transferringOrder';
     export default {
       name: "applyFor",
       components: {
@@ -172,11 +171,22 @@
       data() {
         return {
           buttonDisable: true,
+          buttonDisableTwo: true,
           split1:0.2,
           purchaseType: 9999,
           purchaseTypeArr:[
-            {label:'所有',value:9999}
-            ],
+            { label:'所有',value:9999 },
+            { label:'草稿',value:1 },
+            { label:'待受理',value:2 },
+            { label:'已受理',value:3 },
+            { label:'待分拣',value:4 },
+            { label:'待发货',value:5 },
+            { label:'已出库',value:6 },
+            { label:'已入库',value:7 },
+            { label:'已拒绝',value:8 },
+            { label:'已作废',value:9 },
+          ],
+          List:[],
           Left: {
             page: {
               num: 1,
@@ -188,53 +198,53 @@
               {
                 title: '序号',
                 minWidth: 50,
-                key:'id'
+                type:'index'
               },
               {
                 title: '状态',
-                key: 'venderSkuNo',
-                minWidth: 70
+                key: 'status',
+                minWidth: 70,
+                render:(h,params) => {
+                  let Identity = JSON.parse(params.row.status ||{})
+                  let name = Identity.name
+                  return h('span',name)
+                }
               },
               {
-                title: '供应商',
-                key: 'name',
-                minWidth: 170
+                title: '调出方',
+                key: 'guestName',
+                minWidth: 80
               },
               {
                 title: '创建日期',
-                key: 'address',
+                key: 'createTime',
                 minWidth: 120
               },
               {
                 title: '创建人',
-                key: 'isCycle',
-                minWidth: 140
+                key: 'createUname',
+                minWidth: 100
               },
               {
-                title: '计划员',
-                key: 'salesPrice',
+                title: '申请单号',
+                key: 'serviceId',
                 minWidth: 120
               },
               {
-                title: '计划单号',
-                key: 'disable',
-                minWidth: 200
-              },
-              {
                 title: '提交人',
-                key: 'remark',
+                key: 'orderMan',
                 minWidth: 100
               },
               {
                 title: '提交日期',
                 align:'center',
-                key: 'qualitySourceName',
+                key: 'orderDate',
                 minWidth: 170
               },
               {
                 title: '打印次数',
-                key: 'categoryName',
-                minWidth: 170
+                key: 'printing',
+                minWidth: 70
               }
             ],
             tbdata: []
@@ -302,7 +312,9 @@
             tbdata: [],
           },
           advanced: false, //更多模块的弹框
-          GainInformation: false //编辑收获信息
+          GainInformation: false, //编辑收获信息
+          rowData: '',  //声明一个数据，用于赋值右边内容
+          selectArr:[] //快速查询的数组 用于赋值
         }
       },
       methods: {
@@ -311,10 +323,16 @@
           this.advanced = true
         },
         // 新增按钮
-        addProoo(){},
+        addProoo(){
+          this.buttonDisable = false
+        },
         //添加配件按钮
         addPro(){
           this.$refs.SelectPartCom.init()
+          let params = {}
+          findByAllot(params).then(res => {
+              this.Right.tbdata = [...res.data.content,...this.Right.tbdata]
+          })
         },
         //保存按钮
         Save(){},
@@ -327,18 +345,30 @@
         //左边列表选中当前行
         selectTabelData(){},
         //分页
+        changePageLeft(p) {
+          this.Left.page.num = p
+          // this.getList()
+        },
+        changeSizeLeft(size) {
+          this.Left.page.num = 1
+          this.Left.page.size = size
+          // this.getList()
+        },
+        //右部分分页
         changePage(p) {
-          this.page.num = p
+          this.Left.page.num = p
           // this.getList()
         },
         changeSize(size) {
-          this.page.num = 1
-          this.page.size = size
+          this.Left.page.num = 1
+          this.Left.page.size = size
           // this.getList()
         },
-        //split 分割
+        // 查询下拉框
         getDataQuick(v){
-          // console.log(v)
+          console.log(v)
+          this.selectArr = v
+          this.leftgetList()
         },
         //footer计算
         addFooter(){},
@@ -347,7 +377,19 @@
         //更多弹框的确定按钮
         Determined(){},
         //子组件的参数
-        getPartNameList(){},
+        getPartNameList(ChildMessage){
+          // console.log(ChildMessage)
+          let parts = ChildMessage
+          parts.map( item => {
+            item.partName = item.partStandardName
+            item.unit = item.minUnit
+            item.oemCode = item.brandPartCode
+            item.spec = item.specifications
+            item.enterUnitId = item.direction
+          })
+          this.Right.tbdata = [...this.Right.tbdata,...parts]
+          console.log(this.Right.tbdata)
+        },
         //编辑收货信息弹框显示
         GoodsInfoModal(){
           this.GainInformation = true
@@ -359,7 +401,44 @@
         //供应商子组件内容
         getSupplierName(a){
           console.log(a)
+        },
+        leftgetList(){
+          let params = {}
+          params.page = this.Left.page.num - 1
+          params.size = this.Left.page.size
+          params.startDate = this.selectArr[0]
+          params.endDate = this.selectArr[1]
+          queryAll(params).then(res => {
+            if(res.code === 0){
+              this.Left.tbdata = res.data.content
+            }
+          })
+        },
+        // 左边部分的当前行
+        selection(row){
+          // console.log(row)
+          console.log(row.id)
+          if(row.id){
+            this.buttonDisable = false
+          }
+          let params = {}
+          params.id = row.id
+          findById(params).then(res => {
+            if(res.code === 0){
+              this.rowData = res.data
+              this.Right.tbdata = res.data.detailVOS
+            }
+          })
+        },
+        // 仓库下拉框
+        warehouse(){
+          queryByOrgid().then(res => {
+              if(res.code === 0){
+                this.List = res.data
+              }
+          })
         }
+
       },
       mounted(){
         this.$nextTick(()=>{
@@ -371,14 +450,16 @@
           this.leftTableHeight = wrapH-70;
           //获取右侧表格高度
           this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-        })
+        });
+          this.leftgetList();
+          this.warehouse()
       }
     }
 </script>
 
 <style scoped>
   .con-box{
-    height: 600px;
+    height: 700px;
   }
   .w550{
     width: 580px;
