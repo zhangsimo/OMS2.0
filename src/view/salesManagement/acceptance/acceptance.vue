@@ -1,7 +1,8 @@
 <template>
-  <div class="acceptanceComponent">
+  <div class="content-oper content-oper-flex">
     <section class="oper-box">
       <div class="oper-top flex">
+        <div class="wlf wlf-center">
         <div class="db mr10">
           <span>快速查询：</span>
           <Select v-model="conditionData.character" class="w100 mr10" clearable>
@@ -42,11 +43,13 @@
             查询
           </Button>
         </div>
+        </div>
       </div>
     </section>
 
 
     <section class="con-box">
+      <div class="inner-box">
       <!--         上表格-->
       <div class="topTableDate">
         <vxe-table
@@ -61,9 +64,9 @@
             type="index"
             title="序号"
           ></vxe-table-column>
-          <vxe-table-column title="操作">
+          <vxe-table-column title="操作" width="120">
             <template v-slot="{ row,rowIndex }">
-              <a>生成采购单</a>
+              <vxe-button type="text"  @click="showNewOrder">生成采购单</vxe-button>
             </template>
           </vxe-table-column>
 
@@ -263,13 +266,20 @@
           ></vxe-table-column>
         </vxe-table>
       </div>
+    </div>
     </section>
+<!--    新增采购订单-->
+    <new-order ref="newOrder"></new-order>
   </div>
 </template>
 
 <script>
+  import NewOrder from './components/NewOrder';
   export default {
     name: "acceptance",
+    components:{
+      NewOrder
+    },
     data() {
       return {
         conditionData: {
@@ -328,10 +338,30 @@
         pageTotal: 10,
       }
 
+    },
+    methods:{
+      showNewOrder(){
+        this.$refs.newOrder.openModal()
+      }
     }
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  @import url("../../lease/product/lease.less");
+
+
+  * {
+    font-size: 12px !important;
+  }
+
+  .ivu-form-item {
+    margin-bottom: 0px;
+  }
+
+  .wlf-center {
+    display: flex;
+    align-items: center;
+  }
 
 </style>
