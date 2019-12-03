@@ -32,7 +32,13 @@
             />
           </FormItem>
           <Button type="primary" class="mr10" @click="searchInfo">查询</Button>
-          <Button type="primary" :disabled="disabled" class="mr10" @click="saveInfo">保存</Button>
+          <Button
+            type="primary"
+            :disabled="disabled"
+            class="mr10"
+            @click="saveInfo"
+            >保存</Button
+          >
           <Button @click="cancel">取消</Button>
         </Form>
       </div>
@@ -95,22 +101,16 @@
             :label-width="100"
           >
             <FormItem label="收货单位：" prop="receiveComp">
-              <Input v-model="formDateRight.receiveComp" class="w200"/>
+              <Input v-model="formDateRight.receiveComp" class="w200" />
             </FormItem>
             <FormItem label="收货地址：" prop="receiveAddress">
-              <Input
-                v-model="formDateRight.receiveAddress"
-                class="w200"
-              />
+              <Input v-model="formDateRight.receiveAddress" class="w200" />
             </FormItem>
             <FormItem label="收货人：" prop="receiver">
-              <Input v-model="formDateRight.receiver" class="w200"/>
+              <Input v-model="formDateRight.receiver" class="w200" />
             </FormItem>
             <FormItem label="联系电话：" prop="receiverMobile">
-              <Input
-                v-model="formDateRight.receiverMobile"
-                class="w200"
-              />
+              <Input v-model="formDateRight.receiverMobile" class="w200" />
             </FormItem>
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
@@ -134,19 +134,19 @@
               </Select>
             </FormItem>
             <FormItem label="运输费用：">
-              <Input v-model="formDateRight.transportCost" class="w200"/>
+              <Input v-model="formDateRight.transportCost" class="w200" />
             </FormItem>
             <FormItem label="结算方式：">
-              <Input v-model="formDateRight.settleType" class="w200"/>
+              <Input v-model="formDateRight.settleType" class="w200" />
             </FormItem>
             <FormItem label="发货备注：">
-              <Input v-model="formDateRight.remark" class="w200"/>
+              <Input v-model="formDateRight.remark" class="w200" />
             </FormItem>
             <FormItem label="业务单号：">
-              <Input v-model="formDateRight.businessNum" class="w200"/>
+              <Input v-model="formDateRight.businessNum" class="w200" />
             </FormItem>
             <FormItem label="关联单号：">
-              <Input v-model="formDateRight.relationNum" class="w200"/>
+              <Input v-model="formDateRight.relationNum" class="w200" />
             </FormItem>
           </Form>
         </div>
@@ -186,11 +186,22 @@ export default class GoodsInfo extends Vue {
   private disabled: boolean = true;
 
   private ruleValidate: ruleValidate = {
-    receiveComp: [{ required: true, message: '收货单位不能为空', trigger: 'blur' }],
-    receiveAddress: [{ required: true, message: '收货地址不能为空', trigger: 'blur' }],
+    receiveComp: [
+      { required: true, message: "收货单位不能为空", trigger: "blur" }
+    ],
+    receiveAddress: [
+      { required: true, message: "收货地址不能为空", trigger: "blur" }
+    ],
     receiver: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
-    receiverMobile: [{ required: true, message: "联系电话错误", validator: checkPhone, trigger: "blur" }],
-  }
+    receiverMobile: [
+      {
+        required: true,
+        message: "联系电话错误",
+        validator: checkPhone,
+        trigger: "blur"
+      }
+    ]
+  };
 
   private ok() {
     this.cancel();
@@ -199,7 +210,7 @@ export default class GoodsInfo extends Vue {
   private cancel() {
     this.showInfo = false;
   }
-  
+
   private async init() {
     this.loading = true;
     this.formDateTop = {
@@ -208,7 +219,8 @@ export default class GoodsInfo extends Vue {
       address: null, //详细收货地址
       receiveManTel: null //联系电话
     };
-    
+    const ref: any = this.$refs["formTwo"];
+    ref.resetFields();
     this.getLists();
 
     //获取物流下拉框
@@ -273,7 +285,7 @@ export default class GoodsInfo extends Vue {
   };
   //表格 数据
   private tableData: Array<any> = new Array();
-  private loading:boolean = false;
+  private loading: boolean = false;
   //配送方式字典下拉框
   private dictArr: Array<any> = new Array();
   //发货物流下拉框
@@ -285,37 +297,37 @@ export default class GoodsInfo extends Vue {
   }
   //查询
   private async searchInfo() {
-    let data:any = {}
+    let data: any = {};
     this.loading = true;
-    for(let k in this.formDateTop) {
-      const v = this.formDateTop[k]
-      if(v) {
+    for (let k in this.formDateTop) {
+      const v = this.formDateTop[k];
+      if (v) {
         data[k] = v;
       }
     }
     let res = await fapi.queryGoodsInfo(data);
-    if(res.code == 0) {
+    if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
     }
   }
   //保存
   private saveInfo() {
-    const ref: any = this.$refs['formTwo'];
+    const ref: any = this.$refs["formTwo"];
     ref.validate(async (valid: any) => {
-      if(valid) {
+      if (valid) {
         this.saveId(this.tableData);
         let res = await fapi.saveGoodsInfo(this.formDateRight);
         if (res.code == 0) {
-          this.$Message.success('保存成功');
+          this.$Message.success("保存成功");
           this.getLists();
-          const ref: any = this.$refs['formTwo'];
-          ref.resetFields()
+          const ref: any = this.$refs["formTwo"];
+          ref.resetFields();
         }
       } else {
-        this.$Message.error('必填信息未填写!');
+        this.$Message.error("必填信息未填写!");
       }
-    })
+    });
   }
   private echoDate({ row }) {
     this.disabled = false;
