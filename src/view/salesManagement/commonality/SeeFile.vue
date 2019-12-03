@@ -108,6 +108,9 @@
                 let data = {}
                 data.partId = this.data.partId
                 getDetails(data).then( res => {
+                    if(res.code  === 0){
+
+                    }
                     console.log(res ,999)
 
                 })

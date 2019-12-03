@@ -3,11 +3,11 @@
       <Form inline :show-message="false" ref="formPlan" :model="formPlan"  :label-width="100">
       <div class="pane-made-hd">
         <span class="titler mr5">固定额度:</span>
-        <span class="titler mr10">{{ 31231 |priceFilters}}</span>
+        <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
         <span class="titler mr5">临时余额:</span>
-        <span class="titler mr10">{{ 31231 |priceFilters}}</span>
+        <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
         <span class="titler mr5">可用余额:</span>
-        <span class="titler mr5">{{ 31231 |priceFilters}}</span>
+        <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
             <FormItem label="客户：" >
@@ -47,10 +47,10 @@
           <Input class="w210" v-model="formPlan.serviceId" disabled></Input>
         </FormItem>
         <FormItem label="计划发货日期:">
-          <DatePicker v-model="formPlan.planSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
+          <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
         </FormItem>
         <FormItem label="计划到货日期:">
-          <DatePicker v-model="formPlan.planArriveDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
+          <DatePicker :value="formPlan.planArriveDate" @on-change="getplanArriveDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
         </FormItem>
         <FormItem label="交货仓库：" >
           <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
@@ -112,9 +112,13 @@
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="orderPrice" title="单价" :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="orderAmt" title="金额" ></vxe-table-column>
+          <vxe-table-column field="orderQty" title="数量"   :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="orderPrice" title="单价"  :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column  title="金额" >
+            <template v-slot="{ row }">
+              <span>{{ countAmount(row) }} </span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="remark" title="备注" ></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
@@ -152,7 +156,7 @@
 
       <!--  编辑发货地址 -->
       <Modal v-model="addressShow" title="收货信息"  width="1000">
-        <goods-info></goods-info>
+<!--        <goods-info></goods-info>-->
         <div slot='footer'>
           <Button type='primary' @click = changeShippingAddress>确定</Button>
           <Button type='default' @click='addressShow = false'>取消</Button>
@@ -181,7 +185,7 @@ import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
-import {getClient , getRightList,getWarehouseList ,getLimit} from '@/api/salesManagment/salesOrder'
+import {getClient , getRightList,getWarehouseList ,getLimit , getSave} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 
 
@@ -199,7 +203,7 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
         },
         data(){
             return {
-                formPlan:{},
+                formPlan:{},//获取到数据
                 model1:'',
                 orderType:[
                     {
@@ -211,21 +215,6 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                         label: '电商订单'
                     }
                 ],//订单类型
-                cityList:[
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'New York1',
-                        label: 'New York1'
-                    },
-                ],
-                tableData:[
-                    {role:12,name:5,role1:8,name1:1},
-                    {role:12,name:5,role1:8,name1:1},
-                    {role:12,name:5},
-                ],
                 clientList:{}, //新增客户资料
                 provinceArr:{},//获取数据字典地址
                 treeDiagramList:[], //新增客户树形图信息
@@ -237,6 +226,8 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                 WarehouseList:[],//仓库
                 oneRow:{},//点击详情的数据
                 limitList:{},//额度信息
+                totalMoney:'',//总价
+                client:[],//客户列表
             }
         },
         mounted(){
@@ -274,12 +265,10 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
           async getAllLimit(){
               let data = {}
               data.guestId = this.$store.state.user.userData.groupId
-              console.log(this.$store.state.user.userData)
                let res = await getLimit(data)
                 if( res.code === 0){
                     this.limitList = res.data
                 }
-                console.log(res,999)
             },
             //获取客户属性
             async getType(){
@@ -323,14 +312,30 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
             //确认新增客户
             addNewClient(){},
             //计算表格数据
+            countAmount (row) {
+                return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
+            },
+            // 计算尾部总和
+            countAllAmount (data) {
+                let count = 0
+                data.forEach(row => {
+                    count += this.countAmount(row)
+                })
+                this.totalMoney = count
+                return count
+            },
+            //获取尾部总数
             footerMethod ({ columns, data }) {
                 return [
                     columns.map((column, columnIndex) => {
                         if (columnIndex === 0) {
                             return '和值'
                         }
-                        if (['role1', 'name1'].includes(column.property)) {
+                        if (['orderQty', 'orderPrice','orderAmt'].includes(column.property)) {
                             return this.$utils.sum(data, column.property)
+                        }
+                        if (columnIndex === 8) {
+                            return ` ${this.countAllAmount(data)} `
                         }
                         return null
                     })
@@ -345,6 +350,14 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
             //添加配件
             addMountings(){
                 this.$refs.selectPartCom.init()
+            },
+            //计划发货日期
+            getplanSendDate(data){
+                this.formPlan.planSendDate = data + ' '+ "00:00:00"
+            },
+            //计划到货日期
+            getplanArriveDate(data){
+                this.formPlan.planArriveDate = data + ' '+ "00:00:00"
             },
             //配件返回的参数
             getPartNameList(){
@@ -368,6 +381,14 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                 this.$nextTick( function () {
                     this.$refs.fileList.openModal()
                 })
+            },
+            //保存
+            async save(){
+              this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+              let res = await getSave(this.formPlan)
+                if(res.code === 0){
+                    return res
+                }
             }
 
         },

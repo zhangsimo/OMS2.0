@@ -8,9 +8,9 @@
         </Select>
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
         <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-        <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-        <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
-        <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
+        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+        <Button class="mr10" :disabled="orderlistType.value != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
+        <Button class="mr10" :disabled="orderlistType.isWms == 1"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
         <Button class="mr10" @click="printTable"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
         <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
         <Button class=""><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
@@ -19,7 +19,7 @@
         <div class="demo-split">
           <Split v-model="split1">
             <div slot="left" class="demo-split-pane">
-              <OrderLeft :queryTime="queryTime" :orderType ='orderType'></OrderLeft>
+              <OrderLeft :queryTime="queryTime" :orderType ='orderType' @getOneOrder = 'getOrder'></OrderLeft>
             </div>
             <div slot="right" class="demo-split-pane">
               <OrderRight ref="right"></OrderRight>
@@ -67,7 +67,7 @@
                   showPerson:true
               },//更多查询
               queryTime:'',//快速查询时间
-
+              orderlistType:{}
           }
         },
         methods:{
@@ -83,6 +83,16 @@
             openQueryModal(){
                 this.queryList={showPerson:true}
                 this.$refs.morequeryModal.openModal()
+            },
+            //左侧点击数据
+            getOrder( data ){
+              console.log(data , 999)
+                this.orderlistType = data.billStatusId
+            },
+            //保存
+            setSave(){
+              let res =  this.$refs.right.save()
+                console.log(res , 666)
             }
         }
     }

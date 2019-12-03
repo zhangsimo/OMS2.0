@@ -55,7 +55,7 @@ export default [
   {
     path: "/goods",
     name: "goods",
-    // mark: '1',
+    mark: '1',
     redirect: "/multilevel/level_2_1",
     meta: {
       icon: "md-cloud-done",
@@ -106,7 +106,7 @@ export default [
       {
         path: "/goods/categoryList",
         name: "categoryList",
-        // mark: "10",
+        mark: "10",
         meta: {
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -228,7 +228,7 @@ export default [
       {
         path: "/salesManagement/presell",
         name: "presell",
-        // mark: "18",
+        mark: "18",
         meta: {
           icon: "arrow-graph-up-right",
           title: "预售单"
@@ -309,6 +309,16 @@ export default [
               title: "调拨入库"
             },
             component: () => import("@/view/AlotManagement/transferringOrder/putStorage/putStorage.vue")
+          },
+          {
+            path: "/AlotManagement/transferringOrder/productDistribution",
+            name: "productDistribution",
+            // mark: "29",
+            meta: {
+              // hideInMenu: true,
+              title: "紧俏品分配"
+            },
+            component: () => import("@/view/AlotManagement/transferringOrder/productDistribution/index.vue")
           }
         ]
       },
@@ -329,8 +339,8 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调入退回申请"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferReback/twoBackApply/index.vue")
           },
           {
             path: "/allot/two/backAccept",
@@ -339,8 +349,8 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调入退回受理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferReback/twoBackAccept/index.vue")
           },
           {
             path: "/allot/two/backInStorage",
@@ -349,8 +359,8 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "调出退回入库"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/transferReback/twoBackInStorage/index.vue")
           }
         ]
       },
@@ -370,8 +380,8 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "总部直调受理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/quickDelivery/threeHeadquarters/index.vue")
           },
           {
             path: "/allot/three/supplier",
@@ -380,13 +390,14 @@ export default [
             meta: {
               // hideInMenu: true,
               title: "供应商直发受理"
-            }
-            // component: () => import()
+            },
+            component: () => import("@/view/AlotManagement/quickDelivery/threeSupplier/index.vue")
           }
         ]
       }
     ]
   },
+
   {
     path: "/business/policy",
     name: "policy",

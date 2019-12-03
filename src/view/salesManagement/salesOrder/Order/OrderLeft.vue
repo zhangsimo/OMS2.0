@@ -52,7 +52,9 @@
                     num:1
                 },
                 tableData:[],
-                query:{},//更多搜索信息
+                query:{
+                    showPerson : 1
+                },//更多搜索信息
             }
         },
         mounted(){
@@ -67,10 +69,11 @@
             //获取表格数据
             async getList(){
                   let data = {}
+                  console.log(this.queryTime , 4444)
                 data.startTime = this.queryTime[0] || ''
                 data.endTime = this.queryTime[1] || ''
                 data.billStatusId = this.orderType
-                    data = this.query
+                    // data = this.query
                   let page = this.page.num -1
                   let size = this.page.size
                 let res = await getLeftList(page, size,data)
@@ -93,24 +96,39 @@
             },
             //点击获取当前信息
             clickOnesList(data){
+                this.$emit('getOneOrder',data.row)
                 this.$store.commit('setOneOrder',data.row)
             }
         },
         watch:{
             //监听时间
             queryTime:function (val ,old) {
+                this.page.num = 1
+                this.page.size = 10
                 this.getList()
             },
             //监听状态
             orderType:function (val ,old) {
+                this.page.num = 1
+                this.page.size = 10
                 this.getList()
             },
             //更多搜索
             queryall:{
                 handler(v,ov){
                     v.showPerson = v.showPerson ? 1 : 0
-                    this.query = v
-                    this.getList()
+                    this.page.num = 1
+                    this.page.size = 10
+                    let page = this.page.num -1
+                    let size = this.page.size
+                     getLeftList(page, size,v).then( res => {
+                         if(res.code === 0){
+                             res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
+                             this.tableData = res.data.content
+                             this.page.total = res.data.totalElements
+                         }
+                     })
+
                 },
                 deep:true
             }
