@@ -276,17 +276,17 @@ export default {
       ]
     };
   },
-  async created () {
-    let arr = await creat (this.$store)
+  async mounted () {
+    let arr = await creat (this.$refs.quickDate.val,this.$store)
     // getreceivable().then(res=>{
     //   console.log(res)
     // })
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    getOrderlist({}).then(res=>{
-      console.log(res)
-    })
+    // getOrderlist({}).then(res=>{
+    //   console.log(res)
+    // })
   },
   methods: {
     Dealings() {
