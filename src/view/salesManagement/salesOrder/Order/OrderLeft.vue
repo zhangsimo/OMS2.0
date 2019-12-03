@@ -51,11 +51,17 @@
                     size:10,
                     num:1
                 },
-                tableData:[]
+                tableData:[],
+                query:{},//更多搜索信息
             }
         },
         mounted(){
             this.getList()
+        },
+        computed:{
+            queryall(){
+                return this.$store.state.dataList.orederQueryList
+            }
         },
         methods:{
             //获取表格数据
@@ -64,11 +70,10 @@
                 data.startTime = this.queryTime[0] || ''
                 data.endTime = this.queryTime[1] || ''
                 data.billStatusId = this.orderType
+                    data = this.query
                   let page = this.page.num -1
                   let size = this.page.size
-                console.log(1231231)
                 let res = await getLeftList(page, size,data)
-                console.log(res)
                 if(res.code === 0){
                     res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
                     this.tableData = res.data.content
@@ -76,12 +81,19 @@
                 }
             },
             //切换页面
-            selectNum(){},
+            selectNum(val){
+                this.page.num = val
+                this.getList()
+            },
             //切换页数
-            selectPage(){},
+            selectPage(val){
+                this.page.num = 1
+                this.page.size = val
+                this.getList()
+            },
             //点击获取当前信息
             clickOnesList(data){
-                console.log(data.row)
+                this.$store.commit('setOneOrder',data.row)
             }
         },
         watch:{
@@ -92,6 +104,15 @@
             //监听状态
             orderType:function (val ,old) {
                 this.getList()
+            },
+            //更多搜索
+            queryall:{
+                handler(v,ov){
+                    v.showPerson = v.showPerson ? 1 : 0
+                    this.query = v
+                    this.getList()
+                },
+                deep:true
             }
         }
     }

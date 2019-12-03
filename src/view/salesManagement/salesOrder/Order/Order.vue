@@ -27,7 +27,7 @@
           </Split>
         </div>
 <!--        更多搜索-->
-        <More-query :data="queryList" ref="morequeryModal"></More-query>
+        <More-query :data="queryList" ref="morequeryModal" ></More-query>
 <!--        打印-->
         <Print-show ref="printBox"></Print-show>
       </div>
@@ -64,7 +64,7 @@
               ],
               split1: 0.2,
               queryList:{
-                  isdisabad:true
+                  showPerson:true
               },//更多查询
               queryTime:'',//快速查询时间
 
@@ -81,6 +81,7 @@
             },
             //打开更多搜索
             openQueryModal(){
+                this.queryList={showPerson:true}
                 this.$refs.morequeryModal.openModal()
             }
         }
