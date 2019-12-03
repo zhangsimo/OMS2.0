@@ -325,8 +325,11 @@
           },
           {
             title: '状态',
-            key: 'venderSkuNo',
-            minWidth: 70
+            key: 'flag',
+            minWidth: 70,
+            render:(h,params) => {
+              return h('span',this.returnOrderType(params.row.flag))
+            }
           },
           {
             title: '供应商',
@@ -379,6 +382,7 @@
       }
     },
     mounted() {
+      this.initStart();
       setTimeout(()=>{
         this.getDomHeight();
       },0);
@@ -406,25 +410,7 @@
         this.getList()
       },
 
-      //初始化
-      getList() {
-        const params = {}
-        let searchValue = this.searchValue.trim()
-        if(searchValue){
-          params.name = searchValue
-        }
-        params.page = this.page.num - 1
-        params.size = this.page.size
-        this.loading = false
-        getLeaseProlist(params).then(res => {
-          this.loading = false
-          if (res.code == 0) {
-            this.tbdata = res.data || []
-            this.page.total = res.totalElements
-          }
 
-        })
-      },
       //选择供应商
       addSuppler(){
         this.$refs.selectSupplier.init()
