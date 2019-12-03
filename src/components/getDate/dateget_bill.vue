@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       val: [],
-      searchQuick: "0",
+      searchQuick: "3",
       dateQiuck: [
         { value: "0", label: "请选择" },
         { value: "1", label: "今天" },
@@ -36,7 +36,9 @@ export default {
   },
   props: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.getval(this.searchQuick)
+  },
   methods: {
     getval(type) {
       // 日期快速选择
