@@ -21,7 +21,7 @@ export const minxParts = {
         },
         {
           'label':'拼音',
-          'value':'namePy'
+          'value':'pyCode'
         },
       ],
       //审核状态查询
