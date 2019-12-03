@@ -35,7 +35,7 @@
         </Col>
         <Col span="8">
           <FormItem label='调整后固定额度:' >
-            <Input :value='+ data.applyQuota + data.creditLimit || 0' style="width: 150px" disabled  ></Input>
+            <Input :value='+data.applyQuota + data.creditLimit || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整后临时额度:' >
             <Input  :value='+data.tempQuota + data.tempCreditLimit || 0' style="width: 150px" disabled ></Input>

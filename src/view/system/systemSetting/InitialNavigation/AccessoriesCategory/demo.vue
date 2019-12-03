@@ -7,6 +7,7 @@
           :loading="Loading"
           :tree-config="{children: 'children'}"
           @cell-click="selection"
+          highlight-hover-row
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="code" title="分类编码"></vxe-table-column>

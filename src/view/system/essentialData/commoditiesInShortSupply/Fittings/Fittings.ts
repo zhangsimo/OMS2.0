@@ -53,7 +53,7 @@ export default class Fittings extends Vue {
         {
           type: 'selection',
           minWidth: 60,
-          align: 'center'
+          align: 'center',
         },
         {
           title: "序号",
@@ -396,6 +396,11 @@ export default class Fittings extends Vue {
     let res: any = await getCloudList({...params, ...data});
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
+      res.data.content.map( item => {
+        if (item.isTight ==0){
+          item._disabled= true
+        }
+      })
       this.cloud.page.total = res.data.totalElements;
       this.cloud.loading = false;
     }
@@ -498,7 +503,6 @@ export default class Fittings extends Vue {
   }
   // 单选行
   private selectRow(row: any) {
-    console.log(row)
     this.currRow = row;
     // this.isCanbutton = true;
     // this.isDisable = row.disabled == 0 ? true : false;

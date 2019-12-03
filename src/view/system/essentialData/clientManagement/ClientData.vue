@@ -468,9 +468,6 @@
             }
         },
       mounted(){
-          console.log(this.data.guestLogisticsVOList,471)
-          console.log(this.data.guestVOList,472)
-          console.log(this.data.guestTaxpayerVOList,473)
           this.placeList = this.data.guestLogisticsVOList || []
           this.relevanceClientShow =this.data.guestVOList || []
           this.invoice =this.data.guestTaxpayerVOList || []

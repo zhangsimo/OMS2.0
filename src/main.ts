@@ -23,6 +23,9 @@ import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 
 import loadmore from "./directive/loadmore";
+import VueQriously from 'vue-qriously'
+
+Vue.use(VueQriously)
 // @ts-ignore
 Vue.use(loadmore);
 

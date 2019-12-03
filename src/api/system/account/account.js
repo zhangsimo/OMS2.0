@@ -28,7 +28,8 @@ export function generationQR(data) {
   return axios.request({
     url: `${api.wmsApi}/wxPay/generationQR`,
     method: 'post',
-    responseType: 'blob',
+    // responseType: 'blob',
+    responseType: 'arraybuffer',
     data
   })
 }
@@ -61,5 +62,16 @@ export function tenantInfogenerateOrder(data) {
     url: `${api.wmsApi}/tenantInfo/generateOrder`,
     method: 'post',
     data
+  })
+}
+
+// wxPay/queryOrder
+//关闭按钮
+export function queryOrder(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wxPay/queryOrder`,
+    method: 'post',
+    data:data.data,
+    params:data.params
   })
 }

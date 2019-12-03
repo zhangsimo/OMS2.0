@@ -11,9 +11,9 @@ export function getStaffList (params) {
 }
 
 // 新增用户信息
-export function editUser (data) {
+export function editUser (data , id) {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/save`,
+    url: `${api.authApi}/tenantUsers/save?groupId=${id}`,
     method: 'post',
     data
   })
@@ -47,9 +47,9 @@ export function findCompanyList (params) {
 }
 
 //开通账号
-export function putNewCompany (data) {
+export function putNewCompany (data ,id) {
   return axios.request({
-    url: `${api.authApi}/staff/TenantUsersSave`,
+    url: `${api.authApi}/staff/TenantUsersSave?groupId=${id}`,
     method: 'post',
     data
   })

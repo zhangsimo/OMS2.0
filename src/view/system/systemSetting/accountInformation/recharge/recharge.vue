@@ -33,16 +33,16 @@
             <div><Button type="warning" @click="Pay">确认购买</Button></div>
           </div>
         </div>
-      <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" >
+      <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-cancel="close">
         <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{payMoney}}</span> 元</div>
-        <div class="modal"><img class="image" :src="this.flowPic" alt=""></div>
+        <div class="modal"><qriously :value="erweima" :size="200" /></div>
         <div class="modal" style="color: #bbbbbb;padding-bottom: 50px">用微信扫此二维码（10分钟有效）</div>
       </Modal>
     </div>
 </template>
 
 <script>
-  import {rechargeCoinInfo,generateOrder,generationQR} from '../../../../../api/system/account/account'
+  import {rechargeCoinInfo,generateOrder,generationQR,queryOrder} from '../../../../../api/system/account/account'
   export default {
         name: "recharge",
       data(){
@@ -60,7 +60,9 @@
             modal: false,
             remark:'',
             totalCoin:'',
-            flowPic: ''
+            flowPic: '',
+            erweima:'' , //微信二维码路径
+            orderNum: ''
           }
       },
       methods:{
@@ -85,13 +87,13 @@
             generateOrder(data).then(res => {
                 if(res.code === 0){
                   let num = res.data.orderNum
+                  this.orderNum = res.data.orderNum
                   let dataa = {}
                   dataa.price = this.payMoney
                   dataa.orderNum = num
                   generationQR(dataa).then(res => {
-                    let url = window.URL.createObjectURL(res)
-                    console.log(url,123)
-                    this.flowPic = url;
+                    this.erweima = res.data.code_url
+                    console.log(this.erweima,'二维码路径')
                     this.modal = true
             })
             }
@@ -100,6 +102,14 @@
           } else {
             this.$Message.warning('请选择套餐！')
           }
+        },
+        close(){
+          let data = {}
+          let params = {}
+          params.orderNum = this.orderNum
+          queryOrder({data:data,params:params}).then(res => {
+
+          })
         }
       },
       mounted(){

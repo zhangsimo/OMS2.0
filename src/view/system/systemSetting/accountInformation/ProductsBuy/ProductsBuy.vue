@@ -29,9 +29,12 @@
       </div>
     </div>
 
-    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" >
+    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-cancel="close">
       <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{getMsg.salesPrice}}</span> 元</div>
-      <div class="modal"><div id="qrcode" ref="qrcode"></div></div>
+      <div class="modal">
+        <!--<div id="qrcode" ref="qrcode"></div>-->
+        <qriously :value="erweima" :size="200" />
+      </div>
       <div class="modal" style="color: #bbbbbb;padding-bottom: 50px">用微信扫此二维码（10分钟有效）</div>
     </Modal>
 
@@ -41,7 +44,7 @@
 <script>
   // import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
-  import { tenantInfogenerateOrder,generationQR } from '../../../../../api/system/account/account'
+  import { tenantInfogenerateOrder,generationQR, queryOrder } from '../../../../../api/system/account/account'
     export default {
         name: "ProductsBuy",
       // components: {QRCode},
@@ -61,21 +64,30 @@
           tenantInfogenerateOrder().then(res => {
               if(res.code === 0 ){
                  var aaa = res.data.orderNum
-                console.log(aaa,2323)
+                // console.log(aaa,2323)
                 let data = {}
                 data.price = this.getMsg.salesPrice
                 data.orderNum = aaa
+                this.orderNum = aaa
                 generationQR(data).then(res => {
-                  console.log(res,1)
+                  // console.log(res,1)
                   if(res.code === 0){
                     this.erweima = res.data.code_url
-                    console.log(this.erweima ,123123)
+                    // console.log(this.erweima,123123)
                     this.modal = true
                   }
                 })
               }
           })
         },
+        close(){
+          let data = {}
+          let params = {}
+          params.orderNum = this.orderNum
+          queryOrder({data:data,params:params}).then(res => {
+
+          })
+        }
         // qrcodeScan () {//生成二维码
         //   let qrcode = new QRCode('qrcode', {
         //     width: 200,  // 二维码宽度
@@ -92,7 +104,7 @@
       },
       activated(){
           this.getMsg = this.$route.query
-          console.log(this.getMsg)
+          // console.log(this.getMsg)
       }
     }
 </script>

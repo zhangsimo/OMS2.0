@@ -32,3 +32,5 @@ export function checkList (data) {
     data
   });
 }
+//导入 /enterMain/import
+export const url = `${api.omsOrder}/enterMain/import`;

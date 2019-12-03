@@ -546,6 +546,11 @@
                 data.afterAdjustQuota = this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal
                 console.log(data,123)
                 save(data).then(res => {
+                  if(res.code === 0){
+                    this.adjustment = false
+                    this.$Message.warning('保存成功')
+                    this.getListTop()
+                  }
                   // console.log(res);
                 })
           },
@@ -595,7 +600,11 @@
             data.addTotalQuota = this.creaditList.tototo
             data.adjustType = 0
             save(data).then(res => {
-
+              if(res.code === 0){
+                this.CreditLineApplicationShow = false
+                this.$Message.warning('保存成功')
+                this.getListTop()
+              }
             })
           },
           //确定取消

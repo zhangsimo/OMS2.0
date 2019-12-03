@@ -130,11 +130,9 @@ export default class ProcurementModal extends Vue {
   }
 
   private cellClickEvent() {
-    console.log("单元格点击事件");
   }
   private radioChangeEvent({ row }) {
     this.selectRow = row;
-    console.log("单选事件");
   }
 
   private changePageToTable(p: number) {

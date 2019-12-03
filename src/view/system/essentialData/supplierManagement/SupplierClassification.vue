@@ -21,7 +21,7 @@
             <Input placeholder='请输入分类名称' v-model='newOne.title' style="width: 250px" ></Input>
           </FormItem>
           <FormItem label='上级名称:' >
-            <Select v-model="newOne.code" style="width:250px" class="mr10" :disabled="changeadd">
+            <Select v-model="newOne.code" style="width:250px" class="mr10" :disabled="changeadd" @on-change="getNewOne">
               <Option v-for="item in data" v-if='item.parentId == 0' :value="item.code" :key="item.code">{{ item.title }}</Option>
             </Select>
           </FormItem>
@@ -70,13 +70,15 @@
                 modalShow:false,
                 treeList:[],
                 list:[],
-                newOne:{}
+                newOne:{},
+                selectchangeOne:''//下拉数据
             }
         },
         mounted(){
         },
         methods:{
             resetFields() {
+                this.selectchangeOne = ''
                 this.newOne = {}
                 this.$refs.form.resetFields()
             },
@@ -109,8 +111,20 @@
                     if (valid) {
                         //成功
                         let data ={}
-                        data = this.newOne
-                        console.log( this.newOne)
+                        if(this.selectchangeOne) {
+                            let arr = ''
+                            let name = ''
+                            name = this.newOne.title
+                            arr = this.data.filter(item => {
+                                return item.code == this.selectchangeOne
+                            })
+                            data = arr[0]
+                            data.parentId = data.code
+                            data.id = ''
+                            data.title = name
+                        } else {
+                            data = this.newOne
+                        }
                         changeTree(data).then(res => {
                             if (res.code == 0){
                                 this.modalShow = false
@@ -121,6 +135,10 @@
                         this.$Message.error('信息填写错误');
                     }
                 })
+            },
+            //下拉框选择
+            getNewOne(value){
+                this.selectchangeOne = value
             },
             //修改客户分类
             changeClient(){

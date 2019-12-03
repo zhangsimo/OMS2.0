@@ -19,40 +19,44 @@
           <Split v-model="split1">
             <div slot="left" class="demo-split-pane">
               <div class="tableBox">
-              <vxe-table
-                border
-                resizable
-                show-overflow
-                highlight-hover-row
-                highlight-current-row
-                resizable
-                style="width: 700px"
-                size="mini"
-                :loading="Loading"
-                align="center"
-                :data="tableData"
-                height="500"
-                >
-                <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
-                <vxe-table-column field="name" title="状态" ></vxe-table-column>
-                <vxe-table-column field="name" title="客户" ></vxe-table-column>
-                <vxe-table-column field="name" title="创建日期" ></vxe-table-column>
-                <vxe-table-column field="name" title="销售员" ></vxe-table-column>
-                <vxe-table-column field="name" title="销售订单单号" ></vxe-table-column>
-                <vxe-table-column field="name" title="打印次数" ></vxe-table-column>
-                <vxe-table-column field="name" title="提交人" ></vxe-table-column>
-                <vxe-table-column field="name" title="提交日期" ></vxe-table-column>
-                <vxe-table-column field="name" title="创建人" ></vxe-table-column>
-              </vxe-table>
-              </div>
-              <Page size="small" :total="page.total" :page-size="page.size" :current="page.num"   :page-size-opts="page.sizeOpts"
-                    show-sizer show-total
-                    style="float: right;margin-top: 10px"/>
+                <Tree :data="treeList"></Tree>
+            </div>
             </div>
             <div slot="right" class="demo-split-pane">
-              <div>
-                21213123123
+              <div style="overflow: hidden;overflow-x: scroll">
+                <vxe-table
+                  border
+                  resizable
+                  :data="tableData"
+                  border
+                  stripe
+                  size="mini"
+                  align="center"
+                  resizable
+                  :auto-resize="true"
+                  highlight-hover-row
+                  highlight-current-row
+                  show-overflow
+                  height="500"
+                  style="width: 1500px"
+                 >
+                  <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+                  <vxe-table-column field="name" title="名称"  show-overflow></vxe-table-column>
+                  <vxe-table-column field="name" title="编码"></vxe-table-column>
+                  <vxe-table-column field="name" title="状态"></vxe-table-column>
+                  <vxe-table-column field="name" title="票据类型"></vxe-table-column>
+                  <vxe-table-column field="name" title="结算方式"></vxe-table-column>
+                  <vxe-table-column field="name" title="联系人"></vxe-table-column>
+                  <vxe-table-column field="name" title="联系人手机号"></vxe-table-column>
+                  <vxe-table-column field="name" title="业务员"></vxe-table-column>
+                  <vxe-table-column field="name" title="业务员电话"></vxe-table-column>
+                  <vxe-table-column field="name" title="是否内部供应商"></vxe-table-column>
+                  <vxe-table-column field="name" title="优势品牌/产品"></vxe-table-column>
+                </vxe-table>
               </div>
+              <Page size="small" :total="page1.total" :page-size="page1.size" :current="page1.num"   :page-size-opts="page1.sizeOpts"
+                    show-sizer show-total
+                    style="float: right;margin-top: 10px"/>
             </div>
           </Split>
         </div>
@@ -60,7 +64,7 @@
     </div>
     <div slot='footer'>
       <Button type='primary'>确定</Button>
-      <Button type='default'>取消</Button>
+      <Button type='default' @click="addressShow=false">取消</Button>
     </div>
   </Modal>
 </template>
@@ -70,7 +74,7 @@
         name: "SelectTheCustomer",
         data(){
             return {
-                addressShow: true,
+                addressShow: false,
                 clientName:'' ,//名称
                 clientCode:'',//编码
                 clientPhone:'',//电话
@@ -87,13 +91,22 @@
                 ],
                 split1: 0.3,//分割线
                 Loading:true,//加载中
-                page:{
+                treeList:[],//树形图数组
+                page1:{
                     num:1,
                     total:0,
-                    size:50,
-                    sizeOpts:[50,60,70,80,90,100]
+                    size:20,
+                    sizeOpts:[20,40,60,80,100]
                 },
-
+                tableData:[
+                    {name:23}
+                ],
+                single:'',//是否禁用
+            }
+        },
+        methods:{
+            openModel(){
+                this.addressShow =true
             }
         }
     }
@@ -109,8 +122,9 @@
   height: 600px;
 }
 .tableBox{
+  height: 100%;
   overflow: hidden;
-  overflow-x: scroll;
+  overflow-y: scroll;
 }
 .demo-split{
   height: 100%;
@@ -119,7 +133,7 @@
 .demo-split-pane{
   padding-left: 10px;
   padding-top: 10px;
-
+  height: 100%;
 
 }
 </style>
