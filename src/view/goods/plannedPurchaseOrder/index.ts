@@ -32,13 +32,19 @@ enum orderState {
 })
 export default class PlannedPurchaseOrder extends Vue {
   private split1: number = 0.2;
+
+  private isInput: boolean = true;
+
   //左侧表格高度
   private leftTableHeight: number = 0;
   //右侧表格高度
   private rightTableHeight: number = 0;
 
+  // 订单调整按钮是否可用
+  private adjustButtonDisable: boolean = true;
+
   // 快速查询订单状态
-  private purchaseType: string|number = "";
+  private purchaseType: string | number = "";
   // 快速查询订单状态选项
   private purchaseTypeArr: Array<Option> = [
     {
@@ -88,7 +94,7 @@ export default class PlannedPurchaseOrder extends Vue {
         key: 'billStatusId',
         minWidth: 80,
         render: (h, p) => {
-          let val:string = orderState[p.row.billStatusId];
+          let val: string = orderState[p.row.billStatusId];
           return h('span', val);
         }
       },
@@ -142,6 +148,9 @@ export default class PlannedPurchaseOrder extends Vue {
     }
   }
 
+  // 合计采购金额
+  private totalAmt: number = 0;
+
   // 票据类型
   private pjTypes: Array<Option> = new Array();
   // 结算方式
@@ -152,25 +161,26 @@ export default class PlannedPurchaseOrder extends Vue {
   private putStores: Array<Option> = [];
 
   // 采购订单信息——表单
-  private formPlan = {
+  private formPlanmain: any = {
+    guestId: "", // 供应商id
     guest: "", // 供应商
     orderMan: "", // 采购员
     billTypeId: "", // 票据类型
     settleTypeId: "",  // 结算方式
-    storeName: "", // 入库仓
+    storeId: "", // 入库仓
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
     companyName: "", // 直发门店
     serviceId: "", // 订单号
   }
-  private rulePlan: ruleValidate = {
+  private ruleValidate: ruleValidate = {
     guest: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
     orderMan: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
-    storeName: [{ required: true, message: "请选择入库仓", trigger: "change" }],
-    orderDate: [{ required: true, message: "请选择订货日期", trigger: "change" }],
+    storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
+    orderDate: [{ required: true, type: 'date', message: "请选择订货日期", trigger: "change" }],
   }
 
   // 采购订单信息表格数据
@@ -190,7 +200,7 @@ export default class PlannedPurchaseOrder extends Vue {
   }
 
   // 快速查询日期
-  private quickDate:Array<string> = new Array();
+  private quickDate: Array<string> = new Array();
   private getDataQuick(v: Array<string>) {
     this.quickDate = v;
     this.getListData();
@@ -204,28 +214,169 @@ export default class PlannedPurchaseOrder extends Vue {
   //---- 判断是否能新增
   private isAdd: boolean = true;
   //---- 新增的采购订单列表数据
+  private detail: any = {};
   private PTrow: any = {
+    new: true,
+    _highlight: true,
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
+    details: [],
   }
   //---- 新增方法
   private addPro() {
+    const ref: any = this.$refs['formplanref'];
     if (!this.isAdd) {
       return this.$Message.error('请先保存数据');
     }
+    ref.resetFields();
+    this.formPlanmain.guestId = '';
+    this.formPlanmain.serviceId = '';
     this.isAdd = false;
+    this.isInput = false;
     this.purchaseOrderTable.tbdata.push(this.PTrow);
-    this.tableData.push({});
+  }
+
+  // 保存/修改/提交用数据
+  private formdata(refname: string) {
+    const ref: any = this.$refs[refname];
+    let data: any = {};
+    ref.validate((valid: any) => {
+      if (valid) {
+        data = {
+          guestId: this.formPlanmain.guestId,
+          orderMan: this.formPlanmain.orderMan,
+          billTypeId: this.formPlanmain.billTypeId,
+          settleTypeId: this.formPlanmain.settleTypeId,
+          storeId: this.formPlanmain.storeId,
+          orderDate: tools.transTime(this.formPlanmain.orderDate),
+          planArriveDate: this.formPlanmain.planArriveDate,
+          remark: this.formPlanmain.remark,
+          companyId: this.formPlanmain.companyName,
+          serviceId: this.formPlanmain.serviceId,
+        };
+        for (let k in this.amt) {
+          if (this.amt[k] > 0) {
+            data[k] = this.amt[k];
+          }
+        }
+      } else {
+        this.$Message.error('必填信息未填写!');
+        data = null;
+      }
+    })
+    let obj: any = {};
+    for (let k in data) {
+      let v = data[k];
+      if (v && v.length > 0) {
+        obj[k] = v;
+      }
+    }
+    if (!data) {
+      return null;
+    }
+    // obj.details = [];
+    return obj;
   }
 
   // 保存
-  private saveHandle() { }
+  private async saveHandle(refname: string) {
+    let data: any = this.formdata(refname);
+    if (!data) return;
+    if (this.selectTableRow.id) {
+      data = { ...this.selectTableRow, ...data };
+    }
+    let res = await api.saveDraft(data);
+    if (res.code == 0) {
+      this.$Message.success('保存成功');
+      this.getListData();
+      this.isAdd = true;
+    }
+  }
 
   // 提交
-  private submit() { }
+  private submit(refname: string) {
+    this.$Modal.confirm({
+      title: '是否提交',
+      onOk: async () => {
+        let data: any = this.formdata(refname);
+        if (!data) return;
+        if (this.selectTableRow.id) {
+          data = { ...this.selectTableRow, ...data };
+        }
+        let res = await api.saveCommit(data);
+        if (res.code == 0) {
+          this.$Message.success('保存成功');
+          this.getListData();
+          this.isAdd = true;
+        }
+      },
+      onCancel: () => {
+        this.$Message.info('取消提交');
+      },
+    })
+  }
+
+
+
+  // 选择要删除配件
+  private deletePartArr: Array<any> = new Array();
+  private selectAll({ checked }) {
+    if (checked) {
+      this.tableData.forEach((el: any) => {
+        if (el.isOldFlag) {
+          this.deletePartArr.push(el)
+        }
+      })
+    } else {
+      this.deletePartArr = new Array();
+    }
+  }
+  private selectChange({ checked, row }) {
+    if (checked) {
+      this.deletePartArr.push(row);
+    } else {
+      this.deletePartArr.forEach((el: any, index: number, arr: Array<any>) => {
+        if (el.isOldFlag && row.id == el.id) {
+          arr.splice(index, 1);
+        }
+      })
+    }
+  }
+
+  // 删除配件
+  private delPart() {
+    if (this.deletePartArr.length <= 0) return this.$Message.error('请选择要删除的配件');
+    this.$Modal.confirm({
+      title: '是否要删除配件',
+      onOk: async () => {
+        let res: any = await api.delPchsOrderDetail(this.deletePartArr);
+        if (res.code == 0) {
+          this.$Message.success('删除成功');
+          this.getListData();
+        }
+      },
+      onCancel: () => {
+        this.$Message.info('取消删除');
+      },
+    })
+  }
 
   // 废弃
-  private abandoned() { }
+  private abandoned() {
+    this.$Modal.confirm({
+      title: '是否要作废',
+      onOk: async () => {
+        let res: any = await api.saveObsolete(this.selectTableRow.id);
+        if (res.code == 0) {
+          this.$Message.success('作废成功');
+          this.getListData();
+        }
+      },
+      onCancel: () => {
+        this.$Message.info('取消作废');
+      },
+    })
+  }
 
   // 打印
   private print() { }
@@ -234,6 +385,14 @@ export default class PlannedPurchaseOrder extends Vue {
   private selectTabelData(v: any) {
     this.selectTableRow = v;
     this.tableData = v.details || [];
+    this.isInput = false;
+    for (let k in this.formPlanmain) {
+      this.formPlanmain[k] = v[k];
+    }
+    if (!v.new && !this.isAdd) {
+      this.purchaseOrderTable.tbdata.pop();
+      this.isAdd = true;
+    }
   }
 
   private editActivedEvent({ row, column }, event) {
@@ -252,7 +411,7 @@ export default class PlannedPurchaseOrder extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(column.property) || columnIndex === 8) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -269,7 +428,7 @@ export default class PlannedPurchaseOrder extends Vue {
       }
       total += parseFloat(value)
     })
-    if (type == 'orderPrice') {
+    if (['orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(type)) {
       return total.toFixed(2);
     }
     if (columnIndex === 8) {
@@ -278,9 +437,16 @@ export default class PlannedPurchaseOrder extends Vue {
         return el.orderQty * el.orderPrice;
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
+      this.totalAmt = totals;
       return totals.toFixed(2);
     }
     return total
+  }
+
+  // 选择采购计划
+  private selectPlan() {
+    if (!this.formPlanmain.guestId) return this.$Message.error('请选择供应商');
+    this.showModel('procurementModal')
   }
 
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
@@ -330,37 +496,94 @@ export default class PlannedPurchaseOrder extends Vue {
     }
   }
 
+  // 高级查询
+  private moreData: any = {};
+  private getmoreData(data) {
+    this.moreData = data;
+    if (data != null) {
+      this.isMore = true;
+      this.getListData();
+    } else {
+      this.isMore = false;
+    }
+  }
+
   // 初始化主数据
   //---- 判断是否是高级查询
   private isMore: boolean = false;
   //---- 初始方法
   private async getListData() {
+    this.purchaseOrderTable.loading = true;
     let params: any = {}
-    let data:any = {}
+    let data: any = {}
     params.size = this.purchaseOrderTable.page.size;
     params.page = this.purchaseOrderTable.page.num - 1;
-    if(this.quickDate.length > 0) {
+    if (this.quickDate.length > 0) {
       data.startTime = this.quickDate[0];
       data.endTime = this.quickDate[1];
     }
-    if(this.purchaseType != 999) {
+    if (this.purchaseType != 999 && this.purchaseType) {
       data.flag = this.purchaseType;
     }
     let res: any;
     if (!this.isMore) {
       res = await api.findPageByDynamicQuery(params, data)
     } else {
+      if (this.moreData != null) {
+        data = { ...data, ...this.moreData };
+      }
       res = await api.queryByConditions(params, data)
     }
     if (res.code == 0) {
+      this.isAdd = true;
+      this.isInput = true;
+      this.tableData = new Array();
+      const ref: any = this.$refs['formplanref'];
+      ref.resetFields();
+      this.formPlanmain.guestId = '';
+      this.formPlanmain.serviceId = '';
+      this.purchaseOrderTable.loading = false;
       this.purchaseOrderTable.page.total = res.data.totalElements;
       this.purchaseOrderTable.tbdata = res.data.content;
+      this.purchaseOrderTable.tbdata.forEach((el: any) => {
+        el.details.forEach((d: any) => {
+          d.isOldFlag = true;
+        })
+      })
     }
   }
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    this.formPlan.guest = row.fullName;
+    this.formPlanmain.guest = row.fullName;
+    this.formPlanmain.guestId = row.id;
+  }
+
+  // 采购计划单据
+  private getPlanOrder(row: any) {
+    this.purchaseOrderTable.tbdata.forEach((el: any) => {
+      el.details.forEach((d: any, index: number, arr: Array<any>) => {
+        if (!d.isOldFlag) {
+          arr.splice(index, 1);
+        }
+      })
+    })
+    this.tableData = this.tableData.concat(...row.details);
+    this.selectTableRow.details = this.tableData;
+    this.purchaseOrderTable.tbdata.forEach((el: any) => {
+      if (el.id == this.selectTableRow.id) {
+        el = this.selectTableRow;
+      }
+    })
+  }
+
+  // 采购金额填写
+  private amt: any = {
+    disAmt: 0,
+    rebateAmt: 0,
+  }
+  private getAmt(amt) {
+    this.amt = amt;
   }
 
   // 操作-查看

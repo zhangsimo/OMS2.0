@@ -37,7 +37,7 @@
         </div>
       </div>
       <div>
-        <vxe-table border resizable height="auto" size="mini" :data="tableData">
+        <vxe-table border auto-resize height="auto" size="mini" :data="tableData">
           <vxe-table-column
             type="index"
             width="80"

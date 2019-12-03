@@ -47,3 +47,49 @@ export function queryByConditions(params, data = {}) {
     data
   });
 }
+
+// 采购计划单
+export function getPchsPlan(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/pchsPlan`,
+    method: "post",
+    params,
+    data
+  });
+}
+
+// 保存草稿
+export function saveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderPlan/saveDraft`,
+    method: "post",
+    data
+  });
+}
+
+// 提交
+export function saveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderPlan/saveCommit`,
+    method: "post",
+    data
+  });
+}
+
+// 删除配件
+export function delPchsOrderDetail(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderDetail/delete`,
+    method: "post",
+    data
+  });
+}
+
+// 作废
+export function saveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderPlan/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+}
