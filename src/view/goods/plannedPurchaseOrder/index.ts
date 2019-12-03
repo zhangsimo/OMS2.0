@@ -546,7 +546,7 @@ export default class PlannedPurchaseOrder extends Vue {
       this.purchaseOrderTable.page.total = res.data.totalElements;
       this.purchaseOrderTable.tbdata = res.data.content;
       this.purchaseOrderTable.tbdata.forEach((el: any) => {
-        el.details.forEach((d: any) => {
+        Array.isArray(el.details) && el.details.forEach((d: any) => {
           d.isOldFlag = true;
         })
       })

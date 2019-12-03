@@ -65,7 +65,7 @@
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
-          <div class="db"><span>本年采购总金额：200000.00元</span></div>
+          <!-- <div class="db"><span>本年采购总金额：200000.00元</span></div> -->
         </div>
       </div>
     </section>
