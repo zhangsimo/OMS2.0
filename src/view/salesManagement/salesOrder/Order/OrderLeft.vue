@@ -30,7 +30,7 @@
           <vxe-table-column field="createUname" title="创建人"></vxe-table-column>
         </vxe-table>
       </div>
-      <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
+      <Page :total="page.total" :page-size="page.size" size="small" :current="page.num" show-sizer show-total class-name="page-con"
             @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
     </div>
 </template>

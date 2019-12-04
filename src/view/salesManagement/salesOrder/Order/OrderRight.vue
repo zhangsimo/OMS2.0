@@ -189,6 +189,7 @@ import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
 import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+import {getNewClient} from '@/api/system/essentialData/clientManagement'
 
 
 
@@ -341,6 +342,40 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
             openAddNewClient(){
                 this.clientList ={}
                 this.clientDataShow = true
+            },
+            //获取新增客户二级分类
+            getList(){
+                getClientTreeList().then( res => {
+                    if (res.code == 0){
+                        this.treeDiagramList = res.data
+                        let leverOne = res.data.filter( item => item.lever ==1)
+                        leverOne.map( item => {
+                            item.children =[]
+                            item.code = item.id
+                            this.treeDiagramList.forEach( el => {
+                                if (item.id == el.parentId){
+                                    item.children.push(el)
+                                }
+                            })
+                        })
+                    }
+                })
+            },
+
+            //新增客户确认
+            addNewClient(){
+                this.$refs.child.handleSubmit( async () =>{
+                    let data ={}
+                    data = this.clientList
+                    data.isNeedPack ? data.isNeedPack = 1 : data.isNeedPack =0
+                    data.isSupplier ? data.isSupplier = 1 : data.isSupplier =0
+                    data.isDisabled ? data.isDisabled = 1 : data.isDisabled =0
+                    let res = await getNewClient(this.clientList)
+                    if(res.code == 0){
+                        this.clientDataShow =false
+                    }
+                })
+
             },
             //获取数据字典地址
             getAdress(){
