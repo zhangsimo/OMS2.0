@@ -323,7 +323,7 @@
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column title="操作" width="80">
                   <template v-slot="{ row }">
-                    <Button type="text" @click="watch(row.id)">查看</Button>
+                    <Button type="text" @click="watch(row.partId)">查看</Button>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column

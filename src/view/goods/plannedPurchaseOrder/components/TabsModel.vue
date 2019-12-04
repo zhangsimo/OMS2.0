@@ -65,7 +65,7 @@ export default class TabsModel extends Vue {
     {
       title: "序号",
       minWidth: 50,
-      key: "id"
+      type: 'index'
     },
     {
       title: "配件编码",
@@ -108,7 +108,7 @@ export default class TabsModel extends Vue {
     {
       title: "序号",
       minWidth: 50,
-      key: "id"
+      type: 'index'
     },
     {
       title: "公司名称",
@@ -144,7 +144,7 @@ export default class TabsModel extends Vue {
   private async getlist() {
     let res:any = await api.queryPartStockAndLog(this.partId);
     if(res.code == 0) {
-      this.Tab1tableData = res.data.orgStock;// 本地
+      this.Tab1tableData = res.data.orgStock // 本地
       this.Tab2tableData = res.data.chainStock // 连锁
       this.Tab3tableData = res.data.pchsLog // 采购
     }

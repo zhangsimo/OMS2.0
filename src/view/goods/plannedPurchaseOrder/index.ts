@@ -615,7 +615,9 @@ export default class PlannedPurchaseOrder extends Vue {
   private partId:string = '';
   private watch(id: string) {
     this.partId = id;
-    this.showModel('tabsModel');
+    this.$nextTick(() => {
+      this.showModel('tabsModel');
+    })
   }
 
   private mounted() {
