@@ -70,7 +70,6 @@ Vue.filter('toChies', function (values) {
   let arr:any=[];
   let str2:any = ''
   let chin_list=['零','壹','贰','叁','肆','伍','陆','柒','捌','玖']
-
   let chin_lisp=['仟','佰','拾','亿','仟','佰','拾','万','仟','佰','拾']
 
   for(let i=0;i<len;i++){

@@ -5,7 +5,7 @@
           <div class="wlf">
           <div class="db mr10">
             <span class="mr10">快速查询：</span>
-            <Select v-model="conditionData.character" class="w100 mr10" clearable>
+            <Select v-model="form.kuaisu" class="w100 mr10" clearable>
               <Option v-for="item in quickArray" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -16,37 +16,46 @@
             </DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="conditionData.status" class="w100 mr10" clearable>
+            <Select v-model="form.status" class="w100 mr10" clearable>
               <Option value="1" label="待入库"></Option>
               <Option value="3" label="已入库"></Option>
               <Option value="2" label="部分入库"></Option>
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="productName" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.No" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Input v-model="productName1" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.peijianCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Input v-model="productName2" placeholder="配件名称" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.peijianmingcheng" placeholder="配件名称" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Button type="warning" class="mr20"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+            <Button type="warning" class="mr20" @click="search(form)"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
           </div>
         </div>
         </div>
       </section>
-
+    <Modal
+            v-model="modal2"
+            title="提示"
+            @on-ok="ok1"
+            @on-cancel="cancel">
+            <span><Icon type="information"></Icon>是否确认已到货入库!</span>
+        </Modal>
 
       <section class="con-box">
 <!--         上表格-->
-        <div class="topTableDate">
+        <div class="topTableDate" style="height:45%">
           <vxe-table
             border
             resizable
+            highlight-current-row
+            highlight-hover-row
+            @current-change="currentChangeEvent"
             size="mini"
-            height='400'
+            height='auto'
             :data="TopTableData"
             :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
           >
@@ -56,7 +65,7 @@
             ></vxe-table-column>
             <vxe-table-column  title="操作" >
               <template v-slot="{ row,rowIndex }">
-                <Button type="text">到货入库</Button>
+                <Button type="text" @click="ruku(row)">到货入库</Button>
               </template>
             </vxe-table-column>
 
@@ -102,7 +111,7 @@
 
         <!--     分页-->
         <Row class="mt10 mb10">
-          <Col span="12">
+          <Col span="12" offset="12" style="text-align:right">
             <div><Page
               :current="pageList.page"
               :total="this.pageList.total"
@@ -111,21 +120,17 @@
               show-sizer
             /></div>
           </Col>
-          <Col span="12" class="mt10">
-            <div style="text-align: right">
-              每页{{this.pageList.size}}条,
-              共{{this.pageList.total}}条
-            </div>
-          </Col>
         </Row>
 <!--        下表格-->
-        <div class="bottomTableDate">
+        <div class="bottomTableDate" style="height:45%">
 
             <vxe-table
               border
               resizable
+              highlight-current-row
+              highlight-hover-row
               size="mini"
-              height='400'
+              height='auto'
               :data="BottomTableData"
               :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
             >
@@ -192,16 +197,19 @@
 <script>
 import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
+    import { zongbuzhidiaoList, ListDetail, daohuoruku } from '../../../../api/threeHeadquarters/index'
     export default {
         name: "threeHeadquarters",
        data(){
         return{
-          productName: '',
-          productName1: '',
-          productName2: '',
-          conditionData: {
-            character: "本周",  // 快速查询
-            status: '1',  //受理状态
+          modal2: false,
+          form: {
+            kuaisu: '',
+            dataTime: [],
+            status: '1',
+            No: '',
+            peijianCode: '',
+            peijianmingcheng: ''
           },
           // 快速查询数据1
           quickArray: [
@@ -271,11 +279,16 @@ import '../../../lease/product/lease.less';
           },
           pageTotal: 10,
           selectOne: '',
-          dateTime: ''
+          dateTime: '',
+          currentrow: {}
         }
 
       },
        methods: {
+        currentChangeEvent({ row }) {
+           console.log('当前行'+ row)
+           this.getList(row)
+        },
         //  日期选择器从子组件哪来的数据
         getData(A){
           console.log(A)
@@ -283,12 +296,53 @@ import '../../../lease/product/lease.less';
         },
         //选中的日期
         selectDate(date){
-          this.dateTime = date
-          console.log(this.dateTime)
+          this.form.dataTime = data
         },
         //搜索
-        search(){
+        search(form){
+          zongbuzhidiaoList(form).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('获取直调列表失败')
+            })
           // this.getList()
+        },
+        getList(row) {
+          const params = {
+            id: row.id
+          }
+          ListDetail(params).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('请求明细失败')
+            })
+        },
+        ok1 () {
+           const params = {
+            id: this.currentrow.id,
+            list: this.BottomTableData
+          }
+          ListDetail(params).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('入库失败')
+            })
+          },
+          cancel () {
+              this.$Message.info('点击了取消');
+          },
+        ruku(row) {
+          this.modal2 = true
+          this.currentrow = row
         }
       }
     }

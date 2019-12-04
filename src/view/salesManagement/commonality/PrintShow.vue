@@ -8,11 +8,11 @@
       <div class="titler">
         <Row style="border: 1px #000000 solid">
           <Col span="12" class="pl10">
-            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{'红梅南路'}}</h5>
+            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.userCompany}}</h5>
           </Col>
           <Col span="12" class="pl10" >
             <p>销售订单:</p>
-            <p>No: {{'1'}}</p>
+            <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
@@ -21,8 +21,11 @@
             <p><span>电话:</span></p>
           </Col>
           <Col span="12" class="pl10" >
-            <p><span>订单日期:</span></p>
-            <p><span>打印日期:</span></p>
+            <p><span>订单日期:</span><span>{{onelist.orderDate}}</span></p>
+            <p>
+              <span>打印日期:</span>
+              <span>{{onelist.printDate}}</span>
+            </p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
@@ -31,45 +34,49 @@
             <p><span>地址:</span> <span>{{onelist.addr}}</span></p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>联系人:</span></p>
-            <p><span>票据类型:</span></p>
+            <p><span>联系人:</span> <span>{{onelist.orderMan}}</span></p>
+            <p><span>票据类型:</span><span>{{onelist.billTypeName}}</span></p>
 
           </Col>
           <Col span="8" class="pl10">
-            <p><span>联系电话:</span></p>
-            <p><span>结算方式:</span></p>
+            <p><span>联系电话:</span><span>{{onelist.tel}}</span></p>
+            <p><span>结算方式:</span><span>{{onelist.settleTypeName}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="data4" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
-            <span>{{ num | toChies}}</span>
+            <span>{{ onelist.orderAmt | toChies}}</span>
           </Col>
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>总数:</span>
-            <span>{{num}}</span>
+            <span>{{onelist.orderQty}}</span>
           </Col>
           <Col class="pl10" span="8">
             <span>合计:</span>
-            <span>{{num}}</span>
+            <span>{{onelist.orderAmt}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
+            <span>{{onelist.orderMan}}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>提交人:</span>
+            <span>{{onelist.auditor}}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
+            <span>{{onelist.deliverer}}</span>
           </Col>
           <Col span="6" class="pl10">
             <span>收货人:</span>
+            <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
-        <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：</p>
+        <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
         <p class="pl10">
           兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！
         </p>
@@ -95,161 +102,60 @@
                 printShow: false, //模态框隐藏
                 columns2: [
                     {
-                        title: 'Name',
-                        key: 'name',
+                        title: '序号',
+                        type:'index',
+                        align: 'center'
+                    },
+                    {
+                        title: '配件编码',
+                        key: 'partCode',
+                        align: 'center'
+                    },
+                    {
+                        title: '配件名称',
+                        key: 'partName',
+                        align: 'center'
+                    },
+                    {
+                        title: '品牌',
+                        key: 'partBrand',
+                        align: 'center'
 
                     },
                     {
-                        title: 'Age',
-                        key: 'age',
+                        title: '规格',
+                        key: 'spec',
+                        align: 'center'
 
                     },
                     {
-                        title: 'Province',
-                        key: 'province',
+                        title: '单位',
+                        key: 'unit',
+                        align: 'center'
 
                     },
                     {
-                        title: 'City',
-                        key: 'city',
+                        title: '单价',
+                        key: 'orderPrice',
+                        align: 'center'
+
+                    },                    {
+                        title: '金额',
+                        key: 'orderAmt',
+                        align: 'center'
 
                     },
                     {
-                        title: 'Address',
-                        key: 'address',
+                        title: '仓库',
+                        key: 'storeName',
+                        align: 'center'
 
                     },
                     {
-                        title: 'Postcode',
-                        key: 'zip',
+                        title: '仓位',
+                        key: 'storeShelf',
+                        align: 'center'
 
-                    },
-                    {
-                        title: 'Action',
-                        key: 'action',
-
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, 'View'),
-                                h('Button', {
-                                    props: {
-                                        type: 'text',
-                                        size: 'small'
-                                    }
-                                }, 'Edit')
-                            ]);
-                        }
-                    }
-                ],
-                data4: [
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'Washington, D.C. No. 1 Lake Park',
-                        province: 'America',
-                        city: 'Washington, D.C.',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        province: 'Australian',
-                        city: 'Sydney',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        province: 'Canada',
-                        city: 'Ottawa',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jim Green',
-                        age: 24,
-                        address: 'Washington, D.C. No. 1 Lake Park',
-                        province: 'America',
-                        city: 'Washington, D.C.',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Joe Black',
-                        age: 30,
-                        address: 'Sydney No. 1 Lake Park',
-                        province: 'Australian',
-                        city: 'Sydney',
-                        zip: 100000
-                    },
-                    {
-                        name: 'Jon Snow',
-                        age: 26,
-                        address: 'Ottawa No. 2 Lake Park',
-                        province: 'Canada',
-                        city: 'Ottawa',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
-                    },
-                    {
-                        name: 'John Brown',
-                        age: 18,
-                        address: 'New York No. 1 Lake Park',
-                        province: 'America',
-                        city: 'New York',
-                        zip: 100000
                     },
 
                 ],
@@ -275,12 +181,13 @@
           async  openModal(){
                 let order = this.$store.state.dataList.oneOrder
                 if(order.id){
-                    this.printShow = true
+
                     let data ={}
                         data.id = order.id
                     let res = await getprintList(data)
                     if(res.code === 0){
-                        this.onelist = res
+                        this.printShow = true
+                        this.onelist = res.data
                     }
                     console.log(res,996)
                 }else {
@@ -310,5 +217,8 @@
   padding-left: 10px;
   }
 }
-
+  #printBox::-webkit-scrollbar {display:none}
+  #printBox { -ms-overflow-style: none; }
+  #printBox::-webkit-scrollbar { width: 0 !important }
+  #printBox { overflow: -moz-scrollbars-none; }
 </style>
