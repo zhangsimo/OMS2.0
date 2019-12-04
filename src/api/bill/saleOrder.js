@@ -18,9 +18,25 @@ export function getStorelist(data) {
     })
 }
 // 应收应付管理 
-export function getreceivable () {
+export function getreceivable (params) {
     return axios.request({
         url:`${api.omsSettle}/receivable/payable/get`,
         method: 'get',
+        params
+    })
+}
+// 应收应付销售清单
+export function getSalelist () {
+    return axios.request({
+        url:`${api.omsSettle}/receivable/payable/sales/purchase`,
+        method: 'get',
+        
+    })
+}
+export function getNumberList (params) {
+    return axios.request({
+        url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
+        method: 'get',
+        params
     })
 }
