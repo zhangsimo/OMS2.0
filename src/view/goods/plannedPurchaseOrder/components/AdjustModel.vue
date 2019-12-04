@@ -7,16 +7,16 @@
     <div>
       <div class="tools-bar mb10">
         <div class="db mr5">
-          <Button type="default"
+          <Button type="default" @click="save"
             ><i class="iconfont iconxuanzetichengchengyuanicon"></i>保存</Button
           >
         </div>
         <div class="db mr10">
-          <Button type="default"><Icon type="md-close" />取消</Button>
+          <Button type="default" @click="cancel"><Icon type="md-close" />取消</Button>
         </div>
         <div class="db mr10">|</div>
         <div class="db mr10">
-          <Button class="w90" type="warning">
+          <Button class="w90" type="warning" @clcik="allAdj">
             <span class="center">全部调整</span>
           </Button>
         </div>
@@ -29,7 +29,7 @@
           <Input class="w180" v-model="partName" placeholder="请输入配件名称" />
         </div>
         <div class="db">
-          <Button class="w90" type="warning">
+          <Button class="w90" type="warning" @click="query">
             <span class="center">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </span>
@@ -40,9 +40,11 @@
         <vxe-table
           border
           auto-resize
-          height="auto"
+          :loading="loading"
+          height="420"
           size="mini"
           :data="tableData"
+          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
         >
           <vxe-table-column
             type="index"
@@ -67,7 +69,7 @@
             width="120"
           >
             <template v-slot:edit="{ row }">
-              <Input />
+              <InputNumber :min="0" :max="row.orderQty" v-model="row.adjustQty" />
             </template>
           </vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -86,6 +88,7 @@ import * as api from "_api/procurement/plan";
 @Component
 export default class AdjustModel extends Vue {
   private show: boolean = false;
+  private loading:boolean = false;
 
   @Prop(String) readonly mainId;
 
@@ -100,23 +103,49 @@ export default class AdjustModel extends Vue {
     this.getList();
   }
 
+  private cancel():void {
+    this.show = false;
+  }
+
   private reset(): void {
     this.partCode = "";
     this.partName = "";
   }
 
+  private query() {
+    this.getList();
+  }
+
   private async getList() {
+    this.loading = true;
     let data: any = {};
     data.mainId = this.mainId;
     if (this.partCode.trim()) {
-      data.partCode = this.partCode;
+      data.partCode = this.partCode.trim();
     }
     if (this.partName.trim()) {
-      data.partName = this.partName;
+      data.partName = this.partName.trim();
     }
     let res: any = await api.queryModifyOrder(data);
     if(res.code == 0) {
-      this.tableData = res.data;
+        this.loading = false;
+        this.tableData = res.data;
+    }
+  }
+
+  private async save() {
+    let res: any = await api.saveModifyOrder(this.tableData);
+    if(res.code == 0) {
+      this.$Message.success('保存成功!');
+      this.getList()
+    }
+  }
+
+  private async allAdj () {
+    let res:any = await api.saveModifyAllOrder({ mainIds: this.mainId });
+    if(res.code == 0) {
+      this.$Message.success('保存成功!');
+      this.getList()
     }
   }
 }
