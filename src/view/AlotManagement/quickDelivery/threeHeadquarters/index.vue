@@ -1,18 +1,19 @@
 <template>
-    <div class="acceptanceComponent">
+    <div class="content-oper content-oper-flex">
       <section class="oper-box">
         <div class="oper-top flex">
+          <div class="wlf">
           <div class="db mr10">
             <span class="mr10">快速查询：</span>
             <Select v-model="conditionData.character" class="w100 mr10" clearable>
               <Option v-for="item in quickArray" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db mt40 mrt10">
+          <div class="db mr10">
             <span class="mr10">出库日期：</span>
-            <Date-picker type="date" style="width: 120px" placeholder="选择日期"></Date-picker>
-            至
-            <Date-picker type="date" style="width: 120px" placeholder="选择日期"></Date-picker>
+            <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
+                          class="w200 mr20">
+            </DatePicker>
           </div>
           <div class="db mr10">
             <Select v-model="conditionData.status" class="w100 mr10" clearable>
@@ -33,6 +34,7 @@
           <div class="db mr10">
             <Button type="warning" class="mr20"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
           </div>
+        </div>
         </div>
       </section>
 
@@ -90,7 +92,7 @@
               width="100"
             ></vxe-table-column>
             <vxe-table-column
-              field="date12"
+              field="date123"
               title="操作人"
               width="100"
             ></vxe-table-column>
@@ -166,27 +168,15 @@
               ></vxe-table-column>
 
               <vxe-table-column
-                field="date12"
+                field="date123"
                 title="备注"
               ></vxe-table-column>
-              <vxe-table-column field="num" title="入库数量">
-                <template v-slot:edit="{ row }">
-                  <InputNumber
-                    :max="9999"
-                    :min="0"
-                    v-model="row.num"
-                  ></InputNumber>
-                </template>
+              <vxe-table-column field="num" title="入库数量" :edit-render="{name: 'input', attrs: {type: 'number'}}">
               </vxe-table-column>
-              <vxe-table-column field="num" title="入库仓库">
-              <template v-slot:edit="{ row }">
-                <Select v-model="conditionData.character" class="w100 mr10" clearable>
-                  <Option v-for="item in quickArray" :value="item.value" :key="item.value" placeholder="--请选择--">{{ item.label }}</Option>
-                </Select>
-              </template>
+              <vxe-table-column field="numName" title="入库仓库" :edit-render="{name: 'select', options: quickArray}">
             </vxe-table-column>
             <vxe-table-column
-                field="date123"
+                field="date1243"
                 title="OE码"
               ></vxe-table-column>
               <vxe-table-column
@@ -200,6 +190,8 @@
 </template>
 
 <script>
+import '../../../lease/product/lease.less';
+  import "../../../goods/goodsList/goodsList.less";
     export default {
         name: "threeHeadquarters",
        data(){
@@ -248,8 +240,27 @@
           },
           customerListOptions:[],//选择客户下拉列表
           companyListOptions:[],//选择公司下拉列表
-          TopTableData:[],//上侧表格list
-          BottomTableData:[],//下侧表格list
+          TopTableData:[{
+            name: '奥特曼',
+            customer: 'mz-280dfjj',
+            preId: '调出中',
+            status: '2019-12-2 12:12:12',
+            status1: '顺丰快递',
+            date12: '2019-12-3 13:13:13',
+            date123: '鲨鱼辣椒'
+          }],//上侧表格list
+          BottomTableData:[{
+            name: 'gtxT8094',
+            role: '钢铁侠-t8094',
+            brand: '斯塔克',
+            brand1: '件',
+            date12: '1',
+            date123: '全球限量版',
+            num: '12',
+            numName: '本周',
+            date1243: 'OET93432',
+            date124: 'XM'
+          }],//下侧表格list
           // 分页数据
           pageList: {
             page: 1,
@@ -259,28 +270,31 @@
             pageSizeOpts: [50, 100, 150, 200]
           },
           pageTotal: 10,
+          selectOne: '',
+          dateTime: ''
         }
 
+      },
+       methods: {
+        //  日期选择器从子组件哪来的数据
+        getData(A){
+          console.log(A)
+          this.selectOne = A
+        },
+        //选中的日期
+        selectDate(date){
+          this.dateTime = date
+          console.log(this.dateTime)
+        },
+        //搜索
+        search(){
+          // this.getList()
+        }
       }
     }
 </script>
 
 <style scoped>
-.mr10{
-  margin-top: 6px;
-}
-.mr20{
-  margin-top: 10px;
-}
-.mr30{
-  margin-top: 28px;
-}
-.mt40{
-  margin-top: 12px;
-}
-.mrt10{
-  margin-right: 10px;
-}
 </style>
 
 

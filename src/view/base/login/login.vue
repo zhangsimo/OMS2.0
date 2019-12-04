@@ -23,7 +23,8 @@
         this.handleLogin({username, password}).then(res => {
           localStorage.setItem('username', username)
           this.getUserInfo(username).then(res => {
-            this.$router.push({
+              console.log(res)
+              this.$router.push({
               name: 'home'
             })
           })

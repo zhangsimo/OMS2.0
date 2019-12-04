@@ -1,6 +1,6 @@
 <template>
     <div style="height: 100%;">
-      <Form inline :show-message="false" ref="formPlan" :model="formPlan"  :label-width="100">
+      <Form inline :show-message="false" ref="formPlan" :model="formPlan" :rules="ruleValidate"  :label-width="100">
       <div class="pane-made-hd">
         <span class="titler mr5">固定额度:</span>
         <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
@@ -10,7 +10,7 @@
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
-            <FormItem label="客户：" >
+            <FormItem label="客户：" prop="guestId" >
               <Row  style="width: 310px">
                 <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
@@ -19,7 +19,7 @@
                 <Button  class="ml5" size="small" type="default" @click="openAddNewClient" :disabled="draftShow != 0"><Icon type="md-add" /></Button>
               </Row>
             </FormItem>
-            <FormItem label="销售员：">
+            <FormItem label="销售员：" prop="orderMan">
               <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0"></Input>
             </FormItem>
             <FormItem label="订单类型：" >
@@ -30,12 +30,12 @@
             <FormItem label="往来单号：" >
               <Input class="w210" v-model="formPlan.code" disabled></Input>
             </FormItem>
-            <FormItem label="票据类型:">
+            <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
                 <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
               </Select>
             </FormItem>
-        <FormItem label="结算方式：" >
+        <FormItem label="结算方式：" prop="settleTypeId">
           <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
             <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
           </Select>
@@ -52,7 +52,7 @@
         <FormItem label="计划到货日期:">
           <DatePicker :value="formPlan.planArriveDate" @on-change="getplanArriveDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
         </FormItem>
-        <FormItem label="交货仓库：" >
+        <FormItem label="交货仓库：" prop="storeId">
           <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
             <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
@@ -98,6 +98,7 @@
           :footer-method="footerMethod"
           showOverflow="true"
           height="400"
+          :edit-rules="validRules"
           :data="formPlan.detailList"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -202,32 +203,71 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
             SeeFile
         },
         data(){
+            let changeNumber = (rule, value, callback) => {
+                if (!value && value != '0') {
+                    callback(new Error("请输入大于或等于0的正整数"));
+                } else {
+                    const reg = /^([0]|[1-9][0-9]*)$/
+                    if (reg.test(value)) {
+                        callback();
+                    } else {
+                        callback(new Error("请输入大于或等于0的正整数"));
+
+                    }
+                }
+            };
             return {
-                formPlan:{},//获取到数据
-                model1:'',
-                orderType:[
+                formPlan: {},//获取到数据
+                model1: '',
+                orderType: [
                     {
-                        value:0,
-                        label:'销售开单'
+                        value: 0,
+                        label: '销售开单'
                     },
                     {
-                        value:1,
+                        value: 1,
                         label: '电商订单'
                     }
                 ],//订单类型
-                clientList:{}, //新增客户资料
-                provinceArr:{},//获取数据字典地址
-                treeDiagramList:[], //新增客户树形图信息
-                clientDataShow:false, //新增客户模态框关闭
-                addressShow:false,//收货地址显示
-                leftOneOrder:{},//获取到的左侧数据
-                draftShow:'',//判定是不是草稿
-                settleTypeList:{},//结账类型
-                WarehouseList:[],//仓库
-                oneRow:{},//点击详情的数据
-                limitList:{},//额度信息
-                totalMoney:'',//总价
-                client:[],//客户列表
+                clientList: {}, //新增客户资料
+                provinceArr: {},//获取数据字典地址
+                treeDiagramList: [], //新增客户树形图信息
+                clientDataShow: false, //新增客户模态框关闭
+                addressShow: false,//收货地址显示
+                leftOneOrder: {},//获取到的左侧数据
+                draftShow: '',//判定是不是草稿
+                settleTypeList: {},//结账类型
+                WarehouseList: [],//仓库
+                oneRow: {},//点击详情的数据
+                limitList: {},//额度信息
+                totalMoney: '',//总价
+                client: [],//客户列表
+                ruleValidate: {
+                    guestId: [
+                        {required: true, type: 'string', message: ' ', trigger: 'change'}
+                    ],
+                    orderMan:[
+                        {required: true, message: '  ', trigger: 'blur'}
+                    ],
+                    billTypeId:[
+                        {required: true, type: 'string', message: ' ', trigger: 'change'}
+                    ],
+                    settleTypeId:[
+                        {required: true, type: 'string', message: ' ', trigger: 'change'}
+                    ],
+                    storeId:[
+                        {required: true, type: 'string', message: ' ', trigger: 'change'}
+                    ]
+                },//form表单校验
+                validRules: {
+                    orderQty: [
+                        { required: true,validator:changeNumber },
+
+                    ],
+                    orderPrice: [
+                        { required: true, validator:changeNumber }
+                    ]
+                }, //表格校验
             }
         },
         mounted(){
@@ -383,12 +423,30 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                 })
             },
             //保存
-            async save(){
-              this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
-              let res = await getSave(this.formPlan)
-                if(res.code === 0){
-                    return res
-                }
+             save(){
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        try {
+                            await this.$refs.xTable.validate()
+
+                            if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
+                                return this.$message.error('可用余额不足')
+                            }
+
+                            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+                              let res = await getSave(this.formPlan)
+                              if(res.code === 0){
+                                  this.$Message.success('保存成功');
+                                  return res
+                              }
+                        } catch (errMap) {
+                            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
+
             }
 
         },
