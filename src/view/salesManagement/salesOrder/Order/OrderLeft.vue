@@ -51,24 +51,32 @@
                     size:10,
                     num:1
                 },
-                tableData:[]
+                tableData:[],
+                query:{
+                    showPerson : 1
+                },//更多搜索信息
             }
         },
         mounted(){
             this.getList()
         },
+        computed:{
+            queryall(){
+                return this.$store.state.dataList.orederQueryList
+            }
+        },
         methods:{
             //获取表格数据
             async getList(){
                   let data = {}
+                  console.log(this.queryTime , 4444)
                 data.startTime = this.queryTime[0] || ''
                 data.endTime = this.queryTime[1] || ''
                 data.billStatusId = this.orderType
+                    // data = this.query
                   let page = this.page.num -1
                   let size = this.page.size
-                console.log(1231231)
                 let res = await getLeftList(page, size,data)
-                console.log(res)
                 if(res.code === 0){
                     res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
                     this.tableData = res.data.content
@@ -76,22 +84,53 @@
                 }
             },
             //切换页面
-            selectNum(){},
+            selectNum(val){
+                this.page.num = val
+                this.getList()
+            },
             //切换页数
-            selectPage(){},
+            selectPage(val){
+                this.page.num = 1
+                this.page.size = val
+                this.getList()
+            },
             //点击获取当前信息
             clickOnesList(data){
-                console.log(data.row)
+                this.$emit('getOneOrder',data.row)
+                this.$store.commit('setOneOrder',data.row)
             }
         },
         watch:{
             //监听时间
             queryTime:function (val ,old) {
+                this.page.num = 1
+                this.page.size = 10
                 this.getList()
             },
             //监听状态
             orderType:function (val ,old) {
+                this.page.num = 1
+                this.page.size = 10
                 this.getList()
+            },
+            //更多搜索
+            queryall:{
+                handler(v,ov){
+                    v.showPerson = v.showPerson ? 1 : 0
+                    this.page.num = 1
+                    this.page.size = 10
+                    let page = this.page.num -1
+                    let size = this.page.size
+                     getLeftList(page, size,v).then( res => {
+                         if(res.code === 0){
+                             res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
+                             this.tableData = res.data.content
+                             this.page.total = res.data.totalElements
+                         }
+                     })
+
+                },
+                deep:true
             }
         }
     }

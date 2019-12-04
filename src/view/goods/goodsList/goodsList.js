@@ -1,32 +1,32 @@
 export const purchaseTypeList = (v) => {
   let dataArr = [
     {
-      'label':'所有',
-      'value':0
+      "label":"所有",
+      "value":9999
     },
     {
-      'label':'草稿',
-      'value':1
+      "label":"草稿",
+      "value":0
     },
     {
-      'label':'审批中',
-      'value':2
+      "label":"审批中",
+      "value":1
     },
     {
-      'label':'已审批',
-      'value':3
+      "label":"已审批",
+      "value":2
     },
     {
-      'label':'已完成',
-      'value':4
+      "label":"已完成",
+      "value":3
     },
     {
-      'label':'不通过',
-      'value':5
+      "label":"不通过",
+      "value":4
     },
     {
-      'label':'已作废',
-      'value':6
+      "label":"已作废",
+      "value":-1
     },
   ]
   if(v||v===0){

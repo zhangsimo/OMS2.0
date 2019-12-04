@@ -102,7 +102,7 @@
                 :stripe="true"
                 :loading="preSellOrderTable.loading"
                 :columns="preSellOrderTable.columns"
-                :data="preSellOrderTable.tbdata"
+                :data="preSellOrderTable.tbData"
               ></Table>
 
 
@@ -181,7 +181,7 @@
                   </FormItem>
                   <FormItem label="结算方式：">
                     <Select v-model="model1" style="width:100px">
-                      <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                      <Option v-for="item in wareHouseList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="预计发货日期:">
@@ -320,7 +320,7 @@
     <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer"></select-the-customer>
     <!--更多 搜索-->
-    <More-query :data="moreQueryList" ref="moreQuery"></More-query>
+    <More-search :data="moreQueryList" ref="moreQuery"></More-search>
     <!--  编辑发货地址 -->
     <Modal v-model="addressShow" title="收货信息" width="1000">
       <goods-info></goods-info>
@@ -334,11 +334,12 @@
 </template>
 
 <script>
+  import {getLeftList} from "_api/salesManagment/presell.js";
   import QuickDate from '_c/getDate/dateget';
   import goodsInfo from "../../../components/goodsInfo/goodsInfo";
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import selectPartCom from "../salesOrder/components/selectPartCom";
-  import MoreQuery from "../commonality/MoreQuery.vue";
+  import MoreSearch from "./components/MoreSearch";
 
   export default {
     name: "presell",
@@ -347,13 +348,14 @@
       goodsInfo,
       selectTheCustomer,
       selectPartCom,
-      MoreQuery
+      MoreSearch
     },
     data() {
       return {
         moreQueryList: {},//更多查询
         model1: '',
-        wareHouseList: [
+        inStores: [],// 入库仓
+        wareHouseList: [ //交货仓库
           {
             value: 'New York',
             label: 'New York'
@@ -376,52 +378,58 @@
             {
               title: '序号',
               minWidth: 50,
-              key: 'id'
+              type: 'index',
+              align: 'center'
             },
             {
               title: '状态',
-              key: 'status',
-              minWidth: 70
+
+              minWidth: 70,
+              render: (h, params) => {
+                let tex = params.row.status.name
+                return h('span', {}, tex)
+
+              }
             },
             {
               title: '客户',
-              key: 'name',
+              key: 'guestName',
               minWidth: 170
             },
             {
               title: '创建日期',
-              key: 'sellDate',
+              key: 'createTime',
               minWidth: 120
             },
             {
               title: '创建人',
-              key: 'createPerson',
+              key: 'createUname',
               minWidth: 100
             },
             {
               title: '预售单单号',
-              key: 'disable',
+              key: 'serviceId',
               minWidth: 200
             },
             {
               title: '打印次数',
-              key: 'printNum',
+              key: 'printTime',
               minWidth: 120
             },
             {
               title: '提交人',
-              key: 'submitPerson',
+              key: 'commitUname',
               minWidth: 100
             },
             {
               title: '提交日期',
               align: 'center',
-              key: 'submitDate',
+              key: 'commitTime',
               minWidth: 170
             },
 
           ],
-          tbdata: [],
+          tbData: [],
 
         }, //表格属性
         salesTypeArr: [
@@ -455,23 +463,36 @@
         tableData: [],
         formPlan: {},//表单对象
         addressShow: false,//收货地址显示
+        query:{},//更多搜索信息
       }
 
+
+    },
+    mounted(){
+      this.getLeftList()
     },
     methods: {
       //切换页面
-      selectNum() {
+      selectNum(val) {
+        this.page.num = val
+        this.getLeftList()
       },
       //切换页数
-      selectPage() {
+      selectPage(val) {
+        this.page.num = 1
+        this.page.size = val
+        this.getLeftList()
       },
       // 快速查询日期
       getDataQuick(v) {
-        console.log(v);
+        // console.log(v);
+        //  this.startTime=v[0]
+        //  this.endTime=v[1]
+        // console.log(this.startTime,this.endTime)
       },
       //打开新增客户
       CustomerShowModel() {
-        console.log(44)
+        // console.log(44)
         this.$refs.selectTheCustomer.openModel()
       },
       //选择更多
@@ -493,7 +514,27 @@
       //确认收货地址
       changeShippingAddress() {
       },
-    }
+      //分页查询预售单信息左侧
+      getLeftList(){
+        let data={
+
+        }
+        // params=this.query
+        let page = this.page.num -1
+        let size = this.page.size
+        getLeftList(size,page,data).then(res =>{
+          // console.log('打印出来的数据',res)
+
+          if(res.code===0){
+            res.data.content.map( item => item.status = JSON.parse(item.status))
+            this.preSellOrderTable.tbData = res.data.content
+            this.page.total = res.data.totalElements
+          }
+
+        })
+
+      }
+    },
   }
 </script>
 
@@ -523,8 +564,5 @@
     align-items: center;
   }
 
-  .tabsTable {
-
-  }
 
 </style>
