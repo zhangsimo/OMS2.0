@@ -69,7 +69,6 @@
             //获取表格数据
             async getList(){
                   let data = {}
-                  console.log(this.queryTime , 4444)
                 data.startTime = this.queryTime[0] || ''
                 data.endTime = this.queryTime[1] || ''
                 data.billStatusId = this.orderType
