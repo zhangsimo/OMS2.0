@@ -14,7 +14,7 @@ import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
 
 enum orderState {
-  '草稿', '待发货', '待收货', '部分入库', '全部入库', '已退回', '关闭'
+  '作废' = -1, '草稿', '审批中', '待收货', '部分入库', '全部入库', '退回'
 }
 
 @Component({
@@ -79,6 +79,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
+  private mainId: string|null = null;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -233,7 +234,8 @@ export default class PlannedPurchaseOrder extends Vue {
     this.formPlanmain.serviceId = '';
     this.isAdd = false;
     this.isInput = false;
-    this.purchaseOrderTable.tbdata.push(this.PTrow);
+    this.purchaseOrderTable.tbdata.unshift(this.PTrow);
+    this.selectTableRow = this.PTrow;
   }
 
   // 保存/修改/提交用数据
@@ -363,6 +365,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 废弃
   private abandoned() {
+    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
@@ -384,8 +387,18 @@ export default class PlannedPurchaseOrder extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     this.selectTableRow = v;
+    this.mainId = v.id;
     this.tableData = v.details || [];
-    this.isInput = false;
+    if([orderState['草稿'], orderState['退回']].includes(Number(v.billStatusId))) {
+      this.isInput = false;
+    } else {
+      this.isInput = true;
+    }
+    if([orderState['待收货'], orderState['部分入库']].includes(Number(v.billStatusId))) {
+      this.adjustButtonDisable = false;
+    } else {
+      this.adjustButtonDisable = true;
+    }
     for (let k in this.formPlanmain) {
       this.formPlanmain[k] = v[k];
     }
@@ -447,6 +460,18 @@ export default class PlannedPurchaseOrder extends Vue {
   private selectPlan() {
     if (!this.formPlanmain.guestId) return this.$Message.error('请选择供应商');
     this.showModel('procurementModal')
+  }
+
+  // 费用登记
+  private showFee() {
+    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    this.showModel('feeRegistration');
+  }
+
+  // 收货信息
+  private showGoodsInfo() {
+    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    this.showModel('goodsInfo');
   }
 
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)

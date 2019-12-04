@@ -101,21 +101,41 @@
             :label-width="100"
           >
             <FormItem label="收货单位：" prop="receiveComp">
-              <Input v-model="formDateRight.receiveComp" class="w200" />
+              <Input
+                v-model="formDateRight.receiveComp"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="收货地址：" prop="receiveAddress">
-              <Input v-model="formDateRight.receiveAddress" class="w200" />
+              <Input
+                v-model="formDateRight.receiveAddress"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="收货人：" prop="receiver">
-              <Input v-model="formDateRight.receiver" class="w200" />
+              <Input
+                v-model="formDateRight.receiver"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="联系电话：" prop="receiverMobile">
-              <Input v-model="formDateRight.receiverMobile" class="w200" />
+              <Input
+                v-model="formDateRight.receiverMobile"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
             <FormItem label="配送方式：">
-              <Select v-model="formDateRight.deliveryType" class="w200">
+              <Select
+                v-model="formDateRight.deliveryType"
+                class="w200"
+                :disabled="disabled"
+              >
                 <Option value="1">自配</Option>
                 <Option value="2">客户自提</Option>
                 <Option value="3">快递</Option>
@@ -123,7 +143,11 @@
               </Select>
             </FormItem>
             <FormItem label="发货物流：">
-              <Select v-model="formDateRight.deliveryLogistics" class="w200">
+              <Select
+                v-model="formDateRight.deliveryLogistics"
+                class="w200"
+                :disabled="disabled"
+              >
                 <Option
                   @on-change="logCom(item.logisticsComp)"
                   v-for="item in logisArr"
@@ -134,19 +158,39 @@
               </Select>
             </FormItem>
             <FormItem label="运输费用：">
-              <Input v-model="formDateRight.transportCost" class="w200" />
+              <Input
+                v-model="formDateRight.transportCost"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="结算方式：">
-              <Input v-model="formDateRight.settleType" class="w200" />
+              <Input
+                v-model="formDateRight.settleType"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="发货备注：">
-              <Input v-model="formDateRight.remark" class="w200" />
+              <Input
+                v-model="formDateRight.remark"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="业务单号：">
-              <Input v-model="formDateRight.businessNum" class="w200" />
+              <Input
+                v-model="formDateRight.businessNum"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="关联单号：">
-              <Input v-model="formDateRight.relationNum" class="w200" />
+              <Input
+                v-model="formDateRight.relationNum"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
           </Form>
         </div>
@@ -160,7 +204,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 // @ts-ignore
@@ -184,6 +228,8 @@ export default class GoodsInfo extends Vue {
   private showInfo: boolean = false;
 
   private disabled: boolean = true;
+
+  @Prop(String) readonly mainId;
 
   private ruleValidate: ruleValidate = {
     receiveComp: [
@@ -213,14 +259,7 @@ export default class GoodsInfo extends Vue {
 
   private async init() {
     this.loading = true;
-    this.formDateTop = {
-      receiveCompName: null, //收货单位
-      receiveMan: null, //收货人
-      address: null, //详细收货地址
-      receiveManTel: null //联系电话
-    };
-    const ref: any = this.$refs["formTwo"];
-    ref.resetFields();
+    this.reset();
     this.getLists();
 
     //获取物流下拉框
@@ -229,7 +268,7 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     this.showInfo = true;
-    let res = await fapi.getGoodsInfo();
+    let res = await fapi.getGoodsInfo({ mainId: this.mainId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -298,6 +337,7 @@ export default class GoodsInfo extends Vue {
   //查询
   private async searchInfo() {
     let data: any = {};
+    data.mainId = this.mainId;
     this.loading = true;
     for (let k in this.formDateTop) {
       const v = this.formDateTop[k];
@@ -305,7 +345,7 @@ export default class GoodsInfo extends Vue {
         data[k] = v;
       }
     }
-    let res = await fapi.queryGoodsInfo(data);
+    let res = await fapi.getGoodsInfo(data);
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -316,13 +356,15 @@ export default class GoodsInfo extends Vue {
     const ref: any = this.$refs["formTwo"];
     ref.validate(async (valid: any) => {
       if (valid) {
-        this.saveId(this.tableData);
-        let res = await fapi.saveGoodsInfo(this.formDateRight);
+        // this.saveId(this.tableData);
+        let res = await fapi.saveGoodsInfo({
+          ...this.formDateRight,
+          mainId: this.mainId
+        });
         if (res.code == 0) {
           this.$Message.success("保存成功");
+          this.reset();
           this.getLists();
-          const ref: any = this.$refs["formTwo"];
-          ref.resetFields();
         }
       } else {
         this.$Message.error("必填信息未填写!");
@@ -332,6 +374,7 @@ export default class GoodsInfo extends Vue {
   private echoDate({ row }) {
     this.disabled = false;
     if (row.logisticsRecordVO) {
+      this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight.receiveComp = row.logisticsRecordVO.receiveComp;
       this.formDateRight.receiver = row.logisticsRecordVO.receiver;
       this.formDateRight.receiveAddress = row.logisticsRecordVO.receiveAddress;
@@ -352,11 +395,54 @@ export default class GoodsInfo extends Vue {
   }
   //传入保存id
   private saveId(row) {
+    console.log(row);
     row.forEach(item => {
       if (item.logisticsRecordVO) {
         this.formDateRight.id = item.logisticsRecordVO.id;
       }
     });
+  }
+
+  private reset() {
+    this.formDateTop = {
+      receiveCompName: null, //收货单位
+      receiveMan: null, //收货人
+      address: null, //详细收货地址
+      receiveManTel: null //联系电话
+    };
+    const ref: any = this.$refs["formTwo"];
+    ref.resetFields();
+    this.formDateRight = {
+      //表单数据 上 查询
+      receiveCompName: "", //收货单位
+      receiveMan: "", //收货人
+      receiveManTel: "", //联系电话
+      //收货信息
+      receiveComp: "", //收货单位名称
+      receiver: "", //收货人
+      receiveAddress: "", //收货单位地址
+      receiverMobile: "", //联系电话
+      //发货信息
+      address: "", //收货详细地址
+      deliveryType: "", //配送方式
+      transportCost: "", //运输费用
+      remark: "", //备注
+      relationNum: "", //光联单号
+      deliveryLogistics: "", //发货物流
+      settleType: "", //结算方式
+      businessNum: "", //业务单号
+
+      //其它要带上的数据
+      //初始化中的数据
+      id: "", //保存带的id
+      logisticsId: "", //初始化数据中的id
+      guestId: "",
+      provinceId: "",
+      cityId: "",
+      countyId: "",
+      //物流中的数据
+      logisticsComp: "" //物流公司名字
+    };
   }
 }
 </script>

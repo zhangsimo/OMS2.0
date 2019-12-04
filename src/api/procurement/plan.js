@@ -93,3 +93,30 @@ export function saveObsolete(id) {
     params: { id }
   });
 }
+
+// 计划调整查询
+export function queryModifyOrder(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderDetail/queryModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整保存
+export function saveModifyOrder(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderDetail/saveModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整全部调整
+export function saveModifyAllOrder(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderDetail/saveModifyAllOrder`,
+    method: "post",
+    data
+  });
+}

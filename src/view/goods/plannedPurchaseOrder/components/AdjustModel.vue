@@ -17,16 +17,16 @@
         <div class="db mr10">|</div>
         <div class="db mr10">
           <Button class="w90" type="warning">
-            <span class="center">全部取消</span>
+            <span class="center">全部调整</span>
           </Button>
         </div>
         <div class="db mr5">
           <span>配件编码:</span>
-          <Input class="w180" placeholder="请输入配件编码" />
+          <Input class="w180" v-model="partCode" placeholder="请输入配件编码" />
         </div>
         <div class="db mr10">
           <span>配件名称:</span>
-          <Input class="w180" placeholder="请输入配件名称" />
+          <Input class="w180" v-model="partName" placeholder="请输入配件名称" />
         </div>
         <div class="db">
           <Button class="w90" type="warning">
@@ -37,19 +37,31 @@
         </div>
       </div>
       <div>
-        <vxe-table border auto-resize height="auto" size="mini" :data="tableData">
+        <vxe-table
+          border
+          auto-resize
+          height="auto"
+          size="mini"
+          :data="tableData"
+        >
           <vxe-table-column
             type="index"
             width="80"
             title="序号"
           ></vxe-table-column>
-          <vxe-table-column field="age" title="配件编码"></vxe-table-column>
-          <vxe-table-column field="age" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="age" title="订单数量"></vxe-table-column>
-          <vxe-table-column field="age" title="实际入库数量"></vxe-table-column>
-          <vxe-table-column field="age" title="已调整数量"></vxe-table-column>
           <vxe-table-column
-            field="age"
+            field="partCode"
+            title="配件编码"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="partName"
+            title="配件名称"
+          ></vxe-table-column>
+          <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
+          <vxe-table-column field="trueEnterQty" title="实际入库数量"></vxe-table-column>
+          <vxe-table-column field="notEnterQty" title="已调整数量"></vxe-table-column>
+          <vxe-table-column
+            field="adjustQty"
             title="本次调整数量"
             :edit-render="{ name: 'input' }"
             width="120"
@@ -58,24 +70,54 @@
               <Input />
             </template>
           </vxe-table-column>
-          <vxe-table-column field="age" title="备注"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
     </div>
+    <div slot="footer"></div>
   </Modal>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
+// @ts-ignore
+import * as api from "_api/procurement/plan";
 
 @Component
 export default class AdjustModel extends Vue {
   private show: boolean = false;
 
+  @Prop(String) readonly mainId;
+
   private tableData: Array<any> = new Array();
+
+  private partCode: string = "";
+  private partName: string = "";
 
   private init(): void {
     this.show = true;
+    this.reset();
+    this.getList();
+  }
+
+  private reset(): void {
+    this.partCode = "";
+    this.partName = "";
+  }
+
+  private async getList() {
+    let data: any = {};
+    data.mainId = this.mainId;
+    if (this.partCode.trim()) {
+      data.partCode = this.partCode;
+    }
+    if (this.partName.trim()) {
+      data.partName = this.partName;
+    }
+    let res: any = await api.queryModifyOrder(data);
+    if(res.code == 0) {
+      this.tableData = res.data;
+    }
   }
 }
 </script>

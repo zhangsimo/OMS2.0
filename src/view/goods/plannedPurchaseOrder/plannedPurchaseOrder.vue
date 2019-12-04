@@ -51,17 +51,18 @@
             >
           </div>
           <div class="db">
-            <Button @click="print" class="mr10" :disabled="isInput"
+            <Button @click="print" class="mr10" :disabled="selectTableRow === null"
               ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="isInput"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
           <div class="db">
-            <Button @click="showModel('feeRegistration')" class="mr10"
+            <Button @click="showFee" class="mr10"
+              :disabled="isInput"
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
@@ -276,7 +277,7 @@
                     <Button
                       size="small"
                       class="mr10"
-                      :disabled="adjustButtonDisable && isInput"
+                      :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"
                       >订单调整</Button
                     >
@@ -285,7 +286,8 @@
                     <Button
                       size="small"
                       class="mr10"
-                      @click="showModel('goodsInfo')"
+                      :disabled="isInput"
+                      @click="showGoodsInfo"
                       >收货信息</Button
                     >
                   </div>
@@ -455,9 +457,9 @@
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->
-    <goods-info ref="goodsInfo"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
     <!-- 订单调整 -->
-    <adjust-model ref="adjustModel"></adjust-model>
+    <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
     <tabs-model ref="tabsModel"></tabs-model>
   </div>
