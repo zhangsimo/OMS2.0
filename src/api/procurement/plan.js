@@ -120,3 +120,13 @@ export function saveModifyAllOrder(data) {
     data
   });
 }
+
+// 查看库存
+export function queryPartStockAndLog(partId) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderDetail/queryPartStockAndLog`,
+    method: "post",
+    params: { partId },
+    data: {},
+  });
+}

@@ -16,7 +16,7 @@
         </div>
         <div class="db mr10">|</div>
         <div class="db mr10">
-          <Button class="w90" type="warning" @clcik="allAdj">
+          <Button class="w90" type="warning" @click="allAdj">
             <span class="center">全部调整</span>
           </Button>
         </div>
@@ -141,8 +141,8 @@ export default class AdjustModel extends Vue {
     }
   }
 
-  private async allAdj () {
-    let res:any = await api.saveModifyAllOrder({ mainIds: this.mainId });
+  private async allAdj() {
+    let res:any = await api.saveModifyAllOrder({ mainId: this.mainId });
     if(res.code == 0) {
       this.$Message.success('保存成功!');
       this.getList()

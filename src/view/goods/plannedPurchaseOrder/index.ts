@@ -612,7 +612,9 @@ export default class PlannedPurchaseOrder extends Vue {
   }
 
   // 操作-查看
-  private watch(row: any) {
+  private partId:string = '';
+  private watch(id: string) {
+    this.partId = id;
     this.showModel('tabsModel');
   }
 

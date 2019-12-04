@@ -27,7 +27,7 @@
             border
             :stripe="true"
             :loading="loading"
-            :columns="Tab2columns"
+            :columns="Tab1columns"
             :data="Tab2tableData"
           ></Table>
         </TabPane>
@@ -39,7 +39,7 @@
             border
             :stripe="true"
             :loading="loading"
-            :columns="Tab3columns"
+            :columns="Tab2columns"
             :data="Tab3tableData"
           ></Table>
         </TabPane>
@@ -49,13 +49,17 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
+// @ts-ignore
+import * as api from "_api/procurement/plan";
 
 @Component
 export default class TabsModel extends Vue {
   private show: boolean = false;
 
   private loading: boolean = false;
+
+  @Prop(String) readonly partId;
 
   private Tab1columns: Array<Tableth> = [
     {
@@ -65,37 +69,37 @@ export default class TabsModel extends Vue {
     },
     {
       title: "配件编码",
-      key: "venderSkuNo",
+      key: "partCode",
       minWidth: 100
     },
     {
       title: "配件名称",
-      key: "venderSkuNo",
+      key: "partName",
       minWidth: 120
     },
     {
       title: "单位",
-      key: "venderSkuNo",
+      key: "unit",
       minWidth: 80
     },
     {
       title: "仓库",
-      key: "venderSkuNo",
+      key: "storeName",
       minWidth: 100
     },
     {
       title: "库存数量",
-      key: "venderSkuNo",
+      key: "stockQty",
       minWidth: 80
     },
     {
       title: "订单占用",
-      key: "venderSkuNo",
+      key: "occupyQty",
       minWidth: 80
     },
     {
       title: "可开单数量",
-      key: "venderSkuNo",
+      key: "outQty",
       minWidth: 80
     }
   ];
@@ -108,91 +112,23 @@ export default class TabsModel extends Vue {
     },
     {
       title: "公司名称",
-      key: "venderSkuNo",
+      key: "companyName",
       minWidth: 120
     },
     {
       title: "仓库",
-      key: "venderSkuNo",
+      key: "storeName",
       minWidth: 80
     },
     {
       title: "库存数量",
-      key: "venderSkuNo",
+      key: "stockQty",
       minWidth: 80
     },
     {
       title: "可售数量",
-      key: "venderSkuNo",
+      key: "outQty",
       minWidth: 80
-    }
-  ];
-
-  private Tab3columns: Array<Tableth> = [
-    {
-      title: "序号",
-      minWidth: 50,
-      key: "id"
-    },
-    {
-      title: "配件编码",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "配件名称",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "仓库",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "单位",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "采购数量",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "税点",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "含税单价",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "不含税单价",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "供应商",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "第一供应商",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "入库单号",
-      key: "venderSkuNo",
-      minWidth: 120
-    },
-    {
-      title: "入库日期",
-      key: "venderSkuNo",
-      minWidth: 120
     }
   ];
 
@@ -202,6 +138,16 @@ export default class TabsModel extends Vue {
 
   private init(): void {
     this.show = true;
+    this.getlist();
+  }
+
+  private async getlist() {
+    let res:any = await api.queryPartStockAndLog(this.partId);
+    if(res.code == 0) {
+      this.Tab1tableData = res.data.orgStock;// 本地
+      this.Tab2tableData = res.data.chainStock // 连锁
+      this.Tab3tableData = res.data.pchsLog // 采购
+    }
   }
 }
 </script>
