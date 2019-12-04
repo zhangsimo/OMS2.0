@@ -158,6 +158,7 @@ export const mixSelectSupplier ={
     throwData(){
       this.$emit('selectSupplierName',this.selectTableItem);
       this.searchPartLayer = false;
+      // console.log(this.selectTableItem)
     },
     //分页
     changePage(p) {

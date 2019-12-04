@@ -1,37 +1,46 @@
 <template>
-    <div class="navbox">
-      <Row>
-        <Col span="12">
-          <span class="w40">创建日期：</span>
-          <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px"></DatePicker>
-        </Col>
-        <Col span="12">
-          <span class="w40">提交日期：</span>
-          <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px"></DatePicker>
-        </Col>
-      </Row>
-      <row class="mt15">
-        <span class="ml5">调 出 方：</span>
-        <Input v-model="callout" icon="md-checkmark" placeholder="请选择调出方" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span>申请单号：</span>
-        <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span>配件编码：</span>
-        <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span class="ml5">配 件 人：</span>
-        <Input v-model="Accessories" placeholder="请输入配件人" style="width: 450px" />
-      </row>
-      <row class="mt15">
-        <span>配件名称：</span>
-        <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
-      </row>
+    <div>
+      <Modal title="高级查询" width="600px" v-model="moreAndMore">
+        <div class="navbox">
+          <Row>
+            <Col span="12">
+              <span class="w40">创建日期：</span>
+              <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px"></DatePicker>
+            </Col>
+            <Col span="12">
+              <span class="w40">提交日期：</span>
+              <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px"></DatePicker>
+            </Col>
+          </Row>
+          <Row class="mt15">
+            <span class="ml5">调 出 方：</span>
+            <Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>
+            <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
+          </Row>
+          <Row class="mt15">
+            <span>申请单号：</span>
+            <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span>配件编码：</span>
+            <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span class="ml5">创 建 人：</span>
+            <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span>配件名称：</span>
+            <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+          </Row>
+        </div>
+        <div slot='footer'>
+          <Button type='primary' @click="Determined">确定</Button>
+          <Button type='default' >取消</Button>
+        </div>
+      </Modal>
 
-      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea" ></select-supplier>
     </div>
 </template>
 
@@ -49,18 +58,46 @@
             coding: '', //编码
             Accessories: '', //配件人
             Name: '', //配件名称
+            createData: '', //创建日期
+            submitData: '', //提交日期
+            moreAndMore: false
           }
       },
       methods: {
           //选择创建日期
         establish(date){
           console.log(date)
+          this.createData = date
         },
         //选择提交日期
         submit(date){
           console.log(date)
-        }
+          this.submitData = date
+        },
+        getSupplierNamea(a) {
+          console.log(a)
+          this.callout = a.fullName
+          console.log(this.callout)
+        },
+        init(){
+          this.moreAndMore = true
+        },
+        sendMsg(){
+            let a = { callout: this.callout , numbers: this.numbers ,coding: this.coding, Accessories: this.Accessories,Name: this.Name,createData: this.createData,submitData:this.submitData}
+            this.$emit('sendMsg', a)
+            console.log(a)
+        },
+        //更多弹框的确定按钮
+        Determined(){
+          this.sendMsg()
+          this.moreAndMore = false
+        },
+        //供应商弹框
+        addSuppler(){
+          this.$refs.selectSupplier.init()
+        },
       }
+
     }
 </script>
 <style scoped>
@@ -69,6 +106,3 @@
   }
 </style>
 
-<style scoped>
-
-</style>

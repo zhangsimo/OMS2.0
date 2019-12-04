@@ -7,24 +7,24 @@
               <div class="db">
                 <span>快速查询：</span>
                 <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                <Select v-model="purchaseType" class="w90 mr10">
+                <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
                   <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
                 </Select>
               </div>
               <div class="db">
-                <Button type="default" @click="more" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
+                <Button type="default" @click="moreaa" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
               </div>
               <div class="db">
                 <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='Save()' class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button type="default" @click='SaveMsg' class="mr10" :disabled="presentrowMsg.status !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="editPro" :disabled="buttonDisable"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button class="mr10" @click="editPro" :disabled="presentrowMsg.status !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10" :disabled="buttonDisable"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button @click="cancellation" class="mr10" :disabled="presentrowMsg.status !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -65,7 +65,7 @@
                       <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
                         <Input class="w160" :disabled="buttonDisable" v-model="this.rowData.orderDate"></Input>
                       </FormItem>
-                      <FormItem label="备注：" prop="remark" >
+                      <FormItem label="备注：" prop="remark">
                         <Input class="w500" :disabled="buttonDisable" v-model="this.rowData.remark"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
@@ -105,13 +105,17 @@
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
-                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}" width="100"></vxe-table-column>
+                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100"></vxe-table-column>
                     <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
                     <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column field="" title="紧销品" width="100" type="checkbox"></vxe-table-column>
+                    <vxe-table-column title="紧销品" width="100" type="checkbox">
+                      <template v-slot="{ row,rowIndex }">
+                        <Checkbox disabled :value="row.isTightPart == 1"></Checkbox>
+                      </template>
+                    </vxe-table-column>
                     <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
                     <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
                     <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
@@ -127,15 +131,10 @@
           </div>
         </section>
         <!--更多弹框-->
-        <Modal v-model="advanced" title="高级查询" width="600px">
-              <More></More>
-          <div slot='footer'>
-            <Button type='primary' @click="Determined">确定</Button>
-            <Button type='default' >取消</Button>
-          </div>
-        </Modal>
+              <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>
+        <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
+        <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
         <!--编辑收货信息-->
         <Modal v-model="GainInformation" title="编辑收获信息" width="1200px">
           <goods-info></goods-info>
@@ -153,38 +152,41 @@
 <script>
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
-  import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+  // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
   import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
-  import { queryAll,findById,queryByOrgid,findByAllot } from '../../../../api/AlotManagement/transferringOrder';
+  import supplier from './compontents/supplier'
+  import { queryAll,findById,queryByOrgid,save} from '../../../../api/AlotManagement/transferringOrder';
     export default {
       name: "applyFor",
       components: {
         QuickDate,
         More,
-        SelectPartCom,
+        supplier,
+        // SelectPartCom,
         GoodsInfo,
         SelectSupplier
       },
       data() {
         return {
+          rowId:'', //当前行的id
           buttonDisable: true,
           buttonDisableTwo: true,
           split1:0.2,
-          purchaseType: 9999,
+          purchaseType: '9999',
           purchaseTypeArr:[
-            { label:'所有',value:9999 },
-            { label:'草稿',value:1 },
-            { label:'待受理',value:2 },
-            { label:'已受理',value:3 },
-            { label:'待分拣',value:4 },
-            { label:'待发货',value:5 },
-            { label:'已出库',value:6 },
-            { label:'已入库',value:7 },
-            { label:'已拒绝',value:8 },
-            { label:'已作废',value:9 },
+            { label:'所有',value:'9999' },
+            { label:'草稿',value:'DRAFT' },
+            { label:'待受理',value:'UNACCEPTED' },
+            { label:'已受理',value:'3' },
+            { label:'待分拣',value:'4' },
+            { label:'待发货',value:'5' },
+            { label:'已出库',value:'6' },
+            { label:'已入库',value:'7' },
+            { label:'已拒绝',value:'8' },
+            { label:'已作废',value:'9' },
           ],
           List:[],
           Left: {
@@ -314,13 +316,15 @@
           advanced: false, //更多模块的弹框
           GainInformation: false, //编辑收获信息
           rowData: '',  //声明一个数据，用于赋值右边内容
-          selectArr:[] //快速查询的数组 用于赋值
+          selectArr:[], //快速查询的数组 用于赋值,
+          moreArr: {},
+          presentrowMsg: ''
         }
       },
       methods: {
         //更多按钮
-        more(){
-          this.advanced = true
+        moreaa(){
+          this.$refs.moremore.init()
         },
         // 新增按钮
         addProoo(){
@@ -329,13 +333,18 @@
         //添加配件按钮
         addPro(){
           this.$refs.SelectPartCom.init()
-          let params = {}
-          findByAllot(params).then(res => {
-              this.Right.tbdata = [...res.data.content,...this.Right.tbdata]
-          })
+        },
+        // 下拉框查询
+        SelectChange(){
+          this.leftgetList()
         },
         //保存按钮
-        Save(){},
+        SaveMsg(){
+          let data = this.Right.tbdata
+          save(data).then(res => {
+
+          })
+        },
         // 提交
         editPro(){},
         //作废
@@ -347,12 +356,12 @@
         //分页
         changePageLeft(p) {
           this.Left.page.num = p
-          // this.getList()
+          this.leftgetList()
         },
         changeSizeLeft(size) {
           this.Left.page.num = 1
           this.Left.page.size = size
-          // this.getList()
+          this.leftgetList()
         },
         //右部分分页
         changePage(p) {
@@ -371,11 +380,28 @@
           this.leftgetList()
         },
         //footer计算
-        addFooter(){},
+        addFooter ({ columns, data }) {
+          return [
+            columns.map((column, columnIndex) => {
+              if (columnIndex === 0) {
+                return '和值'
+              }
+              if (['applyQty'].includes(column.property)) {
+                return this.$utils.sum(data, column.property)
+              }
+              return null
+            })
+          ]
+        },
         //表格编辑状态下被关闭的事件
         editClosedEvent(){},
-        //更多弹框的确定按钮
-        Determined(){},
+
+        // 更多子组件的参数
+        getMsg(msg){
+          this.moreArr = msg
+          this.leftgetList()
+          // console.log(msg)
+        },
         //子组件的参数
         getPartNameList(ChildMessage){
           // console.log(ChildMessage)
@@ -398,7 +424,7 @@
         addSuppler(){
           this.$refs.selectSupplier.init()
         },
-        //供应商子组件内容
+        // 供应商子组件内容
         getSupplierName(a){
           console.log(a)
         },
@@ -406,8 +432,36 @@
           let params = {}
           params.page = this.Left.page.num - 1
           params.size = this.Left.page.size
-          params.startDate = this.selectArr[0]
-          params.endDate = this.selectArr[1]
+          if(this.selectArr){
+            params.startDate = this.selectArr[0]
+            params.endDate = this.selectArr[1]
+          }
+          if(this.purchaseType !== '9999'){
+            params.status = this.purchaseType
+          }
+          if(this.moreArr.createData){
+            params.startTime = this.moreArr.createData[0] + " 00:00:00"
+            params.endTime = this.moreArr.createData[1] + " 23:59:59"
+          }
+          if(this.moreArr.submitData){
+            params.startDate = this.moreArr.submitData[0] + " 00:00:00"
+            params.endDate = this.moreArr.submitData[1] + " 23:59:59"
+          }
+          if(this.moreArr.callout){
+            params.guestName = this.more.callout
+          }
+          if(this.moreArr.numbers){
+            params.serviceId = this.more.numbers
+          }
+          if(this.moreArr.coding){
+            params.partCode = this.more.coding
+          }
+          if(this.moreArr.Accessories){
+            params.createUname = this.more.Accessories
+          }
+          if(this.moreArr.Name){
+            params.fullName = this.more.Name
+          }
           queryAll(params).then(res => {
             if(res.code === 0){
               this.Left.tbdata = res.data.content
@@ -417,7 +471,9 @@
         // 左边部分的当前行
         selection(row){
           // console.log(row)
-          console.log(row.id)
+          // console.log(row.id)
+          this.presentrowMsg = JSON.parse(row.status).value
+          this.rowId = row.id
           if(row.id){
             this.buttonDisable = false
           }
@@ -437,6 +493,9 @@
                 this.List = res.data
               }
           })
+        },
+        Determined(){
+
         }
 
       },
