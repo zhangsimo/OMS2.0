@@ -44,9 +44,8 @@
                   移仓列表
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata"></Table>
-                <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePage"
-                      @on-page-size-change="changeSize" show-sizer show-total>
-                </Page>
+                <Page :total="0" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total class-name="page-con"
+                      @on-change="changePage" @on-page-size-change="changeSize" class="mr10 p5"></Page>
               </div>
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
                 <div class="pane-made-hd center">
@@ -74,7 +73,6 @@
                     <FormItem label="移仓日期：" class="fs12 ml20">
                       <DatePicker type="date" @on-change="submit" style="width: 140px"></DatePicker>
                     </FormItem>
-
                     <FormItem label="移仓单号：" class="ml20">
                       <Input class="w120" ></Input>
                     </FormItem>
@@ -115,8 +113,8 @@
                   <vxe-table-column field="date12" title="方向" width="120"></vxe-table-column>
                 </vxe-table>
                 <div ref="planPage">
-                  <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
-                        @on-page-size-change="changeSize" show-sizer show-total></Page>
+                  <Page :total="Right.page.total" :page-size="Right.page.size" :current="Right.page.num" show-sizer show-total class-name="page-con"
+                        @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
                 </div>
               </div>
             </Split>
@@ -388,7 +386,7 @@
                 let planBtnH = this.$refs.planBtn.offsetHeight;
                 let planPageH = this.$refs.planPage.offsetHeight;
                 //获取左侧侧表格高度
-                this.leftTableHeight = wrapH-70;
+                this.leftTableHeight = wrapH-90;
                 //获取右侧表格高度
                 this.rightTableHeight = wrapH-planFormH-planBtnH-65;
             })
@@ -398,7 +396,7 @@
 
 <style scoped>
   .con-box{
-    height: 600px;
+    height: 800px;
   }
   .w550{
     width: 580px;

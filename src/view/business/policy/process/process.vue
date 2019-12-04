@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper h600">
+  <div class="content-oper">
     <!--    头部-->
     <section class="oper-box">
       <!--      主菜单导航-->
@@ -486,25 +486,25 @@
     height: 600px;
   }
 
-  .w550 {
-    width: 580px;
-  }
+  /*.w550 {*/
+  /*  width: 580px;*/
+  /*}*/
 
-  .ivu-split-horizontal {
-    height: 630px;
-  }
+  /*.ivu-split-horizontal {*/
+  /*  height: 630px;*/
+  /*}*/
 
-  .ivu-table-tip {
-    height: 665px;
-  }
+  /*.ivu-table-tip {*/
+  /*  height: 665px;*/
+  /*}*/
 
   .con-box[data-v-49eda4e0] {
     height: 770px;
   }
 
-  .ivu-split-trigger-vertical {
-    height: 770px;
-  }
+  /*.ivu-split-trigger-vertical {*/
+  /*  height: 770px;*/
+  /*}*/
 
   .hei {
     height: 740px;
@@ -512,6 +512,10 @@
 
   .con-box[data-v-49eda4e0][data-v-49eda4e0] {
     height: 790px;
+  }
+  .content-oper{
+    height: 100%;
+    overflow: hidden;
   }
 
 
