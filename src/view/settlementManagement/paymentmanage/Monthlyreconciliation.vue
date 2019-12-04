@@ -95,69 +95,69 @@ export default {
         },
         {
           title: "序号",
-          key: "id",
+          key: "num",
           width: 40,
           className: "tc"
         },
         {
           title: "客户名称",
-          key: "Customername",
+          key: "guestName",
           className: "tc"
         },
         {
           title: "日期",
-          key: "date",
+          key: "transferDate",
           className: "tc"
         },
         {
           title: "业务单据号",
-          key: "Businessbill",
+          key: "serviceId",
           width: 120,
           className: "tc"
         },
         {
           title: "来源",
-          key: "source",
+          key: "serviceSourceName",
           className: "tc"
         },
         {
           title: "业务类型",
-          key: "Businesstype",
+          key: "serviceTypeName",
           className: "tc"
         },
         {
           title: "含税标志",
-          key: "Taxmark",
+          key: "taxSignName",
           className: "tc"
         },
         {
           title: "油品/配件",
-          key: "Oilaccessories",
+          key: "speciesName",
           className: "tc"
         },
         {
           title: "单据金额",
-          key: "bill",
+          key: "rpAmt",
           className: "tc"
         },
         {
           title: "前期已对账金额",
-          key: "Previouslyreconciled",
+          key: "accountAmt",
           className: "tc"
         },
         {
           title: "前期未对账金额",
-          key: "Previouslynoreconciled",
+          key: "noAccountAmt",
           className: "tc"
         },
         {
           title: "本次不对账金额",
-          key: "Noreconciliation",
+          key: "thisNoAccountAmt",
           className: "tc"
         },
         {
           title: "本次对账金额",
-          key: "reconciliation",
+          key: "thisAccountAmt",
           className: "tc"
         }
       ],
@@ -175,36 +175,12 @@ export default {
           Statementoilincludingtax: ""
         }
       ],
-      data1: [
-        {
-          id: "1",
-          receivablesid: "XS201941445452313",
-          receivablestime: "2019/10/10",
-          receivablestype: "现金",
-          receivablesaccount: "佳配零部件",
-          receivablesmoney: "35648",
-          reviewedstate: "已审",
-          person: "张三",
-          revieweddate: "2019-09-19"
-        }
-      ],
-      data2: [
-        {
-          id: "1",
-          payid: "XS201941445452313",
-          paytime: "2019/10/10",
-          paytype: "现金",
-          payaccount: "佳配零部件",
-          paymoney: "35648",
-          reviewedstate: "已审",
-          person: "张三",
-          revieweddate: "2019-09-19"
-        }
-      ]
+      data1: [],
+      data2: []
     };
   },
-  async created () {
-    let arr = await creat (this.$store)
+  async mounted () {
+    let arr = await creat ([],this.$store)
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];

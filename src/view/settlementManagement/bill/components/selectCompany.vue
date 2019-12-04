@@ -41,6 +41,7 @@
                   height="500"
                   style="width: 1500px"
                 >
+                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                   <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
                   <vxe-table-column field="name" title="往来单位名称" show-overflow></vxe-table-column>
                   <vxe-table-column field="name" title="编码"></vxe-table-column>
