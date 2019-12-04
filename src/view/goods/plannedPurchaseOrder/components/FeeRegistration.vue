@@ -46,7 +46,6 @@
         </div>
         <Page
           :total="40"
-          
           show-elevator
           show-sizer
           show-total

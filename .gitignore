@@ -3,7 +3,7 @@ node_modules
 /dist
 /url.js
 *.json
-
+/config
 # local env files
 .env.local
 .env.*.local
