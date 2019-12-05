@@ -24,7 +24,7 @@ export const mixGoodsData = {
           { required: true, message: '供应商不能为空', trigger: 'blur' }
         ],
         planDate: [
-          { required: true, type: 'date', message: '计划采购日期不能为空', trigger: 'change' },
+          { required: true, message: '计划采购日期不能为空', trigger: 'change' },
         ],
         planner: [
           { required: true, message: '计划员不能为空', trigger: 'blur' }
@@ -33,16 +33,15 @@ export const mixGoodsData = {
           { required: true, message: '票据类型不能为空', trigger: 'change' }
         ],
       },
-      tableData:[
-        {id:1,num:0,price:0},
-        {id:1,num:0,price:0},
-      ],
+      tableData:[],
       //待删除数据
       delArr:[],
       //票据类型
       invoiceMap:[],
       //直发门店
       companyMap:[],
+      //选中的采购计划单
+      selectPlanOrderItem:{}
     }
   },
   mounted(){
@@ -149,18 +148,23 @@ export const mixGoodsData = {
       //赋值供应商名称
       this.formPlan.supplyName = v.fullName||"";
       //赋值供应商id
-      this.formPlan.guestId = v.guestId||"";
+      this.formPlan.guestId = v.id||"";
       //赋值票据类型id
       this.formPlan.billType = v.billTypeId||"";
     },
     //选择日期
     setDataFun(v){
-      // this.formValidate.planDate = v
+      this.formPlan.planDate = v
       console.log(this.formValidate.planDate)
     },
     //获取订单状态
     returnOrderType(n){
       return purchaseTypeList(n)
+    },
+    //采购计划单选中
+    selectTabelData(v){
+      this.selectPlanOrderItem = v;
+      console.log(v)
     },
     //保存采购计划信息
     submit (name) {
@@ -169,23 +173,27 @@ export const mixGoodsData = {
         if (valid) {
           let objReq = {}
           //供应商id
-          objReq.guestId = this.formValidate.guestId;
+          objReq.guestId = this.formPlan.guestId;
           //计划日期
-          objReq.orderDate = this.formValidate.planDate;
+          objReq.orderDate = this.formPlan.planDate;
           //计划员name
-          objReq.orderMan = this.formValidate.planner;
+          objReq.orderMan = this.formPlan.planner;
           //备注
-          objReq.remark = this.formValidate.remark;
+          objReq.remark = this.formPlan.remark;
           //票据类型
-          objReq.billTypeId = this.formValidate.billType;
+          objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directOrgid = this.formValidate.hairShop;
+          objReq.directOrgid = this.formPlan.hairShop;
           //计划单号
-          objReq.serviceId = this.formValidate.planOrderNum;
+          if(this.formPlan.planOrderNum&&this.formPlan.planOrderNum!='新计划采购'){
+            objReq.serviceId = this.formPlan.planOrderNum;
+          }
           //其它费用
-          objReq.otherAmt = this.formValidate.otherPrice
+          objReq.otherAmt = parseFloat(this.formPlan.otherPrice);
           //合计总金额
-          objReq.totalAmt = this.formValidate.totalPrice
+          objReq.totalAmt = parseFloat(this.formPlan.totalPrice);
+          // console.log(objReq)
+          // return
           saveDraft(objReq).then(res => {
             if(res.code==0){
               this.proModal = false
