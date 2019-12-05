@@ -9,3 +9,20 @@ export function getLeftList (num,page,data) {
     data
   })
 }
+//获取客户
+export function getClient () {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByQuery`,
+    method: 'get',
+
+  })
+}
+//交货仓库list
+export function getWarehouseList (params) {
+  return axios.request({
+    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    method: 'get',
+    params
+  })
+}
+
