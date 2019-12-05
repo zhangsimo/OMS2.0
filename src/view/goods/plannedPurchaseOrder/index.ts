@@ -1,7 +1,9 @@
 import { Vue, Component } from "vue-property-decorator";
+import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
+import { orderState } from './global';
 
 import QuickDate from '_c/getDate/dateget.vue';
 import SelectSupplier from "./components/selectSupplier.vue";
@@ -12,10 +14,7 @@ import FeeRegistration from './components/FeeRegistration.vue';
 import ProcurementModal from './components/ProcurementModal.vue';
 import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
-
-enum orderState {
-  '作废' = -1, '草稿', '审批中', '待收货', '部分入库', '全部入库', '退回'
-}
+import PrintModel from './components/print.vue';
 
 @Component({
   components: {
@@ -28,9 +27,12 @@ enum orderState {
     ProcurementModal,
     AdjustModel,
     TabsModel,
+    PrintModel
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
+  @State('user') user;
+
   private split1: number = 0.2;
 
   private isInput: boolean = true;
@@ -42,6 +44,10 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 订单调整按钮是否可用
   private adjustButtonDisable: boolean = true;
+
+  // 选中的采购订单列表的状态;
+  private selectRowState:orderState| null = null;
+  private serviceId:string = '';
 
   // 快速查询订单状态
   private purchaseType: string | number = "";
@@ -219,6 +225,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
+    id: '0',
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -234,8 +241,11 @@ export default class PlannedPurchaseOrder extends Vue {
     this.formPlanmain.serviceId = '';
     this.isAdd = false;
     this.isInput = false;
+    this.selectRowState = null;
+    this.formPlanmain.orderMan = this.user.userData.staffName;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
+    this.tableData = new Array();
   }
 
   // 保存/修改/提交用数据
@@ -382,13 +392,25 @@ export default class PlannedPurchaseOrder extends Vue {
   }
 
   // 打印
-  private print() { }
+  private print() {
+    const ref:any = this.$refs.PrintModel;
+    ref.openModal();
+  }
 
   //表格单选选中
   private selectTabelData(v: any) {
+    if(v == null) return;
+    if (!v.new && !this.isAdd) {
+      this.purchaseOrderTable.tbdata.splice(0, 1);
+      this.isAdd = true;
+      const currentRowTable:any = this.$refs["currentRowTable"];
+      currentRowTable.clearCurrentRow();
+    }
     this.selectTableRow = v;
     this.mainId = v.id;
     this.tableData = v.details || [];
+    this.selectRowState = Number(v.billStatusId);
+    this.serviceId = v.serviceId;
     if([orderState['草稿'], orderState['退回']].includes(Number(v.billStatusId))) {
       this.isInput = false;
     } else {
@@ -401,10 +423,6 @@ export default class PlannedPurchaseOrder extends Vue {
     }
     for (let k in this.formPlanmain) {
       this.formPlanmain[k] = v[k];
-    }
-    if (!v.new && !this.isAdd) {
-      this.purchaseOrderTable.tbdata.pop();
-      this.isAdd = true;
     }
   }
 
@@ -464,7 +482,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 费用登记
   private showFee() {
-    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if(this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
     this.showModel('feeRegistration');
   }
 
@@ -586,6 +604,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购计划单据
   private getPlanOrder(row: any) {
+    if(!row) return;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
@@ -613,8 +632,8 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 操作-查看
   private partId:string = '';
-  private watch(id: string) {
-    this.partId = id;
+  private watch(id: any) {
+    this.partId = id || null;
     this.$nextTick(() => {
       this.showModel('tabsModel');
     })
