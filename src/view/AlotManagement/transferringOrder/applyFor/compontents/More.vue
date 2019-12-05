@@ -5,11 +5,11 @@
           <Row>
             <Col span="12">
               <span class="w40">创建日期：</span>
-              <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px"></DatePicker>
+              <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px" v-model="create"></DatePicker>
             </Col>
             <Col span="12">
               <span class="w40">提交日期：</span>
-              <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px"></DatePicker>
+              <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px" v-model="submita"></DatePicker>
             </Col>
           </Row>
           <Row class="mt15">
@@ -60,7 +60,10 @@
             Name: '', //配件名称
             createData: '', //创建日期
             submitData: '', //提交日期
-            moreAndMore: false
+            moreAndMore: false,
+            submita: '',
+            create: '',
+            guestId: ''
           }
       },
       methods: {
@@ -77,13 +80,13 @@
         getSupplierNamea(a) {
           console.log(a)
           this.callout = a.fullName
-          console.log(this.callout)
+          this.guestId = a.id
         },
         init(){
           this.moreAndMore = true
         },
         sendMsg(){
-            let a = { callout: this.callout , numbers: this.numbers ,coding: this.coding, Accessories: this.Accessories,Name: this.Name,createData: this.createData,submitData:this.submitData}
+            let a = { callout: this.callout , numbers: this.numbers ,coding: this.coding, Accessories: this.Accessories,Name: this.Name,createData: this.createData,submitData:this.submitData,guestId:this.guestId}
             this.$emit('sendMsg', a)
             console.log(a)
         },
@@ -91,6 +94,13 @@
         Determined(){
           this.sendMsg()
           this.moreAndMore = false
+          this.callout =  ''
+          this.numbers = ''
+          this.coding = ''
+          this.Accessories = ''
+          this.Name = ''
+          this.create = ''
+          this.submita = ''
         },
         //供应商弹框
         addSuppler(){

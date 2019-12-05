@@ -68,9 +68,9 @@
           </div>
         </div>
 
-        <Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-cancel="closedTap" >
-          <Atten-tion @childrenMsg="getMsg" ref="FatherMsg"></Atten-tion>
-        </Modal>
+        <!--<Modal v-model="modal" title="新增关注品牌" :footer-hide="true" width="1020" @on-cancel="closedTap" >-->
+          <Atten-tion @childrenMsg="getMsg" ref="FatherMsg" @fathermeans="Childfalse"></Atten-tion>
+        <!--</Modal>-->
       </div>
 </template>
 
@@ -87,7 +87,6 @@
             checkBox: [],
             getArr:[], //定义一个获取子组件数组
             split: 0.4,
-            modal:false, //添加关注弹框
             topLeft:{
               loading: false,
               tbdata:[],
@@ -258,13 +257,9 @@
         selctionBottom(a){
           console.log(a)
         },
-        //modal的关闭按钮事件
-        closedTap(){
-          this.$refs.FatherMsg.handleSelectAll(false)
-        },
         //点击添加关注按钮
         AddAttention(){
-          this.modal = true
+          this.$refs.FatherMsg.init()
         },
         //初始化上半部分
         getListTop(){
@@ -300,6 +295,10 @@
           partBrandOrgDeleteAll(data).then(res => {
               this.getListBottom()
           })
+        },
+        // 子组件的方法
+        Childfalse(aaa){
+          // console.log(aaa)
         },
         //关注品牌的多选框
         selctionTopBottom(a){

@@ -18,13 +18,13 @@
                 <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='SaveMsg' class="mr10" :disabled="presentrowMsg.status !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button type="default" @click='SaveMsg' class="mr10" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="editPro" :disabled="presentrowMsg.status !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button class="mr10" @click="editPro" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10" :disabled="presentrowMsg.status !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button @click="cancellation" class="mr10" :disabled="presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -50,29 +50,33 @@
                     调拨申请信息
                   </div>
                   <div class="clearfix purchase" ref="planForm">
-                    <Form inline :show-message="false" ref="formPlan" :label-width="100">
-                      <FormItem label="调出方：" prop="supplyName" class="fs12">
+                    <Form inline
+                          :show-message="false"
+                          ref="formPlan"
+                          :rules="ruleValidate"
+                          :label-width="100">
+                      <FormItem label="调出方：" prop="guestName" class="fs12">
                         <Row class="w500">
-                          <Col span="22"><Input placeholder="请选择调出方" v-model="this.rowData.guestName" disabled=""></Input></Col>
+                          <Col span="22"><Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled=""></Input></Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="billType" v-model="this.rowData.storeId">
+                      <FormItem label="调入仓库：" prop="storeId" v-model="formPlan.storeId">
                         <Select class="w160" :disabled="buttonDisable">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
-                        <Input class="w160" :disabled="buttonDisable" v-model="this.rowData.orderDate"></Input>
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
+                        <Input class="w160" :disabled="buttonDisable" v-model="formPlan.orderDate"></Input>
                       </FormItem>
                       <FormItem label="备注：" prop="remark">
-                        <Input class="w500" :disabled="buttonDisable" v-model="this.rowData.remark"></Input>
+                        <Input class="w500" :disabled="buttonDisable" v-model="formPlan.remark"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
-                        <Input class="w160" :disabled="buttonDisableTwo" v-model="this.rowData.createUname"></Input>
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
                       </FormItem>
                       <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
-                        <Input class="w160" :disabled="buttonDisableTwo" v-model="this.rowData.serviceId"></Input>
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
                       </FormItem>
                     </Form>
                   </div>
@@ -85,7 +89,7 @@
                         <Button size="small" class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                     </div>
                   </div>
@@ -95,6 +99,7 @@
                     show-footer
                     @edit-closed="editClosedEvent"
                     size="mini"
+                    :edit-rules="validRules"
                     :height="rightTableHeight"
                     :data="Right.tbdata"
                     :footer-method="addFooter"
@@ -136,13 +141,13 @@
         <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
         <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
         <!--编辑收货信息-->
-        <Modal v-model="GainInformation" title="编辑收获信息" width="1200px">
-          <goods-info></goods-info>
-          <div slot='footer'>
-            <Button type='primary' @click="Determined">确定</Button>
-            <Button type='default' >取消</Button>
-          </div>
-        </Modal>
+        <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
+          <goods-info ref="goodsInfo"></goods-info>
+          <!--<div slot='footer'>-->
+            <!--<Button type='primary' @click="Determined">确定</Button>-->
+            <!--<Button type='default' >取消</Button>-->
+          <!--</div>-->
+        <!--</Modal>-->
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -150,10 +155,12 @@
 </template>
 
 <script>
+  import * as tools from "../../../../utils/tools";
+
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
   // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
-  import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
+  import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
@@ -170,7 +177,40 @@
         SelectSupplier
       },
       data() {
+        let changeNumber = (rule, value, callback) => {
+          if (!value && value != '0') {
+            callback(new Error("请输入大于或等于0的正整数"));
+          } else {
+            const reg = /^([0]|[1-9][0-9]*)$/
+            if (reg.test(value)) {
+              callback();
+            } else {
+              callback(new Error("请输入大于或等于0的正整数"));
+            }
+          }
+        };
         return {
+            //新增当前行
+             PTrow: {
+            new: true,
+            _highlight: true,
+               status: 0,
+               guestName: '',
+               createUname: '',
+               serviceId: '',
+               orderMan:'',
+               orderDate:'',
+               printing: '',
+               createTime: tools.transTime(new Date()),
+            detailVOS: [],
+          },
+          //表单验证
+          ruleValidate: {
+            guestName: [{ required: true, message: '调出方不能为空', trigger: 'blur' }],
+            storeId: [{ required: true, message: '调入仓库不能为空', trigger: 'blur' }],
+            orderDate: [{ required: true,type: 'date', message: '调入仓库不能为空', trigger: 'blur' }]
+          },
+          datadata: {},
           rowId:'', //当前行的id
           buttonDisable: true,
           buttonDisableTwo: true,
@@ -180,14 +220,23 @@
             { label:'所有',value:'9999' },
             { label:'草稿',value:'DRAFT' },
             { label:'待受理',value:'UNACCEPTED' },
-            { label:'已受理',value:'3' },
-            { label:'待分拣',value:'4' },
-            { label:'待发货',value:'5' },
-            { label:'已出库',value:'6' },
-            { label:'已入库',value:'7' },
-            { label:'已拒绝',value:'8' },
-            { label:'已作废',value:'9' },
+            { label:'已受理',value:'ACCEPTED' },
+            { label:'待分拣',value:'SORTING' },
+            { label:'待发货',value:'SHIPPED' },
+            { label:'已出库',value:'STOCKING' },
+            { label:'已入库',value:'WAREHOUSING' },
+            { label:'已拒绝',value:'REJECTED' },
+            { label:'已作废',value:'INVALID' },
           ],
+          //校验输入框的值
+          validRules: {
+            applyQty: [
+              { required: true,validator:changeNumber },
+            ],
+            // remark: [
+            //   { required: true, validator:changeNumber }
+            // ]
+          },
           List:[],
           Left: {
             page: {
@@ -263,54 +312,54 @@
               total: 0
             },
             loading: false,
-            columns: [
-              {
-                title: '序号',
-                minWidth: 50,
-                key:'id'
-              },
-              {
-                title: '状态',
-                key: 'venderSkuNo',
-                minWidth: 70
-              },
-              {
-                title: '调出方',
-                key: 'name',
-                minWidth: 170
-              },
-              {
-                title: '创建日期',
-                key: 'address',
-                minWidth: 120
-              },
-              {
-                title: '申请人',
-                key: 'isCycle',
-                minWidth: 140
-              },
-              {
-                title: '申请单号',
-                key: 'disable',
-                minWidth: 200
-              },
-              {
-                title: '提交人',
-                key: 'remark',
-                minWidth: 100
-              },
-              {
-                title: '提交日期',
-                align:'center',
-                key: 'qualitySourceName',
-                minWidth: 170
-              },
-              {
-                title: '打印次数',
-                key: 'categoryName',
-                minWidth: 170
-              }
-            ],
+            // columns: [
+            //   {
+            //     title: '序号',
+            //     minWidth: 50,
+            //     key:'id'
+            //   },
+            //   {
+            //     title: '状态',
+            //     key: 'venderSkuNo',
+            //     minWidth: 70
+            //   },
+            //   {
+            //     title: '调出方',
+            //     key: 'name',
+            //     minWidth: 170
+            //   },
+            //   {
+            //     title: '创建日期',
+            //     key: 'address',
+            //     minWidth: 120
+            //   },
+            //   {
+            //     title: '申请人',
+            //     key: 'isCycle',
+            //     minWidth: 140
+            //   },
+            //   {
+            //     title: '申请单号',
+            //     key: 'disable',
+            //     minWidth: 200
+            //   },
+            //   {
+            //     title: '提交人',
+            //     key: 'remark',
+            //     minWidth: 100
+            //   },
+            //   {
+            //     title: '提交日期',
+            //     align:'center',
+            //     key: 'qualitySourceName',
+            //     minWidth: 170
+            //   },
+            //   {
+            //     title: '打印次数',
+            //     key: 'categoryName',
+            //     minWidth: 170
+            //   }
+            // ],
             tbdata: [],
           },
           advanced: false, //更多模块的弹框
@@ -318,7 +367,17 @@
           rowData: '',  //声明一个数据，用于赋值右边内容
           selectArr:[], //快速查询的数组 用于赋值,
           moreArr: {},
-          presentrowMsg: ''
+          presentrowMsg: '',
+          guestidId: '' ,//给后台传值保存调出方的id
+           isAdd:true, //判断是否能新增
+          formPlan: {
+            guestName:'',//调出方
+            storeId: '', //调入仓库
+            orderDate: '', //申请调拨日期
+            remark: '', //备注
+            createUname: '', //创建人
+            serviceId: '', //申请单号
+          }
         }
       },
       methods: {
@@ -329,6 +388,8 @@
         // 新增按钮
         addProoo(){
           this.buttonDisable = false
+          this.Left.tbdata.unshift(this.PTrow)
+          console.log(this.Left.tbdata)
         },
         //添加配件按钮
         addPro(){
@@ -340,7 +401,32 @@
         },
         //保存按钮
         SaveMsg(){
-          let data = this.Right.tbdata
+          let data = {}
+          data.guestId = this.guestidId
+          data.storeId = this.storeId
+          data.orderDate = this.orderDate
+          data.remark = this.remark
+          data.createUname  = this.createUname
+          data.serviceId = this.serviceId
+          data.detailVOS = []
+          this.Right.tbdata.map(item => {
+            let obj = {}
+            obj.partInnerId = item.code
+            obj.Code = item.partCode
+            obj.partName = item.partStandardName
+            obj.oemCode = item.oeCode
+            obj.partBrand = item.partBrand
+            obj.carBrandName = item.adapterCarBrand
+            obj.carModelName = item.adapterCarModel
+            obj.carTypef = item.baseType.firstType.typeName
+            obj.cartypes = item.baseType.secondType.typeName
+            obj.carTypet = item.baseType.thirdType.typeName
+            obj.spec = item.specifivations
+            obj.unit = item.minUnit
+            data.detailVOS.push(obj);
+          })
+          // data.detailVOS = this.Right.tbdata
+          console.log(data)
           save(data).then(res => {
 
           })
@@ -418,7 +504,8 @@
         },
         //编辑收货信息弹框显示
         GoodsInfoModal(){
-          this.GainInformation = true
+          // if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+          this.$refs.goodsInfo.init()
         },
         //供应商弹框
         addSuppler(){
@@ -427,40 +514,42 @@
         // 供应商子组件内容
         getSupplierName(a){
           console.log(a)
+          this.formPlan.guestName = a.shortName
+          this.formPlan.guestidId = a.id
         },
         leftgetList(){
           let params = {}
           params.page = this.Left.page.num - 1
           params.size = this.Left.page.size
-          if(this.selectArr){
-            params.startDate = this.selectArr[0]
-            params.endDate = this.selectArr[1]
-          }
-          if(this.purchaseType !== '9999'){
-            params.status = this.purchaseType
+          if(this.selectArr !== '9999'){
+            params.startTime = this.selectArr[0]
+            params.endTime = this.selectArr[1]
           }
           if(this.moreArr.createData){
             params.startTime = this.moreArr.createData[0] + " 00:00:00"
             params.endTime = this.moreArr.createData[1] + " 23:59:59"
+          }
+          if(this.purchaseType !== '9999'){
+            params.status = this.purchaseType
           }
           if(this.moreArr.submitData){
             params.startDate = this.moreArr.submitData[0] + " 00:00:00"
             params.endDate = this.moreArr.submitData[1] + " 23:59:59"
           }
           if(this.moreArr.callout){
-            params.guestName = this.more.callout
+            params.guestId = this.moreArr.guestId
           }
           if(this.moreArr.numbers){
-            params.serviceId = this.more.numbers
+            params.serviceId = this.moreArr.numbers
           }
           if(this.moreArr.coding){
-            params.partCode = this.more.coding
+            params.partCode = this.moreArr.coding
           }
           if(this.moreArr.Accessories){
-            params.createUname = this.more.Accessories
+            params.createUname = this.moreArr.Accessories
           }
           if(this.moreArr.Name){
-            params.fullName = this.more.Name
+            params.fullName = this.moreArr.Name
           }
           queryAll(params).then(res => {
             if(res.code === 0){
@@ -472,7 +561,17 @@
         selection(row){
           // console.log(row)
           // console.log(row.id)
+          this.guestidId = row.guestId
+            this.datadata = row
+            this.formPlan.guestName = this.datadata.guestName
+            this.formPlan.storeId = this.datadata.storeId
+            this.formPlan.orderDate = this.datadata.orderDate
+            this.formPlan.remark = this.datadata.remark
+            this.formPlan.createUname = this.datadata.createUname
+            this.formPlan.serviceId = this.datadata.serviceId
+            // this.guestidId = this
           this.presentrowMsg = JSON.parse(row.status).value
+          console.log(this.presentrowMsg)
           this.rowId = row.id
           if(row.id){
             this.buttonDisable = false
