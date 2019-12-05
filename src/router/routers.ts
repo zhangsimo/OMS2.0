@@ -2060,7 +2060,7 @@ export default [
     redirect: '/multilevel/level_2_1',
     meta: {
       icon: 'gear-b',
-      title: '权限中心',
+      title: '权限管理',
       // access: []
     },
     component: Main,
