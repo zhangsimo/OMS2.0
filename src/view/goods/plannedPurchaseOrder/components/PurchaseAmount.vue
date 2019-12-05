@@ -10,10 +10,10 @@
           <Input type="text" class="w300 ml5" disabled v-model="totalAmt" />
         </FormItem>
         <FormItem label="折扣金额: ">
-          <InputNumber :min="0" :max="totalAmt" v-model="formInline.disAmt" placeholder="请输入" class="w300 ml5"/>
+          <InputNumber :min="0" :max="totalAmt" v-model="formInline.disAmt" :precision="2" placeholder="请输入" class="w300 ml5"/>
         </FormItem>
         <FormItem label="返利金额: ">
-          <InputNumber :min="0" :max="totalAmt" v-model="formInline.rebateAmt" placeholder="请输入" class="w300 ml5"/>
+          <InputNumber :min="0" :max="totalAmt" v-model="formInline.rebateAmt" :precision="2" placeholder="请输入" class="w300 ml5"/>
         </FormItem>
         <FormItem label="实际应付金额: ">
           <Input class="w300 ml5" disabled v-model="endPrice" />
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 
 @Component
 export default class PurchaseAmount extends Vue {
@@ -54,9 +54,10 @@ export default class PurchaseAmount extends Vue {
         this.sumMod = true;
     }
 
+    @Emit('amt')
     private save() {
-      this.$emit('amt', this.formInline);
       this.cancel();
+      return this.formInline;
     }
 
     private cancel() {

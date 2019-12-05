@@ -17,6 +17,7 @@ const dev = {
   authApi: 'http://192.168.2.47:5200', // 系统资源 5200
   // omsProduct: '', // 9200
   omsOrder: 'http://192.168.30.179:9210', // 9210
+  omsSettle: 'http://192.168.30.179:9270',
   // omsEdit: '', // 9220salesOrder
   // omsTask: '', // 9230
   // omsApi: '', // 9240

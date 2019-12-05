@@ -130,3 +130,41 @@ export function queryPartStockAndLog(partId) {
     data: {},
   });
 }
+
+// 打印
+export function print(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/print`,
+    method: "post",
+    params: { id },
+    data: {},
+  });
+}
+
+// 费用登记-查询左侧
+export function findPageByguest(params, data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data,
+  });
+}
+
+// 费用登记-查询右侧
+export function getFee(params) {
+  return axios.request({
+    url: `${api.omsSettle}/receivable/payable/get/fee/registration`,
+    method: "get",
+    params,
+  });
+}
+
+// 费用登记-保存
+export function saveFee(data) {
+  return axios.request({
+    url: `${api.omsSettle}/receivable/payable/saveOrUpdate`,
+    method: "post",
+    data,
+  });
+}
