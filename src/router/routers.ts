@@ -2077,17 +2077,17 @@ export default [
         },
         component: () => import('@/view/admin/resource/resource.vue')
       },
-      {
-        path: '/auth/lessee',
-        name: 'lessee',
-        // mark: 'tenantUsers',
-        meta: {
-          icon: 'arrow-graph-up-right',
-          title: '租户员工',
-          // access: ['admin', 'auth_staff']
-        },
-        component: () => import('@/view/admin/lessee/lessee.vue')
-      },
+      // {
+      //   path: '/auth/lessee',
+      //   name: 'authLessee',
+      //   // mark: 'tenantUsers',
+      //   meta: {
+      //     icon: 'arrow-graph-up-right',
+      //     title: '租户员工',
+      //     // access: ['admin', 'auth_staff']
+      //   },
+      //   component: () => import('@/view/admin/lessee/lessee.vue')
+      // },
     ]
   },
 
