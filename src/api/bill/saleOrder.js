@@ -25,7 +25,7 @@ export function getreceivable (params) {
         params
     })
 }
-// 应收应付销售清单
+// 应收应付销售/采购清单
 export function getSalelist () {
     return axios.request({
         url:`${api.omsSettle}/receivable/payable/sales/purchase`,
