@@ -3,7 +3,6 @@ import api from '_conf/url'
 
 //获取左侧数据
 export function getLeftList (num , page,data) {
-  console.log(data)
   return axios.request({
     url: `${api.omsOrder}/sellOrderMain/queryPageByDynamicQuery?page=${num}&size=${page}`,
     method: 'post',
@@ -72,5 +71,32 @@ export function getSave (data) {
     url: `${api.omsOrder}/sellOrderMain/saveSellOrder`,
     method: 'post',
     data
+  })
+}
+
+//出库
+export function getStockOut (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/stockOut`,
+    method: 'post',
+    data
+  })
+}
+
+//提交
+export function getSubmitList (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/comfirmSubmitSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//打印
+export function getprintList (params) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/print`,
+    method: 'get',
+    params
   })
 }

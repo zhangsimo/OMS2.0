@@ -15,8 +15,8 @@
         <FormItem>
           <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
-        <Button type="primary" @click="searchInfo">查询</Button>
-        <Button type="primary" @click="saveInfo">保存</Button>
+        <Button type="primary mr15" @click="searchInfo">查询</Button>
+        <Button type="primary mr15" @click="saveInfo">保存</Button>
         <Button>取消</Button>
       </Form>
     </div>

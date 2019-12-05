@@ -61,6 +61,33 @@ Vue.filter("priceFilters",function(value){
   return value;
 });
 
+//全局过滤器数字转大写
+Vue.filter('toChies', function (values) {
+  values = (+values).toFixed(2)
+  let moneymax:any = values.split('.')[0]
+  let moneymin:any = values.split('.')[1]
+  let len :any=moneymax.length//统计出长度
+  let arr:any=[];
+  let str2:any = ''
+  let chin_list=['零','壹','贰','叁','肆','伍','陆','柒','捌','玖']
+  let chin_lisp=['仟','佰','拾','亿','仟','佰','拾','万','仟','佰','拾']
+
+  for(let i=0;i<len;i++){
+    arr.push(parseInt(values[i]));
+    arr[i]=chin_list[arr[i]]
+  }
+  for(let i=len-1,j=1;i>0;i--){
+    arr.splice(i,0,chin_lisp[chin_lisp.length-j++])
+  }
+  for (var i = 0; i < moneymin.length; i++) {
+    str2 += chin_list[moneymin[i]];
+  }
+  str2 = str2[0] +'角' +str2[1] + '分'
+  arr=arr.join('')
+  arr+='元'
+  return arr + str2
+})
+
 // 自定义组件
 const requireComponents = require.context('_c/base', true, /\.vue/);
 requireComponents.keys().forEach(fileName => {

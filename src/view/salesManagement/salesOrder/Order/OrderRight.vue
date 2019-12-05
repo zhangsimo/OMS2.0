@@ -4,7 +4,7 @@
       <div class="pane-made-hd">
         <span class="titler mr5">固定额度:</span>
         <span class="titler mr10">{{ limitList.fixationQuota |priceFilters}}</span>
-        <span class="titler mr5">临时余额:</span>
+        <span class="titler mr5">临时额度:</span>
         <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
         <span class="titler mr5">可用余额:</span>
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
@@ -100,6 +100,7 @@
           height="400"
           :edit-rules="validRules"
           :data="formPlan.detailList"
+          @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
         >
@@ -113,8 +114,8 @@
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量"   :edit-render="{name: 'input'}"></vxe-table-column>
-          <vxe-table-column field="orderPrice" title="单价"  :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="orderQty" title="数量"   :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
+          <vxe-table-column field="orderPrice" title="单价"  :edit-render="{name: 'input' ,attrs: {disabled: false}}"></vxe-table-column>
           <vxe-table-column  title="金额" >
             <template v-slot="{ row }">
               <span>{{ countAmount(row) }} </span>
@@ -186,8 +187,9 @@ import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
-import {getClient , getRightList,getWarehouseList ,getLimit , getSave} from '@/api/salesManagment/salesOrder'
+import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+import {getNewClient} from '@/api/system/essentialData/clientManagement'
 
 
 
@@ -304,7 +306,7 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
             //获取客户额度
           async getAllLimit(){
               let data = {}
-              data.guestId = this.$store.state.user.userData.groupId
+              data.guestId = this.leftOneOrder.guestId
                let res = await getLimit(data)
                 if( res.code === 0){
                     this.limitList = res.data
@@ -341,6 +343,40 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                 this.clientList ={}
                 this.clientDataShow = true
             },
+            //获取新增客户二级分类
+            getList(){
+                getClientTreeList().then( res => {
+                    if (res.code == 0){
+                        this.treeDiagramList = res.data
+                        let leverOne = res.data.filter( item => item.lever ==1)
+                        leverOne.map( item => {
+                            item.children =[]
+                            item.code = item.id
+                            this.treeDiagramList.forEach( el => {
+                                if (item.id == el.parentId){
+                                    item.children.push(el)
+                                }
+                            })
+                        })
+                    }
+                })
+            },
+
+            //新增客户确认
+            addNewClient(){
+                this.$refs.child.handleSubmit( async () =>{
+                    let data ={}
+                    data = this.clientList
+                    data.isNeedPack ? data.isNeedPack = 1 : data.isNeedPack =0
+                    data.isSupplier ? data.isSupplier = 1 : data.isSupplier =0
+                    data.isDisabled ? data.isDisabled = 1 : data.isDisabled =0
+                    let res = await getNewClient(this.clientList)
+                    if(res.code == 0){
+                        this.clientDataShow =false
+                    }
+                })
+
+            },
             //获取数据字典地址
             getAdress(){
                 area().then(res => {
@@ -371,7 +407,7 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                         if (columnIndex === 0) {
                             return '和值'
                         }
-                        if (['orderQty', 'orderPrice','orderAmt'].includes(column.property)) {
+                        if (['orderQty', 'orderPrice',].includes(column.property)) {
                             return this.$utils.sum(data, column.property)
                         }
                         if (columnIndex === 8) {
@@ -447,7 +483,70 @@ import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement
                     }
                 })
 
-            }
+            },
+            //判断表格能不能编辑
+                editActivedEvent ({ row }) {
+                    let xTable = this.$refs.xTable
+                    let orderQtyColumn = xTable.getColumnByField('orderQty')
+                    let orderPriceColumn = xTable.getColumnByField('orderPrice')
+                    let sexColumn = xTable.getColumnByField('sex')
+                    let isDisabled = this.draftShow != 0
+                    orderQtyColumn.editRender.attrs.disabled = isDisabled
+                    orderPriceColumn.editRender.attrs.disabled = isDisabled
+                },
+            //出库
+            stockOut(){
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        try {
+                            await this.$refs.xTable.validate()
+
+                            if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
+                                return this.$message.error('可用余额不足')
+                            }
+
+                            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+                            let res = await getStockOut(this.formPlan)
+                            if(res.code === 0){
+                                this.$Message.success('出库成功成功');
+                                return res
+                            }
+                        } catch (errMap) {
+                            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
+
+            },
+            //提交
+            //getSubmitList
+            submitList(){
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        try {
+                            await this.$refs.xTable.validate()
+
+                            if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
+                                return this.$message.error('可用余额不足')
+                            }
+                            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+                            let res = await getSubmitList(this.formPlan)
+                            if(res.code === 0){
+                                this.$Message.success('出库成功成功');
+                                return res
+                            }
+                        } catch (errMap) {
+                            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
+
+            },
+
 
         },
         watch:{
