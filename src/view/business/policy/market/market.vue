@@ -38,9 +38,6 @@
     // import getDate from '@/components/getDate/dateget'
     import MarketLeft from "./marketLeft";
     import MarketRight from "./marketRight";
-    // import MoreQuery from "../../commonality/MoreQuery";
-    // import PrintShow from "../../commonality/PrintShow";
-
     export default {
         name: "market",
         components:{
@@ -110,5 +107,8 @@
   }
   .bigBox {
     background-color: #fff;
+  }
+  .demo-split[data-v-4dd5fe70]{
+    height: 93%;
   }
 </style>

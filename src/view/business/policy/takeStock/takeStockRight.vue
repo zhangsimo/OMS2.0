@@ -48,7 +48,7 @@
         show-footer
         :footer-method="footerMethod"
         showOverflow="true"
-        height="400"
+        height="450"
         :data="tableData"
         style="width: 2000px"
         :edit-config="{trigger: 'click', mode: 'cell'}"

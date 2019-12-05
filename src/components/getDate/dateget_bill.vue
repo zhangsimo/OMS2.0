@@ -13,7 +13,7 @@ import {
   LastWeekStr,
   ThisMonthStr,
   prevMonthStr
-} from "./index";
+} from "./index_bill";
 export default {
   name: "quickDate",
   components: {},

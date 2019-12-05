@@ -3,12 +3,14 @@
     <div class="costBox clearfix con-split">
       <div class="fl mr10">
         <div class="leftT mb15">
-          <Select  style="width:100px" class="mr15">
+          <Select  style="width:100px" class="mr15" v-model="selectValue">
             <Option
-              v-for="item in cityList"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.label }}</Option
+              value="0"
+              >往来单位名称</Option
+            >
+            <Option
+              value="1"
+              >往来单位编码</Option
             >
           </Select>
           <Input
@@ -46,7 +48,6 @@
         </div>
         <Page
           :total="40"
-          
           show-elevator
           show-sizer
           show-total
@@ -55,10 +56,10 @@
       </div>
       <div class="fr h600 right">
         <div class="mb15">
-          <Button type="primary"  class="mr10">保存</Button>
-          <Button >取消</Button>
+          <Button type="primary"  class="mr10" @click="save">保存</Button>
+          <Button @click="cancel">取消</Button>
         </div>
-        <div class="pt30">
+        <div>
           <vxe-table
             border
             resizable
@@ -138,8 +139,16 @@ import { Vue, Component } from "vue-property-decorator";
 export default class FeeRegistration extends Vue {
     private isCost:boolean = false;
 
+    private selectValue: string = "";
+
     private init() {
-        this.isCost = true;
+      this.isCost = true;
+    }
+
+    private async save() {}
+
+    private cancel() {
+      this.isCost = false;
     }
 }
 </script>

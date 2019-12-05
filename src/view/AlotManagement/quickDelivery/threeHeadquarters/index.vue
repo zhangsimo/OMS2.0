@@ -1,50 +1,61 @@
 <template>
-    <div class="acceptanceComponent">
+    <div class="content-oper content-oper-flex">
       <section class="oper-box">
         <div class="oper-top flex">
+          <div class="wlf">
           <div class="db mr10">
             <span class="mr10">快速查询：</span>
-            <Select v-model="conditionData.character" class="w100 mr10" clearable>
+            <Select v-model="form.kuaisu" class="w100 mr10" clearable>
               <Option v-for="item in quickArray" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db mt40 mrt10">
+          <div class="db mr10">
             <span class="mr10">出库日期：</span>
-            <Date-picker type="date" style="width: 120px" placeholder="选择日期"></Date-picker>
-            至
-            <Date-picker type="date" style="width: 120px" placeholder="选择日期"></Date-picker>
+            <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
+                          class="w200 mr20">
+            </DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="conditionData.status" class="w100 mr10" clearable>
+            <Select v-model="form.status" class="w100 mr10" clearable>
               <Option value="1" label="待入库"></Option>
               <Option value="3" label="已入库"></Option>
               <Option value="2" label="部分入库"></Option>
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="productName" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.No" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Input v-model="productName1" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.peijianCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Input v-model="productName2" placeholder="配件名称" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.peijianmingcheng" placeholder="配件名称" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
-            <Button type="warning" class="mr20"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
+            <Button type="warning" class="mr20" @click="search(form)"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
           </div>
         </div>
+        </div>
       </section>
-
+    <Modal
+            v-model="modal2"
+            title="提示"
+            @on-ok="ok1"
+            @on-cancel="cancel">
+            <span><Icon type="information"></Icon>是否确认已到货入库!</span>
+        </Modal>
 
       <section class="con-box">
 <!--         上表格-->
-        <div class="topTableDate">
+        <div class="topTableDate" style="height:45%">
           <vxe-table
             border
             resizable
+            highlight-current-row
+            highlight-hover-row
+            @current-change="currentChangeEvent"
             size="mini"
-            height='400'
+            height='auto'
             :data="TopTableData"
             :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
           >
@@ -54,7 +65,7 @@
             ></vxe-table-column>
             <vxe-table-column  title="操作" >
               <template v-slot="{ row,rowIndex }">
-                <Button type="text">到货入库</Button>
+                <Button type="text" @click="ruku(row)">到货入库</Button>
               </template>
             </vxe-table-column>
 
@@ -90,7 +101,7 @@
               width="100"
             ></vxe-table-column>
             <vxe-table-column
-              field="date12"
+              field="date123"
               title="操作人"
               width="100"
             ></vxe-table-column>
@@ -100,7 +111,7 @@
 
         <!--     分页-->
         <Row class="mt10 mb10">
-          <Col span="12">
+          <Col span="12" offset="12" style="text-align:right">
             <div><Page
               :current="pageList.page"
               :total="this.pageList.total"
@@ -109,21 +120,17 @@
               show-sizer
             /></div>
           </Col>
-          <Col span="12" class="mt10">
-            <div style="text-align: right">
-              每页{{this.pageList.size}}条,
-              共{{this.pageList.total}}条
-            </div>
-          </Col>
         </Row>
 <!--        下表格-->
-        <div class="bottomTableDate">
+        <div class="bottomTableDate" style="height:45%">
 
             <vxe-table
               border
               resizable
+              highlight-current-row
+              highlight-hover-row
               size="mini"
-              height='400'
+              height='auto'
               :data="BottomTableData"
               :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
             >
@@ -166,27 +173,15 @@
               ></vxe-table-column>
 
               <vxe-table-column
-                field="date12"
+                field="date123"
                 title="备注"
               ></vxe-table-column>
-              <vxe-table-column field="num" title="入库数量">
-                <template v-slot:edit="{ row }">
-                  <InputNumber
-                    :max="9999"
-                    :min="0"
-                    v-model="row.num"
-                  ></InputNumber>
-                </template>
+              <vxe-table-column field="num" title="入库数量" :edit-render="{name: 'input', attrs: {type: 'number'}}">
               </vxe-table-column>
-              <vxe-table-column field="num" title="入库仓库">
-              <template v-slot:edit="{ row }">
-                <Select v-model="conditionData.character" class="w100 mr10" clearable>
-                  <Option v-for="item in quickArray" :value="item.value" :key="item.value" placeholder="--请选择--">{{ item.label }}</Option>
-                </Select>
-              </template>
+              <vxe-table-column field="numName" title="入库仓库" :edit-render="{name: 'select', options: quickArray}">
             </vxe-table-column>
             <vxe-table-column
-                field="date123"
+                field="date1243"
                 title="OE码"
               ></vxe-table-column>
               <vxe-table-column
@@ -200,16 +195,21 @@
 </template>
 
 <script>
+import '../../../lease/product/lease.less';
+  import "../../../goods/goodsList/goodsList.less";
+    import { zongbuzhidiaoList, ListDetail, daohuoruku } from '../../../../api/threeHeadquarters/index'
     export default {
         name: "threeHeadquarters",
        data(){
         return{
-          productName: '',
-          productName1: '',
-          productName2: '',
-          conditionData: {
-            character: "本周",  // 快速查询
-            status: '1',  //受理状态
+          modal2: false,
+          form: {
+            kuaisu: '',
+            dataTime: [],
+            status: '1',
+            No: '',
+            peijianCode: '',
+            peijianmingcheng: ''
           },
           // 快速查询数据1
           quickArray: [
@@ -248,8 +248,27 @@
           },
           customerListOptions:[],//选择客户下拉列表
           companyListOptions:[],//选择公司下拉列表
-          TopTableData:[],//上侧表格list
-          BottomTableData:[],//下侧表格list
+          TopTableData:[{
+            name: '奥特曼',
+            customer: 'mz-280dfjj',
+            preId: '调出中',
+            status: '2019-12-2 12:12:12',
+            status1: '顺丰快递',
+            date12: '2019-12-3 13:13:13',
+            date123: '鲨鱼辣椒'
+          }],//上侧表格list
+          BottomTableData:[{
+            name: 'gtxT8094',
+            role: '钢铁侠-t8094',
+            brand: '斯塔克',
+            brand1: '件',
+            date12: '1',
+            date123: '全球限量版',
+            num: '12',
+            numName: '本周',
+            date1243: 'OET93432',
+            date124: 'XM'
+          }],//下侧表格list
           // 分页数据
           pageList: {
             page: 1,
@@ -259,28 +278,77 @@
             pageSizeOpts: [50, 100, 150, 200]
           },
           pageTotal: 10,
+          selectOne: '',
+          dateTime: '',
+          currentrow: {}
         }
 
+      },
+       methods: {
+        currentChangeEvent({ row }) {
+           console.log('当前行'+ row)
+           this.getList(row)
+        },
+        //  日期选择器从子组件哪来的数据
+        getData(A){
+          console.log(A)
+          this.selectOne = A
+        },
+        //选中的日期
+        selectDate(date){
+          this.form.dataTime = data
+        },
+        //搜索
+        search(form){
+          zongbuzhidiaoList(form).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('获取直调列表失败')
+            })
+          // this.getList()
+        },
+        getList(row) {
+          const params = {
+            id: row.id
+          }
+          ListDetail(params).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('请求明细失败')
+            })
+        },
+        ok1 () {
+           const params = {
+            id: this.currentrow.id,
+            list: this.BottomTableData
+          }
+          ListDetail(params).then(res => {
+              if (res.code == 0) {
+                this.tbdata = res.data || []
+                this.page.total = res.totalElements
+              }
+            }).catch(e => {
+              this.$Message.info('入库失败')
+            })
+          },
+          cancel () {
+              this.$Message.info('点击了取消');
+          },
+        ruku(row) {
+          this.modal2 = true
+          this.currentrow = row
+        }
       }
     }
 </script>
 
 <style scoped>
-.mr10{
-  margin-top: 6px;
-}
-.mr20{
-  margin-top: 10px;
-}
-.mr30{
-  margin-top: 28px;
-}
-.mt40{
-  margin-top: 12px;
-}
-.mrt10{
-  margin-right: 10px;
-}
 </style>
 
 

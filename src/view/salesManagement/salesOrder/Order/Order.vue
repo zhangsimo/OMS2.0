@@ -9,9 +9,10 @@
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
         <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
         <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-        <Button class="mr10" :disabled="orderlistType.value != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
-        <Button class="mr10" :disabled="orderlistType.isWms == 1"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
+        <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
+        <Button class="mr10" @click="setStockOut" :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
         <Button class="mr10" @click="printTable"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+        <Button class="mr10" :disabled="orderlistType.value != 1"><i class="iconfont mr5 iconziyuan14"></i> 返单</Button>
         <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
         <Button class=""><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
       </div>
@@ -67,7 +68,9 @@
                   showPerson:true
               },//更多查询
               queryTime:'',//快速查询时间
-              orderlistType:{}
+              orderlistType:{
+                  value:0
+              },//默认状态
           }
         },
         methods:{
@@ -92,7 +95,14 @@
             //保存
             setSave(){
               let res =  this.$refs.right.save()
-                console.log(res , 666)
+            },
+            //出库
+            setStockOut(){
+                let res =  this.$refs.right.stockOut()
+            },
+            //提交
+            sumbit(){
+                let res =  this.$refs.right.submitList()
             }
         }
     }

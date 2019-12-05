@@ -26,16 +26,33 @@ export function getreceivable (params) {
     })
 }
 // 应收应付销售/采购清单
-export function getSalelist () {
+export function getSalelist (params) {
     return axios.request({
         url:`${api.omsSettle}/receivable/payable/sales/purchase`,
         method: 'get',
-        
+        params
     })
 }
-export function getNumberList (params) {
+// 出库明细
+export function getOutStock (params) {
     return axios.request({
         url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
+        method: 'get',
+        params
+    })
+}
+// 入库明细
+export function getOnStock (params) {
+    return axios.request({
+        url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
+        method: 'get',
+        params
+    })
+}
+// 月结对账
+export function getReconciliation (params) {
+    return axios.request({
+        url:`${api.omsSettle}/accounts/receivable/get/reconciliation/business`,
         method: 'get',
         params
     })

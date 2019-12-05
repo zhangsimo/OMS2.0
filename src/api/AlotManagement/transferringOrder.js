@@ -39,3 +39,24 @@ export function findByAllot(params){
     params
   })
 }
+
+
+// 保存按钮
+export function save(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/save`,
+    method: 'post',
+    data
+  })
+}
+
+
+// 提交按钮
+// /allotApplyMain/commit
+export function commit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/commit`,
+    method: 'post',
+    data
+  })
+}

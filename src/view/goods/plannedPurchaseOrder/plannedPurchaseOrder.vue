@@ -10,7 +10,11 @@
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db">
-            <Select @on-change="changeState" v-model="purchaseType" class="w90 mr10">
+            <Select
+              @on-change="changeState"
+              v-model="purchaseType"
+              class="w90 mr10"
+            >
               <Option
                 v-for="(item, index) in purchaseTypeArr"
                 :value="item.value"
@@ -30,31 +34,39 @@
             >
           </div>
           <div class="db">
-            <Button type="default" @click="saveHandle" class="mr10"
+            <Button
+              type="default"
+              @click="saveHandle('formplanref')"
+              class="mr10"
+              :disabled="isInput"
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
           <div class="db">
-            <Button class="mr10" @click="submit"
+            <Button
+              class="mr10"
+              @click="submit('formplanref')"
+              :disabled="isInput"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>
           <div class="db">
-            <Button @click="print" class="mr10"
+            <Button @click="print" class="mr10" :disabled="selectTableRow === null"
               ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
           <div class="db">
-            <Button @click="showModel('feeRegistration')" class="mr10"
+            <Button @click="showFee" class="mr10"
+              :disabled="isInput"
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
-          <div class="db"><span>本年采购总金额：200000.00元</span></div>
+          <!-- <div class="db"><span>本年采购总金额：200000.00元</span></div> -->
         </div>
       </div>
     </section>
@@ -81,18 +93,18 @@
                 :columns="purchaseOrderTable.columns"
                 :data="purchaseOrderTable.tbdata"
               ></Table>
-             <Page
-                  class-name="fl pt10"
-                  size="small"
-                  :current="purchaseOrderTable.page.num"
-                  :total="purchaseOrderTable.page.total"
-                  :page-size="purchaseOrderTable.page.size"
-                  @on-change="purchaseOrderTableChangePage"
-                  @on-page-size-change="purchaseOrderTableChangeSize"
-                  show-sizer
-                  show-total
-                >
-                </Page>
+              <Page
+                class-name="fl pt10"
+                size="small"
+                :current="purchaseOrderTable.page.num"
+                :total="purchaseOrderTable.page.total"
+                :page-size="purchaseOrderTable.page.size"
+                @on-change="purchaseOrderTableChangePage"
+                @on-page-size-change="purchaseOrderTableChangeSize"
+                show-sizer
+                show-total
+              >
+              </Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">
@@ -101,18 +113,19 @@
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
-                  ref="formPlan"
-                  :model="formPlan"
-                  :rules="rulePlan"
+                  ref="formplanref"
+                  :model="formPlanmain"
+                  :rules="ruleValidate"
                   :label-width="106"
-                  :show-message="false"
+                  :show-message="true"
                 >
                   <FormItem class="form-Item" label="供应商：" prop="guest">
                     <Row class="w160">
                       <Col span="19"
                         ><Input
-                          v-model="formPlan.guest"
+                          v-model="formPlanmain.guest"
                           placeholder="请选择供应商"
+                          :disabled="isInput"
                       /></Col>
                       <Col span="5"
                         ><Button
@@ -120,6 +133,7 @@
                           class="ml5"
                           size="small"
                           type="default"
+                          :disabled="isInput"
                           ><i
                             class="iconfont iconxuanzetichengchengyuanicon"
                           ></i></Button
@@ -130,11 +144,20 @@
                     <Input
                       class="w160"
                       placeholder="请输入采购员"
-                      v-model="formPlan.orderMan"
+                      v-model="formPlanmain.orderMan"
+                      :disabled="isInput"
                     />
                   </FormItem>
-                  <FormItem class="form-Item" label="票据类型：" prop="billTypeId">
-                    <Select class="w160" v-model="formPlan.billTypeId">
+                  <FormItem
+                    class="form-Item"
+                    label="票据类型："
+                    prop="billTypeId"
+                  >
+                    <Select
+                      class="w160"
+                      v-model="formPlanmain.billTypeId"
+                      :disabled="isInput"
+                    >
                       <Option
                         v-for="(item, index) in pjTypes"
                         :key="index"
@@ -143,8 +166,16 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem class="form-Item" label="结算方式：" prop="settleTypeId">
-                    <Select class="w160" v-model="formPlan.settleTypeId">
+                  <FormItem
+                    class="form-Item"
+                    label="结算方式："
+                    prop="settleTypeId"
+                  >
+                    <Select
+                      class="w160"
+                      v-model="formPlanmain.settleTypeId"
+                      :disabled="isInput"
+                    >
                       <Option
                         v-for="(item, index) in settleMethods"
                         :key="index"
@@ -153,8 +184,12 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem class="form-Item" label="入库仓：" prop="storeName">
-                    <Select class="w160" v-model="formPlan.storeName">
+                  <FormItem class="form-Item" label="入库仓：" prop="storeId">
+                    <Select
+                      class="w160"
+                      v-model="formPlanmain.storeId"
+                      :disabled="isInput"
+                    >
                       <Option
                         v-for="(item, index) in inStores"
                         :key="index"
@@ -163,12 +198,17 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem class="form-Item" label="订货日期：" prop="orderDate">
+                  <FormItem
+                    class="form-Item"
+                    label="订货日期："
+                    prop="orderDate"
+                  >
                     <DatePicker
                       style="width: 160px"
                       type="date"
                       placeholder="请选择订货日期"
-                      v-model="formPlan.orderDate"
+                      v-model="formPlanmain.orderDate"
+                      :disabled="isInput"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="预计到货日期：">
@@ -176,18 +216,24 @@
                       style="width: 160px"
                       type="date"
                       placeholder="请选择预计到货日期"
-                      v-model="formPlan.planArriveDate"
+                      v-model="formPlanmain.planArriveDate"
+                      :disabled="isInput"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="备注：">
                     <Input
                       placeholder="请输入备注"
                       class="w160"
-                      v-model="formPlan.remark"
+                      v-model="formPlanmain.remark"
+                      :disabled="isInput"
                     />
                   </FormItem>
                   <FormItem class="form-Item" label="直发门店：">
-                    <Select class="w160" v-model="formPlan.companyName">
+                    <Select
+                      class="w160"
+                      v-model="formPlanmain.companyName"
+                      :disabled="isInput"
+                    >
                       <Option
                         v-for="(item, index) in putStores"
                         :key="index"
@@ -200,7 +246,8 @@
                     <Input
                       placeholder="请输入订单号"
                       class="w160"
-                      v-model="formPlan.serviceId"
+                      v-model="formPlanmain.serviceId"
+                      :disabled="isInput"
                     />
                   </FormItem>
                 </Form>
@@ -208,22 +255,39 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="showModel('procurementModal')">选择采购计划</Button>
-                  </div>
-                  <div class="fl mb5">
-                    <Button size="small" class="mr10"
-                      ><Icon custom="iconfont iconlajitongicon icons" />
-                      删除配件</Button
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="selectPlan"
+                      :disabled="isInput"
+                      >选择采购计划</Button
                     >
-                  </div>
-                  <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="showModel('adjustModel')">订单调整</Button>
                   </div>
                   <div class="fl mb5">
                     <Button
                       size="small"
                       class="mr10"
-                      @click="showModel('goodsInfo')"
+                      @click="delPart"
+                      :disabled="isInput"
+                      ><Icon custom="iconfont iconlajitongicon icons" />
+                      删除配件</Button
+                    >
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      :disabled="adjustButtonDisable"
+                      @click="showModel('adjustModel')"
+                      >订单调整</Button
+                    >
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      :disabled="isInput"
+                      @click="showGoodsInfo"
                       >收货信息</Button
                     >
                   </div>
@@ -232,12 +296,10 @@
                       size="small"
                       class="mr10"
                       @click="showModel('purchaseAmount')"
+                      :disabled="isInput"
                       >采购金额填写</Button
                     >
                   </div>
-                </div>
-                <div class="t-price">
-                  合计采购金额：120000.00
                 </div>
               </div>
               <vxe-table
@@ -245,6 +307,8 @@
                 resizable
                 show-footer
                 @edit-closed="editClosedEvent"
+                @select-change="selectChange"
+                @select-all="selectAll"
                 size="mini"
                 :height="rightTableHeight"
                 :data="tableData"
@@ -259,7 +323,7 @@
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column title="操作" width="80">
                   <template v-slot="{ row }">
-                    <Button type="text" @click="watch">查看</Button>
+                    <Button type="text" @click="watch(row.partId)">查看</Button>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -308,11 +372,7 @@
                     {{ row.orderPrice | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column
-                  title="采购金额"
-                  filed="orderAmt"
-                  width="120"
-                >
+                <vxe-table-column title="采购金额" filed="orderAmt" width="120">
                   <template v-slot="{ row }">
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>
@@ -375,7 +435,7 @@
       </div>
     </section>
     <!-- 更多 -->
-    <more-search ref="moreSearch"></more-search>
+    <more-search @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 费用登记 -->
     <fee-registration ref="feeRegistration"></fee-registration>
     <!-- 供应商资料 -->
@@ -385,15 +445,23 @@
       headerTit="供应商资料"
     ></select-supplier>
     <!-- 选择采购计划单 -->
-    <procurement-modal ref="procurementModal"></procurement-modal>
+    <procurement-modal
+      ref="procurementModal"
+      :guestId="formPlanmain.guestId"
+      @getPlanOrder="getPlanOrder"
+    ></procurement-modal>
     <!-- 采购金额 -->
-    <purchase-amount ref="purchaseAmount"></purchase-amount>
+    <purchase-amount
+      ref="purchaseAmount"
+      :totalAmt="totalAmt"
+      @amt="getAmt"
+    ></purchase-amount>
     <!-- 收货信息 -->
-    <goods-info ref="goodsInfo"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
     <!-- 订单调整 -->
-    <adjust-model ref="adjustModel"></adjust-model>
+    <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
-    <tabs-model ref="tabsModel"></tabs-model>
+    <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
   </div>
 </template>
 

@@ -9,7 +9,14 @@
           </div>
           <div class="db ml20">
             <span>转单期间：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker
+              format="yyyy-MM-dd"
+              :value="value"
+              @on-change="changedate"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+            ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -28,7 +35,7 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true;value1=[]">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>
@@ -53,25 +60,20 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table class="detailed" border :columns="columns" :data="data" @on-row-click="selete"></i-table>
+        <i-table
+          highlight-row
+          class="detailed"
+          border
+          :columns="columns"
+          :data="data"
+          @on-row-click="selete"
+        ></i-table>
         <Tabs active-key="key1" class="mt10">
           <Tab-pane label="销售清单" key="key1">
-            <i-table
-              border
-              :columns="columns1"
-              :data="data1"
-              class="mt10 detailed"
-              @on-row-click="seletelist"
-            ></i-table>
+            <i-table border :columns="columns1" :data="data1" class="mt10 detailed"></i-table>
           </Tab-pane>
           <Tab-pane label="采购清单" key="key2">
-            <i-table
-              border
-              :columns="columns2"
-              :data="data2"
-              class="mt10 detailed"
-              @on-row-click="seletelist"
-            ></i-table>
+            <i-table border :columns="columns2" :data="data2" class="mt10 detailed"></i-table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -80,7 +82,14 @@
     <Modal v-model="modal1" title="高级查询" @on-ok="senior">
       <div class="db pro mt20">
         <span>转单日期：</span>
-        <Date-picker :value="value1" format="yyyy-MM-dd" type="daterange" placeholder="选择日期" class="w200" @on-change="changedate"></Date-picker>
+        <Date-picker
+          :value="value"
+          format="yyyy-MM-dd"
+          type="daterange"
+          placeholder="选择日期"
+          class="w200"
+          @on-change="changedate"
+        ></Date-picker>
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
@@ -113,12 +122,24 @@
         <input type="text" class="w200" v-model="text" />
       </div>
     </Modal>
-    <Modal v-model="modal2" title="单号明细" width="1200">
+    <Modal v-model="outStock" title="出库明细" width="1200">
       <div class="db">
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
       </div>
       <i-table border :columns="columns3" :data="data3" class="mt10"></i-table>
+      <div slot="footer"></div>
+    </Modal>
+    <Modal v-model="onStock" title="入库明细" width="1200">
+      <div class="db">
+        <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+      </div>
+      <i-table border :columns="columns4" :data="data4" class="mt10"></i-table>
+      <div slot="footer"></div>
+    </Modal>
+    <Modal v-model="Tips" title="提示">
+      <p class="tc">请选择要对账的数据</p>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
@@ -133,7 +154,8 @@ import {
   getStorelist,
   getreceivable,
   getSalelist,
-  getNumberList
+  getOutStock,
+  getOnStock
 } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
 export default {
@@ -144,15 +166,16 @@ export default {
   },
   data() {
     return {
+      Tips: false,
       value: [],
-      value1: ["2019-12-02", "2019-12-16"],
       model1: "",
       model2: "",
       model3: "",
       text: "",
-      nametext: '',
+      nametext: "",
       modal1: false,
-      modal2: false,
+      outStock: false,
+      onStock: false,
       flag: false,
       columns: [
         {
@@ -277,7 +300,24 @@ export default {
         {
           title: "出库单号",
           key: "serviceId",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.outStock = true;
+                  }
+                }
+              },
+              params.row.serviceId
+            );
+          }
         },
         {
           title: "来源",
@@ -395,7 +435,24 @@ export default {
         {
           title: "入库单号",
           key: "serviceId",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.onStock = true;
+                  }
+                }
+              },
+              params.row.serviceId
+            );
+          }
         },
         {
           title: "来源",
@@ -486,8 +543,86 @@ export default {
           className: "tc"
         },
         {
-          title: "配件内码",
-          key: "partInnerId;",
+          title: "配件编码",
+          key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          className: "tc"
+        },
+        {
+          title: "配件规格",
+          key: "specification",
+          className: "tc"
+        },
+        {
+          title: "配件车型",
+          key: "carModel",
+          className: "tc"
+        },
+        {
+          title: "配件品牌",
+          key: "partBrand",
+          className: "tc"
+        },
+        {
+          title: "配件厂牌",
+          key: "factoryBrand",
+          className: "tc"
+        },
+        {
+          title: "OEM码",
+          key: "oemCode",
+          className: "tc"
+        },
+        {
+          title: "基本单位",
+          key: "basicUnit",
+          className: "tc"
+        },
+        {
+          title: "件规",
+          key: "guige",
+          className: "tc"
+        },
+        {
+          title: "税率",
+          key: "taxRate",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "qty",
+          className: "tc"
+        },
+        {
+          title: "单位",
+          key: "unitId",
+          className: "tc"
+        },
+        {
+          title: "单价",
+          key: "price",
+          className: "tc"
+        },
+        {
+          title: "金额",
+          key: "orderAmt",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        }
+      ],
+      columns4: [
+        {
+          title: "序号",
+          key: "num",
+          width: 40,
           className: "tc"
         },
         {
@@ -570,81 +705,108 @@ export default {
       data1: [],
       data2: [],
       data3: [],
+      data4: [],
       typelist: [
         {
-          value: "type1",
-          label: "外部"
-        },
-        {
-          value: "type2",
+          value: "HS",
           label: "华胜"
         },
         {
-          value: "type3",
+          value: "NB",
           label: "内部"
+        },
+        {
+          value: "WB",
+          label: "外部"
         }
       ],
       Branchstore: [],
       business: [
         {
-          value: "business1",
-          label: "销售出库"
-        },
-        {
-          value: "business2",
+          value: "CGRK",
           label: "采购入库"
         },
         {
-          value: "business3",
+          value: "CGTH",
           label: "采购退货"
         },
         {
-          value: "business4",
+          value: "XSCK",
+          label: "销售出库"
+        },
+        {
+          value: "XSTH",
           label: "销售退货"
         }
       ]
     };
   },
   async mounted() {
+    this.parameter = [];
     let arr = await creat(this.$refs.quickDate.val, this.$store);
-    this.getGeneral(arr);
-    this.getDetailed();
+    let obj = {
+      orgId: arr[1],
+      startDate: arr[0][0],
+      endDate: arr[0][1]
+    };
+    this.getGeneral(obj);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
   },
   methods: {
-    changedate (daterange) {
-      this.value1 = daterange
+    // 选择日期
+    changedate(daterange) {
+      this.value = daterange;
     },
+    // 更多条件查询
     senior() {
-      console.log(this.value1);
-      console.log(this.model1);
-      console.log(this.model2);
-      console.log(this.model3);
-      console.log(this.text);
-      console.log(this.nametext);
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0],
+        endDate: this.value[1],
+        guestType: this.model2,
+        tenantName: this.nametext,
+        orgId: this.model1,
+        serviceType: this.model3,
+        serviceId: this.text
+      };
+      this.getGeneral(obj);
     },
+    // 查询应收/应付总表
     query() {
-      this.value = this.$refs.quickDate.val;
-      console.log(this.value);
-      let arr = [this.value, this.model1];
-      this.getGeneral(arr);
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0],
+        endDate: this.value[1]
+      };
+      this.getGeneral(obj);
     },
-    getGeneral(arr) {
-      getreceivable({
-        orgId: arr[1],
-        startDate: "2019-10-01 00:00:00",
-        endDate: "2019-12-30 00:00:01"
-      }).then(res => {
-        res.data.list.map((item, index) => {
-          item.num = index + 1;
-        });
-        this.data = res.data.list;
+    // 应收应付接口
+    getGeneral(obj) {
+      getreceivable(obj).then(res => {
+        if (res.data.length !== 0) {
+          res.data.map((item, index) => {
+            item.num = index + 1;
+          });
+          this.data = res.data;
+          this.getDetailed(this.data, obj);
+        }
       });
     },
-    getDetailed() {
-      getSalelist().then(res => {
+    // 销售/采购接口
+    getDetailed(data, obj) {
+      if (Array.isArray(data)) {
+        data = data[0];
+      }
+      getSalelist({
+        tenantId: data.tenantId,
+        orgId: data.orgId,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        serviceId: data.serviceId,
+        guestId: data.guestId
+      }).then(res => {
         let number = 0;
         let totalrpAmt = 0;
         let totalcharOffAmt = 0;
@@ -657,68 +819,85 @@ export default {
         let totalnoCharOffAmt1 = 0;
         let totalaccountAmt1 = 0;
         let totalnoAccountAmt1 = 0;
-        res.data.one.map((item, index) => {
-          item.num = index + 1;
-          let guestType = JSON.parse(item.guestType);
-          let serviceType = JSON.parse(item.serviceType);
-          let species = JSON.parse(item.species);
-          item.guestType = guestType.name;
-          item.serviceType = serviceType.name;
-          item.species = species.name;
-          number += 1;
-          totalrpAmt += item.rpAmt;
-          totalcharOffAmt += item.charOffAmt;
-          totalnoCharOffAmt += item.noCharOffAmt;
-          totalaccountAmt += item.accountAmt;
-          totalnoAccountAmt += item.noAccountAmt;
-        });
-        res.data.two.map((item, index) => {
-          item.num = index + 1;
-          let guestType = JSON.parse(item.guestType);
-          let serviceType = JSON.parse(item.serviceType);
-          let species = JSON.parse(item.species);
-          item.guestType = guestType.name;
-          item.serviceType = serviceType.name;
-          item.species = species.name;
-          number1 += 1;
-          totalrpAmt1 += item.rpAmt;
-          totalcharOffAmt1 += item.charOffAmt;
-          totalnoCharOffAmt1 += item.noCharOffAmt;
-          totalaccountAmt1 += item.accountAmt;
-          totalnoAccountAmt1 += item.noAccountAmt;
-        });
-        this.data1 = res.data.one;
-        this.data2 = res.data.two;
-        this.data1.push({
-          num: "合计",
-          serviceId: number,
-          rpAmt: totalrpAmt,
-          charOffAmt: totalcharOffAmt,
-          noCharOffAmt: totalnoCharOffAmt,
-          accountAmt: totalaccountAmt,
-          noAccountAmt: totalnoAccountAmt
-        });
-        this.data2.push({
-          num: "合计",
-          serviceId: number1,
-          rpAmt: totalrpAmt1,
-          charOffAmt: totalcharOffAmt1,
-          noCharOffAmt: totalnoCharOffAmt1,
-          accountAmt: totalaccountAmt1,
-          noAccountAmt: totalnoAccountAmt1
-        });
+        if (res.data.length !== 0) {
+          if (res.data.one) {
+            res.data.one.map((item, index) => {
+              item.num = index + 1;
+              let guestType = JSON.parse(item.guestType);
+              let serviceType = JSON.parse(item.serviceType);
+              let species = JSON.parse(item.species);
+              item.guestType = guestType.name;
+              item.serviceType = serviceType.name;
+              item.species = species.name;
+              number += 1;
+              totalrpAmt += item.rpAmt;
+              totalcharOffAmt += item.charOffAmt;
+              totalnoCharOffAmt += item.noCharOffAmt;
+              totalaccountAmt += item.accountAmt;
+              totalnoAccountAmt += item.noAccountAmt;
+            });
+            this.data1 = res.data.one;
+            this.data1.push({
+              num: "合计",
+              // serviceId: number,
+              rpAmt: totalrpAmt,
+              charOffAmt: totalcharOffAmt,
+              noCharOffAmt: totalnoCharOffAmt,
+              accountAmt: totalaccountAmt,
+              noAccountAmt: totalnoAccountAmt
+            });
+          }
+          if (res.data.two) {
+            res.data.two.map((item, index) => {
+              item.num = index + 1;
+              let guestType = JSON.parse(item.guestType);
+              let serviceType = JSON.parse(item.serviceType);
+              let species = JSON.parse(item.species);
+              item.guestType = guestType.name;
+              item.serviceType = serviceType.name;
+              item.species = species.name;
+              number1 += 1;
+              totalrpAmt1 += item.rpAmt;
+              totalcharOffAmt1 += item.charOffAmt;
+              totalnoCharOffAmt1 += item.noCharOffAmt;
+              totalaccountAmt1 += item.accountAmt;
+              totalnoAccountAmt1 += item.noAccountAmt;
+            });
+            this.data2 = res.data.two;
+            this.data2.push({
+              num: "合计",
+              rpAmt: totalrpAmt1,
+              charOffAmt: totalcharOffAmt1,
+              noCharOffAmt: totalnoCharOffAmt1,
+              accountAmt: totalaccountAmt1,
+              noAccountAmt: totalnoAccountAmt1
+            });
+          }
+        }
       });
     },
+    // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
+    // 月结对账
     Monthlyreconciliation() {
-      this.$refs.Monthlyreconciliation.modal = true;
+      if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== '{}') {
+        this.$refs.Monthlyreconciliation.modal = true;
+      } else {
+        this.Tips = true;
+      }
     },
-    selete(data, index) {
-      // console.log(data)
-      // console.log(this.ind)
+    // 点击总汇表数据查询销售/采购清单
+    selete(data) {
+      let date = {
+        startDate: this.value[0],
+        endDate: this.value[1]
+      }
+      this.$refs.Monthlyreconciliation.parameter = {...data,...date};
+      this.getDetailed(data, this.value);
     },
+    // 查询单号明细
     seletelist() {
       this.modal2 = true;
       getNumberList({
@@ -727,20 +906,20 @@ export default {
       }).then(res => {
         let partId = 0;
         let qty = 0;
-        let orderAmt = 0
-        res.data.map((item,index) => {
-          item.num = index + 1
-          partId++
-          qty += item.qty
-          orderAmt += item.orderAmt
-        })
-        this.data3 = res.data
+        let orderAmt = 0;
+        res.data.map((item, index) => {
+          item.num = index + 1;
+          partId++;
+          qty += item.qty;
+          orderAmt += item.orderAmt;
+        });
+        this.data3 = res.data;
         this.data3.push({
-          num: '合计',
+          num: "合计",
           partId,
           qty,
           orderAmt
-        })
+        });
       });
     }
   }
@@ -776,5 +955,8 @@ export default {
 .detailed {
   max-height: 400px;
   overflow: auto;
+}
+.ivu-table .rowactive td {
+  background-color: antiquewhite;
 }
 </style>

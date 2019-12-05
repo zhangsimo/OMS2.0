@@ -1,12 +1,19 @@
 <template>
-  <Modal v-model="modal" title="对账单" @on-ok="ok" @on-cancel="cancel" width="1200">
+  <Modal
+    v-model="modal"
+    title="对账单"
+    @on-ok="ok"
+    @on-cancel="cancel"
+    width="1200"
+    @on-visible-change="hander"
+  >
     <div class="content-oper content-oper-flex">
       <section class="oper-box mb10">
         <div class="oper-top flex">
           <div class="wlf">
             <div class="db ml20">
               <span>对账门店：</span>
-              <i-select  v-model="model1" class="w150">
+              <i-select v-model="model1" class="w150">
                 <i-option
                   v-for="item in Branchstore"
                   :value="item.value"
@@ -55,7 +62,8 @@
 
 <script>
 import selectDealings from "./../bill/components/selectCompany";
-import {creat} from './../components'
+import { creat } from "./../components";
+import { getReconciliation } from "@/api/bill/saleOrder";
 export default {
   components: {
     selectDealings
@@ -161,31 +169,60 @@ export default {
           className: "tc"
         }
       ],
-      data: [
-        {
-          Detailedstatistics: "对账单号",
-          Statementexcludingtax: "",
-          Taxincludedpartsstatement: "",
-          Statementoilincludingtax: ""
-        },
-        {
-          Detailedstatistics: "对账金额",
-          Statementexcludingtax: "",
-          Taxincludedpartsstatement: "",
-          Statementoilincludingtax: ""
-        }
-      ],
+      data: [],
       data1: [],
-      data2: []
+      data2: [],
+      parameter: {}
     };
   },
-  async mounted () {
-    let arr = await creat ([],this.$store)
+  async mounted() {
+    let arr = await creat([], this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
   },
   methods: {
+    hander() {
+      let { orgId, startDate, endDate, guestId } = this.parameter;
+      let obj = { orgId, startDate, endDate, guestId };
+      getReconciliation(obj).then(res => {
+        console.log(res)
+        let Statementexcludingtax = 0;
+        let Taxincludedpartsstatement = 0;
+        let Statementoilincludingtax = 0;
+        let Statementexcludingtax1 = 0;
+        let Taxincludedpartsstatement1 = 0;
+        let Statementoilincludingtax1 = 0;
+        for (let i of res.data.one) {
+          if (i.number === 1) {
+            Statementexcludingtax = i.accountNo;
+            Statementexcludingtax1 = i.accountSumAmt;
+          } else if (i.number === 2) {
+            Taxincludedpartsstatement = i.accountNo;
+            Taxincludedpartsstatement1 = i.accountSumAmt;
+          } else {
+            Statementoilincludingtax = i.accountNo;
+            Statementoilincludingtax1 = i.accountSumAmt;
+          }
+        }
+        this.data = [
+          {
+            Detailedstatistics: "对账单号",
+            Statementexcludingtax,
+            Taxincludedpartsstatement,
+            Statementoilincludingtax
+          },
+          {
+            Detailedstatistics: "对账金额",
+            Statementexcludingtax: Statementexcludingtax1,
+            Taxincludedpartsstatement: Taxincludedpartsstatement1,
+            Statementoilincludingtax: Statementoilincludingtax1
+          }
+        ];
+        this.data1 = res.data.two;
+        this.data2 = res.data.three;
+      });
+    },
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
