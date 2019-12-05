@@ -310,6 +310,7 @@ export default class FeeRegistration extends Vue {
     if(res.code == 0) {
       this.$Message.success('保存成功');
       this.tableInfoData = res.data;
+      this.loading2 = false;
     }
   }
 
