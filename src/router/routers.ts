@@ -2022,41 +2022,9 @@ export default [
     ]
   },
   {
-    path: "/asddasd",
-    name: "leasdasdae",
-    mark: '10000',
-    meta: {
-      icon: "ios-transgender",
-      title: "权限管理"
-    },
-    component: Main,
-    children: [
-      {
-        path: "/lease/123",
-        name: "register",
-        // mark: 'oms_policy_approve',
-        meta: {
-          icon: "",
-          title: "应用功能管理"
-        }
-        // component: () => import('@/view/lease/lease/register.vue')
-      },
-      {
-        path: "/lease/ewewe",
-        name: "lessee",
-        // mark: 'oms_policy_approve',
-        meta: {
-          icon: "",
-          title: " 菜单管理"
-        }
-        // component: () => import('@/view/lease/lease/lessee.vue')
-      }
-    ]
-  },
-  {
     path: '/gpart_auth_center',
     name: 'auth',
-    // mark: 'gpart_auth_center',
+    mark: '10',
     redirect: '/multilevel/level_2_1',
     meta: {
       icon: 'gear-b',
@@ -2109,17 +2077,17 @@ export default [
         },
         component: () => import('@/view/admin/resource/resource.vue')
       },
-      {
-        path: '/auth/lessee',
-        name: 'lessee',
-        // mark: 'tenantUsers',
-        meta: {
-          icon: 'arrow-graph-up-right',
-          title: '租户员工',
-          // access: ['admin', 'auth_staff']
-        },
-        component: () => import('@/view/admin/lessee/lessee.vue')
-      },
+      // {
+      //   path: '/auth/lessee',
+      //   name: 'authLessee',
+      //   // mark: 'tenantUsers',
+      //   meta: {
+      //     icon: 'arrow-graph-up-right',
+      //     title: '租户员工',
+      //     // access: ['admin', 'auth_staff']
+      //   },
+      //   component: () => import('@/view/admin/lessee/lessee.vue')
+      // },
     ]
   },
 
