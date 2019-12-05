@@ -244,10 +244,10 @@ export default class FeeRegistration extends Vue {
       page: this.page.num - 1
     };
     if (this.selectValue == "0") {
-      data.fullName = this.inputval;
+      data.fullName = this.inputval.trim();
     }
     if (this.selectValue == "1") {
-      data.code = this.inputval;
+      data.code = this.inputval.trim();
     }
     let res: any = await api.findPageByguest(params, data);
     if (res.code == 0) {
