@@ -260,7 +260,8 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                     storeId:[
                         {required: true, type: 'string', message: ' ', trigger: 'change'}
                     ]
-                },//form表单校验
+                },
+              //form表单校验
                 validRules: {
                     orderQty: [
                         { required: true,validator:changeNumber },

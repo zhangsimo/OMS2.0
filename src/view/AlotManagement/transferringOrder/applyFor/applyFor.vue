@@ -388,7 +388,11 @@
         // 新增按钮
         addProoo(){
           this.buttonDisable = false
+          if (!this.isAdd) {
+            return this.$Message.error('请先保存数据');
+          }
           this.Left.tbdata.unshift(this.PTrow)
+          this.isAdd = false;
           console.log(this.Left.tbdata)
         },
         //添加配件按钮
