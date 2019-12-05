@@ -63,6 +63,9 @@ Vue.filter("priceFilters",function(value){
 
 //全局过滤器数字转大写
 Vue.filter('toChies', function (values) {
+  if(!values){
+    values = 0
+  }
   values = (+values).toFixed(2)
   let moneymax:any = values.split('.')[0]
   let moneymin:any = values.split('.')[1]
