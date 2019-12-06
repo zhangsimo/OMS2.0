@@ -60,3 +60,16 @@ export function commit(data) {
     data
   })
 }
+
+// 打印次数
+// /allotApplyMain/pointAdd
+export function pointAdd(params){
+  console.log(params)
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/pointAdd?`,
+    method: 'get',
+    params
+  })
+}
+
+
