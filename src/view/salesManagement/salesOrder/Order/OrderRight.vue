@@ -62,13 +62,13 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" class="mr10" @click="addMountings "><Icon type="md-add"/> 添加配件</Button>
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings "><Icon type="md-add"/> 添加配件</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10" ><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10"> 批次配件</Button>
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openBarchModal"> 批次配件</Button>
           </div>
           <div class="fl mb5">
             <Upload
@@ -82,19 +82,19 @@
               :on-success="onSuccess"
               :before-upload ='beforeUpload'
             >
-            <Button size="small" class="mr10">
+            <Button size="small" class="mr10" @click="getRUl" :disabled="draftShow != 0 || !formPlan.id">
               <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
             </Button>
             </Upload>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10" @click="openActivityModal"> 选择活动</Button>
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
+            <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
           </div>
         </div>
       </div>
@@ -112,6 +112,8 @@
           height="400"
           :edit-rules="validRules"
           :data="formPlan.detailList"
+          @select-change="selectTable"
+          @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -169,22 +171,24 @@
       </Modal>
 
       <!--  编辑发货地址 -->
-      <Modal v-model="addressShow" title="收货信息"  width="1000">
-<!--        <goods-info></goods-info>-->
-        <div slot='footer'>
-          <Button type='primary' @click = changeShippingAddress>确定</Button>
-          <Button type='default' @click='addressShow = false'>取消</Button>
-        </div>
-      </Modal>
+<!--      <Modal v-model="addressShow" title="收货信息"  width="1000">-->
+        <goods-info ref="goodsInfo" :mainId="formPlan.id"></goods-info>
+<!--        <div slot='footer'>-->
+<!--          <Button type='primary' @click = changeShippingAddress>确定</Button>-->
+<!--          <Button type='default' @click='addressShow = false'>取消</Button>-->
+<!--        </div>-->
+<!--      </Modal>-->
 
 <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
+<!--      批次配件-->
+      <barch ref="barch" @selectPartName="getBarchList"></barch>
 <!--      选择客户-->
       <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
 <!--      选择入库单-->
-      <Godown-entry ref="GodownEntryModal"></Godown-entry>
+      <Godown-entry ref="GodownEntryModal" @godownList="getGodown"></Godown-entry>
 <!--      选择活动-->
-      <Activity ref="activity"></Activity>
+      <Activity ref="activity" @getActivity="activiyList"></Activity>
 <!--      查看详情-->
       <See-file ref="fileList" :data="oneRow"></See-file>
     </div>
@@ -192,20 +196,20 @@
 
 <script>
 import ClientData from "../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "../../../../components/goodsInfo/goodsInfo";
+import goodsInfo from "../../../goods/plannedPurchaseOrder/components/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
-import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList} from '@/api/salesManagment/salesOrder'
+import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 import {getNewClient} from '@/api/system/essentialData/clientManagement'
 import {getClientTreeList} from '@/api/system/essentialData/clientManagement';
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
-
+import barch from '../batch/selectPartCom'
 
 
 
@@ -218,7 +222,8 @@ import { TOKEN_KEY } from '@/libs/util'
             SelectTheCustomer,
             GodownEntry,
             Activity,
-            SeeFile
+            SeeFile,
+            barch
         },
         data(){
             let changeNumber = (rule, value, callback) => {
@@ -252,7 +257,7 @@ import { TOKEN_KEY } from '@/libs/util'
                 headers:  {
                     Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
                 },//请求头
-                upurl:'',//导入地址
+                upurl: getup,//导入地址
                 orderType: [
                     {
                         value: 0,
@@ -303,6 +308,7 @@ import { TOKEN_KEY } from '@/libs/util'
                         { required: true, validator:money }
                     ]
                 }, //表格校验
+                selectTableList:[], //table表格选中的数据
             }
         },
         mounted(){
@@ -327,8 +333,9 @@ import { TOKEN_KEY } from '@/libs/util'
                  let res = await  getRightList(data)
               if( res.code === 0 ){
                   stop()
-                  this.draftShow = JSON.parse(res.data.billStatusId)
-                  res.data.orderType =  JSON.parse(res.data.orderType)
+                  // this.draftShow = JSON.parse(res.data.billStatusId)
+                  // res.data.orderType =  JSON.parse(res.data.orderType)
+                  this.draftShow = res.data.billStatusId
                   res.data.orderTypeValue = res.data.orderType.value
                   this.formPlan = res.data
                   this.draftShow = this.draftShow.value
@@ -461,6 +468,7 @@ import { TOKEN_KEY } from '@/libs/util'
                     })
                 ]
             },
+
             //批量上传失败
             onFormatError(file) {
                 this.$Message.error('只支持xls xlsx后缀的文件')
@@ -468,10 +476,11 @@ import { TOKEN_KEY } from '@/libs/util'
             // 上传成功函数
             onSuccess (response) {
                 if(response.code != 0 ){
-                    this.$Message.success(response.message)
+                    this.$Message.error(response.message)
                 }else {
                     this.$Message.success(response.message)
                 }
+                this.getList()
             },
             //上传之前清空
             beforeUpload(){
@@ -479,13 +488,43 @@ import { TOKEN_KEY } from '@/libs/util'
             },
             //打开收货地址
             openAddressShow(){
-               this.addressShow =true
+              this.$refs.goodsInfo.init()
             },
             //确认收货地址
             changeShippingAddress(){},
-            //添加配件
+            //打开添加配件模态框
             addMountings(){
                 this.$refs.selectPartCom.init()
+            },
+            openBarchModal(){
+                this.$refs.barch.init()
+            },
+            //多选内容
+            selectTable(data){
+                this.selectTableList = data.selection
+
+
+            },
+            //全选内容
+            selectAllTable(data){
+                this.selectTableList = data.selection
+            },
+            //删除配件
+            deletePart(){
+                if (this.selectTableList.length > 0){
+                    let data= []
+                    this.selectTableList.forEach( item => {
+                        data.push({id: item.id})
+                    })
+                    console.log(data)
+                    getDeleteList(data).then( res => {
+                    if(res.code === 0){
+                        this.getList()
+                    }
+                     })
+                }else {
+                    this.$message.error('请选择一条有效数据')
+                }
             },
             //计划发货日期
             getplanSendDate(data){
@@ -496,8 +535,24 @@ import { TOKEN_KEY } from '@/libs/util'
                 this.formPlan.planArriveDate = data + ' '+ "00:00:00"
             },
             //配件返回的参数
-            getPartNameList(){
-
+          async  getPartNameList(val){
+              let data ={}
+                  data = this.formPlan
+                  data.detailList = val
+              let res = await  getAccessories(data)
+              if(res.code === 0){
+                  this.getList()
+              }
+            },
+            // 批次配件
+            async  getBarchList(val){
+                let data ={}
+                data = this.formPlan
+                data.detailList = val
+                let res = await  getAccessories(data)
+                if(res.code === 0){
+                  this.getList()
+                }
             },
             //打开客户选择
             openAddCustomer(){
@@ -510,6 +565,16 @@ import { TOKEN_KEY } from '@/libs/util'
             //打开活动
             openActivityModal(){
                 this.$refs.activity.openModal()
+            },
+            //获取活动内的数据
+          async  activiyList(val){
+                let data ={}
+                data = this.formPlan
+                data.detailList = [val]
+                let res = await  getAccessories(data)
+                if(res.code === 0){
+                    this.getList()
+                }
             },
             //打开查看模态框
             openFileModal(row){
@@ -546,7 +611,7 @@ import { TOKEN_KEY } from '@/libs/util'
             },
             //获取搜索框内的数据
             setOneClient(val){
-                this.formPlan.guestId = val.guestId
+                this.$set(this.formPlan,"guestId",val.id);
             },
             //判断表格能不能编辑
                 editActivedEvent ({ row }) {
@@ -585,7 +650,6 @@ import { TOKEN_KEY } from '@/libs/util'
 
             },
             //提交
-            //getSubmitList
             submitList(){
                this.$refs.formPlan.validate(async (valid) => {
                     if (valid) {
@@ -608,6 +672,19 @@ import { TOKEN_KEY } from '@/libs/util'
                     }
                 })
             },
+            //获取选择入库单的信息
+          async  getGodown(val){
+                let data ={}
+                data = this.formPlan
+                data.detailList = val.details
+                let res = await  getAccessories(data)
+                if(res.code === 0){
+                    this.getList()
+                }
+            },
+            getRUl(){
+              this.upurl = this.upurl +'id=' + this.formPlan.id
+            },
 
 
         },
@@ -615,7 +692,10 @@ import { TOKEN_KEY } from '@/libs/util'
             getOneOrder:{
                 handler(old ,ov){
                     if(!old.id){
-                        this.formPlan ={}
+                        this.formPlan ={
+                            billStatusId: {name:"草稿",value:0}
+                        }
+                        this.draftShow = 0
                         return false
                     }
                     this.leftOneOrder = old

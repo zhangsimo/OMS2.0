@@ -1,6 +1,8 @@
 import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
-import {getwbParts} from "_api/system/partManager";
+// import {getwbParts} from "_api/system/partManager";
 import {getDetails} from '@/api/salesManagment/salesOrder'
+import {getParnt} from '@/api/salesManagment/salesOrder'
+
 
 export const mixSelectPartCom  = {
   inject:['reload'],
@@ -216,9 +218,9 @@ export const mixSelectPartCom  = {
       if(this.searchValue.trim()){
         req[this.searchType] = this.searchValue.trim()
       }
-      req.page = this.page.num
+      req.page = this.page.num -1
       req.size = this.page.size
-      getwbParts(req).then(res => {
+      getParnt(req).then(res => {
         this.loading = false;
         this.partData = res.data.content||[];
         this.page.total = res.data.totalElements

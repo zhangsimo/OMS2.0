@@ -65,8 +65,6 @@
       </div>
     </div>
     <div slot='footer'>
-      <Button type='primary'>确定</Button>
-      <Button type='default' @click="addressShow=false">取消</Button>
     </div>
   </Modal>
 </template>

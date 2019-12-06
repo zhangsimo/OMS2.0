@@ -81,7 +81,7 @@
                   let size = this.page.size
                 let res = await getLeftList(page, size,data)
                 if(res.code === 0){
-                    res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
+                    // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
                     this.tableData = res.data.content
                     this.page.total = res.data.totalElements
                     this.$store.commit('setOneOrder',{})
