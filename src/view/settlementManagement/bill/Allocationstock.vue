@@ -13,13 +13,13 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select  v-model="model1" class="w150">
-              <i-option
+            <Select  v-model="model1" class="w150">
+              <Option
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
@@ -28,9 +28,9 @@
           </div>
           <div class="db">
             <span>类型：</span>
-            <i-select :model.sync="model1" style="width:200px">
-              <i-option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-            </i-select>
+            <Select :model.sync="model1" style="width:200px">
+              <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button">
@@ -46,9 +46,9 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data"></i-table>
+        <Table border :columns="columns" :data="data" max-hight="400"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <i-table border :columns="columns1" :data="data1" class="mt10"></i-table>
+        <Table border :columns="columns1" :data="data1" class="mt10" max-hight="400"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -71,9 +71,9 @@
         </div>
         <div class="db pro mt20">
           <span>审核状态：</span>
-          <i-select :model.sync="model1" style="width:200px">
-            <i-option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-          </i-select>
+          <Select :model.sync="model1" style="width:200px">
+            <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
     </Modal>
   </div>

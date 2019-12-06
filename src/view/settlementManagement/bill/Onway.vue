@@ -13,13 +13,13 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select  v-model="model1" class="w150">
-              <i-option
+            <Select  v-model="model1" class="w150">
+              <Option
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml20">
             <span>供应商：</span>
@@ -44,7 +44,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data" class="waytable"></i-table>
+        <Table border :columns="columns" :data="data" class="waytable"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -67,9 +67,9 @@
         </div>
         <div class="db pro mt20">
           <span>审核状态：</span>
-          <i-select :model.sync="model1" style="width:200px">
-            <i-option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-          </i-select>
+          <Select :model.sync="model1" style="width:200px">
+            <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
     </Modal>
   </div>

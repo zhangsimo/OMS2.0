@@ -13,13 +13,13 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select v-model="model1" class="w150">
-              <i-option
+            <Select v-model="model1" class="w150">
+              <Option
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
@@ -52,10 +52,10 @@
       <div class="inner-box">
         <Tabs active-key="key1" class="mt10 waytable">
           <Tab-pane label="应收审核" key="key1">
-            <i-table border :columns="columns" :data="data1" class="mt10"></i-table>
+            <Table border :columns="columns" :data="data1" class="mt10" max-height="400"></Table>
           </Tab-pane>
           <Tab-pane label="应付审核" key="key2">
-            <i-table border :columns="columns1" :data="data2" class="mt10"></i-table>
+            <Table border :columns="columns1" :data="data2" class="mt10" max-height="400"></Table>
           </Tab-pane>
         </Tabs>
       </div>

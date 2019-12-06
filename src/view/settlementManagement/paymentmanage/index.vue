@@ -20,13 +20,13 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select v-model="model1" class="w150">
-              <i-option
+            <Select v-model="model1" class="w150">
+              <Option
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -60,20 +60,20 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table
+        <Table
+          max-height="400"
           highlight-row
-          class="detailed"
           border
           :columns="columns"
           :data="data"
           @on-row-click="selete"
-        ></i-table>
+        ></Table>
         <Tabs active-key="key1" class="mt10">
           <Tab-pane label="销售清单" key="key1">
-            <i-table border :columns="columns1" :data="data1" class="mt10 detailed"></i-table>
+            <Table border :columns="columns1" :data="data1" class="mt10" max-height="400"></Table>
           </Tab-pane>
           <Tab-pane label="采购清单" key="key2">
-            <i-table border :columns="columns2" :data="data2" class="mt10 detailed"></i-table>
+            <Table border :columns="columns2" :data="data2" class="mt10" max-height="400"></Table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -93,9 +93,9 @@
       </div>
       <div class="db pro mt20">
         <span>客户类型：</span>
-        <i-select v-model="model2" style="width:200px">
-          <i-option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-        </i-select>
+        <Select v-model="model2" style="width:200px">
+          <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </div>
       <div class="db pro mt20">
         <span>客户名称：</span>
@@ -103,19 +103,15 @@
       </div>
       <div class="db pro mt20">
         <span>分店名称：</span>
-        <i-select v-model="model1" style="width:200px">
-          <i-option
-            v-for="item in Branchstore"
-            :value="item.value"
-            :key="item.value"
-          >{{ item.label }}</i-option>
-        </i-select>
+        <Select v-model="model1" style="width:200px">
+          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </div>
       <div class="db pro mt20">
         <span>业务类型：</span>
-        <i-select v-model="model3" style="width:200px">
-          <i-option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-        </i-select>
+        <Select v-model="model3" style="width:200px">
+          <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </div>
       <div class="db pro mt20">
         <span>业务单号：</span>
@@ -127,7 +123,7 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
       </div>
-      <i-table border :columns="columns3" :data="data3" class="mt10"></i-table>
+      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400"></Table>
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
@@ -135,11 +131,7 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
       </div>
-      <i-table border :columns="columns4" :data="data4" class="mt10"></i-table>
-      <div slot="footer"></div>
-    </Modal>
-    <Modal v-model="Tips" title="提示">
-      <p class="tc">请选择要对账的数据</p>
+      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400"></Table>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
@@ -166,7 +158,6 @@ export default {
   },
   data() {
     return {
-      Tips: false,
       value: [],
       model1: "",
       model2: "",
@@ -790,15 +781,11 @@ export default {
             item.num = index + 1;
           });
           this.data = res.data;
-          this.getDetailed(this.data, obj);
         }
       });
     },
     // 销售/采购接口
     getDetailed(data, obj) {
-      if (Array.isArray(data)) {
-        data = data[0];
-      }
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
@@ -807,73 +794,70 @@ export default {
         serviceId: data.serviceId,
         guestId: data.guestId
       }).then(res => {
-        let number = 0;
-        let totalrpAmt = 0;
-        let totalcharOffAmt = 0;
-        let totalnoCharOffAmt = 0;
-        let totalaccountAmt = 0;
-        let totalnoAccountAmt = 0;
-        let number1 = 0;
-        let totalrpAmt1 = 0;
-        let totalcharOffAmt1 = 0;
-        let totalnoCharOffAmt1 = 0;
-        let totalaccountAmt1 = 0;
-        let totalnoAccountAmt1 = 0;
-        if (res.data.length !== 0) {
-          if (res.data.one) {
-            res.data.one.map((item, index) => {
-              item.num = index + 1;
-              let guestType = JSON.parse(item.guestType);
-              let serviceType = JSON.parse(item.serviceType);
-              let species = JSON.parse(item.species);
-              item.guestType = guestType.name;
-              item.serviceType = serviceType.name;
-              item.species = species.name;
-              number += 1;
-              totalrpAmt += item.rpAmt;
-              totalcharOffAmt += item.charOffAmt;
-              totalnoCharOffAmt += item.noCharOffAmt;
-              totalaccountAmt += item.accountAmt;
-              totalnoAccountAmt += item.noAccountAmt;
-            });
-            this.data1 = res.data.one;
-            this.data1.push({
-              num: "合计",
-              // serviceId: number,
-              rpAmt: totalrpAmt,
-              charOffAmt: totalcharOffAmt,
-              noCharOffAmt: totalnoCharOffAmt,
-              accountAmt: totalaccountAmt,
-              noAccountAmt: totalnoAccountAmt
-            });
-          }
-          if (res.data.two) {
-            res.data.two.map((item, index) => {
-              item.num = index + 1;
-              let guestType = JSON.parse(item.guestType);
-              let serviceType = JSON.parse(item.serviceType);
-              let species = JSON.parse(item.species);
-              item.guestType = guestType.name;
-              item.serviceType = serviceType.name;
-              item.species = species.name;
-              number1 += 1;
-              totalrpAmt1 += item.rpAmt;
-              totalcharOffAmt1 += item.charOffAmt;
-              totalnoCharOffAmt1 += item.noCharOffAmt;
-              totalaccountAmt1 += item.accountAmt;
-              totalnoAccountAmt1 += item.noAccountAmt;
-            });
-            this.data2 = res.data.two;
-            this.data2.push({
-              num: "合计",
-              rpAmt: totalrpAmt1,
-              charOffAmt: totalcharOffAmt1,
-              noCharOffAmt: totalnoCharOffAmt1,
-              accountAmt: totalaccountAmt1,
-              noAccountAmt: totalnoAccountAmt1
-            });
-          }
+        if (res.data.one) {
+          let number = 0;
+          let totalrpAmt = 0;
+          let totalcharOffAmt = 0;
+          let totalnoCharOffAmt = 0;
+          let totalaccountAmt = 0;
+          let totalnoAccountAmt = 0;
+          res.data.one.map((item, index) => {
+            item.num = index + 1;
+            item.guestType = item.guestType.name;
+            item.serviceType = item.serviceType.name;
+            item.species = item.species.name;
+            number += 1;
+            totalrpAmt += item.rpAmt;
+            totalcharOffAmt += item.charOffAmt;
+            totalnoCharOffAmt += item.noCharOffAmt;
+            totalaccountAmt += item.accountAmt;
+            totalnoAccountAmt += item.noAccountAmt;
+          });
+          this.data1 = res.data.one;
+          this.data1.push({
+            num: "合计",
+            // serviceId: number,
+            rpAmt: totalrpAmt,
+            charOffAmt: totalcharOffAmt,
+            noCharOffAmt: totalnoCharOffAmt,
+            accountAmt: totalaccountAmt,
+            noAccountAmt: totalnoAccountAmt
+          });
+        } else {
+          this.data1 = []
         }
+        if (res.data.two) {
+          let number = 0;
+          let totalrpAmt = 0;
+          let totalcharOffAmt = 0;
+          let totalnoCharOffAmt = 0;
+          let totalaccountAmt = 0;
+          let totalnoAccountAmt = 0;
+          res.data.two.map((item, index) => {
+            item.num = index + 1;
+            item.guestType = item.guestType.name;
+            item.serviceType = item.serviceType.name;
+            item.species = item.species.name;
+            number += 1;
+            totalrpAmt += item.rpAmt;
+            totalcharOffAmt += item.charOffAmt;
+            totalnoCharOffAmt += item.noCharOffAmt;
+            totalaccountAmt += item.accountAmt;
+            totalnoAccountAmt += item.noAccountAmt;
+          });
+          this.data2 = res.data.two;
+          this.data2.push({
+            num: "合计",
+            rpAmt: totalrpAmt,
+            charOffAmt: totalcharOffAmt,
+            noCharOffAmt: totalnoCharOffAmt,
+            accountAmt: totalaccountAmt,
+            noAccountAmt: totalnoAccountAmt
+          });
+        } else {
+          this.data2 = []
+        }
+        
       });
     },
     // 往来单位
@@ -882,19 +866,20 @@ export default {
     },
     // 月结对账
     Monthlyreconciliation() {
-      if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== '{}') {
-        this.$refs.Monthlyreconciliation.modal = true;
-      } else {
-        this.Tips = true;
-      }
+      this.$refs.Monthlyreconciliation.modal = true;
+      // if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
+      //   this.$refs.Monthlyreconciliation.modal = true;
+      // } else {
+      //   this.$Message.warning("请选择要对账的数据");
+      // }
     },
     // 点击总汇表数据查询销售/采购清单
     selete(data) {
       let date = {
         startDate: this.value[0],
         endDate: this.value[1]
-      }
-      this.$refs.Monthlyreconciliation.parameter = {...data,...date};
+      };
+      this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);
     },
     // 查询单号明细
@@ -947,16 +932,5 @@ export default {
 .pro input {
   border: 1px solid #dddddd;
   height: 28px;
-}
-.ivu-poptip-popper .ivu-poptip-body {
-  padding: 0;
-  height: 150px;
-}
-.detailed {
-  max-height: 400px;
-  overflow: auto;
-}
-.ivu-table .rowactive td {
-  background-color: antiquewhite;
 }
 </style>
