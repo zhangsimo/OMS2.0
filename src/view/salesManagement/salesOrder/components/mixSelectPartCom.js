@@ -26,6 +26,12 @@ export const mixSelectPartCom  = {
           minWidth: 80
         },
         {
+          title: '详情',
+          slot: 'action',
+          width: 60,
+          align: 'center'
+        },
+        {
           title: "内码",
           key: "code",
           minWidth: 120
@@ -187,6 +193,8 @@ export const mixSelectPartCom  = {
           "value":"9999"
         }
       ],
+      //获取点击的数据
+      allList:{},
     }
   },
   mounted(){
@@ -304,6 +312,19 @@ export const mixSelectPartCom  = {
         this.$Message.success("保存成功！")
         this.reload();
       })
+    },
+
+    //点击详情
+    show(val){
+      let data = {}
+      data.partId = val.id
+      getDetails(data).then( res => {
+        if(res.code  === 0){
+          this.allList = res.data
+        }
+
+      })
+      console.log(val,789)
     }
   }
 }

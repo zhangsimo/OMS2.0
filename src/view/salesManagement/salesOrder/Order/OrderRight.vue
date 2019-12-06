@@ -12,7 +12,7 @@
       <div class="clearfix purchase" ref="planForm">
             <FormItem label="客户：" prop="guestId" >
               <Row  style="width: 310px">
-                <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0">
+                <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                 </Select>
                 <Button  class="ml5" size="small" type="default" @click="openAddCustomer" :disabled="draftShow != 0"><Icon type="md-checkmark" /></Button>
@@ -71,9 +71,21 @@
             <Button size="small" class="mr10"> 批次配件</Button>
           </div>
           <div class="fl mb5">
+            <Upload
+              ref="upload"
+              style="display: inline-block"
+              :show-upload-list="false"
+              :action="upurl"
+              :headers="headers"
+              :format="['xlsx','xls']"
+              :on-format-error="onFormatError"
+              :on-success="onSuccess"
+              :before-upload ='beforeUpload'
+            >
             <Button size="small" class="mr10">
               <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
             </Button>
+            </Upload>
           </div>
           <div class="fl mb5">
             <Button size="small" class="mr10" @click="openActivityModal"> 选择活动</Button>
@@ -168,7 +180,7 @@
 <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
 <!--      选择客户-->
-      <Select-the-customer ref="AddCustomerModel"></Select-the-customer>
+      <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
 <!--      选择入库单-->
       <Godown-entry ref="GodownEntryModal"></Godown-entry>
 <!--      选择活动-->
@@ -190,6 +202,10 @@ import {area} from '@/api/lease/registerApi'
 import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 import {getNewClient} from '@/api/system/essentialData/clientManagement'
+import {getClientTreeList} from '@/api/system/essentialData/clientManagement';
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
+
 
 
 
@@ -218,9 +234,25 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                     }
                 }
             };
+            let money = (rule, value, callback) => {
+                if (!value && value != '0') {
+                    callback(new Error("最多保留4位小数"));
+                } else {
+                    const reg = /^[+-]?\d+\.\d{0,4}$/i
+                    if (reg.test(value)) {
+                        callback();
+                    } else {
+                        callback(new Error("最多保留4位小数"));
+
+                    }
+                }
+            };
             return {
                 formPlan: {},//获取到数据
-                model1: '',
+                headers:  {
+                    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+                },//请求头
+                upurl:'',//导入地址
                 orderType: [
                     {
                         value: 0,
@@ -268,7 +300,7 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
 
                     ],
                     orderPrice: [
-                        { required: true, validator:changeNumber }
+                        { required: true, validator:money }
                     ]
                 }, //表格校验
             }
@@ -278,6 +310,7 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
             this.getAllClient()
             this.getType()
             this.getWarehouse()
+            this.getClassifyList()
 
         },
         computed:{
@@ -309,6 +342,18 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
               let data = {}
               data.guestId = this.leftOneOrder.guestId
                let res = await getLimit(data)
+                if( res.code === 0){
+                    this.limitList = res.data
+                }
+            },
+            //改变客户
+            async changeClient(value){
+                let data = {}
+                if(!value){
+                    return false
+                }
+                data.guestId = value
+                let res = await getLimit(data)
                 if( res.code === 0){
                     this.limitList = res.data
                 }
@@ -345,7 +390,7 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                 this.clientDataShow = true
             },
             //获取新增客户二级分类
-            getList(){
+            getClassifyList(){
                 getClientTreeList().then( res => {
                     if (res.code == 0){
                         this.treeDiagramList = res.data
@@ -386,8 +431,6 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                     }
                 })
             },
-            //确认新增客户
-            addNewClient(){},
             //计算表格数据
             countAmount (row) {
                 return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
@@ -417,6 +460,22 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                         return null
                     })
                 ]
+            },
+            //批量上传失败
+            onFormatError(file) {
+                this.$Message.error('只支持xls xlsx后缀的文件')
+            },
+            // 上传成功函数
+            onSuccess (response) {
+                if(response.code != 0 ){
+                    this.$Message.success(response.message)
+                }else {
+                    this.$Message.success(response.message)
+                }
+            },
+            //上传之前清空
+            beforeUpload(){
+                this.$refs.upload.clearFiles()
             },
             //打开收货地址
             openAddressShow(){
@@ -474,7 +533,7 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                               let res = await getSave(this.formPlan)
                               if(res.code === 0){
                                   this.$Message.success('保存成功');
-                                  return res
+                                  this.$store.commit('setleftList' ,res)
                               }
                         } catch (errMap) {
                             this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
@@ -484,6 +543,10 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                     }
                 })
 
+            },
+            //获取搜索框内的数据
+            setOneClient(val){
+                this.formPlan.guestId = val.guestId
             },
             //判断表格能不能编辑
                 editActivedEvent ({ row }) {
@@ -524,11 +587,10 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
             //提交
             //getSubmitList
             submitList(){
-                this.$refs.formPlan.validate(async (valid) => {
+               this.$refs.formPlan.validate(async (valid) => {
                     if (valid) {
                         try {
                             await this.$refs.xTable.validate()
-
                             if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
                                 return this.$message.error('可用余额不足')
                             }
@@ -536,16 +598,15 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
                             let res = await getSubmitList(this.formPlan)
                             if(res.code === 0){
                                 this.$Message.success('出库成功成功');
-                                return res
+                                this.$store.commit('setleftList' ,res)
                             }
                         } catch (errMap) {
-                            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+                            // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
                         }
                     } else {
                         this.$Message.error('*为必填项');
                     }
                 })
-
             },
 
 
@@ -553,6 +614,10 @@ import {getNewClient} from '@/api/system/essentialData/clientManagement'
         watch:{
             getOneOrder:{
                 handler(old ,ov){
+                    if(!old.id){
+                        this.formPlan ={}
+                        return false
+                    }
                     this.leftOneOrder = old
                     this.getList()
                     this.getAllLimit()

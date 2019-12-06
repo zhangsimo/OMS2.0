@@ -42,7 +42,8 @@
         name: "OrderLeft",
         props:{
             queryTime:'', //时间查询
-            orderType:'' //状态查询
+            orderType:'', //状态查询
+            changeLeftList:'',//改变list
         },
         data(){
             return {
@@ -63,6 +64,9 @@
         computed:{
             queryall(){
                 return this.$store.state.dataList.orederQueryList
+            },
+            getRightType(){
+                return this.$store.state.dataList.leftList
             }
         },
         methods:{
@@ -80,6 +84,7 @@
                     res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
                     this.tableData = res.data.content
                     this.page.total = res.data.totalElements
+                    this.$store.commit('setOneOrder',{})
                 }
             },
             //切换页面
@@ -128,6 +133,26 @@
                          }
                      })
 
+                },
+                deep:true
+            },
+            //改变左侧list
+            changeLeftList:{
+                handler(v,ov){
+                    this.page.num = 1
+                    this.page.size = 10
+                    this.getList()
+                },
+                deep:true
+            },
+            //右侧保存 提交
+            getRightType:{
+                handler(v ,ov){
+                    if(v.code === 0){
+                        this.page.num = 1
+                        this.page.size = 10
+                        this.getList()
+                    }
                 },
                 deep:true
             }

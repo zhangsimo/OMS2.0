@@ -59,7 +59,7 @@ export function getWarehouseList (params) {
 //点击打开详情级别价格
 export function getDetails  (params) {
   return axios.request({
-    url: `${api.wmsApi}/sellPricePart/findBySell`,
+    url: `${api.omsOrder}/sellOutDetail/check`,
     method: 'get',
     params
   })
@@ -98,5 +98,52 @@ export function getprintList (params) {
     url: `${api.omsOrder}/sellOrderMain/print`,
     method: 'get',
     params
+  })
+}
+
+
+//作废
+export function getCancellation (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/invalidSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+
+//返单
+export function getReorder (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/backSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//导出
+// export function getExport (params) {
+// //   return axios.request({
+// //     url: `${api.omsOrder}/sellOrderMain/export`,
+// //     method: 'get',
+// //     params
+// //   })
+// // }
+
+//客户选择
+export function getTreeClient (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/queryGuestList?`,
+    method: 'get',
+    params
+  })
+}
+
+//客户类型
+export function getClientType () {
+  return axios.request({
+    url: `${api.wmsApi}/guestType/guestTypeTree`,
+    method: 'get',
+
   })
 }
