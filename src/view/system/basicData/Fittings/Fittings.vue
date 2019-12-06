@@ -171,7 +171,8 @@
         </div>
       </Split>
     </section>
-    <accessories ref="accessories"></accessories>
+    <!-- <accessories ref="accessories"></accessories> -->
+    <part-info ref="partInfo" :is-add-part="true" @throwData="submitSave"></part-info>
   </main>
 </template>
 

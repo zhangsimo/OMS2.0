@@ -37,6 +37,7 @@
               <Col span="11">
                 <FormItem label="配件品牌：" prop="partBrandId">
                   <Select 
+                    v-if="brandAll.length > 0"
                     @on-change="selectPartBrand"
                     v-model="formValidate.partBrandId">
                     <Option
@@ -45,6 +46,9 @@
                       :key="item.value"
                       >{{ item.label }}</Option
                     >
+                  </Select>
+                  <Select v-model="formValidate.partBrandId" v-else>
+                    <Option :value="formValidate.partBrandId">{{ formValidate.partBrandName }}</Option>
                   </Select>
                 </FormItem>
               </Col>
@@ -67,9 +71,9 @@
             </Row>
             <Row>
               <Col span="11">
-                <FormItem label="单位：" prop="unit">
+                <FormItem label="单位：" prop="unitId">
                   <Select
-                    v-model="formValidate.unit"
+                    v-model="formValidate.unitId"
                     @on-change="changeSelectUnit"
                   >
                     <Option
@@ -184,7 +188,7 @@
                   <div class="flex">
                     <div>
                       <div
-                        class="unit-item w300"
+                        class="unitId-item w300"
                         v-for="(v, index) in valueVOS"
                         :key="index"
                       >
@@ -235,7 +239,7 @@
             ref="xTable"
             border
             :auto-resize="true"
-            :data="formValidate.specVOList"
+            :data="formValidate.specVOS"
             :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
           >
             <vxe-table-column

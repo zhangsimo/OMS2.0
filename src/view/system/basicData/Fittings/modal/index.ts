@@ -167,7 +167,7 @@ export default class Accessories extends Vue {
         brandPartCode: "",
         code: "", //配件编码
         name: "", //配件名称
-        unit: "", //配件单位
+        unitId: "", //配件单位
         unitname: "", // 配件单位名称
         oemCode: "", //oe码
         spec: "", //规格
@@ -175,6 +175,7 @@ export default class Accessories extends Vue {
         applyCarbrandId: "", //适用车型Id
         carModelName: "",
         carBrand: "",
+        carBrandName: "",
         explain: "", //车型说明
         commonCode: "", //通用编码
         produceFactory: "", //生产厂家
@@ -188,7 +189,7 @@ export default class Accessories extends Vue {
         carTypefName: "",
         carTypesName: "",
         carTypetName: "",
-        specVOList: new Array(), //规格list
+        specVOS: new Array(), //规格list
         valueVOS: new Array() //单位换算list
     };
     private formValidate2: any = {};
@@ -202,7 +203,7 @@ export default class Accessories extends Vue {
         ],
         code: [{ required: true, message: "配件编码不能为空", trigger: "blur" }],
         name: [{ required: true, message: "配件名称不能为空", trigger: "blur" }],
-        unit: [{ required: true, message: "配件单位不能为空", trigger: "change" }]
+        unitId: [{ required: true, message: "配件单位不能为空", trigger: "change" }]
     };
     /**新增配件表单 */
     private formPart: Kv = {
@@ -436,8 +437,13 @@ export default class Accessories extends Vue {
         if (res.code == 0) {
             let data = res.data;
             this.formValidate = { ...data };
-            this.formValidate.valueVOS = data.attributeValueVOS || [];
-            this.formValidate.specVOList = data.attributeSpecVOS || [];
+            for (let wb of this.wbBansarr) {
+                if (wb.id == this.formValidate.carBrandName) {
+                    this.formValidate.nameEn = wb.value;
+                    break;
+                }
+            }
+            this.changcarmodel();
         }
     }
     private showName() {
@@ -457,15 +463,15 @@ export default class Accessories extends Vue {
     //新增规格
     private addSpec() {
         let objData = this._.cloneDeep(this.newSpecObj);
-        if (this.formValidate.specVOList.length <= 0) {
+        if (this.formValidate.specVOS.length <= 0) {
             objData.isMinCompany = true;
         }
-        this.formValidate.specVOList.push(objData);
+        this.formValidate.specVOS.push(objData);
     }
     // 删除规格
     private delSpec() {
-        if (this.formValidate.specVOList.length <= 1) return;
-        let vo: any = this.formValidate.specVOList.pop();
+        if (this.formValidate.specVOS.length <= 1) return;
+        let vo: any = this.formValidate.specVOS.pop();
         if (vo) {
             let meterCompany: string = vo.meterCompany;
             this.dictCodeAll.forEach((el: any) => {
@@ -480,7 +486,7 @@ export default class Accessories extends Vue {
     private changeSelect(item: string) {
         this.dictCodeAll.forEach((el: any) => {
             el.disabled = false;
-            this.formValidate.specVOList.forEach((vo: any) => {
+            this.formValidate.specVOS.forEach((vo: any) => {
                 if (vo.meterCompany === el.itemName) {
                     el.disabled = true;
                 }
@@ -496,14 +502,14 @@ export default class Accessories extends Vue {
             }
             return el;
         });
-        if (this.formValidate.specVOList.length <= 0) {
+        if (this.formValidate.specVOS.length <= 0) {
             let objData = { ...this.newSpecObj };
             objData.isMinCompany = true;
             objData.meterCompany = this.formValidate.unitname;
-            this.formValidate.specVOList.push(objData);
+            this.formValidate.specVOS.push(objData);
         } else {
-            this.formValidate.specVOList[0].meterCompany = this.formValidate.unitname;
-            this.formValidate.specVOList.push();
+            this.formValidate.specVOS[0].meterCompany = this.formValidate.unitname;
+            this.formValidate.specVOS.push();
         }
     }
     // 选择树
@@ -616,7 +622,7 @@ export default class Accessories extends Vue {
     private submit(name: string) {
         let self: any = this;
         let form: any = this.$refs[name];
-        let bing: boolean = this.formValidate.specVOList.every((element: any) => element.meterCompany);
+        let bing: boolean = this.formValidate.specVOS.every((element: any) => element.meterCompany);
         form.validate(async (valid: any) => {
             if (valid && bing) {
                 let data: any = {
@@ -626,7 +632,7 @@ export default class Accessories extends Vue {
                     partBrandName: this.formValidate.partBrandName,
                     brandPartCode: this.formValidate.brandPartCode,
                     code: this.formValidate.code,
-                    unitId: this.formValidate.unit,
+                    unitId: this.formValidate.unitId,
                     name: this.formValidate.name,
                     oemCode: this.formValidate.oemCode,
                     spec: this.formValidate.spec,
@@ -644,7 +650,7 @@ export default class Accessories extends Vue {
                     carTypefName: this.formValidate.carTypefName,
                     carTypesName: this.formValidate.carTypesName,
                     carTypetName: this.formValidate.carTypetName,
-                    specVOS: this.formValidate.specVOList.map((el: any) => {
+                    specVOS: this.formValidate.specVOS.map((el: any) => {
                         let obj = this._.cloneDeep(el);
                         obj.isMinCompany = el.isMinCompany ? 1 : 0;
                         return obj;
@@ -708,6 +714,9 @@ export default class Accessories extends Vue {
             pageSize: 10,
             page: 0
         };
+        if(this.proModal && this.update) {
+            this.getpartinfo();
+        }
     }
 
     private resPart() {
@@ -718,15 +727,9 @@ export default class Accessories extends Vue {
                 size: 10
             }
         };
-        this.getPartsName();
-        this.treeData = this._.cloneDeep(this.treeDataOrgin);
-    }
-
-    /**========watch========== */
-    @Watch('update')
-    private changeShow(newval: boolean, oldval: boolean) {
-        if (newval) {
-            this.getpartinfo();
+        if(this.proModal) {
+         this.getPartsName();
         }
+        this.treeData = this._.cloneDeep(this.treeDataOrgin);
     }
 }

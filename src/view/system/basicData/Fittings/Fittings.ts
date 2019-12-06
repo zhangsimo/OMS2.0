@@ -6,11 +6,11 @@ import * as api from "_api/system/partManager";
 // @ts-ignore
 import * as tools from "_utils/tools";
 // @ts-ignore
-import accessories from './modal/Accessories';
-
+// import accessories from './modal/Accessories';
+import PartInfo from "_c/partInfo/partInfo";
 @Component({
   components: {
-    accessories
+    PartInfo
   }
 })
 export default class Fittings extends Vue {
@@ -541,18 +541,31 @@ export default class Fittings extends Vue {
     this.queryHandle();
   }
   /* 本地平台 */
+  private isAdd:boolean = true;
   // 新增
   private add() {
-    let accessories: any = this.$refs.accessories;
-    accessories.proModal = true;
+    this.isAdd = true;
+    const ref:any = this.$refs.partInfo
+    ref.init();
   }
   // 修改
-  private change() {
-    let partid = this.currRow.id;
-    let accessories: any = this.$refs.accessories;
-    accessories.update = true;
-    accessories.id = partid;
-    accessories.proModal = true;
+  private async change() {
+    this.isAdd = false;
+    const ref:any = this.$refs.partInfo
+    let res: any = await api.findbyidInfo(this.currRow.id);
+    ref.init(res.data || {});
+  }
+  private async submitSave(row) {
+    if(!this.isAdd) {
+      row.id = this.currRow.id;
+    }
+    let res:any = await api.approval(row);
+    if(res.code == 0) {
+      this.$Message.success('保存成功');
+      const ref:any = this.$refs.partInfo;
+      ref.proModal = false;
+      this.queryHandle();
+    }
   }
   // 启用 禁用
   private async changeDisable() {
