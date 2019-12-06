@@ -419,10 +419,10 @@
         let page = this.page.num - 1
         let size = this.page.size
         getTopList(size, page, data).then(res => {
-          // console.log('打印出来的数据',res)
+          console.log('打印出来的数据',res)
 
           if (res.code === 0) {
-            res.data.content.map(item => item.status = JSON.parse(item.status))
+            // res.data.content.map(item => item.status = JSON.parse(item.status))
             this.page.total = res.data.totalElements
             this.TopTableData = res.data.content
             // console.log('上表格数据',this.TopTableData)
