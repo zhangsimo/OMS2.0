@@ -3,46 +3,44 @@
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf wlf-center">
-        <div class="db mr10">
-          <span>快速查询：</span>
-          <Select v-model="conditionData.character" class="w100 mr10" clearable>
-            <Option v-for="item in quickArray" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </div>
-        <div class="db mr10">
-          <span class="mr10">日期：</span>
-          <Date-picker
-            type="daterange"
-            class="w200 mr10"
-            :options="options3"
-
-            placeholder="年/月/日-年/月/日"
-          >
-          </Date-picker>
-        </div>
-        <div class="db mr10">
-          <Select v-model="conditionData.status" class="w100 mr10" clearable>
-            <Option value="1" label="待受理"></Option>
-            <Option value="3" label="已受理"></Option>
-            <Option value="2" label="部分受理"></Option>
-          </Select>
-        </div>
-        <div class="db mr10">
-          <Select v-model="penSalesData.customer" class="w100 mr10" placeholder="选择客户" filterable clearable>
-            <Option v-for="item in customerListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </div>
-        <div class="db mr10">
-          <Select v-model="penSalesData.company" class="w200 mr10" placeholder="选择公司" filterable clearable>
-            <Option v-for="item in companyListOptions" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </div>
-        <div class="db mr10">
-          <Button type="warning" class="mr20">
-            <Icon custom="iconfont iconchaxunicon icons"/>
-            查询
-          </Button>
-        </div>
+          <div class="db mr10">
+            <span>快速查询：</span>
+            <getDate class="mr10" @quickDate="getvalue"></getDate>
+          </div>
+          <div class="db mr10">
+            <span class="mr10">日期：</span>
+            <Date-picker
+              type="datetimerange"
+              clearable
+              class="w320 mr10"
+              :options="options3"
+              @on-change="getvalue"
+              placeholder="年/月/日-年/月/日"
+            >
+            </Date-picker>
+          </div>
+          <div class="db mr10">
+            <Select v-model="orderType" style="width:100px" class="mr10" @on-change="getOrderType">
+              <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
+            </Select>
+          </div>
+          <div class="db mr10">
+            <Select v-model="guestId" class="w150 mr10" placeholder="选择客户" filterable clearable
+                    @on-change="getCustomer">
+              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
+          </div>
+          <div class="db mr10">
+            <Select v-model="company" class="w200 mr10" placeholder="选择公司" filterable clearable @on-change="getCompany">
+              <Option v-for="item in companyListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
+            </Select>
+          </div>
+          <!--        <div class="db mr10">-->
+          <!--          <Button type="warning" class="mr20">-->
+          <!--            <Icon custom="iconfont iconchaxunicon icons"/>-->
+          <!--            查询-->
+          <!--          </Button>-->
+          <!--        </div>-->
         </div>
       </div>
     </section>
@@ -50,235 +48,204 @@
 
     <section class="con-box">
       <div class="inner-box">
-      <!--         上表格-->
-      <div class="topTableDate">
-        <vxe-table
-          border
-          resizable
-          size="mini"
-          height='400'
-          :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
-        >
-          <vxe-table-column
-            type="index"
-            title="序号"
-          ></vxe-table-column>
-          <vxe-table-column title="操作" width="120">
-            <template v-slot="{ row,rowIndex }">
-              <vxe-button type="text"  @click="showNewOrder">生成采购单</vxe-button>
-            </template>
-          </vxe-table-column>
+        <!--         上表格-->
+        <div class="topTableDate">
+          <vxe-table
+            border
+            resizable
+            size="mini"
+            height='300'
+            :queryTime="queryTime"
+            :orderType="orderType"
+            :company="company"
+            :guestId="guestId"
+            :data="TopTableData"
+            highlight-hover-row
+            highlight-current-row
+            @current-change="selectTabelData"
+            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          >
+            <vxe-table-column
+              type="index"
+              title="序号"
+            ></vxe-table-column>
+            <vxe-table-column title="操作" width="120">
+              <template v-slot="{ row,rowIndex }">
+                <vxe-button v-if="row.status.value == 1" type="text" @click="showNewOrder(row)">生成采购单</vxe-button>
+              </template>
+            </vxe-table-column>
 
-          <vxe-table-column
-            field="name"
-            title="公司"
+            <vxe-table-column
+              field="company"
+              title="公司"
 
-          ></vxe-table-column>
-          <vxe-table-column
-            field="customer"
-            title="客户"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="guestName"
+              title="客户"
 
-          ></vxe-table-column>
-          <vxe-table-column
-            field="preId"
-            title="预售单号"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="serviceId"
+              title="预售单号"
 
-          ></vxe-table-column>
+            ></vxe-table-column>
 
-          <vxe-table-column
-            field="status"
-            title="状态"
+            <!--          <vxe-table-column-->
+            <!--            field="status"-->
+            <!--            title="状态"-->
 
-          ></vxe-table-column>
-          <vxe-table-column field="num" title="订单数量">
-            <template v-slot:edit="{ row }">
-              <InputNumber
-                :max="9999"
-                :min="0"
-                v-model="row.num"
-              ></InputNumber>
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="订单金额" filed="totalprice">
-            <template v-slot="{ row }">
-              {{ (row.price * row.num) | priceFilters }}
-            </template>
-          </vxe-table-column>
-          <vxe-table-column
-            field="num6"
-            title="提交日期"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="预计发货日期"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="预计到货日期"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="备注"
+            <!--          ></vxe-table-column>-->
+            <vxe-table-column field="status" title="状态">
+              <template v-slot="{ row }">
+                <span>{{row.status.name}}</span>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column field="orderQty" title="订单数量">
+              <!--            <template v-slot:edit="{ row }">-->
+              <!--              <InputNumber-->
+              <!--                :max="9999"-->
+              <!--                :min="0"-->
+              <!--                v-model="row.num"-->
+              <!--              ></InputNumber>-->
+              <!--            </template>-->
+            </vxe-table-column>
+            <vxe-table-column title="订单金额" filed="orderAmt">
+            </vxe-table-column>
+            <vxe-table-column
+              field="commitTime"
+              title="提交日期"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="planSendDate"
+              title="预计发货日期"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="planArriveDate"
+              title="预计到货日期"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="remark"
+              title="备注"
 
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="采购单号"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="pchsMainCode"
+              title="采购单号"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="settleMan"
+              title="受理人"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="settleDate"
+              title="受理日期"
+            ></vxe-table-column>
 
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="受理人"
-            width="100"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="受理日期"
-            width="100"
-          ></vxe-table-column>
+          </vxe-table>
+        </div>
 
-        </vxe-table>
+        <!--     分页-->
+        <Row class="mt10 mb10">
+          <Col span="12">
+            <div>
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total
+                    class-name="page-con"
+                    @on-change="selectNum" @on-page-size-change="selectPage"
+              ></Page>
+            </div>
+          </Col>
+          <Col span="12" class="mt20">
+            <div style="text-align: right">
+              每页{{this.page.size}}条,
+              共{{this.page.total}}条
+            </div>
+
+          </Col>
+        </Row>
+        <!--        下表格-->
+        <div class="bottomTableDate">
+
+          <vxe-table
+            border
+            show-footer
+            :footer-method="footerMethod"
+            resizable
+            size="mini"
+            height='400'
+            :data="BottomTableData"
+            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          >
+            <vxe-table-column
+              type="index"
+              title="序号"
+            ></vxe-table-column>
+
+            <!-- <vxe-table-column title="操作" width="80">
+              <template v-slot="{ row }">
+                <Button type="text">查看</Button>
+              </template>
+            </vxe-table-column> -->
+
+            <vxe-table-column
+              field="partCode"
+              title="配件编码"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="partName"
+              title="配件名称"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="partBrand"
+              title="品牌"
+            ></vxe-table-column>
+            <vxe-table-column field="orderQty" title="数量"></vxe-table-column>
+            <vxe-table-column field="orderPrice" title="销价"></vxe-table-column>
+            <vxe-table-column title="金额">
+              <template v-slot="{ row }">
+                <span>{{ countAmount(row) }} </span>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column
+              field="remark"
+              title="备注"
+            ></vxe-table-column>
+            <vxe-table-column title="品牌车型">
+              <template v-slot="{row,rowIndex}">
+                <span>{{row.carBrandName}} {{row.carModelName}}</span>
+              </template>
+            </vxe-table-column>
+            <vxe-table-column
+              field="unit"
+              title="单位"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="oemCode"
+              title="OE码"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="spec"
+              title="规格"
+            ></vxe-table-column>
+          </vxe-table>
+        </div>
       </div>
-
-      <!--     分页-->
-      <Row class="mt10 mb10">
-        <Col span="12">
-          <div>
-            <Page
-
-              :current="pageList.page"
-              :total="this.pageList.total"
-              :page-size="pageList.pageSize"
-              :page-size-opts="pageList.pageSizeOpts"
-              show-sizer
-            />
-          </div>
-        </Col>
-        <Col span="12" class="mt10">
-          <div style="text-align: right">
-            每页{{this.pageList.size}}条,
-            共{{this.pageList.total}}条
-          </div>
-
-        </Col>
-      </Row>
-      <!--        下表格-->
-      <div class="bottomTableDate">
-
-        <vxe-table
-          border
-          resizable
-          size="mini"
-          height='400'
-          :data="BottomTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
-        >
-          <vxe-table-column
-            type="index"
-
-            title="序号"
-          ></vxe-table-column>
-
-          <!-- <vxe-table-column title="操作" width="80">
-            <template v-slot="{ row }">
-              <Button type="text">查看</Button>
-            </template>
-          </vxe-table-column> -->
-
-          <vxe-table-column
-            field="name"
-            title="配件编码"
-
-          ></vxe-table-column>
-          <vxe-table-column
-            field="role"
-            title="配件名称"
-            width="100"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="brand"
-            title="品牌"
-
-          ></vxe-table-column>
-          <vxe-table-column field="num" title="数量">
-            <template v-slot:edit="{ row }">
-              <InputNumber
-                :max="9999"
-                :min="0"
-                v-model="row.num"
-              ></InputNumber>
-            </template>
-          </vxe-table-column>
-
-          <vxe-table-column field="price" title="销价">
-            <template v-slot:edit="{ row }">
-              <InputNumber
-                :max="9999"
-                :min="0"
-                v-model="row.price"
-              ></InputNumber>
-            </template>
-            <template v-slot="{ row }">
-              {{ row.price | priceFilters }}
-            </template>
-          </vxe-table-column>
-          <vxe-table-column title="金额" filed="totalprice">
-            <template v-slot="{ row }">
-              {{ (row.price * row.num) | priceFilters }}
-            </template>
-          </vxe-table-column>
-
-          <vxe-table-column
-            field="date12"
-            title="备注"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="品牌车型"
-
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="品牌车型"
-
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="单位"
-
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="OE码"
-
-          ></vxe-table-column>
-          <vxe-table-column
-            field="date12"
-            title="规格"
-
-          ></vxe-table-column>
-
-          <vxe-table-column
-            field="date12"
-            title="配件内码"
-
-          ></vxe-table-column>
-        </vxe-table>
-      </div>
-    </div>
     </section>
-<!--    新增采购订单-->
-    <new-order ref="newOrder"></new-order>
+    <!--    新增采购订单-->
+    <new-order ref="newOrder" :data = 'clickRow'></new-order>
   </div>
 </template>
 
 <script>
+  import {getTopList, getClient, selectCompany} from "_api/salesManagment/acceptance.js";
+  import getDate from '@/components/getDate/dateget'
   import NewOrder from './components/NewOrder';
+
   export default {
     name: "acceptance",
-    components:{
-      NewOrder
+    components: {
+      NewOrder,
+      getDate
     },
     data() {
       return {
@@ -286,62 +253,253 @@
           character: "",  // 快速查询
           status: '1',  //受理状态
         },
-        // 快速查询数据1
-        quickArray: [
-          {
-            value: "本周",
-            label: "本周"
-          },
-          {
-            value: "上周",
-            label: "上周"
-          },
-          {
-            value: "本月",
-            label: "本月"
-          },
-          {
-            value: "上月",
-            label: "上月"
-          },
-          {
-            label: "本年",
-            value: "本年"
-          }
+        orderType: 1,
+        typeList: [
+          {value: 1, name: '待受理'},
+          {value: 3, name: '已受理'},
+          {value: 4, name: '已完成'},
+
         ],
+        // // 快速查询数据1
+        // quickArray: [
+        //   {
+        //     value: "本周",
+        //     label: "本周"
+        //   },
+        //   {
+        //     value: "上周",
+        //     label: "上周"
+        //   },
+        //   {
+        //     value: "本月",
+        //     label: "本月"
+        //   },
+        //   {
+        //     value: "上月",
+        //     label: "上月"
+        //   },
+        //   {
+        //     label: "本年",
+        //     value: "本年"
+        //   }
+        // ],
         // 日期数据
         options3: {
           disabledDate(date) {
             return date && date.valueOf() > Date.now();
           }
         },
-        // 代销售条件查询
-        penSalesData: {
-          character: '', // 快速查询
-          company: '', //公司选择
-          customer: '', //客户
-        },
-        customerListOptions: [],//选择客户下拉列表
+
+        company: '', //公司选择
         companyListOptions: [],//选择公司下拉列表
-        TopTableData: [{
-          index: 1, name: 123, date12: 456
-        }],//上侧表格list
+        guestId: '',
+        company: '',
+        client: [],//选择客户列表
+        TopTableData: [],//上侧表格list
         BottomTableData: [],//下侧表格list
-        // 分页数据
-        pageList: {
-          page: 1,
+        //分页
+        page: {
           total: 0,
           size: 10,
-          pageSize: 10,
-          pageSizeOpts: [10, 20, 30, 40, 50]
+          num: 1
         },
-        pageTotal: 10,
+        totalMoney: '',//总价
+        queryTime: '',//快速查询时间
+        queryDate: '',//获取查询日期
+        clickRow:'',//打开采购订单信息
       }
 
     },
-    methods:{
-      showNewOrder(){
+    mounted() {
+      this.getTopList()
+      this.getAllClient()
+      this.getAllCompany()
+    },
+    methods: {
+      //获取选择状态类型
+      getOrderType(v) {
+        this.orderType = v
+        // console.log('获取的状态时间', this.orderType)
+      },
+      //获取选择客户
+      getCustomer(v) {
+        this.guestId = v
+        // console.log('选择的客户数据999', v)
+      },
+      //获取选择公司
+      getCompany(v) {
+        this.company = v
+        // console.log('选择的公司数据55555555555', v)
+      },
+      // //快速查询日期
+      // getDateTime(date){
+      //   this.queryDate=date
+      //   console.log('获取的日期呜呜呜呜',date)
+      // },
+      //获取时间
+      getvalue(date) {
+        this.queryTime = date
+        // console.log('获取的时间啊啊', this.queryTime)
+      },
+      //客户列表
+      getAllClient() {
+        getClient().then(res => {
+          // console.log('打印出来的客户数据', res)
+          if (res.code === 0) {
+            this.client = res.data
+          }
+        })
+      },
+      newArr(arr) {
+        // console.log(arr)
+        return arr.reduce((pre, cur) => {
+          // console.log(pre, cur)
+          let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
+          return pre.concat(flag ? this.newArr(cur.childs) : cur)
+        }, [])
+      },
+      toList(arr) {
+        // console.log(arr)v
+        return arr.reduce((ret, v) => {
+          // console.log(ret, v)
+          let item = this.deepClone(v)
+          delete item.childs
+          this.companyListOptions.push(item)
+          let flag = Array.isArray(v.childs) && v.childs.length > 0
+          return ret.concat(flag ? this.toList(v.childs) : v)
+        }, [])
+      },
+      deepClone(obj) {
+        let ret
+        ret = JSON.stringify(obj)
+        ret = JSON.parse(ret)
+        return ret
+      },
+      //获取公司信息列表
+      getAllCompany() {
+        selectCompany({pId: this.$store.state.user.userData.groupId}).then(res => {
+          // console.log('获取到的公司信息3333', res)
+          if (res.code === 0) {
+            let data = res.data
+            let item = this.deepClone(data)
+            delete item.childs
+            // console.log(item)
+            this.companyListOptions.push(item)
+            this.toList(data.childs)
+            // console.log('666666', this.companyListOptions)
+          }
+        })
+      },
+      //切换页面
+      selectNum(val) {
+        this.page.num = val
+        this.getTopList()
+      },
+      //切换页数
+      selectPage(val) {
+        this.page.num = 1
+        this.page.size = val
+        this.getTopList()
+      },
+      showNewOrder(row) { //弹出生成采购订单模态框
+        this.clickRow = JSON.parse(JSON.stringify(row))
         this.$refs.newOrder.openModal()
+      },
+      //分页查询预售单受理信息上
+      getTopList() {
+        let data = {}
+        data.commitTimeStart = this.queryTime[0] || ''
+        data.commitTimeEnd = this.queryTime[1] || ''
+        data.guestId = this.guestId
+        data.company = this.company
+        // data.commitTimeStart=this.queryDate[0] || ''
+        // data.commitTimeEnd=this.queryDate[1] || ''
+        // params=this.query
+        data.status = this.orderType
+        let page = this.page.num - 1
+        let size = this.page.size
+        getTopList(size, page, data).then(res => {
+          // console.log('打印出来的数据',res)
+
+          if (res.code === 0) {
+            res.data.content.map(item => item.status = JSON.parse(item.status))
+            this.page.total = res.data.totalElements
+            this.TopTableData = res.data.content
+            // console.log('上表格数据',this.TopTableData)
+          }
+
+        })
+
+      },
+      //获取下侧表格一行选中的数据
+      selectTabelData(v) {
+        this.currentRow = v
+        console.log('99999', this.currentRow)
+        this.BottomTableData = v.row.detailVOList
+        // console.log('下表格数据', this.BottomTableData)
+      },
+      //计算表格数据
+      countAmount(row) {
+        return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
+      },
+      // 计算尾部总和
+      countAllAmount(data) {
+        let count = 0
+        data.forEach(row => {
+          count += this.countAmount(row)
+        })
+        this.totalMoney = count
+        return count
+      },
+      //获取尾部总数
+      footerMethod({columns, data}) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return '和值'
+            }
+            if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
+              return this.$utils.sum(data, column.property)
+            }
+            if (columnIndex === 6) {
+              return ` ${this.countAllAmount(data)} `
+            }
+            return null
+          })
+        ]
+      },
+    },
+    watch: {
+      //监听时间
+      queryTime: function (val, old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getTopList()
+      },
+      // //监听日期
+      // queryDate:function (val,old) {
+      //   this.page.num = 1
+      //   this.page.size = 10
+      //   this.getTopList()
+      //
+      // }
+      //监听客户状态
+      guestId: function (val, old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getTopList()
+      },
+      //监听状态
+      orderType: function (val, old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getTopList()
+      },
+      //监听公司
+      company: function (val, old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getTopList()
       }
     }
   }
@@ -364,4 +522,12 @@
     align-items: center;
   }
 
+  .main .ivu-layout .page-con {
+    text-align: left;
+    padding-left: 10px;
+  }
+
+  .ivu-row {
+    margin-right: 10px;
+  }
 </style>

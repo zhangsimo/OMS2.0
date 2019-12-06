@@ -62,7 +62,6 @@
           </div>
           <div class="db">
             <Button @click="showFee" class="mr10"
-              :disabled="isInput"
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
@@ -92,6 +91,7 @@
                 :loading="purchaseOrderTable.loading"
                 :columns="purchaseOrderTable.columns"
                 :data="purchaseOrderTable.tbdata"
+                ref="currentRowTable"
               ></Table>
               <Page
                 class-name="fl pt10"
@@ -366,6 +366,7 @@
                       :max="999999"
                       :min="0"
                       v-model="row.orderPrice"
+                      :precision="2"
                     ></InputNumber>
                   </template>
                   <template v-slot="{ row }">
@@ -437,7 +438,7 @@
     <!-- 更多 -->
     <more-search @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 费用登记 -->
-    <fee-registration ref="feeRegistration"></fee-registration>
+    <fee-registration ref="feeRegistration" :state="selectRowState" :serviceId="serviceId"></fee-registration>
     <!-- 供应商资料 -->
     <select-supplier
       @selectSearchName="selectSupplierName"
@@ -462,6 +463,8 @@
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
+    <!-- 打印 -->
+    <print-model ref="PrintModel" :orderId="mainId"></print-model>
   </div>
 </template>
 

@@ -69,7 +69,7 @@
 
 <script lang="ts">
 import * as tools from "../../../../utils/tools";
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Emit } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
 
 @Component({
@@ -126,6 +126,7 @@ export default class MoreSearch extends Vue {
     this.serchN = false;
   }
 
+  @Emit('getmoreData')
   private ok() {
     let data = {
       startTime: tools.transTime(this.createDate[0]),
@@ -150,16 +151,16 @@ export default class MoreSearch extends Vue {
         subdata.set(key, data[key]);
       }
     }
+     let obj:any = {};
     if (subdata.size > 0) {
-      let obj = {};
       for (let [k, v] of subdata) {
         obj[k] = v;
       }
-      this.$emit("getmoreData", obj);
     } else {
-      this.$emit("getmoreData", null);
+      obj = null;
     }
     this.cancel();
+    return obj;
   }
 }
 </script>

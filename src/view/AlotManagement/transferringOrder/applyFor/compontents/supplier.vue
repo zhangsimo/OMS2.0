@@ -12,7 +12,7 @@
         </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default' @click="throwData"><Icon type="md-close" /> 取消</Button>
+        <Button class="mr10" type='default' @click="throwDatatwo"><Icon type="md-close" /> 取消</Button>
         <Button type='default' v-if="isShowAddPartBtn" @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
@@ -47,6 +47,11 @@
       components: {PartInfo},
       props:{
         isShowAddPartBtn:false
+      },
+      methods: {
+        throwDatatwo(){
+          this.searchPartLayer = false
+        }
       }
     }
 </script>

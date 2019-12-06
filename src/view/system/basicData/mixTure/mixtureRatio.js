@@ -160,6 +160,31 @@ const data = function() {
                 input(event) {
                   params.row.qty = event;
                   vm.customer.tbdata[params.index] = params.row;
+                },
+                "on-blur": event => {
+                  let val = event.target.value;
+                  let reg = /^[+]{0,1}(\d+)$/
+                  if (!reg.test("val")) {
+                    this.$Message.error("请输入正整数")
+                    params.row.qty = ''
+                  }
+                  // console.log(val)
+                  if(!val){
+                    this.$Message.error("请输入0-100之间的数值")
+                    params.row.qty = ''
+                  }
+                  if(isNaN(val)){
+                    this.$Message.error("请输入0-100之间的数值")
+                    params.row.qty = ''
+                  }
+                  if(val < 0){
+                    this.$Message.error("请输入0-100之间的数值")
+                    params.row.qty = ''
+                  }
+                  if(val > 100){
+                    this.$Message.error("请输入0-100之间的数值")
+                    params.row.qty = ''
+                  }
                 }
               },
             })

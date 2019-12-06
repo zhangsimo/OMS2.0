@@ -120,7 +120,7 @@
 
 <script lang="ts">
 import * as tools from "../../../../utils/tools";
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 // import SelectSupplier from "./selectSupplier.vue";
@@ -150,15 +150,14 @@ export default class ProcurementModal extends Vue {
   private init() {
     this.shows = true;
     this.reset();
-    if(this.tableData.length <= 0) {
-      this.getPchsPlanList();
-    }
+    this.getPchsPlanList();
   }
 
+  @Emit('getPlanOrder')
   private ok() {
-    if(!this.selectRow) return this.$Message.error('请选择采购计划');
-    this.$emit('getPlanOrder', this.selectRow);
+    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
     this.shows = false;
+    return this.selectRow;
   }
 
   // 选择供应商

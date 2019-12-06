@@ -2,34 +2,33 @@
   <Modal v-model="showNew" title="新增采购订单" width="600">
     <div class="newOrderInfo">
       <div class="header">
-        <Form ref="formOne" :model="Orderform" :label-width="80">
-          <div class="db ml20 mb10">
-            <Button type="warning" class="mr10"
-            ><i class="iconfont mr5 iconbaocunicon"></i>保存
-            </Button
-            >
-            <Button class="mr10"
-            >
-              <Icon type="md-close" size="14"/>
-              取消
-            </Button
-            >
-          </div>
+        <Form  ref="formPlan" :model="formPlan" :label-width="80">
+<!--          <div class="db ml20 mb10">-->
+<!--            <Button type="warning" class="mr10"-->
+<!--            ><i class="iconfont mr5 iconbaocunicon"></i>保存-->
+<!--            </Button-->
+<!--            >-->
+<!--            <Button class="mr10"-->
+<!--            >-->
+<!--              <Icon type="md-close" size="14"/>-->
+<!--              取消-->
+<!--            </Button-->
+<!--            >-->
+<!--          </div>-->
           <Row>
             <FormItem label="往来单位:">
               <Col span="19">
                 <Input
                   type="text"
                   placeholder="请选择往来单位"
-
-                  v-model="Orderform.name"
+                  v-model="formPlan.supplyName"
                 />
               </Col>
               <Col>
                 <Col span="5"
                 >
                   <Button
-
+                    @click="addSuppler"
                     class="ml5"
                     size="small"
                     type="default"
@@ -45,19 +44,17 @@
             <Col span="12">
               <FormItem
                 label="票据类型:">
-                <Select v-model="Orderform.pjtype"
+                <Select v-model="formPlan.billTypeId"
                         placeholder="请选择票据类型">
-                  <Option v-for="item in  pjTypeList" :value="item.value" :key="item.value">{{ item.label }}
-                  </Option>
+                  <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="结算方式:">
-                <Select v-model="Orderform.jstype"
+                <Select v-model="formPlan.settleTypeId"
                         placeholder="请选择结算方式">
-                  <Option v-for="item in jsTypeList" :value="item.value" :key="item.value">{{ item.label }}
-                  </Option>
+                  <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -67,76 +64,79 @@
               type="text"
               placeholder="备注"
 
-              v-model="Orderform.mark"
+              v-model="formPlan.mark"
             />
           </FormItem>
         </Form>
       </div>
       <div class="main clearfix mt20">
-        <!-- 销售出库单上 -->
+        <!-- 销售出库单下 -->
         <vxe-table
           border
           resizable
           size="mini"
-          :data="tableDataTop"
+          :data="data.detailVOList"
+          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
           highlight-current-row
         >
           <vxe-table-column
             type="index"
             title="序号"
-            width="60"
           ></vxe-table-column>
           <vxe-table-column
-            field="role"
+            field="partCode"
             title="配件编码"
-            width="150"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
+            field="partName"
             title="配件名称"
-            width="150"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
+            field="partBrand"
             title="品牌"
-            width="100"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
+            field="unit"
             title="单位"
-            width="60"
           ></vxe-table-column>
+
           <vxe-table-column
-            field="sex"
-            title="配件内码"
-            width="120"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="num6"
+            field="orderQty"
             title="采购数量"
-            width="80"
+            :edit-render="{name: 'input'}"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="orderPrice"
             title="采购单价"
-            width="80"
+            :edit-render="{name: 'input'}"
           ></vxe-table-column>
         </vxe-table>
       </div>
     </div>
     <div slot='footer'>
-      <Button type='primary'>确定</Button>
+      <Button type='primary' @click="addPurchaseOrder">确定</Button>
       <Button type='default' @click="showNew=false">取消</Button>
     </div>
+    <!--选择供应商-->
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
   </Modal>
+
 </template>
 
 <script>
+  import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
+  import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  import {newPurchaseOrder} from "_api/salesManagment/acceptance.js";
   export default {
     name: 'NewOrder',
+    components:{
+      SelectSupplier
+    },
+    props:{
+      data:''
+    },
     data() {
       return {
-
         pjTypeList: [ //票据类型
           {
             value: '汇票',
@@ -157,16 +157,16 @@
             label: '现结'
           },
         ],
+        settleTypeList: {},//结账类型
         showNew: false, // 新增采购订单信息——表单
-        Orderform: {
-          name: '',//往来单位
-          mark: '', //备注
-          pjtype: '',//票据类型
-          jstype: '',//结算方式
+        formPlan: {
+          supplyName: '', //往来单位
+           mark: '', //备注
+          // pjtype: '',//票据类型
+          // jstype: '',//结算方式
+          guestId:'',//客户id
+          billTypeId:''
         },
-        tableDataTop: [
-          {index: 1, role: 123, sex: 456}
-        ],//上面表格数据
         tableDataBottom: [], //下面表格数据
         SalesOutboundTable: {  // 销售出库单列表
           loading: false,
@@ -179,9 +179,49 @@
       }
 
     },
+    mounted() {
+      // console.log('李敏反反复复',this.$parent)
+      this.getType()
+      // console.log(this.$refs)
+    },
     methods: {
+      //选择供应商
+      addSuppler(){
+        this.$refs.selectSupplier.init()
+      },
       openModal() {
         this.showNew = true;
+        this.tableDataBottom=this.$parent.BottomTableData
+        // console.log('哈哈哈哈哈',this.$parent)
+      },
+      getSupplierName(v){
+        // console.log(v);
+        //赋值供应商名称
+        this.formPlan.supplyName = v.fullName||"";
+        //赋值供应商id
+        this.formPlan.guestId = v.guestId||"";
+        //赋值票据类型id
+        this.formPlan.billType = v.billTypeId||"";
+      },
+      //获取客户属性
+      async getType(){
+        let data ={}
+        //107票据类型
+        //106结算方式
+        data =['CS00106','CS00107']
+        let res = await getDigitalDictionary(data)
+        if(res.code == 0){
+          this.settleTypeList = res.data
+          // console.log('6666666666666',this.settleTypeList)
+        }
+
+      },
+       //生成采购订单
+      addPurchaseOrder(){
+        let data={}
+        newPurchaseOrder(data).then(res=>{
+          // console.log('88888888888',res)
+        })
       }
     }
 
