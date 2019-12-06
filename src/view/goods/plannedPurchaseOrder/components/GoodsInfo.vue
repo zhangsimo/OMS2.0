@@ -364,7 +364,8 @@ export default class GoodsInfo extends Vue {
         if (res.code == 0) {
           this.$Message.success("保存成功");
           this.reset();
-          this.getLists();
+          // this.getLists();
+          this.cancel();
         }
       } else {
         this.$Message.error("必填信息未填写!");

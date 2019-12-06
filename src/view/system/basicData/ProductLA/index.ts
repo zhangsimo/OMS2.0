@@ -197,6 +197,7 @@ export default class ProductLA extends Vue {
 
     // mounted
     private async mounted() {
+        this.getStaff();
         const roles = await api.getRoles()
         if (roles.code == 0) {
             this.roleOptions = roles.data.content.map((el: any) => {
@@ -207,8 +208,6 @@ export default class ProductLA extends Vue {
             })
             this.roleOptions.unshift({ label: "全部", value: '全部' })
         }
-
-        this.getStaff();
     }
 
     // methods
@@ -276,31 +275,39 @@ export default class ProductLA extends Vue {
     private async getwaitEmps() {
         this.waitPartListData = [];
         this.waitPartListLoading = true;
-        let params: any = { id: this.employeeId }
+        // id: this.employeeId
+        let params: any = {}
+        let data: any = {};
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
         if(this.waitPartTransListContent.trim().length > 0) {
             switch (this.waitPartTransListSelecteOption) {
                 case "0":
-                    params.partCode = this.waitPartTransListContent;
+                    data.partCode = this.waitPartTransListContent;
                     break;
                 case "1":
-                    params.fullName = this.waitPartTransListContent;
+                    data.fullName = this.waitPartTransListContent;
                     break;
                 case "2":
-                    params.applyCarModel = this.waitPartTransListContent;
+                    data.adapterCarModels = [this.waitPartTransListContent];
                     break;
                 case "3":
-                    params.keyWord = this.waitPartTransListContent;
+                    data.keyWord = this.waitPartTransListContent;
                     break;
                 default:
                     break;
             }
         }
-        let res: any = await api.findByEmp(params);
+        let res: any = await api.findByEmp(params, data);
         if(res.code == 0) {
             this.waitPartListLoading = false;
-            this.waitPartListData = res.data.content;
+            this.waitPartListData = res.data.content.map((el:any) => {
+                let obj = {...el};
+                if(obj.isDistribution != null) {
+                    obj._disabled = true;
+                }
+                return obj;
+            });
             this.waitPartListPage.total = res.data.totalElements;
         }
     }
