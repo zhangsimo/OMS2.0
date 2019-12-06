@@ -34,6 +34,9 @@
       <FormItem label='身份证号码:' prop="cardId" >
         <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
       </FormItem>
+      <FormItem label='入职部门:' prop="ground" >
+        <Cascader :data="list" v-model="data.ground" placeholder='选择部门' style="width: 250px"  @on-change="selectGroust"></Cascader>
+      </FormItem>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='入职时间：' style="">
@@ -94,6 +97,7 @@
 </template>
 
 <script>
+  import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
     export default {
         name: "addStaff",
         props:{
@@ -119,6 +123,9 @@
                     ],
                     cardId:[
                         {required: true, message: '身份证号码不能为空', trigger: 'blur'}
+                    ],
+                    ground:[
+                        {required: true,type:'array', message: '请选择部门', trigger: 'change'}
                     ]
                 },
                 costList:[
@@ -130,9 +137,47 @@
                     {name:'否',value:1}
                 ],
                 business:0,
+                list:[], //公司信息
             }
         },
+    mounted(){
+      this.getList()
+    },
     methods:{
+            //获取公司
+       async getList(){
+           let data = {}
+              data.groupId = this.$store.state.user.userData.tenantGroupId
+           let res = await getcompany(data)
+           if(res.code === 0){
+               let list = []
+               res.data.childs.forEach(item => {
+                   if(item.childs.length > 0){
+                    list.push({value: item.id ,label: item.name ,children:item.childs})
+                   }else {
+                       list.push({value: item.id ,label: item.name ,children:[]})
+                   }
+               })
+                list.forEach( item => {
+                    if(item.children.length > 0){
+                        item.children.map( val => {
+                           val.value = val.id
+                           val.label = val.name
+                           if(val.childs.length > 0){
+                               val.children = val.childs
+                               val.children.map( v => {
+                                   v.value = v.id
+                                   v.label = v.name
+                               })
+                           }else{
+                               val.children = []
+                           }
+                        })
+                    }
+                })
+               this.list = list
+           }
+        },
         resetFields() {
             this.$refs.form.resetFields()
         },
@@ -150,6 +195,10 @@
         },
         changeBirthday(data){
             this.data.birthDay = data
+        },
+        //获取到公司
+        selectGroust(value , selectedData){
+            this.data.groundId = value[value.length - 1]
         }
     }
     }

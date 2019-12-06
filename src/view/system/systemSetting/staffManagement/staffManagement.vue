@@ -170,7 +170,7 @@
                         align: 'center',
                         key:'',
                         render:(h , params) => {
-                            let text = params.row.openSystem ? '是':'否'
+                            let text = params.row.openSystem == 1 ? '否':'是'
                             return h('span' , {} ,text)
                         }
                     },
@@ -319,6 +319,10 @@
           //新增员工
           findRootGroup(){
               this. cancel()
+              this.newStaff ={
+                  single: false,
+                  singtwo: false
+              }
               this.modalShow =true
           },
           // 确认
@@ -327,6 +331,8 @@
                   let stop = this.$loading()
                   this.modalShow = false
                  if(this.title == '新增员工'){
+                     this.newStaff.single =  this.newStaff.single ? 1 : 0
+                     this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
                      editUser(this.newStaff , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
@@ -381,8 +387,8 @@
                   this.newStaff.id=this.oneStaffChange.id,      //id
                   this.newStaff.sureCost=this.oneStaffChange.sureCost, //成本价
                   this.newStaff.business=this.oneStaffChange.business, // 业务员
-                  this.newStaff.single= this.oneStaffChange.single, //允许查看
-                  this.newStaff.singtwo=this.oneStaffChange.singtwo, //允许提交
+                  this.newStaff.single= this.oneStaffChange.single == 1 ? true: false  //允许查看
+                  this.newStaff.singtwo=this.oneStaffChange.singtwo == 1 ? true : false, //允许提交
                   this.newStaff.office=0, //是否在职默认在职
                   this.newStaff.openSystem=0,
                   this.newStaff.groupId=0 //所属机构

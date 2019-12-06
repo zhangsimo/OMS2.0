@@ -64,3 +64,12 @@ export function restpasswd (data) {
   })
 }
 
+
+//获取公司名称
+export function getcompany (params) {
+  return axios.request({
+    url: `${api.authApi}/group/findRootGroup`,
+    method: 'get',
+    params
+  })
+}
