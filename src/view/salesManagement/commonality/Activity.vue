@@ -3,27 +3,26 @@
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
-          <span>编码/名称/拼音：</span>
+          <span>配件编码：</span>
           <FormItem>
             <Input
               type="text"
-              placeholder="配件编码/名称/拼音"
-              style="width: 120px"
-              v-model="Outform.fittingsCode"
+              placeholder="配件编码"
+              style="width: 150px"
+              v-model="Outform.partCode"
             />
           </FormItem>
-          <span>内码:</span>
-          <FormItem>
-            <Input
-              type="text"
-              placeholder="内码"
-              style="width: 120px"
-              v-model="Outform.fittingsCode"
-            />
-          </FormItem>
-          <Button class="mr10" type='warning'><Icon type="ios-search" size="14" /> 查询</Button>
-          <Button class="mr10" type='default'><Icon type="md-checkmark" /> 确定</Button>
-
+            <span>名称：</span>
+            <FormItem>
+              <Input
+                type="text"
+                placeholder="名称"
+                style="width: 150px"
+                v-model="Outform.partName"
+              />
+            </FormItem>
+          <Button class="mr10" type='warning' @click="query"><Icon type="ios-search" size="14" /> 查询</Button>
+          <Button class="mr10" type='default' @click="add"><Icon type="md-checkmark" /> 确定</Button>
         </Form>
       </div>
       <div class="main clearfix">
@@ -36,6 +35,7 @@
           size="mini"
           highlight-hover-row
           highlight-current-row
+          @current-change="getOneActivity"
           :data="tableDataBottom"
         >
           <vxe-table-column
@@ -45,59 +45,58 @@
           ></vxe-table-column>
 
           <vxe-table-column
-            field="role"
+            field="activityName"
             title="活动名称"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
-            title="配件内码"
-          ></vxe-table-column>
-          <vxe-table-column
-            field="num6"
+            field="partCode"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="partName"
             title="配件名称"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="partBrandName"
             title="品牌"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
-            title="活动"
+            field="num"
+            title="活动数量"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="price"
             title="活动单价"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
             title="是否赠送"
-          ></vxe-table-column>
+          >
+            <template v-slot="{row }">
+              <Checkbox :value="row.isGift == 1" disabled></Checkbox>
+            </template>
+          </vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="oemCode"
             title="OEM编码"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="carModelName"
             title="车型"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="activityId"
             title="活动ID"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="remark"
             title="备注"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="beginDate"
             title="开始日期"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="endDate"
             title="结束日期"
           ></vxe-table-column>
 
@@ -105,25 +104,24 @@
       </div>
     </div>
     <div slot='footer'>
-      <Button type='primary'>确定</Button>
-      <Button type='default' @click="showInfo=false">取消</Button>
     </div>
   </Modal>
 </template>
 
 <script>
+    import {getActivity} from '@/api/salesManagment/salesOrder'
+
     export default {
         name:'SalesOutBound',
         data(){
             return {
                 showInfo: false, // 销售出库订单信息——表单
                 Outform :{
-                    Date: "", //开始日期
-                    orderId: "", //业务单号
-                    outOrderId: "", //出库单号
-                    fittingsCode: "", //配件编码
+                    partCode: "",
+                    partName: "",
                 },
                 tableDataBottom:[], //下面表格数据
+                oneList:{},//获取点击到的信息
             }
 
         },
@@ -131,8 +129,32 @@
             //打开模态框
             openModal() {
                 this.showInfo = true;
+                this.getList()
             },
-
+            //获取活动内容
+           async getList(){
+                let data ={}
+                data = this.Outform
+               let res = await getActivity(data)
+                  if(res.code === 0){
+                      console.log(res)
+                      this.tableDataBottom = res.data
+                  }
+           },
+            //查询
+            query(){
+                this.getList()
+            },
+            //获取当前点击到的数据
+            getOneActivity(val){
+              this.oneList = val.row
+            },
+            //确定
+            add(){
+                this.$emit('getActivity' , this.oneList)
+                this.showInfo = false
+            }
+            //getActivity
         }
     }
 </script>

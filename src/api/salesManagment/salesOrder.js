@@ -147,3 +147,62 @@ export function getClientType () {
 
   })
 }
+
+//添加配件
+export function getAccessories (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/saveSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//删除配件
+export function getDeleteList (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/delete`,
+    method: 'post',
+    data
+  })
+}
+
+
+//批量导入地址
+export const getup = `${api.omsOrder}/sellOrderMain/import?`;
+
+//批次配件
+export function getParnt (params) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/chooseBatch`,
+    method: 'get',
+    params
+  })
+}
+
+//活动数据
+export function getActivity (params) {
+  return axios.request({
+    url: `${api.wmsApi}/activityPart/queryAll?`,
+    method: 'get',
+    params
+  })
+}
+
+
+//选择入库单数据
+export function getGodown (params) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/chooseEnter?`,
+    method: 'get',
+    params
+  })
+}
+//获取供应商
+export function getSupplier (data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findAllSupplier`,
+    method: 'post',
+    data
+  })
+}
+

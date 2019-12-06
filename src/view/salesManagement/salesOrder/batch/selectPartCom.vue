@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal v-model="searchPartLayer" title="选择批次配件" width="1000">
       <div class="partCheck-hd">
         <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
           <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>

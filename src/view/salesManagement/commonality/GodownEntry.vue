@@ -3,43 +3,37 @@
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
-          出库日期：
+          入库日期：
           <FormItem>
             <DatePicker
               style="width: 200px"
               type="daterange"
               placeholder="请选择日期"
-              v-model="Outform.Date"
+              @on-change="getTime"
             ></DatePicker>
           </FormItem>
           <FormItem>
-            <Input
-              type="text"
-              placeholder="业务单号"
-              style="width: 150px"
-              v-model="Outform.orderId"
-            />
+            <Select v-model="Outform.enterTypeId" filterable style="width:200px">
+              <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              placeholder="出库单号"
+              placeholder="入库单号"
               style="width: 150px"
-              v-model="Outform.outOrderId"
+              v-model="Outform.serviceId"
             />
           </FormItem>
           <FormItem>
-            <Input
-              type="text"
-              placeholder="配件编码"
-              style="width: 120px"
-              v-model="Outform.fittingsCode"
-            />
+            <Select v-model="Outform.guestId" style="width:100px" placeholder="请选择供应商">
+              <Option v-for="item in enterTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
           </FormItem>
 
-          <Button type="warning" class="mr15">查询</Button>
-          <Button type="warning" class="mr15">选入</Button>
-          <Button>取消</Button>
+          <Button type="warning" class="mr15" @click="query">查询</Button>
+          <Button type="warning" class="mr15" @click="selectInto">选入</Button>
+          <Button @click="showInfo = false">取消</Button>
         </Form>
       </div>
       <div class="main clearfix">
@@ -47,45 +41,44 @@
         <vxe-table
           height='200'
           border
+          :loading="Loading"
           resizable
           auto-resize
           align="center"
-          @select-all="allSelect"
-          @select-change="selectList"
+          @radio-change="selectOne"
           size="mini"
           :data="tableDataTop"
         >
-          <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+          <vxe-table-column type='radio' title="选择" width="60"></vxe-table-column>
           <vxe-table-column
             type="index"
             width="50"
             title="序号"
           ></vxe-table-column>
           <vxe-table-column
-            field="role"
+            field="serviceId"
             title="入库单号"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
+            field="guestName"
             title="供应商名称"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="enterAmt"
             title="入库金额"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="enterDate"
             title="入库日期"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="code"
             title="业务单号"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="enterTypeIdName"
             title="入库类型"
           ></vxe-table-column>
-
         </vxe-table>
         <!-- 入库单下 -->
         <div class="clearfix">
@@ -104,7 +97,7 @@
           size="small"
           highlight-hover-row
           highlight-current-row
-          :data="tableDataBottom"
+          :data="tableDataBottom.details"
         >
           <vxe-table-column
             type="index"
@@ -113,74 +106,65 @@
           ></vxe-table-column>
 
           <vxe-table-column
-            field="role"
+            field="partCode"
             title="配件编码"
           ></vxe-table-column>
           <vxe-table-column
-            field="sex"
+            field="partName"
             title="配件名称"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="partBrand"
             title="品牌"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="oemCode"
             title="OE码"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="systemUnitId"
             title="单位"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="enterQty"
             title="入库数量"
-            width="120"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="enterPrice"
             title="入库单价"
           ></vxe-table-column>
           <vxe-table-column
-            field="num6"
+            field="outableQty"
             title="可售数量"
-            width="120"
           ></vxe-table-column>
-          <vxe-table-column
-            field="num6"
-            title="配件内码"
-            width="120"
-          ></vxe-table-column>
-
         </vxe-table>
 
       </div>
     </div>
     <div slot='footer'>
-      <Button type='primary'>确定</Button>
-      <Button type='default' @click="showInfo=false">取消</Button>
     </div>
   </Modal>
 </template>
 
 <script>
+    import {getGodown , getSupplier} from '@/api/salesManagment/salesOrder'
+
     export default {
         name:'SalesOutBound',
         data(){
             return {
                 showInfo: false, // 销售出库订单信息——表单
-                Outform :{
-                    Date: "", //开始日期
-                orderId: "", //业务单号
-                outOrderId: "", //出库单号
-                fittingsCode: "", //配件编码
-                },
+                Outform :{},
+                clientList:[],//客户列表
+                enterTypeList:[
+                    {label:'全部' ,value:'12345'},
+                    {label:'采购入库' ,value:'050101'},
+                    {label:'调拨入库' ,value:'050104'}
+
+                ],//入库类型
                 tableDataTop:[
-                    {role:123,sex:456},
-                    {role:123,sex:456},
-                    {role:123,sex:456},
                 ],//上面表格数据
-                tableDataBottom:[], //下面表格数据
+                tableDataBottom:{}, //下面表格数据
                 SalesOutboundTable:{  // 销售出库单列表
                     loading: false,
                 },
@@ -189,26 +173,76 @@
                     size: 20,
                     total: 0,
                     placement:[20,40,60,80,100]
-                }
+                },
+                Loading: true,//状态
             }
 
+        },
+        mounted(){
+            this.getClientList()
         },
         methods:{
             //打开模态框
             openModal() {
                 this.showInfo = true;
+                this.getList()
+            },
+            //获取入库数据
+           async getList(){
+                let data = {}
+                    data = this.Outform
+                    data.page = this.page.num -1
+                    data.size = this.page.size
+               this.Loading = true
+               let res = await getGodown(data)
+               if(res.code === 0){
+                   this.Loading = false
+                   this.tableDataTop = res.data.content
+                   this.page.total = res.data.totalElements
+               }
+            },
+            //获取供应商列表
+            async getClientList(){
+                let res = await getSupplier({})
+                  if(res.code === 0){
+                      this.clientList = res.data || []
+                  }
+            },
+            //获取时间
+            getTime(value){
+                if(value[0]){
+                    this.Outform.enterDateStart = value[0] +  " " + "00:00:00"
+                    this.Outform.enterDateEnd = value[1] +' '+ '23:59:59'
+                }
+            },
+            //查询
+            query(){
+                this.getList()
+
             },
             //切换页面
-            selectNum(){},
-            //切换页数
-            selectPage(){},
-            //入库单上部选择
-            selectList(params){
-                // console.log(params.selection)
+            selectNum(val){
+                this.page.num = val
+                this.getList()
             },
-            //入库单上部全选
-            allSelect(params){
-                console.log(params.selection)
+            //切换页数
+            selectPage(val){
+                this.page.num = 1
+                this.page.size = val
+                this.getList()
+            },
+            //上部表格选中
+            selectOne(data){
+                this.tableDataBottom = data.row
+            },
+            //选入
+            selectInto(){
+            if(!this.tableDataBottom.id){
+                this.$message.error('请选择一条有效数据')
+            }else {
+                this.$emit('godownList',this.tableDataBottom)
+              this.showInfo = false
+            }
             }
         }
 

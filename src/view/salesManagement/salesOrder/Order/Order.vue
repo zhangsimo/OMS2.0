@@ -7,7 +7,7 @@
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
-        <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
+        <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
         <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
         <Button class="mr10" @click="setStockOut" :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
@@ -162,6 +162,10 @@
                 }
 
             },
+            //新增
+            addNew(){
+                this.$store.commit('setOneOrder',{})
+            }
         }
     }
 </script>
