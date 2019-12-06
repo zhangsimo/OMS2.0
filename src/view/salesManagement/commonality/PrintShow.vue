@@ -99,7 +99,7 @@
         name: "PrintShow",
         data(){
             return{
-                printShow: false, //模态框隐藏
+                printShoww: false, //模态框隐藏
                 columns2: [
                     {
                         title: '序号',
@@ -186,7 +186,7 @@
                         data.id = order.id
                     let res = await getprintList(data)
                     if(res.code === 0){
-                        this.printShow = true
+                        this.printShoww = true
                         this.onelist = res.data
                     }
                     console.log(res,996)

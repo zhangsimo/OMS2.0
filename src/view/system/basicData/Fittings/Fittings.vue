@@ -41,79 +41,79 @@
           <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
         </div>
         <div slot="right" class="right table-warp">
-          <div class="btn-title" v-if="tabIndex === 0 || isSys">
+          <div class="btn-title" v-if="tabIndex === 0">
             <Button class="mr10 w90" @click="add">
               <span class="center">
                 <Icon type="md-add" />新增
               </span>
             </Button>
-            <!-- <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
+            <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
             </Button>
-            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeDisable" v-if="!isDisable">
+            <!-- <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeDisable" v-if="!isDisable">
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />启用
               </span>
-            </Button>
-            <Button class="mr10 w90" @click="changeDisable" :disabled="!isCanbutton" v-else>
-              <span class="center">
-                <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
-              </span>
-            </Button>
-            <Upload
-              ref="upload"
-              :show-upload-list="false"
-              :action="upurl"
-              :format="['xlsx','xls','csv']"
-              :headers="headers"
-              :before-upload="handleBeforeUpload"
-              :on-success="handleSuccess"
-            >
-              <Button class="mr10 w90">
+              </Button>
+              <Button class="mr10 w90" @click="changeDisable" :disabled="!isCanbutton" v-else>
                 <span class="center">
-                  <Icon custom="iconfont icondaoruicon icons" />导入
+                  <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
                 </span>
               </Button>
-            </Upload> -->
-            <!-- <Button class="mr10 w90" @click="refresh">
+              <Upload
+                ref="upload"
+                :show-upload-list="false"
+                :action="upurl"
+                :format="['xlsx','xls','csv']"
+                :headers="headers"
+                :before-upload="handleBeforeUpload"
+                :on-success="handleSuccess"
+              >
+                <Button class="mr10 w90">
+                  <span class="center">
+                    <Icon custom="iconfont icondaoruicon icons" />导入
+                  </span>
+                </Button>
+              </Upload> 
+              <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
+                <span class="center">
+                  <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售
+                </span>
+              </Button>
+              <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-else>
+                <span class="center">
+                  <Icon custom="iconfont iconqiyongicon icons" />可售
+                </span>
+              </Button>
+              <Button class="mr10 w90" @click="downTemplate">
+                <span class="center">
+                  <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                </span>
+            </Button> -->
+            <Button class="mr10 w90" @click="refresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
               </span>
-            </Button> -->
-            <!-- <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
+            </Button>
+          </div>
+          <div class="btn-title" v-else>
+            <Button class="mr10 w90" @click="add">
               <span class="center">
-                <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售
+                <Icon type="md-add" />新增
               </span>
             </Button>
-            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-else>
-              <span class="center">
-                <Icon custom="iconfont iconqiyongicon icons" />可售
-              </span>
-            </Button>
-            <Button class="mr10 w90" @click="downTemplate">
-              <span class="center">
-                <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-              </span>
-            </Button> -->
             <Button class="mr10 w90" @click="couldRefresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
               </span>
             </Button>
           </div>
-          <!-- <div class="btn-title" v-else>
-            <Button class="mr10 w90" @click="couldRefresh">
-              <span class="center">
-                <Icon custom="iconfont iconshuaxinicon icons" />刷新
-              </span>
-            </Button>
-          </div> -->
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
-              <li v-if="!isSys" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
-              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件资料</li>
+              <li class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
+              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">云配件资料</li>
             </ul>
           </div>
           <div class="tabs-warp" v-if="tabIndex == 0">
@@ -171,7 +171,8 @@
         </div>
       </Split>
     </section>
-    <accessories ref="accessories"></accessories>
+    <!-- <accessories ref="accessories"></accessories> -->
+    <part-info ref="partInfo" :is-add-part="true" @throwData="submitSave"></part-info>
   </main>
 </template>
 

@@ -3,18 +3,6 @@
     <div class="newOrderInfo">
       <div class="header">
         <Form  ref="formPlan" :model="formPlan" :label-width="80">
-<!--          <div class="db ml20 mb10">-->
-<!--            <Button type="warning" class="mr10"-->
-<!--            ><i class="iconfont mr5 iconbaocunicon"></i>保存-->
-<!--            </Button-->
-<!--            >-->
-<!--            <Button class="mr10"-->
-<!--            >-->
-<!--              <Icon type="md-close" size="14"/>-->
-<!--              取消-->
-<!--            </Button-->
-<!--            >-->
-<!--          </div>-->
           <Row>
             <FormItem label="往来单位:">
               <Col span="19">
@@ -64,7 +52,7 @@
               type="text"
               placeholder="备注"
 
-              v-model="formPlan.mark"
+              v-model="formPlan.remark"
             />
           </FormItem>
         </Form>
@@ -74,6 +62,7 @@
         <vxe-table
           border
           resizable
+          :edit-rules="validRules"
           size="mini"
           :data="data.detailVOList"
           :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
@@ -115,7 +104,7 @@
     </div>
     <div slot='footer'>
       <Button type='primary' @click="addPurchaseOrder">确定</Button>
-      <Button type='default' @click="showNew=false">取消</Button>
+      <Button type='default' @click="handleReset">取消</Button>
     </div>
     <!--选择供应商-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -136,36 +125,28 @@
       data:''
     },
     data() {
+      let changeNumber = (rule, value, callback) => {
+        if (!value && value != '0') {
+          callback(new Error("请输入大于或等于0的正整数"));
+        } else {
+          const reg = /^([0]|[1-9][0-9]*)$/
+          if (reg.test(value)) {
+            callback();
+          } else {
+            callback(new Error("请输入大于或等于0的正整数"));
+
+          }
+        }
+      };
       return {
-        pjTypeList: [ //票据类型
-          {
-            value: '汇票',
-            label: '汇票'
-          },
-          {
-            value: '承兑',
-            label: '承兑'
-          },
-        ],
-        jsTypeList: [ //结算方式
-          {
-            value: '月结',
-            label: '月结'
-          },
-          {
-            value: '现结',
-            label: '现结'
-          },
-        ],
         settleTypeList: {},//结账类型
         showNew: false, // 新增采购订单信息——表单
         formPlan: {
           supplyName: '', //往来单位
-           mark: '', //备注
-          // pjtype: '',//票据类型
-          // jstype: '',//结算方式
+           remark: '', //备注
           guestId:'',//客户id
-          billTypeId:''
+          billTypeId:'',//票据类型
+          settleTypeId:'' //结算方式
         },
         tableDataBottom: [], //下面表格数据
         SalesOutboundTable: {  // 销售出库单列表
@@ -175,7 +156,16 @@
           num: 1,
           size: 10,
           total: 0
-        }
+        },
+        validRules: {
+          orderQty: [
+            { required: true,validator:changeNumber },
+
+          ],
+          orderPrice: [
+            { required: true, validator:changeNumber }
+          ]
+        }, //表格校验
       }
 
     },
@@ -185,6 +175,7 @@
       // console.log(this.$refs)
     },
     methods: {
+
       //选择供应商
       addSuppler(){
         this.$refs.selectSupplier.init()
@@ -192,16 +183,24 @@
       openModal() {
         this.showNew = true;
         this.tableDataBottom=this.$parent.BottomTableData
+         let company=''
+          for(let i in this.$parent.TopTableData){
+            company=this.$parent.TopTableData[i].company
+          }
+        this.formPlan.supplyName=company
         // console.log('哈哈哈哈哈',this.$parent)
       },
       getSupplierName(v){
-        // console.log(v);
+        // console.log('打印出来的选择数据是是是',v);
         //赋值供应商名称
         this.formPlan.supplyName = v.fullName||"";
         //赋值供应商id
-        this.formPlan.guestId = v.guestId||"";
+
+        this.formPlan.guestId = v.id||"";
         //赋值票据类型id
-        this.formPlan.billType = v.billTypeId||"";
+        this.formPlan.billTypeId = v.billTypeId||"";
+        //赋值结算类型id
+        this.formPlan.settleTypeId = v.settTypeId ||''
       },
       //获取客户属性
       async getType(){
@@ -219,10 +218,31 @@
        //生成采购订单
       addPurchaseOrder(){
         let data={}
+        data = this.formPlan
+        data.id = this.data.id
+        data.guestId=this.formPlan.guestId
+        data.details= this.data.detailVOList
         newPurchaseOrder(data).then(res=>{
           // console.log('88888888888',res)
+          if(res.code==0){
+            this.$Message.success('新增采购订单成功');
+            this.formPlan.supplyName=""
+            this.formPlan.billTypeId=""
+            this.formPlan.remark=""
+            this.formPlan.settleTypeId=""
+            this.showNew = false;
+            this.$parent.getTopList();
+          }
         })
+      },
+      handleReset(){
+        this.showNew=false
+        this.formPlan.supplyName=""
+        this.formPlan.billTypeId=""
+        this.formPlan.remark=""
+        this.formPlan.settleTypeId=""
       }
+
     }
 
   }
