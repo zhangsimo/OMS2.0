@@ -32,11 +32,12 @@ export function getStaffList (params) {
 }
 
 // 待分配配件
-export function findByEmp (params) {
+export function findByEmp (params, data) {
   return axios.request({
     url: `${api.wmsApi}/wbParts/findByEmp`,
-    method: 'get',
-    params
+    method: 'post',
+    params,
+    data
   })
 }
 

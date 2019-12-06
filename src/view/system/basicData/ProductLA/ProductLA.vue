@@ -146,6 +146,7 @@
               @on-selection-change="selectWaitPart"
             ></Table>
             <Page
+              size="small"
               class-name="page-con"
               :current="waitPartListPage.num"
               :total="waitPartListPage.total"

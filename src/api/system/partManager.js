@@ -68,11 +68,12 @@ export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
 }
 
 // wb配件资料
-export function getwbParts(params) {
+export function getwbParts(params, data) {
   return axios.request({
     url: `${api.wmsApi}/wbParts/queryAll`,
-    method: "get",
-    params
+    method: "post",
+    params,
+    data
   });
 }
 
@@ -115,7 +116,7 @@ export function toggleSale(id) {
 // 通过主键查询-配件资料
 export function findbyidInfo(id) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/findById`,
+    url: `${api.wmsApi}/part/findById`,
     method: "get",
     params: { id }
   });
@@ -170,6 +171,15 @@ export function savePart(data={}) {
     url: `${api.wmsApi}/attribute/save`,
     method: "post",
     data
+  });
+}
+
+// 本地配件资料
+export function getLocalParts(params) {
+  return axios.request({
+    url: `${api.wmsApi}/part/queryAll`,
+    method: "get",
+    params
   });
 }
 
