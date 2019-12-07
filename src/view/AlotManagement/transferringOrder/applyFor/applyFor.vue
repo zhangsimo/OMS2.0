@@ -95,7 +95,7 @@
                         <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
                         <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
@@ -213,10 +213,9 @@
           }
         };
         return {
-          // 保存按钮是否禁用
-          disSave: false,
-            //新增当前行
-             PTrow: {
+          checkboxArr:[],// checkbox选中
+          disSave: false, // 保存按钮是否禁用
+             PTrow: {//新增当前行
             new: true,
             _highlight: true,
                status: {"name":"草稿","value":0},
@@ -360,6 +359,16 @@
         }
       },
       methods: {
+        //删除配件
+        Delete(){
+          // var arr1=[{id:1},{id:2},{id:3},{id:4},{id:5}]
+          // var arr2=[{id:1},{id:2},{id:3}]
+          var set = this.checkboxArr.map(item=>item.id)
+          // console.log(set)
+          var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
+          console.log(resArr)
+          this.Right.tbdata = resArr
+        },
         //更多按钮
         moreaa(){
           this.$refs.moremore.init()
@@ -445,7 +454,8 @@
         },
         //右侧表格复选框选中
         selectChange(msg){
-          console.log(msg.selection)
+          this.checkboxArr = msg.selection
+          console.log(this.checkboxArr)
         },
         //分页
         changePageLeft(p) {

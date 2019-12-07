@@ -34,6 +34,7 @@
             <div>
               <div class="pl10 pr10 Tablebox">
                 <vxe-table
+                  class="aaabox"
                   border
                   resizable
                   :data="topRight.tbdata"
@@ -45,9 +46,11 @@
                   @edit-closed="editClosedEvent">
                   <vxe-table-column title="序号" type="index" width="60"></vxe-table-column>
                   <vxe-table-column field="" title="操作" >
-                    <template v-slot="{row,rowIndex}" v-show="row.status === 0">
-                      <vxe-button type="primary" size="small" @click="acceptance">受理</vxe-button>
-                      <vxe-button size="small" @click="refuse">拒绝</vxe-button>
+                    <template v-slot="{row,rowIndex}">
+                      <div v-show="row.status.value === 1">
+                        <vxe-button type="primary" size="small" @click="acceptance">受理</vxe-button>
+                        <vxe-button size="small" @click="refuse">拒绝</vxe-button>
+                      </div>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="guestName" title="申请公司"></vxe-table-column>
@@ -72,8 +75,10 @@
           <div class="bottom pt10">
             <div class="pl10 pr10 Tablebox">
               <vxe-table
+                class="BottomBox"
                 border
                 resizable
+                show-footer
                 :data="Bottom.tbdata"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 :footer-method="footerMethod"
@@ -93,9 +98,9 @@
                 </vxe-table-column>
                 <vxe-table-column field="remark" title="备注"></vxe-table-column>
               </vxe-table>
-              <Page class-name="page-con" :current="Bottom.page.num" :total="Bottom.page.total" :page-size="Bottom.page.size" @on-change="changePageBottom"
-                    @on-page-size-change="changeSizeBottom" show-sizer show-total>
-              </Page>
+              <!--<Page class-name="page-con" :current="Bottom.page.num" :total="Bottom.page.total" :page-size="Bottom.page.size" @on-change="changePageBottom"-->
+                    <!--@on-page-size-change="changeSizeBottom" show-sizer show-total>-->
+              <!--</Page>-->
             </div>
           </div>
         </div>
@@ -115,6 +120,7 @@
       },
         data(){
           return {
+            rightTableHeight: 0,
             purchaseNameArr: [
               {fullName:'全部',id:'9999'}
             ], //申请公司名称
@@ -184,9 +190,10 @@
           return [
             columns.map((column, columnIndex) => {
               if (columnIndex === 0) {
-                return '和值'
+                let tex = this.Bottom.tbdata.length
+                return tex
               }
-              if (['age', 'rate'].includes(column.property)) {
+              if (['applyQty'].includes(column.property)) {
                 return this.$utils.sum(data, column.property)
               }
               return null
@@ -219,7 +226,7 @@
         //点击一行
         clickOnesList(a){
           this.RowMessage = a.row
-          console.log(a.row.status.value)
+          // console.log(a.row)
           // console.log(this.RowMessage)
           let params = {}
           params.id = this.RowMessage.id
