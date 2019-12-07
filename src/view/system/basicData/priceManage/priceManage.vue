@@ -2,97 +2,185 @@
   <main class="price-manage page">
     <!--上部-->
     <section class="price-main">
-      <Split v-model="split" min="402" max="588">
+      <Split v-model="split" min="400" max="588">
         <div slot="left" class="left">
           <div class="db btn-title">
             <p class="mr10">级别定义:</p>
             <Button class="mr10 w90" @click="add">
-              <span class="center">
-                <Icon type="md-add" />新增
-              </span>
+              <span class="center"> <Icon type="md-add" />新增 </span>
             </Button>
             <Button class="mr10 w90" @click="save">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
             </Button>
-            <Button class="mr10 w90" @click="remove">
+            <Button class="mr10 w90" :disabled="curronly" @click="remove">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
           </div>
-          <Table
+          <vxe-table
             border
-            highlight-row
-            size="small"
-            :loading="level.loading"
-            :stripe="true"
-            :columns="level.columns"
-            :data="level.tbdata"
-            @on-current-change="selectRow"
+            resizable
+            auto-resize
+            stripe
             height="549"
-          ></Table>
+            :loading="level.loading"
+            :data="level.tbdata"
+            highlight-current-row
+            @current-change="selectRow"
+            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          >
+            <vxe-table-column
+              type="index"
+              width="80"
+              title="序号"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="name"
+              title="级别名称"
+              min-width="200"
+              :edit-render="{ name: 'input' }"
+            >
+              <template v-slot:edit="{ row }">
+                <Input v-model="row.name" :disabled="row.readonly" />
+              </template>
+            </vxe-table-column>
+          </vxe-table>
         </div>
         <div slot="right" class="right">
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
-              <li v-if="!curronly" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">客户信息</li>
-              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件价格</li>
+              <li
+                v-if="!curronly"
+                class="center"
+                :class="{ 'tab-active': tabIndex == 0 }"
+                @click="setTab(0)"
+              >
+                客户信息
+              </li>
+              <li
+                class="center"
+                :class="{ 'tab-active': tabIndex == 1 }"
+                @click="setTab(1)"
+              >
+                配件价格
+              </li>
             </ul>
           </div>
           <div class="tabs-warp" v-if="tabIndex == 0">
             <div class="btn-warp">
-              <Input v-model="customer.pinyin" placeholder="请输入拼音" style="width: 140px;" class="mr10" />
+              <Input
+                v-model="customer.pinyin"
+                placeholder="请输入拼音"
+                style="width: 140px;"
+                class="mr10"
+              />
               <Input
                 v-model="customer.fullname"
                 placeholder="请输入全称"
                 style="width: 140px;"
                 class="mr10"
               />
-              <Button :disabled="disabled" class="mr10 w90" @click="queryCustomer" type="warning">
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="queryCustomer"
+                type="warning"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="addCustomer">
-                <span class="center">
-                  <Icon type="md-add" />添加客户
-                </span>
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="addCustomer"
+              >
+                <span class="center"> <Icon type="md-add" />添加客户 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="removeCustomer">
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="removeCustomer"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconlajitongicon icons" />删除客户
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="saveCustomer">
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="saveCustomer"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
               </Button>
             </div>
-            <Table
-              class="table"
+            <vxe-table
               border
-              highlight-row
-              size="small"
-              :loading="customer.loading"
-              :stripe="true"
-              :columns="customer.columns"
-              :data="customer.tbdata"
+              resizable
+              auto-resize
+              stripe
+              ref="xTable1"
               height="440"
-              @on-select="selectrightcus"
-              @on-select-cancel="selectCancelrightcus"
-              @on-select-all="selectAllrightcus"
-              @on-select-all-cancel="selectCancelAllrightcus"
-            ></Table>
+              :loading="customer.loading"
+              :data="customer.tbdata"
+              @select-all="selectAllrightcus"
+              @select-change="selectRC"
+            >
+              <vxe-table-column
+                type="index"
+                width="60"
+                title="序号"
+              ></vxe-table-column>
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="客户全称"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="shortName"
+                title="客户简称"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="brandName"
+                title="操作人"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="brandName"
+                title="操作日期"
+              ></vxe-table-column>
+            </vxe-table>
           </div>
           <div class="tabs-warp" v-else>
             <div class="btn-warp">
-              <Input v-model="part.pinyin" placeholder="请输入编码" style="width: 140px;" class="mr10" />
-              <Input v-model="part.code" placeholder="请输入拼音" style="width: 140px;" class="mr10" />
-              <Input v-model="part.fullname" placeholder="请输入名称" style="width: 140px;" class="mr10" />
-              <Button :disabled="disabled" class="mr10 w90" @click="queryPart" type="warning">
+              <Input
+                v-model="part.pinyin"
+                placeholder="请输入编码"
+                style="width: 140px;"
+                class="mr10"
+              />
+              <Input
+                v-model="part.code"
+                placeholder="请输入拼音"
+                style="width: 140px;"
+                class="mr10"
+              />
+              <Input
+                v-model="part.fullname"
+                placeholder="请输入名称"
+                style="width: 140px;"
+                class="mr10"
+              />
+              <Button
+                :disabled="disabled"
+                class="mr10 w90"
+                @click="queryPart"
+                type="warning"
+              >
                 <span class="center">
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
@@ -103,17 +191,52 @@
                 </span>
               </Button>
             </div>
-            <Table
-              class="table"
+            <vxe-table
               border
-              highlight-row
-              size="small"
-              :loading="part.loading"
-              :stripe="true"
-              :columns="part.columns"
-              :data="part.tbdata"
+              stripe
+              auto-resize
               height="440"
-            ></Table>
+              :loading="part.loading"
+              :data="part.tbdata"
+              :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+            >
+              <vxe-table-column
+                type="index"
+                width="60"
+                title="序号"
+              ></vxe-table-column>
+              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="配件编码"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="配件全称"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="成本单价"
+              ></vxe-table-column>
+              <vxe-table-column field="fullName" title="销售单价">
+                <template v-slot:edit="{ row }">
+                  <InputNumber
+                    :precision="2"
+                    :min="0"
+                    :max="row.orderQty"
+                    v-model="row.adjustQty"
+                  />
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="操作人"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="fullName"
+                title="操作日期"
+              ></vxe-table-column>
+            </vxe-table>
           </div>
           <div class="page-warp">
             <Page
@@ -150,7 +273,7 @@
   </main>
 </template>
 
-<script src="./priceManage.js"></script>
+<script src="./index.ts"></script>
 
 <style lang="less" scoped>
 @import url("../../../lease/tenantres/icon");
@@ -158,12 +281,12 @@
 </style>
 <style>
 .edit {
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-    padding-left: 10px;
-    outline: none;
-    border: 0;
-    background-color: transparent;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  padding-left: 10px;
+  outline: none;
+  border: 0;
+  background-color: transparent;
 }
 </style>

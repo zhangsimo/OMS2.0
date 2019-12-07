@@ -49,8 +49,10 @@
           <vxe-table
             border
             resizable
+            stripe
             size="mini"
             height="400"
+            ref="xTable1"
             :data="tableData"
             :laoding="loading"
             @current-change="echoDate"
@@ -100,30 +102,30 @@
             :rules="ruleValidate"
             :label-width="100"
           >
-            <FormItem label="收货单位：" prop="receiveComp">
+            <FormItem label="收货单位：" prop="receiveCompName">
               <Input
-                v-model="formDateRight.receiveComp"
+                v-model="formDateRight.receiveCompName"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="收货地址：" prop="receiveAddress">
+            <FormItem label="收货地址：" prop="address">
               <Input
-                v-model="formDateRight.receiveAddress"
+                v-model="formDateRight.address"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="收货人：" prop="receiver">
+            <FormItem label="收货人：" prop="receiveMan">
               <Input
-                v-model="formDateRight.receiver"
+                v-model="formDateRight.receiveMan"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="联系电话：" prop="receiverMobile">
+            <FormItem label="联系电话：" prop="receiveManTel">
               <Input
-                v-model="formDateRight.receiverMobile"
+                v-model="formDateRight.receiveManTel"
                 class="w200"
                 :disabled="disabled"
               />
@@ -199,8 +201,8 @@
       </div>
     </div>
     <div slot="footer">
-      <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button>
+      <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
+      <Button @click="cancel">取消</Button> -->
     </div>
   </Modal>
 </template>
@@ -234,14 +236,14 @@ export default class GoodsInfo extends Vue {
   @Prop(String) readonly mainId;
 
   private ruleValidate: ruleValidate = {
-    receiveComp: [
+    receiveCompName: [
       { required: true, message: "收货单位不能为空", trigger: "blur" }
     ],
-    receiveAddress: [
+    address: [
       { required: true, message: "收货地址不能为空", trigger: "blur" }
     ],
-    receiver: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
-    receiverMobile: [
+    receiveMan: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
+    receiveManTel: [
       {
         required: true,
         message: "联系电话错误",
@@ -263,14 +265,12 @@ export default class GoodsInfo extends Vue {
     this.loading = true;
     this.reset();
     this.getLists();
-
-    //获取物流下拉框
     this.inlogistics();
   }
 
   private async getLists() {
     this.showInfo = true;
-    let res = await fapi.getGoodsInfo({ mainId: this.mainId });
+    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -279,7 +279,7 @@ export default class GoodsInfo extends Vue {
 
   //获取物流下拉框
   private async inlogistics() {
-    let log = await fapi.logistics();
+    let log:any = await fapi.logistics();
     if (log.code == 0) {
       this.logisArr = log.data;
     }
@@ -375,12 +375,15 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
+    let ref:any = this.$refs.formTwo;
+    ref.resetFields();
     this.disabled = false;
     if (row.logisticsRecordVO) {
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight = { ...row.logisticsRecordVO };
     } else {
       this.formDateRight = { ...row };
+      this.formDateRight.id = null;
     }
     this.formDateRight.transportCost =  this.formDateRight.transportCost ? this.formDateRight.transportCost : 0;
     //其它数据
@@ -389,7 +392,7 @@ export default class GoodsInfo extends Vue {
     this.formDateRight.provinceId = row.provinceId;
     this.formDateRight.cityId = row.cityId;
     this.formDateRight.countyId = row.countyId;
-    this.formDateRight.address = row.address;
+    // console.log(this.formDateRight);
   }
   //传入保存id
   private saveId(row) {
@@ -410,6 +413,8 @@ export default class GoodsInfo extends Vue {
     };
     const ref: any = this.$refs["formTwo"];
     ref.resetFields();
+    const xTable1:any = this.$refs.xTable1;
+    xTable1.clearRadioRow();
     this.formDateRight = {
       //表单数据 上 查询
       receiveCompName: "", //收货单位
