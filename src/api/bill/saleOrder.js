@@ -33,27 +33,28 @@ export function getSalelist (params) {
         params
     })
 }
-// 出库明细
-export function getOutStock (params) {
+// 出/入库明细
+export function getNumberList (params) {
     return axios.request({
         url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
         method: 'get',
         params
     })
 }
-// 入库明细
-export function getOnStock (params) {
-    return axios.request({
-        url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
-        method: 'get',
-        params
-    })
-}
+
 // 月结对账
 export function getReconciliation (params) {
     return axios.request({
         url:`${api.omsSettle}/accounts/receivable/get/reconciliation/business`,
         method: 'get',
         params
+    })
+}
+// 月结对账选中结算
+export function getSettlement(data) {
+    return axios.request({
+        url:`${api.omsSettle}/accounts/receivable/get/total/reconciliation`,
+        method: 'post',
+        data
     })
 }

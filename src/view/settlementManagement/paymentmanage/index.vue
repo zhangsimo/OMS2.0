@@ -146,8 +146,7 @@ import {
   getStorelist,
   getreceivable,
   getSalelist,
-  getOutStock,
-  getOnStock
+  getNumberList
 } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
 export default {
@@ -280,7 +279,7 @@ export default {
         },
         {
           title: "客户供应商类别",
-          key: "guestType",
+          key: "guestTypeName",
           className: "tc"
         },
         {
@@ -301,8 +300,20 @@ export default {
                   color: "#87CEFA"
                 },
                 on: {
-                  click: () => {
+                  click: async () => {
                     this.outStock = true;
+                    let obj = {
+                      orderCode: params.row.serviceId,
+                      orderType: params.row.serviceType.value
+                    };
+                    let res = await this.getList(obj);
+                    this.data3 = res.detailed;
+                    this.data3.push({
+                      num: "合计",
+                      partCode: res.partCode,
+                      qty: res.qty,
+                      orderAmt: res.orderAmt
+                    });
                   }
                 }
               },
@@ -317,7 +328,7 @@ export default {
         },
         {
           title: "业务类型",
-          key: "serviceType",
+          key: "serviceTypeName",
           className: "tc"
         },
         {
@@ -327,7 +338,7 @@ export default {
         },
         {
           title: "油品/配件",
-          key: "species",
+          key: "speciesName",
           className: "tc"
         },
         {
@@ -415,7 +426,7 @@ export default {
         },
         {
           title: "客户供应商类别",
-          key: "guestType",
+          key: "guestTypeName",
           className: "tc"
         },
         {
@@ -436,8 +447,21 @@ export default {
                   color: "#87CEFA"
                 },
                 on: {
-                  click: () => {
+                  click: async () => {
                     this.onStock = true;
+                    let obj = {
+                      orderCode: params.row.serviceId,
+                      orderType: params.row.serviceType.value
+                    };
+                    let res = await this.getList(obj);
+                    this.data4 = res.detailed;
+                    this.data4.push({
+                      num: "合计",
+                      qty: res.qty,
+                      orderAmt: res.orderAmt,
+                      noTaxAmt: res.noTaxAmt,
+                      taxAmt: res.taxAmt
+                    });
                   }
                 }
               },
@@ -452,7 +476,7 @@ export default {
         },
         {
           title: "业务类型",
-          key: "serviceType",
+          key: "serviceTypeName",
           className: "tc"
         },
         {
@@ -462,7 +486,7 @@ export default {
         },
         {
           title: "油品/配件",
-          key: "species",
+          key: "speciesName",
           className: "tc"
         },
         {
@@ -569,11 +593,6 @@ export default {
           className: "tc"
         },
         {
-          title: "基本单位",
-          key: "basicUnit",
-          className: "tc"
-        },
-        {
           title: "件规",
           key: "guige",
           className: "tc"
@@ -617,6 +636,16 @@ export default {
           className: "tc"
         },
         {
+          title: "门店名称",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "是否直发",
+          key: "isDirect",
+          className: "tc"
+        },
+        {
           title: "配件编码",
           key: "partCode",
           className: "tc"
@@ -652,16 +681,6 @@ export default {
           className: "tc"
         },
         {
-          title: "基本单位",
-          key: "basicUnit",
-          className: "tc"
-        },
-        {
-          title: "件规",
-          key: "guige",
-          className: "tc"
-        },
-        {
           title: "税率",
           key: "taxRate",
           className: "tc"
@@ -689,6 +708,26 @@ export default {
         {
           title: "备注",
           key: "remark",
+          className: "tc"
+        },
+        {
+          title: "不含税价格",
+          key: "noTaxPrice",
+          className: "tc"
+        },
+        {
+          title: "不含税金额",
+          key: "noTaxAmt",
+          className: "tc"
+        },
+        {
+          title: "含税单价",
+          key: "taxPrice",
+          className: "tc"
+        },
+        {
+          title: "含税金额",
+          key: "taxAmt",
           className: "tc"
         }
       ],
@@ -791,7 +830,6 @@ export default {
         orgId: data.orgId,
         startDate: obj.startDate,
         endDate: obj.endDate,
-        serviceId: data.serviceId,
         guestId: data.guestId
       }).then(res => {
         if (res.data.one) {
@@ -803,9 +841,9 @@ export default {
           let totalnoAccountAmt = 0;
           res.data.one.map((item, index) => {
             item.num = index + 1;
-            item.guestType = item.guestType.name;
-            item.serviceType = item.serviceType.name;
-            item.species = item.species.name;
+            item.guestTypeName = item.guestType.name;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
             number += 1;
             totalrpAmt += item.rpAmt;
             totalcharOffAmt += item.charOffAmt;
@@ -824,7 +862,7 @@ export default {
             noAccountAmt: totalnoAccountAmt
           });
         } else {
-          this.data1 = []
+          this.data1 = [];
         }
         if (res.data.two) {
           let number = 0;
@@ -835,9 +873,9 @@ export default {
           let totalnoAccountAmt = 0;
           res.data.two.map((item, index) => {
             item.num = index + 1;
-            item.guestType = item.guestType.name;
-            item.serviceType = item.serviceType.name;
-            item.species = item.species.name;
+            item.guestTypeName = item.guestType.name;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
             number += 1;
             totalrpAmt += item.rpAmt;
             totalcharOffAmt += item.charOffAmt;
@@ -855,9 +893,8 @@ export default {
             noAccountAmt: totalnoAccountAmt
           });
         } else {
-          this.data2 = []
+          this.data2 = [];
         }
-        
       });
     },
     // 往来单位
@@ -882,30 +919,38 @@ export default {
       this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);
     },
-    // 查询单号明细
-    seletelist() {
-      this.modal2 = true;
-      getNumberList({
-        orderCode: "CGR00000020191116010100000190",
-        orderType: "0"
-      }).then(res => {
-        let partId = 0;
-        let qty = 0;
-        let orderAmt = 0;
+    // 查询出/入库单号明细
+    async getList(obj) {
+      let detailed = [];
+      let partCode = 0;
+      let qty = 0;
+      let orderAmt = 0;
+      let noTaxAmt = 0;
+      let taxAmt = 0;
+      await getNumberList(obj).then(res => {
         res.data.map((item, index) => {
           item.num = index + 1;
-          partId++;
+          partCode++;
           qty += item.qty;
           orderAmt += item.orderAmt;
+          noTaxAmt += item.noTaxAmt;
+          taxAmt += item.taxAmt;
         });
-        this.data3 = res.data;
-        this.data3.push({
-          num: "合计",
-          partId,
-          qty,
-          orderAmt
-        });
+        detailed = res.data;
       });
+      return { detailed, partCode, qty, orderAmt, noTaxAmt, taxAmt };
+    },
+    seletelist() {
+      this.modal2 = true;
+      let res = this.getList();
+      console.log(res);
+      // this.data3 = res;
+      // this.data3.push({
+      //   num: "合计",
+      //   partId,
+      //   qty,
+      //   orderAmt
+      // });
     }
   }
 };
