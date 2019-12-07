@@ -135,7 +135,19 @@
               return h('span', {}, length)
             },
             minWidth: 160
-          }
+          },
+            {
+                title: "租户名称",
+                align: "center",
+                key: "tenantCompanyName",
+                minWidth: 160
+            },
+            {
+                title: "租户ID",
+                align: "center",
+                key: "tenantId",
+                minWidth: 160
+            },
         ],
         tbdata: [],
         companyList:''

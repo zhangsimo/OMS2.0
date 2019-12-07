@@ -14,28 +14,29 @@
             placement="bottom-end"
             placeholder="请选择日期"
             style="width: 120px"
+            v-model="auditDate"
           ></DatePicker>
         </div>
+        <!-- <div class="db mr5">
+          <Input placeholder="请选择供应商" v-model="guestname"  @on-focus="showModel('selectSupplier')" />
+        </div> -->
         <div class="db mr5">
-          <Input placeholder="请选择供应商" />
+          <Input placeholder="订单号" v-model="serviceId" />
         </div>
         <div class="db mr5">
-          <Input placeholder="订单号" />
-        </div>
-        <div class="db mr5">
-          <Button class="w90" type="warning">
+          <Button class="w90" type="warning" @click="query">
             <span class="center">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </span>
           </Button>
         </div>
         <div class="db mr5">
-          <Button type="default"
+          <Button type="default" @click="ok"
             ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择</Button
           >
         </div>
         <div class="db mr5">
-          <Button type="default"
+          <Button type="default" @click="cancel"
             ><Icon type="md-close" />取消</Button
           >
         </div>
@@ -60,12 +61,12 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="sex" title="计划单号"></vxe-table-column>
-        <vxe-table-column field="sex" title="供应商"></vxe-table-column>
-        <vxe-table-column field="sex" title="计划采购日期"></vxe-table-column>
-        <vxe-table-column field="sex" title="计划员"></vxe-table-column>
-        <vxe-table-column field="sex" title="提交日期"></vxe-table-column>
-        <vxe-table-column field="sex" title="备注"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="计划单号"></vxe-table-column>
+        <vxe-table-column field="guest" title="供应商"></vxe-table-column>
+        <vxe-table-column field="orderDate" title="计划采购日期"></vxe-table-column>
+        <vxe-table-column field="orderMan" title="计划员"></vxe-table-column>
+        <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
         <Page
@@ -95,25 +96,46 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="sex" title="配件编码"></vxe-table-column>
-        <vxe-table-column field="sex" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="sex" title="计划采购数量"></vxe-table-column>
-        <vxe-table-column field="sex" title="调整数量"></vxe-table-column>
-        <vxe-table-column field="sex" title="已转订单数量"></vxe-table-column>
-        <vxe-table-column field="sex" title="未转订单数量"></vxe-table-column>
-        <vxe-table-column field="sex" title="备注"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+        <vxe-table-column field="orderQty" title="计划采购数量"></vxe-table-column>
+        <vxe-table-column field="adjustQty" title="调整数量"></vxe-table-column>
+        <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>
+        <vxe-table-column field="notEnterQty" title="未转订单数量"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
     </div>
+    <div slot="footer">
+      <Button class="mr15" type="primary" @click="ok">确定</Button>
+      <Button @click="cancel">取消</Button>
+    </div>
+     <!-- 供应商资料
+    <select-supplier
+      @selectSearchName="selectSupplierName"
+      ref="selectSupplier"
+      headerTit="供应商资料"
+    ></select-supplier> -->
   </Modal>
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import * as tools from "../../../../utils/tools";
+import { Vue, Component, Prop, Emit } from "vue-property-decorator";
+// @ts-ignore
+import * as api from "_api/procurement/plan";
+// import SelectSupplier from "./selectSupplier.vue";
 
 @Component
 export default class ProcurementModal extends Vue {
   private shows: boolean = false;
   private selectRow: any = null;
+
+  @Prop(String)
+  private readonly guestId;
+
+  private auditDate:Array<Date> = [];
+  // private guestname:string = "";
+  private serviceId:string = "";
 
   private page: Page = {
     num: 1,
@@ -127,21 +149,85 @@ export default class ProcurementModal extends Vue {
 
   private init() {
     this.shows = true;
+    this.reset();
+    this.getPchsPlanList();
+  }
+
+  @Emit('getPlanOrder')
+  private ok() {
+    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
+    this.shows = false;
+    return this.selectRow;
+  }
+
+  // 选择供应商
+  // private selectSupplierName(row: any) {
+  //   this.guestId = row.id;
+  //   this.guestname = row.fullName;
+  // }
+
+  private showModel(name) {
+    let ref: any = this.$refs[name];
+    ref.init();
+  }
+
+  private cancel() {
+    this.shows = false;
+  }
+
+  private reset() {
+    this.auditDate = new Array();
+    // this.guestId = "";
+    // this.guestname = "";
+    this.serviceId = "";
   }
 
   private cellClickEvent() {
+    console.log("单元格点击事件");
   }
   private radioChangeEvent({ row }) {
     this.selectRow = row;
+    this.tableDataBm = row.details || [];
+  }
+
+  private query() {
+    this.page.num = 1;
+    this.getPchsPlanList();
+  }
+
+  private async getPchsPlanList() {
+    let params: any = {};
+    let data:any = {
+      guestId: this.guestId,
+      serviceId: this.serviceId,
+      auditStartDate: tools.transTime(this.auditDate[0]),
+      auditEndDate: tools.transTime(this.auditDate[1]),
+    };
+    params.size = this.page.size;
+    params.page = this.page.num - 1;
+    let formData = {};
+    for(let k in data) {
+      if(data[k] && data[k].trim().length > 0) {
+        formData[k] = data[k];
+      }
+    }
+    let res:any = await api.getPchsPlan(params, formData);
+    if(res.code == 0) {
+      this.page.total = res.data.totalElements;
+      this.tableData = res.data.content;
+    }
   }
 
   private changePageToTable(p: number) {
     this.page.num = p;
+    this.getPchsPlanList();
   }
   private changeSizeToTable(size: number) {
     this.page.num = 1;
     this.page.size = size;
+    this.getPchsPlanList();
   }
+
 }
 </script>
 

@@ -7,27 +7,28 @@
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
-        <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-        <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-        <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
-        <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
+        <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
+        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType.value != 0"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+        <Button class="mr10" @click="sumbit" :disabled="orderlistType.value != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button>
+        <Button class="mr10" @click="setStockOut" :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
         <Button class="mr10" @click="printTable"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
-        <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
-        <Button class=""><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
+        <Button class="mr10" @click="setBackOrder" :disabled="orderlistType.value != 1"><i class="iconfont mr5 iconziyuan14"></i> 返单</Button>
+        <Button class="mr10" @click="setCancellation" :disabled="orderlistType.value != 0"><Icon type="md-close" size="14" /> 作废</Button>
+        <Button class="" @click="setDerive"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
       </div>
       <div class="conter">
         <div class="demo-split">
           <Split v-model="split1">
             <div slot="left" class="demo-split-pane">
-              <OrderLeft :queryTime="queryTime" :orderType ='orderType'></OrderLeft>
+              <OrderLeft :queryTime="queryTime" :orderType ='orderType' @getOneOrder = 'getOrder' :changeLeftList="changeLeft"></OrderLeft>
             </div>
             <div slot="right" class="demo-split-pane">
-              <OrderRight ref="right"></OrderRight>
+              <OrderRight ref="right" ></OrderRight>
             </div>
           </Split>
         </div>
 <!--        更多搜索-->
-        <More-query :data="queryList" ref="morequeryModal"></More-query>
+        <More-query :data="queryList" ref="morequeryModal" ></More-query>
 <!--        打印-->
         <Print-show ref="printBox"></Print-show>
       </div>
@@ -35,13 +36,18 @@
 </template>
 
 <script>
-  import getDate from '@/components/getDate/dateget'
+    import baseUrl from '_conf/url'
+    import Cookies from 'js-cookie'
+    import {TOKEN_KEY} from '@/libs/util'
+    import getDate from '@/components/getDate/dateget'
   import OrderLeft from "./OrderLeft";
   import OrderRight from "./OrderRight";
   import MoreQuery from "../../commonality/MoreQuery";
   import PrintShow from "../../commonality/PrintShow";
+  import {getCancellation , getReorder } from '@/api/salesManagment/salesOrder'
 
-    export default {
+
+  export default {
         name: "Order",
         components:{
             getDate,
@@ -64,10 +70,13 @@
               ],
               split1: 0.2,
               queryList:{
-                  isdisabad:true
+                  showPerson:true
               },//更多查询
               queryTime:'',//快速查询时间
-
+              orderlistType:{
+                  value:0
+              },//默认状态
+              changeLeft:'',//发生改变数据调动左侧list
           }
         },
         methods:{
@@ -81,7 +90,81 @@
             },
             //打开更多搜索
             openQueryModal(){
+                this.queryList={showPerson:true}
                 this.$refs.morequeryModal.openModal()
+            },
+            //左侧点击数据
+            getOrder( data ){
+              console.log(data , 999)
+                this.orderlistType = data.billStatusId
+            },
+            //保存
+            setSave(){
+              let res =  this.$refs.right.save()
+            },
+            //出库
+            setStockOut(){
+                let res =  this.$refs.right.stockOut()
+            },
+            //提交
+            sumbit(){
+                let list = this.$store.state.dataList.oneOrder
+                if(!list.id){
+                    this.$message.error('请选择一条有效数据')
+                    return false
+                }
+                let res =  this.$refs.right.submitList()
+                  console.log(res,789)
+            },
+            //返单
+           async setBackOrder(){
+                let list = this.$store.state.dataList.oneOrder
+                if(!list.id){
+                    this.$message.error('请选择一条有效数据')
+                    return false
+                }
+               let data = {}
+                data.id =list.id
+              let res = await getReorder(data)
+               if(res.code === 0){
+                   this.changeLeft = res
+                   let data ={}
+                   this.$store.commit('setOneOrder',data)
+
+               }
+            },
+            //作废
+           async setCancellation(){
+               let list = this.$store.state.dataList.oneOrder
+               if(!list.id){
+                   this.$message.error('请选择一条有效数据')
+                   return false
+               }
+               let data = {}
+               data.id =list.id
+               let res = await getCancellation(data)
+               if(res.code === 0){
+                   this.changeLeft = res
+                   let data ={}
+                   this.$store.commit('setOneOrder',data)
+
+               }
+
+           },
+            //导出
+            async setDerive(){
+                let list = this.$store.state.dataList.oneOrder
+                if(!list.id){
+                    this.$message.error('请选择一条有效数据')
+                    return false
+                }else {
+                    location.href = baseUrl.omsOrder + '/sellOrderMain/export?id='+ list.id +'&access_token=' + Cookies.get(TOKEN_KEY)
+                }
+
+            },
+            //新增
+            addNew(){
+                this.$store.commit('setOneOrder',{})
             }
         }
     }

@@ -2,7 +2,7 @@
   <Modal v-model="showInfo" title="选择销售出库单" width="1000">
     <div class="OutboundInfo">
       <div class="header">
-        <Form ref="formOne" :model="formInfo" inline>
+        <Form ref="formOne" :model="Outform" inline>
           出库日期：
           <FormItem>
             <DatePicker

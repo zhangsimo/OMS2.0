@@ -4,16 +4,15 @@ import axios from '@/libs/api.request'
 //获取供应商分类
 export function getfindTypeList(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanMain/guestClassify`,
-    method: 'post',
-    data
+    url: `${api.wmsApi}/supplierType/findType`,
+    method: 'get'
   })
 }
 
 //获取供应商列表
 export function getSupplierList(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanMain/findAllByGuest`,
+    url: `${api.wmsApi}/guest/findAllSupplier`,
     method: 'post',
     data
   })
@@ -34,5 +33,41 @@ export function saveDraft(data) {
     url: `${api.omsOrder}/pchsPlanMain/saveDraft`,
     method: 'post',
     data
+  })
+}
+
+//获取采购计划单列表
+export function findPageByDynamicQuery(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/findPageByDynamicQuery`,
+    method: 'post',
+    data
+  })
+}
+
+// 配件分类菜单树
+export function getCarPartClass(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/getCarClassifys`,
+    method: 'post',
+    data
+  })
+}
+
+// 配件分类菜单树
+export function getCarParts(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/getParts`,
+    method: 'post',
+    data
+  })
+}
+
+// 配件分类菜单树 ====> 调拨所需接口
+export function getCarPartsTwo(params) {
+  return axios.request({
+    url: `${api.wmsApi}/wbParts/findByAllot`,
+    method: 'get',
+    params
   })
 }

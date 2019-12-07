@@ -1,5 +1,5 @@
 <template>
-  <div class="content-oper h600">
+  <div class="content-oper">
     <!--    头部-->
     <section class="oper-box">
       <!--      主菜单导航-->
@@ -57,10 +57,9 @@
                 <Table height="670" @on-current-change="selectTabelData" size="small" highlight-row border
                        :stripe="true"
                        :columns="Left.columns" :data="Left.tbdata"></Table>
-                <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100"
-                      :page-size="Left.page.size" @on-change="changePage"
-                      @on-page-size-change="changeSize" show-sizer show-total>
-                </Page>
+                <Page :total="0" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total
+                      class-name="page-con"
+                      @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
               </div>
               <!--            右边-->
               <div slot="right" class="con-split-pane-right pl5 goods-list-form bd">
@@ -71,27 +70,27 @@
                 <div class="clearfix purchase" ref="planForm">
                   <Form inline :show-message="false" ref="formPlan" :label-width="100">
                     <FormItem label="仓库：">
-                      <Select class="w160">
+                      <Select class="w260">
                         <Option value="beijing">主仓</Option>
                         <Option value="shanghai">嘻嘻</Option>
                         <Option value="shenzhen">哈哈</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="创建日期：" class="fs12 ml50">
-                      <Input class="w160"></Input>
+                      <Input class="w260"></Input>
                     </FormItem>
                     <FormItem label="操作员：">
-                      <Input class="w160"></Input>
+                      <Input class="w260"></Input>
                     </FormItem>
-                    <FormItem label="备注：">
-                      <Input class="w500"></Input>
+                    <FormItem label="备注：" class="mt15">
+                      <Input class="w260"></Input>
                     </FormItem>
-                    <FormItem label="组装单号：" class="ml50">
-                      <Input class="w160"></Input>
+                    <FormItem label="组装单号：" class="mt15 ml50">
+                      <Input class="w260"></Input>
                     </FormItem>
                   </Form>
                 </div>
-                <div class="db mt10 mb10">
+                <div class="db mt10 mb10 ml10">
                   <Button class="mr10 w90"><span class="center"><Icon type="md-add"/>选择成品</span></Button>
                   <Button class="mr10 w90"><span class="center"><Icon
                     custom="iconfont iconlajitongicon icons"/>删除</span>
@@ -168,10 +167,9 @@
                 <Table height="670" @on-current-change="selectTabelData" size="small" highlight-row border
                        :stripe="true"
                        :columns="Left.columns" :data="Left.tbdata"></Table>
-                <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100"
-                      :page-size="Left.page.size" @on-change="changePage"
-                      @on-page-size-change="changeSize" show-sizer show-total>
-                </Page>
+                <Page :total="0" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total
+                      class-name="page-con"
+                      @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
               </div>
               <!--            右边-->
               <div slot="right" class="con-split-pane-right pl5 goods-list-form bd">
@@ -182,27 +180,27 @@
                 <div class="clearfix purchase" ref="planForm">
                   <Form inline :show-message="false" ref="formPlan" :label-width="100">
                     <FormItem label="仓库：">
-                      <Select class="w160">
+                      <Select class="w260">
                         <Option value="beijing">主仓</Option>
                         <Option value="shanghai">嘻嘻</Option>
                         <Option value="shenzhen">哈哈</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="创建日期：" class="fs12 ml50">
-                      <Input class="w160"></Input>
+                      <Input class="w260"></Input>
                     </FormItem>
                     <FormItem label="操作员：">
-                      <Input class="w160"></Input>
+                      <Input class="w260"></Input>
                     </FormItem>
-                    <FormItem label="备注：">
-                      <Input class="w500"></Input>
+                    <FormItem label="备注：" class="mt15">
+                      <Input class="w260"></Input>
                     </FormItem>
-                    <FormItem label="拆分单号：" class="ml50">
-                      <Input class="w160"></Input>
+                    <FormItem label="拆分单号：" class="ml50 mt15">
+                      <Input class="w260"></Input>
                     </FormItem>
                   </Form>
                 </div>
-                <div class="db mt10 mb10">
+                <div class="db mt10 mb10 ml10">
                   <Button class="mr10 w90"><span class="center"><Icon type="md-add"/>选择成品</span></Button>
                   <Button class="mr10 w90"><span class="center"><Icon
                     custom="iconfont iconlajitongicon icons"/>删除</span>
@@ -298,11 +296,11 @@
         },
         data() {
             return {
-                modal1: false,//提交确认框
+                modal1: false,        //提交确认框
                 split1: 0.2,
                 tabIndex: 0,
                 curronly: false,
-                purchaseType: 9999, //查询选项
+                purchaseType: 9999,    //查询选项
                 purchaseTypeArr: [
                     {label: '所有', value: 9999},
                     {label: '本日', value: 1},
@@ -312,13 +310,11 @@
                     {label: '本月', value: 5},
                     {label: '上月', value: 6},
                 ],
-                advanced: false, //更多模块的弹框
-                //左侧表格高度
-                leftTableHeight: 0,
-                tableData1: [], // 组装信息表
-                tableData2: [], // 组装零件表
-                //右侧表格高度
-                rightTableHeight: 0,
+                advanced: false,       //更多模块的弹框
+                leftTableHeight: 0,    //左侧表格高度
+                tableData1: [],        // 组装信息表
+                tableData2: [],        // 组装零件表
+                rightTableHeight: 0,   // 右侧表格高度
                 //左侧的表头内容
                 Left: {
                     page: {
@@ -426,18 +422,16 @@
             }
         },
         methods: {
-            //切换tab
+            // 切换tab
             setTab(index) {
                 this.tabIndex = index
                 if (this.tabIndex == 1) {
-                    // console.log("配件拆分")
                 }
             },
-            //split 分割
+            // split 分割
             getDataQuick(v) {
-                // console.log(v)
             },
-            //更多按钮
+            // 更多按钮
             more() {
                 this.advanced = true
             },
@@ -445,16 +439,16 @@
             editPro() {
                 this.modal1 = true
             },
-            //作废
+            // 作废
             cancellation() {
             },
             // 打印
             stamp() {
             },
-            //左边列表选中当前行
+            // 左边列表选中当前行
             selectTabelData() {
             },
-            //分页
+            // 分页
             changePage(p) {
                 this.page.num = p
                 // this.getList()
@@ -464,11 +458,17 @@
                 this.page.size = size
                 // this.getList()
             },
-            //表格编辑状态下被关闭的事件
+            // 表格编辑状态下被关闭的事件
             editClosedEvent() {
             },
-            //footer计算
+            // footer计算
             addFooter() {
+            },
+            // 切换页面
+            selectNum() {
+            },
+            //切换页数
+            selectPage() {
             },
             ok() {
                 this.$Message.success('已提交');
@@ -486,26 +486,36 @@
     height: 600px;
   }
 
-  .w550 {
-    width: 580px;
-  }
-  .ivu-split-horizontal{
-    height: 630px;
-  }
-  .ivu-table-tip{
-    height: 665px;
-  }
-  .con-box[data-v-49eda4e0]{
+  /*.w550 {*/
+  /*  width: 580px;*/
+  /*}*/
+
+  /*.ivu-split-horizontal {*/
+  /*  height: 630px;*/
+  /*}*/
+
+  /*.ivu-table-tip {*/
+  /*  height: 665px;*/
+  /*}*/
+
+  .con-box[data-v-49eda4e0] {
     height: 770px;
   }
-  .ivu-split-trigger-vertical{
-    height: 770px;
-  }
-  .hei{
+
+  /*.ivu-split-trigger-vertical {*/
+  /*  height: 770px;*/
+  /*}*/
+
+  .hei {
     height: 740px;
   }
-  .con-box[data-v-49eda4e0][data-v-49eda4e0]{
-    height: 750px;
+
+  .con-box[data-v-49eda4e0][data-v-49eda4e0] {
+    height: 790px;
+  }
+  .content-oper{
+    height: 100%;
+    overflow: hidden;
   }
 
 

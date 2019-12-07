@@ -51,7 +51,7 @@
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">
-                计划采购信息
+                采购计划信息
               </div>
               <div class="clearfix purchase" ref="planForm">
                 <Form inline :show-message="false" ref="formPlan" :model="formPlan" :rules="rulePlan" :label-width="100">
@@ -63,7 +63,7 @@
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
                     <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
-                    <DatePicker @on-change="setDataFun" v-model="formPlan.planDate" class="w160" type="date" placeholder="选择日期"></DatePicker>
+                    <DatePicker @on-change="setDataFun" v-model="formPlan.planDate" class="w160" type="datetime" placeholder="选择日期"></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner" >
                     <Input class="w160" readonly v-model="formPlan.planner"></Input>
@@ -150,9 +150,9 @@
                 :edit-config="{trigger: 'dblclick', mode: 'cell'}">
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column field="name" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="role" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="sex" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column field="partStandardName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="连锁库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="总部库存" width="100"></vxe-table-column>
                 <vxe-table-column field="num6" title="门店库存" width="100"></vxe-table-column>
@@ -163,7 +163,7 @@
                     <InputNumber :max="9999" :min="0" v-model="row.num"></InputNumber>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="price" title="计划采购单价" :edit-render="{name: 'input'}" width="120">
+                <vxe-table-column field="referencePrice" title="计划采购单价" :edit-render="{name: 'input'}" width="120">
                   <template v-slot:edit="{ row }">
                     <InputNumber :max="9999" :min="0" v-model="row.price"></InputNumber>
                   </template>
@@ -183,11 +183,11 @@
                 <vxe-table-column field="date12" title="单价差" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="库存上限" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="库存下限" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
+                <vxe-table-column field="adapterCarModel" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="minUnit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="oeCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column field="specifications" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
                 <vxe-table-column field="date12" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
@@ -325,8 +325,11 @@
           },
           {
             title: '状态',
-            key: 'venderSkuNo',
-            minWidth: 70
+            key: 'flag',
+            minWidth: 70,
+            render:(h,params) => {
+              return h('span',this.returnOrderType(params.row.flag))
+            }
           },
           {
             title: '供应商',
@@ -371,7 +374,7 @@
           }
         ],
         tbdata: [],
-        selectTable:{},
+
         //左侧表格高度
         leftTableHeight:0,
         //右侧表格高度
@@ -379,6 +382,7 @@
       }
     },
     mounted() {
+      this.initStart();
       setTimeout(()=>{
         this.getDomHeight();
       },0);
@@ -406,25 +410,7 @@
         this.getList()
       },
 
-      //初始化
-      getList() {
-        const params = {}
-        let searchValue = this.searchValue.trim()
-        if(searchValue){
-          params.name = searchValue
-        }
-        params.page = this.page.num - 1
-        params.size = this.page.size
-        this.loading = false
-        getLeaseProlist(params).then(res => {
-          this.loading = false
-          if (res.code == 0) {
-            this.tbdata = res.data || []
-            this.page.total = res.totalElements
-          }
 
-        })
-      },
       //选择供应商
       addSuppler(){
         this.$refs.selectSupplier.init()
@@ -456,10 +442,7 @@
         this.getList()
       },
 
-      //表格单选选中
-      selectTabelData(v){
-        this.selectTable = v
-      },
+
       //快速查询日期
       getDataQuick(v){
         console.log(v)

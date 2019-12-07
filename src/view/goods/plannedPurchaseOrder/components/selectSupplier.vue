@@ -63,7 +63,7 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 
@@ -245,9 +245,10 @@ export default class SelectSupplier extends Vue {
     this.selectTableItem = v;
   }
   // 选择
+  @Emit('selectSearchName')
   private throwData() {
-    this.$emit("selectSearchName", this.selectTableItem);
     this.searchPartLayer = false;
+    return this.selectTableItem;
   }
   // 取消
   private cancel() {

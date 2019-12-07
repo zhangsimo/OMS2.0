@@ -1,5 +1,6 @@
 import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
 import {getwbParts} from "_api/system/partManager";
+import {getCarPartClass,getCarParts} from "../../../../api/purchasing/purchasePlan";
 
 export const mixSelectPartCom  = {
   inject:['reload'],
@@ -209,7 +210,7 @@ export const mixSelectPartCom  = {
       }
       req.page = this.page.num
       req.size = this.page.size
-      getwbParts(req).then(res => {
+      getCarParts(req).then(res => {
         this.loading = false;
         this.partData = res.data.content||[];
         this.page.total = res.data.totalElements
@@ -236,9 +237,9 @@ export const mixSelectPartCom  = {
     //获取系统分类
     getCarClassifysFun(){
       this.treeLoading = true
-      getCarClassifys({page: 1,pageSize: 500}).then(res => {
+      getCarPartClass({}).then(res => {
         this.treeLoading = false
-        this.treeData = this.resetData(res.data.content||[])
+        this.treeData = this.resetData(res.data||[])
       })
     },
     //树形数组递归加入新属性

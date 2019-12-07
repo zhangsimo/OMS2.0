@@ -5,6 +5,7 @@ import user from './module/user'
 import app from './module/app'
 import common from './module/common'
 import getters from './getters.js'
+import dataList from './module/dataList'
 
 Vue.use(Vuex)
 
@@ -24,6 +25,7 @@ export default new Vuex.Store({
     user,
     app,
     common,
+    dataList,
     ...moduleStores,
   },
   getters

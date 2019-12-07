@@ -1,30 +1,22 @@
-import api from '_conf/url'
-import axios from '@/libs/api.request'
+import api from "_conf/url";
+import axios from "@/libs/api.request";
 
 // 收货信息初始化 192.168.30.21.9210
-export function getGoodsInfo (data={}) {
-    return axios.request({
-        url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
-        method: 'post',
-        data
-    })
-  }
-//查询按钮
-export function queryGoodsInfo (data={}) {
+export function getGoodsInfo(data = {}) {
   return axios.request({
-      url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
-      method: 'post',
-      data
-  })
+    url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
+    method: "post",
+    data
+  });
 }
 //保存按钮
-  export function saveGoodsInfo (data={}) {
-    return axios.request({
-        url: `${api.omsOrder}/logisticsRecord/save`,
-        method: 'post',
-        data
-    })
-  }
+export function saveGoodsInfo(data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/logisticsRecord/save`,
+    method: "post",
+    data
+  });
+}
 //获取配送方式字典 配送方式下拉框
 // export function getDic () {
 //   return axios.request({
@@ -33,9 +25,9 @@ export function queryGoodsInfo (data={}) {
 //   })
 // }
 //发货物流下拉框
-export function logistics  () {
+export function logistics() {
   return axios.request({
-      url: `${api.wmsApi}/guest/findAllLogistics`,
-      method: 'get',
-  })
+    url: `${api.wmsApi}/guest/findAllLogistics`,
+    method: "get"
+  });
 }

@@ -15,8 +15,8 @@
         <FormItem>
           <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
-        <Button type="primary mr15" @click="searchInfo">查询</Button>
-        <Button type="primary mr15" @click="saveInfo">保存</Button>
+        <Button type="primary" @click="searchInfo">查询</Button>
+        <Button type="primary" @click="saveInfo">保存</Button>
         <Button>取消</Button>
       </Form>
     </div>
@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,logistics } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
@@ -188,7 +188,7 @@ export default {
         this.formDateTop.receiveMan= null,//收货人
         this.formDateTop.streetAddress= null,//详细收货地址
         this.formDateTop.receiveManTel= null//联系电话
-      let res = await queryGoodsInfo(this.formDateTop)
+      let res = await getGoodsInfo(this.formDateTop)
     },
     //保存
     async saveInfo() {
