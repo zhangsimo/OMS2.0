@@ -19,6 +19,7 @@
         <div>
           <vxe-table
             border
+            stripe
             resizable
             height="420"
             size="mini"
@@ -73,6 +74,7 @@
           <vxe-table
             border
             resizable
+            stripe
             size="mini"
             :data="tableInfoData"
             height="450"

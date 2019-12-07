@@ -43,6 +43,7 @@
       </div>
       <vxe-table
         border
+        stripe
         ref="xTable1"
         height="300"
         size="small"
@@ -85,6 +86,7 @@
     <div class="bottom-plan mt10">
         <vxe-table
         border
+        stripe
         ref="xTable1"
         height="300"
         size="small"

@@ -5,9 +5,24 @@
       <div class="oper-top flex">
         <div class="wlf center">
           <div class="title center">
-            <Input v-model="fullname" placeholder="请输入名称" style="width: 140px;" class="mr10" />
-            <Input v-model="code" placeholder="请输入编码" style="width: 140px;" class="mr10" />
-            <Input v-model="mobile" placeholder="请输入电话" style="width: 140px;" class="mr10" />
+            <Input
+              v-model="fullname"
+              placeholder="请输入名称"
+              style="width: 140px;"
+              class="mr10"
+            />
+            <Input
+              v-model="code"
+              placeholder="请输入编码"
+              style="width: 140px;"
+              class="mr10"
+            />
+            <Input
+              v-model="mobile"
+              placeholder="请输入电话"
+              style="width: 140px;"
+              class="mr10"
+            />
           </div>
           <div class="ml10">
             显示禁用:
@@ -19,14 +34,10 @@
             </span>
           </Button>
           <Button class="mr10 w90" @click="selected">
-            <span class="center">
-              <Icon type="md-checkmark" />选择
-            </span>
+            <span class="center"> <Icon type="md-checkmark" />选择 </span>
           </Button>
           <Button class="mr10 w90" @click="cancel">
-            <span class="center">
-              <Icon type="md-close" />取消
-            </span>
+            <span class="center"> <Icon type="md-close" />取消 </span>
           </Button>
         </div>
       </div>
@@ -145,8 +156,8 @@ export default {
               title: "是否内部供应商",
               minWidth: 120,
               render: (h, params) => {
-                let text = params.row.isSupplier == 1 ? '是' : '否';
-                return h('span', text);
+                let text = params.row.isSupplier == 1 ? "是" : "否";
+                return h("span", text);
               }
             },
             {
@@ -179,8 +190,8 @@ export default {
               key: "isDisabled",
               minWidth: 120,
               render: (h, params) => {
-                let text = params.row.isDisabled == 1 ? '启用' : '禁用';
-                return h('span', text);
+                let text = params.row.isDisabled == 0 ? "启用" : "禁用";
+                return h("span", text);
               }
             }
           ]
@@ -199,87 +210,112 @@ export default {
       // 市
       City: {},
       // 区
-      Area: {},
+      Area: {}
     };
   },
   async mounted() {
-    // 省市区 树状图
-    let areares = await area();
-    if (areares.code === 0) {
-      areares.data.forEach(el => {
-        // object
-        if (el.grade === "1") {
-          if (!this.Provinces[el.parentId]) {
-            this.Provinces[el.parentId] = [];
-          }
-          this.Provinces[el.parentId].push(el);
-          // tree
-          let province = { ...el };
-          province.title = el.name;
-          province.expand = false;
-          this.treeData.push(province);
-        }
-        if (el.grade === "2") {
-          if (!this.City[el.parentId]) {
-            this.City[el.parentId] = [];
-          }
-          this.City[el.parentId].push(el);
-        }
-        if (el.grade === "3") {
-          if (!this.Area[el.parentId]) {
-            this.Area[el.parentId] = [];
-          }
-          this.Area[el.parentId].push(el);
-        }
-      });
-      // tree
-      this.treeData.forEach(el => {
-        this.City[el.id].forEach(cy => {
-          if (!el.children) {
-            el.children = [];
-          }
-          let city = { ...cy };
-          city.title = cy.name;
-          city.expand = false;
-          el.children.push(city);
-        });
-      });
-      // 区
-      // this.treeData.forEach(tree => {
-      //   tree.children.forEach(ch => {
-      //     if(Array.isArray(this.Area[ch.id])) {
-      //       this.Area[ch.id].forEach(ar => {
-      //         let area = {...ar};
-      //         area.title = area.name;
-      //         if(!ch.children) {
-      //           ch.children = [];
-      //         }
-      //         ch.children.push(area);
-      //       })
-      //     }
-      //   })
-      // });
-    }
+    this.custarr = new Array();
   },
   methods: {
+    init() {
+      this.tbdata = new Array();
+      this.selectTree = null;
+      this.fullname = "";
+      this.code = "";
+      this.mobile = "";
+      this.page = { num: 1, size: 10, total: 0 };
+      this.getArea();
+      this.initList();
+    },
+    // 获取省市区
+    async getArea() {
+      // 省市区 树状图
+      let areares = await area();
+      if (areares.code === 0) {
+        areares.data.forEach(el => {
+          // object
+          if (el.grade === "1") {
+            if (!this.Provinces[el.parentId]) {
+              this.Provinces[el.parentId] = [];
+            }
+            this.Provinces[el.parentId].push(el);
+            // tree
+            let province = { ...el };
+            province.title = el.name;
+            province.expand = false;
+            this.treeData.push(province);
+          }
+          if (el.grade === "2") {
+            if (!this.City[el.parentId]) {
+              this.City[el.parentId] = [];
+            }
+            this.City[el.parentId].push(el);
+          }
+          if (el.grade === "3") {
+            if (!this.Area[el.parentId]) {
+              this.Area[el.parentId] = [];
+            }
+            this.Area[el.parentId].push(el);
+          }
+        });
+        // tree
+        this.treeData.forEach(el => {
+          this.City[el.id].forEach(cy => {
+            if (!el.children) {
+              el.children = [];
+            }
+            let city = { ...cy };
+            city.title = cy.name;
+            city.expand = false;
+            el.children.push(city);
+          });
+        });
+        // 区
+        this.treeData.forEach(tree => {
+          tree.children.forEach(ch => {
+            if(Array.isArray(this.Area[ch.id])) {
+              this.Area[ch.id].forEach(ar => {
+                let area = {...ar};
+                area.title = area.name;
+                if(!ch.children) {
+                  ch.children = [];
+                }
+                ch.children.push(area);
+              })
+            }
+          })
+        });
+      }
+    },
     // 客户表
     async initList() {
       this.loading = true;
       let data = {};
       data.page = this.page.num - 1;
       data.size = this.page.size;
-      data.code = this.code;
-      data.fullName = this.fullname;
-      data.contactorTel = this.mobile;
-      if(this.selectTree != null) {
-        if(this.selectTree.grade == '1') {
+      if(this.code && this.code.trim().length > 1) {
+        data.code = this.code.trim();
+      }
+      if(this.fullname && this.fullname.trim().length > 1) {
+        data.fullName = this.fullname.trim();
+      }
+      if(this.mobile && this.mobile.trim().length > 1) {
+        data.contactorTel = this.mobile.trim();
+      }
+      if (this.selectTree != null) {
+        if (this.selectTree.grade == "1") {
           data.provinceId = this.selectTree.id;
         }
-        if(this.selectTree.grade == '2') {
+        if (this.selectTree.grade == "2") {
           data.cityId = this.selectTree.id;
         }
+        if(this.selectTree.grade == "3") {
+          data.areaId = this.selectTree.id;
+        }
       }
-      if(!this.showDis) {
+      if (!this.showDis) {
+        data.isDisabled = 0;
+      } else {
         data.isDisabled = 1;
       }
       let res = await getCustomerInformation(data);
@@ -300,26 +336,28 @@ export default {
     },
     // 选择
     selected() {
-      if(this.currentrow == null) {
-        return this.$Message.error('请选择客户');
-      };
-      if(this.custarr.length <= 0) {
+      if (this.currentrow == null) {
+        return this.$Message.error("请选择客户");
+      }
+      if (this.custarr.length <= 0) {
+        this.currentrow.new = true;
         this.custarr.push(this.currentrow);
       } else {
         let res = this.custarr.every(el => el.id != this.currentrow.id);
-        if(res) {
+        if (res) {
+          this.currentrow.new = true;
           this.custarr.push(this.currentrow);
         } else {
-          this.$Message.error('该客户已选择');
+          this.$Message.error("该客户已选择");
         }
       }
-      this.$emit('addcu', this.custarr);
+      this.$emit("addcu", this.custarr);
     },
     // 取消
     cancel() {
       this.tbdata = [];
       this.currentrow = null;
-      this.$emit('update:show', false);
+      this.$emit("update:show", false);
     },
     // 翻页
     changePage(p) {
