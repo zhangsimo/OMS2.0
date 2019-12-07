@@ -158,11 +158,13 @@
               </Select>
             </FormItem>
             <FormItem label="运输费用：">
-              <Input
+              <InputNumber
+                :precision="2"
+                :min="0"
                 v-model="formDateRight.transportCost"
                 class="w200"
                 :disabled="disabled"
-              />
+              ></InputNumber>
             </FormItem>
             <FormItem label="结算方式：">
               <Input
@@ -304,7 +306,7 @@ export default class GoodsInfo extends Vue {
     //发货信息
     address: "", //收货详细地址
     deliveryType: "", //配送方式
-    transportCost: "", //运输费用
+    transportCost: 0, //运输费用
     remark: "", //备注
     relationNum: "", //光联单号
     deliveryLogistics: "", //发货物流
@@ -364,7 +366,8 @@ export default class GoodsInfo extends Vue {
         if (res.code == 0) {
           this.$Message.success("保存成功");
           this.reset();
-          this.getLists();
+          // this.getLists();
+          this.cancel();
         }
       } else {
         this.$Message.error("必填信息未填写!");
@@ -375,16 +378,11 @@ export default class GoodsInfo extends Vue {
     this.disabled = false;
     if (row.logisticsRecordVO) {
       this.formDateRight.id = row.logisticsRecordVO.id;
-      this.formDateRight.receiveComp = row.logisticsRecordVO.receiveComp;
-      this.formDateRight.receiver = row.logisticsRecordVO.receiver;
-      this.formDateRight.receiveAddress = row.logisticsRecordVO.receiveAddress;
-      this.formDateRight.receiverMobile = row.logisticsRecordVO.receiverMobile;
+      this.formDateRight = { ...row.logisticsRecordVO };
     } else {
-      this.formDateRight.receiveComp = row.receiveCompName;
-      this.formDateRight.receiver = row.receiveMan;
-      this.formDateRight.receiveAddress = row.address;
-      this.formDateRight.receiverMobile = row.receiveManTel;
+      this.formDateRight = { ...row };
     }
+    this.formDateRight.transportCost =  this.formDateRight.transportCost ? this.formDateRight.transportCost : 0;
     //其它数据
     this.formDateRight.logisticsId = row.id;
     this.formDateRight.guestId = row.guestId;
@@ -425,13 +423,12 @@ export default class GoodsInfo extends Vue {
       //发货信息
       address: "", //收货详细地址
       deliveryType: "", //配送方式
-      transportCost: "", //运输费用
+      transportCost: 0, //运输费用
       remark: "", //备注
       relationNum: "", //光联单号
       deliveryLogistics: "", //发货物流
       settleType: "", //结算方式
       businessNum: "", //业务单号
-
       //其它要带上的数据
       //初始化中的数据
       id: "", //保存带的id

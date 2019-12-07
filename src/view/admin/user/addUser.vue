@@ -9,11 +9,11 @@
     <FormItem label='电子邮箱：' prop='staffEmail'>
       <Input placeholder='请输入邮箱' v-model='data.staffEmail'></Input>
     </FormItem>
-    <FormItem label='公司名称：' >
-      <i-select  style="width:200px" @on-change="changId">
-        <i-option v-for="(item, index) in company" :key="index" :value="item.id">{{ item.tenantCompanyName }}</i-option>
-      </i-select>
-    </FormItem>
+<!--    <FormItem label='公司名称：' >-->
+<!--      <i-select  style="width:200px" @on-change="changId">-->
+<!--        <i-option v-for="(item, index) in company" :key="index" :value="item.id">{{ item.tenantCompanyName }}</i-option>-->
+<!--      </i-select>-->
+<!--    </FormItem>-->
 <!--     <FormItem label='联系电话：'>
       <Input v-model='data.phone'></Input>
     </FormItem> -->

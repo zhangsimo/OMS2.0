@@ -150,7 +150,7 @@
                     </Select>
                   </FormItem>
                   <FormItem label="预售单号：">
-                    <Input class="w160" v-model="formPlan.serviceId"/>
+                    <Input class="w160" v-model="formPlan.serviceId" disabled/>
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId">
                     <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
@@ -293,7 +293,7 @@
     <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer"></select-the-customer>
     <!--更多 搜索-->
-    <More-search :data="moreQueryList" ref="moreQuery"></More-search>
+    <More-search :data="moreQueryList" ref="morequeryModal"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
     <!--  编辑发货地址 -->
@@ -508,7 +508,7 @@
       //选择更多
       moreQueryShowModal(row) {
         this.oneRow = row
-        this.$refs.moreQuery.openModal()
+        this.$refs.morequeryModal.openModal()
       },
       //点击查看
       openFileModal(){
@@ -551,10 +551,11 @@
           // console.log('打印出来的数据',res)
 
           if(res.code===0){
-            res.data.content.map( item => item.status = JSON.parse(item.status))
+            // this.draftShow = value
             this.preSellOrderTable.tbData = res.data.content || []
             console.log(this.preSellOrderTable.tbData)
             this.page.total = res.data.totalElements
+            // this.draftShow = this.draftShow.value
           }
 
         })
@@ -563,11 +564,12 @@
       //获取左侧表格一行选中的数据
       selectTabelData(v){
         this.currentRow=v
-        // console.log('99999',this.currentRow)
+        // console.log('97779999',this.currentRow)
         // this.draftShow = JSON.parse(v.billStatusId)
         // v.orderType =  JSON.parse(v.orderType)
         // v.orderTypeValue = v.orderType.value
         // this.draftShow = this.draftShow.value
+        this.draftShow=v.status.value
         this.tableData=v.detailVOList
         this.formPlan = v
         // console.log('打印的表单数据',this.formPlan)
@@ -625,7 +627,6 @@
 
       },
     },
-
     watch:{
       //监听时间
       queryTime:function (val ,old) {
@@ -638,7 +639,25 @@
         this.page.num = 1
         this.page.size = 10
         this.getLeftList()
-      }
+      },
+      //更多搜索
+      queryall:{
+        handler(v,ov){
+          this.page.num = 1
+          this.page.size = 10
+          let page = this.page.num -1
+          let size = this.page.size
+          getLeftList(page, size,v).then( res => {
+            if(res.code === 0){
+              // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
+              this.tableData = res.data.content
+              this.page.total = res.data.totalElements
+            }
+          })
+
+        },
+        deep:true
+      },
     }
   }
 </script>

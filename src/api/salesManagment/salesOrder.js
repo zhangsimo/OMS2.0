@@ -59,7 +59,7 @@ export function getWarehouseList (params) {
 //点击打开详情级别价格
 export function getDetails  (params) {
   return axios.request({
-    url: `${api.wmsApi}/sellPricePart/findBySell`,
+    url: `${api.omsOrder}/sellOutDetail/check`,
     method: 'get',
     params
   })
@@ -100,3 +100,109 @@ export function getprintList (params) {
     params
   })
 }
+
+
+//作废
+export function getCancellation (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/invalidSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+
+//返单
+export function getReorder (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/backSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//导出
+// export function getExport (params) {
+// //   return axios.request({
+// //     url: `${api.omsOrder}/sellOrderMain/export`,
+// //     method: 'get',
+// //     params
+// //   })
+// // }
+
+//客户选择
+export function getTreeClient (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/queryGuestList?`,
+    method: 'get',
+    params
+  })
+}
+
+//客户类型
+export function getClientType () {
+  return axios.request({
+    url: `${api.wmsApi}/guestType/guestTypeTree`,
+    method: 'get',
+
+  })
+}
+
+//添加配件
+export function getAccessories (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderMain/saveSellOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//删除配件
+export function getDeleteList (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/delete`,
+    method: 'post',
+    data
+  })
+}
+
+
+//批量导入地址
+export const getup = `${api.omsOrder}/sellOrderMain/import?`;
+
+//批次配件
+export function getParnt (params) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/chooseBatch`,
+    method: 'get',
+    params
+  })
+}
+
+//活动数据
+export function getActivity (params) {
+  return axios.request({
+    url: `${api.wmsApi}/activityPart/queryAll?`,
+    method: 'get',
+    params
+  })
+}
+
+
+//选择入库单数据
+export function getGodown (params) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderDetail/chooseEnter?`,
+    method: 'get',
+    params
+  })
+}
+//获取供应商
+export function getSupplier (data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findAllSupplier`,
+    method: 'post',
+    data
+  })
+}
+

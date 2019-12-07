@@ -11,13 +11,13 @@
           resizable
           align="center"
           highlight-hover-row
-          :data="tableData"
+          :data="allList.priceLever"
          >
           <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
-          <vxe-table-column title="级别名称"></vxe-table-column>
-          <vxe-table-column field="name" title="级别销假" ></vxe-table-column>
-          <vxe-table-column field="name" title="更新人" ></vxe-table-column>
-          <vxe-table-column field="name" title="更新日期" ></vxe-table-column>
+          <vxe-table-column field="strategyName" title="级别名称"></vxe-table-column>
+          <vxe-table-column field="sellPrice" title="级别销价" ></vxe-table-column>
+          <vxe-table-column field="updateName" title="更新人" ></vxe-table-column>
+          <vxe-table-column field="updateTime" title="更新日期" ></vxe-table-column>
         </vxe-table>
       </div>
     </TabPane>
@@ -30,16 +30,16 @@
           resizable
           align="center"
           highlight-hover-row
-          :data="tableData"
+          :data="allList.orgStock"
         >
           <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
-          <vxe-table-column title="配件编码"></vxe-table-column>
-          <vxe-table-column field="name" title="配件名称" ></vxe-table-column>
-          <vxe-table-column field="name" title="公司" ></vxe-table-column>
-          <vxe-table-column field="name" title="客户" ></vxe-table-column>
-          <vxe-table-column field="name" title="销售日期" ></vxe-table-column>
-          <vxe-table-column field="name" title="数量" ></vxe-table-column>
-          <vxe-table-column field="name" title="销假" ></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" ></vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" ></vxe-table-column>
+          <vxe-table-column field="stockQty" title="库存数量" ></vxe-table-column>
+          <vxe-table-column field="occupyQty" title="订单占用" ></vxe-table-column>
+          <vxe-table-column field="outableQty" title="可开单数量" ></vxe-table-column>
         </vxe-table>
       </div>
     </div></TabPane>
@@ -52,13 +52,13 @@
           align="center"
           height="500"
           highlight-hover-row
-          :data="tableData"
+          :data="allList.chainStock"
         >
           <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
-          <vxe-table-column title="公司名称"></vxe-table-column>
-          <vxe-table-column field="name" title="仓库" ></vxe-table-column>
-          <vxe-table-column field="name" title="库存数量" ></vxe-table-column>
-          <vxe-table-column field="name" title="可售数量" ></vxe-table-column>
+          <vxe-table-column field='partCode' title="配件编码"></vxe-table-column>
+          <vxe-table-column field="companyName" title="公司名称" ></vxe-table-column>
+          <vxe-table-column field="storeName" title="仓库" ></vxe-table-column>
+          <vxe-table-column field="stockQty" title="库存数量" ></vxe-table-column>
         </vxe-table>
       </div>
     </TabPane>
@@ -71,16 +71,16 @@
           align="center"
           height="500"
           highlight-hover-row
-          :data="tableData"
+          :data="allList.sellHistory"
         >
           <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
-          <vxe-table-column title="配件编码"></vxe-table-column>
-          <vxe-table-column field="name" title="配件名称" ></vxe-table-column>
-          <vxe-table-column field="name" title="公司" ></vxe-table-column>
-          <vxe-table-column field="name" title="客户" ></vxe-table-column>
-          <vxe-table-column field="name" title="销售日期" ></vxe-table-column>
-          <vxe-table-column field="name" title="数量" ></vxe-table-column>
-          <vxe-table-column field="name" title="销价" ></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+          <vxe-table-column field="companyName" title="公司" ></vxe-table-column>
+          <vxe-table-column field="guestName" title="客户" ></vxe-table-column>
+          <vxe-table-column field="finishDate" title="销售日期" ></vxe-table-column>
+          <vxe-table-column field="sellQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="sellPrice" title="销价" ></vxe-table-column>
         </vxe-table>
       </div>
     </TabPane>
@@ -100,6 +100,7 @@
             return {
                 fileShow: false,//模态框
                 tableData:[],//表格数据
+                allList:{},//获取到全部数据
             }
         },
         methods:{
@@ -109,9 +110,8 @@
                 data.partId = this.data.partId
                 getDetails(data).then( res => {
                     if(res.code  === 0){
-
+                       this.allList = res.data
                     }
-                    console.log(res ,999)
 
                 })
 

@@ -9,6 +9,15 @@ export function getLeftList (num,page,data) {
     data
   })
 }
+
+//获取左侧表格数据
+export function getMoreList (num,page,data) {
+  return axios.request({
+    url: `${api.omsOrder}/guestOrderMain/queryAll?page=${page}&size=${num}`,
+    method: 'post',
+    data
+  })
+}
 //获取客户
 export function getClient () {
   return axios.request({

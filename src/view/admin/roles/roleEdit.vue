@@ -6,11 +6,11 @@
     <FormItem label='标识:' prop='name'>
       <Input type="text" placeholder="请填写角色标识" v-model='data.name'></Input>
     </FormItem>
-    <FormItem label='公司名称：' style="margin-left: 35px">
-      <i-select  style="width:200px" @on-change="changId">
-        <i-option v-for="item in company" :value="item.id">{{ item.tenantCompanyName }}</i-option>
-      </i-select>
-    </FormItem>
+<!--    <FormItem label='公司名称：' style="margin-left: 35px">-->
+<!--      <i-select  style="width:200px" @on-change="changId">-->
+<!--        <i-option v-for="item in company" :value="item.id">{{ item.tenantCompanyName }}</i-option>-->
+<!--      </i-select>-->
+<!--    </FormItem>-->
     <FormItem label='资源:'>
       <Tree style="max-height: 500px;overflow-y: auto"
         ref="resTree" :data='res' show-checkbox children-key="childs" @on-check-change='checkChange'></Tree>

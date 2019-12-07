@@ -6,8 +6,8 @@
           <Order></Order>
         </div>
         </TabPane>
-        <TabPane  label="配件信息" tab="orderbox"><div></div></TabPane>
-        <TabPane  label="报价列表" tab="orderbox"><div></div></TabPane>
+<!--        <TabPane  label="配件信息" tab="orderbox"><div></div></TabPane>-->
+<!--        <TabPane  label="报价列表" tab="orderbox"><div></div></TabPane>-->
       </Tabs>
     </main>
 </template>

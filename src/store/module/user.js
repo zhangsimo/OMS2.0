@@ -113,7 +113,6 @@ export default {
 
           commit('setUserId', data.id)
           commit('setUserData', data)
-          console.log(data.tenantId);
           localStorage.tenantId = data.tenantId
           resolve(data)
         }).catch(err => {
