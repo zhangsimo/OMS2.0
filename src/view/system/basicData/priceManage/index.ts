@@ -96,7 +96,7 @@ export default class PriceManage extends Vue {
         if (this.customer.pinyin) {
             data.pyName = this.customer.pinyin.trim();
         }
-        params.strategyId = this.currRow.id;
+        data.strategyId = this.currRow.id;
         params.page = this.customer.page.num - 1;
         params.size = this.customer.page.size;
         let res = await api.findAllCus(params, data);
@@ -121,15 +121,18 @@ export default class PriceManage extends Vue {
             data.pinyin = this.part.pinyin;
         }
         if (this.part.code) {
-            data.code = this.part.code;
+            data.partCode = this.part.code;
         }
-        data.strategyId = this.currRow.id;
+        params.strategyId = this.currRow.id;
         params.page = this.part.page.num - 1;
         params.size = this.part.page.size;
         let res = await api.queryPart(params, data);
         if (res.code == 0) {
             this.part.loading = false;
-            this.part.tbdata = res.data.content;
+            this.part.tbdata = res.data.content.map((el:any) => {
+                el.sellPrice = Number(el.sellPrice);
+                return el;
+            });
             this.part.page.total = res.data.totalElements;
         }
     }
@@ -169,6 +172,8 @@ export default class PriceManage extends Vue {
     }
     // 单选行
     private selectRow({ row }) {
+        const curs: any = this.$refs.curs;
+        curs.custarr = new Array();
         this.currRow = row;
         this.disabled = false;
         this.selectCrr = new Array();
@@ -228,6 +233,7 @@ export default class PriceManage extends Vue {
     }
     // 查询客户
     private queryCustomer() {
+        this.customer.page.num = 1;
         this.getCus();
     }
     // 添加客户
@@ -289,14 +295,14 @@ export default class PriceManage extends Vue {
             addList: new Array(),
             delList: new Array(),
         };
-        data.addList = this.selectRightCR;
+        data.addList = this.customer.tbdata.filter((el:any) => el.new);
         this.removeRightCr.forEach(el => {
             if (el.oid) {
                 data.delList.push(el);
             }
         });
-        if (this.selectRightCR.length <= 0 && data.delList.length <= 0) {
-            return this.$Message.error('请选择客户');
+        if (data.addList.length <= 0 && data.delList.length <= 0) {
+            return this.$Message.error('没有修改过数据');
         }
         data.addList.forEach(el => {
             el.strategyId = this.currRow.id;
@@ -305,6 +311,8 @@ export default class PriceManage extends Vue {
         })
         let res = await api.sellcussave(data);
         if (res.code === 0) {
+            const curs: any = this.$refs.curs;
+            curs.custarr = new Array();
             this.$Message.success('保存成功');
             this.getCus();
         }
@@ -322,9 +330,31 @@ export default class PriceManage extends Vue {
         this.getPart();
     }
     // 查询配件
-    private queryPart() { }
+    private queryPart() {
+        this.part.page.num = 1;
+        this.getPart();
+    }
     // 保存配件
-    private savePart() { }
+    private async savePart() {
+        let res:any;
+        let data = [...this.part.tbdata];
+        data.forEach((el:any) => {
+           el.pchsPrice = el.costPrice;
+        });
+        if(this.curronly) {
+           res = await api.partPriceSave(data);
+        } else {
+            data.map((el:any) => {
+                el.strategyId = this.currRow.id;
+                return el;
+            })
+            res = await api.partLevelSave(data);
+        }
+        if(res.code == 0) {
+            this.$Message.success('保存成功');
+            this.queryPart()
+        }
+    }
 
     /**mounted */
     private mounted() {

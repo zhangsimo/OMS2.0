@@ -69,7 +69,7 @@
               </li>
             </ul>
           </div>
-          <div class="tabs-warp" v-if="tabIndex == 0">
+          <div class="tabs-warp" v-show="tabIndex == 0">
             <div class="btn-warp">
               <Input
                 v-model="customer.pinyin"
@@ -124,6 +124,8 @@
               resizable
               auto-resize
               stripe
+              sheetName="n1"
+              id="n1"
               ref="xTable1"
               height="440"
               :loading="customer.loading"
@@ -146,26 +148,26 @@
                 title="客户简称"
               ></vxe-table-column>
               <vxe-table-column
-                field="brandName"
+                field="createUname"
                 title="操作人"
               ></vxe-table-column>
               <vxe-table-column
-                field="brandName"
+                field="createTime"
                 title="操作日期"
               ></vxe-table-column>
             </vxe-table>
           </div>
-          <div class="tabs-warp" v-else>
+          <div class="tabs-warp" v-show="tabIndex == 1">
             <div class="btn-warp">
-              <Input
+              <!-- <Input
                 v-model="part.pinyin"
-                placeholder="请输入编码"
+                placeholder="请输入拼音"
                 style="width: 140px;"
                 class="mr10"
-              />
+              /> -->
               <Input
                 v-model="part.code"
-                placeholder="请输入拼音"
+                placeholder="请输入编码"
                 style="width: 140px;"
                 class="mr10"
               />
@@ -194,10 +196,14 @@
             <vxe-table
               border
               stripe
+              resizable
               auto-resize
               height="440"
+              sheetName="n2"
+              id="n2"
               :loading="part.loading"
               :data="part.tbdata"
+              highlight-current-row
               :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
             >
               <vxe-table-column
@@ -207,7 +213,7 @@
               ></vxe-table-column>
               <vxe-table-column type="checkbox" width="60"></vxe-table-column>
               <vxe-table-column
-                field="fullName"
+                field="partCode"
                 title="配件编码"
               ></vxe-table-column>
               <vxe-table-column
@@ -215,25 +221,25 @@
                 title="配件全称"
               ></vxe-table-column>
               <vxe-table-column
-                field="fullName"
+                field="costPrice"
                 title="成本单价"
               ></vxe-table-column>
-              <vxe-table-column field="fullName" title="销售单价">
+              <vxe-table-column
+                field="sellPrice"
+                title="销售单价"
+                :edit-render="{ name: 'input' }"
+                width="120"
+              >
                 <template v-slot:edit="{ row }">
-                  <InputNumber
-                    :precision="2"
-                    :min="0"
-                    :max="row.orderQty"
-                    v-model="row.adjustQty"
-                  />
+                  <InputNumber :min="0" :precision="2" v-model="row.sellPrice" />
                 </template>
               </vxe-table-column>
               <vxe-table-column
-                field="fullName"
+                field="operationName"
                 title="操作人"
               ></vxe-table-column>
               <vxe-table-column
-                field="fullName"
+                field="operationTime"
                 title="操作日期"
               ></vxe-table-column>
             </vxe-table>

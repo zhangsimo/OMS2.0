@@ -190,7 +190,7 @@ export default {
               key: "isDisabled",
               minWidth: 120,
               render: (h, params) => {
-                let text = params.row.isDisabled == 1 ? "启用" : "禁用";
+                let text = params.row.isDisabled == 0 ? "启用" : "禁用";
                 return h("span", text);
               }
             }
@@ -213,10 +213,11 @@ export default {
       Area: {}
     };
   },
-  async mounted() {},
+  async mounted() {
+    this.custarr = new Array();
+  },
   methods: {
     init() {
-      this.custarr = new Array();
       this.tbdata = new Array();
       this.selectTree = null;
       this.fullname = "";
@@ -313,6 +314,8 @@ export default {
         }
       }
       if (!this.showDis) {
+        data.isDisabled = 0;
+      } else {
         data.isDisabled = 1;
       }
       let res = await getCustomerInformation(data);
@@ -337,10 +340,12 @@ export default {
         return this.$Message.error("请选择客户");
       }
       if (this.custarr.length <= 0) {
+        this.currentrow.new = true;
         this.custarr.push(this.currentrow);
       } else {
         let res = this.custarr.every(el => el.id != this.currentrow.id);
         if (res) {
+          this.currentrow.new = true;
           this.custarr.push(this.currentrow);
         } else {
           this.$Message.error("该客户已选择");
