@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select v-model="purchaseType" class="w90 mr10">
+            <Select @on-change="search" v-model="purchaseType" class="w90 mr10">
               <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
             </Select>
           </div>
@@ -13,19 +13,19 @@
             <Button type="default" @click="advancedSearch=true" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
           </div>
           <div class="db">
-            <Button class="mr10"><Icon type="md-add"/> 新增</Button>
+            <Button class="mr10" @click="addOrder"><Icon type="md-add"/> 新增</Button>
           </div>
           <div class="db">
-            <Button type="default" @click='submit("formPlan")' class="mr10"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+            <Button type="default" :disabled="selectPlanOrderItem.flag!==0" @click='submit("formPlan",1)' class="mr10"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
           </div>
           <div class="db">
-            <Button class="mr10" ><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+            <Button class="mr10" :disabled="selectPlanOrderItem.flag!==0" @click='submit("formPlan",2)'><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
           </div>
           <div class="db">
-            <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
+            <Button class="mr10" @click="saveObsoleteFun(1)" :disabled="selectPlanOrderItem.flag!==1"><Icon type="md-close" size="14" /> 作废</Button>
           </div>
           <div class="db">
-            <Button class="mr10"><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button>
+            <Button @click="saveObsoleteFun(2)" class="mr10" :disabled="selectPlanOrderItem.flag!==-1"><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button>
           </div>
           <div class="db">
             <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -44,8 +44,8 @@
               <div class="pane-made-hd">
                 采购计划单列表
               </div>
-              <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="columns" :data="tbdata"></Table>
-              <Page simple class-name="fl pt10" size="small" :current="page.num" :total="100" :page-size="page.size" @on-change="changePage"
+              <Table :height="leftTableHeight"  @on-current-change="selectTabelData" ref="planOrderTable" size="small" highlight-row  border :stripe="true" :columns="columns" :data="tbdata"></Table>
+              <Page simple class-name="fl pt10" size="small" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
                     @on-page-size-change="changeSize" show-sizer show-total>
               </Page>
             </div>
@@ -57,27 +57,27 @@
                 <Form inline :show-message="false" ref="formPlan" :model="formPlan" :rules="rulePlan" :label-width="100">
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
-                      <Col span="19"><Input v-model="formPlan.supplyName" placeholder="请选择供应商"></Input></Col>
-                      <Col span="5"><Button @click="addSuppler" class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
+                      <Col span="19"><Input v-model="formPlan.supplyName" placeholder="请选择供应商" :readonly="selectPlanOrderItem.flag!==0"></Input></Col>
+                      <Col span="5"><Button :disabled="selectPlanOrderItem.flag!==0" @click="addSuppler" class="ml5" size="small" type="default"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                     </Row>
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planDate">
                     <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
-                    <DatePicker @on-change="setDataFun" v-model="formPlan.planDate" class="w160" type="datetime" placeholder="选择日期"></DatePicker>
+                    <DatePicker :readonly="selectPlanOrderItem.flag!==0"  v-model="formPlan.planDate" class="w160" type="datetime" placeholder="选择日期"></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner" >
                     <Input class="w160" readonly v-model="formPlan.planner"></Input>
                   </FormItem>
                   <FormItem label="备注：" prop="remark">
-                    <Input class="w160" v-model="formPlan.remark"></Input>
+                    <Input class="w160" :readonly="selectPlanOrderItem.flag!==0" v-model="formPlan.remark"></Input>
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
-                    <Select class="w160" v-model="formPlan.billType">
+                    <Select class="w160" :disabled="selectPlanOrderItem.flag!==0" v-model="formPlan.billType">
                       <Option v-for="item in invoiceMap" :value="item.value" :key="item.value">{{item.label}}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="直发门店：" prop="hairShop">
-                    <Select class="w160" v-model="formPlan.hairShop">
+                    <Select class="w160" :disabled="selectPlanOrderItem.flag!==0" v-model="formPlan.hairShop">
                       <Option v-for="item in companyMap" :value="item.value" :key="item.value">{{item.label}}</Option>
                     </Select>
                   </FormItem>
@@ -85,10 +85,10 @@
                     <Input class="w160" readonly v-model="formPlan.planOrderNum"></Input>
                   </FormItem>
                   <FormItem label="其他费用：" prop="otherPrice">
-                    <Input class="w160" v-model="formPlan.otherPrice"></Input>
+                    <Input class="w160" :readonly="selectPlanOrderItem.flag!==0" v-model="formPlan.otherPrice"></Input>
                   </FormItem>
                   <FormItem label="合计总金额：" prop="totalPrice">
-                    <Input class="w160" v-model="formPlan.totalPrice"></Input>
+                    <Input class="w160" :readonly="selectPlanOrderItem.flag!==0" v-model="formPlan.totalPrice"></Input>
                   </FormItem>
                 </Form>
               </div>
@@ -204,10 +204,61 @@
     <!--选择供应商-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
 
-    <Drawer title="高级查询" v-model="advancedSearch" width="720">
-      <p>Some contents...</p>
-      <p>Some contents...</p>
-      <p>Some contents...</p>
+    <Drawer title="高级查询" v-model="advancedSearch" :mask-closable="false" width="720">
+      <Form :model="seniorFormData">
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="创建日期：">
+              <DatePicker v-model="seniorFormData.date" type="daterange" class="w200" ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="提交日期：">
+              <DatePicker v-model="seniorFormData.date" type="daterange" class="w200" ></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="Owner" label-position="top">
+              <Select v-model="seniorFormData.owner" placeholder="please select an owner">
+                <Option value="jobs">Steven Paul Jobs</Option>
+                <Option value="ive">Sir Jonathan Paul Ive</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="Type" label-position="top">
+              <Select v-model="seniorFormData.type" placeholder="please choose the type">
+                <Option value="private">Private</Option>
+                <Option value="public">Public</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="32">
+          <Col span="12">
+            <FormItem label="Approver" label-position="top">
+              <Select v-model="seniorFormData.approver" placeholder="please choose the approver">
+                <Option value="jobs">Steven Paul Jobs</Option>
+                <Option value="ive">Sir Jonathan Paul Ive</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="DateTime" label-position="top">
+              <DatePicker v-model="seniorFormData.date" type="daterange" placeholder="please select the date" style="display: block" placement="bottom-end"></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="Description" label-position="top">
+          <Input type="textarea" v-model="seniorFormData.desc" :rows="4" placeholder="please enter the description" />
+        </FormItem>
+      </Form>
+      <div class="demo-drawer-footer">
+        <Button style="margin-right: 8px" @click="value3 = false">Cancel</Button>
+        <Button type="primary" @click="value3 = false">Submit</Button>
+      </div>
     </Drawer>
   </div>
 </template>
@@ -321,6 +372,7 @@
           {
             title: '序号',
             minWidth: 50,
+            type:'index',
             key:'id'
           },
           {
@@ -445,7 +497,7 @@
 
       //快速查询日期
       getDataQuick(v){
-        console.log(v)
+        this.selectDate(v)
       },
 
     },
