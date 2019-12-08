@@ -419,14 +419,14 @@ export default [
         component: () => import("@/view/business/policy/stockSearch/stockSearch.vue")
       },
       {
-        path: "",
-        name: "",
+        path: "/business/procurementAndStorage",
+        name: "procurementAndStorage",
         mark: "4001",
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购入库"
         },
-        // component: () => import()
+        component: () => import('@/view/business/procurementAndStorage/procurementAndStorage.vue')
       },
       {
         path: "/policy/market",
