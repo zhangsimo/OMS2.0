@@ -694,7 +694,7 @@ import baseUrl from '_conf/url'
                 }
             },
             getRUl(){
-              this.upurl = this.upurl +'id=' + this.formPlan.id
+              this.upurl = getup +'id=' + this.formPlan.id
             },
 
 
