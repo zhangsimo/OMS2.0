@@ -70,10 +70,24 @@
         ></Table>
         <Tabs active-key="key1" class="mt10">
           <Tab-pane label="销售清单" key="key1">
-            <Table border :columns="columns1" :data="data1" class="mt10" max-height="400"></Table>
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              class="mt10"
+              max-height="400"
+              show-summary
+            ></Table>
           </Tab-pane>
           <Tab-pane label="采购清单" key="key2">
-            <Table border :columns="columns2" :data="data2" class="mt10" max-height="400"></Table>
+            <Table
+              border
+              :columns="columns2"
+              :data="data2"
+              class="mt10"
+              max-height="400"
+              show-summary
+            ></Table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -123,7 +137,7 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
       </div>
-      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400"></Table>
+      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary></Table>
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
@@ -131,7 +145,7 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
       </div>
-      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400"></Table>
+      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary></Table>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
@@ -308,12 +322,6 @@ export default {
                     };
                     let res = await this.getList(obj);
                     this.data3 = res.detailed;
-                    this.data3.push({
-                      num: "合计",
-                      partCode: res.partCode,
-                      qty: res.qty,
-                      orderAmt: res.orderAmt
-                    });
                   }
                 }
               },
@@ -455,13 +463,6 @@ export default {
                     };
                     let res = await this.getList(obj);
                     this.data4 = res.detailed;
-                    this.data4.push({
-                      num: "合计",
-                      qty: res.qty,
-                      orderAmt: res.orderAmt,
-                      noTaxAmt: res.noTaxAmt,
-                      taxAmt: res.taxAmt
-                    });
                   }
                 }
               },
@@ -833,65 +834,24 @@ export default {
         guestId: data.guestId
       }).then(res => {
         if (res.data.one) {
-          let number = 0;
-          let totalrpAmt = 0;
-          let totalcharOffAmt = 0;
-          let totalnoCharOffAmt = 0;
-          let totalaccountAmt = 0;
-          let totalnoAccountAmt = 0;
           res.data.one.map((item, index) => {
             item.num = index + 1;
             item.guestTypeName = item.guestType.name;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
-            number += 1;
-            totalrpAmt += item.rpAmt;
-            totalcharOffAmt += item.charOffAmt;
-            totalnoCharOffAmt += item.noCharOffAmt;
-            totalaccountAmt += item.accountAmt;
-            totalnoAccountAmt += item.noAccountAmt;
           });
           this.data1 = res.data.one;
-          this.data1.push({
-            num: "合计",
-            // serviceId: number,
-            rpAmt: totalrpAmt,
-            charOffAmt: totalcharOffAmt,
-            noCharOffAmt: totalnoCharOffAmt,
-            accountAmt: totalaccountAmt,
-            noAccountAmt: totalnoAccountAmt
-          });
         } else {
           this.data1 = [];
         }
         if (res.data.two) {
-          let number = 0;
-          let totalrpAmt = 0;
-          let totalcharOffAmt = 0;
-          let totalnoCharOffAmt = 0;
-          let totalaccountAmt = 0;
-          let totalnoAccountAmt = 0;
           res.data.two.map((item, index) => {
             item.num = index + 1;
             item.guestTypeName = item.guestType.name;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
-            number += 1;
-            totalrpAmt += item.rpAmt;
-            totalcharOffAmt += item.charOffAmt;
-            totalnoCharOffAmt += item.noCharOffAmt;
-            totalaccountAmt += item.accountAmt;
-            totalnoAccountAmt += item.noAccountAmt;
           });
           this.data2 = res.data.two;
-          this.data2.push({
-            num: "合计",
-            rpAmt: totalrpAmt,
-            charOffAmt: totalcharOffAmt,
-            noCharOffAmt: totalnoCharOffAmt,
-            accountAmt: totalaccountAmt,
-            noAccountAmt: totalnoAccountAmt
-          });
         } else {
           this.data2 = [];
         }
@@ -903,12 +863,12 @@ export default {
     },
     // 月结对账
     Monthlyreconciliation() {
-      this.$refs.Monthlyreconciliation.modal = true;
-      // if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
-      //   this.$refs.Monthlyreconciliation.modal = true;
-      // } else {
-      //   this.$Message.warning("请选择要对账的数据");
-      // }
+      // this.$refs.Monthlyreconciliation.modal = true;
+      if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
+        this.$refs.Monthlyreconciliation.modal = true;
+      } else {
+        this.$Message.warning("请选择要对账的数据");
+      }
     },
     // 点击总汇表数据查询销售/采购清单
     selete(data) {
@@ -939,18 +899,6 @@ export default {
         detailed = res.data;
       });
       return { detailed, partCode, qty, orderAmt, noTaxAmt, taxAmt };
-    },
-    seletelist() {
-      this.modal2 = true;
-      let res = this.getList();
-      console.log(res);
-      // this.data3 = res;
-      // this.data3.push({
-      //   num: "合计",
-      //   partId,
-      //   qty,
-      //   orderAmt
-      // });
     }
   }
 };

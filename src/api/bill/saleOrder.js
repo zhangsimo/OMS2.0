@@ -58,3 +58,13 @@ export function getSettlement(data) {
         data
     })
 }
+// 月结对账保存草稿/保存并提交
+export function Preservation(data) {
+    console.log(data)
+    return axios.request({
+        url:`${api.omsSettle}/accounts/receivable/add`,
+        method: 'post',
+        data
+    })
+}
+
