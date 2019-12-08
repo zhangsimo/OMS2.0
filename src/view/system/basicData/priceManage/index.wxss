@@ -29,7 +29,6 @@
   height: 50px;
   display: flex;
   align-items: center;
-  padding-left: 20px;
 }
 .tabs {
   list-style: none;

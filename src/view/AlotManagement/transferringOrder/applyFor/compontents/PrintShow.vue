@@ -4,29 +4,27 @@
       <div class="titler">
         <Row style="border: 1px #000000 solid">
           <Col span="12" class="pl10">
-            <h5
-              style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >
+            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">
               {{ onelist.orgName }}
             </h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>采购订单:</p>
+            <p>调拨申请单:</p>
             <p>No: {{ onelist.serviceId }}</p>
           </Col>
         </Row>
         <Row class="pt10 pd10" style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址: {{ onelist.orgAddress }}</span></p>
-            <p><span>电话: {{ onelist.orgTel }}</span></p>
+            <p><span>地址: {{ onelist.receiveAddress }}</span></p>
+            <p><span>电话: {{ onelist.receiverMobile }}</span></p>
           </Col>
           <Col span="12" class="pl10">
             <p>
-              <span>订单日期:</span><span>{{ onelist.orderDate }}</span>
+              <span>订单日期:</span><span>{{  }}</span>
             </p>
             <p>
               <span>打印日期:</span>
-              <span>{{ onelist.printDate }}</span>
+              <span>{{  }}</span>
             </p>
           </Col>
         </Row>
@@ -41,18 +39,18 @@
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>联系人:</span> <span>{{ onelist.orderMan }}</span>
+              <span>联系人:</span> <span>{{ onelist.receiver }}</span>
             </p>
             <p>
-              <span>票据类型:</span><span>{{ onelist.billTypeName }}</span>
+              <span>票据类型:</span><span>{{  }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span><span>{{ onelist.guestTel }}</span>
+              <span>联系电话:</span><span>{{ onelist.receiverMobile }}</span>
             </p>
             <p>
-              <span>结算方式:</span><span>{{ onelist.settleTypeName }}</span>
+              <span>结算方式:</span><span>{{ onelist.settleType }}</span>
             </p>
           </Col>
         </Row>
@@ -100,7 +98,7 @@
     </div>
     <div slot="footer">
       <Button type="success" @click="print">打印</Button>
-      <Button type="default" @click="printShow = false">取消</Button>
+      <Button type="default" @click="printShowfalse">取消</Button>
     </div>
   </Modal>
 </template>
@@ -138,13 +136,13 @@
             align: "center"
           },
           {
-            title: "品牌车型",
-            key: "carBrand",
+            title: "申请数量",
+            key: "applyQty",
             align: "center"
           },
           {
-            title: "规格",
-            key: "spec",
+            title: "备注",
+            key: "remark",
             align: "center"
           },
           {
@@ -153,29 +151,55 @@
             align: "center"
           },
           {
-            title: "数量",
-            key: "orderQty",
+            title: "  OE码",
+            key: "oemCode",
             align: "center"
           },
           {
-            title: "单价",
-            key: "orderPrice",
+            title: "规格",
+            key: "spec",
             align: "center"
           },
           {
-            title: "金额",
-            key: "orderAmt",
+            title: "方向",
+            key: "enterUnitId",
             align: "center"
           },
           {
-            title: "仓库",
-            key: "storeName",
+            title: "紧销品",
+            key: "isTightPart",
+            align: "center",
+            render: (h ,params) => {
+              let isTight = params.row.isTight
+              let zi = ''
+              if(isTight === 0){
+                zi = "不是"
+              }
+              if(isTight === 1){
+                zi = '是'
+              }
+              return h('span',zi)
+            }
+          },
+          {
+            title: "受理数量",
+            key: "hasAcceptQty",
             align: "center"
           },
           {
-            title: "仓位",
+            title: "取消数量",
+            key: "hasCancelQty",
+            align: "center"
+          },
+          {
+            title: "出库数量",
+            key: "hasOutQty",
+            align: "center"
+          },
+          {
+            title: "入库数量",
             key: "storeShelf",
-            align: "center"
+            align: "hasInQty"
           }
         ],
         onelist: {}, //打印数据
@@ -205,11 +229,15 @@
             this.printShow = true;
             this.onelist = res.data;
             // this.onelist.printDate = tools.transTime(new Date());
-            this.details = res.data.details;
+            this.details = res.data.detailVOS;
           }
         } else {
           this.$message.error("至少选择一条信息");
         }
+      },
+      //取消
+      printShowfalse(){
+        this.printShow = false
       }
     }
   };

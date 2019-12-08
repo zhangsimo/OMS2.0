@@ -41,9 +41,27 @@ export function findAllCus(params, data) {
 // 配件分页查询
 export function queryPart(params, data) {
   return axios.request({
-    url: `${api.wmsApi}/sellPricePart/queryAll`,
+    url: `${api.omsSotck}/partStock/findPartPrice`,
     method: "post",
     params,
+    data,
+  });
+}
+
+// 统一售价配件保存
+export function partPriceSave(data) {
+  return axios.request({
+    url: `${api.wmsApi}/partPrice/save`,
+    method: "post",
+    data,
+  });
+}
+
+// 普通配件保存
+export function partLevelSave(data) {
+  return axios.request({
+    url: `${api.wmsApi}/sellPricePart/save`,
+    method: "post",
     data,
   });
 }

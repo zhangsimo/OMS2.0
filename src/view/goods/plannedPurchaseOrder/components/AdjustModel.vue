@@ -39,6 +39,7 @@
       <div>
         <vxe-table
           border
+          stripe
           auto-resize
           :loading="loading"
           height="420"
