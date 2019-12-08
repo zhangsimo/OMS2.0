@@ -97,7 +97,7 @@
             <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
+            <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
           </div>
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
@@ -217,6 +217,7 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import barch from '../batch/selectPartCom'
 import baseUrl from '_conf/url'
+import {conversionList} from '@/components/changeWbList/changewblist'
 
 
 
@@ -513,8 +514,6 @@ import baseUrl from '_conf/url'
             //多选内容
             selectTable(data){
                 this.selectTableList = data.selection
-
-
             },
             //全选内容
             selectAllTable(data){
@@ -545,25 +544,39 @@ import baseUrl from '_conf/url'
             getplanArriveDate(data){
                 this.formPlan.planArriveDate = data + ' '+ "00:00:00"
             },
+
             //配件返回的参数
-          async  getPartNameList(val){
-              let data ={}
-                  data = this.formPlan
-                  data.detailList = val
-              let res = await  getAccessories(data)
-              if(res.code === 0){
-                  this.getList()
-              }
+            getPartNameList(val){
+              this.$refs.formPlan.validate(async (valid) => {
+                  if (valid) {
+                      let data ={}
+                      data = this.formPlan
+                      data.detailList = conversionList(val)
+                      let res = await  getAccessories(data)
+                      if(res.code === 0){
+                          this.getList()
+                      }
+                  } else {
+                      this.$Message.error('*为必填项');
+                  }
+              })
+
             },
             // 批次配件
             async  getBarchList(val){
-                let data ={}
-                data = this.formPlan
-                data.detailList = val
-                let res = await  getAccessories(data)
-                if(res.code === 0){
-                  this.getList()
-                }
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        let data ={}
+                        data = this.formPlan
+                        data.detailList = val
+                        let res = await  getAccessories(data)
+                        if(res.code === 0){
+                            this.getList()
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
             },
             //打开客户选择
             openAddCustomer(){
