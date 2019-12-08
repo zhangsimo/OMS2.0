@@ -28,6 +28,7 @@
           </div>
           <div class="db">
             <Button class="mr10"
+                    @click="addOrder"
             >
               <Icon type="md-add"/>
               新增
@@ -36,18 +37,23 @@
           </div>
           <div class="db">
             <Button type="default" class="mr10"
+                    :disabled="draftShow != 0"
+                    @click="isSave"
             ><i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
+                    @click="isSubmit"
+                    :disabled="draftShow != 0"
             ><i class="iconfont mr5 iconziyuan2"></i>提交
             </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
+                    @click="printTable"
             ><i class="iconfont mr5 icondayinicon"></i> 打印
             </Button
             >
@@ -55,6 +61,8 @@
 
           <div class="db">
             <Button class="mr10"
+                    @click="isDelete"
+                    :disabled="draftShow != 0&&draftShow==5"
             >
               <Icon type="md-close" size="14"/>
               作废
@@ -63,12 +71,15 @@
           </div>
           <div class="db">
             <Button class="mr10"
+                    @click="Output"
             ><i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
+                    :disabled="draftShow != 3"
+                    @click="finish"
             ><i class="iconfont mr5 "></i> 完成销售
             </Button
             >
@@ -110,42 +121,44 @@
             </div>
             <!-- 右边表格-->
             <div slot="right" class="con-split-pane-right pl5 goods-list-form" style="overflow-y: auto; height: 100%;">
+
               <div class="pane-made-hd">
                 <span class="titler mr5">固定额度:</span>
-                <span class="titler mr10">{{ 31231 |priceFilters}}</span>
+                <span class="titler mr10">{{this.limitList.fixationQuota |priceFilters}}</span>
                 <span class="titler mr5">临时余额:</span>
-                <span class="titler mr10">{{ 31231 |priceFilters}}</span>
+                <span class="titler mr10">{{this.limitList.tempQuota |priceFilters}}</span>
                 <span class="titler mr5">可用余额:</span>
-                <span class="titler mr5">{{ 31231 |priceFilters}}</span>
+                <span class="titler mr5">{{ this.limitList.sumAmt |priceFilters}}</span>
               </div>
+              <Form
+                inline
+                ref="formPlan"
+                :model="formPlan"
+                :label-width="120"
+                :rules="ruleValidate"
+              >
               <div class="clearfix purchase" ref="planForm">
-                <Form
-                  inline
-                  ref="formPlan"
-                  :model="formPlan"
-                  :label-width="120"
-                  :rules="ruleValidate"
-                >
+
                   <FormItem label="客户：" prop="guestId">
                     <Row  style="width: 310px">
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" >
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="getLimit">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
                       <Button  class="ml5" size="small" type="default"  @click="CustomerShowModel" :disabled="draftShow != 0"><Icon type="md-checkmark" /></Button>
 
                     </Row>
                   </FormItem>
-                  <FormItem label="业务员：" prop="orderMan">
+                  <FormItem label="业务员：" prop="salesman">
                     <Input
                       class="w160"
                       placeholder="请输入业务员"
-                      v-model="formPlan.orderMan"
+                      v-model="formPlan.salesman"
                       :disabled="draftShow != 0"
                     />
                   </FormItem>
 
-                  <FormItem label="交货仓库：" prop="storeId" >
-                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
+                  <FormItem label="交货仓库：" prop="storeId">
+                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0" @on-change="getStore">
                       <Option v-for="item in WareHouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                   </FormItem>
@@ -163,26 +176,26 @@
                     </Select>
                   </FormItem>
                   <FormItem label="预计发货日期:">
-                    <DatePicker type="date" placeholder="选择日期" style="width: 150px" v-model="formPlan.planSendDate" :disabled="draftShow != 0"></DatePicker>
+                    <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
                   </FormItem>
                   <FormItem label="预计到货日期:">
-                    <DatePicker type="date" placeholder="选择日期" style="width: 150px" v-model="formPlan.planArriveDate" :disabled="draftShow != 0"></DatePicker>
+                    <DatePicker :value="formPlan.planArriveDate" @on-change="getplanArriveDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
                     <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0"></Input>
                   </FormItem>
-                </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addMountings ">
+                    <Button size="small" class="mr10" @click="addMountings " :disabled="draftShow != 0">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10"
+                    <Button size="small" class="mr10" :disabled="draftShow != 0"
+                            @click="deletePart"
                     >
                       <Icon custom="iconfont iconlajitongicon icons"/>
                       删除配件
@@ -190,12 +203,24 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload ='beforeUpload'
+                    >
+                    <Button size="small" class="mr10"  @click="getRUl" :disabled="draftShow != 0">
                       <span class="center"><Icon custom="iconfont icondaoruicon icons"/>导入配件</span>
                     </Button>
+                    </Upload>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
+                    <Button size="small" class="mr10" @click="openAddressShow" :disabled="draftShow != 0"> 编辑发货信息</Button>
                   </div>
                 </div>
               </div>
@@ -205,9 +230,13 @@
                 show-footer
                 :footer-method="footerMethod"
                 resizable
+                auto-resize
                 size="mini"
+                ref="xTable"
                 height='500'
-                :data="tableData"
+                @select-change="selectTable"
+                @select-all="selectAllTable"
+                :data="formPlan.detailVOList"
                 :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
               >
                 <vxe-table-column
@@ -284,40 +313,52 @@
                   title="方向"
                 ></vxe-table-column>
               </vxe-table>
+              </Form>
             </div>
           </Split>
         </div>
       </div>
     </section>
+    <!--        打印-->
+    <Print-show ref="printBox" :id="id"></Print-show>
+<!--      添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
     <!--    选择客户-->
-    <select-the-customer ref="selectTheCustomer"></select-the-customer>
+    <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
     <!--更多 搜索-->
-    <More-search :data="moreQueryList" ref="morequeryModal"></More-search>
+    <More-search :data="moreQueryList"  ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
     <!--  编辑发货地址 -->
-    <Modal v-model="addressShow" title="收货信息" width="1000">
-      <goods-info></goods-info>
-      <div slot='footer'>
-        <Button type='primary' @click=changeShippingAddress>确定</Button>
-        <Button type='default' @click='addressShow = false'>取消</Button>
-      </div>
-    </Modal>
+<!--    <Modal v-model="addressShow" title="收货信息" width="1000">-->
+<!--      <goods-info></goods-info>-->
+<!--      <div slot='footer'>-->
+<!--        <Button type='primary' @click=changeShippingAddress>确定</Button>-->
+<!--        <Button type='default' @click='addressShow = false'>取消</Button>-->
+<!--      </div>-->
+<!--    </Modal>-->
+    <goods-info ref="goodsInfo" :mainId="id"></goods-info>
   </div>
 
 </template>
 
 <script>
-  import {getLeftList,getClient,getWarehouseList} from "_api/salesManagment/presell.js";
+  import baseUrl from '_conf/url'
+  import {TOKEN_KEY} from '@/libs/util'
+  import {getLeftList,getClient,getWarehouseList,getDelete,getSave,getSubmit,getLimit,finishSales,getDeleteList,getOutput,getup} from "_api/salesManagment/presell.js";
   // import QuickDate from '_c/getDate/dateget';
   import getDate from '@/components/getDate/dateget'
-  import goodsInfo from "../../../components/goodsInfo/goodsInfo";
+  // import goodsInfo from "../../../components/goodsInfo/goodsInfo";
+  import goodsInfo from "../../goods/plannedPurchaseOrder/components/GoodsInfo";
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import selectPartCom from "../salesOrder/components/selectPartCom";
   import MoreSearch from "./components/MoreSearch";
+  import PrintShow from "./components/PrintShow";
   import SeeFile from "../commonality/SeeFile";
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  import {conversionList} from '@/components/changeWbList/changewblist'
+  import * as tools from "../../../utils/tools";
+  import Cookies from "js-cookie";
   export default {
     name: "presell",
     components: {
@@ -327,7 +368,8 @@
       selectTheCustomer,
       selectPartCom,
       MoreSearch,
-      SeeFile
+      SeeFile,
+      PrintShow
     },
     data() {
       let changeNumber = (rule, value, callback) => {
@@ -343,13 +385,32 @@
           }
         }
       };
+      let money = (rule, value, callback) => {
+        if (!value && value != '0') {
+          callback(new Error("最多保留4位小数"));
+        } else {
+          const reg = /^[+-]?\d+\.\d{0,4}$/i
+          if (reg.test(value)) {
+            callback();
+          } else {
+            callback(new Error("最多保留4位小数"));
+
+          }
+        }
+      };
       return {
+
+        headers:  {
+          Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+        },//请求头
+        upurl: getup,//导入地址
         oneRow: {},//点击详情的数据
         draftShow:'',//判定是不是草稿
         settleTypeList: {},//结账类型
         moreQueryList: {},//更多查询
         model1: '',
         WareHouseList: [], //交货仓库
+        limitList:[], //客户额度
         //分页
         page: {
           total: 0,
@@ -417,7 +478,7 @@
           tbData: [],
 
         }, //表格属性
-        orderType:99,
+        orderType:99,  //快速查询状态
         typeList:[
           {value:99,name:'所有'},
           {value:0,name:'草稿'},
@@ -437,7 +498,7 @@
           guestId: [
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
-          orderMan:[
+          salesman:[
             {required: true, message: '  ', trigger: 'blur'}
           ],
           billTypeId:[
@@ -446,7 +507,7 @@
           settleTypeId:[
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
-          storeId:[
+           storeId:[
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ]
         },//表单校验
@@ -456,10 +517,23 @@
 
           ],
           orderPrice: [
-            { required: true, validator:changeNumber }
+            { required: true, validator:money }
           ]
         }, //表格校验
         queryTime:'',//快速查询时间
+        isAdd:'', //判断是否新增
+        id:'',  //作废需要传入的id
+      //   detail:{},
+      //   PTrow:{
+      //   new: true,
+      //   _highlight: true,
+      //   id: '0',
+      //   billStatusId: '0',
+      //   createTime: tools.transTime(new Date()),
+      //   details: [],
+      // }
+        PTrow:{},
+        selectTableList:[], //右侧table表格选中的数据
 
       }
 
@@ -470,8 +544,100 @@
       this.getAllClient()
       this.getWarehouse()
       this.getType()
+
     },
     methods: {
+      //多选内容
+      selectTable(data){
+        this.selectTableList = data.selection
+        // console.log('多选内容', this.selectTableList)
+
+
+      },
+      //全选内容
+      selectAllTable(data){
+        this.selectTableList = data.selection
+        // console.log('全选内容', this.selectTableList )
+      },
+      //导出
+
+      Output(){
+        let id=this.id
+        if(!id){
+          this.$message.error('请选择一条有效数据')
+          return false
+        }else {
+          location.href = baseUrl.omsOrder + '/guestOrderMain/export?id='+ id +'&access_token=' + Cookies.get(TOKEN_KEY)
+        }
+
+      },
+      //打印弹出框
+      printTable(){
+        this.$refs.printBox.openModal()
+      },
+      getLimit(){
+        this.getAllLimit()
+      },
+      //获取客户额度
+      getAllLimit(){
+        let guestId = this.formPlan.guestId
+        getLimit(guestId).then(res=>{
+          // console.log('客户额度数据',res)
+          if( res.code === 0){
+            this.limitList = res.data
+          }
+        })
+      },
+      //更多搜索
+      queryList(){
+        this.page.num = 1
+        let page = this.page.num -1
+        let size = this.page.size
+        let data= this.moreQueryList
+        getLeftList(size,page,data).then(res =>{
+          if(res.code===0){
+            // this.draftShow = value
+            this.preSellOrderTable.tbData = res.data.content || []
+            this.page.total = res.data.totalElements
+
+          }
+
+        })
+      },
+
+
+
+      // async getAllLimit(){
+      //   let data = {}
+      //   data.guestId = this.formPlan.guestId
+      //   let res = await getLimit(data)
+      //   console.log()
+      //   if( res.code === 0){
+      //     this.limitList = res.data
+      //   }
+      // },
+
+      //仓库改变右侧表格改变
+      getStore(data){
+        let house = this.WareHouseList.filter( item => item.id == data)
+        this.formPlan.detailVOList.map( val => {
+          val.storeName = house[0].name
+        })
+
+      },
+      //获取搜索框内的数据
+      setOneClient(val){
+        this.$set(this.formPlan,"guestId",val.id);
+      },
+      //获取表单预计发货时间
+      getplanSendDate(data){
+        this.formPlan.planSendDate = data + ' '+ "00:00:00"
+      },
+      //获取表单计划到货日期
+      getplanArriveDate(data){
+        this.formPlan.planArriveDate = data + ' '+ "00:00:00"
+      },
+
       //获取选择状态类型
       getOrderType(v){
         this.orderType=v
@@ -508,24 +674,71 @@
       //选择更多
       moreQueryShowModal(row) {
         this.oneRow = row
+        this.moreQueryList = {}
         this.$refs.morequeryModal.openModal()
       },
       //点击查看
-      openFileModal(){
-        this.$refs.fileList.openModal()
+      openFileModal(row){
+        this.oneRow = row
+        this.$nextTick( function () {
+          this.$refs.fileList.openModal()
+        })
       },
       //打开收货地址
-      openAddressShow() {
-        this.addressShow = true
+      openAddressShow(){
+        this.$refs.goodsInfo.init()
       },
       //添加配件
       addMountings() {
         this.$refs.selectPartCom.init()
       },
+
       //配件返回的参数
-      getPartNameList() {
+      getPartNameList(val){
+        this.$refs.formPlan.validate(async (valid) => {
+          if (valid) {
+            let data ={}
+            data = this.formPlan
+            data.detailVOList= conversionList(val)
+            let res = await  getSave(data)
+            if(res.code === 0){
+              this.getLeftList()
+            }
+          } else {
+            this.$Message.error('*为必填项');
+          }
+        })
 
       },
+      // getPartNameList(v) {
+      //   console.log('配件返回的参数',v)
+      //
+      //
+      //       // v.forEach( item => {
+      //       //   arr.push(
+      //       //     {partId: item.id ,
+      //       //       partInnerId:item.code,
+      //       //       partCode: item.partCode,
+      //       //       partName:item.partStandardName,
+      //       //       fullName:item.fullName,
+      //       //       oemCode:item.oeCode,
+      //       //       partBrand: item.partBrand,
+      //       //       carBrandName:item.adapterCarBrand,
+      //       //       carModelName:item.adapterCarModel,
+      //       //       spec:item.specifications,
+      //       //       unit:item.minUnit,
+      //       //       carTypef:item.baseType.firstType.typeName,
+      //       //       carType:item.sbaseType.secondType.typeName,
+      //       //       carTypet:item.baseType.thirdType.typeName
+      //       //
+      //       //     })
+      //       // })
+      //    getSave(arr).then(res=>{
+      //      console.log('9999999999999',res)
+      //    })
+      //   // row.carBrandName=v.adapterCarBrand
+      //   // row.carModelName=v.adapterCarBrand
+      // },
       //确认收货地址
       changeShippingAddress() {
       },
@@ -548,14 +761,11 @@
         let page = this.page.num -1
         let size = this.page.size
         getLeftList(size,page,data).then(res =>{
-          // console.log('打印出来的数据',res)
-
           if(res.code===0){
             // this.draftShow = value
             this.preSellOrderTable.tbData = res.data.content || []
             console.log(this.preSellOrderTable.tbData)
             this.page.total = res.data.totalElements
-            // this.draftShow = this.draftShow.value
           }
 
         })
@@ -563,8 +773,9 @@
       },
       //获取左侧表格一行选中的数据
       selectTabelData(v){
+        console.log(v)
         this.currentRow=v
-        // console.log('97779999',this.currentRow)
+        this.id = v.id
         // this.draftShow = JSON.parse(v.billStatusId)
         // v.orderType =  JSON.parse(v.orderType)
         // v.orderTypeValue = v.orderType.value
@@ -626,6 +837,132 @@
         }
 
       },
+
+      //新增按钮
+      addOrder(){
+        this.tableData=[]
+        this.formPlan = {}
+        this.preSellOrderTable.tbData.unshift(this.PTrow)
+        // console.log('4444',ref)
+        // if (!this.isAdd) {
+        //   return this.$Message.error('请先保存数据');
+        // }
+        // console.log('新增的数据',this.PTrow)
+      },
+      //作废按钮
+       isDelete(){
+        if(this.id){
+          let id=this.id
+          console.log(id)
+          getDelete(id).then(res=>{
+            if(res.code==0){
+              this.$Message.success('作废成功');
+              // console.log('作废的数据',res)
+              this.getLeftList()
+            }
+          })
+        }else{
+          this.$message.error("至少选择一条信息");
+        }
+      },
+   //保存
+      isSave(){
+        this.$refs.formPlan.validate(async (valid) => {
+          if (valid) {
+            try {
+              await this.$refs.xTable.validate()
+
+              if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
+                return this.$message.error('可用余额不足')
+              }
+
+              // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+              let res = await getSave(this.formPlan)
+              if(res.code === 0){
+                this.$Message.success('保存成功');
+               this.getLeftList()
+                this.formPlan={}
+              }
+            } catch (errMap) {
+              this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+            }
+          } else {
+            this.$Message.error('*为必填项');
+          }
+        })
+
+      },
+      //提交
+      isSubmit(){
+        let data={}
+          data = this.formPlan
+        getSubmit(data).then(res=>{
+         if(res.code===0){
+           this.$Message.success('提交成功');
+           console.log('提交',res)
+           this.getLeftList()
+         }
+        })
+      },
+
+      //完成销售
+   finish(){
+       let id=this.id
+       // console.log('我是IDIDiidididid',id)
+       finishSales(id).then(res=>{
+         console.log('哈哈哈哈哈',res)
+         if(res.code === 0){
+           this.getLeftList()
+         }
+       })
+   },
+
+      //删除配件
+      deletePart(){
+        if (this.selectTableList.length > 0){
+          let data= []
+          this.selectTableList.forEach( item => {
+            data.push({id: item.id})
+          })
+          console.log(data)
+          getDeleteList(data).then( res => {
+            if(res.code === 0){
+              this.selectTableList.forEach( item => {
+                this.tableData = this.tableData.filter( val =>  item.id != val.id)
+              })
+
+              this.$Message.success('删除配件成功');
+              this.getLeftList()
+            }
+          })
+        }else {
+          this.$message.error('请选择一条有效数据')
+        }
+      },
+      //批量上传失败
+      onFormatError(file) {
+        this.$Message.error('只支持xls xlsx后缀的文件')
+      },
+      // 上传成功函数
+      onSuccess (response) {
+        if(response.code != 0 ){
+          this.$Message.error(response.message)
+        }else {
+          this.$Message.success(response.message)
+        }
+        this.getLeftList()
+      },
+      //上传之前清空
+      beforeUpload(){
+        this.$refs.upload.clearFiles()
+      },
+
+      //导入配件
+      getRUl(){
+        // console.log('导入',v)
+        let id=this.id
+        this.upurl = getup +'id='+id
+      }
     },
     watch:{
       //监听时间
@@ -639,25 +976,17 @@
         this.page.num = 1
         this.page.size = 10
         this.getLeftList()
-      },
-      //更多搜索
-      queryall:{
-        handler(v,ov){
-          this.page.num = 1
-          this.page.size = 10
-          let page = this.page.num -1
-          let size = this.page.size
-          getLeftList(page, size,v).then( res => {
-            if(res.code === 0){
-              // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
-              this.tableData = res.data.content
-              this.page.total = res.data.totalElements
-            }
-          })
 
+      },
+      formPlan:{
+        handler(val ,old){
+          if(!val.id){
+            return false
+          }
+         this.getAllLimit()
         },
         deep:true
-      },
+      }
     }
   }
 </script>

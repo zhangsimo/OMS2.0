@@ -7,16 +7,20 @@
             <span>快速查询：</span>
           </div>
           <div class="db">
-            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+<!--            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>-->
+            <getDate class="mr10"  @quickDate="getvalue" ></getDate>
           </div>
           <div class="db">
-            <Select v-model="salesType" class="w90 mr10">
-              <Option
-                v-for="item in salesTypeArr"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+<!--            <Select v-model="salesType" class="w90 mr10">-->
+<!--              <Option-->
+<!--                v-for="item in salesTypeArr"-->
+<!--                :value="item.value"-->
+<!--                :key="item.value"-->
+<!--                >{{ item.label }}</Option-->
+<!--              >-->
+<!--            </Select>-->
+            <Select v-model="orderType" style="width:100px" class="mr10" @on-change="getOrderType">
+              <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -74,6 +78,8 @@
                 销售退货列表
               </div>
               <Table
+                :queryTime="queryTime"
+                :orderType ="orderType"
                 height="660"
                 size="small"
                 highlight-row
@@ -100,24 +106,13 @@
                   :label-width="120"
                   :rules="ruleValidate"
                 >
-                  <FormItem label="客户："  prop="name">
-                    <Row class="w160">
-                      <Col span="19"
-                        ><Input
-                          v-model="formPlan.customer"
-                          placeholder="请选择客户"
+                  <FormItem label="客户：">
+                    <Row>
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px">
+                        <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                      </Select>
+                      <Button  class="ml5" size="small" type="default"  @click="CustomerShowModel"><Icon type="md-checkmark" /></Button>
 
-                      /></Col>
-                      <Col span="5"
-                        ><Button
-                         @click="CustomerShowModel"
-                          class="ml5"
-                          size="small"
-                          type="default"
-                          ><i
-                            class="iconfont iconxuanzetichengchengyuanicon"
-                          ></i></Button
-                      ></Col>
                     </Row>
                   </FormItem>
                   <FormItem label="退货员：" >
@@ -328,7 +323,7 @@
     </section>
 
   <!--    选择客户-->
-    <select-the-customer ref="selectTheCustomer"></select-the-customer>
+    <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
     <!--更多 搜索-->
     <More-query :data="moreQueryList" ref="moreQuery"></More-query>
     <!-- 选择销售出库单 -->
@@ -337,17 +332,20 @@
 </template>
 
 <script>
-  import QuickDate from '_c/getDate/dateget';
+
+  import {getLeftList,getClient} from "_api/salesManagment/sellReturn.js";
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import SalesOutbound from './components/SalesOutbound.vue';
   import MoreQuery from "../commonality/MoreQuery.vue";
+  import getDate from '@/components/getDate/dateget'
   export default {
     name:'sellReturn',
     components: {
-      QuickDate,
+      // QuickDate,
       selectTheCustomer,
       SalesOutbound,
-      MoreQuery
+      MoreQuery,
+      getDate
     },
     data(){
       return {
@@ -357,82 +355,75 @@
           num:1
         },
         moreQueryList:{},//更多查询
-        salesTypeArr:[
-          {
-            'label':'所有',
-            'value':0
-          },
-          {
-            'label':'草稿',
-            'value':1
-          },
-          {
-            'label':'待入库',
-            'value':2
-          },
-          {
-            'label':'已入库',
-            'value':3
-          },
-          {
-            'label':'已作废',
-            'value':4
-          },
-        ],//快速查询订单状态选项
-        salesType:'',//快速查询选中
+        orderType:99,  //快速查询状态
+        typeList:[
+          {value:99,name:'所有'},
+          {value:0,name:'草稿'},
+          {value:2,name:'待入库'},
+          {value:4,name:'已入库'},
+          {value:7,name:'已作废'}
+        ],
+
+        queryTime:'',  //快速查询时间
+        client:[],//客户列表
         sellOrderTable:{
           loading: false,
           columns: [
             {
               title: '序号',
               minWidth: 50,
-              key:'id'
+              type: 'index',
+              align: 'center'
             },
             {
               title: '状态',
-              key: 'status',
+              render: (h, params) => {
+                let tex = params.row.status.name
+                return h('span', {}, tex)
+
+              },
               minWidth: 70
             },
             {
               title: '客户',
-              key: 'name',
+              key: 'guestName',
               minWidth: 170
             },
             {
               title: '退货日期',
-              key: 'sellDate',
+              key: 'orderDate',
               minWidth: 120
             },
             {
               title: '退货员',
-              key: 'sellPerson',
+              key: 'orderMan',
               minWidth: 120
             },
 
             {
               title: '退货单号',
-              key: 'disable',
+              key: 'serviceId',
               minWidth: 200
             },
             {
               title: '打印次数',
-              key: 'printNum',
+              key: 'printTimes',
               minWidth: 120
             },
             {
               title: '创建人',
-              key: 'createPerson',
+              key: 'auditor',
               minWidth: 100
             },
             {
               title: '创建日期',
               align:'center',
-              key: 'createDate',
+              key: 'createTime',
               minWidth: 170
             },
             {
               title: '提交人',
-              key: 'submitPerson',
+              key: 'auditDate',
               minWidth: 100
             },
             {
@@ -443,20 +434,14 @@
             },
 
           ],
-          tbdata: [],
+          tbdata:[],
 
         }, //表格属性
-        formPlan:{
-          customer:''
-        },//表单对象
+        formPlan:{},//表单对象
         split1:0.2,//左右框
         inStores:[],// 入库仓
         settleMethods:[],//结算方式
-        tableData:[
-          {index:1,role:123,sex:456},
-          {index:2,role:123,sex:456},
-          {index:3,role:123,sex:456},
-        ],//右侧表格list
+        tableData:[],//右侧表格list
         thTypes:[], //退货类型
        ruleValidate:{ //表单校验
        name: [
@@ -465,10 +450,27 @@
    }
       }
     },
+    mounted() {
+      this.getLeftList()
+    },
     methods:{
+      //获取选择状态类型
+      getOrderType(v){
+        this.orderType=v
+        console.log('获取的状态时间',this.orderType)
+      },
       //打开新增客户
       CustomerShowModel(){
         this.$refs.selectTheCustomer.openModel()
+      },
+      //客户列表
+      getAllClient(){
+        getClient().then(res=>{
+          // console.log('打印出来的客户数据',res)
+          if(res.code===0){
+            this.client = res.data
+          }
+        })
       },
       //选择销售出库单
        SalesOutboundShowModel(){
@@ -479,15 +481,57 @@
       moreQueryShowModal(){
         this.$refs.moreQuery.openModal()
       },
-      // 快速查询日期
-       getDataQuick(v) {
-       // console.log(v);
+      //获取时间
+      getvalue(date){
+        this.queryTime = date
+        console.log('获取的时间啊啊',this.queryTime[0])
       },
       //切换页面
       selectNum(){},
       //切换页数
       selectPage(){},
+      //获取搜索框内的数据
+      setOneClient(val){
+        console.log('数据',val)
+        this.$set(this.formPlan,"guestId",val.id);
+      },
+      //获取左侧数据
+      getLeftList(){
+        let data={}
+         data.startTime =this.queryTime[0]||''
+         data.endTime = this.queryTime[1]||''
+        // data.status= this.orderType
+        // params=this.query
+        let page = this.page.num -1
+        let size = this.page.size
+        getLeftList(page,size,data).then(res=>{
+          console.log('左侧数据',res)
+          if(res.code===0){
+            this.sellOrderTable.tbdata = res.data.content || []
+            this.page.total = res.data.totalElements
+          }
+        })
+      }
+    },
+    watch:{
+      //监听时间
+      queryTime:function (val ,old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getLeftList()
+      },
+      //监听状态
+      orderType:function (val ,old) {
+        this.page.num = 1
+        this.page.size = 10
+        this.getLeftList()
 
+      },
+      formPlan:{
+        handler(val ,old){
+        },
+        deep:true
+      }
     }
   }
 </script>
