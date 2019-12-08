@@ -87,6 +87,12 @@
             </Button>
             </Upload>
           </div>
+          <div class="fl mr10">
+            <Button size="small"  @click="down">
+              <Icon custom="iconfont iconxiazaiicon icons" />
+             下载模板
+            </Button>
+          </div>
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
@@ -210,6 +216,8 @@ import {getClientTreeList} from '@/api/system/essentialData/clientManagement';
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import barch from '../batch/selectPartCom'
+import baseUrl from '_conf/url'
+
 
 
 
@@ -468,7 +476,10 @@ import barch from '../batch/selectPartCom'
                     })
                 ]
             },
-
+            //下载模板
+            down(){
+                location.href = baseUrl.omsOrder + '/sellOrderMain/template?access_token=' + Cookies.get(TOKEN_KEY)
+            },
             //批量上传失败
             onFormatError(file) {
                 this.$Message.error('只支持xls xlsx后缀的文件')
