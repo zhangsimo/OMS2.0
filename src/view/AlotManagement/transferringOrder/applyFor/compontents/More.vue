@@ -69,16 +69,13 @@
       methods: {
           //选择创建日期
         establish(date){
-          console.log(date)
           this.createData = date
         },
         //选择提交日期
         submit(date){
-          console.log(date)
           this.submitData = date
         },
         getSupplierNamea(a) {
-          console.log(a)
           this.callout = a.fullName
           this.guestId = a.id
         },
@@ -88,7 +85,6 @@
         sendMsg(){
             let a = { callout: this.callout , numbers: this.numbers ,coding: this.coding, Accessories: this.Accessories,Name: this.Name,createData: this.createData,submitData:this.submitData,guestId:this.guestId}
             this.$emit('sendMsg', a)
-            console.log(a)
         },
         //更多弹框的确定按钮
         Determined(){

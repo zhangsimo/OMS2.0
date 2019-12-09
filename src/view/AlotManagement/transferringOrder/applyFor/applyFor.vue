@@ -18,13 +18,13 @@
                 <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
               </div>
               <div class="db">
-                <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+                <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="instance" :disabled="presentrowMsg !== 0 "><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button class="mr10" @click="instance" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
-                <Button @click="cancellation" class="mr10" :disabled="presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+                <Button @click="cancellation" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
                 <Button @click="stamp" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -58,11 +58,11 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12">
                         <Row class="w500">
                           <Col span="22"><Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled=""></Input></Col>
-                          <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
+                          <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="storeId" v-model="formPlan.storeId">
-                        <Select class="w160" :disabled="buttonDisable">
+                      <FormItem label="调入仓库：" prop="storeId" >
+                        <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
@@ -75,11 +75,11 @@
                           type="date"
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
-                          :disabled="buttonDisable"
+                          :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
                       </FormItem>
                       <FormItem label="备注：" prop="remark">
-                        <Input class="w500" :disabled="buttonDisable" v-model="formPlan.remark"></Input>
+                        <Input class="w500" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
@@ -92,10 +92,10 @@
                   <div class="flex plan-cz-btn" ref="planBtn">
                     <div class="clearfix">
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro" :disabled="buttonDisable"><Icon type="md-add"/> 添加配件</Button>
+                        <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" :disabled="buttonDisable"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
                         <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
@@ -125,10 +125,11 @@
                           :max="999999"
                           :min="0"
                           v-model="row.applyQty"
+                          :disabled="presentrowMsg !== 0"
                         ></InputNumber>
                       </template>
                     </vxe-table-column>
-                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100"></vxe-table-column>
+                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
                     <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
                     <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -136,7 +137,7 @@
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
                     <vxe-table-column title="紧销品" width="100" type="checkbox">
                       <template v-slot="{ row,rowIndex }">
-                        <Checkbox disabled :value="row.isTightPart == 1"></Checkbox>
+                        <Checkbox disabled :value="row.isTight == 1"></Checkbox>
                       </template>
                     </vxe-table-column>
                     <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
@@ -212,10 +213,9 @@
           }
         };
         return {
-          // 保存按钮是否禁用
-          disSave: false,
-            //新增当前行
-             PTrow: {
+          checkboxArr:[],// checkbox选中
+          disSave: false, // 保存按钮是否禁用
+             PTrow: {//新增当前行
             new: true,
             _highlight: true,
                status: {"name":"草稿","value":0},
@@ -223,7 +223,7 @@
                createUname: '',
                serviceId: '',
                orderMan:'',
-               orderDate:'',
+               orderDate: '',
                printing: '',
                createTime: tools.transTime(new Date()),
             detailVOS: [],
@@ -336,54 +336,6 @@
               total: 0
             },
             loading: false,
-            // columns: [
-            //   {
-            //     title: '序号',
-            //     minWidth: 50,
-            //     key:'id'
-            //   },
-            //   {
-            //     title: '状态',
-            //     key: 'venderSkuNo',
-            //     minWidth: 70
-            //   },
-            //   {
-            //     title: '调出方',
-            //     key: 'name',
-            //     minWidth: 170
-            //   },
-            //   {
-            //     title: '创建日期',
-            //     key: 'address',
-            //     minWidth: 120
-            //   },
-            //   {
-            //     title: '申请人',
-            //     key: 'isCycle',
-            //     minWidth: 140
-            //   },
-            //   {
-            //     title: '申请单号',
-            //     key: 'disable',
-            //     minWidth: 200
-            //   },
-            //   {
-            //     title: '提交人',
-            //     key: 'remark',
-            //     minWidth: 100
-            //   },
-            //   {
-            //     title: '提交日期',
-            //     align:'center',
-            //     key: 'qualitySourceName',
-            //     minWidth: 170
-            //   },
-            //   {
-            //     title: '打印次数',
-            //     key: 'categoryName',
-            //     minWidth: 170
-            //   }
-            // ],
             tbdata: [],
           },
           advanced: false, //更多模块的弹框
@@ -391,13 +343,13 @@
           rowData: '',  //声明一个数据，用于赋值右边内容
           selectArr:[], //快速查询的数组 用于赋值,
           moreArr: {},
-          presentrowMsg: '',
+          presentrowMsg: 0,
           guestidId: '' ,//给后台传值保存调出方的id
            isAdd:true, //判断是否能新增
           formPlan: {
             guestName:'',//调出方
             storeId: '', //调入仓库
-            orderDate: '', //申请调拨日期
+            orderDate: tools.transTime(new Date()), //申请调拨日期
             remark: '', //备注
             createUname: '', //创建人
             serviceId: '', //申请单号
@@ -407,6 +359,16 @@
         }
       },
       methods: {
+        //删除配件
+        Delete(){
+          // var arr1=[{id:1},{id:2},{id:3},{id:4},{id:5}]
+          // var arr2=[{id:1},{id:2},{id:3}]
+          var set = this.checkboxArr.map(item=>item.id)
+          // console.log(set)
+          var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
+          console.log(resArr)
+          this.Right.tbdata = resArr
+        },
         //更多按钮
         moreaa(){
           this.$refs.moremore.init()
@@ -414,6 +376,7 @@
         // 新增按钮
         addProoo(){
           this.buttonDisable = false
+          this.presentrowMsg = 0
           if (!this.isAdd) {
             return this.$Message.error('请先保存数据');
           }
@@ -435,17 +398,25 @@
         SaveMsg(){
           let data = {}
           data.id = this.rowId
-          data.guestId = this.guestidId
+          data.guestId = this.formPlan.guestidId
           data.storeId = this.formPlan.storeId
+          data.guestName = this.formPlan.guestName
           data.orderDate = tools.transTime(this.formPlan.orderDate)
           data.remark = this.formPlan.remark
           data.createUname  = this.formPlan.createUname
           data.serviceId = this.formPlan.serviceId
           data.detailVOS = this.Right.tbdata
+          // console.log(data)
           save(data).then(res => {
             if(res.code === 0){
               this.$message.success('保存成功！')
-               this.getRightlist()
+              this.leftgetList()
+                this.formPlan.guestName = '',
+                this.formPlan.storeId =  '',
+                this.formPlan.remark =  '',
+                this.formPlan.createUname =  '',
+                this.formPlan.serviceId =  '',
+                  this.Right.tbdata = []
               }
           })
         },
@@ -483,7 +454,8 @@
         },
         //右侧表格复选框选中
         selectChange(msg){
-          console.log(msg.selection)
+          this.checkboxArr = msg.selection
+          console.log(this.checkboxArr)
         },
         //分页
         changePageLeft(p) {

@@ -176,7 +176,7 @@ export const mixSelectPartCom  = {
           label: "名称"
         },
         {
-          value: "applyCarModel",
+          value: "adapterCarModels",
           label: "车型"
         },
         {
@@ -210,11 +210,16 @@ export const mixSelectPartCom  = {
         req.typeId = this.selectTreeItem.id
       }
       if(this.selectBrand&&this.selectBrand!='9999'){
-        req.partBrandCode = this.selectBrand
+        req.partCodes =[]
+        req.partBrandCodes = [this.selectBrand]
       }
 
-      if(this.searchValue.trim()){
-        req[this.searchType] = this.searchValue.trim()
+      if(this.partName.trim()){
+        if (this.searchType == 'adapterCarModels'){
+          req[this.searchType] = [this.partName]
+        } else {
+          req[this.searchType] = this.partName.trim()
+        }
       }
       req.page = this.page.num
       req.size = this.page.size
@@ -325,7 +330,6 @@ export const mixSelectPartCom  = {
         }
 
       })
-      console.log(val,789)
     }
   }
 }

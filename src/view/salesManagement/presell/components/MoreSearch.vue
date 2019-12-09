@@ -64,60 +64,39 @@
     mounted(){
       this.getAllClient()
     },
-    methods:{
-      openModal(){
+    methods: {
+      openModal() {
         this.moreQueryShow = true
       },
       //获取公司
-      async getAllClient(){
+      async getAllClient() {
         let res = await getClient()
-        if(res.code === 0 ){
+        if (res.code === 0) {
           this.clientList = res.data
         }
         // console.log(res,999)
       },
       //获取创建时间
-      getCreatDate(date){
+      getCreatDate(date) {
         // console.log(date)
-        this.data.createTimeStart = date[0] +  " " + "00:00:00"
-        this.data.createTimeEnd = date[1] +' '+ '23:59:59'
+        this.data.createTimeStart = date[0] + " " + "00:00:00"
+        this.data.createTimeEnd = date[1] + ' ' + '23:59:59'
         // console.log('666',this.data.createTimeStart,this.data.createTimeEnd)
       },
       //提交日期
-      submitDate(date){
+      submitDate(date) {
         // console.log('444',date)
-        this.data.commitTimeStart = date[0] +  " " + "00:00:00"
-        this.data.commitTimeEnd = date[1] +' '+ '23:59:59'
+        this.data.commitTimeStart = date[0] + " " + "00:00:00"
+        this.data.commitTimeEnd = date[1] + ' ' + '23:59:59'
         // console.log('777',this.data.createTimeStart,this.data.createTimeStart)
       },
       //更多搜索
-      getMoreSearch(){
+      getMoreSearch() {
+        this.$emit('moreQuery' , this.data)
+        this.moreQueryShow=false
 
-        let data={}
-         data.createTimeStart=this.data.createTimeStart
-         data.createTimeEnd=this.data.createTimeEnd
-         data.commitTimeStart=this.data.commitTimeStart
-         data.commitTimeEnd=this.data.commitTimeEnd
-         data.guestId=this.data.guestId
-         data.partCode=this.data.partCode
-         data.partName=this.data.partName
-         data.createUname=this.data.createUname
-         data.commitUname=this.data.commitUname;
-         data.serviceId=this.data.serviceId
-         // this.$parent.getLeftList(data)
-        let page = this.page.num -1
-        let size = this.page.size
-        getMoreList(size,page,data).then(res =>{
-          // console.log('打印出来的数据434344444',res)
-       if(res.code==0){
-         this.moreQueryShow=false
-         this.data.serviceId=""
-       }
-
-        })
-        },
-
-       }
+      }
+    }
   }
 </script>
 

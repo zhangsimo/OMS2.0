@@ -84,14 +84,14 @@ export default [
         component: () => import("@/view/goods/plannedPurchaseOrder/plannedPurchaseOrder.vue")
       },
       {
-        path: "/goods/goodsList",
-        name: "goodsList3",
-        mark: '1002',
+        path: "interPurchase",
+        name: "interPurchase",
+        mark: '1001',
         meta: {
           icon: "arrow-graph-up-right",
           title: "国际采购订单"
         },
-        component: () => import("@/view/goods/goodsList/goodsList.vue")
+        component: () => import("@/view/goods/InterPurchase/InterPurchase.vue")
       },
       {
         path: "/goods/goodsList",
@@ -123,7 +123,7 @@ export default [
           icon: "arrow-graph-up-right",
           title: "采购退货"
         },
-        component: () => import("@/view/business/goods/supplierList.vue")
+        component: () => import("@/view/business/goods/supplierList/supplierList.vue")
       },
       {
         path: "/goods/bookingSheet/bookingSheet",
@@ -419,14 +419,14 @@ export default [
         component: () => import("@/view/business/policy/stockSearch/stockSearch.vue")
       },
       {
-        path: "",
-        name: "",
+        path: "/business/procurementAndStorage",
+        name: "procurementAndStorage",
         mark: "4001",
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购入库"
         },
-        // component: () => import()
+        component: () => import('@/view/business/procurementAndStorage/procurementAndStorage.vue')
       },
       {
         path: "/policy/market",

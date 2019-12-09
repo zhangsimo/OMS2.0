@@ -64,7 +64,6 @@ export function commit(data) {
 // 打印次数
 // /allotApplyMain/pointAdd
 export function pointAdd(params){
-  console.log(params)
   return axios.request({
     url: `${api.omsOrder}/allotApplyMain/pointAdd?`,
     method: 'get',
@@ -72,4 +71,30 @@ export function pointAdd(params){
   })
 }
 
+// 申请受理所有
+// /allotApplyMain/findAll
+export function findAll(params){
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/findAll`,
+    method: 'get',
+    params
+  })
+}
 
+//获取供应商列表
+export function getSupplierList(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findAllSupplier`,
+    method: 'post',
+    data
+  })
+}
+// 受理和拒绝接口
+// /allotMainAccept/save
+export function allotMainAccept(data){
+  return axios.request({
+    url: `${api.omsOrder}/allotMainAccept/save`,
+    method: 'post',
+    data
+  })
+}

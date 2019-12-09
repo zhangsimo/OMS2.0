@@ -189,7 +189,6 @@
                         this.printShoww = true
                         this.onelist = res.data
                     }
-                    console.log(res,996)
                 }else {
                     this.$message.error('至少选择一条信息')
                 }

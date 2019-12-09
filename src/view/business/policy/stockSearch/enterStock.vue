@@ -27,6 +27,7 @@
                 <DatePicker
                   @on-change="selectDate"
                   type="daterange"
+                  v-model="oneTime"
                   placement="bottom-start"
                   placeholder="选择日期"
                   class="w200 mr20">
@@ -34,7 +35,7 @@
               </div>
               <div class="db">
                 <span>供应商: </span>
-                <Input v-model="searchForm2.originGuestId" class="w200 mr10"></Input>
+                <Input v-model="searchForm2.guestName" class="w200 mr10"></Input>
               </div>
               <div class="db">
                 <Button type="warning" class="mr10 w90" @click="search">
@@ -47,7 +48,7 @@
           <!--      表-->
           <Table class="table-highlight-row" highlight-row size="small"
                  @on-current-change="selectTable"
-                 border :stripe="true" :columns="enterInfo" :data="contentOne.dataOne" height="600"></Table>
+                 border :stripe="true" :columns="enterInfo" :data="contentOne.dataOne" height="450"></Table>
         </div>
         <!--      出库明细-->
         <div class="tabs-warp" v-if="tIndex == 2">
@@ -56,7 +57,7 @@
             <div class="wlf">
               <div class="db">
                 <span>出库日期：</span>
-                <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
+                <DatePicker v-model="twoTime" @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
                             class="w200 mr20">
                 </DatePicker>
               </div>
@@ -75,18 +76,19 @@
           <!--      表-->
           <Table class="table-highlight-row" highlight-row size="small"
                  @on-current-change="selectTable"
-                 border :stripe="true" :columns="outInfo" :data="contentTwo.dataTwo" height="600"></Table>
+                 border :stripe="true" :columns="outInfo" :data="contentTwo.dataTwo" height="450"></Table>
         </div>
         <!--      占用订单-->
         <div class="tabs-warp p10" v-if="tIndex==3">
           <!--      表-->
           <Table class="table-highlight-row" highlight-row size="small"
                  @on-current-change="selectTable"
-                 border :stripe="true" :columns="occupy" :data="contentThree.dataThree" height="600"></Table>
+                 border :stripe="true" :columns="occupy" :data="contentThree.dataThree" height="450"></Table>
         </div>
         <!--      分页-->
-        <div class="page-warp">
+        <div class="page-warp clearfix">
           <Page
+            class="fr mr10 mt10"
             v-if="tIndex == 1"
             class-name="page-con"
             :current="contentOne.page.num"
@@ -96,9 +98,9 @@
             @on-page-size-change="changeSizeCus"
             show-sizer
             show-total
-            show-elevator
           ></Page>
           <Page
+            class="fr mr10 mt10"
             v-if="tIndex == 2"
             class-name="page-con"
             :current="contentTwo.page.num"
@@ -108,9 +110,9 @@
             @on-page-size-change="changeSizeCus"
             show-sizer
             show-total
-            show-elevator
           ></Page>
           <Page
+            class="fr mr10 mt10"
             v-if="tIndex == 3"
             class-name="page-con"
             :current="contentThree.page.num"
@@ -120,7 +122,6 @@
             @on-page-size-change="changeSizeCus"
             show-sizer
             show-total
-            show-elevator
           ></Page>
         </div>
         <!--      点击查看显示-->
@@ -138,7 +139,8 @@
         props: {mainData: ''},
         data() {
             return {
-
+                oneTime:'',//出库时间
+                twoTime:'', //出库时间
                 //客户查询
                 guestName:'',
                 //主表id
@@ -175,19 +177,19 @@
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'outUnitId',
+                        key: 'enterUnitId',
                         minWidth: 120
                     },
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'partBrandName',
+                        key: 'partBrand',
                         minWidth: 120
                     },
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'applyCarModel',
+                        key: 'carBrandName',
                         minWidth: 120
                     },
                     {
@@ -200,7 +202,7 @@
                     {
                         title: '供应商',
                         align: 'center',
-                        key: 'originGuestId',
+                        key: 'guestName',
                         minWidth: 120
                     },
                     {
@@ -225,7 +227,7 @@
                     {
                         title: '金额',
                         align: 'center',
-                        key: 'enterAmt',
+                        key: 'noTaxAmt',
                         minWidth: 120
                     },
                     {
@@ -237,7 +239,7 @@
                     {
                         title: '不含税单价',
                         align: 'center',
-                        key: 'direction',
+                        key: 'noTaxPrice',
                         minWidth: 120
                     },
                     {
@@ -289,19 +291,19 @@
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'outUnitId',
+                        key: 'enterUnitId',
                         minWidth: 120
                     },
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'partBrandName',
+                        key: 'partBrand',
                         minWidth: 120
                     },
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'carBrandName',
                         minWidth: 120
                     },
                     {
@@ -327,13 +329,13 @@
                     {
                         title: '出库数量',
                         align: 'center',
-                        key: 'outUnitId',
+                        key: 'sellQty',
                         minWidth: 120
                     },
                     {
                         title: '出库单价',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'sellPrice',
                         minWidth: 120
                     },
                     {
@@ -360,30 +362,30 @@
                         key: 'noTaxAmt',
                         minWidth: 120
                     },
-                    {
-                        title: '出库批次',
-                        align: 'center',
-                        key: 'isMarkBatch',
-                        minWidth: 120
-                    },
-                    {
-                        title: '批次成本',
-                        align: 'center',
-                        key: 'aaa',
-                        minWidth: 120
-                    },
-                    {
-                        title: '批次金额',
-                        align: 'center',
-                        key: 'aaa',
-                        minWidth: 120
-                    },
-                    {
-                        title: '供应商',
-                        align: 'center',
-                        key: 'originGuestId',
-                        minWidth: 120
-                    },
+                    // {
+                    //     title: '出库批次',
+                    //     align: 'center',
+                    //     key: 'serviceId',
+                    //     minWidth: 120
+                    // },
+                    // {
+                    //     title: '批次成本',
+                    //     align: 'center',
+                    //     key: 'enterPrice',
+                    //     minWidth: 120
+                    // },
+                    // {
+                    //     title: '批次金额',
+                    //     align: 'center',
+                    //     key: 'enterAmt',
+                    //     minWidth: 120
+                    // },
+                    // {
+                    //     title: '供应商',
+                    //     align: 'center',
+                    //     key: 'originGuestId',
+                    //     minWidth: 120
+                    // },
                     {
                         title: '出库单号',
                         align: 'center',
@@ -393,13 +395,13 @@
                     {
                         title: '出库类型',
                         align: 'center',
-                        key: 'downLimitWinter',
+                        key: 'enterTypeId',
                         minWidth: 120
                     },
                     {
                         title: '备注',
                         align: 'center',
-                        key: '出库类型',
+                        key: 'remark',
                         minWidth: 120
                     },
                 ],
@@ -415,31 +417,31 @@
                     {
                         title: '业务单号',
                         align: 'center',
-                        key: 'partCode',
+                        key: 'serviceId',
                         minWidth: 170,
                     },
                     {
                         title: '客户',
                         align: 'center',
-                        key: 'partName',
+                        key: 'guestName',
                         minWidth: 120
                     },
                     {
                         title: '配件编码',
                         align: 'center',
-                        key: 'outUnitId',
+                        key: 'partCode',
                         minWidth: 120
                     },
                     {
                         title: '配件名称',
                         align: 'center',
-                        key: 'partBrandName',
+                        key: 'partName',
                         minWidth: 120
                     },
                     {
                         title: '占用数量',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'lockStockQty',
                         minWidth: 120
                     },
                     {
@@ -452,19 +454,19 @@
                     {
                         title: '创建人',
                         align: 'center',
-                        key: 'guestName',
+                        key: 'createUname',
                         minWidth: 120
                     },
                     {
                         title: '创建日期',
                         align: 'center',
-                        key: 'outDate',
+                        key: 'createDate',
                         minWidth: 80
                     },
                     {
                         title: '备注',
                         align: 'center',
-                        key: '',
+                        key: 'remark',
                         minWidth: 120
                     },
                 ],
@@ -512,15 +514,9 @@
                 },
 
                 //入库查询
-                searchForm2:{
-                    dateTime: '',     // 时间
-                    originGuestId:'', // 供应商查询
-                },
+                searchForm2:{},
                 //出库查询
-                searchForm3:{
-                    dateTime: '',     // 时间
-                    guestName:'',     // 客户查询
-                }
+                searchForm3:{}
             }
         },
         methods: {
@@ -531,112 +527,126 @@
             },
             // 入库明细请求
             async getEnters() {
+                this.oneTime = ''
+                this.twoTime = ''
                 this.modal1 = true
-                let partId = this.mainData.partId
-                let enterData = Object.assign({},this.contentOne.page,{partId})
-                let res = await getEnter({enterData})
+                this.tIndex = 1
+                this.getList()
+              },
+            //入库明细请求
+            async getList() {
+                let data ={}
+                  data = this.searchForm2
+                  data.partId = this.mainData.partId
+                  data.page =  this.contentOne.page.num -1
+                  data.size =  this.contentOne.page.size
+                let res = await getEnter(data)
                 if (res.code == 0) {
-                    // console.log(res,777)
                     this.contentOne.dataOne = res.data.content
                     this.contentOne.page.total = res.data.totalElements
-                    this.contentOne.page.size = res.data.totalPages
-                    // console.log(this.dataOne, "dataone的")
-                } else {
-                    // console.log("bbbb")
                 }
             },
             // 出库明细请求
             async getOuts() {
-                let partId = this.mainData.partId
-                let outData = Object.assign({},this.contentTwo.page,{partId})
-                let res = await getOut({outData})
+                let data ={}
+                data = this.searchForm3
+                data.partId = this.mainData.partId
+                data.page =  this.contentTwo.page.num -1
+                data.size =  this.contentTwo.page.size
+                let res = await getOut(data)
                 if (res.code == 0) {
                     this.contentTwo.dataTwo = res.data.content
                     this.contentTwo.page.total = res.data.totalElements
-                    this.contentTwo.page.size = res.data.totalPages
-                    // console.log(this.contentTwo.dataTwo, "2222")
-                } else {
-                    // console.log(4444)
                 }
             },
             // 占用订单 getOccupy
             async getHold() {
-                let partId = this.mainData.partId
-                let getData = Object.assign({},this.contentThree.page,{partId})
-                let res = await getOccupy({getData})
+                let data ={}
+                data.partId = this.mainData.partId
+                data.page =  this.contentThree.page.num -1
+                data.size =  this.contentThree.page.size
+                let res = await getOccupy(data)
                 if (res.code == 0) {
                     this.contentThree.dataThree = res.data.content
                     this.contentThree.page.total = res.data.totalElements
-                    this.contentThree.page.size = res.data.totalPages
-                    // console.log(this.contentTwo.dataTwo, "2222")
-                } else {
-                    console.log(4444)
                 }
             },
             // tab切换
             setTab(index) {
                 this.tIndex = index;
-                console.log(this.tIndex, "tabindex")
+                console.log(this.tIndex)
                 if (this.tIndex == 2) {
                     this.getOuts()
                 }
                 if (this.tIndex == 1) {
-                    this.getEnters()
+                    this.getList()
                 }
                 if (this.tIndex == 3) {
                     this.getHold()
 
                 }
             },
-            // 修改每页显示条数-客户信息
+            // // 修改每页显示条数-客户信息
             changeSizeCus(size) {
                 if(this.tIndex==1){
                   this.contentOne.page.size = size
-                  this.search()
+                    this.contentOne.page.page = 1
+                  this.getList()
                 }else if(this.tabIndex==2){
                   this.contentTwo.page.size = size
-                  this.search()
+                    this.contentTwo.page.page = 1
+                    this.getOuts()
                 }else{
-                  this.contentThree.page.size = size
-                  this.search()
+                    this.contentThree.page.page = 1
+                    this.contentThree.page.size = size
+                  this.getHold()
                 }
             },
-            // 页数变动事件
+            // // 页数变动事件
             changePageCus(currentPage) {
                 if(this.tIndex==1){
                   this.contentOne.page.num = currentPage
-                  this.search()
-                }else if(this.tabIndex==2){
+                  this.getList()
+                }else if(this.tIndex==2){
                   this.contentTwo.page.num = currentPage
-                  this.search()
+                  this.getOuts()
                 }else{
                   this.contentThree.page.num = currentPage
-                  this.search()
+                  this.getHold()
                 }
 
             },
             // 获取选择时间
             selectDate(date) {
-              console.log(date)
               // 入库获取时间
-                if(this.tIndex==1){
-                    this.searchForm2.dateTime=date
-                }
-                if(this.tIndex==2){
-                    this.searchForm3.dateTime=date
-                }
-              this.search()
+                    if (this.tIndex == 1) {
+                        if (date[0]){
+                        this.searchForm2.startEnterDate = date[0] + ' ' + '00:00:00'
+                        this.searchForm2.endEnterDate = date[1] + ' ' + '23:59:59'
+                        }else{
+                            this.searchForm2.startEnterDate = ''
+                            this.searchForm2.endEnterDate = ''
+                        }
+
+                    }
+                    if (this.tIndex == 2) {
+                        if(date[0]){
+                            this.searchForm3.startEnterDate = date[0] + ' ' + '00:00:00'
+                            this.searchForm3.endEnterDate = date[1] + ' ' + '23:59:59'
+                        }else {
+                            this.searchForm3.startEnterDate = ''
+                            this.searchForm3.endEnterDate = ''
+                        }
+
+                    }
             },
             // 查询
             search() {
                 if(this.tIndex==1){
-                  let searchTableList = Object.assign({},this.contentOne.page,this.searchForm2)
-                  this.getLotStocks(searchTableList)
-                }else if(this.tabIndex==2){
-                  let searchTableList = Object.assign({},this.contentTwo.page,this.searchForm3)
-                  this.getLotStocks(searchTableList)
+                  this.getList()
+                }else if(this.tIndex==2){
+                  this.getOuts()
                 }else{
-                  let searchTableList = Object.assign({},this.contentThree.page,this.searchForm3)
                   this.getHold()
                 }
             }

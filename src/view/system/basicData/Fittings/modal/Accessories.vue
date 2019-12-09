@@ -238,6 +238,7 @@
             max-height="360"
             ref="xTable"
             border
+            stripe
             :auto-resize="true"
             :data="formValidate.specVOS"
             :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"

@@ -19,6 +19,7 @@
         <div>
           <vxe-table
             border
+            stripe
             resizable
             height="420"
             size="mini"
@@ -73,6 +74,7 @@
           <vxe-table
             border
             resizable
+            stripe
             size="mini"
             :data="tableInfoData"
             height="450"
@@ -209,7 +211,7 @@ export default class FeeRegistration extends Vue {
   ];
 
   get dsiabled(): boolean {
-    const stat: string = orderState[this.state];
+    const stat: string = this.state; // orderState[];
     if (["草稿", "待收货"].includes(stat)) {
       return false;
     }
