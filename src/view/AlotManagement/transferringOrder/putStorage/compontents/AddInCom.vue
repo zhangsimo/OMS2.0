@@ -1,166 +1,218 @@
 <template>
-  <div style="width:500px; height: 300px">
-    <Modal v-model="searchPartLayer" title="选择调拨申请单" width="1000">
-      <section class="oper-box">
-        <div class="oper-top flex">
-          <div class="wlf">
-            <div class="db mr10 abd">
-              <span class="mr10">快速查询：</span>
-            </div>
-            <div class="db mt40 mrt10 abc">
-              <span class="mr10">申请日期:</span>
-              <Date-picker
-                v-model="penSalesData.option1"
-                @on-change="selectDate"
-                type="daterange"
-                placement="bottom-end"
-                placeholder="选择日期"
-                style="width: 200px"
-              ></Date-picker>
-            </div>
-            <div class="db mr10">
-              <Select
-                v-model="penSalesData.customer"
-                class="w100 mr10"
-                placeholder="调出方"
-                filterable
-                clearable
-              >
-                <Option
-                  v-for="item in customerListOptions"
-                  :value="item.name"
-                  :key="item.id"
-                >{{ item.name }}</Option>
-              </Select>
-            </div>
-            <div class="db mr10">
-              <Input
-                v-model="penSalesData.productName"
-                placeholder="申请单号"
-                style="width: 160px"
-                class="mr10"
-              ></Input>
-            </div>
-            <div class="db mr10">
-              <Button @on-click="search" type class="mr20">查询</Button>
-            </div>
-            <div class="db mr10 btn">
-              <Button @on-click="chose" type="warning" class="mr20">选择</Button>
-            </div>
-            <div class="db mr10">
-              <Button @on-click="cancel" type class="mr20">取消</Button>
-            </div>
+  <Modal v-model="searchPartLayer" title="选择调拨申请单" width="1000" @on-ok="ok">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf">
+          <div class="db mr10">
+            <span>快速查询: </span>
+          </div>
+          <div class="db mr10">
+              <span class="">申请日期从：</span>
+              <DatePicker v-model="penSalesData.allotEnterTimeStart" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+          </div>
+          <div class="db mr10">
+              <span class=" ml10">至：</span>
+              <DatePicker v-model="penSalesData.allotEnterTimeEnd" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+          </div>
+          <div class="db mr10">
+             <span>调 出 方 ：</span>
+              <Input v-model="penSalesData.guestName" style="width: 128px" />
+              <Button @click="getName" class="ml5" size="small" type="default">
+                                <i class="iconfont iconxuanzetichengchengyuanicon"></i>
+              </Button>
+          </div>
+          <div class="db mr10">
+            <Input
+              v-model="penSalesData.serviceId"
+              placeholder="申请单号"
+              style="width: 160px"
+              class="mr10"
+            ></Input>
+          </div>
+          <div class="db mr10">
+            <Button @click="search(pageList.size, pageList.page)" type class="mr20">查询</Button>
+          </div>
+          <div class="db mr10 btn">
+            <Button @click="ok" type="warning" class="mr20">选入</Button>
+          </div>
+          <div class="db mr10 btn">
+            <Button @click="init1" type="warning" class="mr20">取消</Button>
           </div>
         </div>
-      </section>
-      <section class="con-box">
-        <!--上表格-->
-        <div class="topTableDate">
-          <vxe-table border resizable auto-resize height="100" :data="TopTableData">
-            <vxe-table-column type="index" title="序号"></vxe-table-column>
-            <vxe-table-column field="item2" title="选择"></vxe-table-column>
-            <vxe-table-column field="item3" title="申请单号"></vxe-table-column>
-            <vxe-table-column field="item4" title="调出方"></vxe-table-column>
-            <vxe-table-column field="item5" title="受理状态"></vxe-table-column>
-            <vxe-table-column field="item6" title="申请人"></vxe-table-column>
-            <vxe-table-column field="item7" title="申请日期" width="100"></vxe-table-column>
-            <vxe-table-column field="item8" title="提交人" width="100"></vxe-table-column>
-            <vxe-table-column field="item9" title="提交日期" width="100"></vxe-table-column>
-            <vxe-table-column field="item10" title="备注" width="100"></vxe-table-column>
-          </vxe-table>
-        </div>
+      </div>
+    </section>
+    <section class="con-box">
+      <!--上表格-->
+      <div class="topTableDate">
+        <vxe-table
+          border
+          resizable
+          ref="xtale"
+          size="mini"
+          :height="200"
+          auto-resize
+          :data="tabList"
+          highlight-current-row
+          highlight-hover-row
+          @current-change="selectTabelData"
+          :radio-config="{labelField: 'name', trigger: 'row'}"
+          @radio-change="radioChangeEvent"
+        >
+          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+          <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
+          <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
+          <vxe-table-column field="serviceId" title="申请单" width="100"></vxe-table-column>
+          <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
+          <vxe-table-column field="status" title="受理状态" width="100"></vxe-table-column>
+          <vxe-table-column field="orderMan" title="申请人" width="100"></vxe-table-column>
+          <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
+          <vxe-table-column field="createUname" title="提交人" width="100"></vxe-table-column>
+          <vxe-table-column field="createTime" title="提交日期" width="100"></vxe-table-column>
+        </vxe-table>
+      </div>
 
-        <!--     分页-->
-        <Row class="mt10 mb10">
-          <Col span="12" offset="12" style="text-align:right">
-            <div>
-              <Page
-                :current="pageList.page"
-                :total="this.pageList.total"
-                :page-size="pageList.pageSize"
-                :page-size-opts="pageList.pageSizeOpts"
-                show-sizer
-              />
-            </div>
-          </Col>
-        </Row>
-        <!--        下表格-->
-        <div class="bottomTableDate">
-          <vxe-table border resizable auto-resize height="100" :data="BottomTableData">
-            <vxe-table-column type="index" title="序号"></vxe-table-column>
-            <vxe-table-column field="item2" title="配件编码"></vxe-table-column>
-            <vxe-table-column field="item3" title="配件名称" width="100"></vxe-table-column>
-            <vxe-table-column field="item4" title="品牌"></vxe-table-column>
-            <vxe-table-column field="item5" title="单位"></vxe-table-column>
-            <vxe-table-column field="item6" title="品牌车型"></vxe-table-column>
-            <vxe-table-column field="item7" title="申请数量"></vxe-table-column>
-            <vxe-table-column field="item8" title="受理数量"></vxe-table-column>
-            <vxe-table-column field="item9" title="取消数量"></vxe-table-column>
-            <vxe-table-column field="item10" title="已入库数量"></vxe-table-column>
-            <vxe-table-column field="item11" title="备注"></vxe-table-column>
-          </vxe-table>
-        </div>
-      </section>
-    </Modal>
-  </div>
+      <!--     分页-->
+      <Row class="mt10 mb10">
+        <Col span="12" offset="12" style="text-align:right">
+          <div>
+            <Page
+              :current="pageList.page"
+              :total="tabList.length"
+              :page-size="pageList.pageSize"
+              :page-size-opts="pageList.pageSizeOpts"
+              show-sizer
+              @on-change="changePage" @on-page-size-change="changeSize"
+            />
+          </div>
+        </Col>
+      </Row>
+      <!--        下表格-->
+      <div class="bottomTableDate">
+        <vxe-table border resizable auto-resize height="150" :data="currentData">
+          <vxe-table-column type="index" title="序号"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="unit" title="单位"></vxe-table-column>
+          <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
+          <vxe-table-column field="hasInQty" title="入库数量"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+        </vxe-table>
+      </div>
+    </section>
+     <div slot="footer">
+      </div>
+  </Modal>
 </template>
 
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
+import moment from 'moment'
 export default {
   data() {
     return {
       searchPartLayer: false,
       // 日期数据
       options1: [],
+      tabList: [],
       // 调出方查询
       penSalesData: {
-        options1: [], //日期
-        customer: '', //调出方
-        productName: '' //申请单号
+        allotEnterTimeEnd: '', //申请单号
+        allotEnterTimeStart: '',
+        guestName: '',
+        guestId: '',
+        serviceId: ''
       },
       customerListOptions: [], //调出方下拉列表
-      TopTableData: [
-        {
-          item2: '2',
-          item3: '3',
-          item4: '4',
-          item5: '5',
-          item6: '6',
-          item7: '7',
-          item8: '8',
-          item9: '9',
-          item10: '10'
-        }
-      ], //上侧表格list
-      BottomTableData: [
-        {
-          item2: '2',
-          item3: '3',
-          item4: '4',
-          item5: '5',
-          item6: '6',
-          item7: '7',
-          item8: '8',
-          item9: '9',
-          item10: '10',
-          item11: '11'
-        }
-      ], //下侧表格list
+      tableData: [{name1: '123'}, {}, {}, {}],
+      TopTableData: [], //上侧表格list
+      BottomTableData: [], //下侧表格list
       // 分页数据
       pageList: {
         page: 1,
         total: 0,
-        size: 50,
+        size: 10,
         pageSize: 50,
         pageSizeOpts: [50, 100, 150, 200]
+      },
+      xuanzhognList: [],
+      checkRow: {},
+      currentData:[]
+    }
+  },
+  watch: {
+    tbdata: {
+      handler(newVal) {
+        this.tabList = newVal
+      },
+      deep: true
+    },
+    dcList: {
+      handler(newVal) {
+        this.diaochuList = newVal
+      },
+      deep: true
+    },
+     dcName: {
+      handler(newVal) {
+        this.penSalesData.guestName = newVal
+      },
+      deep: true
+    },
+    dcId: {
+      handler(newVal) {
+        this.penSalesData.guestId = newVal
+      },
+      deep: true
+    }
+  },
+  props: {
+    tbdata: {
+      type: Array,
+      default: function() {
+        return []
       }
+    },
+    dcList: {
+      type: Array,
+      default: function() {
+        return []
+      }
+    },
+    dcName: {
+      type: String,
+      default: ''
+    },
+    dcId: {
+      type: String,
+      default: ''
     }
   },
   methods: {
+    radioChangeEvent({row}) {
+      console.log(row)
+      this.checkRow = row
+      this.currentData = row.detailVOS
+    },
+    //分页
+    changePage(p) {
+      this.pageList.page = p
+      this.search(this.pageList.size, p)
+    },
+    changeSize(size) {
+      this.pageList.size = size
+      this.search(size, this.pageList.page)
+    },
+    getName() {
+      this.$emit('getName', 2)
+    },
     init() {
       this.searchPartLayer = true
+    },
+    init1() {
+      this.searchPartLayer = false
     },
     //选中的日期
     selectDate(date) {
@@ -168,13 +220,41 @@ export default {
       console.log(this.penSalesData.option1)
     },
     //搜索
-    search() {
-      // this.getList()
+    search(size, num ) {
+      if (this.penSalesData.allotEnterTimeStart) {
+        this.penSalesData.allotEnterTimeStart = moment(this.penSalesData.allotEnterTimeStart).format('YYYY-MM-DD HH:mm:ss')
+      }
+      if (this.penSalesData.allotEnterTimeEnd) {
+        this.penSalesData.allotEnterTimeEnd = moment(this.penSalesData.allotEnterTimeEnd).format('YYYY-MM-DD HH:mm:ss')
+      }
+      for(var k in this.penSalesData) {
+        if(!this.penSalesData[k]) {
+          delete this.penSalesData[k]
+        }
+      }
+      this.$emit('search21', this.penSalesData, size, num)
+    },
+    getParams() {
+      this.$emit('getLisw', this.penSalesData)
     },
     //确定
-    chose() {},
+    chose() {
+      // 将选中的行添加到下面
+      // this.bData.push(this.checkRow)
+    },
     //取消
-    cancel() {}
+    cancel() {},
+    echoDate() {},
+    selectTabelData({row}) {
+      console.log(row)
+      this.checkRow = row
+      this.currentData = row.voList
+    },
+    ok() {
+       // 将选好的成品传父组件
+       console.log(this.checkRow)
+      this.$emit('ok', this.checkRow)
+    }
   }
 }
 </script>

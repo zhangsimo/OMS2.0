@@ -16,8 +16,8 @@
           <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
         <Button type="primary mr15" @click="searchInfo">查询</Button>
-        <Button type="primary mr15" @click="saveInfo">保存</Button>
-        <Button>取消</Button>
+        <!-- <Button type="primary mr15" @click="saveInfo">保存</Button> -->
+        <!-- <Button @click="init1">取消</Button> -->
       </Form>
     </div>
     <div class="main clearfix">
@@ -99,8 +99,8 @@
         </Form>
       </div>
       </div>
-
     </div>
+
     <!-- </Modal> -->
   </div>
 </template>
@@ -169,10 +169,12 @@ export default {
     //初始化数据左边表格
     let res = await getGoodsInfo()
     this.tableData = res.data
+    console.log(res)
 
     //获取物流下拉框
     let log = await logistics()
     this.logisArr = log.data
+    console.log(log)
   },
   mounted() {
 
@@ -189,6 +191,10 @@ export default {
         this.formDateTop.streetAddress= null,//详细收货地址
         this.formDateTop.receiveManTel= null//联系电话
       let res = await queryGoodsInfo(this.formDateTop)
+      console.log(res)
+    },
+    getParams() {
+      return this.formDateRight
     },
     //保存
     async saveInfo() {
@@ -197,6 +203,7 @@ export default {
       if (res.code == 0) {
         this.$Message.success(res.data)
         // this.$refs.formTwo.resetFields()
+        console.log(res)
       }
     },
     echoDate({row}) {
