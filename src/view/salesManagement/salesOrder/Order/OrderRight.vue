@@ -87,11 +87,17 @@
             </Button>
             </Upload>
           </div>
+          <div class="fl mr10">
+            <Button size="small"  @click="down">
+              <Icon custom="iconfont iconxiazaiicon icons" />
+             下载模板
+            </Button>
+          </div>
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
+            <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
           </div>
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
@@ -210,6 +216,9 @@ import {getClientTreeList} from '@/api/system/essentialData/clientManagement';
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import barch from '../batch/selectPartCom'
+import baseUrl from '_conf/url'
+import {conversionList} from '@/components/changeWbList/changewblist'
+
 
 
 
@@ -468,7 +477,10 @@ import barch from '../batch/selectPartCom'
                     })
                 ]
             },
-
+            //下载模板
+            down(){
+                location.href = baseUrl.omsOrder + '/sellOrderMain/template?access_token=' + Cookies.get(TOKEN_KEY)
+            },
             //批量上传失败
             onFormatError(file) {
                 this.$Message.error('只支持xls xlsx后缀的文件')
@@ -502,8 +514,6 @@ import barch from '../batch/selectPartCom'
             //多选内容
             selectTable(data){
                 this.selectTableList = data.selection
-
-
             },
             //全选内容
             selectAllTable(data){
@@ -534,25 +544,39 @@ import barch from '../batch/selectPartCom'
             getplanArriveDate(data){
                 this.formPlan.planArriveDate = data + ' '+ "00:00:00"
             },
+
             //配件返回的参数
-          async  getPartNameList(val){
-              let data ={}
-                  data = this.formPlan
-                  data.detailList = val
-              let res = await  getAccessories(data)
-              if(res.code === 0){
-                  this.getList()
-              }
+            getPartNameList(val){
+              this.$refs.formPlan.validate(async (valid) => {
+                  if (valid) {
+                      let data ={}
+                      data = this.formPlan
+                      data.detailList = conversionList(val)
+                      let res = await  getAccessories(data)
+                      if(res.code === 0){
+                          this.getList()
+                      }
+                  } else {
+                      this.$Message.error('*为必填项');
+                  }
+              })
+
             },
             // 批次配件
             async  getBarchList(val){
-                let data ={}
-                data = this.formPlan
-                data.detailList = val
-                let res = await  getAccessories(data)
-                if(res.code === 0){
-                  this.getList()
-                }
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        let data ={}
+                        data = this.formPlan
+                        data.detailList = val
+                        let res = await  getAccessories(data)
+                        if(res.code === 0){
+                            this.getList()
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
             },
             //打开客户选择
             openAddCustomer(){
@@ -683,7 +707,7 @@ import barch from '../batch/selectPartCom'
                 }
             },
             getRUl(){
-              this.upurl = this.upurl +'id=' + this.formPlan.id
+              this.upurl = getup +'id=' + this.formPlan.id
             },
 
 

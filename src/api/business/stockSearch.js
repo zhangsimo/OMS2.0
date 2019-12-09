@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 // 获取汇总库存数据
 export function getAllStock (data) {
   return axios.request({
-    url: `${api.omsStore}/partStoreStock/findPageByDynamicQuery`,
+    url: `${api.omsSotck}/partStoreStock/findPageByDynamicQuery?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   });
@@ -12,7 +12,7 @@ export function getAllStock (data) {
 //   批次库存查询
 export function getLotStock (data) {
   return axios.request({
-    url: `${api.omsOrder}/enterMain/queryBatchStock`,
+    url: `${api.omsOrder}/enterMain/queryBatchStock?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   });
@@ -28,7 +28,7 @@ export function getEnter (data) {
 //获取出库明细数据outDetail/queryByMainId
 export function getOut (data) {
   return axios.request({
-    url: `${api.omsOrder}/outDetail/queryByConditions`,
+    url: `${api.omsOrder}/outDetail/queryByConditions?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   });
@@ -36,7 +36,7 @@ export function getOut (data) {
 // 占用订单sellQtyTempRecord/findPageByDynamicQuery
 export function getOccupy (data) {
   return axios.request({
-    url: `${api.omsStore}sellQtyTempRecord/findPageByDynamicQuery`,
+    url: `${api.omsSotck}/sellQtyTempRecord/findPageByDynamicQuery?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   });

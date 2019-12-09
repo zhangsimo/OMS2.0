@@ -1,4 +1,4 @@
-import {getPurchaseInit,saveDraft,findPageByDynamicQuery} from "_api/purchasing/purchasePlan";
+import {getPurchaseInit,saveDraft,findPageByDynamicQuery,saveCommit,saveObsolete,saveReverse} from "_api/purchasing/purchasePlan";
 
 import {purchaseTypeList} from "./goodsList";
 
@@ -11,6 +11,8 @@ export const mixGoodsData = {
         guestId:'',//供应商id
 
         planDate: '',//计划日期
+        planDateformat:'',
+
         planner: this.$store.state.user.userData.staffName||'',//计划人
         remark: '',//备注
         billType: '',//票据类型
@@ -24,7 +26,7 @@ export const mixGoodsData = {
           { required: true, message: '供应商不能为空', trigger: 'blur' }
         ],
         planDate: [
-          { required: true, message: '计划采购日期不能为空', trigger: 'change' },
+          { required: true, type: 'date', message: '计划采购日期不能为空', trigger: 'change' },
         ],
         planner: [
           { required: true, message: '计划员不能为空', trigger: 'blur' }
@@ -41,7 +43,18 @@ export const mixGoodsData = {
       //直发门店
       companyMap:[],
       //选中的采购计划单
-      selectPlanOrderItem:{}
+      selectPlanOrderItem:{},
+
+      //高级查询
+      seniorFormData: {
+        name: '',
+        url: '',
+        owner: '',
+        type: '',
+        approver: '',
+        date: '',
+        desc: ''
+      },
     }
   },
   mounted(){
@@ -74,11 +87,14 @@ export const mixGoodsData = {
     //初始化
     getList() {
       const params = {}
-      let searchValue = this.searchValue.trim()
-      if(searchValue){
-        params.name = searchValue
+      if(this.purchaseType!==9999){
+        params.flag = this.purchaseType
       }
-      params.page = this.page.num - 1
+      if(this.dateTime.length>0){
+        params.startTime = this.dateTime[0];
+        params.endTime = this.dateTime[1];
+      }
+      params.page = this.page.num
       params.size = this.page.size
       this.loading = false
       findPageByDynamicQuery(params).then(res => {
@@ -140,7 +156,6 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v){
-      console.log(v)
       this.tableData = this.tableData.concat(v)
     },
     //获取选中供应商
@@ -154,8 +169,8 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v){
-      this.formPlan.planDate = v
-      console.log(this.formValidate.planDate)
+      console.log(v)
+      this.formPlan.planDateformat = v
     },
     //获取订单状态
     returnOrderType(n){
@@ -163,19 +178,74 @@ export const mixGoodsData = {
     },
     //采购计划单选中
     selectTabelData(v){
-      this.selectPlanOrderItem = v;
       console.log(v)
+      if(v){
+        this.selectPlanOrderItem = v||{};
+        this.formPlan.supplyName = v.guest||"";
+        this.formPlan.guestId = v.guestId||"";
+        this.formPlan.planDate = v.orderDate||"";
+        this.formPlan.planDateformat = v.orderDate||"";
+        this.formPlan.remark = v.remark||"";
+        this.formPlan.billType = v.billTypeId||"";
+        this.formPlan.hairShop = v.directOrgid||"";
+        this.formPlan.planOrderNum = v.serviceId||"";
+        this.formPlan.otherPrice = v.otherAmt||0;
+        this.formPlan.totalPrice = v.totalAmt||0;
+        this.tableData = v.details||[]
+      }
     },
+
+    //新增采购计划单
+    addOrder(){
+      this.$refs['planOrderTable'].clearCurrentRow();
+      this.$refs['formPlan'].resetFields();
+      this.tableData = [];
+      this.selectPlanOrderItem = {}
+      this.selectPlanOrderItem.flag = 0
+    },
+
+    //作废--反作废
+    saveObsoleteFun(type){
+      if(type===1){
+        let req = {
+          id:this.selectPlanOrderItem.id,
+          flag:-1
+        }
+        saveObsolete(req).then(res => {
+          if(res.code==0){
+            this.$Message.success("提交成功")
+            this.getList()
+          }
+        })
+      }else{
+        let req = {
+          id:this.selectPlanOrderItem.id,
+          flag:0
+        }
+        saveReverse(req).then(res => {
+          if(res.code==0){
+            this.$Message.success("提交成功")
+            this.getList()
+          }
+        })
+      }
+    },
+
+
+
     //保存采购计划信息
-    submit (name) {
-      console.log(name)
+    submit (name,subType) {
       this.$refs[name].validate((valid) => {
         if (valid) {
           let objReq = {}
+          if(this.selectPlanOrderItem.id){
+            objReq.id = this.selectPlanOrderItem.id
+          }
           //供应商id
           objReq.guestId = this.formPlan.guestId;
+          objReq.guest = this.formPlan.supplyName;
           //计划日期
-          objReq.orderDate = this.formPlan.planDate;
+          objReq.orderDate = this.formPlan.planDateformat;
           //计划员name
           objReq.orderMan = this.formPlan.planner;
           //备注
@@ -192,17 +262,30 @@ export const mixGoodsData = {
           objReq.otherAmt = parseFloat(this.formPlan.otherPrice);
           //合计总金额
           objReq.totalAmt = parseFloat(this.formPlan.totalPrice);
+          //配件详情
+          objReq.details = this.tableData
           // console.log(objReq)
           // return
-          saveDraft(objReq).then(res => {
-            if(res.code==0){
-              this.proModal = false
-              this.$Message.success("添加成功")
-              this.getList()
-            }
-          })
+          if(subType===1){
+            saveDraft(objReq).then(res => {
+              if(res.code==0){
+                this.proModal = false
+                this.$Message.success("添加成功")
+                this.getList()
+              }
+            })
+          }else if(subType===2){
+            saveCommit(objReq).then(res => {
+              if(res.code==0){
+                this.proModal = false
+                this.$Message.success("提交成功")
+                this.getList()
+              }
+            })
+          }
         }
       })
     },
+
   },
 }

@@ -36,6 +36,34 @@ export function saveDraft(data) {
   })
 }
 
+//采购计划保存为草稿
+export function saveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/saveCommit`,
+    method: 'post',
+    data
+  })
+}
+
+
+//作废
+export function saveObsolete(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/saveObsolete`,
+    method: 'post',
+    data
+  })
+}
+
+//反作废
+export function saveReverse(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/saveReverse`,
+    method: 'post',
+    data
+  })
+}
+
 //获取采购计划单列表
 export function findPageByDynamicQuery(data) {
   return axios.request({
