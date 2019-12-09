@@ -157,13 +157,11 @@
       methods: {
         //  日期选择器从子组件哪来的数据
         getData(A){
-          console.log(A)
           this.selectOne = A
         },
         //选中的日期
         selectDate(date){
           this.dateTime = date
-          console.log(this.dateTime)
         },
         //搜索
         search(){
@@ -171,11 +169,9 @@
         },
         //底部的每行点击事件
         selctionBottom(a){
-          console.log(a)
         },
         //多选框
         selctionTopBottom(a){
-          console.log(a)
         },
         // 单元格被激活事件
         editActivedEvent ({ row, column }, event) {

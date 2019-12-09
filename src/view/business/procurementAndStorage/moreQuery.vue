@@ -61,9 +61,6 @@
 
     export default {
         name: "MoreQuery",
-        props: {
-            data: ''
-        },
         data() {
             return {
                 moreQueryShow: false,//模态框是否展示
@@ -75,11 +72,9 @@
         },
         methods: { async getAllClient() {
                 let res = await getClient()
-                console.log(res, 999)
             },
             openModal() {
                 this.moreQueryShow = true
-                console.log('9999')
             },
             //取消
             cancel () {

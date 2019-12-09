@@ -16,8 +16,43 @@
     <div class="conter">
       <div class="demo-split">
         <Split v-model="split1">
+<!--          左侧表格-->
           <div slot="left" class="demo-split-pane">
-            <market-left :orderType ='orderType' :queryTime="queryTime"></market-left>
+            <div>
+              <div class="orderList">
+                <h5>销售出库列表</h5>
+              </div>
+              <div class="orderCenter">
+                <vxe-table
+                  border
+                  align="center"
+                  size="mini"
+                  @current-change="clickOnesList"
+                  highlight-hover-row
+                  highlight-current-row
+                  style="width: 1000px"
+                  height="593"
+                  :data="tableData">
+                  <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+                  <vxe-table-column field="billStatusId" title="状态">
+                    <template v-slot="{ row }">
+                      <span>{{row.billStatusId.name}}</span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="xx" title="客户"></vxe-table-column>
+                  <vxe-table-column field="xx" title="销售员"></vxe-table-column>
+                  <vxe-table-column field="xx" title="出库单号"></vxe-table-column>
+                  <vxe-table-column field="xx" title="创建日期"></vxe-table-column>
+
+                  <vxe-table-column field="xx" title="创建人"></vxe-table-column>
+                  <vxe-table-column field="xx" title="打印次数"></vxe-table-column>
+                  <vxe-table-column field="xx" title="出库日期"></vxe-table-column>
+                  <vxe-table-column field="xx" title="出库人"></vxe-table-column>
+                </vxe-table>
+              </div>
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
+                    @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
+            </div>
           </div>
           <div slot="right" class="demo-split-pane">
             <market-right ref="right"></market-right>
@@ -25,7 +60,7 @@
         </Split>
       </div>
       <!--        更多搜索-->
-      <More-query :data="queryList" ref="morequeryModal"></More-query>
+      <More-query ref="morequeryModal"></More-query>
       <!--        打印-->
       <!--      <Print-show ref="printBox"></Print-show>-->
     </div>
@@ -35,15 +70,13 @@
 <script>
     import QuickDate from '../../../components/getDate/dateget' //日期查询
     import MoreQuery from './moreQuery'  // 更多窗口
-    // import getDate from '@/components/getDate/dateget'
-    import MarketLeft from "./marketLeft";
     import MarketRight from "./marketRight";
+    import {getLeftList} from '@/api/business/procurementAndStorage'
     export default {
         name: "market",
         components:{
             QuickDate,
             MoreQuery,
-            MarketLeft,
             MarketRight
         },
         data(){
@@ -60,10 +93,13 @@
                     {value:5,name:'已作废'},
                 ],
                 split1: 0.2,
-                queryList:{
-                    isdisabad:true
-                },//更多查询
                 queryTime:'',//快速查询时间
+                page:{
+                    total:0,
+                    size:10,
+                    num:1
+                }, //左侧分页
+                tableData:[] //左侧数组
 
             }
         },
@@ -83,6 +119,24 @@
             // 打开更多搜索
             openQueryModal(){
                 this.$refs.morequeryModal.openModal()
+            },
+
+            //左侧数据
+          // 左侧表格数据
+          async  getLeftLists(){
+              let data ={}
+               let res = await getLeftList( data )
+              if(res.code === 0) {
+                  console.log(res, 777)
+              }
+            },
+            //切换页面
+            selectNum(){},
+            //切换页数
+            selectPage(){},
+            //点击获取当前信息
+            clickOnesList(data){
+
             }
         }
     }
@@ -110,5 +164,16 @@
   }
   .demo-split[data-v-4dd5fe70]{
     height: 93%;
+  }
+  .orderList {
+    line-height: 30px;
+    padding-left: 10px;
+    /*border-bottom: 1px solid #dcdee2;*/
+    background-color: #f8f8f8;
+
+  }
+  .orderCenter{
+    overflow: hidden;
+    overflow-x: scroll;
   }
 </style>
