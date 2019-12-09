@@ -116,9 +116,9 @@
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="收货人：" prop="receiveMan">
+            <FormItem label="收货人：" prop="receiver">
               <Input
-                v-model="formDateRight.receiveMan"
+                v-model="formDateRight.receiver"
                 class="w200"
                 :disabled="disabled"
               />
@@ -169,11 +169,18 @@
               ></InputNumber>
             </FormItem>
             <FormItem label="结算方式：">
-              <Input
+              <Select
                 v-model="formDateRight.settleType"
                 class="w200"
                 :disabled="disabled"
-              />
+              >
+                <Option
+                  v-for="item in settleTypes"
+                  :value="item.value"
+                  :key="item.value"
+                  >{{ item.label }}</Option
+                >
+              </Select>
             </FormItem>
             <FormItem label="发货备注：">
               <Input
@@ -235,15 +242,23 @@ export default class GoodsInfo extends Vue {
 
   @Prop(String) readonly mainId;
 
+  private settleTypes:Array<Option> = [{
+    value: "0", label: "到付"
+  }, {
+    value: "1", label: "现结"
+  }, {
+    value: "2", label: "月结"
+  }]
+
   private ruleValidate: ruleValidate = {
-    receiveCompName: [
+    receiveComp: [
       { required: true, message: "收货单位不能为空", trigger: "blur" }
     ],
-    address: [
+    receiveAddress: [
       { required: true, message: "收货地址不能为空", trigger: "blur" }
     ],
-    receiveMan: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
-    receiveManTel: [
+    receiver: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
+    receiverMobile: [
       {
         required: true,
         message: "联系电话错误",
