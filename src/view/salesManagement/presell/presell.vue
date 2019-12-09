@@ -156,7 +156,6 @@
                       :disabled="draftShow != 0"
                     />
                   </FormItem>
-
                   <FormItem label="交货仓库：" prop="storeId">
                     <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0" @on-change="getStore">
                       <Option v-for="item in WareHouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -521,7 +520,7 @@
           ]
         }, //表格校验
         queryTime:'',//快速查询时间
-        isAdd:'', //判断是否新增
+        isAdd:true, //判断是否新增
         id:'',  //作废需要传入的id
       //   detail:{},
       //   PTrow:{
@@ -605,17 +604,6 @@
         })
       },
 
-
-
-      // async getAllLimit(){
-      //   let data = {}
-      //   data.guestId = this.formPlan.guestId
-      //   let res = await getLimit(data)
-      //   console.log()
-      //   if( res.code === 0){
-      //     this.limitList = res.data
-      //   }
-      // },
 
       //仓库改变右侧表格改变
       getStore(data){
@@ -842,12 +830,14 @@
       addOrder(){
         this.tableData=[]
         this.formPlan = {}
-        this.preSellOrderTable.tbData.unshift(this.PTrow)
+
         // console.log('4444',ref)
-        // if (!this.isAdd) {
-        //   return this.$Message.error('请先保存数据');
-        // }
-        // console.log('新增的数据',this.PTrow)
+        if (!this.isAdd) {
+           return this.$Message.error('请先保存数据');
+         }
+        this.preSellOrderTable.tbData.unshift(this.PTrow)
+        this.isAdd=false;
+         console.log('新增的数据',this.PTrow)
       },
       //作废按钮
        isDelete(){
@@ -879,6 +869,7 @@
               // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
               let res = await getSave(this.formPlan)
               if(res.code === 0){
+                this.isAdd=true;
                 this.$Message.success('保存成功');
                this.getLeftList()
                 this.formPlan={}
@@ -899,7 +890,7 @@
         getSubmit(data).then(res=>{
          if(res.code===0){
            this.$Message.success('提交成功');
-           console.log('提交',res)
+           // console.log('提交',res)
            this.getLeftList()
          }
         })
@@ -910,7 +901,7 @@
        let id=this.id
        // console.log('我是IDIDiidididid',id)
        finishSales(id).then(res=>{
-         console.log('哈哈哈哈哈',res)
+         // console.log('哈哈哈哈哈',res)
          if(res.code === 0){
            this.getLeftList()
          }
@@ -924,19 +915,16 @@
           this.selectTableList.forEach( item => {
             data.push({id: item.id})
           })
-          console.log(data)
+          // console.log(data)
           getDeleteList(data).then( res => {
             if(res.code === 0){
-              this.selectTableList.forEach( item => {
-                this.tableData = this.tableData.filter( val =>  item.id != val.id)
-              })
-
+              this.formPlan={}
               this.$Message.success('删除配件成功');
               this.getLeftList()
             }
           })
         }else {
-          this.$message.error('请选择一条有效数据')
+          this.$Message.error('请选择一条有效数据')
         }
       },
       //批量上传失败
