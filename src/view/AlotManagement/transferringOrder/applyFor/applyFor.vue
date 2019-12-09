@@ -21,7 +21,7 @@
                 <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
               </div>
               <div class="db">
-                <Button class="mr10" @click="instance" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+                <Button class="mr10" @click="instance('formPlan')" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
               </div>
               <div class="db">
                 <Button @click="cancellation" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
@@ -51,6 +51,7 @@
                   </div>
                   <div class="clearfix purchase" ref="planForm">
                     <Form inline
+                          :model="formPlan"
                           :show-message="false"
                           ref="formPlan"
                           :rules="ruleValidate"
@@ -66,9 +67,6 @@
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <!--<FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">-->
-                        <!--<Input class="w160" :disabled="buttonDisable" v-model="formPlan.orderDate"></Input>-->
-                      <!--</FormItem>-->
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
                         <DatePicker
                           style="width: 160px"
@@ -76,6 +74,7 @@
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
                           :disabled="presentrowMsg !== 0 || buttonDisable"
+                          prop="orderDate"
                         ></DatePicker>
                       </FormItem>
                       <FormItem label="备注：" prop="remark">
@@ -92,13 +91,13 @@
                   <div class="flex plan-cz-btn" ref="planBtn">
                     <div class="clearfix">
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
+                        <Button size="small" class="mr10" @click="addPro" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                       </div>
                     </div>
                   </div>
@@ -157,16 +156,9 @@
         <!--更多弹框-->
               <More @sendMsg="getMsg" ref="moremore"></More>
         <!--选择配件-->
-        <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
         <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
         <!--编辑收货信息-->
-        <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
           <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
-          <!--<div slot='footer'>-->
-            <!--<Button type='primary' @click="Determined">确定</Button>-->
-            <!--<Button type='default' >取消</Button>-->
-          <!--</div>-->
-        <!--</Modal>-->
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -232,7 +224,7 @@
           ruleValidate: {
             guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'blur' }],
             storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'blur' }],
-            orderDate: [{ required: true,type: 'date', message: '请选择日期', trigger: 'blur' }]
+            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }]
           },
           datadata: null,
           rowId:'', //当前行的id
@@ -396,28 +388,34 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          let data = {}
-          data.id = this.rowId
-          data.guestId = this.formPlan.guestidId
-          data.storeId = this.formPlan.storeId
-          data.guestName = this.formPlan.guestName
-          data.orderDate = tools.transTime(this.formPlan.orderDate)
-          data.remark = this.formPlan.remark
-          data.createUname  = this.formPlan.createUname
-          data.serviceId = this.formPlan.serviceId
-          data.detailVOS = this.Right.tbdata
-          // console.log(data)
-          save(data).then(res => {
-            if(res.code === 0){
-              this.$message.success('保存成功！')
-              this.leftgetList()
-                this.formPlan.guestName = '',
-                this.formPlan.storeId =  '',
-                this.formPlan.remark =  '',
-                this.formPlan.createUname =  '',
-                this.formPlan.serviceId =  '',
-                  this.Right.tbdata = []
-              }
+          this.$refs['formPlan'].validate((valid) => {
+            if (valid) {
+              let data = {}
+              data.id = this.rowId
+              data.guestId = this.formPlan.guestidId
+              data.storeId = this.formPlan.storeId
+              data.guestName = this.formPlan.guestName
+              data.orderDate = tools.transTime(this.formPlan.orderDate)
+              data.remark = this.formPlan.remark
+              data.createUname  = this.formPlan.createUname
+              data.serviceId = this.formPlan.serviceId
+              data.detailVOS = this.Right.tbdata
+              // console.log(data)
+              save(data).then(res => {
+                if(res.code === 0){
+                  this.$message.success('保存成功！')
+                  this.leftgetList()
+                  this.formPlan.guestName = '',
+                    this.formPlan.storeId =  '',
+                    this.formPlan.remark =  '',
+                    this.formPlan.createUname =  '',
+                    this.formPlan.serviceId =  '',
+                    this.Right.tbdata = []
+                }
+              })
+            } else {
+              this.$Message.error('*为必填！');
+            }
           })
         },
         //作废
@@ -639,33 +637,39 @@
 
         },
         // 提交按钮
-        instance () {
-          this.$Modal.confirm({
-            title: '是否提交',
-            onOk: async () => {
-              if(this.clickdelivery){
-                let data = {}
-                data.id = this.rowId
-                data.guestId = this.guestidId
-                data.storeId = this.formPlan.storeId
-                data.orderDate = tools.transTime(this.formPlan.orderDate)
-                data.remark = this.formPlan.remark
-                data.createUname  = this.formPlan.createUname
-                data.serviceId = this.formPlan.serviceId
-                data.detailVOS = this.Right.tbdata
-                let res = await commit(data);
-                if (res.code == 0) {
-                  this.$Message.success('提交成功');
-                  this.leftgetList();
-                  this.isAdd = true;
-                }
-              }else{
-                this.$Message.warning('请先编辑收货信息')
-              }
-            },
-            onCancel: () => {
-              this.$Message.info('取消提交');
-            },
+        instance (name) {
+          this.$refs[name].validate((valid) => {
+            if (valid) {
+              this.$Modal.confirm({
+                title: '是否提交',
+                onOk: async () => {
+                  if(this.clickdelivery){
+                    let data = {}
+                    data.id = this.rowId
+                    data.guestId = this.guestidId
+                    data.storeId = this.formPlan.storeId
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+                    let res = await commit(data);
+                    if (res.code == 0) {
+                      this.$Message.success('提交成功');
+                      this.leftgetList();
+                      this.isAdd = true;
+                    }
+                  }else{
+                    this.$Message.warning('请先编辑收货信息')
+                  }
+                },
+                onCancel: () => {
+                  this.$Message.info('取消提交');
+                },
+              })
+            } else {
+              this.$Message.error('*为必填项！');
+            }
           })
         }
       },

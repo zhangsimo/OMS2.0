@@ -132,6 +132,7 @@
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="applyQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
@@ -164,7 +165,6 @@
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
-                  <!--<vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>-->
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
@@ -180,9 +180,8 @@
       </section>
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
-      <!--选择配件-->
-      <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
-      <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
+      <!--选择采购计划弹窗-->
+      <procurement-modal ref="procurementModal" :guestId="formPlan.guestidId" @getPlanOrder="getPlanOrder"></procurement-modal>
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -199,16 +198,15 @@
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
-  import supplier from './compontents/supplier'
   import PrintShow from "./compontents/PrintShow";
+  import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   export default {
     name: 'supplierList',
     components: {
       QuickDate,
       More,
-      supplier,
-      // SelectPartCom,
+      ProcurementModal,
       SelectSupplier,
       PrintShow
     },
@@ -379,12 +377,8 @@
     methods: {
       //删除配件
       Delete(){
-        // var arr1=[{id:1},{id:2},{id:3},{id:4},{id:5}]
-        // var arr2=[{id:1},{id:2},{id:3}]
         var set = this.checkboxArr.map(item=>item.id)
-        // console.log(set)
         var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
-        console.log(resArr)
         this.Right.tbdata = resArr
       },
       //更多按钮
@@ -405,11 +399,39 @@
       },
       //添加配件按钮
       addPro(){
-        this.$refs.SelectPartCom.init()
+        if (!this.formPlan.guestName) return this.$Message.error('请选择供应商');
+        this.showModel('procurementModal')
+      },
+      //显示子组件封装的方法
+      showModel(name) {
+        let ref = this.$refs[name];
+        ref.init();
       },
       // 下拉框查询
       SelectChange(){
         this.leftgetList()
+      },
+      //选择采购入库单
+      getPlanOrder(Msg){
+        console.log(Msg)
+        let arr = []
+        arr.push(Msg)
+        this.Right.tbdata = [...this.Right.tbdata,...arr]
+        // if(!row) return;
+        // this.purchaseOrderTable.tbdata.forEach((el) => {
+        //   el.details.forEach((d, index, arr) => {
+        //     if (!d.isOldFlag) {
+        //       arr.splice(index, 1);
+        //     }
+        //   })
+        // })
+        // this.tableData = this.tableData.concat(...row.details);
+        // this.selectTableRow.details = this.tableData;
+        // this.purchaseOrderTable.tbdata.forEach((el) => {
+        //   if (el.id == this.selectTableRow.id) {
+        //     el = this.selectTableRow;
+        //   }
+        // })
       },
       selectTabelData(){},
       //保存按钮
