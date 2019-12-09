@@ -27,8 +27,16 @@
                 </button>
               </div>
               <div class="db ml10">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="preservationDraft">保存草稿</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="preservationSubmission">保存并提交</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="preservationDraft"
+                >保存草稿</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="preservationSubmission"
+                >保存并提交</button>
                 <button class="mr10 ivu-btn ivu-btn-default" type="button">导出对账清单</button>
                 <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
               </div>
@@ -38,6 +46,20 @@
         <section class="con-box">
           <div class="inner-box">
             <Table :columns="columns" :data="data" border max-height="400"></Table>
+            <div class="db mt10 info" v-if="info">
+              <h5 class="p10">付款信息</h5>
+              <div class="flex p10">
+                <span>收款户名：</span>
+                <Input type="text" class="w140 mr10"/>
+                <i class="iconfont iconcaidan input" @click="Dealings"></i>
+                <span>开户行：</span>
+                <Input type="text" class="w140 mr10"/>
+                <span>收款账号：</span>
+                <Input type="text" class="w140 mr10"/>
+                <span>本次申请付款账户：</span>
+                <Input type="text" class="w140 mr10"/>
+              </div>
+            </div>
             <div class="db mt20">
               <h5>应收业务销售出库/退货对账</h5>
               <Table
@@ -69,33 +91,28 @@
             <div class="flex mt20">
               <div class="totalcollect p10">
                 <span class="mr5">应收合计</span>
-                <input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
+                <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
                 <span class="mr5">应收坏账</span>
-                <input type="number" v-model.number="collectBaddebt" class="w60 mr10 tc" />
+                <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
                 <span class="mr5">应收返利</span>
-                <input type="number" v-model.number="collectRebate" class="w60 mr10 tc" />
+                <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
                 <span class="mr5" style="color:#f66">实际应收合计</span>
-                <input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
+                <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
               </div>
               <div class="totalpayment p10 ml10">
                 <span class="mr5">应付合计</span>
-                <input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
+                <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
                 <span class="mr5">应付坏账</span>
-                <input
-                  type="number"
-                  v-model.number="paymentBaddebt"
-                  class="w60 mr10 tc"
-                  @change="paymentBaddebt"
-                />
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
                 <span class="mr5">应付返利</span>
-                <input type="number" v-model.number="paymentRebate" class="w60 mr10 tc" />
+                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
                 <span class="mr5" style="color:#f66">实际应付合计</span>
-                <input :value="Actualtotalpayment" type="text" class="w60 mr10 tc" disabled />
+                <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
               </div>
             </div>
             <div class="db total mt20 p10">
               <span class="mr5">本次对账结算合计(整数收款)</span>
-              <input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
+              <Input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
               <span class="mr5">计划结算类型</span>
               <Select class="w100 mr10" v-model="totalvalue">
                 <Option
@@ -105,32 +122,38 @@
                 >{{ item.label }}</Option>
               </Select>
               <span class="mr5">应收返利请示单号</span>
-              <input type="text" v-model="Rebateid" class="w60 mr10 tc" />
+              <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
               <span class="mr5">应收坏账请示单号</span>
-              <input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
+              <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
               <span class="mr5">备注</span>
-              <input type="text" v-model="remark" class="w60 mr10 tc" />
+              <Input type="text" v-model="remark" class="w60 mr10 tc" />
             </div>
           </div>
         </section>
-        <selectDealings ref="selectDealings" @getOne="getOne"/>
+        <selectDealings ref="selectDealings" @getOne="getOne" />
       </div>
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="Reconciliation" title="本次不对账" width="1200" @on-ok="noReconciliation">
       <div class="flex mb20">
         <span class="mr5">门店</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="store">
+        <input type="text" disabled class="w140 mr15 tc" :value="store" />
         <span class="mr5">单据编号</span>
-        <input type="text" disabled class="w180 mr15 tc" :value="bill">
+        <input type="text" disabled class="w180 mr15 tc" :value="bill" />
         <span class="mr5">业务类型</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="business">
+        <input type="text" disabled class="w140 mr15 tc" :value="business" />
         <span class="mr5">往来单位信息</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="thiscompanyInfo">
+        <input type="text" disabled class="w140 mr15 tc" :value="thiscompanyInfo" />
         <span class="mr5">单据日期</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="billDate">
+        <input type="text" disabled class="w140 mr15 tc" :value="billDate" />
       </div>
-      <Table :columns="Reconciliationlist" :data="Reconciliationcontent" border max-height="400" show-summary ></Table>
+      <Table
+        :columns="Reconciliationlist"
+        :data="Reconciliationcontent"
+        border
+        max-height="400"
+        show-summary
+      ></Table>
     </Modal>
   </div>
 </template>
@@ -138,19 +161,24 @@
 <script>
 import selectDealings from "./../bill/components/selectCompany";
 import { creat } from "./../components";
-import { getReconciliation,getSettlement,Preservation } from "@/api/bill/saleOrder";
+import {
+  getReconciliation,
+  getSettlement,
+  Preservation
+} from "@/api/bill/saleOrder";
 export default {
   components: {
     selectDealings
   },
   data() {
     return {
-      store:'',
-      bill:'',
-      business:'',
-      companyInfo: '',
-      thiscompanyInfo: '',
-      billDate:'',
+      info: false,
+      store: "",
+      bill: "",
+      business: "",
+      companyInfo: "",
+      thiscompanyInfo: "", //弹框往来单位
+      billDate: "",
       Rebateid: "", //返利单号
       BadDebtid: "", //坏帐单号
       remark: "", //备注
@@ -265,16 +293,16 @@ export default {
                 on: {
                   click: () => {
                     this.Reconciliation = true;
-                    params.row.detailDtoList.map((item,index) =>{
-                      item.num = index+1
-                      item.index = params.index
-                    })
-                    this.Reconciliationcontent= params.row.detailDtoList
-                    this.store = params.row.orgId
-                    this.bill = params.row.serviceId
-                    this.business = params.row.serviceTypeName
-                    this.thiscompanyInfo = params.row.guestName
-                    this.billDate = params.row.transferDate
+                    params.row.detailDtoList.map((item, index) => {
+                      item.num = index + 1;
+                      item.index = params.index;
+                    });
+                    this.Reconciliationcontent = params.row.detailDtoList;
+                    this.store = params.row.orgId;
+                    this.bill = params.row.serviceId;
+                    this.business = params.row.serviceTypeName;
+                    this.thiscompanyInfo = params.row.guestName;
+                    this.billDate = params.row.transferDate;
                   }
                 }
               },
@@ -290,23 +318,23 @@ export default {
       ],
       SettlementType: [
         {
-          value: "FK",
+          value: "0",
           label: "付款"
         },
         {
-          value: "DC",
-          label: "对冲"
+          value: "1",
+          label: "收款"
         },
         {
-          value: "SK",
-          label: "收款"
+          value: "2",
+          label: "对冲"
         }
       ],
       Reconciliationlist: [
         {
           title: "序号",
           key: "num",
-          width: '40',
+          width: "40",
           className: "tc"
         },
         {
@@ -359,20 +387,33 @@ export default {
           key: "thisNoAccountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("Input", {
+            return h("InputNumber", {
               style: {
                 width: "60px"
               },
               props: {
                 value: params.row.thisNoAccountAmt,
-                type: 'number'
+                type: "number",
+                min: "0"
               },
               on: {
-                'on-change': (event)=>{
-                  this.modifyAccountAmt = event.target.value.replace(/[^\d]/g,'')
-                  this.$set(params.row,'thisNoAccountAmt',this.modifyAccountAmt)
-                  this.$set(this.Reconciliationcontent,params.index,params.row)
-                  params.row.thisAccountAmt = params.row.amount-params.row.accountAmt-this.modifyAccountAmt;
+                "on-change": event => {
+                  this.flag = true
+                  this.modifyAccountAmt = event;
+                  this.$set(
+                    params.row,
+                    "thisNoAccountAmt",
+                    this.modifyAccountAmt
+                  );
+                  this.$set(
+                    this.Reconciliationcontent,
+                    params.index,
+                    params.row
+                  );
+                  params.row.thisAccountAmt =
+                    params.row.amount -
+                    params.row.accountAmt -
+                    this.modifyAccountAmt;
                 }
               }
             });
@@ -405,7 +446,9 @@ export default {
       Reconciliationcontent: [],
       parameter: {},
       paymentlist: [],
-      collectlist: []
+      collectlist: [],
+      companyInfoId: '',
+      flag: false
     };
   },
   async mounted() {
@@ -420,33 +463,40 @@ export default {
       this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return this.totalpayment - this.paymentBaddebt - this.paymentRebate;
     },
-    Actualtotalcollect (){
+    Actualtotalcollect() {
       this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
-      this.totalpayment = this.totalpayment ? this.totalpayment : 0; 
+      this.totalpayment = this.totalpayment ? this.totalpayment : 0;
       return this.totalcollect - this.collectBaddebt - this.collectRebate;
     },
-    Reconciliationtotal (){
-      return this.Actualtotalcollect - this.Actualtotalpayment
+    Reconciliationtotal() {
+      return this.Actualtotalcollect - this.Actualtotalpayment;
     },
-    totalvalue (){
+    totalvalue() {
       if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
-        if (this.Reconciliationtotal > 0){
-          return 'SK'
-        } else if(this.Reconciliationtotal < 0) {
-          return 'FK'
+        if (this.Reconciliationtotal > 0) {
+          this.info = false
+          return "1";
+        } else if (this.Reconciliationtotal < 0) {
+          this.info = true
+          return "0";
         } else {
-          return 'DC'
+          this.info = false
+          return "2";
         }
       } else {
-        return 'SK'
+        return "1";
       }
     }
   },
   methods: {
     // 对账单弹框出现加载数据
     hander() {
+      this.flag = false
+      this.info = false
       let { orgId, startDate, endDate, guestId } = this.parameter;
       this.companyInfo = this.parameter.guestName;
+      this.companyInfoId = this.parameter.guestId;
+      this.store = this.parameter.orgId;
       let obj = { orgId, startDate, endDate, guestId };
       getReconciliation(obj).then(res => {
         let Statementexcludingtax = 0;
@@ -502,143 +552,190 @@ export default {
       });
     },
     // 选择往来单位
-    getOne (data) {
-      this.companyInfo = data.shortName
+    getOne(data) {
+      console.log(data)
+      this.companyInfo = data.shortName;
+      this.companyInfoId = data.id;
     },
     // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
     // 已勾选结算类型计算
-    getSettlementComputed () {
-      getSettlement({one:this.collectlist,two:this.paymentlist}).then(res=>{
-        this.$set(this.data,1 ,{
+    getSettlementComputed() {
+      getSettlement({ one: this.collectlist, two: this.paymentlist }).then(
+        res => {
+          this.$set(this.data, 1, {
             Detailedstatistics: "对账金额",
             Statementexcludingtax: res.data.one,
             Taxincludedpartsstatement: res.data.two,
             Statementoilincludingtax: res.data.three
-          })
-      })
+          });
+        }
+      );
     },
     // 应付选中
     paymentCheckout(selection, row) {
-      this.paymentlist = selection
+      this.paymentlist = selection;
       this.totalpayment = 0;
       selection.map(item => {
         this.totalpayment += item.thisAccountAmt;
       });
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 应收选中
     collectCheckout(selection, row) {
-      this.collectlist = selection
+      this.collectlist = selection;
       this.totalcollect = 0;
       this.Actualtotalcollect = 0;
       selection.map(item => {
         this.totalcollect += item.thisAccountAmt;
       });
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 应收全选
     collectCheckoutAll(selection) {
-      this.collectlist = selection
-      this.totalcollect = selection[selection.length-1].thisAccountAmt;
-      this.getSettlementComputed()
+      this.collectlist = selection;
+      this.totalcollect = selection[selection.length - 1].thisAccountAmt;
+      this.getSettlementComputed();
     },
     // 应付全选
     paymentCheckoutAll(selection) {
-      this.paymentlist = selection
-      this.totalpayment = selection[selection.length-1].thisAccountAmt;
-      this.getSettlementComputed()
+      this.paymentlist = selection;
+      this.totalpayment = selection[selection.length - 1].thisAccountAmt;
+      this.getSettlementComputed();
     },
     // 应付取消选中
     paymentNoCheckout(selection, row) {
-      this.paymentlist = selection
+      this.paymentlist = selection;
       this.totalpayment -= row.thisAccountAmt;
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 应收取消选中
     collectNoCheckout(selection, row) {
-      this.collectlist = selection
+      this.collectlist = selection;
       this.totalcollect -= row.thisAccountAmt;
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 应付取消全选
     paymentNoCheckoutAll() {
-      this.paymentlist = []
+      this.paymentlist = [];
       this.totalpayment = 0;
       this.Actualtotalpayment = 0;
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 应收取消全选
     collectNoCheckoutAll() {
-      this.collectlist = 0
+      this.collectlist = 0;
       this.totalcollect = 0;
       this.Actualtotalcollect = 0;
-      this.getSettlementComputed()
+      this.getSettlementComputed();
     },
     // 本次不对帐金额弹窗
-    noReconciliation (){
-      let sum  = 0 
-      this.Reconciliationcontent.map(item =>{
-        sum += item.thisNoAccountAmt *1
-      })
-      if(this.business === '销售退货'||this.business === '销售出库'){
-        this.$set(this.data1[this.Reconciliationcontent[0].index],'thisNoAccountAmt',sum)
+    noReconciliation() { 
+      if(this.flag) {
+        if(this.Reason){
+          this.$message.error('差异原因必填')
+          return ''
+        }
+      }
+      let sum = 0;
+      this.Reconciliationcontent.map(item => {
+        sum += item.thisNoAccountAmt * 1;
+      });
+      if (this.business === "销售退货" || this.business === "销售出库") {
+        this.$set(
+          this.data1[this.Reconciliationcontent[0].index],
+          "thisNoAccountAmt",
+          sum
+        );
       } else {
-        this.$set(this.data2[this.Reconciliationcontent[0].index],'thisNoAccountAmt',sum)
+        this.$set(
+          this.data2[this.Reconciliationcontent[0].index],
+          "thisNoAccountAmt",
+          sum
+        );
       }
     },
-    // 保存草稿
-    preservationDraft(){
-      if(this.collectlist.length!==0||this.paymentlist.length!==0){
+    // 保存接口
+    getPreservation(num) {
+      if (this.collectBaddebt - this.paymentBaddebt > 100) {
+        if (!this.BadDebtid) {
+          this.$message.error("请输入应收坏账请示单号");
+          return "";
+        }
+      }
+      if (this.collectRebate - this.paymentRebate > 100) {
+        if (!this.Rebateid) {
+          this.$message.error("请输入应收返利请示单号");
+          return "";
+        }
+      }
+      if (!this.remark) {
+        this.$message.error("请填写备注");
+        return "";
+      }
+      if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
         let one = [
           {
-            number: '1',
+            number: "1",
             accountNo: this.data[0].Statementexcludingtax,
             accountSumAmt: this.data[1].Statementexcludingtax
           },
           {
-            number: '2',
+            number: "2",
             accountNo: this.data[0].Statementoilincludingtax,
             accountSumAmt: this.data[1].Statementoilincludingtax
           },
           {
-            number: '3',
+            number: "3",
             accountNo: this.data[0].Taxincludedpartsstatement,
             accountSumAmt: this.data[1].Taxincludedpartsstatement
           }
-        ]
-        let four = {
-          accountsReceivable:this.totalcollect,
-          badDebtReceivable:this.collectBaddebt ,
-          receivableRebate:this.collectRebate ,
-          actualCollection:this.Actualtotalcollect,
-          reconciliation:this.totalpayment ,
-          payingBadDebts:this.paymentBaddebt ,
-          dealingRebates:this.paymentRebate ,
-          actualPayment:this.Actualtotalpayment,
-          settlementTotal:this.Reconciliationtotal,
-          billingType:this.totalvalue,
-          rebateNo:this.Rebateid,
-          badDebNo:this.BadDebtid,
-          buttonStatus:0
-        }
+        ];
+        let four = [
+          {
+            tenantId: 0,
+            orgId: this.store,
+            orgName: "null",
+            guestId: this.companyInfoId,
+            serviceId: "XSCDS001-20191000071",
+            accountReceivable: this.totalcollect,
+            badDebtReceivable: this.collectBaddebt,
+            receivableRebate: this.collectRebate,
+            actualCollection: this.Actualtotalcollect,
+            reconciliation: this.totalpayment,
+            payingBadDebts: this.paymentBaddebt,
+            dealingRebates: this.paymentRebate,
+            actualPayment: this.Actualtotalpayment,
+            settlementTotal: this.Reconciliationtotal,
+            billingType: this.totalvalue,
+            rebateNo: this.Rebateid,
+            badDebNo: this.BadDebtid,
+            buttonStatus: num
+          }
+        ];
         let obj = {
           one,
           two: this.collectlist,
           three: this.paymentlist,
           four
-        }
-        Preservation(obj).then(res=>{
-          console.log(res)
-        })
+        };
+        Preservation(obj).then(res => {
+          console.log(res);
+        });
       } else {
-        this.$message.error('请选择要对账的数据')
+        this.$message.error("请选择要对账的数据");
       }
     },
+    // 保存草稿
+    preservationDraft() {
+      this.getPreservation(0)
+    },
     // 保存并提交
-    preservationSubmission(){}
+    preservationSubmission() {
+      this.getPreservation(1)
+    }
   }
 };
 </script>
@@ -657,5 +754,19 @@ export default {
 .totalpayment,
 .total {
   border: 1px solid #dddddd;
+}
+.info {
+  border: 1px solid #dddddd;
+}
+.info > h5 {
+  border-bottom: 1px solid #dddddd;
+  background-color: #f8f8f8;
+}
+.info .flex{
+  align-items: center
+}
+.info .flex i {
+  position: relative;
+  left: -30px;
 }
 </style>

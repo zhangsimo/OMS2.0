@@ -67,17 +67,23 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
 import {creat} from './../components'
+import {capitalAudit} from "@/api/bill/saleOrder";
 export default {
   components: {
     selectDealings,
     quickDate
   },
   async mounted () {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat (this.$refs.quickDate.val,this.$store)
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    capitalAudit().then(res=>{
+      console.log(res)
+      if(res.data.length !==0){
+        this.data1 = res.data
+      }
+    })
   },
   data() {
     return {

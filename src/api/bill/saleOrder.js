@@ -60,11 +60,38 @@ export function getSettlement(data) {
 }
 // 月结对账保存草稿/保存并提交
 export function Preservation(data) {
-    console.log(data)
     return axios.request({
         url:`${api.omsSettle}/accounts/receivable/add`,
         method: 'post',
         data
     })
 }
-
+// 对账单
+export function AccountStatement (params) {
+    return axios.request({
+        url:`${api.omsSettle}/statement/master/page`,
+        method: 'get',
+        params
+    })
+}
+// 收/付款单记录
+export function Record(){
+    return axios.request({
+        url:`${api.omsSettle}/payment/record/get`,
+        method: 'get'
+    })
+}
+// 应收单据明细和应付单据明细
+export function detailsDocuments(){
+    return axios.request({
+        url:`${api.omsSettle}/receivable/payable/document/details`,
+        method: 'get'
+    })
+}
+// 每日资金应收/付审核
+export function capitalAudit(){
+    return axios.request({
+        url:`${api.omsSettle}/fund/review/get`,
+        method: 'get'
+    })
+}
