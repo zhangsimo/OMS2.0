@@ -13,25 +13,37 @@
             </Col>
           </Row>
           <Row class="mt15">
-            <span class="ml5">调 出 方：</span>
-            <Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>
+            <span class="ml5">供 应 商：</span>
+            <Input v-model="callout" placeholder="请选择供应商" style="width: 410px" disabled/>
             <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
           </Row>
           <Row class="mt15">
-            <span>申请单号：</span>
-            <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
+            <span>采退单号：</span>
+            <Input v-model="numbers" placeholder="请输入采购单号" style="width: 450px" />
           </Row>
           <Row class="mt15">
             <span>配件编码：</span>
             <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
           </Row>
           <Row class="mt15">
+            <span>配件名称：</span>
+            <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span class="ml5">采购订单：</span>
+            <Input v-model="purchase " placeholder="请输入采购订单" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span class="ml5">退 货 员：</span>
+            <Input v-model="Return" placeholder="请输入退货员" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
             <span class="ml5">创 建 人：</span>
             <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
           </Row>
           <Row class="mt15">
-            <span>配件名称：</span>
-            <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+            <span class="ml5">提 交 人：</span>
+            <Input v-model="submitter" placeholder="请输入提交人" style="width: 450px" />
           </Row>
         </div>
         <div slot='footer'>
@@ -60,6 +72,9 @@
             Name: '', //配件名称
             createData: '', //创建日期
             submitData: '', //提交日期
+            purchase: '', //采购订单
+            Return: '',  //退货员
+            submitter: '', //提交人
             moreAndMore: false,
             submita: '',
             create: '',
@@ -86,7 +101,19 @@
           this.moreAndMore = true
         },
         sendMsg(){
-            let a = { callout: this.callout , numbers: this.numbers ,coding: this.coding, Accessories: this.Accessories,Name: this.Name,createData: this.createData,submitData:this.submitData,guestId:this.guestId}
+            let a = {
+              callout: this.callout ,
+              numbers: this.numbers ,
+              coding: this.coding,
+              Accessories: this.Accessories,
+              Name: this.Name,
+              createData: this.createData,
+              submitData:this.submitData,
+              guestId:this.guestId,
+              purchase: this.purchase,
+              Return: this.Return,
+              submitter: this.submitter,
+            }
             this.$emit('sendMsg', a)
             console.log(a)
         },

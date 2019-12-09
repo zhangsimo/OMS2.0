@@ -59,7 +59,7 @@
                         :rules="ruleValidate"
                         :label-width="100">
                     <FormItem label="供应商：" prop="guestName" class="fs12">
-                      <Row class="w500">
+                      <Row class="w350">
                         <Col span="22"><Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled=""></Input></Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
@@ -69,7 +69,7 @@
                         <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                     </FormItem>
-                    <FormItem label="退货日期：" prop="orderDate" class="fs12 ml50">
+                    <FormItem label="退货日期：" prop="orderDate" class="fs12">
                       <DatePicker
                         style="width: 160px"
                         type="date"
@@ -78,26 +78,29 @@
                         :disabled="presentrowMsg !== 0 || buttonDisable"
                       ></DatePicker>
                     </FormItem>
-                    <FormItem label="采购单号：" prop="orderDate" class="fs12 ml50">
-                    <Input class="w160"></Input>
+                    <FormItem label="采退单号：" prop="numbers" class="fs12">
+                    <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.numbers"></Input>
                     </FormItem>
-                    <FormItem label="退货原因：" >
-                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" >
+                    <FormItem label="退货原因：" prop="cause">
+                      <Select class="w120" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.cause">
                         <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                     </FormItem>
-                    <FormItem label="结算方式：">
-                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" >
+                    <FormItem label="结算方式：" prop="clearing">
+                      <Select class="w120" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.clearing">
                         <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input class="w500" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
+                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
-                    <FormItem label="创建人：" prop="planner">
-                      <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
+                    <FormItem label="退货仓库：" prop="planner">
+                      <!--<Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>-->
+                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.createUname">
+                        <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      </Select>
                     </FormItem>
-                    <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
+                    <FormItem label="采购订单:" prop="planOrderNum" class="">
                       <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
                     </FormItem>
                   </Form>
@@ -105,13 +108,10 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
+                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 选择采购入库单</Button>
                     </div>
                     <div class="fl mb5">
                       <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
-                    </div>
-                    <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
                     </div>
                   </div>
                 </div>
@@ -132,7 +132,28 @@
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column field="" title="可退数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="applyQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
+                    <template v-slot:edit="{ row }">
+                      <InputNumber
+                        :max="999999"
+                        :min="0"
+                        v-model="row.applyQty"
+                        :disabled="presentrowMsg !== 0"
+                      ></InputNumber>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="applyQty" title="退货单价" :edit-render="{name: 'input'}" width="100">
+                    <template v-slot:edit="{ row }">
+                      <InputNumber
+                        :max="999999"
+                        :min="0"
+                        v-model="row.applyQty"
+                        :disabled="presentrowMsg !== 0"
+                      ></InputNumber>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="applyQty" title="退货金额" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
@@ -143,25 +164,15 @@
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
-                  <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                  <!--<vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>-->
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                  <vxe-table-column title="紧销品" width="100" type="checkbox">
-                    <template v-slot="{ row,rowIndex }">
-                      <Checkbox disabled :value="row.isTight == 1"></Checkbox>
-                    </template>
-                  </vxe-table-column>
-                  <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
                 </vxe-table>
-                <div ref="planPage">
-                  <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
-                        @on-page-size-change="changeSize" show-sizer show-total></Page>
-                </div>
+                <!--<div ref="planPage">-->
+                  <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
+                        <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
+                <!--</div>-->
               </div>
             </Split>
           </div>
@@ -172,14 +183,6 @@
       <!--选择配件-->
       <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
       <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
-      <!--编辑收货信息-->
-      <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
-      <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
-      <!--<div slot='footer'>-->
-      <!--<Button type='primary' @click="Determined">确定</Button>-->
-      <!--<Button type='default' >取消</Button>-->
-      <!--</div>-->
-      <!--</Modal>-->
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -193,7 +196,6 @@
 
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
-  import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
@@ -207,7 +209,6 @@
       More,
       supplier,
       // SelectPartCom,
-      GoodsInfo,
       SelectSupplier,
       PrintShow
     },
@@ -242,9 +243,11 @@
         },
         //表单验证
         ruleValidate: {
-          guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'blur' }],
-          storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'blur' }],
-          orderDate: [{ required: true,type: 'date', message: '请选择日期', trigger: 'blur' }]
+          guestName: [{ required: true, type:'string',message: '供应商不能为空', trigger: 'blur' }],
+          storeId: [{ required: true,type:'string', message: '请选择退货员', trigger: 'blur' }],
+          orderDate: [{ required: true,type: 'date', message: '请选择退货日期', trigger: 'blur' }],
+          cause: [{ required: true,type: 'string', message: '请选择退货原因', trigger: 'blur' }],
+          clearing: [{ required: true,type: 'string', message: '请选择结算方式', trigger: 'blur' }],
         },
         datadata: null,
         rowId:'', //当前行的id
@@ -359,12 +362,15 @@
         guestidId: '' ,//给后台传值保存调出方的id
         isAdd:true, //判断是否能新增
         formPlan: {
-          guestName:'',//调出方
-          storeId: '', //调入仓库
-          orderDate: tools.transTime(new Date()), //申请调拨日期
+          cause: '',  //退货原因
+          clearing: '', //结算方式
+          guestName:'',//供应商
+          storeId: '', //退货员
+          orderDate: tools.transTime(new Date()), //退货日期
           remark: '', //备注
-          createUname: '', //创建人
-          serviceId: '', //申请单号
+          createUname: '', //退货仓库
+          serviceId: '', //采购单号
+          numbers: '' //采退单号
         },
         mainId: null, //选中行的id
         clickdelivery: false
@@ -548,12 +554,6 @@
         console.log(ChildMessage)
         this.Right.tbdata = [...this.Right.tbdata,...parts]
         console.log(this.Right.tbdata)
-      },
-      //编辑收货信息弹框显示
-      GoodsInfoModal(){
-        if(!this.datadata || this.datadata.new) return this.$Message.error('请先保存数据');
-        this.clickdelivery = true
-        this.$refs.goodsInfo.init()
       },
       //供应商弹框
       addSuppler(){

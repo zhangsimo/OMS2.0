@@ -123,7 +123,7 @@ export default [
           icon: "arrow-graph-up-right",
           title: "采购退货"
         },
-        component: () => import("@/view/business/goods/supplierList.vue")
+        component: () => import("@/view/business/goods/supplierList/supplierList.vue")
       },
       {
         path: "/goods/bookingSheet/bookingSheet",
