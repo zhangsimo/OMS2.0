@@ -3,18 +3,18 @@ import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
-import { orderState } from './global';
+import { orderState } from '../plannedPurchaseOrder/global';
 
 import QuickDate from '_c/getDate/dateget.vue';
-import SelectSupplier from "./components/selectSupplier.vue";
-import PurchaseAmount from "./components/PurchaseAmount.vue";
-import GoodsInfo from './components/GoodsInfo.vue';
-import MoreSearch from './components/MoreSearch.vue';
-import FeeRegistration from './components/FeeRegistration.vue';
-import ProcurementModal from './components/ProcurementModal.vue';
-import AdjustModel from './components/AdjustModel.vue';
-import TabsModel from './components/TabsModel.vue';
-import PrintModel from './components/print.vue';
+import SelectSupplier from "../plannedPurchaseOrder/components/selectSupplier.vue";
+import PurchaseAmount from "../plannedPurchaseOrder/components/PurchaseAmount.vue";
+import GoodsInfo from '../plannedPurchaseOrder/components/GoodsInfo.vue';
+import MoreSearch from '../plannedPurchaseOrder/components/MoreSearch.vue';
+import FeeRegistration from '../plannedPurchaseOrder/components/FeeRegistration.vue';
+import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModal.vue';
+import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
+import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
+import PrintModel from '../plannedPurchaseOrder/components/print.vue';
 
 @Component({
   components: {
@@ -30,7 +30,7 @@ import PrintModel from './components/print.vue';
     PrintModel
   }
 })
-export default class PlannedPurchaseOrder extends Vue {
+export default class InterPurchase extends Vue {
   @State('user') user;
 
   private split1: number = 0.2;
@@ -382,10 +382,13 @@ export default class PlannedPurchaseOrder extends Vue {
     this.tableData = v.details || [];
     this.selectRowState = v.billStatusId;
     this.serviceId = v.serviceId;
-    if(['草稿', '退回'].includes(v.billStatusId)) {      this.isInput = false;
+    // orderState['草稿'], orderState['退回']
+    if(['草稿', '退回'].includes(v.billStatusId)) {
+      this.isInput = false;
     } else {
       this.isInput = true;
     }
+    // orderState['待收货'], orderState['部分入库']
     if(['待收货', '部分入库'].includes(v.billStatusId)) {
       this.adjustButtonDisable = false;
     } else {
