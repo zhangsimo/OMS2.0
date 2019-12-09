@@ -15,6 +15,7 @@ import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModa
 import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
 import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
 import PrintModel from '../plannedPurchaseOrder/components/print.vue';
+import ApportionmentExpenses from '../plannedPurchaseOrder/components/ApportionmentExpenses.vue';
 
 @Component({
   components: {
@@ -27,7 +28,8 @@ import PrintModel from '../plannedPurchaseOrder/components/print.vue';
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel
+    PrintModel,
+    ApportionmentExpenses
   }
 })
 export default class InterPurchase extends Vue {
@@ -197,7 +199,7 @@ export default class InterPurchase extends Vue {
     new: true,
     _highlight: true,
     id: '0',
-    billStatusId: '0',
+    billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
   }
@@ -380,16 +382,16 @@ export default class InterPurchase extends Vue {
     this.selectTableRow = v;
     this.mainId = v.id;
     this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId;
+    this.selectRowState = v.billStatusId.name;
     this.serviceId = v.serviceId;
     // orderState['草稿'], orderState['退回']
-    if(['草稿', '退回'].includes(v.billStatusId)) {
+    if(['草稿', '退回'].includes(v.billStatusId.name)) {
       this.isInput = false;
     } else {
       this.isInput = true;
     }
     // orderState['待收货'], orderState['部分入库']
-    if(['待收货', '部分入库'].includes(v.billStatusId)) {
+    if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
       this.adjustButtonDisable = false;
     } else {
       this.adjustButtonDisable = true;
