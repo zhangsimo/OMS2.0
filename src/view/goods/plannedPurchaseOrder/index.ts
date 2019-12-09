@@ -52,36 +52,7 @@ export default class PlannedPurchaseOrder extends Vue {
   // 快速查询订单状态
   private purchaseType: string | number = "";
   // 快速查询订单状态选项
-  private purchaseTypeArr: Array<Option> = [
-    {
-      'label': '所有',
-      'value': 999
-    },
-    {
-      'label': '草稿',
-      'value': 0
-    },
-    {
-      'label': '审批中',
-      'value': 1
-    },
-    {
-      'label': '已审批',
-      'value': 2
-    },
-    {
-      'label': '已完成',
-      'value': 3
-    },
-    {
-      'label': '不通过',
-      'value': 4
-    },
-    {
-      'label': '已作废',
-      'value': -1
-    },
-  ]
+  private purchaseTypeArr: Array<Option> = []
 
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
@@ -519,7 +490,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private async init() {
     let res: any = await api.optGroupInit();
     if (res.code == 0) {
-      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, storeMap } = res.data;
+      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap } = res.data;
       // 票据类型
       for (let el in invoiceMap) {
         this.pjTypes.push({ value: invoiceMap[el], label: el })
@@ -535,6 +506,9 @@ export default class PlannedPurchaseOrder extends Vue {
       // 直发门店
       for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
+      }
+      for(let el in billStatusMap) {
+        this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
       }
     }
   }
