@@ -616,6 +616,18 @@ export default class InterPurchase extends Vue {
       this.showModel('tabsModel');
     })
   }
+  
+  // 分摊费用
+  private feeform:any = {
+    currency: "", // 币种
+    exchangeRate: 0, // 汇率
+    tariff: 0, // 关税比例
+    transportation: 0, // 运杂费比例
+    valueAddedTax: 0 // 增值税比例
+  }
+  private getFeeForm(form:any) {
+    this.feeform = form;
+  }
 
   private mounted() {
     setTimeout(() => {

@@ -101,7 +101,7 @@ export default class ApportionmentExpenses extends Vue {
     this.sumMod = true;
   }
 
-  @Emit("form")
+  @Emit("feeForm")
   private save() {
     this.cancel();
     return this.formInline;
