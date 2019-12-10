@@ -618,7 +618,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                                 return this.$message.error('可用余额不足')
                             }
 
-                            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+                            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
                               let res = await getSave(this.formPlan)
                               if(res.code === 0){
                                   this.$Message.success('保存成功');

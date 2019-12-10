@@ -1,304 +1,266 @@
 <template>
-  <div>
-    <div class="content-oper content-oper-flex">
-      <section class="oper-box">
-        <div class="oper-top flex">
-          <div class="wlf">
-            <div class="db">
-              <span>快速查询：</span>
-              <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-              <Select v-model="purchaseType" class="w90 mr10">
-                <Option
-                  v-for="item in purchaseTypeArr"
-                  :value="item.value"
-                  :key="item.value"
-                >{{item.label}}</Option>
-              </Select>
-            </div>
-            <div class="db">
-              <Button type="default" @click="more()" class="mr10">
-                <i class="iconfont mr5 iconchaxunicon"></i>更多
-              </Button>
-            </div>
-            <div class="db">
-              <Button type="default" @click="In()" class="mr10">
-                <i class="iconfont mr5 iconbaocunicon"></i>入库
-              </Button>
-            </div>
-            <div class="db">
-              <Button @click="stamp" class="mr10">
-                <i class="iconfont mr5 icondayinicon"></i> 打印
-              </Button>
-            </div>
-            <!-- 状态定义 -->
-            <div class="status">已入库</div>
+  <div class="content-oper content-oper-flex">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf">
+          <div class="db">
+            <span>快速查询：</span>
+            <Select v-model="params.selectDayType" @on-change="getDataQuick" class="w90 mr10">
+              <Option
+                v-for="item in selectDayTypeArr"
+                :value="item.value"
+                :key="item.value"
+              >{{item.label}}</Option>
+            </Select>
+            <Select v-model="params.settleStatus" @on-change="getDataType" class="w90 mr10">
+              <Option
+                v-for="item in purchaseTypeArr"
+                :value="item.value"
+                :key="item.value"
+              >{{item.label}}</Option>
+            </Select>
           </div>
+          <div class="db">
+            <Button type="default" @click="more" class="mr10">
+              <i class="iconfont mr5 iconchaxunicon"></i>更多
+            </Button>
+          </div>
+          <div class="db">
+            <Button :disabled="btnIn" type="default" @click="inPro" class="mr10">
+              <i class="iconfont mr5 iconbaocunicon"></i>入库
+            </Button>
+          </div>
+          <div class="db">
+            <Button :disabled="true" @click="stamp" class="mr10">
+              <i class="iconfont mr5 icondayinicon"></i> 打印
+            </Button>
+          </div>
+          <!-- 状态定义 -->
+          <div class="status">{{inStatus}}</div>
         </div>
-      </section>
-      <section class="con-box">
-        <div class="inner-box">
-          <div class="con-split" ref="paneLeft">
-            <Split v-model="split1" min="200" max="500">
-              <div slot="left" class="con-split-pane-left">
-                <div class="pane-made-hd">调拨申请列表</div>
-                <Table
-                  :height="leftTableHeight"
-                  @on-current-change="selectTabelData"
-                  size="small"
-                  highlight-row
-                  border
-                  :stripe="true"
-                  :columns="Left.columns"
-                  :data="Left.tbdata"
-                ></Table>
-                <Page
-                  simple
-                  class-name="fl pt10"
-                  size="small"
-                  :current="Left.page.num"
-                  :total="100"
-                  :page-size="Left.page.size"
-                  @on-change="changePage"
-                  @on-page-size-change="changeSize"
-                  show-sizer
-                  show-total
-                ></Page>
-              </div>
-              <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-                <div class="pane-made-hd">调拨入库信息</div>
-                <div class="clearfix purchase" ref="planForm">
-                  <Form
-                    inline
-                    :show-message="false"
-                    ref="formPlan"
-                    :label-width="100"
-                    :model="formPlan"
-                  >
-                    <FormItem label="调出方：" prop="supplyName" class="fs12">
-                      <Row class="w500">
-                        <Col span="22">
-                          <Input v-model="formPlan.item1" placeholder="请选择调出方"></Input>
-                        </Col>
-                        <Col span="2">
-                          <Button @click="showModel" class="ml5" size="small" type="default">
-                            <i class="iconfont iconxuanzetichengchengyuanicon"></i>
-                          </Button>
-                        </Col>
-                      </Row>
-                    </FormItem>
-                    <FormItem label="调入仓库：" prop="billType">
-                      <Select class="w160" v-model="formPlan.item2">
-                        <Option value="beijing">主仓</Option>
-                        <Option value="shanghai">嘻嘻</Option>
-                        <Option value="shenzhen">哈哈</Option>
-                      </Select>
-                    </FormItem>
-                    <FormItem label="调拨申请日期：" prop="planDate" class="fs12 ml50">
-                      <Date-picker
-                        v-model="formPlan.item3"
-                        type="date"
-                        placeholder="选择日期"
-                        class="w160"
-                      ></Date-picker>
-                    </FormItem>
-                    <FormItem label="备注：" prop="remark">
-                      <Input class="w500" v-model="formPlan.item4"></Input>
-                    </FormItem>
-                    <FormItem label="申请人：" prop="planner">
-                      <Input class="w160" v-model="formPlan.item5"></Input>
-                    </FormItem>
-                    <FormItem label="申请单号：" prop="planOrderNum" class="ml50">
-                      <Input class="w160" v-model="formPlan.item6"></Input>
-                    </FormItem>
-                  </Form>
-                </div>
-                <div class="flex plan-cz-btn" ref="planBtn">
-                  <div class="clearfix"></div>
-                </div>
-                <vxe-table
-                  border
-                  resizable
-                  show-footer
-                  @edit-closed="editClosedEvent"
-                  size="mini"
-                  :height="rightTableHeight"
-                  :data="tableData"
-                  :footer-method="addFooter"
-                  :edit-config="{trigger: 'click', mode: 'cell'}"
+      </div>
+    </section>
+    <section class="con-box">
+      <div class="inner-box">
+        <div class="con-split" ref="paneLeft">
+          <Split v-model="split1" min="200" max="500">
+            <div slot="left" class="con-split-pane-left">
+              <div class="pane-made-hd">调拨申请列表</div>
+              <Table
+                :height="leftTableHeight"
+                @on-current-change="selectTabelData"
+                size="small"
+                highlight-row
+                border
+                :stripe="true"
+                :columns="Left.columns"
+                :data="Left.tbdata"
+              ></Table>
+              <Page
+                size="small"
+                :total="Left.total"
+                :page-size="params.size"
+                :current="params.page +1"
+                show-sizer
+                show-total
+                :page-size-opts="[10, 20, 30, 40]"
+                class-name="page-con"
+                @on-change="changePage"
+                @on-page-size-change="changeSize"
+                class="mr10"
+              ></Page>
+            </div>
+            <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+              <div class="pane-made-hd">调拨入库信息</div>
+              <div class="clearfix purchase" ref="planForm">
+                <Form
+                  inline
+                  :show-message="false"
+                  ref="formPlan"
+                  :label-width="100"
+                  :model="formPlan"
                 >
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                  <vxe-table-column field="name" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="role" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="sex" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="num6" title="申请数量" width="100"></vxe-table-column>
-                  <vxe-table-column
-                    field="num6"
-                    title="备注"
-                    :edit-render="{name: 'input'}"
-                    width="100"
-                  ></vxe-table-column>
-                  <vxe-table-column field="num6" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="规格" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="紧销品" width="100" type="checkbox"></vxe-table-column>
-                  <vxe-table-column field="date12" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="取消数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="date12" title="入库数量" width="100"></vxe-table-column>
-                </vxe-table>
-                <div ref="planPage">
-                  <Page
-                    size="small"
-                    class-name="page-con"
-                    :current="Right.page.num"
-                    :total="Right.page.total"
-                    :page-size="Right.page.size"
-                    @on-change="changePage"
-                    @on-page-size-change="changeSize"
-                    show-sizer
-                    show-total
-                  ></Page>
-                </div>
+                  <FormItem label="申请方：" class="fs12">
+                    <Row class="w500">
+                      <Col span="22">
+                        <Input readonly v-model="formPlan.orgid" placeholder></Input>
+                      </Col>
+                    </Row>
+                  </FormItem>
+                  <FormItem label="入库仓库：">
+                    <Input readonly v-model="formPlan.storeId" placeholder></Input>
+                  </FormItem>
+                  <FormItem label="调出退回日期：" class="fs12 ml50">
+                    <Date-picker
+                      readonly
+                      v-model="formPlan.finishDate"
+                      type="date"
+                      placeholder
+                      class="w160"
+                    ></Date-picker>
+                  </FormItem>
+                  <FormItem label="备注：">
+                    <Input class="w500" v-model="formPlan.remark" placeholder="选填"></Input>
+                  </FormItem>
+                  <FormItem label="处理人：">
+                    <Input readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
+                  </FormItem>
+                  <FormItem label="申请单号：" class="ml50">
+                    <Input readonly class="w160" v-model="formPlan.code" placeholder></Input>
+                  </FormItem>
+                  <FormItem label="退回单号：" class="ml50">
+                    <Input readonly class="w160" v-model="formPlan.serviceId" placeholder></Input>
+                  </FormItem>
+                </Form>
               </div>
-            </Split>
-          </div>
+              <div class="flex plan-cz-btn" ref="planBtn">
+                <div class="clearfix"></div>
+              </div>
+              <vxe-table
+                border
+                resizable
+                show-footer
+                size="mini"
+                :height="rightTableHeight"
+                :data="tableData"
+              >
+                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column field="carBrandName" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
+                <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+                <vxe-table-column field="enterUnitId" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column field="hasCancelQty" title="统计退回数量" width="100"></vxe-table-column>
+              </vxe-table>
+            </div>
+          </Split>
         </div>
-      </section>
-      <!--更多弹框-->
-      <Modal v-model="advanced" title="高级查询" width="600px">
-        <!-- <More></More> -->
-        <div slot="footer">
-          <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
-        </div>
-      </Modal>
-      <!-- 选择调出方 -->
-      <select-supplier
-        @selectSearchName="selectSupplierName"
-        ref="selectSupplier"
-        headerTit="供应商资料"
-      ></select-supplier>
-      <!--选择配件-->
-      <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>
-      <!--编辑收货信息-->
-      <Modal v-model="GainInformation" title="编辑收获信息" width="1200px">
-        <goods-info></goods-info>
-        <div slot="footer">
-          <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
-        </div>
-      </Modal>
-      <!-- 入库提示 -->
-      <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
-        <p>是否确定入库</p>
-      </Modal>
-    </div>
+      </div>
+    </section>
+    <!--更多弹框-->
+    <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
+    <!-- 入库提示 -->
+    <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
+      <p>是否确定入库</p>
+    </Modal>
   </div>
 </template>
 
 <script>
-import QuickDate from '../../../../components/getDate/dateget'
+import {
+  getList,
+  inDataList,
+  stampDataList
+} from '../../../../api/AlotManagement/twoBackInStorage.js'
 import More from './compontents/More'
-import SelectSupplier from './compontents/selectSupplier'
-import SelectPartCom from '../../../goods/goodsList/components/selectPartCom'
-import GoodsInfo from '../../../../components/goodsInfo/goodsInfo'
 import '../../../lease/product/lease.less'
 import '../../../goods/goodsList/goodsList.less'
 export default {
-  name: 'toBackInStorage',
+  name: 'twoBackInStorage',
   components: {
-    QuickDate,
-    More,
-    SelectPartCom,
-    GoodsInfo,
-    SelectSupplier
+    More
   },
   data() {
     return {
       split1: 0.2,
-      purchaseType: 9999,
-      purchaseTypeArr: [{ label: '所有', value: 9999 }],
-      //单据表头
-      formPlan: {
-        item1: '',
-        item2: '',
-        item3: '',
-        item4: '',
-        item5: '',
-        item6: ''
+      selectDayTypeArr: [
+        { label: '所有', value: '' },
+        { label: '本日', value: 0 },
+        { label: '昨日', value: 1 },
+        { label: '本周', value: 2 },
+        { label: '上周', value: 3 },
+        { label: '本月', value: 4 },
+        { label: '上月', value: 5 }
+      ],
+      purchaseTypeArr: [
+        { label: '所有', value: '' },
+        { label: '待出库', value: 0 },
+        { label: '待入库', value: 1 },
+        { label: '已入库', value: 2 }
+      ],
+      //查询
+      params: {
+        selectDayType: '', //完成日期12345
+        settleStatus: '',
+        size: 10,
+        page: 0
       },
       Left: {
         page: {
-          num: 1,
-          size: 10,
-          total: 0
+          offset: 0,
+          pageNumber: 1,
+          pageSize: 10,
+          paged: true
         },
+        total: 0,
         loading: false,
         columns: [
           {
             title: '序号',
             minWidth: 50,
-            key: 'id'
+            type: 'index'
           },
           {
             title: '状态',
-            key: 'venderSkuNo',
+            key: 'status',
             minWidth: 70
           },
           {
             title: '申请方',
-            key: 'name',
+            key: 'orgid',
             minWidth: 170
           },
           {
             title: '受理日期',
-            key: 'address',
+            key: 'createTime',
             minWidth: 120
           },
           {
             title: '受理人',
-            key: 'isCycle',
+            key: 'createUname',
             minWidth: 140
           },
 
           {
             title: '退回单号',
-            key: 'disable',
+            key: 'serviceId',
             minWidth: 200
           },
           {
             title: '入库人',
-            key: 'remark',
+            key: 'createUname',
             minWidth: 100
           },
           {
             title: '调出回退日期',
             align: 'center',
-            key: 'qualitySourceName',
-            minWidth: 170
-          },
-          {
-            title: '打印次数',
-            key: 'categoryName',
+            key: 'finishDate',
             minWidth: 170
           }
         ],
         tbdata: []
       },
+      //right信息
+      formPlan: {
+        orgid: '', //申请方
+        storeId: '', //入库仓库
+        finishDate: '', //调出退回日期
+        remark: '', //备注
+        orderMan: '', //入库人
+        code: '', //申请单号
+        serviceId: '' //退回单号
+      },
+      //right表格
       tableData: [],
       //左侧表格高度
       leftTableHeight: 0,
       //右侧表格高度
       rightTableHeight: 0,
       Right: {
-        page: {
-          num: 1,
-          size: 10,
-          total: 0
-        },
         loading: false,
         columns: [
           {
@@ -350,63 +312,130 @@ export default {
         ],
         tbdata: []
       },
-      advanced: false, //更多模块的弹框
-      GainInformation: false //编辑收获信息
+      inID: { id: '' }, //入库ID
+      btnIn: false, //入库按钮禁用
+      showMore: false, //更多模块的弹框
+      showIn: false, //是否确定入库弹框
+      inStatus: '' //单据状态
     }
   },
+  created() {
+    this.getinfo(this.params)
+  },
   methods: {
-    //更多按钮
+    //获取调拨申请列表
+    getinfo(params) {
+      getList(params)
+        .then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$Message.info('成功')
+            this.Left.tbdata = res.data.content || []
+            this.Left.page = res.data.pageable
+            this.Left.page.total = res.totalElements
+          } else if (res.code === 1) {
+            this.$Message.info('未查到数据')
+            this.Left.tbdata = []
+          }
+        })
+        .catch(err => {
+          this.$Message.info('初始化数据失败')
+        })
+    },
+    //快速查询-时间
+    getDataQuick(v) {
+      console.log(v)
+      this.params.selectDayType = v
+      this.getinfo(this.params)
+    },
+    //类型查询
+    getDataType() {
+      console.log(this.params.settleStatus)
+      this.getinfo(this.params)
+    },
+    //显示更多弹窗
     more() {
-      this.advanced = true
+      this.showMore = true
+      console.log(this.showMore)
+    },
+    //更多弹窗恢复false
+    getMoreStatus(val) {
+      this.showMore = val
+    },
+    //更多搜索接收调拨申请列表
+    getMoreData(val) {
+      console.log(val)
+      this.params = { ...this.params, ...val }
+      this.getinfo(this.params)
+    },
+    //
+
+    //入库按钮
+    inPro() {
+      this.showIn = true
+    },
+    //确定入库
+    inOk() {
+      inDataList(this.inID)
+        .then(res => {
+          if (res.code === 0) {
+            this.showIn = false
+            this.$Message.info('确定入库成功')
+          } else if (res.code === 1) {
+            this.$Message.info('提示入库失败')
+          }
+        })
+        .catch(err => {
+          this.$Message.info('确定入库失败')
+        })
+    },
+    //取消入库
+    inCancel() {
+      this.showIn = false
     },
 
-    //添加配件按钮
-    addPro() {
-      this.$refs.SelectPartCom.init()
-    },
-    //保存按钮
-    Save() {},
-    // 提交
-    editPro() {},
-    //作废
-    cancellation() {},
     // 打印
-    stamp() {},
-    //左边列表选中当前行
-    selectTabelData() {},
+    stamp() {
+      stampDataList()
+        .then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.$Message.info('打印成功')
+          }
+        })
+        .catch(err => {
+          this.$Message.info('打印失败')
+        })
+    },
+    //左边列表选中事件
+    selectTabelData(currentRow) {
+      this.inID.id = currentRow.id
+      this.formPlan = currentRow
+      this.tableData = currentRow.voList //添加right表格数据
+      if (currentRow.status === 0) {
+        this.inStatus = '未入库'
+        this.btnIn = false
+      } else if (currentRow.status === 1) {
+        this.inStatus = '部分'
+        this.btnIn = false
+      } else if (currentRow.status === 2) {
+        this.inStatus = '已入库'
+        this.btnIn = true
+      } else {
+        this.$Message.info('状态错误')
+      }
+    },
     //分页
     changePage(p) {
-      this.page.num = p
-      // this.getList()
+      console.log(p)
+      this.params.page = p
+      this.getinfo(this.params)
     },
-    changeSize(size) {
-      this.page.num = 1
-      this.page.size = size
-      // this.getList()
-    },
-    //split 分割
-    getDataQuick(v) {
-      // console.log(v)
-    },
-    //footer计算
-    addFooter() {},
-    //表格编辑状态下被关闭的事件
-    editClosedEvent() {},
-    //更多弹框的确定按钮
-    Determined() {},
-    //子组件的参数
-    getPartNameList() {},
-    //编辑收货信息弹框显示
-    GoodsInfoModal() {
-      this.GainInformation = true
-    },
-    //展示方
-    showModel() {
-      this.$refs.selectSupplier.init()
-    },
-    //选择方
-    selectSupplierName(row) {
-      this.formPlan.item1 = row.fullName
+    changeSize(s) {
+      console.log(s)
+      this.params.page = 1
+      this.params.size = s
+      this.getinfo(this.params)
     }
   },
   mounted() {
@@ -416,7 +445,7 @@ export default {
       let planBtnH = this.$refs.planBtn.offsetHeight
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 70
+      this.leftTableHeight = wrapH - 104
       //获取右侧表格高度
       this.rightTableHeight = wrapH - planFormH - planBtnH - 65
     })

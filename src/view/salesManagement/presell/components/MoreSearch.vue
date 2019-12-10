@@ -5,15 +5,15 @@
   >
     <div class="box">
       <Form ref="formInline" :model="data" :label-width="100">
-        <FormItem label="创建日期:">
-          <DatePicker type="daterange"  @on-change="getCreatDate"  placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+        <FormItem label="创建日期:" >
+          <DatePicker type="daterange"  v-model="data.start"  @on-change="getCreatDate"  placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
-          <DatePicker type="daterange"  @on-change="submitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange"  v-model="data.end"  @on-change="submitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
           <Select v-model="data.guestId" filterable style="width: 350px">
-            <Option v-for="item in clientList" :value="item.value" :key="item.value">{{ item.fullName }}</Option>
+            <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
           </Select>
         </FormItem>
         <FormItem label="预售单号:">
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import {getClient} from '@/api/salesManagment/salesOrder'
+  import {getClient} from "_api/salesManagment/presell.js"
   import {getMoreList} from "_api/salesManagment/presell.js";
   export default {
     name: "MoreSearh",
@@ -71,6 +71,7 @@
       //获取公司
       async getAllClient() {
         let res = await getClient()
+        console.log('我是打印出来的客户IDIDiidid',res)
         if (res.code === 0) {
           this.clientList = res.data
         }
@@ -90,8 +91,13 @@
         this.data.commitTimeEnd = date[1] + ' ' + '23:59:59'
         // console.log('777',this.data.createTimeStart,this.data.createTimeStart)
       },
+      // getGuestId(v){
+      //
+      //   console.log('我是打印出来的客户数据id',this.v)
+      // },
       //更多搜索
       getMoreSearch() {
+        console.log('我是打印出来的moressearch',this.data)
         this.$emit('moreQuery' , this.data)
         this.moreQueryShow=false
 

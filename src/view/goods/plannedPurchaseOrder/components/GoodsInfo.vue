@@ -396,7 +396,6 @@ export default class GoodsInfo extends Vue {
   }
   //传入保存id
   private saveId(row) {
-    console.log(row);
     row.forEach(item => {
       if (item.logisticsRecordVO) {
         this.formDateRight.id = item.logisticsRecordVO.id;

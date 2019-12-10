@@ -45,7 +45,8 @@
       <div class="main clearfix">
         <!-- 销售出库单上 -->
         <vxe-table
-          height='140'
+          @on-current-change="selectTabelData"
+          height='200'
           border
           resizable
           size="small"
@@ -97,7 +98,7 @@
           ></vxe-table-column>
         </vxe-table>
         <!-- 销售出库单下 -->
-        <div class="mt5 pr10 h40">订单数量共4条</div>
+        <div class="mt5 pr10 h40">订单数量共{{this.page.total}}条</div>
         <vxe-table
           height='140'
           border
@@ -168,9 +169,11 @@
           :current="page.num"
           :total="page.total"
           :page-size="page.size"
+          :page-size-opts="page.placement"
           size="small"
           show-elevator
           show-sizer
+          @on-change="selectNum" @on-page-size-change="selectPage"
           class="mt10 fr mr10"
         />
       </div>
@@ -183,6 +186,7 @@
 </template>
 
 <script>
+  import {getoutList} from "_api/salesManagment/sellReturn.js";
   export default {
     name: 'SalesOutBound',
     data() {
@@ -204,8 +208,9 @@
         },
         page: {
           num: 1,
-          size: 10,
-          total: 0
+          size: 20,
+          total: 0,
+          placement:[20,40,60,80,100]
         }
       }
 
@@ -213,7 +218,34 @@
     methods: {
       openModal() {
         this.showInfo = true;
+        this.getList()
+      },
+      //切换页面
+      selectNum(val){
+        this.page.num = val
+        this.getList()
+      },
+      //切换页数
+      selectPage(val){
+        this.page.num = 1
+        this.page.size = val
+        this.getList()
+      },
+      //上表格选中
+      selectTabelData(data){
+        this.tableDataBottom = data.row
+      },
+      //获取销售出库单列表
+      getList(){
+        getoutList().then(res=>{
+          // console.log('我是获取到的列表',res)
+          if(res.code==0){
+            this.tableDataTop= res.data.content || []
+            this.page.total = res.data.totalElements
+          }
+        })
       }
+
     }
 
   }

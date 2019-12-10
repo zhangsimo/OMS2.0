@@ -327,7 +327,6 @@ export const mixSelectPartCom  = {
         }
 
       })
-      console.log(val,789)
     }
   }
 }
