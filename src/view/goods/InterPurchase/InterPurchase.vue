@@ -379,9 +379,9 @@
                       :precision="2"
                     ></InputNumber>
                   </template>
-                  <!-- <template v-slot="{ row }">
+                  <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}
-                  </template> -->
+                  </template>
                 </vxe-table-column>
                 <vxe-table-column title="采购金额" filed="orderAmt" width="120">
                   <template v-slot="{ row }">
