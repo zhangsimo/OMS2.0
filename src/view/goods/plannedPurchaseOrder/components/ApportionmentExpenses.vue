@@ -10,7 +10,7 @@
       :label-width="100"
       class="ml10 pl25"
     >
-      <FormItem prop="user" label="币种: ">
+      <FormItem label="币种: ">
         <Select v-model="formInline.currency" class="w300">
           <Option
             v-for="item in currencies"
@@ -20,7 +20,7 @@
           >
         </Select>
       </FormItem>
-      <FormItem prop="user" label="汇率: ">
+      <FormItem label="汇率: ">
         <InputNumber
           :min="0"
           class="w300 ml5"
