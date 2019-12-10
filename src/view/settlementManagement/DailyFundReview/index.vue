@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>查询期间：</span>
@@ -80,8 +80,21 @@ export default {
     this.Branchstore = arr[2];
     capitalAudit().then(res=>{
       console.log(res)
-      if(res.data.length !==0){
-        this.data1 = res.data
+      if(res.data.one.length !==0){
+        res.data.one.map((item,index)=>{
+          item.num = index + 1
+          item.sortName = item.sort.name
+          item.furposeName = item.furpose.name
+        })
+        this.data1 = res.data.one
+      }
+      if(res.data.two.lenght !==0){
+        res.data.two.map((item,index)=>{
+          item.num = index + 1
+          item.sortName = item.sort.name
+          item.furposeName = item.furpose.name
+        })
+        this.data2 = res.data.two
       }
     })
   },
@@ -90,336 +103,336 @@ export default {
       columns: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
           title: '收款单号',
-          key: 'receiptid',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '对账单单号',
-          key: 'reconciliationid',
+          key: 'serviceId',
           className: 'tc'
         },
         {
           title: '往来单位',
-          key: 'source',
+          key: 'guestName',
           className: 'tc'
         },
         {
           title: '收付类型',
-          key: 'Customer',
+          key: 'sortName',
           className: 'tc'
         },
         {
           title: '核销方式',
-          key: 'CustomerCode',
+          key: 'furposeName',
           className: 'tc'
         },
         {
           title: '对账应收',
-          key: 'Dealingstype',
+          key: 'accountsReceivable',
           className: 'tc'
         },
         {
           title: '应收返利',
-          key: 'Warehouse',
+          key: 'receivableRebate',
           className: 'tc'
         },
         {
           title: '应收坏账',
-          key: 'Single',
+          key: 'badDebtReceivable',
           className: 'tc'
         },
         {
           title: '对账应付',
-          key: 'Singledata',
+          key: 'reconciliation',
           className: 'tc'
         },
         {
           title: '应付返利',
-          key: 'money',
+          key: 'dealingRebates',
           className: 'tc'
         },
         {
           title: '应付坏账',
-          key: 'remarks',
+          key: 'badDebtPaying',
           className: 'tc'
         },
         {
           title: '其他应收款',
-          key: 'billstate',
+          key: 'otherAmt',
           className: 'tc'
         },
         {
           title: '预收账款',
-          key: 'billstate',
+          key: 'advanceReceipt',
           className: 'tc'
         },
         {
           title: '收款合计',
-          key: 'billstate',
+          key: 'sumAmt',
           className: 'tc'
         },
         {
           title: '现金',
-          key: 'billstate',
+          key: 'cashAmt',
           className: 'tc'
         },
         {
           title: 'A卡',
-          key: 'billstate',
+          key: 'aCardAmt',
           className: 'tc'
         },
         {
           title: 'B卡',
-          key: 'billstate',
+          key: 'bCardAmt',
           className: 'tc'
         },
         {
           title: 'C卡',
-          key: 'billstate',
+          key: 'cCardAmt',
           className: 'tc'
         },
         {
           title: 'D卡',
-          key: 'billstate',
+          key: 'dCardAmt',
           className: 'tc'
         },
         {
           title: '基本开户A',
-          key: 'billstate',
+          key: 'aBasicAmt',
           className: 'tc'
         },
         {
           title: '基本开户B',
-          key: 'billstate',
+          key: 'bBasicAmt',
           className: 'tc'
         },
         {
           title: '一般户A',
-          key: 'billstate',
+          key: 'aOrdinaryAmt',
           className: 'tc'
         },
         {
           title: '一般户B',
-          key: 'billstate',
+          key: 'bOrdinaryAmt',
           className: 'tc'
         },
         {
           title: '运费',
-          key: 'billstate',
+          key: 'freightAmt',
           className: 'tc'
         },
         {
           title: '手续费',
-          key: 'billstate',
+          key: 'formalitiesAmt',
           className: 'tc'
         },
         {
           title: '利息收入',
-          key: 'billstate',
+          key: 'interestIncomeAmt',
           className: 'tc'
         },
         {
           title: '利息支出',
-          key: 'billstate',
+          key: 'interestExpenseAmt',
           className: 'tc'
         },
         {
           title: '代收代付',
-          key: 'billstate',
+          key: 'paymentAmt',
           className: 'tc'
         },
         {
           title: '收款所属门店',
-          key: 'billstate',
+          key: 'orgName',
           className: 'tc'
         },
         {
           title: '收款人',
-          key: 'billstate',
+          key: 'collectionName',
           className: 'tc'
         },
         {
           title: '收款日期',
-          key: 'billstate',
+          key: 'receiptDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'billstate',
+          key: 'remark',
           className: 'tc'
         }
       ],
       columns1: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
-          title: '收款单号',
-          key: 'receiptid',
+          title: '付款单号',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '对账单单号',
-          key: 'reconciliationid',
+          key: 'serviceId',
           className: 'tc'
         },
         {
           title: '往来单位',
-          key: 'source',
+          key: 'guestName',
           className: 'tc'
         },
         {
           title: '收付类型',
-          key: 'Customer',
+          key: 'sortName',
           className: 'tc'
         },
         {
           title: '核销方式',
-          key: 'CustomerCode',
+          key: 'furposeName',
           className: 'tc'
         },
         {
           title: '对账应收',
-          key: 'Dealingstype',
+          key: 'accountsReceivable',
           className: 'tc'
         },
         {
           title: '应收返利',
-          key: 'Warehouse',
+          key: 'receivableRebate',
           className: 'tc'
         },
         {
           title: '应收坏账',
-          key: 'Single',
+          key: 'badDebtReceivable',
           className: 'tc'
         },
         {
           title: '对账应付',
-          key: 'Singledata',
+          key: 'reconciliation',
           className: 'tc'
         },
         {
           title: '应付返利',
-          key: 'money',
+          key: 'dealingRebates',
           className: 'tc'
         },
         {
           title: '应付坏账',
-          key: 'remarks',
+          key: 'badDebtPaying',
           className: 'tc'
         },
         {
-          title: '其他应收款',
-          key: 'billstate',
+          title: '其他应付款',
+          key: 'otherAmt',
           className: 'tc'
         },
         {
-          title: '预收账款',
-          key: 'billstate',
+          title: '预付账款',
+          key: 'advanceReceipt',
           className: 'tc'
         },
         {
-          title: '收款合计',
-          key: 'billstate',
+          title: '付款合计',
+          key: 'sumAmt',
           className: 'tc'
         },
         {
           title: '现金',
-          key: 'billstate',
+          key: 'cashAmt',
           className: 'tc'
         },
         {
           title: 'A卡',
-          key: 'billstate',
+          key: 'aCardAmt',
           className: 'tc'
         },
         {
           title: 'B卡',
-          key: 'billstate',
+          key: 'bCardAmt',
           className: 'tc'
         },
         {
           title: 'C卡',
-          key: 'billstate',
+          key: 'cCardAmt',
           className: 'tc'
         },
         {
           title: 'D卡',
-          key: 'billstate',
+          key: 'dCardAmt',
           className: 'tc'
         },
         {
           title: '基本开户A',
-          key: 'billstate',
+          key: 'aBasicAmt',
           className: 'tc'
         },
         {
           title: '基本开户B',
-          key: 'billstate',
+          key: 'bBasicAmt',
           className: 'tc'
         },
         {
           title: '一般户A',
-          key: 'billstate',
+          key: 'aOrdinaryAmt',
           className: 'tc'
         },
         {
           title: '一般户B',
-          key: 'billstate',
+          key: 'bOrdinaryAmt',
           className: 'tc'
         },
         {
           title: '运费',
-          key: 'billstate',
+          key: 'freightAmt',
           className: 'tc'
         },
         {
           title: '手续费',
-          key: 'billstate',
+          key: 'formalitiesAmt',
           className: 'tc'
         },
         {
           title: '利息收入',
-          key: 'billstate',
+          key: 'interestIncomeAmt',
           className: 'tc'
         },
         {
           title: '利息支出',
-          key: 'billstate',
+          key: 'interestExpenseAmt',
           className: 'tc'
         },
         {
           title: '代收代付',
-          key: 'billstate',
+          key: 'paymentAmt',
           className: 'tc'
         },
         {
-          title: '收款所属门店',
-          key: 'billstate',
+          title: '付款所属门店',
+          key: 'orgName',
           className: 'tc'
         },
         {
-          title: '收款人',
-          key: 'billstate',
+          title: '付款人',
+          key: 'collectionName',
           className: 'tc'
         },
         {
-          title: '收款日期',
-          key: 'billstate',
+          title: '付款日期',
+          key: 'receiptDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'billstate',
+          key: 'remark',
           className: 'tc'
         }
       ],
@@ -431,6 +444,10 @@ export default {
     };
   },
   methods: {
+    // 快速查询
+    quickDate(data){
+      this.value = data
+    },
     Dealings() {
       this.$refs.selectDealings.openModel();
     },

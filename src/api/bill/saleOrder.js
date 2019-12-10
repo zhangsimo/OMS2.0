@@ -75,17 +75,19 @@ export function AccountStatement (params) {
     })
 }
 // 收/付款单记录
-export function Record(){
+export function Record(params){
     return axios.request({
         url:`${api.omsSettle}/payment/record/get`,
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 // 应收单据明细和应付单据明细
-export function detailsDocuments(){
+export function detailsDocuments(params){
     return axios.request({
         url:`${api.omsSettle}/receivable/payable/document/details`,
-        method: 'get'
+        method: 'get',
+        params
     })
 }
 // 每日资金应收/付审核

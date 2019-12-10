@@ -12,7 +12,9 @@ import {
   ThisWeekStr,
   LastWeekStr,
   ThisMonthStr,
-  prevMonthStr
+  prevMonthStr,
+  prevYearStr,
+  ThisYearStr
 } from "./index_bill";
 export default {
   name: "quickDate",
@@ -70,6 +72,14 @@ export default {
         case 6:
         case "6":
           this.val = prevMonthStr();
+          break;
+        case 7:
+        case "7":
+          this.val = ThisYearStr();
+          break;
+        case 8:
+        case "8":
+          this.val = prevYearStr();
           break;
         default:
           this.val = ToDayStr();

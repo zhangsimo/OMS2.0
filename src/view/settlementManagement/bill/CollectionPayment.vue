@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>对账期间：</span>
@@ -357,6 +357,10 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
+    // 快速查询
+    quickDate(data){
+      this.value = data
+    },
     Dealings() {
       this.$refs.selectDealings.openModel()
     },

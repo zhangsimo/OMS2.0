@@ -15,7 +15,7 @@ export const ToDayStr = () => {
     month = month < 10 ? "0" + month : month;
     day = day < 10 ? "0" + day : day;
     returnStr[0] = year + "-" + month + "-" + day;       //起始时间
-    returnStr[1] = year + "-" + month + "-" + day ;      //结束时间
+    returnStr[1] = year + "-" + month + "-" + day;      //结束时间
     return returnStr;
 }
 
@@ -32,7 +32,7 @@ export const YesterDayStr = () => {
     month = month < 10 ? "0" + month : month;
     day = day < 10 ? "0" + day : day;
     returnStr[0] = year + "-" + month + "-" + day;       //起始时间
-    returnStr[1] = year + "-" + month + "-" + day ;      //结束时间
+    returnStr[1] = year + "-" + month + "-" + day;      //结束时间
     return returnStr;
 }
 
@@ -62,7 +62,7 @@ export const ThisWeekStr = () => {
     day2 = day2 < 10 ? "0" + day2 : day2;
 
     returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2 ;      //结束时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
     return returnStr;
 }
 
@@ -92,7 +92,7 @@ export const LastWeekStr = () => {
     day2 = day2 < 10 ? "0" + day2 : day2;
 
     returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2 ;      //结束时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
     return returnStr;
 }
 
@@ -125,7 +125,7 @@ export const ThisMonthStr = () => {
     day2 = day2 < 10 ? "0" + day2 : day2;
 
     returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2 ;      //结束时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
     return returnStr;
 }
 
@@ -134,32 +134,32 @@ export const ThisMonthStr = () => {
 *返回值："起始时间,结束时间"
 */
 export const prevMonthStr = () => {
-  var returnStr = [];
-  var date = new Date();      //当前时间
-  var year = date.getFullYear();
-  var month = date.getMonth();
+    var returnStr = [];
+    var date = new Date();      //当前时间
+    var year = date.getFullYear();
+    var month = date.getMonth();
 
-  var min = new Date(year, month-1, 1);                 //本月月初
-  var max = new Date(year, month, 0);             //本月月底
+    var min = new Date(year, month - 1, 1);                 //本月月初
+    var max = new Date(year, month, 0);             //本月月底
 
-  //起始时间的年月日
-  var year1 = min.getFullYear();
-  var month1 = min.getMonth() + 1;
-  var day1 = min.getDate();
-  //结束时间的年月日
-  var year2 = max.getFullYear();
-  var month2 = max.getMonth() + 1;
-  var day2 = max.getDate();
-  //处理起始时间小于10的追加"0"在前面
-  month1 = month1 < 10 ? "0" + month1 : month1;
-  day1 = day1 < 10 ? "0" + day1 : day1;
-  //处理结束时间小于10的追加"0"在前面
-  month2 = month2 < 10 ? "0" + month2 : month2;
-  day2 = day2 < 10 ? "0" + day2 : day2;
+    //起始时间的年月日
+    var year1 = min.getFullYear();
+    var month1 = min.getMonth() + 1;
+    var day1 = min.getDate();
+    //结束时间的年月日
+    var year2 = max.getFullYear();
+    var month2 = max.getMonth() + 1;
+    var day2 = max.getDate();
+    //处理起始时间小于10的追加"0"在前面
+    month1 = month1 < 10 ? "0" + month1 : month1;
+    day1 = day1 < 10 ? "0" + day1 : day1;
+    //处理结束时间小于10的追加"0"在前面
+    month2 = month2 < 10 ? "0" + month2 : month2;
+    day2 = day2 < 10 ? "0" + day2 : day2;
 
-  returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-  returnStr[1] = year2 + "-" + month2 + "-" + day2 ;      //结束时间
-  return returnStr;
+    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    return returnStr;
 }
 
 /*
@@ -196,4 +196,66 @@ export const GetDate2 = (day, type, date) => {
         edate = new Date(zdate.getTime() + (day * 24 * 60 * 60 * 1000));
     }
     return edate;
+}
+/*
+*获取上年的起始和结束时间
+*返回值："起始时间,结束时间"
+*/
+export const prevYearStr = () => {
+    var returnStr = [];
+    var date = new Date();      //当前时间
+    var year = date.getFullYear();
+
+    var min = new Date(year - 1, 0, 1);                 //上年初
+    var max = new Date(year, 0, 0);             //上年底
+
+    //起始时间的年月日
+    var year1 = min.getFullYear();
+    var month1 = min.getMonth() + 1;
+    var day1 = min.getDate();
+    //结束时间的年月日
+    var year2 = max.getFullYear();
+    var month2 = max.getMonth() + 1;
+    var day2 = max.getDate();
+    //处理起始时间小于10的追加"0"在前面
+    month1 = month1 < 10 ? "0" + month1 : month1;
+    day1 = day1 < 10 ? "0" + day1 : day1;
+    //处理结束时间小于10的追加"0"在前面
+    month2 = month2 < 10 ? "0" + month2 : month2;
+    day2 = day2 < 10 ? "0" + day2 : day2;
+
+    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    return returnStr;
+}
+/*
+*获取本年的起始和结束时间
+*返回值："起始时间,结束时间"
+*/
+export const ThisYearStr = () => {
+    var returnStr = [];
+    var date = new Date();      //当前时间
+    var year = date.getFullYear();
+
+    var min = new Date(year, 0, 1);                 //本年初
+    var max = new Date(year + 1, 0, 0);             //本年底
+
+    //起始时间的年月日
+    var year1 = min.getFullYear();
+    var month1 = min.getMonth() + 1;
+    var day1 = min.getDate();
+    //结束时间的年月日
+    var year2 = max.getFullYear();
+    var month2 = max.getMonth() + 1;
+    var day2 = max.getDate();
+    //处理起始时间小于10的追加"0"在前面
+    month1 = month1 < 10 ? "0" + month1 : month1;
+    day1 = day1 < 10 ? "0" + day1 : day1;
+    //处理结束时间小于10的追加"0"在前面
+    month2 = month2 < 10 ? "0" + month2 : month2;
+    day2 = day2 < 10 ? "0" + day2 : day2;
+
+    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    return returnStr;
 }

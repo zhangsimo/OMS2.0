@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>转单期间：</span>
@@ -786,6 +786,10 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
+    // 快速查询
+    quickDate(data){
+      this.value = data
+    },
     // 选择日期
     changedate(daterange) {
       this.value = daterange;
@@ -798,7 +802,6 @@ export default {
         endDate: this.value[1],
         guestType: this.model2,
         tenantName: this.nametext,
-        orgId: this.model1,
         serviceType: this.model3,
         serviceId: this.text
       };
@@ -863,7 +866,7 @@ export default {
     },
     // 月结对账
     Monthlyreconciliation() {
-      // this.$refs.Monthlyreconciliation.modal = true;
+        // this.$refs.Monthlyreconciliation.modal = true;
       if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
         this.$refs.Monthlyreconciliation.modal = true;
       } else {

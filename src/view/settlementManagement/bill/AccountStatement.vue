@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>转单期间：</span>
@@ -30,7 +30,7 @@
           </div>
           <div class="db ml20">
             <span>对账单状态：</span>
-            <Select v-model="Reconciliationtype" class="w150">
+            <Select v-model="Reconciliationtype" class="w150" placeholder="全部">
               <Option
                 v-for="item in Reconciliationlist"
                 :value="item.value"
@@ -56,6 +56,13 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+        >对账单结算</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="viewStatement">查看对账单</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button">撤销</button>
         <Table
           border
           :columns="columns1"
@@ -63,8 +70,9 @@
           class="mt10"
           max-height="400"
           @on-row-click="morevis"
+          highlight-row
         ></Table>
-        <Page :total="pagetotal" show-elevator class="mt10 tr" />
+        <Page :total="pagetotal" show-elevator class="mt10 tr" @on-change="pageCode" show-total />
         <div class="flex mt20">
           <div class="db" style="flex:1;">
             <button class="ivu-btn ivu-btn-default" type="button">收/付款单记录</button>
@@ -85,6 +93,47 @@
               <Table border :columns="columns4" :data="data4" max-height="400" show-summary></Table>
             </TabPane>
           </Tabs>
+        </div>
+        <div class="db mt10" v-if="falg">
+          <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
+          <Steps :current="1">
+            <Step title="提交人">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="店长">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="会计">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="财务总监">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="总经理">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="出纳">
+              <div slot="content">
+                <span>审批人：{{}}</span><br/>
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+          </Steps>
         </div>
       </div>
     </section>
@@ -127,6 +176,71 @@
         <input type="text" class="w200" v-model="text" />
       </div>
     </Modal>
+    <Modal v-model="Settlement" title="收付款结算" width="1200">
+      <div class="db">
+        <button class="ivu-btn ivu-btn-default mr10" type="button">保存</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button">关闭</button>
+      </div>
+      <div class="db p15 settlement mt10 mb10">
+        <div class="db_top flex mb15">
+          <span style="flex:1">门店：{{}}</span>
+          <span style="flex:1">往来单位：{{}}</span>
+          <span style="flex:1">收付类型：{{}}</span>
+        </div>
+        <div class="db_bottom flex mt15">
+          <span style="flex:1">对账单号：{{}}</span>
+          <span style="flex:1">实际收款/付款：{{}}</span>
+          <span style="flex:1">收付款单号：{{}}</span>
+        </div>
+      </div>
+      <div class="flex">
+        <vxe-table
+          style="flex:6"
+          border
+          resizable
+          :data="tableData"
+          auto-resize
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+          @edit-actived="editActivedEvent"
+          @edit-closed="editClosedEvent"
+        >
+          <vxe-table-column field="businessType" title="业务类型"></vxe-table-column>
+          <vxe-table-column field="accountsReceivable" title="对账金额"></vxe-table-column>
+          <vxe-table-column field="accepted" title="已收金额"></vxe-table-column>
+          <vxe-table-column field="uncollected" title="未收金额"></vxe-table-column>
+          <vxe-table-column
+            field="noCharOffAmt"
+            title="本次核销金额"
+            width="140"
+            :edit-render="{name: 'input', attrs: {type: 'number'}}"
+          ></vxe-table-column>
+          <vxe-table-column field="remainingUncollected" title="剩余未收"></vxe-table-column>
+        </vxe-table>
+        <vxe-table
+          class="ml10"
+          style="flex:4"
+          border
+          resizable
+          :data="tableData"
+          auto-resize
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+          @edit-actived="editActivedEvent"
+          @edit-closed="editClosedEvent"
+        >
+          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column field="name" title="收款账户"></vxe-table-column>
+          <vxe-table-column
+            field="role"
+            title="金额"
+            :edit-render="{name: 'input', attrs: {type: 'number'}}"
+          ></vxe-table-column>
+          <vxe-table-column field="sex" title="所属门店"></vxe-table-column>
+        </vxe-table>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
+    <reconciliation ref="reconciliation"></reconciliation>
+    <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
   </div>
 </template>
 <script>
@@ -137,18 +251,26 @@ import {
   Record,
   detailsDocuments
 } from "@/api/bill/saleOrder";
+import reconciliation from "./components/reconciliation.vue";
+import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
 export default {
   components: {
-    quickDate
+    quickDate,
+    reconciliation,
+    Monthlyreconciliation
   },
   data() {
     return {
-      pagetotal: 1,
+      falg: true,
+      reconciliationStatement: {},
+      tableData: [],
+      Settlement: false,
+      pagetotal: 0,
       value: [],
       model1: "",
       model2: "",
       model3: "",
-      Reconciliationtype: "QB",
+      Reconciliationtype: "",
       Branchstore: [],
       modal1: false,
       text: "",
@@ -187,10 +309,6 @@ export default {
       ],
       Reconciliationlist: [
         {
-          value: "QB",
-          label: "全部"
-        },
-        {
           value: "CG",
           label: "草稿"
         },
@@ -199,7 +317,7 @@ export default {
           label: "审核中"
         },
         {
-          value: "SPTG",
+          value: "SHTG",
           label: "审批通过"
         },
         {
@@ -212,11 +330,6 @@ export default {
         }
       ],
       columns1: [
-        {
-          type: "selection",
-          width: 40,
-          align: "center"
-        },
         {
           title: "序号",
           key: "num",
@@ -325,7 +438,7 @@ export default {
         },
         {
           title: "流程是否通过",
-          key: "pass",
+          key: "passName",
           className: "tc"
         }
       ],
@@ -348,7 +461,7 @@ export default {
         },
         {
           title: "收/付款方式",
-          key: "sort",
+          key: "sortName",
           className: "tc"
         },
         {
@@ -469,62 +582,155 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getAccountStatement();
+    let obj = {
+      startDate: this.value[0],
+      endDate: this.value[1],
+      orgId: this.model1,
+      statementStatus: this.Reconciliationtype
+    };
+    this.getAccountStatement(obj);
   },
   methods: {
+    // 快速查询日期
+    quickDate(data) {
+      this.value = data;
+    },
     // 选择日期
     changedate(daterange) {
       this.value = daterange;
     },
     // 应收/付单据接口
-    getdetailsDocuments() {
-      detailsDocuments().then(res => {
+    getdetailsDocuments(obj) {
+      detailsDocuments(obj).then(res => {
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.num = index + 1;
           });
           this.data3 = res.data.one;
+        } else {
+          this.data3 = [];
         }
         if (res.data.two.length !== 0) {
           res.data.two.map((item, index) => {
             item.num = index + 1;
           });
           this.data4 = res.data.two;
+        } else {
+          this.data4 = [];
         }
       });
     },
     // 收付款单记录接口
-    getRecord() {
-      Record().then(res => {
-        console.log("11", res);
-      });
-    },
-    // 对账总表
-    getAccountStatement() {
-      AccountStatement().then(res => {
-        console.log("12", res);
-        this.pagetotal = res.data.content.length
-        if (res.data.content.length !== 0) {
-          console.log(res.data)
-          res.data.content.map((item, index) => {
+    getRecord(obj) {
+      Record(obj).then(res => {
+        if (res.data.length !== 0) {
+          res.data.map((item, index) => {
             item.num = index + 1;
-            item.paymentTypeName = item.paymentType.name
-            item.billingTypeName = item.billingType.name
-            item.statementStatusName = item.statementStatus.name
+            item.sortName = item.sort.name;
           });
-          this.data1 = res.data.content;
+          this.data2 = res.data;
         }
       });
     },
+    // 对账总表
+    getAccountStatement(obj) {
+      AccountStatement(obj).then(res => {
+        this.pagetotal = res.data.totalElements;
+        if (res.data.content.length !== 0) {
+          res.data.content.map((item, index) => {
+            item.num = index + 1;
+            item.paymentTypeName = item.paymentType.name;
+            item.billingTypeName = item.billingType.name;
+            item.statementStatusName = item.statementStatus.name;
+          });
+          this.data1 = res.data.content;
+        } else {
+          this.data1 = [];
+        }
+      });
+    },
+    // 页码
+    pageCode(page) {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        page: page - 1,
+        statementStatus: this.Reconciliationtype
+      };
+      this.getAccountStatement(obj);
+    },
     // 查询
-    query() {},
+    query() {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype
+      };
+      this.getAccountStatement(obj);
+    },
     // 更多查询
-    senior() {},
+    senior() {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype,
+        guestType: this.model2,
+        tenantName: this.nametext,
+        serviceType: this.model3,
+        serviceId: this.text
+      };
+      this.getAccountStatement(obj);
+    },
     // 点击总表查询明细
-    morevis() {
-      this.getdetailsDocuments();
-      this.getdetailsDocuments();
-    }
+    morevis(row, index) {
+      this.reconciliationStatement = row;
+      let obj = {
+        orgId: row.orgId,
+        startDate: this.value[0],
+        endDate: this.value[1],
+        guestId: row.guestId,
+        accountNo: row.accountNo,
+        serviceId: row.serviceId
+      };
+      this.getRecord(obj);
+      this.getdetailsDocuments(obj);
+    },
+    // 查看对账单
+    viewStatement() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        this.$refs.reconciliation.modal = true;
+        if (this.reconciliationStatement.statementStatusName === "草稿") {
+          this.$refs.Monthlyreconciliation.modal = true
+        } else {
+          this.$refs.reconciliation.modal = true
+        }
+      } else {
+        this.$message.error("请勾选要查看的对账单");
+      }
+    },
+    // 对账单结算
+    statementSettlement() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        if (
+          this.reconciliationStatement.pass &&
+          (this.reconciliationStatement.statementStatusName === "审核通过" ||
+            this.reconciliationStatement.statementStatusName === "结算中")
+        ) {
+          this.Settlement = true;
+        } else {
+          this.$message.error(
+            "请勾选流程通过且对账单状态为审核通过或结算中的数据"
+          );
+        }
+      } else {
+        this.$message.error("请勾选要对账数据");
+      }
+    },
+    editActivedEvent() {},
+    editClosedEvent() {}
   }
 };
 </script>
@@ -540,5 +746,8 @@ export default {
 .pro input {
   border: 1px solid #dddddd;
   height: 28px;
+}
+.settlement {
+  border: 1px solid #dddddd;
 }
 </style>

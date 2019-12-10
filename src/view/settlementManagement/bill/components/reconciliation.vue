@@ -159,8 +159,8 @@
 </template>
 
 <script>
-import selectDealings from "./../bill/components/selectCompany";
-import { creat } from "./../components";
+import selectDealings from "./selectCompany";
+import { creat } from "./../../components";
 import {
   getReconciliation,
   getSettlement,
