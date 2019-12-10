@@ -32,12 +32,12 @@
             </FormItem>
             <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
-                <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
+                <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
               </Select>
             </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
           <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
-            <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
+            <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
           </Select>
         </FormItem>
         <FormItem label="备注：">
@@ -252,7 +252,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 if (!value && value != '0') {
                     callback(new Error("最多保留4位小数"));
                 } else {
-                    const reg = /^[+-]?\d+\.\d{0,4}$/i
+                    const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
                     if (reg.test(value)) {
                         callback();
                     } else {
