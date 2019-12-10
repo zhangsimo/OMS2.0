@@ -35,3 +35,24 @@ export  function getCalculate( params ={}) {
     params
   })
 }
+
+//采购订单
+export function getBuy(params , data){
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/findPageByDynamicQuery`,
+    method: 'post',
+    params,
+    data
+  })
+}
+
+//删除
+export  function deletList( data ={}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsEnterDetail/deleteParts`,
+    method: 'post',
+    data
+  })
+}
+
+
