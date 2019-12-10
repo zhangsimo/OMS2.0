@@ -34,7 +34,7 @@
       <FormItem label='身份证号码:' prop="cardId" >
         <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
       </FormItem>
-      <FormItem label='入职部门:' prop="ground" >
+      <FormItem label='入职部门:' prop="groundId" >
         <Cascader :data="list" v-model="data.groundId" placeholder='选择部门' style="width: 250px"></Cascader>
       </FormItem>
       <div style="display: flex">
@@ -124,7 +124,7 @@
                     cardId:[
                         {required: true, message: '身份证号码不能为空', trigger: 'blur'}
                     ],
-                    ground:[
+                    groundId:[
                         {required: true,type:'array', message: '请选择部门', trigger: 'change'}
                     ]
                 },
