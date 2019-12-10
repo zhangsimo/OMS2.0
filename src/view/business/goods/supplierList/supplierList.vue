@@ -133,15 +133,13 @@
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="canReQty" title="可退数量" width="100">
-
-                  </vxe-table-column>
+                  <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderQty"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
@@ -151,7 +149,7 @@
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderPrice"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
@@ -161,7 +159,7 @@
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderQty * row.orderPrice"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
