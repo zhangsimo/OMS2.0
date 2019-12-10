@@ -73,6 +73,7 @@ export default class PriceManage extends Vue {
     /**==============左侧============= */
     // 获取表格
     private async getLevelList() {
+        this.level.tbdata = [{ name: '统一售价', readonly: true }];
         let res = await api.sellPsList();
         if (res.code === 0) {
             res.data.forEach(el => {
@@ -201,6 +202,7 @@ export default class PriceManage extends Vue {
             total: 0,
             size: 10
         };
+        if(row.isNew) return false;
         if(!this.curronly) {
             this.getCus();
         }

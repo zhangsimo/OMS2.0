@@ -6,7 +6,7 @@
         :label-width="100"
         class="ml10 pl25"
       >
-        <FormItem prop="user" label="合计采购金额: ">
+        <FormItem label="合计采购金额: ">
           <Input type="text" class="w300 ml5" disabled v-model="totalAmt" />
         </FormItem>
         <FormItem label="折扣金额: ">

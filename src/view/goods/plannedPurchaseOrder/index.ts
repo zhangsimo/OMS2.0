@@ -46,8 +46,8 @@ export default class PlannedPurchaseOrder extends Vue {
   private adjustButtonDisable: boolean = true;
 
   // 选中的采购订单列表的状态;
-  private selectRowState:orderState| null = null;
-  private serviceId:string = '';
+  private selectRowState: orderState | null = null;
+  private serviceId: string = '';
 
   // 快速查询订单状态
   private purchaseType: string | number = "";
@@ -56,7 +56,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
-  private mainId: string|null = null;
+  private mainId: string | null = null;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -197,7 +197,7 @@ export default class PlannedPurchaseOrder extends Vue {
     new: true,
     _highlight: true,
     id: '0',
-    billStatusId: '0',
+    billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
   }
@@ -346,7 +346,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 废弃
   private abandoned() {
-    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
@@ -364,29 +364,30 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 打印
   private print() {
-    const ref:any = this.$refs.PrintModel;
+    const ref: any = this.$refs.PrintModel;
     ref.openModal();
   }
 
   //表格单选选中
   private selectTabelData(v: any) {
-    if(v == null) return;
+    if (v == null) return;
     if (!v.new && !this.isAdd) {
       this.purchaseOrderTable.tbdata.splice(0, 1);
       this.isAdd = true;
-      const currentRowTable:any = this.$refs["currentRowTable"];
+      const currentRowTable: any = this.$refs["currentRowTable"];
       currentRowTable.clearCurrentRow();
     }
     this.selectTableRow = v;
     this.mainId = v.id;
     this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId;
+    this.selectRowState = v.billStatusId.name;
     this.serviceId = v.serviceId;
-    if(['草稿', '退回'].includes(v.billStatusId)) {      this.isInput = false;
+    if (['草稿', '退回'].includes(v.billStatusId.name)) {
+      this.isInput = false;
     } else {
       this.isInput = true;
     }
-    if(['待收货', '部分入库'].includes(v.billStatusId)) {
+    if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
       this.adjustButtonDisable = false;
     } else {
       this.adjustButtonDisable = true;
@@ -452,13 +453,13 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 费用登记
   private showFee() {
-    if(this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
+    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
     this.showModel('feeRegistration');
   }
 
   // 收货信息
   private showGoodsInfo() {
-    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.showModel('goodsInfo');
   }
 
@@ -506,7 +507,7 @@ export default class PlannedPurchaseOrder extends Vue {
       for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
-      for(let el in billStatusMap) {
+      for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
       }
     }
@@ -577,7 +578,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购计划单据
   private getPlanOrder(row: any) {
-    if(!row) return;
+    if (!row) return;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
@@ -604,7 +605,7 @@ export default class PlannedPurchaseOrder extends Vue {
   }
 
   // 操作-查看
-  private partId:string = '';
+  private partId: string = '';
   private watch(id: any) {
     this.partId = id || null;
     this.$nextTick(() => {
