@@ -347,6 +347,8 @@
                      if(this.title == '员工离职'){
                          this.newStaff.office = 1
                      }
+                     this.newStaff.single =  this.newStaff.single ? 1 : 0
+                     this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
                      changeeditUser(this.newStaff).then( res => {
                          stop()
                          if(res.code ==0){
