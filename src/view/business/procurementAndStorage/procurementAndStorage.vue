@@ -10,8 +10,8 @@
       <Button type="default" class="mr10 w90" @click="addNew"><Icon type="md-add" size="14" /> 新增</Button>
       <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusId != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
       <Button class="mr10" :disabled="formPlan.billStatusId != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
-      <Button class="mr10"  @click="selectPlan"> 选择采购订单</Button>
-      <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+      <Button class="mr10" :disabled="formPlan.billStatusId != 0" @click="selectPlan"> 选择采购订单</Button>
+      <Button class="mr10" @click="setPrint"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
       <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusId != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
     </div>
     <div class="conter">
@@ -111,6 +111,21 @@
                   <div class="fl mb5">
                     <Button @click="delect" :disabled="formPlan.billStatusId != 0" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                   </div>
+                  <div class="fl mb5">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload ='beforeUpload'
+                    >
+                      <Button size="small"  class="mr10"  type="default" > <i class="iconfont icondaoruicon icons" /> 导入</Button>
+                    </Upload>
+                  </div>
                 </div>
               </div>
               <div class="tableBox">
@@ -172,7 +187,7 @@
       <!--        更多搜索-->
       <More-query ref="morequeryModal" @getSureQuery="moreQuery" :data="moreQueryList"></More-query>
       <!--        打印-->
-      <!--      <Print-show ref="printBox"></Print-show>-->
+            <Print-show ref="printBox" :data="formPlan"></Print-show>
 <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
 <!--      费用登记-->

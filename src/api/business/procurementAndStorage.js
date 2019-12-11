@@ -55,4 +55,14 @@ export  function deletList( data ={}) {
   })
 }
 
+//批量导入地址
+export const getup = `${api.omsOrder}/guest/importExcel`;
 
+//打印
+export  function getPrintShow(params) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsEnterMain/print?`,
+    method: 'get',
+    params
+  })
+}
