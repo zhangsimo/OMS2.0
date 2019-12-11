@@ -39,20 +39,20 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report">导出</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data"></Table>
-        <Tabs active-key="key1" class="mt10">
-          <Tab-pane label="收款单记录" key="key1">
-            <Table border :columns="columns1" :data="data1" class="mt10"></Table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary></Table>
+        <Tabs v-model="tab" class="mt10" @click="tabName">
+          <Tab-pane label="收款单记录" name="key1">
+            <Table border :columns="columns1" :data="data1" class="mt10" ref="receivables" show-summary></Table>
           </Tab-pane>
-          <Tab-pane label="付款单记录" key="key2">
-            <Table border :columns="columns2" :data="data2" class="mt10"></Table>
+          <Tab-pane label="付款单记录" name="key2">
+            <Table border :columns="columns2" :data="data2" class="mt10" ref="payment" show-summary></Table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -96,6 +96,8 @@ export default {
   },
   data() {
     return {
+      tab: 'key1',
+      value: [],
       Branchstore: [],
       model1: "",
       modal1: false,
@@ -361,8 +363,40 @@ export default {
     quickDate(data){
       this.value = data
     },
+    // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel()
+    },
+    // tab标签页的name
+    tabName(name){
+      this.tab = name
+    },
+    // 导出
+    report(){
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: '收付款查询'
+        })
+      } else {
+        this.$message.error('收付款总表暂无数据')
+      }
+      if(this.tab === 'key1') {
+        if(this.data1.length !==0){
+          this.$refs.receivables.exportCsv({
+            filename: '收款单明细'
+          })
+        } else {
+          this.$message.error('收款单明细暂无数据')
+        }
+      } else if(this.tab === 'key2') {
+        if(this.data2.length !==0){
+          this.$refs.payment.exportCsv({
+            filename: '付款单明细'
+          })
+        } else {
+          this.$message.error('付款单明细暂无数据')
+        }
+      }
     },
     ok (){},
     cancel (){}

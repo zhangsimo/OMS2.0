@@ -17,10 +17,10 @@ const dev = {
   // omsOrder: 'http://192.168.30.191:9210', //
   omsStore:'http://192.168.30.221:9280', // 库存查询 周伟健
   // omsProduct: "http://192.168.30.209:9200",
-  omsOrder:'http://192.168.30.234:9210', //陈舒
+  omsOrder:'http://192.168.30.84:9210', //陈舒
   /**oms系统接口设定 */
   authApi: 'http://192.168.2.47:5200', // 系统资源 5200
-  // omsProduct: '', // 9200
+  omsProduct: 'http://192.168.30.84:9200', // 9200
   // omsOrder: 'http://192.168.30.179:9210', // 9210
   // omsEdit: '', // 9220salesOrder
   // omsTask: '', // 9230

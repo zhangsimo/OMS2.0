@@ -27,16 +27,6 @@
                 </button>
               </div>
               <div class="db ml10">
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="preservationDraft"
-                >保存草稿</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="preservationSubmission"
-                >保存并提交</button>
                 <button class="mr10 ivu-btn ivu-btn-default" type="button">导出对账清单</button>
                 <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
               </div>
@@ -93,9 +83,9 @@
                 <span class="mr5">应收合计</span>
                 <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
                 <span class="mr5">应收坏账</span>
-                <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
+                <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" disabled />
                 <span class="mr5">应收返利</span>
-                <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
+                <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" disabled />
                 <span class="mr5" style="color:#f66">实际应收合计</span>
                 <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
               </div>
@@ -103,9 +93,9 @@
                 <span class="mr5">应付合计</span>
                 <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
                 <span class="mr5">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" disabled />
                 <span class="mr5">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
+                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" disabled />
                 <span class="mr5" style="color:#f66">实际应付合计</span>
                 <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
               </div>
@@ -122,11 +112,11 @@
                 >{{ item.label }}</Option>
               </Select>
               <span class="mr5">应收返利请示单号</span>
-              <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
+              <Input type="text" v-model="Rebateid" class="w60 mr10 tc" disabled />
               <span class="mr5">应收坏账请示单号</span>
-              <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
+              <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" disabled />
               <span class="mr5">备注</span>
-              <Input type="text" v-model="remark" class="w60 mr10 tc" />
+              <Input type="text" v-model="remark" class="w60 mr10 tc" disabled />
             </div>
           </div>
         </section>
@@ -216,11 +206,6 @@ export default {
         }
       ],
       columns1: [
-        {
-          type: "selection",
-          width: 40,
-          align: "center"
-        },
         {
           title: "序号",
           key: "num",

@@ -37,8 +37,16 @@
                   type="button"
                   @click="preservationSubmission"
                 >保存并提交</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出对账清单</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="getReportReconciliationt"
+                >导出对账清单</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="getReportParts"
+                >导出配件明细</button>
               </div>
             </div>
           </div>
@@ -50,14 +58,14 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <i class="iconfont iconcaidan input" @click="Dealings"></i>
                 <span>开户行：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <span>收款账号：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <span>本次申请付款账户：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
               </div>
             </div>
             <div class="db mt20">
@@ -72,6 +80,7 @@
                 @on-select-cancel="collectNoCheckout"
                 @on-select-all-cancel="collectNoCheckoutAll"
                 show-summary
+                ref="receivable"
               ></Table>
             </div>
             <div class="db mt20">
@@ -86,6 +95,7 @@
                 @on-select-cancel="paymentNoCheckout"
                 @on-select-all-cancel="paymentNoCheckoutAll"
                 show-summary
+                ref="payable"
               ></Table>
             </div>
             <div class="flex mt20">
@@ -398,7 +408,7 @@ export default {
               },
               on: {
                 "on-change": event => {
-                  this.flag = true
+                  this.flag = true;
                   this.modifyAccountAmt = event;
                   this.$set(
                     params.row,
@@ -447,7 +457,7 @@ export default {
       parameter: {},
       paymentlist: [],
       collectlist: [],
-      companyInfoId: '',
+      companyInfoId: "",
       flag: false
     };
   },
@@ -474,13 +484,13 @@ export default {
     totalvalue() {
       if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
         if (this.Reconciliationtotal > 0) {
-          this.info = false
+          this.info = false;
           return "1";
         } else if (this.Reconciliationtotal < 0) {
-          this.info = true
+          this.info = true;
           return "0";
         } else {
-          this.info = false
+          this.info = false;
           return "2";
         }
       } else {
@@ -491,8 +501,8 @@ export default {
   methods: {
     // 对账单弹框出现加载数据
     hander() {
-      this.flag = false
-      this.info = false
+      this.flag = false;
+      this.info = false;
       let { orgId, startDate, endDate, guestId } = this.parameter;
       this.companyInfo = this.parameter.guestName;
       this.companyInfoId = this.parameter.guestId;
@@ -631,11 +641,11 @@ export default {
       this.getSettlementComputed();
     },
     // 本次不对帐金额弹窗
-    noReconciliation() { 
-      if(this.flag) {
-        if(this.Reason){
-          this.$message.error('差异原因必填')
-          return ''
+    noReconciliation() {
+      if (this.flag) {
+        if (this.Reason) {
+          this.$message.error("差异原因必填");
+          return "";
         }
       }
       let sum = 0;
@@ -729,12 +739,35 @@ export default {
     },
     // 保存草稿
     preservationDraft() {
-      this.getPreservation(0)
+      this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {
-      this.getPreservation(1)
-    }
+      this.getPreservation(1);
+    },
+    // 对账清单导出
+    getReportReconciliationt() {
+      if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
+        if (this.paymentlist.length !== 0) {
+          this.$refs.payable.exportCsv({
+            filename: "采购清单",
+            data: this.paymentlist,
+            columns: this.columns1.filter((col, index) => index > 0)
+          });
+        }
+        if (this.collectlist.length !== 0) {
+          this.$refs.receivable.exportCsv({
+            filename: "销售清单",
+            data: this.collectlist,
+            columns: this.columns1.filter((col, index) => index > 0)
+          });
+        }
+      } else {
+        this.$message.error("请勾选要导出的对账清单");
+      }
+    },
+    // 导出配件明细
+    getReportParts() {}
   }
 };
 </script>
@@ -761,8 +794,8 @@ export default {
   border-bottom: 1px solid #dddddd;
   background-color: #f8f8f8;
 }
-.info .flex{
-  align-items: center
+.info .flex {
+  align-items: center;
 }
 .info .flex i {
   position: relative;

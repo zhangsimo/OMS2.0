@@ -97,3 +97,35 @@ export function capitalAudit(){
         method: 'get'
     })
 }
+// 审核
+export function examineBtn(data){
+    return axios.request({
+        url:`${api.omsSettle}/fund/review/check`,
+        method: 'post',
+        data
+    })
+}
+// 撤销
+export function revokeBtn(data){
+    return axios.request({
+        url:`${api.omsSettle}/fund/review/cancel`,
+        method: 'post',
+        data
+    })
+}
+// 导出配件明细
+export function reportParts(params){
+    return axios.request({
+        url:`${api.omsSettle}/accounts/receivable/report/details`,
+        method: 'get',
+        params
+    })
+}
+// 业务类型/收款账户
+export function dictionaries(params){
+    return axios.request({
+        url:`${api.omsProduct}/dictionaries/findByCode`,
+        method: 'get',
+        params
+    })
+}

@@ -37,14 +37,14 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report">导出</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" class="waytable"></Table>
+        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return {
+      value: [],
       Branchstore: [],
       model1: "",
       modal1: false,
@@ -315,7 +316,17 @@ export default {
       this.$refs.selectDealings.openModel()
     },
     ok (){},
-    cancel (){}
+    cancel (){},
+    // 导出
+    report(){
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: '在途库存'
+        })
+      } else {
+        this.$message.error('在途库存暂无数据')
+      }
+    }
   }
 };
 </script>

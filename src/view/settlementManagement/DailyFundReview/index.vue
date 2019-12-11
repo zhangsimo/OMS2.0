@@ -23,434 +23,554 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" :value="companyDealings" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db ml20">
             <span>收付款单号：</span>
-            <input type="text" class="h30" />
+            <input type="text" class="h30" v-model="collectPayId" />
           </div>
           <div class="db ml20">
             <span>对账单号：</span>
-            <input type="text" class="h30" />
+            <input type="text" class="h30" v-model="reconciliationId" />
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="quick">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">审核</button>
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">撤销</button>
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="examine">审核</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revokecapital">撤销</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report">导出</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Tabs active-key="key1" class="mt10 waytable">
-          <Tab-pane label="应收审核" key="key1">
-            <Table border :columns="columns" :data="data1" class="mt10" max-height="400"></Table>
+        <Tabs v-model="tabName" class="mt10 waytable" @click="tab">
+          <Tab-pane label="应收审核" name="key1">
+            <Table
+              border
+              :columns="columns"
+              :data="data1"
+              class="mt10"
+              max-height="400"
+              highlight-row
+              @on-row-click="selectExamine"
+              ref="collectExamine"
+            ></Table>
           </Tab-pane>
-          <Tab-pane label="应付审核" key="key2">
-            <Table border :columns="columns1" :data="data2" class="mt10" max-height="400"></Table>
+          <Tab-pane label="应付审核" name="key2">
+            <Table
+              border
+              :columns="columns1"
+              :data="data2"
+              class="mt10"
+              max-height="400"
+              highlight-row
+              @on-row-click="selectExamine"
+              ref="payExamine"
+            ></Table>
           </Tab-pane>
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings" />
+    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <Modal v-model="capitalexamine" title="资金审核" @on-ok="confirmExamine">
+      <p class="tc">确认审核?</p>
+    </Modal>
+    <Modal v-model="revoke" title="资金审核撤销">
+      <div class="db flex">
+        <span>撤销原因：</span>
+        <Input v-model="revokeReason" type="text" class="w300" />
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
-import {creat} from './../components'
-import {capitalAudit} from "@/api/bill/saleOrder";
+import { creat } from "./../components";
+import { capitalAudit, examineBtn, revokeBtn } from "@/api/bill/saleOrder";
 export default {
   components: {
     selectDealings,
     quickDate
   },
-  async mounted () {
-    let arr = await creat (this.$refs.quickDate.val,this.$store)
+  async mounted() {
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    capitalAudit().then(res=>{
-      console.log(res)
-      if(res.data.one.length !==0){
-        res.data.one.map((item,index)=>{
-          item.num = index + 1
-          item.sortName = item.sort.name
-          item.furposeName = item.furpose.name
-        })
-        this.data1 = res.data.one
-      }
-      if(res.data.two.lenght !==0){
-        res.data.two.map((item,index)=>{
-          item.num = index + 1
-          item.sortName = item.sort.name
-          item.furposeName = item.furpose.name
-        })
-        this.data2 = res.data.two
-      }
-    })
+    let obj = {
+      startDate: this.value[0],
+      endDate: this.value[1],
+      orgId: this.model1
+    };
+    this.getcapitalAudit(obj);
   },
   data() {
     return {
+      tabName: 'key1',
+      collectPayId: "",
+      reconciliationId: "",
+      companyDealings: "",
+      companyDealingsId: "",
+      capitalexamine: false,
+      revoke: false,
+      revokeReason: "",
       columns: [
         {
-          title: '序号',
-          key: 'num',
+          title: "序号",
+          key: "num",
           width: 40,
-          className: 'tc'
+          className: "tc"
         },
         {
-          title: '收款单号',
-          key: 'fno',
-          className: 'tc'
+          title: "收款单号",
+          key: "fno",
+          className: "tc"
         },
         {
-          title: '对账单单号',
-          key: 'serviceId',
-          className: 'tc'
+          title: "对账单单号",
+          key: "serviceId",
+          className: "tc"
         },
         {
-          title: '往来单位',
-          key: 'guestName',
-          className: 'tc'
+          title: "往来单位",
+          key: "guestName",
+          className: "tc"
         },
         {
-          title: '收付类型',
-          key: 'sortName',
-          className: 'tc'
+          title: "收付类型",
+          key: "sortName",
+          className: "tc"
         },
         {
-          title: '核销方式',
-          key: 'furposeName',
-          className: 'tc'
+          title: "核销方式",
+          key: "furposeName",
+          className: "tc"
         },
         {
-          title: '对账应收',
-          key: 'accountsReceivable',
-          className: 'tc'
+          title: "对账应收",
+          key: "accountsReceivable",
+          className: "tc"
         },
         {
-          title: '应收返利',
-          key: 'receivableRebate',
-          className: 'tc'
+          title: "应收返利",
+          key: "receivableRebate",
+          className: "tc"
         },
         {
-          title: '应收坏账',
-          key: 'badDebtReceivable',
-          className: 'tc'
+          title: "应收坏账",
+          key: "badDebtReceivable",
+          className: "tc"
         },
         {
-          title: '对账应付',
-          key: 'reconciliation',
-          className: 'tc'
+          title: "对账应付",
+          key: "reconciliation",
+          className: "tc"
         },
         {
-          title: '应付返利',
-          key: 'dealingRebates',
-          className: 'tc'
+          title: "应付返利",
+          key: "dealingRebates",
+          className: "tc"
         },
         {
-          title: '应付坏账',
-          key: 'badDebtPaying',
-          className: 'tc'
+          title: "应付坏账",
+          key: "badDebtPaying",
+          className: "tc"
         },
         {
-          title: '其他应收款',
-          key: 'otherAmt',
-          className: 'tc'
+          title: "其他应收款",
+          key: "otherAmt",
+          className: "tc"
         },
         {
-          title: '预收账款',
-          key: 'advanceReceipt',
-          className: 'tc'
+          title: "预收账款",
+          key: "advanceReceipt",
+          className: "tc"
         },
         {
-          title: '收款合计',
-          key: 'sumAmt',
-          className: 'tc'
+          title: "收款合计",
+          key: "sumAmt",
+          className: "tc"
         },
         {
-          title: '现金',
-          key: 'cashAmt',
-          className: 'tc'
+          title: "现金",
+          key: "cashAmt",
+          className: "tc"
         },
         {
-          title: 'A卡',
-          key: 'aCardAmt',
-          className: 'tc'
+          title: "A卡",
+          key: "aCardAmt",
+          className: "tc"
         },
         {
-          title: 'B卡',
-          key: 'bCardAmt',
-          className: 'tc'
+          title: "B卡",
+          key: "bCardAmt",
+          className: "tc"
         },
         {
-          title: 'C卡',
-          key: 'cCardAmt',
-          className: 'tc'
+          title: "C卡",
+          key: "cCardAmt",
+          className: "tc"
         },
         {
-          title: 'D卡',
-          key: 'dCardAmt',
-          className: 'tc'
+          title: "D卡",
+          key: "dCardAmt",
+          className: "tc"
         },
         {
-          title: '基本开户A',
-          key: 'aBasicAmt',
-          className: 'tc'
+          title: "基本开户A",
+          key: "aBasicAmt",
+          className: "tc"
         },
         {
-          title: '基本开户B',
-          key: 'bBasicAmt',
-          className: 'tc'
+          title: "基本开户B",
+          key: "bBasicAmt",
+          className: "tc"
         },
         {
-          title: '一般户A',
-          key: 'aOrdinaryAmt',
-          className: 'tc'
+          title: "一般户A",
+          key: "aOrdinaryAmt",
+          className: "tc"
         },
         {
-          title: '一般户B',
-          key: 'bOrdinaryAmt',
-          className: 'tc'
+          title: "一般户B",
+          key: "bOrdinaryAmt",
+          className: "tc"
         },
         {
-          title: '运费',
-          key: 'freightAmt',
-          className: 'tc'
+          title: "运费",
+          key: "freightAmt",
+          className: "tc"
         },
         {
-          title: '手续费',
-          key: 'formalitiesAmt',
-          className: 'tc'
+          title: "手续费",
+          key: "formalitiesAmt",
+          className: "tc"
         },
         {
-          title: '利息收入',
-          key: 'interestIncomeAmt',
-          className: 'tc'
+          title: "利息收入",
+          key: "interestIncomeAmt",
+          className: "tc"
         },
         {
-          title: '利息支出',
-          key: 'interestExpenseAmt',
-          className: 'tc'
+          title: "利息支出",
+          key: "interestExpenseAmt",
+          className: "tc"
         },
         {
-          title: '代收代付',
-          key: 'paymentAmt',
-          className: 'tc'
+          title: "代收代付",
+          key: "paymentAmt",
+          className: "tc"
         },
         {
-          title: '收款所属门店',
-          key: 'orgName',
-          className: 'tc'
+          title: "收款所属门店",
+          key: "orgName",
+          className: "tc"
         },
         {
-          title: '收款人',
-          key: 'collectionName',
-          className: 'tc'
+          title: "收款人",
+          key: "collectionName",
+          className: "tc"
         },
         {
-          title: '收款日期',
-          key: 'receiptDate',
-          className: 'tc'
+          title: "收款日期",
+          key: "receiptDate",
+          className: "tc"
         },
         {
-          title: '备注',
-          key: 'remark',
-          className: 'tc'
+          title: "备注",
+          key: "remark",
+          className: "tc"
         }
       ],
       columns1: [
         {
-          title: '序号',
-          key: 'num',
+          title: "序号",
+          key: "num",
           width: 40,
-          className: 'tc'
+          className: "tc"
         },
         {
-          title: '付款单号',
-          key: 'fno',
-          className: 'tc'
+          title: "付款单号",
+          key: "fno",
+          className: "tc"
         },
         {
-          title: '对账单单号',
-          key: 'serviceId',
-          className: 'tc'
+          title: "对账单单号",
+          key: "serviceId",
+          className: "tc"
         },
         {
-          title: '往来单位',
-          key: 'guestName',
-          className: 'tc'
+          title: "往来单位",
+          key: "guestName",
+          className: "tc"
         },
         {
-          title: '收付类型',
-          key: 'sortName',
-          className: 'tc'
+          title: "收付类型",
+          key: "sortName",
+          className: "tc"
         },
         {
-          title: '核销方式',
-          key: 'furposeName',
-          className: 'tc'
+          title: "核销方式",
+          key: "furposeName",
+          className: "tc"
         },
         {
-          title: '对账应收',
-          key: 'accountsReceivable',
-          className: 'tc'
+          title: "对账应收",
+          key: "accountsReceivable",
+          className: "tc"
         },
         {
-          title: '应收返利',
-          key: 'receivableRebate',
-          className: 'tc'
+          title: "应收返利",
+          key: "receivableRebate",
+          className: "tc"
         },
         {
-          title: '应收坏账',
-          key: 'badDebtReceivable',
-          className: 'tc'
+          title: "应收坏账",
+          key: "badDebtReceivable",
+          className: "tc"
         },
         {
-          title: '对账应付',
-          key: 'reconciliation',
-          className: 'tc'
+          title: "对账应付",
+          key: "reconciliation",
+          className: "tc"
         },
         {
-          title: '应付返利',
-          key: 'dealingRebates',
-          className: 'tc'
+          title: "应付返利",
+          key: "dealingRebates",
+          className: "tc"
         },
         {
-          title: '应付坏账',
-          key: 'badDebtPaying',
-          className: 'tc'
+          title: "应付坏账",
+          key: "badDebtPaying",
+          className: "tc"
         },
         {
-          title: '其他应付款',
-          key: 'otherAmt',
-          className: 'tc'
+          title: "其他应付款",
+          key: "otherAmt",
+          className: "tc"
         },
         {
-          title: '预付账款',
-          key: 'advanceReceipt',
-          className: 'tc'
+          title: "预付账款",
+          key: "advanceReceipt",
+          className: "tc"
         },
         {
-          title: '付款合计',
-          key: 'sumAmt',
-          className: 'tc'
+          title: "付款合计",
+          key: "sumAmt",
+          className: "tc"
         },
         {
-          title: '现金',
-          key: 'cashAmt',
-          className: 'tc'
+          title: "现金",
+          key: "cashAmt",
+          className: "tc"
         },
         {
-          title: 'A卡',
-          key: 'aCardAmt',
-          className: 'tc'
+          title: "A卡",
+          key: "aCardAmt",
+          className: "tc"
         },
         {
-          title: 'B卡',
-          key: 'bCardAmt',
-          className: 'tc'
+          title: "B卡",
+          key: "bCardAmt",
+          className: "tc"
         },
         {
-          title: 'C卡',
-          key: 'cCardAmt',
-          className: 'tc'
+          title: "C卡",
+          key: "cCardAmt",
+          className: "tc"
         },
         {
-          title: 'D卡',
-          key: 'dCardAmt',
-          className: 'tc'
+          title: "D卡",
+          key: "dCardAmt",
+          className: "tc"
         },
         {
-          title: '基本开户A',
-          key: 'aBasicAmt',
-          className: 'tc'
+          title: "基本开户A",
+          key: "aBasicAmt",
+          className: "tc"
         },
         {
-          title: '基本开户B',
-          key: 'bBasicAmt',
-          className: 'tc'
+          title: "基本开户B",
+          key: "bBasicAmt",
+          className: "tc"
         },
         {
-          title: '一般户A',
-          key: 'aOrdinaryAmt',
-          className: 'tc'
+          title: "一般户A",
+          key: "aOrdinaryAmt",
+          className: "tc"
         },
         {
-          title: '一般户B',
-          key: 'bOrdinaryAmt',
-          className: 'tc'
+          title: "一般户B",
+          key: "bOrdinaryAmt",
+          className: "tc"
         },
         {
-          title: '运费',
-          key: 'freightAmt',
-          className: 'tc'
+          title: "运费",
+          key: "freightAmt",
+          className: "tc"
         },
         {
-          title: '手续费',
-          key: 'formalitiesAmt',
-          className: 'tc'
+          title: "手续费",
+          key: "formalitiesAmt",
+          className: "tc"
         },
         {
-          title: '利息收入',
-          key: 'interestIncomeAmt',
-          className: 'tc'
+          title: "利息收入",
+          key: "interestIncomeAmt",
+          className: "tc"
         },
         {
-          title: '利息支出',
-          key: 'interestExpenseAmt',
-          className: 'tc'
+          title: "利息支出",
+          key: "interestExpenseAmt",
+          className: "tc"
         },
         {
-          title: '代收代付',
-          key: 'paymentAmt',
-          className: 'tc'
+          title: "代收代付",
+          key: "paymentAmt",
+          className: "tc"
         },
         {
-          title: '付款所属门店',
-          key: 'orgName',
-          className: 'tc'
+          title: "付款所属门店",
+          key: "orgName",
+          className: "tc"
         },
         {
-          title: '付款人',
-          key: 'collectionName',
-          className: 'tc'
+          title: "付款人",
+          key: "collectionName",
+          className: "tc"
         },
         {
-          title: '付款日期',
-          key: 'receiptDate',
-          className: 'tc'
+          title: "付款日期",
+          key: "receiptDate",
+          className: "tc"
         },
         {
-          title: '备注',
-          key: 'remark',
-          className: 'tc'
+          title: "备注",
+          key: "remark",
+          className: "tc"
         }
       ],
       Branchstore: [],
       value: [],
-      model1: '',
+      model1: "",
       data1: [],
-      data2: []
+      data2: [],
+      row: {}
     };
   },
   methods: {
-    // 快速查询
-    quickDate(data){
-      this.value = data
+    // 往来单位
+    getOne(data){
+      this.companyDealings = data.shortName
+      this.companyDealingsId = data.id
     },
+    // 查询
+    quick() {
+      let obj = {
+        fno:this.collectPayId,
+        serviceId:this.reconciliationId,
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        guestId: this.companyDealingsId,
+      };
+      this.getcapitalAudit(obj);
+    },
+    //审核数据接口
+    getcapitalAudit(obj) {
+      capitalAudit().then(res => {
+        // console.log(res)
+        if (res.data.one.length !== 0) {
+          res.data.one.map((item, index) => {
+            item.num = index + 1;
+            item.sortName = item.sort.name;
+            item.furposeName = item.furpose.name;
+          });
+          this.data1 = res.data.one;
+        }
+        if (res.data.two.lenght !== 0) {
+          res.data.two.map((item, index) => {
+            item.num = index + 1;
+            item.sortName = item.sort.name;
+            item.furposeName = item.furpose.name;
+          });
+          this.data2 = res.data.two;
+        }
+      });
+    },
+    // 快速查询(日期)
+    quickDate(data) {
+      this.value = data;
+    },
+    // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
+    // 确认审核
+    confirmExamine() {
+      let obj = {
+        guestId: this.row.guestId,
+        checkId: this.row.checkId,
+        orgId: this.model1,
+        fno: this.row.fno,
+        id: this.row.id
+      };
+      examineBtn(obj).then(res => {
+        console.log(res);
+      });
+    },
+    // 选中数据
+    selectExamine(row) {
+      this.row = row;
+    },
+    // 审核按钮
+    examine() {
+      if (Object.keys(this.row).length !== 0) {
+        this.capitalexamine = true;
+      } else {
+        this.$message.error("请选择审核的数据");
+      }
+    },
+    // 撤销按钮
+    revokecapital() {
+      if (Object.keys(this.row).length !== 0) {
+        this.revoke = true;
+      } else {
+        this.$message.error("请选择撤销的数据");
+      }
+    },
+    // 导出
+    report(){
+      if(this.tabName === 'key1') {
+        if (this.data1.length !==0) {
+          this.$refs.collectExamine.exportCsv({
+            filename: "应收审核"
+          });
+        } else {
+          this.$message.error('应收审核暂无数据')
+        }
+      } else if(this.tabName === 'key2') {
+        if(this.data2.length!==0){
+          this.$refs.payExamine.exportCsv({
+            filename: "应付审核"
+          });
+        } else {
+          this.$message.error('应付审核暂无数据')
+        }
+      }
+    },
+    // 当前标签页的name
+    tab(name){
+      this.tabName = name
+    }
   }
 };
 </script>

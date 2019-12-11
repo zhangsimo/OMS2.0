@@ -39,16 +39,26 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <Poptip placement="bottom">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+              <div slot="content">
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="report(0)"
+                >导出汇总</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
+              </div>
+            </Poptip>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data"></Table>
+        <Table border :columns="columns" :data="data"  ref="summary" show-summary></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10"></Table>
+        <Table border :columns="columns1" :data="data1" class="mt10"  ref="parts" show-summary></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
@@ -90,6 +100,7 @@ export default {
   },
   data() {
     return {
+      value: [],
       Branchstore: [],
       model1: "",
       modal1: false,
@@ -338,7 +349,27 @@ export default {
       this.$refs.selectDealings.openModel()
     },
     ok (){},
-    cancel (){}
+    cancel (){},
+    // 导出汇总/配件明细
+    report(type) {
+      if (type) {
+        if (this.data1.length !== 0) {
+          this.$refs.parts.exportCsv({
+            filename: "销售出库汇总-配件信息"
+          });
+        } else {
+          this.$message.error("销售出库汇总-配件信息暂无数据");
+        }
+      } else {
+        if (this.data.length !== 0) {
+          this.$refs.summary.exportCsv({
+            filename: "销售出库汇总"
+          });
+        } else {
+          this.$message.error("销售出库汇总暂无数据");
+        }
+      }
+    }
   }
 };
 </script>

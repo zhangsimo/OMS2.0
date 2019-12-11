@@ -44,9 +44,12 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出单据</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="exportSummary"
+                >导出汇总</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportBill">导出单据</button>
               </div>
             </Poptip>
             <button
@@ -67,9 +70,10 @@
           :columns="columns"
           :data="data"
           @on-row-click="selete"
+          ref="summary"
         ></Table>
-        <Tabs active-key="key1" class="mt10">
-          <Tab-pane label="销售清单" key="key1">
+        <Tabs v-model="detailedList" class="mt10" @click="tabName">
+          <Tab-pane label="销售清单" name="key1">
             <Table
               border
               :columns="columns1"
@@ -77,9 +81,10 @@
               class="mt10"
               max-height="400"
               show-summary
+              ref="sale"
             ></Table>
           </Tab-pane>
-          <Tab-pane label="采购清单" key="key2">
+          <Tab-pane label="采购清单" name="key2">
             <Table
               border
               :columns="columns2"
@@ -87,6 +92,7 @@
               class="mt10"
               max-height="400"
               show-summary
+              ref="purchase"
             ></Table>
           </Tab-pane>
         </Tabs>
@@ -135,17 +141,17 @@
     <Modal v-model="outStock" title="出库明细" width="1200">
       <div class="db">
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)">导出</button>
       </div>
-      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary></Table>
+      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary ref="noWarehousing"></Table>
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
       <div class="db">
         <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)">导出</button>
       </div>
-      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary></Table>
+      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary ref="warehousing"></Table>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
@@ -171,6 +177,7 @@ export default {
   },
   data() {
     return {
+      detailedList: "key1",
       value: [],
       model1: "",
       model2: "",
@@ -787,8 +794,8 @@ export default {
   },
   methods: {
     // 快速查询
-    quickDate(data){
-      this.value = data
+    quickDate(data) {
+      this.value = data;
     },
     // 选择日期
     changedate(daterange) {
@@ -866,7 +873,7 @@ export default {
     },
     // 月结对账
     Monthlyreconciliation() {
-        // this.$refs.Monthlyreconciliation.modal = true;
+      // this.$refs.Monthlyreconciliation.modal = true;
       if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
         this.$refs.Monthlyreconciliation.modal = true;
       } else {
@@ -902,6 +909,52 @@ export default {
         detailed = res.data;
       });
       return { detailed, partCode, qty, orderAmt, noTaxAmt, taxAmt };
+    },
+    // 导出汇总
+    exportSummary() {
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: "应收应付汇总表"
+        });
+      } else {
+        this.$message.error('应收应付汇总表暂无数据')
+      }
+    },
+    // 当前标签页的name
+    tabName(name) {
+      this.detailedList = name;
+    },
+    // 导出单据
+    exportBill() {
+      if (this.detailedList === "key1") {
+        if(this.data1.length!==0){
+          this.$refs.sale.exportCsv({
+            filename: "销售清单"
+          });
+        } else {
+          this.$message.error('销售清单暂无数据')
+        }
+      } else if (this.detailedList === "key2") {
+        if(this.data2.length !==0) {
+          this.$refs.purchase.exportCsv({
+            filename: "采购清单"
+          });
+        } else {
+          this.$message.error('销售清单暂无数据')
+        }
+      }
+    },
+    // 出/入库明细导出
+    exportDetail(type){
+      if(type) {
+        this.$refs.warehousing.exportCsv({
+          filename: '入库单配件明细'
+        })
+      } else{
+        this.$refs.noWarehousing.exportCsv({
+          filename: '出库单配件明细'
+        })
+      }
     }
   }
 };

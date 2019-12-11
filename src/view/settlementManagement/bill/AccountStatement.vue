@@ -45,7 +45,13 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <Poptip placement="bottom">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+              <div slot="content">
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
+              </div>
+            </Poptip>
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
@@ -71,6 +77,7 @@
           max-height="400"
           @on-row-click="morevis"
           highlight-row
+          ref="accountStatement"
         ></Table>
         <Page :total="pagetotal" show-elevator class="mt10 tr" @on-change="pageCode" show-total />
         <div class="flex mt20">
@@ -85,12 +92,26 @@
               show-summary
             ></Table>
           </div>
-          <Tabs value="name1" class="ml20" style="flex:1" :animated="false">
+          <Tabs v-model="tab" class="ml20" style="flex:1" :animated="false" @click="tabName">
             <TabPane label="应收单据明细" name="name1">
-              <Table border :columns="columns3" :data="data3" max-height="400" show-summary></Table>
+              <Table
+                border
+                :columns="columns3"
+                :data="data3"
+                max-height="400"
+                show-summary
+                ref="collectBill"
+              ></Table>
             </TabPane>
             <TabPane label="应付单据明细" name="name2">
-              <Table border :columns="columns4" :data="data4" max-height="400" show-summary></Table>
+              <Table
+                border
+                :columns="columns4"
+                :data="data4"
+                max-height="400"
+                show-summary
+                ref="payBill"
+              ></Table>
             </TabPane>
           </Tabs>
         </div>
@@ -99,37 +120,43 @@
           <Steps :current="1">
             <Step title="提交人">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
             <Step title="店长">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
             <Step title="会计">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
             <Step title="财务总监">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
             <Step title="总经理">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
             <Step title="出纳">
               <div slot="content">
-                <span>审批人：{{}}</span><br/>
+                <span>审批人：{{}}</span>
+                <br />
                 <span>审批时间：{{}}</span>
               </div>
             </Step>
@@ -176,7 +203,7 @@
         <input type="text" class="w200" v-model="text" />
       </div>
     </Modal>
-    <Modal v-model="Settlement" title="收付款结算" width="1200">
+    <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
       <div class="db">
         <button class="ivu-btn ivu-btn-default mr10" type="button">保存</button>
         <button class="ivu-btn ivu-btn-default mr10" type="button">关闭</button>
@@ -203,11 +230,12 @@
           :edit-config="{trigger: 'click', mode: 'cell'}"
           @edit-actived="editActivedEvent"
           @edit-closed="editClosedEvent"
+          :span-method="mergeCol"
         >
-          <vxe-table-column field="businessType" title="业务类型"></vxe-table-column>
-          <vxe-table-column field="accountsReceivable" title="对账金额"></vxe-table-column>
-          <vxe-table-column field="accepted" title="已收金额"></vxe-table-column>
-          <vxe-table-column field="uncollected" title="未收金额"></vxe-table-column>
+          <vxe-table-column field="itemName" title="业务类型"></vxe-table-column>
+          <vxe-table-column field="itemCode" title="对账金额"></vxe-table-column>
+          <vxe-table-column field="itemCode" title="已收金额"></vxe-table-column>
+          <vxe-table-column field="itemCode" title="未收金额"></vxe-table-column>
           <vxe-table-column
             field="noCharOffAmt"
             title="本次核销金额"
@@ -249,7 +277,8 @@ import { creat } from "./../components";
 import {
   AccountStatement,
   Record,
-  detailsDocuments
+  detailsDocuments,
+  dictionaries
 } from "@/api/bill/saleOrder";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
@@ -261,6 +290,7 @@ export default {
   },
   data() {
     return {
+      tab: "name1",
       falg: true,
       reconciliationStatement: {},
       tableData: [],
@@ -518,18 +548,33 @@ export default {
           className: "tc"
         },
         {
+          title: "出库单号",
+          key: "serviceId",
+          className: "tc"
+        },
+        {
           title: "应收金额",
           key: "rpAmt",
           className: "tc"
         },
         {
-          title: "已收金额",
+          title: "前期已对账金额",
           key: "charOffAmt",
           className: "tc"
         },
         {
-          title: "未收金额",
+          title: "前期未对账金额",
           key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "本次不对账金额",
+          key: "thisNoAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "本次对账金额",
+          key: "thisAccountAmt",
           className: "tc"
         }
       ],
@@ -556,18 +601,33 @@ export default {
           className: "tc"
         },
         {
+          title: "入库单号",
+          key: "serviceId",
+          className: "tc"
+        },
+        {
           title: "应付金额",
           key: "rpAmt",
           className: "tc"
         },
         {
-          title: "已付金额",
+          title: "前期已对账金额",
           key: "charOffAmt",
           className: "tc"
         },
         {
-          title: "未付金额",
+          title: "前期未对账金额",
           key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "本次不对账金额",
+          key: "thisNoAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "本次对账金额",
+          key: "thisAccountAmt",
           className: "tc"
         }
       ],
@@ -602,6 +662,7 @@ export default {
     // 应收/付单据接口
     getdetailsDocuments(obj) {
       detailsDocuments(obj).then(res => {
+        console.log(res);
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.num = index + 1;
@@ -701,11 +762,10 @@ export default {
     // 查看对账单
     viewStatement() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
-        this.$refs.reconciliation.modal = true;
         if (this.reconciliationStatement.statementStatusName === "草稿") {
-          this.$refs.Monthlyreconciliation.modal = true
+          this.$refs.Monthlyreconciliation.modal = true;
         } else {
-          this.$refs.reconciliation.modal = true
+          this.$refs.reconciliation.modal = true;
         }
       } else {
         this.$message.error("请勾选要查看的对账单");
@@ -716,7 +776,7 @@ export default {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         if (
           this.reconciliationStatement.pass &&
-          (this.reconciliationStatement.statementStatusName === "审核通过" ||
+          (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
           this.Settlement = true;
@@ -730,7 +790,96 @@ export default {
       }
     },
     editActivedEvent() {},
-    editClosedEvent() {}
+    editClosedEvent() {},
+    // 导出对账单/单据明细
+    report(type) {
+      if (type) {
+        if (this.tab === "name1") {
+          if (this.data3.length !== 0) {
+            this.$refs.collectBill.exportCsv({
+              filename: "应收单据明细"
+            });
+          } else {
+            this.$message.error("应收单据明细暂无数据");
+          }
+        } else if (this.tab === "name2") {
+          if (this.data4.length !== 0) {
+            this.$refs.payBill.exportCsv({
+              filename: "应付单据明细"
+            });
+          } else {
+            this.$message.error("应付单据明细暂无数据");
+          }
+        }
+      } else {
+        if (this.data1.length !== 0) {
+          this.$refs.accountStatement.exportCsv({
+            filename: "对账单"
+          });
+        } else {
+          this.$message.error("对账单暂无数据");
+        }
+      }
+    },
+    // tab标签页当前的name
+    tabName(name) {
+      this.tab = name;
+    },
+    // 业务类型/收款账户
+    hander() {
+      dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
+        this.tableData = res.data.itemVOS;
+        console.log(this.tableData);
+        this.tableData.push(
+          {
+            itemName: "合计"
+          },
+          {
+            itemName: "核对"
+          },
+          {
+            itemName: "备注"
+          }
+        );
+      });
+      dictionaries({ dictCode: "dictCode =PAYMENT_AMT_TYPE" }).then(res => {
+        console.log(res);
+        // this.tableData = res.data.itemVOS
+        // console.log(this.tableData)
+        // this.tableData.push({
+        //   itemName: '合计'
+        // },{
+        //   itemName: '核对'
+        // },{
+        //   itemName: '备注'
+        // },)
+      });
+    },
+    // 合并列
+    mergeCol({
+      seq,
+      row,
+      rowIndex,
+      $rowIndex,
+      column,
+      columnIndex,
+      $columnIndex,
+      data
+    }) {
+      console.log(column, columnIndex, $columnIndex, data);
+      console.log(seq, row, rowIndex, $rowIndex);
+      if (rowIndex > 5) {
+        if(columnIndex === 1){
+          return {
+            colspan: 6
+          }; 
+        } else if(columnIndex > 1) {
+          return {
+            colspan:0
+          }
+        }
+      }
+    }
   }
 };
 </script>
