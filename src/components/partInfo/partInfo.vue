@@ -1,7 +1,7 @@
 <template>
   <div>
     <Modal v-model="proModal" title="配件资料" width="700">
-      <div class="pb10 tr" v-if="!isAddPart">
+      <div class="pb10 tr" v-if="!isAddPart || isSellDis">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
@@ -236,7 +236,8 @@
   export default {
 		name: "partInfo",
     props:{
-		  isAddPart:false
+      isAddPart:false,
+      isSellDis: false,
     },
     components: {SearchPartName},
     mixins:[mixPartInfo],
