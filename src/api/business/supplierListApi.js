@@ -28,3 +28,13 @@ export function saveDraft (data) {
     data
   })
 }
+
+//删除配件
+// /sellOutDetail/delete
+export function sellOrderReturn (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/delete`,
+    method: 'post',
+    data
+  })
+}

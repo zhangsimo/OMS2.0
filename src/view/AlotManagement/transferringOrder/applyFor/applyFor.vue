@@ -174,7 +174,7 @@
   import More from './compontents/More'
   // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
   import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
-  import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
+  import SelectSupplier from "./compontents/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import supplier from './compontents/supplier'
@@ -388,6 +388,7 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
+          console.log(this.$refs['formPlan'].validate())
           this.$refs['formPlan'].validate((valid) => {
             if (valid) {
               let data = {}

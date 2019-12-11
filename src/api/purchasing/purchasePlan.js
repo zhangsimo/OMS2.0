@@ -17,6 +17,15 @@ export function getSupplierList(data) {
     data
   })
 }
+// 获取供应商列表
+// /guest/findForAllot
+export function findForAllot(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findForAllot`,
+    method: 'post',
+    data
+  })
+}
 
 //获取票据类型，直发门店下拉框数据
 export function getPurchaseInit(data) {
