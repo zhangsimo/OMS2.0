@@ -94,14 +94,14 @@ export default [
         component: () => import("@/view/goods/InterPurchase/InterPurchase.vue")
       },
       {
-        path: "/goods/goodsList",
-        name: "goodsList4",
+        path: "/goods/temporary-purchase",
+        name: "temporaryPurchase",
         mark: '1003',
         meta: {
           icon: "arrow-graph-up-right",
           title: "临时采购订单"
         },
-        component: () => import("@/view/goods/goodsList/goodsList.vue")
+        component: () => import("@/view/goods/temporaryPurchase/index.vue")
       },
       {
         path: "/goods/categoryList",

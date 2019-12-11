@@ -15,6 +15,7 @@ import ProcurementModal from './components/ProcurementModal.vue';
 import AdjustModel from './components/AdjustModel.vue';
 import TabsModel from './components/TabsModel.vue';
 import PrintModel from './components/print.vue';
+import StatusModal from './components/checkApprovalModal.vue';
 
 @Component({
   components: {
@@ -27,7 +28,8 @@ import PrintModel from './components/print.vue';
     ProcurementModal,
     AdjustModel,
     TabsModel,
-    PrintModel
+    PrintModel,
+    StatusModal
   }
 })
 export default class PlannedPurchaseOrder extends Vue {
