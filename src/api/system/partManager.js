@@ -68,10 +68,11 @@ export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
 }
 
 // wb配件资料
-export function getwbParts(data) {
+export function getwbParts(params, data) {
   return axios.request({
-    url: `${api.wmsApi}/wbParts/queryAll?page=${data.page}&size=${data.size}`,
+    url: `${api.wmsApi}/wbParts/queryAll`,
     method: "post",
+    params,
     data
   });
 }

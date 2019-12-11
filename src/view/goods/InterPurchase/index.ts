@@ -272,7 +272,7 @@ export default class InterPurchase extends Vue {
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
-    let res = await api.saveDraft(data);
+    let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
@@ -290,7 +290,7 @@ export default class InterPurchase extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
-        let res = await api.saveCommit(data);
+        let res = await api.saveInterCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
           this.getListData();
@@ -354,7 +354,7 @@ export default class InterPurchase extends Vue {
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
-        let res: any = await api.saveObsolete(this.selectTableRow.id);
+        let res: any = await api.saveInterObsolete(this.selectTableRow.id);
         if (res.code == 0) {
           this.$Message.success('作废成功');
           this.getListData();
@@ -640,8 +640,14 @@ export default class InterPurchase extends Vue {
     transportScale: 0, // 运杂费比例
     vatScale: 0 // 增值税比例
   }
-  private getFeeForm(form: any) {
+  private async getFeeForm(form: any) {
+    if(form === null) return;
     this.feeform = form;
+    let data = Object.assign({}, this.selectTableRow, this.feeform);
+    let res:any = await api.calculatAmt(data);
+    if(res.cdoe == 0) {
+      this.tableData = res.data || [];
+    }
   }
 
   private mounted() {

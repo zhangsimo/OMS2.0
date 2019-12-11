@@ -493,7 +493,7 @@ export default class Fittings extends Vue {
           data.adapterCarModels = [qurry];
           break;
         case "3":
-          data.keyWord = qurry;
+          data.pinyin = qurry;
           break;
         default:
           break;
