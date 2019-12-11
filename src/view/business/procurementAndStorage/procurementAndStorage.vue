@@ -9,7 +9,7 @@
       <Button type="default"   @click="openQueryModal" class="mr10"><Icon type="ios-more" />更多</Button>
       <Button type="default" class="mr10 w90" @click="addNew"><Icon type="md-add" size="14" /> 新增</Button>
       <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusId != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-      <Button class="mr10" :disabled="formPlan.billStatusId != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
+      <Button class="mr10" @click="godown" :disabled="formPlan.billStatusId != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
       <Button class="mr10" :disabled="formPlan.billStatusId != 0" @click="selectPlan"> 选择采购订单</Button>
       <Button class="mr10" @click="setPrint"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
       <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusId != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
