@@ -48,6 +48,25 @@ export function queryByConditions(params, data = {}) {
   });
 }
 
+// 国际采购主数据-分页查询
+export function findPageByInternationDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+}
+// 国际采购主数据-高级查询
+export function queryByInternationConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+}
+
 // 采购计划单
 export function getPchsPlan(params, data = {}) {
   return axios.request({

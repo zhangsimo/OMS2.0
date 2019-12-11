@@ -347,6 +347,8 @@
                      if(this.title == '员工离职'){
                          this.newStaff.office = 1
                      }
+                     this.newStaff.single =  this.newStaff.single ? 1 : 0
+                     this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
                      changeeditUser(this.newStaff).then( res => {
                          stop()
                          if(res.code ==0){
@@ -373,22 +375,9 @@
               }
               this.title= '修改员工信息'
               this.modalShow =true
-              this.newStaff.userName=this.oneStaffChange.userName, //用户名
-                  this.newStaff.phone= this.oneStaffChange.phone,   //电话
-                  this.newStaff.gender=this.oneStaffChange.gender, //性别
-                  this.newStaff.birthDay=this.oneStaffChange.birthDay,//生日
-                  this.newStaff.cardId=this.oneStaffChange.cardId, //身份证
-                  this.newStaff.wechatId=this.oneStaffChange.wechatId, //微信号
-                  this.newStaff.entryTime=this.oneStaffChange.entryTime,//入职日期
-                  this.newStaff.emergencyContact=this.oneStaffChange.emergencyContact, //紧急联系人
-                  this.newStaff.emergencyContactPhone=this.oneStaffChange.emergencyContactPhone, //紧急联系人电话
-                  this.newStaff.costPrice=this.oneStaffChange.costPrice,
-                  this.newStaff.salesman=this.oneStaffChange.salesman, //
-                  this.newStaff.id=this.oneStaffChange.id,      //id
-                  this.newStaff.sureCost=this.oneStaffChange.sureCost, //成本价
-                  this.newStaff.business=this.oneStaffChange.business, // 业务员
-                  this.newStaff.single= this.oneStaffChange.single == 1 ? true: false  //允许查看
-                  this.newStaff.singtwo=this.oneStaffChange.singtwo == 1 ? true : false, //允许提交
+              this.newStaff=this.oneStaffChange //用户名
+                  this.newStaff.single= this.newStaff.single == 1 ? true: false  //允许查看
+                  this.newStaff.singtwo=this.newStaff.singtwo == 1 ? true : false, //允许提交
                   this.newStaff.office=0, //是否在职默认在职
                   this.newStaff.openSystem=0,
                   this.newStaff.groupId=0 //所属机构

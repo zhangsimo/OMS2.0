@@ -132,7 +132,6 @@
 </template>
 
 <script>
-  import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
   import PartInfo from "_c/partInfo/partInfo";
   import {mixSelectPartCom} from "./mixSelectPartCom";
 

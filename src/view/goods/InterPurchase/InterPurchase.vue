@@ -56,7 +56,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != '草稿'"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
@@ -300,6 +300,15 @@
                       >采购金额填写</Button
                     >
                   </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="showModel('apportionmentExpenses')"
+                      :disabled="isInput"
+                      >分摊费用填写</Button
+                    >
+                  </div>
                 </div>
               </div>
               <vxe-table
@@ -355,6 +364,7 @@
                     ></InputNumber>
                   </template>
                 </vxe-table-column>
+
                 <vxe-table-column
                   field="orderPrice"
                   title="采购单价"
@@ -465,6 +475,8 @@
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
+    <!-- 分摊费用 -->
+    <apportionment-expenses ref="apportionmentExpenses" @feeForm="getFeeForm"></apportionment-expenses>
   </div>
 </template>
 
