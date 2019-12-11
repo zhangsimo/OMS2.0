@@ -159,6 +159,9 @@ export default class ProcurementModal extends Vue {
   private ok() {
     if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
     this.shows = false;
+    this.selectRow.details.forEach((el:any) => {
+      Reflect.deleteProperty(el, 'id');
+    })
     return this.selectRow;
   }
 
@@ -179,6 +182,7 @@ export default class ProcurementModal extends Vue {
 
   private reset() {
     this.auditDate = new Array();
+    this.tableDataBm = new Array();
     // this.guestId = "";
     // this.guestname = "";
     this.serviceId = "";

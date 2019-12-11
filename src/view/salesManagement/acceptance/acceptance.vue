@@ -419,7 +419,7 @@
         let page = this.page.num - 1
         let size = this.page.size
         getTopList(size, page, data).then(res => {
-          console.log('打印出来的数据',res)
+          // console.log('打印出来的数据',res)
 
           if (res.code === 0) {
             // res.data.content.map(item => item.status = JSON.parse(item.status))
@@ -434,7 +434,7 @@
       //获取下侧表格一行选中的数据
       selectTabelData(v) {
         this.currentRow = v
-        console.log('99999', this.currentRow)
+        // console.log('99999', this.currentRow)
         this.BottomTableData = v.row.detailVOList
         // console.log('下表格数据', this.BottomTableData)
       },
