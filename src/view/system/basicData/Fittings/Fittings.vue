@@ -220,6 +220,7 @@
     <part-info
       ref="partInfo"
       :is-add-part="true"
+      :isSellDis="true"
       @throwData="submitSave"
     ></part-info>
   </main>

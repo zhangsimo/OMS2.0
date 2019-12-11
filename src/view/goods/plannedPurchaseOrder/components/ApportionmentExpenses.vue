@@ -31,7 +31,7 @@
         <InputNumber
           :min="0"
           :max="100"
-          v-model="formInline.tariff"
+          v-model="formInline.tariffScale"
           :formatter="value => `${value}%`"
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
@@ -42,7 +42,7 @@
         <InputNumber
           :min="0"
           :max="100"
-          v-model="formInline.transportation"
+          v-model="formInline.transportScale"
           :formatter="value => `${value}%`"
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
@@ -53,7 +53,7 @@
         <InputNumber
           :min="0"
           :max="100"
-          v-model="formInline.valueAddedTax"
+          v-model="formInline.vatScale"
           :formatter="value => `${value}%`"
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
@@ -81,18 +81,18 @@ export default class ApportionmentExpenses extends Vue {
   private formInline = {
     currency: "", // 币种
     exchangeRate: 0, // 汇率
-    tariff: 0, // 关税比例
-    transportation: 0, // 运杂费比例
-    valueAddedTax: 0 // 增值税比例
+    tariffScale: 0, // 关税比例
+    transportScale: 0, // 运杂费比例
+    vatScale: 0 // 增值税比例
   };
 
   private reset() {
     this.formInline = {
       currency: "", // 币种
       exchangeRate: 0, // 汇率
-      tariff: 0, // 关税比例
-      transportation: 0, // 运杂费比例
-      valueAddedTax: 0 // 增值税比例
+      tariffScale: 0, // 关税比例
+      transportScale: 0, // 运杂费比例
+      vatScale: 0 // 增值税比例
     };
   }
 

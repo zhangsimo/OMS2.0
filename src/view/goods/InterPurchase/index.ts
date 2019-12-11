@@ -633,12 +633,12 @@ export default class InterPurchase extends Vue {
   }
 
   // 分摊费用
-  private feeform: any = {
+  private feeform = {
     currency: "", // 币种
     exchangeRate: 0, // 汇率
-    tariff: 0, // 关税比例
-    transportation: 0, // 运杂费比例
-    valueAddedTax: 0 // 增值税比例
+    tariffScale: 0, // 关税比例
+    transportScale: 0, // 运杂费比例
+    vatScale: 0 // 增值税比例
   }
   private getFeeForm(form: any) {
     this.feeform = form;
