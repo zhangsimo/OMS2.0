@@ -374,13 +374,14 @@
                   return false
               }
               this.title= '修改员工信息'
-              this.modalShow =true
               this.newStaff=this.oneStaffChange //用户名
                   this.newStaff.single= this.newStaff.single == 1 ? true: false  //允许查看
                   this.newStaff.singtwo=this.newStaff.singtwo == 1 ? true : false, //允许提交
                   this.newStaff.office=0, //是否在职默认在职
                   this.newStaff.openSystem=0,
                   this.newStaff.groupId=0 //所属机构
+              this.newStaff = JSON.parse(this.newStaff.groundIds)
+              this.modalShow =true
           },
           //员工离职
           changeDimission(){
