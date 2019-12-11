@@ -580,11 +580,13 @@ export default class Fittings extends Vue {
     }
     if(res.code == 0) {
       self.$Message.success(success);
-    }
-    if(this.isSys) {
-      this.initCloudPartInfo();
-    } else {
-      this.initLocalPartInfo();
+      const localTable:any = this.$refs.localTable;
+      localTable.clearCurrentRow();
+      if(this.isSys) {
+        this.initCloudPartInfo();
+      } else {
+        this.initLocalPartInfo();
+      }
     }
   }
   // 导入
@@ -608,11 +610,13 @@ export default class Fittings extends Vue {
     }
     if(res.code == 0) {
       self.$Message.success(success);
-    }
-    if(this.isSys) {
-      this.initCloudPartInfo();
-    } else {
-      this.initLocalPartInfo();
+      const localTable:any = this.$refs.localTable;
+      localTable.clearCurrentRow();
+      if(this.isSys) {
+        this.initCloudPartInfo();
+      } else {
+        this.initLocalPartInfo();
+      }
     }
   }
   // 单选行

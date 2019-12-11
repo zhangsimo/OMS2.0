@@ -76,7 +76,7 @@ export default class ApportionmentExpenses extends Vue {
   private sumMod: boolean = false;
 
   // 币种
-  private currencies: Array<Option> = [];
+  @Prop(Array) private readonly currencies;
 
   private formInline = {
     currency: "", // 币种

@@ -108,8 +108,8 @@
       </vxe-table>
     </div>
     <div slot="footer">
-      <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button>
+      <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
+      <Button @click="cancel">取消</Button> -->
     </div>
      <!-- 供应商资料
     <select-supplier
