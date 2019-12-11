@@ -1,6 +1,6 @@
 <template>
   <Modal
-    title="选择采购计划单"
+    title="选择采购订单"
     v-model="shows"
     :styles="{ top: '50px', width: '1000px' }"
   >
@@ -13,15 +13,17 @@
             type="daterange"
             placement="bottom-end"
             placeholder="请选择日期"
-            style="width: 120px"
+            style="width: 200px"
             v-model="auditDate"
           ></DatePicker>
         </div>
-        <!-- <div class="db mr5">
-          <Input placeholder="请选择供应商" v-model="guestname"  @on-focus="showModel('selectSupplier')" />
-        </div> -->
+         <div class="db mr5">
+           <Select v-model="client" filterable style="width: 200px" placeholder="请选择客户" >
+             <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+           </Select>
+        </div>
         <div class="db mr5">
-          <Input placeholder="订单号" v-model="serviceId" />
+          <Input placeholder="采购单号" v-model="serviceId" />
         </div>
         <div class="db mr5">
           <Button class="w90" type="warning" @click="query">
@@ -62,11 +64,11 @@
           title="序号"
           width="60"
         ></vxe-table-column>
-        <vxe-table-column field="serviceId" title="计划单号"></vxe-table-column>
-        <vxe-table-column field="guest" title="供应商"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="计划采购日期"></vxe-table-column>
-        <vxe-table-column field="orderMan" title="计划员"></vxe-table-column>
-        <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
+        <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
+        <vxe-table-column field="orderQty" title="采购总数"></vxe-table-column>
+        <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
+        <vxe-table-column field="settleTypeName" title="结算方式"></vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
@@ -100,16 +102,19 @@
         ></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="orderQty" title="计划采购数量"></vxe-table-column>
-        <vxe-table-column field="adjustQty" title="调整数量"></vxe-table-column>
-        <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>
-        <vxe-table-column field="notEnterQty" title="未转订单数量"></vxe-table-column>
+        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+        <vxe-table-column field="unit" title="单位"></vxe-table-column>
+        <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
+        <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
+        <vxe-table-column field="orderPrice" title="采购单价"></vxe-table-column>
+        <vxe-table-column field="orderAmt" title="采购金额"></vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot="footer">
-      <!-- <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button> -->
+      <Button class="mr15" type="primary" @click="ok">确定</Button>
+      <Button @click="cancel">取消</Button>
     </div>
      <!-- 供应商资料
     <select-supplier
@@ -124,7 +129,7 @@
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 // @ts-ignore
-import * as api from "_api/procurement/plan";
+import {getBuy} from '@/api/business/procurementAndStorage'
 // import SelectSupplier from "./selectSupplier.vue";
 
 @Component
@@ -132,10 +137,11 @@ export default class ProcurementModal extends Vue {
   private shows: boolean = false;
   private selectRow: any = null;
 
-  @Prop(String)
-  private readonly guestId;
+  @Prop(String) readonly guestId;
+  @Prop(Array) readonly clientList;
 
-  private auditDate:Array<Date> = [];
+
+    private auditDate:Array<Date> = [];
   // private guestname:string = "";
   private serviceId:string = "";
 
@@ -144,6 +150,8 @@ export default class ProcurementModal extends Vue {
     size: 10,
     total: 0
   };
+
+  private client: any = ''
 
   private tableData: Array<any> = new Array();
 
@@ -185,7 +193,7 @@ export default class ProcurementModal extends Vue {
   }
 
   private cellClickEvent() {
-    console.log("单元格点击事件");
+    // console.log("单元格点击事件");
   }
   private radioChangeEvent({ row }) {
     this.selectRow = row;
@@ -200,10 +208,11 @@ export default class ProcurementModal extends Vue {
   private async getPchsPlanList() {
     let params: any = {};
     let data:any = {
-      guestId: this.guestId,
+      guestId: this.client,
       serviceId: this.serviceId,
       auditStartDate: tools.transTime(this.auditDate[0]),
       auditEndDate: tools.transTime(this.auditDate[1]),
+
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;
@@ -213,7 +222,7 @@ export default class ProcurementModal extends Vue {
         formData[k] = data[k];
       }
     }
-    let res:any = await api.getPchsPlan(params, formData);
+    let res:any = await getBuy(params, formData);
     if(res.code == 0) {
       this.page.total = res.data.totalElements;
       this.tableData = res.data.content;

@@ -402,7 +402,6 @@ export default {
   methods: {
     //获取左侧列表
     getList() {
-      debugger
       //获取右边仓库数据
       getstate()
         .then(res=> {
@@ -414,7 +413,7 @@ export default {
             this.$Message.info('获取仓库信息失败') //获取仓库数据
         })
       //获取左边数据
-      
+
       let data = {}
         if(this.purchaseType == "-1"){
             this.purchaseType = null
@@ -425,10 +424,8 @@ export default {
             // data = this.query
         let page = this.Left.page.num -1
         let size = this.Left.page.size
-        debugger
         getLeftList(data,page,size)
           .then(res => {
-            debugger
             console.log(res)
             if (res.code === 0) {
               this.Left.tbdata = res.data.content || []

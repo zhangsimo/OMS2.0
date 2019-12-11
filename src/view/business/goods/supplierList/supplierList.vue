@@ -8,7 +8,7 @@
               <span>快速查询：</span>
               <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
               <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
-                <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
+                <Option v-for="item in statusArr" :value="item.value" :key="item.value">{{item.label}}</Option>
               </Select>
             </div>
             <div class="db">
@@ -24,7 +24,7 @@
               <Button class="mr10" @click="instance" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
+              <Button class="mr10" :disabled="presentrowMsg !== 1"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
             </div>
             <div class="db">
               <Button @click="cancellation" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
@@ -54,6 +54,7 @@
                 </div>
                 <div class="clearfix purchase" ref="planForm">
                   <Form inline
+                        :model="formPlan"
                         :show-message="false"
                         ref="formPlan"
                         :rules="ruleValidate"
@@ -66,7 +67,7 @@
                     </FormItem>
                     <FormItem label="退货员：" prop="storeId" >
                       <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId">
-                        <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in userMap" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="退货日期：" prop="orderDate" class="fs12">
@@ -79,25 +80,24 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="采退单号：" prop="numbers" class="fs12">
-                    <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.numbers"></Input>
+                    <Input class="w160" :disabled="true" v-model="formPlan.numbers"></Input>
                     </FormItem>
                     <FormItem label="退货原因：" prop="cause">
                       <Select class="w120" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.cause">
-                        <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="结算方式：" prop="clearing">
                       <Select class="w120" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.clearing">
-                        <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        <Option v-for="item in settleMethods" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
                     <FormItem label="退货仓库：" prop="planner">
-                      <!--<Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>-->
-                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.createUname">
-                        <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.warehouse">
+                        <Option v-for="item in inStores" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="采购订单:" prop="planOrderNum" class="">
@@ -132,42 +132,42 @@
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="可退数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="applyQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderQty"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="applyQty" title="退货单价" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderPrice"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="applyQty" title="退货金额" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column field="orderAmt" title="退货金额" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.orderQty * row.orderPrice"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
+                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                  <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
                 </vxe-table>
                 <!--<div ref="planPage">-->
                   <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
@@ -181,7 +181,7 @@
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择采购计划弹窗-->
-      <procurement-modal ref="procurementModal" :guestId="formPlan.guestidId" @getPlanOrder="getPlanOrder"></procurement-modal>
+      <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder"></procurement-modal>
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -190,7 +190,6 @@
   </div>
 </template>
 <script>
-  // import {getSupplierList} from '_api/business/supplierApi'
   import * as tools from "../../../../utils/tools";
 
   import QuickDate from '../../../../components/getDate/dateget'
@@ -200,7 +199,7 @@
   import "../../../goods/goodsList/goodsList.less";
   import PrintShow from "./compontents/PrintShow";
   import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
-  import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
+  import { optGroup, findPageByDynamicQuery,saveDraft } from '../../../../api/business/supplierListApi';
   export default {
     name: 'supplierList',
     components: {
@@ -229,42 +228,36 @@
         PTrow: {//新增当前行
           new: true,
           _highlight: true,
-          status: {"name":"草稿","value":0},
+          billStatusId: {name: "草稿", value: 0, enum: "DRAFT"},
           guestName: '',
+          createTime: tools.transTime(new Date()),
           createUname: '',
           serviceId: '',
           orderMan:'',
-          orderDate: '',
-          printing: '',
-          createTime: tools.transTime(new Date()),
+          printTimes: '',
+          auditor: '',
+          auditStartTime: '',
           detailVOS: [],
         },
         //表单验证
         ruleValidate: {
-          guestName: [{ required: true, type:'string',message: '供应商不能为空', trigger: 'blur' }],
-          storeId: [{ required: true,type:'string', message: '请选择退货员', trigger: 'blur' }],
-          orderDate: [{ required: true,type: 'date', message: '请选择退货日期', trigger: 'blur' }],
-          cause: [{ required: true,type: 'string', message: '请选择退货原因', trigger: 'blur' }],
-          clearing: [{ required: true,type: 'string', message: '请选择结算方式', trigger: 'blur' }],
+          guestName: [{ required: true,type: 'string',message: '供应商不能为空', trigger: 'blur' }],
+          // storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'blur' }], //暂时不验证。。。
+          orderDate: [{ required: true,type: 'date', message: '请选择退货日期', trigger: 'change' }],
+          cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'blur' }],
+          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'blur' }]
         },
         datadata: null,
         rowId:'', //当前行的id
         buttonDisable: true,
         buttonDisableTwo: true,
         split1:0.2,
-        purchaseType: '9999',
-        purchaseTypeArr:[
-          { label:'所有',value:'9999' },
-          { label:'草稿',value:'DRAFT' },
-          { label:'待受理',value:'UNACCEPTED' },
-          { label:'已受理',value:'ACCEPTED' },
-          { label:'待分拣',value:'SORTING' },
-          { label:'待发货',value:'SHIPPED' },
-          { label:'已出库',value:'STOCKING' },
-          { label:'已入库',value:'WAREHOUSING' },
-          { label:'已拒绝',value:'REJECTED' },
-          { label:'已作废',value:'INVALID' },
-        ],
+        purchaseType: '99',
+        statusArr:[], //状态
+        settleMethods: [], //结算方式
+        inStores: [], //退货仓
+        purchaseTypeArr: [], //退货原因
+        userMap: [], //退货员
         //校验输入框的值
         validRules: {
           applyQty: [
@@ -290,11 +283,10 @@
             },
             {
               title: '状态',
-              key: 'status',
+              key: 'billStatusId',
               minWidth: 70,
               render:(h,params) => {
-                // let Identity = JSON.parse(params.row.status ||{})
-                let name = params.row.status.name
+                let name = params.row.billStatusId.name
                 return h('span',name)
               }
             },
@@ -320,18 +312,18 @@
             },
             {
               title: '打印次数',
-              key: 'printing',
+              key: 'printTimes',
               minWidth: 70
             },
             {
               title: '提交人',
-              key: 'orderMan',
+              key: 'auditor',
               minWidth: 100
             },
             {
               title: '提交日期',
               align:'center',
-              key: 'orderDate',
+              key: 'auditStartTime',
               minWidth: 170
             }
           ],
@@ -366,9 +358,9 @@
           storeId: '', //退货员
           orderDate: tools.transTime(new Date()), //退货日期
           remark: '', //备注
-          createUname: '', //退货仓库
+          warehouse: '', //退货仓库
           serviceId: '', //采购单号
-          numbers: '' //采退单号
+          numbers: '' ,//采退单号
         },
         mainId: null, //选中行的id
         clickdelivery: false
@@ -413,50 +405,43 @@
       },
       //选择采购入库单
       getPlanOrder(Msg){
-        console.log(Msg)
-        let arr = []
-        arr.push(Msg)
-        this.Right.tbdata = [...this.Right.tbdata,...arr]
-        // if(!row) return;
-        // this.purchaseOrderTable.tbdata.forEach((el) => {
-        //   el.details.forEach((d, index, arr) => {
-        //     if (!d.isOldFlag) {
-        //       arr.splice(index, 1);
-        //     }
-        //   })
-        // })
-        // this.tableData = this.tableData.concat(...row.details);
-        // this.selectTableRow.details = this.tableData;
-        // this.purchaseOrderTable.tbdata.forEach((el) => {
-        //   if (el.id == this.selectTableRow.id) {
-        //     el = this.selectTableRow;
-        //   }
-        // })
+        let arr = Msg.details || []
+        console.log(arr)
+        console.log(this.Right.tbdata);
+        this.Right.tbdata = this.Right.tbdata.concat(arr);
       },
       selectTabelData(){},
       //保存按钮
       SaveMsg(){
-        let data = {}
-        data.id = this.rowId
-        data.guestId = this.formPlan.guestidId
-        data.storeId = this.formPlan.storeId
-        data.guestName = this.formPlan.guestName
-        data.orderDate = tools.transTime(this.formPlan.orderDate)
-        data.remark = this.formPlan.remark
-        data.createUname  = this.formPlan.createUname
-        data.serviceId = this.formPlan.serviceId
-        data.detailVOS = this.Right.tbdata
-        // console.log(data)
-        save(data).then(res => {
-          if(res.code === 0){
-            this.$message.success('保存成功！')
-            this.leftgetList()
-            this.formPlan.guestName = '',
-              this.formPlan.storeId =  '',
-              this.formPlan.remark =  '',
-              this.formPlan.createUname =  '',
-              this.formPlan.serviceId =  '',
-              this.Right.tbdata = []
+        this.$refs['formPlan'].validate((valid) => {
+          if (valid) {
+            let data = {}
+            data.id = this.rowId
+            data.guestId = this.guestidId   //调出方
+            data.orderMan = this.formPlan.storeId     //退货员
+            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+            data.serviceId = this.formPlan.numbers  //采退单号
+            data.rtnReasonId = this.formPlan.cause  //退货原因
+            data.settleTypeId = this.formPlan.clearing  //结算方式
+            data.remark = this.formPlan.remark  //备注
+            data.storeId = this.formPlan.warehouse  //退货仓库
+            data.code =    this.formPlan.serviceId //采购订单
+            data.detailList = this.Right.tbdata || [] //子表格
+            console.log(data)
+            // saveDraft(data).then(res => {
+            //   if(res.code === 0){
+            //     this.$message.success('保存成功！')
+            //     this.leftgetList()
+            //     this.formPlan.guestName = '',
+            //       this.formPlan.storeId =  '',
+            //       this.formPlan.remark =  '',
+            //       this.formPlan.createUname =  '',
+            //       this.formPlan.serviceId =  '',
+            //       this.Right.tbdata = []
+            //   }
+            // })
+          } else {
+            this.$Message.error('*为必填！');
           }
         })
       },
@@ -530,7 +515,7 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['applyQty'].includes(column.property)) {
+            if (['canReQty','orderQty','orderAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
             return null
@@ -543,6 +528,7 @@
       // 更多子组件的参数
       getMsg(msg){
         this.moreArr = msg
+        console.log(this.moreArr)
         this.leftgetList()
         // console.log(msg)
       },
@@ -583,91 +569,116 @@
       },
       // 供应商子组件内容
       getSupplierName(a){
-        console.log(a)
+        // console.log(a)
         this.formPlan.guestName = a.shortName
-        this.formPlan.guestidId = a.id
+        this.guestidId = a.id
+        console.log(this.guestidId)
       },
       leftgetList(){
         let params = {}
         params.page = this.Left.page.num - 1
         params.size = this.Left.page.size
+        //快速选择
         if(this.selectArr !== '9999'){
           params.startTime = this.selectArr[0]
           params.endTime = this.selectArr[1]
         }
-        if(this.moreArr.createData){
+        //创建日期
+        if(this.moreArr.createData != null){
           params.startTime = this.moreArr.createData[0] + " 00:00:00"
           params.endTime = this.moreArr.createData[1] + " 23:59:59"
         }
-        if(this.purchaseType !== '9999'){
-          params.status = this.purchaseType
+        //状态
+        if(this.purchaseType !== '99'){
+          params.billStatusId = this.purchaseType
         }
-        if(this.moreArr.submitData){
-          params.startDate = this.moreArr.submitData[0] + " 00:00:00"
-          params.endDate = this.moreArr.submitData[1] + " 23:59:59"
+        //提交日期
+        if(this.moreArr.submitData != null){
+          params.auditStartTime = this.moreArr.submitData[0] + " 00:00:00"
+          params.auditEndTime  = this.moreArr.submitData[1] + " 23:59:59"
         }
-        if(this.moreArr.callout){
+        //供应商
+        if(this.moreArr.callout != null){
           params.guestId = this.moreArr.guestId
         }
-        if(this.moreArr.numbers){
+        //采退单号
+        if(this.moreArr.numbers !=null ){
           params.serviceId = this.moreArr.numbers
         }
-        if(this.moreArr.coding){
+        //配件编码
+        if(this.moreArr.coding != null){
           params.partCode = this.moreArr.coding
         }
-        if(this.moreArr.Accessories){
+        //配件名称
+        if(this.moreArr.Name != null ){
+          params.partName = this.moreArr.Name
+        }
+        //采购订单
+        if(this.moreArr.purchase != null ){
+          params.code = this.moreArr.purchase
+        }
+        //退货员
+        if(this.moreArr.Return != null ){
+          params.orderMan = this.moreArr.Return
+        }
+        //创建人
+        if(this.moreArr.Accessories != null ){
           params.createUname = this.moreArr.Accessories
         }
-        if(this.moreArr.Name){
-          params.fullName = this.moreArr.Name
+        //提交人
+        if(this.moreArr.submitter != null){
+          params.auditor = this.moreArr.submitter
         }
-        queryAll(params).then(res => {
+        findPageByDynamicQuery(params).then(res => {
           if(res.code === 0){
-            this.Left.tbdata = res.data.content
+            this.Left.tbdata = res.data.content || []
+
           }
         })
       },
       // 左边部分的当前行
       selection(row){
-        // console.log(row)
-        console.log(row.id)
+        // console.log(row.id)
         this.mainId = row.id
         this.guestidId = row.guestId
+        // console.log(this.guestidId)
         this.datadata = row
-        console.log(this.datadata)
+        // console.log(this.datadata)
         this.formPlan.guestName = this.datadata.guestName
         this.formPlan.storeId = this.datadata.storeId
         this.formPlan.orderDate = this.datadata.orderDate
+        this.formPlan.numbers = this.datadata.serviceId
+        this.formPlan.cause = this.datadata.rtnReasonId
+        this.formPlan.clearing = this.datadata.settleTypeId
         this.formPlan.remark = this.datadata.remark
-        this.formPlan.createUname = this.datadata.createUname
-        this.formPlan.serviceId = this.datadata.serviceId
-        // this.guestidId = this
-        this.presentrowMsg = row.status.value
+        this.formPlan.warehouse = this.datadata.storeId
+        this.formPlan.serviceId = this.datadata.code
+        this.Right.tbdata = row.details
+        this.presentrowMsg = row.billStatusId.value
         console.log(this.presentrowMsg)
         this.rowId = row.id
         if(row.id){
           this.buttonDisable = false
         }
-        this.getRightlist()
       },
-      //右部分接口
-      getRightlist(){
-        let params = {}
-        params.id = this.rowId
-        findById(params).then(res => {
-          if(res.code === 0){
-            this.rowData = res.data
-            this.Right.tbdata = res.data.detailVOS
-          }
-        })
-      },
+      // //右部分接口
+      // getRightlist(){
+      //   let params = {}
+      //   params.id = this.rowId
+      //   findById(params).then(res => {
+      //     if(res.code === 0){
+      //       this.rowData = res.data
+      //       this.Right.tbdata = res.data.detailVOS
+      //     }
+      //   })
+      // },
       // 仓库下拉框
       warehouse(){
-        queryByOrgid().then(res => {
-          if(res.code === 0){
-            this.List = res.data
-          }
-        })
+        // queryByOrgid().then(res => {
+        //   if(res.code === 0){
+        //     this.List = res.data
+        //   }
+        // })
       },
       Determined(){
 
@@ -701,6 +712,35 @@
             this.$Message.info('取消提交');
           },
         })
+      },
+      //所有下拉框
+      allSelect(){
+        let data = {}
+        optGroup(data).then(res => {
+          if (res.code === 0) {
+            const { billStatusMap, companyMap, guestMap, invoiceMap,levelMap,rtnReasonMap,sellOrderStatusMap, settlementMap, storeMap, userMap} = res.data;
+            // 结算方式
+            for (let el in settlementMap) {
+              this.settleMethods.push({ value: settlementMap[el], label: el })
+            }
+            // 退货仓
+            for (let el in storeMap) {
+              this.inStores.push({ value: storeMap[el], label: el })
+            }
+            // 状态
+            for (let el in sellOrderStatusMap) {
+              this.statusArr.push({ value: sellOrderStatusMap[el], label: el })
+            }
+            //退货原因
+            for(let el in rtnReasonMap) {
+              this.purchaseTypeArr.push({ value: rtnReasonMap[el], label: el })
+            }
+            // userMap 用户
+            for(let el in userMap) {
+              this.userMap.push({ value: userMap[el], label: el })
+            }
+          }
+        })
       }
     },
     mounted(){
@@ -714,8 +754,8 @@
         //获取右侧表格高度
         this.rightTableHeight = wrapH-planFormH-planBtnH-65;
       });
+      this.allSelect()
       this.leftgetList();
-      this.warehouse()
     }
   }
 </script>

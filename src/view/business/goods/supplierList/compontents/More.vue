@@ -68,16 +68,16 @@
       },
       data(){
           return {
-            callout: '', //调出方
-            numbers: '', //申请单号
-            coding: '', //编码
-            Accessories: '', //配件人
-            Name: '', //配件名称
-            createData: '', //创建日期
-            submitData: '', //提交日期
-            purchase: '', //采购订单
-            Return: '',  //退货员
-            submitter: '', //提交人
+            callout: null, //调出方
+            numbers: null, //申请单号
+            coding: null, //编码
+            Accessories: null, //配件人
+            Name: null, //配件名称
+            createData: null, //创建日期
+            submitData: null, //提交日期
+            purchase: null, //采购订单
+            Return: null,  //退货员
+            submitter: null, //提交人
             moreAndMore: false,
             submita: '',
             create: '',
@@ -123,15 +123,19 @@
         },
         //更多弹框的确定按钮
         Determined(){
-          this.sendMsg()
-          this.moreAndMore = false
-          this.callout =  ''
-          this.numbers = ''
-          this.coding = ''
-          this.Accessories = ''
-          this.Name = ''
-          this.create = ''
-          this.submita = ''
+            this.sendMsg()
+            this.moreAndMore = false
+            this.callout = null ,
+            this.numbers = null ,
+            this.coding = null,
+            this.Accessories = null,
+            this.Name = null,
+            this.createData = null,
+            this.submitData = null,
+            this.guestId = null,
+            this.purchase = null,
+            this.Return = null,
+            this.submitter = null
         },
         //供应商弹框
         addSuppler(){

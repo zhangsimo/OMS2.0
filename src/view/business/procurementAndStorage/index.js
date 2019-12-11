@@ -1,10 +1,17 @@
 import QuickDate from '../../../components/getDate/dateget' //日期查询
 import MoreQuery from './moreQuery'  // 更多窗口
-import {getLeftList, getLeftMoreList , saveList , getCalculate} from '@/api/business/procurementAndStorage'
+import {getLeftList, getLeftMoreList , saveList , getCalculate,deletList} from '@/api/business/procurementAndStorage'
 import {getWarehouseList} from '@/api/salesManagment/salesOrder'
 import {getClient} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 import moment from 'moment'
+import selectPartCom from "@/view/salesManagement/salesOrder/components/selectSupplier";
+import {conversionList} from '@/components/changeWbList/changewblist'
+import FeeRegistration from '@/view/goods/plannedPurchaseOrder/components/FeeRegistration.vue';
+import ProcurementModal from './components/ProcurementModal.vue';
+
+
+
 
 
 export default {
@@ -12,6 +19,9 @@ export default {
   components: {
     QuickDate,
     MoreQuery,
+    selectPartCom,
+    FeeRegistration,
+    ProcurementModal,
   },
   data() {
     let changeNumber = (rule, value, callback) => {
@@ -31,7 +41,7 @@ export default {
       if (!value && value != '0') {
         callback(new Error("最多保留4位小数"));
       } else {
-        const reg = /^[+-]?\d+\.\d{0,4}$/i
+        const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
         if (reg.test(value)) {
           callback();
         } else {
@@ -59,7 +69,9 @@ export default {
       queryDate: [],//快速查询时间
       moreQueryList: {},//更多搜索信息
       formPlan: {
-        billStatusId:0
+        billStatusId:0,
+        details:[],
+        code:''
       },//点击获取左侧数据
       settleTypeList: {},//结账类型
       client: [], //客户
@@ -95,6 +107,9 @@ export default {
       }, //表格校验
       allMoney:0,//总价
       taxRate:{},//税率
+      selectRowState:'草稿',//费用需要的状态
+      serviceId:'',//费用需要id
+      rightList:[],//右侧点击数据
     }
   },
   mounted() {
@@ -183,17 +198,30 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-     this.taxRate = this.settleTypeList.CS00107.filter( item => { return item.id == data.row.billTypeId})[0]
+     this.taxRate = this.settleTypeList.CS00107.filter( item => { return item.itemCode == data.row.billTypeId})[0]
       this.formPlan = data.row
       console.log(data.row, 9999)
-      this.formPlan.taxRate = this.taxRate.itemValueOne || ''
-      this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
+      if(this.taxRate) {
+        this.formPlan.taxRate = this.taxRate.itemValueOne || ''
+        this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
+      }
     },
     //更换票据类型获取税率
     getBillType(val){
-      this.taxRate = this.settleTypeList.CS00107.filter( item => { return item.id == val})[0]
-      this.formPlan.taxRate = this.taxRate.itemValueOne || ''
-      this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
+      this.taxRate = this.settleTypeList.CS00107.filter( item => { return item.itemCode == val})[0]
+      if(this.taxRate){
+        this.formPlan.taxRate = this.taxRate.itemValueOne || ''
+        this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
+      }
+
+      if(this.formPlan.details && this.formPlan.details.length > 0){
+        this.$nextTick(
+          () => {
+            this.$set(this.formPlan.details,1 , this.formPlan.details[0])
+          }
+        )
+      }
+
     },
     //获取客户属性
     async getType() {
@@ -224,7 +252,7 @@ export default {
     countAmount (row) {
       return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
     },
-    //计算表格内不含税
+    //计算表格内不含税单价
     countTaxRate(row) {
       if(this.taxRate.itemValueTwo ==1){
         return this.$utils.toNumber(row.orderPrice)/(1 +  (+this.taxRate.itemValueOne))
@@ -232,11 +260,43 @@ export default {
         return this.$utils.toNumber(row.orderPrice)
       }
     },
+    // 计算表格内不含税总价
+    countTaxRateAll(row){
+      if(this.taxRate.itemValueTwo ==1){
+        return this.$utils.toNumber(row.orderPrice)/(1 +  (+this.taxRate.itemValueOne)) * this.$utils.toNumber(row.orderQty)
+      }else{
+        return this.$utils.toNumber(row.orderPrice) * this.$utils.toNumber(row.orderQty)
+      }
+    },
+
+    // 在值发生改变时更新表尾合计
+    updateFooterEvent (params) {
+      let xTable = this.$refs.xTable
+      xTable.updateFooter()
+    },
     // 计算尾部总和
     countAllAmount (data) {
       let count = 0
       data.forEach(row => {
         count += +this.countAmount(row)
+      })
+      count = count.toFixed(2)
+      return count
+    },
+    //计算尾部不含税单价总和
+    countTaxAll(data) {
+      let count = 0
+      data.forEach(row => {
+        count += +this.countTaxRateAll(row)
+      })
+      count = count.toFixed(2)
+      return count
+    },
+    //计算尾部不含税总价
+    countAll(data){
+      let count = 0
+      data.forEach(row => {
+        count += +this.countTaxRate(row)
       })
       count = count.toFixed(2)
       return count
@@ -254,6 +314,13 @@ export default {
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `
           }
+          if (columnIndex === 9) {
+
+            return ` ${this.countAll(data)} `
+          }
+          if (columnIndex === 10) {
+            return ` ${this.countTaxAll(data)} `
+          }
           return null
         })
       ]
@@ -267,6 +334,21 @@ export default {
        this.allMoney = res.data
      }
     },
+    // 费用登记
+     showFee() {
+  if(!this.formPlan.serviceId) return this.$Message.error('请先保存数据');
+  this.$refs.feeRegistration.init()
+   },
+    //采购订单打开
+    selectPlan() {
+      // if (!this.formPlan.guestId) return this.$Message.error('一条有效的数据');
+      this.$refs.procurementModal.init()
+    },
+    //获取采购订单数据
+    getPlanOrder(val){
+    console.log( val , 5555)
+    },
+
     //保存
     save(){
       this.$refs.formPlan.validate(async (valid) => {
@@ -275,6 +357,13 @@ export default {
             await this.$refs.xTable.validate()
             let res = await saveList(this.formPlan)
             if(res.code === 0){
+              this.getLeftLists()
+              this.formPlan = {
+                billStatusId: 0,
+                code:''
+
+              }
+              this.allMoney = 0
               this.$Message.success('保存成功');
             }
           } catch (errMap) {
@@ -287,10 +376,103 @@ export default {
 
     },
 
-    //更改订单事件
+    //入库
+    godown(){
+      this.$refs.formPlan.validate(async (valid) => {
+        if (valid) {
+          if(this.formPlan.details && this.formPlan.details.length < 1){
+            this.$message.error('请至少选择一条配件')
+            return
+          }
+          try {
+            await this.$refs.xTable.validate()
+            this.formPlan.billStatusId = 4
+            let res = await saveList(this.formPlan)
+            if(res.code === 0){
+              this.getLeftLists()
+              this.formPlan = {
+                billStatusId: 0,
+                code:''
+              }
+              this.allMoney = 0
+              this.$Message.success('保存成功');
+            }
+          } catch (errMap) {
+            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+          }
+        } else {
+          this.$Message.error('*为必填项');
+        }
+      })
+
+    },
+
+    //更改订单时间
     setOrderDate(val){
       this.formPlan.orderDate = val
     },
+
+    //打开添加配件模态框
+    addMountings(){
+      this.$refs.selectPartCom.init()
+    },
+    //添加配件
+    getPartNameList(val){
+      this.$refs.formPlan.validate(async (valid) => {
+        if (valid) {
+          let data ={}
+          data = this.formPlan
+          data.details = conversionList(val)
+          let res = await  saveList(data)
+          if(res.code === 0){
+            this.getLeftLists()
+            this.formPlan = {
+              billStatusId: 0
+            }
+            this.allMoney = 0
+          }
+        } else {
+          this.$Message.error('*为必填项');
+        }
+      })
+
+    },
+    //新增
+    addNew(){
+    this.formPlan =  {
+        billStatusId:0,
+      billStatusName:'草稿',
+          details:[],
+          code: ''
+      }
+      this.legtTableData.unshift(this.formPlan)
+    },
+    //右侧表格多选
+    selectSameList(val){
+      console.log(val.selection)
+      this.rightList = val.selection
+    },
+    //右侧全选
+    selectAllList(val){
+      this.rightList = val.selection
+    },
+    //删除
+   async delect(){
+      if(this.rightList.length < 1) return this.$message.error('至少选择一条数据')
+        // let list = []
+        //     this.rightList.forEach( item => {
+        //       list.push( item.id)
+        //     })
+     let res = await deletList(this.rightList)
+     if(res.code === 0){
+       this.getLeftLists()
+       this.formPlan = {
+         billStatusId: 0,
+         code:''
+       }
+       this.allMoney = 0
+     }
+    }
   },
 watch:{
   formPlan:{

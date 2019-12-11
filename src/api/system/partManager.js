@@ -97,7 +97,7 @@ export function approval(data) {
 // 启用
 export function toggleDis(id) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/disableById`,
+    url: `${api.wmsApi}/part/disabled`,
     method: "get",
     params: { id }
   });
@@ -106,7 +106,7 @@ export function toggleDis(id) {
 // 可售
 export function toggleSale(id) {
   return axios.request({
-    url: `${api.wmsApi}/attribute/isSellById`,
+    url: `${api.wmsApi}/part/sell`,
     method: "get",
     params: { id }
   });
