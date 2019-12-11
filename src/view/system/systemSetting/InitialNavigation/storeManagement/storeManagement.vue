@@ -33,18 +33,32 @@
             getList(){
                 getSupplierTreeList().then( res => {
                     if (res.code == 0){
-                        this.list = res.data
-                        let leverOne = res.data.filter( item => item.lever ==1)
-                        leverOne.map( item => {
+                        console.log(res)
+                      let list = []
+                        res.data.forEach( item => {
+                            item.title = item.companyName
+                            item.code = item.id
+                            list.push(item)
+                            if (item.children && item.children.length > 0) {
+                                item.children.forEach(val => {
+                                    val.title = val.companyName
+                                    val.code = val.id
+                                    list.push(val)
+                                })
+                            }
+                        })
+                        this.list = list
+                        let tree = list.filter(item => item.parentId == 0)
+                        tree.map( item => {
                             item.children =[]
                             item.code = item.id
-                            this.list.forEach( el => {
-                                if (item.id == el.pid){
+                           list.forEach( el => {
+                                if (item.id == el.parentId){
                                     item.children.push(el)
                                 }
                             })
                         })
-                        this.treeList = leverOne
+                        this.treeList = tree
                     }
                 })
             },

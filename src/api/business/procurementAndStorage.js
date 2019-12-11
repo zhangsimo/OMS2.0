@@ -56,7 +56,7 @@ export  function deletList( data ={}) {
 }
 
 //批量导入地址
-export const getup = `${api.omsOrder}/guest/importExcel`;
+export const getup = `${api.omsOrder}/pchsEnterMain/import`;
 
 //打印
 export  function getPrintShow(params) {

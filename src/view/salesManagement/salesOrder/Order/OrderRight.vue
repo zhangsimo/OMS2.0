@@ -487,12 +487,19 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             },
             // 上传成功函数
             onSuccess (response) {
-                if(response.code != 0 ){
-                    this.$Message.error(response.message)
+                if(response.code == 0 ){
+                    if (response.data.list && response.data.list.length > 0) {
+                        this.warning(response.data.list[0])
+                    }
                 }else {
-                    this.$Message.success(response.message)
+                    this.$Message.error('上传失败')
                 }
-                this.getList()
+            },
+            warning (nodesc) {
+                this.$Notice.warning({
+                    title: '上传错误信息',
+                    desc: nodesc
+                });
             },
             //上传之前清空
             beforeUpload(){

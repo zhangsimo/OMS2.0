@@ -73,7 +73,7 @@ export default {
       queryDate: [],//快速查询时间
       moreQueryList: {},//更多搜索信息
       formPlan: {
-        billStatusId:0,
+        billStatusValue:0,
         details:[],
         code:''
       },//点击获取左侧数据
@@ -171,7 +171,7 @@ export default {
         data.startTime = ''
         data.endTime = ''
       }
-      data.billStatusId = this.orderType
+      data.billStatusValue = this.orderType
       data.page = this.leftPage.num - 1
       data.size = this.leftPage.size
       let res = await getLeftList(data)
@@ -364,7 +364,7 @@ export default {
             if(res.code === 0){
               this.getLeftLists()
               this.formPlan = {
-                billStatusId: 0,
+                billStatusValue: 0,
                 code:''
 
               }
@@ -391,7 +391,7 @@ export default {
             if(res.code === 0){
               this.getLeftLists()
               this.formPlan = {
-                billStatusId: 0,
+                billStatusValue: 0,
                 code:''
 
               }
@@ -418,12 +418,12 @@ export default {
           }
           try {
             await this.$refs.xTable.validate()
-            this.formPlan.billStatusId = 4
+            this.formPlan.billStatusValue = 4
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
               this.formPlan = {
-                billStatusId: 0,
+                billStatusValue: 0,
                 code:''
               }
               this.allMoney = 0
@@ -459,7 +459,7 @@ export default {
           if(res.code === 0){
             this.getLeftLists()
             this.formPlan = {
-              billStatusId: 0
+              billStatusValue: 0
             }
             this.allMoney = 0
           }
@@ -472,7 +472,7 @@ export default {
     //新增
     addNew(){
     this.formPlan =  {
-        billStatusId:0,
+      billStatusValue:0,
       billStatusName:'草稿',
           details:[],
           code: ''
@@ -499,12 +499,16 @@ export default {
      if(res.code === 0){
        this.getLeftLists()
        this.formPlan = {
-         billStatusId: 0,
+         billStatusValue: 0,
          code:''
        }
        this.allMoney = 0
      }
     },
+    getRUl(){
+      this.upurl = getup +'?id=' + this.formPlan.id
+    },
+
     //批量上传失败
     onFormatError(file) {
       // console.log(file)
@@ -512,11 +516,26 @@ export default {
     },
     // 上传成功函数
     onSuccess (response) {
-      if(response.code != 0 ){
-        this.$Message.success(response.message)
+      if(response.code == 0 ){
+        if (response.data.list && response.data.list.length > 0) {
+          this.warning(response.data.list[0])
+        }
+        this.getLeftLists()
+        this.formPlan = {
+          billStatusValue: 0,
+          code:''
+        }
+        this.allMoney = 0
+        this.$Message.success('保存成功');
       }else {
-        this.$Message.success(response.message)
+        this.$Message.error('上传失败')
       }
+    },
+    warning (nodesc) {
+      this.$Notice.warning({
+        title: '上传错误信息',
+        desc: nodesc
+      });
     },
     //上传之前清空
     beforeUpload(){
