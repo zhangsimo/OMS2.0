@@ -333,6 +333,7 @@
                  if(this.title == '新增员工'){
                      this.newStaff.single =  this.newStaff.single ? 1 : 0
                      this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
+                     this.newStaff.groundIds = JSON.stringify(this.newStaff.groundIds)
                      editUser(this.newStaff , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
@@ -349,6 +350,7 @@
                      }
                      this.newStaff.single =  this.newStaff.single ? 1 : 0
                      this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
+                     this.newStaff.groundIds = JSON.stringify(this.newStaff.groundIds)
                      changeeditUser(this.newStaff).then( res => {
                          stop()
                          if(res.code ==0){
@@ -365,7 +367,8 @@
           },
           //获取当前数据
           selection(currentRow){
-                this.oneStaffChange = currentRow
+              console.log(currentRow , 999);
+              this.oneStaffChange = currentRow
           },
           //修改信息
           changStaffList(){
@@ -380,7 +383,7 @@
                   this.newStaff.office=0, //是否在职默认在职
                   this.newStaff.openSystem=0,
                   this.newStaff.groupId=0 //所属机构
-              this.newStaff = JSON.parse(this.newStaff.groundIds)
+                  // this.newStaff.groundIds = JSON.parse(this.newStaff.groundIds)
               this.modalShow =true
           },
           //员工离职
