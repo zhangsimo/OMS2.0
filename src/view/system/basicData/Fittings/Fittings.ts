@@ -38,10 +38,10 @@ export default class Fittings extends Vue {
       value: "2",
       label: "车型"
     },
-    {
-      value: "3",
-      label: "拼音"
-    }
+    // {
+    //   value: "3",
+    //   label: "拼音"
+    // }
   ];
   // cloud表头字段
   tcolumns: Tableth = [
