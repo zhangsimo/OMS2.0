@@ -187,3 +187,49 @@ export function saveFee(data) {
     data,
   });
 }
+//临时采购导入配件地址
+export const getup = `${api.omsOrder}/pchsOrderTemporary/importExcel?`;
+
+//临时采购主数据-分页查询
+export function TemporaryFindPageByDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+};
+//临时采购主数据-高级查询
+export function TemporaryQueryByConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+};
+// 临时采购保存草稿
+export function TemporarySaveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveDraft`,
+    method: "post",
+    data
+  });
+};
+// 临时采购提交
+export function TemporarySaveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveCommit`,
+    method: "post",
+    data
+  });
+};
+// 临时采购作废
+export function TemporarySaveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+}
+

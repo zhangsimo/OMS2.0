@@ -144,10 +144,10 @@
                       ></Col>
                     </Row>
                   </FormItem>
-                  <FormItem class="form-Item" label="预付款：" prop="orderMan">
+                  <FormItem class="form-Item" label="预付款：" prop="advanceAmt">
                     <Input
                       class="w160"
-                      v-model="formPlanmain.orderMan"
+                      v-model="formPlanmain.advanceAmt"
                       :disabled="isInput"
                     />
                   </FormItem>
@@ -269,8 +269,8 @@
                     <Button
                       size="small"
                       class="mr10"
-                      @click="selectPlan"
-                      :disabled="isInput"
+                      @click="addAcc"
+                      :disabled="isInput||!formPlanmain.guestId"
                     >添加配件</Button
                     >
                   </div>
@@ -285,14 +285,21 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button
-                      size="small"
-                      class="mr10"
-                      @click="delPart"
-                      :disabled="isInput"
-                    ><Icon custom="iconfont iconlajitongicon icons" />
-                      导入配件</Button
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload ='beforeUpload'
                     >
+                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput">
+                        <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
+                      </Button>
+                    </Upload>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -488,6 +495,8 @@
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="mainId"></status-model>
+    <!--添加配件-->
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
   </div>
 </template>
 
