@@ -56,32 +56,13 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary></Table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
+          @on-row-click="election"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" />
-    <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
-      <div class="db pro mt20">
-        <span>对账单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款人：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>审核状态：</span>
-        <Select :model.sync="model1" style="width:200px">
-          <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-    </Modal>
   </div>
 </template>
 
@@ -89,6 +70,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
+import { getWarehousingList, getWarehousingPart } from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -100,42 +82,32 @@ export default {
       Branchstore: [],
       model1: "",
       modal1: false,
-      statelist: [
-        {
-          value: "weishen",
-          label: "未审"
-        },
-        {
-          value: "yishen",
-          label: "已审"
-        }
-      ],
       columns: [
         {
           title: "序号",
-          key: "id",
+          key: "num",
           width: 40,
           className: "tc"
         },
         {
           title: "分店名称",
-          key: "companyname",
+          key: "guestOrgName",
           className: "tc"
         },
         {
           title: "单号",
-          key: "reconciliationid",
+          key: "serviceId",
           className: "tc"
         },
         {
           title: "供应商",
-          key: "Supplier",
+          key: "guestName",
           width: 120,
           className: "tc"
         },
         {
           title: "订单号",
-          key: "Orderid",
+          key: "code",
           className: "tc"
         },
         {
@@ -150,17 +122,17 @@ export default {
         },
         {
           title: "制单人",
-          key: "Single",
+          key: "createUname",
           className: "tc"
         },
         {
           title: "制单日期",
-          key: "Singledata",
+          key: "createTime",
           className: "tc"
         },
         {
           title: "审核日期",
-          key: "revieweddate",
+          key: "auditDate",
           className: "tc"
         },
         {
@@ -175,12 +147,12 @@ export default {
         },
         {
           title: "金额",
-          key: "money",
+          key: "enterAmt",
           className: "tc"
         },
         {
           title: "单据状态",
-          key: "billstate",
+          key: "billStatusId",
           className: "tc"
         },
         {
@@ -197,123 +169,79 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "id",
+          key: "num",
           width: 40,
           className: "tc"
         },
         {
-          title: "配件内码",
-          key: "partsInternal",
-          className: "tc"
-        },
-        {
           title: "配件编码",
-          key: "partsCode",
+          key: "partCode",
           className: "tc"
         },
         {
           title: "配件名称",
-          key: "partsname",
+          key: "partName",
           width: 120,
           className: "tc"
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           className: "tc"
         },
         {
           title: "车型",
-          key: "Vehicle",
+          key: "carModel",
           className: "tc"
         },
         {
           title: "OEM码",
-          key: "OEMCode",
+          key: "oemCode",
           className: "tc"
         },
         {
           title: "是否含税",
-          key: "Whether",
+          key: "taxSign",
           className: "tc"
         },
         {
           title: "不含税单价",
-          key: "notaxprice",
+          key: "noTaxPrice",
           className: "tc"
         },
         {
           title: "不含税金额",
-          key: "notaxmoney",
+          key: "noTaxAmt",
           className: "tc"
         },
         {
           title: "含税单价",
-          key: "taxprice",
+          key: "taxPrice",
           className: "tc"
         },
         {
           title: "含税金额",
-          key: "taxmoney",
+          key: "taxAmt",
           className: "tc"
         },
         {
           title: "数量",
-          key: "number",
+          key: "hasOutQty",
           className: "tc"
         },
         {
-          title: "单价",
-          key: "price",
+          title: "销售单价",
+          key: "orderPrice",
           className: "tc"
         },
         {
           title: "金额",
-          key: "money",
+          key: "orderAmt",
           className: "tc"
         }
       ],
-      data: [
-        {
-          id: "1",
-          companyname: "上海佳配总部",
-          reconciliationid: "XSCDS000-20190500001",
-          Supplier: "HS-215-上海虹梅南路店",
-          currentcompany: "华胜215店",
-          Orderid: "CGRDS000-20190500001",
-          billtype: "采购入库",
-          Warehouse: "门店仓库",
-          Single: "sys",
-          Singledata: "2019-5-6 17:56",
-          revieweddate: "2019-5-6 17:57",
-          Invoice: "开票",
-          Straight: "否",
-          money: "45.00",
-          billstate: "已审",
-          paymentstate: "未付款",
-          remarks: ""
-        }
-      ],
-      data1: [
-        {
-          id: "1",
-          partsInternal: "18009602",
-          partsCode: "03H103483",
-          partsname: "气门室盖密封垫",
-          brand: "原厂品牌",
-          Vehicle: "Q7",
-          reviewedstate: "已审",
-          OEMCode: "03H103483",
-          Whether: "1",
-          notaxprice: "38.793",
-          notaxmoney: "77.586",
-          taxprice: "45",
-          taxmoney: "90",
-          number: "2",
-          price: "45",
-          money: "￥90.00"
-        }
-      ],
+      data: [],
+      data1: [],
       typelist: [
         {
           value: "Warehousing",
@@ -332,12 +260,14 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    this.getGeneral();
   },
   methods: {
     // 快速查询
     quickDate(data) {
       this.value = data;
     },
+    // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
@@ -361,8 +291,18 @@ export default {
         }
       }
     },
-    ok() {},
-    cancel() {}
+    // 总表查询
+    getGeneral() {
+      getWarehousingList({}).then(res => {
+        console.log(res);
+      });
+    },
+    // 选中总表查询明细
+    election(row) {
+      getWarehousingPart({ mainId: row.id }).then(res => {
+        console.log(res);
+      });
+    }
   }
 };
 </script>

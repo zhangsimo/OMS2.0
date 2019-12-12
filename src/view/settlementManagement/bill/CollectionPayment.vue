@@ -46,7 +46,8 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary></Table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary  highlight-row
+          @on-row-click="election"></Table>
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
             <Table border :columns="columns1" :data="data1" class="mt10" ref="receivables" show-summary></Table>
@@ -89,6 +90,8 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
 import {creat} from './../components'
+import { getReceiptsPaymentsSummary,
+getReceiptsPaymentsList } from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -114,18 +117,18 @@ export default {
       columns: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
-          title: '公司名称',
-          key: 'companyname',
+          title: '门店名称',
+          key: 'groupName',
           className: 'tc'
         },
         {
           title: '对账单号',
-          key: 'reconciliationid',
+          key: 'fno',
           className: 'tc'
         },
         {
@@ -136,12 +139,12 @@ export default {
         },
         {
           title: '往来单位',
-          key: 'currentcompany',
+          key: 'guestName',
           className: 'tc'
         },
         {
           title: '收付类型',
-          key: 'payment',
+          key: 'sort',
           className: 'tc'
         },
         {
@@ -151,12 +154,12 @@ export default {
         },
         {
           title: '已冲减/已审核',
-          key: 'offset',
+          key: 'ycAmt',
           className: 'tc'
         },
         {
           title: '未冲减/未审核',
-          key: 'notoffset',
+          key: 'wcAmt',
           className: 'tc'
         },
         {
@@ -166,39 +169,39 @@ export default {
         },
         {
           title: '收付款人',
-          key: 'person',
+          key: 'createUname',
           className: 'tc'
         },
         {
           title: '收付款时间',
-          key: 'time',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewed',
+          key: 'startStatus',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'reviewedperson',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         }
       ],
       columns1:  [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
@@ -303,52 +306,9 @@ export default {
           className: 'tc'
         }
       ],
-      data: [
-        {
-          id: '1',
-          companyname: '上海虹梅南路店',
-          reconciliationid: 'XS201941445452313',
-          collectionpaymentid: '454455454',
-          currentcompany: '华胜215店',
-          payment: '收',
-          paymoney: '35648',
-          offset:'121',
-          notoffset: '0',
-          purpose:'预收款',
-          person:'张三',
-          time:'2019-09-19',
-          remarks: '',
-          reviewed: '已审',
-          reviewedperson: '王五',
-          revieweddate:'2019/10/10'
-        }
-      ],
-      data1: [
-        {
-          id: '1',
-          receivablesid: 'XS201941445452313',
-          receivablestime: '2019/10/10',
-          receivablestype: '现金',
-          receivablesaccount: '佳配零部件',
-          receivablesmoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
-        }
-      ],
-      data2: [
-        {
-          id: '1',
-          payid: 'XS201941445452313',
-          paytime: '2019/10/10',
-          paytype: '现金',
-          payaccount: '佳配零部件',
-          paymoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
-        }
-      ]
+      data: [],
+      data1: [],
+      data2:[]
     };
   },
   async mounted () {
@@ -357,6 +317,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    this.getGeneral()
   },
   methods: {
     // 快速查询
@@ -399,7 +360,19 @@ export default {
       }
     },
     ok (){},
-    cancel (){}
+    cancel (){},
+    // 总表查询
+    getGeneral() {
+      getReceiptsPaymentsSummary({}).then(res => {
+        console.log(res);
+      });
+    },
+    // 选中总表查询明细
+    election(row) {
+      getReceiptsPaymentsList({ mainId: row.id }).then(res => {
+        console.log(res);
+      });
+    }
   }
 };
 </script>

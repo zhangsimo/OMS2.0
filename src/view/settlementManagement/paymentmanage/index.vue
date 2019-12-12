@@ -140,7 +140,7 @@
     </Modal>
     <Modal v-model="outStock" title="出库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)">导出</button>
       </div>
       <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary ref="noWarehousing"></Table>
@@ -148,13 +148,14 @@
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)">导出</button>
       </div>
       <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary ref="warehousing"></Table>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
+    <PrintShow ref="PrintShow"/>
   </div>
 </template>
 
@@ -162,6 +163,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
+import PrintShow from './component/PrintShow'
 import {
   getStorelist,
   getreceivable,
@@ -173,7 +175,8 @@ export default {
   components: {
     quickDate,
     selectDealings,
-    Monthlyreconciliation
+    Monthlyreconciliation,
+    PrintShow
   },
   data() {
     return {
@@ -601,11 +604,6 @@ export default {
           className: "tc"
         },
         {
-          title: "件规",
-          key: "guige",
-          className: "tc"
-        },
-        {
           title: "税率",
           key: "taxRate",
           className: "tc"
@@ -955,6 +953,11 @@ export default {
           filename: '出库单配件明细'
         })
       }
+    },
+    // 打印
+    print(){
+      console.log(this.$refs.PrintShow)
+      this.$refs.PrintShow.openModal()
     }
   }
 };

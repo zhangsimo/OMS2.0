@@ -27,8 +27,8 @@
                 </button>
               </div>
               <div class="db ml10">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出对账清单</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账清单</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出配件明细</button>
               </div>
             </div>
           </div>
@@ -40,14 +40,14 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <i class="iconfont iconcaidan input" @click="Dealings"></i>
                 <span>开户行：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <span>收款账号：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
                 <span>本次申请付款账户：</span>
-                <Input type="text" class="w140 mr10"/>
+                <Input type="text" class="w140 mr10" />
               </div>
             </div>
             <div class="db mt20">
@@ -62,6 +62,7 @@
                 @on-select-cancel="collectNoCheckout"
                 @on-select-all-cancel="collectNoCheckoutAll"
                 show-summary
+                ref="receivable"
               ></Table>
             </div>
             <div class="db mt20">
@@ -76,6 +77,7 @@
                 @on-select-cancel="paymentNoCheckout"
                 @on-select-all-cancel="paymentNoCheckoutAll"
                 show-summary
+                ref="payable"
               ></Table>
             </div>
             <div class="flex mt20">
@@ -124,7 +126,7 @@
       </div>
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="Reconciliation" title="本次不对账" width="1200" @on-ok="noReconciliation">
+    <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
         <input type="text" disabled class="w140 mr15 tc" :value="store" />
@@ -154,8 +156,10 @@ import { creat } from "./../../components";
 import {
   getReconciliation,
   getSettlement,
-  Preservation
+  Preservation,
+  reportParts
 } from "@/api/bill/saleOrder";
+import axios from "axios";
 export default {
   components: {
     selectDealings
@@ -370,39 +374,7 @@ export default {
         {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
-          className: "tc",
-          render: (h, params) => {
-            return h("InputNumber", {
-              style: {
-                width: "60px"
-              },
-              props: {
-                value: params.row.thisNoAccountAmt,
-                type: "number",
-                min: "0"
-              },
-              on: {
-                "on-change": event => {
-                  this.flag = true
-                  this.modifyAccountAmt = event;
-                  this.$set(
-                    params.row,
-                    "thisNoAccountAmt",
-                    this.modifyAccountAmt
-                  );
-                  this.$set(
-                    this.Reconciliationcontent,
-                    params.index,
-                    params.row
-                  );
-                  params.row.thisAccountAmt =
-                    params.row.amount -
-                    params.row.accountAmt -
-                    this.modifyAccountAmt;
-                }
-              }
-            });
-          }
+          className: "tc"
         },
         {
           title: "本次对账金额",
@@ -412,17 +384,7 @@ export default {
         {
           title: "差异原因",
           key: "diffeReason",
-          className: "tc",
-          render: (h, params) => {
-            return h("Input", {
-              style: {
-                width: "60px"
-              },
-              props: {
-                value: ""
-              }
-            });
-          }
+          className: "tc"
         }
       ],
       data: [],
@@ -432,7 +394,7 @@ export default {
       parameter: {},
       paymentlist: [],
       collectlist: [],
-      companyInfoId: '',
+      companyInfoId: "",
       flag: false
     };
   },
@@ -459,13 +421,13 @@ export default {
     totalvalue() {
       if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
         if (this.Reconciliationtotal > 0) {
-          this.info = false
+          this.info = false;
           return "1";
         } else if (this.Reconciliationtotal < 0) {
-          this.info = true
+          this.info = true;
           return "0";
         } else {
-          this.info = false
+          this.info = false;
           return "2";
         }
       } else {
@@ -476,13 +438,18 @@ export default {
   methods: {
     // 对账单弹框出现加载数据
     hander() {
-      this.flag = false
-      this.info = false
+      this.flag = false;
+      this.info = false;
       let { orgId, startDate, endDate, guestId } = this.parameter;
       this.companyInfo = this.parameter.guestName;
       this.companyInfoId = this.parameter.guestId;
       this.store = this.parameter.orgId;
-      let obj = { orgId, startDate, endDate, guestId };
+      let obj = {
+        orgId,
+        startDate: "2019-10-03",
+        endDate: "2019-12-07",
+        guestId
+      };
       getReconciliation(obj).then(res => {
         let Statementexcludingtax = 0;
         let Taxincludedpartsstatement = 0;
@@ -615,32 +582,6 @@ export default {
       this.Actualtotalcollect = 0;
       this.getSettlementComputed();
     },
-    // 本次不对帐金额弹窗
-    noReconciliation() { 
-      if(this.flag) {
-        if(this.Reason){
-          this.$message.error('差异原因必填')
-          return ''
-        }
-      }
-      let sum = 0;
-      this.Reconciliationcontent.map(item => {
-        sum += item.thisNoAccountAmt * 1;
-      });
-      if (this.business === "销售退货" || this.business === "销售出库") {
-        this.$set(
-          this.data1[this.Reconciliationcontent[0].index],
-          "thisNoAccountAmt",
-          sum
-        );
-      } else {
-        this.$set(
-          this.data2[this.Reconciliationcontent[0].index],
-          "thisNoAccountAmt",
-          sum
-        );
-      }
-    },
     // 保存接口
     getPreservation(num) {
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
@@ -714,11 +655,84 @@ export default {
     },
     // 保存草稿
     preservationDraft() {
-      this.getPreservation(0)
+      this.getPreservation(0);
     },
     // 保存并提交
     preservationSubmission() {
-      this.getPreservation(1)
+      this.getPreservation(1);
+    },
+    // 导出
+    report(type) {
+      if (type) {
+        let obj = [
+          {
+            tenantId: 0,
+            orgId: this.store,
+            orgName: "null",
+            guestId: this.companyInfoId,
+            serviceId: "XSCDS001-20191000071",
+            accountReceivable: this.totalcollect,
+            badDebtReceivable: this.collectBaddebt,
+            receivableRebate: this.collectRebate,
+            actualCollection: this.Actualtotalcollect,
+            reconciliation: this.totalpayment,
+            payingBadDebts: this.paymentBaddebt,
+            dealingRebates: this.paymentRebate,
+            actualPayment: this.Actualtotalpayment,
+            settlementTotal: this.Reconciliationtotal,
+            billingType: this.totalvalue,
+            rebateNo: this.Rebateid,
+            badDebNo: this.BadDebtid,
+            buttonStatus: -1
+          }
+        ];
+        if (this.data1.length !== 0 || this.data2.length !== 0) {
+          reportParts({
+            one: this.data1,
+            two: this.data2,
+            three: obj
+          })
+            // .then(res => {
+            //   console.log(res);
+            //   const link = document.createElement("a");
+            //   let blob = new Blob([res.data], {
+            //     type: "application/vnd.ms-excel"
+            //   });
+            //   link.style.display = "none";
+            //   link.href = URL.createObjectURL(blob);
+
+            //   // link.download = res.headers['content-disposition'] //下载后文件名
+            //   link.download = "配件明细"; //下载的文件名
+            //   document.body.appendChild(link);
+            //   link.click();
+            //   document.body.removeChild(link);
+            // })
+            // .catch(error => {
+            //   this.$Notice.error({
+            //     title: "错误",
+            //     desc: "网络连接错误"
+            //   });
+            //   console.log(error);
+            // });
+        } else {
+          this.$message.error("应收/应付暂无数据");
+        }
+      } else {
+        if (this.data1.length !== 0 || this.data2.length !== 0) {
+          if (this.data2.length !== 0) {
+            this.$refs.payable.exportCsv({
+              filename: "采购清单"
+            });
+          }
+          if (this.data1.length !== 0) {
+            this.$refs.receivable.exportCsv({
+              filename: "销售清单"
+            });
+          }
+        } else {
+          this.$message.error("应收/应付暂无数据");
+        }
+      }
     }
   }
 };
@@ -746,8 +760,8 @@ export default {
   border-bottom: 1px solid #dddddd;
   background-color: #f8f8f8;
 }
-.info .flex{
-  align-items: center
+.info .flex {
+  align-items: center;
 }
 .info .flex i {
   position: relative;

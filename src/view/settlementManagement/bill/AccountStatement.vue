@@ -662,7 +662,7 @@ export default {
     // 应收/付单据接口
     getdetailsDocuments(obj) {
       detailsDocuments(obj).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.num = index + 1;
@@ -747,7 +747,13 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.reconciliationStatement = row;
+      this.reconciliationStatement = row
+      let date = {
+        startDate: this.value[0],
+        endDate: this.value[1]
+      };
+      this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
+      this.$refs.reconciliation.parameter = { ...row, ...date };
       let obj = {
         orgId: row.orgId,
         startDate: this.value[0],
@@ -856,27 +862,16 @@ export default {
       });
     },
     // 合并列
-    mergeCol({
-      seq,
-      row,
-      rowIndex,
-      $rowIndex,
-      column,
-      columnIndex,
-      $columnIndex,
-      data
-    }) {
-      console.log(column, columnIndex, $columnIndex, data);
-      console.log(seq, row, rowIndex, $rowIndex);
+    mergeCol({ columnIndex }) {
       if (rowIndex > 5) {
-        if(columnIndex === 1){
+        if (columnIndex === 1) {
           return {
             colspan: 6
-          }; 
-        } else if(columnIndex > 1) {
+          };
+        } else if (columnIndex > 1) {
           return {
-            colspan:0
-          }
+            colspan: 0
+          };
         }
       }
     }

@@ -48,30 +48,6 @@
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
-    <Modal
-        v-model="modal1"
-        title="高级查询"
-        @on-ok="ok"
-        @on-cancel="cancel">
-        <div class="db pro mt20">
-          <span>对账单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款人：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>审核状态：</span>
-          <Select :model.sync="model1" style="width:200px">
-            <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </div>
-    </Modal>
   </div>
 </template>
 
@@ -79,6 +55,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
 import {creat} from './../components'
+import {getOnWay} from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -89,47 +66,31 @@ export default {
       value: [],
       Branchstore: [],
       model1: "",
-      modal1: false,
-      statelist: [
-        {
-          value: 'weishen',
-          label: '未审'
-        },
-        {
-          value: 'yishen',
-          label: '已审'
-        }
-      ],
       columns: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
-          title: '配件内码',
-          key: 'partsInternal',
-          className: 'tc'
-        },
-        {
           title: '配件编码',
-          key: 'partsCode',
+          key: 'partCode',
           className: 'tc'
         },
         {
           title: '配件名称',
-          key: 'partsname',
+          key: 'partName',
           className: 'tc'
         },
         {
           title: 'OEM码',
-          key: 'OEMCode',
+          key: 'oemCode',
           className: 'tc'
         },
         {
           title: '品牌',
-          key: 'brand',
+          key: 'partBrand',
           className: 'tc'
         },
         {
@@ -139,27 +100,27 @@ export default {
         },
         {
           title: '车型',
-          key: 'Vehicle',
+          key: 'carModelName',
           className: 'tc'
         },
         {
           title: '配件类别一级',
-          key: 'partsone',
+          key: 'carTypef',
           className: 'tc'
         },
         {
           title: '配件类别二级',
-          key: 'partstwo',
+          key: 'carTypes',
           className: 'tc'
         },
         {
           title: '数量',
-          key: 'number',
+          key: 'orderQty',
           className: 'tc'
         },
         {
           title: '单位',
-          key: 'Company',
+          key: 'outUnitId',
           className: 'tc'
         },
         {
@@ -273,31 +234,7 @@ export default {
           className: 'tc'
         }
       ],
-      data: [
-        {
-          id: '1',
-          companyname: '上海佳配总部',
-          reconciliationid: 'XSCDS000-20190500001',
-          Supplier: 'HS-215-上海虹梅南路店',
-          currentcompany: '华胜215店',
-          Orderid: 'CGRDS000-20190500001',
-          billtype: '采购入库',
-          Warehouse:'门店仓库',
-          Single: 'sys',
-          Singledata:'2019-5-6 17:56',
-          revieweddate:'2019-5-6 17:57',
-          Invoice:'开票',
-          Straight: '否',
-          money: '45.00',
-          billstate: '已审',
-          paymentstate:'未付款',
-          remarks: ''
-        },
-        {
-          id: '合计',
-          money: '15'
-        }
-      ]
+      data: []
     };
   },
   async mounted () {
@@ -306,6 +243,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    this.getGeneral()
   },
   methods: {
     // 快速查询
@@ -326,7 +264,13 @@ export default {
       } else {
         this.$message.error('在途库存暂无数据')
       }
-    }
+    },
+    // 总表查询
+    getGeneral() {
+      getOnWay({}).then(res => {
+        console.log(res);
+      });
+    },
   }
 };
 </script>

@@ -1,6 +1,7 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
 
+
 // 销售订单明细
 export function getOrderlist(data) {
     return axios.request({
@@ -9,32 +10,137 @@ export function getOrderlist(data) {
         data
     })
 }
+// 销售订单配件明细
+export function getPartList(data) {
+    return axios.request({
+        url: `${api.omsOrder}/sellOrderDetail/findPageByDynamicQuery`,
+        method: 'post',
+        data
+    })
+}
+// 采购入库单查询
+export function getWarehousingList(data) {
+    return axios.request({
+        url: `${api.omsOrder}/enterMain/findOutMainPubIn`,
+        method: 'post',
+        data
+    })
+}
+// 采购入库配件查询
+export function getWarehousingPart(params) {
+    return axios.request({
+        url: `${api.omsOrder}/enterDetail/details`,
+        method: 'get',
+        params
+    })
+}
+// 销售退货单查询
+export function getReturnGoodsList(data) {
+    return axios.request({
+        url: `${api.omsOrder}/enterMain/findOutMainSellRtn`,
+        method: 'post',
+        data
+    })
+}
+// 销售退货配件查询
+export function getReturnGoodsPart(params) {
+    return axios.request({
+        url: `${api.omsOrder}/enterDetail/details`,
+        method: 'get',
+        params
+    })
+}
+// 销售出库单查询
+export function getOutStockList(params) {
+    return axios.request({
+        url: `${api.omsOrder}/outMain/findOutMainAll`,
+        method: 'get',
+        params
+    })
+}
+// 销售出库配件查询
+export function getOutStockPart(params) {
+    return axios.request({
+        url: `${api.omsOrder}/outDetail/queryByMainId`,
+        method: 'get',
+        params
+    })
+}
+// 在途库存明细查询
+export function getOnWay(data) {
+    return axios.request({
+        url: `${api.omsOrder}/allotOutMain/queryOnOrderStock`,
+        method: 'post',
+        data
+    })
+}
+// 收付款查询
+export function getReceiptsPaymentsSummary(data) {
+    return axios.request({
+        url: `${api.omsOrder}/payment/record/queryRecordVerification`,
+        method: 'post',
+        data
+    })
+}
+// 收付款明细接口
+export function getReceiptsPaymentsList(params) {
+    return axios.request({
+        url: `${api.omsOrder}/payment/detail/findOmsPaymentDetail`,
+        method: 'get',
+        params
+    })
+}
+// 调拨出库明细查询
+export function transferStock(data) {
+    return axios.request({
+        url: `${api.omsOrder}/allotOutMain/queryAllotOutMains`,
+        method: 'post',
+        data
+    })
+}
+// 调拨入库明细查询
+export function transferWarehousing(data) {
+    return axios.request({
+        url: `${api.omsOrder}/allotEnterMain/queryAllotEnterMains`,
+        method: 'post',
+        data
+    })
+}
+
+// 调拨出/入库配件明细查询
+export function transferParts(params) {
+    return axios.request({
+        url: `${api.omsOrder}/allotOutDetail/findByMainId`,
+        method: 'get',
+        params
+    })
+}
 // 分店名称
 export function getStorelist(data) {
     return axios.request({
-        url:`${api.authApi}/group/findRootByPid?pId=0`,
+        url: `${api.authApi}/group/findRootByPid?pId=0`,
         method: 'get',
         data
     })
 }
 // 应收应付管理 
-export function getreceivable (params) {
+export function getreceivable(params) {
     return axios.request({
-        url:`${api.omsSettle}/receivable/payable/get`,
+        url: `${api.omsSettle}/receivable/payable/get`,
         method: 'get',
         params
     })
 }
 // 应收应付销售/采购清单
-export function getSalelist (params) {
+export function getSalelist(params) {
     return axios.request({
-        url:`${api.omsSettle}/receivable/payable/sales/purchase`,
+        url: `${api.omsSettle}/receivable/payable/sales/purchase`,
         method: 'get',
         params
     })
 }
 // 出/入库明细
-export function getNumberList (params) {
+export function getNumberList(params) {
     return axios.request({
         url: `${api.omsOrder}/pchsEnterMain/findOrderDetail`,
         method: 'get',
@@ -43,9 +149,9 @@ export function getNumberList (params) {
 }
 
 // 月结对账
-export function getReconciliation (params) {
+export function getReconciliation(params) {
     return axios.request({
-        url:`${api.omsSettle}/accounts/receivable/get/reconciliation/business`,
+        url: `${api.omsSettle}/accounts/receivable/get/reconciliation/business`,
         method: 'get',
         params
     })
@@ -53,7 +159,7 @@ export function getReconciliation (params) {
 // 月结对账选中结算
 export function getSettlement(data) {
     return axios.request({
-        url:`${api.omsSettle}/accounts/receivable/get/total/reconciliation`,
+        url: `${api.omsSettle}/accounts/receivable/get/total/reconciliation`,
         method: 'post',
         data
     })
@@ -61,70 +167,93 @@ export function getSettlement(data) {
 // 月结对账保存草稿/保存并提交
 export function Preservation(data) {
     return axios.request({
-        url:`${api.omsSettle}/accounts/receivable/add`,
+        url: `${api.omsSettle}/accounts/receivable/add`,
         method: 'post',
         data
     })
 }
 // 对账单
-export function AccountStatement (params) {
+export function AccountStatement(params) {
     return axios.request({
-        url:`${api.omsSettle}/statement/master/page`,
+        url: `${api.omsSettle}/statement/master/page`,
         method: 'get',
         params
     })
 }
 // 收/付款单记录
-export function Record(params){
+export function Record(params) {
     return axios.request({
-        url:`${api.omsSettle}/payment/record/get`,
+        url: `${api.omsSettle}/payment/record/get`,
         method: 'get',
         params
     })
 }
 // 应收单据明细和应付单据明细
-export function detailsDocuments(params){
+export function detailsDocuments(params) {
     return axios.request({
-        url:`${api.omsSettle}/receivable/payable/document/details`,
+        url: `${api.omsSettle}/receivable/payable/document/details`,
         method: 'get',
         params
     })
 }
 // 每日资金应收/付审核
-export function capitalAudit(){
+export function capitalAudit() {
     return axios.request({
-        url:`${api.omsSettle}/fund/review/get`,
+        url: `${api.omsSettle}/fund/review/get`,
         method: 'get'
     })
 }
 // 审核
-export function examineBtn(data){
+export function examineBtn(data) {
     return axios.request({
-        url:`${api.omsSettle}/fund/review/check`,
+        url: `${api.omsSettle}/fund/review/check`,
         method: 'post',
         data
     })
 }
 // 撤销
-export function revokeBtn(data){
+export function revokeBtn(data) {
     return axios.request({
-        url:`${api.omsSettle}/fund/review/cancel`,
+        url: `${api.omsSettle}/fund/review/cancel`,
         method: 'post',
         data
     })
 }
 // 导出配件明细
-export function reportParts(params){
+export function reportParts(data){
     return axios.request({
         url:`${api.omsSettle}/accounts/receivable/report/details`,
-        method: 'get',
-        params
-    })
+        method: 'post',
+        responseType: "blob",
+        data
+    }).then(res => {
+        console.log(res);
+        const link = document.createElement("a");
+        let blob = new Blob([res.data], {
+          type: "application/vnd.ms-excel"
+        });
+        link.style.display = "none";
+        link.href = URL.createObjectURL(blob);
+
+        // link.download = res.headers['content-disposition'] //下载后文件名
+        link.download = "配件明细"; //下载的文件名
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(error => {
+        this.$Notice.error({
+          title: "错误",
+          desc: "网络连接错误"
+        });
+        console.log(error);
+      });
 }
+
 // 业务类型/收款账户
-export function dictionaries(params){
+export function dictionaries(params) {
     return axios.request({
-        url:`${api.omsProduct}/dictionaries/findByCode`,
+        url: `${api.omsProduct}/dictionaries/findByCode`,
         method: 'get',
         params
     })

@@ -56,39 +56,20 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary></Table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
+          @on-row-click="election"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" />
-    <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
-      <div class="db pro mt20">
-        <span>对账单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款人：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>审核状态：</span>
-        <Select :model.sync="model1" style="width:200px">
-          <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-    </Modal>
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
-import { getOrderlist } from "@/api/bill/saleOrder";
+import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
 export default {
   components: {
@@ -100,32 +81,21 @@ export default {
       value: [],
       Branchstore: [],
       model1: "",
-      modal1: false,
-      statelist: [
-        {
-          value: "weishen",
-          label: "未审"
-        },
-        {
-          value: "yishen",
-          label: "已审"
-        }
-      ],
       columns: [
         {
           title: "序号",
-          key: "id",
+          key: "num",
           width: 40,
           className: "tc"
         },
         {
           title: "分店名称",
-          key: "companyname",
+          key: "guestOrgName",
           className: "tc"
         },
         {
           title: "订单号",
-          key: "Orderid",
+          key: "serviceId",
           className: "tc"
         },
         {
@@ -135,42 +105,42 @@ export default {
         },
         {
           title: "客户",
-          key: "Customer",
+          key: "guestName",
           className: "tc"
         },
         {
           title: "客户编码",
-          key: "CustomerCode",
+          key: "guestId",
           className: "tc"
         },
         {
           title: "往来类型",
-          key: "Dealingstype",
+          key: "orderType",
           className: "tc"
         },
         {
           title: "仓库",
-          key: "Warehouse",
+          key: "storeName",
           className: "tc"
         },
         {
           title: "制单人",
-          key: "Single",
+          key: "createUname",
           className: "tc"
         },
         {
           title: "制单日期",
-          key: "Singledata",
+          key: "createTime",
           className: "tc"
         },
         {
           title: "金额",
-          key: "money",
+          key: "orderAmt",
           className: "tc"
         },
         {
           title: "备注",
-          key: "remarks",
+          key: "remark",
           className: "tc"
         },
         {
@@ -182,91 +152,54 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "id",
+          key: "bum",
           width: 40,
           className: "tc"
         },
         {
-          title: "配件内码",
-          key: "partsInternal",
-          className: "tc"
-        },
-        {
           title: "配件编码",
-          key: "partsCode",
+          key: "partCode",
           className: "tc"
         },
         {
           title: "配件名称",
-          key: "partsname",
+          key: "partName",
           width: 120,
           className: "tc"
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           className: "tc"
         },
         {
           title: "车型",
-          key: "Vehicle",
+          key: "carModelName",
           className: "tc"
         },
         {
           title: "OEM码",
-          key: "OEMCode",
+          key: "oemCode",
           className: "tc"
         },
         {
           title: "数量",
-          key: "number",
+          key: "orderQty",
           className: "tc"
         },
         {
           title: "单价",
-          key: "price",
+          key: "orderPrice",
           className: "tc"
         },
         {
           title: "金额",
-          key: "money",
+          key: "orderAmt",
           className: "tc"
         }
       ],
-      data: [
-        {
-          id: "1",
-          companyname: "上海佳配总部",
-          Orderid: "CGRDS000-20190500001",
-          source: "人工开单",
-          Customer: "法雷奥汽车零部件贸易（上海）有限公司",
-          CustomerCode: "145",
-          Dealingstype: "内部客户",
-          Warehouse: "品牌仓",
-          Single: "陈凤彩",
-          Singledata: "2019-5-6 17:57",
-          money: "45.00",
-          billstate: "作废",
-          remarks: ""
-        },
-        {
-          id: "合计",
-          money: "15"
-        }
-      ],
-      data1: [
-        {
-          id: "1",
-          partsInternal: "18009602",
-          partsCode: "03H103483",
-          partsname: "气门室盖密封垫",
-          brand: "原厂品牌",
-          Vehicle: "Q7",
-          number: "2",
-          price: "45",
-          money: "￥90.00"
-        }
-      ],
+      data:[],
+      data1: [],
       typelist: [
         {
           value: "Warehousing",
@@ -285,15 +218,10 @@ export default {
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
-    // getreceivable().then(res=>{
-    //   console.log(res)
-    // })
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    // getOrderlist({}).then(res=>{
-    //   console.log(res)
-    // })
+    this.getGeneral()
   },
   methods: {
     // 快速查询
@@ -303,8 +231,6 @@ export default {
     Dealings() {
       this.$refs.selectDealings.openModel();
     },
-    ok() {},
-    cancel() {},
     // 导出汇总/配件明细
     report(type) {
       if (type) {
@@ -324,6 +250,18 @@ export default {
           this.$message.error("销售订单汇总暂无数据");
         }
       }
+    },
+    // 总表查询
+    getGeneral() {
+      getOrderlist({}).then(res => {
+        console.log(res);
+      });
+    },
+    // 选中总表查询明细
+    election(row) {
+      getPartList({ mainId: row.id }).then(res => {
+        console.log(res);
+      });
     }
   }
 };
