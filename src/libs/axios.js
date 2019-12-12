@@ -73,12 +73,16 @@ class httpRequest {
           // else{
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-            if(config.params.tenantId == undefined) {
-              config.params.tenantId = 0
-              if(localStorage.tenantId != undefined) {
-                config.params.tenantId = localStorage.tenantId;
-              }
-            }
+            let res = JSON.parse(localStorage.getItem('oms2-userList'))
+           config.params.tenantId = res.tenantId || 0
+           config.params.shopId = res.shopId || 0
+           config.params.shopkeeper = res.shopkeeper || 0
+            // if(config.params.tenantId == undefined) {
+            //   config.params.tenantId = 0
+            //   if(localStorage.tenantId != undefined) {
+            //     config.params.tenantId = localStorage.tenantId;
+            //   }
+            // }
           // }
       }else{
         if(config.url.includes('/token')){
