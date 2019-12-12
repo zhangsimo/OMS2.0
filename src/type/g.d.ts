@@ -21,7 +21,7 @@ interface Option {
  */
 interface ruleItem {
     required: boolean,
-    message: string,
+    message?: string,
     type?: string,
     trigger: string|Array<string>,
     validator?(rule:any, value:any, callback:Function): any

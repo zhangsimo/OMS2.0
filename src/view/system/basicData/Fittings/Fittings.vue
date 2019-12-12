@@ -165,6 +165,7 @@
               border
               highlight-row
               size="small"
+              ref="localTable"
               :loading="local.loading"
               :stripe="true"
               :columns="local.columns"
@@ -219,6 +220,7 @@
     <part-info
       ref="partInfo"
       :is-add-part="true"
+      :isSellDis="true"
       @throwData="submitSave"
     ></part-info>
   </main>

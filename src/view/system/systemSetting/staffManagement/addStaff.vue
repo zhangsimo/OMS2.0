@@ -35,7 +35,7 @@
         <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
       </FormItem>
       <FormItem label='入职部门:' prop="groundIds" >
-        <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 250px"></Cascader>
+        <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 250px" ></Cascader>
       </FormItem>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
@@ -198,7 +198,7 @@
         },
         //获取到公司
         selectGroust(value , selectedData){
-            this.data.groundId = value[value.length - 1]
+            this.data.groundIds = JSON.stringify(value)
         }
     }
     }

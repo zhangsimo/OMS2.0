@@ -107,10 +107,10 @@ export default class ProductLA extends Vue {
             value: '2',
             label: '车型',
         },
-        {
-            value: '3',
-            label: '首字拼音',
-        },
+        // {
+        //     value: '3',
+        //     label: '首字拼音',
+        // },
     ]
     /**待分配列表选中的分配状态选项 */
     private waitPartTransListSelecteOption: string = "0"

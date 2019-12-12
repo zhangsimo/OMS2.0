@@ -139,6 +139,8 @@ export default class InterPurchase extends Vue {
   private inStores: Array<Option> = [];
   // 直发门店
   private putStores: Array<Option> = [];
+  // 外币种类
+  private currencyMap: Array<Option> = [];
 
   // 采购订单信息——表单
   private formPlanmain: any = {
@@ -270,7 +272,8 @@ export default class InterPurchase extends Vue {
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
-    let res = await api.saveDraft(data);
+    data.details = this.tableData;
+    let res = await api.saveInterDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
@@ -288,7 +291,8 @@ export default class InterPurchase extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
-        let res = await api.saveCommit(data);
+        data.details = this.tableData;
+        let res = await api.saveInterCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
           this.getListData();
@@ -352,7 +356,7 @@ export default class InterPurchase extends Vue {
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
-        let res: any = await api.saveObsolete(this.selectTableRow.id);
+        let res: any = await api.saveInterObsolete(this.selectTableRow.id);
         if (res.code == 0) {
           this.$Message.success('作废成功');
           this.getListData();
@@ -417,7 +421,7 @@ export default class InterPurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(column.property) || columnIndex === 8) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt'].includes(column.property) || columnIndex === 14) {
           return this.sum(data, column.property, columnIndex)
         }
         return null
@@ -434,13 +438,21 @@ export default class InterPurchase extends Vue {
       }
       total += parseFloat(value)
     })
-    if (['orderPrice', 'noTaxPrice', 'noTaxAmt'].includes(type)) {
+    if (['noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt'].includes(type)) {
       return total.toFixed(2);
     }
-    if (columnIndex === 8) {
+    if(type === 'orderPrice') {
       let totals = 0;
       let sumarr = data.map(el => {
-        return el.orderQty * el.orderPrice;
+        return el.rmbPrice + el.tariffAmt + el.transportAmt + el.vatAmt + el.otherAmt
+      })
+      totals = sumarr.reduce((total, el) => total += el, 0);
+      return totals.toFixed(2);
+    }
+    if (columnIndex === 14) {
+      let totals = 0;
+      let sumarr = data.map(el => {
+        return el.orderQty * (el.rmbPrice + el.tariffAmt + el.transportAmt + el.vatAmt + el.otherAmt);
       })
       totals = sumarr.reduce((total, el) => total += el, 0);
       this.totalAmt = totals;
@@ -494,7 +506,7 @@ export default class InterPurchase extends Vue {
   private async init() {
     let res: any = await api.optGroupInit();
     if (res.code == 0) {
-      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap } = res.data;
+      const { companyMap, currencyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap } = res.data;
       // 票据类型
       for (let el in invoiceMap) {
         this.pjTypes.push({ value: invoiceMap[el], label: el })
@@ -511,8 +523,13 @@ export default class InterPurchase extends Vue {
       for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
+      // 状态
       for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+      }
+      // 外币种类
+      for (let el in currencyMap) {
+        this.currencyMap.push({ value: currencyMap[el], label: el })
       }
     }
   }
@@ -590,8 +607,9 @@ export default class InterPurchase extends Vue {
         }
       })
     })
+    this.tableData = this.selectTableRow.details;
     this.tableData = this.tableData.concat(...row.details);
-    this.selectTableRow.details = this.tableData;
+    // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
         el = this.selectTableRow;
@@ -616,17 +634,23 @@ export default class InterPurchase extends Vue {
       this.showModel('tabsModel');
     })
   }
-  
+
   // 分摊费用
-  private feeform:any = {
+  private feeform = {
     currency: "", // 币种
     exchangeRate: 0, // 汇率
-    tariff: 0, // 关税比例
-    transportation: 0, // 运杂费比例
-    valueAddedTax: 0 // 增值税比例
+    tariffScale: 0, // 关税比例
+    transportScale: 0, // 运杂费比例
+    vatScale: 0 // 增值税比例
   }
-  private getFeeForm(form:any) {
+  private async getFeeForm(form: any) {
+    if(form === null) return;
     this.feeform = form;
+    let data = Object.assign({}, this.selectTableRow, this.feeform);
+    let res:any = await api.calculatAmt(data);
+    if(res.cdoe == 0) {
+      this.tableData = res.data || [];
+    }
   }
 
   private mounted() {

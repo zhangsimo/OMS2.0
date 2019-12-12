@@ -1,6 +1,6 @@
 import QuickDate from '../../../components/getDate/dateget' //日期查询
 import MoreQuery from './moreQuery'  // 更多窗口
-import {getLeftList, getLeftMoreList , saveList , getCalculate,deletList} from '@/api/business/procurementAndStorage'
+import {getLeftList, getLeftMoreList , saveList , getCalculate,deletList , getup} from '@/api/business/procurementAndStorage'
 import {getWarehouseList} from '@/api/salesManagment/salesOrder'
 import {getClient} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
@@ -9,6 +9,9 @@ import selectPartCom from "@/view/salesManagement/salesOrder/components/selectSu
 import {conversionList} from '@/components/changeWbList/changewblist'
 import FeeRegistration from '@/view/goods/plannedPurchaseOrder/components/FeeRegistration.vue';
 import ProcurementModal from './components/ProcurementModal.vue';
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
+import PrintShow from './components/PrintShow'
 
 
 
@@ -22,6 +25,7 @@ export default {
     selectPartCom,
     FeeRegistration,
     ProcurementModal,
+    PrintShow
   },
   data() {
     let changeNumber = (rule, value, callback) => {
@@ -69,7 +73,7 @@ export default {
       queryDate: [],//快速查询时间
       moreQueryList: {},//更多搜索信息
       formPlan: {
-        billStatusId:0,
+        billStatusValue:0,
         details:[],
         code:''
       },//点击获取左侧数据
@@ -110,6 +114,10 @@ export default {
       selectRowState:'草稿',//费用需要的状态
       serviceId:'',//费用需要id
       rightList:[],//右侧点击数据
+      headers:  {
+        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+      },//请求头
+      upurl:getup,//批量导入地址
     }
   },
   mounted() {
@@ -126,9 +134,10 @@ export default {
       this.moreQueryList = {}
       this.getLeftLists()
     },
-    //打印表格
-    printTable() {
-      // this.$refs.printBox.openModal()
+    //打印
+    setPrint() {
+      if(!this.formPlan.id) return this.$message.error('请至少选择一条数据')
+      this.$refs.printBox.openModal()
     },
     // 打开更多搜索
     openQueryModal() {
@@ -162,7 +171,7 @@ export default {
         data.startTime = ''
         data.endTime = ''
       }
-      data.billStatusId = this.orderType
+      data.billStatusValue = this.orderType
       data.page = this.leftPage.num - 1
       data.size = this.leftPage.size
       let res = await getLeftList(data)
@@ -254,7 +263,7 @@ export default {
     },
     //计算表格内不含税单价
     countTaxRate(row) {
-      if(this.taxRate.itemValueTwo ==1){
+      if(this.taxRate && this.taxRate.itemValueTwo ==1){
         return this.$utils.toNumber(row.orderPrice)/(1 +  (+this.taxRate.itemValueOne))
       }else{
         return this.$utils.toNumber(row.orderPrice)
@@ -262,7 +271,7 @@ export default {
     },
     // 计算表格内不含税总价
     countTaxRateAll(row){
-      if(this.taxRate.itemValueTwo ==1){
+      if( this.taxRate && this.taxRate.itemValueTwo ==1){
         return this.$utils.toNumber(row.orderPrice)/(1 +  (+this.taxRate.itemValueOne)) * this.$utils.toNumber(row.orderQty)
       }else{
         return this.$utils.toNumber(row.orderPrice) * this.$utils.toNumber(row.orderQty)
@@ -346,7 +355,30 @@ export default {
     },
     //获取采购订单数据
     getPlanOrder(val){
-    console.log( val , 5555)
+      this.formPlan.pchsOrderId = val.id
+      this.$refs.formPlan.validate(async (valid) => {
+        if (valid) {
+          try {
+            await this.$refs.xTable.validate()
+            let res = await saveList(this.formPlan)
+            if(res.code === 0){
+              this.getLeftLists()
+              this.formPlan = {
+                billStatusValue: 0,
+                code:''
+
+              }
+              this.allMoney = 0
+              this.$Message.success('保存成功');
+            }
+          } catch (errMap) {
+            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+          }
+        } else {
+          this.$Message.error('*为必填项');
+        }
+      })
+
     },
 
     //保存
@@ -359,7 +391,7 @@ export default {
             if(res.code === 0){
               this.getLeftLists()
               this.formPlan = {
-                billStatusId: 0,
+                billStatusValue: 0,
                 code:''
 
               }
@@ -386,12 +418,12 @@ export default {
           }
           try {
             await this.$refs.xTable.validate()
-            this.formPlan.billStatusId = 4
+            this.formPlan.billStatusValue = 4
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
               this.formPlan = {
-                billStatusId: 0,
+                billStatusValue: 0,
                 code:''
               }
               this.allMoney = 0
@@ -427,7 +459,7 @@ export default {
           if(res.code === 0){
             this.getLeftLists()
             this.formPlan = {
-              billStatusId: 0
+              billStatusValue: 0
             }
             this.allMoney = 0
           }
@@ -440,7 +472,7 @@ export default {
     //新增
     addNew(){
     this.formPlan =  {
-        billStatusId:0,
+      billStatusValue:0,
       billStatusName:'草稿',
           details:[],
           code: ''
@@ -467,12 +499,48 @@ export default {
      if(res.code === 0){
        this.getLeftLists()
        this.formPlan = {
-         billStatusId: 0,
+         billStatusValue: 0,
          code:''
        }
        this.allMoney = 0
      }
-    }
+    },
+    getRUl(){
+      this.upurl = getup +'?id=' + this.formPlan.id
+    },
+
+    //批量上传失败
+    onFormatError(file) {
+      // console.log(file)
+      this.$Message.error('只支持xls xlsx后缀的文件')
+    },
+    // 上传成功函数
+    onSuccess (response) {
+      if(response.code == 0 ){
+        if (response.data.list && response.data.list.length > 0) {
+          this.warning(response.data.list[0])
+        }
+        this.getLeftLists()
+        this.formPlan = {
+          billStatusValue: 0,
+          code:''
+        }
+        this.allMoney = 0
+        this.$Message.success('保存成功');
+      }else {
+        this.$Message.error('上传失败')
+      }
+    },
+    warning (nodesc) {
+      this.$Notice.warning({
+        title: '上传错误信息',
+        desc: nodesc
+      });
+    },
+    //上传之前清空
+    beforeUpload(){
+      this.$refs.upload.clearFiles()
+    },
   },
 watch:{
   formPlan:{

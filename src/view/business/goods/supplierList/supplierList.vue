@@ -61,7 +61,7 @@
                         :label-width="100">
                     <FormItem label="供应商：" prop="guestName" class="fs12">
                       <Row class="w350">
-                        <Col span="22"><Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled=""></Input></Col>
+                        <Col span="22"><Input placeholder="请选择供应商" v-model="formPlan.guestName" ></Input></Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
                     </FormItem>
@@ -154,14 +154,9 @@
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="orderAmt" title="退货金额" :edit-render="{name: 'input'}" width="100">
-                    <template v-slot:edit="{ row }">
-                      <InputNumber
-                        :max="999999"
-                        :min="0"
-                        v-model="row.orderQty * row.orderPrice"
-                        :disabled="presentrowMsg !== 0"
-                      ></InputNumber>
+                  <vxe-table-column field="orderAmt" title="退货金额" width="100">
+                    <template v-slot="{ row }">
+                      {{ (row.orderPrice * row.orderQty) | priceFilters }}
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
@@ -199,7 +194,7 @@
   import "../../../goods/goodsList/goodsList.less";
   import PrintShow from "./compontents/PrintShow";
   import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
-  import { optGroup, findPageByDynamicQuery,saveDraft } from '../../../../api/business/supplierListApi';
+  import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn } from '../../../../api/business/supplierListApi';
   export default {
     name: 'supplierList',
     components: {
@@ -229,23 +224,24 @@
           new: true,
           _highlight: true,
           billStatusId: {name: "草稿", value: 0, enum: "DRAFT"},
-          guestName: '',
-          createTime: tools.transTime(new Date()),
-          createUname: '',
-          serviceId: '',
-          orderMan:'',
-          printTimes: '',
-          auditor: '',
-          auditStartTime: '',
-          detailVOS: [],
+          guestId : ''  , //调出方
+          orderMan : '',   //退货员
+          orderDate : tools.transTime(new Date()),  //退货日期
+          serviceId : '',  //采退单号
+          rtnReasonId : '',  //退货原因
+          settleTypeId : '',  //结算方式
+          remark : '',  //备注
+          storeId : '',  //退货仓库
+          code : '', //采购订单
+          details : '' //子表格
         },
         //表单验证
         ruleValidate: {
-          guestName: [{ required: true,type: 'string',message: '供应商不能为空', trigger: 'blur' }],
+          guestName: [{ required: true,type: 'string',message: '供应商不能为空', trigger: 'change' }],
           // storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'blur' }], //暂时不验证。。。
-          orderDate: [{ required: true,type: 'date', message: '请选择退货日期', trigger: 'change' }],
-          cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'blur' }],
-          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'blur' }]
+          // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+          cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'change' }],
+          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }]
         },
         datadata: null,
         rowId:'', //当前行的id
@@ -369,9 +365,17 @@
     methods: {
       //删除配件
       Delete(){
-        var set = this.checkboxArr.map(item=>item.id)
-        var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
-        this.Right.tbdata = resArr
+        let data = this.checkboxArr.map(item => {
+          return item.id
+        })
+        sellOrderReturn(data).then(res => {
+            if(res.code === 0){
+              this.leftgetList()
+            }
+        })
+        // var set = this.checkboxArr.map(item=>item.id)
+        // var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
+        // this.Right.tbdata = resArr
       },
       //更多按钮
       moreaa(){
@@ -384,9 +388,21 @@
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
-        this.Left.tbdata.unshift(this.PTrow)
+          this.formPlan.cause =  '',  //退货原因
+          this.formPlan.clearing =  '', //结算方式
+          this.formPlan.guestName = '',//供应商
+          this.formPlan.storeId =  '', //退货员
+          this.formPlan.orderDate =  tools.transTime(new Date()), //退货日期
+          this.formPlan.remark =  '', //备注
+          this.formPlan.warehouse =  '', //退货仓库
+          this.formPlan.serviceId =  '', //采购单号
+          this.formPlan.numbers =  '' ,//采退单号
+          this.Right.tbdata = []
         this.isAdd = false;
+        console.log(this.isAdd)
+        this.Left.tbdata.unshift(this.PTrow)
         this.datadata = this.PTrow
+
         // console.log(this.Left.tbdata)
       },
       //添加配件按钮
@@ -407,13 +423,17 @@
       getPlanOrder(Msg){
         let arr = Msg.details || []
         console.log(arr)
-        console.log(this.Right.tbdata);
+        arr.map(item => {
+          item.outUnitId = item.unit
+          item.stockOutQty = item.totalStockQty
+        })
         this.Right.tbdata = this.Right.tbdata.concat(arr);
       },
       selectTabelData(){},
       //保存按钮
       SaveMsg(){
-        this.$refs['formPlan'].validate((valid) => {
+        this.$refs.formPlan.validate((valid) => {
+          console.log(1231231)
           if (valid) {
             let data = {}
             data.id = this.rowId
@@ -425,21 +445,42 @@
             data.settleTypeId = this.formPlan.clearing  //结算方式
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
-            data.code =    this.formPlan.serviceId //采购订单
-            data.detailList = this.Right.tbdata || [] //子表格
+            data.code = this.formPlan.serviceId //采购订单
+            data.details = this.Right.tbdata.map(item => {
+              return {
+                partId : item.partId,
+                partCode : item.partCode,
+                partName : item.partName,
+                partBrand : item.partBrand,
+                outUnitId : item.outUnitId,
+                canReQty : item.canReQty,
+                orderQty : item.orderQty,
+                orderPrice : item.orderPrice,
+                orderAmt : item.orderAmt,
+                remark : item.remark,
+                stockOutQty : item.stockOutQty,
+                oemCode : item.oemCode,
+                spec : item.spec
+              }
+            }) //子表格
             console.log(data)
-            // saveDraft(data).then(res => {
-            //   if(res.code === 0){
-            //     this.$message.success('保存成功！')
-            //     this.leftgetList()
-            //     this.formPlan.guestName = '',
-            //       this.formPlan.storeId =  '',
-            //       this.formPlan.remark =  '',
-            //       this.formPlan.createUname =  '',
-            //       this.formPlan.serviceId =  '',
-            //       this.Right.tbdata = []
-            //   }
-            // })
+            saveDraft(data).then(res => {
+              if(res.code === 0){
+                this.$message.success('保存成功！')
+                this.isAdd = false;
+                this.leftgetList()
+                this.formPlan.guestName = ''   //调出方
+                data.orderMan = ''   //退货员
+                // tools.transTime(this.formPlan.orderDate)  //退货日期
+                this.formPlan.numbers = '' //采退单号
+                this.formPlan.cause  = '' //退货原因
+                this.formPlan.clearing = '' //结算方式
+                this.formPlan.remark  = '' //备注
+                this.formPlan.warehouse = ''  //退货仓库
+                this.formPlan.serviceId = '' //采购订单
+                this.Right.tbdata  =  [] //子表格
+              }
+            })
           } else {
             this.$Message.error('*为必填！');
           }
@@ -479,7 +520,24 @@
       },
       //右侧表格复选框选中
       selectChange(msg){
+        console.log(msg.selection)
         this.checkboxArr = msg.selection
+        // this.checkboxArr = msg.selection.map(item => {
+        //   return {
+        //     partCode : item.partCode,
+        //     partName : item.partName,
+        //     partBrand : item.partBrand,
+        //     outUnitId : item.outUnitId,
+        //     canReQty : item.canReQty,
+        //     orderQty : item.orderQty,
+        //     orderPrice : item.orderPrice,
+        //     orderAmt : item.orderAmt,
+        //     remark : item.remark,
+        //     stockOutQty : item.stockOutQty,
+        //     oemCode : item.oemCode,
+        //     spec : item.spec
+        //   }
+        // })
         console.log(this.checkboxArr)
       },
       //分页
@@ -515,8 +573,8 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['canReQty','orderQty','orderAmt'].includes(column.property)) {
-              return this.$utils.sum(data, column.property)
+            if (['canReQty','orderQty'].includes(column.property) || columnIndex === 9) {
+              return this.$utils.sum(data, column.property,columnIndex)
             }
             return null
           })
