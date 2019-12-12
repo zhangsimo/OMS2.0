@@ -598,7 +598,7 @@ export default class InterPurchase extends Vue {
       if (this.moreData != null) {
         data = { ...data, ...this.moreData };
       }
-      res = await api.temporaryQueryByConditions(params, data)
+      res = await api.temporaryQueryByConditions(params, data);
     }
     if (res.code == 0) {
       this.isAdd = true;
