@@ -28,6 +28,15 @@ export function changeeditUser (data) {
   })
 }
 
+//新增兼职公司
+export function addEditUser (data) {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/updateUserCompany`,
+    method: 'post',
+    data
+  })
+}
+
 //新增兼职公司全部信息
 export function getCompanyList (params) {
   return axios.request({

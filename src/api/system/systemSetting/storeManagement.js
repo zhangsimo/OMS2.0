@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取当前页信息树形图
 export function getSupplierTreeList (params) {
   return axios.request({
-    url: `${api.wmsApi}/companyPart/findType`,
+    url: `${api.wmsApi}/companyArea/findAll`,
     method: 'get',
     params
   })
@@ -14,7 +14,7 @@ export function getSupplierTreeList (params) {
 //树形图增删改查
 export function changeTree (data) {
   return axios.request({
-    url: `${api.wmsApi}/company/saveOrUpdate`,
+    url: `${api.wmsApi}/companyArea/save`,
     method: 'post',
     data
   })

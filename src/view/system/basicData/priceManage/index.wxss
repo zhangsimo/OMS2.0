@@ -25,10 +25,11 @@
 .tabs-warp {
   overflow-y: auto;
 }
-.tabs-warp .btn-warp {
+.tabs-warp .btns-warp {
   height: 50px;
   display: flex;
   align-items: center;
+  padding-left: 20px;
 }
 .tabs {
   list-style: none;

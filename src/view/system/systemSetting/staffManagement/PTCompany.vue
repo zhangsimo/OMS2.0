@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import {getCompanyList , changeeditUser} from '@/api/system/systemSetting/staffManagenebt'
+  import {getCompanyList , addEditUser} from '@/api/system/systemSetting/staffManagenebt'
     export default {
         name: "PTCompany",
         props:{
@@ -127,7 +127,7 @@
                 companyList = companyList.substring(0 ,companyList.length -1 )
                 this.data.companyList = '('+ companyList + ')'
                 let stop = this.$loading()
-                changeeditUser(this.data).then( res => {
+                addEditUser(this.data).then( res => {
                     stop()
                     this.getlist()
                     this.$emit('colseMdole' , res)

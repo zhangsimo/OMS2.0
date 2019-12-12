@@ -525,7 +525,7 @@
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!-- 分摊费用 -->
-    <apportionment-expenses ref="apportionmentExpenses" :currencies="currencyMap" @feeForm="getFeeForm"></apportionment-expenses>
+    <apportionment-expenses ref="apportionmentExpenses" :currencies="currencyMap" @currencyForm="getFeeForm"></apportionment-expenses>
   </div>
 </template>
 

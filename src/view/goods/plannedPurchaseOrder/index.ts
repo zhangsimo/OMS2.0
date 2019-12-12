@@ -270,6 +270,7 @@ export default class PlannedPurchaseOrder extends Vue {
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
+    data.details = this.tableData;
     let res = await api.saveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
@@ -288,6 +289,7 @@ export default class PlannedPurchaseOrder extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
+        data.details = this.tableData;
         let res = await api.saveCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
@@ -588,8 +590,9 @@ export default class PlannedPurchaseOrder extends Vue {
         }
       })
     })
+    this.tableData = this.selectTableRow.details;
     this.tableData = this.tableData.concat(...row.details);
-    this.selectTableRow.details = this.tableData;
+    // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
         el = this.selectTableRow;

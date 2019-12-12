@@ -66,11 +66,21 @@ export function getSave(data) {
   })
 }
 
-//查询出库单列表
-
-export function getoutList () {
+//提交
+export function getSubmit(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsReturnOrdeMain/findBySellOutMain`,
-    method: 'get',
+    url: `${api.omsOrder}/pchsReturnOrdeMain/commitOrder`,
+    method: 'post',
+    data
   })
 }
+
+//查询出库单列表
+
+export function getoutList (num,page,data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/findBySellOutMain?page=${num}&size=${page}`,
+    method: 'post',
+    data
+  })
+ }

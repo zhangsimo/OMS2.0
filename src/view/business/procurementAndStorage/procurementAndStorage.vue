@@ -8,11 +8,11 @@
       </Select>
       <Button type="default"   @click="openQueryModal" class="mr10"><Icon type="ios-more" />更多</Button>
       <Button type="default" class="mr10 w90" @click="addNew"><Icon type="md-add" size="14" /> 新增</Button>
-      <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusId != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-      <Button class="mr10" :disabled="formPlan.billStatusId != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
-      <Button class="mr10"  @click="selectPlan"> 选择采购订单</Button>
-      <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
-      <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusId != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
+      <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusValue != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+      <Button class="mr10" @click="godown" :disabled="formPlan.billStatusValue != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
+      <Button class="mr10" :disabled="formPlan.billStatusValue != 0" @click="selectPlan"> 选择采购订单</Button>
+      <Button class="mr10" @click="setPrint"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+      <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -61,16 +61,16 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="供应商：" prop="guestId">
                     <Row style="width: 310px">
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  :disabled="formPlan.billStatusId != 0 || formPlan.code != ''">
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
-                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''">
+                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
                         <Icon type="md-checkmark"/>
                       </Button>
                     </Row>
                   </FormItem>
                   <FormItem label="采购员：" prop="orderMan">
-                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''"></Input>
+                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
                     <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss" @on-change="setOrderDate" :value="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''"></DatePicker>
@@ -79,23 +79,23 @@
                     <Input class="w160" v-model="formPlan.serviceId" disabled></Input>
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId" props="billTypeId" >
-                    <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''" @on-change="getBillType">
+                    <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @on-change="getBillType">
                       <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="结算方式：" prop="settleTypeId" >
-                    <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''">
+                    <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
                       <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''"></Input>
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
                   </FormItem>
                   <FormItem label="往来单号：" >
                     <Input class="w210" v-model="formPlan.code" disabled></Input>
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
-                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''">
+                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
                       <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                   </FormItem>
@@ -103,13 +103,28 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix pt10 pb10">
                   <div class="fl mb5">
-                    <Button :disabled="formPlan.billStatusId != 0" size="small" class="mr10" @click="addMountings">
+                    <Button :disabled="formPlan.billStatusValue != 0" size="small" class="mr10" @click="addMountings">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button @click="delect" :disabled="formPlan.billStatusId != 0" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                    <Button @click="delect" :disabled="formPlan.billStatusValue != 0" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload ='beforeUpload'
+                    >
+                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 || !formPlan.code" type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入</Button>
+                    </Upload>
                   </div>
                 </div>
               </div>
@@ -172,7 +187,7 @@
       <!--        更多搜索-->
       <More-query ref="morequeryModal" @getSureQuery="moreQuery" :data="moreQueryList"></More-query>
       <!--        打印-->
-      <!--      <Print-show ref="printBox"></Print-show>-->
+            <Print-show ref="printBox" :data="formPlan"></Print-show>
 <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
 <!--      费用登记-->
