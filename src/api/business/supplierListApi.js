@@ -15,7 +15,8 @@ export function findPageByDynamicQuery (data) {
   return axios.request({
     url: `${api.omsOrder}/sellOrderReturn/findPageByDynamicQuery`,
     method: 'post',
-    data
+    data:data.data,
+    params:data.params
   })
 }
 
@@ -35,6 +36,47 @@ export function sellOrderReturn (data) {
   return axios.request({
     url: `${api.omsOrder}/sellOrderReturn/delete`,
     method: 'post',
+    data
+  })
+}
+
+//提交
+// /sellOrderReturn/saveCommit
+export function saveCommit (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/saveCommit`,
+    method: 'post',
+    data
+  })
+}
+
+// 退货
+// /sellOrderReturn/returnPchs
+export function returnPchs (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/returnPchs`,
+    method: 'post',
+    data
+  })
+}
+
+// 作废
+// /sellOrderReturn/saveObsolete
+export function saveObsolete (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/saveObsolete`,
+    method: 'post',
+    data:data.data,
+    params: data.params
+  })
+}
+
+// 打印   /sellOrderReturn/print
+export function print (params,data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/print`,
+    method: 'post',
+    params,
     data
   })
 }

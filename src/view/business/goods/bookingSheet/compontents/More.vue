@@ -13,8 +13,8 @@
             </Col>
           </Row>
           <Row class="mt15">
-            <span class="ml5">调 出 方：</span>
-            <Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>
+            <span class="ml5">业 务 员：</span>
+            <Input v-model="callout" placeholder="请选择业务员" style="width: 410px" disabled/>
             <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
           </Row>
           <Row class="mt15">
@@ -29,18 +29,18 @@
             <span>配件名称：</span>
             <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
           </Row>
+          <Row class="mt15">
+            <span class="ml20">品 牌：</span>
+            <Input v-model="brand" placeholder="请输入创建人" style="width: 450px" />
+          </Row>
+          <Row class="mt15">
+            <span class="ml5">提 交 人：</span>
+            <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
+          </Row>
         </div>
-        <Row class="mt15">
-        <span class="ml5">品 牌：</span>
-        <Input v-model="brand" placeholder="请输入创建人" style="width: 450px" />
-        </Row>
-        <Row class="mt15">
-        <span class="ml5">提 交 人：</span>
-        <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
-        </Row>
         <div slot='footer'>
           <Button type='primary' @click="Determined">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancel">取消</Button>
         </div>
       </Modal>
 
@@ -75,6 +75,7 @@
           //选择创建日期
         establish(date){
           this.createData = date
+          console.log(this.createData)
         },
         //选择提交日期
         submit(date){
@@ -117,6 +118,10 @@
         addSuppler(){
           this.$refs.selectSupplier.init()
         },
+        //取消
+        cancel(){
+          this.moreAndMore = false
+        }
       }
 
     }

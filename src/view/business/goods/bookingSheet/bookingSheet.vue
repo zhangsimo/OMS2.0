@@ -41,8 +41,20 @@
                   预订单列表
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
-                <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
-                      @on-page-size-change="changeSizeLeft" show-sizer show-total>
+                <!--<Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"-->
+                      <!--@on-page-size-change="changeSizeLeft" show-sizer show-total>-->
+                <!--</Page>-->
+                <Page
+                  class-name="fl pt10"
+                  size="small"
+                  :current="Left.page.num"
+                  :total="Left.page.total"
+                  :page-size="Left.page.size"
+                  @on-change="changePageLeft"
+                  @on-page-size-change="changeSizeLeft"
+                  show-sizer
+                  show-total
+                >
                 </Page>
               </div>
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
@@ -127,9 +139,6 @@
                   <vxe-table-column field="" title="配件编码" width="100"></vxe-table-column>
                 </vxe-table>
                 <div ref="planPage">
-                  <!--<Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"-->
-                        <!--@on-page-size-change="changeSize" show-sizer show-total>-->
-                  <!--</Page>-->
                 </div>
               </div>
             </Split>
@@ -167,7 +176,7 @@
   import "../../../goods/goodsList/goodsList.less";
   import supplier from './compontents/supplier'
   import PrintShow from "./compontents/PrintShow";
-  import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
+  import { optGroup } from '../../../../api/business/advanceOrder';
 export default {
     name: 'bookingSheet',
   components: {
@@ -217,18 +226,13 @@ export default {
       buttonDisable: true,
       buttonDisableTwo: true,
       split1:0.2,
-      purchaseType: '9999',
+      purchaseType: '99',
       purchaseTypeArr:[
-        { label:'所有',value:'9999' },
-        { label:'草稿',value:'DRAFT' },
-        { label:'待受理',value:'UNACCEPTED' },
-        { label:'已受理',value:'ACCEPTED' },
-        { label:'待分拣',value:'SORTING' },
-        { label:'待发货',value:'SHIPPED' },
-        { label:'已出库',value:'STOCKING' },
-        { label:'已入库',value:'WAREHOUSING' },
-        { label:'已拒绝',value:'REJECTED' },
-        { label:'已作废',value:'INVALID' },
+        { label:'所有',value:'99' },
+        { label:'草稿',value:'0' },
+        { label:'待受理',value:'1' },
+        { label:'已受理',value:'3' },
+        { label:'已作废',value:'5' },
       ],
       //校验输入框的值
       validRules: {
@@ -258,45 +262,39 @@ export default {
             key: 'status',
             minWidth: 70,
             render:(h,params) => {
-              // let Identity = JSON.parse(params.row.status ||{})
               let name = params.row.status.name
               return h('span',name)
             }
           },
           {
             title: '公司',
-            key: 'guestName',
+            key: 'company',
             minWidth: 80
           },
           {
             title: '创建日期',
-            key: 'createTime',
+            key: 'createTimeStart',
             minWidth: 120
           },
           {
             title: '业务员',
-            key: 'createUname',
+            key: 'salesman',
             minWidth: 100
           },
           {
             title: '预定单号',
-            key: 'serviceId',
+            key: 'orderNo',
             minWidth: 120
           },
           {
-            title: '打印次数',
-            key: 'printing',
-            minWidth: 70
-          },
-          {
             title: '提交人',
-            key: 'orderMan',
+            key: 'commitUname',
             minWidth: 100
           },
           {
             title: '提交日期',
             align:'center',
-            key: 'orderDate',
+            key: 'commitTimeStart',
             minWidth: 170
           }
         ],
@@ -526,41 +524,41 @@ export default {
     },
     leftgetList(){
       let params = {}
+      let data = {}
       params.page = this.Left.page.num - 1
       params.size = this.Left.page.size
       if(this.selectArr !== '9999'){
-        params.startTime = this.selectArr[0]
-        params.endTime = this.selectArr[1]
+        data.createTimeStart = this.selectArr[0]
+        data.createTimeEnd = this.selectArr[1]
       }
       if(this.moreArr.createData){
-        params.startTime = this.moreArr.createData[0] + " 00:00:00"
-        params.endTime = this.moreArr.createData[1] + " 23:59:59"
+        data.createTimeStart = this.moreArr.createData[0] + " 00:00:00"
+        data.createTimeEnd = this.moreArr.createData[1] + " 23:59:59"
       }
-      if(this.purchaseType !== '9999'){
-        params.status = this.purchaseType
+      if(this.purchaseType !== '99'){
+        data.status = this.purchaseType
       }
       if(this.moreArr.submitData){
-        params.startDate = this.moreArr.submitData[0] + " 00:00:00"
-        params.endDate = this.moreArr.submitData[1] + " 23:59:59"
+        data.commitTimeStart = this.moreArr.submitData[0] + " 00:00:00"
+        data.commitTimeEnd = this.moreArr.submitData[1] + " 23:59:59"
       }
       if(this.moreArr.callout){
-        params.guestId = this.moreArr.guestId
+        console.log(this.moreArr.callout)
+        data.salesman = this.moreArr.guestId
       }
       if(this.moreArr.numbers){
-        params.serviceId = this.moreArr.numbers
+        data.orderNo = this.moreArr.numbers
       }
       if(this.moreArr.coding){
-        params.partCode = this.moreArr.coding
-      }
-      if(this.moreArr.Accessories){
-        params.createUname = this.moreArr.Accessories
+        data.partCode = this.moreArr.coding
       }
       if(this.moreArr.Name){
-        params.fullName = this.moreArr.Name
+        data.fullName = this.moreArr.Name
       }
-      queryAll(params).then(res => {
+      optGroup({params:params,data:data}).then(res => {
         if(res.code === 0){
           this.Left.tbdata = res.data.content
+          this.Left.page.total = res.data.totalElements
         }
       })
     },
@@ -595,14 +593,6 @@ export default {
         if(res.code === 0){
           this.rowData = res.data
           this.Right.tbdata = res.data.detailVOS
-        }
-      })
-    },
-    // 仓库下拉框
-    warehouse(){
-      queryByOrgid().then(res => {
-        if(res.code === 0){
-          this.List = res.data
         }
       })
     },
@@ -652,7 +642,6 @@ export default {
       this.rightTableHeight = wrapH-planFormH-planBtnH-65;
     });
     this.leftgetList();
-    this.warehouse()
   }
 }
 </script>
