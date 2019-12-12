@@ -21,11 +21,11 @@ export function changeTree (data) {
 }
 
 //右侧list
-export function getSupplierformation (data) {
+export function getSupplierformation (params) {
   return axios.request({
-    url: `${api.wmsApi}/company/findPageByDynamicQuery`,
-    method: 'post',
-    data
+    url: `${api.wmsApi}/company/queryAll`,
+    method: 'get',
+    params
   })
 }
 
@@ -35,9 +35,20 @@ export function getSupplierformation (data) {
 //新增客户资料
 export function getNewSupplier (data) {
   return axios.request({
-    url: `${api.wmsApi}/company/saveOrUpdate?`,
+    url: `${api.wmsApi}/company/save`,
     method: 'post',
     data
   })
 }
+
+
+//是否禁用
+export function setDisabled (params) {
+  return axios.request({
+    url: `${api.wmsApi}/company/disabled`,
+    method: 'get',
+    params
+  })
+}
+
 

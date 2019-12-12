@@ -23,7 +23,12 @@
         this.handleLogin({username, password}).then(res => {
           localStorage.setItem('username', username)
           this.getUserInfo(username).then(res => {
-              console.log(res)
+              // console.log(res , 7777777)
+              let data = {}
+                  data.tenantId = res.tenantId
+                  data.shopId = res.shopId
+                  data.shopkeeper = res.shopkeeper
+          localStorage.setItem('oms2-userList' , JSON.stringify(data))
               this.$router.push({
               name: 'home'
             })
