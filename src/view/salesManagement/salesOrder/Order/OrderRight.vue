@@ -515,6 +515,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             addMountings(){
                 this.$refs.selectPartCom.init()
             },
+            //打开批次配件框
             openBarchModal(){
                 this.$refs.barch.init()
             },
@@ -574,6 +575,9 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 this.$refs.formPlan.validate(async (valid) => {
                     if (valid) {
                         let data ={}
+                        val.map( item => {
+                            item.isMarkBatch = 1
+                        })
                         data = this.formPlan
                         data.detailList = val
                         let res = await  getAccessories(data)
@@ -600,6 +604,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             //获取活动内的数据
           async  activiyList(val){
                 let data ={}
+                val.isMarkActivity = 1
                 data = this.formPlan
                 data.detailList = [val]
                 let res = await  getAccessories(data)
@@ -707,6 +712,9 @@ import {conversionList} from '@/components/changeWbList/changewblist'
           async  getGodown(val){
                 let data ={}
                 data = this.formPlan
+                val.map( item => {
+                    item.isMarkBatch = 1
+                })
                 data.detailList = val.details
                 let res = await  getAccessories(data)
                 if(res.code === 0){

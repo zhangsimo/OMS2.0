@@ -33,7 +33,6 @@
             getList(){
                 getSupplierTreeList().then( res => {
                     if (res.code == 0){
-                        console.log(res)
                       let list = []
                         res.data.forEach( item => {
                             item.title = item.companyName
