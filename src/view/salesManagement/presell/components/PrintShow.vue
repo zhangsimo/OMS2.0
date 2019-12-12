@@ -199,7 +199,6 @@
 
                if(this.id){
                  let id=this.id
-                 // console.log('我是IDIDiidididid',id)
                  getPrint(id).then(res=>{
                    this.onelist = res.data;
                    this.details = res.data.detailVOList;
@@ -216,22 +215,6 @@
                }
 
             }
-          // async  openModal(){
-          //       let order = this.$store.state.dataList.oneOrder
-          //       if(order.id){
-          //
-          //           let data ={}
-          //               data.id = order.id
-          //           let res = await getprintList(data)
-          //           if(res.code === 0){
-          //               this.printShoww = true
-          //               this.onelist = res.data
-          //           }
-          //           console.log(res,996)
-          //       }else {
-          //           this.$message.error('至少选择一条信息')
-          //       }
-          //   }
         }
     }
 </script>

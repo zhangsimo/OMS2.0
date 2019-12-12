@@ -10,14 +10,6 @@ export function getLeftList (num,page,data) {
   })
 }
 
-//获取左侧表格数据
-export function getMoreList (num,page,data) {
-  return axios.request({
-    url: `${api.omsOrder}/guestOrderMain/queryAll?page=${page}&size=${num}`,
-    method: 'post',
-    data
-  })
-}
 
 //获取右侧额度
 export function getLimit  (guestId) {
@@ -75,14 +67,6 @@ export function getSubmit(data) {
     data
   })
 }
-// //导出
-// export function getOutput (id) {
-//   return axios.request({
-//     url: `${api.omsOrder}/guestOrderMain/export?id=${id}`,
-//     method: 'get',
-//   })
-// }
-
 
 //完成销售
 

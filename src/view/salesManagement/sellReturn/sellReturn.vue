@@ -7,18 +7,9 @@
             <span>快速查询：</span>
           </div>
           <div class="db">
-<!--            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>-->
-            <getDate class="mr10"  @quickDate="getvalue" ></getDate>
+            <getDate class="mr10" @quickDate="getvalue"></getDate>
           </div>
           <div class="db">
-<!--            <Select v-model="salesType" class="w90 mr10">-->
-<!--              <Option-->
-<!--                v-for="item in salesTypeArr"-->
-<!--                :value="item.value"-->
-<!--                :key="item.value"-->
-<!--                >{{ item.label }}</Option-->
-<!--              >-->
-<!--            </Select>-->
             <Select v-model="billStatusId" style="width:100px" class="mr10" @on-change="getOrderType">
               <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
             </Select>
@@ -29,48 +20,59 @@
               class="mr10"
               @click="moreQueryShowModal"
             >
-              <Icon type="ios-more" />更多</Button
+              <Icon type="ios-more"/>
+              更多
+            </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
                     @click="addOneList"
-              ><Icon type="md-add" /> 新增</Button
+            >
+              <Icon type="md-add"/>
+              新增
+            </Button
             >
           </div>
           <div class="db">
-            <Button type="default"  class="mr10"
+            <Button type="default" class="mr10"
                     :disabled="draftShow != 0||isNew"
                     @click="isSave"
-              ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
+            ><i class="iconfont mr5 iconbaocunicon"></i>保存
+            </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
                     :disabled="draftShow != 0||isNew"
                     @click="isSubmit"
-              ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
+            ><i class="iconfont mr5 iconziyuan2"></i>提交
+            </Button
             >
           </div>
           <div class="db">
             <Button class="mr10"
                     @click="returnWarehouse"
-                    :disabled="draftShow != 2"
-              ><i class="iconfont mr5 iconshenheicon"></i> 退货入库</Button
+                    :disabled="formPlan.isWms"
+            ><i class="iconfont mr5 iconshenheicon"></i> 退货入库
+            </Button
             >
           </div>
           <div class="db">
-            <Button  class="mr10"
-                     @click="cancellation"
-                     :disabled="draftShow != 0"
-              ><Icon type="md-close" size="14" /> 作废</Button
+            <Button class="mr10"
+                    @click="cancellation"
+                    :disabled="draftShow != 0||!formPlan.id"
+            >
+              <Icon type="md-close" size="14"/>
+              作废
+            </Button
             >
           </div>
           <div class="db">
-            <Button  class="mr10"
-                     @click="printTable"
-                     :disabled="draftShow==6"
-              ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
+            <Button class="mr10"
+                    @click="printTable"
+            ><i class="iconfont mr5 icondayinicon"></i> 打印
+            </Button
             >
           </div>
         </div>
@@ -80,6 +82,7 @@
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="300" max="500">
+<!--            左侧表格-->
             <div
               slot="left"
               class="con-split-pane-left"
@@ -90,7 +93,7 @@
               </div>
               <Table
                 :queryTime="queryTime"
-                :billStatusId ="billStatusId"
+                :billStatusId="billStatusId"
                 height="660"
                 size="small"
                 highlight-row
@@ -101,12 +104,13 @@
                 :data="sellOrderTable.tbdata"
                 @on-current-change="selectTabelData"
               ></Table>
-
-
-              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
+<!--              分页-->
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total
+                    class-name="page-con"
                     @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
-            <div slot="right" class="con-split-pane-right pl5 goods-list-form"  style="overflow-y: auto; height: 100%;">
+<!--            右侧表格-->
+            <div slot="right" class="con-split-pane-right pl5 goods-list-form" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">
                 销售退货信息
               </div>
@@ -117,18 +121,20 @@
                 :label-width="120"
                 :rules="ruleValidate"
               >
-              <div class="clearfix purchase" ref="planForm">
-
+                <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0||isNew">
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px"
+                              :disabled="draftShow != 0||isNew">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
-                      <Button  class="ml5" size="small" type="default"  @click="CustomerShowModel" :disabled="draftShow != 0||isNew"><Icon type="md-checkmark" /></Button>
-
+                      <Button class="ml5" size="small" type="default" @click="CustomerShowModel"
+                              :disabled="draftShow != 0||isNew">
+                        <Icon type="md-checkmark"/>
+                      </Button>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="orderMan" >
+                  <FormItem label="退货员：" prop="orderMan">
                     <Input
                       class="w160"
                       placeholder="请输入退货员"
@@ -143,11 +149,10 @@
                       placeholder="请选择退货日期"
                       v-model="formPlan.orderDate"
                       :disabled="draftShow != 0||isNew"
-                      @on-change="getReturnDate"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="往来单号：">
-                    <Input class="w160" v-model="formPlan.code" disabled/>
+                    <Input class="w160" v-model="formPlan.code"/>
                   </FormItem>
                   <FormItem label="退货原因：" prop="rtnReasonId">
                     <Select class="w160" v-model="formPlan.rtnReasonId" :disabled="draftShow != 0||isNew">
@@ -155,14 +160,16 @@
                         v-for="item in  settleTypeList.CS00116"
                         :key="item.itemCode"
                         :value="item.itemCode"
-                        >{{ item.itemName }}</Option
+                      >{{ item.itemName }}
+                      </Option
                       >
                     </Select>
                   </FormItem>
-
-                  <FormItem label="结算方式：" prop="settleTypeId" >
+                  <FormItem label="结算方式：" prop="settleTypeId">
                     <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0||isNew">
-                      <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
+                      <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{
+                        item.itemName }}
+                      </Option>
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
@@ -174,140 +181,125 @@
                     />
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
-                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0||isNew" @on-change="getStore">
+                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0||isNew"
+                            @on-change="getStore">
                       <Option v-for="item in WareHouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="退货单号：">
                     <Input class="w160" v-model="formPlan.serviceId" disabled/>
                   </FormItem>
-              </div>
-              <div class="flex plan-cz-btn" ref="planBtn">
-                <div class="clearfix">
-                  <div class="fl mb5">
-                    <Button
-                      size="small"
-                      class="mr10"
-                      @click="SalesOutboundShowModel"
-                      :disabled="draftShow != 0 || isNew"
-                    >
-                      选择销售出库单</Button
-                    >
-                  </div>
-                  <div class="fl mb5">
-                    <Button size="small" class="mr10"
-                            :disabled="draftShow != 0||isNew"
-                            @click="deletePart"
-                      ><Icon custom="iconfont iconlajitongicon icons" />
-                      删除配件</Button
-                    >
+                </div>
+                <div class="flex plan-cz-btn" ref="planBtn">
+                  <div class="clearfix">
+                    <div class="fl mb5">
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="SalesOutboundShowModel"
+                        :disabled="draftShow != 0 || isNew"
+                      >
+                        <Icon type="md-add"/>
+                        选择销售出库单
+                      </Button
+                      >
+                    </div>
+                    <div class="fl mb5">
+                      <Button size="small" class="mr10"
+                              :disabled="draftShow != 0||isNew"
+                              @click="deletePart"
+                      >
+                        <Icon custom="iconfont iconlajitongicon icons"/>
+                        删除配件
+                      </Button
+                      >
+                    </div>
                   </div>
                 </div>
-              </div>
-              <vxe-table
-                border
-                resizable
-                show-footer
-                :edit-rules="validRules"
-                :footer-method="footerMethod"
-                size="mini"
-                resizable
-                auto-resize
-                @select-change="selectTable"
-                @select-all="selectAllTable"
-                ref="xTable"
-                height='500'
-                :data="formPlan.details"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
-              >
-                <vxe-table-column
-                  type="index"
-                  title="序号"
-                ></vxe-table-column>
-                <vxe-table-column type="checkbox"></vxe-table-column>
-                <!-- <vxe-table-column title="操作" width="80">
-                  <template v-slot="{ row }">
-                    <Button type="text">查看</Button>
-                  </template>
-                </vxe-table-column> -->
-
-                <vxe-table-column
-                  field="partCode"
-                  title="配件编码"
-
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="partName"
-                  title="配件名称"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="partBrand"
-                  title="品牌"
-                ></vxe-table-column>
-
-                <vxe-table-column field="orderQty" title="数量"   :edit-render="{name: 'input'}"></vxe-table-column>
-                <vxe-table-column field="orderPrice" title="销价"  :edit-render="{name: 'input'}"></vxe-table-column>
-                <vxe-table-column  title="金额" >
-                  <template v-slot="{ row }">
-                    <span>{{ countAmount(row) }} </span>
-                  </template>
-                </vxe-table-column>
-                <vxe-table-column
-                  field="remark"
-                  title="备注"
-
-                  :edit-render="{name: 'input'}"
-                ></vxe-table-column>
-<!--                <vxe-table-column-->
-<!--                  field="date12"-->
-<!--                  title="仓库"-->
-<!--                 :edit-render="{name: 'select', options: WareHouseList}"-->
-<!--                  width="100"-->
-
-<!--                ></vxe-table-column>-->
-                <vxe-table-column
-                  field="storeName"
-                  title="仓库"
-                  disabled
+                <vxe-table
+                  border
+                  resizable
+                  show-footer
+                  :edit-rules="validRules"
+                  :footer-method="footerMethod"
+                  size="mini"
+                  resizable
+                  auto-resize
+                  @select-change="selectTable"
+                  @select-all="selectAllTable"
+                  ref="xTable"
+                  height='500'
+                  :data="formPlan.details"
+                  :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
                 >
-                  <template v-slot:edit="{ row }">
-                    <Select  style="width:100px">
-                      <Option
-                        v-for="item in WareHouseList"
-                        :value="item.id"
-                        :key="item.id"
-                      >{{ item.name }}</Option
-                      >
-                    </Select>
-                  </template>
-
-                </vxe-table-column>
-                <vxe-table-column
-                  field="storeShelf"
-                  title="仓位"
-
-                ></vxe-table-column>
-                <vxe-table-column  title="品牌车型">
-                  <template v-slot="{row,rowIndex}">
-                    <span>{{row.carBrandName}} {{row.carModelName}}</span>
-                  </template>
-                </vxe-table-column>
-                <vxe-table-column
-                  field="unit"
-                  title="单位"
-
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="oemCode"
-                  title="OE码"
-
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="spec"
-                  title="规格"
-
-                ></vxe-table-column>
-              </vxe-table>
+                  <vxe-table-column
+                    type="index"
+                    title="序号"
+                  ></vxe-table-column>
+                  <vxe-table-column type="checkbox"></vxe-table-column>
+                  <vxe-table-column
+                    field="partCode"
+                    title="配件编码"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partName"
+                    title="配件名称"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partBrand"
+                    title="品牌"
+                  ></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input'}"></vxe-table-column>
+                  <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input'}"></vxe-table-column>
+                  <vxe-table-column title="金额">
+                    <template v-slot="{ row }">
+                      <span>{{ countAmount(row) }} </span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column
+                    field="remark"
+                    title="备注"
+                    :edit-render="{name: 'input'}"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="storeName"
+                    title="仓库"
+                    disabled
+                  >
+                    <template v-slot:edit="{ row }">
+                      <Select style="width:100px">
+                        <Option
+                          v-for="item in WareHouseList"
+                          :value="item.id"
+                          :key="item.id"
+                        >{{ item.name }}
+                        </Option
+                        >
+                      </Select>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column
+                    field="storeShelf"
+                    title="仓位"
+                  ></vxe-table-column>
+                  <vxe-table-column title="品牌车型">
+                    <template v-slot="{row,rowIndex}">
+                      <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column
+                    field="unit"
+                    title="单位"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="oemCode"
+                    title="OE码"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="spec"
+                    title="规格"
+                  ></vxe-table-column>
+                </vxe-table>
               </Form>
             </div>
           </Split>
@@ -319,34 +311,41 @@
     <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
     <!--更多 搜索-->
-    <More-search :data="moreQueryList"  ref="morequeryModal" @moreQuery="queryList"></More-search>
+    <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!-- 选择销售出库单 -->
     <Sales-outbound ref="salesOutbound" @salesOutList="getOutList"></Sales-outbound>
   </div>
 </template>
 
 <script>
-
-  import {getLeftList,getClient,getWarehouseList,getDelete,returnWareHouse,getDeleteList,getSave,getSubmit} from "_api/salesManagment/sellReturn.js";
-  import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  import {
+    getLeftList,
+    getClient,
+    getWarehouseList,
+    getDelete,
+    returnWareHouse,
+    getDeleteList,
+    getSave,
+    getSubmit
+  } from "_api/salesManagment/sellReturn.js";
+  import {getDigitalDictionary} from '@/api/system/essentialData/clientManagement'
   import selectTheCustomer from '../commonality/SelectTheCustomer.vue'
   import SalesOutbound from './components/SalesOutbound.vue';
   import getDate from '@/components/getDate/dateget'
   import PrintShow from "./components/PrintShow";
   import MoreSearch from "./components/MoreSearch";
   import * as tools from "../../../utils/tools";
-  import {save} from "../../../api/AlotManagement/transferringOrder";
+
   export default {
-    name:'sellReturn',
+    name: 'sellReturn',
     components: {
-      // QuickDate,
       selectTheCustomer,
       SalesOutbound,
       getDate,
       MoreSearch,
       PrintShow
     },
-    data(){
+    data() {
       let changeNumber = (rule, value, callback) => {
         if (!value && value != '0') {
           callback(new Error("请输入大于或等于0的正整数"));
@@ -374,36 +373,36 @@
         }
       };
       return {
-        isNew:true,//页面开始禁用
-        isCommit:true,//是否提交
-        draftShow:'',//判定是不是草稿
-        isAdd:true, //判断是否新增
-        isWms:true,//判断是否提交
-        PTrow:{
+        isNew: true,//页面开始禁用
+        isCommit: true,//是否提交
+        draftShow: '',//判定是不是草稿
+        isAdd: true, //判断是否新增
+        isWms: true,//判断是否提交,返回
+        PTrow: {
           _highlight: true,
-          billStatusId:{name:'草稿' ,value:0}
+          billStatusId: {name: '草稿', value: 0}
           // status: {"name":"草稿","value":0},
         },
-        page:{
-          total:0,
-          size:10,
-          num:1
+        page: {
+          total: 0,
+          size: 10,
+          num: 1
         },
         moreQueryList: {},//更多查询
-         oneRow: {},//点击详情的数据
-        billStatusId:99,  //快速查询状态
-        typeList:[
-          {value:99,name:'所有'},
-          {value:0,name:'草稿'},
-          {value:2,name:'待入库'},
-          {value:4,name:'已入库'},
-          {value:6,name:'已作废'}
+        oneRow: {},//点击详情的数据
+        billStatusId: 99,  //快速查询状态
+        typeList: [
+          {value: 99, name: '所有'},
+          {value: 0, name: '草稿'},
+          {value: 2, name: '待入库'},
+          {value: 4, name: '已入库'},
+          {value: 6, name: '已作废'}
         ],
 
-        queryTime:'',  //快速查询时间
-        client:[],//客户列表
+        queryTime: '',  //快速查询时间
+        client: [],//客户列表
 
-         sellOrderTable:{
+        sellOrderTable: {
           loading: false,
           columns: [
             {
@@ -454,7 +453,7 @@
             },
             {
               title: '创建日期',
-              align:'center',
+              align: 'center',
               key: 'createTime',
               minWidth: 170
             },
@@ -465,51 +464,54 @@
             },
             {
               title: '提交日期',
-              align:'center',
+              align: 'center',
               key: 'submitDate',
               minWidth: 170
             },
 
           ],
-          tbdata:[],
+          tbdata: [],
 
         }, //表格属性
-        formPlan:{},//表单对象
-        split1:0.2,//左右框
-        WareHouseList:[],// 入库仓
+        formPlan: {},//表单对象
+        split1: 0.2,//左右框
+        WareHouseList: [],// 入库仓
         settleTypeList: {},//结账类型
-        tableData:[],//右侧表格list
-        thTypes:[], //退货类型
-        ruleValidate:{ //表单校验
-         guestId: [
-           {required: true, type: 'string', message: '', trigger: 'change'}
-         ],
-         orderMan:[
-           {required: true, message: '  ', trigger: 'blur'}
-         ],
-         rtnReasonId:[
-           {required: true, type: 'string', message: ' ', trigger: 'change'}
-         ],
-         storeId:[
-           {required: true, type: 'string', message: ' ', trigger: 'change'}
-         ],
-         orderDate:[
-           {required: true, type: 'string', message: ' ', trigger: 'change'}
-          ]
-       },
+        tableData: [],//右侧表格list
+        thTypes: [], //退货类型
+        ruleValidate: { //表单校验
+          guestId: [
+            {required: true, type: 'string', message: '', trigger: 'change'}
+          ],
+          orderMan: [
+            {required: true, message: '  ', trigger: 'blur'}
+          ],
+          rtnReasonId: [
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
+          ],
+          storeId: [
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
+          ],
+          orderDate: [
+            {required: true, type: 'date', message: ' ', trigger: 'change'}
+          ],
+          settleTypeId: [
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
+          ],
+        },
         validRules: {
           orderQty: [
-            { required: true,validator:changeNumber },
+            {required: true, validator: changeNumber},
 
           ],
           orderPrice: [
-            { required: true, validator:money }
+            {required: true, validator: money}
           ]
         }, //表格校验
 
-        id:'',  //点击左侧表格拿到的id
-        selectTableList:[], //右侧table表格选中的数据
-        isCommit:false//判断是否已提交
+        id: '',  //点击左侧表格拿到的id
+        selectTableList: [], //右侧table表格选中的数据
+        isCommit: false//判断是否已提交
       }
     },
     mounted() {
@@ -518,176 +520,141 @@
       this.getType()
       this.getWarehouse()
     },
-    methods:{
-      //获取表单预计发货时间
-      getReturnDate(data){
-        this.formPlan.orderDate =tools.transTime(data)
-        // console.log('获取到的退货时间',this.formPlan.orderDate )
-      },
+    methods: {
       //多选内容
-      selectTable(data){
+      selectTable(data) {
         this.selectTableList = data.selection
-        // console.log('多选内容', this.selectTableList)
-
-
       },
       //全选内容
-      selectAllTable(data){
+      selectAllTable(data) {
         this.selectTableList = data.selection
-        // console.log('全选内容', this.selectTableList )
       },
       //计算表格数据
-      countAmount (row) {
+      countAmount(row) {
         return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
       },
       //获取左侧表格一行选中的数据
-      selectTabelData(v){
-        // console.log(v, 666)
-        // console.log('点击左侧获取的数据',v)
-        this.isNew=false
-        this.currentRow=v
+      selectTabelData(v) {
+        console.log('左侧数据数据',v)
+        this.isNew = false
+        this.currentRow = v
         this.id = v.id
-        this.formPlan.orderDate=tools.transTime(v.orderDate)
-        // console.log('xiuxuiixixixi',this.formPlan.orderDate)
-        // this.draftShow = JSON.parse(v.billStatusId)
-        // v.orderType =  JSON.parse(v.orderType)
-        // v.orderTypeValue = v.orderType.value
-        // this.draftShow = this.draftShow.value
-        this.tableData=v.details
+        this.formPlan.orderDate = tools.transTime(v.orderDate)
+        this.tableData = v.details
         this.formPlan = v
-        this.draftShow=v.billStatusId.value
-        // this.formPlan.orderDate=tools.transTime(v.orderDate)
-        // console.log('退货时间', this.formPlan.orderDate)
-        // console.log('打印的表单数据',this.formPlan)
+        this.draftShow = v.billStatusId.value
       },
       //新增按钮
-      addOneList(){
+      addOneList() {
         this.isNew = false;
-        this.tableData=[]
-        this.formPlan={}
+        this.tableData = []
+        this.formPlan = {}
         this.draftShow = 0
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
         this.sellOrderTable.tbdata.unshift(this.PTrow)
-        this.isAdd=false;
-        // console.log('新增的数据',this.PTrow)
+        this.isAdd = false;
       },
       //获取客户属性
-      async getType(){
-        let data ={}
+      async getType() {
+        let data = {}
         //107票据类型
         //106结算方式
-        data =['CS00106','CS00107','CS00116']
+        data = ['CS00106', 'CS00107', 'CS00116']
         let res = await getDigitalDictionary(data)
-        if(res.code == 0){
+        if (res.code == 0) {
           this.settleTypeList = res.data
-          // console.log('6666666666666',this.settleTypeList)
         }
 
       },
       //获取选择状态类型
-      getOrderType(v){
-        this.billStatusId=v
-        // console.log('获取的状态时间',this.billStatusId)
+      getOrderType(v) {
+        this.billStatusId = v
       },
       //打开新增客户
-      CustomerShowModel(){
+      CustomerShowModel() {
         this.$refs.selectTheCustomer.openModel()
       },
       //客户列表
-      getAllClient(){
-        getClient().then(res=>{
-          // console.log('打印出来的客户数据',res)
-          if(res.code===0){
+      getAllClient() {
+        getClient().then(res => {
+          if (res.code === 0) {
             this.client = res.data
           }
         })
       },
       //选择销售出库单
-       SalesOutboundShowModel(){
-        // console.log(this.$refs.salesOutbound)
+      SalesOutboundShowModel() {
         this.$refs.salesOutbound.openModal()
 
-       },
+      },
       //选择更多
       moreQueryShowModal(row) {
-
         this.oneRow = row
         this.moreQueryList = {}
         this.$refs.morequeryModal.openModal()
       },
       //获取时间
-      getvalue(date){
+      getvalue(date) {
         this.queryTime = date
-        // console.log('获取的时间啊啊',this.queryTime[0])
       },
       // 获取仓库
-      async getWarehouse(){
-        let res = await  getWarehouseList({groupId:this.$store.state.user.userData.groupId})
-        // console.log('3333',res)
-        if(res.code === 0){
+      async getWarehouse() {
+        let res = await getWarehouseList({groupId: this.$store.state.user.userData.groupId})
+        if (res.code === 0) {
           this.WareHouseList = res.data
-          // console.log('获取到的仓库列表',this.WareHouseList)
         }
       },
       //仓库改变右侧表格改变
-      getStore(data){
-        if(this.formPlan.details > 0){
-          let house = this.WareHouseList.filter( item => item.id == data)
-          this.formPlan.details.map( val => {
+      getStore(data) {
+        if (this.formPlan.details > 0) {
+          let house = this.WareHouseList.filter(item => item.id == data)
+          this.formPlan.details.map(val => {
             val.storeName = house[0].name
           })
         }
       },
       //切换页面
-      selectNum(val){
+      selectNum(val) {
         this.page.num = val
         this.getLeftList()
       },
       //切换页数
-      selectPage(val){
+      selectPage(val) {
         this.page.num = 1
         this.page.size = val
         this.getLeftList()
       },
       //更多搜索
-      queryList(){
+      queryList() {
         this.page.num = 1
-        let page = this.page.num -1
+        let page = this.page.num - 1
         let size = this.page.size
-        let data= this.moreQueryList
-        getLeftList(page,size,data).then(res =>{
-          // console.log('叔叔或或或或或或',res)
-          if(res.code===0){
-            // this.draftShow = value
-
-            this.sellOrderTable.tbdata= res.data.content || []
-
+        let data = this.moreQueryList
+        getLeftList(page, size, data).then(res => {
+          if (res.code === 0) {
+            this.sellOrderTable.tbdata = res.data.content || []
             this.page.total = res.data.totalElements
 
           }
 
         })
       },
-      //获取搜索框内的数据
-      setOneClient(val){
-        // console.log('数据',val)
-        this.$set(this.formPlan,"guestId",val.id);
+      //获取搜索框内的数
+      setOneClient(val) {
+        this.$set(this.formPlan, "guestId", val.id);
       },
       //获取左侧表格数据
-      getLeftList(){
-        let data={}
-         data.startTime =this.queryTime[0]||''
-         data.endTime = this.queryTime[1]||''
-        // data.status= this.orderType
-        // params=this.query
-        data.billStatusId= this.billStatusId
-        let page = this.page.num -1
+      getLeftList() {
+        let data = {}
+        data.startTime = this.queryTime[0] || ''
+        data.endTime = this.queryTime[1] || ''
+        data.billStatusId = this.billStatusId
+        let page = this.page.num - 1
         let size = this.page.size
-        getLeftList(page,size,data).then(res=>{
-          // console.log('左侧数据',res)
-          if(res.code===0){
+        getLeftList(page, size, data).then(res => {
+          if (res.code === 0) {
             this.sellOrderTable.tbdata = res.data.content || []
             this.page.total = res.data.totalElements
           }
@@ -696,34 +663,36 @@
 
       //作废按钮
 
-      cancellation(){
-        if(this.id){
+      cancellation() {
+        if (this.id) {
           this.$Modal.confirm({
             title: '是否确定作废',
             onOk: async () => {
-              let id=this.id
-              let res = await  getDelete(id);
+              let id = this.id
+              let res = await getDelete(id);
               if (res.code == 0) {
                 this.$Message.success('作废成功');
                 this.getLeftList()
-                this.id=null
+                this.formPlan={}
+                this.id = null
+                this.$refs.formPlan.resetFields();
               }
             },
             onCancel: () => {
               this.$Message.info('取消提交');
             },
           })
-        }else{
+        } else {
           this.$Message.warning('请选择草稿状态下的一条有效数据')
         }
       },
 
       //打印弹出框
-      printTable(){
+      printTable() {
         this.$refs.printBox.openModal()
       },
       // 计算尾部总和
-      countAllAmount (data) {
+      countAllAmount(data) {
         let count = 0
         data.forEach(row => {
           count += this.countAmount(row)
@@ -733,177 +702,136 @@
       },
 
       //退货入库
-
-      returnWarehouse(){
-        if(this.id){
-          let id=this.id
-          // console.log(id)
-          returnWareHouse(id).then(res=>{
-            if(res.code==0){
-              this.$Message.success('退货入库成功');
-              // console.log('作废的数据',res)
-              this.getLeftList()
-            }
+      returnWarehouse() {
+        if (this.id) {
+          this.$Modal.confirm({
+            title: '是否确定已完成销售',
+            onOk: async () => {
+              let id = this.id
+              let res = await returnWareHouse(id);
+              if (res.code == 0) {
+                this.$Message.success('操作成功');
+                this.getLeftList()
+                this.id = null
+                this.formPlan = {}
+                this.$refs.formPlan.resetFields();
+              }
+            },
+            onCancel: () => {
+              this.$Message.info('取消提交');
+            },
           })
-        }else{
+        } else {
           this.$message.error("至少选择一条信息");
         }
       },
 
       //保存
-      isSave(){
-
+      isSave() {
         this.$refs.formPlan.validate(async (valid) => {
-
           if (valid) {
-            // console.log('999999999999999999999999999')
             try {
               await this.$refs.xTable.validate()
-              // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
-                let data={}
-               data=this.formPlan
-              //data.billStatusId=this.formPlan.billStatusId.value
-             // data.orderDate = tools.transTime(this.formPlan.orderDate)
-              data.billStatusId=null
-              data.orderDate=this.formPlan.orderDate
+              let data = {}
+              data = this.formPlan
+              data.orderDate = tools.transTime(this.formPlan.orderDate)
+              data.billStatusId = null
+              // data.orderDate=this.formPlan.orderDate
               let res = await getSave(data)
-              if(res.code === 0){
-                this.isAdd=true;
-                this.isCommit=true
+              console.log('打印出来的保存数据888',res)
+              if (res.code === 0) {
+                this.isAdd = true;
+                this.isCommit = true
                 this.$Message.success('保存成功');
                 this.getLeftList()
-                this.formPlan={}
+                this.$refs.formPlan.resetFields();
+                this.formPlan = {}
               }
             } catch (errMap) {
-              this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+              this.$XModal.message({status: 'error', message: '表格校验不通过！'})
             }
           } else {
             this.$Message.error('*为必填项');
           }
         })
-        // this.$refs.formPlan.validate((valid) => {
-        //   if (valid) {
-        //           let data = {}
-        //           data=this.formPlan
-        //           // data.billStatusId=this.formPlan.billStatusId.value
-        //           //   data.orderDate = tools.transTime(this.formPlan.orderDate)
-        //           data.billStatusId=null
-        //           getSave(data).then(res => {
-        //             if(res.code === 0){
-        //               this.isAdd=true;
-        //               this.$Message.success('保存成功！')
-        //               this.formPlan={}
-        //               this.getLeftList()
-        //
-        //             }
-        //           })
-        //         } else {
-        //           this.$Message.error('*为必填！');
-        //         }
-        //       })
-
       },
 
       //提交
+      isSubmit() {
+        if (!this.isCommit || !this.formPlan.id) {
+          return this.$Message.error('请先保存数据')
+        }
+        this.$Modal.confirm({
+          title: '是否确定提交订单',
+          onOk: async () => {
+            let data = {}
+            data = this.formPlan
+            data.billStatusId = null
+            data.orderDate = tools.transTime(this.formPlan.orderDate)
+            let res = await getSubmit(data);
+            if (res.code == 0) {
+              this.$Message.success('提交成功');
+              this.getLeftList()
+              this.isCommit = false;
+              this.isNew = true
+              this.formPlan = {}
+              this.id = null
+              this.$refs.formPlan.resetFields();
+              this.getLeftList()
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('取消提交');
+          },
+        })
 
-      // isSubmit(){
-      //   let data={}
-      //   data = this.formPlan
-      //   data.billStatusId=this.formPlan.billStatusId.value
-      //   data.orderDate = tools.transTime(this.formPlan.orderDate)
-      //   getSubmit(data).then(res=>{
-      //     if(res.code===0){
-      //       this.$Message.success('提交成功');
-      //       // console.log('提交',res)
-      //       this.getLeftList()
-      //     }
-      //   })
-      // },
-
-     isSubmit(){
-       // if (!this.isCommit) {
-       //   return this.$Message.error('请先保存数据');
-       // }
-       //    let data={}
-       //    data = this.formPlan
-       //    // data.billStatusId=this.formPlan.billStatusId.value
-       //     //data.orderDate = tools.transTime(this.formPlan.orderDate)
-       //      data.billStatusId=null
-       //    getSubmit(data).then(res=>{
-       //      if(res.code===0){
-       //        this.$Message.success('提交成功');
-       //        this.isCommit=false;
-       //        this.formPlan={}
-       //        this.getLeftList()
-       //      }
-       //    })
-       if(this.isCommit){
-         this.$Modal.confirm({
-           title: '是否确定提交订单',
-           onOk: async () => {
-             let data={}
-               data = this.formPlan
-             data.billStatusId=null
-             let res = await  getSubmit(data);
-             if (res.code == 0) {
-               this.$Message.success('提交成功');
-               this.getLeftList()
-               this.isCommit=false;
-               this.isNew=true
-               this.formPlan={}
-               this.id=null
-               this.getLeftList()
-             }
-           },
-           onCancel: () => {
-             this.$Message.info('取消提交');
-           },
-         })
-       }else{
-         this.$Message.error('请先保存数据')
-       }
-  },
+      },
 
       //选择销售出库单
-      getOutList(val){
-        let data ={}
+      getOutList(val) {
+        let data = {}
         data = this.formPlan
         data.details = val
+        data.orderDate = tools.transTime(this.formPlan.orderDate)
         data.billStatusId = null
-        getSave(data).then(res=>{
+        getSave(data).then(res => {
+          this.$Message.success('选择销售出库单成功');
+          this.formPlan = {}
+          this.$refs.formPlan.resetFields();
           this.getLeftList()
         })
       },
 
 
       //删除配件
-      deletePart(){
-        if (this.selectTableList.length > 0){
-          let data= []
-          this.selectTableList.forEach( item => {
+      deletePart() {
+        if (this.selectTableList.length > 0) {
+          let data = []
+          this.selectTableList.forEach(item => {
             data.push({id: item.id})
           })
           // console.log(data)
-          getDeleteList(data).then( res => {
-            if(res.code === 0){
+          getDeleteList(data).then(res => {
+            if (res.code === 0) {
               this.$Message.success('删除配件成功');
-              this.formPlan={}
-              this.tableData=[]
+              this.formPlan = {}
+              this.tableData = []
+              this.$refs.formPlan.resetFields();
               this.getLeftList()
             }
           })
-        }else {
+        } else {
           this.$Message.error('请选择一条有效数据')
         }
       },
       //获取尾部总数
-      footerMethod ({ columns, data }) {
+      footerMethod({columns, data}) {
         return [
           columns.map((column, columnIndex) => {
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['orderQty', 'orderPrice','orderAmt'].includes(column.property)) {
+            if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
             if (columnIndex === 7) {
@@ -914,30 +842,32 @@
         ]
       },
     },
-    watch:{
+    watch: {
       //监听时间
-      queryTime:function (val ,old) {
+      queryTime: function (val, old) {
         this.page.num = 1
         this.page.size = 10
         this.getLeftList()
       },
       //监听状态
-      billStatusId:function (val ,old) {
+      billStatusId: function (val, old) {
         this.page.num = 1
-        this.page.size =10
+        this.page.size = 10
         this.getLeftList()
 
       },
-      formPlan:{
-        handler(val ,old){
+      formPlan: {
+        handler(val, old) {
         },
-        deep:true
+        deep: true
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
-@import url("../../lease/product/lease.less");
-@import url("./index");
+
+  @import url("../../lease/product/lease.less");
+  @import url("./index");
 </style>
