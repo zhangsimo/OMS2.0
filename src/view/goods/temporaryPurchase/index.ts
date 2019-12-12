@@ -295,7 +295,7 @@ export default class InterPurchase extends Vue {
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
-    let res = await api.TemporarySaveDraft(data);
+    let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
@@ -313,7 +313,7 @@ export default class InterPurchase extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
-        let res = await api.TemporarySaveCommit(data);
+        let res = await api.temporarySaveCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
           this.getListData();
@@ -377,7 +377,7 @@ export default class InterPurchase extends Vue {
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
-        let res: any = await api.TemporarySaveObsolete(this.selectTableRow.id);
+        let res: any = await api.temporarySaveObsolete(this.selectTableRow.id);
         if (res.code == 0) {
           this.$Message.success('作废成功');
           this.getListData();
@@ -593,12 +593,12 @@ export default class InterPurchase extends Vue {
     }
     let res: any;
     if (!this.isMore) {
-      res = await api.TemporaryFindPageByDynamicQuery(params, data)
+      res = await api.temporaryFindPageByDynamicQuery(params, data)
     } else {
       if (this.moreData != null) {
         data = { ...data, ...this.moreData };
       }
-      res = await api.TemporaryQueryByConditions(params, data)
+      res = await api.temporaryQueryByConditions(params, data)
     }
     if (res.code == 0) {
       this.isAdd = true;
