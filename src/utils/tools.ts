@@ -19,6 +19,19 @@ export function transTime(long: any): string {
 }
 
 /**
+ * 时间格式转换 -> 'y-m-d h:m:s'
+ * @param long 日期时间字符串
+ */
+export function transDate(long: any): string {
+  if (!long) return "";
+  let date = new Date(long);
+  let year = date.getFullYear();
+  let month = lt9(date.getMonth() + 1);
+  let day = lt9(date.getDate());
+  return `${year}-${month}-${day}`;
+}
+
+/**
  * 对象数组去重
  * @param arr 原数组
  * @param key 判断的键默认id

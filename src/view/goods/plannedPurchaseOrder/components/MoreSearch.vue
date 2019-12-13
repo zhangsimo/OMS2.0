@@ -43,6 +43,9 @@
       <FormItem label="配件编码: ">
         <Input type="text" class="w300 ml5" size="large" v-model="partCode" />
       </FormItem>
+      <FormItem label="配件名称: ">
+        <Input type="text" class="w300 ml5" size="large" v-model="partName" />
+      </FormItem>
       <FormItem label="品牌: ">
         <Input type="password" class="w300 ml5" v-model="partBrand" />
       </FormItem>
@@ -87,6 +90,7 @@ export default class MoreSearch extends Vue {
   private partCode: string = "";
   private partBrand: string = "";
   private auditor: string = "";
+  private partName: string = "";
   private createUname: string = "";
   private guestId:string = "";
   private guestname:string = "";
@@ -103,6 +107,7 @@ export default class MoreSearch extends Vue {
     this.guestId = "";
     this.guestname = "";
     this.createUname = "";
+    this.partName = "";
     this.showSelf = true;
   }
 
@@ -140,6 +145,7 @@ export default class MoreSearch extends Vue {
       partBrand: this.partBrand,
       auditor: this.auditor,
       createUname: this.createUname,
+      partName: this.partName,
       guestId: this.guestId,
       showSelf: this.showSelf,
     };

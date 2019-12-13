@@ -74,11 +74,22 @@ export function saveReverse(data) {
 }
 
 //获取采购计划单列表
-export function findPageByDynamicQuery(data) {
+export function findPageByDynamicQuery(params, data) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/findPageByDynamicQuery`,
     method: 'post',
-    data
+    params,
+    data,
+  })
+}
+
+//获取采购计划单列表 - 高级
+export function queryByConditions(params, data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/queryByConditions`,
+    method: 'post',
+    params,
+    data,
   })
 }
 
