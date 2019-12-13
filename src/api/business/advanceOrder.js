@@ -11,3 +11,52 @@ export function optGroup (data) {
     params:data.params
   })
 }
+
+// 删除配件  /preOrderDetail/delete
+export function deleteit (data) {
+  return axios.request({
+    url: `${api.omsOrder}/preOrderDetail/delete`,
+    method: 'post',
+    data:data
+  })
+}
+
+// 保存  /preOrderMain/save
+export function save (data) {
+  return axios.request({
+    url: `${api.omsOrder}/preOrderMain/save`,
+    method: 'post',
+    data:data
+  })
+}
+
+//提交 /preOrderMain/commitOrder
+export function commitOrder (data) {
+  return axios.request({
+    url: `${api.omsOrder}/preOrderMain/commitOrder`,
+    method: 'post',
+    data:data
+  })
+}
+
+// 作废 /preOrderMain/invalid
+export function invalid (params) {
+  return axios.request({
+    url: `${api.omsOrder}/preOrderMain/invalid`,
+    method: 'get',
+    params
+  })
+}
+
+//批量导入地址
+export const getup = `${api.omsOrder}/preOrderMain/import?`;
+
+// 更多弹筐里的下拉框
+// tenantUsers/queryAll?size=10&page=0&userName=&
+export function queryAll (params) {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/queryAll?size=1000&page=0&userName=&phone=`,
+    method: 'get',
+    params
+  })
+}

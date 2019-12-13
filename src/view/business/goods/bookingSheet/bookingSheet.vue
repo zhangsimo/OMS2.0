@@ -41,9 +41,6 @@
                   预订单列表
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
-                <!--<Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"-->
-                      <!--@on-page-size-change="changeSizeLeft" show-sizer show-total>-->
-                <!--</Page>-->
                 <Page
                   class-name="fl pt10"
                   size="small"
@@ -63,18 +60,20 @@
                 </div>
                 <div class="clearfix purchase" ref="planForm">
                   <Form inline
+                        :model="formPlan"
                         :show-message="false"
                         ref="formPlan"
                         :rules="ruleValidate"
                         :label-width="100">
                     <FormItem label="业务员：" prop="salesman">
-                      <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.salesman"></Input>
+                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.salesman"></Input>
                     </FormItem>
                     <FormItem label="预订单号:" prop="Reservation" class="ml50">
-                      <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.Reservation"></Input>
+                      <Input class="w160" :disabled="true" v-model="formPlan.Reservation"></Input>
                     </FormItem>
                     <FormItem label="期望到货日期：" prop="orderDate" class="fs12 ml50">
                       <DatePicker
+                        @on-change="changedate"
                         style="width: 160px"
                         type="date"
                         placeholder="请选择期望到货日期"
@@ -90,16 +89,28 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
+                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0 || buttonDisable"><Icon type="md-add"/> 添加配件</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0 || buttonDisable" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                     </div>
                     <!--<div class="fl mb5">-->
                       <!--<Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>-->
                     <!--</div>-->
                     <div class="fl mb5">
-                    <Button size="small" class="mr10" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
+                      <Upload
+                        ref="upload"
+                        style="display: inline-block"
+                        :show-upload-list="false"
+                        :action="upurl"
+                        :headers="headers"
+                        :format="['xlsx','xls']"
+                        :on-format-error="onFormatError"
+                        :on-success="onSuccess"
+                        :before-upload ='beforeUpload'
+                      >
+                    <Button size="small" class="mr10" @click="getRUl" :disabled="presentrowMsg !== 0 || buttonDisable"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
+                   </Upload>
                     </div>
                   </div>
                 </div>
@@ -109,6 +120,7 @@
                   show-footer
                   @select-change="selectChange"
                   @edit-closed="editClosedEvent"
+                  @select-all="selectAll"
                   size="mini"
                   :edit-rules="validRules"
                   :height="rightTableHeight"
@@ -116,27 +128,27 @@
                   :footer-method="addFooter"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column type="" width="60"></vxe-table-column>
-                  <vxe-table-column field="" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="预定数量" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column width="60" type="checkbox"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称" width="150"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column field="preQty" title="预定数量" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
                         :min="0"
-                        v-model="row.applyQty"
+                        v-model="row.preQty"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="规格" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="方向" width="100"></vxe-table-column>
-                  <vxe-table-column field="" title="配件编码" width="100"></vxe-table-column>
+                  <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
+                  <vxe-table-column field="acceptQty" title="受理数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                  <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
+                  <vxe-table-column field="partInnerId" title="配件内码" width="150"></vxe-table-column>
                 </vxe-table>
                 <div ref="planPage">
                 </div>
@@ -148,7 +160,6 @@
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择配件-->
-      <!--<Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList"></Select-part-com>-->
       <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
       <!--编辑收货信息-->
       <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
@@ -176,7 +187,10 @@
   import "../../../goods/goodsList/goodsList.less";
   import supplier from './compontents/supplier'
   import PrintShow from "./compontents/PrintShow";
-  import { optGroup } from '../../../../api/business/advanceOrder';
+  import Cookies from 'js-cookie'
+  import { optGroup ,deleteit, save, commitOrder, invalid, getup} from '../../../../api/business/advanceOrder';
+  import { TOKEN_KEY } from '@/libs/util'
+  import baseUrl from '_conf/url'
 export default {
     name: 'bookingSheet',
   components: {
@@ -219,7 +233,7 @@ export default {
       },
       //表单验证
       ruleValidate: {
-        salesman: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'blur' }],
+        salesman: [{ required: true ,message: '调出方不能为空', trigger: 'blur' }]
       },
       datadata: null,
       rowId:'', //当前行的id
@@ -238,10 +252,7 @@ export default {
       validRules: {
         applyQty: [
           { required: true,validator:changeNumber },
-        ],
-        // remark: [
-        //   { required: true, validator:changeNumber }
-        // ]
+        ]
       },
       List:[],
       Left: {
@@ -328,16 +339,39 @@ export default {
         orderDate: tools.transTime(new Date()), //期望到货日期
         remark: '', //备注
       },
+      headers: {
+        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+      },//请求头
+      upurl: getup,//导入地址
       mainId: null, //选中行的id
       clickdelivery: false
     }
   },
   methods: {
+      //改变日期
+    changedate(a){
+      this.formPlan.orderDate = a
+    },
     //删除配件
     Delete(){
-      var set = this.checkboxArr.map(item=>item.id)
-      var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
-      this.Right.tbdata = resArr
+      // var set = this.checkboxArr.map(item=>item.id)
+      // var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
+      // this.Right.tbdata = resArr
+      let data = this.checkboxArr.map(item => {
+        return {
+          id: item.id
+        }
+      })
+      deleteit(data).then(res => {
+        if(res.code === 0){
+          this.$message.warning('删除成功！')
+          this.leftgetList()
+          this.formPlan.salesman = ''
+          this.formPlan.Reservation = ''
+          this.formPlan.remark = ''
+          this.Right.tbdata = []
+        }
+      })
     },
     //更多按钮
     moreaa(){
@@ -366,51 +400,59 @@ export default {
     selectTabelData(){},
     //保存按钮
     SaveMsg(){
-      let data = {}
-      data.id = this.rowId
-      data.guestId = this.formPlan.guestidId
-      data.storeId = this.formPlan.storeId
-      data.guestName = this.formPlan.guestName
-      data.orderDate = tools.transTime(this.formPlan.orderDate)
-      data.remark = this.formPlan.remark
-      data.createUname  = this.formPlan.createUname
-      data.serviceId = this.formPlan.serviceId
-      data.detailVOS = this.Right.tbdata
-      // console.log(data)
-      save(data).then(res => {
-        if(res.code === 0){
-          this.$message.success('保存成功！')
-          this.leftgetList()
-          this.formPlan.guestName = '',
-            this.formPlan.storeId =  '',
-            this.formPlan.remark =  '',
-            this.formPlan.createUname =  '',
-            this.formPlan.serviceId =  '',
-            this.Right.tbdata = []
+      this.$refs.formPlan.validate((valid) => {
+        if (valid) {
+          let data = {}
+          data.id = this.rowId
+          data.salesman =  this.formPlan.salesman
+          data.orderNo =  this.formPlan.Reservation
+          data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+          console.log(tools.transDate(this.formPlan.orderDate))
+          data.remark = this.formPlan.remark
+          data.detailVOList = this.Right.tbdata
+          save(data).then(res => {
+            if(res.code === 0){
+              this.$message.success('保存成功！')
+              this.leftgetList(),
+                this.formPlan.salesman =  '', //业务员
+                this.formPlan.Reservation =  '',
+                this.formPlan.remark =  '',
+                this.Right.tbdata = []
+            }
+          })
+        } else {
+          this.$Message.error('*为必填！');
         }
       })
+    },
+    //checkbox全选
+    selectAll(a){
+      this.checkboxArr = a.selection
+      console.log(this.checkboxArr)
     },
     //作废
     cancellation(){
       this.$Modal.confirm({
         title: '是否作废',
         onOk: async () => {
-          let data = {}
-          data.status = 8
-          data.id = this.rowId
-          data.guestId = this.guestidId
-          data.storeId = this.formPlan.storeId
-          data.orderDate = tools.transTime(this.formPlan.orderDate)
-          data.remark = this.formPlan.remark
-          data.createUname  = this.formPlan.createUname
-          data.serviceId = this.formPlan.serviceId
-          data.detailVOS = this.Right.tbdata
-          let res = await save(data);
-          if (res.code == 0) {
-            this.$Message.success('作废成功');
-            this.leftgetList();
-            this.isAdd = true;
-          }
+          this.$refs.formPlan.validate((valid) => {
+            if (valid) {
+              let params = {}
+              params.id = this.rowId
+              invalid(params).then(res => {
+                if(res.code === 0){
+                  this.$message.success('作废成功！')
+                  this.leftgetList(),
+                    this.formPlan.salesman =  '', //业务员
+                    this.formPlan.Reservation =  '',
+                    this.formPlan.remark =  '',
+                    this.Right.tbdata = []
+                }
+              })
+            } else {
+              this.$Message.error('*为必填！');
+            }
+          })
         },
         onCancel: () => {
           this.$Message.info('取消作废');
@@ -419,8 +461,36 @@ export default {
     },
     // 导出
     derive(){
-
+      if(!this.mainId){
+        this.$message.error('请选择一条有效数据')
+        return false
+      }else {
+        location.href = baseUrl.omsOrder + '/preOrderMain/export?id='+ this.mainId +'&access_token=' + Cookies.get(TOKEN_KEY)
+      }
       },
+    //导入配件
+    getRUl(){
+      this.upurl = getup +'id=' + this.mainId
+    },
+    //批量上传失败
+    onFormatError(file) {
+      this.$Message.error('只支持xls xlsx后缀的文件')
+    },
+    // 上传成功函数
+    onSuccess (response) {
+      if(response.code == 0 ){
+        console.log(response.data)
+        if (response.data.list && response.data.list.length > 0) {
+          this.warning(response.data.List[0])
+        }
+      }else {
+        this.$Message.error('上传失败')
+      }
+    },
+    //上传之前清空
+    beforeUpload(){
+      this.$refs.upload.clearFiles()
+    },
     //右侧表格复选框选中
     selectChange(msg){
       this.checkboxArr = msg.selection
@@ -459,7 +529,7 @@ export default {
           if (columnIndex === 0) {
             return '和值'
           }
-          if (['applyQty'].includes(column.property)) {
+          if (['preQty'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
           return null
@@ -480,26 +550,18 @@ export default {
       // console.log(ChildMessage)
       let parts = ChildMessage.map( item => {
         return {
-          partName : item.partStandardName,
-          unit : item.minUnit,
-          // oemCode : item.brandPartCode,
-          // spec : item.specifications,
-          enterUnitId : item.direction,
-          applyQty : '',
-          remark : '',
-          partInnerId : item.code,
-          partCode : item.partCode,
-          oemCode : item.oeCode,
-          partBrand : item.partBrand,
-          carBrandName : item.adapterCarBrand,
-          carModelName : item.adapterCarModel,
-          carTypef : item.baseType.firstType.typeName,
-          cartypes : item.baseType.secondType.typeName,
-          carTypet : item.baseType.thirdType.typeName,
-          spec : item.specifications,
+          partCode : item.partCode, //编码
+          partName : item.partStandardName, //名称
+          unit : item.minUnit, //单位
+          partBrand : item.partBrand, //品牌
+          spec : item.specifications,  //规格
+          preQty : '', //预定数量
+          remark : '', //备注
+          acceptQty: 0, //受理数量
+          oemCode : item.oeCode, //oe码
+          direction: item.direction, //方向
+          partInnerId: item.code, //配件内码
           partId : item.id,
-          fullName : item.fullName,
-          systemUnitId : item.minUnit,
         }
       })
       console.log(ChildMessage)
@@ -531,20 +593,20 @@ export default {
         data.createTimeStart = this.selectArr[0]
         data.createTimeEnd = this.selectArr[1]
       }
-      if(this.moreArr.createData){
+      if(this.moreArr.createData != null){
         data.createTimeStart = this.moreArr.createData[0] + " 00:00:00"
         data.createTimeEnd = this.moreArr.createData[1] + " 23:59:59"
       }
       if(this.purchaseType !== '99'){
         data.status = this.purchaseType
       }
-      if(this.moreArr.submitData){
+      if(this.moreArr.submitData != null){
         data.commitTimeStart = this.moreArr.submitData[0] + " 00:00:00"
         data.commitTimeEnd = this.moreArr.submitData[1] + " 23:59:59"
       }
       if(this.moreArr.callout){
         console.log(this.moreArr.callout)
-        data.salesman = this.moreArr.guestId
+        data.salesman = this.moreArr.callout
       }
       if(this.moreArr.numbers){
         data.orderNo = this.moreArr.numbers
@@ -554,6 +616,12 @@ export default {
       }
       if(this.moreArr.Name){
         data.fullName = this.moreArr.Name
+      }
+      if(this.moreArr.brand){
+        data.partBrandCode = this.moreArr.brand
+      }
+      if(this.moreArr.Accessories){
+        data.commitUname = this.moreArr.Accessories
       }
       optGroup({params:params,data:data}).then(res => {
         if(res.code === 0){
@@ -570,31 +638,17 @@ export default {
       this.guestidId = row.guestId
       this.datadata = row
       console.log(this.datadata)
-      this.formPlan.guestName = this.datadata.guestName
-      this.formPlan.storeId = this.datadata.storeId
-      this.formPlan.orderDate = this.datadata.orderDate
+      this.formPlan.salesman = this.datadata.salesman
+      this.formPlan.Reservation = this.datadata.orderNo
+      this.formPlan.orderDate = this.datadata.expectedArrivalDate
       this.formPlan.remark = this.datadata.remark
-      this.formPlan.createUname = this.datadata.createUname
-      this.formPlan.serviceId = this.datadata.serviceId
-      // this.guestidId = this
+      this.Right.tbdata = this.datadata.detailVOList
       this.presentrowMsg = row.status.value
       console.log(this.presentrowMsg)
       this.rowId = row.id
       if(row.id){
         this.buttonDisable = false
       }
-      this.getRightlist()
-    },
-    //右部分接口
-    getRightlist(){
-      let params = {}
-      params.id = this.rowId
-      findById(params).then(res => {
-        if(res.code === 0){
-          this.rowData = res.data
-          this.Right.tbdata = res.data.detailVOS
-        }
-      })
     },
     Determined(){
 
@@ -604,25 +658,30 @@ export default {
       this.$Modal.confirm({
         title: '是否提交',
         onOk: async () => {
-          if(this.clickdelivery){
-            let data = {}
-            data.id = this.rowId
-            data.guestId = this.guestidId
-            data.storeId = this.formPlan.storeId
-            data.orderDate = tools.transTime(this.formPlan.orderDate)
-            data.remark = this.formPlan.remark
-            data.createUname  = this.formPlan.createUname
-            data.serviceId = this.formPlan.serviceId
-            data.detailVOS = this.Right.tbdata
-            let res = await commit(data);
-            if (res.code == 0) {
-              this.$Message.success('提交成功');
-              this.leftgetList();
-              this.isAdd = true;
+          this.$refs.formPlan.validate((valid) => {
+            if (valid) {
+              let data = {}
+              data.id = this.rowId
+              data.salesman =  this.formPlan.salesman
+              data.orderNo =  this.formPlan.Reservation
+              data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+              console.log(tools.transDate(this.formPlan.orderDate))
+              data.remark = this.formPlan.remark
+              data.detailVOList = this.Right.tbdata
+              commitOrder(data).then(res => {
+                if(res.code === 0){
+                  this.$message.success('提交成功！')
+                  this.leftgetList(),
+                    this.formPlan.salesman =  '', //业务员
+                    this.formPlan.Reservation =  '',
+                    this.formPlan.remark =  '',
+                    this.Right.tbdata = []
+                }
+              })
+            } else {
+              this.$Message.error('*为必填！');
             }
-          }else{
-            this.$Message.warning('请先编辑收货信息')
-          }
+          })
         },
         onCancel: () => {
           this.$Message.info('取消提交');
