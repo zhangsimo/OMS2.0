@@ -510,6 +510,7 @@ export default class InterPurchase extends Vue {
   }
   //导入
   private getRUl(){
+    this.upurl=api.getup;
     Object.keys(this.formPlanmain).map((item,i)=>{
       if(i==0){
         this.upurl+=`${item}=${this.formPlanmain[item]}`;
