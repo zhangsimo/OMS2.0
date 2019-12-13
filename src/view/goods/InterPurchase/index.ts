@@ -561,7 +561,7 @@ export default class InterPurchase extends Vue {
       data.endTime = this.quickDate[1];
     }
     if (this.purchaseType != 999 && this.purchaseType) {
-      data.flag = this.purchaseType;
+      data.billStatusId = this.purchaseType;
     }
     let res: any;
     if (!this.isMore) {
