@@ -64,14 +64,14 @@ export default [
     component: Main,
     children: [
       {
-        path: "/goods/goodsList",
-        name: "goodsList",
+        path: "PurchasePlan",
+        name: "PurchasePlan",
         mark: '1000',
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购计划"
         },
-        component: () => import("@/view/goods/goodsList/goodsList.vue")
+        component: () => import("@/view/goods/PurchasePlan/PurchasePlan.vue")
       },
       {
         path: "plannedPurchaseOrder",
