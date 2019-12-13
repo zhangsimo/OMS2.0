@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="other-item">
-      <a class="mr20" @click="openShow">{{tenantCompanyName}}</a>
+      <a class="mr20" @click="openShow">{{getName}}</a>
       <a class="mr20" href="#">客服</a>
       <a class="mr20" @click="toImage">反馈</a>
       <Icon class="mr20" type="md-home" size="16"/>
@@ -55,7 +55,12 @@
             company:'',//公司
             tableData:[],//公司列表
             companyOneList:'',//点击获取到的公司信息
-            tenantCompanyName: this.$store.state.user.userData.tenantCompanyName
+
+        }
+      },
+      computed:{
+        getName(){
+            return this.$store.state.user.userShopName
         }
       },
       methods: {
@@ -97,7 +102,17 @@
                   data.userId = this.$store.state.user.userData.id
              let res = await setCompany(data)
                       console.log(res)
-
+                  if(res.code === 0){
+                      this.$store.commit('setUserShopName' , res.data.shopName)
+                      let data = {}
+                      data.tenantId = res.data.tenantId
+                      data.shopId = res.data.shopId
+                      data.shopkeeper = res.data.shopkeeper
+                      localStorage.setItem('oms2-userList' , JSON.stringify(data))
+                      this.$nextTick( () => {
+                          this.$router.go(0);
+                      })
+                  }
 
 
           }
