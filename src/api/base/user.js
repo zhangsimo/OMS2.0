@@ -45,10 +45,23 @@ export const changePwd = (data) => {
     data
   })
 }
-//审批状态接口
-export const approvalStatus =(data)=>{
-  return axios.request({
-    url:`${api.omsTpApi}/dingtalk/process/getProcessInstance?instanceId=${data.instanceId}`,
-    method:'get'
+
+//获取当前用户的所有公司
+export const getUserAllCompany = ( params) =>{
+    return axios.request( {
+      url:api.passportApi + '/sysOrgEmporg/findUserShopListPage',
+      method: 'get',
+      params
+    })
+}
+
+//切换企业号
+export const setCompany = (data) =>{
+    return axios.request( {
+    url:api.passportApi + '/staff/findByShopId',
+    method: 'post',
+    data
   })
 }
+
+
