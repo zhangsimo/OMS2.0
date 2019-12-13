@@ -144,7 +144,7 @@
             <!--<Button type='default' @click='proModal = false'>取消</Button>-->
           <!--</div>-->
         </TabPane>
-        <TabPane label="包装规格" tab="partInfoTab">
+        <TabPane label="包装规格" tab="partInfoTab" v-if="showSpe">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
@@ -238,6 +238,7 @@
     props:{
       isAddPart:false,
       isSellDis: false,
+      showSpe:true,//是否显示包装规格
     },
     components: {SearchPartName},
     mixins:[mixPartInfo],

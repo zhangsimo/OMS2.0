@@ -3,20 +3,22 @@ import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
-import { orderState } from './global';
+import { orderState } from '../plannedPurchaseOrder/global';
 
 import QuickDate from '_c/getDate/dateget.vue';
-import SelectSupplier from "./components/selectSupplier.vue";
-import PurchaseAmount from "./components/PurchaseAmount.vue";
-import GoodsInfo from './components/GoodsInfo.vue';
-import MoreSearch from './components/MoreSearch.vue';
-import FeeRegistration from './components/FeeRegistration.vue';
-import ProcurementModal from './components/ProcurementModal.vue';
-import AdjustModel from './components/AdjustModel.vue';
-import TabsModel from './components/TabsModel.vue';
-import PrintModel from './components/print.vue';
-import StatusModal from './components/checkApprovalModal.vue';
-
+import SelectSupplier from "../plannedPurchaseOrder/components/selectSupplier.vue";
+import PurchaseAmount from "../plannedPurchaseOrder/components/PurchaseAmount.vue";
+import GoodsInfo from '../plannedPurchaseOrder/components/GoodsInfo.vue';
+import MoreSearch from '../plannedPurchaseOrder/components/MoreSearch.vue';
+import FeeRegistration from '../plannedPurchaseOrder/components/FeeRegistration.vue';
+import ProcurementModal from '../plannedPurchaseOrder/components/ProcurementModal.vue';
+import AdjustModel from '../plannedPurchaseOrder/components/AdjustModel.vue';
+import TabsModel from '../plannedPurchaseOrder/components/TabsModel.vue';
+import PrintModel from '../plannedPurchaseOrder/components/print.vue';
+import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.vue';
+import SelectPartCom from "../goodsList/components/selectPartCom.vue";
+import Cookies from 'js-cookie'
+import { TOKEN_KEY } from '@/libs/util'
 @Component({
   components: {
     QuickDate,
@@ -29,16 +31,18 @@ import StatusModal from './components/checkApprovalModal.vue';
     AdjustModel,
     TabsModel,
     PrintModel,
-    StatusModal
+    StatusModel,
+    SelectPartCom
   }
 })
-export default class PlannedPurchaseOrder extends Vue {
+export default class InterPurchase extends Vue {
   @State('user') user;
 
   private split1: number = 0.2;
 
   private isInput: boolean = true;
-
+  //配件数据
+  private accData: Array<Option> = [];
   //左侧表格高度
   private leftTableHeight: number = 0;
   //右侧表格高度
@@ -48,17 +52,20 @@ export default class PlannedPurchaseOrder extends Vue {
   private adjustButtonDisable: boolean = true;
 
   // 选中的采购订单列表的状态;
-  private selectRowState: orderState | null = null;
-  private serviceId: string = '';
+  private selectRowState:orderState| null = null;
+  private serviceId:string = '';
 
   // 快速查询订单状态
   private purchaseType: string | number = "";
   // 快速查询订单状态选项
   private purchaseTypeArr: Array<Option> = []
-
+  private headers={
+    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+  };//请求头
+  private upurl = api.getup;//导入地址
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
-  private mainId: string | null = null;
+  private mainId: string|null = null;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -128,6 +135,24 @@ export default class PlannedPurchaseOrder extends Vue {
     }
   }
 
+  //批量上传失败
+  onFormatError(file) {
+    this.$Message.error('只支持xls xlsx后缀的文件')
+  };
+  // 上传成功函数
+  onSuccess (response) {
+    if(response.code != 0 ){
+      this.$Message.error(response.message)
+    }else {
+      this.$Message.success(response.message)
+    }
+    this.getListData();
+  }
+  //上传之前清空
+  beforeUpload(){
+    let upload : any=this.$refs.upload;
+    upload.clearFiles()
+  };
   // 合计采购金额
   private totalAmt: number = 0;
 
@@ -144,6 +169,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private formPlanmain: any = {
     guestId: "", // 供应商id
     guest: "", // 供应商
+    advanceAmt:"",//预付款
     orderMan: "", // 采购员
     billTypeId: "", // 票据类型
     settleTypeId: "",  // 结算方式
@@ -162,7 +188,6 @@ export default class PlannedPurchaseOrder extends Vue {
     storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
     orderDate: [{ required: true, type: 'date', message: "请选择订货日期", trigger: "change" }],
   }
-
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
 
@@ -199,7 +224,7 @@ export default class PlannedPurchaseOrder extends Vue {
     new: true,
     _highlight: true,
     id: '0',
-    billStatusId: '',
+    billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
   }
@@ -270,8 +295,7 @@ export default class PlannedPurchaseOrder extends Vue {
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
-    data.details = this.tableData;
-    let res = await api.saveDraft(data);
+    let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
       this.getListData();
@@ -289,8 +313,7 @@ export default class PlannedPurchaseOrder extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
-        data.details = this.tableData;
-        let res = await api.saveCommit(data);
+        let res = await api.temporarySaveCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
           this.getListData();
@@ -350,11 +373,11 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 废弃
   private abandoned() {
-    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
-        let res: any = await api.saveObsolete(this.selectTableRow.id);
+        let res: any = await api.temporarySaveObsolete(this.selectTableRow.id);
         if (res.code == 0) {
           this.$Message.success('作废成功');
           this.getListData();
@@ -368,30 +391,32 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 打印
   private print() {
-    const ref: any = this.$refs.PrintModel;
+    const ref:any = this.$refs.PrintModel;
     ref.openModal();
   }
 
   //表格单选选中
   private selectTabelData(v: any) {
-    if (v == null) return;
+    if(v == null) return;
     if (!v.new && !this.isAdd) {
       this.purchaseOrderTable.tbdata.splice(0, 1);
       this.isAdd = true;
-      const currentRowTable: any = this.$refs["currentRowTable"];
+      const currentRowTable:any = this.$refs["currentRowTable"];
       currentRowTable.clearCurrentRow();
     }
     this.selectTableRow = v;
     this.mainId = v.id;
     this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId.name;
+    this.selectRowState = v.billStatusId;
     this.serviceId = v.serviceId;
-    if (['草稿', '退回'].includes(v.billStatusId.name)) {
+    // orderState['草稿'], orderState['退回']
+    if(['草稿', '退回'].includes(v.billStatusId)) {
       this.isInput = false;
     } else {
       this.isInput = true;
     }
-    if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
+    // orderState['待收货'], orderState['部分入库']
+    if(['待收货', '部分入库'].includes(v.billStatusId)) {
       this.adjustButtonDisable = false;
     } else {
       this.adjustButtonDisable = true;
@@ -457,22 +482,42 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 费用登记
   private showFee() {
-    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
+    if(this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
     this.showModel('feeRegistration');
   }
 
   // 收货信息
   private showGoodsInfo() {
-    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.showModel('goodsInfo');
   }
-
+  //查看审批
+  private showStatus(){
+    this.showModel('StatusModel');
+  }
+  //添加配件
+  private addAcc(){
+   this.showModel('selectPartCom')
+  }
+  //添加配件数据
+  private getPartNameList(v){
+    this.tableData = this.tableData.concat(v)
+  }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
   private showModel(name) {
     let ref: any = this.$refs[name];
     ref.init();
   }
-
+  //导入
+  private getRUl(){
+    Object.keys(this.formPlanmain).map((item,i)=>{
+      if(i==0){
+        this.upurl+=`${item}=${this.formPlanmain[item]}`;
+      }else{
+        this.upurl+=`&${item}=${this.formPlanmain[item]}`;
+      }
+    })
+  }
   // 调节大小
   private getDomHeight() {
     this.$nextTick(() => {
@@ -511,7 +556,7 @@ export default class PlannedPurchaseOrder extends Vue {
       for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
-      for (let el in billStatusMap) {
+      for(let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
       }
     }
@@ -548,12 +593,12 @@ export default class PlannedPurchaseOrder extends Vue {
     }
     let res: any;
     if (!this.isMore) {
-      res = await api.findPageByDynamicQuery(params, data)
+      res = await api.temporaryFindPageByDynamicQuery(params, data)
     } else {
       if (this.moreData != null) {
         data = { ...data, ...this.moreData };
       }
-      res = await api.queryByConditions(params, data)
+      res = await api.temporaryQueryByConditions(params, data);
     }
     if (res.code == 0) {
       this.isAdd = true;
@@ -582,7 +627,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购计划单据
   private getPlanOrder(row: any) {
-    if (!row) return;
+    if(!row) return;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
@@ -590,9 +635,8 @@ export default class PlannedPurchaseOrder extends Vue {
         }
       })
     })
-    this.tableData = this.selectTableRow.details;
     this.tableData = this.tableData.concat(...row.details);
-    // this.selectTableRow.details = this.tableData;
+    this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
         el = this.selectTableRow;
@@ -608,9 +652,8 @@ export default class PlannedPurchaseOrder extends Vue {
   private getAmt(amt) {
     this.amt = amt;
   }
-
   // 操作-查看
-  private partId: string = '';
+  private partId:string = '';
   private watch(id: any) {
     this.partId = id || null;
     this.$nextTick(() => {

@@ -214,7 +214,97 @@ export function saveFee(data) {
     data,
   });
 }
+//临时采购导入配件地址
+export const getup = `${api.omsOrder}/pchsOrderTemporary/importExcel?`;
 
+//临时采购主数据-分页查询
+export function temporaryFindPageByDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+};
+//临时采购主数据-高级查询
+export function temporaryQueryByConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+};
+// 临时采购保存草稿
+export function temporarySaveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveDraft`,
+    method: "post",
+    data
+  });
+};
+// 临时采购提交
+export function temporarySaveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveCommit`,
+    method: "post",
+    data
+  });
+};
+// 临时采购作废
+export function temporarySaveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+};
+
+
+//外采主数据-分页查询
+export function outsideFindPageByDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+};
+//外采--导入配件地址
+export const outgetup = `${api.omsOrder}/pchsOrderExternal/importExcel?`;
+//外采购主数据-高级查询
+export function outsideQueryByConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+};
+// 外采购--保存草稿
+export function outsideSaveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveDraft`,
+    method: "post",
+    data
+  });
+};
+// 外采购--提交
+export function outsideSaveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveCommit`,
+    method: "post",
+    data
+  });
+};
+// 外采购--作废
+export function outsideSaveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+};
 // 计算金额
 export function calculatAmt(data) {
   return axios.request({
@@ -223,3 +313,5 @@ export function calculatAmt(data) {
     data,
   });
 }
+
+

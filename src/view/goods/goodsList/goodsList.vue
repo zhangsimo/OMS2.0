@@ -103,7 +103,7 @@
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="delTableData"><i class="iconfont mr5 iconlajitongicon"></i> 删除</Button>
                   </div>
-                  <div class="fl mb5">
+                  <!-- <div class="fl mb5">
                     │
                     <span class="ml10">配件品牌：</span>
                     <Select size="small" class="w100 mr10" v-model="formPlan.billType">
@@ -127,15 +127,14 @@
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconxiazaiicon"></i> 获取配件</Button>
-                  </div>
+                  </div> -->
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 计划调整</Button>
                   </div>
                 </div>
-
-                <div class="t-price">
+                <!-- <div class="t-price">
                   采购计划金额：120000.00
-                </div>
+                </div> -->
               </div>
               <vxe-table
                 border
@@ -265,9 +264,10 @@
 <script>
   import '../../lease/product/lease.less'
   import './goodsList.less'
+  import {getPurchaseInit} from "_api/purchasing/purchasePlan";
   import {getLeaseProlist,saveProduct} from '../../../api/lease/leaseApi'
   import QuickDate from '../../../components/getDate/dateget'
-  import {purchaseTypeList} from './goodsList'
+  // import {purchaseTypeList} from './goodsList'
   import {mixGoodsData} from "./mixGoodsList";
   import SelectPartCom from "./components/selectPartCom";
   import SelectSupplier from "./components/supplier/selectSupplier";
@@ -321,7 +321,7 @@
       return {
         //快速订单查询状态
         purchaseType:0,
-        purchaseTypeArr:purchaseTypeList()||[],
+        purchaseTypeArr: [],
         //高级搜索层
         advancedSearch:false,
 
@@ -380,7 +380,7 @@
             key: 'flag',
             minWidth: 70,
             render:(h,params) => {
-              return h('span',this.returnOrderType(params.row.flag))
+              return h('span', params.row.billStatusId.name)
             }
           },
           {
@@ -443,6 +443,15 @@
         this.getDomHeight();
       }
 
+      getPurchaseInit({}).then(res => {
+      //票据类型
+        if(res.code == 0) {
+          const {billStatusMap} = res.data;
+          for (let el in billStatusMap) {
+            this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+          }
+        }
+      })
     },
     methods: {
       //获取表格高度

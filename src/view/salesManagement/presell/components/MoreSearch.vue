@@ -43,7 +43,6 @@
 
 <script>
   import {getClient} from "_api/salesManagment/presell.js"
-  import {getMoreList} from "_api/salesManagment/presell.js";
   export default {
     name: "MoreSearh",
     props:{
@@ -71,36 +70,25 @@
       //获取公司
       async getAllClient() {
         let res = await getClient()
-        console.log('我是打印出来的客户IDIDiidid',res)
         if (res.code === 0) {
           this.clientList = res.data
         }
-        // console.log(res,999)
       },
       //获取创建时间
       getCreatDate(date) {
-        // console.log(date)
         this.data.createTimeStart = date[0] + " " + "00:00:00"
         this.data.createTimeEnd = date[1] + ' ' + '23:59:59'
-        // console.log('666',this.data.createTimeStart,this.data.createTimeEnd)
       },
       //提交日期
       submitDate(date) {
-        // console.log('444',date)
         this.data.commitTimeStart = date[0] + " " + "00:00:00"
         this.data.commitTimeEnd = date[1] + ' ' + '23:59:59'
-        // console.log('777',this.data.createTimeStart,this.data.createTimeStart)
       },
-      // getGuestId(v){
-      //
-      //   console.log('我是打印出来的客户数据id',this.v)
-      // },
       //更多搜索
       getMoreSearch() {
-        console.log('我是打印出来的moressearch',this.data)
+        // console.log('我是打印出来的moressearch',this.data)
         this.$emit('moreQuery' , this.data)
         this.moreQueryShow=false
-
       }
     }
   }

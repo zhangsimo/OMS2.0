@@ -9,48 +9,48 @@
             </h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>调拨申请单:</p>
+            <p>采购退货单:</p>
             <p>No: {{ onelist.serviceId }}</p>
           </Col>
         </Row>
         <Row class="pt10 pd10" style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址: {{ onelist.receiveAddress }}</span></p>
-            <p><span>电话: {{ onelist.receiverMobile }}</span></p>
+            <p><span>地址: {{ onelist.orgAddress }}</span></p>
+            <p><span>电话: {{ onelist.orgTel }}</span></p>
           </Col>
           <Col span="12" class="pl10">
             <p>
-              <span>订单日期:</span><span>{{  }}</span>
+              <span>订单日期:</span><span>{{ onelist.orderDate }}</span>
             </p>
             <p>
               <span>打印日期:</span>
-              <span>{{  }}</span>
+              <span>{{ onelist.printDate }}</span>
             </p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>客户:</span> <span>{{ onelist.guestName }}</span>
+              <span>供应商:</span> <span>{{ onelist.guestName }}</span>
             </p>
             <p>
-              <span>地址:</span> <span>{{ onelist.guestAddress }}</span>
+              <span>地址:</span> <span>{{ onelist.orgAddress }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>联系人:</span> <span>{{ onelist.receiver }}</span>
+              <span>联系人:</span> <span>{{ onelist.contactor }}</span>
             </p>
             <p>
-              <span>票据类型:</span><span>{{  }}</span>
+              <span>票据类型:</span><span>{{ onelist.billTypeName }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span><span>{{ onelist.receiverMobile }}</span>
+              <span>联系电话:</span><span>{{ onelist.orgTel }}</span>
             </p>
             <p>
-              <span>结算方式:</span><span>{{ onelist.settleType }}</span>
+              <span>结算方式:</span><span>{{ onelist.settleTypeName }}</span>
             </p>
           </Col>
         </Row>
@@ -65,15 +65,15 @@
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
+          <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ onelist.totalAmt | toChies }}</span>
           </Col>
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
-            <span>总数:</span>
-            <span>{{ onelist.orderQty }}</span>
-          </Col>
-          <Col class="pl10" span="8">
+          <!--<Col class="pl10" span="8" style="border-right: 1px #000000 solid">-->
+            <!--<span>总数:</span>-->
+            <!--<span>{{ onelist.orderQty }}</span>-->
+          <!--</Col>-->
+          <Col class="pl10" span="12">
             <span>合计:</span>
             <span>{{ onelist.totalAmt }}</span>
           </Col>
@@ -81,7 +81,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{ onelist.orderMan }}</span>
+            <span>{{ onelist.creator }}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
@@ -106,7 +106,7 @@
 <script>
   import * as api from "_api/procurement/plan";
   import * as tools from "../../../../../utils/tools";
-  import { pointAdd } from '../../../../../api/AlotManagement/transferringOrder';
+  import { print } from '../../../../../api/business/supplierListApi';
 
   export default {
     name: "PrintShow",
@@ -136,23 +136,8 @@
             align: "center"
           },
           {
-            title: "申请数量",
-            key: "applyQty",
-            align: "center"
-          },
-          {
-            title: "备注",
-            key: "remark",
-            align: "center"
-          },
-          {
-            title: "单位",
-            key: "unit",
-            align: "center"
-          },
-          {
-            title: "  OE码",
-            key: "oemCode",
+            title: "品牌车型",
+            key: "carModelName",
             align: "center"
           },
           {
@@ -161,45 +146,34 @@
             align: "center"
           },
           {
-            title: "方向",
-            key: "enterUnitId",
+            title: "单位",
+            key: "unit",
             align: "center"
           },
           {
-            title: "紧销品",
-            key: "isTightPart",
-            align: "center",
-            render: (h ,params) => {
-              let isTight = params.row.isTight
-              let zi = ''
-              if(isTight === 0){
-                zi = "不是"
-              }
-              if(isTight === 1){
-                zi = '是'
-              }
-              return h('span',zi)
-            }
-          },
-          {
-            title: "受理数量",
-            key: "hasAcceptQty",
+            title: "数量",
+            key: "orderQty",
             align: "center"
           },
           {
-            title: "取消数量",
-            key: "hasCancelQty",
+            title: "单价",
+            key: "orderPrice",
             align: "center"
           },
           {
-            title: "出库数量",
-            key: "hasOutQty",
+            title: "金额",
+            key: "orderAmt",
             align: "center"
           },
           {
-            title: "入库数量",
+            title: "仓库",
+            key: "storeName",
+            align: "center"
+          },
+          {
+            title: "仓位",
             key: "storeShelf",
-            align: "hasInQty"
+            align: "center"
           }
         ],
         onelist: {}, //打印数据
@@ -224,12 +198,12 @@
       },
       async openModal() {
         if (this.orderId) {
-          let res = await pointAdd({id:this.orderId});
+          let res = await print({id:this.orderId});
           if (res.code === 0) {
             this.printShow = true;
             this.onelist = res.data;
             // this.onelist.printDate = tools.transTime(new Date());
-            this.details = res.data.detailVOS;
+            this.details = res.data.details;
           }
         } else {
           this.$message.error("至少选择一条信息");

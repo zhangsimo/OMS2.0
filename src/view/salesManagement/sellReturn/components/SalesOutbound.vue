@@ -65,7 +65,6 @@
           <vxe-table-column
             field="guestName"
             title="往来单位"
-
           ></vxe-table-column>
           <vxe-table-column
             field="orderMan"
@@ -101,14 +100,9 @@
 
           ></vxe-table-column>
         </vxe-table>
-        <div class="clearfix">
-          <Page :total="page.total" :page-size="page.size" :current="page.num"
-                show-sizer show-total class-name="page-con fr mr10 mb10 mt10"
-                :page-size-opts="page.placement"
-                @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
-        </div>
+
         <!-- 销售出库单下 -->
-<!--        <div class="mt5 pr10 h40">订单数量共{{this.page.total}}条</div>-->
+        <div class="mt5 pr10 h40">订单数量共{{this.page.total}}条</div>
         <vxe-table
           height='200'
           border
@@ -132,51 +126,48 @@
           <vxe-table-column
             field="partCode"
             title="配件编码"
-
           ></vxe-table-column>
           <vxe-table-column
             field="partName"
             title="配件名称"
-
           ></vxe-table-column>
           <vxe-table-column
             field="partBrand"
             title="品牌"
-
           ></vxe-table-column>
           <vxe-table-column
             field="oemCode"
             title="OE码"
-
           ></vxe-table-column>
           <vxe-table-column
             field="unit"
             title="单位"
-
           ></vxe-table-column>
           <vxe-table-column
             field="trueOutQty"
             title="出库数量"
-
           ></vxe-table-column>
 
           <vxe-table-column
             field="orderPrice"
             title="出库单价"
-
           ></vxe-table-column>
           <vxe-table-column
             field="trueOutAmt"
             title="出库金额"
-
           ></vxe-table-column>
           <vxe-table-column
             field="remark"
             title="备注"
-
           ></vxe-table-column>
         </vxe-table>
-
+<!--        分页-->
+        <div class="clearfix">
+          <Page :total="page.total" :page-size="page.size" :current="page.num"
+                show-sizer show-total class-name="page-con fr mr10 mb10 mt10"
+                :page-size-opts="page.placement"
+                @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
+        </div>
       </div>
     </div>
     <div slot='footer'>
@@ -188,7 +179,6 @@
   import {getoutList} from "_api/salesManagment/sellReturn.js";
   export default {
     name: 'SalesOutBound',
-
     data() {
       return {
         showInfo: false, // 销售出库订单信息——表单
@@ -211,11 +201,8 @@
     methods: {
       //查询
       search(){
-      // let data=this.Outform
         this.tableDataBottom = {}
         this.getList()
-
-
       },
       openModal() {
         this.showInfo = true;
@@ -225,12 +212,14 @@
       //切换页面
       selectNum(val){
         this.page.num = val
+        this.tableDataBottom = {}
         this.getList()
       },
       //切换页数
       selectPage(val){
         this.page.num = 1
         this.page.size = val
+        this.tableDataBottom = {}
         this.getList()
       },
       //获取时间
@@ -243,19 +232,14 @@
       //上表格选中
       selectTabelData(data){
         this.tableDataBottom = data.row
-        // console.log('8888888',data)
       },
       //多选内容
       selectTable(data){
         this.selectTableList = data.selection
-        // console.log('多选内容', this.selectTableList)
-
-
       },
       //全选内容
       selectAllTable(data){
         this.selectTableList = data.selection
-        // console.log('全选内容', this.selectTableList )
       },
       //选入
       selectEnter(){
@@ -265,19 +249,16 @@
           this.$emit('salesOutList',this.selectTableList)
           this.showInfo = false
         }
-
       },
 
 
       //获取销售出库单列表
       getList(){
-          let data={}
-
+        let data={}
         let page = this.page.num -1
         let size = this.page.size
          data=this.Outform
         getoutList(page,size,data).then(res=>{
-          // console.log('我是获取到的列表',res)
           if(res.code==0){
             this.tableDataTop= res.data.content || []
             this.page.total = res.data.totalElements
@@ -314,9 +295,7 @@
           })
         ]
       },
-
     }
-
   }
 </script>
 

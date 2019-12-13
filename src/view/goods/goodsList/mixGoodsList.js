@@ -1,6 +1,6 @@
 import {getPurchaseInit,saveDraft,findPageByDynamicQuery,saveCommit,saveObsolete,saveReverse} from "_api/purchasing/purchasePlan";
 
-import {purchaseTypeList} from "./goodsList";
+// import {purchaseTypeList} from "./goodsList";
 
 export const mixGoodsData = {
   data(){
@@ -173,9 +173,9 @@ export const mixGoodsData = {
       this.formPlan.planDateformat = v
     },
     //获取订单状态
-    returnOrderType(n){
-      return purchaseTypeList(n)
-    },
+    // returnOrderType(n){
+    //   return purchaseTypeList(n)
+    // },
     //采购计划单选中
     selectTabelData(v){
       console.log(v)
