@@ -13,7 +13,7 @@
               <Option v-for="item in place" v-if="item.parentId==0" :key="item.id" :value="item.id" >{{ item.name}}</Option>
             </Select>
           </FormItem>
-          <FormItem label='地区:' >
+          <FormItem label='地区:'  prop="countyId">
             <Select v-model="data.countyId" style="width:180px" class="mr10">
               <Option v-for="item in place"  v-if="data.cityId==item.parentId" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
@@ -83,10 +83,15 @@
                     streetAddress:[
                         {required: true,message:'不能为空', trigger: 'blur'}
                     ],
+                  countyId:
+                    [
+                      {required: true,message:'地区不可为空', trigger: 'blur'}
+                    ]
                 }
             }
         },
          methods:{
+
              //清除内容
              resetFields() {
                  this.$refs.form.resetFields()

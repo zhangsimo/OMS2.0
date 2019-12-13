@@ -32,7 +32,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="名称：" prop="name">
-                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" ></Input>
+                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" readonly="readonly"></Input>
                 </FormItem>
               </Col>
             </Row>
