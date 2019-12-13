@@ -96,12 +96,12 @@ export default {
         },
         {
           title: "分店名称",
-          key: "companyname",
+          key: "guestOrgName",
           className: "tc"
         },
         {
           title: "出库单号",
-          key: "stockid",
+          key: "code",
           className: "tc"
         },
         {
@@ -112,7 +112,7 @@ export default {
         },
         {
           title: "订单号",
-          key: "Orderid",
+          key: "code",
           className: "tc"
         },
         {
@@ -127,47 +127,37 @@ export default {
         },
         {
           title: "仓库",
-          key: "Warehouse",
+          key: "enterTypeIdName",
           className: "tc"
         },
         {
           title: "制单人",
-          key: "Single",
+          key: "createUname",
           className: "tc"
         },
         {
           title: "制单日期",
-          key: "Singledata",
+          key: "createTime",
           className: "tc"
         },
         {
           title: "审核日期",
-          key: "revieweddate",
-          className: "tc"
-        },
-        {
-          title: "是否开票",
-          key: "Invoice",
+          key: "auditDate",
           className: "tc"
         },
         {
           title: "金额",
-          key: "money",
+          key: "outQty",
           className: "tc"
         },
         {
           title: "单据状态",
-          key: "billstate",
-          className: "tc"
-        },
-        {
-          title: "收款状态",
-          key: "paymentstate",
+          key: "auditSign",
           className: "tc"
         },
         {
           title: "备注",
-          key: "remarks",
+          key: "remark",
           className: "tc"
         }
       ],

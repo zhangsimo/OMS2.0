@@ -122,18 +122,18 @@ export default {
           className: 'tc'
         },
         {
-          title: '门店名称',
+          title: '公司名称',
           key: 'groupName',
           className: 'tc'
         },
         {
           title: '对账单号',
-          key: 'fno',
+          key: 'accountNo',
           className: 'tc'
         },
         {
           title: '对账单收付款单号',
-          key: 'collectionpaymentid',
+          key: 'fno',
           width: 120,
           className: 'tc'
         },
@@ -207,102 +207,102 @@ export default {
         },
         {
           title: '收款单号',
-          key: 'receivablesid',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '收款时间',
-          key: 'receivablestime',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '收款方式',
-          key: 'receivablestype',
+          key: 'sortName',
           width: 120,
           className: 'tc'
         },
         {
           title: '收款账户',
-          key: 'receivablesaccount',
+          key: 'paymentAmtType',
           className: 'tc'
         },
         {
           title: '收款金额',
-          key: 'receivablesmoney',
+          key: 'checkAmt',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewedstate',
+          key: 'startStatus',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'person',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         }
       ],
       columns2: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
           title: '付款单号',
-          key: 'payid',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '付款时间',
-          key: 'paytime',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '付款方式',
-          key: 'paytype',
+          key: 'sortName',
           width: 120,
           className: 'tc'
         },
         {
           title: '付款账户',
-          key: 'payaccount',
+          key: 'paymentAmtType',
           className: 'tc'
         },
         {
           title: '付款金额',
-          key: 'paymoney',
+          key: 'checkAmt',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewedstate',
+          key: 'startStatus',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'person',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         }
       ],

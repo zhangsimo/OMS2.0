@@ -160,6 +160,9 @@ import {
   reportParts
 } from "@/api/bill/saleOrder";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   components: {
     selectDealings
@@ -687,33 +690,44 @@ export default {
           }
         ];
         if (this.data1.length !== 0 || this.data2.length !== 0) {
-          reportParts({
-            one: this.data1,
-            two: this.data2,
-            three: obj
-          })
-            // .then(res => {
-            //   console.log(res);
-            //   const link = document.createElement("a");
-            //   let blob = new Blob([res.data], {
-            //     type: "application/vnd.ms-excel"
-            //   });
-            //   link.style.display = "none";
-            //   link.href = URL.createObjectURL(blob);
+          console.log(this.data1, this.data2);
+          location.href = `${
+            baseUrl.omsSettle
+          }/accounts/receivable/report/details?access_token=${Cookies.get(
+            TOKEN_KEY
+          )}&one=${JSON.stringify(this.data1)}&two=${JSON.stringify(this.data2)}&three=${JSON.stringify(obj)}`;
+          // reportParts({ one: this.data1, two: this.data2, three: obj }).then(
+          //   res => {
+          // var blob = new Blob([res]); //创建一个blob对象
+          // var a = document.createElement("a"); //创建一个<a></ a>标签
+          // a.href = URL.createObjectURL(blob); // response is a blob
+          // a.download = "用户列表.csv"; //文件名称
+          // a.style.display = "none";
+          // document.body.appendChild(a);
+          // a.click();
+          // a.remove();
 
-            //   // link.download = res.headers['content-disposition'] //下载后文件名
-            //   link.download = "配件明细"; //下载的文件名
-            //   document.body.appendChild(link);
-            //   link.click();
-            //   document.body.removeChild(link);
-            // })
-            // .catch(error => {
-            //   this.$Notice.error({
-            //     title: "错误",
-            //     desc: "网络连接错误"
-            //   });
-            //   console.log(error);
-            // });
+          // const blob = new Blob([res]);
+          // const fileName = "配件明细.csv";
+          // const elink = document.createElement("a");
+          // elink.download = fileName;
+          // elink.style.display = "none";
+          // elink.href = URL.createObjectURL(blob);
+          // document.body.appendChild(elink);
+          // elink.click();
+          // URL.revokeObjectURL(elink.href); // 释放URL 对象
+          // document.body.removeChild(elink);
+
+          // const link = document.createElement("a");
+          // let blob = new Blob([res]);
+          // link.style.display = "none";
+          // link.href = URL.createObjectURL(blob);
+          // link.setAttribute("download", "配件明细.csv");
+          // document.body.appendChild(link);
+          // link.click();
+          // document.body.removeChild(link);
+          // }
+          // );
         } else {
           this.$message.error("应收/应付暂无数据");
         }

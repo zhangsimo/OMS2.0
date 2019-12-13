@@ -100,7 +100,7 @@ export default {
         },
         {
           title: "来源",
-          key: "source",
+          key: "sourceType",
           className: "tc"
         },
         {

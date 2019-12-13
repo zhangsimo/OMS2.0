@@ -89,148 +89,113 @@ export default {
           className: 'tc'
         },
         {
-          title: '品牌',
+          title: '品牌车型',
           key: 'partBrand',
           className: 'tc'
         },
         {
-          title: '厂牌',
-          key: 'factory',
-          className: 'tc'
-        },
-        {
-          title: '车型',
-          key: 'carModelName',
-          className: 'tc'
-        },
-        {
-          title: '配件类别一级',
-          key: 'carTypef',
-          className: 'tc'
-        },
-        {
-          title: '配件类别二级',
-          key: 'carTypes',
-          className: 'tc'
-        },
-        {
-          title: '数量',
-          key: 'orderQty',
-          className: 'tc'
-        },
-        {
           title: '单位',
-          key: 'outUnitId',
+          key: 'unit',
+          className: 'tc'
+        },
+        {
+          title: '规格',
+          key: 'spec',
+          className: 'tc'
+        },
+        {
+          title: '出库数量',
+          key: 'hasOutQty',
+          className: 'tc'
+        },
+        {
+          title: '在途数量',
+          key: 'onOrderQty',
           className: 'tc'
         },
         {
           title: '已入库数量',
-          key: 'didnumber',
+          key: 'inStockQty',
           className: 'tc'
         },
         {
           title: '未入库数量',
-          key: 'nonumber',
+          key: 'noStockQty',
           className: 'tc'
         },
         {
           title: '分店名称',
-          key: 'storename',
+          key: 'groupName',
           className: 'tc'
         },
         {
           title: '出库单号',
-          key: 'stockid',
+          key: 'outOrderNo',
           className: 'tc'
         },
         {
           title: '客户名称',
-          key: 'Customer',
+          key: 'customerName',
           className: 'tc'
         },
         {
           title: '出库日期',
-          key: 'stockdate',
+          key: 'outStockDate',
           className: 'tc'
         },
         {
           title: '仓库',
-          key: 'Warehouse',
+          key: 'storeName',
           className: 'tc'
         },
         {
           title: '含税标记',
-          key: 'Taxmark',
+          key: 'taxSign',
           className: 'tc'
         },
         {
           title: '税率',
-          key: 'taxrate',
+          key: 'taxRate',
           className: 'tc'
         },
         {
-          title: '销售单价',
-          key: 'saleprice',
+          title: '调拨单价',
+          key: 'orderPrice',
           className: 'tc'
         },
         {
-          title: '销售金额',
-          key: 'salemoney',
+          title: '调拨金额',
+          key: 'orderAmt',
           className: 'tc'
         },
         {
           title: '成本单价',
-          key: 'costprice',
+          key: 'taxPrice',
           className: 'tc'
         },
         {
           title: '成本金额',
-          key: 'costmoney',
+          key: 'taxAmt',
           className: 'tc'
         },
         {
-          title: '损益',
-          key: 'sunyi',
+          title: '受理人',
+          key: 'hasAcceptUname',
           className: 'tc'
         },
         {
-          title: '毛利',
-          key: 'profit',
-          className: 'tc'
-        },
-        {
-          title: '成本率',
-          key: 'Costrate',
-          className: 'tc'
-        },
-        {
-          title: '毛利率',
-          key: 'profitrate',
-          className: 'tc'
-        },
-        {
-          title: '业务员',
-          key: 'Salesman',
-          className: 'tc'
-        },
-        {
-          title: '销售订单',
-          key: 'saleid',
+          title: '受理单号',
+          key: 'hasAcceptOrderNo',
           className: 'tc'
         },
         {
           title: '供应商',
-          key: 'Supplier',
+          key: 'guestName',
           className: 'tc'
         },
         {
-          title: '整单备注',
-          key: 'Wholeremarks',
-          className: 'tc'
-        },
-        {
-          title: '明细备注',
-          key: 'Detailedremarks',
+          title: '订单备注',
+          key: 'remark',
           className: 'tc'
         }
       ],

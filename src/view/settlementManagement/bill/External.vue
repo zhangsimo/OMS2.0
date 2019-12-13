@@ -112,12 +112,12 @@ export default {
         },
         {
           title: "单据类型",
-          key: "billtype",
+          key: "enterTypeIdName",
           className: "tc"
         },
         {
           title: "仓库",
-          key: "Warehouse",
+          key: "storeName",
           className: "tc"
         },
         {
@@ -136,16 +136,6 @@ export default {
           className: "tc"
         },
         {
-          title: "是否开票",
-          key: "Invoice",
-          className: "tc"
-        },
-        {
-          title: "是否直发",
-          key: "Straight",
-          className: "tc"
-        },
-        {
           title: "金额",
           key: "enterAmt",
           className: "tc"
@@ -156,13 +146,8 @@ export default {
           className: "tc"
         },
         {
-          title: "付款状态",
-          key: "paymentstate",
-          className: "tc"
-        },
-        {
           title: "备注",
-          key: "remarks",
+          key: "remark",
           className: "tc"
         }
       ],
@@ -230,7 +215,7 @@ export default {
           className: "tc"
         },
         {
-          title: "销售单价",
+          title: "单价",
           key: "orderPrice",
           className: "tc"
         },

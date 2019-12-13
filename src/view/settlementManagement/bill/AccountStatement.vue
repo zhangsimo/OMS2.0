@@ -205,66 +205,97 @@
     </Modal>
     <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
       <div class="db">
-        <button class="ivu-btn ivu-btn-default mr10" type="button">保存</button>
-        <button class="ivu-btn ivu-btn-default mr10" type="button">关闭</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="close">关闭</button>
       </div>
       <div class="db p15 settlement mt10 mb10">
         <div class="db_top flex mb15">
-          <span style="flex:1">门店：{{}}</span>
-          <span style="flex:1">往来单位：{{}}</span>
-          <span style="flex:1">收付类型：{{}}</span>
+          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
+          <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
+          <span style="flex:1">收付类型：{{reconciliationStatement.paymentTypeName}}</span>
         </div>
         <div class="db_bottom flex mt15">
-          <span style="flex:1">对账单号：{{}}</span>
-          <span style="flex:1">实际收款/付款：{{}}</span>
-          <span style="flex:1">收付款单号：{{}}</span>
+          <span style="flex:1">对账单号：{{reconciliationStatement.accountNo}}</span>
+          <span style="flex:1">实际收款/付款：{{reconciliationStatement.receiptPayment}}</span>
+          <span style="flex:1">收付款单号：{{collectPayId}}</span>
         </div>
       </div>
-      <div class="flex">
-        <vxe-table
-          style="flex:6"
-          border
-          resizable
-          :data="tableData"
-          auto-resize
-          :edit-config="{trigger: 'click', mode: 'cell'}"
-          @edit-actived="editActivedEvent"
-          @edit-closed="editClosedEvent"
-          :span-method="mergeCol"
-        >
-          <vxe-table-column field="itemName" title="业务类型"></vxe-table-column>
-          <vxe-table-column field="itemCode" title="对账金额"></vxe-table-column>
-          <vxe-table-column field="itemCode" title="已收金额"></vxe-table-column>
-          <vxe-table-column field="itemCode" title="未收金额"></vxe-table-column>
-          <vxe-table-column
-            field="noCharOffAmt"
-            title="本次核销金额"
-            width="140"
-            :edit-render="{name: 'input', attrs: {type: 'number'}}"
-          ></vxe-table-column>
-          <vxe-table-column field="remainingUncollected" title="剩余未收"></vxe-table-column>
-        </vxe-table>
-        <vxe-table
-          class="ml10"
-          style="flex:4"
-          border
-          resizable
-          :data="tableData"
-          auto-resize
-          :edit-config="{trigger: 'click', mode: 'cell'}"
-          @edit-actived="editActivedEvent"
-          @edit-closed="editClosedEvent"
-        >
-          <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-          <vxe-table-column field="name" title="收款账户"></vxe-table-column>
-          <vxe-table-column
-            field="role"
-            title="金额"
-            :edit-render="{name: 'input', attrs: {type: 'number'}}"
-          ></vxe-table-column>
-          <vxe-table-column field="sex" title="所属门店"></vxe-table-column>
-        </vxe-table>
-      </div>
+      <Row>
+        <Col span="12">
+          <vxe-table
+            style="flex:6"
+            border
+            resizable
+            :data="BusinessType"
+            auto-resize
+            :edit-config="{trigger: 'click', mode: 'cell'}"
+            @edit-actived="editActivedEvent"
+            @edit-closed="editClosedEvent"
+          >
+            <vxe-table-column field="itemName" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="reconciliation" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="acceptedAmt" title="已收金额"></vxe-table-column>
+            <vxe-table-column field="uncollectedAmt" title="未收金额"></vxe-table-column>
+            <vxe-table-column
+              field="thisAmt"
+              title="本次核销金额"
+              width="140"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
+            <vxe-table-column field="remainingUncollected" title="剩余未收"></vxe-table-column>
+          </vxe-table>
+          <div>
+            <section class="flex">
+              <p
+                class="w90 pl5 pr10"
+                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+              >核对</p>
+              <input
+                type="text"
+                size="large"
+                class="w500"
+                style="border:1px solid #ddd;border-top:none;text-indent:5px"
+                v-model="check"
+              />
+            </section>
+            <section class="flex">
+              <p
+                class="w90 pl5 pr10"
+                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+              >备注</p>
+              <input
+                type="text"
+                size="large"
+                class="w500"
+                style="border:1px solid #ddd;border-top:none;text-indent:5px"
+                v-model="remark"
+              />
+            </section>
+          </div>
+        </Col>
+        <Col span="12">
+          <vxe-table
+            class="ml10"
+            style="flex:4"
+            border
+            resizable
+            :data="tableData"
+            auto-resize
+            :edit-config="{trigger: 'click', mode: 'cell'}"
+            @edit-actived="editActivedEvent"
+            @edit-closed="editClosedEvent"
+          >
+            <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+            <vxe-table-column field="itemName" title="收款账户"></vxe-table-column>
+            <vxe-table-column
+              field="Amt"
+              title="金额"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
+            <vxe-table-column field="store" title="所属门店"></vxe-table-column>
+          </vxe-table>
+        </Col>
+      </Row>
       <div slot="footer"></div>
     </Modal>
     <reconciliation ref="reconciliation"></reconciliation>
@@ -278,7 +309,10 @@ import {
   AccountStatement,
   Record,
   detailsDocuments,
-  dictionaries
+  dictionaries,
+  getId,
+  settlement,
+  settlementPreservation
 } from "@/api/bill/saleOrder";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
@@ -290,10 +324,15 @@ export default {
   },
   data() {
     return {
+      check: "",
+      remark: "",
+      Write: "", //核销编码
+      collectPayId: "", //收付款单号
       tab: "name1",
       falg: true,
       reconciliationStatement: {},
       tableData: [],
+      BusinessType: [],
       Settlement: false,
       pagetotal: 0,
       value: [],
@@ -634,7 +673,8 @@ export default {
       data1: [],
       data2: [],
       data3: [],
-      data4: []
+      data4: [],
+      total: 0
     };
   },
   async mounted() {
@@ -747,7 +787,13 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.reconciliationStatement = row
+      this.reconciliationStatement = row;
+      getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
+        res => {
+          this.collectPayId = res.data.fno;
+          this.Write = res.data.checkId;
+        }
+      );
       let date = {
         startDate: this.value[0],
         endDate: this.value[1]
@@ -795,8 +841,36 @@ export default {
         this.$message.error("请勾选要对账数据");
       }
     },
-    editActivedEvent() {},
-    editClosedEvent() {},
+    editActivedEvent() {
+      // console.log(rowIndex);
+      // row.remainingUncollected = row.reconciliation * 1 - row.acceptedAmt *1 - row.thisAmt * 1
+      // row.acceptedAmt += row.thisAmt * 1
+      // row.uncollectedAmt = row.reconciliation * 1 - row.acceptedAmt
+      // console.log(row)
+      // this.$set(this.BusinessType,rowIndex, row)
+      // acceptedAmt: 0,
+      //       uncollectedAmt: this.reconciliationStatement.reconciliation,
+      //       thisAmt: this.reconciliationStatement.noCharOffAmt,
+      //       remainingUncollected: this.reconciliationStatement.reconciliation
+    },
+    // 单元格编辑状态下被关闭时
+    editClosedEvent({ row, rowIndex }) {
+      row.remainingUncollected =
+        row.reconciliation * 1 - row.acceptedAmt * 1 - row.thisAmt * 1;
+      row.acceptedAmt += row.thisAmt * 1;
+      row.uncollectedAmt = row.reconciliation * 1 - row.acceptedAmt;
+      this.$set(this.BusinessType, rowIndex, row);
+      let obj = {
+        itemName: "合计",
+        reconciliation: 0,
+        acceptedAmt: 0,
+        uncollectedAmt: 0,
+        thisAmt: 0,
+        remainingUncollected: 0
+      };
+      let total = this.getTotal(obj);
+      this.$set(this.BusinessType, 5, obj);
+    },
     // 导出对账单/单据明细
     report(type) {
       if (type) {
@@ -831,49 +905,139 @@ export default {
     tabName(name) {
       this.tab = name;
     },
+    // 收付款结算计算合计
+    getTotal(obj) {
+      this.BusinessType.map((item, index) => {
+        if (index < 5) {
+          if (index > 2) {
+            obj.reconciliation += item.reconciliation;
+            obj.acceptedAmt += item.acceptedAmt;
+            obj.uncollectedAmt += item.uncollectedAmt;
+            obj.thisAmt += item.thisAmt;
+            obj.remainingUncollected += item.remainingUncollected;
+          } else {
+            obj.reconciliation -= item.reconciliation;
+            obj.acceptedAmt -= item.acceptedAmt;
+            obj.uncollectedAmt -= item.uncollectedAmt;
+            obj.thisAmt -= item.thisAmt;
+            obj.remainingUncollected -= item.remainingUncollected;
+          }
+        }
+      });
+      return obj;
+    },
     // 业务类型/收款账户
     hander() {
-      dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
-        this.tableData = res.data.itemVOS;
-        console.log(this.tableData);
-        this.tableData.push(
-          {
-            itemName: "合计"
-          },
-          {
-            itemName: "核对"
-          },
-          {
-            itemName: "备注"
-          }
-        );
-      });
-      dictionaries({ dictCode: "dictCode =PAYMENT_AMT_TYPE" }).then(res => {
-        console.log(res);
-        // this.tableData = res.data.itemVOS
-        // console.log(this.tableData)
-        // this.tableData.push({
-        //   itemName: '合计'
-        // },{
-        //   itemName: '核对'
-        // },{
-        //   itemName: '备注'
-        // },)
+      settlement({
+        orgId: this.reconciliationStatement.orgId,
+        accountNo: this.reconciliationStatement.accountNo
+      }).then(res => {
+        if (res.data.one.length !== 0 && res.data.two.length !== 0) {
+        } else {
+          dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
+            res.data.itemVOS[0] = {
+              ...res.data.itemVOS[0],
+              ...{
+                reconciliation: this.reconciliationStatement.reconciliation,
+                acceptedAmt: 0,
+                uncollectedAmt: this.reconciliationStatement.reconciliation,
+                thisAmt: this.reconciliationStatement.noCharOffAmt,
+                remainingUncollected: this.reconciliationStatement
+                  .reconciliation
+              }
+            };
+            res.data.itemVOS[1] = {
+              ...res.data.itemVOS[1],
+              ...{
+                reconciliation: this.reconciliationStatement.badDebtReceivable,
+                acceptedAmt: 0,
+                uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
+                thisAmt: this.reconciliationStatement.noCharOffAmt,
+                remainingUncollected: this.reconciliationStatement.noCharOffAmt
+              }
+            };
+
+            res.data.itemVOS[2] = {
+              ...res.data.itemVOS[2],
+              ...{
+                reconciliation: this.reconciliationStatement.receivableRebate,
+                acceptedAmt: 0,
+                uncollectedAmt: this.reconciliationStatement.receivableRebate,
+                thisAmt: this.reconciliationStatement.noCharOffAmt,
+                remainingUncollected: this.reconciliationStatement.noCharOffAmt
+              }
+            };
+            res.data.itemVOS[3] = {
+              ...res.data.itemVOS[3],
+              ...{
+                reconciliation: this.reconciliationStatement.payingBadDebts,
+                acceptedAmt: 0,
+                uncollectedAmt: this.reconciliationStatement.payingBadDebts,
+                thisAmt: this.reconciliationStatement.noCharOffAmt,
+                remainingUncollected: this.reconciliationStatement.noCharOffAmt
+              }
+            };
+            res.data.itemVOS[4] = {
+              ...res.data.itemVOS[4],
+              ...{
+                reconciliation: this.reconciliationStatement.dealingRebates,
+                acceptedAmt: 0,
+                uncollectedAmt: this.reconciliationStatement.dealingRebates,
+                thisAmt: this.reconciliationStatement.noCharOffAmt,
+                remainingUncollected: this.reconciliationStatement.noCharOffAmt
+              }
+            };
+            this.BusinessType = res.data.itemVOS;
+            let obj = {
+              reconciliation: 0,
+              acceptedAmt: 0,
+              uncollectedAmt: 0,
+              thisAmt: 0,
+              remainingUncollected: 0
+            };
+            let total = this.getTotal(obj);
+            this.BusinessType.push({
+              itemName: "合计",
+              reconciliation: total.reconciliation,
+              acceptedAmt: total.acceptedAmt,
+              uncollectedAmt: total.uncollectedAmt,
+              thisAmt: total.thisAmt,
+              remainingUncollected: total.remainingUncollected
+            });
+          });
+          dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
+            res.data.itemVOS.map(item => {
+              item.store = this.reconciliationStatement.orgName;
+              item.Amt = 0;
+            });
+            this.tableData = res.data.itemVOS;
+          });
+        }
       });
     },
-    // 合并列
-    mergeCol({ columnIndex }) {
-      if (rowIndex > 5) {
-        if (columnIndex === 1) {
-          return {
-            colspan: 6
-          };
-        } else if (columnIndex > 1) {
-          return {
-            colspan: 0
-          };
-        }
+    // 收付款保存
+    conserve() {
+      if (this.total === this.BusinessType[5].thisAmt) {
+        let one = [{
+          checkId: this.Write,
+          orgId:this.reconciliationStatement.orgId,
+          guestId: this.reconciliationStatement.guestId,
+          paymentTypeName:this.reconciliationStatement.paymentTypeName,
+          accountNo:this.reconciliationStatement.accountNo,
+          receiptPayment:this.reconciliationStatement.receiptPayment,
+          fno:this.collectPayId,
+          endAmt: [this.BusinessType[5]]
+        }]
+        settlementPreservation({one,two:this.BusinessType,three: this.tableData}).then(res=>{
+          console.log(res)
+        })
+      } else {
+        this.$message.error("收款金额与本次核销金额不相等");
       }
+    },
+    // 收付款关闭
+    close() {
+      this.Settlement = false;
     }
   }
 };

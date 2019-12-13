@@ -226,28 +226,7 @@ export function reportParts(data){
         method: 'post',
         responseType: "blob",
         data
-    }).then(res => {
-        console.log(res);
-        const link = document.createElement("a");
-        let blob = new Blob([res.data], {
-          type: "application/vnd.ms-excel"
-        });
-        link.style.display = "none";
-        link.href = URL.createObjectURL(blob);
-
-        // link.download = res.headers['content-disposition'] //下载后文件名
-        link.download = "配件明细"; //下载的文件名
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      })
-      .catch(error => {
-        this.$Notice.error({
-          title: "错误",
-          desc: "网络连接错误"
-        });
-        console.log(error);
-      });
+    })
 }
 
 // 业务类型/收款账户
@@ -256,5 +235,29 @@ export function dictionaries(params) {
         url: `${api.omsProduct}/dictionaries/findByCode`,
         method: 'get',
         params
+    })
+}
+// 收付款单号/本次核销编码单号生成
+export function getId(params) {
+    return axios.request({
+        url: `${api.omsSettle}/generate`,
+        method: 'get',
+        params
+    })
+}
+// 对账单结算接口
+export function settlement(params){
+    return axios.request({
+        url: `${api.omsSettle}/payment/record/get/account/no`,
+        method: 'get',
+        params
+    })
+}
+// 收付款结算保存
+export function settlementPreservation(data){
+    return axios.request({
+        url: `${api.omsSettle}/payment/record/add`,
+        method: 'post',
+        data
     })
 }
