@@ -39,8 +39,8 @@
       </FormItem>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='入职时间：' style="">
-            <Date-picker :value="data.entryTime" type="date" placeholder="选择日期" style="width: 150px" @on-change="changeEntryTime"></Date-picker>
+          <FormItem label='入职时间：' style="" prop="entryTime">
+            <Date-picker v-model="data.entryTime" type="date" placeholder="选择日期" style="width: 150px" ></Date-picker>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%" >
@@ -135,6 +135,9 @@
                     ],
                     groundIds:[
                         {required: true,type:'array', message: '请选择部门', trigger: 'change'}
+                    ],
+                    entryTime:[
+                        {required: true , type:'date' ,message:'入职时间不能为空' ,trigger:'change'}
                     ]
                 },
                 costList:[
