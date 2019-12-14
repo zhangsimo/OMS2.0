@@ -208,7 +208,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral()
+    this.getGeneral({})
   },
   methods: {
     // 快速查询
@@ -231,9 +231,17 @@ export default {
       }
     },
     // 总表查询
-    getGeneral() {
-      getOnWay({}).then(res => {
+    getGeneral(obj) {
+      getOnWay(obj).then(res => {
         console.log(res);
+        if(res.data.length !==0){
+          res.data.map(item=>{
+            item.taxSign = item.taxSign ? '是' : '否'
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
       });
     },
   }

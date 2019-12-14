@@ -57,9 +57,9 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-          @on-row-click="election"></Table>
+          @on-row-click="election" max-height=400></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
+        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary max-height=400></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" />
@@ -112,17 +112,17 @@ export default {
         },
         {
           title: "订单号",
-          key: "code",
+          key: "orderId",
           className: "tc"
         },
         {
           title: "单据类型",
-          key: "billtype",
+          key: "enterTypeIdName",
           className: "tc"
         },
         {
           title: "销售类别",
-          key: "saletype",
+          key: "orderType",
           className: "tc"
         },
         {
@@ -164,79 +164,74 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "id",
+          key: "num",
           width: 40,
           className: "tc"
         },
         {
-          title: "配件内码",
-          key: "partsInternal",
-          className: "tc"
-        },
-        {
           title: "配件编码",
-          key: "partsCode",
+          key: "partCode",
           className: "tc"
         },
         {
           title: "配件名称",
-          key: "partsname",
+          key: "partName",
           width: 120,
           className: "tc"
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           className: "tc"
         },
         {
           title: "车型",
-          key: "Vehicle",
+          key: "carModelName",
           className: "tc"
         },
         {
           title: "OEM码",
-          key: "OEMCode",
+          key: "oemCode",
           className: "tc"
         },
         {
           title: "是否含税",
-          key: "Whether",
+          key: "taxSign",
           className: "tc"
         },
         {
           title: "不含税单价",
-          key: "notaxprice",
+          key: "noTaxPrice",
           className: "tc"
         },
         {
           title: "不含税金额",
-          key: "notaxmoney",
+          key: "noTaxAmt",
           className: "tc"
         },
         {
           title: "含税单价",
-          key: "taxprice",
+          key: "taxPrice",
           className: "tc"
         },
         {
           title: "含税金额",
-          key: "taxmoney",
+          key: "taxAmt",
           className: "tc"
         },
         {
           title: "数量",
-          key: "number",
+          key: "sellQty",
           className: "tc"
         },
         {
-          title: "单价",
-          key: "price",
+          title: "销售单价",
+          key: "sellPrice",
           className: "tc"
         },
         {
-          title: "金额",
-          key: "money",
+          title: "销售金额",
+          key: "sellAmt",
           className: "tc"
         }
       ],
@@ -244,24 +239,23 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "Warehousing",
+          value: "050202",
           label: "销售出库"
         },
         {
-          value: "Return",
+          value: "050102",
           label: "销售退货"
         }
       ],
-      typeName: "Warehousing"
+      typeName: "050202"
     };
   },
   async mounted() {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral()
+    this.getGeneral({enterTypeId:this.typeName})
   },
   methods: {
     // 快速查询
@@ -297,28 +291,51 @@ export default {
       this.typeName = value;
     },
     // 总表查询
-    getGeneral() {
-      if (this.typeName === "Warehousing") {
-        getOutStockList({}).then(res => {
-          console.log(res);
-        });
-      } else if (this.typeName === "Return") {
-        getReturnGoodsList({}).then(res => {
-          console.log(res);
-        });
-      }
+    getGeneral(obj) {
+      getOutStockList(obj).then(res=>{
+        console.log(res)
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.accountSign = item.accountSign ? '已审' : '未审'
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
+      })
+      // if (this.typeName === "Warehousing") {
+      //   getOutStockList({}).then(res => {
+      //     console.log(res);
+      //   });
+      // } else if (this.typeName === "Return") {
+      //   getReturnGoodsList(obj).then(res => {
+      //     console.log(res);
+      //   });
+      // }
     },
     // 选中总表查询明细
     election(row){
-      if (this.typeName === "Warehousing") {
-        getOutStockPart({mainId:row.id}).then(res => {
-          console.log(res);
-        });
-      } else if (this.typeName === "Return") {
-        getReturnGoodsPart({mainId:row.id}).then(res => {
-          console.log(res);
-        });
-      }
+      getOutStockPart({mainId:"1204603211449745408"}).then(res=>{
+        console.log(res)
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.taxSign = item.taxSign ? '是' : '否'
+            item.num = index + 1
+          })
+          this.data1 = res.data
+        }
+
+      })
+      // if (this.typeName === "Warehousing") {
+      //   getOutStockPart({mainId:row.id}).then(res => {
+      //     console.log(res);
+      //   });
+      // } else if (this.typeName === "Return") {
+      //   getReturnGoodsPart({mainId:row.id}).then(res => {
+      //     console.log(res);
+      //   });
+      // }
     }
   }
 };

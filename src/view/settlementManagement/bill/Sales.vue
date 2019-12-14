@@ -57,7 +57,7 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-          @on-row-click="election"></Table>
+          @on-row-click="election" max-height="400"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
@@ -115,7 +115,7 @@ export default {
         },
         {
           title: "往来类型",
-          key: "orderType",
+          key: "orderTypeName",
           className: "tc"
         },
         {
@@ -254,13 +254,32 @@ export default {
     // 总表查询
     getGeneral() {
       getOrderlist({}).then(res => {
-        console.log(res);
+        // console.log(res);
+        if(res.data.length !== 0){
+          res.data.map((item,index)=>{
+            if(item.orderType){
+              item.orderTypeName = item.orderType.name
+            }
+            item.num = index + 1
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
       });
     },
     // 选中总表查询明细
     election(row) {
       getPartList({ mainId: row.id }).then(res => {
-        console.log(res);
+        // console.log(res);
+        if(res.data.length !==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+          })
+          this.data1 = res.data
+        } else {
+          this.data1 = []
+        }
       });
     }
   }

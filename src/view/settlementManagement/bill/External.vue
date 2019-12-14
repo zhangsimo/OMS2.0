@@ -28,7 +28,7 @@
           </div>
           <div class="db">
             <span>类型：</span>
-            <Select :model.sync="model1" style="width:200px">
+            <Select v-model="type" style="width:200px">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -57,9 +57,9 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-          @on-row-click="election"></Table>
+          @on-row-click="election" max-height="400"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
+        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary max-height="400"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" />
@@ -96,7 +96,7 @@ export default {
         },
         {
           title: "单号",
-          key: "serviceId",
+          key: "code",
           className: "tc"
         },
         {
@@ -107,7 +107,7 @@ export default {
         },
         {
           title: "订单号",
-          key: "code",
+          key: "orderCode",
           className: "tc"
         },
         {
@@ -136,13 +136,18 @@ export default {
           className: "tc"
         },
         {
+          title: "是否含税",
+          key: "taxSign",
+          className: "tc"
+        },
+        {
           title: "金额",
           key: "enterAmt",
           className: "tc"
         },
         {
           title: "单据状态",
-          key: "billStatusId",
+          key: "auditSign",
           className: "tc"
         },
         {
@@ -176,7 +181,7 @@ export default {
         },
         {
           title: "车型",
-          key: "carModel",
+          key: "carModelName",
           className: "tc"
         },
         {
@@ -211,17 +216,17 @@ export default {
         },
         {
           title: "数量",
-          key: "hasOutQty",
+          key: "enterQty",
           className: "tc"
         },
         {
           title: "单价",
-          key: "orderPrice",
+          key: "enterPrice",
           className: "tc"
         },
         {
           title: "金额",
-          key: "orderAmt",
+          key: "enterAmt",
           className: "tc"
         }
       ],
@@ -229,23 +234,23 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "Warehousing",
+          value: "050101",
           label: "采购入库"
         },
         {
-          value: "Return",
+          value: "050201",
           label: "采购退货"
         }
-      ]
+      ],
+      type:'050101'
     };
   },
   async mounted() {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral();
+    this.getGeneral({enterTypeId: this.type});
   },
   methods: {
     // 快速查询
@@ -277,15 +282,33 @@ export default {
       }
     },
     // 总表查询
-    getGeneral() {
-      getWarehousingList({}).then(res => {
-        console.log(res);
+    getGeneral(obj) {
+      getWarehousingList(obj).then(res => {
+        // console.log(res);
+        if(res.data.length !==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.taxSign = item.taxSign ? '是' : '否'
+            item.auditSign = item.auditSign ? '已审' : '未审'
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
       });
     },
     // 选中总表查询明细
     election(row) {
-      getWarehousingPart({ mainId: row.id }).then(res => {
-        console.log(res);
+      getWarehousingPart({ mainId: roww.id }).then(res => {
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index +1
+            item.taxSign = item.taxSign ? '是' : '否'
+          })
+          this.data1 = res.data
+        } else {
+          this.data1 = []
+        }
       });
     }
   }

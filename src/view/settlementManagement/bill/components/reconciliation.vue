@@ -667,35 +667,26 @@ export default {
     // 导出
     report(type) {
       if (type) {
-        let obj = [
-          {
-            tenantId: 0,
-            orgId: this.store,
-            orgName: "null",
-            guestId: this.companyInfoId,
-            serviceId: "XSCDS001-20191000071",
-            accountReceivable: this.totalcollect,
-            badDebtReceivable: this.collectBaddebt,
-            receivableRebate: this.collectRebate,
-            actualCollection: this.Actualtotalcollect,
-            reconciliation: this.totalpayment,
-            payingBadDebts: this.paymentBaddebt,
-            dealingRebates: this.paymentRebate,
-            actualPayment: this.Actualtotalpayment,
-            settlementTotal: this.Reconciliationtotal,
-            billingType: this.totalvalue,
-            rebateNo: this.Rebateid,
-            badDebNo: this.BadDebtid,
-            buttonStatus: -1
-          }
-        ];
         if (this.data1.length !== 0 || this.data2.length !== 0) {
-          console.log(this.data1, this.data2);
+          let arr = [];
+          this.data1.map(item => {
+            arr.push({
+              orderCode: item.serviceId,
+              orderType: item.serviceType.value
+            });
+          });
+          this.data2.map(item => {
+            arr.push({
+              orderCode: item.serviceId,
+              orderType: item.serviceType.value
+            });
+          });
+          console.log(arr)
           location.href = `${
-            baseUrl.omsSettle
-          }/accounts/receivable/report/details?access_token=${Cookies.get(
+            baseUrl.omsOrder
+          }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
             TOKEN_KEY
-          )}&one=${JSON.stringify(this.data1)}&two=${JSON.stringify(this.data2)}&three=${JSON.stringify(obj)}`;
+          )}&list=${JSON.stringify(arr)}`;
           // reportParts({ one: this.data1, two: this.data2, three: obj }).then(
           //   res => {
           // var blob = new Blob([res]); //创建一个blob对象

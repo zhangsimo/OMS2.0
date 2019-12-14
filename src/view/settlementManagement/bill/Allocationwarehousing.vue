@@ -77,7 +77,7 @@
       </div>
       <div class="db pro mt20">
         <span>审核状态：</span>
-        <Select :model.sync="model" style="width:200px">
+        <Select v-model="auditStatus" style="width:200px">
           <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </div>
@@ -97,6 +97,7 @@ export default {
   },
   data() {
     return {
+      auditStatus:'', //审核状态
       Branchstore: [],
       model1: "",
       modal1: false,

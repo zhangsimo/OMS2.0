@@ -309,13 +309,16 @@ export default {
     // 主表查询
     getTransferStock(obj) {
       transferStock(obj).then(res => {
-        console.log(res);
-        res.data.map((item,index)=>{
-          item.num = index + 1
-          item.billstate = '已审'
-          item.orderTypeId = item.orderTypeId === 2 ? '调拨出库' : '调出退货'
-        })
-        this.data = res.data
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.billstate = '已审'
+            item.orderTypeId = item.orderTypeId === 2 ? '调拨出库' : '调出退货'
+            this.data = res.data
+          })
+        } else {
+          this.data = []
+        }
       });
     },
     // 往来单位
@@ -347,11 +350,16 @@ export default {
     // 选中数据
     election(row) {
       transferParts({mainId: row.orderManId}).then(res => {
-        console.log(res);
-        res.data.map((item,index)=>{
-          item.num = index + 1
-        })
-        this.data1 = res.data
+        if(res.data.length !==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.taxSign = 1
+            item.taxSign = item.taxSign ? '是' : '否  '
+          })
+          this.data1 = res.data
+        } else {
+          this.data1 = []
+        }
       });
     }
   }
