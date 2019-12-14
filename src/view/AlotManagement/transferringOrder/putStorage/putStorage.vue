@@ -137,6 +137,7 @@
                       </div>
                     </div>
                     <vxe-table
+                    v-if="showit"
                       border
                       resizable
                       ref="xTable1"
@@ -180,6 +181,8 @@
             </div>
           </Modal>
         </div>
+           <!--      添加配件-->
+      <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
           <!-- 选择调出方 -->
     <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>
       <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
@@ -193,11 +196,12 @@ import AddInCom from './compontents/AddInCom'
 import More from './compontents/More'
 import '../../../lease/product/lease.less'
 import PrintShow from "./compontents/PrintShow";
+import selectPartCom from "./compontents/selectPartCom";
 import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
 import SelectSupplier from './compontents/selectSupplier'
 import {
-  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList
+  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '../../../../api/AlotManagement/putStorage.js'
 export default {
   name: 'backApply',
@@ -206,7 +210,8 @@ export default {
     QuickDate,
     AddInCom,
     SelectSupplier,
-    PrintShow
+    PrintShow,
+    selectPartCom
   },
   data() {
     return {
@@ -436,6 +441,23 @@ export default {
        this.getList(this.form)
   },
   methods: {
+  //配件返回的参数
+        getPartNameList(val){
+          this.$refs.formPlan.validate(async (valid) => {
+              if (valid) {
+                  let data ={}
+                  data = this.Leftcurrentrow
+                  data.detailVOS = conversionList(val)
+                  let res = await  baocun(data)
+                  if(res.code === 0){
+                      this.getList()
+                  }
+              } else {
+                  this.$Message.error('*为必填项');
+              }
+          })
+
+        },
     selectAllEvent ({ checked }) {        
     },
     selectChangeEvent ({ checked, row }) {
@@ -461,14 +483,15 @@ export default {
       if (params.xinzeng) {
         delete params.status
       }
-       if (params.status.value) {
-        params.status = params.status.value || ''
+      if (params.status && params.status.name) {
+        params.status = params.status.value
       }
-      if (params.orderTypeId) {
-        params.orderTypeId = params.orderTypeId.value || ''
+      console.log(params.orderTypeId)
+      if (params.orderTypeId && params.orderTypeId.name) {
+        params.orderTypeId = params.orderTypeId.value
       }
-      if (params.settleStatus) {
-        params.settleStatus = params.settleStatus.value || ''
+      if (params.settleStatus && params.settleStatus.name) {
+        params.settleStatus = params.settleStatus.value
       }
       params['voList'] = params.detailVOS
         //配件组装保存
@@ -573,7 +596,7 @@ export default {
             this.$Message.info('请选择打印项')
             return
           }
-            this.$refs.printBox.openModal()
+          this.$refs.printBox.openModal()
         },
     chuku() {
       const params = {
@@ -630,13 +653,21 @@ export default {
       this.advanced = true
     },
     //左边列表选中当前行
-    selectTabelData(row) {
+    async selectTabelData(row) {
       this.dayinCureen = row
       this.Leftcurrentrow = row
-      if (!row.detailVOS) {
-        row['detailVOS'] = []
+       const params = {
+        mainId: row.id
       }
-      this.Leftcurrentrow.detailVOS = row.detailVOS
+      const res = await getListDetail(params)
+      console.log(res)
+      this.showit = false
+      this.Leftcurrentrow.detailVOS = res.data
+      const that = this
+      setTimeout(() => {
+        that.showit = true
+      },100)
+      console.log(this.Leftcurrentrow.detailVOS)
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
                 if (res.code == 0) {
                   res.data.map(item => {

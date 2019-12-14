@@ -1,10 +1,19 @@
 import api from '_conf/url';
 import axios from '@/libs/api.request';
 
-//获取调拨申请列表
-export function getList1(data, size, num) {
+//获取销售出库列表
+export function getList1(num,size, data) {
   return axios.request({
-    url: `${api.omsOrder}/sellOutMain/findPageByDynamicQuery?page=${num -1}&size=${size}`,
+    url: `${api.omsOrder}/sellOutMain/findPageByDynamicQuery?page=${num}&size=${size}`,
+    method: 'post',
+    data
+  });
+}
+
+//获取更多列表
+export function getListmore(data, size, num) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOutMain/queryConditions?page=${num}&size=${size}`,
     method: 'post',
     data
   });
@@ -13,25 +22,17 @@ export function getList1(data, size, num) {
 //保存
 export function baocun(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/addOrUpdate`,
+    url: `${api.omsOrder}/sellOutMain/saveOrUpdate`,
     method: 'post',
     data
   });
 }
 
-//提交
-export function tijiao(data) {
-  return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backApplyCommit`,
-    method: 'post',
-    data
-  });
-}
 
 //删除
 export function shanqu(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backApplyList`,
+    url: `${api.omsOrder}/sellOutDetail/delete`,
     method: 'post',
     data
   });
@@ -39,7 +40,7 @@ export function shanqu(data) {
 //出库
 export function outDataList(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/allotEnterStorage`,
+    url: `${api.omsOrder}/sellOutMain/subSave`,
     method: 'post',
     data
   });
@@ -47,17 +48,17 @@ export function outDataList(data) {
 //作废
 export function zuofei(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/invalid`,
+    url: `${api.omsOrder}/sellOutMain/invalid`,
     method: 'post',
     data
   });
 }
 //打印
-export function getprintList (params) {
+export function getprintList (data) {
   return axios.request({
-    url: `${api.omsOrder}/sellOrderMain/print`,
-    method: 'get',
-    params
+    url: `${api.omsOrder}/sellOutMain/print`,
+    method: 'post',
+    data
   })
 }
 //打印申请

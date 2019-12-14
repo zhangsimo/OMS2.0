@@ -132,9 +132,9 @@
         <Col span="12" offset="12" style="text-align:right">
           <div>
             <Page
-              :current="form.pageNumber+1"
+              :current="pageList.page"
               :total="pageList.total"
-              :page-size="form.pageSize"
+              :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -158,7 +158,7 @@
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-          <vxe-table-column field="partBrandName" title="品牌"></vxe-table-column>
+          <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
           <vxe-table-column field="applyQty" title="申请退回数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -176,7 +176,8 @@ import {
   getcangku,
   getbayer,
   tuihuishouli,
-  tuihuishouliliebiao
+  tuihuishouliliebiao,
+  tuihuishouliliebiaomingxi
 } from '../../../../api/AlotManagement/twoBackAccept.js'
 export default {
   name: 'twoBackAccept',
@@ -234,7 +235,7 @@ export default {
       BottomTableData: [], //下侧表格list
       // 分页数据
       pageList: {
-        page: 0,
+        page: 1,
         total: 0,
         pageSize: 10,
         pageSizeOpts: [10, 20, 30, 40, 50]
@@ -281,18 +282,18 @@ export default {
     //time1
     getDataQuick(val) {
       console.log(val)
-      this.form.createTime = val[0]
+      this.form.startTime = val[0]
       this.form.endTime = val[1]
     },
     //time2
     selectDate(val) {
       console.log(val)
-      this.form.createDate = val[0] + ' ' + '00:00:00'
-      this.form.endDate = val[1] + ' ' + '23:59:59'
+      this.form.commitDateStart = val[0] + ' ' + '00:00:00'
+      this.form.commitDateEnd = val[1] + ' ' + '23:59:59'
     },
     //搜索
     search() {
-      tuihuishouliliebiao(this.form)
+      tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
             console.log(res)
@@ -305,9 +306,14 @@ export default {
         })
     },
     //current
-    currentChangeEvent({ row }) {
+    async currentChangeEvent({ row }) {
       console.log('当前行' + row)
-      this.BottomTableData = row.detailVOS
+      const params = {
+        mainId: row.id
+      }
+      const res = await tuihuishouliliebiaomingxi(params)
+      this.BottomTableData = res.data
+
     },
     copy() {
       var number = document.getElementById('danhao').value //获取需要复制的值(innerHTML)
@@ -325,6 +331,7 @@ export default {
       this.currentrow.settleStatus = this.currentrow.settleStatus.value
       this.currentrow.status = 2
       let params = this.currentrow
+      // params['']
       tuihuishouli(params)
         .then(res => {
           if (res.code == 0) {

@@ -10,6 +10,15 @@ export function getList(params) {
   });
 }
 
+//获取调拨申请列表mingxi
+export function getListDetail(params) {
+  return axios.request({
+    url: `${api.omsOrder}/allotEnterDetail/findEnterDetails`,
+    method: 'get',
+    params
+  });
+}
+
 //入库
 export function inDataList(data) {
   return axios.request({
