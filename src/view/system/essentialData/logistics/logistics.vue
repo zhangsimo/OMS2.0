@@ -47,7 +47,7 @@
         <AddLogistics :data = 'logisticsOne' ref="child" :provincearr="provinceArr" :typelist="newTypeList" :clearinglist="newClearingList"></AddLogistics>
         <div slot='footer'>
           <Button type='primary' @click="addNewSure">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancel">取消</Button>
         </div>
       </Modal>
     </div>
@@ -256,7 +256,8 @@
                 // },
                 logisticsOne:{},
                 newTypeList:[],
-                newClearingList:[]
+                newClearingList:[],
+              id:'',//点击左侧获取的id
             }
         },
         mounted(){
@@ -321,6 +322,7 @@
             //获取当前选中的数据
             selection(currentRow){
                 this.logisticsOne = currentRow
+                this.id= currentRow.id
                 currentRow.isDisabled == 0 ? this.logisticsOne.isDisabled =true : this.logisticsOne.isDisabled = false
             },
             add(){
@@ -328,6 +330,9 @@
                 this.modalShow = true
             },
             change(){
+              if(!this.id){
+                return this.$Message.info('请先选中需要修改的物流快递信息');
+              }
                 this.modalShow = true
             },
             //查询
@@ -362,7 +367,11 @@
                     })
                     }
                 )
-            }
+            },
+          cancel(){
+            this.$refs.child.resetFields()
+            this.modalShow = false
+          }
 
         }
     }

@@ -6,7 +6,7 @@
         <input type="text" class="mr10"  v-model="compentName" placeholder="请输入公司名称">
         <a class="mr20 iconfont iconchaxunicon" @click="inquireShop"> 查询</a>
         <a class="mr20 iconfont iconxuanzetichengchengyuanicon" @click="addCompany"> 确定</a>
-        <a class="mr20 iconfont iconshanchuicon" @click="getlist"> 取消</a>
+        <a class="mr20 iconfont iconshanchuicon" @click="cancel"> 取消</a>
       </div>
       <div class="companyList">
         <Table :columns="columns" border :loading="loading" stripe :data="companyList" height="440" size="small"
@@ -84,6 +84,7 @@
                     this.companyList = res.data.content
                     this.page.total = res.data.totalElements
 
+
                 }
               })
           },
@@ -132,7 +133,13 @@
                     this.getlist()
                     this.$emit('colseMdole' , res)
                 })
-            }
+            },
+          cancel(){
+            this.shopCode=''
+            this.compentName=''
+            this.$emit('colseMdole' , this.data)
+            this.getlist()
+          }
         }
     }
 </script>

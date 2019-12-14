@@ -315,3 +315,31 @@ export function calculatAmt(data) {
 }
 
 
+
+// 采购计划
+// 计划调整查询
+export function queryModifyOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/queryModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整保存
+export function saveModifyOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整全部调整
+export function saveModifyAllOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyAllOrder`,
+    method: "post",
+    data
+  });
+}

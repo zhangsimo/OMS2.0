@@ -110,6 +110,16 @@
                     callback();
                 }
             };
+
+            const validateBankNo=(rule, value, callback) =>{
+               if(!value){
+                 return callback(new Error('银行账户不能为空'));
+               }else if(!/^\d+$/.test(value)){
+                 callback(new Error('银行账号只能输入数字'));
+               }else{
+                 callback();
+               }
+            }
             return {
                 list: [
                     {label:'物流' , value: 0},
@@ -132,7 +142,7 @@
                         {required: true, message: '账户人名称不能为空', trigger: 'blur'}
                     ],
                     accountBankNo:[
-                        {required: true, message: '银行账户不能为空', trigger: 'blur'}
+                        {required: true, validator: validateBankNo, trigger: 'blur'}
                     ],
                     accountBank:[
                         {required: true, message: '开户银行不能为空', trigger: 'blur'}

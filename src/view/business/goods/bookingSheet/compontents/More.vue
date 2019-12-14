@@ -14,8 +14,11 @@
           </Row>
           <Row class="mt15">
             <span class="ml5">业 务 员：</span>
-            <Input v-model="callout" placeholder="请选择业务员" style="width: 410px" disabled/>
-            <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
+            <!--<Input v-model="callout" placeholder="请选择业务员" style="width: 410px" disabled/>-->
+            <!--<Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>-->
+            <Select v-model="callout" filterable style="width: 450px">
+              <Option v-for="item in cityList" :value="item.userName" :key="item.userName">{{ item.userName }}</Option>
+            </Select>
           </Row>
           <Row class="mt15">
             <span>预定单号：</span>
@@ -30,7 +33,7 @@
             <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
           </Row>
           <Row class="mt15">
-            <span class="ml20">品 牌：</span>
+            <span style="margin-left: 25px">品 &nbsp;牌：</span>
             <Input v-model="brand" placeholder="请输入创建人" style="width: 450px" />
           </Row>
           <Row class="mt15">
@@ -43,32 +46,28 @@
           <Button type='default' @click="cancel">取消</Button>
         </div>
       </Modal>
-
-      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea" ></select-supplier>
     </div>
 </template>
 
 <script>
-  import SelectSupplier from "../../../../goods/goodsList/components/supplier/selectSupplier";
-    export default {
+  import { queryAll } from '../../../../../api/business/advanceOrder';
+  export default {
         name: "More",
-      components: {
-        SelectSupplier
-      },
       data(){
           return {
             brand: '', //品牌
             callout: '', //调出方
             numbers: '', //预定单号
             coding: '', //编码
-            Accessories: '', //配件人
+            Accessories: '', //提交人
             Name: '', //配件名称
-            createData: '', //创建日期
-            submitData: '', //提交日期
+            createData: null, //创建日期
+            submitData: null, //提交日期
             moreAndMore: false,
             submita: '',
             create: '',
-            guestId: ''
+            guestId: '',
+            cityList: []
           }
       },
       methods: {
@@ -81,10 +80,6 @@
         submit(date){
           this.submitData = date
         },
-        getSupplierNamea(a) {
-          this.callout = a.fullName
-          this.guestId = a.id
-        },
         init(){
           this.moreAndMore = true
         },
@@ -96,9 +91,11 @@
               Accessories: this.Accessories,
               Name: this.Name,
               createData: this.createData,
+              create: this.create,
               submitData:this.submitData,
               guestId:this.guestId,
-              brand: this.brand
+              brand: this.brand,
+              submita: this.submita
             }
             this.$emit('sendMsg', a)
         },
@@ -113,16 +110,22 @@
           this.Name = ''
           this.create = ''
           this.submita = ''
-        },
-        //供应商弹框
-        addSuppler(){
-          this.$refs.selectSupplier.init()
+          this.createData = null
+          this.submitData = null
         },
         //取消
         cancel(){
           this.moreAndMore = false
         }
-      }
+      },
+    mounted(){
+          let params = {}
+      queryAll(params).then(res => {
+        if(res.code === 0){
+          this.cityList = res.data.content
+        }
+      })
+    }
 
     }
 </script>

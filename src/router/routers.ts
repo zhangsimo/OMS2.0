@@ -64,7 +64,7 @@ export default [
     component: Main,
     children: [
       {
-        path: "/goods/goodsList",
+        path: "goodsList",
         name: "goodsList",
         mark: '1000',
         meta: {
