@@ -69,7 +69,6 @@
             }
         },
         mounted(){
-            this.getlist()
         },
         methods:{
           getlist(){
@@ -123,7 +122,7 @@
               }
               let companyList = ''
                 this.selectedArr.forEach( item => {
-                    companyList += item.orgid + ','
+                    companyList += item.id + ','
                 })
                 companyList = companyList.substring(0 ,companyList.length -1 )
                 this.data.companyList = '('+ companyList + ')'

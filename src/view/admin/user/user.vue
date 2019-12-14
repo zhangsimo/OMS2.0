@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="oper-box">
-      <div class="oper-top">
+      <div class="pl10" style="line-height: 57px">
         <label class="oos-label">查询条件：</label>
         <Select v-model='selectType' style='width: 120px' class="mr10">
           <Option v-for='item in selectTypeArr' :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -9,11 +9,11 @@
         <Input v-model="searchValue" :placeholder="placeh" class="w200 mr10"></Input>
         <Button @click="query" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
       </div>
-      <div class="oper-bottom">
-        <Button type='primary' @click='addClick'>新增</Button>
+<!--      <div class="oper-bottom">-->
+<!--        <Button type='primary' @click='addClick'>新增</Button>-->
         <!--<Button type='primary' class="ml15" @click='confirmDel'>删除</Button>-->
         <!--<button class="ivu-btn fr">导出</button>-->
-      </div>
+<!--      </div>-->
     </section>
     <section class="con-box">
       <Table ref="taskTable" :loading="loading" border stripe :columns="thdata" :data="tbdata"
