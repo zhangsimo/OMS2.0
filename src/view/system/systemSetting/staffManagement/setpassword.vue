@@ -19,15 +19,29 @@
             data:''
         },
         data(){
+          let account = (rule, value, callback) => {
+            if (!value) {
+              callback(new Error("登录账号只能输入字母+数字"));
+            } else {
+              const reg = /^(?=.*?[a-zA-Z])(?=.*?[0-9])[a-zA-Z0-9]{2,}$/
+              if (reg.test(value)) {
+                callback();
+              } else {
+                callback(new Error("登录账号只能输入字母+数字"));
+
+              }
+            }
+          };
             return {
                 rules:{
                     userName:[
                         {required: true, message: '姓名不能为空', trigger: 'blur'}
                     ],
                     account:[
-                        {required: true, message: '账号不能为空', trigger: 'blur'}
+                        {required: true,  validator: account, trigger: 'blur'}
                     ]
                 }
+
             }
 
         },

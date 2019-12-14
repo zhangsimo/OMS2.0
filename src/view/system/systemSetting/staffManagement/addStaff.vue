@@ -113,6 +113,15 @@
                     callback();
                 }
             };
+            const cardId=(rule, value, callback) => {
+            if (!value) {
+              return callback(new Error('身份证号不能为空'));
+            } else if (!/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(value)) {
+              callback(new Error('身份证号格式不正确'));
+            } else {
+              callback();
+            }
+          };
             return {
                 rules: {
                     userName: [
@@ -122,7 +131,7 @@
                         { required: true,validator:validatePhone,trigger:'blur'}
                     ],
                     cardId:[
-                        {required: true, message: '身份证号码不能为空', trigger: 'blur'}
+                        {required: true, validator:cardId, trigger: 'blur'}
                     ],
                     groundIds:[
                         {required: true,type:'array', message: '请选择部门', trigger: 'change'}

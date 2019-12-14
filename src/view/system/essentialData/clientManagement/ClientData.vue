@@ -80,7 +80,7 @@
                  <Option v-for="item in dataList.CS00112" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
                </Select>
              </FormItem>
-             <FormItem label='电话:' >
+             <FormItem label='电话:'>
                <Input v-model='data.tel' style="width: 180px" ></Input>
              </FormItem>
              <FormItem label='备注:' >
@@ -273,6 +273,16 @@
             treelist:''
         },
         data(){
+          const contactorTel= (rule, value, callback) => {
+            if (!value) {
+              return callback(new Error('手机号不能为空'));
+            } else if (!/^1[345789]\d{9}$/.test(value)) {
+              callback(new Error('手机号格式不正确'));
+            } else {
+              callback();
+            }
+          };
+
             return {
                 tree: this.treelist,
                 clinet:true,//是否客户 //是
@@ -419,7 +429,7 @@
                 newInoiceShow:false, //开票
                 loading:true,
                 loading1:true,
-                title:'新增用户',
+                title:'新增收货地址',
                 oneNew:{},
                 relevanceClient:[],
                 addInoiceOne:{},
@@ -446,7 +456,7 @@
                         {required: true,message:' ', trigger: 'change'}
                     ],
                     contactorTel:[
-                        {required: true,message:' ', trigger: 'blur'}
+                        {required: true,validator:contactorTel, trigger: 'blur'}
                     ],
                     cityId:[
                         {required: true,message:' ', trigger: 'change'}
@@ -456,7 +466,7 @@
                     ],
                     guestTypeFloor:[
                         {required: true,message:' ', trigger: 'change'}
-                    ],
+                    ]
                 },
                 dataList:'',
                 id:0,
@@ -690,5 +700,9 @@
 .tabList>>>.ivu-form-item {
   margin-bottom: 10px;
 }
+.tabList>>>.ivu-form-item-content{
+  margin-bottom: 10px;
+}
+
 
 </style>

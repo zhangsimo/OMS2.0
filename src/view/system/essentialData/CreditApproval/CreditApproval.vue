@@ -5,10 +5,10 @@
       <dateget class="mr10" @quickDate="quickDate"></dateget>
       <span class="mr10">申请日期：</span>
       <Date-picker
-        type="daterange" 
-        class="w200 mr20" 
+        type="daterange"
+        class="w200 mr20"
         :options="options3"
-        @on-change="dateChange" 
+        @on-change="dateChange"
         placeholder="请选择日期"
         >
         </Date-picker>
@@ -91,9 +91,9 @@
     </div>
 <!--信用额度查看-->
     <Modal v-model="CreditLineApplicationShow" title="客户信用额度表" width="900" :mask-closable="false">
-      <CreditLineApplication 
-      :data="creaditList" 
-      :customerIfo="customerIfo" 
+      <CreditLineApplication
+      :data="creaditList"
+      :customerIfo="customerIfo"
       :customerDetails="customerDetails"
       :sixsixMonthPerformance="sixMonthPerformance"
       :sellOrderList="sellOrderList"
@@ -267,17 +267,20 @@
               }
               conditionalQuery(this.dateList).then(res => {
                 if(res.code === 0){
+                  console.log('特特特特',res)
                   this.creditList = res.data
                 }
-            }) 
+            })
           },
           // 获取快速查询
           quickDate (item) {
-            // console.log(item)
+             // console.log('777777',item)
             this.quickArray = item
+            this.serchCredit()
             // this.quickList.startTime = item[0]
             // this.quickList.endTime = item[1]
-            // console.log(this.quickList)
+            // console.log(this.quickList.startTime,this.quickList.endTime)
+
           },
           // 获取日期
           dateChange (value) {
@@ -371,7 +374,7 @@
     overflow: hidden;
     .titlecenter{
       width: 120px;
-      text-align: right;  
+      text-align: right;
       /*background-color: #000;*/
       .oneHeight {
         line-height: 50px;

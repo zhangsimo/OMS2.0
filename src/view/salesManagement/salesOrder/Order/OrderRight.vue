@@ -716,6 +716,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                     item.isMarkBatch = 1
                 })
                 data.detailList = val.details
+                data.sign = 1
                 let res = await  getAccessories(data)
                 if(res.code === 0){
                     this.getList()

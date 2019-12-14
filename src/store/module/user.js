@@ -110,10 +110,9 @@ export default {
 
           let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
           commit('setAccess', access)
-
           commit('setUserId', data.id)
           commit('setUserData', data)
-          localStorage.tenantId = data.tenantId
+          // localStorage.tenantId = data.tenantId
           resolve(data)
         }).catch(err => {
           reject(err)
@@ -135,5 +134,7 @@ export default {
         })
       })
     }
-  }
+  },
+
+
 }

@@ -44,7 +44,7 @@
                   采购退货列表
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
-                <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
+                <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
                       @on-page-size-change="changeSizeLeft" show-sizer show-total>
                 </Page>
               </div>
@@ -682,7 +682,7 @@
         findPageByDynamicQuery({params:params,data:data}).then(res => {
           if(res.code === 0){
             this.Left.tbdata = res.data.content || []
-
+            this.Left.page.total = res.data.totalElements
           }
         })
       },
