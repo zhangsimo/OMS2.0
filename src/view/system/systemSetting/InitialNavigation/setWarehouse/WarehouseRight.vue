@@ -88,7 +88,7 @@
 
         <div slot='footer'>
           <Button type='primary' @click="sureNewSaffect" >确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="saffectShow=false" >取消</Button>
         </div>
       </Modal>
 
