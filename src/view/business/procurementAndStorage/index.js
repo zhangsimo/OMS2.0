@@ -387,6 +387,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate()
+            this.formPlan = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
@@ -419,6 +420,7 @@ export default {
           try {
             await this.$refs.xTable.validate()
             this.formPlan.billStatusValue = 4
+            this.formPlan = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
