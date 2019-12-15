@@ -4,14 +4,14 @@ import api from '_conf/url'
 
 // 分页查询员工信息
 export function allStaffCompany (page, size, params) {
-  params.page = page - 1
-  params.size = size
-  params.tenantId = localStorage.getItem('authUserId')
-  return axios.request({
-    url: `${api.authApi}/tenantCompany/findAll?`,
-    method: 'get',
-    params
-  })
+  // params.page = page - 1
+  // params.size = size
+  // params.tenantId = localStorage.getItem('authUserId')
+  // return axios.request({
+  //   url: `${api.authApi}/tenantCompany/findAll?`,
+  //   method: 'get',
+  //   params
+  // })
 }
 
 // 删除用户

@@ -5,14 +5,8 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <Select v-model="params.selectDayType" @on-change="getDataQuick" class="w90 mr10">
-              <Option
-                v-for="item in selectDayTypeArr"
-                :value="item.value"
-                :key="item.value"
-              >{{item.label}}</Option>
-            </Select>
-            <Select v-model="params.settleStatus" @on-change="getDataType" class="w90 mr10">
+             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+            <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
@@ -117,6 +111,7 @@
                 <div class="clearfix"></div>
               </div>
               <vxe-table
+              v-if="showit"
                 border
                 resizable
                 show-footer
@@ -154,18 +149,27 @@
 import {
   getList,
   inDataList,
-  stampDataList
+  stampDataList,
+  getListDetail
 } from '../../../../api/AlotManagement/twoBackInStorage.js'
 import More from './compontents/More'
+import QuickDate from '../../../../components/getDate/dateget'
 import '../../../lease/product/lease.less'
 import '../../../goods/goodsList/goodsList.less'
 export default {
   name: 'twoBackInStorage',
   components: {
-    More
+    More,
+    QuickDate
   },
   data() {
     return {
+      form: {
+        createTimeStart: '',
+        createTimeEnd: '',
+        status: ''
+      },
+      showit: true,
       split1: 0.2,
       selectDayTypeArr: [
         { label: '所有', value: '' },
@@ -184,8 +188,8 @@ export default {
       ],
       //查询
       params: {
-        selectDayType: '', //完成日期12345
-        settleStatus: '',
+        // selectDayType: '', //完成日期12345
+        // settleStatus: '',
         size: 10,
         page: 0
       },
@@ -342,16 +346,22 @@ export default {
           this.$Message.info('初始化数据失败')
         })
     },
-    //快速查询-时间
-    getDataQuick(v) {
-      console.log(v)
-      this.params.selectDayType = v
-      this.getinfo(this.params)
+    // //快速查询-时间
+    // getDataQuick(v) {
+    //   console.log(v)
+    //   this.params.selectDayType = v
+    //   this.getinfo(this.params)
+    // },
+    //time1
+    getDataQuick(val) {
+      console.log(val)
+      this.form.createTimeStart = val[0]
+      this.form.createTimeEnd = val[1]
+      this.getinfo(this.form)
     },
     //类型查询
     getDataType() {
-      console.log(this.params.settleStatus)
-      this.getinfo(this.params)
+      this.getinfo(this.form)
     },
     //显示更多弹窗
     more() {
@@ -408,10 +418,15 @@ export default {
         })
     },
     //左边列表选中事件
-    selectTabelData(currentRow) {
+    async selectTabelData(currentRow) {
       this.inID.id = currentRow.id
       this.formPlan = currentRow
-      this.tableData = currentRow.voList //添加right表格数据
+      const params = {
+        mainId: currentRow.id
+      }
+      const res = await getListDetail(params)
+      console.log(res)
+      this.tableData = res.data
       if (currentRow.status === 0) {
         this.inStatus = '未入库'
         this.btnIn = false

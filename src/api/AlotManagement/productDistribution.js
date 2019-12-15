@@ -36,7 +36,7 @@ export function genxin(data) {
 // 获取待分配单列表
 export function shenqingdanliebiao(params) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/findAllBypartCode`,
+    url: `${api.omsOrder}/allotApplyMain/findAllByPartCode`,
     method: 'get',
     params
   });

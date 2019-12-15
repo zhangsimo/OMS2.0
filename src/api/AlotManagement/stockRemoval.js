@@ -12,6 +12,17 @@ export function getList1(data, size, num) {
   });
 }
 
+//获取调拨申请列表明细
+export function getListDetail(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotOutDetail/findByMainId`,
+    method: 'get',
+    params: {
+      ...data
+    }
+  });
+}
+
 //保存
 export function baocun(data) {
   return axios.request({
@@ -24,7 +35,7 @@ export function baocun(data) {
 //提交
 export function tijiao(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backApplyCommit`,
+    url: `${api.omsOrder}/allotOutMain/commit`,
     method: 'post',
     data
   });
@@ -33,7 +44,7 @@ export function tijiao(data) {
 //删除
 export function shanqu(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backApplyList`,
+    url: `${api.omsOrder}/allotOutDetail/del`,
     method: 'post',
     data
   });
@@ -57,8 +68,8 @@ export function zuofei(data) {
 //打印
 export function getprintList (params) {
   return axios.request({
-    url: `${api.omsOrder}/sellOrderMain/print`,
-    method: 'get',
+    url: `${api.omsOrder}/allotOutMain/pointAdd`,
+    method: 'post',
     params
   })
 }
@@ -74,7 +85,7 @@ export function stampApplyDataList1(data) {
 // 仓库接口
 export function cangkulist2(id) {
   return axios.request({
-    url: `${api.omsOrder}/comStore/findByOrgid?orgid=${id}`,
+    url: `${api.omsStore}/comStore/findByOrgid?orgid=${id}`,
     method: 'get'
   })
 }

@@ -12,6 +12,18 @@ export function getList1(data, size, num) {
   });
 }
 
+
+//获取调拨申请列表明细
+export function getListDetail(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotEnterDetail/findEnterDetails`,
+    method: 'get',
+    params: {
+      ...data
+    }
+  });
+}
+
 //保存
 export function baocun(data) {
   return axios.request({
@@ -57,8 +69,8 @@ export function zuofei(data) {
 //打印
 export function getprintList (params) {
   return axios.request({
-    url: `${api.omsOrder}/sellOrderMain/print`,
-    method: 'get',
+    url: `${api.omsOrder}/allotEnterMain/pointAdd`,
+    method: 'put',
     params
   })
 }

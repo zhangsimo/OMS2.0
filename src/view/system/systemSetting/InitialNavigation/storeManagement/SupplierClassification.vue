@@ -104,7 +104,6 @@
             },
             //点击获取当前信息
             changeOneList(data){
-                console.log(data , 777)
                     this.$store.commit('setTreePid',data[0])
                 this.newOne = JSON.parse(JSON.stringify(data[0]))
                 if(data[0].parentId == 0){

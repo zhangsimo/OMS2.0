@@ -58,7 +58,7 @@
 
 <!--  新增兼职公司    -->
       <Modal title="选择兼职公司" v-model="PtCompany" width="800px" :footer-hide="true">
-        <PTCompany v-if="oneStaffChange" :data="oneStaffChange" @colseMdole = 'colsePtCompany'></PTCompany>
+        <PTCompany v-if="oneStaffChange" ref="addNew" :data="oneStaffChange" @colseMdole = 'colsePtCompany'></PTCompany>
       </Modal>
 <!--      查询兼职公司-->
       <Modal title="查看兼职公司" v-model="findAllCompany" width="800px" :footer-hide="true">
@@ -80,11 +80,12 @@
 </template>
 
 <script>
-  import {getStaffList , editUser , changeeditUser, getCompanyList ,findCompanyList, putNewCompany, restpasswd} from '@/api/system/systemSetting/staffManagenebt'
+  import {getStaffList , editUser , changeeditUser ,findCompanyList, putNewCompany, restpasswd} from '@/api/system/systemSetting/staffManagenebt'
   import {transTime} from '../utils'
   import addStaff from "./addStaff";
   import setPassword from "./setpassword";
   import PTCompany from "./PTCompany";
+  import moment from 'moment'
 
   export default {
         name: "staffManagement",
@@ -283,10 +284,6 @@
               this.getAllStaffList()
           },
           inquireStaff(){
-              // if(this.staffphoneNumber && !(/^1[3456789]\d{9}$/.test(this.staffphoneNumber))){
-              //     this.$Message.warning("手机号码有误，请重填");
-              //     return false;
-              // }
               this.page.num = 1
               this.getAllStaffList()
           },
@@ -331,10 +328,13 @@
                   let stop = this.$loading()
                   this.modalShow = false
                  if(this.title == '新增员工'){
-                     this.newStaff.single =  this.newStaff.single ? 1 : 0
-                     this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
-                     this.newStaff.groundIds = JSON.stringify(this.newStaff.groundIds)
-                     editUser(this.newStaff , this.$store.state.user.userData.groupId).then( res => {
+                     let data = {}
+                     data = JSON.parse(JSON.stringify(this.newStaff))
+                     data.single =  data.single ? 1 : 0
+                     data.singtwo =  data.single ? 1 : 0
+                     data.groundIds = JSON.stringify(data.groundIds)
+                     data.entryTime = moment(data.entryTime).format('YYYY-MM-DD')
+                     editUser(data , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
                              this.$Message.success(res.message)
@@ -345,13 +345,13 @@
                          stop()
                      })
                  }else {
-                     if(this.title == '员工离职'){
-                         this.newStaff.office = 1
-                     }
-                     this.newStaff.single =  this.newStaff.single ? 1 : 0
-                     this.newStaff.singtwo =  this.newStaff.single ? 1 : 0
-                     this.newStaff.groundIds = JSON.stringify(this.newStaff.groundIds)
-                     changeeditUser(this.newStaff).then( res => {
+                     let data = {}
+                     data = JSON.parse(JSON.stringify(this.newStaff))
+                     data.single =  data.single ? 1 : 0
+                     data.singtwo =  data.single ? 1 : 0
+                     data.groundIds = JSON.stringify(data.groundIds)
+                     data.entryTime = moment(data.entryTime).format('YYYY-MM-DD')
+                     changeeditUser(data).then( res => {
                          stop()
                          if(res.code ==0){
                              this.$Message.success(res.message)
@@ -361,13 +361,10 @@
                          stop()
                      })
                  }
-
-
               })
           },
           //获取当前数据
           selection(currentRow){
-              console.log(currentRow , 999);
               this.oneStaffChange = currentRow
           },
           //修改信息
@@ -463,7 +460,9 @@
                   this.$Message.error('请至选择一条员工信息')
                   return false
               }
-             this.PtCompany = true
+              this.$refs.addNew.getlist()
+
+              this.PtCompany = true
           },
           //关闭公司选项
           colsePtCompany(){

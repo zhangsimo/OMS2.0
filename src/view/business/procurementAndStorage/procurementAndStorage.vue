@@ -73,7 +73,7 @@
                     <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
-                    <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss" @on-change="setOrderDate" :value="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusId != 0 || formPlan.code != ''"></DatePicker>
+                    <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss"  v-model="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
                     <Input class="w160" v-model="formPlan.serviceId" disabled></Input>

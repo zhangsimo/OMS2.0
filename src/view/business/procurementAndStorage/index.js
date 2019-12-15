@@ -88,7 +88,7 @@ export default {
           {required: true, message: '  ', trigger: 'blur'}
         ],
         orderDate:[
-          {required:true ,type: 'string', message: ' ' , trigger:'change' }
+          {required:true ,type: 'date', message: ' ' , trigger:'change' }
         ],
         billTypeId:[
           {required: true, type: 'string', message: ' ', trigger: 'change'}
@@ -439,10 +439,10 @@ export default {
 
     },
 
-    //更改订单时间
-    setOrderDate(val){
-      this.formPlan.orderDate = val
-    },
+    // //更改订单时间
+    // setOrderDate(val){
+    //   this.formPlan.orderDate = val
+    // },
 
     //打开添加配件模态框
     addMountings(){

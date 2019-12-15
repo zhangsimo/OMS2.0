@@ -46,7 +46,7 @@
 
 <!--  新增紧俏品-->
   <Modal v-model="addCommodShow" title="新增紧俏品" width="1000">
-    <Fittings @getNewList="getListAget" @setShow="closeCommodShow"></Fittings>
+    <Fittings ref="Fitting" @getNewList="getListAget" @setShow="closeCommodShow"></Fittings>
     <div slot='footer'>
     </div>
   </Modal>
@@ -88,7 +88,7 @@
                     {
                         title: '配件内码',
                         align: 'center',
-                        key: 'code',
+                        key: 'partInnerId',
                     },
                     {
                         title: '编码',
@@ -98,37 +98,32 @@
                     {
                         title: '名称',
                         align: 'center',
-                        key: 'partStandardName',
+                        key: 'partName',
                     },
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'adapterCarBrand',
+                        key: 'partBrandName',
                     },
                     {
                         title: '品质',
                         align: 'center',
-                        key: 'quality',
+                        key: 'qualityTypeName',
                     },
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: '',
-                        render: (h, params) => {
-                            let text = ''
-                            text = params.row.adapterCarBrand + ' ' +params.row.adapterCarModel
-                            return h('span',{},text)
-                        }
+                        key: 'carBrandModel',
                     },
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'minUnit',
+                        key: 'unit',
                     },
                     {
                         title: '规格',
                         align: 'center',
-                        key: 'specifications',
+                        key: 'spec:',
                     },
                     {
                         title: '可售数量',
@@ -268,7 +263,6 @@
             //选中紧俏品
             picthTight(selection){
               this.pitchOn = selection
-                console.log(selection)
             },
             //删除
             deleteTight(){
@@ -300,6 +294,7 @@
             //新增紧俏品
             addNew(){
                 this.addCommodShow = true
+                this.$refs.Fitting.initCloudPartInfo()
             },
             //新增刷新
             getListAget(){
