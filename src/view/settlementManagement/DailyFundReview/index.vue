@@ -82,10 +82,10 @@
     <Modal v-model="capitalexamine" title="资金审核" @on-ok="confirmExamine">
       <p class="tc">确认审核?</p>
     </Modal>
-    <Modal v-model="revoke" title="资金审核撤销">
+    <Modal v-model="revoke" title="资金审核撤销" @on-ok="confirmRemove">
       <div class="db flex">
         <span>撤销原因：</span>
-        <Input v-model="revokeReason" type="text" class="w300" />
+        <Input v-model="revokeReason" type="text" class="w300" @on-change="removeChange" placeholder="只能输入100字以内" />
       </div>
     </Modal>
   </div>
@@ -114,7 +114,7 @@ export default {
   },
   data() {
     return {
-      tabName: 'key1',
+      tabName: "key1",
       collectPayId: "",
       reconciliationId: "",
       companyDealings: "",
@@ -467,32 +467,41 @@ export default {
     };
   },
   methods: {
+    // 撤销原因
+    removeChange(event){
+      if(event.target.value.length<100) {
+        this.revokeReason = event.target.value
+      } else {
+        this.$message.error('只能输入100字以内')
+      }
+    },
     // 往来单位
-    getOne(data){
-      this.companyDealings = data.shortName
-      this.companyDealingsId = data.id
+    getOne(data) {
+      this.companyDealings = data.shortName;
+      this.companyDealingsId = data.id;
     },
     // 查询
     quick() {
       let obj = {
-        fno:this.collectPayId,
-        serviceId:this.reconciliationId,
+        fno: this.collectPayId,
+        serviceId: this.reconciliationId,
         startDate: this.value[0],
         endDate: this.value[1],
         orgId: this.model1,
-        guestId: this.companyDealingsId,
+        guestId: this.companyDealingsId
       };
       this.getcapitalAudit(obj);
     },
     //审核数据接口
     getcapitalAudit(obj) {
       capitalAudit().then(res => {
-        // console.log(res)
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
             item.num = index + 1;
             item.sortName = item.sort.name;
-            item.furposeName = item.furpose.name;
+            if (item.furpose) {
+              item.furposeName = item.furpose.name;
+            }
           });
           this.data1 = res.data.one;
         }
@@ -500,7 +509,9 @@ export default {
           res.data.two.map((item, index) => {
             item.num = index + 1;
             item.sortName = item.sort.name;
-            item.furposeName = item.furpose.name;
+            if (item.furpose) {
+              item.furposeName = item.furpose.name;
+            }
           });
           this.data2 = res.data.two;
         }
@@ -521,10 +532,16 @@ export default {
         checkId: this.row.checkId,
         orgId: this.model1,
         fno: this.row.fno,
-        id: this.row.id
+        id: this.row.id,
+        sort: this.row.sort.value,
+        serviceId: this.row.serviceId
       };
       examineBtn(obj).then(res => {
-        console.log(res);
+        if (res.code === "0") {
+          location.reload();
+        } else {
+          this.$message.error("审核失败");
+        }
       });
     },
     // 选中数据
@@ -548,28 +565,34 @@ export default {
       }
     },
     // 导出
-    report(){
-      if(this.tabName === 'key1') {
-        if (this.data1.length !==0) {
+    report() {
+      if (this.tabName === "key1") {
+        if (this.data1.length !== 0) {
           this.$refs.collectExamine.exportCsv({
             filename: "应收审核"
           });
         } else {
-          this.$message.error('应收审核暂无数据')
+          this.$message.error("应收审核暂无数据");
         }
-      } else if(this.tabName === 'key2') {
-        if(this.data2.length!==0){
+      } else if (this.tabName === "key2") {
+        if (this.data2.length !== 0) {
           this.$refs.payExamine.exportCsv({
             filename: "应付审核"
           });
         } else {
-          this.$message.error('应付审核暂无数据')
+          this.$message.error("应付审核暂无数据");
         }
       }
     },
     // 当前标签页的name
-    tab(name){
-      this.tabName = name
+    tab(name) {
+      this.tabName = name;
+    },
+    // 确认撤销
+    confirmRemove() {
+      revokeBtn({id:this.row.id,remark:this.revokeReason,orgId:this.model1,guestId:this.row.guestId,fno:this.row.fno,serviceId:this.row.serviceId}).then(res=>{
+        console.log(res)
+      })
     }
   }
 };

@@ -68,7 +68,7 @@
           @click="statementSettlement"
         >对账单结算</button>
         <button class="ivu-btn ivu-btn-default mr10" type="button" @click="viewStatement">查看对账单</button>
-        <button class="ivu-btn ivu-btn-default mr10" type="button">撤销</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Revoke">撤销</button>
         <Table
           border
           :columns="columns1"
@@ -212,7 +212,7 @@
         <div class="db_top flex mb15">
           <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
           <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
-          <span style="flex:1">收付类型：{{reconciliationStatement.paymentTypeName}}</span>
+          <span style="flex:1">收付类型：{{reconciliationStatement.billingTypeName}}</span>
         </div>
         <div class="db_bottom flex mt15">
           <span style="flex:1">对账单号：{{reconciliationStatement.accountNo}}</span>
@@ -298,6 +298,7 @@
     </Modal>
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
+    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
   </div>
 </template>
 <script>
@@ -310,7 +311,8 @@ import {
   dictionaries,
   getId,
   settlement,
-  settlementPreservation
+  settlementPreservation,
+  accountRevoke
 } from "@/api/bill/saleOrder";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
@@ -322,6 +324,7 @@ export default {
   },
   data() {
     return {
+      revoke:false,
       check: "",
       remark: "",
       Write: "", //核销编码
@@ -786,6 +789,7 @@ export default {
     // 点击总表查询明细
     morevis(row, index) {
       this.reconciliationStatement = row;
+      this.reconciliationStatement.index = index;
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;
@@ -841,25 +845,24 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt =
-        row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
+      row.unAmt = row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
       row.endAmt += row.checkAmt * 1;
       row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
       this.$set(this.BusinessType, rowIndex, row);
       let obj = {
         serviceTypeName: "合计",
-        accountAmt: 0,
-        endAmt: 0,
-        uncollectedAmt: 0,
-        checkAmt: 0,
-        unAmt: 0
+        accountAmt: this.BusinessType[0].accountAmt,
+        endAmt: this.BusinessType[0].endAmt,
+        uncollectedAmt: this.BusinessType[0].uncollectedAmt,
+        checkAmt: this.BusinessType[0].checkAmt,
+        unAmt: this.BusinessType[0].unAmt
       };
       let total = this.getTotal(obj);
       this.$set(this.BusinessType, 5, obj);
     },
     // 收付款单元格关闭
-    collectPay({ row }){
-      this.total += row.checkAmt *1
+    collectPay({ row }) {
+      this.total += row.checkAmt * 1;
     },
     // 导出对账单/单据明细
     report(type) {
@@ -898,15 +901,15 @@ export default {
     // 收付款结算计算合计
     getTotal(obj) {
       this.BusinessType.map((item, index) => {
-        if (index < 5) {
+        if (index < 5 && index !== 0) {
           if (index > 2) {
-            obj.accountAmt += item.accountAmt*1;
+            obj.accountAmt += item.accountAmt * 1;
             obj.endAmt += item.endAmt;
             obj.uncollectedAmt += item.uncollectedAmt;
             obj.checkAmt += item.checkAmt;
             obj.unAmt += item.unAmt;
           } else {
-            obj.accountAmt -= item.accountAmt*1;
+            obj.accountAmt -= item.accountAmt * 1;
             obj.endAmt -= item.endAmt;
             obj.uncollectedAmt -= item.uncollectedAmt;
             obj.checkAmt -= item.checkAmt;
@@ -918,17 +921,19 @@ export default {
     },
     // 业务类型/收款账户
     hander() {
+      this.total = 0;
       settlement({
         orgId: this.reconciliationStatement.orgId,
         accountNo: this.reconciliationStatement.accountNo
       }).then(res => {
         if (res.data.one.length !== 0 && res.data.two.length !== 0) {
           let accountAmt = 0;
-          console.log(res.data.one)
           let endAmt = 0;
           let uncollectedAmt = 0;
           let checkAmt = 0;
+          let unAmt = 0;
           res.data.one.map((item, index) => {
+            item.serviceTypeName = item.serviceType.name;
             if (
               item.serviceTypeName === "供应商坏账" ||
               item.serviceTypeName === "供应商返利"
@@ -937,10 +942,12 @@ export default {
               endAmt += item.endAmt;
               uncollectedAmt += item.uncollectedAmt;
               checkAmt += item.checkAmt;
+              unAmt += item.unAmt;
             } else {
               accountAmt -= item.accountAmt;
               endAmt -= item.endAmt;
               uncollectedAmt -= item.uncollectedAmt;
+              unAmt += item.unAmt;
               checkAmt -= item.checkAmt;
             }
           });
@@ -949,17 +956,23 @@ export default {
             accountAmt,
             endAmt,
             uncollectedAmt,
-            checkAmt
+            checkAmt,
+            unAmt
           });
-          res.data.two.map(item=>{
-            item.paymentAmtName = item.paymentAmt.name
-          })
+          res.data.two.map(item => {
+            item.paymentAmtName = item.paymentAmt.name;
+            this.total += item.checkAmt;
+          });
           this.BusinessType = res.data.one;
           this.tableData = res.data.two;
         } else {
           dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
             res.data.itemVOS[0] = {
-              serviceType: {name:res.data.itemVOS[0].itemName,enum:res.data.itemVOS[0].itemCode,value:0},
+              serviceType: {
+                name: res.data.itemVOS[0].itemName,
+                enum: res.data.itemVOS[0].itemCode,
+                value: 0
+              },
               serviceTypeName: res.data.itemVOS[0].itemName,
               accountAmt: this.reconciliationStatement.accountsReceivable,
               endAmt: 0,
@@ -968,7 +981,11 @@ export default {
               unAmt: this.reconciliationStatement.accountsReceivable
             };
             res.data.itemVOS[1] = {
-              serviceType: {name:res.data.itemVOS[1].itemName,enum:res.data.itemVOS[1].itemCode,value:1},
+              serviceType: {
+                name: res.data.itemVOS[1].itemName,
+                enum: res.data.itemVOS[1].itemCode,
+                value: 1
+              },
               serviceTypeName: res.data.itemVOS[1].itemName,
               accountAmt: this.reconciliationStatement.badDebtReceivable,
               endAmt: 0,
@@ -978,7 +995,11 @@ export default {
             };
 
             res.data.itemVOS[2] = {
-              serviceType: {name:res.data.itemVOS[2].itemName,enum:res.data.itemVOS[2].itemCode,value:2},
+              serviceType: {
+                name: res.data.itemVOS[2].itemName,
+                enum: res.data.itemVOS[2].itemCode,
+                value: 2
+              },
               serviceTypeName: res.data.itemVOS[2].itemName,
               accountAmt: this.reconciliationStatement.receivableRebate,
               endAmt: 0,
@@ -987,7 +1008,11 @@ export default {
               unAmt: this.reconciliationStatement.noCharOffAmt
             };
             res.data.itemVOS[3] = {
-              serviceType: {name:res.data.itemVOS[3].itemName,enum:res.data.itemVOS[3].itemCode,value:3},
+              serviceType: {
+                name: res.data.itemVOS[3].itemName,
+                enum: res.data.itemVOS[3].itemCode,
+                value: 3
+              },
               serviceTypeName: res.data.itemVOS[3].itemName,
               accountAmt: this.reconciliationStatement.payingBadDebts,
               endAmt: 0,
@@ -996,7 +1021,11 @@ export default {
               unAmt: this.reconciliationStatement.noCharOffAmt
             };
             res.data.itemVOS[4] = {
-              serviceType: {name:res.data.itemVOS[4].itemName,enum:res.data.itemVOS[4].itemCode,value:4},
+              serviceType: {
+                name: res.data.itemVOS[4].itemName,
+                enum: res.data.itemVOS[4].itemCode,
+                value: 4
+              },
               serviceTypeName: res.data.itemVOS[4].itemName,
               accountAmt: this.reconciliationStatement.dealingRebates,
               endAmt: 0,
@@ -1014,7 +1043,7 @@ export default {
             };
             let total = this.getTotal(obj);
             this.BusinessType.push({
-              serviceType: {name:'合计',enum:'HJ',value:5},
+              serviceType: { name: "合计", enum: "HJ", value: 5 },
               serviceTypeName: "合计",
               accountAmt: total.accountAmt,
               endAmt: total.endAmt,
@@ -1024,9 +1053,13 @@ export default {
             });
           });
           dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
-            res.data.itemVOS.map((item,index) => {
-              item.paymentAmtName = item.itemName
-              item.paymentAmt = {name:item.itemName,enum: item.itemCode,value:index}
+            res.data.itemVOS.map((item, index) => {
+              item.paymentAmtName = item.itemName;
+              item.paymentAmt = {
+                name: item.itemName,
+                enum: item.itemCode,
+                value: index
+              };
               item.orgName = this.reconciliationStatement.orgName;
               item.checkAmt = 0;
             });
@@ -1043,9 +1076,10 @@ export default {
             checkId: this.Write,
             orgId: this.reconciliationStatement.orgId,
             guestId: this.reconciliationStatement.guestId,
-            sort: this.reconciliationStatement.paymentType,
+            sort: this.reconciliationStatement.billingType,
             accountNo: this.reconciliationStatement.accountNo,
-            fno: this.collectPayId
+            fno: this.collectPayId,
+            serviceId: this.reconciliationStatement.serviceId
           }
         ];
         settlementPreservation({
@@ -1053,8 +1087,13 @@ export default {
           two: this.BusinessType,
           three: this.tableData
         }).then(res => {
-          console.log(res);
-          this.Settlement = false
+          let ind = this.reconciliationStatement.index;
+          this.$set(
+            this.data1[ind],
+            "amountReceived",
+            this.BusinessType[5].endAmt
+          );
+          this.Settlement = false;
         });
       } else {
         this.$message.error("收款金额与本次核销金额不相等");
@@ -1063,6 +1102,30 @@ export default {
     // 收付款关闭
     close() {
       this.Settlement = false;
+    },
+    // 撤销按钮
+    Revoke() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        this.revoke = true;
+        // if (
+        //   this.reconciliationStatement.statementStatusName === "审核中" ||
+        //   this.reconciliationStatement.statementStatusName === "审核通过"
+        // ) {
+        //   this.revoke = true;
+        // } else {
+        //   this.$message.error("此状态无法撤销");
+        // }
+      } else {
+        this.$message.error("请勾选要撤销的对账单");
+      }
+    },
+    // 确认撤销
+    confirmRevocation(){
+      accountRevoke({
+        id:this.reconciliationStatement.id
+      }).then(res=>{
+        console.log(res)
+      })
     }
   }
 };

@@ -47,13 +47,13 @@
     <section class="con-box">
       <div class="inner-box">
         <Table border :columns="columns" :data="data" ref="summary" show-summary  highlight-row
-          @on-row-click="election"></Table>
+          @on-row-click="election" max-height=400></Table>
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
-            <Table border :columns="columns1" :data="data1" class="mt10" ref="receivables" show-summary></Table>
+            <Table border :columns="columns1" :data="data1" class="mt10" ref="receivables" show-summary max-height=400></Table>
           </Tab-pane>
           <Tab-pane label="付款单记录" name="key2">
-            <Table border :columns="columns2" :data="data2" class="mt10" ref="payment" show-summary></Table>
+            <Table border :columns="columns2" :data="data2" class="mt10" ref="payment" show-summary max-height=400></Table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -144,7 +144,7 @@ export default {
         },
         {
           title: '收付类型',
-          key: 'sort',
+          key: 'sortName',
           className: 'tc'
         },
         {
@@ -184,7 +184,7 @@ export default {
         },
         {
           title: '审核状态',
-          key: 'startStatus',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
@@ -217,7 +217,7 @@ export default {
         },
         {
           title: '收款方式',
-          key: 'sortName',
+          key: 'serviceTypeName',
           width: 120,
           className: 'tc'
         },
@@ -233,7 +233,7 @@ export default {
         },
         {
           title: '审核状态',
-          key: 'startStatus',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
@@ -271,7 +271,7 @@ export default {
         },
         {
           title: '付款方式',
-          key: 'sortName',
+          key: 'serviceTypeName',
           width: 120,
           className: 'tc'
         },
@@ -287,7 +287,7 @@ export default {
         },
         {
           title: '审核状态',
-          key: 'startStatus',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
@@ -364,13 +364,34 @@ export default {
     // 总表查询
     getGeneral() {
       getReceiptsPaymentsSummary({}).then(res => {
-        console.log(res);
+        // console.log(res);
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.sortName = item.sort.name
+            item.startStatusName = item.startStatus.name
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
       });
     },
     // 选中总表查询明细
     election(row) {
-      getReceiptsPaymentsList({ mainId: row.id }).then(res => {
-        console.log(res);
+      getReceiptsPaymentsList({ fno: row.fno }).then(res => {
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.serviceTypeName = item.serviceType.name
+            item.startStatusName = item.startStatus.name
+          })
+          this.data1 = res.data
+          this.data2 = res.data
+        } else {
+          this.data1 = []
+          this.data2 = []
+        }
       });
     }
   }

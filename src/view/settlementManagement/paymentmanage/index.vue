@@ -331,6 +331,12 @@ export default {
                       orderType: params.row.serviceType.value
                     };
                     let res = await this.getList(obj);
+                    res.detailed.map(item=>{
+                      item.orderCode = params.row.serviceId
+                      item.orderType = params.row.serviceType.value
+                      item.orgId = params.row.orgId
+                      item.guestId = params.row.guestId
+                    })
                     this.data3 = res.detailed;
                   }
                 }
@@ -890,23 +896,13 @@ export default {
     // 查询出/入库单号明细
     async getList(obj) {
       let detailed = [];
-      let partCode = 0;
-      let qty = 0;
-      let orderAmt = 0;
-      let noTaxAmt = 0;
-      let taxAmt = 0;
       await getNumberList(obj).then(res => {
         res.data.map((item, index) => {
           item.num = index + 1;
-          partCode++;
-          qty += item.qty;
-          orderAmt += item.orderAmt;
-          noTaxAmt += item.noTaxAmt;
-          taxAmt += item.taxAmt;
         });
         detailed = res.data;
       });
-      return { detailed, partCode, qty, orderAmt, noTaxAmt, taxAmt };
+      return { detailed };
     },
     // 导出汇总
     exportSummary() {
@@ -956,7 +952,7 @@ export default {
     },
     // 打印
     print(){
-      console.log(this.$refs.PrintShow)
+      // console.log(this.$refs.PrintShow)
       this.$refs.PrintShow.openModal()
     }
   }

@@ -681,12 +681,18 @@ export default {
               orderType: item.serviceType.value
             });
           });
-          console.log(arr)
+          // console.log(encodeURI(arr))
+          // console.log(JSON.stringify(arr))
+          // location.href = `${
+          //   baseUrl.omsOrder
+          // }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
+          //   TOKEN_KEY
+          // )}&jsonObject=${JSON.stringify(arr)}`;
           location.href = `${
             baseUrl.omsOrder
           }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
             TOKEN_KEY
-          )}&list=${JSON.stringify(arr)}`;
+          )}&jsonObject=${encodeURI(arr)}`;
           // reportParts({ one: this.data1, two: this.data2, three: obj }).then(
           //   res => {
           // var blob = new Blob([res]); //创建一个blob对象

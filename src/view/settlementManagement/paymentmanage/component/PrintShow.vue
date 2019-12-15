@@ -9,7 +9,7 @@
             >{{onelist.orgName || ' '}}</h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>采购入库:</p>
+            <p>销售出库:</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
@@ -17,17 +17,17 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
-              <span>{{onelist.address || ' '}}</span>
+              <span>{{onelist.OrgAddress || ' '}}</span>
             </p>
             <p>
               <span>电话:</span>
-              <span>{{onelist.tel || ' '}}</span>
+              <span>{{onelist.orgTel || ' '}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
             <p>
               <span>创建日期:</span>
-              <span>{{onelist.createTime || ' '}}</span>
+              <span>{{onelist.creationDate || ' '}}</span>
             </p>
             <p>
               <span>打印日期:</span>
@@ -43,27 +43,27 @@
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.addr}}</span>
+              <span>{{onelist.guestAddress}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>联系人:</span>
-              <span>{{onelist.orderMan}}</span>
+              <span>{{onelist.contactPerson}}</span>
             </p>
             <p>
               <span>票据类型:</span>
-              <span>{{onelist.billTypeName}}</span>
+              <span>{{onelist.ticketTypeName}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.tel}}</span>
+              <span>{{onelist.personTel}}</span>
             </p>
             <p>
               <span>结算方式:</span>
-              <span>{{onelist.settleTypeName}}</span>
+              <span>{{onelist.settlementMethodName}}</span>
             </p>
           </Col>
         </Row>
@@ -74,32 +74,32 @@
           width="990"
           border
           :columns="columns2"
-          :data="onelist.details"
+          :data="onelist.orderDetailList"
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
-            <span>{{ onelist.orderAmt | toChies}}</span>
+            <span>{{ onelist.totalAmt | toChies}}</span>
           </Col>
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{onelist.totalNumber }}</span>
           </Col>
           <Col class="pl10" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{onelist.totalAmt}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{onelist.orderMan}}</span>
+            <span>{{onelist.createName}}</span>
           </Col>
 
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
-            <span>{{onelist.deliverer}}</span>
+            <span>{{onelist.deliveryMan}}</span>
           </Col>
           <Col span="8" class="pl10">
             <span>收货人:</span>
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import { getNumberList } from "@/api/bill/saleOrder";
+import { Printing } from "@/api/bill/saleOrder";
 
 export default {
   name: "PrintShow",
@@ -221,18 +221,19 @@ export default {
     },
     async openModal() {
       this.printShow = true;
-      let data = {};
-      console.log(this.$store.state.user.userData, 888);
-      data.id = this.$store.state.user.userData.id;
-      // let res = await getNumberList(data);
-      console.log(this.$parent.data3)
-      this.onelist = this.$parent.data3;
-      console.log(this.onelist)
-
-      // if (res.code === 0) {
-      //   this.onelist = res.data;
-      //   console.log(res);
-      // }
+      let data = {
+        orderCode: this.$parent.data3[0].orderCode,
+        orderType: this.$parent.data3[0].orderType,
+        orgId: this.$parent.data3[0].orgId,
+        guestId: this.$parent.data3[0].guestId
+      };
+      let res = await Printing(data);
+      res.data.orderDetailList.map((item,index)=>{
+        item.num = index + 1
+      })
+      if (res.code === 0) {
+        this.onelist = res.data;
+      }
     },
     close() {
       this.printShow = false;

@@ -77,7 +77,7 @@ export function getOnWay(data) {
 // 收付款查询
 export function getReceiptsPaymentsSummary(data) {
     return axios.request({
-        url: `${api.omsOrder}/payment/record/queryRecordVerification`,
+        url: `${api.omsSettle}/payment/record/queryRecordVerification`,
         method: 'post',
         data
     })
@@ -85,7 +85,7 @@ export function getReceiptsPaymentsSummary(data) {
 // 收付款明细接口
 export function getReceiptsPaymentsList(params) {
     return axios.request({
-        url: `${api.omsOrder}/payment/detail/findOmsPaymentDetail`,
+        url: `${api.omsSettle}/payment/detail/findOmsPaymentDetail`,
         method: 'get',
         params
     })
@@ -211,18 +211,10 @@ export function examineBtn(data) {
         data
     })
 }
-// 撤销
+// 资金审核撤销
 export function revokeBtn(data) {
     return axios.request({
         url: `${api.omsSettle}/fund/review/cancel`,
-        method: 'post',
-        data
-    })
-}
-// 导出配件明细
-export function reportParts(data){
-    return axios.request({
-        url:`${api.omsSettle}/accounts/receivable/report/details`,
         method: 'post',
         data
     })
@@ -245,7 +237,7 @@ export function getId(params) {
     })
 }
 // 对账单结算接口
-export function settlement(params){
+export function settlement(params) {
     return axios.request({
         url: `${api.omsSettle}/payment/record/get/account/no`,
         method: 'get',
@@ -253,9 +245,25 @@ export function settlement(params){
     })
 }
 // 收付款结算保存
-export function settlementPreservation(data){
+export function settlementPreservation(data) {
     return axios.request({
         url: `${api.omsSettle}/payment/record/add`,
+        method: 'post',
+        data
+    })
+}
+// 打印
+export function Printing(params) {
+    return axios.request({
+        url: `${api.omsOrder}/pchsEnterMain/order/detail/print`,
+        method: 'get',
+        params
+    })
+}
+// 对账单审核
+export function accountRevoke(data) {
+    return axios.request({
+        url: `${api.omsSettle}/statement/master/update/draft`,
         method: 'post',
         data
     })
