@@ -8,25 +8,16 @@ const dev = {
   // omsApi: 'http://192.168.30.21:9240', // 付玮琳
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
-  // omsApi: 'http://192.168.30.234:9240', // 陈舒
-  omsApi: 'http://192.168.30.179:9240', // 常国地
-  // wmsApi: 'http://192.168.30.234:9250', // 陈舒
-  // wmsApi: 'http://192.168.30.179:9250', // 常国地
-  omsSettle: 'http://192.168.30.179:9270', // 常国地
-  omsOrder: 'http://192.168.30.179:9210', // 常国地
-  omsApi: 'http://192.168.30.179:9240', // 陈舒
-  wmsApi: 'http://192.168.30.179:9250', // 陈舒
+  omsApi: 'http://192.168.30.234:9240', // 陈舒
+  wmsApi: 'http://192.168.30.234:9250', // 陈舒
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
   // wmsApi: 'http://192.168.30.69:9250', // 曾史强
   // omsOrder: 'http://192.168.30.69:9210', // 曾史强
   // omsOrder: 'http://192.168.30.21:9210',
-  // omsOrder: 'http://192.168.30.191:9210', //
-  omsStore:'http://192.168.30.179:9280', // 库存查询 周伟健
-  omsProduct: "http://192.168.30.179:9200",
-  // omsOrder:'http://192.168.30.234:9210', //陈舒
-  omsOrder:'http://192.168.30.179:9210', //陈舒
-  omsSotck: 'http://192.168.30.179:9280',
-  omsSettle: 'http://192.168.30.179:9270',
+  // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
+  omsStore:'http://192.168.30.221:9280', // 库存查询 周伟健
+  omsProduct: "http://192.168.30.69:9200",
+  omsOrder:'http://192.168.30.221:9210', //陈舒
   /**oms系统接口设定 */
   authApi: 'http://192.168.2.47:5200', // 系统资源 5200
   // omsProduct: '', // 9200
@@ -37,7 +28,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  //omsSotck:'',//9280
+  omsSotck:'http://192.168.30.221:9280',//9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310
@@ -61,14 +52,14 @@ const test = {
   omsProduct: 'https://tsapi2.g-parts.cn/oms-product-provider',
   omsOrder: 'https://tsapi2.g-parts.cn/oms-order-provider',
   passportApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
-  essentialApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider',
+  essentialApi: 'https://tsapi2.g-parts.cn/oms-essential-provider',
   authApi: 'https://tsapi2.g-parts.cn/gpart-passport-provider',
-  omsBatch: 'https://tsapi2.g-parts.cn/gpart-batch-provider',
-  omsSettle:'https://tsapi2.g-parts.cn/gpart-settlement-provider',
-  omsSotck:'https://tsapi2.g-parts.cn/gpart-sotck-provider',
+  omsBatch: 'https://tsapi2.g-parts.cn/oms-batch-provider',
+  omsSettle:'https://tsapi2.g-parts.cn/oms-settlement-provider',
+  omsSotck:'https://tsapi2.g-parts.cn/oms-sotck-provider',
   uploadApi: 'https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile',
   getFileApi: 'https://tsoms2.g-parts.cn',
-  downApi: 'https://tsapi2.g-parts.cn/gpart-oss-provider',
+  downApi: 'https://tsapi2.g-parts.cn/oms-oss-provider',
 }
 
 const audit = {
