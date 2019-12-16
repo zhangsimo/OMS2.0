@@ -202,7 +202,7 @@ import QuickDate from '../../../../components/getDate/dateget'
 import SelectSupplier from './compontents/selectSupplier'
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
-} from '../../../../api/AlotManagement/putStorage.js'
+} from '@/api/AlotManagement/putStorage.js'
 export default {
   name: 'backApply',
   components: {
@@ -430,7 +430,6 @@ export default {
   watch: {
     Leftcurrentrow: {
       handler(newVal) {
-        console.log(newVal)
         this.Leftcurrentrow = newVal
       },
       deep: true
@@ -439,6 +438,8 @@ export default {
   created() {
       // 调接口获取配件组装列表信息
        this.getList(this.form)
+      //调取仓库
+      this.getWareHouse()
   },
   methods: {
   //配件返回的参数
@@ -458,7 +459,7 @@ export default {
           })
 
         },
-    selectAllEvent ({ checked }) {        
+    selectAllEvent ({ checked }) {
     },
     selectChangeEvent ({ checked, row }) {
         console.log(checked ? '勾选事件' : '取消事件')
@@ -660,14 +661,13 @@ export default {
         mainId: row.id
       }
       const res = await getListDetail(params)
-      console.log(res)
       this.showit = false
       this.Leftcurrentrow.detailVOS = res.data
+        console.log(this.Leftcurrentrow)
       const that = this
       setTimeout(() => {
         that.showit = true
       },100)
-      console.log(this.Leftcurrentrow.detailVOS)
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
                 if (res.code == 0) {
                   res.data.map(item => {
@@ -681,6 +681,22 @@ export default {
               this.$Message.info('获取仓库列表失败')
       })
     },
+      //获取仓库
+      getWareHouse(){
+          cangkulist2(this.$store.state.user.userData.groupId).then(res => {
+              if (res.code == 0) {
+                  res.data.map(item => {
+                      item['label'] = item.name
+                      item['value'] = item.id
+                  })
+                  this.cangkuListall = res.data
+                  this.dcData = res.data
+              }
+          }).catch(e => {
+              this.$Message.info('获取仓库列表失败')
+          })
+      },
+
     //分页
     changePage(p) {
       this.Left.page.num = p
@@ -789,7 +805,7 @@ export default {
       console.log(params)
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
-                  
+
                   if (!res.data.content) {
                     this.Left.tbdata = []
                     this.Left.page.total = 0
