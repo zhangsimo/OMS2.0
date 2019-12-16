@@ -85,7 +85,7 @@ export function stampApplyDataList1(data) {
 // 仓库接口
 export function cangkulist2(id) {
   return axios.request({
-    url: `${api.omsStore}/comStore/findByOrgid?orgid=${id}`,
+    url: `${api.wmsApi}/comStore/findByOrgid?orgid=${id}`,
     method: 'get'
   })
 }

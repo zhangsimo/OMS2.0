@@ -80,14 +80,19 @@
 
           <vxe-table-column field="code" title="业务单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
-          <vxe-table-column field="billStatusId" title="状态"></vxe-table-column>
+          <vxe-table-column field="billStatusId.name" title="状态"></vxe-table-column>
 
-          <vxe-table-column field="enterUname" title="采购员"></vxe-table-column>
-          <vxe-table-column field="invoice" title="票据类型"></vxe-table-column>
+          <vxe-table-column field="orderMan" title="采购员"></vxe-table-column>
+          <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
           <vxe-table-column field="settleTypeName" title="结算方式" width="100"></vxe-table-column>
           <vxe-table-column field="auditor" title="提交人" width="100"></vxe-table-column>
-          <vxe-table-column field="orderDate" title="提交日期"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column
+            field="storeId"
+            title="入库仓库"
+            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
+          ></vxe-table-column>
           <vxe-table-column field="enterTime" title="入库日期" width="100"></vxe-table-column>
           <vxe-table-column field="enterUname" title="操作人" width="100"></vxe-table-column>
         </vxe-table>
@@ -145,11 +150,7 @@
             title="入库数量"
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
-          <vxe-table-column
-            field="storeId"
-            title="入库仓库"
-            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>
+
           <vxe-table-column field="oeCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
         </vxe-table>

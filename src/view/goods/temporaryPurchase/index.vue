@@ -56,7 +56,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
             ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
@@ -296,7 +296,7 @@
                       :on-success="onSuccess"
                       :before-upload ='beforeUpload'
                     >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput">
+                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput||!mainId">
                         <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
                       </Button>
                     </Upload>

@@ -141,13 +141,20 @@ export default class InterPurchase extends Vue {
   };
   // 上传成功函数
   onSuccess (response) {
-    if(response.code != 0 ){
-      this.$Message.error(response.message)
+    if(response.code == 0 ){
+      if(response.data.list&& response.data.list.length > 0){
+        this.warning(response.data.list[0])
+      }
     }else {
-      this.$Message.success(response.message)
+      this.$Message.error(response.message)
     }
-    this.getListData();
   }
+  warning(nodesc){
+    this.$Notice.warning({
+      title: '上传错误信息',
+      desc: nodesc
+    });
+  };
   //上传之前清空
   beforeUpload(){
     let upload : any=this.$refs.upload;
@@ -290,11 +297,14 @@ export default class InterPurchase extends Vue {
 
   // 保存
   private async saveHandle(refname: string) {
-    let data: any = this.formdata(refname);
+    let data: any = this.formdata(refname)
     if (!data) return;
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
+ if(data.id=='0'){
+   data.id='';
+ }
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
@@ -407,16 +417,14 @@ export default class InterPurchase extends Vue {
     this.selectTableRow = v;
     this.mainId = v.id;
     this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId;
+    this.selectRowState = v.billStatusId.name;
     this.serviceId = v.serviceId;
-    // orderState['草稿'], orderState['退回']
-    if(['草稿', '退回'].includes(v.billStatusId)) {
+    if(['草稿', '退回'].includes(v.billStatusId.name)) {
       this.isInput = false;
     } else {
       this.isInput = true;
     }
-    // orderState['待收货'], orderState['部分入库']
-    if(['待收货', '部分入库'].includes(v.billStatusId)) {
+    if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
       this.adjustButtonDisable = false;
     } else {
       this.adjustButtonDisable = true;
@@ -510,13 +518,7 @@ export default class InterPurchase extends Vue {
   }
   //导入
   private getRUl(){
-    Object.keys(this.formPlanmain).map((item,i)=>{
-      if(i==0){
-        this.upurl+=`${item}=${this.formPlanmain[item]}`;
-      }else{
-        this.upurl+=`&${item}=${this.formPlanmain[item]}`;
-      }
-    })
+    this.upurl=api.getup+'id=' + this.mainId;
   }
   // 调节大小
   private getDomHeight() {

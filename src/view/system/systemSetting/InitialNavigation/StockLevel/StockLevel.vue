@@ -32,7 +32,7 @@
             </div>
             <div slot="right" class="right">
               <div class="tabs-warp">
-                <div class="btn-warp">
+                <div class="btn-warp p10">
                   <Select v-model="Type" style="width:100px" class="mr10">
                     <Option v-for="item in QueryType" :value="item.value" :key="item.value">{{ item.label }}</Option>
                   </Select>

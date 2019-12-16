@@ -56,7 +56,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != '草稿'"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
