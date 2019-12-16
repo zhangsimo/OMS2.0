@@ -77,6 +77,7 @@
               data.page = this.page.num -1
               data.orgid = this.shopCode
               data.tenantCompanyName = this.compentName
+              data.id = this.data.id
               getCompanyList(data).then( res => {
                   this.loading =false
                 if (res.code == 0){
@@ -87,6 +88,12 @@
                 }
               })
           },
+            //清空数据
+            clearList(){
+                this.selectedArr = []
+                this.shopCode = ''
+                this.compentName = ''
+            },
             //切换分页条数
             selectPage(size) {
                 this.loading = true
