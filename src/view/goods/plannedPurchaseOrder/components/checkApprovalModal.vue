@@ -69,10 +69,10 @@
         methods:{
             init(){
                 this.canShow=true;
-                approvalStatus({instanceId:this.orderId}).then(res=>{
+                let instanceId=this.orderId.processInstanceId||'';
+                approvalStatus({instanceId:instanceId}).then(res=>{
                     if(res.code=='0'){
                         this.statusData=res.data.processInstance.operationRecords;
-                        console.log(this.statusData)
                     }
                 })
             }

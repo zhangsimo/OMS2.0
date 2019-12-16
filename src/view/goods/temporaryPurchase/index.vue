@@ -61,7 +61,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="showStatus" class="mr10"
+            <Button @click="showStatus" class="mr10" :disabled="selectTableRow === null||selectTableRow.processInstanceId===null"
             ><i class="iconfont mr5 iconshenheicon"></i>查看审批</Button
             >
           </div>
@@ -242,7 +242,7 @@
                   <FormItem class="form-Item" label="直发门店：">
                     <Select
                       class="w160"
-                      v-model="formPlanmain.companyName"
+                      v-model="formPlanmain.directGuestId"
                       :disabled="isInput"
                     >
                       <Option
@@ -494,7 +494,7 @@
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->
-    <status-model ref="StatusModel" :orderId="mainId"></status-model>
+      <status-model ref="StatusModel" :orderId="selectTableRow" ></status-model>
     <!--添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
   </div>

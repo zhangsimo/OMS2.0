@@ -63,5 +63,12 @@ export const setCompany = (data) =>{
     data
   })
 }
+//审批状态接口
+export const approvalStatus =(data)=>{
+  return axios.request({
+    url:`${api.omsTpApi}/dingtalk/process/getProcessInstance?instanceId=${data.instanceId}`,
+    method:'get'
+  })
+}
 
 

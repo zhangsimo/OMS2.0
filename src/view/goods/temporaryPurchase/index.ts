@@ -184,7 +184,7 @@ export default class InterPurchase extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    companyName: "", // 直发门店
+    directGuestId: "", // 直发门店
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
@@ -230,7 +230,7 @@ export default class InterPurchase extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
-    id: '0',
+    id: '',
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -266,10 +266,11 @@ export default class InterPurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
+          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
+          advanceAmt:this.formPlanmain.advanceAmt,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -284,7 +285,7 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -300,11 +301,9 @@ export default class InterPurchase extends Vue {
     let data: any = this.formdata(refname)
     if (!data) return;
     if (this.selectTableRow.id) {
-      data = { ...this.selectTableRow, ...data };
+      data = Object.assign({}, this.selectTableRow, data);
     }
- if(data.id=='0'){
-   data.id='';
- }
+    data.details = this.tableData;
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
@@ -415,6 +414,7 @@ export default class InterPurchase extends Vue {
       currentRowTable.clearCurrentRow();
     }
     this.selectTableRow = v;
+    console.log(this.selectTableRow)
     this.mainId = v.id;
     this.tableData = v.details || [];
     this.selectRowState = v.billStatusId.name;
@@ -591,7 +591,7 @@ export default class InterPurchase extends Vue {
       data.endTime = this.quickDate[1];
     }
     if (this.purchaseType != 999 && this.purchaseType) {
-      data.flag = this.purchaseType;
+      data.billStatusId = this.purchaseType;
     }
     let res: any;
     if (!this.isMore) {
