@@ -315,6 +315,7 @@ export default class InterPurchase extends Vue {
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
+        data.details = this.tableData;
         let res = await api.outsideSaveCommit(data);
         if (res.code == 0) {
           this.$Message.success('保存成功');
