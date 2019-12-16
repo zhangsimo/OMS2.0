@@ -85,7 +85,7 @@
       <AddNewWarehouse :data="newWarehouseOne" :wareHouse="storeId" ref="child"></AddNewWarehouse>
       <div slot="footer">
         <Button type="primary" @click="sureNew">确定</Button>
-        <Button type="default">取消</Button>
+        <Button type="default" @click="warehouseIsShow=false">取消</Button>
       </div>
     </Modal>
 

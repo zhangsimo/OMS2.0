@@ -60,7 +60,7 @@
               <FormItem label='联系人手机:' prop="contactorTel">
                 <Input v-model='data.contactorTel' style="width: 180px" ></Input>
               </FormItem>
-              <FormItem label='城市:' prop="contactorTel">
+              <FormItem label="城市:" prop="cityId">
                 <Select v-model="data.cityId" style="width:180px" class="mr10">
                   <Option v-for="item in provincearr" v-if="data.provinceId==item.parentId" :key="item.id" :value="item.id" >{{ item.name}}</Option>
                 </Select>
@@ -80,8 +80,8 @@
                   <Option v-for="item in dataList.CS00112" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label='电话:'>
-                <Input v-model='data.tel' style="width: 180px" ></Input>
+              <FormItem label="电话:" prop="tel">
+                <Input v-model="data.tel" style="width: 180px"></Input>
               </FormItem>
               <FormItem label='备注:' >
                 <Input v-model='data.remark' style="width: 180px" ></Input>
@@ -92,12 +92,12 @@
                 </Select>
               </FormItem>
             </div>
-            <div style="flex-flow: row nowrap;width: 100%" >
-              <FormItem label='业务员手机:' >
-                <Input v-model='data.salesmanTel' style="width: 180px" ></Input>
+            <div style="flex-flow: row nowrap;width: 100%">
+              <FormItem label="业务员手机:" prop="salesmanTel">
+                <Input v-model="data.salesmanTel" style="width: 180px"></Input>
               </FormItem>
-              <FormItem label='信誉额度:' >
-                <Input v-model='data.creditLimit' style="width: 180px" ></Input>
+              <FormItem label="信誉额度:" prop="creditLimit">
+                <Input v-model="data.creditLimit" style="width: 180px"></Input>
               </FormItem>
               <FormItem label='QQ/微信:' >
                 <Input v-model='data.instantMsg' style="width: 180px" ></Input>
@@ -244,10 +244,10 @@
             <Table size="small" border :stripe="true" highlight-row :columns="columns3" :data="invoice" @on-current-change="pitchOnBank"></Table>
           </div>
           <Modal v-model="newInoiceShow" title="新增开票">
-            <AddInoice :data="addInoiceOne" ref="myChild"></AddInoice>
-            <div slot='footer'>
-              <Button type='primary' @click="addNewBank">确定</Button>
-              <Button type='default' @click='cancel'>取消</Button>
+            <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
+            <div slot="footer">
+              <Button type="primary" @click="addNewBank">确定</Button>
+              <Button type="default" @click="newInoiceShow = false">取消</Button>
             </div>
           </Modal>
         </TabPane>
@@ -261,25 +261,43 @@
   import AddInoice from "./AddInoice";
   import {getDigitalDictionary ,getCustomerInformation} from '@/api/system/essentialData/clientManagement'
 
-  export default {
-    name: "Data",
-    components:{
-      Newplace,
-      AddInoice
-    },
-    props:{
-      data:'',
-      provincearr:'',
-      treelist:''
-    },
-    data(){
-      const contactorTel= (rule, value, callback) => {
-        if (!value) {
-          return callback(new Error('手机号不能为空'));
-        } else if (!/^1[345789]\d{9}$/.test(value)) {
-          callback(new Error('手机号格式不正确'));
-        } else {
-          callback();
+export default {
+  name: "Data",
+  components: {
+    Newplace,
+    AddInoice
+  },
+  props: {
+    data: "",
+    provincearr: "",
+    treelist: ""
+  },
+  data() {
+    const contactorTel = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^1[345789]\d{9}$/.test(value)) {
+        callback(new Error("手机号格式不正确"));
+      } else {
+        callback();
+      }
+    };
+    const creditLimit =(rule,value,callback)=>{
+      if(!value.match(/\d/)){
+        callback(new Error("只能输入数字"));
+      }
+    }
+    return {
+      tree: this.treelist,
+      clinet: true, //是否客户 //是
+      list: [
+        {
+          label: 123,
+          value: 1
+        },
+        {
+          label: 456,
+          value: 2
         }
       };
 
@@ -509,9 +527,34 @@
         }
 
       },
-      //清除内容
-      resetFields() {
-        this.$refs.form.resetFields()
+      placeList: [],
+      newplace: false, //收货地址
+      newInoiceShow: false, //开票
+      loading: true,
+      loading1: true,
+      title: "新增收货地址",
+      oneNew: {},
+      relevanceClient: [],
+      addInoiceOne: {},
+      rules: {
+        creditLimit: [{ validator: creditLimit, trigger: "blur" }],
+        guestProperty: [{ required: true, message: " ", trigger: "change" }],
+        shortName: [{ required: true, message: " ", trigger: "blur" }],
+        settTypeId: [{ required: true, message: " ", trigger: "change" }],
+        billTypeId: [{ required: true, message: " ", trigger: "change" }],
+        fullName: [{ required: true, message: " ", trigger: "blur" }],
+        contactor: [{ required: true, message: " ", trigger: "blur" }],
+        provinceId: [{ required: true, message: " ", trigger: "change" }],
+        contactorTel: [
+          { required: true, validator: contactorTel, trigger: "blur" }
+        ],
+        tel: [{ required: true, validator: contactorTel, trigger: "blur" }],
+        salesmanTel: [
+          { required: true, validator: contactorTel, trigger: "blur" }
+        ],
+        cityId: [{ required: true, message: " ", trigger: "change" }],
+        guestType: [{ required: true, message: " ", trigger: "change" }],
+        guestTypeFloor: [{ required: true, message: " ", trigger: "change" }]
       },
       //校验表单
       handleSubmit (callback) {
@@ -561,130 +604,152 @@
           this.$Message.error('至少选项一条地址')
           return false
         }
-        this.newplace =true
-      },
-      //新增地址
-      addPlace(){
-        this.oneNew ={}
-        this.newplace =true
-      },
-      //删除地址
-      deletPlace(){
-        if (Object.keys(this.oneNew).length == 0){
-          this.$Message.error('至少选项一条地址')
-          return false
-        }
-        this.placeList = this.placeList.filter( item => item.id !=this.oneNew.id)
-        this.data.guestLogisticsVOList = this.placeList
-        this.oneNew ={}
-      },
-      //查询关联客户
-      queryClientList(){
-        this.getClienlist()
-      },
-      //查询关联客户分页
-      changePage1(data){
-        this.page.num = data
-        this.getClienlist()
-      },
-      //查询关联客户切换条数
-      changeSize1(){
-        this.page.num = 1
-        this.page.size = data
-        this.getClienlist()
-      },
-      //选中查询关联客户
-      pitchOnClient(selection){
-        this.pitchOnClientList = selection
-      },
-      //加入查询
-      joinClientList(){
-        let can = true
-        this.pitchOnClientList.forEach( item => {
-          this.relevanceClientShow.forEach( val => {
-            if (item.id == val.id){
-              can =  false
+      });
+    },
+    //修改地址表单
+    changeplage() {
+      console.log(this.oneNew);
+      if (Object.keys(this.oneNew).length == 0) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      if (
+        this.oneNew.cityId == undefined ||
+        this.oneNew.provinceId == undefined
+      ) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      this.newplace = true;
+    },
+    //新增地址
+    addPlace() {
+      this.oneNew = {};
+      this.newplace = true;
+      this.$refs.child.resetFields()
+    },
+    //删除地址
+    deletPlace() {
+      if (Object.keys(this.oneNew).length == 0) {
+        this.$Message.error("至少选项一条地址");
+        return false;
+      }
+      this.placeList = this.placeList.filter(item => item.id != this.oneNew.id);
+      this.data.guestLogisticsVOList = this.placeList;
+      this.oneNew = {};
+    },
+    //查询关联客户
+    queryClientList() {
+      this.getClienlist();
+    },
+    //查询关联客户分页
+    changePage1(data) {
+      this.page.num = data;
+      this.getClienlist();
+    },
+    //查询关联客户切换条数
+    changeSize1() {
+      this.page.num = 1;
+      this.page.size = data;
+      this.getClienlist();
+    },
+    //选中查询关联客户
+    pitchOnClient(selection) {
+      this.pitchOnClientList = selection;
+    },
+    //加入查询
+    joinClientList() {
+      let can = true;
+      if (this.pitchOnClientList.length !== 0) {
+        this.pitchOnClientList.forEach(item => {
+          this.relevanceClientShow.forEach(val => {
+            if (item.id == val.id) {
+              can = false;
             }
-          })
-        })
-        if(can){
-          this.relevanceClientShow =  [...this.relevanceClientShow , ...this.pitchOnClientList]
-          this.data.guestVOList = this.relevanceClientShow
-        } else{
-          this.$Message.error('选择重复')
-        }
-      },
-      //获取删除关联客户
-      deleteClient(selection){
-        this.deleteOneClient = selection
-      },
-      //删除
-      deletAllClient(){
-        let newarr =[]
-        this.deleteOneClient.forEach( item => {
-          this.relevanceClientShow.forEach( val => {
-            if (val.id !== item.id){
-              newarr.push(val)
+          });
+        });
+      } else {
+        this.$message.error("请勾选客户");
+        return;
+      }
+      if (can) {
+        this.relevanceClientShow = [
+          ...this.relevanceClientShow,
+          ...this.pitchOnClientList
+        ];
+        this.data.guestVOList = this.relevanceClientShow;
+      } else {
+        this.$Message.error("选择重复");
+      }
+    },
+    //获取删除关联客户
+    deleteClient(selection) {
+      this.deleteOneClient = selection;
+    },
+    //删除
+    deletAllClient() {
+      if (this.deleteOneClient.length !== 0) {
+        this.deleteOneClient.forEach(item => {
+          this.relevanceClientShow.forEach((val, index, arr) => {
+            if (val.id === item.id) {
+              arr.splice(index, 1);
             }
-          })
-        })
-        this.relevanceClientShow = newarr
-        this.data.guestVOList = this.relevanceClientShow
-      },
-      //新增银行
-      addInoice(){
-        this.addInoiceOne ={}
-        this.newInoiceShow =true
-      },
-      // 确认新增银行
-      addNewBank(){
-        this.$refs.myChild.handleSubmit( () =>{
-          // console.log(this.addInoiceOne)
-          if( this.invoice.some( item => item.bankId ==  this.addInoiceOne.bankId)){
-            let idx = this.invoice.findIndex( item => item.bankId == this.addInoiceOne.bankId)
-            console.log(idx)
-            this.$set(this.invoice ,idx , this.addInoiceOne)
-            this.data.guestTaxpayerVOList = this.invoice
-            this.newInoiceShow =false
-            this.addInoiceOne ={}
-          }else {
-            let newarr = {}
-            newarr = JSON.parse(JSON.stringify(this.addInoiceOne))
-            newarr.bankId = this.bankId
-            this.bankId++
-            this.invoice.push(newarr)
-            console.log(newarr,638)
-            this.data.guestTaxpayerVOList = this.invoice
-            this.newInoiceShow =false
-          }
-        })
-
-      },
-      cancel(){
-        this.$refs.myChild.resetFields()
-        this.newInoiceShow = false
-      },
-      //选中银行
-      pitchOnBank(selection){
-        this.addInoiceOne = selection
-      },
-      //修改银行
-      changeBank(){
-        if (Object.keys(this.addInoiceOne).length == 0){
-          this.$Message.error('至少选项一条地址')
-          return false
+          });
+        });
+        this.data.guestVOList = this.relevanceClientShow;
+      } else {
+        this.$message.error("请勾选要删除的客户");
+      }
+    },
+    //新增银行
+    addInoice() {
+      this.addInoiceOne = {};
+      this.newInoiceShow = true;
+      this.$refs.AddInoice.resetFields();
+    },
+    // 确认新增银行
+    addNewBank() {
+      this.$refs.AddInoice.handleSubmit(() => {
+        if (
+          this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)
+        ) {
+          let idx = this.invoice.findIndex(
+            item => item.bankId == this.addInoiceOne.bankId
+          );
+          // console.log(idx);
+          this.$set(this.invoice, idx, this.addInoiceOne);
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
+          this.addInoiceOne = {};
+        } else {
+          let newarr = {};
+          newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+          newarr.bankId = this.bankId;
+          this.bankId++;
+          this.invoice.push(newarr);
+          // console.log(newarr, 638);
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
         }
-        this.newInoiceShow =true
-      },
-      //删除银行
-      deletBank(){
-        if (Object.keys(this.addInoiceOne).length == 0){
-          this.$Message.error('请先选中需要删除的信息')
-          return false
-        }
-        this.invoice = this.invoice.filter( item => item.bankId !=this.addInoiceOne.bankId)
-        this.data.guestLogisticsVOList = this.invoice
-        this.addInoiceOne ={}
+      });
+    },
+    //选中银行
+    pitchOnBank(selection) {
+      this.addInoiceOne = selection;
+    },
+    //修改银行
+    changeBank() {
+      if (Object.keys(this.addInoiceOne).length == 0) {
+        this.$Message.error("请先选中需要修改的信息");
+        return false;
+      }
+      this.newInoiceShow = true;
+    },
+    //删除银行
+    deletBank() {
+      if (Object.keys(this.addInoiceOne).length == 0) {
+        this.$Message.error("至少选项一条地址");
+        return false;
       }
     }
   }

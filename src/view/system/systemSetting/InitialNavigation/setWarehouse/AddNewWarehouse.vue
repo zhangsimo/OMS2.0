@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { relativeTimeThreshold } from 'moment';
 export default {
   name: "AddNewWarehouse",
   props: {
@@ -49,14 +50,48 @@ export default {
     wareHouse: ""
   },
   data() {
+    const startNumMessage = (rule, value, callback)=>{
+      if(!value){
+        callback(new Error("仓位流水起始号不能为空"));
+      } else {
+        if(value.match(/\d/)) {
+          if(!(value>=0)){
+            callback(new Error('仓位流水起始号必须大于等于0'))
+          } else {
+            callback();
+          }
+        } else {
+          callback(new Error('仓位流水起始号只能是数字'))
+        }
+      }
+    }
+    const endNumMessage = (rule, value, callback)=>{
+      if(!value){
+        callback(new Error("仓位流水终止号不能为空"));
+      } else {
+        if(value.match(/\d/)) {
+          if(!(value>=0)){
+            callback(new Error('仓位流水终止号必须大于等于0'))
+          } else {
+            if(value>=this.data.startNum) {
+              callback();
+            } else {
+              callback(new Error('终止号必须大于等于起始号'))
+            }
+          }
+        } else {
+          return callback(new Error('仓位流水终止号只能是数字'))
+        }
+      }
+    }
     return {
       ruleValidate: {
         firstChar: [{ required: true, message: "必填不可为空", trigger: "blur"}],
         startNum: [
-          { required: true, message: "必填大于0的正整数", trigger: "blur" }
+          { required: true,validator: startNumMessage, trigger: "blur" }
         ],
         endNum: [
-          { required: true, message: "必填大于0的正整数", trigger: "blur" }
+          { required: true,validator: endNumMessage, trigger: "blur" }
         ]
       }
     };
