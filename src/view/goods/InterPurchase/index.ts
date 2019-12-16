@@ -200,7 +200,7 @@ export default class InterPurchase extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
-    id: '0',
+    id: '',
     billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -469,13 +469,13 @@ export default class InterPurchase extends Vue {
 
   // 费用登记
   private showFee() {
-    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
+    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先选择保存过的数据');
     this.showModel('feeRegistration');
   }
 
   // 收货信息
   private showGoodsInfo() {
-    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先选择保存过的数据');
     this.showModel('goodsInfo');
   }
 
@@ -646,7 +646,7 @@ export default class InterPurchase extends Vue {
   private async getFeeForm(form: any) {
     if(form === null) return;
     this.feeform = form;
-    let data = Object.assign({}, this.selectTableRow, this.feeform);
+    let data = Object.assign({}, this.selectTableRow, { details: this.tableData }, this.feeform);
     let res:any = await api.calculatAmt(data);
     if(res.cdoe == 0) {
       this.tableData = res.data || [];

@@ -305,7 +305,7 @@ export const mixGoodsData = {
       let row = {
         new: true,
         _highlight: true,
-        id: "0",
+        id: "",
         billStatusId: "",
         createTime: tools.transTime(new Date()),
         details: []
