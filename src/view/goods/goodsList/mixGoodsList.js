@@ -23,13 +23,13 @@ export const mixGoodsData = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
-        planDate: "", //计划日期
+        planArriveDate: "", //计划日期
         // planDateformat: "",
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        hairShop: "", //直发门店
+        directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0 //合计总金额
@@ -38,7 +38,7 @@ export const mixGoodsData = {
         supplyName: [
           { required: true, message: "供应商不能为空", trigger: "blur" }
         ],
-        planDate: [
+        planArriveDate: [
           {
             required: true,
             type: "date",
@@ -127,11 +127,11 @@ export const mixGoodsData = {
         this.formPlan = {
           supplyName: "", //供应商
           guestId: "", //供应商id
-          planDate: "", //计划日期
+          planArriveDate: "", //计划日期
           planner: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
           billType: "", //票据类型
-          hairShop: "", //直发门店
+          directGuestId: "", //直发门店
           planOrderNum: "新计划采购", //计划单号
           otherPrice: 0, //其他费用
           totalPrice: 0 //合计总金额
@@ -249,7 +249,7 @@ export const mixGoodsData = {
     //选择日期
     setDataFun(v) {
       console.log(v);
-      this.formPlan.planDate = v;
+      this.formPlan.planArriveDate = v;
     },
     //获取订单状态
     // returnOrderType(n){
@@ -264,11 +264,11 @@ export const mixGoodsData = {
         this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
         this.formPlan.supplyName = v.guest || "";
         this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planDate = v.orderDate || "";
+        this.formPlan.planArriveDate = v.orderDate || "";
         // this.formPlan.planDateformat = v.orderDate || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
-        this.formPlan.hairShop = v.directOrgid || "";
+        this.formPlan.directGuestId = v.directGuestId || "";
         this.formPlan.planOrderNum = v.serviceId || "";
         this.formPlan.otherPrice = v.otherAmt || 0;
         this.formPlan.totalPrice = v.totalAmt || 0;
@@ -291,12 +291,12 @@ export const mixGoodsData = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
-        planDate: "", //计划日期
+        planArriveDate: "", //计划日期
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        hairShop: "", //直发门店
+        directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0 //合计总金额
@@ -347,7 +347,7 @@ export const mixGoodsData = {
           objReq.guestId = this.formPlan.guestId;
           objReq.guest = this.formPlan.supplyName;
           //计划日期
-          objReq.orderDate = tools.transTime(this.formPlan.planDate);
+          objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name
           objReq.orderMan = this.formPlan.planner;
           //备注
@@ -355,7 +355,7 @@ export const mixGoodsData = {
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directOrgid = this.formPlan.hairShop;
+          objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
           if (
             this.formPlan.planOrderNum &&
