@@ -456,7 +456,7 @@ export default [
           icon: "arrow-graph-up-right",
           title: "盘点单"
         },
-        component: () => import("@/view/business/policy/takeStock/takeStock.vue")
+        component: () => import('@/view/business/policy/smsInventory/smsInventory.vue')
       },
       {
         path:"/policy/process",
@@ -466,7 +466,7 @@ export default [
           icon: "arrow-graph-up-right",
           title:"加工单",
         },
-        component:()=>import("@/view/business/policy/process/process.vue")
+        component:()=>import('@/view/business/policy/smsWarehouse/smsWarehouse.vue')
       }
     ]
   },

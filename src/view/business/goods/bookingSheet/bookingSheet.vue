@@ -284,7 +284,7 @@ export default {
           },
           {
             title: '创建日期',
-            key: 'createTimeStart',
+            key: 'createTime',
             minWidth: 120
           },
           {
@@ -305,7 +305,7 @@ export default {
           {
             title: '提交日期',
             align:'center',
-            key: 'commitTimeStart',
+            key: 'commitTime',
             minWidth: 170
           }
         ],
