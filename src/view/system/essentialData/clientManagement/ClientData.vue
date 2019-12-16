@@ -77,7 +77,7 @@
               <FormItem label="联系人手机:" prop="contactorTel">
                 <Input v-model="data.contactorTel" style="width: 180px"></Input>
               </FormItem>
-              <FormItem label="城市:" prop="contactorTel">
+              <FormItem label="城市:" prop="cityId">
                 <Select v-model="data.cityId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
@@ -106,7 +106,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="电话:">
+              <FormItem label="电话:" prop="tel">
                 <Input v-model="data.tel" style="width: 180px"></Input>
               </FormItem>
               <FormItem label="备注:">
@@ -124,10 +124,10 @@
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员手机:">
+              <FormItem label="业务员手机:" prop="salesmanTel">
                 <Input v-model="data.salesmanTel" style="width: 180px"></Input>
               </FormItem>
-              <FormItem label="信誉额度:">
+              <FormItem label="信誉额度:" prop="creditLimit">
                 <Input v-model="data.creditLimit" style="width: 180px"></Input>
               </FormItem>
               <FormItem label="QQ/微信:">
@@ -326,7 +326,7 @@
             ></Table>
           </div>
           <Modal v-model="newInoiceShow" title="新增开票">
-            <AddInoice :data="addInoiceOne"></AddInoice>
+            <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
             <div slot="footer">
               <Button type="primary" @click="addNewBank">确定</Button>
               <Button type="default" @click="newInoiceShow = false">取消</Button>
@@ -367,7 +367,11 @@ export default {
         callback();
       }
     };
-
+    const creditLimit =(rule,value,callback)=>{
+      if(!value.match(/\d/)){
+        callback(new Error("只能输入数字"));
+      }
+    }
     return {
       tree: this.treelist,
       clinet: true, //是否客户 //是
@@ -516,6 +520,7 @@ export default {
       relevanceClient: [],
       addInoiceOne: {},
       rules: {
+        creditLimit: [{ validator: creditLimit, trigger: "blur" }],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
@@ -524,6 +529,10 @@ export default {
         contactor: [{ required: true, message: " ", trigger: "blur" }],
         provinceId: [{ required: true, message: " ", trigger: "change" }],
         contactorTel: [
+          { required: true, validator: contactorTel, trigger: "blur" }
+        ],
+        tel: [{ required: true, validator: contactorTel, trigger: "blur" }],
+        salesmanTel: [
           { required: true, validator: contactorTel, trigger: "blur" }
         ],
         cityId: [{ required: true, message: " ", trigger: "change" }],
@@ -637,6 +646,7 @@ export default {
     addPlace() {
       this.oneNew = {};
       this.newplace = true;
+      this.$refs.child.resetFields()
     },
     //删除地址
     deletPlace() {
@@ -700,9 +710,9 @@ export default {
     deletAllClient() {
       if (this.deleteOneClient.length !== 0) {
         this.deleteOneClient.forEach(item => {
-          this.relevanceClientShow.forEach((val,index,arr) => {
+          this.relevanceClientShow.forEach((val, index, arr) => {
             if (val.id === item.id) {
-              arr.splice(index,1)
+              arr.splice(index, 1);
             }
           });
         });
@@ -715,29 +725,33 @@ export default {
     addInoice() {
       this.addInoiceOne = {};
       this.newInoiceShow = true;
+      this.$refs.AddInoice.resetFields();
     },
     // 确认新增银行
     addNewBank() {
-      console.log(this.addInoiceOne);
-      if (this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)) {
-        let idx = this.invoice.findIndex(
-          item => item.bankId == this.addInoiceOne.bankId
-        );
-        console.log(idx);
-        this.$set(this.invoice, idx, this.addInoiceOne);
-        this.data.guestTaxpayerVOList = this.invoice;
-        this.newInoiceShow = false;
-        this.addInoiceOne = {};
-      } else {
-        let newarr = {};
-        newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
-        newarr.bankId = this.bankId;
-        this.bankId++;
-        this.invoice.push(newarr);
-        console.log(newarr, 638);
-        this.data.guestTaxpayerVOList = this.invoice;
-        this.newInoiceShow = false;
-      }
+      this.$refs.AddInoice.handleSubmit(() => {
+        if (
+          this.invoice.some(item => item.bankId == this.addInoiceOne.bankId)
+        ) {
+          let idx = this.invoice.findIndex(
+            item => item.bankId == this.addInoiceOne.bankId
+          );
+          // console.log(idx);
+          this.$set(this.invoice, idx, this.addInoiceOne);
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
+          this.addInoiceOne = {};
+        } else {
+          let newarr = {};
+          newarr = JSON.parse(JSON.stringify(this.addInoiceOne));
+          newarr.bankId = this.bankId;
+          this.bankId++;
+          this.invoice.push(newarr);
+          // console.log(newarr, 638);
+          this.data.guestTaxpayerVOList = this.invoice;
+          this.newInoiceShow = false;
+        }
+      });
     },
     //选中银行
     pitchOnBank(selection) {
@@ -746,7 +760,7 @@ export default {
     //修改银行
     changeBank() {
       if (Object.keys(this.addInoiceOne).length == 0) {
-        this.$Message.error("至少选项一条地址");
+        this.$Message.error("请先选中需要修改的信息");
         return false;
       }
       this.newInoiceShow = true;

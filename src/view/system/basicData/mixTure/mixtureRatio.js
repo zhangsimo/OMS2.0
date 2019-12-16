@@ -185,6 +185,9 @@ const data = function() {
                     this.$Message.error("请输入0-100之间的数值")
                     params.row.qty = ''
                   }
+                },
+                "on-keydown": event =>{
+                  console.log(event.keyCode)
                 }
               },
             })

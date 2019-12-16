@@ -1363,7 +1363,7 @@ export default [
           {
             path: "activityManage",
             name: "activityManage",
-            mark: "52",
+            // mark: "52",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",

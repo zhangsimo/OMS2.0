@@ -117,50 +117,52 @@
         </div>
         <div class="db mt10" v-if="falg">
           <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
-          <Steps :current="1">
-            <Step title="提交人">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
+          <section class="data-container">
+            <div class="modal-data">
+              <span class="data-name">审批人:</span>
+              <div class="data-value flex-center">
+                <template v-for="(item,i) in statusData">
+                  <div class="status-box flex-center" :key="i">
+                    <span class="status">{{item.userid}}</span>
+                    <span class="arrow-box" v-if="i<statusData.length-1"></span>
+                  </div>
+                </template>
               </div>
-            </Step>
-            <Step title="店长">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
+            </div>
+            <div class="modal-data">
+              <span class="data-name">审批状态:</span>
+              <div class="data-value flex-center">
+                <template v-for="(item,i) in statusData">
+                  <div class="status-box flex-center" :key="i">
+                    <span
+                      class="words"
+                      :class="{res:item.operationResult=='REFUSE'}"
+                    >{{item.operationResult|status}}</span>
+                  </div>
+                </template>
               </div>
-            </Step>
-            <Step title="会计">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
+            </div>
+            <div class="modal-data">
+              <span class="data-name">审批日期:</span>
+              <div class="data-value flex-center">
+                <template v-for="(item,i) in statusData">
+                  <div class="status-box flex-center" :key="i">
+                    <span class="date">{{item.date | date}}</span>
+                  </div>
+                </template>
               </div>
-            </Step>
-            <Step title="财务总监">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
+            </div>
+            <div class="modal-data">
+              <span class="data-name">审批意见:</span>
+              <div class="data-value flex-center">
+                <template v-for="(item,i) in statusData">
+                  <div class="status-box flex-center" :key="i">
+                    <span class="remark">{{item.remark}}</span>
+                  </div>
+                </template>
               </div>
-            </Step>
-            <Step title="总经理">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
-              </div>
-            </Step>
-            <Step title="出纳">
-              <div slot="content">
-                <span>审批人：{{}}</span>
-                <br />
-                <span>审批时间：{{}}</span>
-              </div>
-            </Step>
-          </Steps>
+            </div>
+          </section>
         </div>
       </div>
     </section>
@@ -314,6 +316,7 @@ import {
   settlementPreservation,
   accountRevoke
 } from "@/api/bill/saleOrder";
+import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
 export default {
@@ -324,13 +327,17 @@ export default {
   },
   data() {
     return {
-      revoke:false,
+      statusData: [
+        { name: "提交", status: "已提交" },
+        { name: "产品总监审批", status: "已审批" }
+      ],
+      revoke: false,
       check: "",
       remark: "",
       Write: "", //核销编码
       collectPayId: "", //收付款单号
       tab: "name1",
-      falg: true,
+      falg: false,
       reconciliationStatement: {},
       tableData: [],
       BusinessType: [],
@@ -691,6 +698,32 @@ export default {
     };
     this.getAccountStatement(obj);
   },
+  filters: {
+    date(value = 0) {
+      let date = new Date(value).toLocaleDateString();
+      let time = new Date(value).toLocaleTimeString();
+      value = date.split("/").join("-") + " " + time.substr(2);
+      return value;
+    },
+    status(value = "") {
+      value = value.toLowerCase();
+      switch (value) {
+        case "none":
+          value = "已提交";
+          break;
+        case "agree":
+          value = "已同意";
+          break;
+        case "refuse":
+          value = "已拒绝";
+          break;
+        case "redirected":
+          value = "已转交";
+          break;
+      }
+      return value;
+    }
+  },
   methods: {
     // 快速查询日期
     quickDate(data) {
@@ -788,6 +821,7 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
+      this.falg = true
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
@@ -796,6 +830,13 @@ export default {
           this.Write = res.data.checkId;
         }
       );
+      approvalStatus({ instanceId: row.id }).then(res => {
+        console.log(res)
+        // if (res.code == "0") {
+        //   this.statusData = res.data.processInstance.operationRecords;
+        //   console.log(this.statusData);
+        // }
+      });
       let date = {
         startDate: this.value[0],
         endDate: this.value[1]
@@ -1107,25 +1148,25 @@ export default {
     Revoke() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         this.revoke = true;
-        // if (
-        //   this.reconciliationStatement.statementStatusName === "审核中" ||
-        //   this.reconciliationStatement.statementStatusName === "审核通过"
-        // ) {
-        //   this.revoke = true;
-        // } else {
-        //   this.$message.error("此状态无法撤销");
-        // }
+        if (
+          this.reconciliationStatement.statementStatusName === "审核中" ||
+          this.reconciliationStatement.statementStatusName === "审核通过"
+        ) {
+          this.revoke = true;
+        } else {
+          this.$message.error("此状态无法撤销");
+        }
       } else {
         this.$message.error("请勾选要撤销的对账单");
       }
     },
     // 确认撤销
-    confirmRevocation(){
+    confirmRevocation() {
       accountRevoke({
-        id:this.reconciliationStatement.id
-      }).then(res=>{
-        console.log(res)
-      })
+        id: this.reconciliationStatement.id
+      }).then(res => {
+        console.log(res);
+      });
     }
   }
 };
