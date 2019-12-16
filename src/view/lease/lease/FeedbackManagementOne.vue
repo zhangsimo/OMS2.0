@@ -193,10 +193,10 @@
         this.getList()
         },
         show(){
-          if(this.ID){
+          // if(this.ID){
             console.log(this.json)
             this.$router.push({name: 'feedback_management',query:{json: this.json}})
-          }
+          // }
         }
       },
       mounted(){

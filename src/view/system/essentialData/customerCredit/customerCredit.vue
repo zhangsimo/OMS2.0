@@ -67,16 +67,19 @@
         </div>
       </Modal>
       <!--      申请信用调查-->
-      <Modal v-model="surveyShow" title="信用调查表" width="900">
-        <SurveyList :data="creaditList" :dataMsg="costList"></SurveyList>
-        <div slot='footer'>
-          <Button type='primary' @click="confirm">确定</Button>
-          <Button type='default' @click="cancel">取消</Button>
-        </div>
-      </Modal>
+      <div class="credit">
+        <Modal v-model="surveyShow" title="信用调查表" width="1000" style="top: 50px!important;">
+          <SurveyList :data="creaditList" :dataMsg="costList" ref="SurveyList"></SurveyList>
+          <div slot='footer'>
+            <Button type='primary' @click="confirm">确定</Button>
+            <Button type='default' @click="cancel">取消</Button>
+          </div>
+        </Modal>
+      </div>
+
       <!--      修改信用调查-->
-      <Modal v-model="surveyShow" title="信用调查表" width="900">
-        <SurveyList :data="creaditList" :dataMsg="costList"></SurveyList>
+      <Modal v-model="surveyShow" title="信用调查表" width="1000">
+        <SurveyList :data="creaditList" :dataMsg="costList" ref="SurveyList"></SurveyList>
         <div slot='footer'>
           <Button type='primary' @click="confirm">确定</Button>
           <Button type='default' @click="cancel">取消</Button>
@@ -491,15 +494,21 @@
           },
           //确定按钮
           confirm(){
-            let data = {}
-            data = this.creaditList
-            data.guestId = this.ID
-            saveOrUpdate(data).then(res => {
-                if(res.code === 0){
-                    this.getListTop()
-                    this.surveyShow = false
+             this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
+                if (valid) {
+                  let data = this.creaditList
+                  data.guestId = this.ID
+                  console.log(data)
+                  // saveOrUpdate(data).then(res => {
+                  //     if(res.code === 0){
+                  //         this.getListTop()
+                  //         this.surveyShow = false
+                  //     }
+                  // })
+                }else {
+                  this.$message.warning('* 为必填！')
                 }
-            })
+              })
           },
           //取消a按钮
           cancel(){

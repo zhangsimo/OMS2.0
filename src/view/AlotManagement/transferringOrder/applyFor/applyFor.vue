@@ -205,6 +205,7 @@
           }
         };
         return {
+          rowOrgId: '',
           checkboxArr:[],// checkbox选中
           disSave: false, // 保存按钮是否禁用
              PTrow: {//新增当前行
@@ -375,6 +376,13 @@
           this.Left.tbdata.unshift(this.PTrow)
           this.isAdd = false;
           this.datadata = this.PTrow
+          this.formPlan.guestName = '',//调出方
+            this.formPlan.storeId =  '', //调入仓库
+            this.formPlan.orderDate =  tools.transTime(new Date()), //申请调拨日期
+            this.formPlan.remark =  '', //备注
+            this.formPlan.createUname =  '', //创建人
+            this.formPlan.serviceId =  '' //申请单号
+            this.Right.tbdata = []
           // console.log(this.Left.tbdata)
         },
         //添加配件按钮
@@ -388,12 +396,12 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          console.log(this.$refs['formPlan'].validate())
           this.$refs['formPlan'].validate((valid) => {
             if (valid) {
               let data = {}
               data.id = this.rowId
-              data.guestId = this.formPlan.guestidId
+              data.orgid = this.rowOrgId
+              data.guestId = this.guestidId
               data.storeId = this.formPlan.storeId
               data.guestName = this.formPlan.guestName
               data.orderDate = tools.transTime(this.formPlan.orderDate)
@@ -401,7 +409,6 @@
               data.createUname  = this.formPlan.createUname
               data.serviceId = this.formPlan.serviceId
               data.detailVOS = this.Right.tbdata
-              // console.log(data)
               save(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -427,6 +434,7 @@
                 let data = {}
                 data.status = 8
                 data.id = this.rowId
+                data.orgId = this.rowOrgId
                 data.guestId = this.guestidId
                 data.storeId = this.formPlan.storeId
                 data.orderDate = tools.transTime(this.formPlan.orderDate)
@@ -549,7 +557,7 @@
         // 供应商子组件内容
         getSupplierName(a){
           console.log(a)
-          this.formPlan.guestName = a.shortName
+          this.formPlan.guestName = a.fullName
           this.formPlan.guestidId = a.id
         },
         leftgetList(){
@@ -595,11 +603,13 @@
         // 左边部分的当前行
         selection(row){
           // console.log(row)
-          console.log(row.id)
+          // console.log(row.id)
+          this.rowOrgId = row.orgid
           this.mainId = row.id
           this.guestidId = row.guestId
+          // console.log(this.guestidId,123)
             this.datadata = row
-          console.log(this.datadata)
+          // console.log(this.datadata)
             this.formPlan.guestName = this.datadata.guestName
             this.formPlan.storeId = this.datadata.storeId
             this.formPlan.orderDate = this.datadata.orderDate
@@ -647,6 +657,7 @@
                   if(this.clickdelivery){
                     let data = {}
                     data.id = this.rowId
+                    data.orgId = this.rowOrgId
                     data.guestId = this.guestidId
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)

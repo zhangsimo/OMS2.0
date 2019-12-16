@@ -105,6 +105,7 @@
     },
     beforeCreate(){
       this.Msg = this.$route.query.json
+      console.log(this.$route.query.json)
     }
   }
 </script>

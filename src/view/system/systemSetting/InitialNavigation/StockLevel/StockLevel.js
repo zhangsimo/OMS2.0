@@ -1,5 +1,6 @@
 const data = function() {
   return {
+    rowId: '',
     split: 0.22,
     // modal显示
     modal: false,
@@ -200,8 +201,12 @@ const methods = {
       item.isDisable = el.isDisable;
       return item;
     });
-    console.log(data)
-   await stockLevelSave(data);
+    // console.log(data)
+   await stockLevelSave(data).then(res => {
+     if(res.code === 0){
+       this.$Message.warning('保存成功！')
+     }
+   });
     this.leftgetList()
   },
   // 新增
@@ -283,6 +288,7 @@ const methods = {
   changeSizePagePart(size) {
     this.customer.page.num = 1;
     this.customer.page.size = size;
+    this.rightgetList()
   },
   // 查询配件
   queryPart() {},
@@ -311,7 +317,7 @@ const methods = {
         params.partCode = this.customer.fullname
       }
       if(this.Type === 1 && this.customer.fullname !== ''){
-        params.partName = this.customer.fullname
+        params.fullName = this.customer.fullname
       }
       if(this.levelId){
         params.levelId = this.levelId
@@ -335,24 +341,22 @@ const methods = {
     console.log(this.checkboxArr)
   },
   //子组件的参数
-  getMsg2(a){
-    console.log(a)
-    a.map(item => {
-        item.partCode =  item.code,
-        item.partName = item.partStandardName,
-        item.partId = item.id,
-        item.fullName = item.fullName,
-        item.remark = item.remark
-    })
-    this.getArr = a
-
-   // this.getArr.Map( item => {})
-    this.customer.tbdata = [...this.customer.tbdata,...a]
-    this.customer.tbdata = this.unique(this.customer.tbdata)
-    // console.log(this.customer.tbdata)
-  },
+  // getMsg2(a){
+  //   console.log(a)
+  //   a.map(item => {
+  //       item.partName = item.partStandardName,
+  //       item.partId = item.id
+  //   })
+  //   this.getArr = a
+  //
+  //  // this.getArr.Map( item => {})
+  //   this.customer.tbdata = [...this.customer.tbdata,...this.getArr]
+  //   // this.customer.tbdata = this.unique(this.customer.tbdata)
+  //   // console.log(this.customer.tbdata)
+  // },
   //左边内容单某行
   selction(a){
+    this.rowId = a.id
     console.log(a)
     let arrr = []
     arrr.push(a)
@@ -380,10 +384,8 @@ const methods = {
   }
 };
 import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
-import DiaLog from '../../../../../components/Accessories/dialog';
-import selectPartCom from '../../../../goods/goodsList/components/selectPartCom'
+import selectPartCom from './components/selectPartCom'
 const components = {
-  DiaLog,
   selectPartCom
 }
 

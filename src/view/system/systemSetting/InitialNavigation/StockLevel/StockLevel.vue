@@ -57,13 +57,14 @@
                   <Icon custom="iconfont iconlajitongicon icons" />删除配件
                 </span>
                   </Button>
-                  <Button class="mr10 w90" @click="saveCustomer">
-                <span class="center">
-                  <Icon custom="iconfont iconbaocunicon icons" />保存
-                </span>
-                  </Button>
+                  <!--<Button class="mr10 w90" @click="saveCustomer">-->
+                <!--<span class="center">-->
+                  <!--<Icon custom="iconfont iconbaocunicon icons" />保存-->
+                <!--</span>-->
+                  <!--</Button>-->
                 </div>
                 <Table
+                  height="450"
                   border
                   highlight-row
                   size="small"
@@ -90,10 +91,7 @@
             </div>
           </Split>
         </section>
-        <!--<Modal v-model="modal" title="配件选择" :footer-hide="true" width="1020" @on-visible-change="closedTap">-->
-          <!--<Dia-log @getMsg="getMsg2" ref="Msg"></Dia-log>-->
-        <!--</Modal>-->
-        <select-part-com @selectPartName="getMsg2" ref="MsgThree"></select-part-com>
+        <select-part-com  :infoData="rowId" ref="MsgThree"></select-part-com>
       </main>
 </template>
 

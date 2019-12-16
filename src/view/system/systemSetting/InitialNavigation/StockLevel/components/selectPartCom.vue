@@ -12,8 +12,8 @@
         </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default' @click="cancel"><Icon type="md-close" /> 取消</Button>
-        <Button type='default' v-if="isShowAddPartBtn" @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
+        <Button class="mr10" type='default' @click="searchPartLayer = false"><Icon type="md-close" /> 取消</Button>
+        <!--<Button type='default'  @click="applyPart"><Icon type="md-add" v-if="false"/> 配件申请</Button>-->
       </div>
       <div class="partCheck-main clearfix">
         <div class="partCheck-left fl">
@@ -23,32 +23,33 @@
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData">
+            <template slot-scope="{ row, index }" slot="action">
+              <a @click="show(row)">查看</a>
+            </template>
+          </Table>
           <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total></Page>
         </div>
       </div>
+
       <div slot='footer'>
         <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
         <!--<Button type='default' @click='proModal = false'>取消</Button>-->
       </div>
     </Modal>
-    <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun" :show-spe="false"></part-info>
+    <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
   </div>
 </template>
 
 <script>
-  import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
   import PartInfo from "_c/partInfo/partInfo";
   import {mixSelectPartCom} from "./mixSelectPartCom";
 
   export default {
     name: "selectPartCom",
     mixins:[mixSelectPartCom],
-    components: {PartInfo},
-    props:{
-      isShowAddPartBtn:false
-    }
+    components: {PartInfo}
   }
 </script>
 
@@ -90,4 +91,5 @@
       }
     }
   }
+
 </style>
