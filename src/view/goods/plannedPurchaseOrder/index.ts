@@ -252,7 +252,7 @@ export default class PlannedPurchaseOrder extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -268,7 +268,7 @@ export default class PlannedPurchaseOrder extends Vue {
     let data: any = this.formdata(refname);
     if (!data) return;
     if (this.selectTableRow.id) {
-      data = { ...this.selectTableRow, ...data };
+      data = Object.assign({}, this.selectTableRow, data);
     }
     data.details = this.tableData;
     let res = await api.saveDraft(data);
@@ -287,7 +287,7 @@ export default class PlannedPurchaseOrder extends Vue {
         let data: any = this.formdata(refname);
         if (!data) return;
         if (this.selectTableRow.id) {
-          data = { ...this.selectTableRow, ...data };
+          data = Object.assign({}, this.selectTableRow, data);
         }
         data.details = this.tableData;
         let res = await api.saveCommit(data);

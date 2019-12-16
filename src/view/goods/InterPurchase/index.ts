@@ -254,7 +254,7 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
