@@ -153,7 +153,7 @@ export default class InterPurchase extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    companyName: "", // 直发门店
+    directGuestId: "", // 直发门店
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
@@ -200,7 +200,7 @@ export default class InterPurchase extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
-    id: '0',
+    id: '',
     billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -236,9 +236,9 @@ export default class InterPurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
+          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
         };
         for (let k in this.amt) {
@@ -254,7 +254,7 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -469,13 +469,13 @@ export default class InterPurchase extends Vue {
 
   // 费用登记
   private showFee() {
-    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
+    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先选择保存过的数据');
     this.showModel('feeRegistration');
   }
 
   // 收货信息
   private showGoodsInfo() {
-    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先选择保存过的数据');
     this.showModel('goodsInfo');
   }
 
@@ -646,7 +646,7 @@ export default class InterPurchase extends Vue {
   private async getFeeForm(form: any) {
     if(form === null) return;
     this.feeform = form;
-    let data = Object.assign({}, this.selectTableRow, this.feeform);
+    let data = Object.assign({}, this.selectTableRow, { details: this.tableData }, this.feeform);
     let res:any = await api.calculatAmt(data);
     if(res.cdoe == 0) {
       this.tableData = res.data || [];

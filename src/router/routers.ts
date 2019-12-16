@@ -482,8 +482,8 @@ export default [
     component: Main,
     children: [
       {
-        path: "/",
-        name: "",
+        path: "/settlementManagement/bill",
+        name: "settlementManagement-bill",
         mark: "5100",
         meta: {
           title: "对账与结算"
@@ -491,151 +491,15 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/",
-            name: "",
+            path: "/settlementManagement/bill/AccountStatement",
+            name: "bill-AccountStatement",
             redirect: "",
             mark: "5101",
             meta: {
               title: "对账单订单"
             },
-            // component: () => import()
+            component: () => import("@/view/settlementManagement/bill/AccountStatement.vue")
           },
-          {
-            path: "/",
-            name: "",
-            mark: '5103',
-            meta: {
-              // hideInMenu: true,
-              title: " 调拨出库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5104',
-            meta: {
-              // hideInMenu: true,
-              title: " 调拨入库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            mark: '7103',
-            meta: {
-              // hideInMenu: true,
-              title: " 调出在途信息"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            mark: '5106',
-            meta: {
-              // hideInMenu: true,
-              title: " 采购入库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5108',
-            meta: {
-              // hideInMenu: true,
-              title: "销售出库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5109',
-            meta: {
-              // hideInMenu: true,
-              title: "连锁应收应付查询"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5110',
-            meta: {
-              // hideInMenu: true,
-              title: "欠款分析"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5112',
-            meta: {
-              // hideInMenu: true,
-              title: "付款分析"
-            }
-            // component: () => import()
-          },
-         ]
-      },
-      {
-        path: "/",
-        name: "",
-        // mark: 'oms_orders_approve',
-        mark: '5200',
-        meta: {
-          // hideInMenu: true,
-          title: "应收应付"
-        },
-        // component: () => import()
-      },
-      {
-        path: "/settlementManagement/paymentmanage",
-        name: "settlementManagement-paymentmanage",
-        redirect: "",
-        mark: "5201", //59 应收应付
-        meta: {
-          title: "应收应付管理"
-        },
-        component: () => import("@/view/settlementManagement/paymentmanage/index.vue")
-      },
-      {
-        path: "/",
-        name: "",
-        mark: '5300',
-        meta: {
-          // hideInMenu: true,
-          title: "资金审核"
-        },
-        // component: () => import()
-      },
-      {
-        path: "/settlementManagement/DailyFundReview",
-        name: "settlementManagement-DailyFundReview",
-        redirect: "",
-        mark: "5301", //5301
-        meta: {
-          title: "每日资金审核"
-        },
-        component: () => import("@/view/settlementManagement/DailyFundReview/index.vue")
-      },
-      {
-        path: "/settlementManagement/bill",
-        name: "settlementManagement-bill",
-        meta: {
-          title: "单据查询"
-        },
-        component: parentView,
-        children: [
           {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "bill-CollectionPayment",
@@ -647,44 +511,45 @@ export default [
             component: () => import("@/view/settlementManagement/bill/CollectionPayment.vue")
           },
           {
-            path: "/settlementManagement/bill/Allocationwarehousing",
-            name: "bill-Allocationwarehousing",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "内部调拨入库明细"
-            },
-            component: () => import("@/view/settlementManagement/bill/Allocationwarehousing.vue")
-          },
-          {
             path: "/settlementManagement/settlementManagement/bill/Allocationstock",
             name: "bill-Allocationstock",
-            // mark: 'oms_orders_approve',
+            mark: '5103',
             meta: {
               // hideInMenu: true,
-              title: "内部调拨出库明细"
+              title: " 调拨出库明细"
             },
             component: () => import("@/view/settlementManagement/bill/Allocationstock.vue")
           },
           {
-            path: "/settlementManagement/settlementManagement/bill/External",
-            name: "bill_External",
+            path: "/settlementManagement/bill/Allocationwarehousing",
+            name: "bill-Allocationwarehousing",
             // mark: 'oms_orders_approve',
+            mark: '5104',
             meta: {
               // hideInMenu: true,
-              title: "外采入库单明细"
+              title: " 调拨入库明细"
             },
-            component: () => import("@/view/settlementManagement/bill/External.vue")
+            component: () => import("@/view/settlementManagement/bill/Allocationwarehousing.vue")
           },
           {
-            path: "/settlementManagement/settlementManagement/bill/stock",
-            name: "bill_stock",
-            // mark: 'oms_orders_approve',
+            path: "/settlementManagement/bill/Onway",
+            name: "bill_Onway",
+            mark: '7103',
             meta: {
               // hideInMenu: true,
-              title: "出库单明细"
+              title: " 调出在途信息"
             },
-            component: () => import("@/view/settlementManagement/bill/stock.vue")
+            component: () => import("@/view/settlementManagement/bill/Onway.vue")
+          },
+          {
+            path: "/settlementManagement/settlementManagement/bill/External",
+            name: "bill_External",
+            mark: '5106',
+            meta: {
+              // hideInMenu: true,
+              title: " 采购入库明细"
+            },
+            component: () => import("@/view/settlementManagement/bill/External.vue")
           },
           {
             path: "/settlementManagement/bill/Sales",
@@ -698,67 +563,122 @@ export default [
             component: () => import("@/view/settlementManagement/bill/Sales.vue")
           },
           {
-            path: "/settlementManagement/bill/Onway",
-            name: "bill_Onway",
+            path: "/settlementManagement/settlementManagement/bill/stock",
+            name: "bill_stock",
             // mark: 'oms_orders_approve',
+            mark: '5108',
             meta: {
               // hideInMenu: true,
-              title: "在途库存明细"
+              title: "销售出库明细"
             },
-            component: () => import("@/view/settlementManagement/bill/Onway.vue")
-          }
-        ]
+            component: () => import("@/view/settlementManagement/bill/stock.vue")
+          },
+          // {
+          //   path: "/settlementManagement/bill/chainReceivable",
+          //   name: "bill-chainReceivable",
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5109',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     title: "连锁应收应付查询"
+          //   },
+          //   component: () => import("@/view/settlementManagement/bill/chainReceivable.vue")
+          // },
+          // {
+          //   path: "/settlementManagement/bill/arrearsAnalysis",
+          //   name: "bill-arrearsAnalysis",
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5110',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     title: "欠款分析"
+          //   },
+          //   component: () => import("@/view/settlementManagement/bill/arrearsAnalysis.vue")
+          // },
+          // {
+          //   path: "/settlementManagement/bill/paymentAnalysis",
+          //   name: "bill-paymentAnalysis",
+          //   // mark: 'oms_orders_approve',
+          //   mark: '5112',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     title: "付款分析"
+          //   },
+          //   component: () => import("@/view/settlementManagement/bill/paymentAnalysis.vue")
+          // },
+         ]
       },
       {
-        path: "",
-        name: "allotThree",
+        path: "/settlementManagement/paymentmanage",
+        name: "settlementManagement-paymentmanage",
+        // mark: 'oms_orders_approve',
+        mark: '5200',
         meta: {
-          title: "设置"
+          // hideInMenu: true,
+          title: "应收应付"
         },
-        component: parentView,
-        children: [
-          {
-            path: "",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "结算账户"
-            },
-            component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "收支项目"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "期初现金银行"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "期初应收应付"
-            }
-            // component: () => import()
-          }
-        ]
-      }
+        component: () => import("@/view/settlementManagement/paymentmanage/index.vue")
+      },
+      {
+        path: "/settlementManagement/DailyFundReview",
+        name: "settlementManagement-DailyFundReview",
+        mark: '5300',
+        meta: {
+          // hideInMenu: true,
+          title: "资金审核"
+        },
+        component: () => import("@/view/settlementManagement/DailyFundReview/index.vue")
+      },
+      // {
+      //   path: "",
+      //   name: "allotThree",
+      //   meta: {
+      //     title: "设置"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "结算账户"
+      //       },
+      //       component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "收支项目"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "期初现金银行"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "期初应收应付"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // }
     ]
   },
   {
@@ -1241,117 +1161,107 @@ export default [
     ],
 
   },
-  {
-    path: "",
-    name: "baseSetting",
-    mark: "6",
-    meta: {
-      icon: "md-basket",
-      title: "售后管理"
-    },
-    component: Main,
-    children: [
-      // {
-      //   path: '/baseSetting/jpHsRelationship',
-      //   name: 'jpHsRelationship',
-      //   // mark: 'oms_policy_approve',
-      //   meta: {
-      //     icon: 'arrow-graph-up-right',
-      //     title: '极配华胜门店关系'
-      //   },
-      //   component: () => import('@/view/business/baseSetting/storeArea.vue')
-      // },
-      {
-        path: "/baseSetting/storeArea",
-        name: "storeArea",
-        // mark: 'oms_policy_approve',
-        mark: '6100',
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "采退开单"
-        },
-        component: () => import("@/view/business/baseSetting/storeArea.vue")
-      },
-      {
-        path: "/baseSetting/shellStoreSupplier",
-        name: "shellStoreSupplier",
-        mark: '6101',
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "直发退货"
-        },
-        component: () =>
-          import("@/view/business/baseSetting/shellStoreSupplier.vue")
-      },
-      {
-        path: "/baseSetting/setArea",
-        name: "setArea",
-        // mark: 'oms_policy_approve',
-        mark: '6102',
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: " 销退开单"
-        },
-        component: () => import("@/view/business/baseSetting/setArea.vue")
-      },
-      {
-        path: "/baseSetting/setAreaStore",
-        name: "setAreaStore",
-        // mark: 'oms_policy_approve',
-        mark: '6103',
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "客户理赔登记"
-        },
-        component: () => import("@/view/business/baseSetting/setAreaStore.vue")
-      },
-      {
-        path: "/baseSetting/hsStoreSupplier",
-        name: "hsStoreSupplier",
-        // mark: 'oms_policy_approve',
-        mark: '6104',
-        meta: {
-          icon: "arrow-graph-up-right",
-          title: "客户理赔处理"
-        },
-        component: () =>
-          import("@/view/business/baseSetting/hsStoreSupplier.vue")
-      },
-      {
-        path: "/",
-        name: "",
-        // mark: 'oms_orders_approve',
-        // mark: '6105',
-        meta: {
-          // hideInMenu: true,
-          title: "向供应商理赔登记"
-        }
-        // component: () => import()
-      },
-      {
-        path: "/",
-        name: "",
-        // mark: 'oms_orders_approve',
-        mark: '6106',
-        meta: {
-          // hideInMenu: true,
-          title: "返回单据确认"
-        }
-        // component: () => import()
-      },
-      {
-        path: "/",
-        name: "",
-        // mark: 'oms_orders_approve',
-        mark: '6107',
-        meta: {
-          // hideInMenu: true,
-          title: "反馈结果登记"
-        }
-        // component: () => import()
-      }
-    ]
-  },
+  // {
+  //   path: "",
+  //   name: "baseSetting",
+  //   mark: "6",
+  //   meta: {
+  //     icon: "md-basket",
+  //     title: "售后管理"
+  //   },
+  //   component: Main,
+  //   children: [
+  //     {
+  //       path: "/baseSetting/storeArea",
+  //       name: "storeArea",
+  //       // mark: 'oms_policy_approve',
+  //       mark: '6100',
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: "采退开单"
+  //       },
+  //       component: () => import("@/view/business/baseSetting/storeArea.vue")
+  //     },
+  //     {
+  //       path: "/baseSetting/shellStoreSupplier",
+  //       name: "shellStoreSupplier",
+  //       mark: '6101',
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: "直发退货"
+  //       },
+  //       component: () =>
+  //         import("@/view/business/baseSetting/shellStoreSupplier.vue")
+  //     },
+  //     {
+  //       path: "/baseSetting/setArea",
+  //       name: "setArea",
+  //       // mark: 'oms_policy_approve',
+  //       mark: '6102',
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: " 销退开单"
+  //       },
+  //       component: () => import("@/view/business/baseSetting/setArea.vue")
+  //     },
+  //     {
+  //       path: "/baseSetting/setAreaStore",
+  //       name: "setAreaStore",
+  //       // mark: 'oms_policy_approve',
+  //       mark: '6103',
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: "客户理赔登记"
+  //       },
+  //       component: () => import("@/view/business/baseSetting/setAreaStore.vue")
+  //     },
+  //     {
+  //       path: "/baseSetting/hsStoreSupplier",
+  //       name: "hsStoreSupplier",
+  //       // mark: 'oms_policy_approve',
+  //       mark: '6104',
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: "客户理赔处理"
+  //       },
+  //       component: () =>
+  //         import("@/view/business/baseSetting/hsStoreSupplier.vue")
+  //     },
+  //     {
+  //       path: "/",
+  //       name: "",
+  //       // mark: 'oms_orders_approve',
+  //       // mark: '6105',
+  //       meta: {
+  //         // hideInMenu: true,
+  //         title: "向供应商理赔登记"
+  //       }
+  //       // component: () => import()
+  //     },
+  //     {
+  //       path: "/",
+  //       name: "",
+  //       // mark: 'oms_orders_approve',
+  //       mark: '6106',
+  //       meta: {
+  //         // hideInMenu: true,
+  //         title: "返回单据确认"
+  //       }
+  //       // component: () => import()
+  //     },
+  //     {
+  //       path: "/",
+  //       name: "",
+  //       // mark: 'oms_orders_approve',
+  //       mark: '6107',
+  //       meta: {
+  //         // hideInMenu: true,
+  //         title: "反馈结果登记"
+  //       }
+  //       // component: () => import()
+  //     }
+  //   ]
+  // },
   {
     path: "/systemSetting",
     name: "systemSetting",
@@ -1443,7 +1353,7 @@ export default [
           {
             path: "activityManage",
             name: "activityManage",
-            mark: "52",
+            // mark: "52",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",

@@ -5,23 +5,21 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>制单日期：</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
-            <span class="ml5 mr5">至</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select :model.sync="model1" class="w150">
-              <i-option
-                v-for="item in companyList"
+            <Select  v-model="model1" class="w150">
+              <Option
+                v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml20">
             <span>供应商：</span>
@@ -39,47 +37,25 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report">导出</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data" class="waytable"></i-table>
+        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings"/>
-    <Modal
-        v-model="modal1"
-        title="高级查询"
-        @on-ok="ok"
-        @on-cancel="cancel">
-        <div class="db pro mt20">
-          <span>对账单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款人：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>审核状态：</span>
-          <i-select :model.sync="model1" style="width:200px">
-            <i-option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-          </i-select>
-        </div>
-    </Modal>
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
+import {creat} from './../components'
+import {getOnWay} from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -87,242 +63,187 @@ export default {
   },
   data() {
     return {
-      companyList: [
-        {
-          value: "company1",
-          label: "佳配总部"
-        },
-        {
-          value: "company2",
-          label: "上海虹梅南路店"
-        },
-        {
-          value: "company3",
-          label: "杭州华展店"
-        },
-        {
-          value: "company4",
-          label: "郑州天荣店"
-        }
-      ],
+      value: [],
+      Branchstore: [],
       model1: "",
-      modal1: false,
-      statelist: [
-        {
-          value: 'weishen',
-          label: '未审'
-        },
-        {
-          value: 'yishen',
-          label: '已审'
-        }
-      ],
       columns: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
-          title: '配件内码',
-          key: 'partsInternal',
-          className: 'tc'
-        },
-        {
           title: '配件编码',
-          key: 'partsCode',
+          key: 'partCode',
           className: 'tc'
         },
         {
           title: '配件名称',
-          key: 'partsname',
+          key: 'partName',
           className: 'tc'
         },
         {
           title: 'OEM码',
-          key: 'OEMCode',
+          key: 'oemCode',
           className: 'tc'
         },
         {
-          title: '品牌',
-          key: 'brand',
-          className: 'tc'
-        },
-        {
-          title: '厂牌',
-          key: 'factory',
-          className: 'tc'
-        },
-        {
-          title: '车型',
-          key: 'Vehicle',
-          className: 'tc'
-        },
-        {
-          title: '配件类别一级',
-          key: 'partsone',
-          className: 'tc'
-        },
-        {
-          title: '配件类别二级',
-          key: 'partstwo',
-          className: 'tc'
-        },
-        {
-          title: '数量',
-          key: 'number',
+          title: '品牌车型',
+          key: 'partBrand',
           className: 'tc'
         },
         {
           title: '单位',
-          key: 'Company',
+          key: 'unit',
+          className: 'tc'
+        },
+        {
+          title: '规格',
+          key: 'spec',
+          className: 'tc'
+        },
+        {
+          title: '出库数量',
+          key: 'hasOutQty',
+          className: 'tc'
+        },
+        {
+          title: '在途数量',
+          key: 'onOrderQty',
           className: 'tc'
         },
         {
           title: '已入库数量',
-          key: 'didnumber',
+          key: 'inStockQty',
           className: 'tc'
         },
         {
           title: '未入库数量',
-          key: 'nonumber',
+          key: 'noStockQty',
           className: 'tc'
         },
         {
           title: '分店名称',
-          key: 'storename',
+          key: 'groupName',
           className: 'tc'
         },
         {
           title: '出库单号',
-          key: 'stockid',
+          key: 'outOrderNo',
           className: 'tc'
         },
         {
           title: '客户名称',
-          key: 'Customer',
+          key: 'customerName',
           className: 'tc'
         },
         {
           title: '出库日期',
-          key: 'stockdate',
+          key: 'outStockDate',
           className: 'tc'
         },
         {
           title: '仓库',
-          key: 'Warehouse',
+          key: 'storeName',
           className: 'tc'
         },
         {
           title: '含税标记',
-          key: 'Taxmark',
+          key: 'taxSign',
           className: 'tc'
         },
         {
           title: '税率',
-          key: 'taxrate',
+          key: 'taxRate',
           className: 'tc'
         },
         {
-          title: '销售单价',
-          key: 'saleprice',
+          title: '调拨单价',
+          key: 'orderPrice',
           className: 'tc'
         },
         {
-          title: '销售金额',
-          key: 'salemoney',
+          title: '调拨金额',
+          key: 'orderAmt',
           className: 'tc'
         },
         {
           title: '成本单价',
-          key: 'costprice',
+          key: 'taxPrice',
           className: 'tc'
         },
         {
           title: '成本金额',
-          key: 'costmoney',
+          key: 'taxAmt',
           className: 'tc'
         },
         {
-          title: '损益',
-          key: 'sunyi',
+          title: '受理人',
+          key: 'hasAcceptUname',
           className: 'tc'
         },
         {
-          title: '毛利',
-          key: 'profit',
-          className: 'tc'
-        },
-        {
-          title: '成本率',
-          key: 'Costrate',
-          className: 'tc'
-        },
-        {
-          title: '毛利率',
-          key: 'profitrate',
-          className: 'tc'
-        },
-        {
-          title: '业务员',
-          key: 'Salesman',
-          className: 'tc'
-        },
-        {
-          title: '销售订单',
-          key: 'saleid',
+          title: '受理单号',
+          key: 'hasAcceptOrderNo',
           className: 'tc'
         },
         {
           title: '供应商',
-          key: 'Supplier',
+          key: 'guestName',
           className: 'tc'
         },
         {
-          title: '整单备注',
-          key: 'Wholeremarks',
-          className: 'tc'
-        },
-        {
-          title: '明细备注',
-          key: 'Detailedremarks',
+          title: '订单备注',
+          key: 'remark',
           className: 'tc'
         }
       ],
-      data: [
-        {
-          id: '1',
-          companyname: '上海佳配总部',
-          reconciliationid: 'XSCDS000-20190500001',
-          Supplier: 'HS-215-上海虹梅南路店',
-          currentcompany: '华胜215店',
-          Orderid: 'CGRDS000-20190500001',
-          billtype: '采购入库',
-          Warehouse:'门店仓库',
-          Single: 'sys',
-          Singledata:'2019-5-6 17:56',
-          revieweddate:'2019-5-6 17:57',
-          Invoice:'开票',
-          Straight: '否',
-          money: '45.00',
-          billstate: '已审',
-          paymentstate:'未付款',
-          remarks: ''
-        },
-        {
-          id: '合计',
-          money: '15'
-        }
-      ]
+      data: []
     };
   },
+  async mounted () {
+    // console.log(this.$refs.quickDate.val)
+    let arr = await creat (this.$refs.quickDate.val,this.$store)
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
+    this.getGeneral({})
+  },
   methods: {
+    // 快速查询
+    quickDate(data){
+      this.value = data
+    },
     Dealings() {
       this.$refs.selectDealings.openModel()
     },
     ok (){},
-    cancel (){}
+    cancel (){},
+    // 导出
+    report(){
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: '在途库存'
+        })
+      } else {
+        this.$message.error('在途库存暂无数据')
+      }
+    },
+    // 总表查询
+    getGeneral(obj) {
+      getOnWay(obj).then(res => {
+        console.log(res);
+        if(res.data.length !==0){
+          res.data.map(item=>{
+            item.taxSign = item.taxSign ? '是' : '否'
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
+      });
+    },
   }
 };
 </script>

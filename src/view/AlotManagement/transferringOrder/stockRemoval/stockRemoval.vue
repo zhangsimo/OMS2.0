@@ -214,7 +214,7 @@ import QuickDate from '../../../../components/getDate/dateget'
 import SelectSupplier from './compontents/selectSupplier'
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
-} from '../../../../api/AlotManagement/stockRemoval.js'
+} from '@/api/AlotManagement/stockRemoval.js'
 export default {
   name: 'stockRemoval',
   components: {
@@ -448,7 +448,6 @@ export default {
   watch: {
     Leftcurrentrow: {
       handler(newVal) {
-        console.log(newVal)
         this.Leftcurrentrow = newVal
       },
       deep: true
@@ -481,10 +480,10 @@ export default {
     //   this.Leftcurrentrow['sendWay'] = params
     //   this.GainInformation = false
     // },
-    selectAllEvent ({ checked }) {        
+    selectAllEvent ({ checked }) {
     },
     selectChangeEvent ({ checked, row }) {
-        console.log(checked ? '勾选事件' : '取消事件')
+        // console.log(checked ? '勾选事件' : '取消事件')
     },
     baocun1() {
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.createTime || !this.Leftcurrentrow.guestName) {
@@ -509,14 +508,12 @@ export default {
        if (params.status && params.status.name) {
         params.status = params.status.value
       }
-      console.log(params.orderTypeId)
       if (params.orderTypeId && params.orderTypeId.name) {
         params.orderTypeId = params.orderTypeId.value
       }
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value
       }
-      console.log(this.Leftcurrentrow, params)
         //配件组装保存
         baocun(params).then(res => {
             // 点击列表行==>配件组装信息
@@ -529,7 +526,6 @@ export default {
         })
     },
     xinzeng() {
-      console.log(this.$store)
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]['xinzeng'] === '1') {
@@ -844,7 +840,7 @@ export default {
       }
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
-                  
+
                   if (!res.data.content) {
                     this.Left.tbdata = []
                     this.Left.page.total = 0

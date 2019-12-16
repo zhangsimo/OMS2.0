@@ -5,26 +5,31 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>转单期间：</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
-            <span class="ml5 mr5">至</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
+            <Date-picker
+              format="yyyy-MM-dd"
+              :value="value"
+              @on-change="changedate"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+            ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select :model.sync="model1" class="w150">
-              <i-option
-                v-for="item in companyList"
+            <Select v-model="model1" class="w150">
+              <Option
+                v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -39,343 +44,917 @@
             <Poptip placement="bottom">
               <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
               <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出汇总</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出单据</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">导出配件明细</button>
+                <button
+                  class="mr10 ivu-btn ivu-btn-default"
+                  type="button"
+                  @click="exportSummary"
+                >导出汇总</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportBill">导出单据</button>
               </div>
             </Poptip>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="Monthlyreconciliation"
+            >月结对账</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data"></i-table>
-        <Tabs active-key="key1" class="mt10">
-          <Tab-pane label="收款单记录" key="key1">
-            <i-table border :columns="columns1" :data="data1" class="mt10"></i-table>
+        <Table
+          max-height="400"
+          highlight-row
+          border
+          :columns="columns"
+          :data="data"
+          @on-row-click="selete"
+          ref="summary"
+        ></Table>
+        <Tabs v-model="detailedList" class="mt10" @click="tabName">
+          <Tab-pane label="销售清单" name="key1">
+            <Table
+              border
+              :columns="columns1"
+              :data="data1"
+              class="mt10"
+              max-height="400"
+              show-summary
+              ref="sale"
+            ></Table>
           </Tab-pane>
-          <Tab-pane label="付款单记录" key="key2">
-            <i-table border :columns="columns2" :data="data2" class="mt10"></i-table>
+          <Tab-pane label="采购清单" name="key2">
+            <Table
+              border
+              :columns="columns2"
+              :data="data2"
+              class="mt10"
+              max-height="400"
+              show-summary
+              ref="purchase"
+            ></Table>
           </Tab-pane>
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings"/>
-    <Modal
-        v-model="modal1"
-        title="高级查询"
-        @on-ok="ok"
-        @on-cancel="cancel">
-        <div class="db pro mt20">
-          <span>对账单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款单号：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>收付款人：</span>
-          <input type="text" class="w200" />
-        </div>
-        <div class="db pro mt20">
-          <span>审核状态：</span>
-          <i-select :model.sync="model1" style="width:200px">
-            <i-option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-          </i-select>
-        </div>
+    <selectDealings ref="selectDealings" />
+    <Modal v-model="modal1" title="高级查询" @on-ok="senior">
+      <div class="db pro mt20">
+        <span>转单日期：</span>
+        <Date-picker
+          :value="value"
+          format="yyyy-MM-dd"
+          type="daterange"
+          placeholder="选择日期"
+          class="w200"
+          @on-change="changedate"
+        ></Date-picker>
+      </div>
+      <div class="db pro mt20">
+        <span>客户类型：</span>
+        <Select v-model="model2" style="width:200px">
+          <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>客户名称：</span>
+        <input type="text" class="w200" v-model="nametext" />
+      </div>
+      <div class="db pro mt20">
+        <span>分店名称：</span>
+        <Select v-model="model1" style="width:200px">
+          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>业务类型：</span>
+        <Select v-model="model3" style="width:200px">
+          <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>业务单号：</span>
+        <input type="text" class="w200" v-model="text" />
+      </div>
     </Modal>
+    <Modal v-model="outStock" title="出库明细" width="1200">
+      <div class="db">
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)">导出</button>
+      </div>
+      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary ref="noWarehousing"></Table>
+      <div slot="footer"></div>
+    </Modal>
+    <Modal v-model="onStock" title="入库明细" width="1200">
+      <div class="db">
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)">导出</button>
+      </div>
+      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary ref="warehousing"></Table>
+      <div slot="footer"></div>
+    </Modal>
+    <Monthlyreconciliation ref="Monthlyreconciliation" />
+    <PrintShow ref="PrintShow"/>
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from './../bill/components/selectCompany'
+import selectDealings from "./../bill/components/selectCompany";
+import Monthlyreconciliation from "./Monthlyreconciliation.vue";
+import PrintShow from './component/PrintShow'
+import {
+  getStorelist,
+  getreceivable,
+  getSalelist,
+  getNumberList
+} from "@/api/bill/saleOrder";
+import { creat } from "./../components";
 export default {
   components: {
     quickDate,
-    selectDealings
+    selectDealings,
+    Monthlyreconciliation,
+    PrintShow
   },
   data() {
     return {
-      companyList: [
-        {
-          value: "company1",
-          label: "佳配总部"
-        },
-        {
-          value: "company2",
-          label: "上海虹梅南路店"
-        },
-        {
-          value: "company3",
-          label: "杭州华展店"
-        },
-        {
-          value: "company4",
-          label: "郑州天荣店"
-        }
-      ],
+      detailedList: "key1",
+      value: [],
       model1: "",
+      model2: "",
+      model3: "",
+      text: "",
+      nametext: "",
       modal1: false,
+      outStock: false,
+      onStock: false,
       flag: false,
-      statelist: [
-        {
-          value: 'weishen',
-          label: '未审'
-        },
-        {
-          value: 'yishen',
-          label: '已审'
-        }
-      ],
       columns: [
         {
-          title: '序号',
-          key: 'id',
+          title: "序号",
+          key: "num",
           width: 40,
-          className: 'tc'
+          className: "tc"
+        },
+        // {
+        //   title: "区域",
+        //   key: "area",
+        //   className: "tc"
+        // },
+        {
+          title: "店号",
+          key: "orgId",
+          className: "tc"
         },
         {
-          title: '公司名称',
-          key: 'companyname',
-          className: 'tc'
+          title: "客户/供应商名称",
+          key: "guestName",
+          className: "tc"
         },
         {
-          title: '对账单号',
-          key: 'reconciliationid',
-          className: 'tc'
+          title: "客户/供应商类别",
+          key: "guestTypeName",
+          className: "tc"
         },
         {
-          title: '对账单收付款单号',
-          key: 'collectionpaymentid',
-          width: 120,
-          className: 'tc'
+          title: "对账类别",
+          key: "paymentTypeName",
+          className: "tc"
         },
         {
-          title: '往来单位',
-          key: 'currentcompany',
-          className: 'tc'
+          title: "采购入库",
+          key: "stockAmtIn",
+          className: "tc"
         },
         {
-          title: '收付类型',
-          key: 'payment',
-          className: 'tc'
+          title: "采购退货",
+          key: "stockAmtOut",
+          className: "tc"
         },
         {
-          title: '收付款金额',
-          key: 'paymoney',
-          className: 'tc'
+          title: "销售出库",
+          key: "salesAmtOut",
+          className: "tc"
         },
         {
-          title: '已冲减/已审核',
-          key: 'offset',
-          className: 'tc'
+          title: "销售退货",
+          key: "salesAmtReturn",
+          className: "tc"
         },
         {
-          title: '未冲减/未审核',
-          key: 'notoffset',
-          className: 'tc'
+          title: "应收应付金额",
+          key: "duePayableAmt",
+          className: "tc"
         },
         {
-          title: '收款目的',
-          key: 'purpose',
-          className: 'tc'
+          title: "已对账未收金额",
+          key: "receivedAmt",
+          className: "tc"
         },
         {
-          title: '收付款人',
-          key: 'person',
-          className: 'tc'
+          title: "已对账未付金额",
+          key: "paidAmt",
+          className: "tc"
         },
         {
-          title: '收付款时间',
-          key: 'time',
-          className: 'tc'
+          title: "已对账合计",
+          key: "reconciledSumAmt",
+          className: "tc"
         },
         {
-          title: '备注',
-          key: 'remarks',
-          className: 'tc'
+          title: "未对账应收金额",
+          key: "uncollectedAmt",
+          className: "tc"
         },
         {
-          title: '审核状态',
-          key: 'reviewed',
-          className: 'tc'
+          title: "未对账应付金额",
+          key: "unpaidAmt",
+          className: "tc"
         },
         {
-          title: '审核人',
-          key: 'reviewedperson',
-          className: 'tc'
-        },
-        {
-          title: '审核日期',
-          key: 'revieweddate',
-          className: 'tc'
+          title: "未对账合计",
+          key: "unReconciledSumAmt",
+          className: "tc"
         }
       ],
-      columns1:  [
+      columns1: [
         {
-          title: '序号',
-          key: 'id',
+          title: "序号",
+          key: "num",
           width: 40,
-          className: 'tc'
+          className: "tc"
+        },
+        // {
+        //   title: "区域",
+        //   key: "area",
+        //   className: "tc"
+        // },
+        {
+          title: "店号",
+          key: "orgId",
+          className: "tc"
         },
         {
-          title: '收款单号',
-          key: 'receivablesid',
-          className: 'tc'
+          title: "客户/供应商名称",
+          key: "guestName",
+          className: "tc"
         },
         {
-          title: '收款时间',
-          key: 'receivablestime',
-          className: 'tc'
+          title: "客户供应商类别",
+          key: "guestTypeName",
+          className: "tc"
         },
         {
-          title: '收款方式',
-          key: 'receivablestype',
-          width: 120,
-          className: 'tc'
+          title: "销售订单号",
+          key: "orderNo",
+          className: "tc"
         },
         {
-          title: '收款账户',
-          key: 'receivablesaccount',
-          className: 'tc'
+          title: "出库单号",
+          key: "serviceId",
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: async () => {
+                    this.outStock = true;
+                    let obj = {
+                      orderCode: params.row.serviceId,
+                      orderType: params.row.serviceType.value
+                    };
+                    let res = await this.getList(obj);
+                    res.detailed.map(item=>{
+                      item.orderCode = params.row.serviceId
+                      item.orderType = params.row.serviceType.value
+                      item.orgId = params.row.orgId
+                      item.guestId = params.row.guestId
+                    })
+                    this.data3 = res.detailed;
+                  }
+                }
+              },
+              params.row.serviceId
+            );
+          }
         },
         {
-          title: '收款金额',
-          key: 'receivablesmoney',
-          className: 'tc'
+          title: "来源",
+          key: "serviceSourceName",
+          className: "tc"
         },
         {
-          title: '审核状态',
-          key: 'reviewedstate',
-          className: 'tc'
+          title: "业务类型",
+          key: "serviceTypeName",
+          className: "tc"
         },
         {
-          title: '审核人',
-          key: 'person',
-          className: 'tc'
+          title: "含税标志",
+          key: "taxSignName",
+          className: "tc"
         },
         {
-          title: '审核日期',
-          key: 'revieweddate',
-          className: 'tc'
+          title: "油品/配件",
+          key: "speciesName",
+          className: "tc"
         },
         {
-          title: '备注',
-          key: 'remarks',
-          className: 'tc'
+          title: "转单日期",
+          key: "transferDate",
+          className: "tc"
+        },
+        {
+          title: "应收金额",
+          key: "rpAmt",
+          className: "tc"
+        },
+        {
+          title: "已收金额",
+          key: "charOffAmt",
+          className: "tc"
+        },
+        {
+          title: "未收金额",
+          key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "业务员",
+          key: "salesman",
+          className: "tc"
+        },
+        {
+          title: "已对账金额",
+          key: "accountAmt",
+          className: "tc"
+        },
+        {
+          title: "未对账金额",
+          key: "noAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "草稿金额",
+          key: "draftAmt",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        },
+        {
+          title: "对账门店",
+          key: "accountOrgName",
+          className: "tc"
+        },
+        {
+          title: "对账人",
+          key: "accountMan",
+          className: "tc"
+        },
+        {
+          title: "对账订单",
+          key: "accountNo",
+          className: "tc"
         }
       ],
       columns2: [
         {
-          title: '序号',
-          key: 'id',
+          title: "序号",
+          key: "num",
           width: 40,
-          className: 'tc'
+          className: "tc"
+        },
+        // {
+        //   title: "区域",
+        //   key: "area",
+        //   className: "tc"
+        // },
+        {
+          title: "店号",
+          key: "orgId",
+          className: "tc"
         },
         {
-          title: '付款单号',
-          key: 'payid',
-          className: 'tc'
+          title: "客户/供应商名称",
+          key: "guestName",
+          className: "tc"
         },
         {
-          title: '付款时间',
-          key: 'paytime',
-          className: 'tc'
+          title: "客户供应商类别",
+          key: "guestTypeName",
+          className: "tc"
         },
         {
-          title: '付款方式',
-          key: 'paytype',
-          width: 120,
-          className: 'tc'
+          title: "采购订单号",
+          key: "orderNo",
+          className: "tc"
         },
         {
-          title: '付款账户',
-          key: 'payaccount',
-          className: 'tc'
+          title: "入库单号",
+          key: "serviceId",
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: async () => {
+                    this.onStock = true;
+                    let obj = {
+                      orderCode: params.row.serviceId,
+                      orderType: params.row.serviceType.value
+                    };
+                    let res = await this.getList(obj);
+                    this.data4 = res.detailed;
+                  }
+                }
+              },
+              params.row.serviceId
+            );
+          }
         },
         {
-          title: '付款金额',
-          key: 'paymoney',
-          className: 'tc'
+          title: "来源",
+          key: "serviceSourceName",
+          className: "tc"
         },
         {
-          title: '审核状态',
-          key: 'reviewedstate',
-          className: 'tc'
+          title: "业务类型",
+          key: "serviceTypeName",
+          className: "tc"
         },
         {
-          title: '审核人',
-          key: 'person',
-          className: 'tc'
+          title: "含税标志",
+          key: "taxSignName",
+          className: "tc"
         },
         {
-          title: '审核日期',
-          key: 'revieweddate',
-          className: 'tc'
+          title: "油品/配件",
+          key: "speciesName",
+          className: "tc"
         },
         {
-          title: '备注',
-          key: 'remarks',
-          className: 'tc'
+          title: "转单日期",
+          key: "transferDate",
+          className: "tc"
+        },
+        {
+          title: "应付金额",
+          key: "rpAmt",
+          className: "tc"
+        },
+        {
+          title: "已付金额",
+          key: "charOffAmt",
+          className: "tc"
+        },
+        {
+          title: "未付金额",
+          key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "业务员",
+          key: "salesman",
+          className: "tc"
+        },
+        {
+          title: "已对账金额",
+          key: "accountAmt",
+          className: "tc"
+        },
+        {
+          title: "未对账金额",
+          key: "noAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "草稿金额",
+          key: "draftAmt",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        },
+        {
+          title: "对账门店",
+          key: "accountOrgName",
+          className: "tc"
+        },
+        {
+          title: "对账人",
+          key: "accountMan",
+          className: "tc"
+        },
+        {
+          title: "对账订单",
+          key: "accountNo",
+          className: "tc"
         }
       ],
-      data: [
+      columns3: [
         {
-          id: '1',
-          companyname: '上海虹梅南路店',
-          reconciliationid: 'XS201941445452313',
-          collectionpaymentid: '454455454',
-          currentcompany: '华胜215店',
-          payment: '收',
-          paymoney: '35648',
-          offset:'121',
-          notoffset: '0',
-          purpose:'预收款',
-          person:'张三',
-          time:'2019-09-19',
-          remarks: '',
-          reviewed: '已审',
-          reviewedperson: '王五',
-          revieweddate:'2019/10/10'
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "配件编码",
+          key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          className: "tc"
+        },
+        {
+          title: "配件规格",
+          key: "specification",
+          className: "tc"
+        },
+        {
+          title: "配件车型",
+          key: "carModel",
+          className: "tc"
+        },
+        {
+          title: "配件品牌",
+          key: "partBrand",
+          className: "tc"
+        },
+        {
+          title: "配件厂牌",
+          key: "factoryBrand",
+          className: "tc"
+        },
+        {
+          title: "OEM码",
+          key: "oemCode",
+          className: "tc"
+        },
+        {
+          title: "税率",
+          key: "taxRate",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "qty",
+          className: "tc"
+        },
+        {
+          title: "单位",
+          key: "unitId",
+          className: "tc"
+        },
+        {
+          title: "单价",
+          key: "price",
+          className: "tc"
+        },
+        {
+          title: "金额",
+          key: "orderAmt",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
         }
       ],
-      data1: [
+      columns4: [
         {
-          id: '1',
-          receivablesid: 'XS201941445452313',
-          receivablestime: '2019/10/10',
-          receivablestype: '现金',
-          receivablesaccount: '佳配零部件',
-          receivablesmoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "门店名称",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "是否直发",
+          key: "isDirect",
+          className: "tc"
+        },
+        {
+          title: "配件编码",
+          key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          className: "tc"
+        },
+        {
+          title: "配件规格",
+          key: "specification",
+          className: "tc"
+        },
+        {
+          title: "配件车型",
+          key: "carModel",
+          className: "tc"
+        },
+        {
+          title: "配件品牌",
+          key: "partBrand",
+          className: "tc"
+        },
+        {
+          title: "配件厂牌",
+          key: "factoryBrand",
+          className: "tc"
+        },
+        {
+          title: "OEM码",
+          key: "oemCode",
+          className: "tc"
+        },
+        {
+          title: "税率",
+          key: "taxRate",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "qty",
+          className: "tc"
+        },
+        {
+          title: "单位",
+          key: "unitId",
+          className: "tc"
+        },
+        {
+          title: "单价",
+          key: "price",
+          className: "tc"
+        },
+        {
+          title: "金额",
+          key: "orderAmt",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        },
+        {
+          title: "不含税价格",
+          key: "noTaxPrice",
+          className: "tc"
+        },
+        {
+          title: "不含税金额",
+          key: "noTaxAmt",
+          className: "tc"
+        },
+        {
+          title: "含税单价",
+          key: "taxPrice",
+          className: "tc"
+        },
+        {
+          title: "含税金额",
+          key: "taxAmt",
+          className: "tc"
         }
       ],
-      data2: [
+      data: [],
+      data1: [],
+      data2: [],
+      data3: [],
+      data4: [],
+      typelist: [
         {
-          id: '1',
-          payid: 'XS201941445452313',
-          paytime: '2019/10/10',
-          paytype: '现金',
-          payaccount: '佳配零部件',
-          paymoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
+          value: "HS",
+          label: "华胜"
+        },
+        {
+          value: "NB",
+          label: "内部"
+        },
+        {
+          value: "WB",
+          label: "外部"
+        }
+      ],
+      Branchstore: [],
+      business: [
+        {
+          value: "CGRK",
+          label: "采购入库"
+        },
+        {
+          value: "CGTH",
+          label: "采购退货"
+        },
+        {
+          value: "XSCK",
+          label: "销售出库"
+        },
+        {
+          value: "XSTH",
+          label: "销售退货"
         }
       ]
     };
   },
+  async mounted() {
+    this.parameter = [];
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
+    let obj = {
+      orgId: arr[1],
+      startDate: arr[0][0],
+      endDate: arr[0][1]
+    };
+    this.getGeneral(obj);
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
+  },
   methods: {
-    Dealings() {
-      this.$refs.selectDealings.openModel()
+    // 快速查询
+    quickDate(data) {
+      this.value = data;
     },
-    ok (){},
-    cancel (){}
+    // 选择日期
+    changedate(daterange) {
+      this.value = daterange;
+    },
+    // 更多条件查询
+    senior() {
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0],
+        endDate: this.value[1],
+        guestType: this.model2,
+        tenantName: this.nametext,
+        serviceType: this.model3,
+        serviceId: this.text
+      };
+      this.getGeneral(obj);
+    },
+    // 查询应收/应付总表
+    query() {
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0],
+        endDate: this.value[1]
+      };
+      this.getGeneral(obj);
+    },
+    // 应收应付接口
+    getGeneral(obj) {
+      getreceivable(obj).then(res => {
+        if (res.data.length !== 0) {
+          res.data.map((item, index) => {
+            item.num = index + 1;
+          });
+          this.data = res.data;
+        }
+      });
+    },
+    // 销售/采购接口
+    getDetailed(data, obj) {
+      getSalelist({
+        tenantId: data.tenantId,
+        orgId: data.orgId,
+        startDate: obj.startDate,
+        endDate: obj.endDate,
+        guestId: data.guestId
+      }).then(res => {
+        if (res.data.one) {
+          res.data.one.map((item, index) => {
+            item.num = index + 1;
+            item.guestTypeName = item.guestType.name;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data1 = res.data.one;
+        } else {
+          this.data1 = [];
+        }
+        if (res.data.two) {
+          res.data.two.map((item, index) => {
+            item.num = index + 1;
+            item.guestTypeName = item.guestType.name;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data2 = res.data.two;
+        } else {
+          this.data2 = [];
+        }
+      });
+    },
+    // 往来单位
+    Dealings() {
+      this.$refs.selectDealings.openModel();
+    },
+    // 月结对账
+    Monthlyreconciliation() {
+      // this.$refs.Monthlyreconciliation.modal = true;
+      if (JSON.stringify(this.$refs.Monthlyreconciliation.parameter) !== "{}") {
+        this.$refs.Monthlyreconciliation.modal = true;
+      } else {
+        this.$Message.warning("请选择要对账的数据");
+      }
+    },
+    // 点击总汇表数据查询销售/采购清单
+    selete(data) {
+      let date = {
+        startDate: this.value[0],
+        endDate: this.value[1]
+      };
+      this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
+      this.getDetailed(data, this.value);
+    },
+    // 查询出/入库单号明细
+    async getList(obj) {
+      let detailed = [];
+      await getNumberList(obj).then(res => {
+        res.data.map((item, index) => {
+          item.num = index + 1;
+        });
+        detailed = res.data;
+      });
+      return { detailed };
+    },
+    // 导出汇总
+    exportSummary() {
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: "应收应付汇总表"
+        });
+      } else {
+        this.$message.error('应收应付汇总表暂无数据')
+      }
+    },
+    // 当前标签页的name
+    tabName(name) {
+      this.detailedList = name;
+    },
+    // 导出单据
+    exportBill() {
+      if (this.detailedList === "key1") {
+        if(this.data1.length!==0){
+          this.$refs.sale.exportCsv({
+            filename: "销售清单"
+          });
+        } else {
+          this.$message.error('销售清单暂无数据')
+        }
+      } else if (this.detailedList === "key2") {
+        if(this.data2.length !==0) {
+          this.$refs.purchase.exportCsv({
+            filename: "采购清单"
+          });
+        } else {
+          this.$message.error('销售清单暂无数据')
+        }
+      }
+    },
+    // 出/入库明细导出
+    exportDetail(type){
+      if(type) {
+        this.$refs.warehousing.exportCsv({
+          filename: '入库单配件明细'
+        })
+      } else{
+        this.$refs.noWarehousing.exportCsv({
+          filename: '出库单配件明细'
+        })
+      }
+    },
+    // 打印
+    print(){
+      // console.log(this.$refs.PrintShow)
+      this.$refs.PrintShow.openModal()
+    }
   }
 };
 </script>
@@ -395,8 +974,11 @@ export default {
   width: 100px;
   text-align: right;
 }
-.ivu-poptip-popper .ivu-poptip-body {
-  padding: 0;
-  height: 150px;
+.pro i {
+  font-style: normal;
+}
+.pro input {
+  border: 1px solid #dddddd;
+  height: 28px;
 }
 </style>

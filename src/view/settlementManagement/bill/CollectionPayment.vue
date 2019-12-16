@@ -5,23 +5,21 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10"></quickDate>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>对账期间：</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
-            <span class="ml5 mr5">至</span>
-            <Date-picker type="date" placeholder="选择日期" class="w100"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <i-select :model.sync="model1" class="w150">
-              <i-option
-                v-for="item in companyList"
+            <Select  v-model="model1" class="w150">
+              <Option
+                v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</i-option>
-            </i-select>
+              >{{ item.label }}</Option>
+            </Select>
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
@@ -41,20 +39,21 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report">导出</button>
           </div>
         </div>
       </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <i-table border :columns="columns" :data="data"></i-table>
-        <Tabs active-key="key1" class="mt10">
-          <Tab-pane label="收款单记录" key="key1">
-            <i-table border :columns="columns1" :data="data1" class="mt10"></i-table>
+        <Table border :columns="columns" :data="data" ref="summary" show-summary  highlight-row
+          @on-row-click="election" max-height=400></Table>
+        <Tabs v-model="tab" class="mt10" @click="tabName">
+          <Tab-pane label="收款单记录" name="key1">
+            <Table border :columns="columns1" :data="data1" class="mt10" ref="receivables" show-summary max-height=400></Table>
           </Tab-pane>
-          <Tab-pane label="付款单记录" key="key2">
-            <i-table border :columns="columns2" :data="data2" class="mt10"></i-table>
+          <Tab-pane label="付款单记录" name="key2">
+            <Table border :columns="columns2" :data="data2" class="mt10" ref="payment" show-summary max-height=400></Table>
           </Tab-pane>
         </Tabs>
       </div>
@@ -79,9 +78,9 @@
         </div>
         <div class="db pro mt20">
           <span>审核状态：</span>
-          <i-select :model.sync="model1" style="width:200px">
-            <i-option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</i-option>
-          </i-select>
+          <Select :model.sync="model1" style="width:200px">
+            <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </div>
     </Modal>
   </div>
@@ -90,6 +89,9 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
+import {creat} from './../components'
+import { getReceiptsPaymentsSummary,
+getReceiptsPaymentsList } from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -97,24 +99,9 @@ export default {
   },
   data() {
     return {
-      companyList: [
-        {
-          value: "company1",
-          label: "佳配总部"
-        },
-        {
-          value: "company2",
-          label: "上海虹梅南路店"
-        },
-        {
-          value: "company3",
-          label: "杭州华展店"
-        },
-        {
-          value: "company4",
-          label: "郑州天荣店"
-        }
-      ],
+      tab: 'key1',
+      value: [],
+      Branchstore: [],
       model1: "",
       modal1: false,
       statelist: [
@@ -130,34 +117,34 @@ export default {
       columns: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
           title: '公司名称',
-          key: 'companyname',
+          key: 'groupName',
           className: 'tc'
         },
         {
           title: '对账单号',
-          key: 'reconciliationid',
+          key: 'accountNo',
           className: 'tc'
         },
         {
           title: '对账单收付款单号',
-          key: 'collectionpaymentid',
+          key: 'fno',
           width: 120,
           className: 'tc'
         },
         {
           title: '往来单位',
-          key: 'currentcompany',
+          key: 'guestName',
           className: 'tc'
         },
         {
           title: '收付类型',
-          key: 'payment',
+          key: 'sortName',
           className: 'tc'
         },
         {
@@ -167,12 +154,12 @@ export default {
         },
         {
           title: '已冲减/已审核',
-          key: 'offset',
+          key: 'ycAmt',
           className: 'tc'
         },
         {
           title: '未冲减/未审核',
-          key: 'notoffset',
+          key: 'wcAmt',
           className: 'tc'
         },
         {
@@ -182,197 +169,231 @@ export default {
         },
         {
           title: '收付款人',
-          key: 'person',
+          key: 'createUname',
           className: 'tc'
         },
         {
           title: '收付款时间',
-          key: 'time',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewed',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'reviewedperson',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         }
       ],
       columns1:  [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
           title: '收款单号',
-          key: 'receivablesid',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '收款时间',
-          key: 'receivablestime',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '收款方式',
-          key: 'receivablestype',
+          key: 'serviceTypeName',
           width: 120,
           className: 'tc'
         },
         {
           title: '收款账户',
-          key: 'receivablesaccount',
+          key: 'paymentAmtType',
           className: 'tc'
         },
         {
           title: '收款金额',
-          key: 'receivablesmoney',
+          key: 'checkAmt',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewedstate',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'person',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         }
       ],
       columns2: [
         {
           title: '序号',
-          key: 'id',
+          key: 'num',
           width: 40,
           className: 'tc'
         },
         {
           title: '付款单号',
-          key: 'payid',
+          key: 'fno',
           className: 'tc'
         },
         {
           title: '付款时间',
-          key: 'paytime',
+          key: 'rpDate',
           className: 'tc'
         },
         {
           title: '付款方式',
-          key: 'paytype',
+          key: 'serviceTypeName',
           width: 120,
           className: 'tc'
         },
         {
           title: '付款账户',
-          key: 'payaccount',
+          key: 'paymentAmtType',
           className: 'tc'
         },
         {
           title: '付款金额',
-          key: 'paymoney',
+          key: 'checkAmt',
           className: 'tc'
         },
         {
           title: '审核状态',
-          key: 'reviewedstate',
+          key: 'startStatusName',
           className: 'tc'
         },
         {
           title: '审核人',
-          key: 'person',
+          key: 'auditor',
           className: 'tc'
         },
         {
           title: '审核日期',
-          key: 'revieweddate',
+          key: 'auditorDate',
           className: 'tc'
         },
         {
           title: '备注',
-          key: 'remarks',
+          key: 'remark',
           className: 'tc'
         }
       ],
-      data: [
-        {
-          id: '1',
-          companyname: '上海虹梅南路店',
-          reconciliationid: 'XS201941445452313',
-          collectionpaymentid: '454455454',
-          currentcompany: '华胜215店',
-          payment: '收',
-          paymoney: '35648',
-          offset:'121',
-          notoffset: '0',
-          purpose:'预收款',
-          person:'张三',
-          time:'2019-09-19',
-          remarks: '',
-          reviewed: '已审',
-          reviewedperson: '王五',
-          revieweddate:'2019/10/10'
-        }
-      ],
-      data1: [
-        {
-          id: '1',
-          receivablesid: 'XS201941445452313',
-          receivablestime: '2019/10/10',
-          receivablestype: '现金',
-          receivablesaccount: '佳配零部件',
-          receivablesmoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
-        }
-      ],
-      data2: [
-        {
-          id: '1',
-          payid: 'XS201941445452313',
-          paytime: '2019/10/10',
-          paytype: '现金',
-          payaccount: '佳配零部件',
-          paymoney: '35648',
-          reviewedstate:'已审',
-          person:'张三',
-          revieweddate:'2019-09-19'
-        }
-      ]
+      data: [],
+      data1: [],
+      data2:[]
     };
   },
+  async mounted () {
+    // console.log(this.$refs.quickDate.val)
+    let arr = await creat (this.$refs.quickDate.val,this.$store)
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
+    this.getGeneral()
+  },
   methods: {
+    // 快速查询
+    quickDate(data){
+      this.value = data
+    },
+    // 往来单位
     Dealings() {
       this.$refs.selectDealings.openModel()
     },
+    // tab标签页的name
+    tabName(name){
+      this.tab = name
+    },
+    // 导出
+    report(){
+      if(this.data.length !==0){
+        this.$refs.summary.exportCsv({
+          filename: '收付款查询'
+        })
+      } else {
+        this.$message.error('收付款总表暂无数据')
+      }
+      if(this.tab === 'key1') {
+        if(this.data1.length !==0){
+          this.$refs.receivables.exportCsv({
+            filename: '收款单明细'
+          })
+        } else {
+          this.$message.error('收款单明细暂无数据')
+        }
+      } else if(this.tab === 'key2') {
+        if(this.data2.length !==0){
+          this.$refs.payment.exportCsv({
+            filename: '付款单明细'
+          })
+        } else {
+          this.$message.error('付款单明细暂无数据')
+        }
+      }
+    },
     ok (){},
-    cancel (){}
+    cancel (){},
+    // 总表查询
+    getGeneral() {
+      getReceiptsPaymentsSummary({}).then(res => {
+        // console.log(res);
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.sortName = item.sort.name
+            item.startStatusName = item.startStatus.name
+          })
+          this.data = res.data
+        } else {
+          this.data = []
+        }
+      });
+    },
+    // 选中总表查询明细
+    election(row) {
+      getReceiptsPaymentsList({ fno: row.fno }).then(res => {
+        if(res.data.length!==0){
+          res.data.map((item,index)=>{
+            item.num = index + 1
+            item.serviceTypeName = item.serviceType.name
+            item.startStatusName = item.startStatus.name
+          })
+          this.data1 = res.data
+          this.data2 = res.data
+        } else {
+          this.data1 = []
+          this.data2 = []
+        }
+      });
+    }
   }
 };
 </script>

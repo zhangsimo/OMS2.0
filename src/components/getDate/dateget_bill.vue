@@ -12,15 +12,17 @@ import {
   ThisWeekStr,
   LastWeekStr,
   ThisMonthStr,
-  prevMonthStr
-} from "./index";
+  prevMonthStr,
+  prevYearStr,
+  ThisYearStr
+} from "./index_bill";
 export default {
   name: "quickDate",
   components: {},
   data() {
     return {
       val: [],
-      searchQuick: "0",
+      searchQuick: "3",
       dateQiuck: [
         { value: "0", label: "请选择" },
         { value: "1", label: "今天" },
@@ -36,7 +38,9 @@ export default {
   },
   props: {},
   created() {},
-  mounted() {},
+  mounted() {
+    this.getval(this.searchQuick)
+  },
   methods: {
     getval(type) {
       // 日期快速选择
@@ -68,6 +72,14 @@ export default {
         case 6:
         case "6":
           this.val = prevMonthStr();
+          break;
+        case 7:
+        case "7":
+          this.val = ThisYearStr();
+          break;
+        case 8:
+        case "8":
+          this.val = prevYearStr();
           break;
         default:
           this.val = ToDayStr();
