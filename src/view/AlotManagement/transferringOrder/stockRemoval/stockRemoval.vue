@@ -6,7 +6,7 @@
               <div class="wlf">
                 <div class="db">
                   <span>快速查询：</span>
-                  <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+                  <quick-date class="mr10" @quickDate="getDataQuick"></quick-date>
                   <Select v-model="form.status" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
@@ -125,7 +125,7 @@
                     <div class="flex plan-cz-btn" ref="planBtn">
                       <div class="clearfix">
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="addProoo">
+                          <Button size="small" class="mr10" @click="addMountings">
                             <Icon type="md-add"/>添加配件
                           </Button>
                         </div>
@@ -184,18 +184,20 @@
             </div>
           </Modal>
         </div>
+        <!--      添加配件-->
+      <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
         <!--编辑收货信息-->
     <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">
-      <goods-info ref="goodI"></goods-info>
+      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>
       <div slot="footer">
-        <Button type="primary" @click="getMessage">确定</Button>
-        <Button type="default">取消</Button>
+        <!-- <Button type="primary" @click="getMessage">确定</Button>
+        <Button type="default">取消</Button> -->
       </div>
     </Modal>
           <!-- 选择调出方 -->
     <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>
       <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
-      <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
+      <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -205,13 +207,14 @@ import AddInCom from './compontents/AddInCom'
 import More from './compontents/More'
 import '../../../lease/product/lease.less'
 import PrintShow from "./compontents/PrintShow";
+import selectPartCom from "./compontents/selectPartCom";
 import GoodsInfo from './compontents/goodsInfo'
 import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
 import SelectSupplier from './compontents/selectSupplier'
 import {
-  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList
-} from '../../../../api/AlotManagement/stockRemoval.js'
+  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
+} from '@/api/AlotManagement/stockRemoval.js'
 export default {
   name: 'stockRemoval',
   components: {
@@ -220,7 +223,8 @@ export default {
     AddInCom,
     SelectSupplier,
     PrintShow,
-    GoodsInfo
+    GoodsInfo,
+    selectPartCom
   },
   data() {
     return {
@@ -444,7 +448,6 @@ export default {
   watch: {
     Leftcurrentrow: {
       handler(newVal) {
-        console.log(newVal)
         this.Leftcurrentrow = newVal
       },
       deep: true
@@ -455,15 +458,32 @@ export default {
        this.getList(this.form)
   },
   methods: {
-    getMessage() {
-      const params = this.$refs.goodI.getParams()
-      this.Leftcurrentrow['sendWay'] = params
-      this.GainInformation = false
-    },
-    selectAllEvent ({ checked }) {        
+       //配件返回的参数
+            getPartNameList(val){
+              this.$refs.formPlan.validate(async (valid) => {
+                  if (valid) {
+                      let data ={}
+                      data = this.Leftcurrentrow
+                      data.detailVOS = conversionList(val)
+                      let res = await  baocun(data)
+                      if(res.code === 0){
+                          this.getList()
+                      }
+                  } else {
+                      this.$Message.error('*为必填项');
+                  }
+              })
+
+            },
+    // getMessage() {
+    //   const params = this.$refs.goodI.getParams()
+    //   this.Leftcurrentrow['sendWay'] = params
+    //   this.GainInformation = false
+    // },
+    selectAllEvent ({ checked }) {
     },
     selectChangeEvent ({ checked, row }) {
-        console.log(checked ? '勾选事件' : '取消事件')
+        // console.log(checked ? '勾选事件' : '取消事件')
     },
     baocun1() {
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.createTime || !this.Leftcurrentrow.guestName) {
@@ -485,14 +505,14 @@ export default {
       if (params.xinzeng) {
         delete params.status
       }
-       if (params.status.value) {
-        params.status = params.status.value || ''
+       if (params.status && params.status.name) {
+        params.status = params.status.value
       }
-      if (params.orderTypeId) {
-        params.orderTypeId = params.orderTypeId.value || ''
+      if (params.orderTypeId && params.orderTypeId.name) {
+        params.orderTypeId = params.orderTypeId.value
       }
-      if (params.settleStatus) {
-        params.settleStatus = params.settleStatus.value || ''
+      if (params.settleStatus && params.settleStatus.name) {
+        params.settleStatus = params.settleStatus.value
       }
         //配件组装保存
         baocun(params).then(res => {
@@ -506,7 +526,6 @@ export default {
         })
     },
     xinzeng() {
-      console.log(this.$store)
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]['xinzeng'] === '1') {
@@ -620,10 +639,11 @@ export default {
     },
     //打印表格
         printTable(){
-          if (!this.dayinCureen.id) {
-            this.$Message.info('请选择打印项')
-            return
-          }
+          console.log(this.dayinCureen)
+          // if (!this.dayinCureen.id) {
+          //   this.$Message.info('请选择打印项')
+          //   return
+          // }
             this.$refs.printBox.openModal()
         },
     chuku() {
@@ -681,13 +701,15 @@ export default {
       this.advanced = true
     },
     //左边列表选中当前行
-    selectTabelData(row) {
+    async selectTabelData(row) {
       this.dayinCureen = row
+      console.log(row, this.dayinCureen,'234')
       this.Leftcurrentrow = row
-      if (!row.detailVOS) {
-        row['detailVOS'] = []
+      const params = {
+        mainId: row.id
       }
-      this.Leftcurrentrow.detailVOS = row.detailVOS
+      const res = await getListDetail(params)
+      this.Leftcurrentrow.detailVOS = res.data
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
                 if (res.code == 0) {
                   res.data.map(item => {
@@ -701,6 +723,10 @@ export default {
               this.$Message.info('获取仓库列表失败')
       })
     },
+    //打开添加配件模态框
+          addMountings(){
+              this.$refs.selectPartCom.init()
+          },
     //分页
     changePage(p) {
       this.Left.page.num = p
@@ -730,18 +756,24 @@ export default {
         }
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords()
-        console.log(seleList)
-        this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
-      //   const id =  seleList[0].id
-      //   shanqu(id).then(res => {
-      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
-      //           if (res.code == 0) {
-      //             this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
-      //             this.$Message.success('删除成功');
-      //           }
-      //         }).catch(e => {
-      //         this.$Message.info('删除成品失败')
-      // })
+        let arr = []
+        seleList.map(item => {
+          arr.push(parseInt(item.id))
+        })
+        const params = {
+          ids: arr,
+          mainId: parseInt(this.Leftcurrentrow.id)
+        }
+        console.log(params)
+        shanqu(params).then(res => {
+          // 导入成品, 并把成品覆盖掉当前配件组装信息list
+                if (res.code == 0) {
+                  this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
+                  this.$Message.success('删除成功');
+                }
+              }).catch(e => {
+              this.$Message.info('删除成品失败')
+      })
     },
     //展示方
     showModel() {
@@ -808,7 +840,7 @@ export default {
       }
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
-                  
+
                   if (!res.data.content) {
                     this.Left.tbdata = []
                     this.Left.page.total = 0

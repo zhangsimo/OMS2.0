@@ -35,12 +35,6 @@
               <Option v-for="item in companyListOptions" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
-          <!--        <div class="db mr10">-->
-          <!--          <Button type="warning" class="mr20">-->
-          <!--            <Icon custom="iconfont iconchaxunicon icons"/>-->
-          <!--            查询-->
-          <!--          </Button>-->
-          <!--        </div>-->
         </div>
       </div>
     </section>
@@ -78,37 +72,22 @@
             <vxe-table-column
               field="company"
               title="公司"
-
             ></vxe-table-column>
             <vxe-table-column
               field="guestName"
               title="客户"
-
             ></vxe-table-column>
             <vxe-table-column
               field="serviceId"
               title="预售单号"
-
             ></vxe-table-column>
 
-            <!--          <vxe-table-column-->
-            <!--            field="status"-->
-            <!--            title="状态"-->
-
-            <!--          ></vxe-table-column>-->
             <vxe-table-column field="status" title="状态">
               <template v-slot="{ row }">
                 <span>{{row.status.name}}</span>
               </template>
             </vxe-table-column>
             <vxe-table-column field="orderQty" title="订单数量">
-              <!--            <template v-slot:edit="{ row }">-->
-              <!--              <InputNumber-->
-              <!--                :max="9999"-->
-              <!--                :min="0"-->
-              <!--                v-model="row.num"-->
-              <!--              ></InputNumber>-->
-              <!--            </template>-->
             </vxe-table-column>
             <vxe-table-column title="订单金额" filed="orderAmt">
             </vxe-table-column>
@@ -165,7 +144,6 @@
         </Row>
         <!--        下表格-->
         <div class="bottomTableDate">
-
           <vxe-table
             border
             show-footer
@@ -260,29 +238,6 @@
           {value: 4, name: '已完成'},
 
         ],
-        // // 快速查询数据1
-        // quickArray: [
-        //   {
-        //     value: "本周",
-        //     label: "本周"
-        //   },
-        //   {
-        //     value: "上周",
-        //     label: "上周"
-        //   },
-        //   {
-        //     value: "本月",
-        //     label: "本月"
-        //   },
-        //   {
-        //     value: "上月",
-        //     label: "上月"
-        //   },
-        //   {
-        //     label: "本年",
-        //     value: "本年"
-        //   }
-        // ],
         // 日期数据
         options3: {
           disabledDate(date) {
@@ -319,32 +274,22 @@
       //获取选择状态类型
       getOrderType(v) {
         this.orderType = v
-        // console.log('获取的状态时间', this.orderType)
       },
       //获取选择客户
       getCustomer(v) {
         this.guestId = v
-        // console.log('选择的客户数据999', v)
       },
       //获取选择公司
       getCompany(v) {
         this.company = v
-        // console.log('选择的公司数据55555555555', v)
       },
-      // //快速查询日期
-      // getDateTime(date){
-      //   this.queryDate=date
-      //   console.log('获取的日期呜呜呜呜',date)
-      // },
       //获取时间
       getvalue(date) {
         this.queryTime = date
-        // console.log('获取的时间啊啊', this.queryTime)
       },
       //客户列表
       getAllClient() {
         getClient().then(res => {
-          // console.log('打印出来的客户数据', res)
           if (res.code === 0) {
             this.client = res.data
           }
@@ -378,15 +323,12 @@
       //获取公司信息列表
       getAllCompany() {
         selectCompany({pId: this.$store.state.user.userData.groupId}).then(res => {
-          // console.log('获取到的公司信息3333', res)
           if (res.code === 0) {
             let data = res.data
             let item = this.deepClone(data)
             delete item.childs
-            // console.log(item)
             this.companyListOptions.push(item)
             this.toList(data.childs)
-            // console.log('666666', this.companyListOptions)
           }
         })
       },
@@ -412,20 +354,14 @@
         data.commitTimeEnd = this.queryTime[1] || ''
         data.guestId = this.guestId
         data.company = this.company
-        // data.commitTimeStart=this.queryDate[0] || ''
-        // data.commitTimeEnd=this.queryDate[1] || ''
-        // params=this.query
         data.status = this.orderType
         let page = this.page.num - 1
         let size = this.page.size
         getTopList(size, page, data).then(res => {
-          console.log('打印出来的数据',res)
-
           if (res.code === 0) {
             // res.data.content.map(item => item.status = JSON.parse(item.status))
             this.page.total = res.data.totalElements
             this.TopTableData = res.data.content
-            // console.log('上表格数据',this.TopTableData)
           }
 
         })
@@ -434,9 +370,7 @@
       //获取下侧表格一行选中的数据
       selectTabelData(v) {
         this.currentRow = v
-        console.log('99999', this.currentRow)
         this.BottomTableData = v.row.detailVOList
-        // console.log('下表格数据', this.BottomTableData)
       },
       //计算表格数据
       countAmount(row) {

@@ -5,7 +5,7 @@ import {setToken, getToken, setTagNavListInLocalstorage} from '@/libs/util'
 function titleCase(str) {
   return str.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase())
 }
-
+let loginIsOpen = false
 export default {
   state: {
     username: '',
@@ -14,6 +14,7 @@ export default {
     token: getToken(),
     access: '',
     userData: '', //账号信息
+    userShopName:'',//分店名称
     treePid:'',
     storeId:'',
     supplierId:'',
@@ -50,7 +51,11 @@ export default {
     },
     setManagementId(state , data) {
       state.managementId = data
-    }
+    },
+    setUserShopName(state ,data){
+      state.userShopName = data
+    },
+
   },
   actions: {
     // 登录
@@ -81,7 +86,7 @@ export default {
         logout(state.token).then(() => {
           commit('setToken', '')
           commit('setAccess', [])
-          // localStorage.removeItem('username')
+          localStorage.removeItem('oms2-userList')
           setTagNavListInLocalstorage([])
           resolve()
         }).catch(err => {
@@ -104,16 +109,22 @@ export default {
           resolve()
           return
         }
+        // console.log(loginIsOpen , 788898798)
+        // if(loginIsOpen) {
+        //   resolve()
+        //   return;
+        // }
 
         getUserInfo(username).then(res => {
           const data = res.data
-
-          let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
-          commit('setAccess', access)
-
-          commit('setUserId', data.id)
-          commit('setUserData', data)
-          localStorage.tenantId = data.tenantId
+            let access = data.resourceVOS && data.resourceVOS.map(item => item.name)
+            commit('setAccess', access)
+            commit('setUserId', data.id)
+            commit('setUserData', data)
+            commit('setUserShopName', data.shopName)
+          loginIsOpen = true
+          console.log(123123123131231323233,12313131313123)
+          // localStorage.tenantId = data.tenantId
           resolve(data)
         }).catch(err => {
           reject(err)
@@ -135,5 +146,7 @@ export default {
         })
       })
     }
-  }
+  },
+
+
 }

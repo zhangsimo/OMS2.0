@@ -3,15 +3,16 @@
     <div class="headerBox">
       <span class="mr10">快速查询:</span>
       <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-      <Select v-model="orderType" style="width:100px" class="mr10">
+      <Select v-model="orderType" style="width:100px" class="mr10" @on-change="selectTypetList">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
       <Button type="default"   @click="openQueryModal" class="mr10"><Icon type="ios-more" />更多</Button>
-      <Button type="default" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-      <Button class="mr10 w90" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-      <Button class="mr10"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
-      <Button class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
-      <Button class="mr10"><Icon type="md-close" size="14" /> 作废</Button>
+      <Button type="default" class="mr10 w90" @click="addNew"><Icon type="md-add" size="14" /> 新增</Button>
+      <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusValue != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+      <Button class="mr10" @click="godown" :disabled="formPlan.billStatusValue != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
+      <Button class="mr10" :disabled="formPlan.billStatusValue != 0" @click="selectPlan"> 选择采购订单</Button>
+      <Button class="mr10" @click="setPrint"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+      <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -20,7 +21,7 @@
           <div slot="left" class="demo-split-pane">
             <div>
               <div class="orderList">
-                <h5>销售出库列表</h5>
+                <h5>采购入库列表</h5>
               </div>
               <div class="orderCenter">
                 <vxe-table
@@ -32,114 +33,178 @@
                   highlight-current-row
                   style="width: 1000px"
                   height="593"
-                  :data="tableData">
+                  :data="legtTableData">
                   <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-                  <vxe-table-column field="billStatusId" title="状态">
-                    <template v-slot="{ row }">
-                      <span>{{row.billStatusId.name}}</span>
-                    </template>
-                  </vxe-table-column>
-                  <vxe-table-column field="xx" title="客户"></vxe-table-column>
-                  <vxe-table-column field="xx" title="销售员"></vxe-table-column>
-                  <vxe-table-column field="xx" title="出库单号"></vxe-table-column>
-                  <vxe-table-column field="xx" title="创建日期"></vxe-table-column>
-
-                  <vxe-table-column field="xx" title="创建人"></vxe-table-column>
-                  <vxe-table-column field="xx" title="打印次数"></vxe-table-column>
-                  <vxe-table-column field="xx" title="出库日期"></vxe-table-column>
-                  <vxe-table-column field="xx" title="出库人"></vxe-table-column>
+                  <vxe-table-column field="billStatusName" title="状态"></vxe-table-column>
+                  <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
+                  <vxe-table-column field="orderMan" title="采购员"></vxe-table-column>
+                  <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
+                  <vxe-table-column field="createName" title="创建人"></vxe-table-column>
+                  <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
+                  <vxe-table-column field="print" title="打印次数"></vxe-table-column>
+                  <vxe-table-column field="orderDate" title="入库日期"></vxe-table-column>
+                  <vxe-table-column field="orderMan" title="入库人"></vxe-table-column>
                 </vxe-table>
               </div>
-              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
+              <Page :total="leftPage.total" :page-size="leftPage.size" size="small" :current="leftPage.num" show-sizer show-total class-name="page-con"
                     @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
           </div>
+<!--          右侧详情数据显示-->
           <div slot="right" class="demo-split-pane">
-            <market-right ref="right"></market-right>
+            <div style="height: 100%;">
+              <Form inline  ref="formPlan" :model="formPlan" :rules="ruleValidate"  :label-width="100">
+                <div class="pane-made-hd">
+                  <span class="titler mr5">本年采购总额:</span>
+                  <span class="titler mr10">{{ allMoney |priceFilters}}</span>
+                </div>
+                <div class="clearfix purchase" ref="planForm">
+                  <FormItem label="供应商：" prop="guestId">
+                    <Row style="width: 310px">
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                        <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                      </Select>
+                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                        <Icon type="md-checkmark"/>
+                      </Button>
+                    </Row>
+                  </FormItem>
+                  <FormItem label="采购员：" prop="orderMan">
+                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
+                  </FormItem>
+                  <FormItem label="订货日期：" prop="orderDate">
+                    <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss"  v-model="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></DatePicker>
+                  </FormItem>
+                  <FormItem label="入库单号：">
+                    <Input class="w160" v-model="formPlan.serviceId" disabled></Input>
+                  </FormItem>
+                  <FormItem label="票据类型:" prop="billTypeId" props="billTypeId" >
+                    <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @on-change="getBillType">
+                      <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
+                    </Select>
+                  </FormItem>
+                  <FormItem label="结算方式：" prop="settleTypeId" >
+                    <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                      <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
+                    </Select>
+                  </FormItem>
+                  <FormItem label="备注：">
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
+                  </FormItem>
+                  <FormItem label="往来单号：" >
+                    <Input class="w210" v-model="formPlan.code" disabled></Input>
+                  </FormItem>
+                  <FormItem label="交货仓库：" prop="storeId">
+                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                      <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select>
+                  </FormItem>
+                </div>
+              <div class="flex plan-cz-btn" ref="planBtn">
+                <div class="clearfix pt10 pb10">
+                  <div class="fl mb5">
+                    <Button :disabled="formPlan.billStatusValue != 0" size="small" class="mr10" @click="addMountings">
+                      <Icon type="md-add"/>
+                      添加配件
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Button @click="delect" :disabled="formPlan.billStatusValue != 0" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx','xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload ='beforeUpload'
+                    >
+                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 || !formPlan.code" type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入</Button>
+                    </Upload>
+                  </div>
+                </div>
+              </div>
+              <div class="tableBox">
+                <vxe-table
+                  border
+                  align="center"
+                  size="mini"
+                  resizable
+                  stripe
+                  ref="xTable"
+                  show-footer
+                  :footer-method="footerMethod"
+                  :edit-rules="validRules"
+                  showOverflow="true"
+                  height="425"
+                  @select-change="selectSameList"
+                  @select-all = 'selectAllList'
+                  :data="formPlan.details"
+                  style="width: 2000px"
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
+                >
+                  <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+                  <vxe-table-column type="checkbox" width="50"></vxe-table-column>
+                  <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+                  <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+                  <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+                  <vxe-table-column field="orderPrice" title="单价" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+                  <vxe-table-column  title="金额">
+                    <template v-slot="{ row }">
+                      <span>{{ countAmount(row) |priceFilters }} </span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="remark" title="备注"></vxe-table-column>
+                  <vxe-table-column title="不含税单价" >
+                    <template v-slot="{row}">
+                      <span>{{countTaxRate(row) |priceFilters}}</span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column  title="不含税金额">
+                    <template v-slot="{row}">
+                      <span>{{countTaxRateAll(row) |priceFilters}}</span>
+                    </template>
+                  </vxe-table-column>
+                  <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
+                  <vxe-table-column field="unit" title="单位"></vxe-table-column>
+                  <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+                  <vxe-table-column field="spec" title="规格"></vxe-table-column>
+<!--                  <vxe-table-column field="name" title="已验收数量"></vxe-table-column>-->
+                </vxe-table>
+              </div>
+              </Form>
+
+            </div>
+
           </div>
         </Split>
       </div>
       <!--        更多搜索-->
-      <More-query ref="morequeryModal"></More-query>
+      <More-query ref="morequeryModal" @getSureQuery="moreQuery" :data="moreQueryList"></More-query>
       <!--        打印-->
-      <!--      <Print-show ref="printBox"></Print-show>-->
+            <Print-show ref="printBox" :data="formPlan"></Print-show>
+<!--      添加配件-->
+      <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+<!--      费用登记-->
+      <fee-registration ref="feeRegistration" :state='selectRowState' :serviceId="formPlan.serviceId"></fee-registration>
+      <!-- 选择采购计划单 -->
+      <procurement-modal
+        ref="procurementModal"
+        :guestId="formPlan.guestId"
+        :clientList ='client'
+        @getPlanOrder="getPlanOrder"
+      ></procurement-modal>
     </div>
   </div>
 </template>
 
-<script>
-    import QuickDate from '../../../components/getDate/dateget' //日期查询
-    import MoreQuery from './moreQuery'  // 更多窗口
-    import MarketRight from "./marketRight";
-    import {getLeftList} from '@/api/business/procurementAndStorage'
-    export default {
-        name: "market",
-        components:{
-            QuickDate,
-            MoreQuery,
-            MarketRight
-        },
-        data(){
-            return {
-                advanced: false, //更多模块的弹框
-                orderType:6,
-                typeList:[
-                    {value:6,name:'全部'},
-                    {value:0,name:'草稿'},
-                    {value:1,name:'已提交'},
-                    {value:2,name:'待拣货'},
-                    {value:3,name:'待出库'},
-                    {value:4,name:'已出库'},
-                    {value:5,name:'已作废'},
-                ],
-                split1: 0.2,
-                queryTime:'',//快速查询时间
-                page:{
-                    total:0,
-                    size:10,
-                    num:1
-                }, //左侧分页
-                tableData:[] //左侧数组
+<script src="./index.js">
 
-            }
-        },
-        methods:{
-            //获取日期
-            getDataQuick(v){
-                // console.log(v)
-            },
-            //获取时间
-            getvalue(date){
-                this.queryTime = date
-            },
-            //打印表格
-            printTable(){
-                // this.$refs.printBox.openModal()
-            },
-            // 打开更多搜索
-            openQueryModal(){
-                this.$refs.morequeryModal.openModal()
-            },
-
-            //左侧数据
-          // 左侧表格数据
-          async  getLeftLists(){
-              let data ={}
-               let res = await getLeftList( data )
-              if(res.code === 0) {
-                  console.log(res, 777)
-              }
-            },
-            //切换页面
-            selectNum(){},
-            //切换页数
-            selectPage(){},
-            //点击获取当前信息
-            clickOnesList(data){
-
-            }
-        }
-    }
 </script>
 
 <style scoped lang="less">
@@ -175,5 +240,43 @@
   .orderCenter{
     overflow: hidden;
     overflow-x: scroll;
+  }
+  .purchase {
+    padding-top: 10px;
+    padding-left: 10px;
+    border-bottom: 1px #e8eaec solid;
+
+  }
+
+  .pane-made-hd {
+    line-height: 30px;
+    border-bottom: 1px #e8eaec solid;
+    background-color: #f8f8f8;
+    padding-left: 15px
+
+  }
+
+  .plan-cz-btn {
+    justify-content: space-between;
+    padding: 10px 15px 10px;
+    align-items: center;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .tableBox {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    overflow-x: scroll;
+  }
+</style>
+<style scoped>
+  .purchase >>> .ivu-form-item {
+    margin-bottom: 10px;
   }
 </style>

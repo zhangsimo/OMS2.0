@@ -1,5 +1,6 @@
 import api from '_conf/url'
 import axios from '@/libs/api.request'
+import Cookies from 'js-cookie';
 
 //获取供应商分类
 export function getfindTypeList(data) {
@@ -13,6 +14,15 @@ export function getfindTypeList(data) {
 export function getSupplierList(data) {
   return axios.request({
     url: `${api.wmsApi}/guest/findAllSupplier`,
+    method: 'post',
+    data
+  })
+}
+// 获取供应商列表
+// /guest/findForAllot
+export function findForAllot(data) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findForAllot`,
     method: 'post',
     data
   })
@@ -47,11 +57,12 @@ export function saveCommit(data) {
 
 
 //作废
-export function saveObsolete(data) {
+export function saveObsolete(id) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/saveObsolete`,
     method: 'post',
-    data
+    params: { id },
+    data: {},
   })
 }
 
@@ -65,11 +76,22 @@ export function saveReverse(data) {
 }
 
 //获取采购计划单列表
-export function findPageByDynamicQuery(data) {
+export function findPageByDynamicQuery(params, data) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/findPageByDynamicQuery`,
     method: 'post',
-    data
+    params,
+    data,
+  })
+}
+
+//获取采购计划单列表 - 高级
+export function queryByConditions(params, data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/queryByConditions`,
+    method: 'post',
+    params,
+    data,
   })
 }
 
@@ -99,3 +121,21 @@ export function getCarPartsTwo(params) {
     params
   })
 }
+
+// 导出
+export function exportXls(id) {
+  let token = Cookies.get('token');
+  return `${api.omsOrder}/pchsPlanMain/export?id=${id}&access_token=${token}`
+}
+
+// 导入
+export function importXls(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/importExcel`,
+    method: 'post',
+    data
+  })
+}
+
+//
+export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;

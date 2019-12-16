@@ -16,3 +16,71 @@ export function getClient () {
 
   })
 }
+
+//交货仓库list
+export function getWarehouseList (params) {
+  return axios.request({
+    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    method: 'get',
+    params
+  })
+}
+
+//作废
+
+export function getDelete (id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/invalid?id=${id}`,
+    method: 'get',
+  })
+}
+//打印
+export function getPrint (id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/print?id=${id}`,
+    method: 'get',
+  })
+}
+//退货入库
+
+export function returnWareHouse(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/enterStock?id=${id}`,
+    method: 'get',
+  })
+}
+//删除配件
+export function getDeleteList (data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/deleteAll`,
+    method: 'post',
+    data
+  })
+}
+//保存
+export function getSave(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}
+
+//提交
+export function getSubmit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/commitOrder`,
+    method: 'post',
+    data
+  })
+}
+
+//查询出库单列表
+
+export function getoutList (num,page,data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsReturnOrdeMain/findBySellOutMain?page=${num}&size=${page}`,
+    method: 'post',
+    data
+  })
+ }

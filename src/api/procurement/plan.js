@@ -48,6 +48,25 @@ export function queryByConditions(params, data = {}) {
   });
 }
 
+// 国际采购主数据-分页查询
+export function findPageByInternationDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+}
+// 国际采购主数据-高级查询
+export function queryByInternationConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+}
+
 // 采购计划单
 export function getPchsPlan(params, data = {}) {
   return axios.request({
@@ -58,7 +77,7 @@ export function getPchsPlan(params, data = {}) {
   });
 }
 
-// 保存草稿
+// 保存草稿-采购计划单
 export function saveDraft(data) {
   return axios.request({
     url: `${api.omsOrder}/pchsOrderPlan/saveDraft`,
@@ -67,12 +86,48 @@ export function saveDraft(data) {
   });
 }
 
-// 提交
+// 提交-采购计划单
 export function saveCommit(data) {
   return axios.request({
     url: `${api.omsOrder}/pchsOrderPlan/saveCommit`,
     method: "post",
     data
+  });
+}
+
+// 作废-采购计划单
+export function saveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderPlan/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+}
+
+// 保存草稿-国际
+export function saveInterDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/saveDraft`,
+    method: "post",
+    data
+  });
+}
+
+// 提交-国际
+export function saveInterCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/saveCommit`,
+    method: "post",
+    data
+  });
+}
+
+// 作废-国际
+export function saveInterObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/saveObsolete`,
+    method: "post",
+    params: { id }
   });
 }
 
@@ -82,15 +137,6 @@ export function delPchsOrderDetail(data) {
     url: `${api.omsOrder}/pchsOrderDetail/delete`,
     method: "post",
     data
-  });
-}
-
-// 作废
-export function saveObsolete(id) {
-  return axios.request({
-    url: `${api.omsOrder}/pchsOrderPlan/saveObsolete`,
-    method: "post",
-    params: { id }
   });
 }
 
@@ -166,5 +212,134 @@ export function saveFee(data) {
     url: `${api.omsSettle}/receivable/payable/saveOrUpdate`,
     method: "post",
     data,
+  });
+}
+//临时采购导入配件地址
+export const getup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
+
+//临时采购主数据-分页查询
+export function temporaryFindPageByDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+};
+//临时采购主数据-高级查询
+export function temporaryQueryByConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+};
+// 临时采购保存草稿
+export function temporarySaveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveDraft`,
+    method: "post",
+    data
+  });
+};
+// 临时采购提交
+export function temporarySaveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveCommit`,
+    method: "post",
+    data
+  });
+};
+// 临时采购作废
+export function temporarySaveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+};
+
+
+//外采主数据-分页查询
+export function outsideFindPageByDynamicQuery(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/findPageByDynamicQuery`,
+    method: "post",
+    params,
+    data
+  });
+};
+//外采--导入配件地址
+export const outgetup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
+//外采购主数据-高级查询
+export function outsideQueryByConditions(params, data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/queryByConditions`,
+    method: "post",
+    params,
+    data
+  });
+};
+// 外采购--保存草稿
+export function outsideSaveDraft(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveDraft`,
+    method: "post",
+    data
+  });
+};
+// 外采购--提交
+export function outsideSaveCommit(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveCommit`,
+    method: "post",
+    data
+  });
+};
+// 外采购--作废
+export function outsideSaveObsolete(id) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderExternal/saveObsolete`,
+    method: "post",
+    params: { id }
+  });
+};
+// 计算金额
+export function calculatAmt(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderInternation/calculatAmt`,
+    method: "post",
+    data,
+  });
+}
+
+
+
+// 采购计划
+// 计划调整查询
+export function queryModifyOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/queryModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整保存
+export function saveModifyOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyOrder`,
+    method: "post",
+    data
+  });
+}
+
+// 计划调整全部调整
+export function saveModifyAllOrderPlan(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyAllOrder`,
+    method: "post",
+    data
   });
 }

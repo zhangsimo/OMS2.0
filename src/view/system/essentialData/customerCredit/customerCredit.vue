@@ -401,10 +401,7 @@
             this.Limitstate = JSON.parse(row.auditSign).value
             this.rowMessage = row
              this.creaditList = this.rowMessage
-            console.log(this.creaditList,'rowMessage')
-            this.researchStatus = JSON.parse(row.researchStatus).value
-            // console.log(this.researchStatus)
-            console.log(this.rowMessage)
+            this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
             this.credit()
           },
             selectPage(size){
@@ -571,9 +568,7 @@
             guestAdjust(dataa).then(res => {
                 if(res.code === 0){
                     this.applicationArr = res.data
-                    this.payable = res.data.payable
-                    console.log(this.payable,"应收应付")
-                  console.log(this.applicationArr,"申请增加信用额度")
+                    this.payable = res.data.payable||{}
                 }
             })
           },
@@ -588,14 +583,14 @@
             data.tempQuota = this.creaditList.tempQuota
             data.tempStart = this.creaditList.tempStart
             data.tempEnd = this.creaditList.tempEnd
-            data.payableAmt = this.payable.payableAmt
+            data.payableAmt = this.payable.payableAmt||0
             data.tgrade = this.creaditList.tgrade
-            data.thirtyAmt = this.payable.thirtyAmt
-            data.sixtyAmt = this.payable.sixtyAmt
-            data.moreSixtyAmt = this.payable.moreSixtyAmt
+            data.thirtyAmt = this.payable.thirtyAmt||0
+            data.sixtyAmt = this.payable.sixtyAmt||0
+            data.moreSixtyAmt = this.payable.moreSixtyAmt||0
             data.afterAdjustQuota = this.creaditList.totalSum
             data.quotaReason = this.creaditList.quotaReason
-            data.receivableAmt = this.payable.receivableAmt
+            data.receivableAmt = this.payable.receivableAmt||0
             data.totalQuota = (+this.creaditList.applyQuota+this.creaditList.creditLimit) + (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit)
             data.addTotalQuota = this.creaditList.tototo
             data.adjustType = 0

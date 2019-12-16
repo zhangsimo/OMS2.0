@@ -34,6 +34,7 @@
                 getSupplierTreeList().then( res => {
                     if (res.code == 0){
                         this.list = res.data
+                        console.log(res.data, 999)
                         let leverOne = res.data.filter( item => item.lever ==1)
                         leverOne.map( item => {
                             item.children =[]

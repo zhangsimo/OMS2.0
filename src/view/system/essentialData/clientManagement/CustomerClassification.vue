@@ -68,8 +68,6 @@
                 changeadd:true,
                 title:'添加客户分类',
                 modalShow:false,
-                treeList:[],
-                list:[],
                 newOne:{},
                 selectchangeOne:'' //下拉框
             }

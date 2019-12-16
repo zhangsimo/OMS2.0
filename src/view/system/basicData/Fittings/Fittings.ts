@@ -38,10 +38,10 @@ export default class Fittings extends Vue {
       value: "2",
       label: "车型"
     },
-    {
-      value: "3",
-      label: "拼音"
-    }
+    // {
+    //   value: "3",
+    //   label: "拼音"
+    // }
   ];
   // cloud表头字段
   tcolumns: Tableth = [
@@ -493,7 +493,7 @@ export default class Fittings extends Vue {
           data.adapterCarModels = [qurry];
           break;
         case "3":
-          data.keyWord = qurry;
+          data.pinyin = qurry;
           break;
         default:
           break;
@@ -580,11 +580,13 @@ export default class Fittings extends Vue {
     }
     if(res.code == 0) {
       self.$Message.success(success);
-    }
-    if(this.isSys) {
-      this.initCloudPartInfo();
-    } else {
-      this.initLocalPartInfo();
+      const localTable:any = this.$refs.localTable;
+      localTable.clearCurrentRow();
+      if(this.isSys) {
+        this.initCloudPartInfo();
+      } else {
+        this.initLocalPartInfo();
+      }
     }
   }
   // 导入
@@ -608,11 +610,13 @@ export default class Fittings extends Vue {
     }
     if(res.code == 0) {
       self.$Message.success(success);
-    }
-    if(this.isSys) {
-      this.initCloudPartInfo();
-    } else {
-      this.initLocalPartInfo();
+      const localTable:any = this.$refs.localTable;
+      localTable.clearCurrentRow();
+      if(this.isSys) {
+        this.initCloudPartInfo();
+      } else {
+        this.initLocalPartInfo();
+      }
     }
   }
   // 单选行

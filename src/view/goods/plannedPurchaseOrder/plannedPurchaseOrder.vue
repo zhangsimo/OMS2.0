@@ -56,7 +56,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
@@ -126,6 +126,7 @@
                           v-model="formPlanmain.guest"
                           placeholder="请选择供应商"
                           :disabled="isInput"
+                          readonly
                       /></Col>
                       <Col span="5"
                         ><Button
@@ -146,6 +147,7 @@
                       placeholder="请输入采购员"
                       v-model="formPlanmain.orderMan"
                       :disabled="isInput"
+                      readonly
                     />
                   </FormItem>
                   <FormItem

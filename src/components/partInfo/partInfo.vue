@@ -1,7 +1,7 @@
 <template>
   <div>
     <Modal v-model="proModal" title="配件资料" width="700">
-      <div class="pb10 tr" v-if="!isAddPart">
+      <div class="pb10 tr" v-if="!isAddPart || isSellDis">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
@@ -32,7 +32,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="名称：" prop="name">
-                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" ></Input>
+                  <Input @on-click="showName" icon="ios-more" v-model="formValidate.name" readonly="readonly"></Input>
                 </FormItem>
               </Col>
             </Row>
@@ -144,7 +144,7 @@
             <!--<Button type='default' @click='proModal = false'>取消</Button>-->
           <!--</div>-->
         </TabPane>
-        <TabPane label="包装规格" tab="partInfoTab">
+        <TabPane label="包装规格" tab="partInfoTab" v-if="showSpe">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
@@ -236,7 +236,9 @@
   export default {
 		name: "partInfo",
     props:{
-		  isAddPart:false
+      isAddPart:false,
+      isSellDis: false,
+      showSpe:true,//是否显示包装规格
     },
     components: {SearchPartName},
     mixins:[mixPartInfo],

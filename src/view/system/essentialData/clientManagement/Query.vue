@@ -8,7 +8,7 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='客户简称:' >
-            <Input v-model='data.shortName' style="width: 180px" ></Input>
+            <Input v-model='data.shortName' style="width: 180px" :maxlength="10"></Input>
           </FormItem>
         </div>
       </div>
@@ -18,7 +18,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='联系人:' >
-            <Input v-model='data.contactor' style="width: 180px" ></Input>
+            <Input v-model='data.contactor' style="width: 180px"  :maxlength="8"></Input>
           </FormItem>
           <FormItem label='会员等级:' >
             <Input  v-model='data.memLevelId' style="width: 180px" ></Input>

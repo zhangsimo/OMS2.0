@@ -36,7 +36,7 @@
         </div>
         <div slot='footer'>
           <Button type='primary' @click="Determined">确定</Button>
-          <Button type='default' >取消</Button>
+          <Button type='default' @click="cancel">取消</Button>
         </div>
       </Modal>
 
@@ -102,6 +102,10 @@
         addSuppler(){
           this.$refs.selectSupplier.init()
         },
+        //取消
+        cancel(){
+          this.moreAndMore = false
+        }
       }
 
     }

@@ -4,8 +4,8 @@
         <div class="oper-top flex">
           <div class="wlf">
             <div class="db">
-              <Button class="mr10 w90" @click="newly"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>
-              <Button class="mr10 w90" @click="amend"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>
+              <!--<Button class="mr10 w90" @click="newly"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>-->
+              <!--<Button class="mr10 w90" @click="amend"><span class="center"><Icon custom="iconfont iconbianjixiugaiicon icons" />修改</span></Button>-->
               <Button class="mr10 w90" v-if="this.STATE === 1" @click="Start"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用</span></Button>
               <Button class="mr10 w90" v-else-if="this.STATE === 0" @click="forbidden"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用</span></Button>
               <Button class="mr10 w90" v-else><span class="center">未选中</span></Button>

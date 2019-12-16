@@ -73,6 +73,7 @@ export default class PriceManage extends Vue {
     /**==============左侧============= */
     // 获取表格
     private async getLevelList() {
+        this.level.tbdata = [{ name: '统一售价', readonly: true }];
         let res = await api.sellPsList();
         if (res.code === 0) {
             res.data.forEach(el => {
@@ -136,6 +137,39 @@ export default class PriceManage extends Vue {
             this.part.page.total = res.data.totalElements;
         }
     }
+    // rest
+    private restTbdata() {
+        this.customer = {
+            pinyin: "", //客户拼音
+            fullname: "", //客户全程
+            // 表头
+            // 表身
+            tbdata: new Array(),
+            // 表格加载
+            loading: false,
+            // 分页
+            page: {
+                num: 1,
+                total: 0,
+                size: 10
+            }
+        }
+        this.part = {
+            pinyin: "", // 拼音
+            code: "", // 编码
+            fullname: "", // 名称
+            // 表身
+            tbdata: new Array(),
+            // 表格加载
+            loading: false,
+            // 分页
+            page: {
+                num: 1,
+                total: 0,
+                size: 10
+            }
+        };
+    }
     // 保存级别
     private async save() {
         let data: any = {
@@ -164,6 +198,7 @@ export default class PriceManage extends Vue {
         if (res.code === 0) {
             this.$Message.success('保存成功');
             this.getLevelList();
+            this.restTbdata();
         }
     }
     // 新增
@@ -201,6 +236,7 @@ export default class PriceManage extends Vue {
             total: 0,
             size: 10
         };
+        if(row.isNew) return false;
         if(!this.curronly) {
             this.getCus();
         }

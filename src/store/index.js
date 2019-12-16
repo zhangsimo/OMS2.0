@@ -6,6 +6,7 @@ import app from './module/app'
 import common from './module/common'
 import getters from './getters.js'
 import dataList from './module/dataList'
+import createPersistedState from "vuex-persistedstate"
 
 Vue.use(Vuex)
 
@@ -28,5 +29,8 @@ export default new Vuex.Store({
     dataList,
     ...moduleStores,
   },
-  getters
+  getters,
+  plugins: [createPersistedState({
+    storage: window.sessionStorage
+  })]
 })

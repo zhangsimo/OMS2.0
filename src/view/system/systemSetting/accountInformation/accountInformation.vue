@@ -137,6 +137,7 @@
             // this.versions = res.data
             this.basicModule = res.data.menus
             this.UpgradeModule = res.data.products
+            console.log('我是贩夫贩妇',this.UpgradeModule)
             // this.hslArray = this.getHslArray();
           })
         },

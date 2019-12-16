@@ -56,7 +56,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId != 0"
+            <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
@@ -126,6 +126,7 @@
                           v-model="formPlanmain.guest"
                           placeholder="请选择供应商"
                           :disabled="isInput"
+                          readonly
                       /></Col>
                       <Col span="5"
                         ><Button
@@ -146,6 +147,7 @@
                       placeholder="请输入采购员"
                       v-model="formPlanmain.orderMan"
                       :disabled="isInput"
+                      readonly
                     />
                   </FormItem>
                   <FormItem
@@ -300,6 +302,15 @@
                       >采购金额填写</Button
                     >
                   </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="showModel('apportionmentExpenses')"
+                      :disabled="isInput"
+                      >分摊费用填写</Button
+                    >
+                  </div>
                 </div>
               </div>
               <vxe-table
@@ -356,8 +367,49 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
-                  field="orderPrice"
-                  title="采购单价"
+                  field="fcPrice"
+                  title="采购裸价(外币)"
+                  width="120"
+                >
+                  <template v-slot:edit="{ row }">
+                    {{feeform.exchangeRate == 0 ? '0.00' : (row.rmbPrice / feeform.exchangeRate) | priceFilters }}
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column
+                  field="rmbPrice"
+                  title="采购裸价(人民币)"
+                  :edit-render="{ name: 'input' }"
+                  width="130"
+                >
+                  <template v-slot:edit="{ row }">
+                    <InputNumber
+                      :min="0"
+                      v-model="row.rmbPrice"
+                      :precision="2"
+                    ></InputNumber>
+                  </template>
+                  <template v-slot="{ row }">
+                    {{ row.rmbPrice | priceFilters }}
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column
+                  field="tariffAmt"
+                  title="关税费"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="transportAmt"
+                  title="运杂费"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="vatAmt"
+                  title="增值税"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="otherAmt"
+                  title="其他费用"
                   :edit-render="{ name: 'input' }"
                   width="120"
                 >
@@ -365,17 +417,26 @@
                     <InputNumber
                       :max="999999"
                       :min="0"
-                      v-model="row.orderPrice"
+                      v-model="row.otherAmt"
                       :precision="2"
                     ></InputNumber>
                   </template>
                   <template v-slot="{ row }">
-                    {{ row.orderPrice | priceFilters }}
+                    {{ row.otherAmt | priceFilters }}
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column
+                  field="orderPrice"
+                  title="采购单价"
+                  width="120"
+                >
+                  <template v-slot:default="{ row }">
+                    {{ (row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) | priceFilters }}
                   </template>
                 </vxe-table-column>
                 <vxe-table-column title="采购金额" filed="orderAmt" width="120">
-                  <template v-slot="{ row }">
-                    {{ (row.orderPrice * row.orderQty) | priceFilters }}
+                  <template v-slot:default="{ row }">
+                    {{ ((row.rmbPrice + row.tariffAmt + row.transportAmt + row.vatAmt + row.otherAmt) * row.orderQty) | priceFilters }}
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -465,6 +526,8 @@
     <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
+    <!-- 分摊费用 -->
+    <apportionment-expenses ref="apportionmentExpenses" :currencies="currencyMap" @currencyForm="getFeeForm"></apportionment-expenses>
   </div>
 </template>
 

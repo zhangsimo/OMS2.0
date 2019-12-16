@@ -322,7 +322,7 @@
             //打开新增客户
             addClient(){
                 this.clientList ={}
-               this.clientDataShow = true
+                this.clientDataShow = true
             },
             //更多搜索确认
             querySure(){

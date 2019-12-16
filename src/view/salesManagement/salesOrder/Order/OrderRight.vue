@@ -32,12 +32,12 @@
             </FormItem>
             <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
-                <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
+                <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
               </Select>
             </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
           <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
-            <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
+            <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
           </Select>
         </FormItem>
         <FormItem label="备注：">
@@ -252,7 +252,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 if (!value && value != '0') {
                     callback(new Error("最多保留4位小数"));
                 } else {
-                    const reg = /^[+-]?\d+\.\d{0,4}$/i
+                    const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
                     if (reg.test(value)) {
                         callback();
                     } else {
@@ -487,12 +487,19 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             },
             // 上传成功函数
             onSuccess (response) {
-                if(response.code != 0 ){
-                    this.$Message.error(response.message)
+                if(response.code == 0 ){
+                    if (response.data.list && response.data.list.length > 0) {
+                        this.warning(response.data.list[0])
+                    }
                 }else {
-                    this.$Message.success(response.message)
+                    this.$Message.error('上传失败')
                 }
-                this.getList()
+            },
+            warning (nodesc) {
+                this.$Notice.warning({
+                    title: '上传错误信息',
+                    desc: nodesc
+                });
             },
             //上传之前清空
             beforeUpload(){
@@ -508,6 +515,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             addMountings(){
                 this.$refs.selectPartCom.init()
             },
+            //打开批次配件框
             openBarchModal(){
                 this.$refs.barch.init()
             },
@@ -567,6 +575,9 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 this.$refs.formPlan.validate(async (valid) => {
                     if (valid) {
                         let data ={}
+                        val.map( item => {
+                            item.isMarkBatch = 1
+                        })
                         data = this.formPlan
                         data.detailList = val
                         let res = await  getAccessories(data)
@@ -593,6 +604,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             //获取活动内的数据
           async  activiyList(val){
                 let data ={}
+                val.isMarkActivity = 1
                 data = this.formPlan
                 data.detailList = [val]
                 let res = await  getAccessories(data)
@@ -618,7 +630,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                                 return this.$message.error('可用余额不足')
                             }
 
-                            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
+                            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
                               let res = await getSave(this.formPlan)
                               if(res.code === 0){
                                   this.$Message.success('保存成功');
@@ -700,7 +712,11 @@ import {conversionList} from '@/components/changeWbList/changewblist'
           async  getGodown(val){
                 let data ={}
                 data = this.formPlan
+                val.map( item => {
+                    item.isMarkBatch = 1
+                })
                 data.detailList = val.details
+                data.sign = 1
                 let res = await  getAccessories(data)
                 if(res.code === 0){
                     this.getList()

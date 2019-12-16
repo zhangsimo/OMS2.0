@@ -455,9 +455,10 @@ export default class Fittings extends Vue {
       return false
     }
     let data:any = []
-    let time:any = self.expireDate +' '+ '23:59:59'
+    let pastTime:any = self.expireDate +' '+ '23:59:59'
     self.currRow.forEach( item => {
-      data.push({pastTime: time,partId: item.id , partInnerId:item.code ,partCode: item.partCode , partBrandCode: item.partBrandCode})
+       item.passTime = pastTime
+      data.push(item)
     })
     let res:any = await getSaveNewTight(data)
       if(res.code == 0){

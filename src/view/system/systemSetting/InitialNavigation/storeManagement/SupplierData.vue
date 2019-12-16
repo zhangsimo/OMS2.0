@@ -1,7 +1,7 @@
 <template>
     <div style="height:100%">
       <div class="header-box">
-        <Input v-model="fasttipsTitle"  style="width: 150px" class="mr10"/>
+        <Input v-model="fasttipsTitle"  style="width: 150px" class="mr10" placeholder="请输入公司名称"/>
         <Button type="warning" class="w90 mr10" @click="queryList">
               <span class="center">
                 <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -46,7 +46,7 @@
         ></Page>
       </div>
 <!--      客户资料-->
-      <Modal v-model="clientDataShow" title="供应商资料资料"  width="850" >
+      <Modal v-model="clientDataShow" title="供应商资料"  width="850" >
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
         <div slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>
@@ -59,8 +59,10 @@
 
 <script>
   import ClientData from './ClientData'
-  import {getSupplierformation , getNewSupplier} from '@/api/system/systemSetting/storeManagement'
+  import {getSupplierformation , getNewSupplier , setDisabled} from '@/api/system/systemSetting/storeManagement'
   import {area} from '@/api/lease/registerApi'
+  import moment from 'moment'
+
 
 
   export default {
@@ -73,6 +75,7 @@
       },
         data(){
             return {
+                moment: moment,
                 fasttipsTitle:'',//快速查询内容
                 moreQueryOne:{},
                 loading: true,
@@ -123,8 +126,8 @@
                         key: 'isDisabled',
                         render:(h ,params) => {
                          let txt=''
-                            params.row.isDisabled == 1 ? txt='是' : txt='否'
-                        return h('sapn' ,{},txt)
+                            params.row.isDisabled == 1 ? txt='禁用' : txt='启用'
+                        return h('span' ,{},txt)
                         }
                     },
                     {title: '开店日期',
@@ -157,83 +160,85 @@
               return this.$store.state.user.treePid;
           }
       },
-        methods:{
+        methods: {
             //获取全部表格数据
-            async getlist(){
-                this.loading =true
+            async getlist() {
+                this.loading = true
                 let data = {}
                 data.page = this.page.num - 1
                 data.size = this.page.size
                 data.name = this.fasttipsTitle
-                if (this.Pid.lever == 1){
-                  data.supplierTypeFirst = this.Pid.id
-                }else{
-                  data.supplierTypeSecond = this.Pid.id
+                if (this.Pid.parentId == 0) {
+                    data.supplierTypeFirst = this.Pid.id
+                } else {
+                    data.supplierTypeSecond = this.Pid.id
                 }
-         let res = await getSupplierformation(data)
-                if (res.code == 0){
+                let res = await getSupplierformation(data)
+                if (res.code == 0) {
                     this.loading = false
                     this.managementList = res.data.content
                     this.page.total = res.data.totalElements
                 }
             },
             //获取地址
-            getAdress(){
+            getAdress() {
                 area().then(res => {
-                    if(res.code == 0){
+                    if (res.code == 0) {
                         this.provinceArr = res.data
                     }
                 })
             },
             //分页
-            changePage(data){
+            changePage(data) {
                 this.page.num = data
-                    this.getlist()
+                this.getlist()
             },
             //条数
-            changeSize( data){
+            changeSize(data) {
                 this.page.num = 1
                 this.page.size = data
-                    this.getlist()
+                this.getlist()
             },
             //搜索
-            queryList(){
+            queryList() {
+                this.Pid = ''
                 this.getlist()
             },
             //选中一条信息
-            pitchSupplier(currentRow){
+            pitchSupplier(currentRow) {
                 this.pitchSupplierOne = currentRow
             },
             //修改状态禁用
-            async   changeDisabled(){
-                this.pitchSupplierOne.isDisabled == 0? this.pitchSupplierOne.isDisabled =1 : this.pitchSupplierOne.isDisabled =0
-                let res = await  getNewSupplier(this.pitchSupplierOne)
-                if(res.code == 0){
+            async changeDisabled() {
+                if (!this.pitchSupplierOne.id) return this.$message.error('请至少选择一条数据')
+                let data = {}
+                data.id = this.pitchSupplierOne.id
+                let res = await setDisabled(this.pitchSupplierOne)
+                if (res.code == 0) {
                     this.getlist()
                 }
 
             },
-            addClient(){
-                this.clientList ={}
-               this.clientDataShow = true
+            addClient() {
+                this.clientList = {}
+                this.clientDataShow = true
             },
             //确认添加一条信息
-            addNewSupplier(){
-                // this.$refs.child.handleSubmit( async () => {
-                //     let data = this.clientList
-                //     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
-                //     data.isClient ? data.isClient =1 : data.isClient = 0
-                //     console.log(data)
-                //     let  d = new Date(data.Time);
-                //          d=d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate()
-                //          data.Time = d
-                //
-                //     let res = await  getNewSupplier(data)
-                //     if(res.code == 0){
-                //         this.getlist()
-                //     }
-                //     this.clientDataShow = false
-                // })
+            addNewSupplier() {
+                this.$refs.child.handleSubmit(async () => {
+                    let data = this.clientList
+
+                    data.softOpenDate = this.changeTime(data.softOpenDate)
+                    let res = await getNewSupplier(data)
+                    if (res.code == 0) {
+                        this.$message.success('保存成功')
+                        this.getlist()
+                        this.clientDataShow = false
+                    }
+                })
+            },
+            changeTime(val){
+              return  moment(val).format('YYYY-MM-DD HH:mm:ss')
             },
             //修改客户资料
             changeClient(){
@@ -241,8 +246,7 @@
                     this.$Message.error('至少选项一条地址')
                     return false
                 }
-                this.pitchSupplierOne.isDisabled == 1? this.pitchSupplierOne.isDisabled = true : this.pitchSupplierOne.isDisabled = false
-                this.pitchSupplierOne.isClient == 1? this.pitchSupplierOne.isClient = true : this.pitchSupplierOne.isClient = false
+
                 this.clientList =this.pitchSupplierOne
                 this.clientDataShow = true
             }

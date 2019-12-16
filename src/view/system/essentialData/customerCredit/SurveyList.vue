@@ -1,5 +1,5 @@
 <template>
-    <Form :label-width="100" ref="form" class="list">
+    <Form :label-width="100" ref="formInline" :model="formInline" :rules="formInline" class="list">
       <div class="mb10" style="font-weight: bold">
         工商注册信息
       </div>
@@ -9,13 +9,12 @@
       </div>
       <Row>
         <Col span="8">
-          <FormItem label='注册号:' >
+          <FormItem label='注册号:' prop="bizLicenseNo">
             <Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label='公司性质:' >
-            <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
+          <FormItem label='公司性质:' prop="nature">
             <Select style="width:180px" v-model="data.nature">
               <Option v-for="item in dataMsg.CS00117" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
             </Select>
@@ -24,44 +23,44 @@
       </Row>
       <Row>
         <Col span="8">
-          <FormItem label='法定代表人:' >
+          <FormItem label='法定代表人:' prop="legalPerson">
             <Input v-model='data.legalPerson' style="width: 180px" ></Input>
           </FormItem>
-          <FormItem label='经营期限:' >
+          <FormItem label='经营期限:' prop="operationStart">
             <DatePicker :value="data.operationStart" format="yyyy-MM-dd"  style="width: 180px" @on-change="ChangeTime"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label='注册资本(万):' >
+          <FormItem label='注册资本(万):' prop="registMoney">
             <Input v-model='data.registMoney' style="width: 180px" ></Input>
           </FormItem>
-          <FormItem label='至' >
+          <FormItem label='至' prop="operationEnd">
             <DatePicker :value="data.operationEnd"   style="width: 180px" @on-change="ChangeTime2"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label='成立日期:' >
+          <FormItem label='成立日期:' prop="registerDate">
             <DatePicker :value="data.registerDate"  style="width: 180px" @on-change="ChangeTime3"></DatePicker>
           </FormItem>
-          <FormItem label='登记状态:' >
+          <FormItem label='登记状态:' prop="manageStatus">
             <Select v-model="data.manageStatus" style="width:180px" >
               <Option v-for="item in dataMsg.CS00118" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
             </Select>
           </FormItem>
         </Col>
       </Row>
-      <FormItem label="注册地址:">
+      <FormItem label="注册地址:" prop="registAddress">
         <Input v-model='data.registAddress' style="width: 650px" ></Input>
       </FormItem>
-      <FormItem label="经营地址:">
+      <FormItem label="经营地址:" prop="shopAddress">
         <Input v-model='data.shopAddress' style="width: 650px" ></Input>
       </FormItem>
-      <FormItem label="经营范围:">
+      <FormItem label="经营范围:" prop="mainProducts">
         <Input v-model='data.mainProducts' style="width: 650px" ></Input>
       </FormItem>
       <Row>
         <Col span="12">
-          <FormItem label="经营执照扫描:">
+          <FormItem label="经营执照扫描:" prop="businessName">
             <Input v-model='data.businessName' style="width: 150px;float: left"  disabled></Input>
             <Upload style="float: left;line-height: 29px;margin-left: 10px"
                     ref="upload"
@@ -79,7 +78,7 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="购物合同扫描:">
+          <FormItem label="购物合同扫描:" prop="purchaseName">
             <Input v-model='data.purchaseName' style="width: 150px;float: left" disabled></Input>
             <Upload style="float: left;line-height: 29px;margin-left: 10px"
                     ref="upload2"
@@ -97,23 +96,23 @@
           </FormItem>
         </Col>
       </Row>
-      <FormItem label="备注:">
+      <FormItem label="备注:" prop="remark">
         <Input v-model='data.remark' style="width: 650px" ></Input>
       </FormItem>
       <Row>
         <Col span="8">
-          <FormItem label="法人电话:">
+          <FormItem label="法人电话:" prop="chargeManTel">
             <Input v-model='data.chargeManTel' style="width: 180px" ></Input>
           </FormItem>
-          <FormItem label="授权采购员:">
+          <FormItem label="授权采购员:" prop="salesman">
             <Input v-model='data.salesman' style="width: 180px" ></Input>
           </FormItem>
         </Col>
         <Col span="16">
-          <FormItem label="身份证号码:">
+          <FormItem label="身份证号码:" prop="identityCard">
             <Input v-model='data.identityCard' style="width: 380px" ></Input>
           </FormItem>
-          <FormItem label="采购员电话:">
+          <FormItem label="采购员电话:" prop="salesmanTel">
             <Input v-model='data.salesmanTel' style="width: 180px" ></Input>
           </FormItem>
         </Col>
@@ -126,32 +125,31 @@
 
         </Col>
         <Col span="8">
-          <FormItem label="回款方式:">
-            <!--<Input v-model='data.cashMode' style="width: 180px" ></Input>-->
+          <FormItem label="回款方式:" prop="cashMode">
             <Select v-model="data.cashMode" style="width:180px" >
               <Option v-for="item in dataMsg.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="约定对账日期:">
+          <FormItem label="约定对账日期:" prop="accountDate">
             <Input v-model='data.accountDate' style="width: 180px" ></Input>
           </FormItem>
         </Col>
         <Col span="8">
-          <FormItem label="回款日期:">
+          <FormItem label="回款日期:" prop="cashDate">
             <Input v-model='data.cashDate' style="width: 180px" ></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="8">
-          <FormItem label="滚动借款周期:">
+          <FormItem label="滚动借款周期:" prop="rollingDate">
             <Input v-model='data.rollingDate' style="width: 180px" ></Input>
           </FormItem>
         </Col>
         <Col span="16">
-          <FormItem label="申请受用额度:">
+          <FormItem label="申请受用额度:" prop="applyTrustMoney">
             <Input v-model='data.applyTrustMoney' style="width: 380px" @on-blur="verify"></Input>
           </FormItem>
         </Col>
@@ -172,6 +170,32 @@
         },
         data(){
             return {
+              formInline: {
+                bizLicenseNo: [{ required: true,type:'string', message: '请输入正确注册号格式！', trigger: 'blur' }],
+                nature: [{ required: true, type:'string',message: '请输入正确公司性质！', trigger: 'blur' }],
+                legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
+                operationStart: [{ required: true,type:'string',message: '请输入正确经营期限！', trigger: 'blur' }],
+                registMoney: [{ required: true, type:'string',message: '请输入正确注册资本！', trigger: 'blur' }],
+                operationEnd: [{ required: true,type:'string', message: '请选择时间！', trigger: 'blur' }],
+                registerDate: [{ required: true,type:'string', message: '请选择成立日期!', trigger: 'blur' }],
+                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'blur' }],
+                registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
+                shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
+                mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
+                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
+                purchaseName: [{ required: true, type:'string',message: '请上传购物合同', trigger: 'blur' }],
+                remark: [{ required: true,type:'string', message: '请输入备注！', trigger: 'blur' }],
+                chargeManTel: [{ required: true,type:'string', message: '请输入法人电话！', trigger: 'blur' }],
+                salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
+                identityCard: [{ required: true,type:'string', message: '请输入身份证号码！', trigger: 'blur' }],
+                salesmanTel: [{ required: true,type:'string', message: '请输入采购员电话！', trigger: 'blur' }],
+                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'blur' }],
+                accountDate: [{ required: true,type:'string', message: '请输入约定对账日期！', trigger: 'blur' }],
+                cashDate: [{ required: true,type:'string', message: '请输入回款日期！', trigger: 'blur' }],
+                rollingDate: [{ required: true,type:'string', message: '请选择滚动借款周期！', trigger: 'blur' }],
+                applyTrustMoney: [{ required: true,type:'string', message: '请输入申请受用额度！', trigger: 'blur' }],
+
+              },
               wxImgUrl: api.wxImgUrl,//图片地址
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
@@ -241,5 +265,8 @@
 }
 .list>>>.ivu-form-item {
   margin-bottom: 10px;
+}
+.list >>> label{
+  width: 105px!important;
 }
 </style>

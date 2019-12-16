@@ -1,9 +1,10 @@
 <template>
   <div style="height: 500px;overflow:hidden;overflow-y: scroll">
- <Form :label-width="80"  :model='data' :rules="rules" ref="form">
+ <Form :label-width="100"  :model='data' :rules="rules" ref="form">
    <div class="tabList">
-             <FormItem label='LOGO图片:'  >
+             <FormItem label='LOGO图片:' prop="file" >
                <Upload
+                 v-model="data.file"
                  ref="upload"
                  :show-upload-list="false"
                  :action="wxImgUrl"
@@ -95,8 +96,8 @@
      </Row>
      <Row>
        <Col span="12">
-         <FormItem label='开店日期:' prop="Time">
-           <DatePicker v-model="data.Time"  type="date"   placeholder="请选择日期"  style="width: 280px"></DatePicker>
+         <FormItem label='开店日期:' prop="softOpenDate">
+           <DatePicker v-model="data.softOpenDate"  type="date"   placeholder="请选择日期"  style="width: 280px"></DatePicker>
          </FormItem>
        </Col>
        <Col span="12">
@@ -112,14 +113,14 @@
            <Col span="12">
              <FormItem label='一级分类:' prop="supplierTypeFirst">
                <Select v-model="data.supplierTypeFirst" style="width:180px" class="mr10">
-                 <Option v-for="item in treelist" v-if="item.lever == 1" :value="item.id" :key="item.code">{{ item.title }}</Option>
+                 <Option v-for="item in treelist" v-if="item.parentId == 0" :value="item.id" :key="item.code">{{ item.title }}</Option>
                </Select>
              </FormItem>
            </Col>
            <Col span="12">
              <FormItem label='二级分类:'prop="supplierTypeSecond">
                <Select v-model="data.supplierTypeSecond" style="width:180px" class="mr10">
-                 <Option v-for="item in treelist "  v-if="data.supplierTypeFirst == item.pid" :value="item.id" :key="item.id">{{ item.title }}</Option>
+                 <Option v-for="item in treelist "  v-if="data.supplierTypeFirst == item.parentId" :value="item.id" :key="item.id">{{ item.title }}</Option>
                </Select>
              </FormItem>
            </Col>
@@ -164,6 +165,13 @@
                     callback();
                 }
             };
+            const validateUpload = (rule, value, callback) => {
+                if (this.data.file && this.data.file.length == 0) {
+                    callback(new Error('请选择要上传的文件'))
+                } else {
+                    callback()
+                }
+            }
             return {
                 wxImgUrl: api.wxImgUrl,//图片地址
                 headers: {
@@ -196,7 +204,7 @@
                     supplierTypeFirst:[
                         {required: true, message: '不能为空', trigger: 'change'}
                     ],
-                    Time:[
+                    softOpenDate:[
                         {required: true,type: 'date', message: '不能为空', trigger: 'change'}
                     ],
                     supplierTypeSecond:[
@@ -205,6 +213,9 @@
                     tel:[
                         {required: true, message: '不能为空', trigger: 'blur'}
                     ],
+                    file: [
+                        { required: true, validator: validateUpload, trigger: 'change' }
+                    ]
 
                 },
                 uploadSrc:''
@@ -220,8 +231,8 @@
             // 上传成功
             handleSuccess(res, file){
                 if(res.code == 0) {
-                    this.uploadSrc =api.getfile+res.data.url
-                    this.data.src = api.getfile+res.data.url
+                    this.uploadSrc = api.getfile+res.data.url
+                    this.data.logoImg = api.getfile+res.data.url
                 }
             },
             //清除内容

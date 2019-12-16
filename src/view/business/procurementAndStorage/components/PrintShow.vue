@@ -7,21 +7,28 @@
     <div id="printBox" style="height: 600px">
       <div class="titler">
         <Row style="border: 1px #000000 solid">
-          <Col span="12" class="pl10">
-            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.userCompany}}</h5>
+          <Col span="12" class="pl10" style="line-height: 24px">
+            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.orgName || ' '}}</h5>
           </Col>
           <Col span="12" class="pl10" >
-            <p>销售订单:</p>
+            <p>采购入库:</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址:</span></p>
-            <p><span>电话:</span></p>
+            <p>
+              <span>地址:</span>
+              <span>{{onelist.address || ' '}}</span>
+            </p>
+            <p>
+              <span>电话:</span>
+              <span>{{onelist.tel || ' '}}</span>
+            </p>
           </Col>
           <Col span="12" class="pl10" >
-            <p><span>订单日期:</span><span>{{onelist.orderDate}}</span></p>
+            <p><span>创建日期:</span>
+              <span>{{onelist.createTime || ' '}}</span></p>
             <p>
               <span>打印日期:</span>
               <span>{{onelist.printDate}}</span>
@@ -30,7 +37,7 @@
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>客户:</span> <span>{{onelist.guestName}}</span></p>
+            <p><span>供应商:</span> <span>{{onelist.guestName}}</span></p>
             <p><span>地址:</span> <span>{{onelist.addr}}</span></p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
@@ -43,7 +50,7 @@
             <p><span>结算方式:</span><span>{{onelist.settleTypeName}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.details" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
@@ -59,27 +66,21 @@
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{onelist.orderMan}}</span>
           </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
-            <span>提交人:</span>
-            <span>{{onelist.auditor}}</span>
-          </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
             <span>{{onelist.deliverer}}</span>
           </Col>
-          <Col span="6" class="pl10">
+          <Col span="8" class="pl10">
             <span>收货人:</span>
             <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
-        <p class="pl10">
-          兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！
-        </p>
       </div>
 
       <div>
@@ -87,18 +88,23 @@
     </div>
     <div slot='footer'>
       <Button type="success" @click="print">打印</Button>
-      <Button type='default' @click='printShow = false'>取消</Button>
+      <Button type='default' @click="close" >取消</Button>
     </div>
   </Modal>
 </template>
 
 <script>
-import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
+    import {getPrintShow} from '@/api/business/procurementAndStorage'
+
+
     export default {
         name: "PrintShow",
+        props:{
+            data:''
+        },
         data(){
             return{
-                printShoww: false, //模态框隐藏
+                printShow: false, //模态框隐藏
                 columns2: [
                     {
                         title: '序号',
@@ -159,17 +165,7 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
 
                 ],
                 onelist:{}, //打印数据
-                num: '12323.09',
-                num2: 78723
             }
-        },
-        props: {
-          curenrow: {
-            type: Object,
-            default: function () {
-              return {}
-            }
-          }
         },
         methods:{
             //打印
@@ -186,27 +182,18 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
                     document.body.innerHTML = oldstr
             },
           async  openModal(){
-            if (!this.curenrow) {
-              this.$message.error('请选选择列表信息')
-              return
-            } else {
-              const params = {
-                id: this.curenrow.id
-                // ...this.curenrow
-              }
-                // 配件组装作废
-                getprintList(params).then(res => {
-                    // 点击列表行==>配件组装信息
-                          if (res.code == 0) {
-                            this.printShoww = true
-                            this.onelist = res.data
-                          }
-                        }).catch(e => {
-                          this.$Message.info('至少选择一条信息')
-                })
-
-            }
-                console.log(this.curenrow)
+                      this.printShow = true
+              let data ={}
+              console.log(this.$store.state.user.userData , 888)
+              data.id = this.data.id
+                    let res = await getPrintShow(data)
+                    if(res.code === 0){
+                        this.onelist = res.data
+                        console.log(res)
+                    }
+            },
+            close(){
+                this.printShow = false
             }
         }
     }

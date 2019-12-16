@@ -19,7 +19,7 @@
     <Modal v-model="showNewWareHouse" title="仓库定义">
       <Form :model='warehouseData' :label-width="130" :rules='rules' ref="formValidate">
         <FormItem label='仓库名称：' prop="name">
-          <Input v-model='warehouseData.name' style="width: 250px" ></Input>
+          <Input v-model='warehouseData.name' style="width: 250px" maxlength="50"></Input>
         </FormItem>
          <Row>
            <Col span="12">

@@ -34,13 +34,13 @@
       <FormItem label='身份证号码:' prop="cardId" >
         <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
       </FormItem>
-      <FormItem label='入职部门:' prop="ground" >
-        <Cascader :data="list" v-model="data.ground" placeholder='选择部门' style="width: 250px"  @on-change="selectGroust"></Cascader>
+      <FormItem label='入职部门:' prop="groundIds" >
+        <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 250px" ></Cascader>
       </FormItem>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='入职时间：' style="">
-            <Date-picker :value="data.entryTime" type="date" placeholder="选择日期" style="width: 150px" @on-change="changeEntryTime"></Date-picker>
+          <FormItem label='入职时间：' style="" prop="entryTime">
+            <Date-picker v-model="data.entryTime" type="date" placeholder="选择日期" style="width: 150px" ></Date-picker>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%" >
@@ -113,6 +113,15 @@
                     callback();
                 }
             };
+            const cardId=(rule, value, callback) => {
+            if (!value) {
+              return callback(new Error('身份证号不能为空'));
+            } else if (!/^(^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$)|(^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])((\d{4})|\d{3}[Xx])$)$/.test(value)) {
+              callback(new Error('身份证号格式不正确'));
+            } else {
+              callback();
+            }
+          };
             return {
                 rules: {
                     userName: [
@@ -122,10 +131,13 @@
                         { required: true,validator:validatePhone,trigger:'blur'}
                     ],
                     cardId:[
-                        {required: true, message: '身份证号码不能为空', trigger: 'blur'}
+                        {required: true, validator:cardId, trigger: 'blur'}
                     ],
-                    ground:[
+                    groundIds:[
                         {required: true,type:'array', message: '请选择部门', trigger: 'change'}
+                    ],
+                    entryTime:[
+                        {required: true , type:'date' ,message:'入职时间不能为空' ,trigger:'change'}
                     ]
                 },
                 costList:[
@@ -198,7 +210,7 @@
         },
         //获取到公司
         selectGroust(value , selectedData){
-            this.data.groundId = value[value.length - 1]
+            this.data.groundIds = JSON.stringify(value)
         }
     }
     }

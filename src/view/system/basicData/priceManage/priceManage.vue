@@ -70,7 +70,7 @@
             </ul>
           </div>
           <div class="tabs-warp" v-show="tabIndex == 0">
-            <div class="btn-warp">
+            <div class="btns-warp">
               <Input
                 v-model="customer.pinyin"
                 placeholder="请输入拼音"
@@ -158,7 +158,7 @@
             </vxe-table>
           </div>
           <div class="tabs-warp" v-show="tabIndex == 1">
-            <div class="btn-warp">
+            <div class="btns-warp">
               <!-- <Input
                 v-model="part.pinyin"
                 placeholder="请输入拼音"

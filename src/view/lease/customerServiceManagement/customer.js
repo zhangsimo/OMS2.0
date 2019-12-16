@@ -36,7 +36,7 @@ let checkwx = (rule, value, callback) => {
   if (!value) {
     callback(new Error("微信号不能为空"));
   } else {
-    const reg = /^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/;
+    const reg = /^[a-zA-Z]([-_a-zA-Z0-9]{5,19})+$/;
     if (!reg.test(value)) {
       callback(new Error("请输入正确的微信号"));
     } else {

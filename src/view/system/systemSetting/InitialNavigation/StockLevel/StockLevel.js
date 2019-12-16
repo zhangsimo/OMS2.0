@@ -1,6 +1,6 @@
 const data = function() {
   return {
-    split: 0.33,
+    split: 0.22,
     // modal显示
     modal: false,
     // tab索引

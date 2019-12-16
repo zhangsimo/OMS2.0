@@ -124,33 +124,59 @@
                 queryDate: {
                   startTime: '',
                   endTime: ''
-                }
+                },
+                thisdata:[],
+                dateVal:null
             }
         },
         created() {
            this.getTable()
         },
         methods: {
-          async getTable(date) {
-            let { code, data } = await getTableList(date)
-            if (code === 0) {
-              this.staffList = data
-              this.loading = false
-            } else {
-              this.loading = true
+          // async getTable(date) {
+          //   let { code, data } = await getTableList(date)
+          //   if (code === 0) {
+          //     this.staffList = data
+          //     this.loading = false
+          //   } else {
+          //     this.loading = true
+          //   }
+          // },
+          getTable(){
+            let data = {}
+            if(this.thisdata){
+              data.startTime = this.thisdata[0]
+              data.endTime = this.thisdata[1]
             }
+            if(this.dateVal !== null){
+              data.startTime = this.dateVal[0] +  " " + "00:00:00"
+              data.endTime = this.dateVal[1] +  " " + "23:59:59"
+            }
+            getTableList(data).then(res => {
+              if (res.code === 0) {
+                    this.staffList = res.data
+                    this.loading = false
+                  } else {
+                    this.loading = true
+                  }
+            })
+
           },
           getvalue(date) {
-            this.Date.startTime = date[0]
-            this.Date.endTime = date[1]
-            this.getTable(this.Date)
+            this.thisdata = date
+            console.log(date)
+            // this.Date.startTime = date[0]
+            // this.Date.endTime = date[1]
+            // this.getTable(this.Date)
           },
           getDate(val) {
+            // console.log(val)
+            this.dateVal = val
             this.queryDate.startTime = val[0] +  " " + "00:00:00"
             this.queryDate.endTime = val[1] +  " " + "23:59:59"
           },
           query() {
-            this.getTable(this.queryDate)
+            this.getTable()
           }
         }
     }
