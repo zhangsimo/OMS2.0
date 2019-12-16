@@ -65,7 +65,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="mainId.length <= 0 || billStatusId == 0 "
+              :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
               ><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button
             >
@@ -490,7 +490,7 @@
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
-    <status-model ref="StatusModel" :orderId="mainId"></status-model>
+    <status-model ref="StatusModel" :orderId="selectPlanOrderItem"></status-model>
   </div>
 </template>
 <script>
