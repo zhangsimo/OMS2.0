@@ -106,7 +106,7 @@ export const mixGoodsData = {
         data.startTime = this.dateTime[0];
         data.endTime = this.dateTime[1];
       }
-      params.page = this.page.num;
+      params.page = this.page.num - 1;
       params.size = this.page.size;
       let res;
       if (!this.isMore) {
