@@ -70,7 +70,7 @@
         </div>
       </Form>
       <div slot='footer'>
-        <Button type='text' >取消</Button>
+        <Button type='text'@click="cancel">取消</Button>
         <Button type='primary' @click="addAccessories">确定</Button>
       </div>
     </Modal>
