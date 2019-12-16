@@ -215,7 +215,7 @@ export function saveFee(data) {
   });
 }
 //临时采购导入配件地址
-export const getup = `${api.omsOrder}/pchsOrderTemporary/importExcel?`;
+export const getup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
 
 //临时采购主数据-分页查询
 export function temporaryFindPageByDynamicQuery(params, data = {}) {
@@ -271,7 +271,7 @@ export function outsideFindPageByDynamicQuery(params, data = {}) {
   });
 };
 //外采--导入配件地址
-export const outgetup = `${api.omsOrder}/pchsOrderExternal/importExcel?`;
+export const outgetup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
 //外采购主数据-高级查询
 export function outsideQueryByConditions(params, data = {}) {
   return axios.request({
