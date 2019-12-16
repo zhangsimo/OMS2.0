@@ -290,7 +290,7 @@ export default class InterPurchase extends Vue {
 
   // 保存
   private async saveHandle(refname: string) {
-    let data: any = this.formdata(refname);
+    let data: any = this.formdata(refname)
     if (!data) return;
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
