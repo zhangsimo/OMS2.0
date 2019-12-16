@@ -339,6 +339,7 @@ export default {
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
+      this.$refs.child.resetFields();
     },
     //更多搜索确认
     querySure() {
@@ -380,7 +381,7 @@ export default {
         if (res.code == 0) {
           this.clientList = res.data;
         }
-        console.log(res);
+        // console.log(res);
         this.clientDataShow = true;
       });
     }

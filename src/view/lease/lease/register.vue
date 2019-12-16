@@ -222,7 +222,7 @@
           this.statuss = statusss.value
           // console.log(this.statuss)
           this.zhuanagtai = a.isDisabled
-          console.log(this.zhuanagtai)
+          // console.log(this.zhuanagtai)
           if (a.isDisabled === 0) {
             this.jin = true
             this.qi = false
@@ -238,7 +238,7 @@
         },
         //审核弹窗
         Audit(){
-          console.log(this.statuss)
+          // console.log(this.statuss)
           if (this.statuss == 5){
              this.$Message.warning('请选择审核对象')
           }else if(this.statuss == 1){

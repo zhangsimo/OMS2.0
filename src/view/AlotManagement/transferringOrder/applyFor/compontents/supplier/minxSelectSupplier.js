@@ -130,7 +130,7 @@ export const mixSelectSupplier ={
       req.size = this.page.size
       findForAllot(req).then(res => {
         this.loading = false;
-        this.partData = res.data||[];
+        this.partData = res.data.content||[];
         this.page.total = res.data.total
       })
     },

@@ -82,6 +82,7 @@
         <vxe-table border :data="formData.mode">
           <vxe-table-column title=" " min-width="186">
             <template v-slot="{ row, rowIndex}">
+              <span class="dot" v-show="rowIndex == 0">*</span>
               <Button type="text" @click="insert">新增</Button>
               <Button type="text" @click="remove(rowIndex)">删除</Button>
             </template>
@@ -93,8 +94,7 @@
                   v-for="item in SettlementMode"
                   :key="item.value"
                   :value="item.value"
-                  >{{ item.label }}</option
-                >
+                  >{{ item.label }}</option>
               </select>
             </template>
           </vxe-table-column>

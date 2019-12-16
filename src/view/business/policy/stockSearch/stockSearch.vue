@@ -331,17 +331,17 @@
                     {
                         title: '品牌',
                         align: 'center',
-                        key: 'partBrandName',
+                        key: 'partBrand',
                         minWidth: 120
                     },
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: '',
-                        render:(h , params)=>{
+                        key: 'carBrandName',
+                        /*render:(h , params)=>{
 
                           return h('span' ,{} ,tex)
-                        },
+                        },*/
                         minWidth: 120
                     },
                     {
@@ -359,7 +359,7 @@
                     {
                         title: '库存数量',
                         align: 'center',
-                        key: 'stockQty',
+                        key: 'enterQty',
                         minWidth: 120
                     },
                     {
@@ -378,19 +378,19 @@
                     {
                         title: '仓位',
                         align: 'center',
-                        key: 'shelf',
+                        key: 'storeShelf',
                         minWidth: 120
                     },
                     {
                         title: '库存单价',
                         align: 'center',
-                        key: 'costPrice',
+                        key: 'enterPrice',
                         minWidth: 120
                     },
                     {
                         title: '库存金额',
                         align: 'center',
-                        key: 'stockAmt',
+                        key: 'enterAmt',
                         minWidth: 120
                     },
                     {

@@ -94,7 +94,8 @@ export function stockLevelPartSave(data) {
   return axios.request({
     url: `${api.wmsApi}/stockLevelPart/save`,
     method: 'post',
-    data
+    data:data.data,
+    params:data.params
   })
 }
 

@@ -33,7 +33,7 @@ export function getCustomerInformation (params) {
 //获取数字字典内的信息
 export function getDigitalDictionary (data) {
   return axios.request({
-    url: `${api.omsProduct}/dictionariesItem/findByDictCodeList?`,
+    url: `${api.omsProduct}/dictionariesItem/findBydictCodeList?`,
     method: 'post',
     data
   })

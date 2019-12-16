@@ -103,8 +103,8 @@ export default class SettlementAccount extends Vue {
             {required: true, message: "请输入账户名称", trigger: "blur"}
         ],
         type: [
-            {required: true, message: "请选择账户类型", trigger: "change"}
-        ],
+        {required: true, message: "请选择账户类型", trigger: "change"}
+      ],
     }
     private SettlementMode:Array<Option> = []
     private itemVOS:Array<any> = [];
@@ -221,7 +221,7 @@ export default class SettlementAccount extends Vue {
         this.formData.mode = [];
         Array.isArray(this.SelectRow.settleType) && this.SelectRow.settleType.forEach((el:any) => {
             this.formData.mode.push({
-                id: el.customId, 
+                id: el.customId,
                 oid: el.id,
                 accountId: el.accountId,
             });

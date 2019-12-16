@@ -466,7 +466,7 @@ export default [
           icon: "arrow-graph-up-right",
           title:"加工单",
         },
-        component:()=>import('@/view/business/policy/smsWarehouse/smsWarehouse.vue')
+        component:()=>import("@/view/business/policy/process/process.vue")
       }
     ]
   },
@@ -1437,18 +1437,18 @@ export default [
             component: () =>
               import("@/view/system/essentialData/logistics/logistics.vue")
           },
-          {
-            path: "/",
-            name: "",
-            mark: '9110',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 配件替换件"
-            },
+          // {
+          //   path: "/",
+          //   name: "",
+          //   mark: '9110',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     icon: "arrow-graph-up-right",
+          //     title: " 配件替换件"
+          //   },
             // component: () =>
             //   import()
-          },
+          // },
           // {
           //   path: "FittingReplacement",
           //   name: "FittingReplacement",

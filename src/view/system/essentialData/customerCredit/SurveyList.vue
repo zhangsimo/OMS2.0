@@ -1,5 +1,5 @@
 <template>
-    <Form :label-width="100" ref="formInline" :model="formInline" :rules="formInline" class="list">
+    <Form :label-width="100" ref="formInline" :model="data" :rules="formInline" class="list Habox" >
       <div class="mb10" style="font-weight: bold">
         工商注册信息
       </div>
@@ -32,15 +32,16 @@
         </Col>
         <Col span="8">
           <FormItem label='注册资本(万):' prop="registMoney">
-            <Input v-model='data.registMoney' style="width: 180px" ></Input>
+            <InputNumber v-model="data.registMoney" style="width: 180px"></InputNumber>
+            <!--<Input v-model='data.registMoney' style="width: 180px" ></Input>-->
           </FormItem>
           <FormItem label='至' prop="operationEnd">
-            <DatePicker :value="data.operationEnd"   style="width: 180px" @on-change="ChangeTime2"></DatePicker>
+            <DatePicker :value="data.operationEnd" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='成立日期:' prop="registerDate">
-            <DatePicker :value="data.registerDate"  style="width: 180px" @on-change="ChangeTime3"></DatePicker>
+            <DatePicker :value="data.registerDate" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
           </FormItem>
           <FormItem label='登记状态:' prop="manageStatus">
             <Select v-model="data.manageStatus" style="width:180px" >
@@ -133,19 +134,22 @@
         </Col>
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
-            <Input v-model='data.accountDate' style="width: 180px" ></Input>
+            <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
+            <InputNumber v-model="data.accountDate" style="width: 180px" max="31"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="回款日期:" prop="cashDate">
-            <Input v-model='data.cashDate' style="width: 180px" ></Input>
+            <InputNumber v-model="data.cashDate" style="width: 180px" max="31"></InputNumber>
+            <!--<Input v-model='data.cashDate' style="width: 180px" ></Input>-->
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="8">
           <FormItem label="滚动借款周期:" prop="rollingDate">
-            <Input v-model='data.rollingDate' style="width: 180px" ></Input>
+            <!--<Input v-model='data.rollingDate' style="width: 180px" ></Input>-->
+            <InputNumber v-model="data.rollingDate" style="width: 180px"></InputNumber>
           </FormItem>
         </Col>
         <Col span="16">
@@ -161,6 +165,7 @@
   import * as api from "_api/lease/customerSM";
   import Cookies from 'js-cookie'
   import { TOKEN_KEY } from '@/libs/util'
+  import * as tools from "../../../../utils/tools";
 
   export default {
         name: "SurveyList",
@@ -169,59 +174,93 @@
             dataMsg: '', //父组件中数据字典的数据
         },
         data(){
+          //手机号
+          const validatePhone = (rule, value, callback) => {
+            if (this.data.salesmanTel) {
+              callback();
+              return callback(new Error('手机号不能为空'));
+            } else if (!/^1[34578]\d{9}$/.test(this.data.salesmanTel)) {
+              callback(new Error('手机号格式不正确'));
+            } else {
+              callback();
+            }
+          };
+          const bigNumber = (rule, value, callback) => {
+            // let reg = /^\+?[1-9]\d*$/;
+              if (!/^[1-9]\d*$/.test(this.data.applyTrustMoney)) {
+                return callback(new Error('请输入大于0的正整数!'));
+              }
+            if (this.data.applyTrustMoney > 10000) {
+              return callback(new Error('首次申请额度不能大于10000'));
+            }
+          }
+          const smallNumber = (rule, value, callback) => {
+            if (this.data.rollingDate <= 0) {
+              return callback(new Error('请输入大于0的正整数'));
+            }
+          }
+          //注册号
+            const Number = (rule, value, callback) => {
+              if (/^[0-9]+$/.test(this.data.bizLicenseNo)) {
+                callback();
+              } else {
+                return callback(new Error("请输入正确注册号!"));
+              }
+          }
             return {
               formInline: {
-                bizLicenseNo: [{ required: true,type:'string', message: '请输入正确注册号格式！', trigger: 'blur' }],
+                bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
                 nature: [{ required: true, type:'string',message: '请输入正确公司性质！', trigger: 'blur' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
-                operationStart: [{ required: true,type:'string',message: '请输入正确经营期限！', trigger: 'blur' }],
-                registMoney: [{ required: true, type:'string',message: '请输入正确注册资本！', trigger: 'blur' }],
-                operationEnd: [{ required: true,type:'string', message: '请选择时间！', trigger: 'blur' }],
-                registerDate: [{ required: true,type:'string', message: '请选择成立日期!', trigger: 'blur' }],
+                operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change',pattern: /.+/ }],
+                registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
+                operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change',pattern: /.+/ }],
+                registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change',pattern: /.+/}],
                 manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'blur' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
                 businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
-                purchaseName: [{ required: true, type:'string',message: '请上传购物合同', trigger: 'blur' }],
-                remark: [{ required: true,type:'string', message: '请输入备注！', trigger: 'blur' }],
-                chargeManTel: [{ required: true,type:'string', message: '请输入法人电话！', trigger: 'blur' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
-                identityCard: [{ required: true,type:'string', message: '请输入身份证号码！', trigger: 'blur' }],
-                salesmanTel: [{ required: true,type:'string', message: '请输入采购员电话！', trigger: 'blur' }],
+                salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
                 cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'blur' }],
-                accountDate: [{ required: true,type:'string', message: '请输入约定对账日期！', trigger: 'blur' }],
-                cashDate: [{ required: true,type:'string', message: '请输入回款日期！', trigger: 'blur' }],
-                rollingDate: [{ required: true,type:'string', message: '请选择滚动借款周期！', trigger: 'blur' }],
-                applyTrustMoney: [{ required: true,type:'string', message: '请输入申请受用额度！', trigger: 'blur' }],
+                accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
+                cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
+                rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
+                applyTrustMoney: [{ required: true,validator:bigNumber, trigger: 'blur' }],
 
               },
               wxImgUrl: api.wxImgUrl,//图片地址
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
               }, //获取token
+              options3: {
+                // disabledDate(date) {
+                //   return date && date.valueOf() < tools.transTime(this.data.operationStart) - 86400000;
+                // }
+              }
             }
         },
     methods: {
-      verify() {
-        var reg = /^\+?[1-9]\d*$/;
-        if (!reg.test(this.data.applyTrustMoney)) {
-          this.$Message.error('请输入大于0的正整数!')
-        }
-        if (this.data.applyTrustMoney > 10000) {
-          this.$message.error('首次申请额度不能大于10000')
-        }
-      },
+      // verify() {
+      //   var reg = /^\+?[1-9]\d*$/;
+      //   if (!reg.test(this.data.applyTrustMoney)) {
+      //     this.$Message.error('请输入大于0的正整数!')
+      //   }
+      //   if (this.data.applyTrustMoney > 10000) {
+      //     this.$message.error('首次申请额度不能大于10000')
+      //   }
+      // },
       ChangeTime(value) {
         // console.log(value)
-        this.data.operationStart = value
+        this.data.operationStart = tools.transDate(value)
       },
       ChangeTime2(value) {
-        // console.log(value,2312312312)
-        this.data.operationEnd = value
+        console.log(value)
+        this.data.operationEnd = tools.transDate(value)
       },
       ChangeTime3(value) {
-        this.data.registerDate = value
+        this.data.registerDate = tools.transDate(value)
       },
       // 上传前
       handleBeforeUpload() {
@@ -264,9 +303,19 @@
   color: #03a9f4;
 }
 .list>>>.ivu-form-item {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .list >>> label{
   width: 105px!important;
 }
+.list>>> .ivu-form-item-error-tip {
+  position: absolute;
+  top: 100%;
+  left: 5px;
+  line-height: 1;
+  padding-top: 2px!important;
+  color: #ed4014;
+  font-size: 1px!important;
+}
 </style>
+

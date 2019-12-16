@@ -192,9 +192,9 @@
                         key:'accountBankNo'
                     },
                     {
-                        title:'账户人名称',
+                        title:'开户人名称',
                         align: 'center',
-                        key:'createName'
+                        key:'accountName'
                     },
                     {
                         title:'备注',
@@ -321,7 +321,7 @@
             },
             //获取当前选中的数据
             selection(currentRow){
-                this.logisticsOne = currentRow
+                this.logisticsOne = currentRow;
                 this.id= currentRow.id
                 currentRow.isDisabled == 0 ? this.logisticsOne.isDisabled =true : this.logisticsOne.isDisabled = false
             },
@@ -358,8 +358,8 @@
             },
             addNewSure(){
                 this.$refs.child.handleSubmit(() => {
-                        let stop = this.$loading()
-                    this.logisticsOne.isDisabled ? this.logisticsOne.isDisabled = 0 :this.logisticsOne.isDisabled =1
+                        let stop = this.$loading();
+                    this.logisticsOne.isDisabled= this.logisticsOne.isDisabled ? this.logisticsOne.isDisabled :0
                     getNewLogistics(this.logisticsOne).then( res=> {
                         stop()
                         this.modalShow = false

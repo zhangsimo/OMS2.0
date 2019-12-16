@@ -271,8 +271,12 @@ export const mixSelectPartCom = {
         this.$emit('selectPartName', this.selectTableItem);
         this.numberAmount = true;
     },
+    cancel(){
+      this.numberAmount=false
+      this.formInfo={}
+    },//取消
     //添加
-    addAccessories() {
+    async addAccessories() {
       if(parseFloat(this.formInfo.enterQty)<0||parseFloat(this.formInfo.enterPrice)<0||parseFloat(this.formInfo.enterAmt)<0){
         this.$Message.error('数值不可小于0')
         return false
@@ -290,18 +294,19 @@ export const mixSelectPartCom = {
       this.selectTableItem.enterPrice = parseFloat(this.formInfo.enterPrice)
       this.selectTableItem.enterAmt = parseFloat(this.formInfo.enterAmt)
       this.selectTableItem.remark = this.formInfo.remark
+      this.partInfo.details=[]
       this.partInfo.details.push(this.selectTableItem)
+
       this.$refs.formInfo.resetFields()
-      let res = saveList(this.partInfo)
-      if (res.code == 0) {
-        this.numberAmount = false;
-        console.log(this.numberAmount)
+      let res = await saveList(this.partInfo)
+      if (res.code === 0) {
+        this.numberAmount=false
+        this.$Message.success('保存成功，入库单的配件添加成功')
         this.$parent.getList()
-        alert('成功')
-      }else {
+        // alert('成功')
       }
-    }
-    ,
+    },
+
     //分页
     changePage(p) {
       this.page.num = p

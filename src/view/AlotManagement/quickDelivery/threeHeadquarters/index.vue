@@ -71,7 +71,7 @@
           <vxe-table-column field="allotFinishDate" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
-            field="enterStoreName"
+            field="enterStoreId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>
