@@ -290,7 +290,7 @@ export default class InterPurchase extends Vue {
 
   // 保存
   private async saveHandle(refname: string) {
-    let data: any = this.formdata(refname);
+    let data: any = this.formdata(refname)
     if (!data) return;
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
@@ -510,6 +510,7 @@ export default class InterPurchase extends Vue {
   }
   //导入
   private getRUl(){
+    this.upurl=api.getup;
     Object.keys(this.formPlanmain).map((item,i)=>{
       if(i==0){
         this.upurl+=`${item}=${this.formPlanmain[item]}`;
