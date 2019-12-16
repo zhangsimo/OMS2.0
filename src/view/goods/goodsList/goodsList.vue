@@ -65,7 +65,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="mainId.length <= 0"
+              :disabled="mainId.length <= 0 || billStatusId == 0 "
               @click="showStatus"
               ><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button
             >
