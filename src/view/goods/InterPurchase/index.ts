@@ -153,7 +153,7 @@ export default class InterPurchase extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    companyName: "", // 直发门店
+    directGuestId: "", // 直发门店
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
@@ -236,9 +236,9 @@ export default class InterPurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
+          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
         };
         for (let k in this.amt) {
