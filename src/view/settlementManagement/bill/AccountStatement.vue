@@ -1,0 +1,1149 @@
+<template>
+  <div class="content-oper content-oper-flex">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf">
+          <div class="db">
+            <span>快速查询：</span>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+          </div>
+          <div class="db ml20">
+            <span>转单期间：</span>
+            <Date-picker
+              format="yyyy-MM-dd"
+              :value="value"
+              @on-change="changedate"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+            ></Date-picker>
+          </div>
+          <div class="db ml20">
+            <span>分店名称：</span>
+            <Select v-model="model1" class="w150">
+              <Option
+                v-for="item in Branchstore"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </div>
+          <div class="db ml20">
+            <span>对账单状态：</span>
+            <Select v-model="Reconciliationtype" class="w150" placeholder="全部">
+              <Option
+                v-for="item in Reconciliationlist"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </div>
+          <div class="db ml10">
+            <button class="ivu-btn ivu-btn-default" type="button" @click="query">
+              <i class="iconfont iconchaxunicon"></i>
+              <span>查询</span>
+            </button>
+          </div>
+          <div class="db ml10">
+            <Poptip placement="bottom">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+              <div slot="content">
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
+              </div>
+            </Poptip>
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
+              <i class="iconfont iconcaidan"></i>
+              <span>更多</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="con-box">
+      <div class="inner-box">
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+        >对账单结算</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="viewStatement">查看对账单</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Revoke">撤销</button>
+        <Table
+          border
+          :columns="columns1"
+          :data="data1"
+          class="mt10"
+          max-height="400"
+          @on-row-click="morevis"
+          highlight-row
+          ref="accountStatement"
+        ></Table>
+        <Page :total="pagetotal" show-elevator class="mt10 tr" @on-change="pageCode" show-total />
+        <div class="flex mt20">
+          <div class="db" style="flex:1;">
+            <button class="ivu-btn ivu-btn-default" type="button">收/付款单记录</button>
+            <Table
+              class="mt15"
+              border
+              :columns="columns2"
+              :data="data2"
+              max-height="400"
+              show-summary
+            ></Table>
+          </div>
+          <Tabs v-model="tab" class="ml20" style="flex:1" :animated="false" @click="tabName">
+            <TabPane label="应收单据明细" name="name1">
+              <Table
+                border
+                :columns="columns3"
+                :data="data3"
+                max-height="400"
+                show-summary
+                ref="collectBill"
+              ></Table>
+            </TabPane>
+            <TabPane label="应付单据明细" name="name2">
+              <Table
+                border
+                :columns="columns4"
+                :data="data4"
+                max-height="400"
+                show-summary
+                ref="payBill"
+              ></Table>
+            </TabPane>
+          </Tabs>
+        </div>
+        <div class="db mt10" v-if="falg">
+          <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
+          <Steps :current="1">
+            <Step title="提交人">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="店长">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="会计">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="财务总监">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="总经理">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+            <Step title="出纳">
+              <div slot="content">
+                <span>审批人：{{}}</span>
+                <br />
+                <span>审批时间：{{}}</span>
+              </div>
+            </Step>
+          </Steps>
+        </div>
+      </div>
+    </section>
+    <Modal v-model="modal1" title="高级查询" @on-ok="senior">
+      <div class="db pro mt20">
+        <span>转单日期：</span>
+        <Date-picker
+          :value="value"
+          format="yyyy-MM-dd"
+          type="daterange"
+          placeholder="选择日期"
+          class="w200"
+          @on-change="changedate"
+        ></Date-picker>
+      </div>
+      <div class="db pro mt20">
+        <span>客户类型：</span>
+        <Select v-model="model2" style="width:200px">
+          <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>客户名称：</span>
+        <input type="text" class="w200" v-model="nametext" />
+      </div>
+      <div class="db pro mt20">
+        <span>分店名称：</span>
+        <Select v-model="model1" style="width:200px">
+          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>业务类型：</span>
+        <Select v-model="model3" style="width:200px">
+          <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </div>
+      <div class="db pro mt20">
+        <span>业务单号：</span>
+        <input type="text" class="w200" v-model="text" />
+      </div>
+    </Modal>
+    <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
+      <div class="db">
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="close">关闭</button>
+      </div>
+      <div class="db p15 settlement mt10 mb10">
+        <div class="db_top flex mb15">
+          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
+          <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
+          <span style="flex:1">收付类型：{{reconciliationStatement.billingTypeName}}</span>
+        </div>
+        <div class="db_bottom flex mt15">
+          <span style="flex:1">对账单号：{{reconciliationStatement.accountNo}}</span>
+          <span style="flex:1">实际收款/付款：{{reconciliationStatement.receiptPayment}}</span>
+          <span style="flex:1">收付款单号：{{collectPayId}}</span>
+        </div>
+      </div>
+      <Row>
+        <Col span="12">
+          <vxe-table
+            style="flex:6"
+            border
+            resizable
+            :data="BusinessType"
+            auto-resize
+            :edit-config="{trigger: 'click', mode: 'cell'}"
+            @edit-closed="editClosedEvent"
+          >
+            <vxe-table-column field="serviceTypeName" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="accountAmt" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="endAmt" title="已收金额"></vxe-table-column>
+            <vxe-table-column field="uncollectedAmt" title="未收金额"></vxe-table-column>
+            <vxe-table-column
+              field="checkAmt"
+              title="本次核销金额"
+              width="140"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
+            <vxe-table-column field="unAmt" title="剩余未收"></vxe-table-column>
+          </vxe-table>
+          <div>
+            <section class="flex">
+              <p
+                class="w90 pl5 pr10"
+                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+              >核对</p>
+              <input
+                type="text"
+                size="large"
+                class="w500"
+                style="border:1px solid #ddd;border-top:none;text-indent:5px"
+                v-model="check"
+              />
+            </section>
+            <section class="flex">
+              <p
+                class="w90 pl5 pr10"
+                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+              >备注</p>
+              <input
+                type="text"
+                size="large"
+                class="w500"
+                style="border:1px solid #ddd;border-top:none;text-indent:5px"
+                v-model="remark"
+              />
+            </section>
+          </div>
+        </Col>
+        <Col span="12">
+          <vxe-table
+            class="ml10"
+            style="flex:4"
+            border
+            resizable
+            :data="tableData"
+            auto-resize
+            :edit-config="{trigger: 'click', mode: 'cell'}"
+            @edit-closed="collectPay"
+          >
+            <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+            <vxe-table-column field="paymentAmtName" title="收款账户"></vxe-table-column>
+            <vxe-table-column
+              field="checkAmt"
+              title="金额"
+              :edit-render="{name: 'input', attrs: {type: 'number'}}"
+            ></vxe-table-column>
+            <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
+          </vxe-table>
+        </Col>
+      </Row>
+      <div slot="footer"></div>
+    </Modal>
+    <reconciliation ref="reconciliation"></reconciliation>
+    <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
+    <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
+  </div>
+</template>
+<script>
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import { creat } from "./../components";
+import {
+  AccountStatement,
+  Record,
+  detailsDocuments,
+  dictionaries,
+  getId,
+  settlement,
+  settlementPreservation,
+  accountRevoke
+} from "@/api/bill/saleOrder";
+import reconciliation from "./components/reconciliation.vue";
+import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
+export default {
+  components: {
+    quickDate,
+    reconciliation,
+    Monthlyreconciliation
+  },
+  data() {
+    return {
+      revoke:false,
+      check: "",
+      remark: "",
+      Write: "", //核销编码
+      collectPayId: "", //收付款单号
+      tab: "name1",
+      falg: true,
+      reconciliationStatement: {},
+      tableData: [],
+      BusinessType: [],
+      Settlement: false,
+      pagetotal: 0,
+      value: [],
+      model1: "",
+      model2: "",
+      model3: "",
+      Reconciliationtype: "",
+      Branchstore: [],
+      modal1: false,
+      text: "",
+      nametext: "",
+      typelist: [
+        {
+          value: "HS",
+          label: "华胜"
+        },
+        {
+          value: "NB",
+          label: "内部"
+        },
+        {
+          value: "WB",
+          label: "外部"
+        }
+      ],
+      business: [
+        {
+          value: "CGRK",
+          label: "采购入库"
+        },
+        {
+          value: "CGTH",
+          label: "采购退货"
+        },
+        {
+          value: "XSCK",
+          label: "销售出库"
+        },
+        {
+          value: "XSTH",
+          label: "销售退货"
+        }
+      ],
+      Reconciliationlist: [
+        {
+          value: "CG",
+          label: "草稿"
+        },
+        {
+          value: "SHZ",
+          label: "审核中"
+        },
+        {
+          value: "SHTG",
+          label: "审批通过"
+        },
+        {
+          value: "JSZ",
+          label: "结算中"
+        },
+        {
+          value: "JSWC",
+          label: "结算完成"
+        }
+      ],
+      columns1: [
+        {
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "门店名称",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "对账单号",
+          key: "accountNo",
+          className: "tc"
+        },
+        {
+          title: "往来单位",
+          key: "guestName",
+          className: "tc"
+        },
+        {
+          title: "收付类型",
+          key: "paymentTypeName",
+          className: "tc"
+        },
+        {
+          title: "对账应收",
+          key: "accountsReceivable",
+          className: "tc"
+        },
+        {
+          title: "应收返利",
+          key: "receivableRebate",
+          className: "tc"
+        },
+        {
+          title: "应收坏账",
+          key: "badDebtReceivable",
+          className: "tc"
+        },
+        {
+          title: "对账应付",
+          key: "reconciliation",
+          className: "tc"
+        },
+        {
+          title: "应付返利",
+          key: "dealingRebates",
+          className: "tc"
+        },
+        {
+          title: "应付坏账",
+          key: "payingBadDebts",
+          className: "tc"
+        },
+        {
+          title: "实际收款/付款",
+          key: "receiptPayment",
+          className: "tc"
+        },
+        {
+          title: "已收金额",
+          key: "amountReceived",
+          className: "tc"
+        },
+        {
+          title: "未收金额",
+          key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "已付金额",
+          key: "amountPaid",
+          className: "tc"
+        },
+        {
+          title: "未付金额",
+          key: "unpaidAmount",
+          className: "tc"
+        },
+        {
+          title: "计算结算类型",
+          key: "billingTypeName",
+          className: "tc"
+        },
+        {
+          title: "对账单状态",
+          key: "statementStatusName",
+          className: "tc"
+        },
+        {
+          title: "对账人",
+          key: "auditor",
+          className: "tc"
+        },
+        {
+          title: "最近一次回款时间",
+          key: "lastPaymentDate",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        },
+        {
+          title: "流程是否通过",
+          key: "passName",
+          className: "tc"
+        }
+      ],
+      columns2: [
+        {
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "收/付款单号",
+          key: "fno",
+          className: "tc"
+        },
+        {
+          title: "收/付款时间",
+          key: "rpDate",
+          className: "tc"
+        },
+        {
+          title: "收/付款方式",
+          key: "sortName",
+          className: "tc"
+        },
+        {
+          title: "收/付款账户",
+          key: "paymentAmtType",
+          className: "tc"
+        },
+        {
+          title: "收/付款金额",
+          key: "checkAmt",
+          className: "tc"
+        },
+        {
+          title: "审核状态",
+          key: "startStatus",
+          className: "tc"
+        },
+        {
+          title: "审核人",
+          key: "auditor",
+          className: "tc"
+        },
+        {
+          title: "审核日期",
+          key: "auditorDate",
+          className: "tc"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          className: "tc"
+        }
+      ],
+      columns3: [
+        {
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "门店",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "客户",
+          key: "guestName",
+          className: "tc"
+        },
+        {
+          title: "销售单号",
+          key: "orderNo",
+          className: "tc"
+        },
+        {
+          title: "出库单号",
+          key: "serviceId",
+          className: "tc"
+        },
+        {
+          title: "应收金额",
+          key: "rpAmt",
+          className: "tc"
+        },
+        {
+          title: "前期已对账金额",
+          key: "charOffAmt",
+          className: "tc"
+        },
+        {
+          title: "前期未对账金额",
+          key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "本次不对账金额",
+          key: "thisNoAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "本次对账金额",
+          key: "thisAccountAmt",
+          className: "tc"
+        }
+      ],
+      columns4: [
+        {
+          title: "序号",
+          key: "num",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "门店",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "客户",
+          key: "guestName",
+          className: "tc"
+        },
+        {
+          title: "采购单号",
+          key: "orderNo",
+          className: "tc"
+        },
+        {
+          title: "入库单号",
+          key: "serviceId",
+          className: "tc"
+        },
+        {
+          title: "应付金额",
+          key: "rpAmt",
+          className: "tc"
+        },
+        {
+          title: "前期已对账金额",
+          key: "charOffAmt",
+          className: "tc"
+        },
+        {
+          title: "前期未对账金额",
+          key: "noCharOffAmt",
+          className: "tc"
+        },
+        {
+          title: "本次不对账金额",
+          key: "thisNoAccountAmt",
+          className: "tc"
+        },
+        {
+          title: "本次对账金额",
+          key: "thisAccountAmt",
+          className: "tc"
+        }
+      ],
+      data1: [],
+      data2: [],
+      data3: [],
+      data4: [],
+      total: 0
+    };
+  },
+  async mounted() {
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
+    this.value = arr[0];
+    this.model1 = arr[1];
+    this.Branchstore = arr[2];
+    let obj = {
+      startDate: this.value[0],
+      endDate: this.value[1],
+      orgId: this.model1,
+      statementStatus: this.Reconciliationtype
+    };
+    this.getAccountStatement(obj);
+  },
+  methods: {
+    // 快速查询日期
+    quickDate(data) {
+      this.value = data;
+    },
+    // 选择日期
+    changedate(daterange) {
+      this.value = daterange;
+    },
+    // 应收/付单据接口
+    getdetailsDocuments(obj) {
+      detailsDocuments(obj).then(res => {
+        // console.log(res);
+        if (res.data.one.length !== 0) {
+          res.data.one.map((item, index) => {
+            item.num = index + 1;
+          });
+          this.data3 = res.data.one;
+        } else {
+          this.data3 = [];
+        }
+        if (res.data.two.length !== 0) {
+          res.data.two.map((item, index) => {
+            item.num = index + 1;
+          });
+          this.data4 = res.data.two;
+        } else {
+          this.data4 = [];
+        }
+      });
+    },
+    // 收付款单记录接口
+    getRecord(obj) {
+      Record(obj).then(res => {
+        if (res.data.length !== 0) {
+          res.data.map((item, index) => {
+            item.num = index + 1;
+            item.sortName = item.sort.name;
+          });
+          this.data2 = res.data;
+        }
+      });
+    },
+    // 对账总表
+    getAccountStatement(obj) {
+      AccountStatement(obj).then(res => {
+        this.pagetotal = res.data.totalElements;
+        if (res.data.content.length !== 0) {
+          res.data.content.map((item, index) => {
+            item.num = index + 1;
+            item.paymentTypeName = item.paymentType.name;
+            item.billingTypeName = item.billingType.name;
+            item.statementStatusName = item.statementStatus.name;
+          });
+          this.data1 = res.data.content;
+        } else {
+          this.data1 = [];
+        }
+      });
+    },
+    // 页码
+    pageCode(page) {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        page: page - 1,
+        statementStatus: this.Reconciliationtype
+      };
+      this.getAccountStatement(obj);
+    },
+    // 查询
+    query() {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype
+      };
+      this.getAccountStatement(obj);
+    },
+    // 更多查询
+    senior() {
+      let obj = {
+        startDate: this.value[0],
+        endDate: this.value[1],
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype,
+        guestType: this.model2,
+        tenantName: this.nametext,
+        serviceType: this.model3,
+        serviceId: this.text
+      };
+      this.getAccountStatement(obj);
+    },
+    // 点击总表查询明细
+    morevis(row, index) {
+      this.reconciliationStatement = row;
+      this.reconciliationStatement.index = index;
+      getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
+        res => {
+          this.collectPayId = res.data.fno;
+          this.Write = res.data.checkId;
+        }
+      );
+      let date = {
+        startDate: this.value[0],
+        endDate: this.value[1]
+      };
+      this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
+      this.$refs.reconciliation.parameter = { ...row, ...date };
+      let obj = {
+        orgId: row.orgId,
+        startDate: this.value[0],
+        endDate: this.value[1],
+        guestId: row.guestId,
+        accountNo: row.accountNo,
+        serviceId: row.serviceId
+      };
+      this.getRecord(obj);
+      this.getdetailsDocuments(obj);
+    },
+    // 查看对账单
+    viewStatement() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        if (this.reconciliationStatement.statementStatusName === "草稿") {
+          this.$refs.Monthlyreconciliation.modal = true;
+        } else {
+          this.$refs.reconciliation.modal = true;
+        }
+      } else {
+        this.$message.error("请勾选要查看的对账单");
+      }
+    },
+    // 对账单结算
+    statementSettlement() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        if (
+          this.reconciliationStatement.pass &&
+          (this.reconciliationStatement.statementStatusName === "审批通过" ||
+            this.reconciliationStatement.statementStatusName === "结算中")
+        ) {
+          this.Settlement = true;
+        } else {
+          this.$message.error(
+            "请勾选流程通过且对账单状态为审核通过或结算中的数据"
+          );
+        }
+      } else {
+        this.$message.error("请勾选要对账数据");
+      }
+    },
+    // 核销单元格编辑状态下被关闭时
+    editClosedEvent({ row, rowIndex }) {
+      row.unAmt = row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
+      row.endAmt += row.checkAmt * 1;
+      row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
+      this.$set(this.BusinessType, rowIndex, row);
+      let obj = {
+        serviceTypeName: "合计",
+        accountAmt: this.BusinessType[0].accountAmt,
+        endAmt: this.BusinessType[0].endAmt,
+        uncollectedAmt: this.BusinessType[0].uncollectedAmt,
+        checkAmt: this.BusinessType[0].checkAmt,
+        unAmt: this.BusinessType[0].unAmt
+      };
+      let total = this.getTotal(obj);
+      this.$set(this.BusinessType, 5, obj);
+    },
+    // 收付款单元格关闭
+    collectPay({ row }) {
+      this.total += row.checkAmt * 1;
+    },
+    // 导出对账单/单据明细
+    report(type) {
+      if (type) {
+        if (this.tab === "name1") {
+          if (this.data3.length !== 0) {
+            this.$refs.collectBill.exportCsv({
+              filename: "应收单据明细"
+            });
+          } else {
+            this.$message.error("应收单据明细暂无数据");
+          }
+        } else if (this.tab === "name2") {
+          if (this.data4.length !== 0) {
+            this.$refs.payBill.exportCsv({
+              filename: "应付单据明细"
+            });
+          } else {
+            this.$message.error("应付单据明细暂无数据");
+          }
+        }
+      } else {
+        if (this.data1.length !== 0) {
+          this.$refs.accountStatement.exportCsv({
+            filename: "对账单"
+          });
+        } else {
+          this.$message.error("对账单暂无数据");
+        }
+      }
+    },
+    // tab标签页当前的name
+    tabName(name) {
+      this.tab = name;
+    },
+    // 收付款结算计算合计
+    getTotal(obj) {
+      this.BusinessType.map((item, index) => {
+        if (index < 5 && index !== 0) {
+          if (index > 2) {
+            obj.accountAmt += item.accountAmt * 1;
+            obj.endAmt += item.endAmt;
+            obj.uncollectedAmt += item.uncollectedAmt;
+            obj.checkAmt += item.checkAmt;
+            obj.unAmt += item.unAmt;
+          } else {
+            obj.accountAmt -= item.accountAmt * 1;
+            obj.endAmt -= item.endAmt;
+            obj.uncollectedAmt -= item.uncollectedAmt;
+            obj.checkAmt -= item.checkAmt;
+            obj.unAmt -= item.unAmt;
+          }
+        }
+      });
+      return obj;
+    },
+    // 业务类型/收款账户
+    hander() {
+      this.total = 0;
+      settlement({
+        orgId: this.reconciliationStatement.orgId,
+        accountNo: this.reconciliationStatement.accountNo
+      }).then(res => {
+        if (res.data.one.length !== 0 && res.data.two.length !== 0) {
+          let accountAmt = 0;
+          let endAmt = 0;
+          let uncollectedAmt = 0;
+          let checkAmt = 0;
+          let unAmt = 0;
+          res.data.one.map((item, index) => {
+            item.serviceTypeName = item.serviceType.name;
+            if (
+              item.serviceTypeName === "供应商坏账" ||
+              item.serviceTypeName === "供应商返利"
+            ) {
+              accountAmt += item.accountAmt;
+              endAmt += item.endAmt;
+              uncollectedAmt += item.uncollectedAmt;
+              checkAmt += item.checkAmt;
+              unAmt += item.unAmt;
+            } else {
+              accountAmt -= item.accountAmt;
+              endAmt -= item.endAmt;
+              uncollectedAmt -= item.uncollectedAmt;
+              unAmt += item.unAmt;
+              checkAmt -= item.checkAmt;
+            }
+          });
+          res.data.one.push({
+            serviceTypeName: "合计",
+            accountAmt,
+            endAmt,
+            uncollectedAmt,
+            checkAmt,
+            unAmt
+          });
+          res.data.two.map(item => {
+            item.paymentAmtName = item.paymentAmt.name;
+            this.total += item.checkAmt;
+          });
+          this.BusinessType = res.data.one;
+          this.tableData = res.data.two;
+        } else {
+          dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
+            res.data.itemVOS[0] = {
+              serviceType: {
+                name: res.data.itemVOS[0].itemName,
+                enum: res.data.itemVOS[0].itemCode,
+                value: 0
+              },
+              serviceTypeName: res.data.itemVOS[0].itemName,
+              accountAmt: this.reconciliationStatement.accountsReceivable,
+              endAmt: 0,
+              uncollectedAmt: this.reconciliationStatement.accountsReceivable,
+              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              unAmt: this.reconciliationStatement.accountsReceivable
+            };
+            res.data.itemVOS[1] = {
+              serviceType: {
+                name: res.data.itemVOS[1].itemName,
+                enum: res.data.itemVOS[1].itemCode,
+                value: 1
+              },
+              serviceTypeName: res.data.itemVOS[1].itemName,
+              accountAmt: this.reconciliationStatement.badDebtReceivable,
+              endAmt: 0,
+              uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
+              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              unAmt: this.reconciliationStatement.noCharOffAmt
+            };
+
+            res.data.itemVOS[2] = {
+              serviceType: {
+                name: res.data.itemVOS[2].itemName,
+                enum: res.data.itemVOS[2].itemCode,
+                value: 2
+              },
+              serviceTypeName: res.data.itemVOS[2].itemName,
+              accountAmt: this.reconciliationStatement.receivableRebate,
+              endAmt: 0,
+              uncollectedAmt: this.reconciliationStatement.receivableRebate,
+              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              unAmt: this.reconciliationStatement.noCharOffAmt
+            };
+            res.data.itemVOS[3] = {
+              serviceType: {
+                name: res.data.itemVOS[3].itemName,
+                enum: res.data.itemVOS[3].itemCode,
+                value: 3
+              },
+              serviceTypeName: res.data.itemVOS[3].itemName,
+              accountAmt: this.reconciliationStatement.payingBadDebts,
+              endAmt: 0,
+              uncollectedAmt: this.reconciliationStatement.payingBadDebts,
+              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              unAmt: this.reconciliationStatement.noCharOffAmt
+            };
+            res.data.itemVOS[4] = {
+              serviceType: {
+                name: res.data.itemVOS[4].itemName,
+                enum: res.data.itemVOS[4].itemCode,
+                value: 4
+              },
+              serviceTypeName: res.data.itemVOS[4].itemName,
+              accountAmt: this.reconciliationStatement.dealingRebates,
+              endAmt: 0,
+              uncollectedAmt: this.reconciliationStatement.dealingRebates,
+              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              unAmt: this.reconciliationStatement.noCharOffAmt
+            };
+            this.BusinessType = res.data.itemVOS;
+            let obj = {
+              accountAmt: 0,
+              endAmt: 0,
+              uncollectedAmt: 0,
+              checkAmt: 0,
+              unAmt: 0
+            };
+            let total = this.getTotal(obj);
+            this.BusinessType.push({
+              serviceType: { name: "合计", enum: "HJ", value: 5 },
+              serviceTypeName: "合计",
+              accountAmt: total.accountAmt,
+              endAmt: total.endAmt,
+              uncollectedAmt: total.uncollectedAmt,
+              checkAmt: total.checkAmt,
+              unAmt: total.unAmt
+            });
+          });
+          dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
+            res.data.itemVOS.map((item, index) => {
+              item.paymentAmtName = item.itemName;
+              item.paymentAmt = {
+                name: item.itemName,
+                enum: item.itemCode,
+                value: index
+              };
+              item.orgName = this.reconciliationStatement.orgName;
+              item.checkAmt = 0;
+            });
+            this.tableData = res.data.itemVOS;
+          });
+        }
+      });
+    },
+    // 收付款保存
+    conserve() {
+      if (this.total === this.BusinessType[5].checkAmt) {
+        let one = [
+          {
+            checkId: this.Write,
+            orgId: this.reconciliationStatement.orgId,
+            guestId: this.reconciliationStatement.guestId,
+            sort: this.reconciliationStatement.billingType,
+            accountNo: this.reconciliationStatement.accountNo,
+            fno: this.collectPayId,
+            serviceId: this.reconciliationStatement.serviceId
+          }
+        ];
+        settlementPreservation({
+          one,
+          two: this.BusinessType,
+          three: this.tableData
+        }).then(res => {
+          let ind = this.reconciliationStatement.index;
+          this.$set(
+            this.data1[ind],
+            "amountReceived",
+            this.BusinessType[5].endAmt
+          );
+          this.Settlement = false;
+        });
+      } else {
+        this.$message.error("收款金额与本次核销金额不相等");
+      }
+    },
+    // 收付款关闭
+    close() {
+      this.Settlement = false;
+    },
+    // 撤销按钮
+    Revoke() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        this.revoke = true;
+        // if (
+        //   this.reconciliationStatement.statementStatusName === "审核中" ||
+        //   this.reconciliationStatement.statementStatusName === "审核通过"
+        // ) {
+        //   this.revoke = true;
+        // } else {
+        //   this.$message.error("此状态无法撤销");
+        // }
+      } else {
+        this.$message.error("请勾选要撤销的对账单");
+      }
+    },
+    // 确认撤销
+    confirmRevocation(){
+      accountRevoke({
+        id:this.reconciliationStatement.id
+      }).then(res=>{
+        console.log(res)
+      })
+    }
+  }
+};
+</script>
+<style scoped>
+.pro span {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+}
+.pro i {
+  font-style: normal;
+}
+.pro input {
+  border: 1px solid #dddddd;
+  height: 28px;
+}
+.settlement {
+  border: 1px solid #dddddd;
+}
+</style>
