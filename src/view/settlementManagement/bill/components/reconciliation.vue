@@ -693,6 +693,7 @@ export default {
           }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
             TOKEN_KEY
           )}&jsonObject=${encodeURI(arr)}`;
+
           // reportParts({ one: this.data1, two: this.data2, three: obj }).then(
           //   res => {
           // var blob = new Blob([res]); //创建一个blob对象

@@ -268,3 +268,11 @@ export function accountRevoke(data) {
         data
     })
 }
+// 导出配件明细
+export function reportParts(data){
+    return axios.request({
+        url: `${api.omsOrder}/pchsEnterMain/export/in/detail`,
+        method: 'post',
+        data
+    })
+}
