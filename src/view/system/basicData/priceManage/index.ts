@@ -137,6 +137,39 @@ export default class PriceManage extends Vue {
             this.part.page.total = res.data.totalElements;
         }
     }
+    // rest
+    private restTbdata() {
+        this.customer = {
+            pinyin: "", //客户拼音
+            fullname: "", //客户全程
+            // 表头
+            // 表身
+            tbdata: new Array(),
+            // 表格加载
+            loading: false,
+            // 分页
+            page: {
+                num: 1,
+                total: 0,
+                size: 10
+            }
+        }
+        this.part = {
+            pinyin: "", // 拼音
+            code: "", // 编码
+            fullname: "", // 名称
+            // 表身
+            tbdata: new Array(),
+            // 表格加载
+            loading: false,
+            // 分页
+            page: {
+                num: 1,
+                total: 0,
+                size: 10
+            }
+        };
+    }
     // 保存级别
     private async save() {
         let data: any = {
@@ -165,6 +198,7 @@ export default class PriceManage extends Vue {
         if (res.code === 0) {
             this.$Message.success('保存成功');
             this.getLevelList();
+            this.restTbdata();
         }
     }
     // 新增
