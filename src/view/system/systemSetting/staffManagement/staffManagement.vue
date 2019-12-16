@@ -356,7 +356,7 @@
                      editUser(data , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
-                             this.$Message.success(res.message)
+                             this.$Message.success('新增成功')
                              this. cancel()
                              this.getAllStaffList()
                          }
@@ -373,7 +373,7 @@
                      changeeditUser(data).then( res => {
                          stop()
                          if(res.code ==0){
-                             this.$Message.success(res.message)
+                             this.$Message.success('修改成功')
                              this.oneStaffChange = {}
                              this.getAllStaffList()
                          }
