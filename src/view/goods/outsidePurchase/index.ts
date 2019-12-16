@@ -226,7 +226,7 @@ export default class InterPurchase extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
-    id: '0',
+    id: '',
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -261,11 +261,8 @@ export default class InterPurchase extends Vue {
           billTypeId: this.formPlanmain.billTypeId,
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
-          orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
-          directGuestId: this.formPlanmain.serviceId,
+          serviceId: this.formPlanmain.serviceId,
           advanceAmt:this.formPlanmain.advanceAmt
         };
         for (let k in this.amt) {
@@ -297,8 +294,9 @@ export default class InterPurchase extends Vue {
     let data: any = this.formdata(refname);
     if (!data) return;
     if (this.selectTableRow.id) {
-      data = { ...this.selectTableRow, ...data };
+      data = Object.assign({}, this.selectTableRow, data);
     }
+    data.details = this.tableData;
     let res = await api.outsideSaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');

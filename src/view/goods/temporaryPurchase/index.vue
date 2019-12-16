@@ -242,7 +242,7 @@
                   <FormItem class="form-Item" label="直发门店：">
                     <Select
                       class="w160"
-                      v-model="formPlanmain.companyName"
+                      v-model="formPlanmain.directGuestId"
                       :disabled="isInput"
                     >
                       <Option

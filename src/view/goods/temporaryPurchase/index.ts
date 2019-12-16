@@ -184,7 +184,7 @@ export default class InterPurchase extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    companyName: "", // 直发门店
+    directGuestId: "", // 直发门店
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
@@ -230,7 +230,7 @@ export default class InterPurchase extends Vue {
   private PTrow: any = {
     new: true,
     _highlight: true,
-    id: '0',
+    id: '',
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
@@ -258,7 +258,6 @@ export default class InterPurchase extends Vue {
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {
-      console.log(this.formPlanmain.planArriveDate)
       if (valid) {
         data = {
           guestId: this.formPlanmain.guestId,
@@ -267,9 +266,9 @@ export default class InterPurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
+          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          directGuestId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt:this.formPlanmain.advanceAmt,
         };
@@ -301,13 +300,10 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
-    console.log(data)
     if (this.selectTableRow.id) {
-      data = { ...this.selectTableRow, ...data };
+      data = Object.assign({}, this.selectTableRow, data);
     }
- if(data.id=='0'){
-   data.id='';
- }
+    data.details = this.tableData;
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
       this.$Message.success('保存成功');
