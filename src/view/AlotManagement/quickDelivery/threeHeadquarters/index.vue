@@ -67,7 +67,7 @@
           </vxe-table-column>
           <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调拨出库单号"></vxe-table-column>
-          <vxe-table-column field="isEnter" title="状态"></vxe-table-column>
+          <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
           <vxe-table-column field="allotFinishDate" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column

@@ -89,7 +89,7 @@
           <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
-            field="storeName"
+            field="storeId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>
