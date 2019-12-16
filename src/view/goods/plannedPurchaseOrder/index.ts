@@ -151,7 +151,7 @@ export default class PlannedPurchaseOrder extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    companyName: "", // 直发门店
+    directGuestId: "", // 直发门店
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
@@ -234,9 +234,9 @@ export default class PlannedPurchaseOrder extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: this.formPlanmain.planArriveDate,
+          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
         };
         for (let k in this.amt) {
@@ -252,7 +252,7 @@ export default class PlannedPurchaseOrder extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -268,7 +268,7 @@ export default class PlannedPurchaseOrder extends Vue {
     let data: any = this.formdata(refname);
     if (!data) return;
     if (this.selectTableRow.id) {
-      data = { ...this.selectTableRow, ...data };
+      data = Object.assign({}, this.selectTableRow, data);
     }
     data.details = this.tableData;
     let res = await api.saveDraft(data);
@@ -287,7 +287,7 @@ export default class PlannedPurchaseOrder extends Vue {
         let data: any = this.formdata(refname);
         if (!data) return;
         if (this.selectTableRow.id) {
-          data = { ...this.selectTableRow, ...data };
+          data = Object.assign({}, this.selectTableRow, data);
         }
         data.details = this.tableData;
         let res = await api.saveCommit(data);

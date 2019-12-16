@@ -40,7 +40,7 @@
                 查询
               </Button>
               <Button class="mr10 w90" @click="exportTheSummary"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
-              <Button class="mr10 w120" @click="sfy"> 安全库存设置</Button>
+<!--              <Button class="mr10 w120" @click="sfy"> 安全库存设置</Button>-->
           </div>
         </div>
         <!--    表-->
@@ -308,7 +308,6 @@
                         title: '序号',
                         type: 'index',
                         align: 'center',
-                        key: 'aaa',
                         minWidth: 40
                     },
                     {
@@ -338,25 +337,23 @@
                     {
                         title: '品牌车型',
                         align: 'center',
-                        key: 'aaa',
+                        key: '',
+                        render:(h , params)=>{
+
+                          return h('span' ,{} ,tex)
+                        },
                         minWidth: 120
                     },
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'enterUnitId',
                         minWidth: 120
                     },
                     {
                         title: '规格',
                         align: 'center',
                         key: 'spec',
-                        minWidth: 120
-                    },
-                    {
-                        title: '方向',
-                        align: 'center',
-                        key: 'aaa',
                         minWidth: 120
                     },
                     {
@@ -368,7 +365,7 @@
                     {
                         title: '可售数量',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'outableQty',
                         minWidth: 80
                     },
                     {
@@ -399,31 +396,35 @@
                     {
                         title: '税率',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'taxRate',
                         minWidth: 120
                     },
                     {
                         title: '不含税单价',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'noTaxPrice',
                         minWidth: 120
                     },
                     {
                         title: '不含税金额',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'noTaxAmt',
                         minWidth: 120
                     },
                     {
                         title: '本店库龄',
                         align: 'center',
-                        key: 'aaa',
+                        key: 'branchStockAge',
                         minWidth: 120
                     },
                     {
                         title: '滞销',
                         align: 'center',
-                        key: 'aaa',
+                        // key: 'isUnsalable ',
+                        render: (h , params) => {
+                            let tex = params.row.isUnsalable == 0 ? '否' : '是'
+                      return  h('span', {} , tex)
+                    },
                         minWidth: 120
                     },
                 ],
@@ -524,7 +525,7 @@
             },
             //安全库存弹窗
             sfy() {
-                // this.safetyModal = true
+                this.safetyModal = true
             },
             //获取仓库下拉选择信息
             async getStoreHoure() {
