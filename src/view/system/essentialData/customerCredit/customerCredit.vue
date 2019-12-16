@@ -499,12 +499,12 @@
                   let data = this.creaditList
                   data.guestId = this.ID
                   console.log(data)
-                  // saveOrUpdate(data).then(res => {
-                  //     if(res.code === 0){
-                  //         this.getListTop()
-                  //         this.surveyShow = false
-                  //     }
-                  // })
+                  saveOrUpdate(data).then(res => {
+                      if(res.code === 0){
+                          this.getListTop()
+                          this.surveyShow = false
+                      }
+                  })
                 }else {
                   this.$message.warning('* 为必填！')
                 }

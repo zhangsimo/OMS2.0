@@ -210,20 +210,20 @@
             return {
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
-                // nature: [{ required: true, type:'string',message: '请输入正确公司性质！', trigger: 'blur' }],
+                nature: [{ required: true, type:'string',message: '请输入正确公司性质！', trigger: 'blur' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
                 operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change',pattern: /.+/ }],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
                 operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change',pattern: /.+/ }],
                 registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change',pattern: /.+/}],
-                // manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'blur' }],
+                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'blur' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
                 businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
-                // cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'blur' }],
+                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'blur' }],
                 accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
                 cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
@@ -253,14 +253,14 @@
       // },
       ChangeTime(value) {
         // console.log(value)
-        this.data.operationStart = value
+        this.data.operationStart = tools.transDate(value)
       },
       ChangeTime2(value) {
         console.log(value)
-        this.data.operationEnd = value
+        this.data.operationEnd = tools.transDate(value)
       },
       ChangeTime3(value) {
-        this.data.registerDate = value
+        this.data.registerDate = tools.transDate(value)
       },
       // 上传前
       handleBeforeUpload() {
