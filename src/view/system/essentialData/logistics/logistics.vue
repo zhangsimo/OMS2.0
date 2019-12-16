@@ -192,9 +192,9 @@
                         key:'accountBankNo'
                     },
                     {
-                        title:'账户人名称',
+                        title:'开户人名称',
                         align: 'center',
-                        key:'createName'
+                        key:'accountName'
                     },
                     {
                         title:'备注',
