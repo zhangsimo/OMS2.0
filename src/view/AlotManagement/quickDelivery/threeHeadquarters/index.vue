@@ -21,7 +21,6 @@
             <Select v-model="form.isEnter" class="w100 mr10" clearable>
               <Option value="0" label="待入库"></Option>
               <Option value="1" label="已入库"></Option>
-              <Option value="3" label="已入库"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -121,8 +120,8 @@
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
 
-          <vxe-table-column field="date1243" title="OE码"></vxe-table-column>
-          <vxe-table-column field="date124" title="规格"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="spec" title="规格"></vxe-table-column>
         </vxe-table>
       </div>
     </section>

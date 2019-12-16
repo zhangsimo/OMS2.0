@@ -10,7 +10,7 @@
               type="daterange"
               placeholder="请选择日期"
               @on-change="getTime"
-
+              @on-clear="clearTime"
             ></DatePicker>
           </FormItem>
           <FormItem>
@@ -199,6 +199,11 @@
 
     },
     methods: {
+      clearTime(){
+        this.Outform.startOutDate=null
+        this.Outform.endOutDate=null
+        this.getList()
+      },
       //查询
       search(){
         this.tableDataBottom = {}
