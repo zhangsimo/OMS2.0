@@ -16,8 +16,8 @@
           <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
         </FormItem>
         <Button type="primary mr15" @click="searchInfo">查询</Button>
-        <!-- <Button type="primary mr15" @click="saveInfo">保存</Button> -->
-        <!-- <Button @click="init1">取消</Button> -->
+        <Button type="primary mr15" @click="saveInfo">保存</Button>
+        <Button @click="init1">取消</Button>
       </Form>
     </div>
     <div class="main clearfix">
@@ -180,6 +180,9 @@ export default {
 
   },
   methods: {
+    init1() {
+      this.$emit('init')
+    },
     //加上物流公司的名称
     logCom(val) {
       this.formDateRight.logisticsComp = val
@@ -202,7 +205,8 @@ export default {
       let res = await saveGoodsInfo(this.formDateRight)
       if (res.code == 0) {
         this.$Message.success(res.data)
-        // this.$refs.formTwo.resetFields()
+        this.$refs.formTwo.resetFields()
+        this.init1()
         console.log(res)
       }
     },

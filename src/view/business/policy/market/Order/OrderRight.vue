@@ -22,41 +22,41 @@
             <FormItem label="销售员：" prop="orderMan">
               <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0"></Input>
             </FormItem>
-            <FormItem label="订单类型：" >
+             <FormItem label="交货仓库：" prop="storeId">
+          <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
+            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+          </Select>
+        </FormItem>
+            <!-- <FormItem label="订单类型：" >
               <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
                 <Option v-for="item in orderType" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
             <FormItem label="往来单号：" >
               <Input class="w210" v-model="formPlan.code" disabled></Input>
-            </FormItem>
+            </FormItem> -->
             <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
-                <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
+                <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
               </Select>
             </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
           <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
-            <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
+            <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
           </Select>
         </FormItem>
         <FormItem label="备注：">
           <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0"></Input>
         </FormItem>
-        <FormItem label="订单号:">
+        <FormItem label="出库单号:">
           <Input class="w210" v-model="formPlan.serviceId" disabled></Input>
         </FormItem>
-        <FormItem label="计划发货日期:">
+        <!-- <FormItem label="计划发货日期:">
           <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
         </FormItem>
         <FormItem label="计划到货日期:">
           <DatePicker :value="formPlan.planArriveDate" @on-change="getplanArriveDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
-        </FormItem>
-        <FormItem label="交货仓库：" prop="storeId">
-          <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-          </Select>
-        </FormItem>
+        </FormItem> -->
 
       </div>
       <div class="flex plan-cz-btn" ref="planBtn">
@@ -70,7 +70,7 @@
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openBarchModal"> 批次配件</Button>
           </div>
-          <div class="fl mb5">
+          <!-- <div class="fl mb5">
             <Upload
               ref="upload"
               style="display: inline-block"
@@ -86,22 +86,22 @@
               <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
             </Button>
             </Upload>
-          </div>
-          <div class="fl mr10">
+          </div> -->
+          <!-- <div class="fl mr10">
             <Button size="small"  @click="down">
               <Icon custom="iconfont iconxiazaiicon icons" />
              下载模板
             </Button>
-          </div>
+          </div> -->
           <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openActivityModal"> 选择活动</Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
+            <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openGodownEntryModal"> 选择入库单</Button>
           </div>
-          <div class="fl mb5">
+          <!-- <div class="fl mb5">
             <Button size="small" :disabled="draftShow != 0 || !formPlan.id" class="mr10" @click="openAddressShow"> 编辑发货信息</Button>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="tableBox">
@@ -117,7 +117,7 @@
           showOverflow="true"
           height="400"
           :edit-rules="validRules"
-          :data="formPlan.detailList"
+          :data="formPlan.details"
           @select-change="selectTable"
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
@@ -162,7 +162,6 @@
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
           <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
-          <vxe-table-column field="showDirection" title="方向"></vxe-table-column>
         </vxe-table>
       </div>
       </Form>
@@ -202,12 +201,12 @@
 
 <script>
 import ClientData from "../../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "./goodsInfo";
-import selectPartCom from "../../../../salesManagement/salesOrder/components/selectPartCom";
-import SelectTheCustomer from "../../../../salesManagement/commonality/SelectTheCustomer";
-import GodownEntry from "../../../../salesManagement/commonality/GodownEntry";
-import Activity from "../../../../salesManagement/commonality/Activity";
-import SeeFile from "../../../../salesManagement/commonality/SeeFile";
+import goodsInfo from "../../../../goods/plannedPurchaseOrder/components/GoodsInfo";
+import selectPartCom from "../components/selectPartCom";
+import SelectTheCustomer from "../../commonality/SelectTheCustomer";
+import GodownEntry from "../../commonality/GodownEntry";
+import Activity from "../../commonality/Activity";
+import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
 import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
@@ -217,9 +216,8 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import barch from '../batch/selectPartCom'
 import baseUrl from '_conf/url'
-
-
-
+import {conversionList} from '@/components/changeWbList/changewblist'
+ import {baocun, shanqu, outDataList, zuofei} from '@/api/business/market.js'
 
     export default {
         name: "OrderRight",
@@ -329,37 +327,46 @@ import baseUrl from '_conf/url'
         },
         computed:{
             getOneOrder(){
+                console.log(this.$store.state.dataList.oneOrder, '当前列')
                 return this.$store.state.dataList.oneOrder
             }
         },
         methods:{
+            getChangeList() {
+                this.$emit('getChangeList')
+            },
             //获取右侧数据
           async getList(){
-              let data ={}
-              let stop = this.$loading()
-                data.id =this.leftOneOrder.id
-                 let res = await  getRightList(data)
-              if( res.code === 0 ){
-                  stop()
-                  // this.draftShow = JSON.parse(res.data.billStatusId)
-                  // res.data.orderType =  JSON.parse(res.data.orderType)
-                  this.draftShow = res.data.billStatusId
-                  res.data.orderTypeValue = res.data.orderType.value
-                  this.formPlan = res.data
-                  this.draftShow = this.draftShow.value
-              }
-              if(res.code !== 0){
-                  stop()
-              }
+                console.log('抓取右侧信息')
+                const res = this.$store.state.dataList.oneOrder
+                console.log(res)
+                if (res.xinzeng !== '1') {
+                    res.orderType =  JSON.parse(res.orderType)
+                    this.draftShow = res.billStatusId === 0 ? false : true 
+                    res.orderTypeValue = res.orderType.value
+                    this.formPlan = res
+                } else {
+                    this.draftShow = 0
+                    this.formPlan = res
+                }
+                // this.draftShow = this.draftShow.value
             },
             //获取客户额度
           async getAllLimit(){
               let data = {}
               data.guestId = this.leftOneOrder.guestId
-               let res = await getLimit(data)
-                if( res.code === 0){
-                    this.limitList = res.data
-                }
+              if (data.guestId) {
+                  let res = await getLimit(data)
+                   if( res.code === 0){
+                       this.limitList = res.data
+                   }
+              } else {
+                  this.limitList = {
+                      fixationQuota: 0,
+                      tempQuota: 0,
+                      sumAmt: 0
+                  }
+              }
             },
             //改变客户
             async changeClient(value){
@@ -491,7 +498,7 @@ import baseUrl from '_conf/url'
                 }else {
                     this.$Message.success(response.message)
                 }
-                this.getList()
+                this.getChangeList()
             },
             //上传之前清空
             beforeUpload(){
@@ -513,8 +520,6 @@ import baseUrl from '_conf/url'
             //多选内容
             selectTable(data){
                 this.selectTableList = data.selection
-
-
             },
             //全选内容
             selectAllTable(data){
@@ -525,13 +530,15 @@ import baseUrl from '_conf/url'
                 if (this.selectTableList.length > 0){
                     let data= []
                     this.selectTableList.forEach( item => {
-                        data.push({id: item.id})
+                        data.push(item.id)
                     })
                     console.log(data)
-                    getDeleteList(data).then( res => {
-                    if(res.code === 0){
-                        this.getList()
-                    }
+                    const that = this
+                    shanqu(data).then( res => {
+                        console.log(res.code === 0, 'dafadsf')
+                        if (res.code === 0) {
+                            that.getChangeList()
+                        }
                      })
                 }else {
                     this.$message.error('请选择一条有效数据')
@@ -545,25 +552,45 @@ import baseUrl from '_conf/url'
             getplanArriveDate(data){
                 this.formPlan.planArriveDate = data + ' '+ "00:00:00"
             },
+
             //配件返回的参数
-          async  getPartNameList(val){
-              let data ={}
-                  data = this.formPlan
-                  data.detailList = val
-              let res = await  getAccessories(data)
-              if(res.code === 0){
-                  this.getList()
-              }
+            getPartNameList(val){
+              this.$refs.formPlan.validate(async (valid) => {
+                  if (valid) {
+                      let data ={}
+                      data = this.formPlan
+                      data.details = conversionList(val)
+                      let res = await  baocun(data)
+                      if(res.code === 0){
+                          this.getChangeList()
+                      }
+                  } else {
+                      this.$Message.error('*为必填项');
+                  }
+              })
+
             },
             // 批次配件
             async  getBarchList(val){
-                let data ={}
-                data = this.formPlan
-                data.detailList = val
-                let res = await  getAccessories(data)
-                if(res.code === 0){
-                  this.getList()
-                }
+                this.$refs.formPlan.validate(async (valid) => {
+                    if (valid) {
+                        let data ={}
+                        data = this.formPlan
+                        let arr = []
+                        val.map(item => {
+                            arr.push(item.id)
+                        })
+                        data.partIds = arr
+                        data.type = 1
+                        data.details = val
+                        let res = await  baocun(data)
+                        if(res.code === 0){
+                            this.getChangeList()
+                        }
+                    } else {
+                        this.$Message.error('*为必填项');
+                    }
+                })
             },
             //打开客户选择
             openAddCustomer(){
@@ -581,10 +608,13 @@ import baseUrl from '_conf/url'
           async  activiyList(val){
                 let data ={}
                 data = this.formPlan
-                data.detailList = [val]
-                let res = await  getAccessories(data)
+                data.partIds = [val.id]
+                data.type = 2
+                data.details = [val]
+                console.log('dianjiafasong')
+                let res = await  baocun(data)
                 if(res.code === 0){
-                    this.getList()
+                    this.getChangeList()
                 }
             },
             //打开查看模态框
@@ -604,9 +634,12 @@ import baseUrl from '_conf/url'
                             if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
                                 return this.$message.error('可用余额不足')
                             }
-
+                            console.log(this.formPlan, 'sfah')
+                            if (this.formPlan.billStatusId.value) {
+                                this.formPlan.billStatusId = this.formPlan.billStatusId.value
+                            }
                             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
-                              let res = await getSave(this.formPlan)
+                              let res = await baocun(this.formPlan)
                               if(res.code === 0){
                                   this.$Message.success('保存成功');
                                   this.$store.commit('setleftList' ,res)
@@ -636,19 +669,25 @@ import baseUrl from '_conf/url'
                 },
             //出库
             stockOut(){
+                let list = this.$store.state.dataList.oneOrder
+                if(list.xinzeng === '1') {
+                 this.$message.error('请先保存')
+                   return false
+               }
                 this.$refs.formPlan.validate(async (valid) => {
                     if (valid) {
                         try {
                             await this.$refs.xTable.validate()
-
                             if((+this.totalMoney) >  (+this.limitList.sumAmt) ){
                                 return this.$message.error('可用余额不足')
                             }
-
+                            console.log('jinlaile')
                             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
-                            let res = await getStockOut(this.formPlan)
+                            let res = await outDataList(this.formPlan)
+                            console.log('fasong')
                             if(res.code === 0){
                                 this.$Message.success('出库成功成功');
+                                this.getChangeList()
                                 return res
                             }
                         } catch (errMap) {
@@ -687,14 +726,20 @@ import baseUrl from '_conf/url'
           async  getGodown(val){
                 let data ={}
                 data = this.formPlan
-                data.detailList = val.details
-                let res = await  getAccessories(data)
+                let arr = []
+                val.details.map(item => {
+                    arr.push(item.id)
+                })
+                data.partIds = arr
+                data.type = 3
+                data.details = val.details
+                let res = await  baocun(data)
                 if(res.code === 0){
-                    this.getList()
+                    this.getChangeList()
                 }
             },
             getRUl(){
-              this.upurl = this.upurl +'id=' + this.formPlan.id
+              this.upurl = getup +'id=' + this.formPlan.id
             },
 
 
@@ -702,13 +747,14 @@ import baseUrl from '_conf/url'
         watch:{
             getOneOrder:{
                 handler(old ,ov){
-                    if(!old.id){
-                        this.formPlan ={
-                            billStatusId: {name:"草稿",value:0}
-                        }
-                        this.draftShow = 0
-                        return false
-                    }
+                    // if(!old.id){
+                    //     this.draftShow = 0
+                    //     this.leftOneOrder = old
+                    //     this.leftOneOrder = old
+                    //     this.getList()
+                    //     this.getAllLimit()
+                    //     return false
+                    // }
                     this.leftOneOrder = old
                     this.getList()
                     this.getAllLimit()

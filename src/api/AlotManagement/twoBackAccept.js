@@ -16,13 +16,23 @@ export function getbayer(params) {
   });
 }
 // 退回受理列表
-export function tuihuishouliliebiao(params) {
+export function tuihuishouliliebiao(params, size, num) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backAcceptList`,
+    url: `${api.omsOrder}/allotApplyMain/backAcceptList?page=${num -1}&size=${size}`,
     method: 'get',
     params
   });
 }
+
+// 退回受理列表mingxi
+export function tuihuishouliliebiaomingxi(params) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyDetail/findApplyDetails`,
+    method: 'get',
+    params
+  });
+}
+
 // 退回受理确认
 export function tuihuishouli(data) {
   return axios.request({

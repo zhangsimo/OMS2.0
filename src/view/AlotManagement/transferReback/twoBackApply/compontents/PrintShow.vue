@@ -98,7 +98,7 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
         name: "PrintShow",
         data(){
             return{
-                printShoww: false, //模态框隐藏
+                printShow: false, //模态框隐藏
                 columns2: [
                     {
                         title: '序号',
@@ -198,7 +198,7 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
                 getprintList(params).then(res => {
                     // 点击列表行==>配件组装信息
                           if (res.code == 0) {
-                            this.printShoww = true
+                            this.printShow = true
                             this.onelist = res.data
                           }
                         }).catch(e => {

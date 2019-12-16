@@ -58,12 +58,14 @@
             >
           </div>
           <div class="db">
-            <Button class="mr10"
+            <Button class="mr10" @click="exportHandle"
               ><i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" :disabled="mainId.length <= 0"
+            <Button
+              class="mr10"
+              :disabled="mainId.length <= 0"
               @click="showStatus"
               ><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button
             >
@@ -128,7 +130,7 @@
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
                           placeholder="请选择供应商"
-                          :readonly="selectPlanOrderItem.billStatusId != 0"
+                          readonly
                         ></Input
                       ></Col>
                       <Col span="5"
@@ -161,7 +163,7 @@
                       v-model="formPlan.planner"
                     ></Input>
                   </FormItem>
-                  <FormItem label="备注：" >
+                  <FormItem label="备注：">
                     <Input
                       class="w160"
                       :disabled="isinput"
@@ -235,13 +237,23 @@
                     >
                   </div>
                   <div class="fl mb5">
-                    <Button
-                      size="small"
-                      class="mr10"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
-                      @click="addPro"
-                      >导入</Button
+                    <Upload
+                      ref="upload"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :format="['xlsx', 'xls', 'csv']"
+                      :headers="headers"
+                      :before-upload="handleBeforeUpload"
+                      :on-success="handleSuccess"
+                      :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
                     >
+                      <Button
+                        size="small"
+                        class="mr10"
+                        :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
+                        >导入</Button
+                      >
+                    </Upload>
                   </div>
                   <div class="fl mb5">
                     <Button
@@ -381,7 +393,11 @@
                     {{ row.orderPrice | priceFilters }}
                   </template>
                 </vxe-table-column>
-                <vxe-table-column title="计划采购金额" width="120" field="orderAmt">
+                <vxe-table-column
+                  title="计划采购金额"
+                  width="120"
+                  field="orderAmt"
+                >
                   <template v-slot="{ row }">
                     {{ (row.orderPrice * row.orderQty) | priceFilters }}
                   </template>
@@ -407,10 +423,7 @@
                   title="最近采购单价"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column
-                  title="单价差"
-                  width="100"
-                >
+                <vxe-table-column title="单价差" width="100">
                   <template v-slot="{ row }">
                     {{ (row.orderPrice - row.recentPrice) | priceFilters }}
                   </template>
@@ -472,98 +485,6 @@
       header-tit="供应商资料"
       @selectSupplierName="getSupplierName"
     ></select-supplier>
-
-    <Drawer
-      title="高级查询"
-      v-model="advancedSearch"
-      :mask-closable="false"
-      width="720"
-    >
-      <Form :model="seniorFormData">
-        <Row :gutter="32">
-          <Col span="12">
-            <FormItem label="创建日期：">
-              <DatePicker
-                v-model="seniorFormData.date"
-                type="daterange"
-                class="w200"
-              ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="提交日期：">
-              <DatePicker
-                v-model="seniorFormData.date"
-                type="daterange"
-                class="w200"
-              ></DatePicker>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="32">
-          <Col span="12">
-            <FormItem label="Owner" label-position="top">
-              <Select
-                v-model="seniorFormData.owner"
-                placeholder="please select an owner"
-              >
-                <Option value="jobs">Steven Paul Jobs</Option>
-                <Option value="ive">Sir Jonathan Paul Ive</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="Type" label-position="top">
-              <Select
-                v-model="seniorFormData.type"
-                placeholder="please choose the type"
-              >
-                <Option value="private">Private</Option>
-                <Option value="public">Public</Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row :gutter="32">
-          <Col span="12">
-            <FormItem label="Approver" label-position="top">
-              <Select
-                v-model="seniorFormData.approver"
-                placeholder="please choose the approver"
-              >
-                <Option value="jobs">Steven Paul Jobs</Option>
-                <Option value="ive">Sir Jonathan Paul Ive</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12">
-            <FormItem label="DateTime" label-position="top">
-              <DatePicker
-                v-model="seniorFormData.date"
-                type="daterange"
-                placeholder="please select the date"
-                style="display: block"
-                placement="bottom-end"
-              ></DatePicker>
-            </FormItem>
-          </Col>
-        </Row>
-        <FormItem label="Description" label-position="top">
-          <Input
-            type="textarea"
-            v-model="seniorFormData.desc"
-            :rows="4"
-            placeholder="please enter the description"
-          />
-        </FormItem>
-      </Form>
-      <div class="demo-drawer-footer">
-        <Button style="margin-right: 8px" @click="value3 = false"
-          >Cancel</Button
-        >
-        <Button type="primary" @click="value3 = false">Submit</Button>
-      </div>
-    </Drawer>
     <!-- 更多 -->
     <more-search @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 订单调整 -->
@@ -573,9 +494,9 @@
   </div>
 </template>
 <script>
-import adjustModel from './components/AdjustModel.vue';
-import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.vue';
-import MoreSearch from '../plannedPurchaseOrder/components/MoreSearch.vue';
+import adjustModel from "./components/AdjustModel.vue";
+import StatusModel from "../plannedPurchaseOrder/components/checkApprovalModal.vue";
+import MoreSearch from "../plannedPurchaseOrder/components/MoreSearch.vue";
 import "../../lease/product/lease.less";
 import "./goodsList.less";
 import { getPurchaseInit } from "_api/purchasing/purchasePlan";
@@ -588,7 +509,14 @@ import SelectSupplier from "./components/supplier/selectSupplier";
 
 export default {
   name: "goodsList",
-  components: { SelectSupplier, SelectPartCom, QuickDate, StatusModel, adjustModel, MoreSearch},
+  components: {
+    SelectSupplier,
+    SelectPartCom,
+    QuickDate,
+    StatusModel,
+    adjustModel,
+    MoreSearch
+  },
   inject: ["reload"],
   mixins: [mixGoodsData],
   data() {
@@ -639,7 +567,7 @@ export default {
       moreData: {},
 
       //快速订单查询状态
-      purchaseType: 0,
+      purchaseType: "",
       purchaseTypeArr: [],
       //高级搜索层
       advancedSearch: false,
@@ -696,7 +624,8 @@ export default {
           key: "billStatusId",
           minWidth: 70,
           render: (h, params) => {
-            return h("span", params.row.billStatusId.name);
+            let val = params.row.billStatusId.name || '';
+            return h("span", val);
           }
         },
         {
@@ -733,7 +662,7 @@ export default {
           title: "提交日期",
           key: "auditDate",
           minWidth: 170
-        },
+        }
       ],
       tbdata: [],
 
@@ -784,8 +713,8 @@ export default {
       this.getList();
     },
 
-    showStatus(){
-      this.$refs['StatusModel'].init();
+    showStatus() {
+      this.$refs["StatusModel"].init();
     },
 
     showModel(name) {

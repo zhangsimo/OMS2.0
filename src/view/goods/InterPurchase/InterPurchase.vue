@@ -126,6 +126,7 @@
                           v-model="formPlanmain.guest"
                           placeholder="请选择供应商"
                           :disabled="isInput"
+                          readonly
                       /></Col>
                       <Col span="5"
                         ><Button
@@ -146,6 +147,7 @@
                       placeholder="请输入采购员"
                       v-model="formPlanmain.orderMan"
                       :disabled="isInput"
+                      readonly
                     />
                   </FormItem>
                   <FormItem

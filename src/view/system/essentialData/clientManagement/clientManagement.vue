@@ -36,17 +36,22 @@
                 getClientTreeList().then( res => {
                     if (res.code == 0){
                         this.list = res.data
-                        let leverOne = res.data.filter( item => item.lever ==1)
+                        let leverOne = []
+                        let leverTwo =[]
+                            leverOne = res.data.filter( item => item.lever ==1)
+                            leverTwo = res.data.filter(item => item.lever == 2)
                         leverOne.map( item => {
                             item.children =[]
                             item.code = item.id
-                            this.list.forEach( el => {
+
+                        })
+                        leverOne.map( item => {
+                            leverTwo.forEach( el => {
                                 if (item.id == el.parentId){
                                     item.children.push(el)
                                 }
                             })
                         })
-
                         this.treeList = leverOne
                     }
                 })

@@ -1,6 +1,6 @@
 const data = function() {
   return {
-    split: 0.3,
+    split: 0.2,
     // modal显示
     modal: false,
     // tab索引
@@ -455,14 +455,15 @@ const methods = {
     console.log(a)
     let newA = a.map(item => {
       return {
-        partCode: item.code,
-        partName: item.partBrandName,
+        partCode: item.partCode,
+        partName: item.partName,
         partId: item.id,
       }
     })
-    this.getArr = newA
-    this.level.tbdata = [...this.level.tbdata,...this.getArr]
-    this.level.tbdata = this.unique(this.level.tbdata)
+    this.level.tbdata = [...this.level.tbdata,...newA]
+
+    console.log(this.level.tbdata,"left数据")
+    // this.level.tbdata = this.unique(this.level.tbdata) //暂时不去重，后台数据id为null，无法通过partId去重。
     // console.log(this.getArr)
   },
   // 父组件右部分获取子组件的参数

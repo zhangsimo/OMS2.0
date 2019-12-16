@@ -61,7 +61,6 @@
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="入库单号" width="100"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="totalHasInQty" title="入库数量" width="100"></vxe-table-column>
           <vxe-table-column field="code" title="申请单号" width="100"></vxe-table-column>
           <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
         </vxe-table>
@@ -105,6 +104,7 @@
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
+import { chengpingDetail } from '@/api/AlotManagement/twoBackApply.js'
 import moment from 'moment'
 export default {
   data() {
@@ -236,24 +236,26 @@ export default {
     //取消
     cancel() {},
     echoDate() {},
-    selectTabelData({row}) {
+    async selectTabelData({row}) {
       console.log(row)
       this.checkRow = row
-      this.currentData = row.voList
+      const params = {
+        mainId: row.id
+      }
+      const res = await chengpingDetail(params)
+      this.currentData = res.data
+
     },
     ok() {
       // 将选好的成品传父组件
       const sendList = this.$refs.xtale.getSelectRecords()
-      const arr = []
-      sendList.map(item => {
-        arr.push(...item.voList)
-      })
-      console.log(arr, 'shuzu')
       if (sendList.length === 0) {
         this.$Message.info('请勾选需要选入的行')
         return
       }
-      this.$emit('ok', arr)
+      console.log('jinru')
+      this.$emit('ok', this.currentData)
+      this.searchPartLayer = false
     }
   }
 }

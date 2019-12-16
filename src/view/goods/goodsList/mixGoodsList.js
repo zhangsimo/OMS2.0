@@ -5,21 +5,26 @@ import {
   queryByConditions,
   saveCommit,
   saveObsolete,
-  saveReverse
+  saveReverse,
+  exportXls,
+  upxlxs,
 } from "_api/purchasing/purchasePlan";
 import * as tools from "../../../utils/tools";
+import Cookies from 'js-cookie';
+import { TOKEN_KEY } from '@/libs/util';
 // import {purchaseTypeList} from "./goodsList";
 
 export const mixGoodsData = {
   data() {
     return {
+      upurl: '',
       //计划采购信息
       formPlan: {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
         planDate: "", //计划日期
-        planDateformat: "",
+        // planDateformat: "",
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
@@ -58,15 +63,8 @@ export const mixGoodsData = {
       //选中的采购计划单
       selectPlanOrderItem: {},
 
-      //高级查询
-      seniorFormData: {
-        name: "",
-        url: "",
-        owner: "",
-        type: "",
-        approver: "",
-        date: "",
-        desc: ""
+      headers: {
+        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
       }
     };
   },
@@ -101,7 +99,7 @@ export const mixGoodsData = {
     async getList() {
       let params = {};
       let data = {};
-      if (this.purchaseType !== 9999) {
+      if (this.purchaseType !== 9999 && this.purchaseType) {
         data.billStatusId = this.purchaseType;
       }
       if (this.dateTime.length > 0) {
@@ -111,17 +109,33 @@ export const mixGoodsData = {
       params.page = this.page.num;
       params.size = this.page.size;
       let res;
-      if (!this.isMore) { 
+      if (!this.isMore) {
         res = await findPageByDynamicQuery(params, data);
-       } else {
+      } else {
         if (this.moreData != null) {
           data = { ...data, ...this.moreData };
         }
         res = await queryByConditions(params, data);
       }
       if (res.code == 0) {
+        this.newadd = false;
         this.loading = false;
         this.tbdata = res.data.content || [];
+        this.tableData = [];
+        this.$refs["planOrderTable"].clearCurrentRow();
+        this.$refs["formPlan"].resetFields();
+        this.formPlan = {
+          supplyName: "", //供应商
+          guestId: "", //供应商id
+          planDate: "", //计划日期
+          planner: this.$store.state.user.userData.staffName || "", //计划人
+          remark: "", //备注
+          billType: "", //票据类型
+          hairShop: "", //直发门店
+          planOrderNum: "新计划采购", //计划单号
+          otherPrice: 0, //其他费用
+          totalPrice: 0 //合计总金额
+        };
         this.page.total = res.data.totalElements;
       }
     },
@@ -152,17 +166,22 @@ export const mixGoodsData = {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (['totalStockQty',
-          'masterStockQty',
-          'branchStockQty',
-          'onWayQty',
-          'unsalableQty',
-          'orderQty',
-          'orderPrice',
-          'noTaxPrice',
-          'noTaxAmt',
-          'recentPrice',
-          ].includes(column.property) || columnIndex === 12 || columnIndex === 17 ) {
+          if (
+            [
+              "totalStockQty",
+              "masterStockQty",
+              "branchStockQty",
+              "onWayQty",
+              "unsalableQty",
+              "orderQty",
+              "orderPrice",
+              "noTaxPrice",
+              "noTaxAmt",
+              "recentPrice"
+            ].includes(column.property) ||
+            columnIndex === 12 ||
+            columnIndex === 17
+          ) {
             return this.sum(data, column.property, columnIndex);
           }
           return null;
@@ -178,33 +197,37 @@ export const mixGoodsData = {
         }
         total += parseFloat(value);
       });
-      if (['totalStockQty',
-      'masterStockQty',
-      'branchStockQty',
-      'onWayQty',
-      'unsalableQty',
-      'orderQty',
-      'orderPrice',
-      'noTaxPrice',
-      'noTaxAmt',
-      'recentPrice',].includes(type)) {
+      if (
+        [
+          "totalStockQty",
+          "masterStockQty",
+          "branchStockQty",
+          "onWayQty",
+          "unsalableQty",
+          "orderQty",
+          "orderPrice",
+          "noTaxPrice",
+          "noTaxAmt",
+          "recentPrice"
+        ].includes(type)
+      ) {
         return total.toFixed(2);
       }
       if (columnIndex === 12) {
         let totals = 0;
         let sumarr = data.map(el => {
-          return row.orderPrice * row.orderQty;
-        })
-        totals = sumarr.reduce((total, el) => total += el, 0);
+          return el.orderPrice * el.orderQty;
+        });
+        totals = sumarr.reduce((total, el) => (total += el), 0);
         this.totalAmt = totals;
         return totals.toFixed(2);
       }
-      if(columnIndex === 17) {
+      if (columnIndex === 17) {
         let totals = 0;
         let sumarr = data.map(el => {
-          return Math.abs(row.orderPrice - row.recentPrice);
-        })
-        totals = sumarr.reduce((total, el) => total += el, 0);
+          return Math.abs(el.orderPrice - el.recentPrice);
+        });
+        totals = sumarr.reduce((total, el) => (total += el), 0);
         this.totalAmt = -1 * totals;
         return totals.toFixed(2);
       }
@@ -226,7 +249,7 @@ export const mixGoodsData = {
     //选择日期
     setDataFun(v) {
       console.log(v);
-      this.formPlan.planDateformat = v;
+      this.formPlan.planDate = v;
     },
     //获取订单状态
     // returnOrderType(n){
@@ -242,7 +265,7 @@ export const mixGoodsData = {
         this.formPlan.supplyName = v.guest || "";
         this.formPlan.guestId = v.guestId || "";
         this.formPlan.planDate = v.orderDate || "";
-        this.formPlan.planDateformat = v.orderDate || "";
+        // this.formPlan.planDateformat = v.orderDate || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
         this.formPlan.hairShop = v.directOrgid || "";
@@ -251,6 +274,7 @@ export const mixGoodsData = {
         this.formPlan.totalPrice = v.totalAmt || 0;
         this.tableData = v.details || [];
         this.mainId = v.id;
+        this.upurl = upxlxs + v.id;
       }
     },
 
@@ -263,12 +287,11 @@ export const mixGoodsData = {
       this.newadd = true;
       this.$refs["planOrderTable"].clearCurrentRow();
       this.$refs["formPlan"].resetFields();
-      (this.formPlan = {
+      this.formPlan = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
         planDate: "", //计划日期
-        planDateformat: "",
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
@@ -277,37 +300,34 @@ export const mixGoodsData = {
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0 //合计总金额
-      }),
-        (this.tableData = []);
-      this.selectPlanOrderItem = {};
-      this.selectPlanOrderItem.billStatusId = 0;
-      this.tbdata.unshift({
+      };
+      this.tableData = [];
+      let row = {
         new: true,
         _highlight: true,
         id: "0",
         billStatusId: "",
         createTime: tools.transTime(new Date()),
         details: []
-      });
+      }
+      this.selectPlanOrderItem = row;
+      this.tbdata.unshift(row);
     },
 
     //作废--反作废
     saveObsoleteFun(type) {
+      if(this.selectPlanOrderItem.new) {
+        return this.$Message.error('请先保存数据!');
+      }
       if (type === 1) {
-        let req = {
-          id: this.selectPlanOrderItem.id
-        };
-        saveObsolete(req).then(res => {
+        saveObsolete(this.selectPlanOrderItem.id).then(res => {
           if (res.code == 0) {
             this.$Message.success("提交成功");
             this.getList();
           }
         });
       } else {
-        let req = {
-          id: this.selectPlanOrderItem.id
-        };
-        saveReverse(req).then(res => {
+        saveReverse(this.selectPlanOrderItem).then(res => {
           if (res.code == 0) {
             this.$Message.success("提交成功");
             this.getList();
@@ -327,7 +347,7 @@ export const mixGoodsData = {
           objReq.guestId = this.formPlan.guestId;
           objReq.guest = this.formPlan.supplyName;
           //计划日期
-          objReq.orderDate = this.formPlan.planDateformat;
+          objReq.orderDate = tools.transTime(this.formPlan.planDate);
           //计划员name
           objReq.orderMan = this.formPlan.planner;
           //备注
@@ -374,6 +394,37 @@ export const mixGoodsData = {
           this.$Message.error("必填数据未填写");
         }
       });
-    }
+    },
+
+    // 导出
+    exportHandle() {
+      if(this.selectPlanOrderItem.new) {
+        return this.$Message.error('请先保存数据!');
+      }
+      if(!this.mainId || this.mainId.length <= 0) {
+        return this.$Message.error('请选择要导出的数据!');
+      }
+      let url = exportXls(this.mainId);
+      window.open(url, '_balnk');
+    },
+
+    // 导入
+    handleBeforeUpload() {
+      if(this.selectPlanOrderItem.new) {
+        return this.$Message.error('请先保存数据!');
+      }
+      let refs =  this.$refs;
+      refs.upload.clearFiles();
+    },
+    handleSuccess(res, file){
+      let self = this;
+      if(res.code == 0) {
+          self.$Message.success('导入成功');
+          this.tableData = res.data.details;
+      } else {
+        self.$Message.error(res.message);
+      }
+    },
+
   }
 };

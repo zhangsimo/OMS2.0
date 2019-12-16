@@ -260,7 +260,6 @@
         },
         created(){
           this.getList()
-            console.log(this.treelist ,12312312123123)
         },
         methods:{
             //获取客户属性
@@ -268,7 +267,6 @@
                 let data ={}
                 data =['CS00107','CS00106','CS00111','CS00110']
                 let res = await  getDigitalDictionary(data)
-                console.log(res)
                 if(res.code == 0){
                     this.dataList = res.data
                 }

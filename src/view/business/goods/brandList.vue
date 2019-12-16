@@ -13,10 +13,10 @@
           <div class="db mr10">
             <span class="mr10">日期从：</span>
             <Date-picker
-              type="daterange" 
-              class="w200 mr10" 
+              type="daterange"
+              class="w200 mr10"
               :options="options3"
-              @on-change="dateChange" 
+              @on-change="dateChange"
               placeholder="年/月/日-年/月/日"
             >
             </Date-picker>
@@ -36,7 +36,7 @@
           <div class="db mr10">
             <span>品牌：</span>
               <Select v-model="conditionData.brand" filterable clearable class="w100 mr10" placeholder="选择品牌">
-                <Option v-for="item in brandList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
               </Select>
           </div>
           <div class="db">
@@ -59,10 +59,10 @@
           <div class="db mr10">
             <span class="mr10">日期从：</span>
             <Date-picker
-              type="daterange" 
-              class="w200 mr10" 
+              type="daterange"
+              class="w200 mr10"
               :options="options3"
-              @on-change="dateChange" 
+              @on-change="dateChange"
               placeholder="年/月/日-年/月/日"
             >
             </Date-picker>
@@ -75,7 +75,7 @@
           <div class="db mr10">
             <span>品牌：</span>
               <Select v-model="penPurchaseData.brand" class="w100 mr10" placeholder="选择品牌" filterable clearable>
-                <Option v-for="item in brandList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
               </Select>
           </div>
           <div class="db">
@@ -121,7 +121,7 @@
                   @on-change="onChange"
                   :current="pageList.page"
                   :total="this.pageList.total"
-                  :page-size="pageList.pageSize" 
+                  :page-size="pageList.pageSize"
                   :page-size-opts="pageList.pageSizeOpts"
                   show-sizer
                   /></div>
@@ -131,10 +131,10 @@
                   每页{{this.pageList.size}}条,
                   共{{this.pageList.total}}条
                 </div>
-                  
+
               </Col>
             </Row>
-            
+
           <Table
               show-summary
               :summary-method="handleSummary"
@@ -164,7 +164,7 @@
                     @on-change="onChange"
                     :current="pageList.page"
                     :total="this.pageList.total"
-                    :page-size="pageList.pageSize" 
+                    :page-size="pageList.pageSize"
                     :page-size-opts="pageList.pageSizeOpts"
                     show-sizer
                   />
@@ -314,13 +314,14 @@ import {
   searchBrandList,
   pendingPurchase,
   generateOrder,
+    allBrand,
   PjType,
   JsStyle,
   activeCompany,
   savePreOrder,
   accept,
   pendingPurchaseSearch,
-} from "../../../api/business/brandListApi"
+} from "@/api/business/brandListApi"
   export default {
     name: 'brandList',
     data() {
@@ -346,13 +347,13 @@ import {
           character: '', // 快速查询
           status: '1',  //受理状态
           company: '', //公司选择
-          brand: '', //品牌
+          partBrandCode: '', //品牌
         },
         // 代采购条件查询
         penPurchaseData: {
           character: '', // 快速查询
           company: '', //公司选择
-          brand: '', //品牌
+          partBrandCode: '', //品牌
         },
         // 快速查询数据1
         quickArray: [
@@ -419,18 +420,6 @@ import {
         company: '',
         // 品牌选择数据
         brandList: [
-          {
-            value: '马勒',
-            label: '马勒'
-          },
-          {
-            value: '博士',
-            label: '博士'
-          },
-          {
-            value: '马牌',
-            label: '马牌'
-          }
         ],
         brand: '',
         // 分页数据
@@ -715,10 +704,10 @@ import {
         transitUnitList: {},
         // 票据类型数据
         ticketType: "",
-        ticketTypeList: {},
+        ticketTypeList: [],
         // 结算方式
         settlementMethod: "",
-        settlementMethodList: {},
+        settlementMethodList: [],
         // 生成直发采购订单
         directPurchaseOrderDialog: false,
         generateBrand: [],
@@ -732,6 +721,7 @@ import {
       this.getPjType()
       this.getJsStyle()
       this.getActiveCompany()
+        this.getAllBrand()
       // this.getBrandIfoList()
     },
     methods: {
@@ -743,7 +733,7 @@ import {
           // console.log(this.data4)
           // return
           savePreOrder({
-            guestId:  this.guestId, 
+            guestId:  this.guestId,
             storeId: this.storeId,
             orderManId:this.orderManId,
               orderMan:this.orderMan,
@@ -771,6 +761,17 @@ import {
           }
         })
       },
+        //获取品牌
+       async getAllBrand(){
+          let res =await allBrand({pageSize:10000})
+           if(res.code === 0) {
+               let arr = []
+                res.data.content.forEach( item => {
+                    arr.push(...item.children)
+                })
+               this.brandList = arr
+           }
+       },
       // 往来单位
       getActiveCompany(){
         activeCompany().then(res => {
@@ -837,7 +838,7 @@ import {
         pendingPurchase().then(res => {
           if(res.code === 0) {
             this.data3 = res.data.content
-            
+
             this.pageList.total = res.data.totalElements
           }
         })
@@ -912,7 +913,7 @@ import {
               item.status = JSON.parse(item.status)
             })
             this.pageList.total = res.data.totalElements
-          } 
+          }
         })
     },
     // 待采购查询
@@ -947,7 +948,7 @@ import {
         // console.log(selection)
         this.generateBrand = row
         this.data4 = row
-        
+
       },
       // 待采购订单全选
       onSelectAll (selection) {
@@ -1013,7 +1014,7 @@ import {
           this.$Message.error('存在单价为0')
         } else {
           savePreOrder({
-            guestId:  this.guestId, 
+            guestId:  this.guestId,
             storeId: this.storeId,
             orgid: this.orgid,
             orderManId: this.orderManId,
@@ -1032,7 +1033,7 @@ import {
             }
           })
         }
-        
+
       },
       // 直发取消按钮
       cancelZhiFa(){

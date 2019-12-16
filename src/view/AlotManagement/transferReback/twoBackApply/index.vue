@@ -179,7 +179,7 @@
           <!-- 选择调出方 -->
     <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>
       <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
-      <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
+      <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
   </main>
   <!-- 配件组装 -->
 </template>
@@ -193,7 +193,7 @@ import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
 import SelectSupplier from './compontents/selectSupplier'
 import {
-  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList
+  getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '../../../../api/AlotManagement/twoBackApply.js'
 export default {
   name: 'twoBackApply',
@@ -468,15 +468,17 @@ export default {
       if (params.xinzeng) {
         delete params.status
       }
-      if (params.status.value) {
-        params.status = params.status.value || ''
+      if (params.status && params.status.name) {
+        params.status = params.status.value
       }
-      if (params.orderTypeId) {
-        params.orderTypeId = params.orderTypeId.value || ''
+      console.log(params.orderTypeId)
+      if (params.orderTypeId && params.orderTypeId.name) {
+        params.orderTypeId = params.orderTypeId.value
       }
-      if (params.settleStatus) {
-        params.settleStatus = params.settleStatus.value || ''
+      if (params.settleStatus && params.settleStatus.name) {
+        params.settleStatus = params.settleStatus.value
       }
+      console.log(params)
         //配件组装保存
         baocun(params).then(res => {
             // 点击列表行==>配件组装信息
@@ -591,12 +593,15 @@ export default {
           this.$Message.info('只有草稿状态申请单能进行添加操作')
           return
       }
-      chengping({orderTypeId: '3'},10, 1).then(res => {
+      const params = {
+        mainId: this.Leftcurrentrow.id
+      }
+      this.$refs.addInCom.init()
+      chengping(params,10, 1).then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
                 if (res.code == 0) {
                   this.tableData1 = res.data.content
                   console.log(this.tableData1)
-                  this.$refs.addInCom.init()
                   this.$Message.success('获取成品列表成功');
                 }
               }).catch(e => {
@@ -668,13 +673,20 @@ export default {
       this.advanced = true
     },
     //左边列表选中当前行
-    selectTabelData(row) {
+    async selectTabelData(row) {
       this.dayinCureen = row
       this.Leftcurrentrow = row
-      if (!row.detailVOS) {
-        row['detailVOS'] = []
+      const params = {
+        mainId: row.id
       }
-      this.Leftcurrentrow.detailVOS = row.detailVOS
+      const res = await getListDetail(params)
+      console.log(res)
+      this.showit = false
+      this.Leftcurrentrow.detailVOS = res.data
+      const that = this
+      setTimeout(() => {
+        that.showit = true
+      },100)
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
                 if (res.code == 0) {
                   res.data.map(item => {

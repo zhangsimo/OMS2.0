@@ -88,7 +88,7 @@ export default {
           {required: true, message: '  ', trigger: 'blur'}
         ],
         orderDate:[
-          {required:true ,type: 'string', message: ' ' , trigger:'change' }
+          {required:true ,type: 'date', message: ' ' , trigger:'change' }
         ],
         billTypeId:[
           {required: true, type: 'string', message: ' ', trigger: 'change'}
@@ -387,6 +387,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate()
+            this.formPlan = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
@@ -419,6 +420,7 @@ export default {
           try {
             await this.$refs.xTable.validate()
             this.formPlan.billStatusValue = 4
+            this.formPlan = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
             let res = await saveList(this.formPlan)
             if(res.code === 0){
               this.getLeftLists()
@@ -439,10 +441,10 @@ export default {
 
     },
 
-    //更改订单时间
-    setOrderDate(val){
-      this.formPlan.orderDate = val
-    },
+    // //更改订单时间
+    // setOrderDate(val){
+    //   this.formPlan.orderDate = val
+    // },
 
     //打开添加配件模态框
     addMountings(){

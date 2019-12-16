@@ -8,17 +8,17 @@
       <div class="titler">
         <Row style="border: 1px #000000 solid">
           <Col span="12" class="pl10">
-            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.userCompany}}</h5>
+            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.orgName}}</h5>
           </Col>
           <Col span="12" class="pl10" >
-            <p>销售订单:</p>
+            <p>销售出库单:</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址:</span></p>
-            <p><span>电话:</span></p>
+            <p><span>地址:</span><span>{{onelist.orgAddr}}</span></p>
+            <p><span>电话:</span><span>{{onelist.orgTel}}</span></p>
           </Col>
           <Col span="12" class="pl10" >
             <p><span>订单日期:</span><span>{{onelist.orderDate}}</span></p>
@@ -34,16 +34,16 @@
             <p><span>地址:</span> <span>{{onelist.addr}}</span></p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>联系人:</span> <span>{{onelist.orderMan}}</span></p>
+            <p><span>联系人:</span> <span>{{onelist.contactor}}</span></p>
             <p><span>票据类型:</span><span>{{onelist.billTypeName}}</span></p>
 
           </Col>
           <Col span="8" class="pl10">
-            <p><span>联系电话:</span><span>{{onelist.tel}}</span></p>
+            <p><span>联系电话:</span><span>{{onelist.contactorTel}}</span></p>
             <p><span>结算方式:</span><span>{{onelist.settleTypeName}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.details" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
@@ -93,12 +93,13 @@
 </template>
 
 <script>
-import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
+    import { getprintList } from '@/api/business/market.js'
+
     export default {
         name: "PrintShow",
         data(){
             return{
-                printShoww: false, //模态框隐藏
+                printShow: false, //模态框隐藏
                 columns2: [
                     {
                         title: '序号',
@@ -163,14 +164,6 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
                 num2: 78723
             }
         },
-        props: {
-          curenrow: {
-            type: Object,
-            default: function () {
-              return {}
-            }
-          }
-        },
         methods:{
             //打印
             print(){
@@ -186,27 +179,19 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
                     document.body.innerHTML = oldstr
             },
           async  openModal(){
-            if (!this.curenrow) {
-              this.$message.error('请选选择列表信息')
-              return
-            } else {
-              const params = {
-                id: this.curenrow.id
-                // ...this.curenrow
-              }
-                // 配件组装作废
-                getprintList(params).then(res => {
-                    // 点击列表行==>配件组装信息
-                          if (res.code == 0) {
-                            this.printShoww = true
-                            this.onelist = res.data
-                          }
-                        }).catch(e => {
-                          this.$Message.info('至少选择一条信息')
-                })
-
-            }
-                console.log(this.curenrow)
+                let order = this.$store.state.dataList.oneOrder
+                if(order.id){
+                    let data ={}
+                    data['id'] = order.id
+                    let res = await getprintList(data)
+                    if(res.code == 0){
+                        this.printShow = true
+                        this.onelist = res.data
+                    }
+                    console.log(res,996)
+                }else {
+                    this.$message.error('至少选择一条信息')
+                }
             }
         }
     }

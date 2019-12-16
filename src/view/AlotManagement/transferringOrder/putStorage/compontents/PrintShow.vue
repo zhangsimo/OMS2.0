@@ -93,12 +93,12 @@
 </template>
 
 <script>
-import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
+import { getprintList } from '@/api/AlotManagement/putStorage.js'
     export default {
         name: "PrintShow",
         data(){
             return{
-                printShoww: false, //模态框隐藏
+                printShow: false, //模态框隐藏
                 columns2: [
                     {
                         title: '序号',
@@ -185,28 +185,19 @@ import { getprintList } from '@/api/AlotManagement/twoBackApply.js'
                     window.location.reload()
                     document.body.innerHTML = oldstr
             },
-          async  openModal(){
-            if (!this.curenrow) {
-              this.$message.error('请选选择列表信息')
-              return
-            } else {
-              const params = {
-                id: this.curenrow.id
-                // ...this.curenrow
-              }
-                // 配件组装作废
-                getprintList(params).then(res => {
-                    // 点击列表行==>配件组装信息
-                          if (res.code == 0) {
-                            this.printShoww = true
-                            this.onelist = res.data
-                          }
-                        }).catch(e => {
-                          this.$Message.info('至少选择一条信息')
-                })
-
-            }
-                console.log(this.curenrow)
+             async  openModal(){
+                if(this.curenrow.id){
+                    let data ={}
+                    data['id'] = this.curenrow.id
+                    let res = await getprintList(data)
+                    if(res.code == 0){
+                        this.printShow = true
+                        this.onelist = res.data
+                    }
+                    console.log(res,996)
+                }else {
+                    this.$message.error('至少选择一条信息')
+                }
             }
         }
     }

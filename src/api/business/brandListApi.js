@@ -64,14 +64,14 @@ export function selectCompany(params) {
   // 票据类型接口
   export function PjType() {
     return axios.request({
-      url: `${api.omsProduct}/dictionariesItem/findByDictCode?dictCode=CS00107`,
+      url: `${api.omsProduct}/dictionariesItem/findBydictCode?dictCode=CS00107`,
       method: "get",
     });
   }
   // 结算方式接口
   export function JsStyle() {
     return axios.request({
-      url: `${api.omsProduct}/dictionariesItem/findByDictCode?dictCode=CS00106`,
+      url: `${api.omsProduct}/dictionariesItem/findBydictCode?dictCode=CS00106`,
       method: "get",
     });
   }
@@ -108,3 +108,13 @@ export function selectCompany(params) {
       data
     });
   }
+
+
+  //获取品牌
+export function allBrand(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    method: "post",
+    data
+  });
+}
