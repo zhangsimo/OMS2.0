@@ -1437,18 +1437,18 @@ export default [
             component: () =>
               import("@/view/system/essentialData/logistics/logistics.vue")
           },
-          {
-            path: "/",
-            name: "",
-            mark: '9110',
-            meta: {
-              // hideInMenu: true,
-              icon: "arrow-graph-up-right",
-              title: " 配件替换件"
-            },
+          // {
+          //   path: "/",
+          //   name: "",
+          //   mark: '9110',
+          //   meta: {
+          //     // hideInMenu: true,
+          //     icon: "arrow-graph-up-right",
+          //     title: " 配件替换件"
+          //   },
             // component: () =>
             //   import()
-          },
+          // },
           // {
           //   path: "FittingReplacement",
           //   name: "FittingReplacement",

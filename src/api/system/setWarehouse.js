@@ -56,8 +56,9 @@ export function getAdd (data) {
 //右侧员工list
 export function getStaffList (params) {
   return axios.request({
-    url: `${api.wmsApi}/storeMember/${params}`,
+    url: `${api.wmsApi}/storeMember`,
     method: 'get',
+    params
   })
 }
 
@@ -73,6 +74,7 @@ export function getdeleSaffect (data) {
 
 //获取全部员工
 export function getAllseffactList (params) {
+  console.log(params, 999)
   return axios.request({
     url: `${api.authApi}/tenantUsers/queryAll?`,
     method: 'get',

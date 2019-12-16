@@ -216,8 +216,9 @@ export default {
     },
     //获取右侧员工
     async getAllSaffect() {
-      let id = this.storeId.id;
-      let res = await getStaffList(id);
+        let data ={}
+            data.storeId = this.storeId.id;
+      let res = await getStaffList(data);
       if (res.code == 0) {
         this.saffectList = res.data;
       }
@@ -303,6 +304,9 @@ export default {
       let data = {};
       data.size = this.page.size;
       data.page = this.page.num - 1;
+      data.office = 0
+      data.userName = ''
+      data.phone = ''
       getAllseffactList(data).then(res => {
         if (res.code == 0) {
           this.saffectLoading = false;
