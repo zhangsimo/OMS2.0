@@ -265,7 +265,8 @@ export default class InterPurchase extends Vue {
           planArriveDate: this.formPlanmain.planArriveDate,
           remark: this.formPlanmain.remark,
           companyId: this.formPlanmain.companyName,
-          serviceId: this.formPlanmain.serviceId,
+          directGuestId: this.formPlanmain.serviceId,
+          advanceAmt:this.formPlanmain.advanceAmt
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -280,7 +281,7 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -584,7 +585,7 @@ export default class InterPurchase extends Vue {
       data.endTime = this.quickDate[1];
     }
     if (this.purchaseType != 999 && this.purchaseType) {
-      data.flag = this.purchaseType;
+      data.billStatusId = this.purchaseType;
     }
     let res: any;
     if (!this.isMore) {

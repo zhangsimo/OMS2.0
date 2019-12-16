@@ -258,6 +258,7 @@ export default class InterPurchase extends Vue {
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {
+      console.log(this.formPlanmain.planArriveDate)
       if (valid) {
         data = {
           guestId: this.formPlanmain.guestId,
@@ -268,8 +269,9 @@ export default class InterPurchase extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: this.formPlanmain.planArriveDate,
           remark: this.formPlanmain.remark,
-          companyId: this.formPlanmain.companyName,
+          directGuestId: this.formPlanmain.companyName,
           serviceId: this.formPlanmain.serviceId,
+          advanceAmt:this.formPlanmain.advanceAmt,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -284,7 +286,7 @@ export default class InterPurchase extends Vue {
     let obj: any = {};
     for (let k in data) {
       let v = data[k];
-      if (v && v.length > 0) {
+      if (!!v) {
         obj[k] = v;
       }
     }
@@ -299,6 +301,7 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
+    console.log(data)
     if (this.selectTableRow.id) {
       data = { ...this.selectTableRow, ...data };
     }
@@ -591,7 +594,7 @@ export default class InterPurchase extends Vue {
       data.endTime = this.quickDate[1];
     }
     if (this.purchaseType != 999 && this.purchaseType) {
-      data.flag = this.purchaseType;
+      data.billStatusId = this.purchaseType;
     }
     let res: any;
     if (!this.isMore) {
