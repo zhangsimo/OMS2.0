@@ -56,7 +56,7 @@
         name:'checkApprovalModal',
         props:{
             orderId:{
-                type:[Number,String],
+                type:[Number,String,Object],
                 default:''
             },
         },
