@@ -482,8 +482,8 @@ export default [
     component: Main,
     children: [
       {
-        path: "/",
-        name: "",
+        path: "/settlementManagement/bill",
+        name: "settlementManagement-bill",
         mark: "5100",
         meta: {
           title: "对账与结算"
@@ -491,151 +491,15 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/",
-            name: "",
+            path: "/settlementManagement/bill/AccountStatement",
+            name: "bill-AccountStatement",
             redirect: "",
             mark: "5101",
             meta: {
               title: "对账单订单"
             },
-            // component: () => import()
+            component: () => import("@/view/settlementManagement/bill/AccountStatement.vue")
           },
-          {
-            path: "/",
-            name: "",
-            mark: '5103',
-            meta: {
-              // hideInMenu: true,
-              title: " 调拨出库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5104',
-            meta: {
-              // hideInMenu: true,
-              title: " 调拨入库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            mark: '7103',
-            meta: {
-              // hideInMenu: true,
-              title: " 调出在途信息"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            mark: '5106',
-            meta: {
-              // hideInMenu: true,
-              title: " 采购入库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5108',
-            meta: {
-              // hideInMenu: true,
-              title: "销售出库明细"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5109',
-            meta: {
-              // hideInMenu: true,
-              title: "连锁应收应付查询"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5110',
-            meta: {
-              // hideInMenu: true,
-              title: "欠款分析"
-            }
-            // component: () => import()
-          },
-          {
-            path: "/",
-            name: "",
-            // mark: 'oms_orders_approve',
-            mark: '5112',
-            meta: {
-              // hideInMenu: true,
-              title: "付款分析"
-            }
-            // component: () => import()
-          },
-         ]
-      },
-      {
-        path: "/",
-        name: "",
-        // mark: 'oms_orders_approve',
-        mark: '5200',
-        meta: {
-          // hideInMenu: true,
-          title: "应收应付"
-        },
-        // component: () => import()
-      },
-      {
-        path: "/settlementManagement/paymentmanage",
-        name: "settlementManagement-paymentmanage",
-        redirect: "",
-        mark: "5201", //59 应收应付
-        meta: {
-          title: "应收应付管理"
-        },
-        component: () => import("@/view/settlementManagement/paymentmanage/index.vue")
-      },
-      {
-        path: "/",
-        name: "",
-        mark: '5300',
-        meta: {
-          // hideInMenu: true,
-          title: "资金审核"
-        },
-        // component: () => import()
-      },
-      {
-        path: "/settlementManagement/DailyFundReview",
-        name: "settlementManagement-DailyFundReview",
-        redirect: "",
-        mark: "5301", //5301
-        meta: {
-          title: "每日资金审核"
-        },
-        component: () => import("@/view/settlementManagement/DailyFundReview/index.vue")
-      },
-      {
-        path: "/settlementManagement/bill",
-        name: "settlementManagement-bill",
-        meta: {
-          title: "单据查询"
-        },
-        component: parentView,
-        children: [
           {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "bill-CollectionPayment",
@@ -647,44 +511,45 @@ export default [
             component: () => import("@/view/settlementManagement/bill/CollectionPayment.vue")
           },
           {
-            path: "/settlementManagement/bill/Allocationwarehousing",
-            name: "bill-Allocationwarehousing",
-            // mark: 'oms_orders_approve',
-            meta: {
-              // hideInMenu: true,
-              title: "内部调拨入库明细"
-            },
-            component: () => import("@/view/settlementManagement/bill/Allocationwarehousing.vue")
-          },
-          {
             path: "/settlementManagement/settlementManagement/bill/Allocationstock",
             name: "bill-Allocationstock",
-            // mark: 'oms_orders_approve',
+            mark: '5103',
             meta: {
               // hideInMenu: true,
-              title: "内部调拨出库明细"
+              title: " 调拨出库明细"
             },
             component: () => import("@/view/settlementManagement/bill/Allocationstock.vue")
           },
           {
-            path: "/settlementManagement/settlementManagement/bill/External",
-            name: "bill_External",
+            path: "/settlementManagement/bill/Allocationwarehousing",
+            name: "bill-Allocationwarehousing",
             // mark: 'oms_orders_approve',
+            mark: '5104',
             meta: {
               // hideInMenu: true,
-              title: "外采入库单明细"
+              title: " 调拨入库明细"
             },
-            component: () => import("@/view/settlementManagement/bill/External.vue")
+            component: () => import("@/view/settlementManagement/bill/Allocationwarehousing.vue")
           },
           {
-            path: "/settlementManagement/settlementManagement/bill/stock",
-            name: "bill_stock",
-            // mark: 'oms_orders_approve',
+            path: "/settlementManagement/bill/Onway",
+            name: "bill_Onway",
+            mark: '7103',
             meta: {
               // hideInMenu: true,
-              title: "出库单明细"
+              title: " 调出在途信息"
             },
-            component: () => import("@/view/settlementManagement/bill/stock.vue")
+            component: () => import("@/view/settlementManagement/bill/Onway.vue")
+          },
+          {
+            path: "/settlementManagement/settlementManagement/bill/External",
+            name: "bill_External",
+            mark: '5106',
+            meta: {
+              // hideInMenu: true,
+              title: " 采购入库明细"
+            },
+            component: () => import("@/view/settlementManagement/bill/External.vue")
           },
           {
             path: "/settlementManagement/bill/Sales",
@@ -698,16 +563,71 @@ export default [
             component: () => import("@/view/settlementManagement/bill/Sales.vue")
           },
           {
-            path: "/settlementManagement/bill/Onway",
-            name: "bill_Onway",
+            path: "/settlementManagement/settlementManagement/bill/stock",
+            name: "bill_stock",
             // mark: 'oms_orders_approve',
+            mark: '5108',
             meta: {
               // hideInMenu: true,
-              title: "在途库存明细"
+              title: "销售出库明细"
             },
-            component: () => import("@/view/settlementManagement/bill/Onway.vue")
-          }
-        ]
+            component: () => import("@/view/settlementManagement/bill/stock.vue")
+          },
+          {
+            path: "/settlementManagement/bill/chainReceivable",
+            name: "bill-chainReceivable",
+            // mark: 'oms_orders_approve',
+            mark: '5109',
+            meta: {
+              // hideInMenu: true,
+              title: "连锁应收应付查询"
+            },
+            component: () => import("@/view/settlementManagement/bill/chainReceivable.vue")
+          },
+          {
+            path: "/settlementManagement/bill/arrearsAnalysis",
+            name: "bill-arrearsAnalysis",
+            // mark: 'oms_orders_approve',
+            mark: '5110',
+            meta: {
+              // hideInMenu: true,
+              title: "欠款分析"
+            },
+            component: () => import("@/view/settlementManagement/bill/arrearsAnalysis.vue")
+          },
+          {
+            path: "/settlementManagement/bill/paymentAnalysis",
+            name: "bill-paymentAnalysis",
+            // mark: 'oms_orders_approve',
+            mark: '5112',
+            meta: {
+              // hideInMenu: true,
+              title: "付款分析"
+            },
+            component: () => import("@/view/settlementManagement/bill/paymentAnalysis.vue")
+          },
+         ]
+      },
+      {
+        path: "/settlementManagement/paymentmanage",
+        name: "settlementManagement-paymentmanage",
+        // mark: 'oms_orders_approve',
+        mark: '5200',
+        meta: {
+          // hideInMenu: true,
+          title: "应收应付"
+        },
+        component: () => import("@/view/settlementManagement/paymentmanage/index.vue")
+      },
+      {
+        path: "/settlementManagement/DailyFundReview",
+        name: "settlementManagement-DailyFundReview",
+        mark: '5300',
+        meta: {
+          // hideInMenu: true,
+          title: "资金审核"
+        },
+        component: () => import("@/view/settlementManagement/DailyFundReview/index.vue")
       },
       {
         path: "",
