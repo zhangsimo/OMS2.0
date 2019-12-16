@@ -46,7 +46,7 @@
           </FormItem>
         </div>
       </div>
-      <FormItem label='地址:'>
+      <FormItem label='地址:' prop="re">
         <Input placeholder='请输入地址' v-model='data.re' style="width: 300px" ></Input>
       </FormItem>
       <div style="display: flex">
@@ -58,7 +58,7 @@
 <!--          </FormItem>-->
           <FormItem label="结算方式：" prop="settTypeId">
             <Select v-model="data.settTypeId" style="width:100px">
-              <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{
+              <Option v-for="item in settleTypeList['CS00106']" :value="item.itemCode" :key="item.itemCode">{{
                 item.itemName }}
               </Option>
             </Select>
@@ -160,6 +160,9 @@
                     ],
                    settTypeId:[
                         {required: true, message: '必选', trigger: 'change'}
+                    ],
+                    re:[
+                        {required: true, message: '地址不能为空', trigger: 'blur'}
                     ]
                 },
             }
@@ -171,11 +174,10 @@
             //107票据类型
             //106结算方式
             data = ['CS00106', 'CS00107']
-            let res = await getDigitalDictionary(data)
+            let res = await getDigitalDictionary(data);
             if (res.code == 0) {
               this.settleTypeList = res.data
             }
-
           },
             resetFields() {
                 this.$refs.form.resetFields()
@@ -184,8 +186,6 @@
                 this.$refs.form.validate(valid => {
                     if (valid) {
                         callback && callback()
-                    } else {
-                        this.$Message.error('信息填写错误');
                     }
                 })
             },
