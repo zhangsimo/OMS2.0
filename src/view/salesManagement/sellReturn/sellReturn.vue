@@ -448,7 +448,7 @@
             },
             {
               title: '创建人',
-              key: 'auditor',
+              key: 'createUname',
               minWidth: 100
             },
             {
@@ -459,13 +459,13 @@
             },
             {
               title: '提交人',
-              key: 'auditDate',
+              key: 'auditor',
               minWidth: 100
             },
             {
               title: '提交日期',
               align: 'center',
-              key: 'submitDate',
+              key: 'auditDate',
               minWidth: 170
             },
 
@@ -868,6 +868,6 @@
 
 <style lang="less" scoped>
 
-  @import url("../../lease/product/lease.less");
-  @import url("./index");
+  // @import url("../../lease/product/lease.less");
+  // @import url("./index");
 </style>

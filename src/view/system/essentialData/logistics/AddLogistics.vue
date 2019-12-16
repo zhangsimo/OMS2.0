@@ -51,9 +51,16 @@
       </FormItem>
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
-          <FormItem label='结算方式:' prop="settTypeId">
-            <Select v-model="data.settTypeId" style="width:100px" class="mr10">
-              <Option v-for="item in list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+<!--          <FormItem label='结算方式:' prop="settTypeId">-->
+<!--            <Select v-model="data.settTypeId" style="width:100px" class="mr10">-->
+<!--              <Option v-for="item in list" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+<!--            </Select>-->
+<!--          </FormItem>-->
+          <FormItem label="结算方式：" prop="settTypeId">
+            <Select v-model="data.settTypeId" style="width:100px">
+              <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{
+                item.itemName }}
+              </Option>
             </Select>
           </FormItem>
         </div>
@@ -92,6 +99,7 @@
 </template>
 
 <script>
+  import {getDigitalDictionary} from '@/api/system/essentialData/clientManagement'
     export default {
         name: "AddLogistics",
         props:{
@@ -99,6 +107,7 @@
             provincearr:'',
             clearinglist:'',
             typelist:''
+
         },
         data(){
             const validatePhone = (rule, value, callback) => {
@@ -121,10 +130,12 @@
                }
             }
             return {
-                list: [
-                    {label:'物流' , value: 0},
-                    {label:'快递' , value: 1}
-                ],
+                // list: [
+                //     {label:'物流' , value: 0},
+                //     {label:'快递' , value: 1}
+                // ],
+              settTypeId:'',
+              settleTypeList: {},//结账类型
                 rules: {
                     fullName: [
                         {required: true, message: '姓名不能为空', trigger: 'blur'}
@@ -147,13 +158,25 @@
                     accountBank:[
                         {required: true, message: '开户银行不能为空', trigger: 'blur'}
                     ],
-                    settTypeId:[
-                        {required: true,type: 'number', message: '必选', trigger: 'change'}
+                   settTypeId:[
+                        {required: true, message: '必选', trigger: 'change'}
                     ]
                 },
             }
         },
         methods:{
+          //获取客户属性
+          async getType() {
+            let data = {}
+            //107票据类型
+            //106结算方式
+            data = ['CS00106', 'CS00107']
+            let res = await getDigitalDictionary(data)
+            if (res.code == 0) {
+              this.settleTypeList = res.data
+            }
+
+          },
             resetFields() {
                 this.$refs.form.resetFields()
             },
@@ -166,7 +189,10 @@
                     }
                 })
             },
-        }
+        },
+        mounted() {
+        this.getType()
+      }
     }
 </script>
 
