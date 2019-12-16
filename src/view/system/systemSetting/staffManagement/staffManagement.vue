@@ -16,7 +16,7 @@
         <a class="mr10" @click="changStaffList"><Icon custom="iconfont iconbianjixiugaiicon icons"/> 修改</a>
         <a class="mr10" @click =changeDimission v-if="!oneStaffChange.office"><Icon custom="iconfont iconlizhiicon icons"/> 离职</a>
         <a class="mr10" @click =changeDimission v-if="oneStaffChange.office"><Icon type="md-person-add" /> 复职</a>
-        <a class="mr10" @click="giveUser" v-if="!oneStaffChange.office"><Icon custom="iconfont iconziyuan1 icons"/> 开通账号</a>
+        <a class="mr10" @click="giveUser" v-if="!oneStaffChange.office && oneStaffChange.openSystem == 1" ><Icon custom="iconfont iconziyuan1 icons"/> 开通账号</a>
         <a class="mr10" @click="restPassword"><Icon custom="iconfont iconziyuan1 icons"/> 重置密码</a>
         <i-button  type="warning" class="staff-btn mr10" @click="openCompany"><Icon custom="iconfont iconxuanzetichengchengyuanicon" /> 新增兼职公司</i-button>
         <i-button  type="warning" class="staff-btn mr10" @click="lookCompany"><Icon custom="iconfont iconchaxunicon" />查看兼职公司</i-button>
@@ -85,6 +85,7 @@
   import addStaff from "./addStaff";
   import setPassword from "./setpassword";
   import PTCompany from "./PTCompany";
+  import {frozenStaff} from '_api/admin/userApi'
   import moment from 'moment'
 
   export default {
@@ -313,6 +314,24 @@
 
           this.$refs.child.resetFields()
           },
+          //冻结
+          setFrozenStaff(){
+              let stop = this.$loading()
+
+              let data = {
+                  id: id,
+                  frozen: frozen
+              }
+              frozenStaff(data).then(res => {
+                  stop()
+                  if (res.code == 0) {
+                      this.$Message.success(res.message)
+                      this.getUserList()
+                  }
+              }).catch(err => {
+                  stop()
+              })
+          },
           //新增员工
           findRootGroup(){
               this. cancel()
@@ -355,6 +374,7 @@
                          stop()
                          if(res.code ==0){
                              this.$Message.success(res.message)
+                             this.oneStaffChange = {}
                              this.getAllStaffList()
                          }
                      }).catch(err => {
@@ -449,6 +469,8 @@
                   putNewCompany(data ,  this.$store.state.user.userData.groupId).then( res => {
                       stop()
                   if(res.code == 0){
+                      this.getAllStaffList()
+                      this.oneStaffChange = {}
                       this.$Message.success('开通成功')
                   }
                   })
@@ -461,7 +483,7 @@
                   return false
               }
               this.$refs.addNew.getlist()
-
+              this.$refs.addNew.clearList()
               this.PtCompany = true
           },
           //关闭公司选项
@@ -476,6 +498,8 @@
                   return false
               }
             this.findAllCompany = true
+              this.shopCode = ''
+              this.compentName = ''
               this.getLookCompany()
           },
           //兼职公司查询

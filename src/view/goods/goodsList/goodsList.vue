@@ -65,7 +65,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="mainId.length <= 0"
+              :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
               ><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button
             >
@@ -146,12 +146,12 @@
                       ></Col>
                     </Row>
                   </FormItem>
-                  <FormItem label="计划采购日期：" prop="planDate">
-                    <!--<Input class="w160" v-model="formValidate.planDate"></Input>-->
+                  <FormItem label="计划采购日期：" prop="planArriveDate">
+                    <!--<Input class="w160" v-model="formValidate.planArriveDate"></Input>-->
                     <DatePicker
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
-                      v-model="formPlan.planDate"
+                      v-model="formPlan.planArriveDate"
                       class="w160"
                       placeholder="选择日期"
                     ></DatePicker>
@@ -189,7 +189,7 @@
                     <Select
                       class="w160"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
-                      v-model="formPlan.hairShop"
+                      v-model="formPlan.directGuestId"
                     >
                       <Option
                         v-for="item in companyMap"
@@ -490,7 +490,7 @@
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
-    <status-model ref="StatusModel" :orderId="mainId"></status-model>
+    <status-model ref="StatusModel" :orderId="selectPlanOrderItem"></status-model>
   </div>
 </template>
 <script>

@@ -1,7 +1,7 @@
 <template>
   <Form :label-width="100" :model='data' :rules='rules' ref="form">
     <FormItem label='姓名：' prop="userName">
-      <Input placeholder='请输入姓名' v-model='data.userName' style="width: 250px" ></Input>
+      <Input placeholder='请输入姓名' v-model='data.userName' disabled style="width: 250px" ></Input>
     </FormItem>
     <FormItem label='登录账号：' prop="account">
       <Input placeholder='请输入账号名称' v-model='data.account' style="width: 250px" ></Input>

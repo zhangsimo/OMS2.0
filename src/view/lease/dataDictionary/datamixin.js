@@ -250,7 +250,7 @@ export const dataMixin = {
           saveTreeDetailItem(objReq).then(res => {
             if(res.code==0){
               this.addNewItem = false
-              this.$Message.error("保存成功")
+              this.$Message.success("保存成功")
               this.getTableData(this.selectTreeItem.dictCode)
             }
           })

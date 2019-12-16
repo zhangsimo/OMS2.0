@@ -291,7 +291,7 @@
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'enterUnitId',
+                        key: 'unit',
                         minWidth: 120
                     },
                     {

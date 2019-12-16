@@ -50,31 +50,57 @@
 </template>
 
 <script>
-import { approvalStatus } from "_api/base/user";
-export default {
-  name: "checkApprovalModal",
-  props: {
-    orderId: {
-      type: [Number, String],
-      default: ""
-    }
-  },
-  data() {
-    return {
-      statusData: [
-        { name: "提交", status: "已提交" },
-        { name: "产品总监审批", status: "已审批" }
-      ], //数据
-      canShow: false //判断弹窗是否显示
-    };
-  },
-  methods: {
-    init() {
-      this.canShow = true;
-      approvalStatus({ instanceId: this.orderId }).then(res => {
-        if (res.code == "0") {
-          this.statusData = res.data.processInstance.operationRecords;
-          console.log(this.statusData);
+  import {approvalStatus} from '_api/base/user'
+    export default{
+        name:'checkApprovalModal',
+        props:{
+            orderId:{
+                type:[Number,String,Object],
+                default:''
+            },
+        },
+        data(){
+            return {
+                statusData:[{name:'提交',status:'已提交'},{name:'产品总监审批',status:'已审批'}],//数据
+                canShow:false,//判断弹窗是否显示
+            }
+        },
+        methods:{
+            init(){
+                this.canShow=true;
+                let instanceId=this.orderId.processInstanceId||'';
+                approvalStatus({instanceId:instanceId}).then(res=>{
+                    if(res.code=='0'){
+                        this.statusData=res.data.processInstance.operationRecords;
+                    }
+                })
+            }
+        },
+        filters:{
+            date(value=0){
+                let date = new Date(value).toLocaleDateString();
+                let time = new Date(value).toLocaleTimeString();
+                value = date.split('/').join('-')+' '+time.substr(2);
+                return value;
+            },
+            status(value=''){
+                value = value.toLowerCase();
+                switch(value){
+                    case 'none':
+                        value = '已提交';
+                        break;
+                    case 'agree':
+                        value = '已同意';
+                        break;
+                    case 'refuse':
+                        value = '已拒绝';
+                        break;
+                    case 'redirected':
+                        value = '已转交';
+                        break;
+                }
+                return value;
+            }
         }
       });
     }
