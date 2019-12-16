@@ -186,7 +186,7 @@
             }
           };
           const bigNumber = (rule, value, callback) => {
-            // let reg = /^\+?[1-9]\d*$/;
+            let reg = /^\+?[1-9]\d*$/;
               if (!/^[1-9]\d*$/.test(this.data.applyTrustMoney)) {
                 return callback(new Error('请输入大于0的正整数!'));
               }
@@ -227,7 +227,7 @@
                 accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
                 cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
-                applyTrustMoney: [{ required: true,validator:bigNumber, trigger: 'blur' }],
+                applyTrustMoney: [{ required: true,validator:bigNumber,trigger: 'blur' }],
 
               },
               wxImgUrl: api.wxImgUrl,//图片地址
