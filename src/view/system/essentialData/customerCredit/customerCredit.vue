@@ -191,7 +191,7 @@
                             {
                                 title: '授权采购',
                                 align: 'center',
-                                key: 'salesman   '
+                                key: 'salesman'
                             },
                             {
                                 title: '采购员电话',

@@ -76,35 +76,35 @@
                 })
             }
         },
-        filters:{
-            date(value=0){
-                let date = new Date(value).toLocaleDateString();
-                let time = new Date(value).toLocaleTimeString();
-                value = date.split('/').join('-')+' '+time.substr(2);
-                return value;
-            },
-            status(value=''){
-                value = value.toLowerCase();
-                switch(value){
-                    case 'none':
-                        value = '已提交';
-                        break;
-                    case 'agree':
-                        value = '已同意';
-                        break;
-                    case 'refuse':
-                        value = '已拒绝';
-                        break;
-                    case 'redirected':
-                        value = '已转交';
-                        break;
-                }
-                return value;
-            }
-        }
-      });
-    }
-  },
+  //       filters:{
+  //           date(value=0){
+  //               let date = new Date(value).toLocaleDateString();
+  //               let time = new Date(value).toLocaleTimeString();
+  //               value = date.split('/').join('-')+' '+time.substr(2);
+  //               return value;
+  //           },
+  //           status(value=''){
+  //               value = value.toLowerCase();
+  //               switch(value){
+  //                   case 'none':
+  //                       value = '已提交';
+  //                       break;
+  //                   case 'agree':
+  //                       value = '已同意';
+  //                       break;
+  //                   case 'refuse':
+  //                       value = '已拒绝';
+  //                       break;
+  //                   case 'redirected':
+  //                       value = '已转交';
+  //                       break;
+  //               }
+  //               return value;
+  //           }
+  //       }
+  //     })
+  //   }
+  // },
   filters: {
     date(value = 0) {
       let date = new Date(value).toLocaleDateString();
