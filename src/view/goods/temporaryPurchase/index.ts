@@ -414,6 +414,7 @@ export default class InterPurchase extends Vue {
       currentRowTable.clearCurrentRow();
     }
     this.selectTableRow = v;
+    console.log(this.selectTableRow)
     this.mainId = v.id;
     this.tableData = v.details || [];
     this.selectRowState = v.billStatusId.name;
