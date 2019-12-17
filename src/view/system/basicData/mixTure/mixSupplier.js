@@ -1,5 +1,6 @@
 import { getAllBrand, getCarClassifys, savePartInfo } from "_api/system/partsExamine/partsExamineApi";
-import { getwbParts } from "_api/system/partManager";
+// import { getwbParts } from "_api/system/partManager";
+import { getPart } from '@/api/system/systemSetting/Initialization'
 export const mixSelectPartCom = {
   inject: ['reload'],
   data() {
@@ -22,7 +23,7 @@ export const mixSelectPartCom = {
         {
           // title: "序号",
           type: "selection",
-          minWidth: 80
+          minWidth: 80,
         },
         {
           title: "内码",
@@ -215,9 +216,16 @@ export const mixSelectPartCom = {
       }
       req.page = this.page.num
       req.size = this.page.size
-      getwbParts(req).then(res => {
+      req.matchingId = this.$parent.levelId
+      req.partInnerId = this.$parent.code
+      // console.log(req){matchingId:this.$parent.levelId,partInnerId:this.$parent.code,page:this.page.num}
+      getPart(req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
+        this.partData.map(item=>{
+          console.log(item.isMatching)
+          item._disabled = item.isMatching === 0 ? true:false
+        })
         this.page.total = res.data.totalElements
       })
 
