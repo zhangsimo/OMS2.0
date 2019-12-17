@@ -411,7 +411,7 @@
               }
               let stop = this.$loading()
               this.oneStaffChange.office =  this.oneStaffChange.office == 0 ? 1 :0
-              editUser(this.oneStaffChange).then( res => {
+              changeeditUser(this.oneStaffChange).then( res => {
                   stop()
                   if(res.code ==0){
                       this.$Message.success('修改成功')
