@@ -455,6 +455,7 @@ export default {
       this.$refs.formPlan.validate(async (valid) => {
         if (valid) {
           let data ={}
+          this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
           data = this.formPlan
           data.details = conversionList(val)
           let res = await  saveList(data)
