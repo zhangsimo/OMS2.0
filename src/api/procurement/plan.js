@@ -198,11 +198,12 @@ export function findPageByguest(params, data) {
 }
 
 // 费用登记-查询右侧
-export function getFee(params) {
+export function getFee(params, data) {
   return axios.request({
     url: `${api.omsSettle}/receivable/payable/get/fee/registration`,
-    method: "get",
+    method: "post",
     params,
+    data
   });
 }
 
