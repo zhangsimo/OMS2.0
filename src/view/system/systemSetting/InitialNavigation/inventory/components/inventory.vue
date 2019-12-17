@@ -99,16 +99,6 @@
             </span>
           </Button>
         </Upload>
-        <!-- <Upload 
-            :action="UploadUrl"
-            :data="{mainId:mid}"
-            :headers="headers"
-            :show-upload-list="false"
-            >
-            <i-button type="ghost" v-show="oneWarehouse.auditSign == 0">
-              <Icon custom="iconfont icondaoruicon icons"/>导入
-            </i-button>
-        </Upload> -->
       </div>
       <div class="db">
         <Button type="default" @click="downloadFormwork" class="w90 mr10">下载模板</Button>
@@ -179,8 +169,6 @@
   </main>
 </template>
 <script>
-    import baseUrl from '_conf/url'
-
     import {
         getList,
         saveList,
@@ -193,6 +181,7 @@
     import Cookies from 'js-cookie'
     import {TOKEN_KEY} from '@/libs/util'
     import axios from 'axios'
+    import baseUrl from '_conf/url'
 
     export default {
         components: {
@@ -200,7 +189,6 @@
         },
         data() {
             return {
-              UploadUrl: 'http://192.168.30.69:9210/enterMain/import',
                 //模态框默认隐藏
                 modal: false,
                 //加载图标显示
@@ -414,7 +402,8 @@
             //  点击下载模板
             downloadFormwork () {
               console.log('downloadFormwork','downloadFormwork')
-              window.location.href='http://192.168.30.69:9210/enterMain/template'+ '?access_token=' + Cookies.get(TOKEN_KEY)
+              window.location.href=baseUrl.omsOrder + '/enterMain/template?access_token=' + Cookies.get(TOKEN_KEY)
+
             },
 
             //禁止编辑
@@ -474,6 +463,7 @@
             },
             // 上传成功
             handleSuccess(res, file) {
+                console.log(111)
                 let self = this;
                 if (res.code == 0) {
                     this.$message.success(res.message)
