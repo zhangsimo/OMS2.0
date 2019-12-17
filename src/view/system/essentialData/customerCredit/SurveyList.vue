@@ -27,7 +27,7 @@
             <Input v-model='data.legalPerson' style="width: 180px" ></Input>
           </FormItem>
           <FormItem label='经营期限:' prop="operationStart">
-            <DatePicker :value="data.operationStart" format="yyyy-MM-dd"  style="width: 180px" @on-change="ChangeTime"></DatePicker>
+            <DatePicker :value="data.operationStart" format="yyyy-MM-dd" type="date" style="width: 180px" @on-change="ChangeTime"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -36,12 +36,12 @@
             <!--<Input v-model='data.registMoney' style="width: 180px" ></Input>-->
           </FormItem>
           <FormItem label='至' prop="operationEnd">
-            <DatePicker :value="data.operationEnd" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
+            <DatePicker :value="data.operationEnd" type="date" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='成立日期:' prop="registerDate">
-            <DatePicker :value="data.registerDate" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
+            <DatePicker :value="data.registerDate" type="date" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
           </FormItem>
           <FormItem label='登记状态:' prop="manageStatus">
             <Select v-model="data.manageStatus" style="width:180px" >
@@ -75,7 +75,7 @@
               <Button class="uploadbtn">上传</Button>
             </Upload>
             <a target="view__blank" :href="data.businessName" class="download" download="" v-if="data.businessName">下载</a>
-            <a class="download" v-else>下载</a>
+            <a class="download" v-else @click="clownFile">下载</a>
           </FormItem>
         </Col>
         <Col span="12">
@@ -135,12 +135,12 @@
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
             <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
-            <InputNumber v-model="data.accountDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.accountDate" style="width: 180px" max="31" min="1"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="回款日期:" prop="cashDate">
-            <InputNumber v-model="data.cashDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.cashDate" style="width: 180px" max="31" min="1"></InputNumber>
             <!--<Input v-model='data.cashDate' style="width: 180px" ></Input>-->
           </FormItem>
         </Col>
@@ -176,10 +176,9 @@
         data(){
           //手机号
           const validatePhone = (rule, value, callback) => {
-            if (this.data.salesmanTel) {
-              callback();
-              return callback(new Error('手机号不能为空'));
-            } else if (!/^1[34578]\d{9}$/.test(this.data.salesmanTel)) {
+            if (!value) {
+              return callback(new Error('手机号不能为空!'));
+            } else if (!/^1[34578]\d{9}$/.test(value)) {
               callback(new Error('手机号格式不正确'));
             } else {
               callback();
@@ -187,21 +186,22 @@
           };
           const bigNumber = (rule, value, callback) => {
             let reg = /^\+?[1-9]\d*$/;
-              if (!/^[1-9]\d*$/.test(this.data.applyTrustMoney)) {
+              if (!reg.test(value)) {
                 return callback(new Error('请输入大于0的正整数!'));
-              }
-            if (this.data.applyTrustMoney > 10000) {
-              return callback(new Error('首次申请额度不能大于10000'));
+              }else if (value > 10000) {
+                return callback(new Error('首次申请额度不能大于10000'));
+              } else {
+              callback()
             }
           }
           const smallNumber = (rule, value, callback) => {
-            if (this.data.rollingDate <= 0) {
+            if (value <= 0) {
               return callback(new Error('请输入大于0的正整数'));
             }
           }
           //注册号
             const Number = (rule, value, callback) => {
-              if (/^[0-9]+$/.test(this.data.bizLicenseNo)) {
+              if (/^[0-9]+$/.test(value)) {
                 callback();
               } else {
                 return callback(new Error("请输入正确注册号!"));
@@ -210,20 +210,20 @@
             return {
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
-                nature: [{ required: true, type:'string',message: '请输入正确公司性质！', trigger: 'blur' }],
+                nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: ['blur','change'] }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
-                operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change',pattern: /.+/ }],
+                // operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
-                operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change',pattern: /.+/ }],
-                registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change',pattern: /.+/}],
-                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'blur' }],
+                // operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
+                // registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
+                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: ['blur','change'] }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
-                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
+                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'changeq' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
-                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'blur' }],
+                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: ['blur','change'] }],
                 accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
                 cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
@@ -234,33 +234,24 @@
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
               }, //获取token
-              options3: {
-                // disabledDate(date) {
-                //   return date && date.valueOf() < tools.transTime(this.data.operationStart) - 86400000;
-                // }
-              }
             }
         },
     methods: {
-      // verify() {
-      //   var reg = /^\+?[1-9]\d*$/;
-      //   if (!reg.test(this.data.applyTrustMoney)) {
-      //     this.$Message.error('请输入大于0的正整数!')
-      //   }
-      //   if (this.data.applyTrustMoney > 10000) {
-      //     this.$message.error('首次申请额度不能大于10000')
-      //   }
-      // },
+      clownFile(){
+        if(this.data.businessName === null){
+          this.$message.warning('无下载文件！')
+        }
+      },
       ChangeTime(value) {
-        // console.log(value)
-        this.data.operationStart = tools.transDate(value)
+        console.log(this.data)
+        this.data.operationStart = value
       },
       ChangeTime2(value) {
         console.log(value)
-        this.data.operationEnd = tools.transDate(value)
+        this.data.operationEnd = value
       },
       ChangeTime3(value) {
-        this.data.registerDate = tools.transDate(value)
+        this.data.registerDate = value
       },
       // 上传前
       handleBeforeUpload() {

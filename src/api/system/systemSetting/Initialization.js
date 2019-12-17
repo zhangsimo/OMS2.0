@@ -178,17 +178,17 @@ export function partMatchingDetail(params) {
   })
 }
 
-// 删除配比清单备货
+// 删除配件
 // /partMatchingDetail/delete
-export function partMatchingdelete(data) {
-  return axios.request({
-    url: `${api.wmsApi}/partMatchingDetail/delete`,
-    method: 'post',
-    data:data
-  })
-}
+// export function partMatchingdelete(data) {
+//   return axios.request({
+//     url: `${api.wmsApi}/partMatchingDetail/delete`,
+//     method: 'post',
+//     data:data
+//   })
+// }
 
-//新增配比清单详情
+//添加/修改/删除物料
 // /partMatchingDetail/save
 export function partMatchingDetailSave(data) {
   return axios.request({
@@ -273,5 +273,14 @@ export function getCarSeries(data) {
     url: `${api.wmsApi}/wbPub/getCarSeries`,
     method: 'post',
     data:data
+  })
+}
+
+// 添加物料弹窗
+export function getPart(data) {
+  return axios.request({
+    url:`${api.wmsApi}/wbParts/findForMatching`,
+    method:'post',
+    data
   })
 }

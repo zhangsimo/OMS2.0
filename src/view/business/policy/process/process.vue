@@ -9,7 +9,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                  <Select v-model="form.status" class="w90 mr10">
+                  <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -205,8 +205,8 @@
               <div class="wlf">
                 <div class="db">
                   <span>快速查询：</span>
-                  <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                  <Select v-model="purchaseType" class="w90 mr10">
+                  <quick-date class="mr10" v-on:quickDate="getDataQuick1"></quick-date>
+                  <Select v-model="purchaseType" @on-change="getDataType1" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -364,7 +364,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                           <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.num * currentNum }}</span>
+                            <span>{{ row.orderQty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
@@ -885,10 +885,32 @@ export default {
         console.log('配件拆分')
       }
     },
-    //快速查询日期
     getDataQuick(v) {
-      this.form.qucikTime = v
-      console.log(v)
+      const params = {
+        createTime: v[0],
+        endTime: v[1]
+      }
+      this.getListzu(params)
+    },
+    //快速查询日期
+    getDataQuick1(v) {
+      const params = {
+        createTime: v[0],
+        endTime: v[1]
+      }
+      this.getListchai(params)
+    },
+     getDataType() {
+      const params = {
+        status: this.form.status
+      }
+      this.getListzu(params)
+    },
+     getDataType1() {
+      const params = {
+        status: this.form.status
+      }
+      this.getListchai(params)
     },
     //更多按钮
     more() {

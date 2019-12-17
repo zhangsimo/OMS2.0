@@ -82,7 +82,18 @@
                 title: '购买/调用结果',
                 align:'left',
                 key: 'callStatus',
-                minWidth: 120
+                minWidth: 120,
+                render:(h,params)=>{
+                  const status = params.row.callStatus;
+                  var text = ''
+                  if(status == 1){
+                    text = '成功'
+                  }
+                  if(status == 0){
+                    text = '失败'
+                  }
+                  return h('div',text)
+                }
               },
               {
                 title: '支付金额',
