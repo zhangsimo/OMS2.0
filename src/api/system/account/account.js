@@ -75,3 +75,14 @@ export function queryOrder(data) {
     params:data.params
   })
 }
+
+
+// /wxPay/generationRecord
+export function generationRecord(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wxPay/generationRecord`,
+    method: 'post',
+    data:data.data,
+    params:data.params
+  })
+}

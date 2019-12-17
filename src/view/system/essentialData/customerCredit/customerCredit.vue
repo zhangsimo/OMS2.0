@@ -432,6 +432,7 @@
             },
             //申请信用调查
             opensurveyShow(){
+              this.$refs.SurveyList.handleReset()
                 this.surveyShow = true
             },
             //额度调用
@@ -503,13 +504,14 @@
                   data.operationEnd = tools.transDate(this.creaditList.operationEnd)
                   data.operationStart = tools.transDate(this.creaditList.operationStart)
                   data.guestId = this.ID
-                  console.log(data)
-                  // saveOrUpdate(data).then(res => {
-                  //     if(res.code === 0){
-                  //         this.getListTop()
-                  //         this.surveyShow = false
-                  //     }
-                  // })
+                  // console.log(data)
+                  saveOrUpdate(data).then(res => {
+                      if(res.code === 0){
+                          this.getListTop()
+                          this.surveyShow = false
+                          this.$Message.warning('成功！')
+                      }
+                  })
                 }else {
                   this.modal.loading = false
                   setTimeout(() => {
@@ -599,8 +601,8 @@
             data.tempQuotaTotal = +this.creaditList.tempQuota + this.creaditList.tempCreditLimit
             data.applyQuota = this.creaditList.applyQuota
             data.tempQuota = this.creaditList.tempQuota
-            data.tempStart = this.creaditList.tempStart
-            data.tempEnd = this.creaditList.tempEnd
+            data.tempStart = tools.transTime(this.creaditList.tempStart)
+            data.tempEnd = tools.transTime(this.creaditList.tempEnd)
             data.payableAmt = this.payable.payableAmt||0
             data.tgrade = this.creaditList.tgrade
             data.thirtyAmt = this.payable.thirtyAmt||0

@@ -69,7 +69,7 @@
 </template>
 
 <script>
-  import {tenantInfo} from '../../../../api/system/account/account'
+  import { tenantInfo } from '../../../../api/system/account/account'
     export default {
         name: "accountInformation",
       data(){

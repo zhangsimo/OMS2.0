@@ -30,7 +30,7 @@
             <Input v-model='data.tempQuota' style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
-            <DatePicker :value="data.tempStart" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px"></DatePicker>
+            <DatePicker v-model="data.tempStart" type="date" format="yyyy-MM-dd" :options="dateOptions" style="width: 150px"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -41,7 +41,8 @@
             <Input  :value='+data.tempQuota + data.tempCreditLimit || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
-            <DatePicker :value="data.tempEnd" format="yyyy/MM/dd"  :options="dateOptions"  style="width: 150px"></DatePicker>
+            <DatePicker v-model="data.tempEnd" type="date" format="yyyy-MM-dd" :options="dateOptions" style="width: 150px"></DatePicker>
+
           </FormItem>
         </Col>
       </Row>
