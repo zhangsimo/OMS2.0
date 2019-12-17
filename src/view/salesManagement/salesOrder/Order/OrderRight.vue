@@ -733,7 +733,8 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 handler(old ,ov){
                     if(!old.id){
                         this.formPlan ={
-                            billStatusId: {name:"草稿",value:0}
+                            billStatusId: {name:"草稿",value:0},
+                            orderMan: this.$store.state.user.userData.username || ''
                         }
                         this.draftShow = 0
                         return false
