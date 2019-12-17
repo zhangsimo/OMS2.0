@@ -868,6 +868,6 @@
 
 <style lang="less" scoped>
 
-  // @import url("../../lease/product/lease.less");
-  // @import url("./index");
+   @import url("../../lease/product/lease.less");
+   @import url("./index");
 </style>
