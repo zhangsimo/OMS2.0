@@ -216,9 +216,10 @@ export const mixSelectPartCom = {
       }
       req.page = this.page.num
       req.size = this.page.size
-      // console.log(this.$parent.code)
-      getPart({matchingId:this.$parent.levelId,partInnerId:this.$parent.code,page:this.page.num}).then(res => {
-        // console.log(res)
+      req.matchingId = this.$parent.levelId
+      req.partInnerId = this.$parent.code
+      // console.log(req){matchingId:this.$parent.levelId,partInnerId:this.$parent.code,page:this.page.num}
+      getPart(req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.partData.map(item=>{
