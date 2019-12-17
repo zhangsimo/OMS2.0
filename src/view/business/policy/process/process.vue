@@ -364,7 +364,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                           <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.num * currentNum }}</span>
+                            <span>{{ row.orderQty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
