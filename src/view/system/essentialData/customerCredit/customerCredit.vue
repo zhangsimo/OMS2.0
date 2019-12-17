@@ -494,6 +494,7 @@
           },
           //确定按钮
           confirm(){
+            console.log(12)
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
                   let data = this.creaditList
@@ -506,6 +507,10 @@
                       }
                   })
                 }else {
+                  this.modal.loading = false
+                  setTimeout(() => {
+                    this.modal.loading = true
+                  }, 0)
                   this.$message.warning('* 为必填！')
                 }
               })

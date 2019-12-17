@@ -143,7 +143,11 @@
                       <vxe-table-column field="TaxAmt" title="含税金额" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                      <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                      <vxe-table-column title="品牌车型">
+                        <template v-slot="{row,rowIndex}">
+                          <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                        </template>
+                      </vxe-table-column>
                       <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                       <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     </vxe-table>
@@ -171,7 +175,11 @@
                         </vxe-table-column>
                         <vxe-table-column field="storeStockQty" title="库存" width="100"></vxe-table-column>
                         <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                        <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                        <vxe-table-column title="品牌车型">
+                          <template v-slot="{row,rowIndex}">
+                            <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                          </template>
+                        </vxe-table-column>
                         <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                       </vxe-table>
                     </div>
@@ -283,7 +291,7 @@
                         <FormItem label="备注：" prop="remark">
                           <Input :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.remark" class="w160"></Input>
                         </FormItem>
-                        <FormItem label="拆份单号：" prop="planOrderNum">
+                        <FormItem label="拆分单号：" prop="planOrderNum">
                           <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId"></Input>
                         </FormItem>
                       </Form>
@@ -329,7 +337,11 @@
                       <vxe-table-column field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
                       <vxe-table-column field="outableQty" title="可用数量" width="100"></vxe-table-column>
                       <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                      <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                      <vxe-table-column title="品牌车型">
+                        <template v-slot="{row,rowIndex}">
+                          <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                        </template>
+                      </vxe-table-column>
                       <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                       <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     </vxe-table>
@@ -350,13 +362,17 @@
                         <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                         <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                          <vxe-table-column field="num" title="拆分数量" width="100">
+                          <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
                             <span>{{ row.num * currentNum }}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="stock" title="成本比例" width="100"></vxe-table-column>
-                        <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
+                        <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
+                          <vxe-table-column title="品牌车型">
+                            <template v-slot="{row,rowIndex}">
+                              <span>{{row.carBrandName}} {{row.carModelName}}</span>
+                            </template>
+                          </vxe-table-column>
                         <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                       </vxe-table>
                     </div>
@@ -614,7 +630,7 @@ export default {
     } else {
       // 调接口获取配件拆分列表信息
       this.getListchai(this.form)
-    }  
+    }
   },
   methods: {
     keydownEvent({ column }, event) {
@@ -626,7 +642,7 @@ export default {
       // if (currentNum)
       this.currentNum =  parseInt(event.target.value)
     },
-    selectAllEvent ({ checked }) {        
+    selectAllEvent ({ checked }) {
     },
     selectChangeEvent ({ checked, row }) {
         console.log(checked ? '勾选事件' : '取消事件')
@@ -901,7 +917,7 @@ export default {
       } else {
         this.currentData = []
       }
-      
+
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
                 if (res.code == 0) {
@@ -938,7 +954,7 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      const params ={...this.form , ...this.$refs.naform.getITPWE()} 
+      const params ={...this.form , ...this.$refs.naform.getITPWE()}
       if ( this.tabKey === '0') {
         this.getListzu(params)
       } else {
@@ -969,7 +985,7 @@ export default {
               }).catch(e => {
               this.$Message.info('删除成品失败')
       })
-       
+
       } else {
         // 拆分删除
         const seleList = this.$refs.xTable2.getSelectRecords()
@@ -1018,7 +1034,7 @@ export default {
       }
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num).then(res => {
                  if (res.code == 0) {
-                  
+
                   if (!res.data.content) {
                     this.Left.tbdata = []
                     this.Left.page.total = 0

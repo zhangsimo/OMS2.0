@@ -178,7 +178,7 @@ export function partMatchingDetail(params) {
   })
 }
 
-// 删除配比清单备货
+// 删除配件
 // /partMatchingDetail/delete
 export function partMatchingdelete(data) {
   return axios.request({
@@ -188,7 +188,7 @@ export function partMatchingdelete(data) {
   })
 }
 
-//新增配比清单详情
+//添加物料
 // /partMatchingDetail/save
 export function partMatchingDetailSave(data) {
   return axios.request({
