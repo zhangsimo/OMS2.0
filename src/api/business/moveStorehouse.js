@@ -3,7 +3,7 @@ import api from '_conf/url'
 //获取左侧数据
 export function getLeftList (data, num , size,) {
   return axios.request({
-    url: `${api.omsOrder}/stockShiftMain/findListPageAll?page=${num}&size=${size}`,
+    url: `${api.omsOrder}/stockShiftMain/pageAll?page=${num}&size=${size}`,
     method: 'post',
     data
   })
