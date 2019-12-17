@@ -418,6 +418,7 @@ export default {
                 this.formPlan.Reservation =  '',
                 this.formPlan.remark =  '',
                 this.Right.tbdata = []
+                this.isAdd = true
             }
           })
         } else {

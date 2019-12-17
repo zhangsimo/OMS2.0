@@ -95,12 +95,21 @@
                     if(res.code === 0){
                       this.erweima = res.data.code_url
                       this.modal = true
-                      let data1 = {}
-                      let params1 = {}
-                      params1.orderNum = this.orderNum
-                      queryOrder({data:data1,params:params1}).then(res => {
-
-                      })
+                      setInterval(() => {
+                        let data1 = {}
+                        let params1 = {}
+                        // params1.orderNum = this.orderNum
+                        params1.orderNum = 20191217030100000009
+                        queryOrder({data:data1,params:params1}).then(res => {
+                          if(res.code == 0){
+                            if(res.data == 'SUCCESS'){
+                              this.$Message.warning('购买成功！')
+                              this.modal = false
+                              clearInterval(timer)
+                            }
+                          }
+                        })
+                      },10000)
                     }
             })
             }
