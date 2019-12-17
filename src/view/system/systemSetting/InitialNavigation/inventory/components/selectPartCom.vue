@@ -62,7 +62,7 @@
         </div>
         <div class="formItem">
           <FormItem label="金额:" prop="enterAmt">
-            <Input v-model="formInfo.enterAmt"></Input>
+            <Input v-model="inputMoney"></Input>
           </FormItem>
           <FormItem label="备注:" prop="remark">
             <Input v-model="formInfo.remark"></Input>
@@ -89,7 +89,15 @@
       isShowAddPartBtn:false,
         mainData:''
     },
+    computed:{
+      inputMoney:function(){
+        if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
+            return this.formInfo.enterQty * this.formInfo.enterPrice
+        }
+      },
+    },
   }
+
 </script>
 
 <style lang="less" scoped>

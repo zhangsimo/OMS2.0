@@ -24,6 +24,7 @@ module.exports = {
   // 打包时不生成.map文件
   productionSourceMap: false,
   devServer: {
+    open: true,
     port: 8087
   }
 };
