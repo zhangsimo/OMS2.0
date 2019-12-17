@@ -27,7 +27,7 @@
             <Input v-model='data.legalPerson' style="width: 180px" ></Input>
           </FormItem>
           <FormItem label='经营期限:' prop="operationStart">
-            <DatePicker :value="data.operationStart" format="yyyy-MM-dd"  style="width: 180px" @on-change="ChangeTime"></DatePicker>
+            <DatePicker :value="data.operationStart" format="yyyy-MM-dd" type="date" style="width: 180px" @on-change="ChangeTime"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -36,12 +36,12 @@
             <!--<Input v-model='data.registMoney' style="width: 180px" ></Input>-->
           </FormItem>
           <FormItem label='至' prop="operationEnd">
-            <DatePicker :value="data.operationEnd" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
+            <DatePicker :value="data.operationEnd" type="date" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='成立日期:' prop="registerDate">
-            <DatePicker :value="data.registerDate" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
+            <DatePicker :value="data.registerDate" type="date" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
           </FormItem>
           <FormItem label='登记状态:' prop="manageStatus">
             <Select v-model="data.manageStatus" style="width:180px" >
@@ -135,12 +135,12 @@
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
             <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
-            <InputNumber v-model="data.accountDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.accountDate" style="width: 180px" max="31" min="1"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="回款日期:" prop="cashDate">
-            <InputNumber v-model="data.cashDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.cashDate" style="width: 180px" max="31" min="1"></InputNumber>
             <!--<Input v-model='data.cashDate' style="width: 180px" ></Input>-->
           </FormItem>
         </Col>
@@ -208,22 +208,19 @@
               }
           }
             return {
-            data: {
-              nature: '98421534867062833'
-            },
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
                 nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: 'change' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
-                operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change',pattern: /.+/ }],
+                // operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
-                operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change',pattern: /.+/ }],
-                registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change',pattern: /.+/}],
+                // operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
+                // registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
                 manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'change' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
-                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
+                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'changeq' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
                 cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'change' }],
@@ -246,15 +243,15 @@
         }
       },
       ChangeTime(value) {
-        // console.log(value)
-        this.data.operationStart = tools.transDate(value)
+        console.log(this.data)
+        this.data.operationStart = value
       },
       ChangeTime2(value) {
         console.log(value)
-        this.data.operationEnd = tools.transDate(value)
+        this.data.operationEnd = value
       },
       ChangeTime3(value) {
-        this.data.registerDate = tools.transDate(value)
+        this.data.registerDate = value
       },
       // 上传前
       handleBeforeUpload() {
