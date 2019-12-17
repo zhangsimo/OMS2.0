@@ -92,9 +92,16 @@
                   dataa.price = this.payMoney
                   dataa.orderNum = num
                   generationQR(dataa).then(res => {
-                    this.erweima = res.data.code_url
-                    console.log(this.erweima,'二维码路径')
-                    this.modal = true
+                    if(res.code === 0){
+                      this.erweima = res.data.code_url
+                      this.modal = true
+                      let data1 = {}
+                      let params1 = {}
+                      params1.orderNum = this.orderNum
+                      queryOrder({data:data1,params:params1}).then(res => {
+
+                      })
+                    }
             })
             }
             })
@@ -104,12 +111,12 @@
           }
         },
         close(){
-          let data = {}
-          let params = {}
-          params.orderNum = this.orderNum
-          queryOrder({data:data,params:params}).then(res => {
-
-          })
+          // let data = {}
+          // let params = {}
+          // params.orderNum = this.orderNum
+          // queryOrder({data:data,params:params}).then(res => {
+          //
+          // })
         }
       },
       mounted(){

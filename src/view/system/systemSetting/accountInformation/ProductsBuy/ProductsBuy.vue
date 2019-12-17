@@ -70,11 +70,18 @@
                 data.orderNum = aaa
                 this.orderNum = aaa
                 generationQR(data).then(res => {
-                  // console.log(res,1)
                   if(res.code === 0){
                     this.erweima = res.data.code_url
-                    // console.log(this.erweima,123123)
                     this.modal = true
+                    let data1 = {}
+                    let params1 = {}
+                    params1.orderNum = this.orderNum
+                    queryOrder({data:data1,params:params1}).then(res => {
+                      // if(res.code == 0){
+                      //   this.$Message.warning('购买成功！')
+                      //   this.modal = false
+                      // }
+                    })
                   }
                 })
               }

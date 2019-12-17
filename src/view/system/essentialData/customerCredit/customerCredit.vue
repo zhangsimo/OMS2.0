@@ -102,6 +102,7 @@
   import SurveyList from "./SurveyList";
   import {queryCreditList,guestCreditHistory,saveOrUpdate,adjustment,save,guestAdjust} from '../../../../api/system/CustomerManagement/CustomerManagement'
   import { getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  import * as tools from "../../../../utils/tools";
   export default {
         name: "customerCredit",
         components:{
@@ -494,18 +495,21 @@
           },
           //确定按钮
           confirm(){
-            console.log(12)
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
-                  let data = this.creaditList
+                  let data = {}
+                  data = this.creaditList
+                  data.registerDate = tools.transDate(this.creaditList.registerDate)
+                  data.operationEnd = tools.transDate(this.creaditList.operationEnd)
+                  data.operationStart = tools.transDate(this.creaditList.operationStart)
                   data.guestId = this.ID
                   console.log(data)
-                  saveOrUpdate(data).then(res => {
-                      if(res.code === 0){
-                          this.getListTop()
-                          this.surveyShow = false
-                      }
-                  })
+                  // saveOrUpdate(data).then(res => {
+                  //     if(res.code === 0){
+                  //         this.getListTop()
+                  //         this.surveyShow = false
+                  //     }
+                  // })
                 }else {
                   this.modal.loading = false
                   setTimeout(() => {
