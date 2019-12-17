@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取表一页信息
 export function getList (params) {
   return axios.request({
-    url: `${api.omsOrder}/enterMain/main/queryQc`,
+    url: `http://192.168.30.69:9210/enterMain/main/queryQc`,
     method: 'get',
     params
   });
@@ -33,4 +33,4 @@ export function checkList (data) {
   });
 }
 //导入 /enterMain/import
-export const url = `${api.omsOrder}/enterMain/import`;
+export const url = `http://192.168.30.69:9210/enterMain/import`;
