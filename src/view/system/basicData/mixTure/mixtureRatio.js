@@ -1,5 +1,6 @@
 const data = function () {
   return {
+    code: '',
     split: 0.2,
     // modal显示
     modal: false,
@@ -58,7 +59,7 @@ const data = function () {
             let vm = this;
             return h('Select', {
               props: {
-                value: params.row.isDisabled
+                value: 0
               },
               style: {
                 width: "100%"
@@ -143,7 +144,7 @@ const data = function () {
                   params.row.qty = event;
                   vm.customer.tbdata[params.index] = params.row;
                 },
-                "on-blur": (event)=>  {
+                "on-blur": (event) => {
                   let val = event.target.value;
                   let reg = /^\d{1,3}$/
                   if (!reg.test(val)) {
@@ -151,7 +152,7 @@ const data = function () {
                     params.row.qty = ''
                   }
                 },
-                "on-enter":(event)=> {
+                "on-enter": (event) => {
                   event.target.blur()
                 }
               },
@@ -181,12 +182,12 @@ const data = function () {
                   vm.customer.tbdata[params.index] = params.row;
                 },
                 "on-blur": (e) => {
-                  if (!e.target.value.match(/^[0]\.\d{1,2}$/)) {
+                  if (!e.target.value.match(/^[0]+(\.\d{1,2})?[1]$/)) {
                     this.$Message.error('请输入0-1数值')
                     params.row.ratio = ''
                   }
                 },
-                "on-enter":(event)=> {
+                "on-enter": (event) => {
                   event.target.blur()
                 }
               },
@@ -213,7 +214,7 @@ const data = function () {
               on: {
                 input(event) {
                   params.row.remark = event;
-                  vm.tbdata[params.index] = params.row;
+                  vm.customer.tbdata[params.index] = params.row;
                 }
               },
             })
@@ -278,9 +279,9 @@ const methods = {
   /**==============左侧============= */
   // 配比清单保存
   async save() {
-    // console.log(this.level.tbdata)
     this.level.tbdata = this.unique(this.level.tbdata)
-    let data = this.level.tbdata.map(el => {
+    let data = []
+    this.level.tbdata.map(el => {
       let item = {};
       if (el.id) {
         item.id = el.id;
@@ -289,7 +290,10 @@ const methods = {
       item.isDisabled = el.isDisabled;
       item.partCode = el.partCode
       item.partId = el.partId
-      return item;
+      item.partInnerId = el.partInnerId
+      item.oemCode = el.oemCode
+      item.fullName = el.fullName
+      data.push(item)
     });
     // console.log(data)
     await partMatchingSave(data);
@@ -297,8 +301,6 @@ const methods = {
   },
   // 新增
   add() {
-    // this.level.tbdata.push({ name: " ", isEdit: false, oid: Date.now() });
-    // this.model_left = true
     this.$refs.Msg1.init()
   },
   // 删除
@@ -338,15 +340,14 @@ const methods = {
     if (this.checkboxArr.length === 0) {
       this.$Message.warning('请选择要删除的对象')
     } else {
-      let needArr = []
-      needArr = this.checkboxArr.map((ele, index) => {
-        return ele.id
+      this.checkboxArr.map(item=>{
+        this.customer.tbdata.map((itm,index)=>{
+          if(item.id === itm.id) {
+            this.customer.tbdata.splice(index,1)
+          }
+        })
       })
-      console.log(needArr, 2313)
-      partMatchingdelete(needArr).then(res => {
-        this.rightgetList()
-        this.$Message.warning('删除成功')
-      })
+      // this.saveCustomer()
     }
   },
   // 保存配件
@@ -355,9 +356,17 @@ const methods = {
     this.customer.tbdata.forEach(item => {
       item.parentId = this.levelId
     })
+    let newArr = []
+    // console.log(this.checkboxArr)
+    if(this.checkboxArr.length!==0){
+      this.checkboxArr.map(item=>{
+        newArr.push(item.id)
+      })
+    }
     // console.log(this.customer.tbdata)
     this.customer.tbdata = this.unique(this.customer.tbdata)
-    partMatchingDetailSave(this.customer.tbdata).then(res => {
+    partMatchingDetailSave({addOrUpdate:this.customer.tbdata,deleteIds:newArr}).then(res => {
+      // console.log(res)  
       this.rightgetList()
     })
   },
@@ -372,10 +381,6 @@ const methods = {
     this.customer.page.num = 1;
     this.customer.page.size = size;
   },
-  // 查询配件
-  queryPart() { },
-  // 保存配件
-  savePart() { },
   //左边内容初始化
   leftgetList() {
     let params = {}
@@ -398,7 +403,7 @@ const methods = {
       params.partCode = this.customer.fullname
     }
     if (this.Type === 1 && this.customer.fullname !== '') {
-      params.fullname = this.customer.fullname
+      params.fullName = this.customer.fullname
     }
     if (this.levelId) {
       params.parentId = this.levelId
@@ -408,6 +413,7 @@ const methods = {
 
     this.customer.loading = true
     partMatchingDetail(params).then(res => {
+      // console.log(res)
       this.customer.loading = false
       if (res.code === 0) {
         this.customer.tbdata = res.data.content || []
@@ -419,58 +425,61 @@ const methods = {
   //多选框
   selection(a) {
     this.checkboxArr = a
-    console.log(this.checkboxArr)
+    // console.log(this.checkboxArr)
   },
   //子组件的参数
-  getMsg2(a) {
-    console.log(a)
+  selectPartName(a) {
+    // console.log(a)
     let newA = a.map(item => {
       return {
         partCode: item.partCode,
-        partName: item.partName,
+        partName: item.partStandardName,
         partId: item.id,
+        partInnerId: item.code,
+        oemCode: item.oeCode,
+        fullName: item.fullName
       }
     })
     this.level.tbdata = [...this.level.tbdata, ...newA]
 
-    console.log(this.level.tbdata, "left数据")
+    // console.log(this.level.tbdata, "left数据")
     // this.level.tbdata = this.unique(this.level.tbdata) //暂时不去重，后台数据id为null，无法通过partId去重。
     // console.log(this.getArr)
   },
   // 父组件右部分获取子组件的参数
   getMsgTwo(a) {
-    // console.log(a)
-    let newA = a.map(item => {
-      return {
+    let newA = []
+    a.map(item => {
+      newA.push({
         partCode: item.code,
-        partName: item.partBrandName,
+        partName: item.partStandardName,
         partId: item.id,
+        partInnerId: item.code,
         fullName: item.fullName,
-        remark: item.remarks
-      }
+        remark: item.remarks,
+        qty:0,
+        ratio: 0
+      })
     })
     this.getArrRight = newA
-    console.log(this.getArrRight)
     this.customer.tbdata = [...this.customer.tbdata, ...this.getArrRight]
+    console.log(this.customer.tbdata)
     this.customer.tbdata = this.unique(this.customer.tbdata)
   },
   //左边内容单某行
   selction(a) {
-    // console.log(a)
     let arrr = []
     arrr.push(a)
-    // console.log(arrr)
     let arrrr = arrr.map(item => {
       return {
-        levelId: item.id
+        levelId: item.id,
+        code:item.partInnerId
       }
     })
-    console.log(arrrr)
     this.levelId = arrrr[0].levelId
-    // console.log(this.levelId)
+    this.code = arrrr[0].code
     if (this.levelId) {
       this.rightgetList()
-      this.$refs.Msg1.chooseArr = []
     }
   },
   //去重方法
@@ -487,9 +496,11 @@ const methods = {
 import { partMatching, partMatchingSave, partMatchingDetail, partMatchingdelete, partMatchingDetailSave } from '@/api/system/systemSetting/Initialization'
 import DiaLog from '../../../../components/Accessories/dialog';
 import selectPartCom from '@/view/salesManagement/salesOrder/components/selectSupplier'
+import selectPart from './selectPart'
 const components = {
   DiaLog,
-  selectPartCom
+  selectPartCom,
+  selectPart
 }
 
 export default {
