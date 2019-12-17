@@ -106,7 +106,7 @@
 </template>
 
 <script>
-import { getGoodsInfo,saveGoodsInfo,logistics,queryGoodsInfo } from "_api/business/goodsInfos"
+import { getGoodsInfo,saveGoodsInfo,logistics } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
@@ -193,7 +193,7 @@ export default {
         this.formDateTop.receiveMan= null,//收货人
         this.formDateTop.streetAddress= null,//详细收货地址
         this.formDateTop.receiveManTel= null//联系电话
-      let res = await queryGoodsInfo(this.formDateTop)
+      let res = await getGoodsInfo(this.formDateTop)
       console.log(res)
     },
     getParams() {

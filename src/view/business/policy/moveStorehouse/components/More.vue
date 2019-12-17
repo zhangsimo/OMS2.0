@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import { getDataMoreList } from '../../../../../api/AlotManagement/putStorage'
+import { getList1 } from '_api/AlotManagement/putStorage'
 export default {
   name: 'More',
   data() {
@@ -95,7 +95,7 @@ export default {
     },
     //更多弹窗-确定
     moreOk() {
-      getDataMoreList()
+      getList1(this.moreData, 10, 1)
         .then(res => {
           if (res.code === 0) {
             //res传出去

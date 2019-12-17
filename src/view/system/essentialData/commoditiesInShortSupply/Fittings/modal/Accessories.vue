@@ -758,7 +758,7 @@ export default class Accessories extends Vue {
 
   private mounted() {
     this.initdic();
-    this.initclassisc();
+    // this.initclassisc();
     this.initwbppb();
     this.getwbBands();
     this.getcarModelall();

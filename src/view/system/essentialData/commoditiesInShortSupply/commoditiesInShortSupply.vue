@@ -312,10 +312,17 @@
             },
             // 上传成功函数
             onSuccess (response) {
-              if(response.code != 0 ){
-                  this.$Message.success(response.message)
+                this.getList()
+                if(response.code != 0 ){
+                  this.$Notice.warning({
+                      title: '导入失败',
+                      desc: response.message,
+                  })
               }else {
-                  this.$Message.success(response.message)
+                  this.$Notice.success({
+                      title: '导入成功',
+                      desc: response.message,
+                  })
               }
             },
             //上传之前清空

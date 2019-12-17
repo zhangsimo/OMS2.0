@@ -22,7 +22,7 @@
     </row>
     <row class="mt15">
       <span>调 出 方 ：</span>
-      <Input v-model="form.guestName" style="width: 398px" />
+      <Input readonly v-model="form.guestName" style="width: 398px" />
        <Button @click="showModel" class="ml5" size="small" type="default">
                                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>
                               </Button>
