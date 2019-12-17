@@ -75,7 +75,7 @@
               <Button class="uploadbtn">上传</Button>
             </Upload>
             <a target="view__blank" :href="data.businessName" class="download" download="" v-if="data.businessName">下载</a>
-            <a class="download" v-else>下载</a>
+            <a class="download" v-else @click="clownFile">下载</a>
           </FormItem>
         </Col>
         <Col span="12">
@@ -208,22 +208,25 @@
               }
           }
             return {
+            data: {
+              nature: '98421534867062833'
+            },
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
-                nature: [{ required: true,message: '请选择正确公司性质！', trigger: 'change' }],
+                nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: 'change' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
                 operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change',pattern: /.+/ }],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
                 operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change',pattern: /.+/ }],
                 registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change',pattern: /.+/}],
-                manageStatus: [{ required: true, message: '请选择登记状态！', trigger: 'change' }],
+                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: 'change' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
                 businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'blur' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
-                cashMode: [{ required: true, message: '请选择回款方式！', trigger: 'change' }],
+                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'change' }],
                 accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
                 cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
@@ -234,23 +237,14 @@
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
               }, //获取token
-              options3: {
-                // disabledDate(date) {
-                //   return date && date.valueOf() < tools.transTime(this.data.operationStart) - 86400000;
-                // }
-              }
             }
         },
     methods: {
-      // verify() {
-      //   var reg = /^\+?[1-9]\d*$/;
-      //   if (!reg.test(this.data.applyTrustMoney)) {
-      //     this.$Message.error('请输入大于0的正整数!')
-      //   }
-      //   if (this.data.applyTrustMoney > 10000) {
-      //     this.$message.error('首次申请额度不能大于10000')
-      //   }
-      // },
+      clownFile(){
+        if(this.data.businessName === null){
+          this.$message.warning('无下载文件！')
+        }
+      },
       ChangeTime(value) {
         // console.log(value)
         this.data.operationStart = tools.transDate(value)

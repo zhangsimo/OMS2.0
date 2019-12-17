@@ -130,12 +130,12 @@ const data = function() {
           key: "fullName",
           minWidth: 120
         },
-        {
-          title: "备注",
-          align: "left",
-          key: "remark",
-          minWidth: 120
-        },
+        // {
+        //   title: "备注",
+        //   align: "left",
+        //   key: "remark",
+        //   minWidth: 120
+        // },
         {
           title: "操作人",
           align: "left",

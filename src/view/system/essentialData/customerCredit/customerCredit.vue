@@ -494,6 +494,7 @@
           },
           //确定按钮
           confirm(){
+            console.log(12)
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
                   let data = this.creaditList
