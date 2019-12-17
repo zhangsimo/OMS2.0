@@ -506,6 +506,10 @@
                       }
                   })
                 }else {
+                  this.modal.loading = false
+                  setTimeout(() => {
+                    this.modal.loading = true
+                  }, 0)
                   this.$message.warning('* 为必填！')
                 }
               })
