@@ -269,12 +269,13 @@ export default class FeeRegistration extends Vue {
     this.getList();
   }
 
-  private async getInfo(params) {
+  private async getInfo(data) {
     this.loading2 = true;
-    let res: any = await api.getFee(params);
+    let res: any = await api.getFee({}, data);
     if (res.code == 0) {
       this.loading2 = false;
-      this.tableInfoData = res.data.map((el: any) => {
+      let resData = res.data || [];
+      this.tableInfoData =  resData.map((el: any) => {
         el.serviceType = JSON.parse(el.serviceType).value;
         for(let o of this.selectrow.revenueTypes) {
           if(o.value == el.serviceType) {
@@ -289,13 +290,13 @@ export default class FeeRegistration extends Vue {
 
   // 选中行
   private currentChangeEvent({ row }) {
-    let params = {
+    let data = {
       guestId: row.id,
       serviceId: this.serviceId
     };
     row.revenueTypes = this._.cloneDeep(this.revenueTypes);
     this.selectrow = row;
-    this.getInfo(params);
+    this.getInfo(data);
   }
 
   private async save() {

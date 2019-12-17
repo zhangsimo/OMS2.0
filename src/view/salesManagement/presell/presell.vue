@@ -520,7 +520,7 @@
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
           storeId: [
-            {required: true, type: 'string', message: '', trigger: 'change'}
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
           ]
         },
         validRules: { //表格校验
@@ -536,7 +536,8 @@
         id: '',  //左侧表格id
         PTrow: {
           _highlight: true,
-          status: {name: '草稿', value: 0}
+          status: {name: '草稿', value: 0},
+          salesman: this.$store.state.user.userData.staffName
           // id: '0',
           // details: [],
           // createTime: tools.transTime(new Date())

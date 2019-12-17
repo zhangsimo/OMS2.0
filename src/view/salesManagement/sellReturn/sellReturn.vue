@@ -380,7 +380,8 @@
         isWms: true,//判断是否提交,返回
         PTrow: {
           _highlight: true,
-          billStatusId: {name: '草稿', value: 0}
+          billStatusId: {name: '草稿', value: 0},
+
           // status: {"name":"草稿","value":0},
         },
         page: {
@@ -481,7 +482,7 @@
         thTypes: [], //退货类型
         ruleValidate: { //表单校验
           guestId: [
-            {required: true, type: 'string', message: '', trigger: 'change'}
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
           orderMan: [
             {required: true, message: '  ', trigger: 'blur'}
