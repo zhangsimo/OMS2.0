@@ -62,7 +62,7 @@
         ></Page>
       </div>
 <!--      客户资料-->
-      <Modal v-model="clientDataShow" title="供应商资料"  width="700">
+      <Modal v-model="clientDataShow" title="供应商资料"   width="700" height="2100">
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
         <div slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>

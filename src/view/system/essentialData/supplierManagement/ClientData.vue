@@ -112,7 +112,7 @@
          <FormItem label="备注:">
            <Input v-model='data.remark' style="width: 480px" ></Input>
          </FormItem>
-         <Row>
+         <Row id="rowMargin" style="marginBottom: 40px">
            <Col span="12">
              <FormItem label='一级分类:' prop="supplierTypeFirst">
                <Select v-model="data.supplierTypeFirst" style="width:180px" class="mr10">
