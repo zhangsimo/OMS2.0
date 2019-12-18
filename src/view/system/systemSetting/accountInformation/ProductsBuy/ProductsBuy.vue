@@ -44,7 +44,7 @@
 <script>
   // import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
-  import { tenantInfogenerateOrder,generationQR, queryOrder } from '../../../../../api/system/account/account'
+  import { tenantInfogenerateOrder,generationQR, queryOrder, generationRecord } from '../../../../../api/system/account/account'
     export default {
         name: "ProductsBuy",
       // components: {QRCode},
@@ -77,13 +77,19 @@
                       let data1 = {}
                       let params1 = {}
                       // params1.orderNum = this.orderNum
-                      params1.orderNum = 20191217030100000009
+                      params1.orderNum = '20191217030100000009'
                      let timer = queryOrder({data:data1,params:params1}).then(res => {
                         if(res.code == 0){
                           if(res.data == 'SUCCESS'){
                             this.$Message.warning('购买成功！')
                             this.modal = false
                            clearInterval(timer)
+                            let data2 = {}
+                            let params2 = {}
+                            params2.orderNum = this.orderNum
+                            generationRecord({data:data2,params:params2}).then(res => {
+
+                            })
                           }
                         }
                       })

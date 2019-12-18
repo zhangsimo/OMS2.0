@@ -27,7 +27,7 @@
             <Input v-model='data.legalPerson' style="width: 180px" ></Input>
           </FormItem>
           <FormItem label='经营期限:' prop="operationStart">
-            <DatePicker :value="data.operationStart" format="yyyy-MM-dd" type="date" style="width: 180px" @on-change="ChangeTime"></DatePicker>
+            <DatePicker v-model="data.operationStart" format="yyyy-MM-dd" type="date" style="width: 180px" ></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -36,12 +36,12 @@
             <!--<Input v-model='data.registMoney' style="width: 180px" ></Input>-->
           </FormItem>
           <FormItem label='至' prop="operationEnd">
-            <DatePicker :value="data.operationEnd" type="date" format="yyyy-MM-dd" style="width: 180px" :options="options3" @on-change="ChangeTime2"></DatePicker>
+            <DatePicker v-model="data.operationEnd" type="date" format="yyyy-MM-dd" style="width: 180px" :options="options3"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='成立日期:' prop="registerDate">
-            <DatePicker :value="data.registerDate" type="date" format="yyyy-MM-dd" style="width: 180px" @on-change="ChangeTime3"></DatePicker>
+            <DatePicker v-model="data.registerDate" type="date" format="yyyy-MM-dd" style="width: 180px"></DatePicker>
           </FormItem>
           <FormItem label='登记状态:' prop="manageStatus">
             <Select v-model="data.manageStatus" style="width:180px" >
@@ -93,7 +93,7 @@
               <Button class="uploadbtn">上传</Button>
             </Upload>
             <a target="view__blank" :href="data.purchaseName" class="download" v-if="data.purchaseName">下载</a>
-            <a v-else class="download">下载</a>
+            <a v-else class="download" @click="clownFile2">下载</a>
           </FormItem>
         </Col>
       </Row>
@@ -135,12 +135,12 @@
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
             <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
-            <InputNumber v-model="data.accountDate" style="width: 180px" max="31" min="1"></InputNumber>
+            <InputNumber v-model="data.accountDate" style="width: 180px" max="31"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="回款日期:" prop="cashDate">
-            <InputNumber v-model="data.cashDate" style="width: 180px" max="31" min="1"></InputNumber>
+            <InputNumber v-model="data.cashDate" style="width: 180px" max="31"></InputNumber>
             <!--<Input v-model='data.cashDate' style="width: 180px" ></Input>-->
           </FormItem>
         </Col>
@@ -195,8 +195,10 @@
             }
           }
           const smallNumber = (rule, value, callback) => {
-            if (value <= 0) {
+            if (value < 0) {
               return callback(new Error('请输入大于0的正整数'));
+            }else {
+              callback()
             }
           }
           //注册号
@@ -212,18 +214,18 @@
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
                 nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: ['blur','change'] }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
-                // operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
+                operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
-                // operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
-                // registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
-                manageStatus: [{ required: true,type:'string', message: '请选择登记状态！', trigger: ['blur','change'] }],
+                operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
+                registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
+                manageStatus: [{ required: true, type:'string',message: '请选择登记状态！', trigger: ['blur','change'] }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
-                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'changeq' }],
+                // businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'change' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
-                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: ['blur','change'] }],
+                cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'change' }],
                 accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
                 cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
@@ -239,6 +241,14 @@
     methods: {
       clownFile(){
         if(this.data.businessName === null){
+          this.$message.warning('无下载文件！')
+        }
+      },
+      handleReset () {
+        this.$refs.formInline.resetFields();
+      },
+      clownFile2(){
+        if(this.data.purchaseName === null){
           this.$message.warning('无下载文件！')
         }
       },

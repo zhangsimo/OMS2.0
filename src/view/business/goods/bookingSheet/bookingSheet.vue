@@ -66,7 +66,7 @@
                         :rules="ruleValidate"
                         :label-width="100">
                     <FormItem label="业务员：" prop="salesman">
-                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.salesman"></Input>
+                      <Input class="w160" :disabled="true" v-model="formPlan.salesman"></Input>
                     </FormItem>
                     <FormItem label="预订单号:" prop="Reservation" class="ml50">
                       <Input class="w160" :disabled="true" v-model="formPlan.Reservation"></Input>
@@ -387,6 +387,8 @@ export default {
       this.Left.tbdata.unshift(this.PTrow)
       this.isAdd = false;
       this.datadata = this.PTrow
+      this.formPlan.salesman = this.$store.state.user.userData.staffName
+      // console.log(this.$store.state.user.userData.staffName)
       // console.log(this.Left.tbdata)
     },
     //添加配件按钮
