@@ -159,7 +159,6 @@
                   <FormItem label="计划员：" prop="planner">
                     <Input
                       class="w160"
-                      readonly
                       v-model="formPlan.planner"
                     ></Input>
                   </FormItem>
@@ -169,6 +168,7 @@
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
                       v-model="formPlan.remark"
+                      maxlength="100"
                     ></Input>
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
@@ -208,20 +208,24 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="其他费用：">
-                    <Input
+                    <InputNumber
                       class="w160"
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
                       v-model="formPlan.otherPrice"
-                    ></Input>
+                      :min="0"
+                      :precision="2"
+                    />
                   </FormItem>
                   <FormItem label="合计总金额：">
-                    <Input
+                    <InputNumber
                       class="w160"
                       :disabled="isinput"
-                      :readonly="selectPlanOrderItem.billStatusId != 0"
+                      :readonly="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
                       v-model="formPlan.totalPrice"
-                    ></Input>
+                      :min="0"
+                      :precision="2"
+                    />
                   </FormItem>
                 </Form>
               </div>
@@ -407,7 +411,8 @@
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
-                ></vxe-table-column>
+                >
+                </vxe-table-column>
                 <vxe-table-column
                   field="noTaxPrice"
                   title="不含税单价"
@@ -486,7 +491,7 @@
       @selectSupplierName="getSupplierName"
     ></select-supplier>
     <!-- 更多 -->
-    <more-search @getmoreData="getmoreData" ref="moreSearch"></more-search>
+    <more-search type="采购计划" @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->

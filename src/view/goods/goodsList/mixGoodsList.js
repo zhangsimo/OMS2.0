@@ -268,6 +268,11 @@ export const mixGoodsData = {
       //     }
       //   })
       // }
+      if(this.newadd && this.selectPlanOrderItem.new) {
+        this.tbdata.splice(0, 1);
+        this.newadd = false;
+        this.$refs.planOrderTable.clearCurrentRow();
+      }
       if (v) {
         this.isinput = false;
         this.selectPlanOrderItem = v || {};
@@ -301,7 +306,7 @@ export const mixGoodsData = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
-        planArriveDate: "", //计划日期
+        planArriveDate: new Date(), //计划日期
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注

@@ -1,11 +1,11 @@
-<template>
+ <template>
   <Modal
     title="高级查询"
     v-model="serchN"
     :styles="{ top: '50px', width: '500px' }"
   >
     <div class="data ml30 pl25">
-      <Row class="mb30">
+      <Row class="mb30" v-if="!['采购计划'].includes(type)">
         <span>订货日期:</span>
         <DatePicker
           type="daterange"
@@ -47,13 +47,13 @@
         <Input type="text" class="w300 ml5" size="large" v-model="partName" />
       </FormItem>
       <FormItem label="品牌: ">
-        <Input type="password" class="w300 ml5" v-model="partBrand" />
+        <Input type="text" class="w300 ml5" v-model="partBrand" />
       </FormItem>
       <FormItem label="提交人: ">
-        <Input type="password" class="w300 ml5" v-model="auditor" />
+        <Input type="text" class="w300 ml5" v-model="auditor" />
       </FormItem>
       <FormItem label="创建人: ">
-        <Input type="password" class="w300 ml5" v-model="createUname" />
+        <Input type="text" class="w300 ml5" v-model="createUname" />
         <Checkbox v-model="showSelf">显示个人单据</Checkbox>
       </FormItem>
     </Form>
@@ -72,7 +72,7 @@
 
 <script lang="ts">
 import * as tools from "../../../../utils/tools";
-import { Vue, Component, Emit } from "vue-property-decorator";
+import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
 
 @Component({
@@ -81,6 +81,8 @@ import SelectSupplier from "./selectSupplier.vue";
   }
 })
 export default class MoreSearch extends Vue {
+   @Prop({ default: '' }) private readonly type!:string; 
+
   private serchN: boolean = false;
 
   private orderDate: Array<any> = new Array();
