@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px"></Input>
+                <Input v-model="data.shortName" style="width: 180px" maxlength="10"></Input>
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
@@ -778,7 +778,7 @@ export default {
     //删除银行
     deletBank() {
       if (Object.keys(this.addInoiceOne).length == 0) {
-        this.$Message.error("至少选项一条地址");
+        this.$Message.error("请先选中需要删除的信息");
         return false;
       }
     }
