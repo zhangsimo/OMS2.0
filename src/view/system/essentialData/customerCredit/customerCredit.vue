@@ -400,9 +400,12 @@
             },
           //当前行
           selection(row){
+            console.log(row)
             this.state = row.isGuestResearch
             this.ID = row.guestId
-            this.Limitstate = JSON.parse(row.auditSign).value
+            // console.log(this.ID)
+            this.Limitstate = JSON.parse(row.researchStatus).value
+            console.log(this.Limitstate)
             this.rowMessage = row
              this.creaditList = this.rowMessage
             this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
@@ -498,8 +501,7 @@
           confirm(){
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
-                  let data = {}
-                  data = this.creaditList
+                  let data = this.creaditList
                   data.registerDate = tools.transDate(this.creaditList.registerDate)
                   data.operationEnd = tools.transDate(this.creaditList.operationEnd)
                   data.operationStart = tools.transDate(this.creaditList.operationStart)

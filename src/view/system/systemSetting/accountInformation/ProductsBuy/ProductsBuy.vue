@@ -76,8 +76,8 @@
                     setInterval(() => {
                       let data1 = {}
                       let params1 = {}
-                      // params1.orderNum = this.orderNum
-                      params1.orderNum = '20191217030100000009'
+                      params1.orderNum = this.orderNum
+                      // params1.orderNum = '20191217030100000009'
                      let timer = queryOrder({data:data1,params:params1}).then(res => {
                         if(res.code == 0){
                           if(res.data == 'SUCCESS'){
