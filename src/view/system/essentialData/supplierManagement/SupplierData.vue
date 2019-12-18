@@ -64,7 +64,7 @@
 <!--      客户资料-->
       <Modal v-model="clientDataShow" title="供应商资料"   width="700" height="2100">
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
-        <div slot='footer'>
+        <div class="footerMargin" slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>
           <Button type='default' @click='clientDataShow = false'>取消</Button>
         </div>
@@ -422,5 +422,8 @@
   overflow: hidden;
   overflow-x:initial;
   height: calc(~"100% - 97px");
+}
+.footerMargin {
+  // margin-top: 100px;
 }
 </style>
