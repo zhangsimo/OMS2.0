@@ -60,7 +60,7 @@
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px"></Input>
+                <Input v-model="data.contactor" style="width: 180px" maxlength="8"></Input>
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
                 <Select v-model="data.provinceId" style="width:180px" class="mr10">
