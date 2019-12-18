@@ -351,7 +351,7 @@
             </Col>
             <Col span="12">
               <FormItem label="备注：">
-                <Input type="textarea" v-model="straightRemark" @on-change="remarks"></Input>
+                <Input type="textarea" v-model="straightRemark" @on-change="remarks2"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -596,7 +596,6 @@ export default {
           align: "center",
           render: (h, params) => {
             let _this = this;
-            console.log(params);
             return h("InputNumber", {
               props: {
                 min: 0,
@@ -606,7 +605,6 @@ export default {
               },
               on: {
                 "on-change": e => {
-                  console.log(e.target);
                   params.row.acceptQty = e;
                   _this.data2[params.index] = params.row;
                 }
@@ -816,7 +814,7 @@ export default {
           billTypeId: this.billTypeId,
           settleTypeId: this.settleTypeId,
           details: this.data4,
-          reamrk: this.reamrk
+          remark: this.remark
         }).then(res => {
           if (res.code === 0) {
             this.addPurchaseOrderDialog = false;
@@ -956,23 +954,24 @@ export default {
     },
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
-      // console.log(value)
       this.guestId = value
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
-      // console.log(value)
       this.settleTypeId = value
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
-      // console.log(value)
       this.billTypeId = value
     },
     // 新增备注
-    remarks(value){
-      console.log(value)
-      this.reamrk = value
+    remarks(event){
+      this.remark = event.target.value
+    },
+    // 新增直发备注
+    remarks2(event){
+      // console.log(event)
+      this.straightRemark = event.target.value
     },
     deepClone(obj) {
       let ret;
