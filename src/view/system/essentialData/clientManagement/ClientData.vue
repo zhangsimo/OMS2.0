@@ -367,8 +367,14 @@ export default {
       }
     };
     const creditLimit = (rule, value, callback) => {
-      if (!value.match(/\d/)) {
-        callback(new Error("只能输入数字"));
+      if(value){
+        if (!(value.match(/\d/))) {
+          callback(new Error("只能输入数字"));
+        } else {
+          callback()
+        }
+      }else {
+        callback()
       }
     };
 
@@ -520,7 +526,7 @@ export default {
       relevanceClient: [],
       addInoiceOne: {},
       rules: {
-        creditLimit: [{ validator: creditLimit, trigger: "blur" }],
+        creditLimit: [{ validator: creditLimit,message: " ", trigger: "blur" }],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],

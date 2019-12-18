@@ -359,6 +359,7 @@ export default {
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
         data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
         let res = await getNewClient(this.clientList);
+        console.log(res)
         if (res.code == 0) {
           this.clientDataShow = false;
           this.getlist();
