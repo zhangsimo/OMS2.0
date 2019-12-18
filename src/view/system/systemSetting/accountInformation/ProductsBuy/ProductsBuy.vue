@@ -73,27 +73,27 @@
                   if(res.code === 0){
                     this.erweima = res.data.code_url
                     this.modal = true
-                    setInterval(() => {
-                      let data1 = {}
-                      let params1 = {}
-                      params1.orderNum = this.orderNum
-                      // params1.orderNum = '20191217030100000009'
-                     let timer = queryOrder({data:data1,params:params1}).then(res => {
-                        if(res.code == 0){
-                          if(res.data == 'SUCCESS'){
-                            this.$Message.warning('购买成功！')
-                            this.modal = false
-                           clearInterval(timer)
-                            let data2 = {}
-                            let params2 = {}
-                            params2.orderNum = this.orderNum
-                            generationRecord({data:data2,params:params2}).then(res => {
-
-                            })
-                          }
-                        }
-                      })
-                    },10000)
+                    // setInterval(() => {
+                    //   let data1 = {}
+                    //   let params1 = {}
+                    //   params1.orderNum = this.orderNum
+                    //   // params1.orderNum = '20191217030100000009'
+                    //  let timer = queryOrder({data:data1,params:params1}).then(res => {
+                    //     if(res.code == 0){
+                    //       if(res.data == 'SUCCESS'){
+                    //         this.$Message.warning('购买成功！')
+                    //         this.modal = false
+                    //        window.clearInterval(timer)
+                    //         let data2 = {}
+                    //         let params2 = {}
+                    //         params2.orderNum = this.orderNum
+                    //         generationRecord({data:data2,params:params2}).then(res => {
+                    //
+                    //         })
+                    //       }
+                    //     }
+                    //   })
+                    // },10000)
                   }
                 })
               }
@@ -119,6 +119,7 @@
       },
       mounted(){
         this.getMsg = this.$route.query
+        console.log(this.getMsg)
         // this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
       },
       activated(){

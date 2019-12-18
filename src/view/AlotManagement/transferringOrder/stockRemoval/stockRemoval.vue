@@ -96,11 +96,13 @@
                           <Row class="w160">
                             <Col span="24">
                               <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
-                                <Option
-                                  v-for="item in cangkuListall"
-                                  :value="item.value"
-                                  :key="item.value"
-                                >{{item.label}}</Option>
+                                <!--<Option-->
+                                  <!--v-for="item in cangkuListall"-->
+                                  <!--:value="item.value"-->
+                                  <!--:key="item.value"-->
+                                <!--&gt;{{item.label}}</Option>-->
+                                <Option v-for="item in cangkuListall" :value="item.id" :key="item.id">{{ item.name }}</Option>
+
                               </Select>
                             </Col>
                           </Row>
@@ -219,6 +221,8 @@ import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplie
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '@/api/AlotManagement/stockRemoval.js'
+
+import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
 export default {
   name: 'stockRemoval',
   components: {
@@ -831,6 +835,14 @@ export default {
         this.diaochuID = row.id
       }
     },
+    // 仓库下拉框
+    warehouse(){
+      queryByOrgid().then(res => {
+        if(res.code === 0){
+          this.cangkuListall = res.data
+        }
+      })
+    },
     getOkList(list) {
       const item =  {
         index: 1,
@@ -911,6 +923,7 @@ export default {
     window.onresize = () => {
       this.getDomHeight()
     }
+    this.warehouse()
   }
 }
 </script>

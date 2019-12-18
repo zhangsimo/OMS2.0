@@ -62,7 +62,13 @@
             totalCoin:'',
             flowPic: '',
             erweima:'' , //微信二维码路径
-            orderNum: ''
+            orderNum: '',
+            Id: '', //选择当前套餐的id
+            Name: '', //选择当前套餐的产品名称
+            Code: '', //选择当前套餐的餐品编码
+            Remark: '', //选择当前套餐的描述
+            SalesPrice: '', //选择当前套餐的售价
+            Cycle: '', //选择当前套餐的产品天数
           }
       },
       methods:{
@@ -72,7 +78,7 @@
         },
         //选择套餐
         selectClass(index,item){
-          // console.log(item)
+          console.log(item)
           this.selectClassA = index
           this.payMoney = item.sellPrice
           this.remark = item.remark
@@ -95,27 +101,27 @@
                     if(res.code === 0){
                       this.erweima = res.data.code_url
                       this.modal = true
-                   let timer =  setInterval(() => {
-                        let data1 = {}
-                        let params1 = {}
-                        params1.orderNum = this.orderNum
-                        // params1.orderNum = '20191217030100000009'
-                        queryOrder({data:data1,params:params1}).then(res => {
-                          if(res.code == 0){
-                            if(res.data == 'SUCCESS'){
-                              this.$Message.warning('购买成功！')
-                              this.modal = false
-                              clearInterval(timer)
-                              let data2 = {}
-                              let params2 = {}
-                              params2.orderNum = this.orderNum
-                              generationRecord({data:data2,params:params2}).then(res => {
-
-                              })
-                            }
-                          }
-                        })
-                      },10000)
+                   // let timer =  setInterval(() => {
+                   //      let data1 = {}
+                   //      let params1 = {}
+                   //      params1.orderNum = this.orderNum
+                   //      // params1.orderNum = '20191217030100000009'
+                   //      queryOrder({data:data1,params:params1}).then(res => {
+                   //        if(res.code == 0){
+                   //          if(res.data == 'SUCCESS'){
+                   //            this.$Message.warning('购买成功！')
+                   //            this.modal = false
+                   //            clearInterval(timer)
+                   //            let data2 = {}
+                   //            let params2 = {}
+                   //            params2.orderNum = this.orderNum
+                   //            generationRecord({data:data2,params:params2}).then(res => {
+                   //
+                   //            })
+                   //          }
+                   //        }
+                   //      })
+                   //    },10000)
                     }
             })
             }

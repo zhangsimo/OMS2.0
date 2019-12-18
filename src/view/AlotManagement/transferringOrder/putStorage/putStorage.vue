@@ -96,11 +96,12 @@
                           <Row class="w160">
                             <Col span="24">
                               <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
-                                <Option
-                                  v-for="item in cangkuListall"
-                                  :value="item.value"
-                                  :key="item.value"
-                                >{{item.label}}</Option>
+                                <!--<Option-->
+                                  <!--v-for="item in cangkuListall"-->
+                                  <!--:value="item.value"-->
+                                  <!--:key="item.value"-->
+                                <!--&gt;{{item.label}}</Option>-->
+                                <Option v-for="item in cangkuListall" :value="item.id" :key="item.id">{{ item.name }}</Option>
                               </Select>
                             </Col>
                           </Row>
@@ -207,6 +208,9 @@ import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplie
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '@/api/AlotManagement/putStorage.js'
+
+import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
+
 export default {
   name: 'backApply',
   components: {
@@ -446,6 +450,13 @@ export default {
       this.getWareHouse()
   },
   methods: {
+    warehouse(){
+      queryByOrgid().then(res => {
+        if(res.code === 0){
+          this.cangkuListall = res.data
+        }
+      })
+    },
   //配件返回的参数
         getPartNameList(val){
           this.$refs.formPlan.validate(async (valid) => {
@@ -687,7 +698,7 @@ export default {
                     item['label'] = item.name
                     item['value'] = item.id
                   })
-                 this.cangkuListall = res.data
+                 // this.cangkuListall = res.data
                  this.dcData = res.data
                 }
               }).catch(e => {
@@ -865,7 +876,9 @@ export default {
     window.onresize = () => {
       this.getDomHeight()
     }
+    this.warehouse()
   }
+
 }
 </script>
 
