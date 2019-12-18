@@ -450,14 +450,14 @@ export default class Fittings extends Vue {
       self.$Message.error('请先选中结束日期')
       return false
     }
-    if(self.currRow.length < 1){
+    if(!self.currRow){
       self.$Message.error('至少选中一条信息')
       return false
     }
     let data:any = []
     let pastTime:any = self.expireDate +' '+ '23:59:59'
     self.currRow.forEach( item => {
-       item.passTime = pastTime
+      item.passTime = pastTime
       data.push(item)
     })
     let res:any = await getSaveNewTight(data)
@@ -465,6 +465,7 @@ export default class Fittings extends Vue {
         this.$emit('getNewList' , res)
         if(this.isSys) {
           this.initCloudPartInfo();
+          this.$Message.success('保存成功')
         } else {
           this.initLocalPartInfo();
         }
