@@ -10,7 +10,7 @@ export function getBrandList (data={}) {
     })
   }
 
-//   分页查询数据接口
+//   预订单分页查询数据接口
 export function getPageList (data) {
     return axios.request({
         url: `${api.omsOrder}/preOrderMain/queryAllAccept?page=${data.page - 1}&size=${data.size}`,
@@ -18,6 +18,15 @@ export function getPageList (data) {
         data
     })
   }
+//   采购配件分页查询数据接口
+export function getPurchasePageList (data) {
+  console.log(data)
+  return axios.request({
+      url: `${api.omsOrder}/preOrderDetail/queryAllPrePart?page=${data.page - 1}&size=${data.size}`,
+      method: 'post',
+      data
+  })
+}
 
 //   预订单条件查询
 export function searchBrandList (data) {
