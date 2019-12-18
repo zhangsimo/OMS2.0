@@ -134,6 +134,7 @@
           }
         },
         close(){
+          clearInterval(this.timer)
           // let data = {}
           // let params = {}
           // params.orderNum = this.orderNum

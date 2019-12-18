@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-visible-change="close()">
+    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-visible-change="close">
       <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{getMsg.salesPrice}}</span> 元</div>
       <div class="modal">
         <!--<div id="qrcode" ref="qrcode"></div>-->
@@ -109,9 +109,9 @@
               }
           })
         },
-        close(a){
+        close(){
           // alert(123456)
-            // clearInterval(this.timer)
+            clearInterval(this.timer)
             // let data2 = {}
             // let params2 = {}
             // params2.orderNum = this.orderNum
