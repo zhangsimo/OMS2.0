@@ -84,7 +84,7 @@ export default {
       columns: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },

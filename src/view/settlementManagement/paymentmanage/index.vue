@@ -143,7 +143,15 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)">导出</button>
       </div>
-      <Table border :columns="columns3" :data="data3" class="mt10" max-height="400" show-summary ref="noWarehousing"></Table>
+      <Table
+        border
+        :columns="columns3"
+        :data="data3"
+        class="mt10"
+        max-height="400"
+        show-summary
+        ref="noWarehousing"
+      ></Table>
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
@@ -151,11 +159,19 @@
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
         <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)">导出</button>
       </div>
-      <Table border :columns="columns4" :data="data4" class="mt10" max-height="400" show-summary ref="warehousing"></Table>
+      <Table
+        border
+        :columns="columns4"
+        :data="data4"
+        class="mt10"
+        max-height="400"
+        show-summary
+        ref="warehousing"
+      ></Table>
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
-    <PrintShow ref="PrintShow"/>
+    <PrintShow ref="PrintShow" />
   </div>
 </template>
 
@@ -163,7 +179,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
-import PrintShow from './component/PrintShow'
+import PrintShow from "./component/PrintShow";
 import {
   getStorelist,
   getreceivable,
@@ -194,7 +210,7 @@ export default {
       columns: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -282,7 +298,7 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -331,12 +347,12 @@ export default {
                       orderType: params.row.serviceType.value
                     };
                     let res = await this.getList(obj);
-                    res.detailed.map(item=>{
-                      item.orderCode = params.row.serviceId
-                      item.orderType = params.row.serviceType.value
-                      item.orgId = params.row.orgId
-                      item.guestId = params.row.guestId
-                    })
+                    res.detailed.map(item => {
+                      item.orderCode = params.row.serviceId;
+                      item.orderType = params.row.serviceType.value;
+                      item.orgId = params.row.orgId;
+                      item.guestId = params.row.guestId;
+                    });
                     this.data3 = res.detailed;
                   }
                 }
@@ -429,7 +445,7 @@ export default {
       columns2: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -570,7 +586,7 @@ export default {
       columns3: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -643,7 +659,7 @@ export default {
       columns4: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -906,12 +922,12 @@ export default {
     },
     // 导出汇总
     exportSummary() {
-      if(this.data.length !==0){
+      if (this.data.length !== 0) {
         this.$refs.summary.exportCsv({
           filename: "应收应付汇总表"
         });
       } else {
-        this.$message.error('应收应付汇总表暂无数据')
+        this.$message.error("应收应付汇总表暂无数据");
       }
     },
     // 当前标签页的name
@@ -921,39 +937,39 @@ export default {
     // 导出单据
     exportBill() {
       if (this.detailedList === "key1") {
-        if(this.data1.length!==0){
+        if (this.data1.length !== 0) {
           this.$refs.sale.exportCsv({
             filename: "销售清单"
           });
         } else {
-          this.$message.error('销售清单暂无数据')
+          this.$message.error("销售清单暂无数据");
         }
       } else if (this.detailedList === "key2") {
-        if(this.data2.length !==0) {
+        if (this.data2.length !== 0) {
           this.$refs.purchase.exportCsv({
             filename: "采购清单"
           });
         } else {
-          this.$message.error('销售清单暂无数据')
+          this.$message.error("销售清单暂无数据");
         }
       }
     },
     // 出/入库明细导出
-    exportDetail(type){
-      if(type) {
+    exportDetail(type) {
+      if (type) {
         this.$refs.warehousing.exportCsv({
-          filename: '入库单配件明细'
-        })
-      } else{
+          filename: "入库单配件明细"
+        });
+      } else {
         this.$refs.noWarehousing.exportCsv({
-          filename: '出库单配件明细'
-        })
+          filename: "出库单配件明细"
+        });
       }
     },
     // 打印
-    print(){
+    print() {
       // console.log(this.$refs.PrintShow)
-      this.$refs.PrintShow.openModal()
+      this.$refs.PrintShow.openModal();
     }
   }
 };
