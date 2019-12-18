@@ -248,9 +248,14 @@
             return item;
           })
           console.log(data)
-          await saveCustom(data)
-          this.$Message.success('保存成功')
-          this.getList()
+         let resss =  await saveCustom(data)
+          console.log(resss)
+          if(resss.code === 0){
+            this.$Message.success('保存成功')
+            this.getList()
+          }else {
+            this.getList()
+          }
         },
         //维修性质分类新增
         addNature(){
@@ -268,10 +273,16 @@
             item.dictCode = 'CUSTOM_002'
             return item;
           })
-          console.log(data)
-          await saveCustom(data)
-         this.$Message.success('保存成功')
-          this.getList()
+          // console.log(data)
+        let ress =  await saveCustom(data)
+         // console.log(ress)
+         if(ress.code === 0){
+           this.$Message.success('保存成功')
+           this.getList()
+         } else {
+           this.getList()
+         }
+
         },
         getList(){
           let data = {}

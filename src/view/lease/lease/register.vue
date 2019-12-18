@@ -178,7 +178,7 @@
               {
                 title: '审核人',
                 align:'left',
-                key: 'name',
+                key: 'updateUname',
                 minWidth: 120
               },
               {

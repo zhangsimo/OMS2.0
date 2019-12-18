@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-cancel="close">
+    <Modal v-model="modal" title="微信支付" :footer-hide="true" width="600" @on-visible-change="close()">
       <div class="modal" style="color: #afafaf;font-size: 18px">待支付：<span style="color:#00b400;font-size: 22px;padding-right: 5px;font-weight: bold">{{getMsg.salesPrice}}</span> 元</div>
       <div class="modal">
         <!--<div id="qrcode" ref="qrcode"></div>-->
@@ -53,7 +53,9 @@
             getMsg: '',
             modal: false,
             orderNum: '',
-            erweima:''
+            erweima:'',
+            timer: null,
+            status: '',
           }
       },
       methods: {
@@ -61,51 +63,61 @@
           this.$router.push('/accountInformation/record')
         },
         pay(){
-          tenantInfogenerateOrder().then(res => {
+          let data = {}
+          data.id = this.getMsg.id
+          data.name = this.getMsg.name
+          data.code = this.getMsg.code
+          data.remark = this.getMsg.remark
+          data.salesPrice = this.getMsg.salesPrice
+          data.cycle = this.getMsg.cycle
+          tenantInfogenerateOrder(data).then(res => {
               if(res.code === 0 ){
-                 var aaa = res.data.orderNum
-                // console.log(aaa,2323)
                 let data = {}
+                this.orderNum = res.data.orderNum
                 data.price = this.getMsg.salesPrice
-                data.orderNum = aaa
-                this.orderNum = aaa
+                data.orderNum = res.data.orderNum
+                // data.orderNum = '20191217030100000009'
                 generationQR(data).then(res => {
                   if(res.code === 0){
                     this.erweima = res.data.code_url
                     this.modal = true
-                    // setInterval(() => {
-                    //   let data1 = {}
-                    //   let params1 = {}
-                    //   params1.orderNum = this.orderNum
-                    //   // params1.orderNum = '20191217030100000009'
-                    //  let timer = queryOrder({data:data1,params:params1}).then(res => {
-                    //     if(res.code == 0){
-                    //       if(res.data == 'SUCCESS'){
-                    //         this.$Message.warning('购买成功！')
-                    //         this.modal = false
-                    //        window.clearInterval(timer)
-                    //         let data2 = {}
-                    //         let params2 = {}
-                    //         params2.orderNum = this.orderNum
-                    //         generationRecord({data:data2,params:params2}).then(res => {
-                    //
-                    //         })
-                    //       }
-                    //     }
-                    //   })
-                    // },10000)
+                 this.timer =  setInterval(() => {
+                      let data1 = {}
+                      let params1 = {}
+                      params1.orderNum = this.orderNum
+                      // params1.orderNum = '20191217030100000009'
+                      queryOrder({data:data1,params:params1}).then(res => {
+                        if(res.code == 0){
+                          if(res.data == 'SUCCESS'){
+                            this.status = res.data
+                            // console.log(this.status)
+                            this.$Message.warning('购买成功！')
+                            this.modal = false
+                           clearInterval(this.timer)
+                            let data2 = {}
+                            let params2 = {}
+                            params2.orderNum = this.orderNum
+                            generationRecord({data:data2,params:params2}).then(res => {
+
+                            })
+                          }
+                        }
+                      })
+                    },1000)
                   }
                 })
               }
           })
         },
-        close(){
-          let data = {}
-          let params = {}
-          params.orderNum = this.orderNum
-          queryOrder({data:data,params:params}).then(res => {
-
-          })
+        close(a){
+          // alert(123456)
+            // clearInterval(this.timer)
+            // let data2 = {}
+            // let params2 = {}
+            // params2.orderNum = this.orderNum
+            // generationRecord({data:data2,params:params2}).then(res => {
+            //
+            // })
         }
         // qrcodeScan () {//生成二维码
         //   let qrcode = new QRCode('qrcode', {
@@ -119,12 +131,12 @@
       },
       mounted(){
         this.getMsg = this.$route.query
-        console.log(this.getMsg)
+        // console.log(this.getMsg)
         // this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
       },
       activated(){
           this.getMsg = this.$route.query
-          // console.log(this.getMsg)
+          console.log(this.getMsg)
       }
     }
 </script>
