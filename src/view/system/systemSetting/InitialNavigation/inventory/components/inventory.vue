@@ -301,6 +301,7 @@
             clOnewList(data) {
                 // console.log(data);
                 // let el = data
+                console.log('点击触发事件 =>304')
                 this.oneWarehouse = data.row;
                 this.mid = data.row.id;
                 // console.log(this.mid,77777)
@@ -358,8 +359,9 @@
                     this.ids = [];
                     this.twoList = [];
                     this.$message.success("删除成功");
-                    // this.getList();
                 }
+                this.getList();
+
                 // console.log(res);
                 this.$Message.info('点击了确定');
             },
@@ -383,7 +385,7 @@
                     this.ids = [];
                     // this.twoList = [];
                     this.$message.success("删除成功");
-                    // this.clOnewList()
+                    this.clOnewList()
                 }
                 // console.log(res);
             },
