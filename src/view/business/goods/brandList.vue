@@ -321,8 +321,8 @@
           </Row>
           <Row>
             <Col span="12">
-              <FormItem label="票据类型：" @on-change="addChange2">
-                <Select v-model="billTypeName">
+              <FormItem label="票据类型：">
+                <Select v-model="billTypeName" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.id"
@@ -332,8 +332,8 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="结算方式：" @on-change="addChange3">
-                <Select v-model="settleTypeName">
+              <FormItem label="结算方式：">
+                <Select v-model="settleTypeName" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.id"
@@ -958,10 +958,12 @@ export default {
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
+      // console.log(value)
       this.settleTypeId = value
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
+      // console.log(value)
       this.billTypeId = value
     },
     // 新增备注
@@ -1078,7 +1080,6 @@ export default {
       let value;
       if (this.data4.length > 0) {
         value = this.data4[0].company;
-        // value = 'this.data4[0].company'
         let flag = this.data4.every(item => item.company == value);
         if (flag) {
           this.data4 = this.data4.map(item => {
@@ -1101,6 +1102,7 @@ export default {
     },
     // 直发确定按钮
     saveZhifa() {
+      console.log(this.orgid)
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -1113,7 +1115,7 @@ export default {
         savePreOrder({
           guestId: this.guestId,
           storeId: this.storeId,
-          orgid: this.orgid,
+          directOrgid: this.orgid,
           orderManId: this.orderManId,
           orderMan: this.orderMan,
           orderTypeId: this.orderTypeId,
