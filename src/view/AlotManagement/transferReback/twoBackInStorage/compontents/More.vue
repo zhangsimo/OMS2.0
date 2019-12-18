@@ -25,12 +25,14 @@
       </Row>
       <row class="mt15">
         <span class="ml5">申 请 方：</span>
-        <Input
-          v-model="moreData.orderMan"
-          icon="ios-clock-outline"
-          placeholder="请选择申请方！"
-          style="width: 450px"
-        />
+        <!--<Input-->
+          <!--v-model="moreData.orderMan"-->
+          <!--icon="ios-clock-outline"-->
+          <!--placeholder="请选择申请方！"-->
+          <!--style="width: 450px"-->
+        <!--/>-->
+        <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled/>
+        <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
       </row>
       <row class="mt15">
         <span>退回单号：</span>
@@ -49,12 +51,17 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea" ></select-supplier>
   </Modal>
+
 </template>
 
 <script>
-export default {
+  import SelectSupplier from "../../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+
+  export default {
   name: 'More',
+    components: { SelectSupplier },
   data() {
     return {
       Time1: [],
@@ -68,7 +75,8 @@ export default {
         serviceId: '', //返回单号
         code: '', //申请单号
         partCode: '', //配件编码
-        partName: '' //配件名称
+        partName: '', //配件名称
+        guestId: '' //申请人id
       }
     }
   },
@@ -76,6 +84,11 @@ export default {
     getShowMore: Boolean
   },
   methods: {
+    // 子组件的参数
+    getSupplierNamea(a) {
+      this.moreData.orderMan = a.fullName
+      this.moreData.guestId = a.id
+    },
     //更多弹窗-确定
     moreOk() {
       this.$emit('getMoreData', this.moreData)
@@ -113,7 +126,11 @@ export default {
       this.moreData.allotEnterTimeEnd = this.$moment(s[0]).format(
         'YYYY-MM-DD HH:mm:ss'
       )
-    }
+    },
+    //供应商弹框
+    addSuppler(){
+      this.$refs.selectSupplier.init()
+    },
   }
 }
 </script>
