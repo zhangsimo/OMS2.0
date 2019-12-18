@@ -195,7 +195,6 @@
         <TabPane label="待采购配件" name="name2">
           <Table
             @on-selection-change="onSelect"
-            
             show-summary
             :summary-method="handleSummary"
             :columns="columns3"
@@ -242,8 +241,17 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit" filterable clearable>
-                  <Option v-for="item in transitUnitList" :key="item.id">{{item.fullName}}</Option>
+                <Select
+                  v-model="transitUnit"
+                  filterable
+                  clearable
+                  @on-change="addChange1"
+                >
+                  <Option
+                    v-for="item in transitUnitList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.fullName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -251,15 +259,23 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeName">
-                  <Option v-for="item in ticketTypeList" :key="item.id">{{item.itemName}}</Option>
+                <Select v-model="billTypeName" @on-change="addChange2">
+                  <Option
+                    v-for="item in ticketTypeList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeName">
-                  <Option v-for="item in settlementMethodList" :key="item.id">{{item.itemName}}</Option>
+                <Select v-model="settleTypeName" @on-change="addChange3">
+                  <Option
+                    v-for="item in settlementMethodList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -267,7 +283,7 @@
           <Row>
             <Col span="24">
               <FormItem label="备注：">
-                <Input type="textarea" v-model="remark"></Input>
+                <Input type="textarea" v-model="remark" @on-change="remarks"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -293,24 +309,36 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit">
-                  <Option v-for="item in transitUnitList" :key="item.id">{{item.fullName}}</Option>
+                <Select v-model="transitUnit" @on-change="addChange1">
+                  <Option
+                    v-for="item in transitUnitList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.fullName}}</Option>
                 </Select>
               </FormItem>
             </Col>
           </Row>
           <Row>
             <Col span="12">
-              <FormItem label="票据类型：">
+              <FormItem label="票据类型：" @on-change="addChange2">
                 <Select v-model="billTypeName">
-                  <Option v-for="item in ticketTypeList" :key="item.id">{{item.itemName}}</Option>
+                  <Option
+                    v-for="item in ticketTypeList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="结算方式：">
+              <FormItem label="结算方式：" @on-change="addChange3">
                 <Select v-model="settleTypeName">
-                  <Option v-for="item in settlementMethodList" :key="item.id">{{item.itemName}}</Option>
+                  <Option
+                    v-for="item in settlementMethodList"
+                    :key="item.id"
+                    :value="item.id"
+                  >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -323,7 +351,7 @@
             </Col>
             <Col span="12">
               <FormItem label="备注：">
-                <Input type="textarea" v-model="straightRemark"></Input>
+                <Input type="textarea" v-model="straightRemark" @on-change="remarks"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -360,7 +388,7 @@ import {
   pendingPurchaseSearch,
   getPurchasePageList
 } from "@/api/business/brandListApi";
-import { parse } from 'qs';
+import { parse } from "qs";
 export default {
   name: "brandList",
   data() {
@@ -779,13 +807,12 @@ export default {
       ) {
         this.$Message.error("请完善单据信息后在保存");
       } else {
-        console.log(this.data4)
+        // console.log(this.data4)
         savePreOrder({
           guestId: this.guestId,
           storeId: this.storeId,
           orderManId: this.orderManId,
           orderMan: this.orderMan,
-          orderTypeId: this.orderTypeId,
           billTypeId: this.billTypeId,
           settleTypeId: this.settleTypeId,
           details: this.data4,
@@ -926,6 +953,26 @@ export default {
         let flag = Array.isArray(v.childs) && v.childs.length > 0;
         return ret.concat(flag ? this.toList(v.childs) : v);
       }, []);
+    },
+    // 新增采购往来单位/结算方式/票据类型改变时触发
+    addChange1(value) {
+      // console.log(value)
+      this.guestId = value
+    },
+    // 新增采购结算方式改变时触发
+    addChange2(value) {
+      // console.log(value)
+      this.settleTypeId = value
+    },
+    // 新增采购票据类型改变时触发
+    addChange3(value) {
+      // console.log(value)
+      this.billTypeId = value
+    },
+    // 新增备注
+    remarks(value){
+      console.log(value)
+      this.reamrk = value
     },
     deepClone(obj) {
       let ret;
@@ -1127,7 +1174,7 @@ export default {
       // console.log(`当前页码${value}`)
       this.pageList.page = value;
       getPurchasePageList(this.pageList).then(res => {
-        console.log(res)
+        console.log(res);
         if (res.code === 0) {
           this.data3 = res.data.content;
           this.data3.map(item => {
