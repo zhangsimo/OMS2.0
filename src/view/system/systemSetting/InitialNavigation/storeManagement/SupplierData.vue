@@ -55,7 +55,7 @@
       ></Page>
     </div>
     <!--      客户资料-->
-    <Modal v-model="clientDataShow" title="门店资料" width="850">
+    <Modal v-model="clientDataShow" title="门店资料" width="900">
       <ClientData
         :data="clientList"
         :provincearr="provinceArr"
