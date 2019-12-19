@@ -1,12 +1,12 @@
 <template>
   <Form ref="form" :label-width="100" :model="data" class="clearfix" :rules="rules">
     <FormItem label="收货单位:" prop="receiveCompName">
-      <Input v-model="data.receiveCompName" style="width: 380px"></Input>
+      <Input v-model="data.receiveCompName" style="width: 380px"/>
     </FormItem>
     <div style="display: flex">
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="收货人:" prop="receiveMan">
-          <Input v-model="data.receiveMan" style="width: 180px"></Input>
+          <Input v-model="data.receiveMan" style="width: 180px"/>
         </FormItem>
         <FormItem label="省份:" prop="provinceId">
           <Select
@@ -36,7 +36,7 @@
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="联系方式:" prop="contactor">
-          <Input v-model="data.contactor" style="width: 180px"></Input>
+          <Input v-model="data.contactor" style="width: 180px"/>
         </FormItem>
         <FormItem label="城市:" prop="cityId">
           <Select v-model="data.cityId" style="width:180px" class="mr10" @on-change="cityName">
@@ -49,15 +49,15 @@
           </Select>
         </FormItem>
         <FormItem label="街道:" prop="streetAddress">
-          <Input v-model="data.streetAddress" style="width: 180px" @on-change="data.address += data.streetAddress"></Input>
+          <Input v-model="data.streetAddress" style="width: 180px" @on-change="data.address += data.streetAddress"/>
         </FormItem>
       </div>
     </div>
     <FormItem label="详细地址:">
-      <Input v-model="data.address" style="width: 400px" disabled></Input>
+      <Input v-model="data.address" style="width: 400px" disabled/>
     </FormItem>
     <FormItem label="备注:" style="float: left">
-      <Input v-model="data.remark" style="width: 330px"></Input>
+      <Input v-model="data.remark" style="width: 330px"/>
     </FormItem>
     <div style="float: left;line-height: 30px;padding-left: 10px">
       <Checkbox v-model="data.isDefault"></Checkbox>是否默认

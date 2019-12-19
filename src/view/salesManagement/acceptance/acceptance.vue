@@ -244,11 +244,11 @@
             return date && date.valueOf() > Date.now();
           }
         },
-
+        id:'',
         company: '', //公司选择
         companyListOptions: [],//选择公司下拉列表
         guestId: '',
-        company: '',
+        // company: '',
         client: [],//选择客户列表
         TopTableData: [],//上侧表格list
         BottomTableData: [],//下侧表格list
@@ -281,6 +281,7 @@
       },
       //获取选择公司
       getCompany(v) {
+        console.log('vvv',v)
         this.company = v
       },
       //获取时间
@@ -322,13 +323,27 @@
       },
       //获取公司信息列表
       getAllCompany() {
-        selectCompany({pId: this.$store.state.user.userData.groupId}).then(res => {
-          if (res.code === 0) {
-            let data = res.data
-            let item = this.deepClone(data)
-            delete item.childs
-            this.companyListOptions.push(item)
-            this.toList(data.childs)
+        // selectCompany({pId: this.$store.state.user.userData.groupId}).then(res => {
+        //   if (res.code === 0) {
+        //     let data = res.data
+        //     let item = this.deepClone(data)
+        //     delete item.childs
+        //     this.companyListOptions.push(item)
+        //     this.toList(data.childs)
+        //   }
+        // })
+        selectCompany().then(res=>{
+
+          if(res.code==0){
+            this.companyListOptions=[]
+            Object.keys(res.data).forEach((key)=>{
+              // this.companyListOptions=res.data[key]
+              this.companyListOptions.push({
+                id: key,
+                name: res.data[key]
+              })
+            })
+            // console.log('res',this.companyListOptions)
           }
         })
       },
@@ -350,14 +365,19 @@
       //分页查询预售单受理信息上
       getTopList() {
         let data = {}
+        this.companyListOptions.map(item=>{
+          if (item.name===this.company){
+            data.orgid=item.id
+          }
+        })
         data.commitTimeStart = this.queryTime[0] || ''
         data.commitTimeEnd = this.queryTime[1] || ''
         data.guestId = this.guestId
-        data.company = this.company
         data.status = this.orderType
         let page = this.page.num - 1
         let size = this.page.size
         getTopList(size, page, data).then(res => {
+          // console.log('shuhuhuhu',res)
           if (res.code === 0) {
             // res.data.content.map(item => item.status = JSON.parse(item.status))
             this.page.total = res.data.totalElements

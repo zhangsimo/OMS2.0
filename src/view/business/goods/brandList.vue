@@ -983,22 +983,38 @@ export default {
     },
     // 公司信息获取
     companyIfo() {
-      let user = this.$store.state.user.userData;
-      // console.log(user)
-      this.orderManId = user.id;
-      this.orderMan = user.staffName;
-      selectCompany({ pId: user.tenantId }).then(res => {
-        // console.log(res)
-        if (res.code === 0) {
-          let data = res.data;
-          let item = this.deepClone(data);
-          delete item.childs;
-          // console.log(item)
-          this.companyListOptions.push(item);
-          this.toList(data.childs);
-          // console.log(this.companyListOptions)
+      // let user = this.$store.state.user.userData;
+      // // console.log(user)
+      // this.orderManId = user.id;
+      // this.orderMan = user.staffName;
+      // selectCompany({ pId: user.tenantId }).then(res => {
+      //   // console.log(res)
+      //   if (res.code === 0) {
+      //     let data = res.data;
+      //     let item = this.deepClone(data);
+      //     delete item.childs;
+      //     // console.log(item)
+      //     this.companyListOptions.push(item);
+      //     this.toList(data.childs);
+      //     // console.log(this.companyListOptions)
+      //   }
+      // });
+
+      selectCompany().then(res=>{
+
+        if(res.code==0){
+          this.companyListOptions=[]
+          Object.keys(res.data).forEach((key)=>{
+            // this.companyListOptions=res.data[key]
+            this.companyListOptions.push({
+              id: key,
+             name: res.data[key]
+            })
+          })
+           console.log('res',this.companyListOptions)
         }
-      });
+      })
+
     },
     // 查询
     searchData() {

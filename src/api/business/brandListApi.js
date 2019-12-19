@@ -64,7 +64,7 @@ export function generateOrder (data) {
 //   公司信息数据接口
 export function selectCompany(params) {
     return axios.request({
-      url: `${api.passportApi}/group/findRootByPid`,
+      url: `${api.wmsApi}/company/get/by/tenantid`,
       method: "get",
       params
     });

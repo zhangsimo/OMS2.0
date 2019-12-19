@@ -31,7 +31,7 @@
       <Modal v-model='modalShow' :title="title" width="700px" :closable="false">
         <addStaff ref='child' :data="newStaff"></addStaff>
         <div slot='footer'>
-          <Button type='default' @click="cancel">取消</Button>
+          <Button type='default' @click="modalShow = false">取消</Button>
           <Button type='primary' @click='submit' >确定</Button>
         </div>
       </Modal>
