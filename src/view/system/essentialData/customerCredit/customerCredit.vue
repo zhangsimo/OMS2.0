@@ -599,19 +599,20 @@
             data.orgId = this.rowMessage.orgid
             data.fixationQuotaTotal = +this.creaditList.applyQuota+this.creaditList.creditLimit || 0 + (+this.creaditList.applyQuota)
             data.tempQuotaTotal = +this.creaditList.tempQuota + this.creaditList.tempCreditLimit || 0 + (+this.creaditList.tempQuota)
-            data.applyQuota = this.creaditList.applyQuota || 0
-            data.tempQuota = this.creaditList.tempQuota || 0
+            data.applyQuota = +this.creaditList.applyQuota || 0
+            data.tempQuota = +this.creaditList.tempQuota || 0
             data.tempStart = tools.transTime(this.creaditList.tempStart)
             data.tempEnd = tools.transTime(this.creaditList.tempEnd)
-            data.payableAmt = this.payable.payableAmt || 0
+            data.payableAmt = +this.payable.payableAmt || 0
             data.tgrade = this.creaditList.tgrade || ''
-            data.thirtyAmt = this.payable.thirtyAmt || 0
-            data.sixtyAmt = this.payable.sixtyAmt || 0
+            data.thirtyAmt = +this.payable.thirtyAmt || 0
+            data.sixtyAmt = +this.payable.sixtyAmt || 0
             data.moreSixtyAmt = this.payable.moreSixtyAmt || 0
             data.afterAdjustQuota = this.creaditList.totalSum
             data.quotaReason = this.creaditList.quotaReason || ''
             data.receivableAmt = this.payable.receivableAmt || 0
-            data.totalQuota = (+this.creaditList.applyQuota+this.creaditList.creditLimit) + (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit) || 0
+            data.totalQuota = (+this.creaditList.applyQuota+this.creaditList.creditLimit) + (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit)
+                             || +data.creaditList.applyQuota + (+data.creaditList.tempQuota)
             data.addTotalQuota = this.creaditList.tototo || 0
             data.adjustType = 0
             console.log(data)

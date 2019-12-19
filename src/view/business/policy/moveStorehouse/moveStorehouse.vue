@@ -26,13 +26,18 @@
             </Button>
           </div>
           <div class="db">
-            <Button type="default" class="mr10">
+            <Button @click="baocun" type="default" class="mr10">
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
           </div>
-          <div class="db">
+          <!-- <div class="db">
             <Button class="mr10" @click="audit">
               <Icon type="md-checkmark" size="14" />审核
+            </Button>
+          </div> -->
+          <div class="db">
+            <Button class="mr10" @click="editPro">
+              <Icon type="md-checkmark" size="14" />提交
             </Button>
           </div>
           <div class="db">
@@ -63,56 +68,57 @@
                 :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
-              ></Table>
+                ></Table>
               <Page size="small" :total="Left.page.total" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total class-name="page-con"
                     @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">配件组装信息</div>
               <div class="clearfix purchase" ref="planForm">
-                <Form inline :show-message="false" ref="formPlan" :label-width="100">
+                <Form inline :show-message="false" ref="Leftcurrentrow" :label-width="100">
                   <FormItem label="移出仓库" >
-                      <Select v-model="formPlan.storeId" style="width:100px" >
+                      <Select v-model="Leftcurrentrow.storeId" style="width:100px" :disabled="Leftcurrentrow.status.value !== 0">
                         <Option v-for="item in warehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                     </FormItem>
                   <FormItem label="移入仓库" >
-                      <Select v-model="formPlan.storeId" style="width:100px" >
+                      <Select v-model="Leftcurrentrow.receiveStoreId" style="width:100px" :disabled="Leftcurrentrow.status.value !== 0">
                         <Option v-for="item in warehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                       </Select>
                     </FormItem>
                   <FormItem label="业务员：" prop="planDate">
-                    <Input class="w160" value="吴力"></Input>
+                    <Input v-model="Leftcurrentrow.createUname" class="w160" value="" :disabled="Leftcurrentrow.status.value !== 0"></Input>
                   </FormItem>
                   <FormItem label="移仓日期" prop="remark">
-                    <DatePicker type="date" class="w160" value="2019-09-25 20:00"></DatePicker>
+                    <DatePicker :value="Leftcurrentrow.commitDate"  format="yyyy-MM-dd HH:mm:ss" type="date" class="w160"  :disabled="Leftcurrentrow.status.value !== 0"></DatePicker>
                   </FormItem>
                   <FormItem label="移仓单号" prop="planOrderNum">
-                    <Input class="w160" value="YCSDFD839239320"></Input>
+                    <Input class="w160" v-model="Leftcurrentrow.serviceId" value="YCSDFD839239320" :disabled="Leftcurrentrow.status.value !== 0"></Input>
                   </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addPro">
+                    <Button size="small" class="mr10" @click="addPro" :disabled="Leftcurrentrow.status.value !== 0">
                       <Icon type="md-add" />添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10">
+                    <Button size="small" class="mr10" @click="deletePar" :disabled="Leftcurrentrow.status.value !== 0">
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除
                     </Button>
                   </div>
                 </div>
               </div>
               <vxe-table
+                ref="xTable1"
                 border
                 resizable
                 @edit-closed="editClosedEvent"
                 size="mini"
                 :height="rightTableHeight"
-                :data="tableData"
+                :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
@@ -143,9 +149,9 @@
       <p>是否确定作废</p>
     </Modal>
     <!-- 审核提示 -->
-    <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
+    <!-- <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
       <p>是否确定审核</p>
-    </Modal>
+    </Modal> -->
     <!-- 打印 -->
     <Print-show ref="printBox"></Print-show>
   </div>
@@ -155,6 +161,12 @@
 import {
   getLeftList,
   getstate,//仓库数据
+   getRightDatas,//获取右边数据
+   updata,////保存
+  getSubmitList,//提交
+   getCancellation,//作废
+   delectTable,//删除
+   getPrint,//打印
   // getSubmitList,//提交
   // getCancellation,//作废
   // getDataQuickList,
@@ -167,10 +179,12 @@ import {
   // stampApplyDataList
 } from '../../../../api/business/moveStorehouse.js'
 import '../../../lease/product/lease.less'
+import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
 import SelectPartCom from '../../../salesManagement/salesOrder/components/selectPartCom'
 import PrintShow from "./components/PrintShow"
 import More from './components/More'
+import {conversionList} from '@/components/changeWbList/changewblist'
 export default {
   name: 'moveStorehouse',
   components: {
@@ -185,11 +199,11 @@ export default {
       tabIndex: 0,
       queryTime:"",//快速查询时间
       curronly: false,
-      purchaseType: 999, //查询选项
+      purchaseType: 99, //查询选项
       purchaseTypeArr: [
         {
           label: '所有',
-          value: 999
+          value: 99
         },
         {
           label: '草稿',
@@ -216,7 +230,6 @@ export default {
           total: 0
         },
         columns: [
-          //key要修改
           {
             title: '序号',
             type: "index",
@@ -224,7 +237,7 @@ export default {
           },
           {
             title: '状态',
-            key: 'status',
+            key: 'statuName',
             minWidth: 70
           },
           {
@@ -268,16 +281,7 @@ export default {
             key: 'commitDate',
             minWidth: 170
           },
-          // {
-          //   title: '审核人',
-          //   key: 'left9',
-          //   minWidth: 170
-          // },
-          // {
-          //   title: '审核日期',
-          //   key: 'left9',
-          //   minWidth: 170
-          // }
+         
         ],
         tbdata: [
           {
@@ -293,36 +297,6 @@ export default {
           }
         ]
       },
-      tableData: [
-        {
-          name: 'a',
-          role: 'a',
-          sex: 'a',
-          num6: '',
-          date12: ''
-        },
-        {
-          name: 'b',
-          role: 'b',
-          sex: 'b',
-          num6: '',
-          date12: ''
-        },
-        {
-          name: 'c',
-          role: 'c',
-          sex: 'c',
-          num6: '',
-          date12: ''
-        },
-        {
-          name: 'd',
-          role: 'd',
-          sex: 'd',
-          num6: '',
-          date12: ''
-        }
-      ],
        Right: {
         page: {
           num: 1,
@@ -388,12 +362,37 @@ export default {
       formModel:[
 
       ],
-      formPlan:{},//右边所有数据（含提交）
+      Leftcurrentrow:{
+        status: {
+          value: 0
+        },
+        storeId: "",//移入
+        receiveStoreId:"",//移出
+        createUname:"",//业务员
+        commitDate:"",//移仓日期
+        serviceId:"",//移仓单号
+        detailVOList:[]
+      },//右边所有数据（含提交）
       showAudit: false, //审核提示
       showRemove: false, //作废提示
       isAddRight: true, //判断右侧是有数据
       showBayer: false, //出库方弹窗
       rightTableStatus: '' //右侧表格状态
+    }
+  },
+   watch:{
+    purchaseType:function (val ,old) {
+      console.log(val ,old)
+        this.Left.page.num = 1
+        this.Left.page.size = 10
+        this.getList()
+    },
+     Leftcurrentrow: {
+      handler(newVal) {
+        console.log(newVal)
+        this.Leftcurrentrow = newVal
+      },
+      deep: true
     }
   },
   created(){
@@ -418,22 +417,32 @@ export default {
         if(this.purchaseType == "-1"){
             this.purchaseType = null
         }
-        data.startTime = this.queryTime[0] || ''
-        data.endTime = this.queryTime[1] || ''
-        data.billStatusId = this.purchaseType
-            // data = this.query
+        if(this.queryTime) {
+          data.startTime = this.queryTime[0] || ''
+          data.endTime = this.queryTime[1] || ''
+        }
+        data.status = this.purchaseType
         let page = this.Left.page.num -1
         let size = this.Left.page.size
         getLeftList(data,page,size)
           .then(res => {
             console.log(res)
             if (res.code === 0) {
-              this.Left.tbdata = res.data.content || []
-              this.Left.page.total = res.data.totalElements
+               if (!res.data.content) {
+                    this.Left.tbdata = []
+                    this.Left.page.total = 0
+                  } else {
+                    res.data.content.map((item, index) => {
+                    item['index'] = index + 1
+                    item['statuName'] = item.status.name
+                  })
+                    this.Left.tbdata = res.data.content || []
+                    this.Left.page.total = res.data.totalElements
+                  }
             }
           })
           .catch(err => {
-            this.$Message.info('获取盘点列表失败')
+            this.$Message.info('获取移仓列表失败')
         })
         console.log(this.$store.state.user.userData)
     },
@@ -464,9 +473,10 @@ export default {
       this.Left.page.size = 10;
       this.getList()
     },
-     //改变盘点时间
-    auditDate(data){
-      this.formPlan.auditDate = data + ' '+ "00:00:00"
+     //改变移仓时间
+    commitDate(data){
+      console.log(data)
+      this.Leftcurrentrow.commitDate = data + ' '+ "00:00:00"
     },
     //更多按钮
     More() {
@@ -483,38 +493,93 @@ export default {
     },
     //新增
     addProoo() {
-      if (!this.isAddRight) {
-        return this.$Message.error('请先保存数据')
+      if (this.Left.tbdata.length === 0) {
+      } else {
+        if (this.Left.tbdata[0]['xinzeng'] === '1') {
+          this.$Message.info('当前列表已有一个新增单等待操作,请先保存当前操作新增单据')
+          return
+        }
       }
-
-      let TrowLeft = {} //新增左侧
-      let TrowRight = {} //新增右侧
-      this.isAddRight = false
-      this.Left.tbdata.push(TrowLeft)
-      this.tableData.push(TrowRight)
+        const item =  {
+        index: 1,
+        xinzeng: '1',
+        status: {
+          enum: "DRAFT",
+          name: "草稿",
+          value: 0
+        },
+        statuName: '草稿',
+        commitDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        createUname: "",
+        serviceId:"",
+        printing:"",
+        createUname:"",
+        createTime:"",
+        commitUname:"",
+        //commitDate:"",
+        //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        //createUname: this.$store.state.user.userData.staffName,
+        detailVOList: []
+      }
+      this.Left.tbdata.unshift(item)
+      this.Left.tbdata.map((item,index) => {
+        item.index = index + 1
+      })
+      // let TrowLeft = {} //新增左侧
+      // this.isAddRight = false
+      // this.Left.tbdata.unshift(TrowLeft)
+    },
+    //保存
+    baocun(){
+      if (!this.Leftcurrentrow.serviceId) {
+          if(this.Leftcurrentrow.xinzeng === '1') {
+          } else {
+            this.$Message.info('请先选择加工单')
+             return
+          }
+      }
+      if(!this.Leftcurrentrow.receiveStoreId || !this.Leftcurrentrow.storeId ||!this.Leftcurrentrow.createUname ||!this.Leftcurrentrow.serviceId){
+        this.$Message.error('请填写移仓信息')
+        return
+      }
+      if(this.Leftcurrentrow.status.value && this.this.Leftcurrentrow.status.value !== 0 ){
+        this.$Message.error('只有草稿状态才能保存')
+        return
+      }
+      const params = JSON.parse(JSON.stringify(this.Leftcurrentrow))
+      updata(params).then(res => {
+          if (res.code == 0) {
+            this.getList()
+            this.$Message.success('保存成功');
+          }
+        }).catch(e => {
+          this.$Message.info('保存失败')
+      })
     },
     // 提交
     editPro() {
       //判断是否为草稿状态
-      if(this.Right.tbdata.length < 1){
+      if(!this.Leftcurrentrow.id){
         this.$Message.error('请选择数据')
         return
       }
-      if(this.formPlan.billStatusId !== 0){
+      if(!this.Leftcurrentrow.receiveStoreId || !this.Leftcurrentrow.storeId ||!this.Leftcurrentrow.createUname ||!this.Leftcurrentrow.serviceId){
+        this.$Message.error('请填写移仓信息')
+        return
+      }
+      if(this.Leftcurrentrow.status.value && this.this.Leftcurrentrow.status.value !== 0 ){
         this.$Message.error('只有草稿状态才能保存')
         return
       }
-      if(!this.formPlan.auditDate || !this.formPlan.storeId ||!this.formPlan.orderMan ||!this.formPlan.serviceId){
-        this.$Message.error('请填写盘点信息')
-        return
-      }
-      this.formPlan.billStatusId = 1;
-      getSubmitList(this.formPlan)
-      .then(res => {
-        console.log(res)
-        if(res.code == 0){
-          his.$Message.error('提交成功')
-        }
+      this.Leftcurrentrow.billStatusId = 1;
+      const params = JSON.parse(JSON.stringify(this.Leftcurrentrow))
+       getSubmitList(params).then(res => {
+          if (res.code == 0) {
+            this.getList()
+            this.$Message.success('提交成功')
+          }
+        }).catch(e => {
+          this.$Message.info('提交失败')
       })
     },
     //作废
@@ -524,10 +589,28 @@ export default {
     },
     //确认作废
     removeOk() {
-      removeDataList()
+      // if(this.Leftcurrentrow.xinzeng === '1') {
+      //   this.$Message.info('请先保存新增加工单')
+      //     return
+      // }
+      if (!this.Leftcurrentrow.id) {
+         this.$Message.info('请先选择盘点单')
+          return
+      }
+      if (this.Leftcurrentrow.status.value !== 0) {
+          this.$Message.info('只有草稿状态加工单能进行作废操作')
+          return
+      }
+      const data = {} 
+      data.id = this.Leftcurrentrow.id
+      // if(this.draftShow && this.draftShow !== 0) {
+      //   this.$Message.error('只有草稿状态才能作废')
+      // }
+      getCancellation(data)
         .then(res => {
           if (res.code === 0) {
             this.showRemove = false
+            this.getList()
           }
         })
         .catch(err => {
@@ -538,36 +621,75 @@ export default {
     removeCancel() {
       this.showRemove = false
     },
-    //审核
-    audit(){
-      this.showAudit = true
-    },
-    //确认审核
-    auditOK() {
-      removeDataList()
-        .then(res => {
-          if (res.code === 0) {
-            this.showAudit = false
-          }
-        })
-        .catch(err => {
-          this.showAudit = false
-          this.$Message.info('确认审核失败')
-        })
-    },
-    auditCancel() {
-      this.showRemove = false
-    },
+    
     // 打印
     printTable() {
-       this.$refs.printBox.openModal()
+       this.$refs.printBox.openModal(this.Leftcurrentrow.id)
     },
     //添加配件
     addPro() {
       this.$refs.SelectPartRef.init()
     },
     //左边列表选中当前行
-    selectTabelData() {},
+    selectTabelData(row) {
+      console.log(row)
+      this.Leftcurrentrow = row
+      if (!row.detailVOList) {
+        row['detailVOList'] = []
+        this.currentData = []
+      }
+      if (Array.isArray(row.detailVOList)){
+        this.Leftcurrentrow.detailVOList = row.detailVOList
+      } else {
+        this.Leftcurrentrow.detailVOList = [row.detailVOList]
+      }
+      if (this.Leftcurrentrow.detailVOList.length > 0) {
+        this.Right.tbdata  = row.detailVOList
+      } else {
+        this.Right.tbdata = []
+      }
+    },  
+    //添加配件
+    getPartNameList(val){
+      // console.log(val,999)
+      // console.log(conversionList(val),8888)
+      var datas = conversionList(val)
+      console.log(datas)
+      datas.forEach(item => {
+        this.Right.tbdata.push(item)
+        this.Leftcurrentrow.detailVOList.push(item)
+      });
+      console.log(this.Right.tbdata)
+      console.log(this.Leftcurrentrow)
+      getSubmitList(this.Leftcurrentrow)
+      .then(res=> {
+        console.log(res)
+        this.getList()
+      })
+      .catch(err => {
+          this.showRemove = false
+          this.$Message.info('添加失败')
+        })
+    },
+    //删除
+    deletePar(){
+        const seleList = this.$refs.xTable1.getSelectRecords()
+        const ids = []
+        seleList.forEach(item=>{
+          ids.push(item.id)
+        })
+        this.array_diff(this.Leftcurrentrow.detailVOList, seleList)
+        delectTable(ids)
+        .then( res=>{
+          console.log(res)
+          if(code == 0){
+            this.$Message.success('删除成功');
+          }
+        })
+         .catch(err => {
+          this.showRemove = false
+        })
+    },
     //分页
     changePage(p) {
       // this.page.num = p
@@ -583,7 +705,18 @@ export default {
     //footer计算
     addFooter() {},
     // 确定
-    Determined() {}
+    Determined() {},
+    array_diff(a, b) {
+      for (var i = 0; i < b.length; i++) {
+        for (var j = 0; j < a.length; j++) {
+          if (a[j].name === b[i].name) {
+            a.splice(j, 1)
+            j = j - 1
+          }
+        }
+      }
+      return a
+    }
   },
   mounted() {
     setTimeout(() => {

@@ -118,7 +118,7 @@
                 inline
                 ref="formPlan"
                 :model="formPlan"
-                :label-width="120"
+                :label-width="100"
                 :rules="ruleValidate"
               >
                 <div class="clearfix purchase" ref="planForm">

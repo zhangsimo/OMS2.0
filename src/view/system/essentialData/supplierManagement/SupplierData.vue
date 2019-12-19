@@ -353,13 +353,17 @@
                     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
                     data.isClient ? data.isClient =1 : data.isClient = 0
                     let res = await  getNewSupplier(data)
+                  if(res.code === 0 ){
                     this.clientDataShow = false
+                    this.getlist()
+                  }
+
                 })
             },
             //修改客户资料
             changeClient(){
                 if (Object.keys(this.pitchSupplierOne).length == 0  ){
-                    this.$Message.error('至少选项一条地址')
+                    this.$Message.error('请先选中一个供应商信息')
                     return false
                 }
                 this.pitchSupplierOne.isDisabled == 1? this.pitchSupplierOne.isDisabled = true : this.pitchSupplierOne.isDisabled = false

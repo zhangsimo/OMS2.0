@@ -1,8 +1,10 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , addOrUpdate} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , addOrUpdate , getStaff} from '_api/admin/roleApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
+// @ts-ignore
+// import {allStaff} from '_api/admin/userApi.js'
 import AddRolse from "./AddRolse.vue"
 import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
 
@@ -17,8 +19,11 @@ export default class index extends Vue{
 
   //中间分割线比例
   private split1:number = 0.3
-  //右侧分割线比例
+  //右侧表格数据
   private tableData:SelectTypes[] = []
+
+  //右侧表格数据
+  private rightTableData:SelectTypes[] = []
   //分页数据
   private page:any = {
         size:20,
@@ -62,7 +67,7 @@ export default class index extends Vue{
     }
 
     //点击左侧表格获取当前数据
-  private setOneTable(val){
+  private async setOneTable(val){
       this.oneStaff = JSON.parse(JSON.stringify(val.row))
     this.findRootRes((res, group) => {
       this.role.id = val.row.id
@@ -73,9 +78,22 @@ export default class index extends Vue{
       this.ch(tmp)
       this.treeList = tmp
     })
-      console.log(val.row)
+  this.getAllStaff()
+    console.log(val.row)
     }
 
+    // 获取员工
+  private async getAllStaff(){
+    let data:any = {}
+    data.userName = this.staffName
+    data.shopName = this.organization
+    data.roleId = this.oneStaff.id
+    let res = await getStaff(data)
+    if(res.code === 0) {
+      this.rightTableData = res.data.content
+    }
+    console.log(res)
+  }
     //方法
   private ch(arr) {
     arr.map(item => {

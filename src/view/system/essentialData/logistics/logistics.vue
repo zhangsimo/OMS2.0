@@ -44,7 +44,7 @@
 
 <!--      新增修改-->
       <Modal v-model='modalShow' :title="title" width="700px">
-        <AddLogistics :data = 'logisticsOne' ref="child" :provincearr="provinceArr" :typelist="newTypeList" :clearinglist="newClearingList"></AddLogistics>
+        <AddLogistics :data ='logisticsOne' ref="child" :provincearr="provinceArr" :typelist="newTypeList" :clearinglist="newClearingList"></AddLogistics>
         <div slot='footer'>
           <Button type='primary' @click="addNewSure">确定</Button>
           <Button type='default' @click="cancel">取消</Button>
@@ -323,11 +323,14 @@
             selection(currentRow){
                 this.logisticsOne = currentRow;
                 this.id= currentRow.id
-                currentRow.isDisabled == 0 ? this.logisticsOne.isDisabled =true : this.logisticsOne.isDisabled = false
+                cosole.log(this.logisticsOne,'this.logisticsOne => 327')
+                // currentRow.isDisabled == 0 ? this.logisticsOne.isDisabled =true : this.logisticsOne.isDisabled = false
+                this.logisticsOne.isDisabled= this.logisticsOne.isDisabled ? this.logisticsOne.isDisabled :0
             },
             add(){
                 this.clear()
                 this.modalShow = true
+                this.getList()
             },
             change(){
               if(!this.id){
@@ -363,7 +366,7 @@
                     getNewLogistics(this.logisticsOne).then( res=> {
                         stop()
                         this.modalShow = false
-
+                        this.getList()
                     })
                     }
                 )

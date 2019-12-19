@@ -70,6 +70,10 @@
             }
         },
         methods:{
+            // 新增展示
+            getAdd(){
+                this.tableData.unshift({billStatusId:{enum:'',value:'',name:''}})
+            },
             //获取表格数据
             async getList(){
                   let data = {}

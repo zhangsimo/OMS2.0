@@ -2,7 +2,7 @@
   <div style="height: 500px;overflow:hidden;overflow-y: scroll">
  <Form :label-width="100"  :model='data' :rules="rules" ref="form">
    <div class="tabList">
-             <FormItem label='LOGO图片:' prop="file" >
+             <FormItem label='LOGO图片:' >
                <Upload
                  v-model="data.file"
                  ref="upload"
@@ -27,17 +27,17 @@
                </Upload>
              </FormItem>
          <FormItem label='企业号:' prop="firm">
-           <Input v-model='data.firm' style="width: 580px" ></Input>
+           <Input v-model='data.firm' style="width: 580px" />
          </FormItem>
      <Row>
        <Col span="16">
          <FormItem label='公司全称:' prop="name">
-           <Input v-model='data.name' style="width: 440px" ></Input>
+           <Input v-model='data.name' style="width: 440px" />
          </FormItem>
        </Col>
        <Col span="8">
          <FormItem label='公司简称:' prop="shortName">
-           <Input v-model='data.shortName' style="width: 180px" ></Input>
+           <Input v-model='data.shortName' style="width: 180px" />
          </FormItem>
        </Col>
      </Row>
@@ -65,32 +65,32 @@
        </Col>
      </Row>
      <FormItem label='详细地址:' prop="streetAddress">
-       <Input v-model='data.streetAddress' style="width: 580px" ></Input>
+       <Input v-model='data.streetAddress' style="width: 580px" />
      </FormItem>
      <FormItem label='组合地址:'>
-       <Input v-model='data.address' style="width: 580px" ></Input>
+       <Input v-model='data.address' style="width: 580px" />
      </FormItem>
      <Row>
        <Col span="12">
          <FormItem label='经度:'>
-           <Input v-model='data.longitude' style="width: 280px" ></Input>
+           <Input v-model='data.longitude' style="width: 280px" />
          </FormItem>
        </Col>
        <Col span="12">
          <FormItem label='纬度:'>
-           <Input v-model='data.latitude' style="width: 280px" ></Input>
+           <Input v-model='data.latitude' style="width: 280px" />
          </FormItem>
        </Col>
      </Row>
      <Row>
        <Col span="12">
          <FormItem label='开户银行:'>
-           <Input v-model='data.bankName' style="width: 280px" ></Input>
+           <Input v-model='data.bankName' style="width: 280px" />
          </FormItem>
        </Col>
        <Col span="12">
          <FormItem label='银行账号:'>
-           <Input v-model='data.bankAccountNumber' style="width: 280px" ></Input>
+           <Input v-model='data.bankAccountNumber' style="width: 280px" />
          </FormItem>
        </Col>
      </Row>
@@ -102,12 +102,12 @@
        </Col>
        <Col span="12">
          <FormItem label='公司电话:' prop="tel">
-           <Input v-model='data.tel' style="width: 280px" ></Input>
+           <Input v-model='data.tel' style="width: 280px" />
          </FormItem>
        </Col>
      </Row>
      <FormItem label='网站:'>
-       <Input v-model='data.webaddress' style="width: 580px" ></Input>
+       <Input v-model='data.webaddress' style="width: 580px" />
      </FormItem>
          <Row>
            <Col span="12">
@@ -126,16 +126,16 @@
            </Col>
          </Row>
      <FormItem label='主修品牌:'>
-       <Input v-model='data.mainBrandId' style="width: 580px" ></Input>
+       <Input v-model='data.mainBrandId' style="width: 580px" />
      </FormItem>
      <FormItem label='救援电话:'>
-       <Input v-model='data.rescueTel' style="width: 580px" ></Input>
+       <Input v-model='data.rescueTel' style="width: 580px" />
      </FormItem>
      <FormItem label='广告语:'>
-       <Input v-model='data.slogan1' style="width: 580px" ></Input>
+       <Input v-model='data.slogan1' style="width: 580px" />
      </FormItem>
      <FormItem label='备注:'>
-       <Input v-model='data.remark' style="width: 580px" ></Input>
+       <Input v-model='data.remark' style="width: 580px" />
      </FormItem>
    </div>
  </Form>
@@ -165,13 +165,13 @@
                     callback();
                 }
             };
-            const validateUpload = (rule, value, callback) => {
-                if (this.data.file && this.data.file.length == 0) {
-                    callback(new Error('请选择要上传的文件'))
-                } else {
-                    callback()
-                }
-            }
+            // const validateUpload = (rule, value, callback) => {
+            //     if (this.data.file && this.data.file.length == 0) {
+            //         callback(new Error('请选择要上传的文件'))
+            //     } else {
+            //         callback()
+            //     }
+            // }
             return {
                 wxImgUrl: api.wxImgUrl,//图片地址
                 headers: {
@@ -213,9 +213,9 @@
                     tel:[
                         {required: true, message: '不能为空', trigger: 'blur'}
                     ],
-                    file: [
-                        { required: true, validator: validateUpload, trigger: 'change' }
-                    ]
+                    // file: [
+                    //     { required: true, validator: validateUpload, trigger: 'change' }
+                    // ]
 
                 },
                 uploadSrc:''

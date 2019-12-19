@@ -36,15 +36,15 @@
             case "门店设置":
                 this.$router.push({name:'storeManagement'})
                   return
-            case "销售提成设置":
-              this.$router.push({name: ''})
-                return
-            case "配件提成":
-              // this.$router.push({name: 'AccessoriesCommission'})
-                return
-            case "配件品牌":
-              this.$router.push({name: 'AccessoriesBrand'})
-                return
+            // case "销售提成设置":
+            //   this.$router.push({name: ''})
+            //     return
+            // case "配件提成":
+            //   this.$router.push({name: 'AccessoriesCommission'})
+            //     return
+            // case "配件品牌":
+            //   this.$router.push({name: 'AccessoriesBrand'})
+            //     return
             case "品牌车型":
               this.$router.push({name: 'brandCarModel'})
               return
@@ -63,13 +63,13 @@
             case "结算账户":
               this.$router.push({name:'SettlementAccount'})
               return
-            case "初期库存":
+            case "期初库存":
               this.$router.push({name: 'inventory'})
               return
-            case "初期现金银行":
+            case "期初现金银行":
               this.$router.push({name: 'setBank'})
               return
-            // case "初期应收应付":
+            // case "期初应收应付":
             //   this.$router.push({name: 'receiptPayment'})
             //   return
           }
