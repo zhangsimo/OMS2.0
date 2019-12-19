@@ -355,7 +355,7 @@
                     let res = await  getNewSupplier(data)
                   if(res.code === 0 ){
                     this.clientDataShow = false
-                      this.getlist()
+                    this.getlist()
                   }
 
                 })
