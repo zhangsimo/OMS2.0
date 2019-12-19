@@ -188,24 +188,50 @@ export const mixSelectPartCom = {
   },
   methods: {
     //初始化数据
-    getList() {
+    // getList() {
+    //   this.loading = true
+    //   let req = {}
+    //   if (this.selectTreeItem.id) {
+    //     req.typeId = this.selectTreeItem.id
+    //   }
+    //   if (this.selectBrand && this.selectBrand != '9999') {
+    //     req.partBrandCode = this.selectBrand
+    //   }
+    //
+    //   if (this.searchValue.trim()) {
+    //     req[this.searchType] = this.searchValue.trim()
+    //   }
+    //   req.page = this.page.num
+    //   req.size = this.page.size
+    //   getwbParts(req).then(res => {
+    //     this.loading = false;
+    //     this.partData = res.data.content || [];
+    //     this.page.total = res.data.totalElements
+    //   })
+    // },
+    getList(){
       this.loading = true
       let req = {}
-      if (this.selectTreeItem.id) {
+      if(this.selectTreeItem.id){
         req.typeId = this.selectTreeItem.id
       }
-      if (this.selectBrand && this.selectBrand != '9999') {
-        req.partBrandCode = this.selectBrand
+      if(this.selectBrand&&this.selectBrand!='9999'){
+        req.partCodes =[]
+        req.partBrandCodes = [this.selectBrand]
       }
 
-      if (this.searchValue.trim()) {
-        req[this.searchType] = this.searchValue.trim()
+      if(this.partName.trim()){
+        if (this.searchType == 'adapterCarModels'){
+          req[this.searchType] = [this.partName]
+        } else {
+          req[this.searchType] = this.partName.trim()
+        }
       }
       req.page = this.page.num
       req.size = this.page.size
       getwbParts(req).then(res => {
         this.loading = false;
-        this.partData = res.data.content || [];
+        this.partData = res.data.content||[];
         this.page.total = res.data.totalElements
       })
     },
@@ -321,7 +347,7 @@ export const mixSelectPartCom = {
       this.page.num = 1
       this.page.size = size
       this.getList()
-      
+
     },
     // //申请配件按钮
     // applyPart() {

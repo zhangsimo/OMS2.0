@@ -10,17 +10,18 @@
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
-            <FormItem label="客户：" prop="guestId" >
+            <FormItem label="客户：" prop="fullName" >
               <Row  style="width: 310px">
-                <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
+                <!-- <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-                </Select>
+                </Select> -->
+                <Input class="w240" v-model="formPlan.fullName" :disabled="draftShow != 0" @on-change="changeClient"/>
                 <Button  class="ml5" size="small" type="default" @click="openAddCustomer" :disabled="draftShow != 0"><Icon type="md-checkmark" /></Button>
                 <Button  class="ml5" size="small" type="default" @click="openAddNewClient" :disabled="draftShow != 0"><Icon type="md-add" /></Button>
               </Row>
             </FormItem>
             <FormItem label="销售员：" prop="orderMan">
-              <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0"></Input>
+              <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />
             </FormItem>
             <FormItem label="订单类型：" >
               <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
@@ -28,7 +29,7 @@
               </Select>
             </FormItem>
             <FormItem label="往来单号：" >
-              <Input class="w210" v-model="formPlan.code" disabled></Input>
+              <Input class="w210" v-model="formPlan.code" disabled />
             </FormItem>
             <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
@@ -41,10 +42,10 @@
           </Select>
         </FormItem>
         <FormItem label="备注：">
-          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0"></Input>
+          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0" />
         </FormItem>
         <FormItem label="订单号:">
-          <Input class="w210" v-model="formPlan.serviceId" disabled></Input>
+          <Input class="w210" v-model="formPlan.serviceId" disabled />
         </FormItem>
         <FormItem label="计划发货日期:">
           <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>
@@ -291,7 +292,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                 totalMoney: '',//总价
                 client: [],//客户列表
                 ruleValidate: {
-                    guestId: [
+                    fullName: [
                         {required: true, type: 'string', message: ' ', trigger: 'change'}
                     ],
                     orderMan:[
@@ -347,6 +348,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                   this.draftShow = res.data.billStatusId
                   res.data.orderTypeValue = res.data.orderType.value
                   this.formPlan = res.data
+                  this.formPlan.fullName = this.formPlan.guestName
                   this.draftShow = this.draftShow.value
               }
               if(res.code !== 0){
@@ -648,6 +650,7 @@ import {conversionList} from '@/components/changeWbList/changewblist'
             //获取搜索框内的数据
             setOneClient(val){
                 this.$set(this.formPlan,"guestId",val.id);
+                this.$set(this.formPlan,"fullName",val.fullName);
             },
             //判断表格能不能编辑
                 editActivedEvent ({ row }) {
