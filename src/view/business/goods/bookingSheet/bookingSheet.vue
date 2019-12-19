@@ -551,8 +551,9 @@ export default {
     //子组件的参数
     getPartNameList(ChildMessage){
       // console.log(ChildMessage)
-      let parts = ChildMessage.map( item => {
-        return {
+      let parts = [] 
+      ChildMessage.map( item => {
+        parts.push({
           partCode : item.partCode, //编码
           partName : item.partStandardName, //名称
           unit : item.minUnit, //单位
@@ -565,11 +566,13 @@ export default {
           direction: item.direction, //方向
           partInnerId: item.code, //配件内码
           partId : item.id,
-        }
+        }) 
       })
-      console.log(ChildMessage)
-      this.Right.tbdata = [...this.Right.tbdata,...parts]
-      console.log(this.Right.tbdata)
+      if(this.Right.tbdata){
+        this.Right.tbdata = [...this.Right.tbdata,...parts]
+      } else {[
+        this.Right.tbdata = parts
+      ]}
     },
     //编辑收货信息弹框显示
     GoodsInfoModal(){

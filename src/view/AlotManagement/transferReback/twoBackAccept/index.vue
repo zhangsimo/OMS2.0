@@ -30,7 +30,8 @@
                 v-for="item in customerListOptions"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}</Option>
+              >{{ item.label }}
+              </Option>
             </Select>
           </div>
           <!-- <div class="db mr10">
@@ -169,7 +170,8 @@
 </template>
 
 <script>
-import QuickDate from '../../../../components/getDate/dateget'
+  import { findForAllot } from "_api/purchasing/purchasePlan";
+  import QuickDate from '../../../../components/getDate/dateget'
 import '../../../lease/product/lease.less'
 import '../../../goods/goodsList/goodsList.less'
 import {
@@ -251,10 +253,10 @@ export default {
   },
   methods: {
     log() {
-      getbayer()
-        .then(res => {
+      let params = {}
+      findForAllot(params).then(res => {
           if (res.code == 0) {
-            console.log(res)
+            // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.id,

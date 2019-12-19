@@ -233,7 +233,7 @@ export default class Fittings extends Vue {
     },
   }
   private split: number = 0.33;
-  private queryValue: string = ""; // 选中的查询条件
+  private queryValue: string = "0"; // 选中的查询条件
   private query: string = ""; // 查询条件文字
   private band: string = ""; // 选中的品牌
   private selectTreeId: string = ""; // 选中的树形菜单
@@ -385,6 +385,7 @@ export default class Fittings extends Vue {
       default:
         break;
     }
+    // console.log(this.query)
     if (this.band != "0") {
       // data.partBrandId = this.band;
       data.partBrandCode = this.band;
@@ -393,6 +394,7 @@ export default class Fittings extends Vue {
       // data.carTypeIdThr = this.selectTreeId;
       data.typeId = this.selectTreeId;
     }
+    // console.log(params,data)
     let res: any = await getCloudList({...params, ...data});
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;

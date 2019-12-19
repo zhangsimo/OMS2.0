@@ -898,7 +898,7 @@
           // console.log(a)
           this.choose = a
           this.Message = a
-          console.log(this.Message)
+          // console.log(this.Message)
         },
         //修改弹窗
         changeNav(){

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import SelectSupplier from "../../../../goods/goodsList/components/supplier/selectSupplier";
+  import SelectSupplier from "../compontents/supplier/selectSupplier";
     export default {
         name: "More",
       components: {

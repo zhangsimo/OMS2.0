@@ -258,12 +258,10 @@ export default {
       rules: {
         creditLimit: [
           {
-            // required: true,
-            message: "只能填写数字或者小数",
-            pattern: /^[0-9]{1}([0-9]|[.])*$/,
-            trigger: "blur"
+            message: "只能填写整数或者两位小数",
+            pattern: /^\d+(?:\.\d{2})?$/,
+            trigger: "blur" ///^[0-9]{1}([0-9]|[.])*$/
           }
-          // { required: true, message: "不能为空", trigger: "blur" }
         ],
         shortName: [{ required: true, message: "不能为空", trigger: "blur" }],
         fullName: [{ required: true, message: "不能为空", trigger: "blur" }],
@@ -344,6 +342,6 @@ export default {
   margin-bottom: 10px;
 }
 >>> .ivu-select-dropdown {
-  height: 60px !important;
+  height: 35px;
 }
 </style>

@@ -349,6 +349,7 @@
             addNewSupplier(){
                 this.$refs.child.handleSubmit( async () => {
                     let data = this.clientList
+                    console.log(data,'data  =>352')
                     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
                     data.isClient ? data.isClient =1 : data.isClient = 0
                     let res = await  getNewSupplier(data)

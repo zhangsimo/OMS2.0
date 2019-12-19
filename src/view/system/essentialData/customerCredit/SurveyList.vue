@@ -27,16 +27,30 @@
             <Input v-model='data.legalPerson' style="width: 180px" ></Input>
           </FormItem>
           <FormItem label='经营期限:' prop="operationStart">
-            <DatePicker v-model="data.operationStart" format="yyyy-MM-dd" type="date" style="width: 180px" ></DatePicker>
+            <DatePicker
+              v-model="data.operationStart"
+              format="yyyy-MM-dd"
+              type="date"
+              style="width: 180px"
+              :options='startTimeOptions'
+              @on-change="onStartTimeChange"
+            >
+            </DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='注册资本(万):' prop="registMoney">
             <InputNumber v-model="data.registMoney" style="width: 180px"></InputNumber>
-            <!--<Input v-model='data.registMoney' style="width: 180px" ></Input>-->
           </FormItem>
           <FormItem label='至' prop="operationEnd">
-            <DatePicker v-model="data.operationEnd" type="date" format="yyyy-MM-dd" style="width: 180px" :options="options3"></DatePicker>
+            <DatePicker
+              v-model="data.operationEnd"
+              type="date" format="yyyy-MM-dd"
+              style="width: 180px"
+              :options='endTimeOptions'
+              @on-change="onEndTimeChange"
+            >
+            </DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -135,12 +149,12 @@
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
             <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
-            <InputNumber v-model="data.accountDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.accountDate" style="width: 180px" :max="31"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="回款日期:" prop="cashDate">
-            <InputNumber v-model="data.cashDate" style="width: 180px" max="31"></InputNumber>
+            <InputNumber v-model="data.cashDate" style="width: 180px" :max="31"></InputNumber>
             <!--<Input v-model='data.cashDate' style="width: 180px" ></Input>-->
           </FormItem>
         </Col>
@@ -154,7 +168,7 @@
         </Col>
         <Col span="16">
           <FormItem label="申请受用额度:" prop="applyTrustMoney">
-            <Input v-model='data.applyTrustMoney' style="width: 380px" @on-blur="verify"></Input>
+            <Input v-model='data.applyTrustMoney' style="width: 380px"></Input>
           </FormItem>
         </Col>
       </Row>
@@ -212,13 +226,13 @@
             return {
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
-                nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: ['blur','change'] }],
+                nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: 'change' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
                 operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
                 registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
                 operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
                 registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
-                manageStatus: [{ required: true, type:'string',message: '请选择登记状态！', trigger: ['blur','change'] }],
+                manageStatus: [{ required: true, type:'string',message: '请选择登记状态！', trigger: 'change' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
@@ -236,6 +250,8 @@
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
               }, //获取token
+              startTimeOptions: {},
+              endTimeOptions: {}
             }
         },
     methods: {
@@ -251,17 +267,6 @@
         if(this.data.purchaseName === null){
           this.$message.warning('无下载文件！')
         }
-      },
-      ChangeTime(value) {
-        console.log(this.data)
-        this.data.operationStart = value
-      },
-      ChangeTime2(value) {
-        console.log(value)
-        this.data.operationEnd = value
-      },
-      ChangeTime3(value) {
-        this.data.registerDate = value
       },
       // 上传前
       handleBeforeUpload() {
@@ -286,6 +291,24 @@
         if (res.code == 0) {
           this.data.purchaseName = api.getfile + res.data.url
         }
+      },
+      onStartTimeChange(startTime,type) {
+        this.endTimeOptions = {
+          // 设置结束时间不能选的范围
+          disabledDate(endTime) {
+            return endTime < new Date(startTime)
+          }
+        }
+        this.data.operationStart = startTime
+      },
+      onEndTimeChange(endTime,type) {
+        this.startTimeOptions = {
+          // 设置开始时间不能选的范围
+          disabledDate(startTime) {
+            return startTime > new Date(endTime)
+          }
+        }
+        this.data.operationEnd = endTime
       }
     }
     }

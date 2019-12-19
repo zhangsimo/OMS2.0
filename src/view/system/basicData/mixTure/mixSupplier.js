@@ -223,7 +223,7 @@ export const mixSelectPartCom = {
         this.loading = false;
         this.partData = res.data.content || [];
         this.partData.map(item=>{
-          console.log(item.isMatching)
+          // console.log(item.isMatching)
           item._disabled = item.isMatching === 0 ? true:false
         })
         this.page.total = res.data.totalElements

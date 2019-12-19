@@ -113,7 +113,8 @@
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import { findAll,findById,getSupplierList,allotMainAccept } from '../../../../api/AlotManagement/transferringOrder';
-    export default {
+  import { findForAllot } from "_api/purchasing/purchasePlan";
+  export default {
         name: "Acceptances",
       components: {
         QuickDate
@@ -302,9 +303,9 @@
         // 供应商
         supplier(){
           let params = {}
-          getSupplierList(params).then(res => {
+          findForAllot(params).then(res => {
             if(res.code === 0){
-              this.purchaseNameArr.push(...res.data)
+              this.purchaseNameArr.push(...res.data.content)
             }
           })
         }

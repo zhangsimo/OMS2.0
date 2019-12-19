@@ -369,14 +369,11 @@ const methods = {
     });
   },
   judge() {
-    console.log(this.count1, "this.count1  =>370");
-    console.log(this.count2, "this.count2   =>371");
     if (this.count1 === this.count2) {
-      this.$Message.success("已经存在，请选择其他");
+      this.$Message.success("配件已存在");
     } else {
       this.$Message.success("选择成功");
     }
-    console.log(377, "=>377");
   },
   //多选框
   selection(a) {

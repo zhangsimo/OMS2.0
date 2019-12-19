@@ -307,7 +307,7 @@ export const mixSelectPartCom = {
           }
           setTimeout(() => {
             this.$parent.judge();
-          }, 2000);
+          }, 2500);
         });
       } else {
         this.$Message.error("请选择数据!");
