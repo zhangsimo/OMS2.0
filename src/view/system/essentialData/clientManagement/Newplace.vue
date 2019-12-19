@@ -36,7 +36,7 @@
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="联系方式:" prop="contactor">
-          <Input v-model="data.contactor" style="width: 180px">
+          <Input v-model="data.contactor" style="width: 180px"/>
         </FormItem>
         <FormItem label="城市:" prop="cityId">
           <Select v-model="data.cityId" style="width:180px" class="mr10" @on-change="cityName">
@@ -54,10 +54,10 @@
       </div>
     </div>
     <FormItem label="详细地址:">
-      <Input v-model="data.address" style="width: 400px" disabled>
+      <Input v-model="data.address" style="width: 400px" disabled/>
     </FormItem>
     <FormItem label="备注:" style="float: left">
-      <Input v-model="data.remark" style="width: 330px">
+      <Input v-model="data.remark" style="width: 330px"/>
     </FormItem>
     <div style="float: left;line-height: 30px;padding-left: 10px">
       <Checkbox v-model="data.isDefault"></Checkbox>是否默认
