@@ -110,8 +110,8 @@
                 <Form
                   inline
                   :show-message="false"
-                  ref="formPlan"
-                  :model='formPlan'
+                  ref="form"
+                  :model="formPlan"
                   :label-width="100"
                   :rules="ruleValidate"
                 >
@@ -129,11 +129,12 @@
                     </Select>
                   </FormItem>
                   <FormItem label="盘点员：" prop="orderMan">
-                    <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0"/>
+                    <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" />
                   </FormItem>
                   <FormItem label="盘点日期" prop="auditDate">
                     <DatePicker
                       :disabled="draftShow != 0"
+                      @on-change="auditDateForm"
                       type="date"
                       class="w160"
                       v-model="formPlan.auditDate"
@@ -436,7 +437,7 @@ export default {
           {
             required: true,
             message: "盘点仓库必选",
-            type:'string',
+            type: "string",
             trigger: "change"
           }
         ],
@@ -448,12 +449,13 @@ export default {
           }
         ],
         auditDate: [
-          {
-            required: true,
-            message: "盘点日期必选",
-            type:'date',
-            trigger: "change"
-          }
+          { required: true, type: 'date', message: '盘点日期必选', trigger: 'change' }
+          // {
+          //   required: true,
+          //   type: 'date',
+          //   message: "盘点日期必选",
+          //   trigger: "change"
+          // }
         ]
       } //校验
     };
@@ -544,10 +546,10 @@ export default {
     //   this.formPlan.orderMan = event.target.value
     //   console.log(this.formPlan.orderMan)
     // },
-    // // 盘点日期
-    // infoFormPlan3(data) {
-    //   this.formPlan.auditDate = data + " " + "00:00:00";
-    // },
+    // 盘点日期
+    auditDateForm(data) {
+      this.formPlan.auditDate = data + " " + "00:00:00";
+    },
     //更多按钮
     More() {
       this.showMore = true;
@@ -641,30 +643,40 @@ export default {
     },
     //保存
     baocun() {
-      // if(this.Right.tbdata.length < 1){
-      //   this.$Message.error('请选择数据')
-      //   return
-      // }
-      // console.log(this.formPlan);
+      // this.$refs.form.validate(valid => {
+      //     console.log(valid)
+      //     if (valid) {
+      //       console.log(1)
+      //     } else {
+      //       this.$message.error("带*必填");
+      //     }
+      //   });
       //判断是否为草稿状态
-      if (this.formPlan.billStatusId.value !== 0) {
-        this.$Message.error("只有草稿状态才能保存");
+      if (this.formPlan.hasOwnProperty("billStatusId")) {
+        this.$refs.form.validate(valid => {
+          console.log(valid)
+          if (valid) {
+            console.log(1)
+          } else {
+            this.$message.error("带*必填");
+          }
+        });
+        if (this.formPlan.billStatusId.value !== 0) {
+          this.$Message.error("只有草稿状态才能保存");
+          return;
+        }
+      } else {
+        this.$message.error("暂无新增");
         return;
       }
-      this.$refs.formPlan.validate(valid => {
-        if (valid) {
-          callback && callback();
-          this.formPlan.billStatusId.value = 1;
-          getSubmitList(this.formPlan).then(res => {
-            console.log(res);
-            if (res.code == 0) {
-              his.$Message.error("保存成功");
-            }
-          });
-        } else {
-          this.$Message.error("带*必填");
-        }
-      });
+      // console.log(1)
+      // this.formPlan.billStatusId.value = 1
+      // getSubmitList(this.formPlan).then(res => {
+      //   console.log(res);
+      //   if (res.code == 0) {
+      //     his.$Message.error("保存成功");
+      //   }
+      // });
       // if (
       //   !this.formPlan.auditDate ||
       //   !this.formPlan.storeId ||
@@ -739,7 +751,6 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(data) {
-      console.log(data);
       this.formPlan = data;
       // getRightDatas(data.id)
       // .then(res=>{
