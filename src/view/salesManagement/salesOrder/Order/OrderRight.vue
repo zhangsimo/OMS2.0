@@ -210,7 +210,7 @@ import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
-import {getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
+import { getLeftList , getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 import {getNewClient} from '@/api/system/essentialData/clientManagement'
 import {getClientTreeList} from '@/api/system/essentialData/clientManagement';
@@ -564,13 +564,12 @@ import {conversionList} from '@/components/changeWbList/changewblist'
                       data.detailList = conversionList(val)
                       let res = await  getAccessories(data)
                       if(res.code === 0){
-                          this.getList()
+                        this.$emit('parentGetleft')
                       }
                   } else {
                       this.$Message.error('*为必填项');
                   }
               })
-
             },
             // 批次配件
             async  getBarchList(val){
