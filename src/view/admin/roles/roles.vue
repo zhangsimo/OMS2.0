@@ -52,9 +52,9 @@
                   <Button class="ml10 w90" @click="save"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
                   <div class="fr">
                     <span class="mr10">机构名称:</span>
-                    <Input class="mr10" v-model="organization" placeholder="Enter something..." style="width: 180px" />
+                    <Input class="mr10" v-model="organization" placeholder="请输入机构名称" style="width: 180px" />
                     <span class="mr10">员工姓名:</span>
-                    <Input class="mr10" v-model="staffName" placeholder="Enter something..." style="width: 180px" />
+                    <Input class="mr10" v-model="staffName" placeholder="请输入员工姓名" style="width: 180px" />
                     <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
                   </div>
                   <vxe-table
