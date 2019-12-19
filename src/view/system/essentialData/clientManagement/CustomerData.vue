@@ -354,6 +354,7 @@ export default {
     addNewClient() {
       this.$refs.child.handleSubmit(async () => {
         let data = {};
+        // console.log(data)
         data = this.clientList;
         data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);

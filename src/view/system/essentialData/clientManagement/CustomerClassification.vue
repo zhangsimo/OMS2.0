@@ -18,7 +18,7 @@
     <Modal v-model="modalShow" :title="title">
       <Form ref="form" :label-width="100" :rules="rules" :model="newOne">
         <FormItem label="分类名称：" prop="title">
-          <Input placeholder="请输入分类名称" v-model="newOne.title" style="width: 250px"></Input>
+          <Input placeholder="请输入分类名称" v-model="newOne.title" style="width: 250px"/>
         </FormItem>
         <FormItem label="上级名称:">
           <Select
