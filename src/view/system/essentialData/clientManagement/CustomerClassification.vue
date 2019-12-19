@@ -92,10 +92,10 @@ export default {
     },
     //点击获取当前信息
     changeOneList(data) {
-      this.newOne = JSON.parse(JSON.stringify(data[0]));
+      this.newOne = data[0];
       this.$store.commit(
         "setManagementId",
-        JSON.parse(JSON.stringify(data[0]))
+        data[0]
       );
     },
     //新增客户分类
@@ -159,7 +159,7 @@ export default {
       this.title = "修改客户分类";
       this.modalShow = true;
       this.changeadd = true;
-      console.log(this.newOne.lever)
+      // console.log(this.newOne.lever)
       if (this.newOne.lever == 1) {
         this.newOne.code = "";
       }

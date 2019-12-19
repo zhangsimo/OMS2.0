@@ -339,7 +339,6 @@ export default {
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
-      this.$refs.child.resetFields();
     },
     //更多搜索确认
     querySure() {
