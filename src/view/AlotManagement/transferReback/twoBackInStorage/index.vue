@@ -82,7 +82,10 @@
                     </Row>
                   </FormItem>
                   <FormItem label="入库仓库：">
-                    <Input readonly v-model="formPlan.storeId" placeholder></Input>
+                    <Select v-model="formPlan.storeId" class="w150">
+                      <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select>
+                    <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
                   <FormItem label="调出退回日期：" class="fs12 ml50">
                     <Date-picker
@@ -156,6 +159,8 @@ import More from './compontents/More'
 import QuickDate from '../../../../components/getDate/dateget'
 import '../../../lease/product/lease.less'
 import '../../../goods/goodsList/goodsList.less'
+import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
+
 export default {
   name: 'twoBackInStorage',
   components: {
@@ -164,6 +169,7 @@ export default {
   },
   data() {
     return {
+      List: [],
       form: {
         createTimeStart: '',
         createTimeEnd: '',
@@ -379,7 +385,14 @@ export default {
       this.getinfo(this.params)
     },
     //
-
+    // 仓库下拉框
+    warehouse(){
+      queryByOrgid().then(res => {
+        if(res.code === 0){
+          this.List = res.data
+        }
+      })
+    },
     //入库按钮
     inPro() {
       this.showIn = true
@@ -464,7 +477,9 @@ export default {
       //获取右侧表格高度
       this.rightTableHeight = wrapH - planFormH - planBtnH - 65
     })
+    this.warehouse()
   }
+
 }
 </script>
 

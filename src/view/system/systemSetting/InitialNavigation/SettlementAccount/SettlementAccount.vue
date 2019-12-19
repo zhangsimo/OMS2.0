@@ -60,12 +60,7 @@
       ></Table>
     </section>
     <Modal v-model="modal" :title="title" width="600">
-      <Form
-        ref="formData"
-        :model="formData"
-        :rules="ruleValidate"
-        :label-width="120"
-      >
+      <Form ref="formData" :model="formData" :rules="ruleValidate" :label-width="120">
         <FormItem label="账户名称：" prop="name">
           <Input v-model="formData.name" placeholder="请输入账户名称" />
         </FormItem>
@@ -75,8 +70,7 @@
               v-for="item in AccountType"
               :key="item.value"
               :label="item.value"
-              >{{ item.label }}</Radio
-            >
+            >{{ item.label }}</Radio>
           </RadioGroup>
         </FormItem>
         <vxe-table border :data="formData.mode">
@@ -94,7 +88,7 @@
                   v-for="item in SettlementMode"
                   :key="item.value"
                   :value="item.value"
-                  >{{ item.label }}</option>
+                >{{ item.label }}</option>
               </select>
             </template>
           </vxe-table-column>

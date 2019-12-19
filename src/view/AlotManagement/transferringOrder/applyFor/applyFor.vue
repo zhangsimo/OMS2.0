@@ -223,8 +223,8 @@
           },
           //表单验证
           ruleValidate: {
-            guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'blur' }],
-            storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'blur' }],
+            guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'change' }],
+            storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'change' }],
             orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }]
           },
           datadata: null,
@@ -378,7 +378,7 @@
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
             this.formPlan.storeId =  '', //调入仓库
-            this.formPlan.orderDate =  tools.transTime(new Date()), //申请调拨日期
+            this.formPlan.orderDate =  new Date(), //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
@@ -396,7 +396,7 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          this.$refs['formPlan'].validate((valid) => {
+          this.$refs.formPlan.validate((valid) => {
             if (valid) {
               let data = {}
               data.id = this.rowId
@@ -558,7 +558,7 @@
         getSupplierName(a){
           console.log(a)
           this.formPlan.guestName = a.fullName
-          this.formPlan.guestidId = a.id
+          this.guestidId = a.id
         },
         leftgetList(){
           let params = {}
@@ -602,14 +602,14 @@
         },
         // 左边部分的当前行
         selection(row){
-          // console.log(row)
-          // console.log(row.id)
-          this.rowOrgId = row.orgid
-          this.mainId = row.id
-          this.guestidId = row.guestId
-          // console.log(this.guestidId,123)
+          if(row.id){
+            // console.log(row)
+            this.rowOrgId = row.orgid
+            this.mainId = row.id
+            this.guestidId = row.guestId
+            // console.log(this.guestidId,123)
             this.datadata = row
-          // console.log(this.datadata)
+            // console.log(this.datadata)
             this.formPlan.guestName = this.datadata.guestName
             this.formPlan.storeId = this.datadata.storeId
             this.formPlan.orderDate = this.datadata.orderDate
@@ -617,13 +617,13 @@
             this.formPlan.createUname = this.datadata.createUname
             this.formPlan.serviceId = this.datadata.serviceId
             // this.guestidId = this
-          this.presentrowMsg = row.status.value
-          console.log(this.presentrowMsg)
-          this.rowId = row.id
-          if(row.id){
+            this.presentrowMsg = row.status.value
+            console.log(this.presentrowMsg)
+            this.rowId = row.id
+
             this.buttonDisable = false
+            this.getRightlist()
           }
-          this.getRightlist()
         },
         //右部分接口
         getRightlist(){

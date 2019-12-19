@@ -116,11 +116,10 @@ export function transferParts(params) {
     })
 }
 // 分店名称
-export function getStorelist(data) {
+export function getStorelist() {
     return axios.request({
-        url: `${api.authApi}/group/findRootByPid?pId=0`,
-        method: 'get',
-        data
+        url: `${api.wmsApi}/company/get/by/tenantid`,
+        method: 'get'
     })
 }
 // 应收应付管理 

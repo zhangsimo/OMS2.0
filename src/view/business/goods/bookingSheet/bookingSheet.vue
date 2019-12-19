@@ -66,7 +66,7 @@
                         :rules="ruleValidate"
                         :label-width="100">
                     <FormItem label="业务员：" prop="salesman">
-                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.salesman"></Input>
+                      <Input class="w160" :disabled="true" v-model="formPlan.salesman"></Input>
                     </FormItem>
                     <FormItem label="预订单号:" prop="Reservation" class="ml50">
                       <Input class="w160" :disabled="true" v-model="formPlan.Reservation"></Input>
@@ -387,6 +387,8 @@ export default {
       this.Left.tbdata.unshift(this.PTrow)
       this.isAdd = false;
       this.datadata = this.PTrow
+      this.formPlan.salesman = this.$store.state.user.userData.staffName
+      // console.log(this.$store.state.user.userData.staffName)
       // console.log(this.Left.tbdata)
     },
     //添加配件按钮
@@ -549,8 +551,9 @@ export default {
     //子组件的参数
     getPartNameList(ChildMessage){
       // console.log(ChildMessage)
-      let parts = ChildMessage.map( item => {
-        return {
+      let parts = [] 
+      ChildMessage.map( item => {
+        parts.push({
           partCode : item.partCode, //编码
           partName : item.partStandardName, //名称
           unit : item.minUnit, //单位
@@ -563,11 +566,13 @@ export default {
           direction: item.direction, //方向
           partInnerId: item.code, //配件内码
           partId : item.id,
-        }
+        }) 
       })
-      console.log(ChildMessage)
-      this.Right.tbdata = [...this.Right.tbdata,...parts]
-      console.log(this.Right.tbdata)
+      if(this.Right.tbdata){
+        this.Right.tbdata = [...this.Right.tbdata,...parts]
+      } else {[
+        this.Right.tbdata = parts
+      ]}
     },
     //编辑收货信息弹框显示
     GoodsInfoModal(){

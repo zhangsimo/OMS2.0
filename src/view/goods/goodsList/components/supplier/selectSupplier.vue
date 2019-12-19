@@ -9,6 +9,7 @@
         <Checkbox class="mr20 ml10" v-model="isDisable"> 显示禁用</Checkbox>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
+        <Button class="mr10" type='default' @click="searchPartLayer=false">取消</Button>
         <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
       </div>
       <div class="partCheck-main clearfix">

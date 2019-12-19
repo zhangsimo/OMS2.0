@@ -219,7 +219,11 @@
             { required: true, message: '接口地址不能为空', trigger: 'blur' }
           ],
           coin:[
-            { required: true, validator:price, trigger: 'blur' }
+            { required: true,
+              // validator:price,
+              message: "只能输入整数",
+              pattern: /^[0-9]+$/,
+              trigger: 'blur' }
           ]
         },
         proType:proTypeList()||[],

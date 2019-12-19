@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import {rechargeCoinInfo,generateOrder,generationQR,queryOrder} from '../../../../../api/system/account/account'
+  import {rechargeCoinInfo,generateOrder,generationQR,queryOrder,generationRecord } from '../../../../../api/system/account/account'
   export default {
         name: "recharge",
       data(){
@@ -62,7 +62,14 @@
             totalCoin:'',
             flowPic: '',
             erweima:'' , //微信二维码路径
-            orderNum: ''
+            orderNum: '',
+            Id: '', //选择当前套餐的id
+            Name: '', //选择当前套餐的产品名称
+            Code: '', //选择当前套餐的餐品编码
+            Remark: '', //选择当前套餐的描述
+            SalesPrice: '', //选择当前套餐的售价
+            Cycle: '', //选择当前套餐的产品天数
+            timer: '', //定时器
           }
       },
       methods:{
@@ -72,7 +79,7 @@
         },
         //选择套餐
         selectClass(index,item){
-          // console.log(item)
+          console.log(item)
           this.selectClassA = index
           this.payMoney = item.sellPrice
           this.remark = item.remark
@@ -91,25 +98,32 @@
                   let dataa = {}
                   dataa.price = this.payMoney
                   dataa.orderNum = num
+                  // dataa.orderNum = '20191217030100000009'
                   generationQR(dataa).then(res => {
                     if(res.code === 0){
                       this.erweima = res.data.code_url
                       this.modal = true
-                      setInterval(() => {
+                   this.timer =  setInterval(() => {
                         let data1 = {}
                         let params1 = {}
-                        // params1.orderNum = this.orderNum
-                        params1.orderNum = 20191217030100000009
+                        params1.orderNum = this.orderNum
+                        // params1.orderNum = '20191217030100000009'
                         queryOrder({data:data1,params:params1}).then(res => {
-                          if(res.code == 0){
-                            if(res.data == 'SUCCESS'){
+                          if(res.code === 0){
+                            if(res.data === 'SUCCESS'){
                               this.$Message.warning('购买成功！')
                               this.modal = false
-                              clearInterval(timer)
+                              clearInterval(this.timer)
+                              let data2 = {}
+                              let params2 = {}
+                              params2.orderNum = this.orderNum
+                              generationRecord({data:data2,params:params2}).then(res => {
+
+                              })
                             }
                           }
                         })
-                      },10000)
+                      },5000)
                     }
             })
             }
@@ -120,6 +134,7 @@
           }
         },
         close(){
+          clearInterval(this.timer)
           // let data = {}
           // let params = {}
           // params.orderNum = this.orderNum

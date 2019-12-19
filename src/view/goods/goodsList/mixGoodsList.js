@@ -64,7 +64,7 @@ export const mixGoodsData = {
       selectPlanOrderItem: {},
 
       headers: {
-        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+        Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
       }
     };
   },
@@ -248,7 +248,7 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v) {
-      console.log(v);
+      // console.log(v);
       this.formPlan.planArriveDate = v;
     },
     //获取订单状态
@@ -257,7 +257,22 @@ export const mixGoodsData = {
     // },
     //采购计划单选中
     selectTabelData(v) {
-      // console.log(v)
+      // console.log(this.formPlan)
+      // console.log(this.newadd)
+      // if(this.newadd){
+      //   Object.keys(this.formPlan).forEach((key) => {
+      //     if (key !== 'planner' && key !== 'planOrderNum') {
+      //       if (this.formPlan[key] !== '') {
+      //         confirm('您正在编辑单据，是否需要保存')
+      //       } 
+      //     }
+      //   })
+      // }
+      if(this.newadd && this.selectPlanOrderItem.new) {
+        this.tbdata.splice(0, 1);
+        this.newadd = false;
+        this.$refs.planOrderTable.clearCurrentRow();
+      }
       if (v) {
         this.isinput = false;
         this.selectPlanOrderItem = v || {};
@@ -291,7 +306,7 @@ export const mixGoodsData = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
-        planArriveDate: "", //计划日期
+        planArriveDate: new Date(), //计划日期
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
@@ -316,7 +331,7 @@ export const mixGoodsData = {
 
     //作废--反作废
     saveObsoleteFun(type) {
-      if(this.selectPlanOrderItem.new) {
+      if (this.selectPlanOrderItem.new) {
         return this.$Message.error('请先保存数据!');
       }
       if (type === 1) {
@@ -398,10 +413,10 @@ export const mixGoodsData = {
 
     // 导出
     exportHandle() {
-      if(this.selectPlanOrderItem.new) {
+      if (this.selectPlanOrderItem.new) {
         return this.$Message.error('请先保存数据!');
       }
-      if(!this.mainId || this.mainId.length <= 0) {
+      if (!this.mainId || this.mainId.length <= 0) {
         return this.$Message.error('请选择要导出的数据!');
       }
       let url = exportXls(this.mainId);
@@ -410,17 +425,17 @@ export const mixGoodsData = {
 
     // 导入
     handleBeforeUpload() {
-      if(this.selectPlanOrderItem.new) {
+      if (this.selectPlanOrderItem.new) {
         return this.$Message.error('请先保存数据!');
       }
-      let refs =  this.$refs;
+      let refs = this.$refs;
       refs.upload.clearFiles();
     },
-    handleSuccess(res, file){
+    handleSuccess(res, file) {
       let self = this;
-      if(res.code == 0) {
-          self.$Message.success('导入成功');
-          this.tableData = res.data.details;
+      if (res.code == 0) {
+        self.$Message.success('导入成功');
+        this.tableData = res.data.details;
       } else {
         self.$Message.error(res.message);
       }

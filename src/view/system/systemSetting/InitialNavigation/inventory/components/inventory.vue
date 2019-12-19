@@ -132,8 +132,10 @@
                           :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
         <vxe-table-column field="enterPrice" title="单价"
                           :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
-        <vxe-table-column field="sellPrice" title="销售价"></vxe-table-column>
-        <vxe-table-column title="金额">
+        <vxe-table-column field="sellPrice" title="销售价"
+                          :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+        <vxe-table-column title="金额"
+                          :edit-render="{name: 'input', attrs: {type: 'number'}}">
           <template v-slot="{row}">
             <span>{{ parseFloat(row.enterPrice)*parseFloat(row.enterQty) }} </span>
           </template>
@@ -198,55 +200,55 @@
                 //存放主表的全部数据
                 tableData: [],
                 //副表 配件信息项  field:列属性
-                tableColumnTwo: [
-                    {type: "index", width: 60, title: "序号"},
-                    {
-                        title: "配件信息",
-                        children: [
-                            {type: "checkbox", width: 30},
-                            {field: "partId", title: "配件ID"},
-                            {field: "partCode", title: "配件编码"},
-                            {field: "partName", title: "配件名称"},
-                            {field: "brand ", title: "品牌"},
-                            {field: "applyCarModel ", title: "品牌车型"},
-                            {field: "systemUnitId", title: "单位"}
-                        ]
-                    },
-                    {
-                        title: "数量金额信息",
-                        children: [
-                            {field: "enterQty", title: "数量", editRender: {name: 'input'}},
-                            {field: "enterPrice", title: "单价", editRender: {name: 'input'}},
-                            {field: "sellPrice", title: "销售价", editRender: {name: 'input'}},
-                            {field: "enterAmt", title: "金额"},
-                            {field: "remark", title: "备注", editRender: {name: 'input'}}
-                        ]
-                    },
-                    {
-                        title: "辅助信息",
-                        children: [
-                            {field: "storeShelf", title: "仓位", editRender: {name: 'input'}},
-                            {field: "storeName", title: "仓库"},
-                            {field: "oemCode", title: "OE码"},
-                            {field: "spec", title: "规格/方向/颜色"}
-                        ]
-                    },
-                    {
-                        title: "不含税信息",
-                        children: [
-                            {field: "noTaxPrice", title: "单价"},
-                            {field: "noTaxAmt", title: "金额"}
-                        ]
-                    },
-                    {
-                        title: "含税信息",
-                        children: [
-                            {field: "taxRate", title: "税率"},
-                            {field: "taxPrice", title: "单价"},
-                            {field: "taxAmt", title: "金额"}
-                        ]
-                    }
-                ],
+                // tableColumnTwo: [
+                //     {type: "index", width: 60, title: "序号"},
+                //     {
+                //         title: "配件信息",
+                //         children: [
+                //             {type: "checkbox", width: 30},
+                //             {field: "partId", title: "配件ID"},
+                //             {field: "partCode", title: "配件编码"},
+                //             {field: "partName", title: "配件名称"},
+                //             {field: "brand ", title: "品牌"},
+                //             {field: "applyCarModel ", title: "品牌车型"},
+                //             {field: "systemUnitId", title: "单位"}
+                //         ]
+                //     },
+                //     {
+                //         title: "数量金额信息",
+                //         children: [
+                //             {field: "enterQty", title: "数量", editRender: {name: 'input'}},
+                //             {field: "enterPrice", title: "单价", editRender: {name: 'input'}},
+                //             {field: "sellPrice", title: "销售价", editRender: {name: 'input'}},
+                //             {field: "enterAmt", title: "金额"},
+                //             {field: "remark", title: "备注", editRender: {name: 'input'}}
+                //         ]
+                //     },
+                //     {
+                //         title: "辅助信息",
+                //         children: [
+                //             {field: "storeShelf", title: "仓位", editRender: {name: 'input'}},
+                //             {field: "storeName", title: "仓库"},
+                //             {field: "oemCode", title: "OE码"},
+                //             {field: "spec", title: "规格/方向/颜色"}
+                //         ]
+                //     },
+                //     {
+                //         title: "不含税信息",
+                //         children: [
+                //             {field: "noTaxPrice", title: "单价"},
+                //             {field: "noTaxAmt", title: "金额"}
+                //         ]
+                //     },
+                //     {
+                //         title: "含税信息",
+                //         children: [
+                //             {field: "taxRate", title: "税率"},
+                //             {field: "taxPrice", title: "单价"},
+                //             {field: "taxAmt", title: "金额"}
+                //         ]
+                //     }
+                // ],
                 //存放当前获取到的响应数据
                 oneWarehouse: {},
                 //判断是否可编辑
@@ -284,7 +286,7 @@
                 this.Loading = true;
                 let res = await getList({});
                 if (res.code == 0) {
-                    console.log(res,'res =>280')
+                    console.log(res,'res =>286')
                     this.isShow = false;
                     this.Loading = false;
                     res.data.map(item => {
@@ -299,6 +301,7 @@
             clOnewList(data) {
                 // console.log(data);
                 // let el = data
+                console.log('点击触发事件 =>304')
                 this.oneWarehouse = data.row;
                 this.mid = data.row.id;
                 // console.log(this.mid,77777)
@@ -311,6 +314,7 @@
             async getStoreHoure() {
                 let res = await getwarehouse({});
                 if (res.code == 0) {
+                  console.log(res,'res=>31')
                     //getColumnByField(fileid) 根据列的字段名获取列
                     // console.log(column, 123123123);
                     res.data.map(item => {
@@ -355,8 +359,9 @@
                     this.ids = [];
                     this.twoList = [];
                     this.$message.success("删除成功");
-                    // this.getList();
                 }
+                this.getList();
+
                 // console.log(res);
                 this.$Message.info('点击了确定');
             },
@@ -376,10 +381,11 @@
                 });
                 let res = await deleteList({ids: arr});
                 if (res.code == 0) {
+                    this.getList();
                     this.ids = [];
-                    this.twoList = [];
+                    // this.twoList = [];
                     this.$message.success("删除成功");
-                    // this.getList();
+                    this.clOnewList()
                 }
                 // console.log(res);
             },
@@ -401,7 +407,6 @@
             },
             //  点击下载模板
             downloadFormwork () {
-              console.log('downloadFormwork','downloadFormwork')
               window.location.href=baseUrl.omsOrder + '/enterMain/template?access_token=' + Cookies.get(TOKEN_KEY)
 
             },
@@ -415,6 +420,8 @@
             //全选框
             selectAllEvent({checked, row}) {
                 // console.log(checked ? "所有勾选事件" : "所有取消事件");
+                console.log(row,'row')
+                console.log(checked,'checked')
                 if (checked) {
                     this.ids = row;
                 } else {
@@ -447,6 +454,7 @@
             AddAttention() {
                 // this.modal = true;
                 this.$refs.addParCom.init()
+                this.getList()
             },
             //modal的关闭按钮事件
             closedTap() {
@@ -463,7 +471,6 @@
             },
             // 上传成功
             handleSuccess(res, file) {
-                console.log(111)
                 let self = this;
                 if (res.code == 0) {
                     this.$message.success(res.message)
@@ -472,7 +479,7 @@
                 }
             }
         }
-    };
+    }
 </script>
 
 <style>

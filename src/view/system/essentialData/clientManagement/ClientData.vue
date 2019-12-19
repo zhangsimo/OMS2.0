@@ -3,15 +3,15 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled"></Checkbox>
+        <Checkbox v-model="data.isDisabled" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier"></Checkbox>
+        <Checkbox v-model="data.isSupplier" />
       </span>
       <span class="isDisabeld">
         客户
-        <Checkbox v-model="clinet" disabled></Checkbox>
+        <Checkbox v-model="clinet" disabled />
       </span>
     </div>
     <!--   切换栏-->
@@ -30,7 +30,7 @@
                 </Select>
               </FormItem>
               <FormItem label="客户简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px"></Input>
+                <Input v-model="data.shortName" style="width: 180px" maxlength="10" />
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
@@ -55,12 +55,12 @@
             </div>
           </div>
           <FormItem label="客户全称:" prop="fullName">
-            <Input v-model="data.fullName" style="width: 380px"></Input>
+            <Input v-model="data.fullName" style="width: 380px" />
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px"></Input>
+                <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
                 <Select v-model="data.provinceId" style="width:180px" class="mr10">
@@ -75,7 +75,7 @@
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="联系人手机:" prop="contactorTel">
-                <Input v-model="data.contactorTel" style="width: 180px"></Input>
+                <Input v-model="data.contactorTel" style="width: 180px" />
               </FormItem>
               <FormItem label="城市:" prop="cityId">
                 <Select v-model="data.cityId" style="width:180px" class="mr10">
@@ -90,12 +90,12 @@
             </div>
           </div>
           <FormItem label="地址:">
-            <Input v-model="data.streetAddress" style="width: 380px"></Input>
+            <Input v-model="data.streetAddress" style="width: 380px" />
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员:">
-                <Input v-model="data.salesman" style="width: 180px"></Input>
+                <Input v-model="data.salesman" style="width: 180px" />
               </FormItem>
               <FormItem label="信用等级:">
                 <Select v-model="data.tgradeName" style="width:180px" class="mr10">
@@ -107,10 +107,10 @@
                 </Select>
               </FormItem>
               <FormItem label="电话:" prop="tel">
-                <Input v-model="data.tel" style="width: 180px"></Input>
+                <Input v-model="data.tel" style="width: 180px" />
               </FormItem>
               <FormItem label="备注:">
-                <Input v-model="data.remark" style="width: 180px"></Input>
+                <Input v-model="data.remark" style="width: 180px" />
               </FormItem>
               <FormItem label="一级分类:" prop="guestType">
                 <Select v-model="data.guestType" style="width:180px" class="mr10">
@@ -125,16 +125,16 @@
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员手机:" prop="salesmanTel">
-                <Input v-model="data.salesmanTel" style="width: 180px"></Input>
+                <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
               <FormItem label="信誉额度:" prop="creditLimit">
-                <Input v-model="data.creditLimit" style="width: 180px"></Input>
+                <Input v-model="data.creditLimit" style="width: 180px" />
               </FormItem>
               <FormItem label="QQ/微信:">
-                <Input v-model="data.instantMsg" style="width: 180px"></Input>
+                <Input v-model="data.instantMsg" style="width: 180px" />
               </FormItem>
               <FormItem label="默认物流:">
-                <Input v-model="data.defaultLogistics" style="width: 180px"></Input>
+                <Input v-model="data.defaultLogistics" style="width: 180px" />
               </FormItem>
               <FormItem label="二级分类:" prop="guestTypeFloor">
                 <Select v-model="data.guestTypeFloor" style="width:180px" class="mr10">
@@ -157,49 +157,49 @@
             <p style="margin-bottom: 10px">财务信息</p>
             <div>
               <FormItem label="银行账号:">
-                <Input v-model="data.accountBankNo" style="width: 450px"></Input>
+                <Input v-model="data.accountBankNo" style="width: 450px" />
               </FormItem>
               <FormItem label="开户银行:">
-                <Input v-model="data.accountBank" style="width: 450px"></Input>
+                <Input v-model="data.accountBank" style="width: 450px" />
               </FormItem>
               <div style="display: flex">
                 <div style="flex-flow: row nowrap;width: 100%">
                   <FormItem label="纳税人编码:" prop="phone">
-                    <Input v-model="data.taxpayerCode" style="width: 150px"></Input>
+                    <Input v-model="data.taxpayerCode" style="width: 150px" />
                   </FormItem>
                 </div>
                 <div style="flex-flow: row nowrap;width: 100%">
                   <FormItem label="纳税人电话:" prop="phone">
-                    <Input v-model="data.taxpayerTel" style="width: 150px"></Input>
+                    <Input v-model="data.taxpayerTel" style="width: 150px" />
                   </FormItem>
                 </div>
               </div>
               <FormItem label="纳税人名称:">
-                <Input v-model="data.taxpayerName" style="width: 450px"></Input>
+                <Input v-model="data.taxpayerName" style="width: 450px" />
               </FormItem>
             </div>
             <p style="margin-bottom: 10px">其他信息</p>
             <FormItem label="网址:">
-              <Input v-model="data.website" style="width: 450px"></Input>
+              <Input v-model="data.website" style="width: 450px" />
             </FormItem>
             <FormItem label="传真:">
-              <Input v-model="data.fax" style="width: 450px"></Input>
+              <Input v-model="data.fax" style="width: 450px" />
             </FormItem>
             <FormItem label="经营地址:">
-              <Input v-model="data.addr" style="width: 450px"></Input>
+              <Input v-model="data.addr" style="width: 450px" />
             </FormItem>
             <FormItem label="会员卡号:">
-              <Input v-model="data.memCarNo" style="width: 450px"></Input>
+              <Input v-model="data.memCarNo" style="width: 450px" />
             </FormItem>
             <div style="display: flex">
               <div style="flex-flow: row nowrap;width: 100%">
                 <FormItem label="会员等级:" prop="phone">
-                  <Input v-model="data.memLevelId" style="width: 150px"></Input>
+                  <Input v-model="data.memLevelId" style="width: 150px" />
                 </FormItem>
               </div>
               <div style="flex-flow: row nowrap;width: 100%">
                 <FormItem label="邮政编码:" prop="phone">
-                  <Input v-model="data.postalCode" style="width: 150px"></Input>
+                  <Input v-model="data.postalCode" style="width: 150px" />
                 </FormItem>
               </div>
             </div>
@@ -241,7 +241,7 @@
           <div>
             <div class="place">
               <span>客户名称:</span>
-              <Input type="text" v-model="customerName" class="staff-name mr10"></Input>
+              <Input type="text" v-model="customerName" class="staff-name mr10" />
               <Button type="warning" class="w90 mr10" @click="queryClientList">
                 <span class="center">
                   <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -367,8 +367,14 @@ export default {
       }
     };
     const creditLimit = (rule, value, callback) => {
-      if (!value.match(/\d/)) {
-        callback(new Error("只能输入数字"));
+      if (value) {
+        if (!/^\d{1,}$/.test(value)) {
+          callback(new Error("只能输入数字"));
+        } else {
+          callback();
+        }
+      } else {
+        callback()
       }
     };
 
@@ -520,7 +526,12 @@ export default {
       relevanceClient: [],
       addInoiceOne: {},
       rules: {
-        creditLimit: [{ validator: creditLimit, trigger: "blur" }],
+        creditLimit: [
+          {
+            validator: creditLimit,
+            trigger: "change"
+          }
+        ],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
@@ -778,9 +789,14 @@ export default {
     //删除银行
     deletBank() {
       if (Object.keys(this.addInoiceOne).length == 0) {
-        this.$Message.error("至少选项一条地址");
+        this.$Message.error("请先选中需要删除的信息");
         return false;
       }
+      this.invoice = this.invoice.filter(
+        item => item.bankId != this.addInoiceOne.bankId
+      );
+      this.data.guestTaxpayerVOList = this.invoice;
+      this.addInoiceOne = {};
     }
   }
 };

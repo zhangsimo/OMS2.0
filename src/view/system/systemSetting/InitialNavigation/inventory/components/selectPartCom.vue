@@ -62,7 +62,7 @@
         </div>
         <div class="formItem">
           <FormItem label="金额:" prop="enterAmt">
-            <Input v-model="formInfo.enterAmt"></Input>
+            <Input v-model="inputMoney"></Input>
           </FormItem>
           <FormItem label="备注:" prop="remark">
             <Input v-model="formInfo.remark"></Input>
@@ -70,7 +70,7 @@
         </div>
       </Form>
       <div slot='footer'>
-        <Button type='text'@click="cancel">取消</Button>
+        <Button type='text' @click="cancel">取消</Button>
         <Button type='primary' @click="addAccessories">确定</Button>
       </div>
     </Modal>
@@ -89,7 +89,26 @@
       isShowAddPartBtn:false,
         mainData:''
     },
+    computed:{
+      // inputMoney:function(){
+      //   if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
+      //       return this.formInfo.enterQty * this.formInfo.enterPrice
+      //   }
+      // },
+      inputMoney: {
+                get:function () {     //getter读取数据
+                    if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
+                        return this.formInfo.enterQty * this.formInfo.enterPrice
+                    }
+                },
+                set:function (val) {    //setter 需要时触发
+                    console.log(val,'val')
+                    this.formInfo.enterPrice = val / this.formInfo.enterQty
+                }
+            }
+    },
   }
+
 </script>
 
 <style lang="less" scoped>

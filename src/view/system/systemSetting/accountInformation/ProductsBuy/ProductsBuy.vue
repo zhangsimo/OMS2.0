@@ -44,7 +44,7 @@
 <script>
   // import QRCode from 'qrcodejs2'
   // tenantInfogenerateOrder
-  import { tenantInfogenerateOrder,generationQR, queryOrder } from '../../../../../api/system/account/account'
+  import { tenantInfogenerateOrder,generationQR, queryOrder, generationRecord } from '../../../../../api/system/account/account'
     export default {
         name: "ProductsBuy",
       // components: {QRCode},
@@ -53,7 +53,9 @@
             getMsg: '',
             modal: false,
             orderNum: '',
-            erweima:''
+            erweima:'',
+            timer: null,
+            status: '',
           }
       },
       methods: {
@@ -61,45 +63,59 @@
           this.$router.push('/accountInformation/record')
         },
         pay(){
-          tenantInfogenerateOrder().then(res => {
+          let data = {}
+          data.id = this.getMsg.id
+          data.name = this.getMsg.name
+          data.code = this.getMsg.code
+          data.remark = this.getMsg.remark
+          data.salesPrice = this.getMsg.salesPrice
+          data.cycle = this.getMsg.cycle
+          tenantInfogenerateOrder(data).then(res => {
               if(res.code === 0 ){
-                 var aaa = res.data.orderNum
-                // console.log(aaa,2323)
                 let data = {}
+                this.orderNum = res.data.orderNum
                 data.price = this.getMsg.salesPrice
-                data.orderNum = aaa
-                this.orderNum = aaa
+                data.orderNum = res.data.orderNum
+                // data.orderNum = '20191217030100000009'
                 generationQR(data).then(res => {
                   if(res.code === 0){
                     this.erweima = res.data.code_url
                     this.modal = true
-                    setInterval(() => {
+                 this.timer =  setInterval(() => {
                       let data1 = {}
                       let params1 = {}
-                      // params1.orderNum = this.orderNum
-                      params1.orderNum = 20191217030100000009
-                     let timer = queryOrder({data:data1,params:params1}).then(res => {
-                        if(res.code == 0){
-                          if(res.data == 'SUCCESS'){
+                      params1.orderNum = this.orderNum
+                      // params1.orderNum = '20191217030100000009'
+                      queryOrder({data:data1,params:params1}).then(res => {
+                        if(res.code === 0){
+                          if(res.data === 'SUCCESS'){
                             this.$Message.warning('购买成功！')
                             this.modal = false
-                           clearInterval(timer)
+                           clearInterval(this.timer)
+                            let data2 = {}
+                            let params2 = {}
+                            params2.orderNum = this.orderNum
+                            generationRecord({data:data2,params:params2}).then(res => {
+
+                            })
                           }
                         }
                       })
-                    },10000)
+                    },5000)
                   }
                 })
               }
           })
         },
         close(){
-          let data = {}
-          let params = {}
-          params.orderNum = this.orderNum
-          queryOrder({data:data,params:params}).then(res => {
-
-          })
+          // alert(123456)
+            clearInterval(this.timer)
+            // let data2 = {}
+            // let params2 = {}
+            // params2.orderNum = this.orderNum
+            // generationRecord({data:data2,params:params2}).then(res => {
+            //
+            // })
         }
         // qrcodeScan () {//生成二维码
         //   let qrcode = new QRCode('qrcode', {
@@ -113,11 +129,12 @@
       },
       mounted(){
         this.getMsg = this.$route.query
+        // console.log(this.getMsg)
         // this.qrcodeScan();    // 注：需在mounted里触发qrcodeScan函数
       },
       activated(){
           this.getMsg = this.$route.query
-          // console.log(this.getMsg)
+          console.log(this.getMsg)
       }
     }
 </script>

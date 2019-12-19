@@ -233,7 +233,7 @@ export default {
         },
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -343,7 +343,7 @@ export default {
       Reconciliationlist: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: "40",
           className: "tc"
         },
@@ -542,18 +542,14 @@ export default {
           }
         ];
         if (res.data.two.length !== 0) {
-          let num = 0;
           res.data.two.map(item => {
-            item.num = ++num;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
           this.data1 = res.data.two;
         }
         if (res.data.three.length !== 0) {
-          let num = 0;
           res.data.three.map(item => {
-            item.num = ++num;
             item.serviceTypeName = item.serviceType.name;
             item.speciesName = item.species.name;
           });
@@ -721,7 +717,11 @@ export default {
             billingType: this.totalvalue,
             rebateNo: this.Rebateid,
             badDebNo: this.BadDebtid,
-            buttonStatus: num
+            buttonStatus: num,
+            incomeType,
+            startDate,
+            endDate,
+            remark
           }
         ];
         let obj = {

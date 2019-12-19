@@ -42,7 +42,9 @@
             <label>基础模块</label>
             <span>
              <ul class="List">
-                 <li class="List_item" v-for="(item,index) in basicModule" :key="index"><Button shape="circle" type="warning" class="colorWhite">{{ item.resName }}</Button></li>
+                 <li class="List_item" v-for="(item,index) in basicModule" :key="index">
+                   <Button shape="circle" type="warning" class="colorWhite">{{ item.resName }}</Button>
+                 </li>
              </ul>
             </span>
           </div>
@@ -69,7 +71,7 @@
 </template>
 
 <script>
-  import {tenantInfo} from '../../../../api/system/account/account'
+  import { tenantInfo } from '../../../../api/system/account/account'
     export default {
         name: "accountInformation",
       data(){

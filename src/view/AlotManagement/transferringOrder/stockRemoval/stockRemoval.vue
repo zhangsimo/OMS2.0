@@ -96,11 +96,13 @@
                           <Row class="w160">
                             <Col span="24">
                               <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
-                                <Option
-                                  v-for="item in cangkuListall"
-                                  :value="item.value"
-                                  :key="item.value"
-                                >{{item.label}}</Option>
+                                <!--<Option-->
+                                  <!--v-for="item in cangkuListall"-->
+                                  <!--:value="item.value"-->
+                                  <!--:key="item.value"-->
+                                <!--&gt;{{item.label}}</Option>-->
+                                <Option v-for="item in cangkuListall" :value="item.id" :key="item.id">{{ item.name }}</Option>
+
                               </Select>
                             </Col>
                           </Row>
@@ -195,8 +197,10 @@
       </div>
     </Modal>
           <!-- 选择调出方 -->
-    <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>
-      <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
+    <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
+    <select-supplier ref="selectSupplier" header-tit="调出方资料" @selectSupplierName="selectSupplierName"></select-supplier>
+
+    <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
       <Print-show ref="printBox" :curenrow="dayinCureen"></Print-show>
   </main>
   <!-- 配件组装 -->
@@ -211,10 +215,14 @@ import selectPartCom from "./compontents/selectPartCom";
 import GoodsInfo from './compontents/goodsInfo'
 import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
-import SelectSupplier from './compontents/selectSupplier'
+// import SelectSupplier from './compontents/selectSupplier'
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '@/api/AlotManagement/stockRemoval.js'
+
+import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
 export default {
   name: 'stockRemoval',
   components: {
@@ -803,6 +811,12 @@ export default {
       console.log(val)
       this.$refs.selectSupplier.init()
     },
+    // 供应商子组件内容
+    getSupplierName(a){
+      console.log(a)
+      this.formPlan.guestName = a.fullName
+      this.formPlan.guestidId = a.id
+    },
     //选择方
     selectSupplierName(row) {
       console.log(row)
@@ -820,6 +834,14 @@ export default {
         console.log(row.id)
         this.diaochuID = row.id
       }
+    },
+    // 仓库下拉框
+    warehouse(){
+      queryByOrgid().then(res => {
+        if(res.code === 0){
+          this.cangkuListall = res.data
+        }
+      })
     },
     getOkList(list) {
       const item =  {
@@ -901,6 +923,7 @@ export default {
     window.onresize = () => {
       this.getDomHeight()
     }
+    this.warehouse()
   }
 }
 </script>

@@ -3,22 +3,22 @@
     <div style="display: flex">
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="客户编码:">
-          <Input v-model="data.code" style="width: 180px"></Input>
+          <Input v-model="data.code" style="width: 180px"/>
         </FormItem>
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="客户简称:">
-          <Input v-model="data.shortName" style="width: 180px" :maxlength="10"></Input>
+          <Input v-model="data.shortName" style="width: 180px" :maxlength="10"/>
         </FormItem>
       </div>
     </div>
     <FormItem label="客户全称:">
-      <Input v-model="data.fullName" style="width: 380px"></Input>
+      <Input v-model="data.fullName" style="width: 380px"/>
     </FormItem>
     <div style="display: flex">
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="联系人:">
-          <Input v-model="data.contactor" style="width: 180px" :maxlength="8"></Input>
+          <Input v-model="data.contactor" style="width: 180px" :maxlength="8"/>
         </FormItem>
         <FormItem label="信用等级:">
           <Select v-model="data.tgradeName" style="width:180px" class="mr10">
@@ -42,10 +42,10 @@
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="联系人电话：">
-          <Input v-model="data.contactorTel" style="width: 180px"></Input>
+          <Input v-model="data.contactorTel" style="width: 180px"/>
         </FormItem>
         <FormItem label="会员卡号：">
-          <Input v-model="data.cardNo" style="width: 180px"></Input>
+          <Input v-model="data.cardNo" style="width: 180px"/>
         </FormItem>
         <FormItem label="城市:">
           <Select v-model="data.cityId" style="width:180px" class="mr10">

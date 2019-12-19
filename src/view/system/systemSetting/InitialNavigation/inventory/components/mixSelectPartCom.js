@@ -306,7 +306,12 @@ export const mixSelectPartCom = {
         // alert('成功')
       }
     },
-
+    inputPrice() {
+      console.log(1,'formInfo.enterPrice')
+    },
+    inputNumber() {
+      console.log(1,'formInfo.enterPrice')
+    },
     //分页
     changePage(p) {
       this.page.num = p
@@ -316,6 +321,7 @@ export const mixSelectPartCom = {
       this.page.num = 1
       this.page.size = size
       this.getList()
+      
     },
     // //申请配件按钮
     // applyPart() {

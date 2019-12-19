@@ -46,11 +46,11 @@
         ></Page>
       </div>
 <!--      客户资料-->
-      <Modal v-model="clientDataShow" title="供应商资料"  width="850" >
+      <Modal v-model="clientDataShow" title="门店资料"  width="850" >
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
         <div slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>
-          <Button type='default' @click='clientDataShow = false'>取消</Button>
+          <Button type='default' @click='cancel'>取消</Button>
         </div>
       </Modal>
 
@@ -234,12 +234,19 @@
                         this.$message.success('保存成功')
                         this.getlist()
                         this.clientDataShow = false
+                      this.$refs.child.resetFields()
+
                     }
                 })
             },
             changeTime(val){
               return  moment(val).format('YYYY-MM-DD HH:mm:ss')
             },
+          cancel(){
+            this.clientDataShow = false
+            this.$refs.child.resetFields()
+
+          },
             //修改客户资料
             changeClient(){
                 if (Object.keys(this.pitchSupplierOne).length == 0  ){

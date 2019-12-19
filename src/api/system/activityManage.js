@@ -117,7 +117,7 @@ export function auditActivity(data) {
 // 指定公司接口
 export function selectCompany(params) {
   return axios.request({
-    url: `${api.passportApi}/group/findRootByPid`,
+    url: `${api.wmsApi}/company/get/by/tenantid`,
     method: "get",
     params
   });

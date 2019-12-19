@@ -409,7 +409,7 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -522,7 +522,7 @@ export default {
       columns2: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -575,7 +575,7 @@ export default {
       columns3: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -628,7 +628,7 @@ export default {
       columns4: [
         {
           title: "序号",
-          key: "num",
+          type: "index",
           width: 40,
           className: "tc"
         },
