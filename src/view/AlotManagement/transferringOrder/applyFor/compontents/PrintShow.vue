@@ -20,7 +20,7 @@
           </Col>
           <Col span="12" class="pl10">
             <p>
-              <span>订单日期:</span><span>{{  }}</span>
+              <span>订单日期:</span><span>{{ onelist.createTime }}</span>
             </p>
             <p>
               <span>打印日期:</span>
@@ -31,7 +31,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>客户:</span> <span>{{ onelist.guestName }}</span>
+              <span>调出方:</span> <span>{{ onelist.guestName }}</span>
             </p>
             <p>
               <span>地址:</span> <span>{{ onelist.guestAddress }}</span>
@@ -42,7 +42,7 @@
               <span>联系人:</span> <span>{{ onelist.receiver }}</span>
             </p>
             <p>
-              <span>票据类型:</span><span>{{  }}</span>
+              <span>入库仓库:</span><span>{{  }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
@@ -50,7 +50,7 @@
               <span>联系电话:</span><span>{{ onelist.receiverMobile }}</span>
             </p>
             <p>
-              <span>结算方式:</span><span>{{ onelist.settleType }}</span>
+              <span>备注:</span><span>{{ onelist.settleType }}</span>
             </p>
           </Col>
         </Row>
@@ -136,13 +136,19 @@
             align: "center"
           },
           {
-            title: "申请数量",
-            key: "applyQty",
-            align: "center"
+            title: "品牌车型",
+            // key: "carBrandName + carModelName",
+            align: "center",
+            render: (h,params) => {
+              let PinPai = params.row.carBrandName
+              let chexing = params.row.carModelName
+              let He = `${PinPai} ${chexing}`
+              return h('span',He)
+            }
           },
           {
-            title: "备注",
-            key: "remark",
+            title: "规格",
+            key: "spec",
             align: "center"
           },
           {
@@ -151,55 +157,14 @@
             align: "center"
           },
           {
-            title: "  OE码",
-            key: "oemCode",
+            title: "数量",
+            key: "applyQty",
             align: "center"
           },
           {
-            title: "规格",
-            key: "spec",
+            title: "备注",
+            key: "remark",
             align: "center"
-          },
-          {
-            title: "方向",
-            key: "enterUnitId",
-            align: "center"
-          },
-          {
-            title: "紧销品",
-            key: "isTightPart",
-            align: "center",
-            render: (h ,params) => {
-              let isTight = params.row.isTight
-              let zi = ''
-              if(isTight === 0){
-                zi = "不是"
-              }
-              if(isTight === 1){
-                zi = '是'
-              }
-              return h('span',zi)
-            }
-          },
-          {
-            title: "受理数量",
-            key: "hasAcceptQty",
-            align: "center"
-          },
-          {
-            title: "取消数量",
-            key: "hasCancelQty",
-            align: "center"
-          },
-          {
-            title: "出库数量",
-            key: "hasOutQty",
-            align: "center"
-          },
-          {
-            title: "入库数量",
-            key: "storeShelf",
-            align: "hasInQty"
           }
         ],
         onelist: {}, //打印数据
