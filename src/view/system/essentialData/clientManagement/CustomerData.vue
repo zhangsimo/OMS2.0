@@ -339,7 +339,6 @@ export default {
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
-      this.$refs.child.resetFields();
     },
     //更多搜索确认
     querySure() {
@@ -354,6 +353,7 @@ export default {
     addNewClient() {
       this.$refs.child.handleSubmit(async () => {
         let data = {};
+        // console.log(data)
         data = this.clientList;
         data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);

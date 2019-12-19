@@ -21,7 +21,7 @@ export function getClient () {
 //获取公司信息
 export function selectCompany(params) {
     return axios.request({
-      url: `${api.passportApi}/group/findRootByPid`,
+      url: `${api.wmsApi}/company/get/by/tenantid`,
       method: "get",
       params
     });

@@ -48,9 +48,9 @@
             case "品牌车型":
               this.$router.push({name: 'brandCarModel'})
               return
-            case "配件分类":
-              this.$router.push({name: 'AccessoriesCategory'})
-              return
+            // case "配件分类":
+            //   this.$router.push({name: 'AccessoriesCategory'})
+            //   return
             case "自定义分类设置":
               this.$router.push({name: 'CustomClassification'})
               return

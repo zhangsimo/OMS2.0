@@ -137,8 +137,8 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="有效期(天)：" prop="isCycle">
-              <Input v-model="formValidate.isCycle"></Input>
+            <FormItem label="有效期(天)：" prop="cycle">
+              <Input v-model="formValidate.cycle"></Input>
             </FormItem>
           </Col>
         </Row>

@@ -744,6 +744,22 @@
               if(res.code === 0){
                 this.getList()
                 this.changeAlert = false
+                this.tenantName = ''
+                this.address = ''
+                this.mobile = ''
+                this.tenantId = ''
+                this.startDate = ''
+                this.endDate = ''
+                this.formValidate2.province = ''
+                this.formValidate2.city = ''
+                this.salesManman = ''
+                this.address = ''
+                this.salesman2 = ''
+                this.Recommended_member = ''
+                this.FirstPay = ''
+                this.payorno = false
+                this.nextPayMoney= ''
+                this.nextPayTime = ''
               }
           })
 
@@ -917,8 +933,13 @@
             this.tenantName = this.Message.tenantName
             this.address = this.Message.address
             this.mobile = this.Message.mobile
-            this.tenantId = this.Message.managerIdentity
-            this.startDate = new Data()// this.Message.startDate
+            if(this.Message.managerIdentity == 0){
+              this.tenantId = '老板'
+            }else {
+              this.tenantId = '员工'
+            }
+            // this.tenantId = this.Message.managerIdentity
+            this.startDate = this.Message.startDate
             this.endDate = this.Message.endDate
             this.formValidate2.province = this.Message.provinceId
             this.formValidate2.city = this.Message.cityId

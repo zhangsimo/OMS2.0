@@ -178,13 +178,13 @@
               {
                 title: '审核人',
                 align:'left',
-                key: 'updateUname',
+                key: 'auditMan',
                 minWidth: 120
               },
               {
                 title: '审核时间',
                 align:'left',
-                key: 'updateTime',
+                key: 'auditDate',
                 minWidth: 160
               }
             ],
