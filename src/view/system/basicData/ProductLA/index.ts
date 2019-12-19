@@ -275,9 +275,9 @@ export default class ProductLA extends Vue {
     private async getwaitEmps() {
         this.waitPartListData = [];
         this.waitPartListLoading = true;
-        // id: this.employeeId
         let params: any = {}
         let data: any = {};
+        data.empId = this.employeeId;
         params.size = this.waitPartListPage.size;
         params.page = this.waitPartListPage.num - 1;
         if(this.waitPartTransListContent.trim().length > 0) {

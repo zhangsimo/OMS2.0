@@ -79,7 +79,7 @@
           </div>
           <div class="db mr10">
             <span>活动配件：</span>
-            <Input ref="getDataObj" style="width:200px" class="mr20" v-model="getDataObj.partName"></Input>
+            <Input ref="getDataObj" style="width:200px" class="mr20" v-model="getDataObj.partName"/>
           </div>
           <div class="db">
             <Button @click="getActivity" type="warning" class="mr20">
@@ -174,7 +174,7 @@
                 v-model="formValidate.remark"
                 type="textarea"
                 :autosize="{minRows: 2,maxRows: 5}"
-              ></Input>
+              />
             </FormItem>
           </Form>
         </div>

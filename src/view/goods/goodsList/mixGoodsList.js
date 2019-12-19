@@ -8,21 +8,22 @@ import {
   saveReverse,
   exportXls,
   upxlxs,
+  deleteparts,
 } from "_api/purchasing/purchasePlan";
 import * as tools from "../../../utils/tools";
-import Cookies from 'js-cookie';
-import { TOKEN_KEY } from '@/libs/util';
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 // import {purchaseTypeList} from "./goodsList";
 
 export const mixGoodsData = {
   data() {
     return {
-      upurl: '',
+      upurl: "",
       //计划采购信息
       formPlan: {
         supplyName: "", //供应商
         guestId: "", //供应商id
-
+        settleTypeId: "", // 结算方式
         planArriveDate: "", //计划日期
         // planDateformat: "",
 
@@ -51,6 +52,9 @@ export const mixGoodsData = {
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
+        ],
+        settleTypeId: [
+          { required: true, message: "请选择结算方式", trigger: "change" }
         ]
       },
       tableData: [],
@@ -58,20 +62,22 @@ export const mixGoodsData = {
       delArr: [],
       //票据类型
       invoiceMap: [],
+      // 结算方式
+      settleMethods: [],
       //直发门店
       companyMap: [],
       //选中的采购计划单
       selectPlanOrderItem: {},
 
       headers: {
-        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }
     };
   },
   mounted() {
     getPurchaseInit({}).then(res => {
       //票据类型
-      let invoiceMap = res.data.invoiceMap || {};
+      let { invoiceMap, settlementMap } = res.data || {};
       if (invoiceMap) {
         for (let v in invoiceMap) {
           let objData = {
@@ -79,6 +85,9 @@ export const mixGoodsData = {
             value: invoiceMap[v]
           };
           this.invoiceMap.push(objData);
+        }
+        for (let el in settlementMap) {
+          this.settleMethods.push({ value: settlementMap[el], label: el });
         }
       }
       //直发门店
@@ -127,6 +136,7 @@ export const mixGoodsData = {
         this.formPlan = {
           supplyName: "", //供应商
           guestId: "", //供应商id
+          settleTypeId: "", // 结算方式
           planArriveDate: "", //计划日期
           planner: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
@@ -144,19 +154,40 @@ export const mixGoodsData = {
       console.log(selection);
       this.delArr = selection;
     },
+    selectAll({ checked }) {
+      if (checked) {
+        this.tableData.forEach(el => {
+          this.delArr.push(el)
+        })
+      } else {
+        this.delArr = new Array();
+      }
+    },
     //删除选中数据
     delTableData() {
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
-        this.delArr.map(item => {
-          this.tableData.map((v2, i) => {
-            if (item.id == v2.id) {
-              this.tableData.splice(i, 1);
+        // this.delArr.map(item => {
+        //   this.tableData.map((v2, i) => {
+        //     if (item.id == v2.id) {
+        //       this.tableData.splice(i, 1);
+        //     }
+        //   });
+        // });
+        this.$Modal.confirm({
+          title: '是否要删除配件',
+          onOk: async () => {
+            let res = await deleteparts(this.delArr);
+            if (res.code == 0) {
+              this.$Message.success('删除成功');
+              this.getList();
             }
-          });
-        });
-        this.delArr = [];
+          },
+          onCancel: () => {
+            this.$Message.info('取消删除');
+          },
+        })
       }
     },
     //计算合计
@@ -220,6 +251,7 @@ export const mixGoodsData = {
         });
         totals = sumarr.reduce((total, el) => (total += el), 0);
         this.totalAmt = totals;
+        this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
         return totals.toFixed(2);
       }
       if (columnIndex === 17) {
@@ -245,10 +277,11 @@ export const mixGoodsData = {
       this.formPlan.guestId = v.id || "";
       //赋值票据类型id
       this.formPlan.billType = v.billTypeId || "";
+      this.formPlan.settleTypeId = v.settTypeId || "";
     },
     //选择日期
     setDataFun(v) {
-      console.log(v);
+      // console.log(v);
       this.formPlan.planArriveDate = v;
     },
     //获取订单状态
@@ -257,7 +290,22 @@ export const mixGoodsData = {
     // },
     //采购计划单选中
     selectTabelData(v) {
-      // console.log(v)
+      // console.log(this.formPlan)
+      // console.log(this.newadd)
+      // if(this.newadd){
+      //   Object.keys(this.formPlan).forEach((key) => {
+      //     if (key !== 'planner' && key !== 'planOrderNum') {
+      //       if (this.formPlan[key] !== '') {
+      //         confirm('您正在编辑单据，是否需要保存')
+      //       }
+      //     }
+      //   })
+      // }
+      if (this.newadd && this.selectPlanOrderItem.new) {
+        this.tbdata.splice(0, 1);
+        this.newadd = false;
+        this.$refs.planOrderTable.clearCurrentRow();
+      }
       if (v) {
         this.isinput = false;
         this.selectPlanOrderItem = v || {};
@@ -277,7 +325,7 @@ export const mixGoodsData = {
         this.upurl = upxlxs + v.id;
       }
     },
-
+    
     //新增采购计划单
     addOrder() {
       if (this.newadd) {
@@ -291,7 +339,7 @@ export const mixGoodsData = {
         supplyName: "", //供应商
         guestId: "", //供应商id
 
-        planArriveDate: "", //计划日期
+        planArriveDate: new Date(), //计划日期
 
         planner: this.$store.state.user.userData.staffName || "", //计划人
         remark: "", //备注
@@ -309,35 +357,48 @@ export const mixGoodsData = {
         billStatusId: "",
         createTime: tools.transTime(new Date()),
         details: []
-      }
+      };
       this.selectPlanOrderItem = row;
       this.tbdata.unshift(row);
     },
 
     //作废--反作废
     saveObsoleteFun(type) {
-      if(this.selectPlanOrderItem.new) {
-        return this.$Message.error('请先保存数据!');
+      if (this.selectPlanOrderItem.new) {
+        return this.$Message.error("请先保存数据!");
       }
+      let title = "";
       if (type === 1) {
-        saveObsolete(this.selectPlanOrderItem.id).then(res => {
-          if (res.code == 0) {
-            this.$Message.success("提交成功");
-            this.getList();
-          }
-        });
+        title = "是否要作废";
       } else {
-        saveReverse(this.selectPlanOrderItem).then(res => {
-          if (res.code == 0) {
-            this.$Message.success("提交成功");
-            this.getList();
-          }
-        });
+        title = "是否要反作废";
       }
+      this.$Modal.confirm({
+        title: title,
+        onOk: () => {
+          if (type === 1) {
+            saveObsolete(this.selectPlanOrderItem.id).then(res => {
+              if (res.code == 0) {
+                this.$Message.success("提交成功");
+                this.getList();
+              }
+            });
+          } else {
+            saveReverse(this.selectPlanOrderItem).then(res => {
+              if (res.code == 0) {
+                this.$Message.success("提交成功");
+                this.getList();
+              }
+            });
+          }
+        },
+        onCancel: () => {}
+      });
     },
     //保存采购计划信息
-    submit(name, subType) {
-      this.$refs[name].validate(valid => {
+    submit(subType) {
+      this.$refs['formPlan'].resetFields();
+      this.$refs['formPlan'].validate(valid => {
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -381,6 +442,9 @@ export const mixGoodsData = {
               }
             });
           } else if (subType === 2) {
+            if(this.tableData.length <= 0) {
+              return this.$Message.error('请添加配件后再提交');
+            }
             saveCommit(objReq).then(res => {
               if (res.code == 0) {
                 this.newadd = false;
@@ -398,33 +462,40 @@ export const mixGoodsData = {
 
     // 导出
     exportHandle() {
-      if(this.selectPlanOrderItem.new) {
-        return this.$Message.error('请先保存数据!');
+      if (this.selectPlanOrderItem.new) {
+        return this.$Message.error("请先保存数据!");
       }
-      if(!this.mainId || this.mainId.length <= 0) {
-        return this.$Message.error('请选择要导出的数据!');
+      if (!this.mainId || this.mainId.length <= 0) {
+        return this.$Message.error("请选择要导出的数据!");
       }
       let url = exportXls(this.mainId);
-      window.open(url, '_balnk');
+      window.open(url, "_balnk");
     },
 
     // 导入
     handleBeforeUpload() {
-      if(this.selectPlanOrderItem.new) {
-        return this.$Message.error('请先保存数据!');
+      if (this.selectPlanOrderItem.new) {
+        return this.$Message.error("请先保存数据!");
       }
-      let refs =  this.$refs;
+      let refs = this.$refs;
       refs.upload.clearFiles();
     },
-    handleSuccess(res, file){
+    handleSuccess(res, file) {
       let self = this;
-      if(res.code == 0) {
-          self.$Message.success('导入成功');
-          this.tableData = res.data.details;
+      if (res.code == 0) {
+        self.$Message.success("导入成功");
+        this.tableData = res.data.details;
       } else {
         self.$Message.error(res.message);
       }
     },
 
+    changeTotals() {
+      let totals = 0;
+      this.tableData.forEach(el => {
+        totals += el.orderPrice * el.orderQty;
+      })
+      this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
+    }
   }
 };

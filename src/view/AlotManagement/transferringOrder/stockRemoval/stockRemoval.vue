@@ -7,7 +7,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" @quickDate="getDataQuick"></quick-date>
-                  <Select v-model="form.status" class="w90 mr10">
+                  <Select v-model="form.value"  @on-change="getDataType" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -83,7 +83,7 @@
                         <FormItem label="调入方：" prop="supplyName" class="redIT">
                           <Row >
                             <Col span="22">
-                              <Input :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
+                              <Input readonly :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
                             </Col>
                             <Col span="2">
                               <Button :disabled="Leftcurrentrow.status.value !== 0" @click="showModel" class="ml5" size="small" type="default">
@@ -233,7 +233,7 @@ export default {
       dcData: [],
       showit: true,
       form: {
-        status: '',
+        value: '',
         qucikTime: ''
       },
       tabKey: '0',
@@ -485,6 +485,13 @@ export default {
     selectChangeEvent ({ checked, row }) {
         // console.log(checked ? '勾选事件' : '取消事件')
     },
+     getDataType() {
+      console.log(121)
+      const params = {
+        value: parseInt(this.form.value)
+      }
+      this.getList(params)
+    },
     baocun1() {
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.createTime || !this.Leftcurrentrow.guestName) {
         this.$Message.info('仓库和创建时间以及调出方为必输项')
@@ -691,11 +698,18 @@ export default {
         this.rightTableHeight = wrapH - planFormH - planBtnH - 38
       })
     },
-    //快速查询日期
     getDataQuick(v) {
-      this.form.qucikTime = v
-      console.log(v)
+      const params = {
+        createDateStart: v[0],
+        createDateEnd: v[1]
+      }
+      this.getList(params)
     },
+    // //快速查询日期
+    // getDataQuick(v) {
+    //   this.form.qucikTime = v
+    //   console.log(v)
+    // },
     //更多按钮
     more() {
       this.advanced = true
@@ -831,13 +845,6 @@ export default {
       this.$refs.addInCom.init1()
     },
     getList(params) {
-      if (params.qucikTime) {
-        params.createTime = params.qucikTime[0],
-        params.endTime = params.qucikTime[1]
-        delete params.qucikTime
-      } else {
-        delete params.qucikTime
-      }
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
 

@@ -83,8 +83,6 @@
                 if (res.code == 0){
                     this.companyList = res.data.content
                     this.page.total = res.data.totalElements
-
-
                 }
               })
           },

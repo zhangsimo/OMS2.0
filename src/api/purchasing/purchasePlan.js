@@ -137,5 +137,14 @@ export function importXls(data) {
   })
 }
 
+// 删除配件
+export function deleteparts(data) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanDetail/delete`,
+    method: 'post',
+    data
+  })
+}
+
 //
 export const upxlxs = `${api.omsOrder}/pchsPlanMain/importExcel?id=`;

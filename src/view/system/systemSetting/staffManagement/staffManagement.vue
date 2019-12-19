@@ -31,7 +31,7 @@
       <Modal v-model='modalShow' :title="title" width="700px" :closable="false">
         <addStaff ref='child' :data="newStaff"></addStaff>
         <div slot='footer'>
-          <Button type='default' @click="cancel">取消</Button>
+          <Button type='default' @click="modalShow = false">取消</Button>
           <Button type='primary' @click='submit' >确定</Button>
         </div>
       </Modal>
@@ -397,9 +397,6 @@
               this.newStaff=this.oneStaffChange //用户名
                   this.newStaff.single= this.newStaff.single == 1 ? true: false  //允许查看
                   this.newStaff.singtwo=this.newStaff.singtwo == 1 ? true : false, //允许提交
-                  this.newStaff.office=0, //是否在职默认在职
-                  this.newStaff.openSystem=0,
-                  this.newStaff.groupId=0 //所属机构
                   // this.newStaff.groundIds = JSON.parse(this.newStaff.groundIds)
               this.modalShow =true
           },
@@ -411,10 +408,13 @@
               }
               let stop = this.$loading()
               this.oneStaffChange.office =  this.oneStaffChange.office == 0 ? 1 :0
-              editUser(this.oneStaffChange).then( res => {
+              this.oneStaffChange.singtwo=this.oneStaffChange.singtwo == 1 ? true : false, //允许提交
+                  this.oneStaffChange.groundIds = JSON.stringify(this.oneStaffChange.groundIds)
+              changeeditUser(this.oneStaffChange).then( res => {
                   stop()
                   if(res.code ==0){
                       this.$Message.success('修改成功')
+                      this.oneStaffChange ={}
                       this.getAllStaffList()
                   }
               }).catch(err => {

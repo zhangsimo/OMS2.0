@@ -2,81 +2,58 @@
   <Modal v-model="getShowMore" title="高级查询" width="600px" @on-ok="moreOk" @on-cancel="moreCancel">
     <div class="navbox">
       <Row class="mb15">
-        <Col span="12">
-          <span class="w40">创建日期：</span>
+        <span class="w40">创建日期：</span>
           <DatePicker
             type="daterange"
             placeholder="请选择创建日期！"
             @on-change="establish"
-            style="width: 190px"
+            style="width: 450px"
           ></DatePicker>
-        </Col>
-        <Col span="12">
-          <span class="w40">至：</span>
-          <DatePicker
-            type="daterange"
-            placeholder="请选择提交日期！"
-            @on-change="submit"
-            style="width: 190px"
-          ></DatePicker>
-        </Col>
       </Row>
       <Row>
-        <Col span="12">
           <span class="w40">提交日期：</span>
           <DatePicker
             type="daterange"
             placeholder="请选择提交日期！"
-            @on-change="establish"
-            style="width: 190px"
-          ></DatePicker>
-        </Col>
-        <Col span="12">
-          <span class="w40">至：</span>
-          <DatePicker
-            type="daterange"
-            placeholder="请选择提交日期！"
             @on-change="submit"
-            style="width: 190px"
+            style="width: 450px"
           ></DatePicker>
-        </Col>
       </Row>
       <row class="mt15">
         <span >移仓单号：</span>
         <Input
-          v-model="callin"
+          v-model="moreData.serviceId"
           icon="ios-clock-outline"
           style="width: 450px"
         />
       </row>
       <row class="mt15">
         <span>配件编码：</span>
-        <Input v-model="numbers" placeholder="请输入受理单号！" style="width: 450px" />
+        <Input v-model="moreData.partCode" placeholder="请输入受理单号！" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件名称：</span>
-        <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+        <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
   </Modal>
 </template>
 
 <script>
-import { getDataMoreList } from '../../../../../api/AlotManagement/putStorage'
+import { getDataMoreList } from '../../../../../api/putStorage'
 export default {
   name: 'More',
   data() {
     return {
       moreData: {
-        createTime: '', //创建日期
-        submitTime: '', //提交日期
-        callin: '', //调入方
-        numbers: '', //受理单号
-        applyNumbers: '', //申请单号
-        coding: '', //配件编码
-        Name: '', //配件名称
-        Accessories: '' //受理人
-      }
+        createStartDate: '', //创建日期
+        commitEndDat:'',
+        commitStartDate: '', //提交日期
+        commitEndDat:'',
+        serviceId: '', //移仓单号
+        partCode: '', //配件编码
+        partName: '', //配件名称
+      },
     }
   },
   props: {
@@ -85,17 +62,19 @@ export default {
   methods: {
     //选择创建日期
     establish(date) {
-      console.log(date)
-      this.moreData.createTime = data
+      this.moreData.createStartDate = date[0] || ""
+      this.moreData.createEndDate = date[1] || ""
     },
     //选择提交日期
     submit(date) {
       console.log(date)
-      this.moreData.submitTime = data
+      this.moreData.commitStartDate = date[0] || ""
+      this.moreData.commitEndDat = date[1] || ""
     },
     //更多弹窗-确定
     moreOk() {
-      getDataMoreList()
+      console.log(this.moreData)
+      getDataMoreList(this.moreData)
         .then(res => {
           if (res.code === 0) {
             //res传出去
@@ -114,7 +93,18 @@ export default {
     //更多弹窗-取消
     moreCancel() {
       this.$emit('getMoreStatus', false)
-    }
+    },
+    reset() {
+      this.moreData = {
+         createStartDate: '', //创建日期
+        commitEndDat:'',
+        commitStartDate: '', //提交日期
+        commitEndDat:'',
+        serviceId: '', //移仓单号
+        partCode: '', //配件编码
+        partName: '', //配件名称
+      }
+    },
   }
 }
 </script>

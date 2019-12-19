@@ -19,7 +19,7 @@
       <Modal v-model="modalShow" title="添加客户分类"  >
         <Form ref="form"  :label-width="100"  >
           <FormItem label='分类名称：'  >
-            <Input placeholder='请输入分类名称' v-model='addTitle' style="width: 250px" ></Input>
+            <Input placeholder='请输入分类名称' v-model='addTitle' style="width: 250px" />
           </FormItem>
           <FormItem label='上级名称:' >
             <Select v-model="addCode" style="width:250px" class="mr10">
@@ -36,7 +36,7 @@
       <Modal v-model="changeShow" title="修改客户分类"  >
         <Form ref="form"  :label-width="100"  >
           <FormItem label='分类名称：'  >
-            <Input placeholder='请输入分类名称' v-model='changeName' style="width: 250px" ></Input>
+            <Input placeholder='请输入分类名称' v-model='changeName' style="width: 250px" />
           </FormItem>
           <FormItem label='上级名称:' >
             <Select v-model="addCode" style="width:250px" class="mr10" :disabled="changeadd">

@@ -2,16 +2,12 @@ import axios from '@/libs/api.request'
 import api from '_conf/url'
 
 // 分页查询角色列表
-export function queryRolesByPage (displayName, name, size, page) {
+export function queryRolesByPage (params) {
   return axios.request({
     url: `${api.authApi}/role/findAllByPage`,
     method: 'get',
-    params: {
-      size,
-      page,
-      displayName,
-      name,
-    }
+    params
+
   })
 }
 
@@ -21,6 +17,15 @@ export function queryAllRoles (params) {
     url: `${api.authApi}/role/findAll`,
     method: 'get',
     params
+  })
+}
+
+//新增角色
+export function  addNewStaffe(data) {
+  return axios.request({
+    url:`${api.authApi}/role/save`,
+    method:'post',
+    data
   })
 }
 
@@ -36,7 +41,7 @@ export function isExisted (name) {
   })
 }
 
-// 删除资源
+// 删除角色
 export function deleteById (data) {
   // data.tenantId = localStorage.getItem('authUserId')
   return axios.request({
@@ -48,13 +53,30 @@ export function deleteById (data) {
 
 // 添加或修改资源
 export function addOrUpdate (data, groupId) {
-  // data.tenantId = localStorage.getItem('authUserId')
   return axios.request({
     url: `${api.authApi}/role/save`,
     method: 'post',
     params: {
       groupId
     },
+    data
+  })
+}
+
+//获取员工权限
+export function getStaff (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/findAllTenantUsersRole`,
+    method: 'post',
+    data
+  })
+}
+
+//员工改变权限保存
+export function saveStaffJurisdiction (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/changeUserRoles`,
+    method: 'post',
     data
   })
 }

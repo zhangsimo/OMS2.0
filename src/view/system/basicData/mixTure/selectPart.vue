@@ -1,57 +1,53 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" :title="headerTit" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
-        <Input class="w150 mr10" v-model="fullName" placeholder="名称"></Input>
-        <Input class="w200 mr10" v-model="code" placeholder="编码"></Input>
-        <Input class="w150 mr10" v-model="contactorTel" placeholder="电话"></Input>
-        │
-        <Checkbox class="mr20 ml10" v-model="isDisable"> 显示禁用</Checkbox>
+        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
+          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
+        </Select>
+        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+
+        <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
+          <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
+        </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default' @click="searchPartLayer=false">取消</Button>
-        <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
+        <Button class="mr10" type='default' @click="searchPartLayer = false"><Icon type="md-close" /> 取消</Button>
+        <Button type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
         <div class="partCheck-left fl">
-          <div class="partCheck-left-tit">供应商分类</div>
-          <div class="partCheck-left-tree" >
-            <Tree :data="treeData" v-loading="treeLoading" @on-select-change="selectTree"></Tree>
+          <div class="partCheck-left-tit">系统分类</div>
+          <div class="partCheck-left-tree">
+            <Tree v-loading="treeLoading" :data="treeData" @on-select-change="selectTree"></Tree>
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-current-change="selectTabelData" highlight-row :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData">
+          </Table>
           <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total></Page>
         </div>
       </div>
       <div slot='footer'>
-        <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
-        <!--<Button type='default' @click='proModal = false'>取消</Button>-->
       </div>
     </Modal>
+    <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
   </div>
 </template>
 
 <script>
+    import PartInfo from "_c/partInfo/partInfo";
+    import {mixSelectPartCom} from "./mixSupplier";
 
-  import {mixSelectSupplier} from "./minxSelectSupplier";
-
-  export default {
-    name: "selectSupplier",
-    mixins:[mixSelectSupplier],
-    props:{
-      headerTit:''
-    },
-    data(){
-      return {
-
-      }
-    },
-    methods:{
+    export default {
+        name: "selectPartCom",
+        mixins:[mixSelectPartCom],
+        components: {PartInfo},
+        props:{
+        },
 
     }
-  }
 </script>
 
 <style lang="less" scoped>
@@ -92,4 +88,5 @@
       }
     }
   }
+
 </style>

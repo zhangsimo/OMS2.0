@@ -7,7 +7,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                  <Select v-model="form.status" class="w90 mr10">
+                  <Select v-model="form.value" @on-change="getDataType" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -83,7 +83,7 @@
                         <FormItem label="调出方：" prop="supplyName" class="redIT">
                           <Row >
                             <Col span="22">
-                              <Input :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
+                              <Input readonly :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
                             </Col>
                             <Col span="2">
                               <Button :disabled="Leftcurrentrow.status.value !== 0" @click="showModel" class="ml5" size="small" type="default">
@@ -219,7 +219,7 @@ export default {
       dcData: [],
       showit: true,
       form: {
-        status: '',
+        value: '',
         qucikTime: ''
       },
       tabKey: '0',
@@ -461,6 +461,13 @@ export default {
         },
     selectAllEvent ({ checked }) {
     },
+    getDataType() {
+      console.log(121)
+      const params = {
+        value: this.form.value
+      }
+      this.getList(params)
+    },
     selectChangeEvent ({ checked, row }) {
         console.log(checked ? '勾选事件' : '取消事件')
     },
@@ -577,12 +584,12 @@ export default {
     },
     // 新增按钮
     addProoo() {
+      this.$refs.addInCom.init()
       chengping({},10, 1).then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
                 if (res.code == 0) {
                   this.tableData1 = res.data.content
                   console.log(this.tableData1)
-                  this.$refs.addInCom.init()
                   this.$Message.success('获取成品列表成功');
                 }
               }).catch(e => {
@@ -644,10 +651,12 @@ export default {
         this.rightTableHeight = wrapH - planFormH - planBtnH - 38
       })
     },
-    //快速查询日期
     getDataQuick(v) {
-      this.form.qucikTime = v
-      console.log(v)
+      const params = {
+        createTimeStart: v[0],
+        createTimeEnd: v[1]
+      }
+      this.getList(params)
     },
     //更多按钮
     more() {
@@ -795,13 +804,6 @@ export default {
       this.$refs.addInCom.init1()
     },
     getList(params) {
-      if (params.qucikTime) {
-        params.createTime = params.qucikTime[0],
-        params.endTime = params.qucikTime[1]
-        delete params.qucikTime
-      } else {
-        delete params.qucikTime
-      }
       console.log(params)
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {

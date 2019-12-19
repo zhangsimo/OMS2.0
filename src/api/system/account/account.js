@@ -59,7 +59,7 @@ export function findPageByDynamicQuery(data) {
 // /tenantInfo/generateOrder
 export function tenantInfogenerateOrder(data) {
   return axios.request({
-    url: `${api.wmsApi}/tenantInfo/generateOrder`,
+    url: `${api.wmsApi}/tenantInfo/tenantProductBuy`,
     method: 'post',
     data
   })
@@ -70,6 +70,17 @@ export function tenantInfogenerateOrder(data) {
 export function queryOrder(data) {
   return axios.request({
     url: `${api.wmsApi}/wxPay/queryOrder`,
+    method: 'post',
+    data:data.data,
+    params:data.params
+  })
+}
+
+
+// /wxPay/generationRecord
+export function generationRecord(data) {
+  return axios.request({
+    url: `${api.wmsApi}/wxPay/generationRecord`,
     method: 'post',
     data:data.data,
     params:data.params

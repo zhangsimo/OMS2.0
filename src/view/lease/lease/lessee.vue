@@ -91,13 +91,13 @@
         <div>
           <div class="xue">
             <Form ref="formValidate2" :model="formValidate2" :rules="ruleValidate2" class="flex">
-              <label class="difficult">省份：</label>
+              <label class="difficult"><span class="zs_red">*</span>省份：</label>
             <FormItem prop="province" style="margin-right: 15px">
               <Select v-model="formValidate2.province" style="width: 150px;" class="mr5">
                 <Option v-for="item in provinceArr" v-if="item.parentId==0" :key="item.id" :value="item.id" >{{ item.name}}</Option>
               </Select>
             </FormItem>
-              <label class="difficult">城市：</label>
+              <label class="difficult"><span class="zs_red">*</span>城市：</label>
             <FormItem prop="city" width="150px">
               <Select v-model="formValidate2.city" style="width: 150px">
                 <Option v-for="item in provinceArr" v-if="item.parentId==formValidate2.province" :key="item.id" :value="item.id" >{{ item.name}}</Option>
@@ -109,24 +109,33 @@
         <div>
           <div><label>开通时间：</label>
             <!--<Date-picker v-model="startDate" type="datetime" style="width: 150px"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" :options="options3" v-model="startDate" ></Date-picker>
+            <!--<Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" :options="options3" v-model="startDate" ></Date-picker>-->
+            <DatePicker type="date" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="startDate" :options="options3"></DatePicker>
+
           </div>
           <div><label>结束时间：</label>
             <!--<Date-picker type="datetime" v-model="endDate" style="width: 150px"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="endDate" :options="options3"></Date-picker>
+            <!--<Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="endDate" :options="options3"></Date-picker>-->
+            <DatePicker type="date" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="endDate" :options="options3"></DatePicker>
           </div>
         </div>
         <div>
-          <div><label>首次付费金额：</label><Input v-model="FirstPay" style="width: 150px"></Input></div>
+          <div>
+            <label>首次付费金额：</label>
+            <!--<Input v-model="FirstPay" style="width: 150px"></Input>-->
+            <InputNumber v-model="FirstPay" style="width: 150px"></InputNumber>
+          </div>
           <div><label>是否付费：</label><Checkbox v-model="payorno" style="width: 20px!important;"></Checkbox></div>
         </div>
         <div>
           <div><label>下次付费时间：</label>
-            <!--<Date-picker type="datetime" v-model="nextPayTime" style="width: 150px"></Date-picker>-->
-            <!--<Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime"></Date-picker>-->
-            <Date-picker type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime" :options="options4"></Date-picker>
+            <DatePicker type="date" format="yyyy-MM-dd HH:mm:ss" style="width: 150px" v-model="nextPayTime" :options="options4"></DatePicker>
           </div>
-          <div><label>下次付费金额：</label><Input v-model="nextPayMoney" style="width: 150px"></Input></div>
+          <div>
+            <label>下次付费金额：</label>
+            <!--<Input v-model="nextPayMoney" style="width: 150px"></Input>-->
+            <InputNumber v-model="nextPayMoney" style="width: 150px"></InputNumber>
+          </div>
         </div>
       </div>
       <div class="hint">
@@ -176,6 +185,7 @@
 <script>
   import {TenanInformation,area,aaa,FindByItemCode,Product,Order,Confirm,Money} from '../../../api/lease/registerApi'
   import {getRelativeDate} from '../../../libs/tools'
+  import * as tools from "../../../utils/tools";
 
   export default {
         name: "lessee",
@@ -413,7 +423,7 @@
               {
                 title: '审核时间',
                 align:'center',
-                key: 'updateTime',
+                key: 'auditDate',
                 minWidth: 200
               },
               {
@@ -712,8 +722,8 @@
           if(this.tenantId === "员工"){
             params.managerIdentity = 1
           }
-          params.startDate =  getRelativeDate(new Date(this.startDate).getTime())
-          params.endDate =   getRelativeDate(new Date(this.endDate).getTime())
+          params.startDate =  tools.transTime(this.startDate) || ''
+          params.endDate =  tools.transTime(this.endDate) || ''
           params.provinceId = this.formValidate2.province
           params.cityId = this.formValidate2.city
           params.manager = this.salesManman
@@ -734,6 +744,22 @@
               if(res.code === 0){
                 this.getList()
                 this.changeAlert = false
+                this.tenantName = ''
+                this.address = ''
+                this.mobile = ''
+                this.tenantId = ''
+                this.startDate = ''
+                this.endDate = ''
+                this.formValidate2.province = ''
+                this.formValidate2.city = ''
+                this.salesManman = ''
+                this.address = ''
+                this.salesman2 = ''
+                this.Recommended_member = ''
+                this.FirstPay = ''
+                this.payorno = false
+                this.nextPayMoney= ''
+                this.nextPayTime = ''
               }
           })
 
@@ -895,10 +921,10 @@
         },
         //点击表格单选
         selection(a){
-          // console.log(a)
+          console.log(a)
           this.choose = a
           this.Message = a
-          console.log(this.Message)
+          // console.log(this.Message)
         },
         //修改弹窗
         changeNav(){
@@ -907,8 +933,13 @@
             this.tenantName = this.Message.tenantName
             this.address = this.Message.address
             this.mobile = this.Message.mobile
-            this.tenantId = this.Message.managerIdentity
-            this.startDate = new Data()// this.Message.startDate
+            if(this.Message.managerIdentity == 0){
+              this.tenantId = '老板'
+            }else {
+              this.tenantId = '员工'
+            }
+            // this.tenantId = this.Message.managerIdentity
+            this.startDate = this.Message.startDate
             this.endDate = this.Message.endDate
             this.formValidate2.province = this.Message.provinceId
             this.formValidate2.city = this.Message.cityId

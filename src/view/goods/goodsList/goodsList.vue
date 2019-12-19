@@ -28,7 +28,7 @@
             <Button
               type="default"
               :disabled="selectPlanOrderItem.billStatusId != 0"
-              @click="submit('formPlan', 1)"
+              @click="submit(1)"
               class="mr10"
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
@@ -37,7 +37,7 @@
             <Button
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 0"
-              @click="submit('formPlan', 2)"
+              @click="submit(2)"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>
@@ -97,13 +97,13 @@
                 :data="tbdata"
               ></Table>
               <Page
-                simple
                 class-name="fl pt10"
                 size="small"
                 :current="page.num"
                 :total="page.total"
                 :page-size="page.size"
                 @on-change="changePage"
+                :page-size-opts="page.opts"
                 @on-page-size-change="changeSize"
                 show-sizer
                 show-total
@@ -159,7 +159,6 @@
                   <FormItem label="计划员：" prop="planner">
                     <Input
                       class="w160"
-                      readonly
                       v-model="formPlan.planner"
                     ></Input>
                   </FormItem>
@@ -169,6 +168,7 @@
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
                       v-model="formPlan.remark"
+                      maxlength="100"
                     ></Input>
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
@@ -181,6 +181,24 @@
                         v-for="item in invoiceMap"
                         :value="item.value"
                         :key="item.value"
+                        >{{ item.label }}</Option
+                      >
+                    </Select>
+                  </FormItem>
+                  <FormItem
+                    class="form-Item"
+                    label="结算方式："
+                    prop="settleTypeId"
+                  >
+                    <Select
+                      class="w160"
+                      v-model="formPlan.settleTypeId"
+                      :disabled="selectPlanOrderItem.billStatusId != 0"
+                    >
+                      <Option
+                        v-for="(item, index) in settleMethods"
+                        :key="index"
+                        :value="item.value"
                         >{{ item.label }}</Option
                       >
                     </Select>
@@ -208,20 +226,25 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="其他费用：">
-                    <Input
+                    <InputNumber
                       class="w160"
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
                       v-model="formPlan.otherPrice"
-                    ></Input>
+                      @on-change="changeTotals"
+                      :min="0"
+                      :precision="2"
+                    />
                   </FormItem>
                   <FormItem label="合计总金额：">
-                    <Input
+                    <InputNumber
                       class="w160"
                       :disabled="isinput"
-                      :readonly="selectPlanOrderItem.billStatusId != 0"
+                      readonly
                       v-model="formPlan.totalPrice"
-                    ></Input>
+                      :min="0"
+                      :precision="2"
+                    />
                   </FormItem>
                 </Form>
               </div>
@@ -309,6 +332,7 @@
                 border
                 resizable
                 show-footer
+                @select-all="selectAll"
                 @select-change="selectVxeData"
                 size="mini"
                 :height="rightTableHeight"
@@ -407,7 +431,8 @@
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
-                ></vxe-table-column>
+                >
+                </vxe-table-column>
                 <vxe-table-column
                   field="noTaxPrice"
                   title="不含税单价"
@@ -486,7 +511,7 @@
       @selectSupplierName="getSupplierName"
     ></select-supplier>
     <!-- 更多 -->
-    <more-search @getmoreData="getmoreData" ref="moreSearch"></more-search>
+    <more-search type="采购计划" @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
@@ -608,8 +633,9 @@ export default {
       proType: [],
       page: {
         num: 1,
-        size: 10,
-        total: 0
+        size: 20,
+        total: 0,
+        opts: [20, 50, 100, 200]
       },
       loading: false,
       columns: [

@@ -31,9 +31,9 @@
             <!--<div class="audit_header"><h1>租户审核</h1><Icon type="close-round" @click="cancel" class="cl_white"></Icon></div>-->
             <div class="audit_nav">
               <Tabs type="card" @on-click="showRadio" class="navgation">
-                <Tab-pane v-for="(item,index) in arrAudit"  :label="item.dictName" >
+                <Tab-pane v-for="(item,index) in arrAudit"  :label="item.dictName" :key="index">
                   <Radio-group v-model="radioSelect" vertical>
-                    <Radio v-for="(v,i) in item.itemVOS" :label="v.itemCode" >{{v.itemName}}</Radio>
+                    <Radio v-for="(v,i) in item.itemVOS" :label="v.itemCode" :key="i">{{v.itemName}}</Radio>
                   </Radio-group>
                 </Tab-pane>
               </Tabs>
@@ -178,13 +178,13 @@
               {
                 title: '审核人',
                 align:'left',
-                key: 'name',
+                key: 'auditMan',
                 minWidth: 120
               },
               {
                 title: '审核时间',
                 align:'left',
-                key: 'updateTime',
+                key: 'auditDate',
                 minWidth: 160
               }
             ],
@@ -265,16 +265,17 @@
         },
         //审核通过
         Pass(){
-          this.$Message.success('审核通过成功')
-          this.tenant_audit = false
-          console.log(this.radioSelect)
           let data = {
             type:this.radioSelect,
             status: 1,
             ids:this.at_present
           }
           trialRegister(data).then((res) => {
-            this.getList()
+            if(res.code === 0){
+              this.tenant_audit = false
+              this.$Message.success('审核通过成功')
+              this.getList()
+            }
           })
         },
         //取消

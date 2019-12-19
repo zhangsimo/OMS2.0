@@ -42,7 +42,9 @@
             <label>基础模块</label>
             <span>
              <ul class="List">
-                 <li class="List_item" v-for="(item,index) in basicModule" :key="index"><Button shape="circle" type="warning" class="colorWhite">{{ item.resName }}</Button></li>
+                 <li class="List_item" v-for="(item,index) in basicModule" :key="index">
+                   <Button shape="circle" type="warning" class="colorWhite">{{ item.resName }}</Button>
+                 </li>
              </ul>
             </span>
           </div>
@@ -51,12 +53,10 @@
             <span>
               <ul class="List">
                 <li class="List_item" v-for="(item,index) in UpgradeModule" :key="index">
-                  <Poptip trigger="hover"  :content="'有效期至:'+ item.expiryDate" v-if="item.expiryDate">
+                  <Poptip trigger="hover"  :content="'有效期至:'+ item.expiryDate" v-if="item.flag == 1">
                     <Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button>
                   </Poptip>
                     <Button v-else shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button>
-
-
                 </li>
                 <!--<li class="List_item" v-for="(item,index) in UpgradeModule" :key="index"><Poptip trigger="hover" v-else :content="无有效期"><Button shape="circle" :type="[item.flag === 1? 'warning':'Default']" class="colorWhite" @click="ProductsBuy(item)">{{ item.name }}</Button></Poptip></li>-->
              </ul>
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-  import {tenantInfo} from '../../../../api/system/account/account'
+  import { tenantInfo } from '../../../../api/system/account/account'
     export default {
         name: "accountInformation",
       data(){

@@ -102,6 +102,7 @@
   import SurveyList from "./SurveyList";
   import {queryCreditList,guestCreditHistory,saveOrUpdate,adjustment,save,guestAdjust} from '../../../../api/system/CustomerManagement/CustomerManagement'
   import { getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
+  import * as tools from "../../../../utils/tools";
   export default {
         name: "customerCredit",
         components:{
@@ -399,10 +400,12 @@
             },
           //当前行
           selection(row){
+            this.rowMessage = row
+            console.log(this.rowMessage)
             this.state = row.isGuestResearch
             this.ID = row.guestId
-            this.Limitstate = JSON.parse(row.auditSign).value
-            this.rowMessage = row
+            // console.log(this.ID)
+            this.Limitstate = JSON.parse(row.researchStatus).value
              this.creaditList = this.rowMessage
             this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
             this.credit()
@@ -431,6 +434,7 @@
             },
             //申请信用调查
             opensurveyShow(){
+              this.$refs.SurveyList.handleReset()
                 this.surveyShow = true
             },
             //额度调用
@@ -494,24 +498,25 @@
           },
           //确定按钮
           confirm(){
-            console.log(12)
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
                   let data = this.creaditList
+                  data.registerDate = tools.transTime(this.creaditList.registerDate)
+                  data.operationEnd = tools.transTime(this.creaditList.operationEnd)
+                  data.operationStart = tools.transTime(this.creaditList.operationStart)
+                  data.tempStart = tools.transTime(this.creaditList.tempStart)
                   data.guestId = this.ID
-                  console.log(data)
+                  // console.log(data)
                   saveOrUpdate(data).then(res => {
                       if(res.code === 0){
                           this.getListTop()
                           this.surveyShow = false
+                          this.$Message.warning('成功！')
                       }
                   })
                 }else {
-                  this.modal.loading = false
-                  setTimeout(() => {
-                    this.modal.loading = true
-                  }, 0)
                   this.$message.warning('* 为必填！')
+                  console.log(this.creaditList)
                 }
               })
           },
@@ -577,8 +582,9 @@
           //申请信用额度弹框
           alertBox(){
             let dataa = {}
-            dataa.guestId = this.creaditList.guestId
-            dataa.orgId = this.creaditList.orgid
+            dataa.guestId = this.rowMessage.guestId
+            dataa.orgId = this.rowMessage.orgid
+            // console.log(dataa)
             guestAdjust(dataa).then(res => {
                 if(res.code === 0){
                     this.applicationArr = res.data
@@ -589,32 +595,34 @@
           //确定申请
           Determined(){
             let data = {}
-            data.guestId = this.creaditList.guestId
-            data.orgId = this.creaditList.orgid
-            data.fixationQuotaTotal = +this.creaditList.applyQuota+this.creaditList.creditLimit
-            data.tempQuotaTotal = +this.creaditList.tempQuota + this.creaditList.tempCreditLimit
-            data.applyQuota = this.creaditList.applyQuota
-            data.tempQuota = this.creaditList.tempQuota
-            data.tempStart = this.creaditList.tempStart
-            data.tempEnd = this.creaditList.tempEnd
-            data.payableAmt = this.payable.payableAmt||0
-            data.tgrade = this.creaditList.tgrade
-            data.thirtyAmt = this.payable.thirtyAmt||0
-            data.sixtyAmt = this.payable.sixtyAmt||0
-            data.moreSixtyAmt = this.payable.moreSixtyAmt||0
+            data.guestId = this.rowMessage.guestId
+            data.orgId = this.rowMessage.orgid
+            data.fixationQuotaTotal = +this.creaditList.applyQuota+this.creaditList.creditLimit || 0 + (+this.creaditList.applyQuota)
+            data.tempQuotaTotal = +this.creaditList.tempQuota + this.creaditList.tempCreditLimit || 0 + (+this.creaditList.tempQuota)
+            data.applyQuota = +this.creaditList.applyQuota || 0
+            data.tempQuota = +this.creaditList.tempQuota || 0
+            data.tempStart = tools.transTime(this.creaditList.tempStart)
+            data.tempEnd = tools.transTime(this.creaditList.tempEnd)
+            data.payableAmt = +this.payable.payableAmt || 0
+            data.tgrade = this.creaditList.tgrade || ''
+            data.thirtyAmt = +this.payable.thirtyAmt || 0
+            data.sixtyAmt = +this.payable.sixtyAmt || 0
+            data.moreSixtyAmt = this.payable.moreSixtyAmt || 0
             data.afterAdjustQuota = this.creaditList.totalSum
-            data.quotaReason = this.creaditList.quotaReason
-            data.receivableAmt = this.payable.receivableAmt||0
+            data.quotaReason = this.creaditList.quotaReason || ''
+            data.receivableAmt = this.payable.receivableAmt || 0
             data.totalQuota = (+this.creaditList.applyQuota+this.creaditList.creditLimit) + (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit)
-            data.addTotalQuota = this.creaditList.tototo
+                             || +data.creaditList.applyQuota + (+data.creaditList.tempQuota)
+            data.addTotalQuota = this.creaditList.tototo || 0
             data.adjustType = 0
-            save(data).then(res => {
-              if(res.code === 0){
-                this.CreditLineApplicationShow = false
-                this.$Message.warning('保存成功')
-                this.getListTop()
-              }
-            })
+            console.log(data)
+            // save(data).then(res => {
+            //   if(res.code === 0){
+            //     this.CreditLineApplicationShow = false
+            //     this.$Message.warning('保存成功')
+            //     this.getListTop()
+            //   }
+            // })
           },
           //确定取消
           cancel2(){

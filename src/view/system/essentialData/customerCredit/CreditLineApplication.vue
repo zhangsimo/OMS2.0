@@ -30,28 +30,29 @@
             <Input v-model='data.tempQuota' style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
-            <DatePicker :value="data.tempStart" format="yyyy/MM/dd"  :options="dateOptions" style="width: 150px"></DatePicker>
+            <DatePicker v-model="data.tempStart" type="date" format="yyyy-MM-dd" :options="startTimeOptions" style="width: 150px"></DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='调整后固定额度:' >
-            <Input :value='+data.applyQuota + data.creditLimit || 0' style="width: 150px" disabled ></Input>
+            <Input :value='+data.applyQuota + data.creditLimit || 0 + (+data.applyQuota) || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整后临时额度:' >
-            <Input  :value='+data.tempQuota + data.tempCreditLimit || 0' style="width: 150px" disabled ></Input>
+            <Input  :value='+data.tempQuota + data.tempCreditLimit || 0 + (+data.tempQuota) || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
-            <DatePicker :value="data.tempEnd" format="yyyy/MM/dd"  :options="dateOptions"  style="width: 150px"></DatePicker>
+            <DatePicker v-model="data.tempEnd" type="date" format="yyyy-MM-dd" :options="endTimeOptions" style="width: 150px"></DatePicker>
+
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="8">
         <FormItem label='调整前额度合计:' >
-          <Input  v-model='data.creditLimit + data.tempCreditLimit' style="width: 150px" disabled  ></Input>
+          <Input  v-model='data.creditLimit + data.tempCreditLimit || 0' style="width: 150px" disabled  ></Input>
         </FormItem>
         <FormItem label='当前应付账款:' >
-          <Input  v-model='payable.payableAmt' style="width: 150px" disabled ></Input>
+          <Input  v-model='payable.payableAmt || 0' style="width: 150px" disabled ></Input>
         </FormItem>
           <FormItem label='信用等级:' >
             <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
@@ -65,7 +66,7 @@
             <Input  :value='sum' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前应收账款:' >
-            <Input  v-model='payable.receivableAmt' style="width: 150px" disabled ></Input>
+            <Input  v-model='payable.receivableAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整前剩余额度:' >
             <Input  v-model='sum2' style="width: 150px" disabled ></Input>
@@ -73,10 +74,10 @@
         </Col>
         <Col span="8">
           <FormItem label='调整后累计额度:' >
-            <Input  :value='(+data.applyQuota+data.creditLimit) + (+data.tempQuota + data.tempCreditLimit) || 0' style="width: 150px" disabled  ></Input>
+            <Input  :value='(+data.applyQuota+data.creditLimit) + (+data.tempQuota + data.tempCreditLimit) || +data.applyQuota + (+data.tempQuota) || 0' style="width: 150px" disabled  ></Input>
           </FormItem>
           <FormItem label='当前欠款总额:' >
-            <Input  v-model='payable.sumAmt' style="width: 150px" disabled ></Input>
+            <Input  v-model='payable.sumAmt || 0 ' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='调整后剩余额度:' >
             <Input  v-model='sum3' style="width: 150px" disabled ></Input>
@@ -86,17 +87,17 @@
       <Row>
         <Col span="8">
           <FormItem label='当前应收30天内:' >
-            <Input  v-model='payable.thirtyAmt' style="width: 150px" disabled ></Input>
+            <Input  v-model='payable.thirtyAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='当前应收30-60天:' >
-            <Input  v-model='payable.sixtyAmt' style="width: 150px" disabled ></Input>
+            <Input  v-model='payable.sixtyAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
         <Col span="8">
           <FormItem label='当前应收60天以上:'>
-            <Input  v-model='payable.moreSixtyAmt' style="width: 150px" disabled ></Input>
+            <Input  v-model='payable.moreSixtyAmt || 0' style="width: 150px" disabled ></Input>
           </FormItem>
         </Col>
       </Row>
@@ -138,14 +139,26 @@
             quality: ''
         },
         data(){
+          const disabledDateS = (date) => {
+            return date && date.valueOf() > new Date(this.data.tempEnd)
+          }
+          const disabledDateE = (date) => {
+            return date && date.valueOf() < new Date(this.data.tempStart)
+          }
             return {
               // increase: 0, //申请增加额度
               // temporary:0, //申请临时额度
-                dateOptions: {
-                    disabledDate (date) {
-                        return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
-                    }
-                },
+              //   dateOptions: {
+              //       disabledDate (date) {
+              //           return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
+              //       }
+              //   },
+              startTimeOptions: {
+                disabledDate: disabledDateS
+              },
+              endTimeOptions: {
+                disabledDate: disabledDateE
+              },
                 isLoading:true,
                 value1: new Date(),
                 value2: new Date(),

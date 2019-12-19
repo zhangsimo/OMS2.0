@@ -6,7 +6,7 @@
           <div class="db">
             <span>快速查询：</span>
              <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
+            <Select v-model="form.value" @on-change="getDataType" class="w90 mr10">
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
@@ -167,7 +167,7 @@ export default {
       form: {
         createTimeStart: '',
         createTimeEnd: '',
-        status: ''
+        value: ''
       },
       showit: true,
       split1: 0.2,

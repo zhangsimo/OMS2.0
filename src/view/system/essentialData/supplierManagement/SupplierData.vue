@@ -62,9 +62,9 @@
         ></Page>
       </div>
 <!--      客户资料-->
-      <Modal v-model="clientDataShow" title="供应商资料"  width="700">
+      <Modal v-model="clientDataShow" title="供应商资料"   width="700" height="2100">
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
-        <div slot='footer'>
+        <div class="footerMargin" slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>
           <Button type='default' @click='clientDataShow = false'>取消</Button>
         </div>
@@ -349,16 +349,21 @@
             addNewSupplier(){
                 this.$refs.child.handleSubmit( async () => {
                     let data = this.clientList
+                    console.log(data,'data  =>352')
                     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
                     data.isClient ? data.isClient =1 : data.isClient = 0
                     let res = await  getNewSupplier(data)
+                  if(res.code === 0 ){
                     this.clientDataShow = false
+                    this.getlist()
+                  }
+
                 })
             },
             //修改客户资料
             changeClient(){
                 if (Object.keys(this.pitchSupplierOne).length == 0  ){
-                    this.$Message.error('至少选项一条地址')
+                    this.$Message.error('请先选中一个供应商信息')
                     return false
                 }
                 this.pitchSupplierOne.isDisabled == 1? this.pitchSupplierOne.isDisabled = true : this.pitchSupplierOne.isDisabled = false
@@ -373,10 +378,17 @@
             },
             // 上传成功函数
             onSuccess (response) {
+                this.getlist()
                 if(response.code != 0 ){
-                    this.$Message.success(response.message)
+                    this.$Notice.warning({
+                        title: '导入失败',
+                        desc: response.message,
+                    })
                 }else {
-                    this.$Message.success(response.message)
+                    this.$Notice.success({
+                        title: '导入成功',
+                        desc: response.message,
+                    })
                 }
             },
             //上传之前清空
@@ -415,5 +427,8 @@
   overflow: hidden;
   overflow-x:initial;
   height: calc(~"100% - 97px");
+}
+.footerMargin {
+  // margin-top: 100px;
 }
 </style>

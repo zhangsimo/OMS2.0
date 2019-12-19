@@ -1,322 +1,119 @@
 <template>
-  <div>
-    <section class="oper-box">
-      <div class="oper-top">
-        <label class="oos-label">查询条件：</label>
-        <Select v-model='selectType' class='w100'>
-          <Option v-for='item in selectTypeArr' :value="item.value" :key="item.value">{{item.label}}</Option>
-        </Select>
-        <Input v-model="searchValue" :placeholder="placeh" class="w200"></Input>
-        <button type="button" class="ivu-btn ivu-btn-primary ml15" @click="query">查询</button>
-      </div>
-      <div class="oper-bottom">
-        <Button type='primary' @click='add'>新增</Button>
-      </div>
-    </section>
-
-    <section class="con-box">
-      <Table :loading="loading" border stripe :columns="thdata" :data="tbdata">
-      </Table>
-      <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con"
-            @on-change="selectNum" @on-page-size-change="selectPage"></Page>
-    </section>
-
-    <Modal v-model='modal' :mask-closable="false" :closable="false" :title="title" @on-cancel="modalHide">
-      <RoleEdit ref="roleEdit" :data='role' :res="resData" :oDisplayname="oDisplayname" :oname="oname" :company="companyList" ></RoleEdit>
-      <div slot='footer'>
-        <Button type='text' @click='modalHide'>取消</Button>
-        <Button type='primary' @click='submit'>确定</Button>
-      </div>
-    </Modal>
-
+  <div class="bigbox">
+    <div class="demo-split">
+      <Split v-model="split1">
+        <div slot="left" class="demo-split-pane">
+         <div class="headerBox">
+           <Button class="mr10" @click="openAdd"><span class="center"><Icon custom="iconfont iconxinzengicon icons" />新增</span></Button>
+           <Button type="default" class="mr10 w90" @click="changeStaff"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
+           <Button type="default" class="mr10 w90" @click="delectStaff"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
+         </div>
+          <div class="titleBox">
+            <vxe-table
+              border
+              size="small"
+              align="center"
+              resizable
+              highlight-hover-row
+              highlight-current-row
+              :data="tableData"
+              @current-change ='setOneTable'
+              height="650px"
+            >
+              <vxe-table-column title="序号" type="index" width="50"></vxe-table-column>
+              <vxe-table-column field="displayName" title="角色名称" ></vxe-table-column>
+            </vxe-table>
+            <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total class-name="page-con" size="small"
+                  :page-size-opts="[20,40,60,80,100]"
+                  @on-change="selectNum" @on-page-size-change="selectPage" style="float: right;margin-right: 10px"></Page>
+          </div>
+<!--          新增模态框-->
+          <Add-rolse ref="add" @getNewList = 'addList'></Add-rolse>
+<!--          修改模态框-->
+          <Change-rolse ref="change" :list="oneStaff" @getNewList="changeList"></Change-rolse>
+        </div>
+        <div slot="right" class="demo-split-pane-right" style="padding-top: 18px">
+          <Tabs type="card" value="name1">
+            <TabPane label="功能" name="name1">
+              <div class="funct">
+                    <div class="treeHeader">
+                      <Button class="ml10 w90" @click="save"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+                    </div>
+                    <div style="padding-top: 10px">
+                      <Tree
+                        style="max-height: 600px;overflow-y: auto"
+                        :data="treeList" show-checkbox children-key="childs"  ref="resTree" @on-select-change="selectTree" @on-check-change='checkChange'></Tree>
+                    </div>
+              </div>
+            </TabPane>
+            <TabPane label="员工" name="name2">
+              <div>
+                <div class="treeHeader">
+                  <Button class="ml10 w90" @click="saveStaff"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+                  <div class="fr">
+                    <span class="mr10">机构名称:</span>
+                    <Input class="mr10" v-model="organization" placeholder="请输入机构名称" style="width: 180px" />
+                    <span class="mr10">员工姓名:</span>
+                    <Input class="mr10" v-model="staffName" placeholder="请输入员工姓名" style="width: 180px" />
+                    <Button @click="search" class="mr10" type='warning'><Icon type="ios-search" size="14" /> 查询</Button>
+                  </div>
+                  <vxe-table
+                    border
+                    align="center"
+                    resizable
+                    :data="rightTableData"
+                  >
+                    <vxe-table-column field="loginName" title="登录账号" ></vxe-table-column>
+                    <vxe-table-column field="userName" title="员工姓名" ></vxe-table-column>
+                    <vxe-table-column field="shopName" title="所属机构" ></vxe-table-column>
+                    <vxe-table-column field="role" title="授权" >
+                      <template v-slot="{ row,rowIndex }">
+                        <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
+                      </template>
+                    </vxe-table-column>
+                  </vxe-table>
+                </div>
+              </div>
+            </TabPane>
+          </Tabs>
+        </div>
+      </Split>
+    </div>
   </div>
 </template>
-<script>
-  import RoleEdit from './roleEdit.vue'
-  import {findRootRes} from '_api/admin/resourceApi'
-  import {queryRolesByPage, addOrUpdate, deleteById} from '_api/admin/roleApi'
-  import {allStaffCompany} from '_api/admin/companyApi'
+<script src="./index.ts">
 
-  export default {
-    name: 'role',
-    data() {
-      return {
-        oname: '',
-        oDisplayname: '',
-        loading: false,
-        selectType: "0", // 查询条件
-        selectTypeArr: [
-          {value: "0", label: "角色名称", param: 'displayName'},
-          {value: "1", label: "角色标识", param: 'name'}
-        ],
-        title: '新增角色',
-        modal: false,
-        role: {
-          id: null,
-          name: null,
-          displayName: null,
-          resIds: [],
-          tenantId:''
-        },
-        resData: [],
-        page: {
-          size: 10,
-          num: 1,
-          total: 0
-        },
-        thdata: [
-          {
-            title: "序号",
-            align: "center",
-            render: (h, params) => {
-              return h('span', params.index + this.basePage)
-            },
-            width: 60
-          },
-          {
-            title: "操作",
-            align: "center",
-            key: "",
-            render: (h, params) => {
-              return h('div', [
-                h('Icon', {
-                  props: {
-                    size: 16,
-                    type: 'edit'
-                  },
-                  attrs: {
-                    title: '修改',
-                  },
-                  class: 'iconfont iconbianjixiugaiicon  icons pointer',
-                  on: {
-                    click: () => {
-                      this.edit(params.row)
-                    }
-                  }
-                }),
-                h('Icon', {
-                  props: {
-                    size: 16,
-                    type: 'android-delete'
-                  },
-                  attrs: {
-                    title: '删除',
-                  },
-                  class: 'iconfont iconlajitongicon icons pointer ml15',
-                  on: {
-                    click: () => {
-                      this.del(params.row.id)
-                    }
-                  }
-                })
-              ])
-            },
-            width: 100
-          },
-          {
-            title: "角色名称",
-            align: "center",
-            key: "displayName",
-            minWidth: 160
-          },
-          {
-            title: '角色标识',
-            align: 'center',
-            key: 'name',
-            minWidth: 160
-          },
-          {
-            title: "资源个数",
-            align: "center",
-            key: "",
-            render: (h, params) => {
-              let length = params.row.resourceVOSet.length
-              length = length > 0 ? (length - 1) : length
-              return h('span', {}, length)
-            },
-            minWidth: 160
-          },
-            {
-                title: "租户名称",
-                align: "center",
-                key: "tenantCompanyName",
-                minWidth: 160
-            },
-            {
-                title: "租户ID",
-                align: "center",
-                key: "tenantId",
-                minWidth: 160
-            },
-        ],
-        tbdata: [],
-        companyList:''
-      }
-    },
-    components: {
-      RoleEdit
-    },
-    activated() {
-      this.getRoles()
-    },
-    mounted() {
-      this.getRoles()
-      this.getCompanyList()
-    },
-    methods: {
-       //获取公司
-        getCompanyList(data ={}){
-            allStaffCompany(this.page.num, 10000, data).then(res => {
-                if (res.code == 0) {
-                    this.companyList = res.data.content
-                }
-            })
-        },
-      findRootRes(callback) {
-        let stop = this.$loading()
-        findRootRes().then(res => {
-          stop()
-          callback && callback(res)
-        }).catch(err => {
-          stop()
-        })
-      },
-      query() {
-        this.page.num = 1
-        this.getRoles()
-      },
-      getRoles() {
-        this.loading = true
-        let searchValue = this.searchValue.trim(), displayName = '', name = ''
-        if (searchValue) {
-          if (this.paramType == 'displayName') {
-            displayName = searchValue
-          } else {
-            name = searchValue
-          }
-        }
-        queryRolesByPage(displayName, name, this.page.size, this.page.num - 1).then(res => {
-          this.loading = false
-          if (res.code == 0) {
-            this.page.total = res.data.totalElements
-            this.tbdata = res.data.content
-          }
-        }).catch(err => {
-          this.loading = false
-        })
-      },
-      del(id) {
-        this.$Modal.confirm({
-          title: '提示',
-          content: '确定要删除吗？',
-          onOk: () => {
-            let stop = this.$loading()
-            deleteById({id}).then(res => {
-              stop()
-              if (res.code == 0) {
-                this.getRoles()
-                this.$Message.success(res.message)
-              }
-            }).catch(err => {
-              stop()
-            })
-          }
-        })
-      },
-      modalHide() {
-        this.modal = false
-        this.title = '新增角色'
-        this.role.id = null
-        this.role.name = null
-        this.role.displayName = null
-        this.role.resIds = []
-        this.oDisplayname = ''
-        this.oname = ''
-        this.$refs.roleEdit.resetFields()
-      },
-      submit() {
-        this.$refs.roleEdit.handleSubmit(() => {
-          let stop = this.$loading()
-          addOrUpdate(this.role, this.role.resIds).then(res => {
-            stop()
-            if (res.code == 0) {
-              if (this.role.id) {
-                this.$Message.success('修改成功')
-                this.getRoles()
-              } else {
-                this.$Message.success('新增成功')
-                this.query()
-              }
-              this.modalHide()
-            }
-          }).catch(err => {
-            stop()
-          })
-        })
-      },
-      edit(data) {
-        this.findRootRes((res, group) => {
-          this.oDisplayname = data.displayName
-          this.oname = data.name
-          this.title = '修改角色'
-          this.role.id = data.id
-          this.role.name = data.name
-          this.role.displayName = data.displayName
-          this.role.resIds = data.resourceVOSet.map(item => item.id)
-
-          let tmp = [res.data]
-          this.ch(tmp)
-          this.resData = tmp
-
-          this.modal = true
-        })
-      },
-      add() {
-        this.findRootRes((res, group) => {
-          let tmp = [res.data]
-          this.ch(tmp)
-          this.resData = tmp
-
-          this.modal = true
-        })
-      },
-      ch(arr) {
-        arr.map(item => {
-          item.expand = true
-          if (item.resType == 1 || item.childs.length == 0) {
-            if (this.role.resIds.indexOf(item.id) != -1) {
-              item.checked = true
-            }
-          }
-          if (item.childs.length > 0) {
-            this.ch(item.childs)
-          }
-        })
-      },
-      selectPage(size) {
-        this.page.size = size
-        this.getRoles()
-      },
-      selectNum(num) {
-        this.page.num = num
-        this.getRoles()
-      }
-    },
-    computed: {
-      placeh() {
-        this.searchValue = ''
-        return (
-          "请填写" +
-          this.selectTypeArr.filter(item => item.value === this.selectType)[0]
-            .label
-        );
-      },
-      paramType() {
-        return this.selectTypeArr.filter(item => item.value === this.selectType)[0].param
-      },
-      basePage() {
-        return 1 + (this.page.num - 1) * this.page.size
-      }
-    }
-  }
 </script>
+<style scoped lang="less">
+ .bigbox {
+   height: 100%;
+   width: 100%;
+   background: #fff;
+ }
+ .demo-split{
+   height: 100%;
+   border: 1px solid #dcdee2;
+ }
+.demo-split-pane-right{
+  padding-left: 10px;
+}
+  .headerBox {
+    padding-left: 10px;
+    line-height: 50px;
+    border-bottom: 1px solid #cccccc;
+  }
+ .funct{
+   width: 100%;
+   height: 650px;
+   border-bottom: 1px solid #cccccc;
+ }
+  .treeHeader {
+    line-height: 50px;
+    border-bottom: 1px solid #cccccc;
+  }
+</style>
+<style scoped>
+  .demo-split-pane-right >>>.ivu-tabs-bar{
+    margin-bottom: 0px;
+  }
+</style>

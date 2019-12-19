@@ -7,7 +7,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                  <Select v-model="form.status" class="w90 mr10">
+                  <Select v-model="form.value" @on-change="getDataType" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -83,7 +83,7 @@
                         <FormItem label="调出方：" prop="supplyName" class="redIT">
                           <Row >
                             <Col span="22">
-                              <Input :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
+                              <Input readonly :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
                             </Col>
                             <Col span="2">
                               <Button :disabled="Leftcurrentrow.status.value !== 0" @click="showModel" class="ml5" size="small" type="default">
@@ -209,7 +209,7 @@ export default {
       dcData: [],
       showit: true,
       form: {
-        status: '',
+        value: '',
         qucikTime: ''
       },
       tabKey: '0',
@@ -443,6 +443,14 @@ export default {
        this.getList(this.form)
   },
   methods: {
+
+    getDataType() {
+      console.log(121)
+      const params = {
+        value: this.form.value
+      }
+      this.getList(params)
+    },
     selectAllEvent ({ checked }) {        
     },
     selectChangeEvent ({ checked, row }) {
@@ -665,8 +673,11 @@ export default {
     },
     //快速查询日期
     getDataQuick(v) {
-      this.form.qucikTime = v
-      console.log(v)
+      const params = {
+        startTime: v[0],
+        endTime: v[1]
+      }
+      this.getList(params)
     },
     //更多按钮
     more() {
@@ -785,13 +796,6 @@ export default {
       this.$refs.addInCom.init1()
     },
     getList(params) {
-      if (params.qucikTime) {
-        params.createTime = params.qucikTime[0],
-        params.endTime = params.qucikTime[1]
-        delete params.qucikTime
-      } else {
-        delete params.qucikTime
-      }
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
                   
