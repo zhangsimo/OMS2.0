@@ -593,8 +593,9 @@ export default class InterPurchase extends Vue {
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    this.formPlanmain.guest = row.fullName;
-    this.formPlanmain.guestId = row.id;
+    console.log(row);
+    this.formPlanmain.guest = row.fullName || '';
+    this.formPlanmain.guestId = row.id || '';
   }
 
   // 采购计划单据
