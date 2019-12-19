@@ -65,15 +65,11 @@
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
+          <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ onelist.totalAmt | toChies }}</span>
           </Col>
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
-            <span>总数:</span>
-            <span>{{ onelist.orderQty }}</span>
-          </Col>
-          <Col class="pl10" span="8">
+          <Col class="pl10" span="12">
             <span>合计:</span>
             <span>{{ onelist.totalAmt }}</span>
           </Col>
