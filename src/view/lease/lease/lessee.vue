@@ -918,7 +918,7 @@
             this.address = this.Message.address
             this.mobile = this.Message.mobile
             this.tenantId = this.Message.managerIdentity
-            this.startDate = new Data()// this.Message.startDate
+            this.startDate = this.Message.startDate
             this.endDate = this.Message.endDate
             this.formValidate2.province = this.Message.provinceId
             this.formValidate2.city = this.Message.cityId
