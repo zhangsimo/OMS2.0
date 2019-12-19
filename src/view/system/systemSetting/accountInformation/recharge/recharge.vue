@@ -109,8 +109,8 @@
                         params1.orderNum = this.orderNum
                         // params1.orderNum = '20191217030100000009'
                         queryOrder({data:data1,params:params1}).then(res => {
-                          if(res.code == 0){
-                            if(res.data == 'SUCCESS'){
+                          if(res.code === 0){
+                            if(res.data === 'SUCCESS'){
                               this.$Message.warning('购买成功！')
                               this.modal = false
                               clearInterval(this.timer)
