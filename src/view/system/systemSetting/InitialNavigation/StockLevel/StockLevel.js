@@ -1,6 +1,10 @@
 const data = function() {
   return {
-    rowId: '',
+    count1: "",
+    count2: "",
+    backReturn: "",
+    arrayCode: [],
+    rowId: "",
     split: 0.22,
     // modal显示
     modal: false,
@@ -14,7 +18,7 @@ const data = function() {
           title: "序号",
           align: "left",
           type: "index",
-          minWidth: 80,
+          minWidth: 80
         },
         {
           title: "级别名称",
@@ -62,9 +66,11 @@ const data = function() {
           align: "left",
           // key: "isDisable",
           minWidth: 80,
-          render:(h,params) => {
+          render: (h, params) => {
             let vm = this;
-            return h('Select', {
+            return h(
+              "Select",
+              {
                 props: {
                   value: params.row.isDisable
                 },
@@ -72,28 +78,37 @@ const data = function() {
                   width: "100%"
                 },
                 on: {
-                  'on-change': (event) => {
+                  "on-change": event => {
                     params.row.isDisable = event;
                     vm.level.tbdata[params.index] = params.row;
                   }
-                },
+                }
               },
               [
-                h('Option', {
-                  props: {
-                    value: 0
-                  }
-                }, '启用'),
-                h('Option', {
-                  props: {
-                    value: 1
-                  }
-                }, '禁用')
-              ])
+                h(
+                  "Option",
+                  {
+                    props: {
+                      value: 0
+                    }
+                  },
+                  "启用"
+                ),
+                h(
+                  "Option",
+                  {
+                    props: {
+                      value: 1
+                    }
+                  },
+                  "禁用"
+                )
+              ]
+            );
           }
-      },
+        }
       ],
-      tbdata: [],
+      tbdata: []
     },
     // 右边内容
     customer: {
@@ -163,11 +178,11 @@ const data = function() {
     QueryType: [
       {
         value: 0,
-        label: '编码'
+        label: "编码"
       },
       {
         value: 1,
-        label: '名称'
+        label: "名称"
       }
     ],
     //默认为编码
@@ -177,15 +192,15 @@ const data = function() {
     //从子组件获取的数组
     getArr: [],
     //合并的数组
-    tbdataArr:[],
+    tbdataArr: [],
     //后台所需id
-    levelId:'',
-    num:1
-  }
+    levelId: "",
+    num: 1
+  };
 };
 
 const mounted = function() {
-  this.leftgetList()
+  this.leftgetList();
 };
 
 const methods = {
@@ -194,7 +209,7 @@ const methods = {
   async save() {
     let data = this.level.tbdata.map(el => {
       let item = {};
-      if(el.id) {
+      if (el.id) {
         item.id = el.id;
       }
       item.name = el.name;
@@ -202,12 +217,12 @@ const methods = {
       return item;
     });
     // console.log(data)
-   await stockLevelSave(data).then(res => {
-     if(res.code === 0){
-       this.$Message.warning('保存成功！')
-     }
-   });
-    this.leftgetList()
+    await stockLevelSave(data).then(res => {
+      if (res.code === 0) {
+        this.$Message.warning("保存成功！");
+      }
+    });
+    this.leftgetList();
   },
   // 新增
   add() {
@@ -231,75 +246,74 @@ const methods = {
   },
   // 查询配件
   queryCustomer() {
-    this.customer.page.num = 1
-    this.rightgetList()
+    this.customer.page.num = 1;
+    this.rightgetList();
   },
   // 添加配件
   addCustomer() {
-    if(this.levelId){
+    if (this.levelId) {
       // this.modal = true;
       // this.num += this.num
       // this.$store.commit('setDialog',this.num )
       // console.log(this.$refs.MsgThree)
-      this.$refs.MsgThree.init()
+      this.$refs.MsgThree.init();
       // this.getArr = []
-    }else{
-      this.$Message.warning('请选择备货级别设置')
+    } else {
+      this.$Message.warning("请选择备货级别设置");
     }
-
   },
   // 删除配件
   removeCustomer() {
-    if(this.checkboxArr.length === 0){
-      this.$Message.warning('请选择要删除的对象')
-    }else{
-      let needArr = this.checkboxArr.map((ele,index) => {
-        return  ele.id
-      })
+    if (this.checkboxArr.length === 0) {
+      this.$Message.warning("请选择要删除的对象");
+    } else {
+      let needArr = this.checkboxArr.map((ele, index) => {
+        return ele.id;
+      });
       // console.log(needArr)
       Delete(needArr).then(res => {
-        this.rightgetList()
-        this.$Message.warning('删除成功')
-        this.checkboxArr = []
-      })
+        this.rightgetList();
+        this.$Message.warning("删除成功");
+        this.checkboxArr = [];
+      });
     }
   },
   // 保存配件
   saveCustomer() {
     this.customer.page.num = 1;
-     this.getArr.map(item => {
-      item.levelId = this.levelId
-       delete item.id
-      })
+    this.getArr.map(item => {
+      item.levelId = this.levelId;
+      delete item.id;
+    });
     // let repeatArr = this.unique(this.getArr)
     // console.log(repeatArr)
     stockLevelPartSave(this.getArr).then(res => {
-      this.getArr = []
-      this.rightgetList()
-    })
+      this.getArr = [];
+      this.rightgetList();
+    });
   },
   /**============配件============ */
   // 翻页-配件价格
   changePagePagePart(p) {
     this.customer.page.num = p;
-    this.rightgetList()
+    this.rightgetList();
   },
   // 修改每页显示条数-配件价格
   changeSizePagePart(size) {
     this.customer.page.num = 1;
     this.customer.page.size = size;
-    this.rightgetList()
+    this.rightgetList();
   },
   // 查询配件
   queryPart() {},
   // 保存配件
   savePart() {},
   //左边内容初始化
-  leftgetList(){
-    let params = {}
-    this.level.loading = true
+  leftgetList() {
+    let params = {};
+    this.level.loading = true;
     stockLevel(params).then(res => {
-      this.level.loading = false
+      this.level.loading = false;
       if (res.code === 0) {
         this.level.tbdata = res.data.map(el => {
           el.oid = el.id;
@@ -307,38 +321,64 @@ const methods = {
           return el;
         });
       }
-    })
+    });
   },
-  //右边内容初始化
-  rightgetList(){
-    let params = {}
-    // let data = {}
-      if(this.Type === 0 && this.customer.fullname !== ''){
-        params.partCode = this.customer.fullname
-      }
-      if(this.Type === 1 && this.customer.fullname !== ''){
-        params.fullName = this.customer.fullname
-      }
-      if(this.levelId){
-        params.levelId = this.levelId
-      }
-      params.page = this.customer.page.num - 1
-      params.size = this.customer.page.size
 
-      this.customer.loading = true
-      RightqueryAll(params).then(res => {
-        this.customer.loading = false
-        if (res.code === 0){
-          this.customer.tbdata = res.data.content || []
-          // console.log(this.customer.tbdata)
-          this.customer.page.total = res.data.totalElements
+  //右边内容初始化
+  rightgetList() {
+    this.count1 = "";
+    this.count2 = "";
+    let params = {};
+    // let data = {}
+    if (this.Type === 0 && this.customer.fullname !== "") {
+      params.partCode = this.customer.fullname;
+    }
+    if (this.Type === 1 && this.customer.fullname !== "") {
+      params.fullName = this.customer.fullname;
+    }
+    if (this.levelId) {
+      params.levelId = this.levelId;
+    }
+    params.page = this.customer.page.num - 1;
+    params.size = this.customer.page.size;
+
+    this.customer.loading = true;
+    RightqueryAll(params).then(res => {
+      this.customer.loading = false;
+      if (res.code === 0) {
+        // this.customer.tbdata = res.data.content || [];
+        console.log(this.customer.tbdata, "this.customer.tbdata");
+        console.log(res.data.content, "res.data.content");
+        if (this.customer.tbdata.length == res.data.content.length) {
+          this.count1 = this.customer.tbdata.length;
+          this.count2 = res.data.content.length;
+          this.customer.tbdata = res.data.content;
+        } else {
+          this.count1 = this.customer.tbdata.length;
+          this.count2 = res.data.content.length;
+          this.customer.tbdata = res.data.content;
         }
-      })
+        console.log(this.count1, "this.count1  =>361");
+        console.log(this.count2, "this.count2   =>362");
+        // console.log(res.data, "res.data=>345");
+        // console.log(this.customer.tbdata)
+        this.customer.page.total = res.data.totalElements;
+        // this.backReturn = res.data.content;
+        // console.log(this.backReturn, "res.data=>351");
+      }
+    });
+  },
+  judge() {
+    if (this.count1 === this.count2) {
+      this.$Message.success("配件已存在");
+    } else {
+      this.$Message.success("选择成功");
+    }
   },
   //多选框
-  selection(a){
-    this.checkboxArr = a
-    console.log(this.checkboxArr)
+  selection(a) {
+    this.checkboxArr = a;
+    console.log(this.checkboxArr);
   },
   //子组件的参数
   // getMsg2(a){
@@ -355,39 +395,46 @@ const methods = {
   //   // console.log(this.customer.tbdata)
   // },
   //左边内容单某行
-  selction(a){
-    this.rowId = a.id
-    console.log(a)
-    let arrr = []
-    arrr.push(a)
-   let arrrr =  arrr.map(item => {
+  selction(a) {
+    this.rowId = a.id;
+    console.log(a);
+    let arrr = [];
+    arrr.push(a);
+    let arrrr = arrr.map(item => {
       return {
-        levelId : item.id
-      }
-    })
+        levelId: item.id
+      };
+    });
     // console.log(arrrr)
-    this.levelId = arrrr[0].levelId
-    if(this.levelId){
-      this.rightgetList()
+    this.levelId = arrrr[0].levelId;
+    if (this.levelId) {
+      this.rightgetList();
       // this.$refs.Msg.chooseArr = []
     }
   },
   //去重方法
-  unique(arr) { // 根据唯一标识orderId来对数组进行过滤
-    const res = new Map();  //定义常量 res,值为一个Map对象实例
+  unique(arr) {
+    // 根据唯一标识orderId来对数组进行过滤
+    const res = new Map(); //定义常量 res,值为一个Map对象实例
     //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
-    return arr.filter((arr) => !res.has(arr.partId) && res.set(arr.partId, 1))
+    return arr.filter(arr => !res.has(arr.partId) && res.set(arr.partId, 1));
   },
   //Model的关闭
-  closedTap(){
+  closedTap() {
     // this.$refs.Msg.chooseArr = []
   }
 };
-import {stockLevel,stockLevelSave,RightqueryAll,Delete,stockLevelPartSave} from '../../../../../api/system/systemSetting/Initialization'
-import selectPartCom from './components/selectPartCom'
+import {
+  stockLevel,
+  stockLevelSave,
+  RightqueryAll,
+  Delete,
+  stockLevelPartSave
+} from "../../../../../api/system/systemSetting/Initialization";
+import selectPartCom from "./components/selectPartCom";
 const components = {
   selectPartCom
-}
+};
 
 export default {
   name: "StockLevel",
