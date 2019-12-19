@@ -16,7 +16,7 @@ const data = function() {
       {
         type: "selection",
         width: 60,
-        align: "center",
+        align: "center"
       },
       {
         title: "序号",
@@ -27,65 +27,65 @@ const data = function() {
         title: "资源ID",
         key: "id",
         minWidth: 200,
-        render: editRow(this, 'tbdata', 'id'),
+        render: editRow(this, "tbdata", "id")
       },
       {
         title: "租户ID",
         key: "tenantId",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'tenantId'),
+        render: editRow(this, "tbdata", "tenantId")
       },
       {
         title: "机构ID",
         key: "orgid",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'orgid'),
+        render: editRow(this, "tbdata", "orgid")
       },
       {
         title: "资源字段",
         key: "resId",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'resId'),
+        render: editRow(this, "tbdata", "resId")
       },
       {
         title: "资源类型",
         key: "resType",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'resType'),
+        render: editRow(this, "tbdata", "resType")
       },
       {
         title: "资源名称",
         key: "resName",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'resName'),
+        render: editRow(this, "tbdata", "resName")
       },
       {
         title: "类型",
         key: "type",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'type'),
+        render: editRow(this, "tbdata", "type")
       },
       {
         title: "资源参数",
         key: "resParentId",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'resParentId'),
+        render: editRow(this, "tbdata", "resParentId")
       },
       {
         title: "是否可用",
         key: "isDisabled",
         minWidth: 80,
-        render: editRow(this, 'tbdata', 'isDisabled'),
+        render: editRow(this, "tbdata", "isDisabled")
       },
       {
         title: "范围域",
         key: "scope",
         minWidth: 120,
-        render: editRow(this, 'tbdata', 'scope'),
+        render: editRow(this, "tbdata", "scope")
       }
     ], // 表头
     tbdata: [], // 表身
-    selectData: new Set(), // 选中的数据
+    selectData: new Set() // 选中的数据
   };
 };
 
@@ -95,27 +95,31 @@ const isArray = any => any && Array.isArray(any);
 // 表格行可编辑
 function editRow(self, tbdata, filed, validator) {
   return (h, params) => {
-    let tb = '';
-    if(tbdata.indexOf('.') !== -1) {
-      tb = tbdata.split('.').reduce((prev, next) => prev[next], self['tbdata']);
+    let tb = "";
+    if (tbdata.indexOf(".") !== -1) {
+      tb = tbdata.split(".").reduce((prev, next) => prev[next], self["tbdata"]);
     } else {
       tb = self[tbdata];
     }
-    return h('p', {
-      class: 'edit',
-      props: {
-        value: params.row[filed]
-      },
-      attrs: {
-        contenteditable: true,
-      },
-      on: {
-        "blur": event => {
-          params.row[filed] = event.target.innerText;
-          tb[params.index] = params.row;
+    return h(
+      "p",
+      {
+        class: "edit",
+        props: {
+          value: params.row[filed]
+        },
+        attrs: {
+          contenteditable: true
+        },
+        on: {
+          blur: event => {
+            params.row[filed] = event.target.innerText;
+            tb[params.index] = params.row;
+          }
         }
       },
-    }, params.row[filed]);
+      params.row[filed]
+    );
   };
 }
 
@@ -201,10 +205,10 @@ const methods = {
   },
   async initList() {
     let params = {};
-    if(this.tenantID) {
+    if (this.tenantID) {
       params.tenantId = this.tenantID;
     }
-    if(this.resID) {
+    if (this.resID) {
       params.menuId = this.resID;
     }
     let res = await api.getAll(params);
@@ -214,23 +218,23 @@ const methods = {
   },
   // 保存
   async save() {
-   let data = [];
-   this.selectTrees.forEach(el => {
-     let o = {
-      "scope": "PART",
-      "type": "pc",
-      "resId": el.id,
-      "resName": el.title,
-      "resParentId": el.parentId,
-      "resType": el.resType,
-     }
-     data.push(o);
-   });
-   let res = await api.addresource(data);
-   if(res.code === 0) {
-    this.$Message.success('保存成功');
-    this.qureyTable();
-   }
+    let data = [];
+    this.selectTrees.forEach(el => {
+      let o = {
+        scope: "PART",
+        type: "pc",
+        resId: el.id,
+        resName: el.title,
+        resParentId: el.parentId,
+        resType: el.resType
+      };
+      data.push(o);
+    });
+    let res = await api.addresource(data);
+    if (res.code === 0) {
+      this.$Message.success("保存成功");
+      this.qureyTable();
+    }
   },
   // 展开收起
   treeToggle(bool) {
@@ -250,13 +254,13 @@ const methods = {
   selectAll(selection) {
     selection.forEach(el => {
       this.selectData.add(el.id);
-    })
+    });
   },
   // 单选
   selectRow(selection, row) {
     selection.forEach(el => {
       this.selectData.add(el.id);
-    })
+    });
   },
   // 取消单选
   selectRowCancel(selection, row) {
@@ -270,33 +274,37 @@ const methods = {
   qureyTable() {
     this.initList();
     this.selectData = new Set();
+    console.log(this.selectData);
   },
   // 删除
   delTable() {
     this.selectData.forEach(id => {
       this.tbdata.forEach((el, index, arr) => {
-        if(el.id === id) {
+        if (el.id === id) {
           arr.splice(index, 1);
         }
-      })
-    })
+      });
+    });
   },
   // 保存
   async saveTable() {
-    if(this.selectData.size > 0) {
+    if (this.selectData.size > 0) {
       let ids = Array.from(this.selectData);
       let res1 = await api.deltenant(ids);
     }
     this.tbdata.forEach(el => {
-      let isDisabled = isNaN(parseInt(el.isDisabled)) ? el.isDisabled : parseInt(el.isDisabled); 
+      let isDisabled = isNaN(parseInt(el.isDisabled))
+        ? el.isDisabled
+        : parseInt(el.isDisabled);
       el.isDisabled = isDisabled;
-    })
+    });
     let res2 = await api.updatetenant(this.tbdata);
-    if(res2.code === 0) {
-      this.$Message.success('保存成功');
+    console.log(res2, "res2 => 303");
+    if (res2.code === 0) {
+      this.$Message.success("保存成功");
       this.qureyTable();
     }
-  },
+  }
 };
 
 const mounted = function() {
