@@ -602,14 +602,14 @@
         },
         // 左边部分的当前行
         selection(row){
-          // console.log(row)
-          // console.log(row.id)
-          this.rowOrgId = row.orgid
-          this.mainId = row.id
-          this.guestidId = row.guestId
-          // console.log(this.guestidId,123)
+          if(row.id){
+            // console.log(row)
+            this.rowOrgId = row.orgid
+            this.mainId = row.id
+            this.guestidId = row.guestId
+            // console.log(this.guestidId,123)
             this.datadata = row
-          // console.log(this.datadata)
+            // console.log(this.datadata)
             this.formPlan.guestName = this.datadata.guestName
             this.formPlan.storeId = this.datadata.storeId
             this.formPlan.orderDate = this.datadata.orderDate
@@ -617,13 +617,13 @@
             this.formPlan.createUname = this.datadata.createUname
             this.formPlan.serviceId = this.datadata.serviceId
             // this.guestidId = this
-          this.presentrowMsg = row.status.value
-          console.log(this.presentrowMsg)
-          this.rowId = row.id
-          if(row.id){
+            this.presentrowMsg = row.status.value
+            console.log(this.presentrowMsg)
+            this.rowId = row.id
+
             this.buttonDisable = false
+            this.getRightlist()
           }
-          this.getRightlist()
         },
         //右部分接口
         getRightlist(){

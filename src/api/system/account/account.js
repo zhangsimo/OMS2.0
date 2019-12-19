@@ -59,7 +59,7 @@ export function findPageByDynamicQuery(data) {
 // /tenantInfo/generateOrder
 export function tenantInfogenerateOrder(data) {
   return axios.request({
-    url: `${api.wmsApi}/tenantInfo/generateOrder`,
+    url: `${api.wmsApi}/tenantInfo/tenantProductBuy`,
     method: 'post',
     data
   })

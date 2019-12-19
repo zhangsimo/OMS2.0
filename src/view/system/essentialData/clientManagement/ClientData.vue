@@ -787,6 +787,9 @@ export default {
         this.$Message.error("请先选中需要删除的信息");
         return false;
       }
+      this.invoice= this.invoice.filter(item => item.bankId != this.addInoiceOne.bankId);
+      this.data.guestTaxpayerVOList  = this.invoice;
+      this.addInoiceOne = {};
     }
   }
 };

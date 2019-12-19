@@ -298,6 +298,7 @@ const methods = {
     // console.log(data)
     await partMatchingSave(data);
     this.leftgetList()
+    this.$Message.success('保存成功')
   },
   // 新增
   add() {
@@ -368,6 +369,7 @@ const methods = {
     partMatchingDetailSave({addOrUpdate:this.customer.tbdata,deleteIds:newArr}).then(res => {
       // console.log(res)  
       this.rightgetList()
+      this.$Message.success('保存成功')
     })
   },
   /**============配件============ */
