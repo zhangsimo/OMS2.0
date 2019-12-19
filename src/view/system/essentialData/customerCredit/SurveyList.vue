@@ -29,11 +29,9 @@
           <FormItem label='经营期限:' prop="operationStart">
             <DatePicker
               v-model="data.operationStart"
-              format="yyyy-MM-dd"
               type="date"
               style="width: 180px"
               :options='startTimeOptions'
-              @on-change="onStartTimeChange"
             >
             </DatePicker>
           </FormItem>
@@ -45,10 +43,9 @@
           <FormItem label='至' prop="operationEnd">
             <DatePicker
               v-model="data.operationEnd"
-              type="date" format="yyyy-MM-dd"
+              type="date"
               style="width: 180px"
               :options='endTimeOptions'
-              @on-change="onEndTimeChange"
             >
             </DatePicker>
           </FormItem>
@@ -223,6 +220,12 @@
                 return callback(new Error("请输入正确注册号!"));
               }
           }
+          const disabledDateS = (date) => {
+            return date && date.valueOf() > new Date(this.data.operationEnd)
+          }
+          const disabledDateE = (date) => {
+            return date && date.valueOf() < new Date(this.data.operationStart)
+          }
             return {
               formInline: {
                 bizLicenseNo: [{ required: true,validator: Number,trigger: 'blur' }],
@@ -250,8 +253,12 @@
               headers: {
                 Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
               }, //获取token
-              startTimeOptions: {},
-              endTimeOptions: {}
+              startTimeOptions: {
+                disabledDate: disabledDateS
+              },
+              endTimeOptions: {
+                disabledDate: disabledDateE
+              }
             }
         },
     methods: {
@@ -296,7 +303,7 @@
         this.endTimeOptions = {
           // 设置结束时间不能选的范围
           disabledDate(endTime) {
-            return endTime < new Date(startTime)
+            return endTime < startTime
           }
         }
         this.data.operationStart = startTime
@@ -305,7 +312,7 @@
         this.startTimeOptions = {
           // 设置开始时间不能选的范围
           disabledDate(startTime) {
-            return startTime > new Date(endTime)
+            return startTime > endTime
           }
         }
         this.data.operationEnd = endTime

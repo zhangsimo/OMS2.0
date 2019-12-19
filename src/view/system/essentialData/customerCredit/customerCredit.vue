@@ -400,13 +400,12 @@
             },
           //当前行
           selection(row){
-            console.log(row)
+            this.rowMessage = row
+            console.log(this.rowMessage)
             this.state = row.isGuestResearch
             this.ID = row.guestId
             // console.log(this.ID)
             this.Limitstate = JSON.parse(row.researchStatus).value
-            console.log(this.Limitstate)
-            this.rowMessage = row
              this.creaditList = this.rowMessage
             this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
             this.credit()
@@ -502,9 +501,10 @@
              this.$refs['SurveyList'].$refs['formInline'].validate((valid) => {
                 if (valid) {
                   let data = this.creaditList
-                  data.registerDate = tools.transDate(this.creaditList.registerDate)
-                  data.operationEnd = tools.transDate(this.creaditList.operationEnd)
-                  data.operationStart = tools.transDate(this.creaditList.operationStart)
+                  data.registerDate = tools.transTime(this.creaditList.registerDate)
+                  data.operationEnd = tools.transTime(this.creaditList.operationEnd)
+                  data.operationStart = tools.transTime(this.creaditList.operationStart)
+                  data.tempStart = tools.transTime(this.creaditList.tempStart)
                   data.guestId = this.ID
                   // console.log(data)
                   saveOrUpdate(data).then(res => {
@@ -515,11 +515,8 @@
                       }
                   })
                 }else {
-                  this.modal.loading = false
-                  setTimeout(() => {
-                    this.modal.loading = true
-                  }, 0)
                   this.$message.warning('* 为必填！')
+                  console.log(this.creaditList)
                 }
               })
           },
@@ -585,8 +582,9 @@
           //申请信用额度弹框
           alertBox(){
             let dataa = {}
-            dataa.guestId = this.creaditList.guestId
-            dataa.orgId = this.creaditList.orgid
+            dataa.guestId = this.rowMessage.guestId
+            dataa.orgId = this.rowMessage.orgid
+            // console.log(dataa)
             guestAdjust(dataa).then(res => {
                 if(res.code === 0){
                     this.applicationArr = res.data
