@@ -238,6 +238,7 @@ export default class index extends Vue{
     let res = await saveStaffJurisdiction(data)
     if(res.code === 0){
       this.$message.success('修改数据')
+      this.getAllStaff()
     }
   }
   }
