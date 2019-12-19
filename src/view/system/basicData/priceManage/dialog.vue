@@ -210,7 +210,8 @@ export default {
       // 市
       City: {},
       // 区
-      Area: {}
+      Area: {},
+      loadArea: false,
     };
   },
   async mounted() {
@@ -224,7 +225,9 @@ export default {
       this.code = "";
       this.mobile = "";
       this.page = { num: 1, size: 10, total: 0 };
-      this.getArea();
+      if(!this.loadArea) {
+        this.getArea();
+      }
       this.initList();
     },
     // 获取省市区
@@ -285,6 +288,7 @@ export default {
             }
           })
         });
+        this.loadArea = true;
       }
     },
     // 客户表
