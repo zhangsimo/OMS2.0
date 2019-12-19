@@ -55,7 +55,7 @@
       ></Page>
     </div>
     <!--      客户资料-->
-    <Modal v-model="clientDataShow" title="门店资料" width="900">
+    <Modal v-model="clientDataShow" title="门店资料" width="900" @on-visible-change="cancelChange">
       <ClientData
         :data="clientList"
         :provincearr="provinceArr"
@@ -148,6 +148,12 @@ export default {
     }
   },
   methods: {
+    // 门店资料关闭
+    cancelChange(type){
+      if(!type){
+        this.$refs.child.resetFields();
+      }
+    },
     //获取全部表格数据
     async getlist() {
       this.loading = true;
@@ -238,7 +244,6 @@ export default {
         this.$Message.error("至少选项一条地址");
         return false;
       }
-
       this.clientList = this.pitchSupplierOne;
       this.clientDataShow = true;
     }
