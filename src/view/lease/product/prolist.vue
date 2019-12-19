@@ -87,8 +87,8 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="有效期(天)：" prop="isCycle">
-              <Input v-model="formValidate.isCycle"></Input>
+            <FormItem label="有效期(天)：" prop="cycle">
+              <Input v-model="formValidate.cycle"></Input>
             </FormItem>
           </Col>
         </Row>
@@ -168,6 +168,7 @@
         }
       }
       let valDay = (rule, value, callback) => {
+        console.log(value)
         if (!value) {
           callback(new Error('有效期不能为空'));
         } else {
@@ -199,7 +200,7 @@
           name: '',
           type: 0,
           salesPrice: '',
-          isCycle: '',
+          cycle: '',
           remark: '',
           disable: 1,
           address:'',
@@ -212,7 +213,7 @@
           salesPrice: [
             { required: true,validator:price2, trigger: 'blur'}
           ],
-          isCycle: [
+          cycle: [
             { required: true,validator:valDay, trigger: 'blur' }
           ],
           address:[
@@ -277,7 +278,7 @@
           },
           {
             title: '有效期（天）',
-            key: 'isCycle',
+            key: 'cycle',
             minWidth: 90
           },
           {
@@ -432,7 +433,7 @@
             objReq.isDisabled = this.formValidate.disable
             if(objReq.type===0){
               objReq.salesPrice = this.formValidate.salesPrice
-              objReq.isCycle = this.formValidate.isCycle
+              objReq.cycle = this.formValidate.cycle
             }else{
               objReq.address = this.formValidate.address
               objReq.coin = this.formValidate.coin
@@ -486,7 +487,7 @@
           this.formValidate.name = this.selectTable.name
           this.formValidate.type = this.selectTable.type
           this.formValidate.salesPrice = this.selectTable.salesPrice
-          this.formValidate.isCycle = this.selectTable.isCycle
+          this.formValidate.cycle = this.selectTable.cycle
           this.formValidate.remark = this.selectTable.remark
           this.formValidate.address = this.selectTable.address
           this.formValidate.coin = this.selectTable.coin
