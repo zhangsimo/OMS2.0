@@ -604,9 +604,9 @@ export default class Fittings extends Vue {
     let res:any = await api.toggleSale(id);
     let success:string = '';
     if(this.isDisable) {
-      success = '禁售成功';
-    } else {
       success = '可售成功';
+    } else {
+      success = '禁售成功';
     }
     if(res.code == 0) {
       self.$Message.success(success);

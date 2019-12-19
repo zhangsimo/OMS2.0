@@ -119,7 +119,7 @@ export default class SettlementAccount extends Vue {
 
     private async getAccounts() {
         this.loading = true;
-        const res:any = await api.getAccounts(this.userData.userData.groupId);
+        const res:any = await api.getAccounts(this.userData.userData.shopId);
         if(res.code == 0) {
             this.loading = false;
             this.tbdata = res.data;

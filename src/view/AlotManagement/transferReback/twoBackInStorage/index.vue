@@ -6,7 +6,7 @@
           <div class="db">
             <span>快速查询：</span>
              <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
+            <Select v-model="form.value" @on-change="getDataType" class="w90 mr10">
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
@@ -82,10 +82,7 @@
                     </Row>
                   </FormItem>
                   <FormItem label="入库仓库：">
-                    <Select v-model="formPlan.storeId" class="w150">
-                      <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                    </Select>
-                    <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
+                    <Input readonly v-model="formPlan.storeId" placeholder></Input>
                   </FormItem>
                   <FormItem label="调出退回日期：" class="fs12 ml50">
                     <Date-picker
@@ -159,8 +156,6 @@ import More from './compontents/More'
 import QuickDate from '../../../../components/getDate/dateget'
 import '../../../lease/product/lease.less'
 import '../../../goods/goodsList/goodsList.less'
-import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
-
 export default {
   name: 'twoBackInStorage',
   components: {
@@ -169,11 +164,10 @@ export default {
   },
   data() {
     return {
-      List: [],
       form: {
         createTimeStart: '',
         createTimeEnd: '',
-        status: ''
+        value: ''
       },
       showit: true,
       split1: 0.2,
@@ -385,14 +379,7 @@ export default {
       this.getinfo(this.params)
     },
     //
-    // 仓库下拉框
-    warehouse(){
-      queryByOrgid().then(res => {
-        if(res.code === 0){
-          this.List = res.data
-        }
-      })
-    },
+
     //入库按钮
     inPro() {
       this.showIn = true
@@ -477,9 +464,7 @@ export default {
       //获取右侧表格高度
       this.rightTableHeight = wrapH - planFormH - planBtnH - 65
     })
-    this.warehouse()
   }
-
 }
 </script>
 
