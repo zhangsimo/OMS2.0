@@ -67,9 +67,7 @@
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
-        <p class="pl10">
-          兹收到上列货物完整无缺，所有电器配件货物出门概不退货，灯，胶，玻璃等易碎货品必须当面检验清楚，事后概不负责！此单据一经客户或其代理人签名，将作为客户欠款凭证，特此声明！
-        </p>
+        
       </div>
 
       <div>
@@ -177,6 +175,7 @@
                      .then(res => {
                        if(res.code === 0){
                          console.log(res)
+                         this.onelist = res.data
                         this.printShow = true
                         //this.onelist = res.data
                       }

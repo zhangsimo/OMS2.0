@@ -56,7 +56,7 @@
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">盘点列表</div>
-               <vxe-table
+               <!-- <vxe-table
                 border
                 resizable
                 @cell-click="selectTabelData"
@@ -80,16 +80,17 @@
                 <vxe-table-column field="createTime" title="创建日期" width="100"></vxe-table-column>
                 <vxe-table-column field="createUname" title="提交人" width="100" ></vxe-table-column>
                 <vxe-table-column field="createTime"  title="提交日期" width="100"></vxe-table-column>
-              </vxe-table>
-              <!-- <Table
+              </vxe-table> -->
+              <Table
                 :height="leftTableHeight"
                 @on-current-change="selectTabelData"
                 size="small"
                 highlight-row
                 border
                 :stripe="true"
+                :columns="Left.columns"
                 :data="Left.tbdata"
-              ></Table> -->
+                ></Table>
                <Page size="small" :total="Left.page.total" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total class-name="page-con"
                   @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
             </div>
@@ -239,6 +240,7 @@ import '../../../lease/product/lease.less'
 import SelectPartCom from '../../../salesManagement/salesOrder/components/selectPartCom'
 import PrintShow from "./components/PrintShow"
 import More from './components/More'
+import moment from 'moment'
    import Cookies from 'js-cookie'
    import { TOKEN_KEY } from '@/libs/util'
 export default {
@@ -298,63 +300,51 @@ export default {
             },
             {
               title: '状态',
-              key: 'billStatusId',
+              key: 'statuName',
               minWidth: 70
             },
             {
               title: '盘点日期',
-              field: 'auditDate',
+              key: 'auditDate',
               minWidth: 120
             },
             {
               title: '盘点员',
-              field: 'orderMan',
+              key: 'orderMan',
               minWidth: 170
             },
             {
               title: '盘点单号',
-              field: 'serviceId',
+              key: 'serviceId',
               minWidth: 140
             },
             {
               title: '打印次数',
-              field: 'print',
+              key: 'print',
               minWidth: 120
             },
             {
               title: '创建人',
-              field: 'createUname',
+              key: 'createUname',
               minWidth: 200
             },
             {
               title: '创建日期',
-              field: 'createTime',
+              key: 'createTime',
               minWidth: 200
             },
             {
               title: '提交人',
-              field: 'createUname',
+              key: 'createUname',
               minWidth: 200
             },
             {
               title: '提交日期',
-              field: 'createTime',
+              key: 'createTime',
               minWidth: 200
             }
         ],
-        tbdata: [
-          {
-            left1: 1,
-            left2: '草稿',
-            left3: '公司名称',
-            left4: '2019-10-01',
-            left5: '李四',
-            left6: 'GT11121223',
-            left7: '张三',
-            left8: '2019-10-21',
-            left9: '10'
-          }
-        ]
+        tbdata: []
       },
        Right: {
         page: {
@@ -438,8 +428,20 @@ export default {
           .then(res => {
             console.log(res)
             if (res.code === 0) {
-              this.Left.tbdata = res.data.content || []
-              this.Left.page.total = res.data.totalElements
+              // this.Left.tbdata = res.data.content || []
+              // this.Left.page.total = res.data.totalElementscreateUname
+              if (!res.data.content) {
+                    this.Left.tbdata = []
+                    this.Left.page.total = 0
+                  } else {
+                    res.data.content.map((item, index) => {
+                      item['index'] = index + 1
+                      item['statuName'] = item.billStatusId.name
+                    })
+                    this.Left.tbdata = res.data.content || []
+                    this.Left.page.total = res.data.totalElements
+                    console.log( this.Left.tbdata)
+                  }
             }
           })
           .catch(err => {
@@ -488,12 +490,39 @@ export default {
     },
     //新增
     addProoo() {
-      if (!this.isAddRight) {
-        return this.$Message.error('请先保存数据')
+       if (this.Left.tbdata.length === 0) {
+      } else {
+        if (this.Left.tbdata[0]['xinzeng'] === '1') {
+          this.$Message.info('当前列表已有一个新增单等待操作,请先保存当前操作新增单据')
+          return
+        }
       }
-      let TrowLeft = {} //新增左侧
-      this.Left.tbdata.push(TrowLeft)
-      this.isAddRight = false
+        const item =  {
+        index: 1,
+        xinzeng: '1',
+        billStatusId: {
+          enum: "DRAFT",
+          name: "草稿",
+          value: 0
+        },
+        statuName: '草稿',
+        auditDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        orderMan:"",
+        serviceId: "",
+        print:"",
+        createUname:"",
+        createTime:"",
+        commitUname:"",
+        createTime:"",
+        //commitDate:"",
+        //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        //createUname: this.$store.state.user.userData.staffName,
+        detailVOList: []
+      }
+      this.Left.tbdata.unshift(item)
+      this.Left.tbdata.map((item,index) => {
+        item.index = index + 1
+      })
     },
     // 提交
     editPro() {
@@ -587,30 +616,12 @@ export default {
     removeCancel() {
       this.showRemove = false
     },
-    //审核
-    // audit(){
-    //   this.showAudit = true
-    // },
-    // //确认审核
-    // auditOK() {
-    //   removeDataList()
-    //     .then(res => {
-    //       if (res.code === 0) {
-    //         this.showAudit = false
-    //       }
-    //     })
-    //     .catch(err => {
-    //       this.showAudit = false
-    //       this.$Message.info('确认审核失败')
-    //     })
-    // },
     auditCancel() {
       this.showRemove = false
     },
     // 打印
     printTable() {
        this.$refs.printBox.openModal(this.formPlan.id)
-       
     },
     
     //添加配件
@@ -619,8 +630,8 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(data) {
-      console.log(data.row)
-      this.formPlan = data.row
+      console.log(data)
+      this.formPlan = data
       // getRightDatas(data.id)
       // .then(res=>{
       //   console.log(res)
@@ -628,8 +639,8 @@ export default {
       //  .catch(err => {
       //    // this.$Message.info('作废草稿失败')
       //   })
-      this.Right.tbdata = data.row.detailVOList
-      this.draftShow = data.row.billStatusId.value
+      this.Right.tbdata = data.detailVOList
+      this.draftShow = data.billStatusId.value
     },
     shanchu() {
       if (this.formPlan.billStatusId.value !== 0) {

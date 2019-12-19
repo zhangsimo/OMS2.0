@@ -3,6 +3,8 @@ import { Vue, Component } from "vue-property-decorator";
 import {queryRolesByPage , deleteById , addOrUpdate} from '_api/admin/roleApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
+// @ts-ignore
+import {allStaff} from '_api/admin/userApi.js'
 import AddRolse from "./AddRolse.vue"
 import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
 
