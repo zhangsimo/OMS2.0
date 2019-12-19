@@ -1,0 +1,74 @@
+<template>
+  <Modal title="新增角色" v-model="staffShow" width="500px">
+    <div>
+      <Form :label-width="80" :model="list" ref="formValidate" :rules="ruleValidate">
+        <FormItem label="角色名称:" prop="displayName">
+          <Input v-model="list.displayName" placeholder="请输入角色名称"></Input>
+        </FormItem>
+        <FormItem label="角色描述:">
+          <Input v-model="list.name" type="textarea" :autosize="{minRows: 5,maxRows: 10}" placeholder="角色描述..."></Input>
+        </FormItem>
+      </Form>
+    </div>
+    <div slot='footer'>
+      <Button type='primary' @click="suerQuery">保存</Button>
+      <Button type='default' @click="staffShow=false">取消</Button>
+    </div>
+  </Modal>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from "vue-property-decorator";
+// @ts-ignore
+import { addNewStaffe} from '_api/admin/roleApi'
+
+@Component
+    export default class AddRolse extends Vue{
+//当前员工信息
+private list:any = {}
+//判断模态框状态
+private staffShow:boolean =false
+//校验
+private ruleValidate:Object =  {
+                    displayName: [
+                        {required: true, message: '角色名称必填', trigger: 'blur'}
+                    ]
+                }
+//------------methods----------------
+            //打开模态框
+private openModal(){
+              this.staffShow = true
+              this.list = {}
+              this.handleReset ()
+                }
+            //清除校验
+private handleReset () {
+             let form:any =this.$refs.formValidate
+                form.resetFields()
+            }
+            //确定校验表格
+private suerQuery () {
+    let form:any =this.$refs.formValidate
+        form.validate(async (valid) => {
+                    if (valid) {
+                        let data:any = {}
+                            data = this.list
+                            data.resIds = []
+                          let res = await addNewStaffe(data)
+                            if(res.code === 0 ){
+                                this.$message.success('添加成功')
+                                this.staffShow = false
+                                this.$emit('getNewList' ,res)
+                            }
+                        console.log(res,789)
+                    } else {
+                        this.$Message.error('验证失败');
+                    }
+                })
+            }
+    }
+</script>
+
+<style scoped>
+
+</style>
