@@ -353,7 +353,11 @@
                     data.isDisabled ? data.isDisabled = 1 : data.isDisabled = 0
                     data.isClient ? data.isClient =1 : data.isClient = 0
                     let res = await  getNewSupplier(data)
+                  if(res.code === 0 ){
                     this.clientDataShow = false
+                      this.getlist()
+                  }
+
                 })
             },
             //修改客户资料
