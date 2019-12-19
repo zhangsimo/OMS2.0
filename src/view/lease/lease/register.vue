@@ -265,8 +265,6 @@
         },
         //审核通过
         Pass(){
-          this.tenant_audit = false
-          console.log(this.radioSelect)
           let data = {
             type:this.radioSelect,
             status: 1,
@@ -274,6 +272,7 @@
           }
           trialRegister(data).then((res) => {
             if(res.code === 0){
+              this.tenant_audit = false
               this.$Message.success('审核通过成功')
               this.getList()
             }
