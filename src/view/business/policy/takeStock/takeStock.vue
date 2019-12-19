@@ -35,7 +35,7 @@
             <Button class="mr10">
               <Icon type="md-checkmark" size="14" />导出
             </Button>
-          </div> -->
+          </div>-->
           <div class="db">
             <Button class="mr10" @click="cancellation">
               <Icon type="md-close" size="14" />作废
@@ -65,26 +65,55 @@
                 :columns="Left.columns"
                 :data="Left.tbdata"
               ></Table>
-               <Page size="small" :total="Left.page.total" :page-size="Left.page.size" :current="Left.page.num" show-sizer show-total class-name="page-con"
-                    @on-change="changePage" @on-page-size-change="changeSize" class="mr10"></Page>
+              <Page
+                size="small"
+                :total="Left.page.total"
+                :page-size="Left.page.size"
+                :current="Left.page.num"
+                show-sizer
+                show-total
+                class-name="page-con"
+                @on-change="changePage"
+                @on-page-size-change="changeSize"
+                class="mr10"
+              ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">盘点信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form inline :show-message="false" ref="formPlan" :label-width="100">
-                  <FormItem label="盘点仓库：" >
-                      <Select v-model="formPlan.storeId" style="width:100px" :disabled="draftShow != 0">
-                        <Option v-for="item in warehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                      </Select>
-                    </FormItem>
+                  <FormItem label="盘点仓库：">
+                    <Select
+                      v-model="formPlan.storeId"
+                      style="width:100px"
+                      :disabled="draftShow != 0"
+                    >
+                      <Option
+                        v-for="item in warehouseList"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.name }}</Option>
+                    </Select>
+                  </FormItem>
                   <FormItem label="盘点员：" prop="supplyOut">
-                    <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0"></Input>
+                    <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" />
                   </FormItem>
                   <FormItem label="盘点日期" prop="remark">
-                    <DatePicker :disabled="draftShow != 0" @on-change="auditDate" type="date" class="w160" :value="formPlan.auditDate" ></DatePicker>
+                    <DatePicker
+                      :disabled="draftShow != 0"
+                      @on-change="auditDate"
+                      type="date"
+                      class="w160"
+                      :value="formPlan.auditDate"
+                    ></DatePicker>
                   </FormItem>
                   <FormItem label="盘点单号" prop="planOrderNum">
-                    <Input v-model="formPlan.serviceId" class="w160" value="YCSDFD839239320" :disabled="draftShow != 0"></Input>
+                    <Input
+                      v-model="formPlan.serviceId"
+                      class="w160"
+                      value="YCSDFD839239320"
+                      :disabled="draftShow != 0"
+                    />
                   </FormItem>
                 </Form>
               </div>
@@ -126,24 +155,34 @@
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column field="enterUnitId" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="sysQty" title="系统数量" width="100" ></vxe-table-column>
-                <vxe-table-column field="trueQty"  title="实盘数量" width="100" :edit-render="{name: 'input'}"></vxe-table-column>
-                <vxe-table-column field="truePrice" title="成本单价" width="100" :edit-render="{name: 'input'}"></vxe-table-column>
+                <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
+                <vxe-table-column
+                  field="trueQty"
+                  title="实盘数量"
+                  width="100"
+                  :edit-render="{name: 'input'}"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="truePrice"
+                  title="成本单价"
+                  width="100"
+                  :edit-render="{name: 'input'}"
+                ></vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
-                      <span v-show="row.sysQty- row.trueQty > 0">{{ "盈利" }}</span>
-                      <span v-show="row.sysQty- row.trueQty < 0">{{ "亏损" }}</span>
-                      <span v-show="row.sysQty- row.trueQty == 0">{{ "无盈亏" }}</span>
+                    <span v-show="row.sysQty- row.trueQty > 0">{{ "盈利" }}</span>
+                    <span v-show="row.sysQty- row.trueQty < 0">{{ "亏损" }}</span>
+                    <span v-show="row.sysQty- row.trueQty == 0">{{ "无盈亏" }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
-                      <span>{{ Math.abs(row.sysQty  - row.trueQty) }}</span>
+                    <span>{{ Math.abs(row.sysQty - row.trueQty) }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="exhibitAmt" title="盘亏金额" width="120">
-                    <template v-slot="{ row, seq }">
-                      <span>{{ Math.abs(row.exhibitQty * row.truePrice) }}</span>
+                  <template v-slot="{ row, seq }">
+                    <span>{{ Math.abs(row.exhibitQty * row.truePrice) }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="sysAmt" title="系统成本" width="100"></vxe-table-column>
@@ -165,7 +204,7 @@
     <!-- 审核提示 -->
     <!-- <Modal v-model="showAudit" title="提示" @on-ok="auditOK" @on-cancel="auditCancel">
       <p>是否确定审核</p>
-    </Modal> -->
+    </Modal>-->
     <!-- 打印 -->
     <Print-show ref="printBox"></Print-show>
   </div>
@@ -174,10 +213,10 @@
 <script>
 import {
   getLeftList,
-  getRightDatas,//获取右侧所有数据
-  getstate,//仓库数据
-  getSubmitList,//提交
-  getCancellation,//作废
+  getRightDatas, //获取右侧所有数据
+  getstate, //仓库数据
+  getSubmitList, //提交
+  getCancellation, //作废
   getDataQuickList,
   getDataTypeList,
   saveDataList,
@@ -186,16 +225,16 @@ import {
   removeDataList,
   stampDataList,
   stampApplyDataList
-} from '../../../../api/business/takeStock.js'
-import '../../../lease/product/lease.less'
-import {conversionList} from '@/components/changeWbList/changewblist'
-import QuickDate from '../../../../components/getDate/dateget'
-import '../../../lease/product/lease.less'
-import SelectPartCom from '../../../salesManagement/salesOrder/components/selectPartCom'
-import PrintShow from "./components/PrintShow"
-import More from './components/More'
+} from "../../../../api/business/takeStock.js";
+import "../../../lease/product/lease.less";
+import { conversionList } from "@/components/changeWbList/changewblist";
+import QuickDate from "../../../../components/getDate/dateget";
+import "../../../lease/product/lease.less";
+import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
+import PrintShow from "./components/PrintShow";
+import More from "./components/More";
 export default {
-  name: 'takeStock',
+  name: "takeStock",
   components: {
     QuickDate,
     PrintShow,
@@ -210,25 +249,25 @@ export default {
       purchaseType: 99, //查询选项
       purchaseTypeArr: [
         {
-          label: '所有',
+          label: "所有",
           value: 99
         },
         {
-          label: '草稿',
+          label: "草稿",
           value: 0
         },
 
         {
-          label: '已提交',
+          label: "已提交",
           value: 1
         },
 
         {
-          label: '已完成',
+          label: "已完成",
           value: 4
         },
         {
-          label: '已作废',
+          label: "已作废",
           value: 5
         }
       ],
@@ -244,72 +283,60 @@ export default {
         },
         columns: [
           //key要修改
-            {
-              title: '序号',
-              minWidth: 50,
-              type: "index"
-            },
-            {
-              title: '状态',
-              key: 'billStatusId',
-              minWidth: 70
-            },
-            {
-              title: '盘点日期',
-              key: 'auditDate',
-              minWidth: 120
-            },
-            {
-              title: '盘点员',
-              key: 'orderMan',
-              minWidth: 170
-            },
-            {
-              title: '盘点单号',
-              key: 'serviceId',
-              minWidth: 140
-            },
-            {
-              title: '打印次数',
-              key: 'print',
-              minWidth: 120
-            },
-            {
-              title: '创建人',
-              key: 'createUname',
-              minWidth: 200
-            },
-            {
-              title: '创建日期',
-              key: 'createTime',
-              minWidth: 200
-            },
-            {
-              title: '提交人',
-              key: 'createUname',
-              minWidth: 200
-            },
-            {
-              title: '提交日期',
-              key: 'createTime',
-              minWidth: 200
-            }
-        ],
-        tbdata: [
           {
-            left1: 1,
-            left2: '草稿',
-            left3: '公司名称',
-            left4: '2019-10-01',
-            left5: '李四',
-            left6: 'GT11121223',
-            left7: '张三',
-            left8: '2019-10-21',
-            left9: '10'
+            title: "序号",
+            minWidth: 50,
+            type: "index"
+          },
+          {
+            title: "状态",
+            key: "billStatusId",
+            minWidth: 70
+          },
+          {
+            title: "盘点日期",
+            key: "auditDate",
+            minWidth: 120
+          },
+          {
+            title: "盘点员",
+            key: "orderMan",
+            minWidth: 170
+          },
+          {
+            title: "盘点单号",
+            key: "serviceId",
+            minWidth: 140
+          },
+          {
+            title: "打印次数",
+            key: "print",
+            minWidth: 120
+          },
+          {
+            title: "创建人",
+            key: "createUname",
+            minWidth: 200
+          },
+          {
+            title: "创建日期",
+            key: "createTime",
+            minWidth: 200
+          },
+          {
+            title: "提交人",
+            key: "createUname",
+            minWidth: 200
+          },
+          {
+            title: "提交日期",
+            key: "createTime",
+            minWidth: 200
           }
-        ]
+        ],
+        tbdata: []
       },
-       Right: {
+      Right: {
         page: {
           num: 1,
           size: 10,
@@ -318,219 +345,244 @@ export default {
         loading: false,
         tbdata: []
       },
-      queryList:{
-          showPerson:true
-      },//更多查询
-      queryTime:'',//快速查询时间
-      orderType:{
-          value:0
-      },//默认状态
-      changeLeft:'',//发生改变数据调动左侧list
+      queryList: {
+        showPerson: true
+      }, //更多查询
+      queryTime: "", //快速查询时间
+      orderType: {
+        value: 0
+      }, //默认状态
+      changeLeft: "", //发生改变数据调动左侧list
       // 所需零件数据
       components: [],
       //右侧表格高度
       rightTableHeight: 0,
       //右边仓库数据
-      warehouseList:{},
+      warehouseList: {},
       //配件组装信息 表单model
-      formPlan:{
-          // storeId:{},
-          // orderMan: "",
-          // auditDate: "",
-          // serviceId: ""
+      formPlan: {
+        // storeId:{},
+        // orderMan: "",
+        // auditDate: "",
+        // serviceId: ""
       },
-      draftShow:0,//判断是不是草稿
+      draftShow: 0, //判断是不是草稿
       showAudit: false, //审核提示
       showRemove: false, //作废提示
       isAddRight: true, //判断右侧是有数据
       showBayer: false, //出库方弹窗
-      rightTableStatus: '' //右侧表格状态
-    }
+      rightTableStatus: "" //右侧表格状态
+    };
   },
   created() {
-    this.getList()
+    this.getList();
   },
-  watch:{
-    purchaseType:function (val ,old) {
-      console.log(val ,old)
-        this.Left.page.num = 1
-        this.Left.page.size = 10
-        this.getList()
-    },
+  watch: {
+    purchaseType: function(val, old) {
+      console.log(val, old);
+      this.Left.page.num = 1;
+      this.Left.page.size = 10;
+      this.getList();
+    }
   },
   methods: {
     //获取左侧列表
     getList() {
       //获取右边仓库数据
       getstate()
-        .then(res=> {
-          
-          if(res.code === 0){
-            this.warehouseList = res.data
+        .then(res => {
+          if (res.code === 0) {
+            this.warehouseList = res.data;
           }
         })
         .catch(err => {
-            this.$Message.info('获取仓库信息失败') //获取仓库数据
-        })
+          this.$Message.info("获取仓库信息失败"); //获取仓库数据
+        });
       //获取左边数据
-      let data = {}
-        if(this.purchaseType == "99"){
-            this.purchaseType = null
-        }
-        data.startTime = this.queryTime[0] || ''
-        data.endTime = this.queryTime[1] || ''
-        data.billStatusId = this.purchaseType
-            // data = this.query
-        let page = this.Left.page.num -1
-        let size = this.Left.page.size
-        getLeftList(data,page,size)
-          .then(res => {
-            console.log(res)
-            if (res.code === 0) {
-              this.Left.tbdata = res.data.content || []
-              this.Left.page.total = res.data.totalElements
-            }
-          })
-          .catch(err => {
-            this.$Message.info('获取盘点列表失败')
+      let data = {};
+      if (this.purchaseType == "99") {
+        this.purchaseType = null;
+      }
+      data.startTime = this.queryTime[0] || "";
+      data.endTime = this.queryTime[1] || "";
+      data.billStatusId = this.purchaseType;
+      // data = this.query
+      let page = this.Left.page.num - 1;
+      let size = this.Left.page.size;
+      getLeftList(data, page, size)
+        .then(res => {
+          console.log(res);
+          if (res.code === 0) {
+            this.Left.tbdata = res.data.content || [];
+            this.Left.page.total = res.data.totalElements;
+          }
         })
-        console.log(this.$store.state.user.userData)
-        
+        .catch(err => {
+          this.$Message.info("获取盘点列表失败");
+        });
+      console.log(this.$store.state.user.userData);
     },
-    
+
     //获取表格高度
     getDomHeight() {
       this.$nextTick(() => {
-        let wrapH = this.$refs.paneLeft.offsetHeight
-        let planFormH = this.$refs.planForm.offsetHeight
-        let planBtnH = this.$refs.planBtn.offsetHeight
+        let wrapH = this.$refs.paneLeft.offsetHeight;
+        let planFormH = this.$refs.planForm.offsetHeight;
+        let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 104
+        this.leftTableHeight = wrapH - 104;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38
-      })
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+      });
     },
     //快速查询日期
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
       this.Left.page.size = 10;
-      this.getList()
+      this.getList();
     },
     //改变盘点时间
-    auditDate(data){
-      this.formPlan.auditDate = data + ' '+ "00:00:00"
+    auditDate(data) {
+      this.formPlan.auditDate = data + " " + "00:00:00";
     },
     //更多按钮
     More() {
-      this.showMore = true
+      this.showMore = true;
     },
-     //更多弹窗恢复false
+    //更多弹窗恢复false
     getMoreStatus(val) {
-      this.showMore = val
+      this.showMore = val;
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      this.Left.tbdata = val.data || []
-      this.Left.page.total = bal.totalElements
+      this.Left.tbdata = val.data || [];
+      this.Left.page.total = bal.totalElements;
     },
     //新增
     addProoo() {
       if (!this.isAddRight) {
-        return this.$Message.error('请先保存数据')
+        return this.$Message.error("请先保存数据");
       }
-      let TrowLeft = {} //新增左侧
-      this.isAddRight = false
-      this.Left.tbdata.push(TrowLeft)
+      let TrowLeft = {
+        billStatusName: '',
+
+        auditDate: "",
+
+        orderMan: "",
+
+        serviceId: "",
+        print: "",
+        createUname: "",
+        createTime: "",
+        createUname: "",
+        createTime: ""
+      }; //新增左侧
+      this.isAddRight = false;
+      this.Left.tbdata.push(TrowLeft);
+      console.log(this.Left.tbdata)
     },
     // 提交
     editPro() {
       //判断是否为草稿状态
-      if(this.Right.tbdata.length < 1){
-        this.$Message.error('请选择数据')
-        return
+      if (this.Right.tbdata.length < 1) {
+        this.$Message.error("请选择数据");
+        return;
       }
-      if(this.formPlan.billStatusId !== 0){
-        this.$Message.error('只有草稿状态才能保存')
-        return
+      if (this.formPlan.billStatusId !== 0) {
+        this.$Message.error("只有草稿状态才能保存");
+        return;
       }
-      if(!this.formPlan.auditDate || !this.formPlan.storeId ||!this.formPlan.orderMan ||!this.formPlan.serviceId){
-        this.$Message.error('请填写盘点信息')
-        return
+      if (
+        !this.formPlan.auditDate ||
+        !this.formPlan.storeId ||
+        !this.formPlan.orderMan ||
+        !this.formPlan.serviceId
+      ) {
+        this.$Message.error("请填写盘点信息");
+        return;
       }
       this.formPlan.billStatusId = 1;
-      getSubmitList(this.formPlan)
-      .then(res => {
-        console.log(res)
-        if(res.code == 0){
-          his.$Message.error('提交成功')
+      getSubmitList(this.formPlan).then(res => {
+        console.log(res);
+        if (res.code == 0) {
+          his.$Message.error("提交成功");
         }
-      })
+      });
     },
     //保存
-     baocun(){
-      if(this.Right.tbdata.length < 1){
-        this.$Message.error('请选择数据')
-        return
+    baocun() {
+      if (this.Right.tbdata.length < 1) {
+        this.$Message.error("请选择数据");
+        return;
       }
-       //判断是否为草稿状态
-      if(this.formPlan.billStatusId!== 0){
-        this.$Message.error('只有草稿状态才能保存')
-        return
+      //判断是否为草稿状态
+      if (this.formPlan.billStatusId !== 0) {
+        this.$Message.error("只有草稿状态才能保存");
+        return;
       }
-       if(!this.formPlan.auditDate || !this.formPlan.storeId ||!this.formPlan.orderMan ||!this.formPlan.serviceId){
-        this.$Message.error('请填写盘点信息')
-        return
+      if (
+        !this.formPlan.auditDate ||
+        !this.formPlan.storeId ||
+        !this.formPlan.orderMan ||
+        !this.formPlan.serviceId
+      ) {
+        this.$Message.error("请填写盘点信息");
+        return;
       }
-      getSubmitList(this.formPlan)
-      .then(res => {
-        console.log(res)
-        if(res.code == 0){
-          his.$Message.error('保存成功')
+      getSubmitList(this.formPlan).then(res => {
+        console.log(res);
+        if (res.code == 0) {
+          his.$Message.error("保存成功");
         }
-      })
-     },
-     //导出 
-     setDerive(){
-      let list = this.$store.state.dataList.oneOrder
-      if(!list.id){
-          this.$message.error('请选择一条有效数据')
-          return false
-      }else {
-          location.href = baseUrl.omsOrder + '/sellOrderMain/export?id='+ list.id +'&access_token=' + Cookies.get(TOKEN_KEY)
+      });
+    },
+    //导出
+    setDerive() {
+      let list = this.$store.state.dataList.oneOrder;
+      if (!list.id) {
+        this.$message.error("请选择一条有效数据");
+        return false;
+      } else {
+        location.href =
+          baseUrl.omsOrder +
+          "/sellOrderMain/export?id=" +
+          list.id +
+          "&access_token=" +
+          Cookies.get(TOKEN_KEY);
       }
-     },
+    },
     //作废
     //作废提示
     cancellation() {
-      this.showRemove = true
+      this.showRemove = true;
     },
     //确认作废
     removeOk() {
-      console.log(this.formPlan.id)
-      if(this.Right.tbdata.length < 1){
-        this.$Message.error('请选择数据')
-        return
+      console.log(this.formPlan.id);
+      if (this.Right.tbdata.length < 1) {
+        this.$Message.error("请选择数据");
+        return;
       }
       //判断是否为草稿状态
-      if(this.formPlan.billStatusId !== 0){
-        this.$Message.error('只有草稿状态才能作废')
-        return
+      if (this.formPlan.billStatusId !== 0) {
+        this.$Message.error("只有草稿状态才能作废");
+        return;
       }
       getCancellation(this.formPlan.id)
         .then(res => {
           if (res.code === 0) {
-            this.showRemove = false
+            this.showRemove = false;
           }
         })
         .catch(err => {
-          this.showRemove = false
-          this.$Message.info('作废草稿失败')
-        })
+          this.showRemove = false;
+          this.$Message.info("作废草稿失败");
+        });
     },
     removeCancel() {
-      this.showRemove = false
+      this.showRemove = false;
     },
     //审核
     // audit(){
@@ -550,22 +602,21 @@ export default {
     //     })
     // },
     auditCancel() {
-      this.showRemove = false
+      this.showRemove = false;
     },
     // 打印
     printTable() {
-       this.$refs.printBox.openModal(this.formPlan.id)
-       
+      this.$refs.printBox.openModal(this.formPlan.id);
     },
-    
+
     //添加配件
     addPro() {
-      this.$refs.SelectPartRef.init()
+      this.$refs.SelectPartRef.init();
     },
     //左边列表选中当前行
     selectTabelData(data) {
-      console.log(data)
-      this.formPlan = data
+      console.log(data);
+      this.formPlan = data;
       // getRightDatas(data.id)
       // .then(res=>{
       //   console.log(res)
@@ -573,43 +624,46 @@ export default {
       //  .catch(err => {
       //    // this.$Message.info('作废草稿失败')
       //   })
-      this.Right.tbdata = data.detailVOList
-      if(data.billStatusId){
-        this.draftShow = data.billStatusId
+      this.Right.tbdata = data.detailVOList;
+      if (data.billStatusId) {
+        this.draftShow = data.billStatusId;
       }
     },
     shanchu() {
       if (this.formPlan.billStatusId !== 0) {
-          this.$Message.info('只有草稿状态才能进行删除操作')
-          return
-        }
-        // 组装删除
-        const seleList = this.$refs.xTable1.getSelectRecords()
-        console.log(seleList)
-        const id =  seleList[0].id
-        this.Right.tbdata = this.array_diff(this.Leftcurrentrow.processProductVO, seleList)
-        this.currentData = []
-        this.$Message.success('删除成功');
+        this.$Message.info("只有草稿状态才能进行删除操作");
+        return;
+      }
+      // 组装删除
+      const seleList = this.$refs.xTable1.getSelectRecords();
+      console.log(seleList);
+      const id = seleList[0].id;
+      this.Right.tbdata = this.array_diff(
+        this.Leftcurrentrow.processProductVO,
+        seleList
+      );
+      this.currentData = [];
+      this.$Message.success("删除成功");
     },
     //配件返回的参数
-    getPartNameList(val){
-      console.log(val,999)
-      console.log(conversionList(val),8888)
-      var datas = conversionList(val)
-      console.log(datas)
+    getPartNameList(val) {
+      console.log(val, 999);
+      console.log(conversionList(val), 8888);
+      var datas = conversionList(val);
+      console.log(datas);
       datas.forEach(item => {
-        this.Right.tbdata.push(item)
-        this.formPlan.detailVOList.push(item)
+        this.Right.tbdata.push(item);
+        this.formPlan.detailVOList.push(item);
       });
       getSubmitList(this.formPlan)
-      .then(res=> {
-        console.log(res)
-      })
-      .catch(err => {
-          this.showRemove = false
-          this.$Message.info('添加失败')
+        .then(res => {
+          console.log(res);
         })
-      console.log(this.Right.tbdata)
+        .catch(err => {
+          this.showRemove = false;
+          this.$Message.info("添加失败");
+        });
+      console.log(this.Right.tbdata);
     },
     //分页
     changePage(p) {
@@ -631,24 +685,24 @@ export default {
       for (var i = 0; i < b.length; i++) {
         for (var j = 0; j < a.length; j++) {
           if (a[j].name === b[i].name) {
-            a.splice(j, 1)
-            j = j - 1
+            a.splice(j, 1);
+            j = j - 1;
           }
         }
       }
-      return a
+      return a;
     }
   },
   mounted() {
     setTimeout(() => {
-      this.getDomHeight()
-    }, 0)
+      this.getDomHeight();
+    }, 0);
 
     window.onresize = () => {
-      this.getDomHeight()
-    }
+      this.getDomHeight();
+    };
   }
-}
+};
 </script>
 
 <style lang="less" scoped>

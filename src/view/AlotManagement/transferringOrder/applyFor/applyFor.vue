@@ -612,7 +612,7 @@
             // console.log(this.datadata)
             this.formPlan.guestName = this.datadata.guestName
             this.formPlan.storeId = this.datadata.storeId
-            this.formPlan.orderDate = this.datadata.orderDate
+            this.formPlan.orderDate = tools.transDate(this.datadata.orderDate)
             this.formPlan.remark = this.datadata.remark
             this.formPlan.createUname = this.datadata.createUname
             this.formPlan.serviceId = this.datadata.serviceId
