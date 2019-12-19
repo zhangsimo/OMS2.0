@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="other-item">
-      <a class="mr20" @click="openShow">{{getName}}</a>
+      <a class="mr20" @click="openShow">{{getName || '请选择分店'}}</a>
       <a class="mr20" href="#">客服</a>
       <a class="mr20" @click="toImage">反馈</a>
       <Icon class="mr20" type="md-home" size="16"/>
