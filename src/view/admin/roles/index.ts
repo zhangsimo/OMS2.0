@@ -1,6 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , addOrUpdate , getStaff} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , addOrUpdate , getStaff , saveStaffJurisdiction} from '_api/admin/roleApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -79,7 +79,7 @@ export default class index extends Vue{
       this.treeList = tmp
     })
   this.getAllStaff()
-    console.log(val.row)
+    // console.log(val.row)
     }
 
     // 获取员工
@@ -92,7 +92,6 @@ export default class index extends Vue{
     if(res.code === 0) {
       this.rightTableData = res.data.content
     }
-    console.log(res)
   }
     //方法
   private ch(arr) {
@@ -149,12 +148,12 @@ export default class index extends Vue{
   //删除员工
   private delectStaff(){
     if(!this.oneStaff.id){
-      this.$message.error('请先选择员工')
+      this.$message.error('请先选择角色')
       return
     }
       this.$Modal.confirm({
         title: '是否删除',
-        content: '<p>是否要删除当前员工</p>',
+        content: '<p>是否要删除当前角色</p>',
         onOk: async () => {
           let data:any ={}
               data.id = this.oneStaff.id
@@ -197,6 +196,7 @@ export default class index extends Vue{
   private save(){
     // @ts-ignore
     let stop:any = this.$loading()
+    this.role.id = ''
     addOrUpdate(this.role, this.role.resIds).then(res => {
       stop()
       if (res.code == 0) {
@@ -215,10 +215,30 @@ export default class index extends Vue{
   }
 
   //员工点击查询
- private search(){
-    let data:any = {}
-        data = this.staffName
-        data = this.organization
+ private search() {
+   if(!this.oneStaff.id){
+     this.$message.error('请先选择角色')
+     return
+   }
+    this.getAllStaff()
+ }
+
+ //员工权限保存
+  private async saveStaff(){
+    let data:any = []
+        data.id = this.rightTableData[0].id
+        data.roleIds = []
+        this.rightTableData.forEach( item => {
+          if(item.allocation ==0){
+            data.push({id: item.id , roleIds:this.oneStaff.id , allocation:0})
+          }else {
+            data.push({id: item.id , roleIds:[] , allocation:1})
+          }
+        })
+    let res = await saveStaffJurisdiction(data)
+    if(res.code === 0){
+      this.$message.success('修改数据')
+    }
   }
   }
 

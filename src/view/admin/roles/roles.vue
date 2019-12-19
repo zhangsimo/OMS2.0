@@ -49,7 +49,7 @@
             <TabPane label="员工" name="name2">
               <div>
                 <div class="treeHeader">
-                  <Button class="ml10 w90" @click="save"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+                  <Button class="ml10 w90" @click="saveStaff"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
                   <div class="fr">
                     <span class="mr10">机构名称:</span>
                     <Input class="mr10" v-model="organization" placeholder="请输入机构名称" style="width: 180px" />
@@ -68,7 +68,7 @@
                     <vxe-table-column field="shopName" title="所属机构" ></vxe-table-column>
                     <vxe-table-column field="role" title="授权" >
                       <template v-slot="{ row,rowIndex }">
-                        <Checkbox ></Checkbox>
+                        <Checkbox v-model="row.allocation" :true-value="0" :false-value="1"></Checkbox>
                       </template>
                     </vxe-table-column>
                   </vxe-table>

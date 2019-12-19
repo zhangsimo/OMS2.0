@@ -71,3 +71,12 @@ export function getStaff (data) {
     data
   })
 }
+
+//员工改变权限保存
+export function saveStaffJurisdiction (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/changeUserRoles`,
+    method: 'post',
+    data
+  })
+}
