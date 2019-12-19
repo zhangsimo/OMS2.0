@@ -1,5 +1,6 @@
 import * as api from "_api/lease/tenantres";
 
+
 const data = function() {
   return {
     // 分割线
@@ -202,7 +203,7 @@ const methods = {
   async initList() {
     let params = {};
     if(this.tenantID) {
-      params.tenantId = this.tenantID;
+      params.tenant = this.tenantID;
     }
     if(this.resID) {
       params.menuId = this.resID;
@@ -223,6 +224,7 @@ const methods = {
       "resName": el.title,
       "resParentId": el.parentId,
       "resType": el.resType,
+      "tenant": this.tenantID,
      }
      data.push(o);
    });
@@ -283,6 +285,9 @@ const methods = {
   },
   // 保存
   async saveTable() {
+    if(this.selectData.size <= 0 && this.tbdata.length <= 0) {
+      return this.$Message.error('没有删除或修改的数据');
+    }
     if(this.selectData.size > 0) {
       let ids = Array.from(this.selectData);
       let res1 = await api.deltenant(ids);

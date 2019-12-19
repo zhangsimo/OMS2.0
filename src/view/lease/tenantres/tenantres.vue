@@ -5,7 +5,7 @@
       <Split v-model="split">
         <div slot="left" class="left-warp left pt10 pb10">
           <div class="db left title-warp pb10">
-            <Button class="mr10" @click="save">
+            <Button class="mr10" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0)">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
@@ -42,7 +42,7 @@
             <Input v-model="resID" placeholder="资源ID" style="width: 140px;" class="mr10" />
             <Button class="mr10 w90" @click="qureyTable">
               <span class="center">
-                <Icon custom="iconfont iconshuaxinicon icons" />查询
+                <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
             <Button class="mr10 w90" @click="delTable">
