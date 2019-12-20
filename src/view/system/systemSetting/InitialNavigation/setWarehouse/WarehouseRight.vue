@@ -30,7 +30,6 @@
         align="center"
         size="mini"
         ref="xTable"
-        :loading="loading"
         highlight-current-row
         highlight-hover-row
         :edit-rules="validRules"
@@ -69,7 +68,6 @@
     <div style="padding: 10px">
       <Table
         class="table-highlight-row"
-        :loading="loading"
         size="small"
         highlight-row
         border
@@ -132,7 +130,6 @@ export default {
   },
   data() {
     return {
-      loading: true,
       columns1: [
         {
           title: "序号",
@@ -206,18 +203,16 @@ export default {
   methods: {
     //获取仓位
     async getAllWarehouseList() {
-      this.loading = true;
       let id = this.storeId.id;
       let res = await getWarehouseList(id);
       if (res.code == 0) {
         this.warehouseList = res.data;
-        this.loading = false;
       }
     },
     //获取右侧员工
     async getAllSaffect() {
-        let data ={}
-            data.storeId = this.storeId.id;
+      let data = {};
+      data.storeId = this.storeId.id;
       let res = await getStaffList(data);
       if (res.code == 0) {
         this.saffectList = res.data;
@@ -304,9 +299,9 @@ export default {
       let data = {};
       data.size = this.page.size;
       data.page = this.page.num - 1;
-      data.office = 0
-      data.userName = ''
-      data.phone = ''
+      data.office = 0;
+      data.userName = "";
+      data.phone = "";
       getAllseffactList(data).then(res => {
         if (res.code == 0) {
           this.saffectLoading = false;
