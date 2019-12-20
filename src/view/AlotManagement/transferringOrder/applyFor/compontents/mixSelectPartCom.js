@@ -240,7 +240,7 @@ export const mixSelectPartCom  = {
       this.treeLoading = true
       getCarPartClass({}).then(res => {
         this.treeLoading = false
-        this.treeData = this.resetData(res.data||[])
+        this.treeData = this.resetData(res.data.content || [])
       })
     },
     //树形数组递归加入新属性
