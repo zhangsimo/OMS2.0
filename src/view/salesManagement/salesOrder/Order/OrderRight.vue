@@ -84,10 +84,12 @@
           <Input class="w210" v-model="formPlan.serviceId" disabled />
         </FormItem>
         <FormItem label="计划发货日期:" prop="planSendDate">
+          <!-- @on-change="getplanSendDate" -->
           <DatePicker
             :value="formPlan.planSendDate"
-            @on-change="getplanSendDate"
+            :options="options1"
             type="date"
+            @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0"
@@ -97,6 +99,7 @@
           <DatePicker
             :value="formPlan.planArriveDate"
             @on-change="getplanArriveDate"
+            :options="options2"
             type="date"
             placeholder="选择日期"
             style="width: 120px"
@@ -360,11 +363,19 @@ export default {
         }
       }
     };
-    // const ArriveDate = (rule,value,callback)=>{
-    //     console.log(formPlan.planSendDate)
-    //     callback
-    // }
+    let options2DisabledDate = (date) => {
+      const orderDate = this.formPlan.planSendDate;
+      return date && orderDate && date.valueOf() < orderDate;
+    }
     return {
+      options1: {
+        disabledDate (date) {
+          return date && date.valueOf() < Date.now() - 86400000;
+        }
+      },
+      options2: {
+        disabledDate: options2DisabledDate,
+      },
       formPlan: {}, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -406,18 +417,15 @@ export default {
         ],
         storeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
-        ],
-        // planArriveDate:[
-        //   { validator:ArriveDate, type: "date", message: " ", trigger: "change" }
-        // ]
+        ]
       },
       //form表单校验
       validRules: {
         orderQty: [{ required: true, validator: changeNumber }],
         orderPrice: [{ required: true, validator: money }]
       }, //表格校验
-      selectTableList: [] //table表格选中的数据
-    };
+      selectTableList: [], //table表格选中的数据
+    }
   },
   mounted() {
     this.getAdress();
@@ -652,6 +660,12 @@ export default {
     //计划发货日期
     getplanSendDate(data) {
       this.formPlan.planSendDate = data + " " + "00:00:00";
+      const orderDate = this.formPlan.planSendDate;
+      this.options2 = {
+        disabledDate(date) {
+          return date && orderDate && date.valueOf() < new Date(orderDate);
+        }
+      }
     },
     //计划到货日期
     getplanArriveDate(data) {
