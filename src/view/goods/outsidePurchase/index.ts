@@ -400,35 +400,62 @@ export default class InterPurchase extends Vue {
 
   //表格单选选中
   private selectTabelData(v: any) {
-    if(v == null) return;
-    const ref: any = this.$refs['formplanref']
-    ref.resetFields();
+    if (v == null) return;
+    const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
-      this.purchaseOrderTable.tbdata.splice(0, 1);
-      this.isAdd = true;
-      const currentRowTable:any = this.$refs["currentRowTable"];
-      currentRowTable.clearCurrentRow();
-    }
-    this.selectTableRow = v;
-    this.mainId = v.id;
-    this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId.name;
-    this.serviceId = v.serviceId;
-    if(['草稿', '退回'].includes(v.billStatusId.name)) {
-      this.isInput = false;
+      this.$Modal.confirm({
+        title: '您正在编辑单据，是否需要保存',
+        onOk: () => {
+          currentRowTable.clearCurrentRow();
+          this.purchaseOrderTable.tbdata[0] = {...this.selectTableRow, ...this.formPlanmain,  _highlight: true };
+          const row = this.purchaseOrderTable.tbdata[0];
+          this.selectTableRow = this.purchaseOrderTable.tbdata[0];
+          this.purchaseOrderTable.tbdata.push();
+          this.saveHandle('formplanref');
+          this.mainId = row.id || "";
+          this.tableData = row.details || [];
+          this.selectRowState = "";
+          this.serviceId = row.serviceId || "";
+          this.isInput = false;
+          this.adjustButtonDisable = true;
+          for (let k in this.formPlanmain) {
+            this.formPlanmain[k] = row[k];
+          }
+        },
+        onCancel: () => {
+          this.purchaseOrderTable.tbdata.splice(0, 1);
+          this.isAdd = true;
+          currentRowTable.clearCurrentRow();
+        },
+      })
     } else {
-      this.isInput = true;
-    }
-    if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
-      this.adjustButtonDisable = false;
-    } else {
-      this.adjustButtonDisable = true;
-    }
-    for (let k in this.formPlanmain) {
-      this.formPlanmain[k] = v[k];
+      if(this.isAdd) {
+        const ref: any = this.$refs['formplanref']
+        ref.resetFields();
+      }
+      if(v) {
+        this.selectTableRow = v;
+        this.mainId = v.id;
+        this.tableData = v.details || [];
+        this.selectRowState = v.billStatusId.name;
+        this.serviceId = v.serviceId;
+        if (['草稿', '退回'].includes(v.billStatusId.name)) {
+          this.isInput = false;
+        } else {
+          this.isInput = true;
+        }
+        if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
+          this.adjustButtonDisable = false;
+        } else {
+          this.adjustButtonDisable = true;
+        }
+        for (let k in this.formPlanmain) {
+          this.formPlanmain[k] = v[k];
+        }
+      }
     }
   }
-
+  
   private editActivedEvent({ row, column }, event) {
     //console.log(`打开 ${column.title} 列编辑`)
   }

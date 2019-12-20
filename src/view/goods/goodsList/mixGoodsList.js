@@ -23,7 +23,7 @@ export const mixGoodsData = {
       formPlan: {
         supplyName: "", //供应商
         guestId: "", //供应商id
-        settleTypeId: "", // 结算方式
+        // settleTypeId: "", // 结算方式
         planArriveDate: "", //计划日期
         // planDateformat: "",
 
@@ -53,9 +53,6 @@ export const mixGoodsData = {
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
         ],
-        settleTypeId: [
-          { required: true, message: "请选择结算方式", trigger: "change" }
-        ]
       },
       tableData: [],
       //待删除数据
@@ -136,7 +133,6 @@ export const mixGoodsData = {
         this.formPlan = {
           supplyName: "", //供应商
           guestId: "", //供应商id
-          settleTypeId: "", // 结算方式
           planArriveDate: "", //计划日期
           planner: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
@@ -257,10 +253,10 @@ export const mixGoodsData = {
       if (columnIndex === 17) {
         let totals = 0;
         let sumarr = data.map(el => {
-          return Math.abs(el.orderPrice - el.recentPrice);
+          return el.orderPrice - el.recentPrice;
         });
         totals = sumarr.reduce((total, el) => (total += el), 0);
-        this.totalAmt = -1 * totals;
+        this.totalAmt = totals;
         return totals.toFixed(2);
       }
       return total;
@@ -277,7 +273,6 @@ export const mixGoodsData = {
       this.formPlan.guestId = v.id || "";
       //赋值票据类型id
       this.formPlan.billType = v.billTypeId || "";
-      this.formPlan.settleTypeId = v.settTypeId || "";
     },
     //选择日期
     setDataFun(v) {
@@ -289,41 +284,62 @@ export const mixGoodsData = {
     //   return purchaseTypeList(n)
     // },
     //采购计划单选中
-    selectTabelData(v) {
-      // console.log(this.formPlan)
-      // console.log(this.newadd)
-      // if(this.newadd){
-      //   Object.keys(this.formPlan).forEach((key) => {
-      //     if (key !== 'planner' && key !== 'planOrderNum') {
-      //       if (this.formPlan[key] !== '') {
-      //         confirm('您正在编辑单据，是否需要保存')
-      //       }
-      //     }
-      //   })
-      // }
-      this.$refs['formPlan'].resetFields();
-      if (this.newadd && this.selectPlanOrderItem.new) {
-        this.tbdata.splice(0, 1);
-        this.newadd = false;
-        this.$refs.planOrderTable.clearCurrentRow();
-      }
-      if (v) {
-        this.isinput = false;
-        this.selectPlanOrderItem = v || {};
-        this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
-        this.formPlan.supplyName = v.guest || "";
-        this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
-        // this.formPlan.planDateformat = v.orderDate || "";
-        this.formPlan.remark = v.remark || "";
-        this.formPlan.billType = v.billTypeId || "";
-        this.formPlan.directGuestId = v.directGuestId || "";
-        this.formPlan.planOrderNum = v.serviceId || "";
-        this.formPlan.otherPrice = v.otherAmt || 0;
-        this.formPlan.totalPrice = v.totalAmt || 0;
-        this.tableData = v.details || [];
-        this.mainId = v.id;
-        this.upurl = upxlxs + v.id;
+    selectTabelData(v, oldv) {
+      if(this.newadd && v) {
+        this.$Modal.confirm({
+          title: '您正在编辑单据，是否需要保存',
+          onOk: () => {
+            this.$refs.planOrderTable.clearCurrentRow();
+            this.tbdata[0] = {...this.selectPlanOrderItem, ...this.formPlan, _highlight: true};
+            this.selectPlanOrderItem = this.tbdata[0];
+            this.tbdata.push();
+            this.submit(1);
+            this.formPlan.supplyName = this.tbdata[0].supplyName || "";
+            this.formPlan.guestId = this.tbdata[0].guestId || "";
+            this.formPlan.planArriveDate = this.tbdata[0].orderDate || "";
+            // this.formPlan.planDateformat = this.tbdata[0].orderDate || "";
+            this.formPlan.remark = this.tbdata[0].remark || "";
+            this.formPlan.billType = this.tbdata[0].billTypeId || "";
+            this.formPlan.directGuestId = this.tbdata[0].directGuestId || "";
+            this.formPlan.planOrderNum = this.tbdata[0].serviceId || "";
+            this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
+            this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
+          },
+          onCancel: () => {
+            if (this.newadd && this.selectPlanOrderItem.new) {
+              this.tbdata.splice(0, 1);
+              this.newadd = false;
+              this.$refs.planOrderTable.clearCurrentRow();
+            }
+          },
+        })
+      } else {
+        if(!this.newadd) {
+          this.$refs['formPlan'].resetFields();
+        }
+        if (v) {
+          if (this.newadd && this.selectPlanOrderItem.new) {
+            this.tbdata.splice(0, 1);
+            this.newadd = false;
+            this.$refs.planOrderTable.clearCurrentRow();
+          }
+          this.isinput = false;
+          this.selectPlanOrderItem = v || {};
+          this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
+          this.formPlan.supplyName = v.guest || "";
+          this.formPlan.guestId = v.guestId || "";
+          this.formPlan.planArriveDate = new Date(v.orderDate) || "";
+          // this.formPlan.planDateformat = v.orderDate || "";
+          this.formPlan.remark = v.remark || "";
+          this.formPlan.billType = v.billTypeId || "";
+          this.formPlan.directGuestId = v.directGuestId || "";
+          this.formPlan.planOrderNum = v.serviceId || "";
+          this.formPlan.otherPrice = v.otherAmt || 0;
+          this.formPlan.totalPrice = v.totalAmt || 0;
+          this.tableData = v.details || [];
+          this.mainId = v.id;
+          this.upurl = upxlxs + v.id;
+        }
       }
     },
     
@@ -370,9 +386,9 @@ export const mixGoodsData = {
       }
       let title = "";
       if (type === 1) {
-        title = "是否要作废";
+        title = "是否确定作废订单";
       } else {
-        title = "是否要反作废";
+        title = "是否确定反作废订单";
       }
       this.$Modal.confirm({
         title: title,
@@ -418,7 +434,7 @@ export const mixGoodsData = {
           //直发门店
           objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
-          objReq.settleTypeId = this.formPlan.settleTypeId;
+          // objReq.settleTypeId = this.formPlan.settleTypeId;
           if (
             this.formPlan.planOrderNum &&
             this.formPlan.planOrderNum != "新计划采购"

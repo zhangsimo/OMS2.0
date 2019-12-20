@@ -185,24 +185,6 @@
                       >
                     </Select>
                   </FormItem>
-                  <FormItem
-                    class="form-Item"
-                    label="结算方式："
-                    prop="settleTypeId"
-                  >
-                    <Select
-                      class="w160"
-                      v-model="formPlan.settleTypeId"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
-                    >
-                      <Option
-                        v-for="(item, index) in settleMethods"
-                        :key="index"
-                        :value="item.value"
-                        >{{ item.label }}</Option
-                      >
-                    </Select>
-                  </FormItem>
                   <FormItem label="直发门店：">
                     <Select
                       class="w160"
