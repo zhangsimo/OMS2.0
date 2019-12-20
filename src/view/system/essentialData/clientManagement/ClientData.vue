@@ -314,15 +314,6 @@
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </a>
             </div>
-            <!-- <Table
-              size="small"
-              border
-              :stripe="true"
-              highlight-row
-              :columns="columns3"
-              :data="invoice"
-              @on-current-change="pitchOnBank"
-            ></Table>-->
             <vxe-table
               highlight-current-row
               @current-change="pitchOnBank"
@@ -332,7 +323,6 @@
               ref="validData"
               :data="invoice"
               :edit-rules="validRules"
-              :mouse-config="{selected: true}"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               :edit-config="{trigger: 'dblclick', mode: 'cell'}"
             >
@@ -826,8 +816,9 @@ export default {
         return false;
       }
       this.invoice = this.invoice.filter(
-        item => item.bankId != this.addInoiceOne.bankId
+        item => item.bankId != this.addInoiceOne.row.bankId
       );
+      console.log(this.invoice,this.addInoiceOne)
       this.data.guestTaxpayerVOList = this.invoice;
       this.addInoiceOne = {};
     }
