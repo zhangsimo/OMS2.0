@@ -149,8 +149,8 @@ export default {
   },
   methods: {
     // 门店资料关闭
-    cancelChange(type){
-      if(!type){
+    cancelChange(type) {
+      if (!type) {
         this.$refs.child.resetFields();
       }
     },
@@ -244,8 +244,9 @@ export default {
         this.$Message.error("至少选项一条地址");
         return false;
       }
-      this.clientList = this.pitchSupplierOne;
       this.clientDataShow = true;
+      this.clientList = this.pitchSupplierOne;
+      this.$refs.child.valuePic();
     }
   },
   watch: {

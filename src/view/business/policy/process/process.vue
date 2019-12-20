@@ -939,8 +939,8 @@ export default {
       } else {
         this.currentData = []
       }
-
       cangkulist2(this.$store.state.user.userData.groupId).then(res => {
+                 console.log(res,'res.data =>951')
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
                 if (res.code == 0) {
                   res.data.map(item => {

@@ -73,7 +73,7 @@
         <!-- <Button type="md-delete" class="mr10 w90" v-show="oneWarehouse.auditSign == 0" @click="del">
           <i class="iconfont mr5 iconbaocunicon"></i>删除
         </Button> -->
-        <Poptip 
+        <Poptip
             v-show="oneWarehouse.auditSign == 0"
             confirm
             title="您确认删除这条内容吗？"
@@ -408,7 +408,6 @@
             //  点击下载模板
             downloadFormwork () {
               window.location.href=baseUrl.omsOrder + '/enterMain/template?access_token=' + Cookies.get(TOKEN_KEY)
-
             },
 
             //禁止编辑

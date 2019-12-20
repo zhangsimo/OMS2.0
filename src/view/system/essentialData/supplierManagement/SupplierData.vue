@@ -80,7 +80,7 @@
   import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
   import Cookies from 'js-cookie'
   import { TOKEN_KEY } from '@/libs/util'
-
+  import baseUrl from '_conf/url'
   export default {
         name: "CustomerData",
         components:{
@@ -379,6 +379,7 @@
             // 上传成功函数
             onSuccess (response) {
                 this.getlist()
+                console.log(response,'response =>382')
                 if(response.code != 0 ){
                     this.$Notice.warning({
                         title: '导入失败',
@@ -397,7 +398,7 @@
             },
             //下载模板
             downTemplate(){
-                down('1100000000')
+                window.location.href= baseUrl.omsOrder + '/enterMain/template?access_token=' + Cookies.get(TOKEN_KEY)
             }
         },
       watch:{
