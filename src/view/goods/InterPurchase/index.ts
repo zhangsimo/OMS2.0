@@ -406,7 +406,7 @@ export default class InterPurchase extends Vue {
           this.saveHandle('formplanref');
           this.mainId = row.id || "";
           this.tableData = row.details || [];
-          this.selectRowState = "";
+          this.selectRowState = null;
           this.serviceId = row.serviceId || "";
           this.isInput = false;
           this.adjustButtonDisable = true;
