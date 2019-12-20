@@ -8,7 +8,7 @@
     >
       <template v-if="type === 'notice'">
         <div :class="contentClasses" ref="content" v-html="content"></div>
-        <div :class="contentWithIcon">
+        <div :class="contentWithIcon" style="overflow:auto">
           <render-cell :render="renderFunc"></render-cell>
         </div>
         <a :class="[baseClass + '-close']" @click="close" v-if="closable">
