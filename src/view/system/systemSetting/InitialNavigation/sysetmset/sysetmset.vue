@@ -149,17 +149,17 @@ const data = () => {
   return {
     setarr: [],
     // 0关闭 1开启
-    trun: "0", // 销售单、销售出库配件选择tab切换成批次选择
+    trun: "", // 销售单、销售出库配件选择tab切换成批次选择
     printHeader: "", // 抬头
     content: "", // 销售单、销售出库单打印内容
-    isrow: "0", // 打印单表格是否换行
-    isQuota: "0", // 启用额度审批流程
-    isMe: "0", // 业务员是否只可见自己的客户和订单
-    isWatch: "0", // 业务员是否禁止可见采购价
-    isLv: "0", // 是否开启分级提成
-    isPPA: "0", // 是否开启采购计划审批
-    isTPA: "0", // 是否开启临时采购审批
-    isEAOM: "0" // 是否开启门店外采审批
+    isrow: "", // 打印单表格是否换行
+    isQuota: "", // 启用额度审批流程
+    isMe: "", // 业务员是否只可见自己的客户和订单
+    isWatch: "", // 业务员是否禁止可见采购价
+    isLv: "", // 是否开启分级提成
+    isPPA: "", // 是否开启采购计划审批
+    isTPA: "", // 是否开启临时采购审批
+    isEAOM: "" // 是否开启门店外采审批
   };
 };
 
@@ -178,7 +178,7 @@ const methods = {
           case "打印表格是否换行":
             this.isrow = el.keyidValue;
             break;
-          case "启用开启采购计划审批":
+          case "是否开启采购计划审批":
             this.isPPA = el.keyidValue;
             break;
           case "业务员是否可见自己客户和订单":
@@ -221,7 +221,7 @@ const methods = {
         case "打印表格是否换行":
           el.keyidValue = this.isrow;
           break;
-        case "启用开启采购计划审批":
+        case "是否开启采购计划审批":
           el.keyidValue = this.isPPA;
           break;
         case "业务员是否可见自己客户和订单":

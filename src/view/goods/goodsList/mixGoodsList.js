@@ -313,7 +313,7 @@ export const mixGoodsData = {
         this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
         this.formPlan.supplyName = v.guest || "";
         this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planArriveDate = v.orderDate || "";
+        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
         // this.formPlan.planDateformat = v.orderDate || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
@@ -418,6 +418,7 @@ export const mixGoodsData = {
           //直发门店
           objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
+          objReq.settleTypeId = this.formPlan.settleTypeId;
           if (
             this.formPlan.planOrderNum &&
             this.formPlan.planOrderNum != "新计划采购"

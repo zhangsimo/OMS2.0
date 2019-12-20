@@ -31,12 +31,6 @@
           <div class="db">
             <Button @click="editPro" type="default" class="mr10">提交</Button>
           </div>
-
-          <!-- <div class="db">
-            <Button class="mr10">
-              <Icon type="md-checkmark" size="14" />导出
-            </Button>
-          </div>-->
           <div class="db">
             <Button class="mr10" @click="cancellation">
               <Icon type="md-close" size="14" />作废
@@ -56,31 +50,6 @@
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">盘点列表</div>
-              <!-- <vxe-table
-                border
-                resizable
-                @cell-click="selectTabelData"
-                size="mini"
-                :height="rightTableHeight"
-                :data="Left.tbdata"
-                :footer-method="addFooter"
-                :edit-config="{trigger: 'click', mode: 'cell'}"
-              >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column field="billStatusId" width="60" title="状态">
-                  <template v-slot="{ row, seq }">
-                      <span>{{ row.billStatusId.name }}</span>
-                  </template>
-                </vxe-table-column>
-                <vxe-table-column field="auditDate" title="盘点日期" width="100"></vxe-table-column>
-                <vxe-table-column field="orderMan" title="盘点员" width="100"></vxe-table-column>
-                <vxe-table-column field="serviceId" title="盘点单号" width="100"></vxe-table-column>
-                <vxe-table-column field="print" title="打印次数" width="100"></vxe-table-column>
-                <vxe-table-column field="createUname" title="创建人" width="100"></vxe-table-column>
-                <vxe-table-column field="createTime" title="创建日期" width="100"></vxe-table-column>
-                <vxe-table-column field="createUname" title="提交人" width="100" ></vxe-table-column>
-                <vxe-table-column field="createTime"  title="提交日期" width="100"></vxe-table-column>
-              </vxe-table>-->
               <Table
                 :height="leftTableHeight"
                 @on-current-change="selectTabelData"
@@ -134,7 +103,6 @@
                   <FormItem label="盘点日期" prop="auditDate">
                     <DatePicker
                       :disabled="draftShow != 0"
-                      @on-change="auditDateForm"
                       type="date"
                       class="w160"
                       v-model="formPlan.auditDate"
@@ -449,7 +417,12 @@ export default {
           }
         ],
         auditDate: [
-          { required: true, type: 'date', message: '盘点日期必选', trigger: 'change' }
+          {
+            required: true,
+            type: "date",
+            message: "盘点日期必选",
+            trigger: "change"
+          }
           // {
           //   required: true,
           //   type: 'date',
@@ -547,9 +520,9 @@ export default {
     //   console.log(this.formPlan.orderMan)
     // },
     // 盘点日期
-    auditDateForm(data) {
-      this.formPlan.auditDate = data + " " + "00:00:00";
-    },
+    // auditDateForm(data) {
+
+    // },
     //更多按钮
     More() {
       this.showMore = true;
@@ -631,32 +604,21 @@ export default {
           callback(new Error("带*必填"));
         }
       });
-      // if (
-      //   !this.formPlan.auditDate ||
-      //   !this.formPlan.storeId ||
-      //   !this.formPlan.orderMan ||
-      //   !this.formPlan.serviceId
-      // ) {
-      //   this.$Message.error("请填写盘点信息");
-      //   return;
-      // }
     },
     //保存
     baocun() {
-      // this.$refs.form.validate(valid => {
-      //     console.log(valid)
-      //     if (valid) {
-      //       console.log(1)
-      //     } else {
-      //       this.$message.error("带*必填");
-      //     }
-      //   });
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
-          console.log(valid)
           if (valid) {
-            console.log(1)
+            this.formPlan.billStatusId.value = 1;
+            this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
+            getSubmitList(this.formPlan).then(res => {
+              console.log(res);
+              if (res.code == 0) {
+                his.$Message.error("保存成功");
+              }
+            });
           } else {
             this.$message.error("带*必填");
           }
@@ -670,13 +632,7 @@ export default {
         return;
       }
       // console.log(1)
-      // this.formPlan.billStatusId.value = 1
-      // getSubmitList(this.formPlan).then(res => {
-      //   console.log(res);
-      //   if (res.code == 0) {
-      //     his.$Message.error("保存成功");
-      //   }
-      // });
+
       // if (
       //   !this.formPlan.auditDate ||
       //   !this.formPlan.storeId ||
@@ -811,24 +767,27 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      console.log(val, 999);
-      console.log(conversionList(val), 8888);
-      var datas = conversionList(val);
-      console.log(datas);
-      datas.forEach(item => {
-        //this.Right.tbdata.push(item)
-        this.formPlan.detailVOList.push(item);
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          var datas = conversionList(val)
+          datas.forEach(item => {
+            this.formPlan.detailVOList = item
+          })
+          this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
+          console.log(this.formPlan , 999)
+          getSubmitList(this.formPlan)
+            .then(res => {
+              console.log(res);
+              this.getList();
+            })
+            .catch(err => {
+              this.showRemove = false;
+              this.$Message.info("添加失败");
+            })
+        } else {
+          this.$message.error("带*必填");
+        }
       });
-      console.log(this.Right.tbdata);
-      getSubmitList(this.formPlan)
-        .then(res => {
-          console.log(res);
-          this.getList();
-        })
-        .catch(err => {
-          this.showRemove = false;
-          this.$Message.info("添加失败");
-        });
     },
     //分页
     changePage(p) {

@@ -96,9 +96,18 @@ export function queryByConditions(params, data) {
 }
 
 // 配件分类菜单树
+// export function getCarPartClass(data) {
+//   return axios.request({
+//     url: `${api.omsOrder}/pchsPlanMain/getCarClassifys`,
+//     method: 'post',
+//     data
+//   })
+// }
+// wbPub/getCarClassifys
+// 配件分类菜单树 =====> 调拨所需接口
 export function getCarPartClass(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanMain/getCarClassifys`,
+    url: `${api.wmsApi}/wbPub/getCarClassifys`,
     method: 'post',
     data
   })
@@ -113,7 +122,7 @@ export function getCarParts(data) {
   })
 }
 
-// 配件分类菜单树 ====> 调拨所需接口
+// ====> 调拨所需接口
 export function getCarPartsTwo(params) {
   return axios.request({
     url: `${api.wmsApi}/wbParts/findByAllot`,

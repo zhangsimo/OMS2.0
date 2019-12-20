@@ -7,7 +7,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-                  <Select v-model="form.value" @on-change="getDataType" class="w90 mr10">
+                  <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -96,11 +96,12 @@
                           <Row class="w160">
                             <Col span="24">
                               <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
-                                <Option
-                                  v-for="item in cangkuListall"
-                                  :value="item.value"
-                                  :key="item.value"
-                                >{{item.label}}</Option>
+                                <!--<Option-->
+                                  <!--v-for="item in cangkuListall"-->
+                                  <!--:value="item.value"-->
+                                  <!--:key="item.value"-->
+                                <!--&gt;{{item.label}}</Option>-->
+                                <Option v-for="item in cangkuListall" :value="item.id" :key="item.id">{{ item.name }}</Option>
                               </Select>
                             </Col>
                           </Row>
@@ -184,8 +185,10 @@
            <!--      添加配件-->
       <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" ></select-part-com>
           <!-- 选择调出方 -->
-    <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>
-      <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
+    <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
+    <select-supplier ref="selectSupplier" header-tit="调出方资料" @selectSupplierName="selectSupplierName"></select-supplier>
+
+    <add-in-com :tbdata="tableData1" @getName="showModel3" :dcName="diaochuName" :dcId="diaochuID" :dcList="dcData" @search21="searchPro" @ok="getOkList" @selectAddName="selectAddlierName" ref="addInCom" headerTit="配件成品选择"></add-in-com>
       <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
   </main>
   <!-- 配件组装 -->
@@ -199,10 +202,15 @@ import PrintShow from "./compontents/PrintShow";
 import selectPartCom from "./compontents/selectPartCom";
 import moment from 'moment'
 import QuickDate from '../../../../components/getDate/dateget'
-import SelectSupplier from './compontents/selectSupplier'
+// import SelectSupplier from './compontents/selectSupplier'
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+
 import {
   getList1, baocun, tijiao, shanqu, zuofei, chengping, cangkulist2, outDataList, getListDetail
 } from '@/api/AlotManagement/putStorage.js'
+
+import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
+
 export default {
   name: 'backApply',
   components: {
@@ -219,7 +227,7 @@ export default {
       dcData: [],
       showit: true,
       form: {
-        value: '',
+        status: '',
         qucikTime: ''
       },
       tabKey: '0',
@@ -442,6 +450,13 @@ export default {
       this.getWareHouse()
   },
   methods: {
+    warehouse(){
+      queryByOrgid().then(res => {
+        if(res.code === 0){
+          this.cangkuListall = res.data
+        }
+      })
+    },
   //配件返回的参数
         getPartNameList(val){
           this.$refs.formPlan.validate(async (valid) => {
@@ -464,7 +479,7 @@ export default {
     getDataType() {
       console.log(121)
       const params = {
-        value: this.form.value
+        status: this.form.status
       }
       this.getList(params)
     },
@@ -653,8 +668,8 @@ export default {
     },
     getDataQuick(v) {
       const params = {
-        createTimeStart: v[0],
-        createTimeEnd: v[1]
+        createTime: v[0],
+        endTime: v[1]
       }
       this.getList(params)
     },
@@ -683,7 +698,7 @@ export default {
                     item['label'] = item.name
                     item['value'] = item.id
                   })
-                 this.cangkuListall = res.data
+                 // this.cangkuListall = res.data
                  this.dcData = res.data
                 }
               }).catch(e => {
@@ -804,6 +819,13 @@ export default {
       this.$refs.addInCom.init1()
     },
     getList(params) {
+      if (params.qucikTime) {
+        params.createTime = params.qucikTime[0],
+        params.endTime = params.qucikTime[1]
+        delete params.qucikTime
+      } else {
+        delete params.qucikTime
+      }
       console.log(params)
       getList1(params, this.Left.page.size, this.Left.page.num).then(res => {
                 if (res.code == 0) {
@@ -854,7 +876,9 @@ export default {
     window.onresize = () => {
       this.getDomHeight()
     }
+    this.warehouse()
   }
+
 }
 </script>
 

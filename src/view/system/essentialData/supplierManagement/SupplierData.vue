@@ -62,11 +62,11 @@
         ></Page>
       </div>
 <!--      客户资料-->
-      <Modal v-model="clientDataShow" title="供应商资料"   width="700" height="2100">
+      <Modal v-model="clientDataShow" title="供应商资料" @on-visible-change="openOrClose"   width="700" height="2100">
         <ClientData :data="clientList" :provincearr="provinceArr" :treelist="treeDiagramList" ref="child"></ClientData>
         <div class="footerMargin" slot='footer'>
           <Button type='primary' @click="addNewSupplier">确定</Button>
-          <Button type='default' @click='clientDataShow = false'>取消</Button>
+          <Button type='default' @click='cancel'>取消</Button>
         </div>
       </Modal>
 
@@ -273,6 +273,7 @@
                 },//请求头
                 upurl:getup,//批量导入地址
 
+
             }
         },
         created(){
@@ -339,14 +340,21 @@
             },
             //选中一条信息
             pitchSupplier(currentRow){
+
                 this.pitchSupplierOne = currentRow
+
             },
             addClient(){
                 this.clientList ={}
-               this.clientDataShow = true
+                this.clientDataShow = true
             },
+          cancel(){
+              this.clientDataShow = false
+             this.$refs.child.resetFields()
+          },
             //确认添加一条信息
             addNewSupplier(){
+                this.$refs.child.resetFields()
                 this.$refs.child.handleSubmit( async () => {
                     let data = this.clientList
                     console.log(data,'data  =>352')
@@ -356,13 +364,18 @@
                   if(res.code === 0 ){
                     this.clientDataShow = false
                     this.getlist()
+
                   }
 
                 })
             },
+          openOrClose(){
+            this.pitchSupplierOne={}
+          },
             //修改客户资料
             changeClient(){
-                if (Object.keys(this.pitchSupplierOne).length == 0  ){
+               this.$refs.child.resetFields()
+                if (Object.keys(this.pitchSupplierOne).length == 0){
                     this.$Message.error('请先选中一个供应商信息')
                     return false
                 }
