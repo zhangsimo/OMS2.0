@@ -2,9 +2,9 @@ import axios from '@/libs/api.request'
 import api from '_conf/url'
 
 // 查询租赁产品列表
-export function getLeaseProlist (data) {
+export function getLeaseProlist (num , page,data) {
   return axios.request({
-    url: `${api.omsApi}/tenantProduct/findPageByDynamicQuery`,
+    url: `${api.omsApi}/tenantProduct/findPageByDynamicQuery?page=${num}&size=${page}`,
     method: 'post',
     data
   })

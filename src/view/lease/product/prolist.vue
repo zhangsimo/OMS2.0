@@ -462,10 +462,12 @@
         if(searchValue){
           params.name = searchValue
         }
-        params.page = this.page.num - 1
-        params.size = this.page.size
+        // params.page = this.page.num - 1
+        // params.size = this.page.size
+        let page = this.page.num - 1
+        let size = this.page.size
         this.loading = true
-        getLeaseProlist(params).then(res => {
+        getLeaseProlist(page, size,params).then(res => {
           this.selectTable = {}
           this.loading = false
           if (res.code == 0) {
@@ -535,13 +537,13 @@
       },
 
       //分页
-      changePage(p) {
-        this.page.num = p
+      changePage(val) {
+        this.page.num = val
         this.getList()
       },
-      changeSize(size) {
+      changeSize(val) {
         this.page.num = 1
-        this.page.size = size
+        this.page.size = val
         this.getList()
       },
       //搜索
