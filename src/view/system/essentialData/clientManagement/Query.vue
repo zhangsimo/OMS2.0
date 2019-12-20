@@ -21,11 +21,11 @@
           <Input v-model="data.contactor" style="width: 180px" :maxlength="8"/>
         </FormItem>
         <FormItem label="信用等级:">
-          <Select v-model="data.tgradeName" style="width:180px" class="mr10">
+          <Select v-model="data.tgradeName" style="width:180px" class="mr10" v-if="dataList != []">
             <Option
-              v-for="item in dataList.CS00112"
+              v-for="item in dataList"
               :value="item.itemCode"
-              :key="item.id"
+              :key="item.itemCode"
             >{{ item.itemName }}</Option>
           </Select>
         </FormItem>
@@ -66,12 +66,13 @@
 import {
   getDigitalDictionary
 } from "@/api/system/essentialData/clientManagement";
+import {area} from '@/api/lease/registerApi';
 export default {
   name: "Query",
   props: {
     data: "",
-    provincearr: "",
-    dataList: []
+
+
   },
   data() {
     return {
@@ -84,17 +85,34 @@ export default {
           label: 456,
           value: 2
         }
-      ]
+      ],
+      dataList:[],
+      provincearr: []
     };
   },
-  async mounted(){
-    let data = {};
-      data = ["CS00112"];
-      let res = await getDigitalDictionary(data);
+  mounted(){
+    this.getxingyong()
+    this.getAdress()
+  },
+  methods:{
+    //获取cs00112
+    async getxingyong(){
+       let data = {};
+       data = ['CS00112']
+       let res = await getDigitalDictionary(data);
+       if (res.code == 0) {
+         this.dataList = res.data.CS00112;
+
+       }
+
+     },
+    //获取地址
+    async getAdress() {
+      let res = await area()
       if (res.code == 0) {
-        this.dataList = res.data;
+        this.provincearr = res.data
       }
-      // console.log(this.dataList)
+    }
   }
 };
 </script>

@@ -138,6 +138,9 @@ export default {
     //出库
     setStockOut() {
       let res = this.$refs.right.stockOut();
+      if(res.code===0){
+        this.$message.success('出库成功')
+      }
     },
     //提交
     sumbit() {
@@ -147,7 +150,6 @@ export default {
         return false;
       }
       let res = this.$refs.right.submitList();
-      console.log(res, 789);
     },
     //返单
     async setBackOrder() {
