@@ -301,6 +301,7 @@ export const mixGoodsData = {
       //     }
       //   })
       // }
+      this.$refs['formPlan'].resetFields();
       if (this.newadd && this.selectPlanOrderItem.new) {
         this.tbdata.splice(0, 1);
         this.newadd = false;
@@ -397,7 +398,6 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
-      this.$refs['formPlan'].resetFields();
       this.$refs['formPlan'].validate(valid => {
         if (valid) {
           let objReq = {};
