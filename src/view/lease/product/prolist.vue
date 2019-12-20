@@ -498,7 +498,7 @@
           this.formValidate.coin = this.selectTable.coin
           this.formValidate.id = this.selectTable.id
           this.formValidate.disable = this.selectTable.isDisabled
-          console.log(this.formValidate.disable)
+          // console.log(this.formValidate.disable)
         }else{
           this.$Message.error("请选择要修改的数据！")
         }
@@ -573,7 +573,7 @@
       },
       selectTree(v){
         this.selectTreeData = v
-        console.log(v)
+        // console.log(v)
       },
       //表格详情选中
       selectDetailFun(v){

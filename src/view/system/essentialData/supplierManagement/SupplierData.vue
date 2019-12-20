@@ -113,7 +113,7 @@ import { area } from "@/api/lease/registerApi";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
-
+import baseUrl from "_conf/url";
 export default {
   name: "CustomerData",
   components: {
@@ -124,22 +124,6 @@ export default {
   },
   data() {
     return {
-      fasttipsList: [
-        { name: "供应商全称", id: "fullName" },
-        { name: "优势品牌/产品", id: "advantageCarbrandId" },
-        { name: "联系人电话", id: "contactorTel" }
-      ], //快速查询下拉框
-      fasttipsType: "", //快速查询种类
-      fasttipsTitle: "", //快速查询内容
-      supplierType: "", //客户种类
-      moreQueryOne: {},
-      loading: true,
-      provinceArr: "",
-      page: {
-        size: 10,
-        num: 1,
-        total: 0
-      },
       columns: [
         { title: "序号", align: "center", type: "index", key: "name" },
         {
@@ -200,16 +184,6 @@ export default {
           title: "财务信息",
           align: "center",
           children: [
-            // {
-            //     title: '信誉等级',
-            //     key: 'tel',
-            //     align: 'center',
-            // },
-            // {
-            //     title: '信誉额度',
-            //     key: 'contactorTel',
-            //     align: 'center',
-            // },
             {
               title: "票据类型",
               key: "billTypeName",
@@ -307,6 +281,7 @@ export default {
       upurl: getup //批量导入地址
     };
   },
+
   created() {
     this.getAdress();
     this.getsupplierTypeList();
@@ -317,6 +292,29 @@ export default {
     }
   },
   methods: {
+    // 上传成功函数
+    onSuccess(response) {
+      this.getlist();
+      console.log(response, "response =>382");
+      if (response.code != 0) {
+        this.$Notice.warning({
+          title: "导入失败",
+          desc: response.message
+        });
+      } else {
+        this.$Notice.success({
+          title: "导入成功",
+          desc: response.message
+        });
+      }
+    },
+    //下载模板
+    downTemplate() {
+      window.location.href =
+        baseUrl.omsOrder +
+        "/enterMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
+    },
     //获取全部表格数据
     async getlist() {
       this.loading = true;
@@ -375,7 +373,7 @@ export default {
     addClient() {
       this.clientList = {};
       this.clientDataShow = true;
-      this.$refs.child.$refs.form.resetFields()
+      this.$refs.child.$refs.form.resetFields();
     },
     cancel() {
       this.clientDataShow = false;
@@ -440,10 +438,6 @@ export default {
     //上传之前清空
     beforeUpload() {
       this.$refs.upload.clearFiles();
-    },
-    //下载模板
-    downTemplate() {
-      down("1100000000");
     }
   },
   watch: {
