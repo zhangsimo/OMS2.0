@@ -370,6 +370,7 @@
                 })
             },
           openOrClose(){
+
             this.pitchSupplierOne={}
           },
             //修改客户资料
