@@ -103,7 +103,7 @@
           <Col span="11">
             <FormItem label="是否禁用：" prop="disable">
               <Select v-model="formValidate.disable" placeholder="Select your city">
-                <Option :value='item.value' v-for="item in disableArr">{{item.label}}</Option>
+                <Option :value='item.value' v-for="(item,index) in disableArr" :key="index">{{item.label}}</Option>
               </Select>
             </FormItem>
           </Col>
