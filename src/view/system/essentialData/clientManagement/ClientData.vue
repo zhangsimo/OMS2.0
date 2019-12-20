@@ -324,20 +324,30 @@
               @on-current-change="pitchOnBank"
             ></Table>-->
             <vxe-table
-              highlight-current-row 
+              highlight-current-row
               @current-change="pitchOnBank"
               border
               auto-resize
               show-overflow
+              ref="validData"
               :data="invoice"
+              :edit-rules="validRules"
               :mouse-config="{selected: true}"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               :edit-config="{trigger: 'dblclick', mode: 'cell'}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerCode" title="税号" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column field="taxpayerTel" title="地址电话" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column
+                field="taxpayerCode"
+                title="税号"
+                :edit-render="{name: 'input'}"
+              ></vxe-table-column>
+              <vxe-table-column
+                field="taxpayerTel"
+                title="地址电话"
+                :edit-render="{name: 'input'}"
+              ></vxe-table-column>
               <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
             </vxe-table>
           </div>
@@ -408,6 +418,12 @@ export default {
           value: 2
         }
       ],
+      validRules: {
+        taxpayerName: [{ required: true, message: '',trigger:'change' }],
+        taxpayerCode: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
+        taxpayerTel: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
+        accountBankNo: [{ required: true, message: '' ,trigger:'change'}]
+      },
       columns: [
         {
           title: "收货单位",
@@ -423,7 +439,7 @@ export default {
         {
           title: "联系方式",
           align: "center",
-          key: "contactor"
+          key: "receiveManTel"
         },
         {
           title: "收货地址",
@@ -614,13 +630,21 @@ export default {
     },
     //校验表单
     handleSubmit(callback) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          callback && callback();
+      this.$refs.validData.validate(valid =>{
+        if(valid){
+          callback && callback()
         } else {
           this.$Message.error("带*为必填");
         }
-      });
+      })
+      // this.$refs.form.validate(valid => {
+      //   if (valid) {
+      //     callback && callback();
+      //   } else {
+      //     this.$Message.error("带*为必填");
+      //   }
+      // });
+      
     },
     // 获取新增地址
     selection(item) {
@@ -631,6 +655,7 @@ export default {
     },
     //新增地址表单校验
     addplaceSure() {
+      // console.log(this.placeList)
       this.$refs.child.handleSubmit(() => {
         if (this.placeList.some(item => item.id == this.oneNew.id)) {
           this.oneNew.isDefault
@@ -657,7 +682,7 @@ export default {
     },
     //修改地址表单
     changeplage() {
-      console.log(this.oneNew);
+      // console.log(this.oneNew);
       if (Object.keys(this.oneNew).length == 0) {
         this.$Message.error("至少选项一条地址");
         return false;

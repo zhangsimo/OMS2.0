@@ -35,8 +35,8 @@
         </FormItem>
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
-        <FormItem label="联系方式:" prop="contactor">
-          <Input v-model="data.contactor" style="width: 180px"/>
+        <FormItem label="联系方式:" prop="receiveManTel">
+          <Input v-model="data.receiveManTel" style="width: 180px"/>
         </FormItem>
         <FormItem label="城市:" prop="cityId">
           <Select v-model="data.cityId" style="width:180px" class="mr10" @on-change="cityName">
@@ -49,7 +49,7 @@
           </Select>
         </FormItem>
         <FormItem label="街道:" prop="streetAddress">
-          <Input v-model="data.streetAddress" style="width: 180px" @on-change="data.address += data.streetAddress"/>
+          <Input v-model="data.streetAddress" style="width: 180px" @on-blur="data.address = data.streetAddress"/>
         </FormItem>
       </div>
     </div>
@@ -93,7 +93,7 @@ export default {
         receiveCompName: [
           { required: true, message: "不能为空", trigger: "blur" }
         ],
-        contactor: [
+        receiveManTel: [
           { required: true, validator: validatePhone, trigger: "blur" }
         ],
         streetAddress: [
@@ -102,6 +102,11 @@ export default {
         countyId: [{ required: true, message: "地区不可为空", trigger: "blur" }]
       }
     };
+  },
+  computed:{
+    address (){
+      
+    }
   },
   methods: {
     //清除内容
@@ -130,7 +135,7 @@ export default {
     countyName() {
       this.place.map(item => {
         if (item.id === this.data.countyId) {
-          this.data.address += item.name;
+          this.data.address = item.name;
         }
       });
     },

@@ -383,6 +383,8 @@ export default {
         if (res.code == 0) {
           this.clientList = res.data;
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList
+          this.$refs.child.relevanceClientShow = this.clientList.guestVOList
+          this.$refs.child.invoice = this.clientList.guestTaxpayerVOList
         }
         // console.log(this.clientList);
         this.clientDataShow = true;
