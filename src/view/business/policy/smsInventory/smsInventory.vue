@@ -662,7 +662,7 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             this.formPlan.billStatusId.value = 1;
-            this.formPlan.auditDate = `${this.formPlan.auditDate.getFullYear()}-${this.formPlan.auditDate.getMonth()}-${this.formPlan.auditDate.getDate()} ${this.formPlan.auditDate.getHours()}:${this.formPlan.auditDate.getMinutes()}:${this.formPlan.auditDate.getSeconds()}`;
+            this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
             getSubmitList(this.formPlan).then(res => {
               console.log(res);
               if (res.code == 0) {
@@ -819,23 +819,21 @@ export default {
     getPartNameList(val) {
       this.$refs.form.validate(valid => {
         if (valid) {
-          var datas = conversionList(val);
+          var datas = conversionList(val)
           datas.forEach(item => {
-            this.formPlan.detailVOList = item;
-          });
-          this.formPlan.auditDate = `${this.formPlan.auditDate.getFullYear()}-${this.formPlan.auditDate.getMonth()}-${this.formPlan.auditDate.getDate()} ${this.formPlan.auditDate.getHours()}:${this.formPlan.auditDate.getMinutes()}:${this.formPlan.auditDate.getSeconds()}`
-          // this.$set(this.formPlan,'auditDate',` `)
-           
-          console.log(this.formPlan.auditDate);
-          // getSubmitList(this.formPlan)
-          //   .then(res => {
-          //     console.log(res);
-          //     this.getList();
-          //   })
-          //   .catch(err => {
-          //     this.showRemove = false;
-          //     this.$Message.info("添加失败");
-          //   });
+            this.formPlan.detailVOList = item
+          })
+          this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
+          console.log(this.formPlan , 999)
+          getSubmitList(this.formPlan)
+            .then(res => {
+              console.log(res);
+              this.getList();
+            })
+            .catch(err => {
+              this.showRemove = false;
+              this.$Message.info("添加失败");
+            })
         } else {
           this.$message.error("带*必填");
         }
