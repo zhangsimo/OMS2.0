@@ -1,12 +1,12 @@
 <template>
   <Form ref="form" :label-width="100" :model="data" class="clearfix" :rules="rules">
     <FormItem label="收货单位:" prop="receiveCompName">
-      <Input v-model="data.receiveCompName" style="width: 380px"/>
+      <Input v-model="data.receiveCompName" style="width: 380px" />
     </FormItem>
     <div style="display: flex">
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="收货人:" prop="receiveMan">
-          <Input v-model="data.receiveMan" style="width: 180px"/>
+          <Input v-model="data.receiveMan" style="width: 180px" />
         </FormItem>
         <FormItem label="省份:" prop="provinceId">
           <Select
@@ -36,7 +36,7 @@
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="联系方式:" prop="receiveManTel">
-          <Input v-model="data.receiveManTel" style="width: 180px"/>
+          <Input v-model="data.receiveManTel" style="width: 180px" />
         </FormItem>
         <FormItem label="城市:" prop="cityId">
           <Select v-model="data.cityId" style="width:180px" class="mr10" @on-change="cityName">
@@ -49,15 +49,15 @@
           </Select>
         </FormItem>
         <FormItem label="街道:" prop="streetAddress">
-          <Input v-model="data.streetAddress" style="width: 180px" @on-blur="data.address = data.streetAddress"/>
+          <Input v-model="data.streetAddress" style="width: 180px" @input="streetName" />
         </FormItem>
       </div>
     </div>
     <FormItem label="详细地址:">
-      <Input v-model="data.address" style="width: 400px" disabled/>
+      <Input v-model="data.address" style="width: 400px" disabled />
     </FormItem>
     <FormItem label="备注:" style="float: left">
-      <Input v-model="data.remark" style="width: 330px"/>
+      <Input v-model="data.remark" style="width: 330px" />
     </FormItem>
     <div style="float: left;line-height: 30px;padding-left: 10px">
       <Checkbox v-model="data.isDefault"></Checkbox>是否默认
@@ -103,9 +103,27 @@ export default {
       }
     };
   },
-  computed:{
-    address (){
-      
+  computed: {
+    address() {
+      let one = this.place.map(item => {
+        if (item.id === this.data.provinceId) {
+          return item.name;
+        }
+      });
+      let two = this.place.map(item => {
+        if (item.id === this.data.countyId) {
+          return item.name;
+        }
+      });
+      let three = this.place.map(item => {
+        if (item.id === this.data.cityId) {
+          return item.name;
+        }
+      });
+      let four = this.data.streetAddres;
+      // console.log(one,two,three)
+      // console.log(one+two+three)
+      return (this.data.address = one + two + four || "");
     }
   },
   methods: {
@@ -135,17 +153,24 @@ export default {
     countyName() {
       this.place.map(item => {
         if (item.id === this.data.countyId) {
-          this.data.address = item.name;
+          this.data.address += item.name;
         }
       });
     },
     // 选择城市
-    cityName(){
+    cityName() {
       this.place.map(item => {
         if (item.id === this.data.cityId) {
           this.data.address += item.name;
         }
       });
+    },
+    streetName(value) {
+      this.data.address = "";
+      this.provinceName();
+      this.countyName();
+      this.cityName();
+      this.data.address += value;
     }
   }
 };
