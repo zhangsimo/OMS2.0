@@ -314,6 +314,13 @@ export default {
         baseUrl.omsOrder +
         "/enterMain/template?access_token=" +
         Cookies.get(TOKEN_KEY);
+
+        // location.href =
+        //   baseUrl.omsOrder +
+        //   "/sellOrderMain/export?id=" +
+        //   list.id +
+        //   "&access_token=" +
+        //   Cookies.get(TOKEN_KEY);
     },
     //获取全部表格数据
     async getlist() {
