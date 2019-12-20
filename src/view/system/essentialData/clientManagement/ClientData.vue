@@ -657,20 +657,6 @@ export default {
     },
     //修改地址表单
     changeplage() {
-      if (Object.keys(this.oneNew).length == 0) {
-        this.$Message.error("至少选项一条地址");
-        return false;
-      }
-      if (
-        this.oneNew.cityId == undefined ||
-        this.oneNew.provinceId == undefined
-      ) {
-        this.$Message.error("至少选项一条地址");
-        return false;
-      }
-    },
-    //修改地址表单
-    changeplage() {
       console.log(this.oneNew);
       if (Object.keys(this.oneNew).length == 0) {
         this.$Message.error("至少选项一条地址");
