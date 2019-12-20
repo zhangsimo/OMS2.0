@@ -97,7 +97,7 @@
                     ></Date-picker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input class="w500" v-model="formPlan.remark" placeholder="选填"></Input>
+                    <Input class="w500" v-model="formPlan.remark" placeholder="选填" maxlength="100"></Input>
                   </FormItem>
                   <FormItem label="处理人：">
                     <Input readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>

@@ -87,7 +87,7 @@ export default class InterPurchase extends Vue {
       },
       {
         title: '供应商',
-        key: 'guest',
+        key: 'guestName',
         minWidth: 170
       },
       {
@@ -175,7 +175,7 @@ export default class InterPurchase extends Vue {
   // 采购订单信息——表单
   private formPlanmain: any = {
     guestId: "", // 供应商id
-    guest: "", // 供应商
+    guestName: "", // 供应商
     advanceAmt:"",//预付款
     orderMan: "", // 采购员
     billTypeId: "", // 票据类型
@@ -188,7 +188,7 @@ export default class InterPurchase extends Vue {
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
-    guest: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
+    guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
     orderMan: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
@@ -197,6 +197,21 @@ export default class InterPurchase extends Vue {
   }
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
+
+  private options1:any = {
+    disabledDate (date:any) {
+      return date && date.valueOf() < Date.now() - 86400000;
+    }
+  }
+
+  private options2:any = {
+    disabledDate: this.options2DisabledDate,
+  }
+
+  private options2DisabledDate (date:any) {
+    const orderDate = this.formPlanmain.orderDate;
+    return date && orderDate && date.valueOf() < orderDate;
+  }
 
   // 采购订单列表-翻页
   private purchaseOrderTableChangePage(p: number) {
@@ -244,6 +259,7 @@ export default class InterPurchase extends Vue {
     ref.resetFields();
     this.formPlanmain.guestId = '';
     this.formPlanmain.serviceId = '';
+    this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
@@ -278,7 +294,7 @@ export default class InterPurchase extends Vue {
           }
         }
       } else {
-        this.$Message.error('必填信息未填写!');
+        this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;
       }
     })
@@ -408,32 +424,58 @@ export default class InterPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if(v == null) return;
-    const ref: any = this.$refs['formplanref']
-    ref.resetFields();
+    const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
-      this.purchaseOrderTable.tbdata.splice(0, 1);
-      this.isAdd = true;
-      const currentRowTable:any = this.$refs["currentRowTable"];
-      currentRowTable.clearCurrentRow();
-    }
-    this.selectTableRow = v;
-    console.log(this.selectTableRow)
-    this.mainId = v.id;
-    this.tableData = v.details || [];
-    this.selectRowState = v.billStatusId.name;
-    this.serviceId = v.serviceId;
-    if(['草稿', '退回'].includes(v.billStatusId.name)) {
-      this.isInput = false;
+      this.$Modal.confirm({
+        title: '您正在编辑单据，是否需要保存',
+        onOk: () => {
+          currentRowTable.clearCurrentRow();
+          this.purchaseOrderTable.tbdata[0] = {...this.selectTableRow, ...this.formPlanmain,  _highlight: true };
+          const row = this.purchaseOrderTable.tbdata[0];
+          this.selectTableRow = this.purchaseOrderTable.tbdata[0];
+          this.purchaseOrderTable.tbdata.push();
+          this.saveHandle('formplanref');
+          this.mainId = row.id || "";
+          this.tableData = row.details || [];
+          this.selectRowState = "";
+          this.serviceId = row.serviceId || "";
+          this.isInput = false;
+          this.adjustButtonDisable = true;
+          for (let k in this.formPlanmain) {
+            this.formPlanmain[k] = row[k];
+          }
+        },
+        onCancel: () => {
+          this.purchaseOrderTable.tbdata.splice(0, 1);
+          this.isAdd = true;
+          currentRowTable.clearCurrentRow();
+        },
+      })
     } else {
-      this.isInput = true;
-    }
-    if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
-      this.adjustButtonDisable = false;
-    } else {
-      this.adjustButtonDisable = true;
-    }
-    for (let k in this.formPlanmain) {
-      this.formPlanmain[k] = v[k];
+      if(this.isAdd) {
+        const ref: any = this.$refs['formplanref']
+        ref.resetFields();
+      }
+      if(v) {
+        this.selectTableRow = v;
+        this.mainId = v.id;
+        this.tableData = v.details || [];
+        this.selectRowState = v.billStatusId.name;
+        this.serviceId = v.serviceId;
+        if(['草稿', '退回'].includes(v.billStatusId.name)) {
+          this.isInput = false;
+        } else {
+          this.isInput = true;
+        }
+        if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
+          this.adjustButtonDisable = false;
+        } else {
+          this.adjustButtonDisable = true;
+        }
+        for (let k in this.formPlanmain) {
+          this.formPlanmain[k] = v[k];
+        }
+      }
     }
   }
 
@@ -626,12 +668,14 @@ export default class InterPurchase extends Vue {
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    this.formPlanmain.guest = row.fullName;
-    this.formPlanmain.guestId = row.id;
-    //结算方式
-    this.formPlanmain.settleTypeId =  row.settTypeId || ''
-    //票据类型
-    this.formPlanmain.billTypeId = row.billTypeId || ''
+    if(row) {
+      this.formPlanmain.guestName = row.fullName;
+      this.formPlanmain.guestId = row.id;
+      //结算方式
+      this.formPlanmain.settleTypeId =  row.settTypeId || ''
+      //票据类型
+      this.formPlanmain.billTypeId = row.billTypeId || ''
+    }
   }
 
   // 采购计划单据
