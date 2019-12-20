@@ -210,7 +210,7 @@ import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import {area} from '@/api/lease/registerApi'
-import { getLeftList , getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
+import { getClient , getRightList,getWarehouseList ,getLimit , getSave , getStockOut , getSubmitList, getAccessories,getDeleteList,getup} from '@/api/salesManagment/salesOrder'
 import {getDigitalDictionary } from '@/api/system/essentialData/clientManagement'
 import {getNewClient} from '@/api/system/essentialData/clientManagement'
 import {getClientTreeList} from '@/api/system/essentialData/clientManagement';

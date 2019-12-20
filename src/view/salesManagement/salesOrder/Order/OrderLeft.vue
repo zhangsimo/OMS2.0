@@ -89,7 +89,6 @@ export default {
     },
     //获取表格数据
     async gitlistValue() {
-      console.log(121212);
       let data = {};
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";

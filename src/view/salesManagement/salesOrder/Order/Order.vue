@@ -2,7 +2,6 @@
   <div style="height:100%">
     <div class="headerBox">
       <span class="mr10">快速查询:</span>
-      <Button>22222</Button>
       <getDate class="mr10" @quickDate="getvalue"></getDate>
       <Select v-model="orderType" style="width:100px" class="mr10">
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
