@@ -127,8 +127,8 @@ export default {
       page: 0,
       loading: false,
       fasttipsList: [],
-      supplierType:'',
-      fasttipsType:'',
+      supplierType: "",
+      fasttipsType: "",
       columns: [
         { title: "序号", align: "center", type: "index", key: "name" },
         {
@@ -299,8 +299,8 @@ export default {
   methods: {
     // 上传成功函数
     onSuccess(response) {
-      this.getlist();
       console.log(response, "response =>382");
+      this.getlist();
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
@@ -315,17 +315,12 @@ export default {
     },
     //下载模板
     downTemplate() {
-      window.location.href =
-        baseUrl.omsOrder +
-        "/enterMain/template?access_token=" +
+      location.href =
+        baseUrl.downApi +
+        "/file/get?fileId=" +
+        1300000000 +
+        "&access_token=" +
         Cookies.get(TOKEN_KEY);
-
-        // location.href =
-        //   baseUrl.omsOrder +
-        //   "/sellOrderMain/export?id=" +
-        //   list.id +
-        //   "&access_token=" +
-        //   Cookies.get(TOKEN_KEY);
     },
     //获取全部表格数据
     async getlist() {
