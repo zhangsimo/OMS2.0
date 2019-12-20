@@ -314,7 +314,7 @@
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </a>
             </div>
-            <Table
+            <!-- <Table
               size="small"
               border
               :stripe="true"
@@ -322,7 +322,24 @@
               :columns="columns3"
               :data="invoice"
               @on-current-change="pitchOnBank"
-            ></Table>
+            ></Table>-->
+            <vxe-table
+              highlight-current-row 
+              @current-change="pitchOnBank"
+              border
+              auto-resize
+              show-overflow
+              :data="invoice"
+              :mouse-config="{selected: true}"
+              :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
+              :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            >
+              <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+              <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="taxpayerCode" title="税号" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="taxpayerTel" title="地址电话" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
+            </vxe-table>
           </div>
           <Modal v-model="newInoiceShow" title="新增开票">
             <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
@@ -374,7 +391,7 @@ export default {
           callback();
         }
       } else {
-        callback()
+        callback();
       }
     };
 
@@ -559,6 +576,11 @@ export default {
       pitchOneBank: []
     };
   },
+  // computed:{
+  //   place(){
+  //     return this.data
+  //   }
+  // },
   mounted() {
     this.placeList = this.data.guestLogisticsVOList || [];
     this.relevanceClientShow = this.data.guestVOList || [];
@@ -588,7 +610,6 @@ export default {
       let res = await getDigitalDictionary(data);
       if (res.code == 0) {
         this.dataList = res.data;
-        console.log(this.dataList)
       }
     },
     //校验表单
