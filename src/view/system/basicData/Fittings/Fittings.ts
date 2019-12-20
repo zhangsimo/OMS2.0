@@ -582,10 +582,10 @@ export default class Fittings extends Vue {
       self.$Message.success(success);
       const localTable:any = this.$refs.localTable;
       localTable.clearCurrentRow();
-      if(this.isSys) {
-        this.initCloudPartInfo();
-      } else {
+      if (this.tabIndex === 0) {
         this.initLocalPartInfo();
+      } else {
+        this.initCloudPartInfo();
       }
     }
   }
@@ -612,19 +612,25 @@ export default class Fittings extends Vue {
       self.$Message.success(success);
       const localTable:any = this.$refs.localTable;
       localTable.clearCurrentRow();
-      if(this.isSys) {
-        this.initCloudPartInfo();
-      } else {
+      if (this.tabIndex === 0) {
         this.initLocalPartInfo();
+      } else {
+        this.initCloudPartInfo();
       }
     }
   }
   // 单选行
   private selectRow(row: any) {
+    if(!row) return;
     this.currRow = row;
     this.isCanbutton = true;
-    this.isDisable = row.disabled == 0 ? true : false;
-    this.isSale = row.isSell == 0 ? true : false;
+    if (this.tabIndex === 0) {
+      this.isDisable = row.disabled == 0 ? true : false;
+      this.isSale = row.isStopSell == 0 ? true : false; 
+    } else {
+      this.isDisable = row.isDisabled == 0 ? true : false;
+      this.isSale = row.isSale == 0 ? true : false;
+    }
   }
   // 翻页-本地
   private changePagelocal(p: number) {
@@ -663,10 +669,15 @@ export default class Fittings extends Vue {
     let self:any = this;
     if(res.code == 0) {
       self.$Message.success('导入成功');
-      if(this.isSys) {
-        this.initCloudPartInfo();
-      } else {
+      // if(this.isSys) {
+      //   this.initCloudPartInfo();
+      // } else {
+      //   this.initLocalPartInfo();
+      // }
+      if (this.tabIndex === 0) {
         this.initLocalPartInfo();
+      } else {
+        this.initCloudPartInfo();
       }
     } else {
       self.$Message.error(res.message);

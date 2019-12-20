@@ -103,7 +103,7 @@
           <Col span="11">
             <FormItem label="是否禁用：" prop="disable">
               <Select v-model="formValidate.disable" placeholder="Select your city">
-                <Option :value='item.value' v-for="item in disableArr">{{item.label}}</Option>
+                <Option :value='item.value' v-for="(item,index) in disableArr" :key="index">{{item.label}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -462,10 +462,12 @@
         if(searchValue){
           params.name = searchValue
         }
-        params.page = this.page.num - 1
-        params.size = this.page.size
+        // params.page = this.page.num - 1
+        // params.size = this.page.size
+        let page = this.page.num - 1
+        let size = this.page.size
         this.loading = true
-        getLeaseProlist(params).then(res => {
+        getLeaseProlist(page, size,params).then(res => {
           this.selectTable = {}
           this.loading = false
           if (res.code == 0) {
@@ -496,7 +498,7 @@
           this.formValidate.coin = this.selectTable.coin
           this.formValidate.id = this.selectTable.id
           this.formValidate.disable = this.selectTable.isDisabled
-          console.log(this.formValidate.disable)
+          // console.log(this.formValidate.disable)
         }else{
           this.$Message.error("请选择要修改的数据！")
         }
@@ -535,13 +537,13 @@
       },
 
       //分页
-      changePage(p) {
-        this.page.num = p
+      changePage(val) {
+        this.page.num = val
         this.getList()
       },
-      changeSize(size) {
+      changeSize(val) {
         this.page.num = 1
-        this.page.size = size
+        this.page.size = val
         this.getList()
       },
       //搜索
@@ -571,7 +573,7 @@
       },
       selectTree(v){
         this.selectTreeData = v
-        console.log(v)
+        // console.log(v)
       },
       //表格详情选中
       selectDetailFun(v){

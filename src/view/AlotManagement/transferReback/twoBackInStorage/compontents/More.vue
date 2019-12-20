@@ -75,8 +75,7 @@
         serviceId: '', //返回单号
         code: '', //申请单号
         partCode: '', //配件编码
-        partName: '', //配件名称
-        guestId: '' //申请人id
+        partName: '' //配件名称
       }
     }
   },

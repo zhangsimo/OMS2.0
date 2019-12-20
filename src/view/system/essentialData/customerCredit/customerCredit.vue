@@ -616,13 +616,13 @@
             data.addTotalQuota = this.creaditList.tototo || 0
             data.adjustType = 0
             console.log(data)
-            // save(data).then(res => {
-            //   if(res.code === 0){
-            //     this.CreditLineApplicationShow = false
-            //     this.$Message.warning('保存成功')
-            //     this.getListTop()
-            //   }
-            // })
+            save(data).then(res => {
+              if(res.code === 0){
+                this.CreditLineApplicationShow = false
+                this.$Message.warning('保存成功')
+                this.getListTop()
+              }
+            })
           },
           //确定取消
           cancel2(){

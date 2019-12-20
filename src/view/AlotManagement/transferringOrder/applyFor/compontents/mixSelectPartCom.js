@@ -238,9 +238,12 @@ export const mixSelectPartCom  = {
     //获取系统分类
     getCarClassifysFun(){
       this.treeLoading = true
-      getCarPartClass({}).then(res => {
+      let data = {}
+      data.page =  1
+      data.pageSize = 500
+      getCarPartClass(data).then(res => {
         this.treeLoading = false
-        this.treeData = this.resetData(res.data||[])
+        this.treeData = this.resetData(res.data.content || [])
       })
     },
     //树形数组递归加入新属性

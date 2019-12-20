@@ -196,7 +196,7 @@ export default class index extends Vue{
   private save(){
     // @ts-ignore
     let stop:any = this.$loading()
-    this.role.id = ''
+    // this.role.id = ''
     addOrUpdate(this.role, this.role.resIds).then(res => {
       stop()
       if (res.code == 0) {

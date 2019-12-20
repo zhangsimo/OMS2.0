@@ -109,7 +109,7 @@ export default {
             return h("span", { class: "table-radio" });
           }
         },
-        { title: "企业号", align: "center", key: "name" },
+        { title: "企业号", align: "center", key: "firm" },
         { title: "公司全称", align: "center", key: "name" },
         { title: "公司简称", align: "center", key: "shortName" },
         { title: "电话", align: "center", key: "tel" },
@@ -149,8 +149,8 @@ export default {
   },
   methods: {
     // 门店资料关闭
-    cancelChange(type){
-      if(!type){
+    cancelChange(type) {
+      if (!type) {
         this.$refs.child.resetFields();
       }
     },
@@ -244,8 +244,9 @@ export default {
         this.$Message.error("至少选项一条地址");
         return false;
       }
-      this.clientList = this.pitchSupplierOne;
       this.clientDataShow = true;
+      this.clientList = this.pitchSupplierOne;
+      this.$refs.child.valuePic();
     }
   },
   watch: {

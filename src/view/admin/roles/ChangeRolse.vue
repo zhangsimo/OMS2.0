@@ -55,7 +55,7 @@ export default class ChangeRolse extends Vue{
                 let res = await addNewStaffe(data)
                 if(res.code === 0 ){
                     // @ts-ignore
-                    this.$message.success('添加成功')
+                    this.$message.success('修改成功')
                     this.staffShow = false
                     this.$emit('getNewList' ,res)
                 }

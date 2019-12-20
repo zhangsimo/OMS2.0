@@ -30,7 +30,12 @@
             <Input v-model='data.tempQuota' style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
-            <DatePicker v-model="data.tempStart" type="date" format="yyyy-MM-dd" :options="startTimeOptions" style="width: 150px"></DatePicker>
+            <DatePicker
+              :value="data.tempStart"
+              type="date"
+              :options="startTimeOptions"
+              style="width: 150px">
+            </DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -41,7 +46,7 @@
             <Input  :value='+data.tempQuota + data.tempCreditLimit || 0 + (+data.tempQuota) || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
-            <DatePicker v-model="data.tempEnd" type="date" format="yyyy-MM-dd" :options="endTimeOptions" style="width: 150px"></DatePicker>
+            <DatePicker :value="data.tempEnd" type="date" format="yyyy-MM-dd" :options="endTimeOptions" style="width: 150px"></DatePicker>
 
           </FormItem>
         </Col>
@@ -130,13 +135,16 @@
 <script>
   // guestAdjustadjustInfo
   import { guestAdjustadjustInfo } from '../../../../api/system/CustomerManagement/CustomerManagement'
-    export default {
+  import * as tools from "../../../../utils/tools";
+
+  export default {
         name: "CreditLineApplication",
         props:{
             data: '',
             sendMsg: '',
             payable: '',
-            quality: ''
+            quality: '',
+            nowDate: tools.transTime(new Date())
         },
         data(){
           const disabledDateS = (date) => {

@@ -159,7 +159,6 @@
             //修改确定
             change(){
                 if(!this.changeName.trim()) return this.$Message.error('名称不能为空')
-
                 let data = {}
                   data.id = this.newOne.id
                   data.companyName = this.changeName

@@ -76,7 +76,6 @@
                 this.orderNum = res.data.orderNum
                 data.price = this.getMsg.salesPrice
                 data.orderNum = res.data.orderNum
-                // data.orderNum = '20191217030100000009'
                 generationQR(data).then(res => {
                   if(res.code === 0){
                     this.erweima = res.data.code_url
@@ -85,7 +84,6 @@
                       let data1 = {}
                       let params1 = {}
                       params1.orderNum = this.orderNum
-                      // params1.orderNum = '20191217030100000009'
                       queryOrder({data:data1,params:params1}).then(res => {
                         if(res.code === 0){
                           if(res.data === 'SUCCESS'){

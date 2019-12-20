@@ -221,7 +221,7 @@
               }
           }
           const disabledDateS = (date) => {
-            return date && date.valueOf() > new Date(this.data.operationEnd)
+            return date && date.valueOf() > new Date(this.data.operationEnd )
           }
           const disabledDateE = (date) => {
             return date && date.valueOf() < new Date(this.data.operationStart)
@@ -232,19 +232,19 @@
                 nature: [{ required: true,type:'string',message: '请选择正确公司性质！', trigger: 'change' }],
                 legalPerson: [{ required: true,type:'string', message: '请输入正确法定代表人！', trigger: 'blur' }],
                 operationStart: [{ required: true,type:'date',message: '请输入正确经营期限！', trigger: 'change'}],
-                registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'blur' }],
+                registMoney: [{ required: true, type:'number',message: '请输入正确注册资本！', trigger: 'change' }],
                 operationEnd: [{ required: true,type:'date', message: '请选择时间！', trigger: 'change'}],
                 registerDate: [{ required: true,type:'date', message: '请选择成立日期!', trigger: 'change'}],
                 manageStatus: [{ required: true, type:'string',message: '请选择登记状态！', trigger: 'change' }],
                 registAddress: [{ required: true,type:'string', message: '请输入正确注册地址！', trigger: 'blur' }],
                 shopAddress: [{ required: true,type:'string', message: '请输入正确经营地址！', trigger: 'blur' }],
                 mainProducts: [{ required: true,type:'string', message: '请输入正确经营范围！', trigger: 'blur' }],
-                // businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'change' }],
+                businessName: [{ required: true,type:'string', message: '请上传营业执照！', trigger: 'change' }],
                 salesman: [{ required: true,type:'string', message: '请输入授权采购员！', trigger: 'blur' }],
                 salesmanTel: [{ required: true,validator:validatePhone, trigger: 'blur' }],
                 cashMode: [{ required: true,type:'string', message: '请选择回款方式！', trigger: 'change' }],
-                accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'blur' }],
-                cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'blur' }],
+                accountDate: [{ required: true, type:'number',message: '请输入约定对账日期！', trigger: 'change' }],
+                cashDate: [{ required: true, type:'number',message: '请输入回款日期！', trigger: 'change' }],
                 rollingDate: [{ required: true, validator:smallNumber, trigger: 'blur' }],
                 applyTrustMoney: [{ required: true,validator:bigNumber,trigger: 'blur' }],
 
@@ -299,25 +299,28 @@
           this.data.purchaseName = api.getfile + res.data.url
         }
       },
-      onStartTimeChange(startTime,type) {
-        this.endTimeOptions = {
-          // 设置结束时间不能选的范围
-          disabledDate(endTime) {
-            return endTime < startTime
-          }
-        }
-        this.data.operationStart = startTime
-      },
-      onEndTimeChange(endTime,type) {
-        this.startTimeOptions = {
-          // 设置开始时间不能选的范围
-          disabledDate(startTime) {
-            return startTime > endTime
-          }
-        }
-        this.data.operationEnd = endTime
-      }
-    }
+      // onStartTimeChange(startTime,type) {
+      //   this.endTimeOptions = {
+      //     // 设置结束时间不能选的范围
+      //     disabledDate(endTime) {
+      //       return endTime < startTime
+      //     }
+      //   }
+      //   this.data.operationStart = startTime
+      // },
+      // onEndTimeChange(endTime,type) {
+      //   this.startTimeOptions = {
+      //     // 设置开始时间不能选的范围
+      //     disabledDate(startTime) {
+      //       return startTime > endTime
+      //     }
+      //   }
+      //   this.data.operationEnd = endTime
+      // }
+    },
+    // mounted(){
+    //   this.data.operationStart = tools.transTime(new Date())
+    // }
     }
 </script>
 
