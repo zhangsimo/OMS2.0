@@ -82,7 +82,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input class="w490" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
+                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
                   </Form>
                 </div>
