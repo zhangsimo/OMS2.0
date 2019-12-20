@@ -101,13 +101,17 @@ export default {
       if (!this.data.firstChar || !this.data.startNum) {
         return;
       }
-      return this.data.firstChar + "-" + this.data.startNum;
+      // return this.data.firstChar + "-" + this.data.startNum;
+      return this.data.firstChar + this.data.startNum;
+
     },
     end() {
       if (!this.data.firstChar || !this.data.endNum) {
         return;
       }
-      return this.data.firstChar + "-" + this.data.endNum;
+      // return this.data.firstChar + "-" + this.data.endNum;
+      return this.data.firstChar + this.data.endNum;
+
     }
   },
   methods: {
