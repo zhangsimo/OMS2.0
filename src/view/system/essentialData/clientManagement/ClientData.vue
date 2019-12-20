@@ -141,7 +141,7 @@
                   <Option
                     v-for="item in treelist "
                     v-if="data.guestType == item.parentId"
-                    :value="item.code"
+                    :value="item.id"
                     :key="item.id"
                   >{{ item.title }}</Option>
                 </Select>
