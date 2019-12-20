@@ -320,9 +320,6 @@ export default {
                           this.$message.error('经纬度查询失败')
                       }
                   )
-                  //  getGaudet(this.data).then(res => {
-                  //      console.log(res)
-                  //  })
               })
 
           }
