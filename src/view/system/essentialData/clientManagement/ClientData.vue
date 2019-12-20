@@ -25,7 +25,7 @@
                   <Option
                     v-for="item in dataList.CS00105"
                     :value="item.itemCode"
-                    :key="item.id"
+                    :key="item.itemCode"
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
@@ -38,7 +38,7 @@
                 <Select v-model="data.settTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00106"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
@@ -47,7 +47,7 @@
                 <Select v-model="data.billTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00107"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
@@ -98,11 +98,11 @@
                 <Input v-model="data.salesman" style="width: 180px" />
               </FormItem>
               <FormItem label="信用等级:">
-                <Select v-model="data.tgradeName" style="width:180px" class="mr10">
+                <Select v-model="data.tgrade" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00112"
                     :value="item.itemCode"
-                    :key="item.id"
+                    :key="item.itemCode"
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
@@ -117,8 +117,8 @@
                   <Option
                     v-for="item in treelist"
                     v-if="item.lever == 1"
-                    :value="item.id"
-                    :key="item.code"
+                    :value="item.code"
+                    :key="item.id"
                   >{{ item.title }}</Option>
                 </Select>
               </FormItem>
@@ -141,7 +141,7 @@
                   <Option
                     v-for="item in treelist "
                     v-if="data.guestType == item.parentId"
-                    :value="item.id"
+                    :value="item.code"
                     :key="item.id"
                   >{{ item.title }}</Option>
                 </Select>
@@ -588,6 +588,7 @@ export default {
       let res = await getDigitalDictionary(data);
       if (res.code == 0) {
         this.dataList = res.data;
+        console.log(this.dataList)
       }
     },
     //校验表单

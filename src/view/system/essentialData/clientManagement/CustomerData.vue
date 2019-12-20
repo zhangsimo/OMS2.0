@@ -358,6 +358,8 @@ export default {
         data.isNeedPack ? (data.isNeedPack = 1) : (data.isNeedPack = 0);
         data.isSupplier ? (data.isSupplier = 1) : (data.isSupplier = 0);
         data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
+        // data.tgrade = data.tgradeName
+        console.log(data,this.clientList)
         let res = await getNewClient(this.clientList);
         if (res.code == 0) {
           this.clientDataShow = false;
