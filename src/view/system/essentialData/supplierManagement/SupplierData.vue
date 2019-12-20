@@ -124,6 +124,11 @@ export default {
   },
   data() {
     return {
+      page: 0,
+      loading: false,
+      fasttipsList: [],
+      supplierType:'',
+      fasttipsType:'',
       columns: [
         { title: "序号", align: "center", type: "index", key: "name" },
         {
