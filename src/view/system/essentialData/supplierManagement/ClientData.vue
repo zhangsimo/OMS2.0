@@ -21,12 +21,12 @@
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="供应商简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px"></Input>
+                <Input v-model="data.shortName" style="width: 180px"/>
               </FormItem>
             </div>
           </div>
           <FormItem label="供应商全称:" prop="fullName">
-            <Input v-model="data.fullName" style="width: 480px"></Input>
+            <Input v-model="data.fullName" style="width: 480px"/>
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
@@ -34,13 +34,13 @@
                 <Select v-model="data.billTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00107"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
               <FormItem label="联系人:" prop="contactor">
-                <Input v-model="data.contactor" style="width: 180px"></Input>
+                <Input v-model="data.contactor" style="width: 180px"/>
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
                 <Select v-model="data.provinceId" style="width:180px" class="mr10">
@@ -58,13 +58,13 @@
                 <Select v-model="data.settTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00106"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
               <FormItem label="联系方式:" prop="contactorTel">
-                <Input v-model="data.contactorTel" style="width: 180px"></Input>
+                <Input v-model="data.contactorTel" style="width: 180px"/>
               </FormItem>
               <FormItem label="城市:" prop="cityId">
                 <Select v-model="data.cityId" style="width:180px" class="mr10">
@@ -79,23 +79,18 @@
             </div>
           </div>
           <FormItem label="地址:">
-            <Input v-model="data.streetAddress" style="width: 380px"></Input>
+            <Input v-model="data.streetAddress" style="width: 380px"/>
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员:">
-                <Input v-model="data.salesman" style="width: 180px"></Input>
+                <Input v-model="data.salesman" style="width: 180px"/>
               </FormItem>
-              <!--             <FormItem label='信用等级:' >-->
-              <!--               <Select v-model="data.use" style="width:180px" class="mr10">-->
-              <!--                 <Option v-for="item in list" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
-              <!--               </Select>-->
-              <!--             </FormItem>-->
               <FormItem label="职务:">
                 <Select v-model="data.salesmanDuty" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00110"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
@@ -104,38 +99,38 @@
                 <Select v-model="data.supplierType" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00111"
-                    :value="item.id"
+                    :value="item.itemCode"
                     :key="item.id"
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
               <FormItem label="邮箱:">
-                <Input v-model="data.email" style="width: 180px"></Input>
+                <Input v-model="data.email" style="width: 180px"/>
               </FormItem>
               <FormItem label="QQ/微信:">
-                <Input v-model="data.instantMsg" style="width: 180px"></Input>
+                <Input v-model="data.instantMsg" style="width: 180px"/>
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="业务员手机:">
-                <Input v-model="data.salesmanTel" style="width: 180px"></Input>
+                <Input v-model="data.salesmanTel" style="width: 180px"/>
               </FormItem>
               <!--             <FormItem label='信誉额度:' >-->
-              <!--                 <Input v-model='data.contactor' style="width: 180px" ></Input>-->
+              <!--                 <Input v-model='data.contactor' style="width: 180px" />-->
               <!--             </FormItem>-->
               <FormItem label="邮政编码:">
-                <Input v-model="data.postalCode" style="width: 180px"></Input>
+                <Input v-model="data.postalCode" style="width: 180px"/>
               </FormItem>
               <FormItem label="优势品牌/产品:">
-                <Input v-model="data.advantageCarbrandId" style="width: 180px"></Input>
+                <Input v-model="data.advantageCarbrandId" style="width: 180px"/>
               </FormItem>
               <FormItem label="电话:">
-                <Input v-model="data.tel" style="width: 180px"></Input>
+                <Input v-model="data.tel" style="width: 180px"/>
               </FormItem>
             </div>
           </div>
           <FormItem label="备注:">
-            <Input v-model="data.remark" style="width: 480px"></Input>
+            <Input v-model="data.remark" style="width: 480px"/>
           </FormItem>
           <Row id="rowMargin" style="marginBottom: 60px">
             <Col span="12">
@@ -168,49 +163,49 @@
           <div>
             <div>
               <FormItem label="银行账号:">
-                <Input v-model="data.accountBankNo" style="width: 450px"></Input>
+                <Input v-model="data.accountBankNo" style="width: 450px"/>
               </FormItem>
               <FormItem label="开户银行:">
-                <Input v-model="data.accountBank" style="width: 450px"></Input>
+                <Input v-model="data.accountBank" style="width: 450px"/>
               </FormItem>
               <div style="display: flex">
                 <div style="flex-flow: row nowrap;width: 100%">
                   <FormItem label="纳税人编码:" prop="phone">
-                    <Input v-model="data.taxpayerCode" style="width: 150px"></Input>
+                    <Input v-model="data.taxpayerCode" style="width: 150px"/>
                   </FormItem>
                 </div>
                 <div style="flex-flow: row nowrap;width: 100%">
                   <FormItem label="纳税人电话:" prop="phone">
-                    <Input v-model="data.taxpayerTel" style="width: 150px"></Input>
+                    <Input v-model="data.taxpayerTel" style="width: 150px"/>
                   </FormItem>
                 </div>
               </div>
               <FormItem label="纳税人名称:">
-                <Input v-model="data.taxpayerName" style="width: 450px"></Input>
+                <Input v-model="data.taxpayerName" style="width: 450px"/>
               </FormItem>
             </div>
             <p style="margin-bottom: 10px">其他信息</p>
             <FormItem label="网址:">
-              <Input v-model="data.website" style="width: 450px"></Input>
+              <Input v-model="data.website" style="width: 450px"/>
             </FormItem>
             <FormItem label="传真:">
-              <Input v-model="data.fax" style="width: 450px"></Input>
+              <Input v-model="data.fax" style="width: 450px"/>
             </FormItem>
             <FormItem label="经营地址:">
-              <Input v-model="data.addr" style="width: 450px"></Input>
+              <Input v-model="data.addr" style="width: 450px"/>
             </FormItem>
             <FormItem label="会员卡号:">
-              <Input v-model="data.memCarNo" style="width: 450px"></Input>
+              <Input v-model="data.memCarNo" style="width: 450px"/>
             </FormItem>
             <div style="display: flex">
               <div style="flex-flow: row nowrap;width: 100%">
                 <FormItem label="会员等级:" prop="phone">
-                  <Input v-model="data.memLevelId" style="width: 150px"></Input>
+                  <Input v-model="data.memLevelId" style="width: 150px"/>
                 </FormItem>
               </div>
               <div style="flex-flow: row nowrap;width: 100%">
                 <FormItem label="信誉额度:" prop="creditLimit">
-                  <Input v-model="data.creditLimit" style="width: 150px"></Input>
+                  <Input v-model="data.creditLimit" style="width: 150px"/>
                 </FormItem>
               </div>
             </div>
@@ -266,24 +261,24 @@ export default {
         shortName: [{ required: true, message: "不能为空", trigger: "blur" }],
         fullName: [{ required: true, message: "不能为空", trigger: "blur" }],
         billTypeId: [
-          { required: true, message: "不能为空", trigger: "change" }
+          { required: true, message: "不能为空", trigger: "change",type: 'string' }
         ],
         contactor: [{ required: true, message: "不能为空", trigger: "blur" }],
         provinceId: [
           { required: true, message: "不能为空", trigger: "change" }
         ],
         settTypeId: [
-          { required: true, message: "不能为空", trigger: "change" }
+          { required: true, message: "不能为空", trigger: "change",type: 'string' }
         ],
         contactorTel: [
-          { required: true, validator: validatePhone, trigger: "blur" }
+          { required: true, validator: validatePhone, trigger: "blur",type: 'string' }
         ],
-        cityId: [{ required: true, message: "不能为空", trigger: "change" }],
+        cityId: [{ required: true, message: "不能为空", trigger: "change",type: 'string' }],
         supplierTypeFirst: [
-          { required: true, message: "不能为空", trigger: "change" }
+          { required: true, message: "不能为空", trigger: "change",type: 'string' }
         ],
         supplierTypeSecond: [
-          { required: true, message: "不能为空", trigger: "change" }
+          { required: true, message: "不能为空", trigger: "change",type: 'string' }
         ]
       },
       dataList: ""
@@ -305,16 +300,6 @@ export default {
     //清除内容
     resetFields() {
       this.$refs.form.resetFields();
-    },
-    //校验表单
-    handleSubmit(callback) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          callback && callback();
-        } else {
-          this.$Message.error("信息填写错误");
-        }
-      });
     },
     selection() {},
     addPlace() {
@@ -341,7 +326,7 @@ export default {
 .tabList >>> .ivu-form-item {
   margin-bottom: 10px;
 }
->>> .ivu-select-dropdown {
+/* >>> .ivu-select-dropdown {
   height: 35px;
-}
+} */
 </style>
