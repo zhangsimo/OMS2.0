@@ -662,7 +662,7 @@ export default {
         this.$refs.form.validate(valid => {
           if (valid) {
             this.formPlan.billStatusId.value = 1;
-            this.formPlan.auditDate = `${this.formPlan.auditDatedate.getFullYear()}-${this.formPlan.auditDatedate.getMonth()}-${this.formPlan.auditDatedate.getDate()} ${this.formPlan.auditDatedate.getHours()}:${this.formPlan.auditDatedate.getMinutes()}:${this.formPlan.auditDatedate.getSeconds()}`;
+            this.formPlan.auditDate = `${this.formPlan.auditDate.getFullYear()}-${this.formPlan.auditDate.getMonth()}-${this.formPlan.auditDate.getDate()} ${this.formPlan.auditDate.getHours()}:${this.formPlan.auditDate.getMinutes()}:${this.formPlan.auditDate.getSeconds()}`;
             getSubmitList(this.formPlan).then(res => {
               console.log(res);
               if (res.code == 0) {
@@ -817,27 +817,25 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      // console.log(val, 999);
-      // console.log(conversionList(val), 8888);
       this.$refs.form.validate(valid => {
         if (valid) {
           var datas = conversionList(val);
-          console.log(datas);
           datas.forEach(item => {
-            // console.log(this.formPlan.detailVOList)
-            //this.Right.tbdata.push(item)
-            this.formPlan.detailVOList=item;
+            this.formPlan.detailVOList = item;
           });
-          console.log(this.Right.tbdata);
-          getSubmitList(this.formPlan)
-            .then(res => {
-              console.log(res);
-              this.getList();
-            })
-            .catch(err => {
-              this.showRemove = false;
-              this.$Message.info("添加失败");
-            });
+          this.formPlan.auditDate = `${this.formPlan.auditDate.getFullYear()}-${this.formPlan.auditDate.getMonth()}-${this.formPlan.auditDate.getDate()} ${this.formPlan.auditDate.getHours()}:${this.formPlan.auditDate.getMinutes()}:${this.formPlan.auditDate.getSeconds()}`
+          // this.$set(this.formPlan,'auditDate',` `)
+           
+          console.log(this.formPlan.auditDate);
+          // getSubmitList(this.formPlan)
+          //   .then(res => {
+          //     console.log(res);
+          //     this.getList();
+          //   })
+          //   .catch(err => {
+          //     this.showRemove = false;
+          //     this.$Message.info("添加失败");
+          //   });
         } else {
           this.$message.error("带*必填");
         }
