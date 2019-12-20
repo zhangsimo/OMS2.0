@@ -301,6 +301,7 @@ export const mixGoodsData = {
       //     }
       //   })
       // }
+      this.$refs['formPlan'].resetFields();
       if (this.newadd && this.selectPlanOrderItem.new) {
         this.tbdata.splice(0, 1);
         this.newadd = false;
@@ -312,7 +313,7 @@ export const mixGoodsData = {
         this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
         this.formPlan.supplyName = v.guest || "";
         this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planArriveDate = v.orderDate || "";
+        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
         // this.formPlan.planDateformat = v.orderDate || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
@@ -397,7 +398,6 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
-      this.$refs['formPlan'].resetFields();
       this.$refs['formPlan'].validate(valid => {
         if (valid) {
           let objReq = {};
@@ -418,6 +418,7 @@ export const mixGoodsData = {
           //直发门店
           objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
+          objReq.settleTypeId = this.formPlan.settleTypeId;
           if (
             this.formPlan.planOrderNum &&
             this.formPlan.planOrderNum != "新计划采购"

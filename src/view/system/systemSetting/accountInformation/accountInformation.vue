@@ -38,7 +38,7 @@
           <div class="navone_one2">
             <span>模块信息</span>
           </div>
-          <div class="navationTwo">
+          <div class="navationThree">
             <label>基础模块</label>
             <span>
              <ul class="List">
@@ -48,7 +48,7 @@
              </ul>
             </span>
           </div>
-          <div class="navationTwo">
+          <div class="navationThree">
             <label>升级模块</label>
             <span>
               <ul class="List">
@@ -137,7 +137,7 @@
             // this.versions = res.data
             this.basicModule = res.data.menus
             this.UpgradeModule = res.data.products
-            console.log('我是贩夫贩妇',this.UpgradeModule)
+            // console.log('我是贩夫贩妇',this.UpgradeModule)
             // this.hslArray = this.getHslArray();
           })
         },
@@ -228,12 +228,30 @@
     display: flex;
     align-items: center;
     list-style: none;
+    flex-wrap: wrap;
   }
   .List_item{
     margin-right: 5px;
+    margin-bottom: 3px;
   }
   .colorWhite{
     /*color: white;*/
     /*border: none!important;*/
+  }
+  .navationThree {
+    height: auto;
+    border-bottom: 1px solid #e5e5e5;
+    padding-left: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding-top: 10px;
+    padding-bottom: 5px;
+  }
+  .navationThree > label {
+    width: 200px;
   }
 </style>

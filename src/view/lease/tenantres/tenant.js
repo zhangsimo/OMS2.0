@@ -204,6 +204,11 @@ const methods = {
     let params = {};
     if(this.tenantID) {
       params.tenant = this.tenantID;
+    } else {
+      let userList = localStorage.getItem('oms2-userList');
+      if(userList) {
+        params.tenant = JSON.parse(userList).tenantId;
+      }
     }
     if(this.resID) {
       params.menuId = this.resID;

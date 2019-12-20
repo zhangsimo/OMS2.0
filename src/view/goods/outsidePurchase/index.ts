@@ -401,6 +401,8 @@ export default class InterPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if(v == null) return;
+    const ref: any = this.$refs['formplanref']
+    ref.resetFields();
     if (!v.new && !this.isAdd) {
       this.purchaseOrderTable.tbdata.splice(0, 1);
       this.isAdd = true;
