@@ -87,7 +87,7 @@ export default class InterPurchase extends Vue {
       },
       {
         title: '供应商',
-        key: 'guest',
+        key: 'guestName',
         minWidth: 170
       },
       {
@@ -176,7 +176,7 @@ export default class InterPurchase extends Vue {
   // 采购订单信息——表单
   private formPlanmain: any = {
     guestId: "", // 供应商id
-    guest: "", // 供应商
+    guestName: "", // 供应商
     advanceAmt:"",//预付款
     orderMan: "", // 采购员
     billTypeId: "", // 票据类型
@@ -186,7 +186,7 @@ export default class InterPurchase extends Vue {
     serviceId: "", // 订单号
   }
   private ruleValidate: ruleValidate = {
-    guest: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
+    guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
     orderMan: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
@@ -645,7 +645,7 @@ export default class InterPurchase extends Vue {
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    this.formPlanmain.guest = row.fullName;
+    this.formPlanmain.guestName = row.fullName;
     this.formPlanmain.guestId = row.id;
     //结算方式
     this.formPlanmain.settleTypeId =  row.settTypeId || ''

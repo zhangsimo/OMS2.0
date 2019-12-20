@@ -326,7 +326,7 @@ export const mixGoodsData = {
           this.isinput = false;
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
-          this.formPlan.supplyName = v.guest || "";
+          this.formPlan.supplyName = v.guestName || "";
           this.formPlan.guestId = v.guestId || "";
           this.formPlan.planArriveDate = new Date(v.orderDate) || "";
           // this.formPlan.planDateformat = v.orderDate || "";
@@ -422,7 +422,7 @@ export const mixGoodsData = {
           }
           //供应商id
           objReq.guestId = this.formPlan.guestId;
-          objReq.guest = this.formPlan.supplyName;
+          objReq.guestName = this.formPlan.supplyName;
           //计划日期
           objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name

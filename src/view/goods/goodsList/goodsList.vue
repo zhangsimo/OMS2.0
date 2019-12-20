@@ -638,7 +638,7 @@ export default {
         },
         {
           title: "供应商",
-          key: "guest",
+          key: "guestName",
           minWidth: 170
         },
         {
