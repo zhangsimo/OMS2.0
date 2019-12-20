@@ -134,7 +134,6 @@
                   <FormItem label="盘点日期" prop="auditDate">
                     <DatePicker
                       :disabled="draftShow != 0"
-                      @on-change="auditDateForm"
                       type="date"
                       class="w160"
                       v-model="formPlan.auditDate"
@@ -449,7 +448,12 @@ export default {
           }
         ],
         auditDate: [
-          { required: true, type: 'date', message: '盘点日期必选', trigger: 'change' }
+          {
+            required: true,
+            type: "date",
+            message: "盘点日期必选",
+            trigger: "change"
+          }
           // {
           //   required: true,
           //   type: 'date',
@@ -547,9 +551,9 @@ export default {
     //   console.log(this.formPlan.orderMan)
     // },
     // 盘点日期
-    auditDateForm(data) {
-      this.formPlan.auditDate = data + " " + "00:00:00";
-    },
+    // auditDateForm(data) {
+
+    // },
     //更多按钮
     More() {
       this.showMore = true;
@@ -651,12 +655,20 @@ export default {
       //       this.$message.error("带*必填");
       //     }
       //   });
+      console.log(this.formPlan.auditDate);
+      // this.formPlan.auditDate = data + " " + "00:00:00";
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
-          console.log(valid)
           if (valid) {
-            console.log(1)
+            this.formPlan.billStatusId.value = 1;
+            this.formPlan.auditDate = `${this.formPlan.auditDatedate.getFullYear()}-${this.formPlan.auditDatedate.getMonth()}-${this.formPlan.auditDatedate.getDate()} ${this.formPlan.auditDatedate.getHours()}:${this.formPlan.auditDatedate.getMinutes()}:${this.formPlan.auditDatedate.getSeconds()}`
+            getSubmitList(this.formPlan).then(res => {
+              console.log(res);
+              if (res.code == 0) {
+                his.$Message.error("保存成功");
+              }
+            });
           } else {
             this.$message.error("带*必填");
           }
@@ -670,13 +682,7 @@ export default {
         return;
       }
       // console.log(1)
-      // this.formPlan.billStatusId.value = 1
-      // getSubmitList(this.formPlan).then(res => {
-      //   console.log(res);
-      //   if (res.code == 0) {
-      //     his.$Message.error("保存成功");
-      //   }
-      // });
+
       // if (
       //   !this.formPlan.auditDate ||
       //   !this.formPlan.storeId ||
