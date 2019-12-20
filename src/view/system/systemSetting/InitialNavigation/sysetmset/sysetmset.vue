@@ -178,7 +178,7 @@ const methods = {
           case "打印表格是否换行":
             this.isrow = el.keyidValue;
             break;
-          case "启用开启采购计划审批":
+          case "是否开启采购计划审批":
             this.isPPA = el.keyidValue;
             break;
           case "业务员是否可见自己客户和订单":
@@ -221,7 +221,7 @@ const methods = {
         case "打印表格是否换行":
           el.keyidValue = this.isrow;
           break;
-        case "启用开启采购计划审批":
+        case "是否开启采购计划审批":
           el.keyidValue = this.isPPA;
           break;
         case "业务员是否可见自己客户和订单":
