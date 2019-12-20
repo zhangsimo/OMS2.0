@@ -621,12 +621,14 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    this.formPlanmain.guestName = row.fullName;
-    this.formPlanmain.guestId = row.id;
-    //结算方式
-    this.formPlanmain.settleTypeId =  row.settTypeId || ''
-    //票据类型
-    this.formPlanmain.billTypeId = row.billTypeId || ''
+    if(row) {
+      this.formPlanmain.guestName = row.fullName;
+      this.formPlanmain.guestId = row.id;
+      //结算方式
+      this.formPlanmain.settleTypeId =  row.settTypeId || ''
+      //票据类型
+      this.formPlanmain.billTypeId = row.billTypeId || ''
+    }
   }
 
   // 采购计划单据

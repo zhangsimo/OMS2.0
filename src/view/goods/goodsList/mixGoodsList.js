@@ -267,12 +267,14 @@ export const mixGoodsData = {
     },
     //获取选中供应商
     getSupplierName(v) {
-      //赋值供应商名称
-      this.formPlan.supplyName = v.fullName || "";
-      //赋值供应商id
-      this.formPlan.guestId = v.id || "";
-      //赋值票据类型id
-      this.formPlan.billType = v.billTypeId || "";
+      if(v) {
+        //赋值供应商名称
+        this.formPlan.supplyName = v.fullName || "";
+        //赋值供应商id
+        this.formPlan.guestId = v.id || "";
+        //赋值票据类型id
+        this.formPlan.billType = v.billTypeId || "";
+      }
     },
     //选择日期
     setDataFun(v) {
