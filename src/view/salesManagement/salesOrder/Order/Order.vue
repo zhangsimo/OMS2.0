@@ -150,7 +150,6 @@ export default {
         return false;
       }
       let res = this.$refs.right.submitList();
-      console.log(res, 789);
     },
     //返单
     async setBackOrder() {
