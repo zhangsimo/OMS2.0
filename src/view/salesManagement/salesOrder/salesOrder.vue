@@ -24,7 +24,8 @@
 
 <style scoped lang="less">
 .marketBox {
-  height:  calc(100vh - 170px);
+  /*height:  calc(100vh - 170px);*/
+  height: 100vh;
   width: 100%;
   background-color: #fff;
 }
