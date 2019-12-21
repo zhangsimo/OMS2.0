@@ -327,7 +327,7 @@ export default {
       if (!value && value != "0") {
         callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^[+-]?\d+\.\d{0,2}$/i;
+        const reg = /^\d+(\.\d{0,2})?$/i;
         if (reg.test(value)) {
           callback();
         } else {
