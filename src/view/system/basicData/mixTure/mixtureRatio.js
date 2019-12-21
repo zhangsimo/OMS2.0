@@ -194,8 +194,8 @@ const data = function() {
                   vm.customer.tbdata[params.index] = params.row;
                 },
                 "on-blur": e => {
-                  if (!e.target.value.match(/^[0]+(\.\d{1,2})?[1]$/)) {
-                    this.$Message.error("请输入0-1数值");
+                  if (!e.target.value.match(/^(0(\.\d{1,4})?|1(\.0{1,4})?)$/)) {
+                    this.$Message.error("请输入0-1数值，且最多四位小数");
                     params.row.ratio = "";
                   }
                 },
