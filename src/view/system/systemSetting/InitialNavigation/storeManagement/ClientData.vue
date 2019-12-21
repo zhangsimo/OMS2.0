@@ -44,7 +44,13 @@
         <Row>
           <Col span="8">
             <FormItem label="省份:" prop="provinceId">
-              <Select v-model="data.provinceId" style="width:180px" class="mr10" label-in-value @on-change="selectProvinceId">
+              <Select
+                v-model="data.provinceId"
+                style="width:180px"
+                class="mr10"
+                label-in-value
+                @on-change="selectProvinceId"
+              >
                 <Option
                   v-for="item in provincearr"
                   v-if="item.parentId==0"
@@ -55,8 +61,14 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="城市:" prop="cityId" >
-              <Select v-model="data.cityId" style="width:180px" class="mr10" label-in-value @on-change="selectCityId">
+            <FormItem label="城市:" prop="cityId">
+              <Select
+                v-model="data.cityId"
+                style="width:180px"
+                class="mr10"
+                label-in-value
+                @on-change="selectCityId"
+              >
                 <Option
                   v-for="item in provincearr"
                   v-if="data.provinceId==item.parentId"
@@ -67,8 +79,14 @@
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="地区:" prop="countyId" >
-              <Select v-model="data.countyId" style="width:180px" class="mr10" label-in-value @on-change="selectCountyId">
+            <FormItem label="地区:" prop="countyId">
+              <Select
+                v-model="data.countyId"
+                style="width:180px"
+                class="mr10"
+                label-in-value
+                @on-change="selectCountyId"
+              >
                 <Option
                   v-for="item in provincearr"
                   v-if="data.cityId==item.parentId"
@@ -194,13 +212,13 @@ export default {
         callback();
       }
     };
-    // const validateUpload = (rule, value, callback) => {
-    //     if (this.data.file && this.data.file.length == 0) {
-    //         callback(new Error('请选择要上传的文件'))
-    //     } else {
-    //         callback()
-    //     }
-    // }
+    const validateUpload = (rule, value, callback) => {
+      if (this.data.file && this.data.file.length == 0) {
+        callback(new Error("请选择要上传的文件"));
+      } else {
+        callback();
+      }
+    };
     return {
       wxImgUrl: api.wxImgUrl, //图片地址
       headers: {
@@ -234,98 +252,110 @@ export default {
         supplierTypeSecond: [
           { required: true, message: "不能为空", trigger: "change" }
         ],
-        tel: [{ required: true, message: "不能为空", trigger: "blur" }]
-        // file: [
-        //     { required: true, validator: validateUpload, trigger: 'change' }
-        // ]
+        tel: [{ required: true, message: "不能为空", trigger: "blur" }],
+        file: [{ required: true, validator: validateUpload, trigger: "change" }]
       },
       uploadSrc: `dataPic`,
-        province:'',//省份
-        city:'',//城市
-        county:'',//地区
-        address:'',//详细地址
+      province: "", //省份
+      city: "", //城市
+      county: "", //地区
+      address: "" //详细地址
     };
   },
   methods: {
-      valuePic() {
-          this.$nextTick(() => {
-              this.uploadSrc = this.data.logoImg;
-          });
-      },
-      // 上传前
-      handleBeforeUpload() {
-          this.$refs.upload.clearFiles();
-      },
-      // 上传成功
-      handleSuccess(res, file) {
-          if (res.code == 0) {
-              this.uploadSrc = api.getfile + res.data.url;
-              this.data.logoImg = api.getfile + res.data.url;
-          }
-      },
-      //清除内容
-      resetFields() {
-          this.$refs.form.resetFields();
-      },
-      //校验表单
-      handleSubmit(callback) {
-          this.$refs.form.validate(valid => {
-              if (valid) {
-                  callback && callback();
-              } else {
-                  this.$Message.error("信息填写错误");
-              }
-          });
-      },
-      //获取选择的省份
-      selectProvinceId(item) {
-          this.province = item.label
-          this.getAllAddress()
-      },
-      //获取选择的城市
-      selectCityId(item) {
-          this.city = item.label
-          this.getAllAddress()
-      },
-      //获取地区
-      selectCountyId(item) {
-          this.county = item.label
-          this.getAllAddress()
-      },
-      //获取详细地址
-      getAddress() {
-          if (this.data.streetAddress) {
-              this.address = this.data.streetAddress.trim()
-              this.getAllAddress()
-          }
-      },
-      //获取全部地址拼接
-      getAllAddress() {
-          if (this.province && this.city && this.county && this.address) {
-                let that = this
-              this.$nextTick(async () => {
-                  this.$set(this.data, 'address', this.province + this.city + this.county + this.address)
-                  this.ajaxAll.get(
-                      `https://restapi.amap.com/v3/geocode/geo?address=${JSON.stringify(this.data.address)}&output=json&key=53a2d993424e4c74fc40e8038698af67`
-                  ).then(
-                      function (response) {
-                          console.log(response)
-                          if (response.data.infocode == 10000) {
-                              let arr = response.data.geocodes[0].location
-                              arr = arr.split(',')
-                              that.$set(that.data, 'longitude', arr[0])
-                              that.$set(that.data, 'latitude', arr[1])
-                          }
-                      }).catch(function (error) {
-                          this.$message.error('经纬度查询失败')
-                      }
-                  )
-              })
-
-          }
+    valuePic() {
+      this.$nextTick(() => {
+        console.log(this.data.logoImg, "this.data.logoImg =>252");
+        this.uploadSrc = this.data.logoImg;
+      });
+    },
+    addPicture() {
+      this.$nextTick(() => {
+        console.log(this.data.logoImg, "this.data.logoImg =>252");
+        this.uploadSrc = "";
+      });
+    },
+    // 上传前
+    handleBeforeUpload() {
+      this.$refs.upload.clearFiles();
+    },
+    // 上传成功
+    handleSuccess(res, file) {
+      if (res.code == 0) {
+        this.uploadSrc = api.getfile + res.data.url;
+        this.data.logoImg = api.getfile + res.data.url;
       }
+    },
+    //清除内容
+    resetFields() {
+      this.$refs.form.resetFields();
+      this.uploadSrc = "";
+    },
+    //校验表单
+    handleSubmit(callback) {
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("信息填写错误");
+        }
+      });
+    },
+    //获取选择的省份
+    selectProvinceId(item) {
+      this.province = item.label;
+      this.getAllAddress();
+    },
+    //获取选择的城市
+    selectCityId(item) {
+      this.city = item.label;
+      this.getAllAddress();
+    },
+    //获取地区
+    selectCountyId(item) {
+      this.county = item.label;
+      this.getAllAddress();
+    },
+    //获取详细地址
+    getAddress() {
+      if (this.data.streetAddress) {
+        this.address = this.data.streetAddress.trim();
+        this.getAllAddress();
+      }
+    },
+    //获取全部地址拼接
+    getAllAddress() {
+      if (this.province && this.city && this.county && this.address) {
+        let that = this;
+        this.$nextTick(async () => {
+          this.$set(
+            this.data,
+            "address",
+            this.province + this.city + this.county + this.address
+          );
+          this.ajaxAll
+            .get(
+              `https://restapi.amap.com/v3/geocode/geo?address=${JSON.stringify(
+                this.data.address
+              )}&output=json&key=53a2d993424e4c74fc40e8038698af67`
+            )
+            .then(function(response) {
+              console.log(response);
+              if (response.data.infocode == 10000) {
+                let arr = response.data.geocodes[0].location;
+                arr = arr.split(",");
+                that.$set(that.data, "longitude", arr[0]);
+                that.$set(that.data, "latitude", arr[1]);
+              }
+            })
+            .catch(function(error) {
+              this.$message.error("经纬度查询失败");
+            });
+        });
+      }
+    }
   }
-}
+};
 </script>
 
 <style scoped lang="less">

@@ -576,10 +576,7 @@
         this.selectTable = v
       },
       selectTree(v){
-        // console.log(v,'v575')
-
         this.selectTreeData = v
-        // console.log(v)
       },
       //表格详情选中
       selectDetailFun(v){
