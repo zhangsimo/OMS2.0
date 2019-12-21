@@ -214,6 +214,7 @@ export default {
     },
     addClient() {
       this.clientList = {};
+      this.$refs.child.addPicture();
       this.clientDataShow = true;
     },
     //确认添加一条信息
@@ -246,7 +247,10 @@ export default {
       }
       this.clientDataShow = true;
       this.clientList = this.pitchSupplierOne;
+      console.log(this.clientList, "this.clientList =>250");
+
       this.$refs.child.valuePic();
+      // if (this.clientList)
     }
   },
   watch: {

@@ -31,7 +31,7 @@
           </FormItem>
           <FormItem label='临时额度开始时间:' >
             <DatePicker
-              :value="data.tempStart"
+              v-model="data.tempStart"
               type="date"
               :options="startTimeOptions"
               style="width: 150px">
@@ -46,7 +46,7 @@
             <Input  :value='+data.tempQuota + data.tempCreditLimit || 0 + (+data.tempQuota) || 0' style="width: 150px" disabled ></Input>
           </FormItem>
           <FormItem label='临时额度结束时间:' >
-            <DatePicker :value="data.tempEnd" type="date" format="yyyy-MM-dd" :options="endTimeOptions" style="width: 150px"></DatePicker>
+            <DatePicker v-model="data.tempEnd" type="date" format="yyyy-MM-dd" :options="endTimeOptions" style="width: 150px"></DatePicker>
 
           </FormItem>
         </Col>
@@ -148,10 +148,11 @@
         },
         data(){
           const disabledDateS = (date) => {
-            return date && date.valueOf() > new Date(this.data.tempEnd)
+            return date && date.valueOf() < new Date() - 24 * 3600 * 1000
           }
           const disabledDateE = (date) => {
-            return date && date.valueOf() < new Date(this.data.tempStart)
+            const end = this.data.tempStart;
+            return date && end && date.valueOf() < new Date(end)
           }
             return {
               // increase: 0, //申请增加额度

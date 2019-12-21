@@ -307,22 +307,6 @@ export default {
     }
   },
   methods: {
-    // 上传成功函数
-    onSuccess(response) {
-      console.log(response, "response =>382");
-      this.getlist();
-      if (response.code != 0) {
-        this.$Notice.warning({
-          title: "导入失败",
-          desc: response.message
-        });
-      } else {
-        this.$Notice.success({
-          title: "导入成功",
-          desc: response.message
-        });
-      }
-    },
     //下载模板
     downTemplate() {
       location.href =

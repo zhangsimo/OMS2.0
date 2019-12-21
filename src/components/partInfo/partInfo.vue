@@ -237,8 +237,7 @@
 		name: "partInfo",
     props:{
       isAddPart:false,
-      isSellDis: false,
-      showSpe:true,//是否显示包装规格
+      isSellDis: false
     },
     components: {SearchPartName},
     mixins:[mixPartInfo],
