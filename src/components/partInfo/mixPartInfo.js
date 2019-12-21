@@ -101,12 +101,14 @@ export const mixPartInfo = {
         //checkbox
         checkboxsing:false
       },
+      showSpe:true,//是否显示包装规格
     }
   },
   methods:{
     //初始化
     init(setData){
       this.proModal = true
+      console.log(this.showSpe)
       //拉取适用车型品牌
       this.getCarBrand();
       //获取所有品质
