@@ -64,6 +64,7 @@ export default {
         num: 1
       },
       tableData: [],
+      isAdd:true,//判断是否新增
       query: {
         showPerson: 1
       } //更多搜索信息
@@ -83,6 +84,10 @@ export default {
   methods: {
     // 新增展示
     getAdd() {
+      if (!this.isAdd) {
+        return this.$Message.error('请先保存数据');
+      }
+      this.isAdd=false
       this.tableData.unshift({
         billStatusId: { enum: "", value: "", name: "" }
       });

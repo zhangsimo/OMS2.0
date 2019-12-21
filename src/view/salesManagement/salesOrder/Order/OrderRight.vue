@@ -753,6 +753,7 @@ export default {
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);
+              this.isAdd = true;
             }
           } catch (errMap) {
             this.$XModal.message({
