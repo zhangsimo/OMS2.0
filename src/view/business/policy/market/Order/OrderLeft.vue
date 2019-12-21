@@ -59,7 +59,7 @@
         watch: {
             changeLeftList: {
                 handler(newVal) {
-                    console.log(newVal)
+                    // console.log(newVal)
                     this.tableData = newVal
                 },
                 deep: true
@@ -104,7 +104,7 @@
                     })
             },
             getData(data) {
-                console.log(data, '该值')
+                // console.log(data, '该值')
                 this.tableData = data
             },
             //获取表格数据
@@ -113,7 +113,7 @@
                 data.startTime = this.queryTime[0] || ''
                 data.endTime = this.queryTime[1] || ''
                 data.billStatusId = this.orderType
-                console.log(this.orderType)
+                // console.log(this.orderType)
                     // data = this.query
                   let page = this.page.num -1
                   let size = this.page.size
@@ -138,8 +138,10 @@
             },
             //点击获取当前信息
             clickOnesList(data){
-                this.$emit('getOneOrder',data.row)
-                this.$store.commit('setOneOrder',data.row)
+              let obj = {}
+                  obj = JSON.parse(JSON.stringify(data.row))
+                this.$emit('getOneOrder',obj)
+                this.$store.commit('setOneOrder',obj)
             }
         },
         watch:{

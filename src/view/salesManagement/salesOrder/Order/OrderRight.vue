@@ -17,7 +17,7 @@
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
-        <FormItem label="客户：" prop="fullName">
+        <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
             <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
@@ -48,8 +48,12 @@
             </Button>
           </Row>
         </FormItem>
-        <FormItem label="销售员：" prop="orderMan">
-          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />
+        <FormItem label="销售员：" prop="orderManId">
+<!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
+          <Select :value="formPlan.orderManId"
+                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0"  label-in-value>
+            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="订单类型：">
           <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
@@ -175,6 +179,7 @@
               :disabled="draftShow != 0 || !formPlan.id"
               class="mr10"
               @click="openGodownEntryModal"
+
             >选择入库单</Button>
           </div>
           <div class="fl mb5">
@@ -311,6 +316,7 @@ import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
 import { area } from "@/api/lease/registerApi";
 import {
+  getSales,
   getClient,
   getRightList,
   getWarehouseList,
@@ -358,13 +364,13 @@ export default {
     };
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
-        callback(new Error("最多保留4位小数"));
+        callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/;
+        const reg = /^\d+(\.\d{0,2})?$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("最多保留4位小数"));
+          callback(new Error("最多保留2位小数"));
         }
       }
     };
@@ -409,11 +415,12 @@ export default {
       limitList: {}, //额度信息
       totalMoney: "", //总价
       client: [], //客户列表
+      salesList:[],//销售员列表
       ruleValidate: {
-        fullName: [
+        guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderMan: [{ required: true, message: "  ", trigger: "blur" }],
+        orderManId: [{ required: true, message: "  ", trigger: "blur" }],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -438,6 +445,8 @@ export default {
     this.getType();
     this.getWarehouse();
     this.getClassifyList();
+    this.getAllSales()
+
   },
   computed: {
     getOneOrder() {
@@ -465,6 +474,14 @@ export default {
         stop();
       }
     },
+    //获取销售员
+    selectOrderMan(val){
+      console.log('77777777',val)
+      this.formPlan.orderMan = val.label
+      this.formPlan.orderManId = val.value
+
+      console.log(val, 123456)
+    },
     //获取客户额度
     async getAllLimit() {
       let data = {};
@@ -486,6 +503,8 @@ export default {
         this.limitList = res.data;
       }
     },
+
+
     //获取客户属性
     async getType() {
       let data = {};
@@ -502,6 +521,17 @@ export default {
       let res = await getClient();
       if (res.code === 0) {
         this.client = res.data;
+      }
+    },
+    //获取销售员
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.map(item => {
+          item.label = item.userName
+        })
+        console.log('销售员',this.salesList)
       }
     },
     // 获取仓库
@@ -595,7 +625,7 @@ export default {
             return "和值";
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
-            return this.$utils.sum(data, column.property);
+            return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 7) {
             return ` ${this.countAllPrice(data)} `;
@@ -812,7 +842,7 @@ export default {
               return this.$message.error("可用余额不足");
             }
 
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getStockOut(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
@@ -838,7 +868,7 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
