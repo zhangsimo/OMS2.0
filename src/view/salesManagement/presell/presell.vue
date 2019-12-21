@@ -401,13 +401,13 @@
       };
       let money = (rule, value, callback) => {
         if (!value && value != '0') {
-          callback(new Error("最多保留4位小数"));
+          callback(new Error("最多保留2位小数"));
         } else {
-          const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+          const reg = /^\d+(\.\d{0,2})?$/
           if (reg.test(value)) {
             callback();
           } else {
-            callback(new Error("最多保留4位小数"));
+            callback(new Error("最多保留2位小数"));
 
           }
         }
@@ -760,7 +760,7 @@
           count += this.countAmount(row)
         })
         this.totalMoney = count
-        return count
+        return count.toFixed(2)
       },
       //获取尾部总数
       footerMethod({columns, data}) {
@@ -770,7 +770,7 @@
               return '和值'
             }
             if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
-              return this.$utils.sum(data, column.property)
+              return this.$utils.sum(data, column.property).toFixed(2)
             }
             if (columnIndex === 8) {
               return ` ${this.countAllAmount(data)} `
