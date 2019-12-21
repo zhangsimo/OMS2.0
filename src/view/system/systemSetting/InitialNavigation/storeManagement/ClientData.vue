@@ -265,13 +265,13 @@ export default {
   methods: {
     valuePic() {
       this.$nextTick(() => {
-        console.log(this.data.logoImg, "this.data.logoImg =>252");
+        // console.log(this.data.logoImg, "this.data.logoImg =>268");
         this.uploadSrc = this.data.logoImg;
       });
     },
     addPicture() {
       this.$nextTick(() => {
-        console.log(this.data.logoImg, "this.data.logoImg =>252");
+        // console.log(this.data.logoImg, "this.data.logoImg =>274");
         this.uploadSrc = "";
       });
     },

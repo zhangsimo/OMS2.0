@@ -151,7 +151,7 @@ export default {
     // 门店资料关闭
     cancelChange(type) {
       if (!type) {
-        this.$refs.child.resetFields();
+        // this.$refs.child.resetFields();
       }
     },
     //获取全部表格数据
@@ -213,6 +213,7 @@ export default {
       }
     },
     addClient() {
+      // this.$refs.child.resetFields();
       this.clientList = {};
       this.$refs.child.addPicture();
       this.clientDataShow = true;
@@ -228,7 +229,7 @@ export default {
           this.$message.success("保存成功");
           this.getlist();
           this.clientDataShow = false;
-          this.$refs.child.resetFields();
+          this.$refs.child.resetFields()
         }
       });
     },
@@ -237,7 +238,7 @@ export default {
     },
     cancel() {
       this.clientDataShow = false;
-      this.$refs.child.resetFields();
+      // this.$refs.child.resetFields();
     },
     //修改客户资料
     changeClient() {
@@ -247,10 +248,7 @@ export default {
       }
       this.clientDataShow = true;
       this.clientList = this.pitchSupplierOne;
-      console.log(this.clientList, "this.clientList =>250");
-
       this.$refs.child.valuePic();
-      // if (this.clientList)
     }
   },
   watch: {
