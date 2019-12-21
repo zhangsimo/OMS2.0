@@ -194,7 +194,7 @@
                                 style="width: 120px" :disabled="draftShow != 0||isNew"></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0||isNew"></Input>
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0||isNew"/>
                   </FormItem>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
