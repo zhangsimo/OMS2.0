@@ -25,11 +25,9 @@
                   border
                   resizable
                   :data="tableData"
-                  border
                   stripe
                   size="mini"
                   align="center"
-                  resizable
                   :auto-resize="true"
                   highlight-hover-row
                   highlight-current-row
