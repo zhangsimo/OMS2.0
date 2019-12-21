@@ -171,7 +171,7 @@ export default {
 <style>
 .notice-warp {
   height: 100px;
-  overflow: hidden;
+  overflow: auto;
 }
 .btn-warp {
   margin: 10px auto 0px;

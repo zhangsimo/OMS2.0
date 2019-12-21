@@ -67,10 +67,11 @@
             <span class="mr10">快速查询:</span>
             <input type="text" class="mr10"  v-model="shopCode" placeholder="请输入店号">
             <input type="text" class="mr10"  v-model="compentName" placeholder="请输入公司名称">
-            <a class="mr20 iconfont iconchaxunicon" @click="inquireShop2"> 查询</a>
+            <Button @click="inquireShop2" class="mr10" type='default'><Icon type="ios-search" size="14" /> 查询</Button>
+            <Button type="default" class="mr10 w90" @click="delect"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
           </div>
           <div class="companyList">
-            <Table :columns="columns2" border :data="companyList" height="200" size="small" ></Table>
+            <Table :columns="columns2" highlight-row border :data="companyList" height="200" size="small" @on-current-change="getOneCliemt"></Table>
           </div>
           <Page :total="page2.total" :page-size="page2.size" :current="page2.num" show-sizer show-total class-name="page-con"
                 @on-change="selectNum2" @on-page-size-change="selectPage2" style="float: right"></Page>
@@ -80,7 +81,7 @@
 </template>
 
 <script>
-  import {getStaffList , editUser , changeeditUser ,findCompanyList, putNewCompany, restpasswd} from '@/api/system/systemSetting/staffManagenebt'
+  import {getStaffList , editUser , changeeditUser ,findCompanyList, putNewCompany, restpasswd ,setCliemt} from '@/api/system/systemSetting/staffManagenebt'
   import {transTime} from '../utils'
   import addStaff from "./addStaff";
   import setPassword from "./setpassword";
@@ -247,7 +248,8 @@
                     office:0, //是否在职默认在职
                     openSystem:0,
                     groupId:0 //所属机构
-                }
+                },
+                oneCliemt:{},//点击获取到当前要删除的兼职公司
             }
 
         },
@@ -510,6 +512,27 @@
           selectPage2(size) {
               this.page2.size = size
               this.getLookCompany()
+          },
+          getOneCliemt(val){
+                console.log(val)
+                this.oneCliemt = val
+          },
+          //删除兼职公司
+         async delect(){
+             if(!this.oneCliemt.id){
+                 this.$message.error('请选择一条需要删除的兼职公司')
+                 return
+             }
+             let data ={}
+                data.id = this.oneStaffChange.id
+                data.companyList = '(' + this.oneCliemt.id + ')'
+            let res = await setCliemt(data)
+             console.log(res)
+             if (res.code === 0){
+                 this.page2.num = 1
+                 this.getLookCompany()
+                 this.oneCliemt = {}
+             }
           },
           getLookCompany(){
               let  data = {}

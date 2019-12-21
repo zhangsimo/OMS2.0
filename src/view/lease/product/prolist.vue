@@ -36,7 +36,7 @@
           <div slot="right" class="lease-model-right">
             <div class="model-left-hd flex">
               <Input v-model="selectTable.id" class="w180 mr10" clearable></Input>
-              <Input v-model="searchValue" placeholder="资源ID" class="w150 mr10" clearable></Input>
+              <Input v-model="selectTable.resId" placeholder="资源ID" class="w150 mr10" clearable></Input>
               <Button type="default" @click="getProductDetailFun" class="mr10 w90"><i class="iconfont mr5 iconshuaxinicon"></i>刷新</Button>
               <Button type="default" @click="addDelList" class="mr10 w90"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
               <Button type="default" @click="saveData" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
@@ -103,7 +103,7 @@
           <Col span="11">
             <FormItem label="是否禁用：" prop="disable">
               <Select v-model="formValidate.disable" placeholder="Select your city">
-                <Option :value='item.value' v-for="item in disableArr">{{item.label}}</Option>
+                <Option :value='item.value' v-for="(item,index) in disableArr" :key="index">{{item.label}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -188,6 +188,8 @@
         }
       }
       return {
+        // objData:{},
+        reqData: [],
         linkModal: false,
         proModal:false,
         proModalTit:'',
@@ -388,12 +390,13 @@
             render:(h,params) => {
               let isDisabled = params.row.disable||0
               return h('Checkbox',{
-                props:{                  "value":isDisabled===0?true:false,
+                props:{            "value":isDisabled===0?true:false,
                 },
                 on:{
-                  'on-change':(v)=>{
-                    if(v){
+                  'on-change':(value)=>{
+                    if(value){
                       this.tbdata2[params.index].disable = 0
+                      // console.log(this.tbdata2,'this.tbdata2')
                     }else{
                       this.tbdata2[params.index].disable = 1
                     }
@@ -520,7 +523,7 @@
         }
       },
       getProductDetailFun(){
-        getProductDetail({"id":this.selectTable.id}).then(res => {
+        getProductDetail({"productId":this.selectTable.id,"resId":this.selectTable.resId}).then(res => {
           if(res.code==0){
             this.tbdata2 = res.data||[]
           }
@@ -573,6 +576,8 @@
         this.selectTable = v
       },
       selectTree(v){
+        // console.log(v,'v575')
+
         this.selectTreeData = v
         // console.log(v)
       },
@@ -591,13 +596,17 @@
             })
           })
           this.delList = this.delList.concat(this.selectDetailArr)
+          // console.log(this.delList,'this.delList =>596')
+
         }else{
           this.$Message.error("请选择要删除的数据！")
         }
       },
       //保存详情
       saveData(){
+
         this.changeList = this.changeList.concat(this.tbdata2)
+        // console.log(this.changeList,'this.changeList =>607')
         let request = {
           "changeList":this.changeList,
           "delList":this.delList
@@ -613,22 +622,36 @@
         if(this.selectTreeData.length>0){
           let arrData = this.selectTreeData.filter(item => item.children.length==0)
           if(arrData.length>0){
-            let reqData = []
-            let objData = {}
-            arrData.map(item => {
+            // let reqData = []
+            // arrData.map(item => {
+            //   objData.productId = this.selectTable.id;
+            //   objData.resId = item.id;
+            //   objData.resName = item.title;
+            //   objData.resParentId = item.parentId;
+            //   objData.resType = item.resType;
+            //   objData.resUrl = "";
+            //   objData.type = 1;
+            //   this.reqData.push(objData)
+            // })
+            // console.log(arrData,'arrData')
+            for (var i = 0 ; i < arrData.length; i++) {
+              var objData = {}
               objData.productId = this.selectTable.id;
-              objData.resId = item.id;
-              objData.resName = item.title;
-              objData.resParentId = item.parentId;
-              objData.resType = item.resType;
-              objData.resUrl = "";
-              objData.type = 1;
-              reqData.push(objData)
-            })
-            getLeasesaveProduct(reqData).then(res => {
+              objData.resId = arrData[i].id;
+              objData.resName = arrData[i].title;
+              objData.resParentId = arrData[i].parentId;
+              objData.resType = arrData[i].resType;
+              objData.resUrl = arrData[i].urlMatcher;
+              objData.type = arrData[i].resType;
+              objData.scope = 0
+              this.reqData.push(objData)
+            }
+            // console.log(this.reqData,'arrData =>629')
+            getLeasesaveProduct(this.reqData).then(res => {
               if(res.code==0){
                 this.$Message.success("添加成功！")
                 this.getProductDetailFun()
+                this.reqData = []
               }
             })
           }

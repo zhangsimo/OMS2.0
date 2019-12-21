@@ -129,6 +129,15 @@ export default {
     AddNewWarehouse
   },
   data() {
+    //自定义校验方法
+    const validatePass = (rule, value, callback) => {
+      let reg = /^[A-Za-z0-9\-]+$/
+        if (!reg.test(value)) {
+          callback(new Error('编码不能输入汉字、字符且不能为空!'));
+        } else {
+          callback();
+        }
+      };
     return {
       columns1: [
         {
@@ -183,7 +192,7 @@ export default {
         total: 0
       },
       validRules: {
-        name: [{ required: true, message: "不能为空" }]
+        name: [{ required: true, message: "不能为空",validator: validatePass}]
       },
       storeId: "",
       oneWarehouse: "",

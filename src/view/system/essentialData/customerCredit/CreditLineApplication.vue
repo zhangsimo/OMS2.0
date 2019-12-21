@@ -30,7 +30,12 @@
             <Input v-model='data.tempQuota' style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
           <FormItem label='临时额度开始时间:' >
-            <DatePicker v-model="data.tempStart" type="date" format="yyyy-MM-dd" :options="startTimeOptions" style="width: 150px"></DatePicker>
+            <DatePicker
+              v-model="data.tempStart"
+              type="date"
+              :options="startTimeOptions"
+              style="width: 150px">
+            </DatePicker>
           </FormItem>
         </Col>
         <Col span="8">
@@ -130,20 +135,24 @@
 <script>
   // guestAdjustadjustInfo
   import { guestAdjustadjustInfo } from '../../../../api/system/CustomerManagement/CustomerManagement'
-    export default {
+  import * as tools from "../../../../utils/tools";
+
+  export default {
         name: "CreditLineApplication",
         props:{
             data: '',
             sendMsg: '',
             payable: '',
-            quality: ''
+            quality: '',
+            nowDate: tools.transTime(new Date())
         },
         data(){
           const disabledDateS = (date) => {
-            return date && date.valueOf() > new Date(this.data.tempEnd)
+            return date && date.valueOf() < new Date() - 24 * 3600 * 1000
           }
           const disabledDateE = (date) => {
-            return date && date.valueOf() < new Date(this.data.tempStart)
+            const end = this.data.tempStart;
+            return date && end && date.valueOf() < new Date(end)
           }
             return {
               // increase: 0, //申请增加额度

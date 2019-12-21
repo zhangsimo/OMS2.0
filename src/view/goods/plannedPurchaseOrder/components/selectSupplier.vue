@@ -236,6 +236,7 @@ export default class SelectSupplier extends Vue {
   }
   //显示层
   private init() {
+    this.selectTableItem = null;
     this.searchPartLayer = true;
     this.getCarClassifysFun();
     this.getList();
@@ -247,6 +248,10 @@ export default class SelectSupplier extends Vue {
   // 选择
   @Emit('selectSearchName')
   private throwData() {
+    if(!this.selectTableItem) {
+      this.$Message.error('请选择供应商');
+      return null;
+    }
     this.searchPartLayer = false;
     return this.selectTableItem;
   }

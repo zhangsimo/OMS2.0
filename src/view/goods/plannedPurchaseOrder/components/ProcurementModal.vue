@@ -63,7 +63,7 @@
           width="60"
         ></vxe-table-column>
         <vxe-table-column field="serviceId" title="计划单号"></vxe-table-column>
-        <vxe-table-column field="guest" title="供应商"></vxe-table-column>
+        <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
         <vxe-table-column field="orderDate" title="计划采购日期"></vxe-table-column>
         <vxe-table-column field="orderMan" title="计划员"></vxe-table-column>
         <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
@@ -181,6 +181,7 @@ export default class ProcurementModal extends Vue {
   }
 
   private reset() {
+    this.selectRow = null;
     this.auditDate = new Array();
     this.tableDataBm = new Array();
     // this.guestId = "";

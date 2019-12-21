@@ -124,11 +124,21 @@ export default {
   },
   data() {
     return {
-      page: 0,
-      loading: false,
-      fasttipsList: [],
-      supplierType: "",
-      fasttipsType: "",
+      provinceArr: "",
+      page: {
+        size: 10,
+        num: 1,
+        total: 0
+      },
+      loading: true,
+      fasttipsList: [
+        { name: "供应商全称", id: "fullName" },
+        { name: "优势品牌/产品", id: "advantageCarbrandId" },
+        { name: "联系人电话", id: "contactorTel" }
+      ], //快速查询下拉框
+      supplierType: "", //客户种类
+      fasttipsType: "", //快速查询种类
+      fasttipsTitle: "", //快速查询内容
       columns: [
         { title: "序号", align: "center", type: "index", key: "name" },
         {

@@ -147,6 +147,7 @@ export const mixSelectSupplier ={
     },
     //显示层
     init(){
+      this.selectTableItem = null;
       this.searchPartLayer = true;
       this.getList();
       this.getfindTypeListFun();
@@ -156,6 +157,9 @@ export const mixSelectSupplier ={
       this.selectTableItem = v
     },
     throwData(){
+      if(!this.selectTableItem) {
+        return this.$Message.error('请选择供应商');
+      }
       this.$emit('selectSupplierName',this.selectTableItem);
       this.searchPartLayer = false;
       // console.log(this.selectTableItem)

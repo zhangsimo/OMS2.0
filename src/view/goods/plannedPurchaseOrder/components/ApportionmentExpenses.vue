@@ -153,7 +153,7 @@ export default class ApportionmentExpenses extends Vue {
           this.cancel();
           res = this.formInline;
       } else {
-          this.$Message.error('必填信息未填写!');
+          this.$Message.error('请添加配件或完善订单信息后再提交!');
       }
     });
     return res;

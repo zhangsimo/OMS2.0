@@ -119,11 +119,11 @@
                   :label-width="106"
                   :show-message="true"
                 >
-                  <FormItem class="form-Item" label="供应商：" prop="guest">
+                  <FormItem class="form-Item" label="供应商：" prop="guestName">
                     <Row class="w160">
                       <Col span="19"
                         ><Input
-                          v-model="formPlanmain.guest"
+                          v-model="formPlanmain.guestName"
                           placeholder="请选择供应商"
                           :disabled="isInput"
                           readonly
@@ -211,6 +211,7 @@
                       placeholder="请选择订货日期"
                       v-model="formPlanmain.orderDate"
                       :disabled="isInput"
+                      :options="options1"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="预计到货日期：">
@@ -220,6 +221,7 @@
                       placeholder="请选择预计到货日期"
                       v-model="formPlanmain.planArriveDate"
                       :disabled="isInput"
+                      :options="options2"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="备注：">
@@ -228,6 +230,7 @@
                       class="w160"
                       v-model="formPlanmain.remark"
                       :disabled="isInput"
+                      maxlength="100"
                     />
                   </FormItem>
                   <FormItem class="form-Item" label="直发门店：">
@@ -250,6 +253,7 @@
                       class="w160"
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
+                      readonly
                     />
                   </FormItem>
                 </Form>
@@ -261,7 +265,7 @@
                       size="small"
                       class="mr10"
                       @click="selectPlan"
-                      :disabled="isInput"
+                      :disabled="isInput || formPlanmain.guestId.length <= 0"
                       >选择采购计划</Button
                     >
                   </div>
