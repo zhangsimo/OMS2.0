@@ -20,7 +20,7 @@
               </Row>
             </FormItem>
             <FormItem label="销售员：" prop="orderMan">
-              <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0"></Input>
+              <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0"/>
             </FormItem>
              <FormItem label="交货仓库：" prop="storeId">
           <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
@@ -33,7 +33,7 @@
               </Select>
             </FormItem>
             <FormItem label="往来单号：" >
-              <Input class="w210" v-model="formPlan.code" disabled></Input>
+              <Input class="w210" v-model="formPlan.code" disabled/>
             </FormItem> -->
             <FormItem label="票据类型:" prop="billTypeId">
               <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
@@ -46,10 +46,10 @@
           </Select>
         </FormItem>
         <FormItem label="备注：">
-          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0"></Input>
+          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0"/>
         </FormItem>
         <FormItem label="出库单号:">
-          <Input class="w210" v-model="formPlan.serviceId" disabled></Input>
+          <Input class="w210" v-model="formPlan.serviceId" disabled/>
         </FormItem>
         <!-- <FormItem label="计划发货日期:">
           <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate" type="date" placeholder="选择日期" style="width: 120px" :disabled="draftShow != 0"></DatePicker>

@@ -613,12 +613,13 @@ export default {
           if (valid) {
             this.formPlan.billStatusId.value = 1;
             this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
-            getSubmitList(this.formPlan).then(res => {
-              console.log(res);
-              if (res.code == 0) {
-                his.$Message.error("保存成功");
-              }
-            });
+            console.log(this.formPlan)
+            // getSubmitList(this.formPlan).then(res => {
+            //   console.log(res);
+            //   if (res.code == 0) {
+            //     his.$Message.error("保存成功");
+            //   }
+            // });
           } else {
             this.$message.error("带*必填");
           }
@@ -770,11 +771,9 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           var datas = conversionList(val)
-          datas.forEach(item => {
-            this.formPlan.detailVOList = item
-          })
+          this.formPlan.detailVOList = datas
           this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
-          console.log(this.formPlan , 999)
+          // console.log(this.formPlan , 999)
           getSubmitList(this.formPlan)
             .then(res => {
               console.log(res);
