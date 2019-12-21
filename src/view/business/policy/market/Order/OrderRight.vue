@@ -325,13 +325,13 @@ export default {
     };
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
-        callback(new Error("最多保留4位小数"));
+        callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^[+-]?\d+\.\d{0,4}$/i;
+        const reg = /^[+-]?\d+\.\d{0,2}$/i;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("最多保留4位小数"));
+          callback(new Error("最多保留2位小数"));
         }
       }
     };
@@ -535,7 +535,9 @@ export default {
       data.forEach(row => {
         count += this.countAmount(row);
       });
-      this.totalMoney = count;
+      // console.log(count,count.toFixed(2))
+      this.totalMoney = count.toFixed(2);
+      // console.log(this.totalMoney)
       return count;
     },
     //获取尾部总数
@@ -546,10 +548,11 @@ export default {
             return "和值";
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
-            return this.$utils.sum(data, column.property);
+            // console.log(this.$utils.sum(data, column.property))
+            return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 8) {
-            return ` ${this.countAllAmount(data)} `;
+            return ` ${this.countAllAmount(data).toFixed(2)} `;
           }
           return null;
         })
