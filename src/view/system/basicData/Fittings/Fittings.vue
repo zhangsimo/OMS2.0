@@ -221,6 +221,7 @@
       ref="partInfo"
       :is-add-part="true"
       :isSellDis="true"
+      :showSpe="true"
       @throwData="submitSave"
     ></part-info>
   </main>

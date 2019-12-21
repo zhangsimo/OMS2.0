@@ -19,15 +19,15 @@
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="fullName">
           <Row style="width: 310px">
-            <!-- <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
+            <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>-->
-            <Input
-              class="w240"
-              v-model="formPlan.fullName"
-              :disabled="draftShow != 0"
-              @on-change="changeClient"
-            />
+            </Select>
+<!--            <Input-->
+<!--              class="w240"-->
+<!--              v-model="formPlan.fullName"-->
+<!--              :disabled="draftShow != 0"-->
+<!--              @on-change="changeClient"-->
+<!--            />-->
             <Button
               class="ml5"
               size="small"
@@ -226,10 +226,15 @@
             field="orderPrice"
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
-          ></vxe-table-column>
+          >
+            <template v-slot="{ row }">
+              <span>{{ countPrice(row) |priceFilters}}</span>
+            </template>
+
+          </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
-              <span>{{ countAmount(row) }}</span>
+              <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -561,14 +566,26 @@ export default {
         this.$utils.toNumber(row.orderPrice)
       );
     },
+    countPrice(row){
+      return  this.$utils.toNumber(row.orderPrice)
+    },
     // 计算尾部总和
     countAllAmount(data) {
       let count = 0;
       data.forEach(row => {
         count += this.countAmount(row);
       });
+      count = count.toFixed(2)
       this.totalMoney = count;
       return count;
+    },
+    countAllPrice(data){
+      let count=0
+      data.forEach(row=>{
+        count +=this.countPrice(row)
+        count = count.toFixed(2)
+        return count;
+      })
     },
     //获取尾部总数
     footerMethod({ columns, data }) {
@@ -579,6 +596,9 @@ export default {
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
+          }
+          if (columnIndex === 7) {
+            return ` ${this.countAllPrice(data)} `;
           }
           if (columnIndex === 8) {
             return ` ${this.countAllAmount(data)} `;
@@ -753,6 +773,7 @@ export default {
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);
+              this.isAdd=true
             }
           } catch (errMap) {
             this.$XModal.message({

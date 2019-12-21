@@ -1,7 +1,7 @@
 import env from './env'
 
 const dev = {
-  tokenApi: 'http://192.168.30.226:5600', // 登录接口API
+  tokenApi: 'http://192.168.2.47:5600', // 登录接口API
   // tokenApi: 'https://api.g-parts.cn', // 登录接口API
   // wmsApi: 'https://api.g-parts.cn/wms-order-provider',
   // omsApi: 'http://192.168.30.209:9240', // 张佳岩
@@ -12,7 +12,7 @@ const dev = {
   wmsApi: 'http://192.168.30.221:9250', // 陈舒
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
   // wmsApi: 'http://192.168.30.69:9250', // 曾史强
-  omsOrder: 'http://192.168.30.179:9210', // 曾史强
+  omsOrder: 'http://192.168.30.221:9210', // 曾史强
   // omsOrder: 'http://192.168.30.21:9210',
   // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
   omsStore:'http://192.168.30.179:9280', // 库存查询 周伟健
