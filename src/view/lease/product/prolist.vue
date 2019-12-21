@@ -212,6 +212,7 @@
           salesPrice: [
             { required: true,validator:price2, trigger: 'blur'}
           ],
+          remark: [{ max : 200, message: '产品描述不超过200个字', trigger: 'blur'}],
           isCycle: [
             { required: true,validator:valDay, trigger: 'blur' }
           ],
