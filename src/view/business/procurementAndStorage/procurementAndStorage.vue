@@ -64,19 +64,19 @@
                       <Select v-model="formPlan.guestId" filterable style="width: 240px"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
-                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @click="addSuppler">
                         <Icon type="md-checkmark"/>
                       </Button>
                     </Row>
                   </FormItem>
                   <FormItem label="采购员：" prop="orderMan">
-                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
+                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"/>
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
                     <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss"  v-model="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
-                    <Input class="w160" v-model="formPlan.serviceId" disabled></Input>
+                    <Input class="w160" v-model="formPlan.serviceId" disabled/>
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId" props="billTypeId" >
                     <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @on-change="getBillType">
@@ -89,10 +89,10 @@
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></Input>
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"/>
                   </FormItem>
                   <FormItem label="往来单号：" >
-                    <Input class="w210" v-model="formPlan.code" disabled></Input>
+                    <Input class="w210" v-model="formPlan.code" disabled/>
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
                     <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
@@ -199,6 +199,12 @@
         :clientList ='client'
         @getPlanOrder="getPlanOrder"
       ></procurement-modal>
+      <!--选择供应商-->
+    <select-supplier
+      ref="selectSupplier"
+      header-tit="供应商资料"
+      @selectSupplierName="getSupplierName"
+    ></select-supplier>
     </div>
   </div>
 </template>

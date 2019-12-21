@@ -9,7 +9,7 @@
 
         <Button type="warning" class="mr10" @click="query"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
         <Button class="mr10" @click="select" type='default'><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default'><Icon type="md-close" /> 取消</Button>
+        <Button class="mr10" type='default' @click="addressShow= false"><Icon type="md-close" /> 取消</Button>
       </header>
       <div class="clientBody">
         <div class="demo-split">
