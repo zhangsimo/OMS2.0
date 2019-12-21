@@ -179,6 +179,7 @@
               :disabled="draftShow != 0 || !formPlan.id"
               class="mr10"
               @click="openGodownEntryModal"
+
             >选择入库单</Button>
           </div>
           <div class="fl mb5">
@@ -841,7 +842,7 @@ export default {
               return this.$message.error("可用余额不足");
             }
 
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getStockOut(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
@@ -867,7 +868,7 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
