@@ -131,8 +131,7 @@
                           :disabled="isinput"
                           placeholder="请选择供应商"
                           readonly
-                        ></Input
-                      ></Col>
+                        /></Col>
                       <Col span="5"
                         ><Button
                           :disabled="selectPlanOrderItem.billStatusId != 0"
@@ -160,7 +159,7 @@
                     <Input
                       class="w160"
                       v-model="formPlan.planner"
-                    ></Input>
+                    />
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
@@ -169,7 +168,7 @@
                       :readonly="selectPlanOrderItem.billStatusId != 0"
                       v-model="formPlan.remark"
                       maxlength="100"
-                    ></Input>
+                    />
                   </FormItem>
                   <FormItem label="票据类型：" prop="billType">
                     <Select
@@ -205,7 +204,7 @@
                       readonly
                       :disabled="isinput"
                       v-model="formPlan.planOrderNum"
-                    ></Input>
+                    />
                   </FormItem>
                   <FormItem label="其他费用：">
                     <InputNumber
