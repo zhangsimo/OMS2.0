@@ -144,14 +144,12 @@ export default {
       handler(v, ov) {
         v.showPerson = v.showPerson ? 1 : 0;
         this.page.num = 1;
-        this.page.size = 10;
+        // this.page.size = 10;
         let page = this.page.num - 1;
         let size = this.page.size;
         getLeftList(page, size, v).then(res => {
           if (res.code === 0) {
-            res.data.content.map(
-              item => (item.billStatusId = JSON.parse(item.billStatusId))
-            );
+            // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
           }
