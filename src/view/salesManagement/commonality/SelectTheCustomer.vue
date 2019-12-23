@@ -202,9 +202,10 @@ export default {
       data.leverId = this.queryType.id;
       data.code = this.clientCode;
       data.shortName = this.clientName;
-      data.tel = this.clientPhone;
+      data.contactorTel = this.clientPhone;
       let res = await getTreeClient(data);
       if (res.code === 0) {
+        console.log('客户',res)
         this.tableData = res.data.content;
         this.page1.total = res.data.totalElements;
       }
