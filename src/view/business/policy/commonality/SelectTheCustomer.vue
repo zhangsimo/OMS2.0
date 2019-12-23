@@ -186,7 +186,7 @@
                     data.code = this.clientCode
                     data.shortName = this.clientName
                     data.contactorTel = this.clientPhone
-                    console.log(data)
+                    // console.log(data)
                 let res = await getTreeClient(data)
                 if (res.code === 0){
                     this.tableData = res.data.content
