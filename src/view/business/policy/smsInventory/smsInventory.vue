@@ -586,18 +586,13 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
-      if (this.formPlan.billStatusId.value !== 0) {
-        this.$Message.error("只有草稿状态才能保存");
-        return;
-      }
       this.$refs.formPlan.validate(valid => {
         if (valid) {
           callback && callback();
-          this.formPlan.billStatusId.value = 1;
           getSubmitList(this.formPlan).then(res => {
-            console.log(res);
             if (res.code == 0) {
-              his.$Message.error("提交成功");
+              this.$Message.error("提交成功");
+              this.getList()
             }
           });
         } else {
@@ -611,15 +606,14 @@ export default {
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
           if (valid) {
-            this.formPlan.billStatusId.value = 1;
             this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
-            console.log(this.formPlan)
-            // getSubmitList(this.formPlan).then(res => {
-            //   console.log(res);
-            //   if (res.code == 0) {
-            //     his.$Message.error("保存成功");
-            //   }
-            // });
+            getSubmitList(this.formPlan).then(res => {
+              console.log(res);
+              if (res.code == 0) {
+                this.$Message.error("保存成功");
+                this.getList()
+              }
+            });
           } else {
             this.$message.error("带*必填");
           }
