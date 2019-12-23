@@ -160,13 +160,15 @@
               </Select>
             </FormItem>
             <FormItem label="运输费用：">
-              <InputNumber
+              <el-input-number
                 :precision="2"
                 :min="0"
                 v-model="formDateRight.transportCost"
                 class="w200"
                 :disabled="disabled"
-              ></InputNumber>
+                :controls="false"
+                size="small"
+              />
             </FormItem>
             <FormItem label="结算方式：">
               <Input

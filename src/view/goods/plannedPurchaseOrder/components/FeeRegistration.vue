@@ -103,10 +103,14 @@
               title="收支项目"
               width="120"
               field="serviceType"
-              :edit-render="{type: 'default'}"
+              :edit-render="{ type: 'default' }"
             >
               <template v-slot:edit="scope">
-                <Select style="width:100px" v-model="scope.row.serviceType" @on-change="changeSelect(scope)">
+                <Select
+                  style="width:100px"
+                  v-model="scope.row.serviceType"
+                  @on-change="changeSelect(scope)"
+                >
                   <Option
                     v-for="item in selectrow.revenueTypes"
                     :value="item.value"
@@ -116,7 +120,9 @@
                   >
                 </Select>
               </template>
-              <template v-slot="{ row }">{{ getSelectLabel(row.serviceType, selectrow.revenueTypes) }}</template>
+              <template v-slot="{ row }">{{
+                getSelectLabel(row.serviceType, selectrow.revenueTypes)
+              }}</template>
             </vxe-table-column>
             <vxe-table-column
               field="duePayableAmt"
@@ -125,12 +131,14 @@
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
-                <InputNumber
+                <el-input-number
                   :max="999999"
                   :min="0"
                   :precision="2"
                   v-model="row.duePayableAmt"
-                ></InputNumber>
+                  :controls="false"
+                  size="small"
+                />
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -159,7 +167,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import { State } from 'vuex-class';
+import { State } from "vuex-class";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import { orderState } from "../global";
@@ -178,7 +186,7 @@ enum Revenue {
 
 @Component
 export default class FeeRegistration extends Vue {
-  @State('user') user;
+  @State("user") user;
 
   @Prop(String) readonly serviceId;
   @Prop({ type: [String, Number] }) readonly state;
@@ -195,9 +203,9 @@ export default class FeeRegistration extends Vue {
   private loading2: boolean = false;
   private tableData: Array<any> = new Array();
   private tableInfoData: Array<any> = new Array();
-  
+
   // 选中行
-  private selectrow:any = null;
+  private selectrow: any = null;
 
   private revenueTypes = [
     { disabled: false, value: "8", label: "运杂费" },
@@ -275,10 +283,10 @@ export default class FeeRegistration extends Vue {
     if (res.code == 0) {
       this.loading2 = false;
       let resData = res.data || [];
-      this.tableInfoData =  resData.map((el: any) => {
+      this.tableInfoData = resData.map((el: any) => {
         el.serviceType = JSON.parse(el.serviceType).value;
-        for(let o of this.selectrow.revenueTypes) {
-          if(o.value == el.serviceType) {
+        for (let o of this.selectrow.revenueTypes) {
+          if (o.value == el.serviceType) {
             o.disabled = true;
             break;
           }
@@ -300,18 +308,20 @@ export default class FeeRegistration extends Vue {
   }
 
   private async save() {
-    let isOk:boolean = this.tableInfoData.every((el:any) => el.serviceType ? true: false);
-    if(!isOk) return this.$Message.error('请选择收支项目');
-    let data:Array<any> = this.tableInfoData.map(el => {
-      let obj = {...el};
+    let isOk: boolean = this.tableInfoData.every((el: any) =>
+      el.serviceType ? true : false
+    );
+    if (!isOk) return this.$Message.error("请选择收支项目");
+    let data: Array<any> = this.tableInfoData.map(el => {
+      let obj = { ...el };
       obj.serviceId = this.serviceId;
       obj.guestId = this.selectrow.id;
       return obj;
-    })
+    });
     this.loading2 = true;
-    let res:any = await api.saveFee(data);
-    if(res.code == 0) {
-      this.$Message.success('保存成功');
+    let res: any = await api.saveFee(data);
+    if (res.code == 0) {
+      this.$Message.success("保存成功");
       this.tableInfoData = res.data;
       this.loading2 = false;
     }
@@ -321,44 +331,49 @@ export default class FeeRegistration extends Vue {
     this.isCost = false;
   }
 
-  private getSelectLabel(value, list, valueProp = 'value', labelField = 'label') {
-    let item = this.$utils.find(list, item => item[valueProp] == value)
-    return item ? item[labelField] : null
+  private getSelectLabel(
+    value,
+    list,
+    valueProp = "value",
+    labelField = "label"
+  ) {
+    let item = this.$utils.find(list, item => item[valueProp] == value);
+    return item ? item[labelField] : null;
   }
 
   private changeSelect(scope) {
     const row = scope.row;
     const val = row.serviceType;
-    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el:any) => {
+    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el: any) => {
       el.disabled = false;
-      if(el.value == val) {
+      if (el.value == val) {
         el.disabled = true;
       }
       return el;
-    })
-    this.tableInfoData.forEach((el:any) => {
-      this.selectrow.revenueTypes.forEach((els:any) => {
-        if(el.serviceType == els.value) {
+    });
+    this.tableInfoData.forEach((el: any) => {
+      this.selectrow.revenueTypes.forEach((els: any) => {
+        if (el.serviceType == els.value) {
           els.disabled = true;
         }
-      })
-    })
-    const ref:any = this.$refs.xTable;
+      });
+    });
+    const ref: any = this.$refs.xTable;
     ref.updateStatus(scope);
   }
 
   // 添加
   private add() {
-    if(this.tableInfoData.length >= this.selectrow.revenueTypes.length) {
-      return this.$Message.error('总条数不能超过收支项目条数');
+    if (this.tableInfoData.length >= this.selectrow.revenueTypes.length) {
+      return this.$Message.error("总条数不能超过收支项目条数");
     }
     let row = {
-      guestName: '',
+      guestName: "",
       duePayableAmt: 0,
-      remark: '',
+      remark: "",
       createUname: this.user.userData.staffName,
-      createTime: tools.transTime(new Date()),
-    }
+      createTime: tools.transTime(new Date())
+    };
     this.tableInfoData.push(row);
   }
 
@@ -366,12 +381,12 @@ export default class FeeRegistration extends Vue {
   private del(index: number) {
     const row = this.tableInfoData[index];
     const val = row.serviceType;
-    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el:any) => {
-      if(el.value == val) {
+    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el: any) => {
+      if (el.value == val) {
         el.disabled = false;
       }
       return el;
-    })
+    });
     this.tableInfoData.splice(index, 1);
   }
 }

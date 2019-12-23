@@ -354,11 +354,13 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -368,12 +370,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}

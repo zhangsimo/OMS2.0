@@ -22,14 +22,16 @@
         </Select>
       </FormItem>
       <FormItem label="汇率: " prop="exchangeRate">
-        <InputNumber
+        <el-input-number
           :min="0"
           class="w300 ml5"
           v-model="formInline.exchangeRate"
+          :controls="false"
+          size="small"
         />
       </FormItem>
       <FormItem label="关税比例: " prop="tariffScale">
-        <InputNumber
+        <el-input-number
           :min="0"
           :max="100"
           v-model="formInline.tariffScale"
@@ -37,10 +39,12 @@
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
           class="w300 ml5"
+          :controls="false"
+          size="small"
         />
       </FormItem>
       <FormItem label="运杂费比例: " prop="transportScale">
-        <InputNumber
+        <el-input-number
           :min="0"
           :max="100"
           v-model="formInline.transportScale"
@@ -48,10 +52,12 @@
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
           class="w300 ml5"
+          :controls="false"
+          size="small"
         />
       </FormItem>
       <FormItem label="增值税比例: " prop="vatScale">
-        <InputNumber
+        <el-input-number
           :min="0"
           :max="100"
           v-model="formInline.vatScale"
@@ -59,6 +65,8 @@
           :parser="value => value.replace('%', '')"
           placeholder="请输入"
           class="w300 ml5"
+          :controls="false"
+          size="small"
         />
       </FormItem>
     </Form>
@@ -146,14 +154,14 @@ export default class ApportionmentExpenses extends Vue {
 
   @Emit("currencyForm")
   private save() {
-    let res:any = null;
+    let res: any = null;
     const formInline: any = this.$refs["formInline"];
     formInline.validate((valid: any) => {
       if (valid) {
-          this.cancel();
-          res = this.formInline;
+        this.cancel();
+        res = this.formInline;
       } else {
-          this.$Message.error('请添加配件或完善订单信息后再提交!');
+        this.$Message.error("请添加配件或完善订单信息后再提交!");
       }
     });
     return res;

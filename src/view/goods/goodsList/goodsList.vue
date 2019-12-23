@@ -207,7 +207,7 @@
                     />
                   </FormItem>
                   <FormItem label="其他费用：">
-                    <InputNumber
+                    <el-input-number
                       class="w160"
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
@@ -215,16 +215,20 @@
                       @on-change="changeTotals"
                       :min="0"
                       :precision="2"
+                      :controls="false"
+                      size="small"
                     />
                   </FormItem>
                   <FormItem label="合计总金额：">
-                    <InputNumber
+                    <el-input-number
                       class="w160"
                       :disabled="isinput"
                       readonly
                       v-model="formPlan.totalPrice"
                       :min="0"
                       :precision="2"
+                      :controls="false"
+                      size="small"
                     />
                   </FormItem>
                 </Form>
@@ -374,11 +378,13 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="9999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -388,11 +394,13 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :min="0"
                       v-model="row.orderPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}

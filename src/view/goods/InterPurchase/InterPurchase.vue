@@ -363,11 +363,13 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -386,11 +388,13 @@
                   width="130"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :min="0"
                       v-model="row.rmbPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.rmbPrice | priceFilters }}
@@ -418,12 +422,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.otherAmt"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.otherAmt | priceFilters }}
