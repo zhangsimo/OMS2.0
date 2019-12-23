@@ -821,7 +821,7 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.falg = true
+      this.falg = true;
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
@@ -831,11 +831,11 @@ export default {
         }
       );
       approvalStatus({ instanceId: row.id }).then(res => {
-        console.log(res)
-        // if (res.code == "0") {
-        //   this.statusData = res.data.processInstance.operationRecords;
-        //   console.log(this.statusData);
-        // }
+        console.log(res);
+        if (res.code == "0") {
+          this.statusData = res.data.processInstance.operationRecords;
+          console.log(this.statusData);
+        }
       });
       let date = {
         startDate: this.value[0],

@@ -312,7 +312,7 @@ export default class Fittings extends Vue {
     this.local.loading = true;
     let params: Kv = {};
     let data: Kv = {};
-    params.page = this.local.page.num - 1;
+    params.page = this.local.page.num;
     params.size = this.local.page.size;
     // switch (this.queryValue) {
     //   case "0":
@@ -367,7 +367,7 @@ export default class Fittings extends Vue {
     let params: Kv = {};
     let data: Kv = {};
     params.tenantId = 0;
-    params.page = this.cloud.page.num - 1;
+    params.page = this.cloud.page.num;
     params.size = this.cloud.page.size;
     switch (this.queryValue) {
       case "0":
@@ -377,7 +377,7 @@ export default class Fittings extends Vue {
         data.fullName = this.query;
         break;
       case "2":
-        data.applyCarModel = this.query;
+        data.adapterCarModels = this.query;
         break;
       case "3":
         data.keyWord = this.query;
@@ -395,7 +395,7 @@ export default class Fittings extends Vue {
       data.typeId = this.selectTreeId;
     }
     // console.log(params,data)
-    let res: any = await getCloudList({...params, ...data});
+    let res: any = await getLocalList({...params, ...data});
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
       res.data.content.map( item => {

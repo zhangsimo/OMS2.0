@@ -30,76 +30,54 @@
         :summary-method="handleSummary"
       ></Table>
     </div>
-    <div class="flowImg" v-if="flag">
-      <div style=" border: 1px solid #eee;">
-        <p class="flowImg-title">额度审批流程</p>
-        <div>
-          <Row class="expand-row">
-            <Col class="mr50" span="2">
-              <span>额度审批流程</span>
-            </Col>
-            <Col span="14" class="mt10">
-              <Steps :current="stepsCurrent" :status="stepsStatus">
-                <Step title="提交申请"></Step>
-                <Step title="店长审批"></Step>
-                <Step title="区域总经理"></Step>
-                <Step title="财务总监"></Step>
-              </Steps>
-            </Col>
-          </Row>
-          <Row class="expand-row">
-            <Col class="mr50" span="2">
-              <span>审批人</span>
-            </Col>
-            <Col span="4">
-              <span>苏义（员工）</span>
-            </Col>
-            <Col span="4">
-              <span>黄春贵（店长）</span>
-            </Col>
-            <Col span="4">
-              <span>王华（销售总监）</span>
-            </Col>
-            <Col span="4">
-              <span></span>
-            </Col>
-          </Row>
-          <Row class="expand-row">
-            <Col class="mr50" span="2">
-              <span>审批意见</span>
-            </Col>
-            <Col span="4">
-              <span style="color: #40A6FF">提交申请</span>
-            </Col>
-            <Col span="4">
-              <span style="color: #40A6FF">同意</span>
-            </Col>
-            <Col span="4">
-              <span style="color: #FD5C5C">审批不通过</span>
-            </Col>
-            <Col span="4">
-              <span></span>
-            </Col>
-          </Row>
-          <Row class="expand-row">
-            <Col class="mr50" span="2">
-              <span>审批时间</span>
-            </Col>
-            <Col span="4">
-              <span>2019-11-19 15:00:00</span>
-            </Col>
-            <Col span="4">
-              <span>2019-11-19 15:00:00</span>
-            </Col>
-            <Col span="4">
-              <span>2019-11-19 15:00:00</span>
-            </Col>
-            <Col span="4">
-              <span></span>
-            </Col>
-          </Row>
+    <div class="db mt10" v-if="falg">
+      <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
+      <section class="data-container">
+        <div class="modal-data">
+          <span class="data-name">审批人:</span>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="status">{{item.userid}}</span>
+                <span class="arrow-box" v-if="i<statusData.length-1"></span>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
+        <div class="modal-data">
+          <span class="data-name">审批状态:</span>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span
+                  class="words"
+                  :class="{res:item.operationResult=='REFUSE'}"
+                >{{item.operationResult|status}}</span>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="modal-data">
+          <span class="data-name">审批日期:</span>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="date">{{item.date | date}}</span>
+              </div>
+            </template>
+          </div>
+        </div>
+        <div class="modal-data">
+          <span class="data-name">审批意见:</span>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="remark">{{item.remark}}</span>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
     </div>
     <!--信用额度查看-->
     <Modal v-model="CreditLineApplicationShow" title="客户信用额度表" width="900" :mask-closable="false">
@@ -128,6 +106,7 @@ import {
   viewDetails,
   guestAdjust
 } from "../../../../api/system/essentialData/creditApproval";
+import { approvalStatus } from "_api/base/user";
 export default {
   name: "CreditApproval",
   components: {
@@ -136,7 +115,11 @@ export default {
   },
   data() {
     return {
-      flag:false,
+      statusData: [
+        { name: "提交", status: "已提交" },
+        { name: "产品总监审批", status: "已审批" }
+      ],
+      flag: false,
       options3: {
         disabledDate(date) {
           return date && date.valueOf() > Date.now();
@@ -342,8 +325,15 @@ export default {
     // 单击表格行获取行数据
     onRowClick(value) {
       // console.log(value)
-      this.flag = true
+      this.flag = true;
       this.creditData.guestId = value.guestId;
+      approvalStatus({ instanceId: row.id }).then(res => {
+        console.log(res);
+        if (res.code == "0") {
+          this.statusData = res.data.processInstance.operationRecords;
+          console.log(this.statusData);
+        }
+      })
     }
   }
 };
