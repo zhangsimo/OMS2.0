@@ -118,23 +118,8 @@ export default class PriceManage extends Vue {
     if (this.part.fullname) {
       data.fullName = this.part.fullname;
     }
-<<<<<<< HEAD
     if (this.part.pinyin) {
       data.pinyin = this.part.pinyin;
-=======
-    // 删除
-    private remove() {
-        if(this.currRow){
-            this.level.tbdata.forEach((el: any, index: number, arr: Array<any>) => {
-                if (this.currRow.oid === el.oid && !el.readonly) {
-                    arr.splice(index, 1);
-                    el.id && this.leveldelarr.push(el);
-                }
-            });
-        } else {
-            this.$message.error('至少选择一个客户信息')
-        }
->>>>>>> d868f1f75a578704ed2ba7be1590494fa2befc58
     }
     if (this.part.code) {
       data.partCode = this.part.code;
