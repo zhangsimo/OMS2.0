@@ -213,7 +213,7 @@ export default {
       }
     },
     addClient() {
-      // this.$refs.child.resetFields();
+      this.$refs.child.resetFields();
       this.clientList = {};
       this.$refs.child.addPicture();
       this.clientDataShow = true;
@@ -222,14 +222,14 @@ export default {
     addNewSupplier() {
       this.$refs.child.handleSubmit(async () => {
         let data = this.clientList;
-
         data.softOpenDate = this.changeTime(data.softOpenDate);
         let res = await getNewSupplier(data);
         if (res.code == 0) {
           this.$message.success("保存成功");
-          this.getlist();
           this.clientDataShow = false;
-          this.$refs.child.resetFields()
+          this.pitchSupplierOne = [];
+          this.$refs.child.resetFields();
+          this.getlist();
         }
       });
     },
@@ -237,8 +237,9 @@ export default {
       return moment(val).format("YYYY-MM-DD HH:mm:ss");
     },
     cancel() {
+      this.pitchSupplierOne = [];
+      this.getlist();
       this.clientDataShow = false;
-      // this.$refs.child.resetFields();
     },
     //修改客户资料
     changeClient() {

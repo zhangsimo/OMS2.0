@@ -11,27 +11,16 @@
                 v-for="item in queryList"
                 :value="item.value"
                 :key="item.value"
-                >{{ item.label }}</Option
-              >
+              >{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db">
-            <Input
-              v-model="query"
-              placeholder="输入查询条件"
-              style="width: 140px;"
-              class="mr10"
-            />
+            <Input v-model="query" placeholder="输入查询条件" style="width: 140px;" class="mr10" />
           </div>
           <div class="db mr10">
             <span>品牌:</span>
             <Select v-model="band" style="width:140px" filterable>
-              <Option
-                v-for="item in bands"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+              <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -49,16 +38,14 @@
       <Split v-model="split" min="200" max="570">
         <div slot="left" class="tree-warp">
           <div class="title">配件分类</div>
-          <Tree
-            class="tree"
-            :data="treeData"
-            @on-select-change="selectedTree"
-          ></Tree>
+          <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
         </div>
         <div slot="right" class="right table-warp">
-          <div class="btn-title" v-if="tabIndex === 0">
+          <div class="btn-title" v-if="tabIndex == 0">
             <Button class="mr10 w90" @click="add">
-              <span class="center"> <Icon type="md-add" />新增 </span>
+              <span class="center">
+                <Icon type="md-add" />新增
+              </span>
             </Button>
             <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
               <span class="center">
@@ -75,37 +62,22 @@
                 <Icon custom="iconfont iconqiyongicon icons" />启用
               </span>
             </Button>
-            <Button
-              class="mr10 w90"
-              @click="changeDisable"
-              :disabled="!isCanbutton"
-              v-else
-            >
+            <Button class="mr10 w90" @click="changeDisable" :disabled="!isCanbutton" v-else>
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>
             </Button>
-            <Button
-              class="mr10 w90"
-              :disabled="!isCanbutton"
-              @click="changeSale"
-              v-if="isSale"
-            >
+            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售
               </span>
             </Button>
-            <Button
-              class="mr10 w90"
-              :disabled="!isCanbutton"
-              @click="changeSale"
-              v-else
-            >
+            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-else>
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />可售
               </span>
             </Button>
-            <!-- 
+            <!--
               <Upload
                 ref="upload"
                 :show-upload-list="false"
@@ -120,12 +92,12 @@
                     <Icon custom="iconfont icondaoruicon icons" />导入
                   </span>
                 </Button>
-              </Upload> 
+              </Upload>
               <Button class="mr10 w90" @click="downTemplate">
                 <span class="center">
                   <Icon custom="iconfont iconxiazaiicon icons" />下载模板
                 </span>
-            </Button> -->
+            </Button>-->
             <Button class="mr10 w90" @click="refresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
@@ -133,9 +105,6 @@
             </Button>
           </div>
           <div class="btn-title" v-else>
-            <Button class="mr10 w90" @click="add">
-              <span class="center"> <Icon type="md-add" />新增 </span>
-            </Button>
             <Button class="mr10 w90" @click="couldRefresh">
               <span class="center">
                 <Icon custom="iconfont iconshuaxinicon icons" />刷新
@@ -144,20 +113,8 @@
           </div>
           <div class="db pl10 tabs-ulwarp">
             <ul class="tabs">
-              <li
-                class="center"
-                :class="{ 'tab-active': tabIndex == 0 }"
-                @click="setTab(0)"
-              >
-                本地配件资料
-              </li>
-              <li
-                class="center"
-                :class="{ 'tab-active': tabIndex == 1 }"
-                @click="setTab(1)"
-              >
-                云配件资料
-              </li>
+              <li class="center" :class="{ 'tab-active': tabIndex == 0 }" @click="setTab(0)">本地配件资料</li>
+              <li class="center" :class="{ 'tab-active': tabIndex == 1 }" @click="setTab(1)">云配件资料</li>
             </ul>
           </div>
           <div class="tabs-warp" v-if="tabIndex == 0">

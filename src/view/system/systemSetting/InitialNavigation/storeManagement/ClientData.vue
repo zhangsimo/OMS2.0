@@ -340,7 +340,6 @@ export default {
               )}&output=json&key=53a2d993424e4c74fc40e8038698af67`
             )
             .then(function(response) {
-              console.log(response);
               if (response.data.infocode == 10000) {
                 let arr = response.data.geocodes[0].location;
                 arr = arr.split(",");
