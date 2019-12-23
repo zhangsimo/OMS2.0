@@ -6,6 +6,7 @@ const data = function() {
     modal: false,
     // tab索引
     tabIndex: 0,
+    flag: 0,
     // 级别名称
     level: {
       loading: false,
@@ -147,7 +148,8 @@ const data = function() {
               },
               //给div绑定样式
               style: {
-                width: "100%"
+                width: "100%",
+                autofocus: "autofocus"
               },
               //给div绑定点击事件
               on: {
@@ -156,12 +158,14 @@ const data = function() {
                   vm.customer.tbdata[params.index] = params.row;
                 },
                 "on-blur": event => {
+                  console.log(params.row.qty, "params.row.qty=?159");
                   let val = event.target.value;
                   let reg = /^(?:0|[1-9][0-9]?|100)$/;
                   if (!reg.test(val)) {
                     this.$Message.error("请输入0-100的正整数");
+                    this.flag = 1;
                     params.row.qty = "";
-                    return false;
+                    return;
                   }
                 },
                 "on-enter": event => {
@@ -376,16 +380,22 @@ const methods = {
         newArr.push(item.id);
       });
     }
+
     // console.log(this.customer.tbdata)
     this.customer.tbdata = this.unique(this.customer.tbdata);
-    partMatchingDetailSave({
-      addOrUpdate: this.customer.tbdata,
-      deleteIds: newArr
-    }).then(res => {
-      // console.log(res)
-      this.rightgetList();
-      this.$Message.success("保存成功");
-    });
+    // if (this.flag === 0) {
+    if (this.flag === 0) {
+      partMatchingDetailSave({
+        addOrUpdate: this.customer.tbdata,
+        deleteIds: newArr
+      }).then(res => {
+        this.$Message.success("保存成功");
+      });
+    }
+    this.rightgetList();
+    this.flag = 0;
+
+    // }
   },
   /**============配件============ */
   // 翻页-配件价格
