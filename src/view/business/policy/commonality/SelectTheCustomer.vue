@@ -220,13 +220,13 @@
             },
             //切换页面
             selectNum(val){
-                this.page.num = val
+                this.page1.num = val
                 this.getList()
             },
             //切换页数
             selectPage(val){
-                this.page.num = 1
-                this.page.size = val
+                this.page1.num = 1
+                this.page1.size = val
                 this.getList()
             },
             //级联选择器
@@ -235,7 +235,7 @@
             },
             //查询
             query(){
-                this.page.num = 1
+                this.page1.num = 1
                 this.clickCity = {}
                 this.getList()
             },

@@ -531,7 +531,6 @@ export default {
         this.salesList.map(item => {
           item.label = item.userName
         })
-        console.log('销售员',this.salesList)
       }
     },
     // 获取仓库
