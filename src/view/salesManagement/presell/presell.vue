@@ -141,7 +141,7 @@
                   <FormItem label="客户：" prop="guestId">
                     <Row style="width: 310px">
                       <Select v-model="formPlan.guestId" filterable style="width: 240px"
-                              :disabled="draftShow != 0||isNew" @on-change="getLimit">
+                              :disabled="draftShow != 0||isNew" @on-change="changeClient">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
                       <Button class="ml5" size="small" type="default" @click="CustomerShowModel"
@@ -586,9 +586,9 @@
       printTable() {
         this.$refs.printBox.openModal()
       },
-      getLimit() {
-        this.getAllLimit()
-      },
+      // getLimit() {
+      //   this.getAllLimit()
+      // },
       //获取客户额度
       getAllLimit() {
         let guestId = this.formPlan.guestId
@@ -596,9 +596,23 @@
           // console.log('客户额度数据',res)
           if (res.code === 0) {
             this.limitList = res.data
+
           }
         })
       },
+      //改变客户
+      async changeClient(value) {
+        // console.log('44444',value)
+        if (!value) {
+          return false;
+        }
+        let guestId = value;
+        let res = await getLimit(guestId);
+        if (res.code === 0) {
+          this.limitList = res.data;
+        }
+      },
+
       //更多搜索
       queryList() {
         this.page.num = 1
@@ -617,6 +631,7 @@
       //仓库改变右侧表格改变
       getStore(data) {
         let house = this.WareHouseList.filter(item => item.id == data)
+        this.formPlan.detailVOList=[]
         this.formPlan.detailVOList.map(val => {
           val.storeName = house[0].name
         })
