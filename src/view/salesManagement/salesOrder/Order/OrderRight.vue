@@ -97,6 +97,8 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0"
+
+            clearable
           ></DatePicker>
         </FormItem>
         <FormItem label="计划到货日期:" prop="planArriveDate">
@@ -108,6 +110,8 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0"
+             clearable
+            ref="clearplanArriveDate"
           ></DatePicker>
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
@@ -314,6 +318,7 @@ import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
+import * as tools from "../../../../utils/tools";
 import { area } from "@/api/lease/registerApi";
 import {
   getSales,
@@ -476,11 +481,9 @@ export default {
     },
     //获取销售员
     selectOrderMan(val){
-      console.log('77777777',val)
       this.formPlan.orderMan = val.label
       this.formPlan.orderManId = val.value
 
-      console.log(val, 123456)
     },
     //获取客户额度
     async getAllLimit() {
@@ -531,7 +534,6 @@ export default {
         this.salesList.map(item => {
           item.label = item.userName
         })
-        console.log('销售员',this.salesList)
       }
     },
     // 获取仓库
@@ -709,7 +711,8 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      this.formPlan.planSendDate = data + " " + "00:00:00";
+      // this.formPlan.planSendDate = data + " " + "00:00:00";
+      this.formPlan.planSendDate==tools.transTime(data)
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
@@ -719,8 +722,20 @@ export default {
     },
     //计划到货日期
     getplanArriveDate(data) {
-      this.formPlan.planArriveDate = data + " " + "00:00:00";
+      // this.formPlan.planArriveDate = data + " " + "00:00:00";
+      this.formPlan.planArriveDate=tools.transTime(data)
     },
+  // //清空日期
+  //
+  //   cleadplanSendDate(data){
+  //     this.formPlan.planSendDate=null
+  //     console.log('4444',this.formPlan.planSendDate)
+  //   },
+  //   clearplanArriveDate(data){
+  //     this.formPlan.planArriveDate=null
+  //     console.log('55', this.formPlan.planArriveDate)
+  //   },
+
 
     //配件返回的参数
     getPartNameList(val) {
