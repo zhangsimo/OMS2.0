@@ -6,7 +6,20 @@ import { getAllBrand, getAllCustom } from '_api/system/partsExamine/partsExamine
 import { getDataDictionaryTable } from '_api/system/dataDictionary/dataDictionaryApi'
 
 export const mixPartInfo = {
+
   data() {
+    //数字加字母校验
+    const NumberA = (rule, value, callback) => {
+      // 模拟异步验证效果
+      let reg = /^[0-9a-zA-Z]*$/;
+      if (!value) {
+        callback(new Error('配件编码不能为空！'));
+      } else if(!reg.test(value)){
+        callback(new Error('配件编码格式不正确!'));
+      }else {
+        callback()
+      }
+    };
     return {
       //是否禁用
       prohibit: false,
@@ -52,16 +65,16 @@ export const mixPartInfo = {
           { required: true, message: '配件品质不能为空', trigger: 'change' }
         ],
         partBrandId: [
-          { required: true, message: '配件品牌不能为空', trigger: 'blur' }
+          { required: true, message: '配件品牌不能为空', trigger: 'change' }
         ],
         code: [
-          { required: true, message: '编码不能为空', trigger: 'blur' }
+          { required: true, validator: NumberA, trigger: 'blur' }
         ],
         name: [
-          { required: true, message: '名称不能为空', trigger: 'blur' }
+          { required: true, message: '名称不能为空', trigger: 'change' }
         ],
         unitId: [
-          { required: true, message: '单位不能为空', trigger: 'blur' }
+          { required: true, message: '单位不能为空', trigger: 'change' }
         ]
       },
       qualityArr: [],//所有品质
@@ -384,7 +397,7 @@ export const mixPartInfo = {
           objReq.isStopSell = this.forbidsale ? 1 : 0
           this.$emit('throwData', objReq)
         } else {
-          this.$message.error('带*必填')
+          this.$Message.error('带*必填')
           return
         }
       })

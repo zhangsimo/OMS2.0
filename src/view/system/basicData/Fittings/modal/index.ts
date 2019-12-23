@@ -36,6 +36,18 @@ let price2 = (rule: any, value: any, callback: Function) => {
         }
     }
 };
+//数字加字母校验
+const NumberA = (rule, value, callback) => {
+  // 模拟异步验证效果
+  let reg = /^[0-9a-zA-Z]*$/;
+  if (!value) {
+    callback(new Error('请输入配件编码！'));
+  } else if(!reg.test(value)){
+    callback(new Error('请输入正确配件编码格式!'));
+  }else {
+    callback()
+  }
+};
 
 @Component
 export default class Accessories extends Vue {
@@ -201,8 +213,8 @@ export default class Accessories extends Vue {
         partBrandId: [
             { required: true, message: "配件品牌不能为空", trigger: "change" }
         ],
-        code: [{ required: true, message: "配件编码不能为空", trigger: "blur" }],
-        name: [{ required: true, message: "配件名称不能为空", trigger: "blur" }],
+        code: [{ required: true, validator: NumberA, trigger: "change" }],
+        name: [{ required: true, message: "配件名称不能为空", trigger: "change" }],
         unitId: [{ required: true, message: "配件单位不能为空", trigger: "change" }]
     };
     /**新增配件表单 */
