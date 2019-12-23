@@ -416,9 +416,7 @@ export default {
     //获取右侧数据
     async getList() {
       const res = this.$store.state.dataList.oneOrder;
-      console.log(res);
       if (res.xinzeng !== "1") {
-        console.log(res.orderType)
         res.orderType = res.orderType;
         this.draftShow = res.billStatusId === 0 ? false : true;
         res.orderTypeValue = res.orderType.value;
