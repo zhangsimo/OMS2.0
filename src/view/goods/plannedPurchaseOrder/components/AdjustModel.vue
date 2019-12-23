@@ -87,6 +87,7 @@
                 v-model="row.adjustQty"
                 :controls="false"
                 size="small"
+                :precision="0"
               />
             </template>
           </vxe-table-column>

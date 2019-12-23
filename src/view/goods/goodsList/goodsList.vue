@@ -384,6 +384,7 @@
                       v-model="row.orderQty"
                       :controls="false"
                       size="small"
+                      :precision="0"
                     />
                   </template>
                 </vxe-table-column>
