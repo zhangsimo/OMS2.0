@@ -204,7 +204,7 @@ export default class Fittings extends Vue {
         },
         {
           title: "内码",
-          key: "code",
+          key: "id",
           minWidth: 120
         },
         {
@@ -437,7 +437,7 @@ export default class Fittings extends Vue {
       switch (this.queryValue) {
         case "0":
           data.queryCode = qurry;
-          break; 
+          break;
         case "1":
           data.fullName = qurry;
           break;
@@ -626,7 +626,7 @@ export default class Fittings extends Vue {
     this.isCanbutton = true;
     if (this.tabIndex === 0) {
       this.isDisable = row.disabled == 0 ? true : false;
-      this.isSale = row.isStopSell == 0 ? true : false; 
+      this.isSale = row.isStopSell == 0 ? true : false;
     } else {
       this.isDisable = row.isDisabled == 0 ? true : false;
       this.isSale = row.isSale == 0 ? true : false;

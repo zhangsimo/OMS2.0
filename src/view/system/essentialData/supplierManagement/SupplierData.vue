@@ -407,6 +407,7 @@ export default {
         this.$Message.error("请先选中一个供应商信息");
         return false;
       }
+      this.clientDataShow = true;
       this.pitchSupplierOne.isDisabled == 1
         ? (this.pitchSupplierOne.isDisabled = true)
         : (this.pitchSupplierOne.isDisabled = false);
@@ -414,7 +415,6 @@ export default {
         ? (this.pitchSupplierOne.isClient = true)
         : (this.pitchSupplierOne.isClient = false);
       this.clientList = this.pitchSupplierOne;
-      this.clientDataShow = true;
     },
     //批量上传失败
     onFormatError(file) {
