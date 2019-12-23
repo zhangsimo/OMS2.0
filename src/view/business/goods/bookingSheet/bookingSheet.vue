@@ -82,7 +82,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
+                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                     </FormItem>
                   </Form>
                 </div>
@@ -137,7 +137,7 @@
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
-                        :min="0"
+                        :min="1"
                         v-model="row.preQty"
                         :disabled="presentrowMsg !== 0"
                       ></InputNumber>
@@ -435,31 +435,37 @@ export default {
     },
     //作废
     cancellation(){
-      this.$Modal.confirm({
-        title: '是否作废',
-        onOk: async () => {
-          this.$refs.formPlan.validate((valid) => {
-            if (valid) {
-              let params = {}
-              params.id = this.rowId
-              invalid(params).then(res => {
-                if(res.code === 0){
-                  this.$message.success('作废成功！')
-                  this.leftgetList(),
-                    this.formPlan.salesman =  '', //业务员
-                    this.formPlan.Reservation =  '',
-                    this.formPlan.remark =  '',
-                    this.Right.tbdata = []
+      this.$refs.formPlan.validate((valid) => {
+        if (valid) {
+          this.$Modal.confirm({
+            title: '是否作废',
+            onOk: async () => {
+              this.$refs.formPlan.validate((valid) => {
+                if (valid) {
+                  let params = {}
+                  params.id = this.rowId
+                  invalid(params).then(res => {
+                    if(res.code === 0){
+                      this.$message.success('作废成功！')
+                      this.leftgetList(),
+                        this.formPlan.salesman =  '', //业务员
+                        this.formPlan.Reservation =  '',
+                        this.formPlan.remark =  '',
+                        this.Right.tbdata = []
+                    }
+                  })
+                } else {
+                  this.$Message.error('*为必填！');
                 }
               })
-            } else {
-              this.$Message.error('*为必填！');
-            }
+            },
+            onCancel: () => {
+              this.$Message.info('取消作废');
+            },
           })
-        },
-        onCancel: () => {
-          this.$Message.info('取消作废');
-        },
+        } else {
+          this.$Message.error('*为必填！');
+        }
       })
     },
     // 导出
@@ -551,7 +557,7 @@ export default {
     //子组件的参数
     getPartNameList(ChildMessage){
       // console.log(ChildMessage)
-      let parts = [] 
+      let parts = []
       ChildMessage.map( item => {
         parts.push({
           partCode : item.partCode, //编码
@@ -566,13 +572,14 @@ export default {
           direction: item.direction, //方向
           partInnerId: item.code, //配件内码
           partId : item.id,
-        }) 
+        })
       })
       if(this.Right.tbdata){
         this.Right.tbdata = [...this.Right.tbdata,...parts]
-      } else {[
+      } else {
         this.Right.tbdata = parts
-      ]}
+      }
+      this.Right.tbdata.map(item => item.preQty = item.preQty > 0 ? item.preQty : 1);
     },
     //编辑收货信息弹框显示
     GoodsInfoModal(){
@@ -639,21 +646,27 @@ export default {
     // 左边部分的当前行
     selection(row){
       // console.log(row)
-      console.log(row.id)
+      // console.log(row.id)
       this.mainId = row.id
       this.guestidId = row.guestId
       this.datadata = row
-      console.log(this.datadata)
-      this.formPlan.salesman = this.datadata.salesman
-      this.formPlan.Reservation = this.datadata.orderNo
-      this.formPlan.orderDate = this.datadata.expectedArrivalDate
-      this.formPlan.remark = this.datadata.remark
-      this.Right.tbdata = this.datadata.detailVOList
-      this.presentrowMsg = row.status.value
-      console.log(this.presentrowMsg)
-      this.rowId = row.id
+      // console.log(this.datadata)
       if(row.id){
+        this.formPlan.salesman = this.datadata.salesman
+        this.formPlan.Reservation = this.datadata.orderNo
+        this.formPlan.orderDate = this.datadata.expectedArrivalDate
+        this.formPlan.remark = this.datadata.remark
+        this.Right.tbdata = this.datadata.detailVOList
+        this.presentrowMsg = row.status.value
+        console.log(this.presentrowMsg)
+        this.rowId = row.id
         this.buttonDisable = false
+      }else {
+        this.formPlan.salesman = this.$store.state.user.userData.staffName
+        this.formPlan.Reservation = ''
+        this.formPlan.orderDate = ''
+        this.formPlan.remark = ''
+        this.Right.tbdata = []
       }
     },
     Determined(){
@@ -661,38 +674,49 @@ export default {
     },
     // 提交按钮
     instance () {
-      this.$Modal.confirm({
-        title: '是否提交',
-        onOk: async () => {
-          this.$refs.formPlan.validate((valid) => {
-            if (valid) {
-              let data = {}
-              data.id = this.rowId
-              data.salesman =  this.formPlan.salesman
-              data.orderNo =  this.formPlan.Reservation
-              data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-              console.log(tools.transDate(this.formPlan.orderDate))
-              data.remark = this.formPlan.remark
-              data.detailVOList = this.Right.tbdata
-              commitOrder(data).then(res => {
-                if(res.code === 0){
-                  this.$message.success('提交成功！')
-                  this.leftgetList(),
-                    this.formPlan.salesman =  '', //业务员
-                    this.formPlan.Reservation =  '',
-                    this.formPlan.remark =  '',
-                    this.Right.tbdata = []
-                }
-              })
-            } else {
-              this.$Message.error('*为必填！');
-            }
-          })
-        },
-        onCancel: () => {
-          this.$Message.info('取消提交');
-        },
+      this.$refs.formPlan.validate((valid) => {
+        if (valid) {
+          if(this.Right.tbdata.length > 0){
+            this.$Modal.confirm({
+              title: '是否提交',
+              onOk: async () => {
+                this.$refs.formPlan.validate((valid) => {
+                  if (valid) {
+                      let data = {}
+                      data.id = this.rowId
+                      data.salesman =  this.formPlan.salesman
+                      data.orderNo =  this.formPlan.Reservation
+                      data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+                      console.log(tools.transDate(this.formPlan.orderDate))
+                      data.remark = this.formPlan.remark
+                      data.detailVOList = this.Right.tbdata
+                      commitOrder(data).then(res => {
+                        if(res.code === 0){
+                          this.$message.success('提交成功！')
+                          this.leftgetList(),
+                            this.formPlan.salesman =  '', //业务员
+                            this.formPlan.Reservation =  '',
+                            this.formPlan.remark =  '',
+                            this.Right.tbdata = []
+                        }
+                      })
+                  } else {
+                    this.$Message.error('*为必填！');
+                  }
+                })
+              },
+              onCancel: () => {
+                this.$Message.info('取消提交');
+              },
+            })
+          }else {
+            this.$Message.warning('请添加配件或完善订单信息后再提交!')
+          }
+        } else {
+          this.$Message.error('*为必填！');
+        }
       })
+
     }
   },
   mounted(){

@@ -263,7 +263,7 @@
         },
     methods: {
       clownFile(){
-        if(this.data.businessName === null){
+        if(this.data.businessName == null){
           this.$message.warning('无下载文件！')
         }
       },
@@ -271,7 +271,7 @@
         this.$refs.formInline.resetFields();
       },
       clownFile2(){
-        if(this.data.purchaseName === null){
+        if(this.data.purchaseName == null){
           this.$message.warning('无下载文件！')
         }
       },
