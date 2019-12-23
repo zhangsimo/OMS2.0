@@ -406,7 +406,6 @@ export default {
   },
   computed: {
     getOneOrder() {
-      console.log(this.$store.state.dataList.oneOrder, "当前列");
       return this.$store.state.dataList.oneOrder;
     }
   },
@@ -416,11 +415,11 @@ export default {
     },
     //获取右侧数据
     async getList() {
-      console.log("抓取右侧信息");
       const res = this.$store.state.dataList.oneOrder;
       console.log(res);
       if (res.xinzeng !== "1") {
-        res.orderType = JSON.parse(res.orderType);
+        console.log(res.orderType)
+        res.orderType = res.orderType;
         this.draftShow = res.billStatusId === 0 ? false : true;
         res.orderTypeValue = res.orderType.value;
         this.formPlan = res;
@@ -446,7 +445,6 @@ export default {
         this.salesList.map(item => {
           item.label = item.userName
         })
-        console.log('销售员',this.salesList)
       }
     },
     //获取客户额度

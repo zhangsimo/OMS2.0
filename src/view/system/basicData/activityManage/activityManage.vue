@@ -951,6 +951,7 @@ export default {
     // 成功函数
     onSuccess (response) {
       if (response.code === 0) {
+        console.log(response)
        this.data5 = response.data
       } else {
        this.$Message.error(response.message)

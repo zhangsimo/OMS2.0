@@ -86,7 +86,7 @@ export function cancelAct(data) {
   });
 }
 // 活动导入接口
-export const upxlxs = `${api.wmsApi}/activity/importExcel`;
+export const upxlxs = `${api.wmsApi}/activity/importExcelWB`;
 
 // 导入活动保存草稿接口
 export function saveDraft(data) {
