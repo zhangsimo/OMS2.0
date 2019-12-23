@@ -321,6 +321,7 @@
               auto-resize
               show-overflow
               ref="validData"
+              :mouse-config="{selected: true}"
               :data="invoice"
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -394,7 +395,17 @@ export default {
         callback();
       }
     };
-
+    const paragraph = (rule, value, callback) => {
+      if (value) {
+        if (!/^[0-9a-zA-Z]+$/.test(value)) {
+          callback(new Error("只能输入数字和字母"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     return {
       tree: this.treelist,
       clinet: true, //是否客户 //是
@@ -410,7 +421,7 @@ export default {
       ],
       validRules: {
         taxpayerName: [{ required: true, message: '',trigger:'change' }],
-        taxpayerCode: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
+        taxpayerCode: [{ required: true, validator: paragraph,trigger:'change'}],
         taxpayerTel: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
         accountBankNo: [{ required: true, message: '' ,trigger:'change'}]
       },
@@ -627,13 +638,13 @@ export default {
           this.$Message.error("带*为必填");
         }
       })
-      // this.$refs.form.validate(valid => {
-      //   if (valid) {
-      //     callback && callback();
-      //   } else {
-      //     this.$Message.error("带*为必填");
-      //   }
-      // });
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          callback && callback();
+        } else {
+          this.$Message.error("带*为必填");
+        }
+      });
       
     },
     // 获取新增地址
