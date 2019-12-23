@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="选择销售出库单" width="1000">
+  <Modal v-model="showInfo" title="选择销售出库单" width="1000"  @on-visible-change="openOrClose">
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
@@ -9,6 +9,7 @@
               style="width: 200px"
               type="daterange"
               placeholder="请选择日期"
+              v-model="time"
               @on-change="getTime"
               @on-clear="clearTime"
             ></DatePicker>
@@ -40,7 +41,7 @@
 
           <Button type="warning mr15" @click="search">查询</Button>
           <Button type="warning mr15" @click="selectEnter">选入</Button>
-          <Button @click="showInfo = false">取消</Button>
+          <Button @click="cancel">取消</Button>
         </Form>
       </div>
       <div class="main clearfix">
@@ -195,6 +196,7 @@
           placement:[20,40,60,80,100]
         },
         selectTableList:[], //下侧table表格选中的数据
+        time:''
       }
 
     },
@@ -213,6 +215,10 @@
         this.showInfo = true;
         this.tableDataBottom = {}
         this.getList()
+      },
+      //取消
+      cancel(){
+        this.showInfo = false;
       },
       //切换页面
       selectNum(val){
@@ -240,22 +246,26 @@
       },
       //多选内容
       selectTable(data){
-        this.selectTableList = data.selection
+        this.selectTableList = data.selection||[]
       },
       //全选内容
       selectAllTable(data){
-        this.selectTableList = data.selection
+        this.selectTableList = data.selection || []
       },
       //选入
       selectEnter(){
-        if(!this.tableDataBottom.id){
+        if(this.selectTableList.length === 0){
           this.$message.error('请选择一条有效数据')
         }else {
           this.$emit('salesOutList',this.selectTableList)
           this.showInfo = false
         }
       },
-
+      openOrClose(){
+        this.Outform={}
+        this.time=''
+        this.selectTableList=[]
+      },
 
       //获取销售出库单列表
       getList(){
