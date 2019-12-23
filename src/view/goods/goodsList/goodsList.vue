@@ -53,7 +53,7 @@
             <Button
               @click="saveObsoleteFun(2)"
               class="mr10"
-              :disabled="selectPlanOrderItem.billStatusId !== -1"
+              :disabled="selectPlanOrderItem.billStatusId != 5"
               ><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button
             >
           </div>
@@ -303,7 +303,7 @@
                       size="small"
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 2"
-                      @click="addPro"
+                      @click="showModel('adjustModel')"
                       ><i class="iconfont mr5 iconbianjixiugaiicon"></i>
                       计划调整</Button
                     >

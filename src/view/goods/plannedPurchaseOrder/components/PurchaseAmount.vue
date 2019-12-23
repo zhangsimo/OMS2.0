@@ -35,7 +35,7 @@ export default class PurchaseAmount extends Vue {
 
     private sumMod:boolean = false;
 
-    private get endPrice():number {
+    private get endPrice():string|number {
       return (this.totalAmt - this.formInline.disAmt - this.formInline.rebateAmt).toFixed(2);
     }
 

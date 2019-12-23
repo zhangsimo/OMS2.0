@@ -155,6 +155,8 @@ export default class InterPurchase extends Vue {
     remark: "", // 备注
     directGuestId: "", // 直发门店
     serviceId: "", // 订单号
+    code: "", // 往来单号
+    codeId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
@@ -229,6 +231,8 @@ export default class InterPurchase extends Vue {
     ref.resetFields();
     this.formPlanmain.guestId = '';
     this.formPlanmain.serviceId = '';
+    this.formPlanmain.code = "";
+    this.formPlanmain.codeId = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
@@ -256,6 +260,8 @@ export default class InterPurchase extends Vue {
           remark: this.formPlanmain.remark,
           directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
+          code: this.formPlanmain.code,
+          codeId: this.formPlanmain.codeId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {

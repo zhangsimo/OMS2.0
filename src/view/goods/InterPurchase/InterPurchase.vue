@@ -256,6 +256,15 @@
                       readonly
                     />
                   </FormItem>
+                  <FormItem class="form-Item" label="往来单号：">
+                    <Input
+                      placeholder="请输入订单号"
+                      class="w160"
+                      readonly
+                      v-model="formPlanmain.code"
+                      :disabled="isInput"
+                    />
+                  </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
