@@ -477,9 +477,10 @@
 
           ],
           tbdata: [],
-          salesList:[]//销售员列表
+
 
         }, //表格属性
+        salesList:[],//销售员列表
         formPlan: {},//表单对象
         split1: 0.2,//左右框
         WareHouseList: [],// 入库仓
