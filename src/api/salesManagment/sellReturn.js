@@ -84,3 +84,12 @@ export function getoutList (num,page,data) {
     data
   })
  }
+
+//获取退货员
+export function getSales () {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/queryAll?&size=10000&page=0&userName=&phone=&office=0`,
+    method: 'get',
+
+  })
+}

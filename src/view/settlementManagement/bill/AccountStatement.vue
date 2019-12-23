@@ -123,7 +123,7 @@
               <div class="data-value flex-center">
                 <template v-for="(item,i) in statusData">
                   <div class="status-box flex-center" :key="i">
-                    <span class="status">{{item.userid}}</span>
+                    <span class="status">{{item.userName}}</span>
                     <span class="arrow-box" v-if="i<statusData.length-1"></span>
                   </div>
                 </template>
@@ -821,22 +821,20 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.falg = true
+      this.falg = true;
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
+      approvalStatus({ instanceId: row.id }).then(res => {
+        if (res.code == "0") {
+          this.statusData = res.data.operationRecords;
+        }
+      });
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;
           this.Write = res.data.checkId;
         }
       );
-      approvalStatus({ instanceId: row.id }).then(res => {
-        console.log(res)
-        // if (res.code == "0") {
-        //   this.statusData = res.data.processInstance.operationRecords;
-        //   console.log(this.statusData);
-        // }
-      });
       let date = {
         startDate: this.value[0],
         endDate: this.value[1]
@@ -1171,7 +1169,7 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="less" scoped>
 .pro span {
   display: inline-block;
   width: 100px;
@@ -1186,5 +1184,93 @@ export default {
 }
 .settlement {
   border: 1px solid #dddddd;
+}
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.data-container {
+  padding: 20px 10px;
+  .modal-data {
+    height: 34px;
+    margin-bottom: 20px;
+    line-height: 34px;
+    .data-name {
+      width: 70px;
+      margin-right: 40px;
+      float: left;
+    }
+    .data-value {
+      float: left;
+    }
+  }
+  .status-box {
+    .status {
+      width: 120px;
+      height: 32px;
+      border: 1px solid #0099ff;
+      border-radius: 4px;
+      line-height: 32px;
+      text-align: center;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .words {
+      width: 120px;
+      color: #00cc66;
+      text-align: center;
+      margin-left: 70px;
+    }
+    .date {
+      width: 120px;
+      text-align: center;
+      margin-left: 70px;
+      font-size: 12px;
+    }
+    .remark {
+      width: 120px;
+      text-align: center;
+      margin-left: 70px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 12px;
+    }
+    &:first-child {
+      .words {
+        margin-left: 0;
+      }
+      .date {
+        margin-left: 0;
+      }
+      .remark {
+        margin-left: 0;
+      }
+    }
+  }
+  .arrow-box {
+    width: 60px;
+    height: 2px;
+    position: relative;
+    margin: 0 7px 4px 3px;
+    background-color: #0099ff;
+    &:after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-right: 5px solid transparent;
+      border-left: 5px solid #0099ff;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      position: absolute;
+      top: -4px;
+      right: -10px;
+    }
+  }
+}
+.res {
+  color: #ff3600 !important;
 }
 </style>

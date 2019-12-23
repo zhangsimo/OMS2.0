@@ -141,7 +141,7 @@
                   <FormItem label="客户：" prop="guestId">
                     <Row style="width: 310px">
                       <Select v-model="formPlan.guestId" filterable style="width: 240px"
-                              :disabled="draftShow != 0||isNew" @on-change="getLimit">
+                              :disabled="draftShow != 0||isNew" @on-change="changeClient">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
                       <Button class="ml5" size="small" type="default" @click="CustomerShowModel"
@@ -151,13 +151,17 @@
 
                     </Row>
                   </FormItem>
-                  <FormItem label="业务员：" prop="salesman">
-                    <Input
-                      class="w160"
-                      placeholder="请输入业务员"
-                      v-model="formPlan.salesman"
-                      :disabled="draftShow != 0||isNew"
-                    />
+                  <FormItem label="业务员：" prop="orderManId">
+<!--                    <Input-->
+<!--                      class="w160"-->
+<!--                      placeholder="请输入业务员"-->
+<!--                      v-model="formPlan.orderMan"-->
+<!--                      :disabled="draftShow != 0||isNew"-->
+<!--                    />-->
+                    <Select :value="formPlan.orderManId"
+                            @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0||isNew"  label-in-value>
+                      <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+                    </Select>
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
                     <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0||isNew"
@@ -184,6 +188,7 @@
                   </FormItem>
                   <FormItem label="预计发货日期:">
                     <DatePicker :value="formPlan.planSendDate" @on-change="getplanSendDate"
+                                @on-clear="clearplanSendDate"
                                 v-bind:options="planSendDatePicker" type="date" placeholder="选择日期" style="width: 120px"
                                 :disabled="draftShow != 0||isNew"></DatePicker>
                   </FormItem>
@@ -191,10 +196,11 @@
                     <DatePicker :value="formPlan.planArriveDate" @on-change="getplanArriveDate"
                                 v-bind:options="planArriveDatePicker" type="date"
                                 placeholder="选择日期"
+                                @on-clear="clearplanArriveDate"
                                 style="width: 120px" :disabled="draftShow != 0||isNew"></DatePicker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0||isNew"></Input>
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0||isNew"/>
                   </FormItem>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
@@ -353,6 +359,7 @@
   import baseUrl from '_conf/url'
   import {TOKEN_KEY} from '@/libs/util'
   import {
+    getSales,
     getLeftList,
     getClient,
     getWarehouseList,
@@ -373,6 +380,7 @@
   import SeeFile from "../commonality/SeeFile";
   import {getDigitalDictionary} from '@/api/system/essentialData/clientManagement'
   import {conversionList} from '@/components/changeWbList/changewblist'
+  import * as tools from "../../../utils/tools";
   import Cookies from "js-cookie";
   export default {
     name: "presell",
@@ -386,29 +394,53 @@
       PrintShow
     },
     data() {
+      // let changeNumber = (rule, value, callback) => {
+      //   if (!value && value != '0') {
+      //     callback(new Error("请输入大于或等于0的正整数"));
+      //   } else {
+      //     const reg = /^([0]|[1-9][0-9]*)$/
+      //     if (reg.test(value)) {
+      //       callback();
+      //     } else {
+      //       callback(new Error("请输入大于或等于0的正整数"));
+      //
+      //     }
+      //   }
+      // };
       let changeNumber = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("请输入大于或等于0的正整数"));
+        if (!value && value != "0") {
+          callback(new Error("请输入大于0的正整数"));
         } else {
-          const reg = /^([0]|[1-9][0-9]*)$/
+          const reg = /^[1-9]+\d?$/;
           if (reg.test(value)) {
             callback();
           } else {
-            callback(new Error("请输入大于或等于0的正整数"));
-
+            callback(new Error("请输入大于0的正整数"));
           }
         }
       };
+      // let money = (rule, value, callback) => {
+      //   if (!value && value != '0') {
+      //     callback(new Error("最多保留2位小数"));
+      //   } else {
+      //     const reg = /^\d+(\.\d{0,2})?$/
+      //     if (reg.test(value)) {
+      //       callback();
+      //     } else {
+      //       callback(new Error("最多保留2位小数"));
+      //
+      //     }
+      //   }
+      // };
       let money = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("最多保留4位小数"));
+        if (!value && value != "0") {
+          callback(new Error("最多保留2位小数"));
         } else {
-          const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+          const reg = /^\d+(\.\d{0,2})?$/i;
           if (reg.test(value)) {
             callback();
           } else {
-            callback(new Error("最多保留4位小数"));
-
+            callback(new Error("最多保留2位小数"));
           }
         }
       };
@@ -510,7 +542,7 @@
           guestId: [
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
-          salesman: [
+          orderManId: [
             {required: true, message: '  ', trigger: 'blur'}
           ],
           billTypeId: [
@@ -533,6 +565,7 @@
         },
         queryTime: '',//快速查询时间
         isAdd: true, //判断是否新增
+        salesList:[],//业务员列表
         id: '',  //左侧表格id
         PTrow: {
           _highlight: true,
@@ -559,9 +592,20 @@
       this.getAllClient()
       this.getWarehouse()
       this.getType()
+      this.getAllSales()
 
     },
     methods: {
+      //获取销售员
+      async getAllSales() {
+        let res = await getSales();
+        if (res.code === 0) {
+          this.salesList = res.data.content;
+          this.salesList.map(item => {
+            item.label = item.userName
+          })
+        }
+      },
       //多选内容
       selectTable(data) {
         this.selectTableList = data.selection
@@ -570,7 +614,12 @@
       selectAllTable(data) {
         this.selectTableList = data.selection
       },
+      //获取销售员
+      selectOrderMan(val){
+        this.formPlan.orderMan = val.label
+        this.formPlan.orderManId = val.value
 
+      },
       //导出
       Output() {
         let id = this.id
@@ -586,9 +635,9 @@
       printTable() {
         this.$refs.printBox.openModal()
       },
-      getLimit() {
-        this.getAllLimit()
-      },
+      // getLimit() {
+      //   this.getAllLimit()
+      // },
       //获取客户额度
       getAllLimit() {
         let guestId = this.formPlan.guestId
@@ -596,9 +645,23 @@
           // console.log('客户额度数据',res)
           if (res.code === 0) {
             this.limitList = res.data
+
           }
         })
       },
+      //改变客户
+      async changeClient(value) {
+        // console.log('44444',value)
+        if (!value) {
+          return false;
+        }
+        let guestId = value;
+        let res = await getLimit(guestId);
+        if (res.code === 0) {
+          this.limitList = res.data;
+        }
+      },
+
       //更多搜索
       queryList() {
         this.page.num = 1
@@ -617,6 +680,7 @@
       //仓库改变右侧表格改变
       getStore(data) {
         let house = this.WareHouseList.filter(item => item.id == data)
+        this.formPlan.detailVOList=[]
         this.formPlan.detailVOList.map(val => {
           val.storeName = house[0].name
         })
@@ -628,7 +692,9 @@
       },
       //获取表单预计发货时间
       getplanSendDate(data) {
-        this.formPlan.planSendDate = data + ' ' + "00:00:00"
+        // this.formPlan.planSendDate = data + ' ' + "00:00:00"
+        this.formPlan.planSendDate= tools.transTime(data)
+        console.log('11',this.formPlan.planSendDate)
 
         //选择日期时，不能小于预计发货日期
         let statDt = this.formPlan.planSendDate
@@ -640,9 +706,19 @@
       },
       //获取表单计划到货日期
       getplanArriveDate(data) {
-        this.formPlan.planArriveDate = data + ' ' + "00:00:00"
+        // this.formPlan.planArriveDate = data + ' ' + "00:00:00"
+        this.formPlan.planArriveDate=tools.transTime(data)
+        console.log('22', this.formPlan.planArriveDate)
       },
-
+ //清空日期
+      clearplanSendDate(v){
+        console.log('77',v)
+        this.formPlan.planSendDate=null
+        console.log('222', this.formPlan.planSendDate)
+      },
+      clearplanArriveDate(v){
+        this.formPlan.planArriveDate=null
+      },
       //获取选择状态类型
       getOrderType(v) {
         this.orderType = v
@@ -760,7 +836,7 @@
           count += this.countAmount(row)
         })
         this.totalMoney = count
-        return count
+        return count.toFixed(2)
       },
       //获取尾部总数
       footerMethod({columns, data}) {
@@ -770,7 +846,7 @@
               return '和值'
             }
             if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
-              return this.$utils.sum(data, column.property)
+              return this.$utils.sum(data, column.property).toFixed(2)
             }
             if (columnIndex === 8) {
               return ` ${this.countAllAmount(data)} `

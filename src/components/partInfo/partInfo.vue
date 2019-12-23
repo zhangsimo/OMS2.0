@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="proModal" title="配件资料" width="700">
+    <Modal v-model="proModal" title="配件资料" width="700" @on-visible-change="visible">
       <div class="pb10 tr" v-if="!isAddPart || isSellDis">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>

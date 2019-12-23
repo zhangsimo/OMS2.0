@@ -370,7 +370,7 @@ const methods = {
   },
   judge() {
     if (this.count1 === this.count2) {
-      this.$Message.success("配件已存在");
+      this.$Message.error("该配件已存在");
     } else {
       this.$Message.success("选择成功");
     }

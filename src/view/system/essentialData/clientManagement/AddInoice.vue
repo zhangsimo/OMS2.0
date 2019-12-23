@@ -4,7 +4,7 @@
       <Input v-model="data.taxpayerName" style="width: 300px"/>
     </FormItem>
     <FormItem label="税号:" prop="taxpayerCode">
-      <Input v-model="data.taxpayerCode" type="number" style="width: 300px"/>
+      <Input v-model="data.taxpayerCode" style="width: 300px"/>
     </FormItem>
     <FormItem label="地址电话:" prop="taxpayerTel">
       <Input v-model="data.taxpayerTel" type="number" style="width: 300px"/>
@@ -22,10 +22,21 @@ export default {
     data: ""
   },
   data() {
+    const paragraph = (rule, value, callback) => {
+      if (value) {
+        if (!/^[0-9a-zA-Z]+$/.test(value)) {
+          callback(new Error("只能输入数字和字母"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     return {
       rules: {
         taxpayerName: [{ required: true, message: "开票名称不能为空", trigger: "blur" }],
-        taxpayerCode: [{ required: true, message: "税号不能为空", trigger: "blur" }],
+        taxpayerCode: [{ required: true, validator: paragraph, trigger: "blur" }],
         taxpayerTel: [{ required: true, message: "电话不能为空", trigger: "blur" }],
         accountBankNo: [{ required: true, message: "开户行不能为空", trigger: "blur" }]
       }
