@@ -134,13 +134,17 @@
                       </Button>
                     </Row>
                   </FormItem>
-                  <FormItem label="退货员：" prop="orderMan">
-                    <Input
-                      class="w160"
-                      placeholder="请输入退货员"
-                      v-model="formPlan.orderMan"
-                      :disabled="draftShow != 0||isNew"
-                    />
+                  <FormItem label="退货员：" prop="orderManId">
+<!--                    <Input-->
+<!--                      class="w160"-->
+<!--                      placeholder="请输入退货员"-->
+<!--                      v-model="formPlan.orderMan"-->
+<!--                      :disabled="draftShow != 0||isNew"-->
+<!--                    />-->
+                    <Select :value="formPlan.orderManId"
+                            @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0||isNew"  label-in-value>
+                      <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+                    </Select>
                   </FormItem>
                   <FormItem label="退货日期：" prop="orderDate">
                     <DatePicker
@@ -319,6 +323,7 @@
 
 <script>
   import {
+    getSales,
     getLeftList,
     getClient,
     getWarehouseList,
@@ -472,6 +477,7 @@
 
           ],
           tbdata: [],
+          salesList:[]//销售员列表
 
         }, //表格属性
         formPlan: {},//表单对象
@@ -484,7 +490,7 @@
           guestId: [
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
-          orderMan: [
+          orderManId: [
             {required: true, message: '  ', trigger: 'blur'}
           ],
           rtnReasonId: [
@@ -520,8 +526,25 @@
       this.getAllClient()
       this.getType()
       this.getWarehouse()
+      this.getAllSales()
     },
     methods: {
+      //获取销售员
+      async getAllSales() {
+        let res = await getSales();
+        if (res.code === 0) {
+          this.salesList = res.data.content;
+          this.salesList.map(item => {
+            item.label = item.userName
+          })
+        }
+      },
+      //获取销售员
+      selectOrderMan(val){
+        this.formPlan.orderMan = val.label
+        this.formPlan.orderManId = val.value
+
+      },
       //多选内容
       selectTable(data) {
         this.selectTableList = data.selection

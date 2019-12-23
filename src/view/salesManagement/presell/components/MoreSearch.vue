@@ -9,7 +9,7 @@
           <DatePicker type="daterange"  v-model="data.start"  :editable=false  @on-change="getCreatDate"  placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
-          <DatePicker type="daterange"  v-model="data.end"  :editable=false  @on-change="submitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange"  v-model="data.end"   :editable=false  @on-change="getSubmitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
           <Select v-model="data.guestId" filterable style="width: 350px">
@@ -43,6 +43,7 @@
 
 <script>
   import {getClient} from "_api/salesManagment/presell.js"
+  import * as tools from "../../../../utils/tools";
   export default {
     name: "MoreSearh",
     props:{
@@ -76,13 +77,20 @@
       },
       //获取创建时间
       getCreatDate(date) {
-        this.data.createTimeStart = date[0] + " " + "00:00:00"
-        this.data.createTimeEnd = date[1] + ' ' + '23:59:59'
+        // this.data.createTimeStart = date[0] + " " + "00:00:00"
+        this.data.createTimeStart= tools.transTime(date[0])
+        // this.data.createTimeEnd = date[1] + ' ' + '23:59:59'
+        this.data.createTimeEnd=tools.transTime(date[1])
+        // console.log('33333',  this.data.createTimeStart,this.data.createTimeEnd)
       },
       //提交日期
-      submitDate(date) {
-        this.data.commitTimeStart = date[0] + " " + "00:00:00"
-        this.data.commitTimeEnd = date[1] + ' ' + '23:59:59'
+      getSubmitDate(date) {
+        // this.data.commitTimeStart = date[0] + " " + "00:00:00"
+        // this.data.commitTimeEnd = date[1] + ' ' + '23:59:59'
+        this.data.commitTimeStart= tools.transTime(date[0])
+        this.data.commitTimeEnd=tools.transTime(date[1])
+        // console.log('4444',   this.data.commitTimeStart,this.data.commitTimeEnd)
+
       },
       //更多搜索
       getMoreSearch() {

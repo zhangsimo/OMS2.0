@@ -44,6 +44,7 @@
 <script>
   import {getClient} from '@/api/salesManagment/salesOrder'
   import {getMoreList} from "_api/salesManagment/presell.js";
+  import * as tools from "../../../../utils/tools";
   export default {
     name: "MoreSearh",
     props:{
@@ -79,20 +80,24 @@
       //获取创建时间
       getCreatDate(date) {
         // console.log(date)
-        this.data.startTime = date[0] + " " + "00:00:00"
-        this.data.endTime = date[1] + ' ' + '23:59:59'
-        // console.log('666',this.data.createTimeStart,this.data.createTimeEnd)
+        // this.data.startTime = date[0] + " " + "00:00:00"
+        // this.data.endTime = date[1] + ' ' + '23:59:59'
+        this.data.startTime=tools.transTime(date[0])
+        this.data.endTime =tools.transTime(date[1])
+        // console.log('666',this.data.startTime,  this.data.endTime)
       },
       //提交日期
       submitDate(date) {
         // console.log('444',date)
-        this.data.auditStartDate = date[0] + " " + "00:00:00"
-        this.data.auditEndDate= date[1] + ' ' + '23:59:59'
-        // console.log('777',this.data.createTimeStart,this.data.createTimeStart)
+        // this.data.auditStartDate = date[0] + " " + "00:00:00"
+        // this.data.auditEndDate= date[1] + ' ' + '23:59:59'
+        this.data.auditStartDate =tools.transTime(date[0])
+          this.data.auditEndDate=tools.transTime(date[1])
+        // console.log('777',this.data.auditStartDate, this.data.auditEndDate)
       },
       //更多搜索
       getMoreSearch() {
-        console.log('999999999999',this.data)
+        // console.log('999999999999',this.data)
         this.$emit('moreQuery' , this.data)
         this.moreQueryShow=false
 
