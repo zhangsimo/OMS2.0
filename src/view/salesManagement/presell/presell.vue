@@ -656,6 +656,17 @@
         if (!value) {
           return false;
         }
+        let oneClient = []
+        oneClient = this.client.filter( item => {
+          return   item.id === value
+        })
+
+        console.log(oneClient,5656)
+        for(var i  in  oneClient){
+          this.formPlan.billTypeId=oneClient[i].billTypeId
+          this.formPlan.settleTypeId=oneClient[i].settTypeId
+
+        }
         let guestId = value;
         let res = await getLimit(guestId);
         if (res.code === 0) {

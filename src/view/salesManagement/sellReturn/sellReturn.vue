@@ -124,7 +124,7 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px"
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  @on-change="changeClient"
                               :disabled="draftShow != 0||isNew">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
@@ -634,6 +634,24 @@
           }
         })
       },
+      //改变客户
+     changeClient(value){
+       // console.log('44444',value)
+       if (!value) {
+         return false;
+       }
+       let oneClient = []
+       oneClient = this.client.filter( item => {
+         return   item.id === value
+       })
+
+       console.log(oneClient,5656)
+       for(var i  in  oneClient){
+         // console.log((oneClient[i].settTypeId))
+         this.formPlan.settleTypeId=oneClient[i].settTypeId
+         // console.log('8888', this.formPlan.settleTypeId)
+       }
+     },
       //选择销售出库单
       SalesOutboundShowModel() {
         this.$refs.salesOutbound.openModal()

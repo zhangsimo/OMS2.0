@@ -26,7 +26,7 @@
               :disabled="draftShow != 0"
               @on-change="changeClient"
             >
-              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.label }}</Option>
             </Select>
             <Button
               class="ml5"
@@ -469,6 +469,16 @@ export default {
       if (!value) {
         return false;
       }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+       return   item.id === value
+      })
+
+      console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
+      }
       data.guestId = value;
       let res = await getLimit(data);
       if (res.code === 0) {
@@ -491,6 +501,10 @@ export default {
       let res = await getClient();
       if (res.code === 0) {
         this.client = res.data;
+        this.client.map( item => {
+          item.label = item.fullName
+        })
+        console.log(res.data)
       }
     },
     // 获取仓库
