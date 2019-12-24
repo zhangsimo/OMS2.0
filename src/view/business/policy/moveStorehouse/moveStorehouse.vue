@@ -252,6 +252,7 @@ export default {
   },
   data() {
     return {
+      mainid: "",
       split1: 0.2,
       tabIndex: 0,
       queryTime: "", //快速查询时间
@@ -465,7 +466,6 @@ export default {
           this.$Message.info("获取仓库信息失败"); //获取仓库数据
         });
       //获取左边数据
-
       let data = {};
       if (this.purchaseType == "-1") {
         this.purchaseType = null;
@@ -593,15 +593,15 @@ export default {
           return;
         }
       }
-      if (
-        !this.Leftcurrentrow.receiveStoreId ||
-        !this.Leftcurrentrow.storeId ||
-        !this.Leftcurrentrow.createUname ||
-        !this.Leftcurrentrow.serviceId
-      ) {
-        this.$Message.error("请填写移仓信息");
-        return;
-      }
+      // if (
+      //   !this.Leftcurrentrow.receiveStoreId ||
+      //   !this.Leftcurrentrow.storeId ||
+      //   !this.Leftcurrentrow.createUname ||
+      //   !this.Leftcurrentrow.serviceId
+      // ) {
+      //   this.$Message.error("请填写移仓信息");
+      //   return;
+      // }
       if (
         this.Leftcurrentrow.status.value &&
         this.this.Leftcurrentrow.status.value !== 0
@@ -613,8 +613,9 @@ export default {
       updata(params)
         .then(res => {
           if (res.code == 0) {
-            this.getList();
+            console.log(res, "res=>616");
             this.$Message.success("保存成功");
+            this.getList();
           }
         })
         .catch(e => {
@@ -646,16 +647,16 @@ export default {
       }
       this.Leftcurrentrow.billStatusId = 1;
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      // getSubmitList(params)
-      //   .then(res => {
-      //     if (res.code == 0) {
-      //       this.getList();
-      //       this.$Message.success("提交成功");
-      //     }
-      //   })
-      //   .catch(e => {
-      //     this.$Message.info("提交失败");
-      //   });
+      getSubmitList(params)
+        .then(res => {
+          if (res.code == 0) {
+            this.getList();
+            this.$Message.success("提交成功");
+          }
+        })
+        .catch(e => {
+          this.$Message.info("提交失败");
+        });
     },
     //作废
     //作废提示
@@ -707,8 +708,8 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
-      console.log(row);
       this.Leftcurrentrow = row;
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
         this.currentData = [];
@@ -723,10 +724,15 @@ export default {
       } else {
         this.Right.tbdata = [];
       }
+      getRightDatas(this.Leftcurrentrow.id).then(res => {
+        console.log(res, "res=>728");
+        this.Right.tbdata = res.data;
+      });
     },
+
     //添加配件
     getPartNameList(val) {
-      // console.log(val,999)
+      console.log(val, 999);
       // console.log(conversionList(val),8888)
       var datas = conversionList(val);
       console.log(datas);
@@ -750,15 +756,32 @@ export default {
     deletePar() {
       const seleList = this.$refs.xTable1.getSelectRecords();
       const ids = [];
-      seleList.forEach(item => {
-        ids.push(item.id);
-      });
+      console.log(seleList, "seleList =>753");
+      // seleList.forEach(item => {
+      //   ids.push(Number(item.id));
+      // });
+      for (var i = 0; i < seleList.length; i++) {
+        ids.push(seleList[i].id);
+        this.mainid = seleList[i].mainId;
+      }
+      console.log(ids, this.mainId);
+      let arrParams = {
+        ids: ids,
+        mainId: this.mainid
+      };
+      // console.log(arrParams, "arrParams =>774");
+
+
       this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
-      delectTable(ids)
+
+      // console.log(arrParams, "arrParams781");
+
+      delectTable(arrParams)
         .then(res => {
-          console.log(res);
-          if (code == 0) {
+          console.log(res, "783");
+          if (res.code == 0) {
             this.$Message.success("删除成功");
+            // this.selectTabelData();
           }
         })
         .catch(err => {
