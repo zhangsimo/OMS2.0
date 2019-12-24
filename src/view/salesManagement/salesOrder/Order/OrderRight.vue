@@ -483,7 +483,6 @@ export default {
     selectOrderMan(val){
       this.formPlan.orderMan = val.label
       this.formPlan.orderManId = val.value
-
     },
     //获取客户额度
     async getAllLimit() {
@@ -499,6 +498,15 @@ export default {
       let data = {};
       if (!value) {
         return false;
+      }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+        return   item.id === value
+      })
+      // console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
       }
       data.guestId = value;
       let res = await getLimit(data);
@@ -835,6 +843,8 @@ export default {
     setOneClient(val) {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "fullName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {

@@ -143,7 +143,7 @@
         },
         // 取消
         cancel(){
-          this,moreAndMore = false
+          this.moreAndMore = false
         }
       }
 

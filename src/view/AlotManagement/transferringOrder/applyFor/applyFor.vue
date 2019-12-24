@@ -69,8 +69,8 @@
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
                         <DatePicker
-                          style="width: 160px"
                           type="date"
+                          style="width: 160px"
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
                           :disabled="presentrowMsg !== 0 || buttonDisable"
@@ -205,6 +205,7 @@
           }
         };
         return {
+          isInternalId:'',//后端需要的供应商的一个id
           rowOrgId: '',
           checkboxArr:[],// checkbox选中
           disSave: false, // 保存按钮是否禁用
@@ -401,6 +402,7 @@
               let data = {}
               data.id = this.rowId
               data.orgid = this.rowOrgId
+              data.isInternalId = this.isInternalId
               data.guestId = this.guestidId
               data.storeId = this.formPlan.storeId
               data.guestName = this.formPlan.guestName
@@ -559,6 +561,7 @@
           console.log(a)
           this.formPlan.guestName = a.fullName
           this.guestidId = a.id
+          this.isInternalId = a.isInternalId
         },
         leftgetList(){
           let params = {}
@@ -656,6 +659,7 @@
                 onOk: async () => {
                   if(this.clickdelivery){
                     let data = {}
+                    data.isInternalId = this.isInternalId
                     data.id = this.rowId
                     data.orgId = this.rowOrgId
                     data.guestId = this.guestidId

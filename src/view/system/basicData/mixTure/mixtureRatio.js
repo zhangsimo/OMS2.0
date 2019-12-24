@@ -483,7 +483,6 @@ const methods = {
     });
     this.getArrRight = newA;
     this.customer.tbdata = [...this.customer.tbdata, ...this.getArrRight];
-    console.log(this.customer.tbdata);
     this.customer.tbdata = this.unique(this.customer.tbdata);
   },
   //左边内容单某行

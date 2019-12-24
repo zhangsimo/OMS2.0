@@ -317,10 +317,7 @@
       //   }
       //   this.data.operationEnd = endTime
       // }
-    },
-    // mounted(){
-    //   this.data.operationStart = tools.transTime(new Date())
-    // }
+    }
     }
 </script>
 

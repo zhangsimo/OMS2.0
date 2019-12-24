@@ -18,19 +18,19 @@
     <div class="tabList">
       <Tabs type="card">
         <TabPane label="基本信息">
-          <div style="display: flex">
+          <div style="display: flex" class="h60">
             <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="供应商简称:" prop="shortName">
                 <Input v-model="data.shortName" style="width: 180px" />
               </FormItem>
             </div>
           </div>
-          <FormItem label="供应商全称:" prop="fullName">
+          <FormItem class="h50" label="供应商全称:" prop="fullName">
             <Input v-model="data.fullName" style="width: 480px" />
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="票据类型:" prop="billTypeId">
+              <FormItem label="票据类型:" prop="billTypeId" class="h50">
                 <Select v-model="data.billTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00107"
@@ -39,10 +39,10 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="联系人:" prop="contactor">
+              <FormItem label="联系人:" prop="contactor" class="h50">
                 <Input v-model="data.contactor" style="width: 180px" />
               </FormItem>
-              <FormItem label="省份:" prop="provinceId">
+              <FormItem label="省份:" prop="provinceId" class="h50">
                 <Select v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
@@ -54,7 +54,7 @@
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="结算方式:" prop="settTypeId">
+              <FormItem label="结算方式:" prop="settTypeId" class="h50">
                 <Select v-model="data.settTypeId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00106"
@@ -63,10 +63,10 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="联系方式:" prop="contactorTel">
+              <FormItem label="联系方式:" prop="contactorTel" class="h50">
                 <Input v-model="data.contactorTel" style="width: 180px" />
               </FormItem>
-              <FormItem label="城市:" prop="cityId">
+              <FormItem label="城市:" prop="cityId" class="h50">
                 <Select v-model="data.cityId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
@@ -78,15 +78,15 @@
               </FormItem>
             </div>
           </div>
-          <FormItem label="地址:">
+          <FormItem label="地址:" class="h50">
             <Input v-model="data.streetAddress" style="width: 380px" />
           </FormItem>
           <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员:">
+              <FormItem label="业务员:" class="h50">
                 <Input v-model="data.salesman" style="width: 180px" />
               </FormItem>
-              <FormItem label="职务:">
+              <FormItem label="职务:" class="h50">
                 <Select v-model="data.salesmanDuty" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00110"
@@ -95,7 +95,7 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="供应类型:">
+              <FormItem label="供应类型:" class="h50">
                 <Select v-model="data.supplierType" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00111"
@@ -104,32 +104,32 @@
                   >{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
-              <FormItem label="邮箱:">
+              <FormItem label="邮箱:" class="h50">
                 <Input v-model="data.email" style="width: 180px" />
               </FormItem>
-              <FormItem label="QQ/微信:">
+              <FormItem label="QQ/微信:" class="h50">
                 <Input v-model="data.instantMsg" style="width: 180px" />
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="业务员手机:">
+              <FormItem label="业务员手机:" class="h50">
                 <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
               <!--             <FormItem label='信誉额度:' >-->
               <!--                 <Input v-model='data.contactor' style="width: 180px" />-->
               <!--             </FormItem>-->
-              <FormItem label="邮政编码:">
+              <FormItem label="邮政编码:" class="h50">
                 <Input v-model="data.postalCode" style="width: 180px" />
               </FormItem>
-              <FormItem label="优势品牌/产品:">
+              <FormItem label="优势品牌/产品:" class="h50">
                 <Input v-model="data.advantageCarbrandId" style="width: 180px" />
               </FormItem>
-              <FormItem label="电话:">
+              <FormItem label="电话:" class="h50">
                 <Input v-model="data.tel" style="width: 180px" />
               </FormItem>
             </div>
           </div>
-          <FormItem label="备注:">
+          <FormItem label="备注:" class="h50">
             <Input v-model="data.remark" style="width: 480px" />
           </FormItem>
           <Row id="rowMargin" style="marginBottom: 60px">

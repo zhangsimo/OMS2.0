@@ -491,7 +491,7 @@ export default {
         return;
       }
       if (this.formPlan.billStatusId !== 0) {
-        this.$Message.error("只有草稿状态才能保存");
+        this.$Message.error("只有草稿状态才能提交");
         return;
       }
       if (
@@ -655,14 +655,14 @@ export default {
         this.Right.tbdata.push(item);
         this.formPlan.detailVOList.push(item);
       });
-      getSubmitList(this.formPlan)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          this.showRemove = false;
-          this.$Message.info("添加失败");
-        });
+      // getSubmitList(this.formPlan)
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     this.showRemove = false;
+      //     this.$Message.info("添加失败");
+      //   });
       console.log(this.Right.tbdata);
     },
     //分页

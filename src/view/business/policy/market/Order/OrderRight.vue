@@ -26,7 +26,7 @@
               :disabled="draftShow != 0"
               @on-change="changeClient"
             >
-              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.label }}</Option>
             </Select>
             <Button
               class="ml5"
@@ -464,9 +464,20 @@ export default {
     },
     //改变客户
     async changeClient(value) {
+      console.log('客户8888',value)
       let data = {};
       if (!value) {
         return false;
+      }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+       return   item.id === value
+      })
+
+      console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
       }
       data.guestId = value;
       let res = await getLimit(data);
@@ -490,6 +501,10 @@ export default {
       let res = await getClient();
       if (res.code === 0) {
         this.client = res.data;
+        this.client.map( item => {
+          item.label = item.fullName
+        })
+        console.log(res.data)
       }
     },
     // 获取仓库
@@ -761,6 +776,9 @@ export default {
     setOneClient(val) {
         console.log(val)
       this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "fullName", val.fullName);
+        this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
@@ -831,6 +849,7 @@ export default {
     },
     //获取选择入库单的信息
     async getGodown(val) {
+
       let data = {};
       data = this.formPlan;
       let arr = [];
