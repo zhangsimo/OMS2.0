@@ -159,11 +159,12 @@ export function saveModifyOrder(data) {
 }
 
 // 计划调整全部调整
-export function saveModifyAllOrder(data) {
+export function saveModifyAllOrder(params) {
   return axios.request({
     url: `${api.omsOrder}/pchsOrderDetail/saveModifyAllOrder`,
     method: "post",
-    data
+    params,
+    data: {},
   });
 }
 
@@ -321,7 +322,7 @@ export function calculatAmt(data) {
 // 计划调整查询
 export function queryModifyOrderPlan(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanDetail/queryModifyOrder`,
+    url: `${api.omsOrder}/pchsPlanDetail/queryModifyPlan`,
     method: "post",
     data
   });
@@ -330,17 +331,28 @@ export function queryModifyOrderPlan(data) {
 // 计划调整保存
 export function saveModifyOrderPlan(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanDetail/saveModifyOrder`,
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyPlan`,
     method: "post",
     data
   });
 }
 
 // 计划调整全部调整
-export function saveModifyAllOrderPlan(data) {
+export function saveModifyAllOrderPlan(params) {
   return axios.request({
-    url: `${api.omsOrder}/pchsPlanDetail/saveModifyAllOrder`,
+    url: `${api.omsOrder}/pchsPlanDetail/saveModifyAllPlan`,
     method: "post",
-    data
+    params,
+    data: {},
+  });
+}
+
+// 远程查询 供应商
+export function getMoteSupplier(name) {
+  return axios.request({
+    url: `${api.omsOrder}/optGroup/optGuest`,
+    method: "post",
+    params: { name },
+    data: {},
   });
 }

@@ -27,7 +27,7 @@
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -310,7 +310,8 @@ export default {
       data: [],
       data1: [],
       data2:[],
-      fullName: '' //往来单位
+      company: '', //往来单位
+      companyId:'' //往来单位id
     };
   },
   async mounted () {
@@ -321,9 +322,14 @@ export default {
     this.getGeneral()
   },
   methods: {
+    //查询
+    query(){
+      this.getGeneral()
+    },
     // 往来单位选择
     getOne(data){
       this.company = data.fullName
+      this.companyId = data.id
     },
     // 分店切换
     fendian(val){
@@ -375,8 +381,10 @@ export default {
       let data = {
         startDate:this.value[0],
         endDate:this.value[1],
-        ordId:this.BranchstoreId
+        ordId:this.BranchstoreId,
+        guestId:this.companyId
       }
+      console.log(data)
       getReceiptsPaymentsSummary(data).then(res => {
         console.log(res);
         if(res.data.length!==0){

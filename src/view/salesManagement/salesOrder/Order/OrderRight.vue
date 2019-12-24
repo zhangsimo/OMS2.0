@@ -720,7 +720,7 @@ export default {
     //计划发货日期
     getplanSendDate(data) {
       // this.formPlan.planSendDate = data + " " + "00:00:00";
-      this.formPlan.planSendDate==tools.transTime(data)
+      this.formPlan.planSendDate = tools.transTime(data)
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {

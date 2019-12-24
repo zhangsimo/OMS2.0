@@ -236,6 +236,7 @@ export default class GoodsInfo extends Vue {
   private disabled: boolean = true;
 
   @Prop(String) readonly mainId;
+  @Prop(Object) readonly row;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [
@@ -272,7 +273,7 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     this.showInfo = true;
-    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId });
+    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId, guestId: this.row.guestId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
