@@ -587,7 +587,6 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
-      console.log(this.formPlan.billStatusId)
       if (this.formPlan.billStatusId.value !== 0) {
         this.$Message.error("只有草稿状态才能提交");
         return;
