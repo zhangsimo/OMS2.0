@@ -50,10 +50,24 @@
         <Input type="text" class="w300 ml5" v-model="partBrand" />
       </FormItem>
       <FormItem label="提交人: ">
-        <Input type="text" class="w300 ml5" v-model="auditor" />
+        <Select v-model="auditor"
+          class="w300 ml5"
+          label-in-value
+          filterable
+        >
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </FormItem>
       <FormItem label="创建人: ">
-        <Input type="text" class="w300 ml5" v-model="createUname" />
+        <Select v-model="createUname"
+          class="w300 ml5"
+          label-in-value
+          filterable
+        >
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </FormItem>
+      <FormItem>
         <Checkbox v-model="showSelf">显示个人单据</Checkbox>
       </FormItem>
     </Form>
@@ -74,6 +88,7 @@
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
+import { getSales } from "@/api/salesManagment/salesOrder";
 
 @Component({
   components: {
@@ -98,6 +113,18 @@ export default class MoreSearch extends Vue {
   private guestname:string = "";
   private showSelf:boolean = true;
 
+  private salesList:Array<any> = new Array();
+  private async getAllSales() {
+    let res:any = await getSales();
+    if (res.code === 0) {
+      this.salesList = res.data.content;
+      this.salesList.forEach((item:any) => {
+        item.label = item.userName;
+        item.value = item.id;
+      })
+    }
+  }
+
   private reset() {
     this.orderDate = new Array();
     this.createDate = new Array();
@@ -115,6 +142,9 @@ export default class MoreSearch extends Vue {
 
   private init() {
     this.reset();
+    if(this.salesList.length <= 0) {
+      this.getAllSales();
+    }
     this.serchN = true;
   }
 
@@ -143,11 +173,11 @@ export default class MoreSearch extends Vue {
       auditStartDate: tools.transTime(this.auditDate[0]),
       auditEndDate: tools.transTime(this.auditDate[1]),
       serviceId: this.serviceId,
-      partCode: this.partCode,
+      partCode: this.partCode.trim(),
       partBrand: this.partBrand,
       auditor: this.auditor,
       createUname: this.createUname,
-      partName: this.partName,
+      partName: this.partName.trim(),
       guestId: this.guestId,
       showSelf: this.showSelf,
     };
