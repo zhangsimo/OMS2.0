@@ -241,7 +241,7 @@
             //选入
             selectInto(){
             if(!this.tableDataBottom.id){
-                this.$message.error('请选择一条有效数据')
+              this.$Message.error('请选择一条有效数据')
             }else {
                 this.$emit('godownList',this.tableDataBottom)
                 this.showInfo = false

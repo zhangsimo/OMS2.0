@@ -188,8 +188,8 @@
                 ></vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
-                    <span v-show="row.sysQty- row.trueQty > 0">{{ "盈利" }}</span>
-                    <span v-show="row.sysQty- row.trueQty < 0">{{ "亏损" }}</span>
+                    <span v-show="row.sysQty- row.trueQty < 0">{{ "盈利" }}</span>
+                    <span v-show="row.sysQty- row.trueQty > 0">{{ "亏损" }}</span>
                     <span v-show="row.sysQty- row.trueQty == 0">{{ "无盈亏" }}</span>
                   </template>
                 </vxe-table-column>
@@ -464,6 +464,7 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.purchaseType;
+      
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size)
@@ -586,13 +587,15 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
-      this.$refs.formPlan.validate(valid => {
+      this.$refs.form.validate(valid => {
         if (valid) {
-          callback && callback();
+          this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+            "YYYY-MM-DD HH:mm:ss"
+          );
           getSubmitList(this.formPlan).then(res => {
             if (res.code == 0) {
-              this.$Message.error("提交成功");
-              this.getList()
+              this.$Message.success("提交成功");
+              this.getList();
             }
           });
         } else {
@@ -606,44 +609,28 @@ export default {
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
           if (valid) {
-            this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
+            if (this.formPlan.billStatusId.value !== 0) {
+              this.$Message.error("只有草稿状态才能保存");
+              return;
+            }
+            this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+              "YYYY-MM-DD HH:mm:ss"
+            );
             getSubmitList(this.formPlan).then(res => {
-              console.log(res);
               if (res.code == 0) {
-                this.$Message.error("保存成功");
-                this.getList()
+                this.isAddRight = true;
+                this.formPlan = {};
+                this.$Message.success("保存成功");
+                this.getList();
               }
             });
           } else {
             this.$message.error("带*必填");
           }
         });
-        if (this.formPlan.billStatusId.value !== 0) {
-          this.$Message.error("只有草稿状态才能保存");
-          return;
-        }
       } else {
         this.$message.error("暂无新增");
-        return;
       }
-      // console.log(1)
-
-      // if (
-      //   !this.formPlan.auditDate ||
-      //   !this.formPlan.storeId ||
-      //   !this.formPlan.orderMan ||
-      //   !this.formPlan.serviceId
-      // ) {
-      //   this.$Message.error("请填写盘点信息");
-      //   return;
-      // }
-      // getSubmitList(this.formPlan).then(res => {
-      //   console.log(res);
-      //   if (res.code == 0) {
-      //     this.isAddRight = true;
-      //     his.$Message.error("保存成功");
-      //   }
-      // });
     },
     //导出
     //  setDerive(){
@@ -702,14 +689,8 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(data) {
+      this.$refs.form.resetFields()
       this.formPlan = data;
-      // getRightDatas(data.id)
-      // .then(res=>{
-      //   console.log(res)
-      // })
-      //  .catch(err => {
-      //    // this.$Message.info('作废草稿失败')
-      //   })
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;
     },
@@ -724,12 +705,9 @@ export default {
       seleList.forEach(item => {
         ids.push(item.id);
       });
-      console.log(this.Right.tbdata, seleList);
       this.array_diff(this.Right.tbdata, seleList);
-      console.log(this.Right.tbdata);
       delectTable(ids)
         .then(res => {
-          console.log(res);
           if (code == 0) {
             this.$Message.success("删除成功");
           }
@@ -755,8 +733,6 @@ export default {
       if (!this.formPlan.billStatusId) {
         return this.$Message.error("请先保存数据!");
       }
-
-      console.log(this.upurl, importAccessories);
       let refs = this.$refs;
       refs.upload.clearFiles();
     },
@@ -764,19 +740,19 @@ export default {
     getPartNameList(val) {
       this.$refs.form.validate(valid => {
         if (valid) {
-          var datas = conversionList(val)
-          this.formPlan.detailVOList = datas
-          this.formPlan.auditDate = moment(this.formPlan.auditDate).format("YYYY-MM-DD HH:mm:ss")
-          // console.log(this.formPlan , 999)
+          var datas = conversionList(val);
+          this.formPlan.detailVOList = datas;
+          this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+            "YYYY-MM-DD HH:mm:ss"
+          );
           getSubmitList(this.formPlan)
             .then(res => {
-              console.log(res);
               this.getList();
             })
             .catch(err => {
               this.showRemove = false;
               this.$Message.info("添加失败");
-            })
+            });
         } else {
           this.$message.error("带*必填");
         }
@@ -784,13 +760,13 @@ export default {
     },
     //分页
     changePage(p) {
-      // this.page.num = p
-      // this.getList()
+      this.Left.page.num = p
+      this.getList()
     },
     changeSize(size) {
-      // this.page.num = 1
-      // this.page.size = size
-      // this.getList()
+      this.Left.page.num = 1
+      this.Left.page.size = size
+      this.getList()
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},

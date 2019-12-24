@@ -899,9 +899,10 @@ export default {
     },
     //获取选择入库单的信息
     async getGodown(val) {
+      // console.log('我是val',val)
       let data = {};
       data = this.formPlan;
-      val.map(item => {
+      val.details.map(item => {
         item.isMarkBatch = 1;
       });
       data.detailList = val.details;

@@ -256,6 +256,15 @@
                       :disabled="isInput"
                     />
                   </FormItem>
+                  <FormItem class="form-Item" label="往来单号：">
+                    <Input
+                      placeholder="请输入订单号"
+                      class="w160"
+                      readonly
+                      v-model="formPlanmain.code"
+                      :disabled="isInput"
+                    />
+                  </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
@@ -354,11 +363,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                      :precision="0"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -368,12 +380,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}
