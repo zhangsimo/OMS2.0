@@ -119,18 +119,21 @@
                   :label-width="106"
                   :show-message="true"
                 >
-                  <FormItem class="form-Item" label="供应商：" prop="guestName">
+                  <FormItem class="form-Item" label="供应商：" prop="guestId">
                     <Row class="w160">
                       <Col span="19"
                         >
                         <Select
-                            v-model="formPlanmain.guestName"
+                            v-model="formPlanmain.guestId"
                             filterable
                             remote
+                            label-in-value
                             :disabled="isInput"
                             :remote-method="remoteMethod"
-                            :loading="guseData.loading">
-                            <Option v-for="item in guseData.lists" :value="option.value" :key="item.id">{{option.label}}</Option>
+                            :loading="guseData.loading"
+                            @on-change="geseChange"
+                            >
+                            <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
                         </Select>
                       </Col>
                       <Col span="5"
@@ -485,7 +488,7 @@
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->
-    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="mainId" :row="selectTableRow"></goods-info>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->

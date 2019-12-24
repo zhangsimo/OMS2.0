@@ -159,7 +159,7 @@ export default class PlannedPurchaseOrder extends Vue {
     codeId: "",
   }
   private ruleValidate: ruleValidate = {
-    guestName: [{ required: true, message: '供应商不能为空', trigger: 'change' }],
+    guestId: [{ required: true, message: '供应商不能为空', trigger: 'change' }],
     orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
@@ -182,9 +182,15 @@ export default class PlannedPurchaseOrder extends Vue {
     }
     this.guseData.loading = true;
     const res:any = await api.getMoteSupplier(query);
+    this.guseData.loading = false;
     if(res.code == 0) {
-      
+      this.guseData.lists = res.data;
     }
+  }
+
+  private geseChange(val:any) {
+    this.formPlanmain.guestId = val.value;
+    this.formPlanmain.guestName = val.label;
   }
 
   private options1:any = {
@@ -434,6 +440,9 @@ export default class PlannedPurchaseOrder extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    if(v.guestId && v.guestId.length > 0) {
+      this.guseData.lists = [{ id: v.guestId, fullName: v.guestName }];
+    }
     const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
       this.$Modal.confirm({

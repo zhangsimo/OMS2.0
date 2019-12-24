@@ -460,7 +460,7 @@
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->
-    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="mainId" :row="selectTableRow"></goods-info>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
