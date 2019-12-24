@@ -81,7 +81,6 @@ class httpRequest {
             }
             if(localStorage.getItem('userScope') != null){
               let  scope = localStorage.getItem('userScope')
-              console.log(scope , 789)
               config.params.scope = scope || 'oms'
             }else{
               config.params.scope = 'oms'

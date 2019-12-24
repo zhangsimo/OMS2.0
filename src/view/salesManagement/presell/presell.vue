@@ -570,8 +570,9 @@
         PTrow: {
           _highlight: true,
           status: {name: '草稿', value: 0},
-          // orderManId: this.$store.state.user.userData.staffName
+            orderMan: this.$store.state.user.userData.staffName,
             orderManId:  this.$store.state.user.userData.id
+
           // id: '0',
           // details: [],
           // createTime: tools.transTime(new Date())
@@ -885,6 +886,7 @@
 
       //新增按钮
       addOrder() {
+        this.$refs.formPlan.resetFields();
         this.isNew = false;
         this.tableData = []
         this.formPlan = {}
@@ -894,8 +896,8 @@
         }
         this.preSellOrderTable.tbData.unshift(this.PTrow)
         this.formPlan.orderManId=this.PTrow.orderManId
+        this.formPlan.orderMan=this.PTrow.orderMan
         this.isAdd = false;
-        console.log('新增的数据', this.PTrow)
       },
       //作废按钮
       isDelete() {

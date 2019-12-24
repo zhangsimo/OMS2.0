@@ -595,6 +595,7 @@
       },
       //新增按钮
       addOneList() {
+        this.$refs.formPlan.resetFields();
         this.isNew = false;
         this.tableData = []
         this.formPlan = {}

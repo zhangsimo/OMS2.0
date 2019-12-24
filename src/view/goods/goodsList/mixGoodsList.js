@@ -8,7 +8,7 @@ import {
   saveReverse,
   exportXls,
   upxlxs,
-  deleteparts,
+  deleteparts
 } from "_api/purchasing/purchasePlan";
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
@@ -52,7 +52,7 @@ export const mixGoodsData = {
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
-        ],
+        ]
       },
       tableData: [],
       //待删除数据
@@ -153,8 +153,8 @@ export const mixGoodsData = {
     selectAll({ checked }) {
       if (checked) {
         this.tableData.forEach(el => {
-          this.delArr.push(el)
-        })
+          this.delArr.push(el);
+        });
       } else {
         this.delArr = new Array();
       }
@@ -172,18 +172,18 @@ export const mixGoodsData = {
         //   });
         // });
         this.$Modal.confirm({
-          title: '是否要删除配件',
+          title: "是否要删除配件",
           onOk: async () => {
             let res = await deleteparts(this.delArr);
             if (res.code == 0) {
-              this.$Message.success('删除成功');
+              this.$Message.success("删除成功");
               this.getList();
             }
           },
           onCancel: () => {
-            this.$Message.info('取消删除');
-          },
-        })
+            this.$Message.info("取消删除");
+          }
+        });
       }
     },
     //计算合计
@@ -264,10 +264,27 @@ export const mixGoodsData = {
     //添加配件数据
     getPartNameList(v) {
       this.tableData = this.tableData.concat(v);
+      console.log(this.tableData, "this.tableData.concat(v) =>267");
+      var oldArr = this.tableData;
+      // console.log(oldArr, "oldArr =>269");
+      var allArr = [];
+      for (var i = 0; i < oldArr.length; i++) {
+        var flag = true;
+        for (var j = 0; j < allArr.length; j++) {
+          if (oldArr[i].oemCode == allArr[j].oemCode) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          allArr.push(oldArr[i]);
+        }
+      }
+      this.tableData = allArr;
     },
+
     //获取选中供应商
     getSupplierName(v) {
-      if(v) {
+      if (v) {
         //赋值供应商名称
         this.formPlan.supplyName = v.fullName || "";
         //赋值供应商id
@@ -287,12 +304,16 @@ export const mixGoodsData = {
     // },
     //采购计划单选中
     selectTabelData(v, oldv) {
-      if(this.newadd && v) {
+      if (this.newadd && v) {
         this.$Modal.confirm({
-          title: '您正在编辑单据，是否需要保存',
+          title: "您正在编辑单据，是否需要保存",
           onOk: () => {
             this.$refs.planOrderTable.clearCurrentRow();
-            this.tbdata[0] = {...this.selectPlanOrderItem, ...this.formPlan, _highlight: true};
+            this.tbdata[0] = {
+              ...this.selectPlanOrderItem,
+              ...this.formPlan,
+              _highlight: true
+            };
             this.selectPlanOrderItem = this.tbdata[0];
             this.tbdata.push();
             this.submit(1);
@@ -313,11 +334,11 @@ export const mixGoodsData = {
               this.newadd = false;
               this.$refs.planOrderTable.clearCurrentRow();
             }
-          },
-        })
+          }
+        });
       } else {
-        if(!this.newadd) {
-          this.$refs['formPlan'].resetFields();
+        if (!this.newadd) {
+          this.$refs["formPlan"].resetFields();
         }
         if (v) {
           if (this.newadd && this.selectPlanOrderItem.new) {
@@ -344,7 +365,7 @@ export const mixGoodsData = {
         }
       }
     },
-    
+
     //新增采购计划单
     addOrder() {
       if (this.newadd) {
@@ -416,7 +437,7 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
-      this.$refs['formPlan'].validate(valid => {
+      this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -461,8 +482,8 @@ export const mixGoodsData = {
               }
             });
           } else if (subType === 2) {
-            if(this.tableData.length <= 0) {
-              return this.$Message.error('请添加配件后再提交');
+            if (this.tableData.length <= 0) {
+              return this.$Message.error("请添加配件后再提交");
             }
             saveCommit(objReq).then(res => {
               if (res.code == 0) {
@@ -513,13 +534,13 @@ export const mixGoodsData = {
       let totals = 0;
       this.tableData.forEach(el => {
         totals += el.orderPrice * el.orderQty;
-      })
+      });
       this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
     },
 
     showModel(name) {
       let ref = this.$refs[name];
       ref.init();
-    },
+    }
   }
 };
