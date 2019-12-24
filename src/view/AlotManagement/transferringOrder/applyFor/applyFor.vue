@@ -58,7 +58,12 @@
                           :label-width="100">
                       <FormItem label="调出方：" prop="guestName" class="fs12">
                         <Row class="w500">
-                          <Col span="22"><Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled=""></Input></Col>
+                          <Col span="22">
+                            <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled=""></Input>-->
+                            <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">
+                              <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                            </Select>
+                          </Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
@@ -180,6 +185,7 @@
   import supplier from './compontents/supplier'
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
+  import {findForAllot} from "_api/purchasing/purchasePlan";
     export default {
       name: "applyFor",
       components: {
@@ -205,6 +211,7 @@
           }
         };
         return {
+          ArraySelect: [], //供应商下拉框
           isInternalId:'',//后端需要的供应商的一个id
           rowOrgId: '',
           checkboxArr:[],// checkbox选中
@@ -355,8 +362,6 @@
       methods: {
         //删除配件
         Delete(){
-          // var arr1=[{id:1},{id:2},{id:3},{id:4},{id:5}]
-          // var arr2=[{id:1},{id:2},{id:3}]
           var set = this.checkboxArr.map(item=>item.id)
           // console.log(set)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
@@ -367,6 +372,11 @@
         moreaa(){
           this.$refs.moremore.init()
         },
+        //调出方下拉框
+        selectGuestName(val){
+          console.log(val)
+          this.formPlan.guestName = val.value
+        },
         // 新增按钮
         addProoo(){
           this.buttonDisable = false
@@ -374,6 +384,7 @@
           if (!this.isAdd) {
             return this.$Message.error('请先保存数据');
           }
+          this.$refs.formPlan.resetFields();
           this.Left.tbdata.unshift(this.PTrow)
           this.isAdd = false;
           this.datadata = this.PTrow
@@ -402,10 +413,11 @@
               let data = {}
               data.id = this.rowId
               data.orgid = this.rowOrgId
-              data.isInternalId = this.isInternalId
+              data.guestOrgId = this.isInternalId
               data.guestId = this.guestidId
+              data.guestId = this.formPlan.guestName
               data.storeId = this.formPlan.storeId
-              data.guestName = this.formPlan.guestName
+              // data.guestName = this.formPlan.guestName
               data.orderDate = tools.transTime(this.formPlan.orderDate)
               data.remark = this.formPlan.remark
               data.createUname  = this.formPlan.createUname
@@ -421,6 +433,7 @@
                     this.formPlan.createUname =  '',
                     this.formPlan.serviceId =  '',
                     this.Right.tbdata = []
+                    this.$refs.formPlan.resetFields();
                 }
               })
             } else {
@@ -492,6 +505,13 @@
           this.selectArr = v
           this.leftgetList()
         },
+        //供应商下拉查询
+        selecQuery(){
+          let req = {}
+          findForAllot(req).then(res => {
+            this.ArraySelect = res.data.content||[];
+          })
+        },
         //footer计算
         addFooter ({ columns, data }) {
           return [
@@ -558,10 +578,10 @@
         },
         // 供应商子组件内容
         getSupplierName(a){
-          console.log(a)
-          this.formPlan.guestName = a.fullName
-          this.guestidId = a.id
+          // console.log(a)
           this.isInternalId = a.isInternalId
+          this.formPlan.guestName = a.id
+          // this.guestidId = a.id
         },
         leftgetList(){
           let params = {}
@@ -606,16 +626,16 @@
         // 左边部分的当前行
         selection(row){
           if(row.id){
-            // console.log(row)
+            console.log(row)
             this.rowOrgId = row.orgid
             this.mainId = row.id
-            this.guestidId = row.guestId
+            // this.guestidId = row.guestId
             // console.log(this.guestidId,123)
             this.datadata = row
             // console.log(this.datadata)
-            this.formPlan.guestName = this.datadata.guestName
+            this.formPlan.guestName = this.datadata.guestId
             this.formPlan.storeId = this.datadata.storeId
-            this.formPlan.orderDate = tools.transDate(this.datadata.orderDate)
+            this.formPlan.orderDate = this.datadata.orderDate
             this.formPlan.remark = this.datadata.remark
             this.formPlan.createUname = this.datadata.createUname
             this.formPlan.serviceId = this.datadata.serviceId
@@ -659,10 +679,10 @@
                 onOk: async () => {
                   if(this.clickdelivery){
                     let data = {}
-                    data.isInternalId = this.isInternalId
+                    data.guestOrgId = this.isInternalId
                     data.id = this.rowId
                     data.orgId = this.rowOrgId
-                    data.guestId = this.guestidId
+                    data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)
                     data.remark = this.formPlan.remark
@@ -701,7 +721,8 @@
           this.rightTableHeight = wrapH-planFormH-planBtnH-65;
         });
           this.leftgetList();
-          this.warehouse()
+          this.warehouse();
+          this.selecQuery();
       }
     }
 </script>

@@ -2,16 +2,14 @@
   <main class="inventory">
     <!-- z主表工具按钮 -->
     <div style="line-height:45px">
-      <Button class="mr10 w90" @click="insertEvent(-1)" >
-        <Icon type="md-add"/>
-        新增
+      <Button class="mr10 w90" @click="insertEvent(-1)">
+        <Icon type="md-add" />新增
       </Button>
-      <Button type="default" class="mr10 w90" @click="save" >
+      <Button type="default" class="mr10 w90" @click="save">
         <i class="iconfont mr5 iconbaocunicon"></i>保存
       </Button>
-      <Button class="mr10 w90" type="default" @click="check">
-        <Icon type="md-checkmark"/>
-        审核
+      <Button class="mr10 w90" type="default" @click="check" v-if="flag">
+        <Icon type="md-checkmark" />审核
       </Button>
     </div>
     <!-- 主表 -->
@@ -65,21 +63,23 @@
     <div style="line-height:57px" class="flex">
       <div class="db">
         <Button class="mr10 w90" @click="AddAttention" v-show="oneWarehouse.auditSign == 0">
-          <Icon type="md-add"/>
-          添加
+          <Icon type="md-add" />添加
         </Button>
       </div>
       <div class="db">
         <!-- <Button type="md-delete" class="mr10 w90" v-show="oneWarehouse.auditSign == 0" @click="del">
           <i class="iconfont mr5 iconbaocunicon"></i>删除
-        </Button> -->
+        </Button>-->
         <Poptip
-            v-show="oneWarehouse.auditSign == 0"
-            confirm
-            title="您确认删除这条内容吗？"
-            @on-ok="confirm"
-            @on-cancel="cancel">
-            <i-button class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>删除</i-button>
+          v-show="oneWarehouse.auditSign == 0"
+          confirm
+          title="您确认删除这条内容吗？"
+          @on-ok="confirm"
+          @on-cancel="cancel"
+        >
+          <i-button class="mr10 w90">
+            <i class="iconfont mr5 iconbaocunicon"></i>删除
+          </i-button>
         </Poptip>
       </div>
       <div class="db">
@@ -95,7 +95,7 @@
         >
           <Button class="mr10 w90" v-show="oneWarehouse.auditSign == 0">
             <span class="center">
-              <Icon custom="iconfont icondaoruicon icons"/>导入
+              <Icon custom="iconfont icondaoruicon icons" />导入
             </span>
           </Button>
         </Upload>
@@ -103,7 +103,6 @@
       <div class="db">
         <Button type="default" @click="downloadFormwork" class="w90 mr10">下载模板</Button>
       </div>
-
     </div>
     <!--  副表 -->
     <vxe-table
@@ -128,16 +127,24 @@
         <vxe-table-column field="systemUnitId" title="单位"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="数量金额信息">
-        <vxe-table-column field="enterQty" title="数量"
-                          :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
-        <vxe-table-column field="enterPrice" title="单价"
-                          :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
-        <vxe-table-column field="sellPrice" title="销售价"
-                          :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
-        <vxe-table-column title="金额"
-                          :edit-render="{name: 'input', attrs: {type: 'number'}}">
+        <vxe-table-column
+          field="enterQty"
+          title="数量"
+          :edit-render="{name: 'input', attrs: {type: 'number'}}"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="enterPrice"
+          title="单价"
+          :edit-render="{name: 'input', attrs: {type: 'number'}}"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="sellPrice"
+          title="销售价"
+          :edit-render="{name: 'input', attrs: {type: 'number'}}"
+        ></vxe-table-column>
+        <vxe-table-column title="金额" :edit-render="{name: 'input', attrs: {type: 'number'}}">
           <template v-slot="{row}">
-            <span>{{ parseFloat(row.enterPrice)*parseFloat(row.enterQty) }} </span>
+            <span>{{ parseFloat(row.enterPrice)*parseFloat(row.enterQty) }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -171,316 +178,318 @@
   </main>
 </template>
 <script>
-    import {
-        getList,
-        saveList,
-        deleteList,
-        checkList,
-        url
-    } from "@/api/system/systemSetting/inventory";
-    import {getwarehouse} from "@/api/system/setWarehouse";
-    import selectPartCom from "./selectPartCom";
-    import Cookies from 'js-cookie'
-    import {TOKEN_KEY} from '@/libs/util'
-    import axios from 'axios'
-    import baseUrl from '_conf/url'
+import {
+  getList,
+  saveList,
+  deleteList,
+  checkList,
+  url
+} from "@/api/system/systemSetting/inventory";
+import { getwarehouse } from "@/api/system/setWarehouse";
+import selectPartCom from "./selectPartCom";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import axios from "axios";
+import baseUrl from "_conf/url";
 
-    export default {
-        components: {
-            selectPartCom
-        },
-        data() {
-            return {
-                //模态框默认隐藏
-                modal: false,
-                //加载图标显示
-                isShow: true,
-                //默认仓库选项
-                storeList: [],
-                //存放主表的全部数据
-                tableData: [],
-                //副表 配件信息项  field:列属性
-                // tableColumnTwo: [
-                //     {type: "index", width: 60, title: "序号"},
-                //     {
-                //         title: "配件信息",
-                //         children: [
-                //             {type: "checkbox", width: 30},
-                //             {field: "partId", title: "配件ID"},
-                //             {field: "partCode", title: "配件编码"},
-                //             {field: "partName", title: "配件名称"},
-                //             {field: "brand ", title: "品牌"},
-                //             {field: "applyCarModel ", title: "品牌车型"},
-                //             {field: "systemUnitId", title: "单位"}
-                //         ]
-                //     },
-                //     {
-                //         title: "数量金额信息",
-                //         children: [
-                //             {field: "enterQty", title: "数量", editRender: {name: 'input'}},
-                //             {field: "enterPrice", title: "单价", editRender: {name: 'input'}},
-                //             {field: "sellPrice", title: "销售价", editRender: {name: 'input'}},
-                //             {field: "enterAmt", title: "金额"},
-                //             {field: "remark", title: "备注", editRender: {name: 'input'}}
-                //         ]
-                //     },
-                //     {
-                //         title: "辅助信息",
-                //         children: [
-                //             {field: "storeShelf", title: "仓位", editRender: {name: 'input'}},
-                //             {field: "storeName", title: "仓库"},
-                //             {field: "oemCode", title: "OE码"},
-                //             {field: "spec", title: "规格/方向/颜色"}
-                //         ]
-                //     },
-                //     {
-                //         title: "不含税信息",
-                //         children: [
-                //             {field: "noTaxPrice", title: "单价"},
-                //             {field: "noTaxAmt", title: "金额"}
-                //         ]
-                //     },
-                //     {
-                //         title: "含税信息",
-                //         children: [
-                //             {field: "taxRate", title: "税率"},
-                //             {field: "taxPrice", title: "单价"},
-                //             {field: "taxAmt", title: "金额"}
-                //         ]
-                //     }
-                // ],
-                //存放当前获取到的响应数据
-                oneWarehouse: {},
-                //判断是否可编辑
-                isAgeDisabled: false,
-                //检验规则
-                validRules: {
-                    storeName: [{required: true, message: "仓库不可为空"}],
-                    enterQty: [{type: "number", message: "请输入数字"}],
-                    enterPrice: [{type: "number", message: "请输入数字"}],
-                    sellPrice: [{type: "number", message: "请输入数字"}]
-                },
-                //选择删除配件信息项的id存放
-                ids: [],
-                //二级表格数据
-                twoList: [],
-                //刷新页面
-                Loading: true,
-                headers: {
-                    Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
-                },
-                upurl: "",
-                mid: "",
-            };
-        },
-        created() {
-            //获取选择仓库信息
-            this.getStoreHoure();
-            this.getList();
-            this.upurl = url;
-        },
-        methods: {
-            //获取表1全部信息
-            async getList() {
-                this.isShow = true;
-                this.Loading = true;
-                let res = await getList({});
-                if (res.code == 0) {
-                    console.log(res,'res =>286')
-                    this.isShow = false;
-                    this.Loading = false;
-                    res.data.map(item => {
-                        item.initBalance = +item.initBalance;
-                    });
-                    this.tableData = res.data;
-                    // console.log(this.tableData,"表一的所有信息")
-                }
-            },
+export default {
+  components: {
+    selectPartCom
+  },
+  data() {
+    return {
+      flag: false,//审核按钮是否展示
+      //模态框默认隐藏
+      modal: false,
+      //加载图标显示
+      isShow: true,
+      //默认仓库选项
+      storeList: [],
+      //存放主表的全部数据
+      tableData: [],
+      //副表 配件信息项  field:列属性
+      // tableColumnTwo: [
+      //     {type: "index", width: 60, title: "序号"},
+      //     {
+      //         title: "配件信息",
+      //         children: [
+      //             {type: "checkbox", width: 30},
+      //             {field: "partId", title: "配件ID"},
+      //             {field: "partCode", title: "配件编码"},
+      //             {field: "partName", title: "配件名称"},
+      //             {field: "brand ", title: "品牌"},
+      //             {field: "applyCarModel ", title: "品牌车型"},
+      //             {field: "systemUnitId", title: "单位"}
+      //         ]
+      //     },
+      //     {
+      //         title: "数量金额信息",
+      //         children: [
+      //             {field: "enterQty", title: "数量", editRender: {name: 'input'}},
+      //             {field: "enterPrice", title: "单价", editRender: {name: 'input'}},
+      //             {field: "sellPrice", title: "销售价", editRender: {name: 'input'}},
+      //             {field: "enterAmt", title: "金额"},
+      //             {field: "remark", title: "备注", editRender: {name: 'input'}}
+      //         ]
+      //     },
+      //     {
+      //         title: "辅助信息",
+      //         children: [
+      //             {field: "storeShelf", title: "仓位", editRender: {name: 'input'}},
+      //             {field: "storeName", title: "仓库"},
+      //             {field: "oemCode", title: "OE码"},
+      //             {field: "spec", title: "规格/方向/颜色"}
+      //         ]
+      //     },
+      //     {
+      //         title: "不含税信息",
+      //         children: [
+      //             {field: "noTaxPrice", title: "单价"},
+      //             {field: "noTaxAmt", title: "金额"}
+      //         ]
+      //     },
+      //     {
+      //         title: "含税信息",
+      //         children: [
+      //             {field: "taxRate", title: "税率"},
+      //             {field: "taxPrice", title: "单价"},
+      //             {field: "taxAmt", title: "金额"}
+      //         ]
+      //     }
+      // ],
+      //存放当前获取到的响应数据
+      oneWarehouse: {},
+      //判断是否可编辑
+      isAgeDisabled: false,
+      //检验规则
+      validRules: {
+        storeName: [{ required: true, message: "仓库不可为空" }],
+        enterQty: [{ type: "number", message: "请输入数字" }],
+        enterPrice: [{ type: "number", message: "请输入数字" }],
+        sellPrice: [{ type: "number", message: "请输入数字" }]
+      },
+      //选择删除配件信息项的id存放
+      ids: [],
+      //二级表格数据
+      twoList: [],
+      //刷新页面
+      Loading: true,
+      headers: {
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+      },
+      upurl: "",
+      mid: ""
+    };
+  },
+  created() {
+    //获取选择仓库信息
+    this.getStoreHoure();
+    this.getList();
+    this.upurl = url;
+  },
+  methods: {
+    //获取表1全部信息
+    async getList() {
+      this.isShow = true;
+      this.Loading = true;
+      let res = await getList({});
+      if (res.code == 0) {
+        console.log(res, "res =>286");
+        this.isShow = false;
+        this.Loading = false;
+        res.data.map(item => {
+          item.initBalance = +item.initBalance;
+        });
+        this.tableData = res.data;
+        // console.log(this.tableData,"表一的所有信息")
+      }
+    },
 
-            //获取当前点击的信息
-            clOnewList(data) {
-                // console.log(data);
-                // let el = data
-                console.log('点击触发事件 =>304')
-                this.oneWarehouse = data.row;
-                this.mid = data.row.id;
-                // console.log(this.mid,77777)
-                // console.log(this.oneWarehouse, "选择表一的数据");
+    //获取当前点击的信息
+    clOnewList(data) {
+      // let el = data
+      this.flag = data.row.auditSign ? false : true
+      this.oneWarehouse = data.row;
+      this.mid = data.row.id;
+      // console.log(this.mid,77777)
+      // console.log(this.oneWarehouse, "选择表一的数据");
 
-                this.twoList = data.row.details;
-                // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
-            },
-            //获取仓库下拉选择信息
-            async getStoreHoure() {
-                let res = await getwarehouse({});
-                if (res.code == 0) {
-                  console.log(res,'res=>31')
-                    //getColumnByField(fileid) 根据列的字段名获取列
-                    // console.log(column, 123123123);
-                    res.data.map(item => {
-                        item.store = item.id;
-                    })
-                    this.storeList = res.data;
-                    // console.log(this.storeList,"默认仓库选项")
-                } else {
-                    // console.log('22')
-                }
-            },
+      this.twoList = data.row.details;
+      // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
+    },
+    //获取仓库下拉选择信息
+    async getStoreHoure() {
+      let res = await getwarehouse({});
+      if (res.code == 0) {
+        console.log(res, "res=>31");
+        //getColumnByField(fileid) 根据列的字段名获取列
+        // console.log(column, 123123123);
+        res.data.map(item => {
+          item.store = item.id;
+        });
+        this.storeList = res.data;
+        // console.log(this.storeList,"默认仓库选项")
+      } else {
+        // console.log('22')
+      }
+    },
 
-            //校验+保存
-            async save() {
-                let storeIdFind = this.oneWarehouse.hasOwnProperty('storeId')
-                // console.log(storeIdFind)
-                // console.log('保存')
-                if (!storeIdFind) {
-                    this.$message.error('仓库不可为空')
-                    return false
-                }
-                let res = await saveList(this.oneWarehouse)
-                if (res.code == 0) {
-                    this.$message.success('保存成功')
-                    this.getList()
-                } else {
-                    // this.$message.error('请求错误')
-                }
-            },
-            async confirm () {
-                                // console.log(this.ids, 1312);
-                if (this.ids.length < 1) {
-                    this.$message.error("请至少选择一项");
-                    return false;
-                }
-                let arr = [];
-                this.ids.forEach(item => {
-                    arr.push(item.id);
-                });
-                let res = await deleteList({ids: arr});
-                if (res.code == 0) {
-                    this.ids = [];
-                    this.twoList = [];
-                    this.$message.success("删除成功");
-                }
-                this.getList();
+    //校验+保存
+    async save() {
+      let storeIdFind = this.oneWarehouse.hasOwnProperty("storeId");
+      // console.log(storeIdFind)
+      // console.log('保存')
+      if (!storeIdFind) {
+        this.$message.error("仓库不可为空");
+        return false;
+      }
+      let res = await saveList(this.oneWarehouse);
+      if (res.code == 0) {
+        this.$message.success("保存成功");
+        this.getList();
+      } else {
+        // this.$message.error('请求错误')
+      }
+    },
+    async confirm() {
+      // console.log(this.ids, 1312);
+      if (this.ids.length < 1) {
+        this.$message.error("请至少选择一项");
+        return false;
+      }
+      let arr = [];
+      this.ids.forEach(item => {
+        arr.push(item.id);
+      });
+      let res = await deleteList({ ids: arr });
+      if (res.code == 0) {
+        this.ids = [];
+        this.twoList = [];
+        this.$message.success("删除成功");
+      }
+      this.getList();
 
-                // console.log(res);
-                this.$Message.info('点击了确定');
-            },
-            cancel () {
-                this.$Message.info('点击了取消');
-            },
-            //删除
-            async del() {
-                // console.log(this.ids, 1312);
-                if (this.ids.length < 1) {
-                    this.$message.error("请至少选择一项");
-                    return false;
-                }
-                let arr = [];
-                this.ids.forEach(item => {
-                    arr.push(item.id);
-                });
-                let res = await deleteList({ids: arr});
-                if (res.code == 0) {
-                    this.getList();
-                    this.ids = [];
-                    // this.twoList = [];
-                    this.$message.success("删除成功");
-                    this.clOnewList()
-                }
-                // console.log(res);
-            },
+      // console.log(res);
+      this.$Message.info("点击了确定");
+    },
+    cancel() {
+      this.$Message.info("点击了取消");
+    },
+    //删除
+    async del() {
+      // console.log(this.ids, 1312);
+      if (this.ids.length < 1) {
+        this.$message.error("请至少选择一项");
+        return false;
+      }
+      let arr = [];
+      this.ids.forEach(item => {
+        arr.push(item.id);
+      });
+      let res = await deleteList({ ids: arr });
+      if (res.code == 0) {
+        this.getList();
+        this.ids = [];
+        // this.twoList = [];
+        this.$message.success("删除成功");
+        this.clOnewList();
+      }
+      // console.log(res);
+    },
 
-            //审核
-            async check() {
-                let twoListData = this.twoList
-                if (twoListData == null) {
-                    this.$message.error("请至少在仓库中添加一个配件！");
-                    return false;
-                }
-                let res = await checkList(this.oneWarehouse)
-                if (res.code == 0) {
-                    this.$message.success('已审核')
-                    this.getList()
-                } else {
-                    this.$message.error('审核请求错误')
-                }
-            },
-            //  点击下载模板
-            downloadFormwork () {
-              window.location.href=baseUrl.omsOrder + '/enterMain/template?access_token=' + Cookies.get(TOKEN_KEY)
-            },
+    //审核
+    async check() {
+      let twoListData = this.twoList;
+      if (twoListData == null) {
+        this.$message.error("请至少在仓库中添加一个配件！");
+        return false;
+      }
+      let res = await checkList(this.oneWarehouse);
+      if (res.code == 0) {
+        this.$message.success("已审核");
+        this.getList();
+      } else {
+        this.$message.error("审核请求错误");
+      }
+    },
+    //  点击下载模板
+    downloadFormwork() {
+      window.location.href =
+        baseUrl.omsOrder +
+        "/enterMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
+    },
 
-            //禁止编辑
-            editActivedEvent({row, rowIndex}) {
-                // 已审核不能编辑
-                this.isAgeDisabled = row.auditSign == 1;
-            },
+    //禁止编辑
+    editActivedEvent({ row, rowIndex }) {
+      // 已审核不能编辑
+      this.isAgeDisabled = row.auditSign == 1;
+    },
 
-            //全选框
-            selectAllEvent({checked, row}) {
-                // console.log(checked ? "所有勾选事件" : "所有取消事件");
-                console.log(row,'row')
-                console.log(checked,'checked')
-                if (checked) {
-                    this.ids = row;
-                } else {
-                    this.ids = [];
-                }
-            },
+    //全选框
+    selectAllEvent({ checked, row }) {
+      // console.log(checked ? "所有勾选事件" : "所有取消事件");
+      console.log(row, "row");
+      console.log(checked, "checked");
+      if (checked) {
+        this.ids = row;
+      } else {
+        this.ids = [];
+      }
+    },
 
-            //单选框
-            selectChangeEvent({checked, row}) {
-                // console.log(checked ? "勾选事件" : "取消事件");
-                if (checked) {
-                    this.ids.push(row);
-                } else {
-                    this.ids = this.ids.filter(item => item.id != row.id);
-                }
-                // console.log(this.ids, 12312313123);
-            },
-            //新增
-            insertEvent(row) {
-                let record = {
-                    auditSign: 0
-                };
-                this.$refs.xTable
-                //insertAt(records, row) 往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入
-                    .insertAt(record, row)
-                    //setActiveCell :激活单元格编辑状态
-                    .then(({row}) => this.$refs.xTable.setActiveCell(row, "sex"));
-            },
-            //点击添加弹出modal
-            AddAttention() {
-                // this.modal = true;
-                this.$refs.addParCom.init()
-                this.getList()
-            },
-            //modal的关闭按钮事件
-            closedTap() {
-                this.$refs.FatherMsg.handleSelectAll(false);
-            },
-            //接收抛出来的数据
-            getPartList(v) {
-                // console.log(v, 222)
-            },
-            // 上传前
-            handleBeforeUpload() {
-                let refs = this.$refs;
-                refs.upload.clearFiles();
-            },
-            // 上传成功
-            handleSuccess(res, file) {
-                let self = this;
-                if (res.code == 0) {
-                    this.$message.success(res.message)
-                }else {
-                    this.$message.error(res.message)
-                }
-            }
-        }
+    //单选框
+    selectChangeEvent({ checked, row }) {
+      // console.log(checked ? "勾选事件" : "取消事件");
+      if (checked) {
+        this.ids.push(row);
+      } else {
+        this.ids = this.ids.filter(item => item.id != row.id);
+      }
+      // console.log(this.ids, 12312313123);
+    },
+    //新增
+    insertEvent(row) {
+      let record = {
+        auditSign: 0
+      };
+      this.$refs.xTable
+        //insertAt(records, row) 往表格插入临时数据，从指定位置插入一行或多行；第二个参数：row 指定位置（不支持树表格）、null从第一行插入、-1 从最后插入
+        .insertAt(record, row)
+        //setActiveCell :激活单元格编辑状态
+        .then(({ row }) => this.$refs.xTable.setActiveCell(row, "sex"));
+    },
+    //点击添加弹出modal
+    AddAttention() {
+      // this.modal = true;
+      this.$refs.addParCom.init();
+      this.getList();
+    },
+    //modal的关闭按钮事件
+    closedTap() {
+      this.$refs.FatherMsg.handleSelectAll(false);
+    },
+    //接收抛出来的数据
+    getPartList(v) {
+      // console.log(v, 222)
+    },
+    // 上传前
+    handleBeforeUpload() {
+      let refs = this.$refs;
+      refs.upload.clearFiles();
+    },
+    // 上传成功
+    handleSuccess(res, file) {
+      let self = this;
+      if (res.code == 0) {
+        this.$message.success(res.message);
+      } else {
+        this.$message.error(res.message);
+      }
     }
+  }
+};
 </script>
 
 <style>
-
 </style>
