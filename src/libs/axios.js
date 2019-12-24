@@ -165,7 +165,7 @@ class httpRequest {
   create () {
     let conf = {
       baseURL: baseURL.omsApi,
-      // timeout: 2000,
+      timeout: 2000,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'X-URL-PATH': location.pathname

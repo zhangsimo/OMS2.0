@@ -141,14 +141,16 @@
                       ></Col>
                     </Row>
                   </FormItem>
-                  <FormItem class="form-Item" label="采购员：" prop="orderMan">
-                    <Input
+                  <FormItem class="form-Item" label="采购员：" prop="orderManId">
+                    <Select v-model="formPlanmain.orderManId"
                       class="w160"
-                      placeholder="请输入采购员"
-                      v-model="formPlanmain.orderMan"
                       :disabled="isInput"
-                      readonly
-                    />
+                      label-in-value
+                      @on-change="selectOrderMan"
+                      filterable
+                    >
+                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
                   </FormItem>
                   <FormItem
                     class="form-Item"
