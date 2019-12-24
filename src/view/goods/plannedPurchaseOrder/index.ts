@@ -159,7 +159,7 @@ export default class PlannedPurchaseOrder extends Vue {
     codeId: "",
   }
   private ruleValidate: ruleValidate = {
-    guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
+    guestName: [{ required: true, message: '供应商不能为空', trigger: 'change' }],
     orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
@@ -169,6 +169,23 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
+
+  private guseData = {
+    loading: false,
+    lists: new Array(),
+  }
+
+  private async remoteMethod(query:string) {
+    if(query == "" || query.trim().length <= 0) {
+      this.guseData.lists = [];
+      return;
+    }
+    this.guseData.loading = true;
+    const res:any = await api.getMoteSupplier(query);
+    if(res.code == 0) {
+      
+    }
+  }
 
   private options1:any = {
     disabledDate (date:any) {

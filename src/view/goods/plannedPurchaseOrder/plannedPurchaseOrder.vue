@@ -122,12 +122,17 @@
                   <FormItem class="form-Item" label="供应商：" prop="guestName">
                     <Row class="w160">
                       <Col span="19"
-                        ><Input
-                          v-model="formPlanmain.guestName"
-                          placeholder="请选择供应商"
-                          :disabled="isInput"
-                          readonly
-                      /></Col>
+                        >
+                        <Select
+                            v-model="formPlanmain.guestName"
+                            filterable
+                            remote
+                            :disabled="isInput"
+                            :remote-method="remoteMethod"
+                            :loading="guseData.loading">
+                            <Option v-for="item in guseData.lists" :value="option.value" :key="item.id">{{option.label}}</Option>
+                        </Select>
+                      </Col>
                       <Col span="5"
                         ><Button
                           @click="showModel('selectSupplier')"
