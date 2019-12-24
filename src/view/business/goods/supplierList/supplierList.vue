@@ -64,15 +64,15 @@
                         <Col span="22">
                           <!--<Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input>-->
                           <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0">
-                            <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+                            <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                           </Select>
                         </Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
                     </FormItem>
                     <FormItem label="退货员：" prop="storeId" >
-                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId">
-                        <Option v-for="item in userMap" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" filterable label-in-value @on-change="selectOrderMan">
+                        <Option v-for="item in userMap" :value="item.id" :key="item.id">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="退货日期：" prop="orderDate" class="fs12">
@@ -203,7 +203,7 @@
   import ProcurementModal from './compontents/ProcurementModal'
   import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete } from '../../../../api/business/supplierListApi';
   import { getSupplierList } from "_api/purchasing/purchasePlan";
-
+  import { getSales } from "@/api/salesManagment/salesOrder";
   export default {
     name: 'supplierList',
     components: {
@@ -248,7 +248,7 @@
         //表单验证
         ruleValidate: {
           guestName: [{ required: true,type: 'string',message: '供应商不能为空', trigger: 'change' }],
-          // storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'blur' }], //暂时不验证。。。
+          storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'change' }],
           // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
           cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'change' }],
           clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }]
@@ -361,7 +361,8 @@
           cause: '',  //退货原因
           clearing: '', //结算方式
           guestName:'',//供应商
-          storeId: '', //退货员
+          storeId: '', //退货员id
+          storeName: '', //退货员名称
           orderDate: tools.transTime(new Date()), //退货日期
           remark: '', //备注
           warehouse: '', //退货仓库
@@ -444,6 +445,12 @@
       SelectChange(){
         this.leftgetList()
       },
+      //获取销售员
+      selectOrderMan(val){
+        console.log(val)
+        this.formPlan.storeId = val.label
+        // this.formPlan.orderManId = val.value
+      },
       //供应商下拉查询
       selecQuery(){
         let req = {}
@@ -468,8 +475,10 @@
           if (valid) {
             let data = {}
             data.id = this.rowId
-            data.guestId = this.guestidId   //调出方
-            data.orderMan = this.formPlan.storeId     //退货员
+            // data.guestId = this.guestidId   //调出方
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
             data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
             data.serviceId = this.formPlan.numbers  //采退单号
             data.rtnReasonId = this.formPlan.cause  //退货原因
@@ -589,7 +598,16 @@
       },
       //表格编辑状态下被关闭的事件
       editClosedEvent(){},
-
+      //获取销售员
+      async getAllSales() {
+        let res = await getSales();
+        if (res.code === 0) {
+          this.userMap = res.data.content;
+          this.userMap.map(item => {
+            item.label = item.userName
+          })
+        }
+      },
       // 更多子组件的参数
       getMsg(msg){
         this.moreArr = msg
@@ -709,8 +727,8 @@
         // console.log(this.guestidId)
         this.datadata = row
         // console.log(this.datadata)
-        this.formPlan.guestName = this.datadata.guestName
-        this.formPlan.storeId = this.datadata.storeId
+        this.formPlan.guestName = this.datadata.guestId
+        this.formPlan.storeId = this.datadata.orderManId
         this.formPlan.orderDate = this.datadata.orderDate
         this.formPlan.numbers = this.datadata.serviceId
         this.formPlan.cause = this.datadata.rtnReasonId
@@ -737,8 +755,9 @@
           onOk: async () => {
               let data = {}
               data.id = this.rowId
-              data.guestId = this.guestidId   //调出方
-              data.orderMan = this.formPlan.storeId     //退货员
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
               data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
               data.serviceId = this.formPlan.numbers  //采退单号
               data.rtnReasonId = this.formPlan.cause  //退货原因
@@ -864,6 +883,7 @@
       this.allSelect();
       this.leftgetList();
       this.selecQuery();
+      this.getAllSales();
     }
   }
 </script>

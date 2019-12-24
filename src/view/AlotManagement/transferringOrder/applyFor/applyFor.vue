@@ -69,6 +69,7 @@
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
                         <DatePicker
+                          type="date"
                           style="width: 160px"
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
