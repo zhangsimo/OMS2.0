@@ -835,6 +835,8 @@ export default {
     setOneClient(val) {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "fullName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
