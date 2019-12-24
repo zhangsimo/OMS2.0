@@ -13,9 +13,9 @@ export const mixPartInfo = {
       // 模拟异步验证效果
       let reg = /^[0-9a-zA-Z]*$/;
       if (!value) {
-        callback(new Error('配件编码不能为空！'));
+        callback(new Error('不能为空！'));
       } else if(!reg.test(value)){
-        callback(new Error('配件编码格式不正确!'));
+        callback(new Error('格式不正确!'));
       }else {
         callback()
       }
@@ -39,7 +39,7 @@ export const mixPartInfo = {
         name: '',//配件名称
         partNameId: '',//配件id
         unitId: '',//配件单位
-        oemCode: '1',//oe码
+        oemCode: '',//oe码
         spec: '',//规格
         model: '',//型号
         carModelName: '',//适用车型name
@@ -75,6 +75,9 @@ export const mixPartInfo = {
         ],
         unitId: [
           { required: true, message: '单位不能为空', trigger: 'change' }
+        ],
+        oemCode: [
+          { required: true, validator: NumberA, trigger: 'blur' }
         ]
       },
       qualityArr: [],//所有品质

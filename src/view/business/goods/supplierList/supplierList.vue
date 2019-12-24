@@ -61,7 +61,12 @@
                         :label-width="100">
                     <FormItem label="供应商：" prop="guestName" class="fs12">
                       <Row class="w350">
-                        <Col span="22"><Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input></Col>
+                        <Col span="22">
+                          <!--<Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input>-->
+                          <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0">
+                            <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
+                          </Select>
+                        </Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
                     </FormItem>
@@ -194,8 +199,11 @@
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import PrintShow from "./compontents/PrintShow";
-  import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
+  // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
+  import ProcurementModal from './compontents/ProcurementModal'
   import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete } from '../../../../api/business/supplierListApi';
+  import { getSupplierList } from "_api/purchasing/purchasePlan";
+
   export default {
     name: 'supplierList',
     components: {
@@ -219,6 +227,7 @@
         }
       };
       return {
+        ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中
         disSave: false, // 保存按钮是否禁用
         PTrow: {//新增当前行
@@ -435,6 +444,13 @@
       SelectChange(){
         this.leftgetList()
       },
+      //供应商下拉查询
+      selecQuery(){
+        let req = {}
+        getSupplierList(req).then(res => {
+          this.ArraySelect = res.data||[];
+        })
+      },
       //选择采购入库单
       getPlanOrder(Msg){
         let arr = Msg.details || []
@@ -618,10 +634,9 @@
       },
       // 供应商子组件内容
       getSupplierName(a){
-        // console.log(a)
-        this.formPlan.guestName = a.shortName
+        console.log(a)
+        this.formPlan.guestName = a.id
         this.guestidId = a.id
-        console.log(this.guestidId)
       },
       leftgetList(){
         let data = {}
@@ -846,8 +861,9 @@
         //获取右侧表格高度
         this.rightTableHeight = wrapH-planFormH-planBtnH-65;
       });
-      this.allSelect()
+      this.allSelect();
       this.leftgetList();
+      this.selecQuery();
     }
   }
 </script>

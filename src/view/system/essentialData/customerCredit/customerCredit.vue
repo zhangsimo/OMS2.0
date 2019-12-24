@@ -401,12 +401,12 @@
           //当前行
           selection(row){
             this.rowMessage = row
-            console.log(this.rowMessage)
             this.state = row.isGuestResearch
             this.ID = row.guestId
             // console.log(this.ID)
             this.Limitstate = JSON.parse(row.researchStatus).value
-             this.creaditList = this.rowMessage
+             this.creaditList = row
+            console.log(this.creaditList)
             this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
             this.credit()
           },
