@@ -1,4 +1,4 @@
- <template>
+<template>
   <Modal
     title="高级查询"
     v-model="serchN"
@@ -35,7 +35,24 @@
     </div>
     <Form :label-width="80" class="ml10 pl25">
       <FormItem label="供 应 商: ">
-        <Input type="text" placeholder="前选择供应商" v-model="guestname" class="w300 ml5" @on-focus="showModel('selectSupplier')"/>
+        <!-- <Input type="text" placeholder="前选择供应商" v-model="guestName" class="w300 ml5" @on-focus="showModel('selectSupplier')"/> -->
+        <Select
+          class="w300 ml5"
+          v-model="guestId"
+          filterable
+          remote
+          label-in-value
+          :remote-method="remoteMethod"
+          :loading="guseData.loading"
+          @on-change="geseChange"
+        >
+          <Option
+            v-for="option in guseData.lists"
+            :value="option.id"
+            :key="option.id"
+            >{{ option.fullName }}</Option
+          >
+        </Select>
       </FormItem>
       <FormItem label="订单单号: ">
         <Input type="text" class="w300 ml5" size="large" v-model="serviceId" />
@@ -50,21 +67,28 @@
         <Input type="text" class="w300 ml5" v-model="partBrand" />
       </FormItem>
       <FormItem label="提交人: ">
-        <Select v-model="auditor"
-          class="w300 ml5"
-          label-in-value
-          filterable
-        >
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="auditor" class="w300 ml5" label-in-value filterable>
+          <Option
+            v-for="item in salesList"
+            :value="item.label"
+            :key="item.value"
+            >{{ item.label }}</Option
+          >
         </Select>
       </FormItem>
       <FormItem label="创建人: ">
-        <Select v-model="createUname"
+        <Select
+          v-model="createUname"
           class="w300 ml5"
           label-in-value
           filterable
         >
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          <Option
+            v-for="item in salesList"
+            :value="item.label"
+            :key="item.value"
+            >{{ item.label }}</Option
+          >
         </Select>
       </FormItem>
       <FormItem>
@@ -88,6 +112,8 @@
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
+// @ts-ignore
+import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 
 @Component({
@@ -96,7 +122,7 @@ import { getSales } from "@/api/salesManagment/salesOrder";
   }
 })
 export default class MoreSearch extends Vue {
-   @Prop({ default: '' }) private readonly type!:string; 
+  @Prop({ default: "" }) private readonly type!: string;
 
   private serchN: boolean = false;
 
@@ -109,19 +135,19 @@ export default class MoreSearch extends Vue {
   private auditor: string = "";
   private partName: string = "";
   private createUname: string = "";
-  private guestId:string = "";
-  private guestname:string = "";
-  private showSelf:boolean = true;
+  private guestId: string = "";
+  private guestName: string = "";
+  private showSelf: boolean = true;
 
-  private salesList:Array<any> = new Array();
+  private salesList: Array<any> = new Array();
   private async getAllSales() {
-    let res:any = await getSales();
+    let res: any = await getSales();
     if (res.code === 0) {
       this.salesList = res.data.content;
-      this.salesList.forEach((item:any) => {
+      this.salesList.forEach((item: any) => {
         item.label = item.userName;
         item.value = item.id;
-      })
+      });
     }
   }
 
@@ -134,15 +160,38 @@ export default class MoreSearch extends Vue {
     this.partBrand = "";
     this.auditor = "";
     this.guestId = "";
-    this.guestname = "";
+    this.guestName = "";
     this.createUname = "";
     this.partName = "";
     this.showSelf = true;
   }
 
+  private guseData = {
+    loading: false,
+    lists: new Array()
+  };
+
+  private async remoteMethod(query: string) {
+    if (query == "" || query.trim().length <= 0) {
+      this.guseData.lists = [];
+      return;
+    }
+    this.guseData.loading = true;
+    const res: any = await api.getMoteSupplier(query);
+    this.guseData.loading = false;
+    if (res.code == 0) {
+      this.guseData.lists = res.data;
+    }
+  }
+
+  private geseChange(val: any) {
+    this.guestId = val.value;
+    this.guestName = val.label;
+  }
+
   private init() {
     this.reset();
-    if(this.salesList.length <= 0) {
+    if (this.salesList.length <= 0) {
       this.getAllSales();
     }
     this.serchN = true;
@@ -151,7 +200,7 @@ export default class MoreSearch extends Vue {
   // 选择供应商
   private selectSupplierName(row: any) {
     this.guestId = row.id;
-    this.guestname = row.fullName;
+    this.guestName = row.fullName;
   }
 
   private showModel(name) {
@@ -163,7 +212,7 @@ export default class MoreSearch extends Vue {
     this.serchN = false;
   }
 
-  @Emit('getmoreData')
+  @Emit("getmoreData")
   private ok() {
     let data = {
       startTime: tools.transTime(this.createDate[0]),
@@ -179,17 +228,17 @@ export default class MoreSearch extends Vue {
       createUname: this.createUname,
       partName: this.partName.trim(),
       guestId: this.guestId,
-      showSelf: this.showSelf,
+      showSelf: this.showSelf
     };
     let subdata: Map<string, string> = new Map();
     for (let key in data) {
-      if(['showSelf'].includes(key)) {
+      if (["showSelf"].includes(key)) {
         subdata.set(key, data[key]);
       } else if (data[key] && data[key].trim().length > 0) {
         subdata.set(key, data[key]);
       }
     }
-     let obj:any = {};
+    let obj: any = {};
     if (subdata.size > 0) {
       for (let [k, v] of subdata) {
         obj[k] = v;
