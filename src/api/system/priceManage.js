@@ -34,7 +34,7 @@ export function findAllCus(params, data) {
     url: `${api.wmsApi}/sellPriceGuest/findAll`,
     method: "post",
     params,
-    data,
+    data
   });
 }
 
@@ -44,7 +44,7 @@ export function queryPart(params, data) {
     url: `${api.omsSotck}/partStock/findPartPrice`,
     method: "post",
     params,
-    data,
+    data
   });
 }
 
@@ -53,7 +53,7 @@ export function partPriceSave(data) {
   return axios.request({
     url: `${api.wmsApi}/partPrice/save`,
     method: "post",
-    data,
+    data
   });
 }
 
@@ -62,7 +62,7 @@ export function partLevelSave(data) {
   return axios.request({
     url: `${api.wmsApi}/sellPricePart/save`,
     method: "post",
-    data,
+    data
   });
 }
 
@@ -70,7 +70,7 @@ export function partLevelSave(data) {
 export function area(params) {
   return axios.request({
     url: `${api.omsProduct}/area/findAll`,
-    method: 'get',
+    method: "get",
     params
-  })
+  });
 }

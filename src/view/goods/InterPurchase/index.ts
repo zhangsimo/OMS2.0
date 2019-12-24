@@ -4,6 +4,7 @@ import { State } from 'vuex-class';
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
 import { orderState } from '../plannedPurchaseOrder/global';
+import { getSales } from "@/api/salesManagment/salesOrder";
 
 import QuickDate from '_c/getDate/dateget.vue';
 import SelectSupplier from "../plannedPurchaseOrder/components/selectSupplier.vue";
@@ -147,6 +148,7 @@ export default class InterPurchase extends Vue {
     guestId: "", // 供应商id
     guestName: "", // 供应商
     orderMan: "", // 采购员
+    orderManId: "",
     billTypeId: "", // 票据类型
     settleTypeId: "",  // 结算方式
     storeId: "", // 入库仓
@@ -155,10 +157,12 @@ export default class InterPurchase extends Vue {
     remark: "", // 备注
     directGuestId: "", // 直发门店
     serviceId: "", // 订单号
+    code: "", // 往来单号
+    codeId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
-    orderMan: [{ required: true, message: '采购员不能为空', trigger: 'blur' }],
+    orderManId: [{ required: true, message: '采购员不能为空', trigger: 'change' }],
     billTypeId: [{ required: true, message: "请选票据类型", trigger: "change" }],
     settleTypeId: [{ required: true, message: "请选择结算方式", trigger: "change" }],
     storeId: [{ required: true, message: "请选择入库仓", trigger: "change" }],
@@ -181,6 +185,22 @@ export default class InterPurchase extends Vue {
   private options2DisabledDate (date:any) {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate;
+  }
+
+  private salesList:Array<any> = new Array();
+  private async getAllSales() {
+    let res:any = await getSales();
+    if (res.code === 0) {
+      this.salesList = res.data.content;
+      this.salesList.forEach((item:any) => {
+        item.label = item.userName;
+        item.value = item.id;
+      })
+    }
+  }
+  private selectOrderMan(val:any){
+    this.formPlanmain.orderMan = val.label || "";
+    this.formPlanmain.orderManId = val.value || "";
   }
 
   // 采购订单列表-翻页
@@ -229,11 +249,14 @@ export default class InterPurchase extends Vue {
     ref.resetFields();
     this.formPlanmain.guestId = '';
     this.formPlanmain.serviceId = '';
+    this.formPlanmain.code = "";
+    this.formPlanmain.codeId = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
     this.formPlanmain.orderMan = this.user.userData.staffName;
+    this.formPlanmain.orderManId = this.user.userData.id;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
@@ -248,6 +271,7 @@ export default class InterPurchase extends Vue {
         data = {
           guestId: this.formPlanmain.guestId,
           orderMan: this.formPlanmain.orderMan,
+          orderManId: this.formPlanmain.orderManId,
           billTypeId: this.formPlanmain.billTypeId,
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
@@ -256,6 +280,8 @@ export default class InterPurchase extends Vue {
           remark: this.formPlanmain.remark,
           directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
+          code: this.formPlanmain.code,
+          codeId: this.formPlanmain.codeId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -710,5 +736,6 @@ export default class InterPurchase extends Vue {
     }, 0);
     this.init();
     this.getListData();
+    this.getAllSales();
   }
 }

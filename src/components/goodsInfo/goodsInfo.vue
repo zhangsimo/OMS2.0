@@ -4,16 +4,16 @@
       <!-- 查询收货信息上 -->
       <Form ref="formOne" :model="formDateTop"  inline>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"></Input>
+          <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位"/>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.streetAddress" placeholder="收货地址"></Input>
+          <Input type="text" v-model="formDateTop.streetAddress" placeholder="收货地址"/>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人"></Input>
+          <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人"/>
         </FormItem>
         <FormItem>
-          <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"></Input>
+          <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话"/>
         </FormItem>
         <Button type="primary" @click="searchInfo">查询</Button>
         <Button type="primary" @click="saveInfo">保存</Button>
@@ -55,16 +55,16 @@
           :label-width="100"
         >
           <FormItem label="收货单位：">
-            <Input v-model="formDateRight.receiveComp" class="w200"></Input>
+            <Input v-model="formDateRight.receiveComp" class="w200"/>
           </FormItem>
           <FormItem label="收货地址：">
-            <Input v-model="formDateRight.receiveAddress" class="w200"></Input>
+            <Input v-model="formDateRight.receiveAddress" class="w200"/>
           </FormItem>
           <FormItem label="收货人：">
-            <Input v-model="formDateRight.receiver" class="w200"></Input>
+            <Input v-model="formDateRight.receiver" class="w200"/>
           </FormItem>
           <FormItem label="联系电话：">
-            <Input v-model="formDateRight.receiverMobile" class="w200"></Input>
+            <Input v-model="formDateRight.receiverMobile" class="w200"/>
           </FormItem>
           <!-- 发货信息 右-->
           <div class="bgc p5 mb15 mt15">发货信息</div>
@@ -82,19 +82,19 @@
             </Select>
           </FormItem>
           <FormItem label="运输费用：">
-            <Input v-model="formDateRight.transportCost" class="w200"></Input>
+            <Input v-model="formDateRight.transportCost" class="w200"/>
           </FormItem>
           <FormItem label="结算方式：">
-            <Input v-model="formDateRight.settleType" class="w200"></Input>
+            <Input v-model="formDateRight.settleType" class="w200"/>
           </FormItem>
           <FormItem label="发货备注：">
-            <Input v-model="formDateRight.remark" class="w200"></Input>
+            <Input v-model="formDateRight.remark" class="w200"/>
           </FormItem>
           <FormItem label="业务单号：">
-            <Input v-model="formDateRight.businessNum" class="w200"></Input>
+            <Input v-model="formDateRight.businessNum" class="w200"/>
           </FormItem>
           <FormItem label="关联单号：">
-            <Input v-model="formDateRight.relationNum" class="w200"></Input>
+            <Input v-model="formDateRight.relationNum" class="w200"/>
           </FormItem>
         </Form>
       </div>

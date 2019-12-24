@@ -10,10 +10,10 @@
           <Input type="text" class="w300 ml5" disabled v-model="totalAmt" />
         </FormItem>
         <FormItem label="折扣金额: ">
-          <InputNumber :min="0" :max="totalAmt" v-model="formInline.disAmt" :precision="2" placeholder="请输入" class="w300 ml5"/>
+          <el-input-number :min="0" :max="totalAmt" v-model="formInline.disAmt" :precision="2" placeholder="请输入" class="w300 ml5" :controls="false" size="small"/>
         </FormItem>
         <FormItem label="返利金额: ">
-          <InputNumber :min="0" :max="totalAmt" v-model="formInline.rebateAmt" :precision="2" placeholder="请输入" class="w300 ml5"/>
+          <el-input-number :min="0" :max="totalAmt" v-model="formInline.rebateAmt" :precision="2" placeholder="请输入" class="w300 ml5" :controls="false" size="small"/>
         </FormItem>
         <FormItem label="实际应付金额: ">
           <Input class="w300 ml5" disabled v-model="endPrice" />
@@ -35,8 +35,8 @@ export default class PurchaseAmount extends Vue {
 
     private sumMod:boolean = false;
 
-    private get endPrice():number {
-      return this.totalAmt - this.formInline.disAmt - this.formInline.rebateAmt;
+    private get endPrice():string|number {
+      return (this.totalAmt - this.formInline.disAmt - this.formInline.rebateAmt).toFixed(2);
     }
 
     private formInline = {

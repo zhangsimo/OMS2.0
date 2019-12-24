@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select  v-model="model1" class="w150">
+            <Select  v-model="BranchstoreId" class="w150" @on-change="fendian">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -23,11 +23,11 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -58,7 +58,7 @@
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings"/>
+    <selectDealings ref="selectDealings" @getOne="getOne"/>
     <Modal
         v-model="modal1"
         title="高级查询"
@@ -66,15 +66,15 @@
         @on-cancel="cancel">
         <div class="db pro mt20">
           <span>对账单号：</span>
-          <input type="text" class="w200" />
+          <Input type="text" class="w200" />
         </div>
         <div class="db pro mt20">
           <span>收付款单号：</span>
-          <input type="text" class="w200" />
+          <Input type="text" class="w200" />
         </div>
         <div class="db pro mt20">
           <span>收付款人：</span>
-          <input type="text" class="w200" />
+          <Input type="text" class="w200" />
         </div>
         <div class="db pro mt20">
           <span>审核状态：</span>
@@ -99,6 +99,7 @@ export default {
   },
   data() {
     return {
+      BranchstoreId:'',
       tab: 'key1',
       value: [],
       Branchstore: [],
@@ -308,11 +309,12 @@ export default {
       ],
       data: [],
       data1: [],
-      data2:[]
+      data2:[],
+      company: '', //往来单位
+      companyId:'' //往来单位id
     };
   },
   async mounted () {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat (this.$refs.quickDate.val,this.$store)
     this.value = arr[0];
     this.model1 = arr[1];
@@ -320,6 +322,19 @@ export default {
     this.getGeneral()
   },
   methods: {
+    //查询
+    query(){
+      this.getGeneral()
+    },
+    // 往来单位选择
+    getOne(data){
+      this.company = data.fullName
+      this.companyId = data.id
+    },
+    // 分店切换
+    fendian(val){
+      this.BranchstoreId = val
+    },
     // 快速查询
     quickDate(data){
       this.value = data
@@ -363,8 +378,15 @@ export default {
     cancel (){},
     // 总表查询
     getGeneral() {
-      getReceiptsPaymentsSummary({}).then(res => {
-        // console.log(res);
+      let data = {
+        startDate:this.value[0],
+        endDate:this.value[1],
+        ordId:this.BranchstoreId,
+        guestId:this.companyId
+      }
+      console.log(data)
+      getReceiptsPaymentsSummary(data).then(res => {
+        console.log(res);
         if(res.data.length!==0){
           res.data.map((item,index)=>{
             item.num = index + 1

@@ -124,7 +124,7 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="客户：" prop="guestId">
                     <Row>
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px"
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  @on-change="changeClient"
                               :disabled="draftShow != 0||isNew">
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
@@ -410,7 +410,7 @@
         PTrow: {
           _highlight: true,
           billStatusId: {name: '草稿', value: 0},
-
+          orderManId:  this.$store.state.user.userData.id
           // status: {"name":"草稿","value":0},
         },
         page: {
@@ -595,6 +595,7 @@
       },
       //新增按钮
       addOneList() {
+        this.$refs.formPlan.resetFields();
         this.isNew = false;
         this.tableData = []
         this.formPlan = {}
@@ -603,6 +604,7 @@
           return this.$Message.error('请先保存数据');
         }
         this.sellOrderTable.tbdata.unshift(this.PTrow)
+        this.formPlan.orderManId=this.PTrow.orderManId
         this.isAdd = false;
       },
       //获取客户属性
@@ -633,6 +635,24 @@
           }
         })
       },
+      //改变客户
+     changeClient(value){
+       // console.log('44444',value)
+       if (!value) {
+         return false;
+       }
+       let oneClient = []
+       oneClient = this.client.filter( item => {
+         return   item.id === value
+       })
+
+       console.log(oneClient,5656)
+       for(var i  in  oneClient){
+         // console.log((oneClient[i].settTypeId))
+         this.formPlan.settleTypeId=oneClient[i].settTypeId
+         // console.log('8888', this.formPlan.settleTypeId)
+       }
+     },
       //选择销售出库单
       SalesOutboundShowModel() {
         this.$refs.salesOutbound.openModal()
@@ -693,6 +713,9 @@
       //获取搜索框内的数
       setOneClient(val) {
         this.$set(this.formPlan, "guestId", val.id);
+        this.$set(this.formPlan, "fullName", val.fullName);
+        this.$set(this.formPlan,"billTypeId",val.billTypeId)
+        this.$set(this.formPlan,"settleTypeId",val.settTypeId)
       },
       //获取左侧表格数据
       getLeftList() {

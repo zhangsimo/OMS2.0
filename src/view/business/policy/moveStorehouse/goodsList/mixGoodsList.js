@@ -72,7 +72,6 @@ export const mixGoodsData = {
   methods:{
     //采购计划列表选中数据
     selectVxeData({selection,rowIndex,reserves}){
-      console.log(selection)
       this.delArr = selection
     },
     //删除选中数据
@@ -120,7 +119,7 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v){
-      console.log(v)
+      // console.log(v)
       this.tableData = this.tableData.concat(v)
     },
     //获取选中供应商
@@ -135,11 +134,11 @@ export const mixGoodsData = {
     //选择日期
     setDataFun(v){
       // this.formValidate.planDate = v
-      console.log(this.formValidate.planDate)
+      // console.log(this.formValidate.planDate)
     },
     //保存采购计划信息
     submit (name) {
-      console.log(name)
+      // console.log(name)
       this.$refs[name].validate((valid) => {
         if (valid) {
           let objReq = {}

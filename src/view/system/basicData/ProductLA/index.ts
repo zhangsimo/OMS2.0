@@ -262,11 +262,14 @@ export default class ProductLA extends Vue {
         this.getStaff();
     }
 
+    // 名字loginName
+    private loginName:string = "";
     // 选取员工列表
     private currentRow(row: any) {
         let id: string = row.id;
         this.employeeId = id;
         this.buttonWaitQuery = false;
+        this.loginName = row.loginName;
         this.getwaitEmps();
         this.getEmps();
     }
@@ -363,6 +366,8 @@ export default class ProductLA extends Vue {
                 partBrandCode: el.partBrandCode,
                 partId: el.id,
                 partInnerId: el.code,
+                partBrand: el.partBrand,
+                empName: this.loginName,
             }
         })
         this.selectionWaitPartArr = [];
@@ -405,6 +410,7 @@ export default class ProductLA extends Vue {
         let self:any = this;
         if(res.code == 0) {
             self.$Message.success('导入成功');
+            self.$Message.success(res.data);
             // this.getwaitEmps();
             // this.getEmps();
         } else {

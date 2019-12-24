@@ -570,7 +570,9 @@
         PTrow: {
           _highlight: true,
           status: {name: '草稿', value: 0},
-          salesman: this.$store.state.user.userData.staffName
+            orderMan: this.$store.state.user.userData.staffName,
+            orderManId:  this.$store.state.user.userData.id
+
           // id: '0',
           // details: [],
           // createTime: tools.transTime(new Date())
@@ -655,6 +657,17 @@
         if (!value) {
           return false;
         }
+        let oneClient = []
+        oneClient = this.client.filter( item => {
+          return   item.id === value
+        })
+
+        console.log(oneClient,5656)
+        for(var i  in  oneClient){
+          this.formPlan.billTypeId=oneClient[i].billTypeId
+          this.formPlan.settleTypeId=oneClient[i].settTypeId
+
+        }
         let guestId = value;
         let res = await getLimit(guestId);
         if (res.code === 0) {
@@ -689,6 +702,9 @@
       //获取搜索框内的数据
       setOneClient(val) {
         this.$set(this.formPlan, "guestId", val.id);
+        this.$set(this.formPlan, "fullName", val.fullName);
+        this.$set(this.formPlan,"billTypeId",val.billTypeId)
+        this.$set(this.formPlan,"settleTypeId",val.settTypeId)
       },
       //获取表单预计发货时间
       getplanSendDate(data) {
@@ -708,13 +724,13 @@
       getplanArriveDate(data) {
         // this.formPlan.planArriveDate = data + ' ' + "00:00:00"
         this.formPlan.planArriveDate=tools.transTime(data)
-        console.log('22', this.formPlan.planArriveDate)
+        // console.log('22', this.formPlan.planArriveDate)
       },
  //清空日期
       clearplanSendDate(v){
-        console.log('77',v)
+        // console.log('77',v)
         this.formPlan.planSendDate=null
-        console.log('222', this.formPlan.planSendDate)
+        // console.log('222', this.formPlan.planSendDate)
       },
       clearplanArriveDate(v){
         this.formPlan.planArriveDate=null
@@ -870,6 +886,7 @@
 
       //新增按钮
       addOrder() {
+        this.$refs.formPlan.resetFields();
         this.isNew = false;
         this.tableData = []
         this.formPlan = {}
@@ -878,8 +895,9 @@
           return this.$Message.error('请先保存数据');
         }
         this.preSellOrderTable.tbData.unshift(this.PTrow)
+        this.formPlan.orderManId=this.PTrow.orderManId
+        this.formPlan.orderMan=this.PTrow.orderMan
         this.isAdd = false;
-        console.log('新增的数据', this.PTrow)
       },
       //作废按钮
       isDelete() {

@@ -184,7 +184,7 @@
                     data.lever = this.queryType.lever
                     data.leverId = this.queryType.id
                     data.code = this.clientCode
-                    data.shortName = this.clientName
+                    data.fullName = this.clientName
                     data.contactorTel = this.clientPhone
                     // console.log(data)
                 let res = await getTreeClient(data)

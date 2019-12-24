@@ -130,12 +130,11 @@ export default class PriceManage extends Vue {
     let res = await api.queryPart(params, data);
     if (res.code == 0) {
       this.part.loading = false;
-      console.log(res.data.content, "res.data.content ==>133");
+      console.log(res.data.content, "res.data.content ==>13311111");
       this.part.tbdata = res.data.content.map((el: any) => {
         el.sellPrice = Number(el.sellPrice);
         return el;
       });
-
       this.part.page.total = res.data.totalElements;
     }
   }
@@ -380,7 +379,7 @@ export default class PriceManage extends Vue {
     data.forEach((el: any) => {
       el.pchsPrice = el.costPrice;
     });
-    console.log(data, "data ==>390");
+    console.log(data, "data ==>383");
     if (this.curronly) {
       res = await api.partPriceSave(data);
     } else {

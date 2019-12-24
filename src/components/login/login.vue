@@ -25,6 +25,11 @@
           </p>
           <div class="form-con-inner">
             <Form ref="loginForm" :model="form" :rules="rules">
+              <FormItem style="margin-bottom: 20px">
+                <Select v-model="form.scope" >
+                  <Option v-for="item in accountTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+              </FormItem>
               <FormItem prop="username" style="margin-bottom: 20px">
                 <Input v-model="form.username" :class="{nodata:!form.username}" placeholder="请输入用户名">
                 <span slot="prepend">
@@ -68,9 +73,15 @@
     components: {SlideValidate},
     data () {
       return {
+          accountTypeList:[
+              {label:"oms" , value:'oms'},
+              {label:"wms" , value:'wms'},
+              {label:"auth" , value:'auth'},
+          ],
         form: {
           username: localStorage.getItem('username') || '',
-          password: ''
+          password: '',
+          scope:'oms'
         },
         rules: {
           username: [
@@ -95,6 +106,8 @@
           if (valid) {
             let username = this.form.username
             let password = this.form.password
+            let scope = this.form.scope
+              localStorage.setItem('userScope' , scope )
             this.$emit('on-commit', {username, password, errCallback: this.errCallback})
           } else {
             this.loading = false

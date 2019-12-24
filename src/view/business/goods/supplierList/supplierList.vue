@@ -61,13 +61,18 @@
                         :label-width="100">
                     <FormItem label="供应商：" prop="guestName" class="fs12">
                       <Row class="w350">
-                        <Col span="22"><Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input></Col>
+                        <Col span="22">
+                          <!--<Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input>-->
+                          <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0">
+                            <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                          </Select>
+                        </Col>
                         <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                       </Row>
                     </FormItem>
                     <FormItem label="退货员：" prop="storeId" >
-                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId">
-                        <Option v-for="item in userMap" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                      <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" filterable label-in-value @on-change="selectOrderMan">
+                        <Option v-for="item in userMap" :value="item.id" :key="item.id">{{ item.label }}</Option>
                       </Select>
                     </FormItem>
                     <FormItem label="退货日期：" prop="orderDate" class="fs12">
@@ -194,8 +199,11 @@
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
   import PrintShow from "./compontents/PrintShow";
-  import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
+  // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
+  import ProcurementModal from './compontents/ProcurementModal'
   import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete } from '../../../../api/business/supplierListApi';
+  import { getSupplierList } from "_api/purchasing/purchasePlan";
+  import { getSales } from "@/api/salesManagment/salesOrder";
   export default {
     name: 'supplierList',
     components: {
@@ -219,6 +227,7 @@
         }
       };
       return {
+        ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中
         disSave: false, // 保存按钮是否禁用
         PTrow: {//新增当前行
@@ -239,7 +248,7 @@
         //表单验证
         ruleValidate: {
           guestName: [{ required: true,type: 'string',message: '供应商不能为空', trigger: 'change' }],
-          // storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'blur' }], //暂时不验证。。。
+          storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'change' }],
           // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
           cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'change' }],
           clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }]
@@ -352,7 +361,8 @@
           cause: '',  //退货原因
           clearing: '', //结算方式
           guestName:'',//供应商
-          storeId: '', //退货员
+          storeId: '', //退货员id
+          storeName: '', //退货员名称
           orderDate: tools.transTime(new Date()), //退货日期
           remark: '', //备注
           warehouse: '', //退货仓库
@@ -435,6 +445,19 @@
       SelectChange(){
         this.leftgetList()
       },
+      //获取销售员
+      selectOrderMan(val){
+        console.log(val)
+        this.formPlan.storeId = val.value
+        // this.formPlan.orderManId = val.value
+      },
+      //供应商下拉查询
+      selecQuery(){
+        let req = {}
+        getSupplierList(req).then(res => {
+          this.ArraySelect = res.data||[];
+        })
+      },
       //选择采购入库单
       getPlanOrder(Msg){
         let arr = Msg.details || []
@@ -452,8 +475,10 @@
           if (valid) {
             let data = {}
             data.id = this.rowId
-            data.guestId = this.guestidId   //调出方
-            data.orderMan = this.formPlan.storeId     //退货员
+            // data.guestId = this.guestidId   //调出方
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
             data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
             data.serviceId = this.formPlan.numbers  //采退单号
             data.rtnReasonId = this.formPlan.cause  //退货原因
@@ -484,7 +509,7 @@
                 this.leftgetList()
                 this.isAdd = true;
                 this.formPlan.guestName = ''   //调出方
-                data.orderMan = ''   //退货员
+                this.formPlan.storeId = ''   //退货员
                 // tools.transTime(this.formPlan.orderDate)  //退货日期
                 this.formPlan.numbers = '' //采退单号
                 this.formPlan.cause  = '' //退货原因
@@ -493,10 +518,11 @@
                 this.formPlan.warehouse = ''  //退货仓库
                 this.formPlan.serviceId = '' //采购订单
                 this.Right.tbdata  =  [] //子表格
+                this.$refs.formPlan.resetFields();
               }
             })
           } else {
-            console.log(this.isAdd)
+            // console.log(this.isAdd)
             this.$Message.error('*为必填！');
           }
         })
@@ -527,9 +553,9 @@
       },
       //右侧表格复选框选中
       selectChange(msg){
-        console.log(msg.selection)
+        // console.log(msg.selection)
         this.checkboxArr = msg.selection
-        console.log(this.checkboxArr)
+        // console.log(this.checkboxArr)
       },
       //分页
       changePageLeft(p) {
@@ -553,7 +579,7 @@
       },
       // 查询下拉框
       getDataQuick(v){
-        console.log(v)
+        // console.log(v)
         this.selectArr = v
         this.leftgetList()
       },
@@ -573,11 +599,20 @@
       },
       //表格编辑状态下被关闭的事件
       editClosedEvent(){},
-
+      //获取销售员
+      async getAllSales() {
+        let res = await getSales();
+        if (res.code === 0) {
+          this.userMap = res.data.content;
+          this.userMap.map(item => {
+            item.label = item.userName
+          })
+        }
+      },
       // 更多子组件的参数
       getMsg(msg){
         this.moreArr = msg
-        console.log(this.moreArr)
+        // console.log(this.moreArr)
         this.leftgetList()
         // console.log(msg)
       },
@@ -608,9 +643,9 @@
             systemUnitId : item.minUnit,
           }
         })
-        console.log(ChildMessage)
+        // console.log(ChildMessage)
         this.Right.tbdata = [...this.Right.tbdata,...parts]
-        console.log(this.Right.tbdata)
+        // console.log(this.Right.tbdata)
       },
       //供应商弹框
       addSuppler(){
@@ -619,9 +654,8 @@
       // 供应商子组件内容
       getSupplierName(a){
         // console.log(a)
-        this.formPlan.guestName = a.shortName
+        this.formPlan.guestName = a.id
         this.guestidId = a.id
-        console.log(this.guestidId)
       },
       leftgetList(){
         let data = {}
@@ -694,8 +728,8 @@
         // console.log(this.guestidId)
         this.datadata = row
         // console.log(this.datadata)
-        this.formPlan.guestName = this.datadata.guestName
-        this.formPlan.storeId = this.datadata.storeId
+        this.formPlan.guestName = this.datadata.guestId
+        this.formPlan.storeId = this.datadata.orderManId
         this.formPlan.orderDate = this.datadata.orderDate
         this.formPlan.numbers = this.datadata.serviceId
         this.formPlan.cause = this.datadata.rtnReasonId
@@ -705,7 +739,7 @@
         this.formPlan.serviceId = this.datadata.code
         this.Right.tbdata = row.details
         this.presentrowMsg = row.billStatusId.value
-        console.log(this.presentrowMsg)
+        // console.log(this.presentrowMsg)
         this.rowId = row.id
         if(row.id){
           this.buttonDisable = false
@@ -722,8 +756,9 @@
           onOk: async () => {
               let data = {}
               data.id = this.rowId
-              data.guestId = this.guestidId   //调出方
-              data.orderMan = this.formPlan.storeId     //退货员
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
               data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
               data.serviceId = this.formPlan.numbers  //采退单号
               data.rtnReasonId = this.formPlan.cause  //退货原因
@@ -846,8 +881,10 @@
         //获取右侧表格高度
         this.rightTableHeight = wrapH-planFormH-planBtnH-65;
       });
-      this.allSelect()
+      this.allSelect();
       this.leftgetList();
+      this.selecQuery();
+      this.getAllSales();
     }
   }
 </script>

@@ -10,19 +10,18 @@
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
                 :key="item.value"
-                >{{ item.label }}</Option
-              >
+              >{{ item.label }}</Option>
             </Select>
           </div>
           <div class="db">
-            <Button type="default" @click="showModel('moreSearch')" class="mr10"
-              ><i class="iconfont mr5 iconchaxunicon"></i>更多</Button
-            >
+            <Button type="default" @click="showModel('moreSearch')" class="mr10">
+              <i class="iconfont mr5 iconchaxunicon"></i>更多
+            </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addOrder"
-              ><Icon type="md-add" /> 新增</Button
-            >
+            <Button class="mr10" @click="addOrder">
+              <Icon type="md-add" />新增
+            </Button>
           </div>
           <div class="db">
             <Button
@@ -30,36 +29,40 @@
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(1)"
               class="mr10"
-              ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
+              <i class="iconfont mr5 iconbaocunicon"></i>保存
+            </Button>
           </div>
           <div class="db">
             <Button
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(2)"
-              ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
+              <i class="iconfont mr5 iconziyuan2"></i>提交
+            </Button>
           </div>
           <div class="db">
             <Button
               class="mr10"
               @click="saveObsoleteFun(1)"
               :disabled="selectPlanOrderItem.billStatusId != 0"
-              ><Icon type="md-close" size="14" /> 作废</Button
             >
+              <Icon type="md-close" size="14" />作废
+            </Button>
           </div>
           <div class="db">
             <Button
               @click="saveObsoleteFun(2)"
               class="mr10"
-              :disabled="selectPlanOrderItem.billStatusId !== -1"
-              ><i class="iconfont mr5 iconfanhuiicon"></i> 反作废</Button
+              :disabled="selectPlanOrderItem.billStatusId != 5"
             >
+              <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
+            </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="exportHandle"
-              ><i class="iconfont mr5 icondaochuicon"></i> 导出
+            <Button class="mr10" @click="exportHandle">
+              <i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
           </div>
           <div class="db">
@@ -67,8 +70,9 @@
               class="mr10"
               :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
-              ><i class="iconfont mr5 iconshenheicon"></i> 查看审批</Button
             >
+              <i class="iconfont mr5 iconshenheicon"></i> 查看审批
+            </Button>
           </div>
         </div>
       </div>
@@ -77,14 +81,8 @@
       <div class="inner-box">
         <div class="con-split" ref="paneLeft">
           <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
-            <div
-              slot="left"
-              class="con-split-pane-left"
-              style="overflow-y: auto; height: 100%;"
-            >
-              <div class="pane-made-hd">
-                采购计划单列表
-              </div>
+            <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+              <div class="pane-made-hd">采购计划单列表</div>
               <Table
                 :height="leftTableHeight"
                 @on-current-change="selectTabelData"
@@ -107,13 +105,10 @@
                 @on-page-size-change="changeSize"
                 show-sizer
                 show-total
-              >
-              </Page>
+              ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">
-                采购计划信息
-              </div>
+              <div class="pane-made-hd">采购计划信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -125,24 +120,25 @@
                 >
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
-                      <Col span="19"
-                        ><Input
+                      <Col span="19">
+                        <Input
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
                           placeholder="请选择供应商"
                           readonly
-                        /></Col>
-                      <Col span="5"
-                        ><Button
+                        />
+                      </Col>
+                      <Col span="5">
+                        <Button
                           :disabled="selectPlanOrderItem.billStatusId != 0"
                           @click="addSuppler"
                           class="ml5"
                           size="small"
                           type="default"
-                          ><i
-                            class="iconfont iconxuanzetichengchengyuanicon"
-                          ></i></Button
-                      ></Col>
+                        >
+                          <i class="iconfont iconxuanzetichengchengyuanicon"></i>
+                        </Button>
+                      </Col>
                     </Row>
                   </FormItem>
                   <FormItem label="计划采购日期：" prop="planArriveDate">
@@ -156,10 +152,7 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="planner">
-                    <Input
-                      class="w160"
-                      v-model="formPlan.planner"
-                    />
+                    <Input class="w160" v-model="formPlan.planner" />
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
@@ -180,8 +173,7 @@
                         v-for="item in invoiceMap"
                         :value="item.value"
                         :key="item.value"
-                        >{{ item.label }}</Option
-                      >
+                      >{{ item.label }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="直发门店：">
@@ -194,8 +186,7 @@
                         v-for="item in companyMap"
                         :value="item.value"
                         :key="item.value"
-                        >{{ item.label }}</Option
-                      >
+                      >{{ item.label }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="计划单号：">
@@ -207,7 +198,7 @@
                     />
                   </FormItem>
                   <FormItem label="其他费用：">
-                    <InputNumber
+                    <el-input-number
                       class="w160"
                       :disabled="isinput"
                       :readonly="selectPlanOrderItem.billStatusId != 0"
@@ -215,16 +206,20 @@
                       @on-change="changeTotals"
                       :min="0"
                       :precision="2"
+                      :controls="false"
+                      size="small"
                     />
                   </FormItem>
                   <FormItem label="合计总金额：">
-                    <InputNumber
+                    <el-input-number
                       class="w160"
                       :disabled="isinput"
                       readonly
                       v-model="formPlan.totalPrice"
                       :min="0"
                       :precision="2"
+                      :controls="false"
+                      size="small"
                     />
                   </FormItem>
                 </Form>
@@ -237,8 +232,9 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="addPro"
-                      ><Icon type="md-add" /> 添加配件</Button
                     >
+                      <Icon type="md-add" />添加配件
+                    </Button>
                   </div>
                   <div class="fl mb5">
                     <Upload
@@ -255,8 +251,7 @@
                         size="small"
                         class="mr10"
                         :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
-                        >导入</Button
-                      >
+                      >导入</Button>
                     </Upload>
                   </div>
                   <div class="fl mb5">
@@ -265,9 +260,10 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="delTableData"
-                      ><i class="iconfont mr5 iconlajitongicon"></i>
-                      删除</Button
                     >
+                      <i class="iconfont mr5 iconlajitongicon"></i>
+                      删除
+                    </Button>
                   </div>
                   <!-- <div class="fl mb5">
                     │
@@ -293,21 +289,22 @@
                   </div>
                   <div class="fl mb5">
                     <Button size="small" class="mr10" @click="addPro"><i class="iconfont mr5 iconxiazaiicon"></i> 获取配件</Button>
-                  </div> -->
+                  </div>-->
                   <div class="fl mb5">
                     <Button
                       size="small"
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 2"
-                      @click="addPro"
-                      ><i class="iconfont mr5 iconbianjixiugaiicon"></i>
-                      计划调整</Button
+                      @click="showModel('adjustModel')"
                     >
+                      <i class="iconfont mr5 iconbianjixiugaiicon"></i>
+                      计划调整
+                    </Button>
                   </div>
                 </div>
                 <!-- <div class="t-price">
                   采购计划金额：120000.00
-                </div> -->
+                </div>-->
               </div>
               <vxe-table
                 border
@@ -321,52 +318,16 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
               >
-                <vxe-table-column
-                  type="index"
-                  width="60"
-                  title="序号"
-                ></vxe-table-column>
+                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column
-                  field="partCode"
-                  title="配件编码"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="partName"
-                  title="配件名称"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="partBrand"
-                  title="品牌"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="totalStockQty"
-                  title="连锁库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="masterStockQty"
-                  title="总部库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="branchStockQty"
-                  title="门店库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="onWayQty"
-                  title="采购在途库存"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="unsalableQty"
-                  title="滞销库存"
-                  width="100"
-                ></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
+                <vxe-table-column field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
+                <vxe-table-column field="branchStockQty" title="门店库存" width="100"></vxe-table-column>
+                <vxe-table-column field="onWayQty" title="采购在途库存" width="100"></vxe-table-column>
+                <vxe-table-column field="unsalableQty" title="滞销库存" width="100"></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="计划采购数量"
@@ -374,11 +335,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="9999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                      :precision="0"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -388,87 +352,38 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :min="0"
                       v-model="row.orderPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
-                  <template v-slot="{ row }">
-                    {{ row.orderPrice | priceFilters }}
-                  </template>
+                  <template v-slot="{ row }">{{ row.orderPrice | priceFilters }}</template>
                 </vxe-table-column>
-                <vxe-table-column
-                  title="计划采购金额"
-                  width="120"
-                  field="orderAmt"
-                >
-                  <template v-slot="{ row }">
-                    {{ (row.orderPrice * row.orderQty) | priceFilters }}
-                  </template>
+                <vxe-table-column title="计划采购金额" width="120" field="orderAmt">
+                  <template v-slot="{ row }">{{ (row.orderPrice * row.orderQty) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column
                   field="remark"
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
-                >
-                </vxe-table-column>
-                <vxe-table-column
-                  field="noTaxPrice"
-                  title="不含税单价"
-                  width="100"
                 ></vxe-table-column>
-                <vxe-table-column
-                  field="noTaxAmt"
-                  title="不含税金额"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="recentPrice"
-                  title="最近采购单价"
-                  width="100"
-                ></vxe-table-column>
+                <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
+                <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
+                <vxe-table-column field="recentPrice" title="最近采购单价" width="100"></vxe-table-column>
                 <vxe-table-column title="单价差" width="100">
-                  <template v-slot="{ row }">
-                    {{ (row.orderPrice - row.recentPrice) | priceFilters }}
-                  </template>
+                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice) | priceFilters }}</template>
                 </vxe-table-column>
-                <vxe-table-column
-                  field="upLimit"
-                  title="库存上限"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="downLimit"
-                  title="库存下限"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="carModelName"
-                  title="品牌车型"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="unit"
-                  title="单位"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="oemCode"
-                  title="OE码"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="spec"
-                  title="规格"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="planCancelQty"
-                  title="计划取消数量"
-                  width="100"
-                ></vxe-table-column>
+                <vxe-table-column field="upLimit" title="库存上限" width="100"></vxe-table-column>
+                <vxe-table-column field="downLimit" title="库存下限" width="100"></vxe-table-column>
+                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
@@ -486,11 +401,7 @@
       :is-show-add-part-btn="true"
     ></select-part-com>
     <!--选择供应商-->
-    <select-supplier
-      ref="selectSupplier"
-      header-tit="供应商资料"
-      @selectSupplierName="getSupplierName"
-    ></select-supplier>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     <!-- 更多 -->
     <more-search type="采购计划" @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 订单调整 -->
@@ -631,7 +542,7 @@ export default {
           key: "billStatusId",
           minWidth: 70,
           render: (h, params) => {
-            let val = params.row.billStatusId.name || '';
+            let val = params.row.billStatusId.name || "";
             return h("span", val);
           }
         },
@@ -652,7 +563,7 @@ export default {
         },
         {
           title: "计划员",
-          key: "planner",
+          key: "orderMan",
           minWidth: 120
         },
         {

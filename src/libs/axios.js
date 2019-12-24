@@ -73,20 +73,17 @@ class httpRequest {
           // else{
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-            // let res = JSON.parse(localStorage.getItem('oms2-userList'))
-            // config.params.tenantId = res.tenantId || 0
-            // config.params.shopId = res.shopId || 0
-            // config.params.shopkeeper = res.shopkeeper || 0
-        // if(!config.params.tenantId || !config.params.shopId || !config.params.shopkeeper ) {
             if(localStorage.getItem("oms2-userList") != null) {
-              // config.params.tenantId = 0
-              // if(localStorage.tenantId != undefined) {
-              //   config.params.tenantId = localStorage.tenantId;
-              // }
               let res = JSON.parse(localStorage.getItem('oms2-userList'))
               config.params.tenantId = res.tenantId || 0
               config.params.shopId = res.shopId || 0
               config.params.shopkeeper = res.shopkeeper || 0
+            }
+            if(localStorage.getItem('userScope') != null){
+              let  scope = localStorage.getItem('userScope')
+              config.params.scope = scope || 'oms'
+            }else{
+              config.params.scope = 'oms'
             }
       }else{
         if(config.url.includes('/token')){
@@ -165,7 +162,7 @@ class httpRequest {
   create () {
     let conf = {
       baseURL: baseURL.omsApi,
-      // timeout: 2000,
+      timeout: 2000,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'X-URL-PATH': location.pathname

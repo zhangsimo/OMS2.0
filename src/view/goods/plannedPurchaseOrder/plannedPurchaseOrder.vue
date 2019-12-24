@@ -119,15 +119,23 @@
                   :label-width="106"
                   :show-message="true"
                 >
-                  <FormItem class="form-Item" label="供应商：" prop="guestName">
+                  <FormItem class="form-Item" label="供应商：" prop="guestId">
                     <Row class="w160">
                       <Col span="19"
-                        ><Input
-                          v-model="formPlanmain.guestName"
-                          placeholder="请选择供应商"
-                          :disabled="isInput"
-                          readonly
-                      /></Col>
+                        >
+                        <Select
+                            v-model="formPlanmain.guestId"
+                            filterable
+                            remote
+                            label-in-value
+                            :disabled="isInput"
+                            :remote-method="remoteMethod"
+                            :loading="guseData.loading"
+                            @on-change="geseChange"
+                            >
+                            <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
+                        </Select>
+                      </Col>
                       <Col span="5"
                         ><Button
                           @click="showModel('selectSupplier')"
@@ -141,14 +149,16 @@
                       ></Col>
                     </Row>
                   </FormItem>
-                  <FormItem class="form-Item" label="采购员：" prop="orderMan">
-                    <Input
+                  <FormItem class="form-Item" label="采购员：" prop="orderManId">
+                    <Select v-model="formPlanmain.orderManId"
                       class="w160"
-                      placeholder="请输入采购员"
-                      v-model="formPlanmain.orderMan"
                       :disabled="isInput"
-                      readonly
-                    />
+                      label-in-value
+                      @on-change="selectOrderMan"
+                      filterable
+                    >
+                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
                   </FormItem>
                   <FormItem
                     class="form-Item"
@@ -256,6 +266,15 @@
                       :disabled="isInput"
                     />
                   </FormItem>
+                  <FormItem class="form-Item" label="往来单号：">
+                    <Input
+                      placeholder="请输入订单号"
+                      class="w160"
+                      readonly
+                      v-model="formPlanmain.code"
+                      :disabled="isInput"
+                    />
+                  </FormItem>
                 </Form>
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
@@ -354,11 +373,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderQty"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                      :precision="0"
+                    />
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
@@ -368,12 +390,14 @@
                   width="120"
                 >
                   <template v-slot:edit="{ row }">
-                    <InputNumber
+                    <el-input-number
                       :max="999999"
                       :min="0"
                       v-model="row.orderPrice"
                       :precision="2"
-                    ></InputNumber>
+                      :controls="false"
+                      size="small"
+                    />
                   </template>
                   <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}
@@ -464,7 +488,7 @@
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->
-    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="mainId" :row="selectTableRow"></goods-info>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->

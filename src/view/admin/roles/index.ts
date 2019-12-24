@@ -132,7 +132,7 @@ export default class index extends Vue{
     //修改员工
   private  changeStaff(){
       if(!this.oneStaff.id){
-        this.$message.error('请先选择员工')
+        this.$message.error('请先选择需要修改的角色')
         return
       }
     let modal:any =  this.$refs.change
@@ -237,7 +237,7 @@ export default class index extends Vue{
         })
     let res = await saveStaffJurisdiction(data)
     if(res.code === 0){
-      this.$message.success('修改数据')
+      this.$message.success('保存成功')
       this.getAllStaff()
     }
   }
