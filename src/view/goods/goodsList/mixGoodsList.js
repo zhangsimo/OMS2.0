@@ -515,6 +515,11 @@ export const mixGoodsData = {
         totals += el.orderPrice * el.orderQty;
       })
       this.formPlan.totalPrice = totals + this.formPlan.otherPrice;
-    }
+    },
+
+    showModel(name) {
+      let ref = this.$refs[name];
+      ref.init();
+    },
   }
 };

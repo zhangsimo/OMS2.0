@@ -425,6 +425,7 @@ const methods = {
   },
   //右边内容初始化
   rightgetList() {
+    console.log(this.levelId)
     let params = {};
     if (this.Type === 0 && this.customer.fullname !== "") {
       params.partCode = this.customer.fullname;
@@ -440,11 +441,9 @@ const methods = {
 
     this.customer.loading = true;
     partMatchingDetail(params).then(res => {
-      // console.log(res)
       this.customer.loading = false;
       if (res.code === 0) {
         this.customer.tbdata = res.data.content || [];
-        // console.log(this.customer.tbdata)
         this.customer.page.total = res.data.totalElements;
       }
     });
@@ -452,11 +451,9 @@ const methods = {
   //多选框
   selection(a) {
     this.checkboxArr = a;
-    // console.log(this.checkboxArr)
   },
   //子组件的参数
   selectPartName(a) {
-    // console.log(a)
     let newA = a.map(item => {
       return {
         partCode: item.partCode,
@@ -467,11 +464,7 @@ const methods = {
         fullName: item.fullName
       };
     });
-    this.level.tbdata = [...this.level.tbdata, ...newA];
-
-    // console.log(this.level.tbdata, "left数据")
-    // this.level.tbdata = this.unique(this.level.tbdata) //暂时不去重，后台数据id为null，无法通过partId去重。
-    // console.log(this.getArr)
+    this.level.tbdata = [ ...newA,...this.level.tbdata];
   },
   // 父组件右部分获取子组件的参数
   getMsgTwo(a) {
@@ -490,11 +483,11 @@ const methods = {
     });
     this.getArrRight = newA;
     this.customer.tbdata = [...this.customer.tbdata, ...this.getArrRight];
-    console.log(this.customer.tbdata);
     this.customer.tbdata = this.unique(this.customer.tbdata);
   },
   //左边内容单某行
   selction(a) {
+    console.log(a)
     let arrr = [];
     arrr.push(a);
     let arrrr = arrr.map(item => {
@@ -507,6 +500,8 @@ const methods = {
     this.code = arrrr[0].code;
     if (this.levelId) {
       this.rightgetList();
+    } else {
+      this.customer.tbdata = []
     }
   },
   //去重方法

@@ -405,6 +405,7 @@ export default class ProductLA extends Vue {
         let self:any = this;
         if(res.code == 0) {
             self.$Message.success('导入成功');
+            self.$Message.success(res.data);
             // this.getwaitEmps();
             // this.getEmps();
         } else {

@@ -388,6 +388,10 @@ export default {
       this.isAdd = false;
       this.datadata = this.PTrow
       this.formPlan.salesman = this.$store.state.user.userData.staffName
+      this.formPlan.Reservation =  '', //预订单号
+      this.formPlan.orderDate =  tools.transTime(new Date()), //期望到货日期
+      this.formPlan.remark =  '' //备注
+      this.Right.tbdata = []
       // console.log(this.$store.state.user.userData.staffName)
       // console.log(this.Left.tbdata)
     },
@@ -412,6 +416,7 @@ export default {
           console.log(tools.transDate(this.formPlan.orderDate))
           data.remark = this.formPlan.remark
           data.detailVOList = this.Right.tbdata
+          // console.log(this.Right.tbdata)
           save(data).then(res => {
             if(res.code === 0){
               this.$message.success('保存成功！')

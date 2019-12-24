@@ -410,7 +410,7 @@
         PTrow: {
           _highlight: true,
           billStatusId: {name: '草稿', value: 0},
-
+          orderManId:  this.$store.state.user.userData.id
           // status: {"name":"草稿","value":0},
         },
         page: {
@@ -603,6 +603,7 @@
           return this.$Message.error('请先保存数据');
         }
         this.sellOrderTable.tbdata.unshift(this.PTrow)
+        this.formPlan.orderManId=this.PTrow.orderManId
         this.isAdd = false;
       },
       //获取客户属性
@@ -693,6 +694,9 @@
       //获取搜索框内的数
       setOneClient(val) {
         this.$set(this.formPlan, "guestId", val.id);
+        this.$set(this.formPlan, "fullName", val.fullName);
+        this.$set(this.formPlan,"billTypeId",val.billTypeId)
+        this.$set(this.formPlan,"settleTypeId",val.settTypeId)
       },
       //获取左侧表格数据
       getLeftList() {
