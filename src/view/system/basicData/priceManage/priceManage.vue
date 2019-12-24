@@ -231,7 +231,7 @@
                 width="120"
               >
                 <template v-slot:edit="{ row }">
-                  <InputNumber :min="0" :precision="2" v-model="row.sellPrice" />
+                  <el-input-number :min="0" :precision="2"  v-model="row.sellPrice" :controls="false" size="small" />
                 </template>
               </vxe-table-column>
               <vxe-table-column
