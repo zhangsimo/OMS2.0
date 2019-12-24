@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="选择入库单" width="1000">
+  <Modal v-model="showInfo" title="选择入库单" width="1000"   @on-visible-change="openOrClose">
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
@@ -235,13 +235,16 @@
             selectOne(data){
                 this.tableDataBottom = data.row
             },
+          openOrClose() {
+            this.tableDataBottom = {};
+          },
             //选入
             selectInto(){
             if(!this.tableDataBottom.id){
-                this.$message.error('请选择一条有效数据')
+              this.$Message.error('请选择一条有效数据')
             }else {
                 this.$emit('godownList',this.tableDataBottom)
-              this.showInfo = false
+                this.showInfo = false
             }
             }
         }

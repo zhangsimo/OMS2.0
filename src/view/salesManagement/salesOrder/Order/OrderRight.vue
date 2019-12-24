@@ -17,17 +17,17 @@
         <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
-        <FormItem label="客户：" prop="fullName">
+        <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
-            <!-- <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
+            <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-            </Select>-->
-            <Input
-              class="w240"
-              v-model="formPlan.fullName"
-              :disabled="draftShow != 0"
-              @on-change="changeClient"
-            />
+            </Select>
+<!--            <Input-->
+<!--              class="w240"-->
+<!--              v-model="formPlan.fullName"-->
+<!--              :disabled="draftShow != 0"-->
+<!--              @on-change="changeClient"-->
+<!--            />-->
             <Button
               class="ml5"
               size="small"
@@ -48,8 +48,12 @@
             </Button>
           </Row>
         </FormItem>
-        <FormItem label="销售员：" prop="orderMan">
-          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />
+        <FormItem label="销售员：" prop="orderManId">
+<!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
+          <Select :value="formPlan.orderManId"
+                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0"  label-in-value>
+            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="订单类型：">
           <Select v-model="formPlan.orderTypeValue" style="width:100px" disabled>
@@ -93,6 +97,8 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0"
+
+            clearable
           ></DatePicker>
         </FormItem>
         <FormItem label="计划到货日期:" prop="planArriveDate">
@@ -104,6 +110,8 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0"
+             clearable
+            ref="clearplanArriveDate"
           ></DatePicker>
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
@@ -175,6 +183,7 @@
               :disabled="draftShow != 0 || !formPlan.id"
               class="mr10"
               @click="openGodownEntryModal"
+
             >选择入库单</Button>
           </div>
           <div class="fl mb5">
@@ -226,10 +235,15 @@
             field="orderPrice"
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
-          ></vxe-table-column>
+          >
+            <template v-slot="{ row }">
+              <span>{{ countPrice(row) |priceFilters}}</span>
+            </template>
+
+          </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
-              <span>{{ countAmount(row) }}</span>
+              <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -304,8 +318,10 @@ import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
 import SeeFile from "../../commonality/SeeFile";
+import * as tools from "../../../../utils/tools";
 import { area } from "@/api/lease/registerApi";
 import {
+  getSales,
   getClient,
   getRightList,
   getWarehouseList,
@@ -353,13 +369,13 @@ export default {
     };
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
-        callback(new Error("最多保留4位小数"));
+        callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/;
+        const reg = /^\d+(\.\d{0,2})?$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("最多保留4位小数"));
+          callback(new Error("最多保留2位小数"));
         }
       }
     };
@@ -404,11 +420,12 @@ export default {
       limitList: {}, //额度信息
       totalMoney: "", //总价
       client: [], //客户列表
+      salesList:[],//销售员列表
       ruleValidate: {
-        fullName: [
+        guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderMan: [{ required: true, message: "  ", trigger: "blur" }],
+        orderManId: [{ required: true, message: "  ", trigger: "blur" }],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -433,6 +450,8 @@ export default {
     this.getType();
     this.getWarehouse();
     this.getClassifyList();
+    this.getAllSales()
+
   },
   computed: {
     getOneOrder() {
@@ -460,6 +479,12 @@ export default {
         stop();
       }
     },
+    //获取销售员
+    selectOrderMan(val){
+      this.formPlan.orderMan = val.label
+      this.formPlan.orderManId = val.value
+
+    },
     //获取客户额度
     async getAllLimit() {
       let data = {};
@@ -481,6 +506,8 @@ export default {
         this.limitList = res.data;
       }
     },
+
+
     //获取客户属性
     async getType() {
       let data = {};
@@ -497,6 +524,16 @@ export default {
       let res = await getClient();
       if (res.code === 0) {
         this.client = res.data;
+      }
+    },
+    //获取销售员
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.map(item => {
+          item.label = item.userName
+        })
       }
     },
     // 获取仓库
@@ -561,14 +598,26 @@ export default {
         this.$utils.toNumber(row.orderPrice)
       );
     },
+    countPrice(row){
+      return  this.$utils.toNumber(row.orderPrice)
+    },
     // 计算尾部总和
     countAllAmount(data) {
       let count = 0;
       data.forEach(row => {
         count += this.countAmount(row);
       });
+      count = count.toFixed(2)
       this.totalMoney = count;
       return count;
+    },
+    countAllPrice(data){
+      let count=0
+      data.forEach(row=>{
+        count +=this.countPrice(row)
+        count = count.toFixed(2)
+        return count;
+      })
     },
     //获取尾部总数
     footerMethod({ columns, data }) {
@@ -578,7 +627,10 @@ export default {
             return "和值";
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
-            return this.$utils.sum(data, column.property);
+            return this.$utils.sum(data, column.property).toFixed(2);
+          }
+          if (columnIndex === 7) {
+            return ` ${this.countAllPrice(data)} `;
           }
           if (columnIndex === 8) {
             return ` ${this.countAllAmount(data)} `;
@@ -659,7 +711,8 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      this.formPlan.planSendDate = data + " " + "00:00:00";
+      // this.formPlan.planSendDate = data + " " + "00:00:00";
+      this.formPlan.planSendDate==tools.transTime(data)
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
@@ -669,8 +722,20 @@ export default {
     },
     //计划到货日期
     getplanArriveDate(data) {
-      this.formPlan.planArriveDate = data + " " + "00:00:00";
+      // this.formPlan.planArriveDate = data + " " + "00:00:00";
+      this.formPlan.planArriveDate=tools.transTime(data)
     },
+  // //清空日期
+  //
+  //   cleadplanSendDate(data){
+  //     this.formPlan.planSendDate=null
+  //     console.log('4444',this.formPlan.planSendDate)
+  //   },
+  //   clearplanArriveDate(data){
+  //     this.formPlan.planArriveDate=null
+  //     console.log('55', this.formPlan.planArriveDate)
+  //   },
+
 
     //配件返回的参数
     getPartNameList(val) {
@@ -753,6 +818,7 @@ export default {
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);
+              this.isAdd=true
             }
           } catch (errMap) {
             this.$XModal.message({
@@ -791,7 +857,7 @@ export default {
               return this.$message.error("可用余额不足");
             }
 
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getStockOut(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
@@ -817,7 +883,7 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("出库成功成功");

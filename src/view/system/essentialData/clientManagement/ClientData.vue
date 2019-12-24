@@ -321,6 +321,7 @@
               auto-resize
               show-overflow
               ref="validData"
+              :mouse-config="{selected: true}"
               :data="invoice"
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
@@ -328,16 +329,8 @@
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>
-              <vxe-table-column
-                field="taxpayerCode"
-                title="税号"
-                :edit-render="{name: 'input'}"
-              ></vxe-table-column>
-              <vxe-table-column
-                field="taxpayerTel"
-                title="地址电话"
-                :edit-render="{name: 'input'}"
-              ></vxe-table-column>
+              <vxe-table-column field="taxpayerCode" title="税号" :edit-render="{name: 'input'}"></vxe-table-column>
+              <vxe-table-column field="taxpayerTel" title="地址电话" :edit-render="{name: 'input'}"></vxe-table-column>
               <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
             </vxe-table>
           </div>
@@ -394,7 +387,17 @@ export default {
         callback();
       }
     };
-
+    const paragraph = (rule, value, callback) => {
+      if (value) {
+        if (!/^[0-9a-zA-Z]+$/.test(value)) {
+          callback(new Error("只能输入数字和字母"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     return {
       tree: this.treelist,
       clinet: true, //是否客户 //是
@@ -409,10 +412,19 @@ export default {
         }
       ],
       validRules: {
-        taxpayerName: [{ required: true, message: '',trigger:'change' }],
-        taxpayerCode: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
-        taxpayerTel: [{ required: true, validator: creditLimit,type:'Number',trigger:'change'}],
-        accountBankNo: [{ required: true, message: '' ,trigger:'change'}]
+        taxpayerName: [{ required: true, message: "", trigger: "change" }],
+        taxpayerCode: [
+          { required: true, validator: paragraph, trigger: "change" }
+        ],
+        taxpayerTel: [
+          {
+            required: true,
+            validator: creditLimit,
+            type: "Number",
+            trigger: "change"
+          }
+        ],
+        accountBankNo: [{ required: true, message: "", trigger: "change" }]
       },
       columns: [
         {
@@ -620,21 +632,19 @@ export default {
     },
     //校验表单
     handleSubmit(callback) {
-      this.$refs.validData.validate(valid =>{
-        if(valid){
-          callback && callback()
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.$refs.validData.validate(valid => {
+            if (valid) {
+              callback && callback();
+            } else {
+              this.$Message.error("带*为必填");
+            }
+          });
         } else {
           this.$Message.error("带*为必填");
         }
-      })
-      // this.$refs.form.validate(valid => {
-      //   if (valid) {
-      //     callback && callback();
-      //   } else {
-      //     this.$Message.error("带*为必填");
-      //   }
-      // });
-      
+      });
     },
     // 获取新增地址
     selection(item) {
@@ -685,6 +695,7 @@ export default {
         return false;
       }
       this.newplace = true;
+      this.title = '修改收货地址'
     },
     //新增地址
     addPlace() {
@@ -818,7 +829,7 @@ export default {
       this.invoice = this.invoice.filter(
         item => item.bankId != this.addInoiceOne.row.bankId
       );
-      console.log(this.invoice,this.addInoiceOne)
+      console.log(this.invoice, this.addInoiceOne);
       this.data.guestTaxpayerVOList = this.invoice;
       this.addInoiceOne = {};
     }

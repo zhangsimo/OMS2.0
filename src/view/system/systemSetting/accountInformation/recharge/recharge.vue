@@ -113,6 +113,7 @@
                             if(res.data === 'SUCCESS'){
                               this.$Message.warning('购买成功！')
                               this.modal = false
+                              this.$router.push('/accountInformation/record')
                               clearInterval(this.timer)
                               let data2 = {}
                               let params2 = {}

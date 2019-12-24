@@ -88,3 +88,11 @@ export function getDeleteList (data) {
 }
 //批量导入地址
 export const getup = `${api.omsOrder}/guestOrderMain/import?`;
+//获取业务员
+export function getSales () {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/queryAll?&size=10000&page=0&userName=&phone=&office=0`,
+    method: 'get',
+
+  })
+}

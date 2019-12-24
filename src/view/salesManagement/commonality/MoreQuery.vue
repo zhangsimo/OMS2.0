@@ -6,10 +6,10 @@
     <div class="box">
       <Form ref="formInline" :model="data" :label-width="100">
         <FormItem label="创建日期:">
-          <DatePicker type="daterange" v-model="data.start" @on-change="getCreatDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="data.start" @on-change="getCreatDate" placement="bottom":editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
-          <DatePicker type="daterange" v-model="data.end" @on-change="submitDate" placement="bottom" placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="data.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
         <Select v-model="data.guestId" filterable style="width: 350px">

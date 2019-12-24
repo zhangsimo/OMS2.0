@@ -64,6 +64,7 @@ export default {
         num: 1
       },
       tableData: [],
+      isAdd:true,//判断是否新增
       query: {
         showPerson: 1
       } //更多搜索信息
@@ -83,6 +84,10 @@ export default {
   methods: {
     // 新增展示
     getAdd() {
+      if (!this.isAdd) {
+        return this.$Message.error('请先保存数据');
+      }
+      this.isAdd=false
       this.tableData.unshift({
         billStatusId: { enum: "", value: "", name: "" }
       });
@@ -139,14 +144,12 @@ export default {
       handler(v, ov) {
         v.showPerson = v.showPerson ? 1 : 0;
         this.page.num = 1;
-        this.page.size = 10;
+        // this.page.size = 10;
         let page = this.page.num - 1;
         let size = this.page.size;
         getLeftList(page, size, v).then(res => {
           if (res.code === 0) {
-            res.data.content.map(
-              item => (item.billStatusId = JSON.parse(item.billStatusId))
-            );
+            // res.data.content.map( item => {item.billStatusId = JSON.parse(item.billStatusId)})
             this.tableData = res.data.content;
             this.page.total = res.data.totalElements;
           }

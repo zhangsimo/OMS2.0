@@ -9,7 +9,7 @@
 
         <Button type="warning" class="mr10" @click="query"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
         <Button class="mr10" @click="select" type='default'><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default'><Icon type="md-close" /> 取消</Button>
+        <Button class="mr10" type='default' @click="addressShow= false"><Icon type="md-close" /> 取消</Button>
       </header>
       <div class="clientBody">
         <div class="demo-split">
@@ -25,11 +25,9 @@
                   border
                   resizable
                   :data="tableData"
-                  border
                   stripe
                   size="mini"
                   align="center"
-                  resizable
                   :auto-resize="true"
                   highlight-hover-row
                   highlight-current-row
@@ -187,7 +185,8 @@
                     data.leverId = this.queryType.id
                     data.code = this.clientCode
                     data.shortName = this.clientName
-                    data.tel = this.clientPhone
+                    data.contactorTel = this.clientPhone
+                    // console.log(data)
                 let res = await getTreeClient(data)
                 if (res.code === 0){
                     this.tableData = res.data.content
@@ -222,13 +221,13 @@
             },
             //切换页面
             selectNum(val){
-                this.page.num = val
+                this.page1.num = val
                 this.getList()
             },
             //切换页数
             selectPage(val){
-                this.page.num = 1
-                this.page.size = val
+                this.page1.num = 1
+                this.page1.size = val
                 this.getList()
             },
             //级联选择器
@@ -237,7 +236,7 @@
             },
             //查询
             query(){
-                this.page.num = 1
+                this.page1.num = 1
                 this.clickCity = {}
                 this.getList()
             },

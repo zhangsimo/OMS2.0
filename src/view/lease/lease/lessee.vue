@@ -380,7 +380,7 @@
               {
                 title: '管理员',
                 align:'left',
-                key: 'salesMan',
+                key: 'manager',
                 minWidth: 120
               },
               {
