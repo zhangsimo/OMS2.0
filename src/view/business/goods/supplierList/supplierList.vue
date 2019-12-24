@@ -448,7 +448,7 @@
       //获取销售员
       selectOrderMan(val){
         console.log(val)
-        this.formPlan.storeId = val.label
+        this.formPlan.storeId = val.value
         // this.formPlan.orderManId = val.value
       },
       //供应商下拉查询
@@ -509,7 +509,7 @@
                 this.leftgetList()
                 this.isAdd = true;
                 this.formPlan.guestName = ''   //调出方
-                data.orderMan = ''   //退货员
+                this.formPlan.storeId = ''   //退货员
                 // tools.transTime(this.formPlan.orderDate)  //退货日期
                 this.formPlan.numbers = '' //采退单号
                 this.formPlan.cause  = '' //退货原因
@@ -518,10 +518,11 @@
                 this.formPlan.warehouse = ''  //退货仓库
                 this.formPlan.serviceId = '' //采购订单
                 this.Right.tbdata  =  [] //子表格
+                this.$refs.formPlan.resetFields();
               }
             })
           } else {
-            console.log(this.isAdd)
+            // console.log(this.isAdd)
             this.$Message.error('*为必填！');
           }
         })
@@ -552,9 +553,9 @@
       },
       //右侧表格复选框选中
       selectChange(msg){
-        console.log(msg.selection)
+        // console.log(msg.selection)
         this.checkboxArr = msg.selection
-        console.log(this.checkboxArr)
+        // console.log(this.checkboxArr)
       },
       //分页
       changePageLeft(p) {
@@ -578,7 +579,7 @@
       },
       // 查询下拉框
       getDataQuick(v){
-        console.log(v)
+        // console.log(v)
         this.selectArr = v
         this.leftgetList()
       },
@@ -611,7 +612,7 @@
       // 更多子组件的参数
       getMsg(msg){
         this.moreArr = msg
-        console.log(this.moreArr)
+        // console.log(this.moreArr)
         this.leftgetList()
         // console.log(msg)
       },
@@ -642,9 +643,9 @@
             systemUnitId : item.minUnit,
           }
         })
-        console.log(ChildMessage)
+        // console.log(ChildMessage)
         this.Right.tbdata = [...this.Right.tbdata,...parts]
-        console.log(this.Right.tbdata)
+        // console.log(this.Right.tbdata)
       },
       //供应商弹框
       addSuppler(){
@@ -652,7 +653,7 @@
       },
       // 供应商子组件内容
       getSupplierName(a){
-        console.log(a)
+        // console.log(a)
         this.formPlan.guestName = a.id
         this.guestidId = a.id
       },
@@ -738,7 +739,7 @@
         this.formPlan.serviceId = this.datadata.code
         this.Right.tbdata = row.details
         this.presentrowMsg = row.billStatusId.value
-        console.log(this.presentrowMsg)
+        // console.log(this.presentrowMsg)
         this.rowId = row.id
         if(row.id){
           this.buttonDisable = false
