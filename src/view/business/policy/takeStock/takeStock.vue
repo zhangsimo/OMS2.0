@@ -655,14 +655,14 @@ export default {
         this.Right.tbdata.push(item);
         this.formPlan.detailVOList.push(item);
       });
-      getSubmitList(this.formPlan)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          this.showRemove = false;
-          this.$Message.info("添加失败");
-        });
+      // getSubmitList(this.formPlan)
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     this.showRemove = false;
+      //     this.$Message.info("添加失败");
+      //   });
       console.log(this.Right.tbdata);
     },
     //分页
