@@ -12,7 +12,9 @@
           >
         </div>
         <div class="db mr10">
-          <Button type="default" @click="cancel"><Icon type="md-close" />取消</Button>
+          <Button type="default" @click="cancel"
+            ><Icon type="md-close" />取消</Button
+          >
         </div>
         <div class="db mr10">|</div>
         <div class="db mr10">
@@ -60,9 +62,18 @@
             field="partName"
             title="配件名称"
           ></vxe-table-column>
-          <vxe-table-column field="orderQty" title="计划数量"></vxe-table-column>
-          <vxe-table-column field="trueEnterQty" title="已下订单数量"></vxe-table-column>
-          <vxe-table-column field="notEnterQty" title="已调整数量"></vxe-table-column>
+          <vxe-table-column
+            field="orderQty"
+            title="计划数量"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="trueEnterQty"
+            title="已下订单数量"
+          ></vxe-table-column>
+          <vxe-table-column
+            field="notEnterQty"
+            title="已调整数量"
+          ></vxe-table-column>
           <vxe-table-column
             field="adjustQty"
             title="本次调整数量"
@@ -70,7 +81,14 @@
             width="120"
           >
             <template v-slot:edit="{ row }">
-              <InputNumber :min="0" :max="row.orderQty" v-model="row.adjustQty" />
+              <el-input-number
+                :min="0"
+                :max="row.orderQty"
+                v-model="row.adjustQty"
+                :controls="false"
+                size="small"
+                :precision="0"
+              />
             </template>
           </vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -89,7 +107,7 @@ import * as api from "_api/procurement/plan";
 @Component
 export default class AdjustModel extends Vue {
   private show: boolean = false;
-  private loading:boolean = false;
+  private loading: boolean = false;
 
   @Prop(String) readonly mainId;
 
@@ -104,7 +122,7 @@ export default class AdjustModel extends Vue {
     this.getList();
   }
 
-  private cancel():void {
+  private cancel(): void {
     this.show = false;
   }
 
@@ -128,25 +146,25 @@ export default class AdjustModel extends Vue {
       data.partName = this.partName.trim();
     }
     let res: any = await api.queryModifyOrderPlan(data);
-    if(res.code == 0) {
-        this.loading = false;
-        this.tableData = res.data;
+    if (res.code == 0) {
+      this.loading = false;
+      this.tableData = res.data;
     }
   }
 
   private async save() {
     let res: any = await api.saveModifyOrderPlan(this.tableData);
-    if(res.code == 0) {
-      this.$Message.success('保存成功!');
-      this.getList()
+    if (res.code == 0) {
+      this.$Message.success("保存成功!");
+      this.getList();
     }
   }
 
   private async allAdj() {
-    let res:any = await api.saveModifyAllOrderPlan({ mainId: this.mainId });
-    if(res.code == 0) {
-      this.$Message.success('保存成功!');
-      this.getList()
+    let res: any = await api.saveModifyAllOrderPlan({ mainId: this.mainId });
+    if (res.code == 0) {
+      this.$Message.success("保存成功!");
+      this.getList();
     }
   }
 }
