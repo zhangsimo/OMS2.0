@@ -41,6 +41,7 @@
       class-name="page-con"
       @on-change="selectNum"
       @on-page-size-change="selectPage"
+      :page-size-opts="[10,20,30,40,50]"
       class="mr10"
     ></Page>
   </div>
