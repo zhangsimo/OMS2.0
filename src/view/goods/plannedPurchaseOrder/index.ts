@@ -440,9 +440,6 @@ export default class PlannedPurchaseOrder extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
-    if(v.guestId && v.guestId.length > 0) {
-      this.guseData.lists = [{ id: v.guestId, fullName: v.guestName }];
-    }
     const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
       this.$Modal.confirm({

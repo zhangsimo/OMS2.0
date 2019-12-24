@@ -123,7 +123,12 @@
                     <Row class="w160">
                       <Col span="19"
                         >
-                        <Select
+                        <Input
+                          v-model="formPlanmain.guestName"
+                          placeholder="请选择供应商"
+                          :disabled="isInput"
+                        />
+                        <!-- <Select
                             v-model="formPlanmain.guestId"
                             filterable
                             remote
@@ -134,7 +139,7 @@
                             @on-change="geseChange"
                             >
                             <Option v-for="option in guseData.lists" :value="option.id" :key="option.id">{{option.fullName}}</Option>
-                        </Select>
+                        </Select> -->
                       </Col>
                       <Col span="5"
                         ><Button
