@@ -770,12 +770,8 @@ export default {
         mainId: this.mainid
       };
       // console.log(arrParams, "arrParams =>774");
-
-
       this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
-
       // console.log(arrParams, "arrParams781");
-
       delectTable(arrParams)
         .then(res => {
           console.log(res, "783");
