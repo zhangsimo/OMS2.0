@@ -491,7 +491,7 @@ export default {
         return;
       }
       if (this.formPlan.billStatusId !== 0) {
-        this.$Message.error("只有草稿状态才能保存");
+        this.$Message.error("只有草稿状态才能提交");
         return;
       }
       if (

@@ -587,11 +587,17 @@ export default {
         this.$Message.error("请选择数据");
         return;
       }
+      console.log(this.formPlan.billStatusId)
+      if (this.formPlan.billStatusId.value !== 0) {
+        this.$Message.error("只有草稿状态才能提交");
+        return;
+      }
       this.$refs.form.validate(valid => {
         if (valid) {
           this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
             "YYYY-MM-DD HH:mm:ss"
           );
+          this.formPlan.billStatusId = 1;
           getSubmitList(this.formPlan).then(res => {
             if (res.code == 0) {
               this.$Message.success("提交成功");
