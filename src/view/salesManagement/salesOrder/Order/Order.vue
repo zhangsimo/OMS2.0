@@ -144,12 +144,28 @@ export default {
     },
     //提交
     sumbit() {
+      // let list = this.$store.state.dataList.oneOrder;
+      // if (!list.id) {
+      //   this.$message.error("请选择一条有效数据");
+      //   return false;
+      // }
+      // let res = this.$refs.right.submitList();
       let list = this.$store.state.dataList.oneOrder;
-      if (!list.id) {
-        this.$message.error("请选择一条有效数据");
-        return false;
+      if (list.id) {
+        this.$Modal.confirm({
+          title: '是否确定提交',
+          onOk: async () => {
+            let res = this.$refs.right.submitList();
+          },
+          onCancel: () => {
+            this.$Message.info('取消提交');
+          },
+        })
+      } else {
+        this.$Message.warning('请选择一条有效数据')
       }
-      let res = this.$refs.right.submitList();
+
+
     },
     //返单
     async setBackOrder() {
