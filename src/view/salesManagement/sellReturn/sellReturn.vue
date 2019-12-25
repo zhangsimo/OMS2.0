@@ -590,6 +590,7 @@
         this.tableData = v.details
         this.formPlan = v
         this.draftShow = v.billStatusId.value
+        this.selectTableList=[]
       },
       //新增按钮
       addOneList() {
@@ -665,6 +666,7 @@
       //获取时间
       getvalue(date) {
         this.queryTime = date
+        console.log( this.queryTime)
       },
       // 获取仓库
       async getWarehouse() {
@@ -868,6 +870,7 @@
           this.$Message.success('选择销售出库单成功');
           this.formPlan = {}
           this.$refs.formPlan.resetFields();
+          this.isNew=true
           this.getLeftList()
         })
       },
@@ -888,6 +891,7 @@
               this.tableData = []
               this.$refs.formPlan.resetFields();
               this.getLeftList()
+              this.isNew=true
             }
           })
         } else {
