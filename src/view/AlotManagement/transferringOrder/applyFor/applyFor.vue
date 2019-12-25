@@ -642,7 +642,7 @@
             console.log(row)
             this.rowOrgId = row.orgid
             this.mainId = row.id
-            // this.guestidId = row.guestId
+            this.guestidId = row.guestId
             // console.log(this.guestidId,123)
             this.datadata = row
             // console.log(this.datadata)
