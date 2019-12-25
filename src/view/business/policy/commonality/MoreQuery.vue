@@ -16,7 +16,7 @@
           <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
         </Select>
         </FormItem>
-        <FormItem label="销售单号:">
+        <FormItem label="出库单号:">
           <Input v-model="data.serviceId" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
         </FormItem>
         <FormItem label="配件编码:">

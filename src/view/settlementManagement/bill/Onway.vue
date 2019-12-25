@@ -23,15 +23,15 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" v-model="company"/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
             <span>调拨单号：</span>
-            <input type="text" class="h30">
+            <input type="text" class="h30" v-model="fno">
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="select">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -47,7 +47,7 @@
         <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings"/>
+    <selectDealings ref="selectDealings" @getOne="getOne"/>
   </div>
 </template>
 
@@ -56,6 +56,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from './components/selectCompany'
 import {creat} from './../components'
 import {getOnWay} from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -63,6 +64,7 @@ export default {
   },
   data() {
     return {
+      fno:'',//调拨单号
       value: [],
       Branchstore: [],
       model1: "",
@@ -199,7 +201,9 @@ export default {
           className: 'tc'
         }
       ],
-      data: []
+      data: [],
+       company: "", //往来单位
+      companyId: "", //往来单位id
     };
   },
   async mounted () {
@@ -208,9 +212,17 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral({})
+    this.getGeneral()
   },
   methods: {
+    select(){
+      this.getGeneral()
+    },
+    // 往来单位选择
+    getOne(data) {
+      this.company = data.fullName;
+      this.companyId = data.id;
+    },
     // 快速查询
     quickDate(data){
       this.value = data
@@ -218,8 +230,6 @@ export default {
     Dealings() {
       this.$refs.selectDealings.openModel()
     },
-    ok (){},
-    cancel (){},
     // 导出
     report(){
       if(this.data.length !==0){
@@ -231,8 +241,15 @@ export default {
       }
     },
     // 总表查询
-    getGeneral(obj) {
-      getOnWay(obj).then(res => {
+    getGeneral() {
+      let data={
+        startTime:moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'),
+        endTime:moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'),
+        orgId:this.model1,
+        code:this.fno,
+        guestId:this.companyId
+      }
+      getOnWay(data).then(res => {
         console.log(res);
         if(res.data.length !==0){
           res.data.map(item=>{

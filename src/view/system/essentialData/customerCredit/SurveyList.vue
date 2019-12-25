@@ -146,7 +146,7 @@
         <Col span="8">
           <FormItem label="约定对账日期:" prop="accountDate">
             <!--<Input v-model='data.accountDate' style="width: 180px" ></Input>-->
-            <InputNumber v-model="data.accountDate" style="width: 180px" :max="31"></InputNumber>
+            <InputNumber v-model="data.accountDate" style="width: 180px" :max="31" :min="1"></InputNumber>
           </FormItem>
         </Col>
         <Col span="8">

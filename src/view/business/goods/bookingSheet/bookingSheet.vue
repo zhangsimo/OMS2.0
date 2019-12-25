@@ -634,7 +634,7 @@ export default {
         data.partCode = this.moreArr.coding
       }
       if(this.moreArr.Name){
-        data.fullName = this.moreArr.Name
+        data.partName = this.moreArr.Name
       }
       if(this.moreArr.brand){
         data.partBrandCode = this.moreArr.brand
