@@ -735,7 +735,7 @@ export default {
       console.log(val, 999);
       // console.log(conversionList(val),8888)
       var datas = conversionList(val);
-      console.log(datas);
+      console.log(datas,'datas=>738');
       datas.forEach(item => {
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
