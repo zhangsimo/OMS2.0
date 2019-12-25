@@ -870,7 +870,7 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getStockOut(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               return res;
             }
           } catch (errMap) {
@@ -896,7 +896,7 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("提交成功");
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
@@ -932,7 +932,8 @@ export default {
         if (!old.id) {
           this.formPlan = {
             billStatusId: { name: "草稿", value: 0 },
-            orderMan: this.$store.state.user.userData.username || ""
+            orderMan: this.$store.state.user.userData.username || "",
+            orderManId:  this.$store.state.user.userData.id
           };
           this.draftShow = 0;
           return false;

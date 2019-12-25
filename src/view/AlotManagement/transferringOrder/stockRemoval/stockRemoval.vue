@@ -108,7 +108,7 @@
                           </Row>
                         </FormItem>
                         <FormItem label="调拨受理日期：" prop="billType" class="redIT">
-                          <DatePicker :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.createTime" format="yyyy-MM-dd HH:mm:ss" type="date" class="w160"></DatePicker>
+                          <DatePicker :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0" @on-change="changeDate" :value="Leftcurrentrow.createTime" format="yyyy-MM-dd HH:mm:ss" type="date" class="w160"></DatePicker>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Input :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.remark" class="w160"></Input>
@@ -117,10 +117,10 @@
                           <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="申请单号：" prop="planOrderNum">
-                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId"></Input>
+                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId" disabled></Input>
                         </FormItem>
                         <FormItem label="受理单号：" prop="planOrderNum">
-                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId"></Input>
+                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId" disabled></Input>
                         </FormItem>
                       </Form>
                     </div>
@@ -236,6 +236,7 @@ export default {
   },
   data() {
     return {
+      guestOrgid: '', //保存调出方的id
       GainInformation: false, //编辑收获信息
       staaa: false,
       dcData: [],
@@ -468,20 +469,33 @@ export default {
   methods: {
        //配件返回的参数
             getPartNameList(val){
-              this.$refs.formPlan.validate(async (valid) => {
-                  if (valid) {
-                      let data ={}
-                      data = this.Leftcurrentrow
-                      data.detailVOS = conversionList(val)
-                      let res = await  baocun(data)
-                      if(res.code === 0){
-                          this.getList()
-                      }
-                  } else {
-                      this.$Message.error('*为必填项');
-                  }
+              val.forEach( item => {
+                  item.partName =  item.partStandardName
+                  item.hasAcceptQty = '1'
+                  item.carBrandName = item.adapterCarModel
+                 item.orderPrice = item.minUnit
+                 item.oemCode= item.oeCode
+                item.spec = item.specifications
+                item.partId = item.id
+                item.partInnerId = item.code
+                delete item.id
+                delete item.orderPrice
               })
-
+              this.Leftcurrentrow.detailVOS = [...this.Leftcurrentrow.detailVOS,...val]
+              console.log(val)
+              // this.$refs.formPlan.validate(async (valid) => {
+              //     if (valid) {
+              //         let data ={}
+              //         data = this.Leftcurrentrow
+              //         data.detailVOS = conversionList(val)
+              //         let res = await  baocun(data)
+              //         if(res.code === 0){
+              //             this.getList()
+              //         }
+              //     } else {
+              //         this.$Message.error('*为必填项');
+              //     }
+              // })
             },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
@@ -529,6 +543,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value
       }
+      params.guestOrgid = this.guestOrgid
         //配件组装保存
         baocun(params).then(res => {
             // 点击列表行==>配件组装信息
@@ -643,6 +658,9 @@ export default {
       })
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
+    },
+    changeDate(val){
+      this.Leftcurrentrow.createTime = val
     },
     //编辑收货信息弹框显示
     GoodsInfoModal() {
@@ -820,6 +838,7 @@ export default {
     //选择方
     selectSupplierName(row) {
       console.log(row)
+      this.guestOrgid = row.isInternalId
       if (this.val === '0') {
         console.log(row.fullName)
         this.showit = false

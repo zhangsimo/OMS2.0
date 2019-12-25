@@ -382,6 +382,7 @@
         sellOrderReturn(data).then(res => {
             if(res.code === 0){
               this.$Message.success('删除成功')
+              this.$refs.formPlan.resetFields();
               this.leftgetList()
               this.formPlan.guestName = ''   //调出方
               data.orderMan = ''   //退货员
@@ -486,26 +487,28 @@
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
             data.code = this.formPlan.serviceId //采购订单
-            data.details = this.Right.tbdata.map(item => {
-              return {
-                partId : item.partId,
-                partCode : item.partCode,
-                partName : item.partName,
-                partBrand : item.partBrand,
-                outUnitId : item.outUnitId,
-                canReQty : item.canReQty,
-                orderQty : item.orderQty,
-                orderPrice : item.orderPrice,
-                orderAmt : item.orderAmt,
-                remark : item.remark,
-                stockOutQty : item.stockOutQty,
-                oemCode : item.oemCode,
-                spec : item.spec
-              }
-            }) //子表格
+            data.details = this.Right.tbdata
+            // data.details = this.Right.tbdata.map(item => {
+            //   return {
+            //     partId : item.partId,
+            //     partCode : item.partCode,
+            //     partName : item.partName,
+            //     partBrand : item.partBrand,
+            //     outUnitId : item.outUnitId,
+            //     canReQty : item.canReQty,
+            //     orderQty : item.orderQty,
+            //     orderPrice : item.orderPrice,
+            //     orderAmt : item.orderAmt,
+            //     remark : item.remark,
+            //     stockOutQty : item.stockOutQty,
+            //     oemCode : item.oemCode,
+            //     spec : item.spec
+            //   }
+            // }) //子表格
             saveDraft(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
+                this.$refs.formPlan.resetFields();
                 this.leftgetList()
                 this.isAdd = true;
                 this.formPlan.guestName = ''   //调出方
@@ -766,23 +769,24 @@
               data.remark = this.formPlan.remark  //备注
               data.storeId = this.formPlan.warehouse  //退货仓库
               data.code = this.formPlan.serviceId //采购订单
-              data.details = this.Right.tbdata.map(item => {
-                return {
-                  partId : item.partId,
-                  partCode : item.partCode,
-                  partName : item.partName,
-                  partBrand : item.partBrand,
-                  outUnitId : item.outUnitId,
-                  canReQty : item.canReQty,
-                  orderQty : item.orderQty,
-                  orderPrice : item.orderPrice,
-                  orderAmt : item.orderAmt,
-                  remark : item.remark,
-                  stockOutQty : item.stockOutQty,
-                  oemCode : item.oemCode,
-                  spec : item.spec
-                }
-              }) //子表格
+              data.details = this.Right.tbdata
+              // data.details = this.Right.tbdata.map(item => {
+              //   return {
+              //     partId : item.partId,
+              //     partCode : item.partCode,
+              //     partName : item.partName,
+              //     partBrand : item.partBrand,
+              //     outUnitId : item.outUnitId,
+              //     canReQty : item.canReQty,
+              //     orderQty : item.orderQty,
+              //     orderPrice : item.orderPrice,
+              //     orderAmt : item.orderAmt,
+              //     remark : item.remark,
+              //     stockOutQty : item.stockOutQty,
+              //     oemCode : item.oemCode,
+              //     spec : item.spec
+              //   }
+              // }) //子表格
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');

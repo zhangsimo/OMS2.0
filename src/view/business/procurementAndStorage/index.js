@@ -13,7 +13,7 @@ import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
 import PrintShow from './components/PrintShow'
 import SelectSupplier from "./../../goods/goodsList/components/supplier/selectSupplier";
-
+import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
 
 
 
@@ -261,7 +261,7 @@ export default {
     },
     //获取公司
     async getAllClient() {
-      let res = await getClient()
+      let res = await getSupplierList({})
       if (res.code === 0) {
         this.client = res.data
       }
