@@ -59,7 +59,7 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12">
                         <Row class="w500">
                           <Col span="22">
-                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled="" :disabled="buttonDisable || presentrowMsg !== 0"></Input>
+                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
                             <!--<Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">-->
                               <!--<Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>-->
                             <!--</Select>-->
@@ -226,7 +226,7 @@
                orderMan:'',
                orderDate: tools.transTime(new Date()),
                printing: '',
-               createTime: tools.transTime(new Date()),
+               createTime: '',
                 detailVOS: [],
           },
           //表单验证
@@ -350,7 +350,7 @@
           formPlan: {
             guestName:'',//调出方
             storeId: '', //调入仓库
-            orderDate: tools.transTime(new Date()), //申请调拨日期
+            orderDate: '', //申请调拨日期
             remark: '', //备注
             createUname: '', //创建人
             serviceId: '', //申请单号
@@ -390,7 +390,7 @@
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
             this.formPlan.storeId =  '', //调入仓库
-            this.formPlan.orderDate =  new Date(), //申请调拨日期
+            this.formPlan.orderDate =  '', //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
@@ -432,6 +432,7 @@
                     this.formPlan.remark =  '',
                     this.formPlan.createUname =  '',
                     this.formPlan.serviceId =  '',
+                    this.formPlan.orderDate = ''
                     this.Right.tbdata = []
                     this.$refs.formPlan.resetFields();
                 }

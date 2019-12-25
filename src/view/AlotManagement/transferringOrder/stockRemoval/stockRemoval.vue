@@ -83,10 +83,10 @@
                         <FormItem label="调入方：" prop="supplyName" class="redIT">
                           <Row >
                             <Col span="22">
-                              <Input readonly :disabled="Leftcurrentrow.status.value !== 0" v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
+                              <Input readonly disabled v-model="Leftcurrentrow.guestName" placeholder="请选择调出方"></Input>
                             </Col>
                             <Col span="2">
-                              <Button :disabled="Leftcurrentrow.status.value !== 0" @click="showModel" class="ml5" size="small" type="default">
+                              <Button :disabled="buttonShow || Leftcurrentrow.status.value !== 0" @click="showModel" class="ml5" size="small" type="default">
                                 <i class="iconfont iconxuanzetichengchengyuanicon"></i>
                               </Button>
                             </Col>
@@ -95,7 +95,7 @@
                           <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                           <Row class="w160">
                             <Col span="24">
-                              <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0">
+                              <Select v-model="Leftcurrentrow.storeId" :disabled="Leftcurrentrow.status.value !== 0 || buttonShow">
                                 <!--<Option-->
                                   <!--v-for="item in cangkuListall"-->
                                   <!--:value="item.value"-->
@@ -108,13 +108,13 @@
                           </Row>
                         </FormItem>
                         <FormItem label="调拨受理日期：" prop="billType" class="redIT">
-                          <DatePicker :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0" @on-change="changeDate" :value="Leftcurrentrow.createTime" format="yyyy-MM-dd HH:mm:ss" type="date" class="w160"></DatePicker>
+                          <DatePicker :disabled="Leftcurrentrow.status.value !== 0 || buttonShow" @on-change="changeDate" :value="Leftcurrentrow.createTime" format="yyyy-MM-dd HH:mm:ss" type="date" class="w160"></DatePicker>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
-                          <Input :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.remark" class="w160"></Input>
+                          <Input :disabled="Leftcurrentrow.status.value !== 0 || buttonShow" :value="Leftcurrentrow.remark" class="w160"></Input>
                         </FormItem>
                         <FormItem label="受理人：" prop="planDate">
-                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.orderMan"></Input>
+                          <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0 || buttonShow" :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="申请单号：" prop="planOrderNum">
                           <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0" :value="Leftcurrentrow.serviceId" disabled></Input>
@@ -236,6 +236,7 @@ export default {
   },
   data() {
     return {
+      buttonShow: true, //按钮是否禁用
       guestOrgid: '', //保存调出方的id
       GainInformation: false, //编辑收获信息
       staaa: false,
@@ -556,6 +557,8 @@ export default {
         })
     },
     xinzeng() {
+      this.buttonShow = false
+      console.log(this.buttonShow)
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]['xinzeng'] === '1') {
