@@ -103,7 +103,7 @@
                   <FormItem label="盘点日期" prop="auditDate">
                     <DatePicker
                       :disabled="draftShow != 0"
-                      type="date"
+                      type="datetime"
                       class="w160"
                       v-model="formPlan.auditDate"
                     ></DatePicker>
@@ -464,7 +464,7 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.purchaseType;
-      
+
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size)
@@ -490,6 +490,10 @@ export default {
         });
     },
 
+    //清除表单校验
+    handleReset () {
+      this.$refs.form.resetFields();
+    },
     //获取表格高度
     getDomHeight() {
       this.$nextTick(() => {
@@ -548,7 +552,7 @@ export default {
           return;
         }
       }
-      const item = {
+      let item = {
         index: 1,
         xinzeng: "1",
         billStatusId: {
@@ -628,6 +632,7 @@ export default {
                 this.$Message.success("保存成功");
                 this.getList();
               }
+              this.handleReset()
             });
           } else {
             this.$message.error("带*必填");
