@@ -292,6 +292,10 @@ export const mixSelectPartCom  = {
         this.$Message.error("请选择数据")
       }
     },
+    cancel(){
+      this.partName=''
+      this.searchPartLayer =false;
+    },
     //分页
     changePage(p) {
       this.page.num = p
