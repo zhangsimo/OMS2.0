@@ -247,7 +247,7 @@
         <Row>
           <Col span="11">
             <FormItem label="首次付费金额：">
-              <InputNumber v-model="formValidate2.FirstPay" style="width: 150px"></InputNumber>
+              <InputNumber v-model="formValidate2.FirstPay" style="width: 150px" ></InputNumber>
             </FormItem>
           </Col>
           <Col span="11">
@@ -270,7 +270,7 @@
           </Col>
           <Col span="11">
             <FormItem label="下次付费金额：">
-              <InputNumber v-model="formValidate2.nextPayMoney" style="width: 150px"></InputNumber>
+              <InputNumber v-model="formValidate2.nextPayMoney" style="width: 150px" ></InputNumber>
             </FormItem>
           </Col>
         </Row>
@@ -946,14 +946,16 @@ export default {
           params.address = this.formValidate2.address;
           params.salesMan = this.formValidate2.salesman2;
           params.referee = this.formValidate2.Recommended_member;
-          params.firstPayAmt = parseInt(this.formValidate2.FirstPay);
+          // params.firstPayAmt = parseInt(this.formValidate2.FirstPay);
+          params.firstPayAmt = this.formValidate2.FirstPay
           // params.isPay = this.formValidate2.payorno
           if (this.formValidate2.payorno === true) {
             params.isPay = 1;
           } else {
             params.isPay = 0;
           }
-          params.nextRenewAmt = parseInt(this.formValidate2.nextPayMoney);
+          // params.nextRenewAmt = parseInt(this.formValidate2.nextPayMoney);
+          params.nextRenewAmt = this.formValidate2.nextPayMoney
           params.nextRenewDate = this.transTime(this.formValidate2.nextPayTime);
           params.id = this.Message.id;
           Confirm(params).then(res => {
