@@ -251,7 +251,7 @@
                   </FormItem>
                   <FormItem class="form-Item" label="订单号：">
                     <Input
-                      placeholder="请输入订单号"
+                      placeholder=""
                       class="w160"
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
@@ -260,7 +260,7 @@
                   </FormItem>
                   <FormItem class="form-Item" label="往来单号：">
                     <Input
-                      placeholder="请输入订单号"
+                      placeholder=""
                       class="w160"
                       readonly
                       v-model="formPlanmain.code"
@@ -375,7 +375,7 @@
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
-                      :max="999999"
+                      :max="row.maxQty"
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"

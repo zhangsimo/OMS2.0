@@ -160,6 +160,7 @@ export default class ProcurementModal extends Vue {
     if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
     this.shows = false;
     this.selectRow.details.forEach((el:any) => {
+      el.maxQty = el.orderQty;
       Reflect.deleteProperty(el, 'id');
     })
     return this.selectRow;

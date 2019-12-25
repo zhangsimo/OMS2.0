@@ -425,7 +425,7 @@ export default {
         guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderManId: [{ required: true, message: "  ", trigger: "blur" }],
+        orderManId: [{ required: true, type:'string',message: "  ", trigger: "change" }],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -870,7 +870,7 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getStockOut(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               return res;
             }
           } catch (errMap) {
@@ -896,7 +896,7 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("提交成功");
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {

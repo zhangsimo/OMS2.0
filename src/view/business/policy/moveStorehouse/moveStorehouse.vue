@@ -85,10 +85,16 @@
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
               <div class="pane-made-hd">配件组装信息</div>
               <div class="clearfix purchase" ref="planForm">
-                <Form inline :show-message="false" ref="Leftcurrentrow" :label-width="100">
-                  <FormItem label="移出仓库">
+                <Form
+                  inline
+                  :rules="ruleValidate"
+                  ref="Leftcurrentrow"
+                  :label-width="100"
+                  :model="Leftcurrentrow"
+                >
+                  <FormItem label="移出仓库" prop="storeId">
                     <Select
-                      v-model="Leftcurrentrow.storeId"
+                      :model="Leftcurrentrow.storeId"
                       style="width:100px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
@@ -99,9 +105,9 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="移入仓库">
+                  <FormItem label="移入仓库" prop="receiveStoreId">
                     <Select
-                      v-model="Leftcurrentrow.receiveStoreId"
+                      :model="Leftcurrentrow.receiveStoreId"
                       style="width:100px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
@@ -112,15 +118,15 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="业务员：" prop="planDate">
+                  <FormItem label="业务员：" prop="createUname">
                     <Input
-                      v-model="Leftcurrentrow.createUname"
+                      :model="Leftcurrentrow.createUname"
                       class="w160"
                       value
                       :disabled="Leftcurrentrow.status.value !== 0"
                     ></Input>
                   </FormItem>
-                  <FormItem label="移仓日期" prop="remark">
+                  <FormItem label="移仓日期" prop="commitDate">
                     <DatePicker
                       :value="Leftcurrentrow.commitDate"
                       format="yyyy-MM-dd HH:mm:ss"
@@ -132,7 +138,7 @@
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Input
                       class="w160"
-                      v-model="Leftcurrentrow.serviceId"
+                      :model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     ></Input>
@@ -428,6 +434,20 @@ export default {
         serviceId: "", //移仓单号
         detailVOList: []
       }, //右边所有数据（含提交）
+      ruleValidate: {
+        storeId: [
+          { required: true, message: "请选择移除仓库", trigger: "change" }
+        ],
+        receiveStoreId: [
+          { required: true, message: "请选择移入仓库", trigger: "change" }
+        ],
+        createUname: [
+          { required: true, message: "业务员不能为空", trigger: "blur" }
+        ],
+        commitDate: [
+          { required: true, message: "移仓时间不为空", trigger: "blur" }
+        ]
+      },
       showAudit: false, //审核提示
       showRemove: false, //作废提示
       isAddRight: true, //判断右侧是有数据
@@ -625,7 +645,15 @@ export default {
     // 提交
     editPro() {
       //判断是否为草稿状态
-      console.log(this.Leftcurrentrow, "tiiao");
+      this.$refs.Leftcurrentrow.validate(valid => {
+        if (valid) {
+          //成功
+          console.log("成功",'成功=>651');
+        } else {
+          console.log("失败",'失败=>653');
+          return;
+        }
+      });
       if (!this.Leftcurrentrow.id) {
         this.$Message.error("请选择数据");
         return;

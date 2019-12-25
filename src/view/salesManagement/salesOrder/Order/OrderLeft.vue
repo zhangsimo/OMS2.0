@@ -68,7 +68,8 @@ export default {
       isAdd:true,//判断是否新增
       query: {
         showPerson: 1
-      } //更多搜索信息
+      }, //更多搜索信息
+
     };
   },
   mounted() {
@@ -89,6 +90,7 @@ export default {
         return this.$Message.error('请先保存数据');
       }
       this.isAdd=false
+
       this.tableData.unshift({
         billStatusId: { enum: "", value: "", name: "" },
         orderMan: this.$store.state.user.userData.staffName,
@@ -125,9 +127,31 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      console.log('00000',data)
+      // if(!this.isEdit){
+      //   return false
+      // }
+      // let list = this.$store.state.dataList.oneOrder;
+      // if(!list.id){
+      //   this.$Modal.confirm({
+      //     title: '当前有数据未保存,请确定是否离开',
+      //     onOk: async () => {
+      //       this.$emit("getOneOrder", data.row);
+      //       this.$store.commit("setOneOrder", data.row);
+      //       this.tableData={}
+      //       this.isEdit=false
+      //     },
+      //     onCancel: () => {
+      //       // this.$Message.info('');
+      //     },
+      //   })
+      // }
+      // else{
+      //
+      // }
       this.$emit("getOneOrder", data.row);
       this.$store.commit("setOneOrder", data.row);
+      // console.log('00000',data)
+
     }
   },
   watch: {
