@@ -156,7 +156,7 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="往来单号：">
-                    <Input class="w160" v-model="formPlan.code"/>
+                    <Input class="w160" v-model="formPlan.code" disabled/>
                   </FormItem>
                   <FormItem label="退货原因：" prop="rtnReasonId">
                     <Select class="w160" v-model="formPlan.rtnReasonId" :disabled="draftShow != 0||isNew">
