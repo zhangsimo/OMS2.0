@@ -40,7 +40,7 @@
                 <div class="pane-made-hd">
                   预订单列表
                 </div>
-                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
                 <Page
                   class-name="fl pt10"
                   size="small"
@@ -344,7 +344,8 @@ export default {
       },//请求头
       upurl: getup,//导入地址
       mainId: null, //选中行的id
-      clickdelivery: false
+      clickdelivery: false,
+      Flaga: false
     }
   },
   methods: {
@@ -427,6 +428,7 @@ export default {
                 this.formPlan.remark =  '',
                 this.Right.tbdata = []
                 this.isAdd = true
+                this.Flaga = true
             }
           })
         } else {
@@ -651,29 +653,77 @@ export default {
     },
     // 左边部分的当前行
     selection(row){
-      // console.log(row)
-      // console.log(row.id)
-      this.mainId = row.id
-      this.guestidId = row.guestId
-      this.datadata = row
-      // console.log(this.datadata)
-      if(row.id){
-        this.formPlan.salesman = this.datadata.salesman
-        this.formPlan.Reservation = this.datadata.orderNo
-        this.formPlan.orderDate = this.datadata.expectedArrivalDate
-        this.formPlan.remark = this.datadata.remark
-        this.Right.tbdata = this.datadata.detailVOList
-        this.presentrowMsg = row.status.value
-        // console.log(this.presentrowMsg)
-        this.rowId = row.id
-        this.buttonDisable = false
-      }else {
-        this.formPlan.salesman = this.$store.state.user.userData.staffName
-        this.formPlan.Reservation = ''
-        this.formPlan.orderDate = ''
-        this.formPlan.remark = ''
-        this.rowId = ''
-        this.Right.tbdata = []
+      if (row == null) return;
+      let currentRowTable = this.$refs["currentRowTable"];
+      // console.log(currentRowTable.clearCurrentRow)
+      if(!this.Flaga && !this.isAdd){
+        this.$Modal.confirm({
+          title: '您正在编辑单据，是否需要保存',
+          onOk: () => {
+            currentRowTable.clearCurrentRow();
+            this.$refs.formPlan.validate((valid) => {
+              if (valid) {
+                let data = {}
+                data.id = this.rowId
+                data.salesman =  this.formPlan.salesman
+                data.orderNo =  this.formPlan.Reservation
+                data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+                data.remark = this.formPlan.remark
+                data.detailVOList = this.Right.tbdata
+                // console.log(this.Right.tbdata)
+                save(data).then(res => {
+                  if(res.code === 0){
+                    this.$message.success('保存成功！')
+                    this.leftgetList(),
+                      this.formPlan.salesman =  '', //业务员
+                      this.formPlan.Reservation =  '',
+                      this.formPlan.remark =  '',
+                      this.Right.tbdata = []
+                    this.isAdd = true
+                    this.Flaga = true
+                  }
+                })
+              } else {
+                this.$Message.error('*为必填！');
+              }
+            })
+          },
+          onCancel: () => {
+            this.Left.tbdata.splice(0, 1);
+            currentRowTable.clearCurrentRow();
+            this.isAdd = true;
+            console.log(this.isAdd);
+            this.formPlan.salesman =  '', //业务员
+              this.formPlan.Reservation =  '',
+              this.formPlan.remark =  '',
+              this.Right.tbdata = []
+          },
+        })
+      }else{
+        // console.log(row)
+        // console.log(row.id)
+        this.mainId = row.id
+        this.guestidId = row.guestId
+        this.datadata = row
+        // console.log(this.datadata)
+        if(row.id){
+          this.formPlan.salesman = this.datadata.salesman
+          this.formPlan.Reservation = this.datadata.orderNo
+          this.formPlan.orderDate = this.datadata.expectedArrivalDate
+          this.formPlan.remark = this.datadata.remark
+          this.Right.tbdata = this.datadata.detailVOList
+          this.presentrowMsg = row.status.value
+          // console.log(this.presentrowMsg)
+          this.rowId = row.id
+          this.buttonDisable = false
+        }else {
+          this.formPlan.salesman = this.$store.state.user.userData.staffName
+          this.formPlan.Reservation = ''
+          this.formPlan.orderDate = ''
+          this.formPlan.remark = ''
+          this.rowId = ''
+          this.Right.tbdata = []
+        }
       }
     },
     Determined(){
