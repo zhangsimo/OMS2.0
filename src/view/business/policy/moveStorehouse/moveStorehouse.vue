@@ -625,6 +625,7 @@ export default {
     // 提交
     editPro() {
       //判断是否为草稿状态
+      console.log(this.Leftcurrentrow, "tiiao");
       if (!this.Leftcurrentrow.id) {
         this.$Message.error("请选择数据");
         return;
@@ -724,10 +725,13 @@ export default {
       } else {
         this.Right.tbdata = [];
       }
-      getRightDatas(this.Leftcurrentrow.id).then(res => {
-        console.log(res, "res=>728");
-        this.Right.tbdata = res.data;
-      });
+      if (this.Leftcurrentrow.id != undefined) {
+        getRightDatas(this.Leftcurrentrow.id).then(res => {
+          console.log(res, "res=>728");
+          this.Right.tbdata = res.data;
+          this.Leftcurrentrow.detailVOList = res.data;
+        });
+      }
     },
 
     //添加配件
@@ -735,7 +739,7 @@ export default {
       console.log(val, 999);
       // console.log(conversionList(val),8888)
       var datas = conversionList(val);
-      console.log(datas,'datas=>738');
+      console.log(datas, "datas=>738");
       datas.forEach(item => {
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
