@@ -119,9 +119,7 @@
             </div>
           </TabPane>
         </Tabs>
-
       </div>
-
       <div slot='footer'>
         <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
         <!--<Button type='default' @click='proModal = false'>取消</Button>-->
