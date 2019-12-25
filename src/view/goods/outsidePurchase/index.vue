@@ -464,7 +464,7 @@
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
-    <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
+    <tabs-model ref="tabsModel" type="外采" :partId="partId"></tabs-model>
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->
