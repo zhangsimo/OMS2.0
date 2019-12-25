@@ -18,6 +18,7 @@ import { TOKEN_KEY } from "@/libs/util";
 export const mixGoodsData = {
   data() {
     return {
+      ArrayList : [],
       upurl: "",
       //计划采购信息
       formPlan: {
@@ -147,7 +148,6 @@ export const mixGoodsData = {
     },
     //采购计划列表选中数据
     selectVxeData({ selection, rowIndex, reserves }) {
-      console.log(selection, 's.tableData.concat(v) =>267"');
       this.delArr = selection;
     },
     selectAll({ checked }) {
@@ -264,8 +264,8 @@ export const mixGoodsData = {
     //添加配件数据
     getPartNameList(v) {
       this.tableData = this.tableData.concat(v);
-      console.log(this.tableData, "this.tableData  ==>267");
-      console.log(this.tableData, "this.tableData.concat(v) =>267");
+      // console.log(this.tableData, "this.tableData  ==>267");
+      // console.log(this.tableData, "this.tableData.concat(v) =>267");
       var oldArr = this.tableData;
       // console.log(oldArr, "oldArr =>269");
       var allArr = [];
@@ -365,8 +365,11 @@ export const mixGoodsData = {
           this.upurl = upxlxs + v.id;
         }
       }
+      this.$refs.selectSupplier.getList();
     },
-
+    getArray(data){
+      this.ArrayList = data
+    },
     //新增采购计划单
     addOrder() {
       if (this.newadd) {

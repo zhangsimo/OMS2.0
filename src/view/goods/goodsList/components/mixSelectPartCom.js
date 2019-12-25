@@ -156,7 +156,7 @@ export const mixSelectPartCom = {
       if (this.searchValue.trim()) {
         req[this.searchType] = this.searchValue.trim();
       }
-      console.log(this.searchType,'this.searchType')
+      // console.log(this.searchType,'this.searchType')
       if (this.searchType == "编码") {
         req.partName = +this.partName;
       }
@@ -164,7 +164,7 @@ export const mixSelectPartCom = {
       // req.carModelBrand = "92A";
       req.page = this.page.num;
       req.size = this.page.size;
-      console.log(req, "req=>161");
+      // console.log(req, "req=>161");
       getCarParts(req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
@@ -178,7 +178,6 @@ export const mixSelectPartCom = {
         let filterData = res.data.content.filter(
           item => item.quality == "品牌件"
         );
-        console.log(filterData);
         if (filterData.length > 0) {
           if (filterData[0].children && filterData[0].children.length > 0) {
             filterData[0].children.map(item => {
@@ -233,7 +232,7 @@ export const mixSelectPartCom = {
       this.selectTableItem = v;
     },
     throwData() {
-      console.log(this.selectTableItem);
+      // console.log(this.selectTableItem);
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;
