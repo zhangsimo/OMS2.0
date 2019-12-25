@@ -22,7 +22,7 @@
           </Row>
           <Row class="mt15">
             <span>预定单号：</span>
-            <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
+            <Input v-model="numbers" placeholder="请输入预定单号" style="width: 450px" />
           </Row>
           <Row class="mt15">
             <span>配件编码：</span>
@@ -33,12 +33,15 @@
             <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
           </Row>
           <Row class="mt15">
-            <span style="margin-left: 25px">品 &nbsp;牌：</span>
-            <Input v-model="brand" placeholder="请输入创建人" style="width: 450px" />
+            <span style="margin-left: 23px">品 &nbsp;牌：</span>
+            <!--<Input v-model="brand" placeholder="请输入品牌" style="width: 450px" />-->
+            <Select v-model="brand" filterable clearable placeholder="选择品牌" style="width:450px" @on-change="changeBrand">
+              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+            </Select>
           </Row>
           <Row class="mt15">
             <span class="ml5">提 交 人：</span>
-            <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
+            <Input v-model="Accessories" placeholder="请输入提交人" style="width: 450px" />
           </Row>
         </div>
         <div slot='footer'>
@@ -51,6 +54,7 @@
 
 <script>
   import { queryAll } from '../../../../../api/business/advanceOrder';
+  import { allBrand } from "@/api/business/brandListApi";
   export default {
         name: "More",
       data(){
@@ -67,7 +71,9 @@
             submita: '',
             create: '',
             guestId: '',
-            cityList: []
+            cityList: [],
+            // 品牌选择数据
+            brandList: [],
           }
       },
       methods: {
@@ -85,8 +91,8 @@
         },
         sendMsg(){
             let a = {
-              callout: this.callout ,
-              numbers: this.numbers ,
+              callout: this.callout,
+              numbers: this.numbers,
               coding: this.coding,
               Accessories: this.Accessories,
               Name: this.Name,
@@ -110,13 +116,30 @@
           this.Name = ''
           this.create = ''
           this.submita = ''
+          this.brand = ''
           this.createData = null
           this.submitData = null
         },
         //取消
         cancel(){
           this.moreAndMore = false
-        }
+        },
+        // 品牌下拉改变
+        changeBrand(val){
+          // console.log(val)
+          this.brand = val
+        },
+        //获取品牌
+        async getAllBrand() {
+          let res = await allBrand({ pageSize: 10000 });
+          if (res.code === 0) {
+            let arr = [];
+            res.data.content.forEach(item => {
+              arr.push(...item.children);
+            });
+            this.brandList = arr;
+          }
+        },
       },
     mounted(){
           let params = {}
@@ -124,9 +147,9 @@
         if(res.code === 0){
           this.cityList = res.data.content
         }
-      })
+      });
+      this.getAllBrand()
     }
-
     }
 </script>
 <style scoped>
