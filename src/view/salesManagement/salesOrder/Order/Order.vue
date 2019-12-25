@@ -169,19 +169,42 @@ export default {
     },
     //作废
     async setCancellation() {
+      // let list = this.$store.state.dataList.oneOrder;
+      // if (!list.id) {
+      //   this.$message.error("请选择一条有效数据");
+      //   return false;
+      // }
+      // let data = {};
+      // data.id = list.id;
+      // let res = await getCancellation(data);
+      // if (res.code === 0) {
+      //   this.changeLeft = res;
+      //   let data = {};
+      //   this.$store.commit("setOneOrder", data);
+      // }
       let list = this.$store.state.dataList.oneOrder;
-      if (!list.id) {
-        this.$message.error("请选择一条有效数据");
-        return false;
+      if (list.id) {
+        this.$Modal.confirm({
+          title: '是否确定作废',
+          onOk: async () => {
+            let data = {};
+            data.id = list.id;
+            let res = await getCancellation(data);
+            if (res.code === 0) {
+              this.changeLeft = res;
+              let data = {};
+              this.$store.commit("setOneOrder", data);
+            }
+          },
+          onCancel: () => {
+            this.$Message.info('取消提交');
+          },
+        })
+      } else {
+        this.$Message.warning('请选择一条有效数据')
       }
-      let data = {};
-      data.id = list.id;
-      let res = await getCancellation(data);
-      if (res.code === 0) {
-        this.changeLeft = res;
-        let data = {};
-        this.$store.commit("setOneOrder", data);
-      }
+
+
     },
     //导出
     async setDerive() {
