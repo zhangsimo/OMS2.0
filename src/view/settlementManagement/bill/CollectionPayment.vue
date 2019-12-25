@@ -112,6 +112,7 @@ import {
   getReceiptsPaymentsSummary,
   getReceiptsPaymentsList
 } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -406,8 +407,8 @@ export default {
     // 总表查询
     getGeneral() {
       let data = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startTime: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        endTime: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
         orgId: this.BranchstoreId,
         guestId: this.companyId,
         accountNo:this.accountNo,
