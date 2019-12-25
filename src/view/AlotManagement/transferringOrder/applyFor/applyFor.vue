@@ -79,7 +79,6 @@
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
                           :disabled="presentrowMsg !== 0 || buttonDisable"
-                          prop="orderDate"
                         ></DatePicker>
                       </FormItem>
                       <FormItem label="备注：" prop="remark">
@@ -117,6 +116,7 @@
                     :height="rightTableHeight"
                     :data="Right.tbdata"
                     :footer-method="addFooter"
+                    @select-all="selectAll"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
                     <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                     <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -163,7 +163,7 @@
         <!--选择配件-->
         <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
         <!--编辑收货信息-->
-          <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
+          <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata"></goods-info>
       </div>
       <!--供应商资料-->
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -224,10 +224,10 @@
                createUname: '',
                serviceId: '',
                orderMan:'',
-               orderDate: '',
+               orderDate: tools.transTime(new Date()),
                printing: '',
                createTime: tools.transTime(new Date()),
-            detailVOS: [],
+                detailVOS: [],
           },
           //表单验证
           ruleValidate: {
@@ -374,7 +374,7 @@
         },
         //调出方下拉框
         selectGuestName(val){
-          console.log(val)
+          // console.log(val)
           this.formPlan.guestName = val.value
         },
         // 新增按钮
@@ -413,7 +413,7 @@
               let data = {}
               data.id = this.rowId
               data.orgid = this.rowOrgId
-              data.guestOrgId = this.isInternalId
+              data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
               data.guestId = this.guestidId
               data.guestId = this.formPlan.guestName
               data.storeId = this.formPlan.storeId
@@ -479,6 +479,11 @@
           this.checkboxArr = msg.selection
           console.log(this.checkboxArr)
         },
+        // 全选
+        selectAll(val){
+          console.log(val)
+          this.checkboxArr = val.selection
+        },
         //分页
         changePageLeft(p) {
           this.Left.page.num = p
@@ -537,7 +542,13 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          // console.log(ChildMessage)
+          console.log(ChildMessage)
+        // let aaa =   ChildMessage.map(item => {
+        //   return{
+        //     name : item.baseType.firstType.typeName
+        //     }
+        //   })
+        //   console.log(aaa)
           let parts = ChildMessage.map( item => {
             return {
               partName : item.partStandardName,
@@ -553,16 +564,16 @@
               partBrand : item.partBrand,
               carBrandName : item.adapterCarBrand,
               carModelName : item.adapterCarModel,
-              carTypef : item.baseType.firstType.typeName,
-              cartypes : item.baseType.secondType.typeName,
-              carTypet : item.baseType.thirdType.typeName,
+              carTypef : item.baseType ? item.baseType.firstType ? item.baseType.firstType.typeName ? item.baseType.firstType.typeName : '' : '' : '',
+              // cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
+              // carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
               spec : item.specifications,
               partId : item.id,
               fullName : item.fullName,
               systemUnitId : item.minUnit,
             }
           })
-          console.log(ChildMessage)
+          console.log(parts)
           this.Right.tbdata = [...this.Right.tbdata,...parts]
           console.log(this.Right.tbdata)
         },
@@ -679,7 +690,7 @@
                 onOk: async () => {
                   if(this.clickdelivery){
                     let data = {}
-                    data.guestOrgId = this.isInternalId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.id = this.rowId
                     data.orgId = this.rowOrgId
                     data.guestId = this.formPlan.guestName

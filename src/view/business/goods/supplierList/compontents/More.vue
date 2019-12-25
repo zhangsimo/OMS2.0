@@ -14,7 +14,10 @@
           </Row>
           <Row class="mt15">
             <span class="ml5">供 应 商：</span>
-            <Input v-model="callout" placeholder="请选择供应商" style="width: 410px" disabled/>
+            <!--<Input v-model="callout" placeholder="请选择供应商" style="width: 410px" disabled/>-->
+            <Select v-model="callout" filterable style="width: 410px">
+              <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
             <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
           </Row>
           <Row class="mt15">
@@ -30,7 +33,7 @@
             <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
           </Row>
           <Row class="mt15">
-            <span class="ml5">采购订单：</span>
+            <span>采购订单：</span>
             <Input v-model="purchase " placeholder="请输入采购订单" style="width: 450px" />
           </Row>
           <Row class="mt15">
@@ -61,13 +64,16 @@
 
 <script>
   import SelectSupplier from "../../../../goods/goodsList/components/supplier/selectSupplier";
-    export default {
+  import {findForAllot} from "_api/purchasing/purchasePlan";
+
+  export default {
         name: "More",
       components: {
         SelectSupplier
       },
       data(){
           return {
+            ArraySelect: [], //调出方下拉框
             callout: null, //调出方
             numbers: null, //申请单号
             coding: null, //编码
@@ -98,7 +104,7 @@
         },
         getSupplierNamea(a) {
           console.log(a)
-          this.callout = a.fullName
+          this.callout = a.id
           this.guestId = a.id
         },
         init(){
@@ -120,6 +126,13 @@
             }
             this.$emit('sendMsg', a)
             console.log(a)
+        },
+        //供应商下拉查询
+        selecQuery(){
+          let req = {}
+          findForAllot(req).then(res => {
+            this.ArraySelect = res.data.content||[];
+          })
         },
         //更多弹框的确定按钮
         Determined(){
@@ -145,7 +158,10 @@
         cancel(){
           this.moreAndMore = false
         }
-      }
+      },
+    mounted(){
+      this.selecQuery()
+    }
 
     }
 </script>

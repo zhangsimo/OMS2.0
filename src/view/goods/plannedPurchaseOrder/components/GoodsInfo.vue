@@ -378,9 +378,11 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
+    console.log(row)
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
+    console.log(row.logisticsRecordVO)
     if (row.logisticsRecordVO) {
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight = { ...row.logisticsRecordVO };
