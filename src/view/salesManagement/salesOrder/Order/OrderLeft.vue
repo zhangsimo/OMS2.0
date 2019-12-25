@@ -90,7 +90,9 @@ export default {
       }
       this.isAdd=false
       this.tableData.unshift({
-        billStatusId: { enum: "", value: "", name: "" }
+        billStatusId: { enum: "", value: "", name: "" },
+        orderMan: this.$store.state.user.userData.staffName,
+        orderManId:  this.$store.state.user.userData.id
       });
     },
     //获取表格数据
@@ -123,6 +125,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      console.log('00000',data)
       this.$emit("getOneOrder", data.row);
       this.$store.commit("setOneOrder", data.row);
     }
