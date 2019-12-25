@@ -261,13 +261,7 @@ export default {
     },
     //获取公司
     async getAllClient() {
-      // let obj = {
-      //   isDisabled: 0,
-      //   page: 1,
-      //   size: 20
-      // }
       let res = await getSupplierList({})
-      console.log(res)
       if (res.code === 0) {
         this.client = res.data
       }

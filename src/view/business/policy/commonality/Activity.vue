@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="选择入库单" width="1300">
+  <Modal v-model="showInfo" title="选择活动" width="1300">
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
