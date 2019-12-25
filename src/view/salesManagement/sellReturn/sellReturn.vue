@@ -403,7 +403,7 @@
       };
       return {
         isNew: true,//页面开始禁用
-        isCommit: true,//是否提交
+        // isCommit: true,//是否提交
         draftShow: '',//判定是不是草稿
         isAdd: true, //判断是否新增
         isWms: true,//判断是否提交,返回
@@ -541,7 +541,7 @@
 
         id: '',  //点击左侧表格拿到的id
         selectTableList: [], //右侧table表格选中的数据
-        isCommit: false//判断是否已提交
+        // isCommit: false//判断是否已提交
       }
     },
     mounted() {
@@ -813,7 +813,8 @@
               console.log('打印出来的保存数据888',res)
               if (res.code === 0) {
                 this.isAdd = true;
-                this.isCommit = true
+                this.isNew=true
+                // this.isCommit = true
                 this.$Message.success('保存成功');
                 this.getLeftList()
                 this.$refs.formPlan.resetFields();
@@ -830,9 +831,9 @@
 
       //提交
       isSubmit() {
-        if (!this.isCommit || !this.formPlan.id) {
-          return this.$Message.error('请先保存数据')
-        }
+        // if (!this.isCommit || !this.formPlan.id) {
+        //   return this.$Message.error('请先保存数据')
+        // }
         this.$Modal.confirm({
           title: '是否确定提交订单',
           onOk: async () => {
@@ -844,7 +845,7 @@
             if (res.code == 0) {
               this.$Message.success('提交成功');
               this.getLeftList()
-              this.isCommit = false;
+              // this.isCommit = false;
               this.isNew = true
               this.formPlan = {}
               this.id = null
