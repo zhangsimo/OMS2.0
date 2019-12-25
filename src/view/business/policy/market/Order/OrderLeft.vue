@@ -138,6 +138,7 @@
             },
             //点击获取当前信息
             clickOnesList(data){
+                this.$parent.$parent.$refs.right.$refs.formPlan.resetFields()
               let obj = {}
                   obj = JSON.parse(JSON.stringify(data.row))
                 this.$emit('getOneOrder',obj)
