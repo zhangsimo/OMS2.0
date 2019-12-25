@@ -515,9 +515,7 @@
           guestId: [
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],
-          orderManId: [
-            {required: true, message: '  ', trigger: 'blur'}
-          ],
+          orderManId: [{ required: true, type:'string',message: "  ", trigger: "change" }],
           rtnReasonId: [
             {required: true, type: 'string', message: ' ', trigger: 'change'}
           ],

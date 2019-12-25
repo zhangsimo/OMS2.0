@@ -23,12 +23,12 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
             <span>往来类型：</span>
-            <Select :model.sync="model1" style="width:200px">
+            <Select v-model="type" style="width:200px">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -37,7 +37,7 @@
             </Select>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -62,7 +62,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" />
+    <selectDealings ref="selectDealings" @getOne="getOne" />
   </div>
 </template>
 
@@ -71,6 +71,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -115,7 +116,7 @@ export default {
         },
         {
           title: "往来类型",
-          key: "orderTypeName",
+          key: "belongSystem",
           className: "tc"
         },
         {
@@ -202,18 +203,21 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "Warehousing",
-          label: "内部客户"
+          value: 0,
+          label: "华胜连锁"
         },
         {
-          value: "Return",
-          label: "外部客户"
+          value: 1,
+          label: "体系外"
         },
         {
-          value: "huasheng",
-          label: "华胜"
+          value: 2,
+          label: "体系内"
         }
-      ]
+      ],
+      company: "", //往来单位
+      companyId: "", //往来单位id
+      type:0,
     };
   },
   async mounted() {
@@ -224,6 +228,15 @@ export default {
     this.getGeneral()
   },
   methods: {
+    //查询
+    query() {
+      this.getGeneral();
+    },
+    // 往来单位选择
+    getOne(data) {
+      this.company = data.fullName;
+      this.companyId = data.id;
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -253,7 +266,14 @@ export default {
     },
     // 总表查询
     getGeneral() {
-      getOrderlist({}).then(res => {
+      let obj ={
+        belongSystem: this.type,
+        startTime: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        endTime: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgId: this.model1,
+        guestId: this.companyId
+      }
+      getOrderlist(obj).then(res => {
         // console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{

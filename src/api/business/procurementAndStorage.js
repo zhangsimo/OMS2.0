@@ -39,7 +39,8 @@ export  function getCalculate( params ={}) {
 //采购订单
 export function getBuy(params , data){
   return axios.request({
-    url: `${api.omsOrder}/pchsOrderMain/findPageByDynamicQuery`,
+    url: `${api.omsOrder}/pchsOrderMain/findNoEnterOrderByDynamicQuery`,
+    // url: `${api.omsOrder}/pchsOrderMain/findPageByDynamicQuery`,
     method: 'post',
     params,
     data

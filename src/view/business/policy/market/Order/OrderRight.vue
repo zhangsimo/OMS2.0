@@ -377,7 +377,7 @@ export default {
         guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderManId: [{ required: true, message: "  ", trigger: "blur" }],
+        orderManId: [{ required: true, type:'string',message: "  ", trigger: "change" }],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -743,6 +743,7 @@ export default {
     },
     //保存
     save() {
+
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -757,6 +758,7 @@ export default {
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await baocun(this.formPlan);
+
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);

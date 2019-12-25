@@ -23,12 +23,12 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
             <span>类型：</span>
-            <Select :model.sync="model1" style="width:200px">
+            <Select v-model="type" style="width:200px">
               <Option
                 v-for="item in typelist"
                 :value="item.value"
@@ -37,7 +37,7 @@
             </Select>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -61,27 +61,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" />
-    <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
-      <div class="db pro mt20">
-        <span>对账单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款单号：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>收付款人：</span>
-        <input type="text" class="w200" />
-      </div>
-      <div class="db pro mt20">
-        <span>审核状态：</span>
-        <Select v-model="auditStatus" style="width:200px">
-          <Option v-for="item in statelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-    </Modal>
+    <selectDealings ref="selectDealings" @getOne="getOne" />
   </div>
 </template>
 
@@ -102,16 +82,6 @@ export default {
       model1: "",
       modal1: false,
       value: [],
-      statelist: [
-        {
-          value: "weishen",
-          label: "未审"
-        },
-        {
-          value: "yishen",
-          label: "已审"
-        }
-      ],
       columns: [
         {
           title: "序号",
@@ -264,30 +234,35 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "Warehousing",
+          value: "1",
           label: "调拨入库"
         },
         {
-          value: "Return",
+          value: "3",
           label: "调入退货"
         }
-      ]
+      ],
+      company: "", //往来单位
+      companyId: "", //往来单位id
+      type: '1'//类型
     };
   },
   async mounted() {
-    // console.log(this.$refs.quickDate.val)
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    let obj = {
-      startDate: this.value[0],
-      endDate: this.value[1],
-      orgId: this.model1
-    };
-    this.getTransferWarehousing(obj);
+    this.getTransferWarehousing();
   },
   methods: {
+    query(){
+      this.getTransferWarehousing()
+    },
+    // 往来单位选择
+    getOne(data) {
+      this.company = data.fullName;
+      this.companyId = data.id;
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -297,7 +272,14 @@ export default {
       this.$refs.selectDealings.openModel();
     },
     // 主表查询
-    getTransferWarehousing(obj) {
+    getTransferWarehousing() {
+      let obj = {
+        createTimeStart: this.value[0],
+        createTimeEnd: this.value[1],
+        orgId: this.model1,
+        guestId: this.companyId,
+        orderTypeId:this.type
+      };
       transferWarehousing(obj).then(res => {
         console.log(res);
         if (res.data.length !== 0){

@@ -224,7 +224,7 @@
                   <FormItem class="form-Item" label="订单号：">
                     <Input
                       readonly
-                      placeholder="请输入订单号"
+                      placeholder=""
                       class="w160"
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"
@@ -464,7 +464,7 @@
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!-- 查看 -->
-    <tabs-model ref="tabsModel" :partId="partId"></tabs-model>
+    <tabs-model ref="tabsModel" type="外采" :partId="partId"></tabs-model>
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->

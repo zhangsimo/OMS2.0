@@ -212,7 +212,6 @@ export default class ProcurementModal extends Vue {
       serviceId: this.serviceId,
       auditStartDate: tools.transTime(this.auditDate[0]),
       auditEndDate: tools.transTime(this.auditDate[1]),
-
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;

@@ -6,28 +6,28 @@
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiveCompName"
+              v-model="formDateTop.receiveComp"
               placeholder="收货单位"
             />
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.address"
+              v-model="formDateTop.streetAddress"
               placeholder="收货地址"
             />
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiveMan"
+              v-model="formDateTop.receiver"
               placeholder="收货人"
             />
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiveManTel"
+              v-model="formDateTop.receiverMobile"
               placeholder="联系电话"
             />
           </FormItem>
@@ -76,7 +76,7 @@
               width="100"
             ></vxe-table-column>
             <vxe-table-column
-              field="address"
+              field="streetAddress"
               title="收货地址"
               width="100"
             ></vxe-table-column>
@@ -102,62 +102,68 @@
             :rules="ruleValidate"
             :label-width="100"
           >
-            <FormItem label="收货单位：" prop="receiveCompName">
+            <FormItem label="收货单位：" prop="receiveComp">
               <Input
-                v-model="formDateRight.receiveCompName"
+                v-model="formDateRight.receiveComp"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="收货地址：" prop="address">
+            <FormItem label="收货地址：" prop="streetAddress">
               <Input
-                v-model="formDateRight.address"
+                v-model="formDateRight.streetAddress"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="收货人：" prop="receiveMan">
+            <FormItem label="收货人：" prop="receiver">
               <Input
-                v-model="formDateRight.receiveMan"
+                v-model="formDateRight.receiver"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
-            <FormItem label="联系电话：" prop="receiveManTel">
+            <FormItem label="联系电话：" prop="receiverMobile">
               <Input
-                v-model="formDateRight.receiveManTel"
+                v-model="formDateRight.receiverMobile"
                 class="w200"
                 :disabled="disabled"
               />
             </FormItem>
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
-            <FormItem label="配送方式：">
+            <FormItem label="配送方式：" prop="deliveryType">
               <Select
                 v-model="formDateRight.deliveryType"
                 class="w200"
                 :disabled="disabled"
+                @on-change="changeDeliveryType"
               >
-                <Option value="1">自配</Option>
-                <Option value="2">客户自提</Option>
-                <Option value="3">快递</Option>
-                <Option value="4">物流</Option>
+                <Option value="0">自配</Option>
+                <Option value="1">客户自提</Option>
+                <Option value="2">快递</Option>
+                <Option value="3">物流</Option>
               </Select>
             </FormItem>
-            <FormItem label="发货物流：">
+            <FormItem label="发货物流：" :class="isRequired ? 'ivu-form-item ivu-form-item-required' : ''">
               <Select
                 v-model="formDateRight.deliveryLogistics"
                 class="w200"
                 :disabled="disabled"
+                filterable
+                label-in-value
+                @on-change="selectLogis"
               >
                 <Option
-                  @on-change="logCom(item.logisticsComp)"
                   v-for="item in logisArr"
                   :value="item.id"
                   :key="item.id"
-                  >{{ item.defaultLogistics }}</Option
+                  >{{ item.fullName }}</Option
                 >
               </Select>
+              <div class="ivu-form-item-error-tip" v-show="logisRequired">
+                发货物流未选择
+              </div>
             </FormItem>
             <FormItem label="运输费用：">
               <el-input-number
@@ -170,12 +176,16 @@
                 size="small"
               />
             </FormItem>
-            <FormItem label="结算方式：">
-              <Input
+            <FormItem label="结算方式：" prop="settleType">
+              <Select
                 v-model="formDateRight.settleType"
                 class="w200"
                 :disabled="disabled"
-              />
+              >
+                <Option value="0">到付</Option>
+                <Option value="1">现结</Option>
+                <Option value="2">月结</Option>
+              </Select>
             </FormItem>
             <FormItem label="发货备注：">
               <Input
@@ -239,20 +249,26 @@ export default class GoodsInfo extends Vue {
   @Prop(Object) readonly row;
 
   private ruleValidate: ruleValidate = {
-    receiveCompName: [
+    receiveComp: [
       { required: true, message: "收货单位不能为空", trigger: "blur" }
     ],
-    address: [
+    streetAddress: [
       { required: true, message: "收货地址不能为空", trigger: "blur" }
     ],
-    receiveMan: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
-    receiveManTel: [
+    receiver: [{ required: true, message: "收货人不能为空", trigger: "blur" }],
+    receiverMobile: [
       {
         required: true,
         message: "联系电话错误",
         validator: checkPhone,
         trigger: "blur"
       }
+    ],
+    deliveryType: [
+      { required: true, message: "配送方式不能为空", trigger: "change" }
+    ],
+    settleType: [
+      { required: true, message: "结算方式不能为空", trigger: "change" }
     ]
   };
 
@@ -266,6 +282,8 @@ export default class GoodsInfo extends Vue {
 
   private async init() {
     this.loading = true;
+    this.isRequired = false;
+    this.logisRequired = false;
     this.reset();
     this.getLists();
     this.inlogistics();
@@ -289,25 +307,40 @@ export default class GoodsInfo extends Vue {
   }
 
   private formDateTop: any = {
-    receiveCompName: null, //收货单位
-    receiveMan: null, //收货人
-    address: null, //详细收货地址
-    receiveManTel: null //联系电话
+    receiveComp: null, //收货单位
+    receiver: null, //收货人
+    streetAddress: null, //详细收货地址
+    receiverMobile: null //联系电话
   };
+
+  private isRequired:boolean = true;
+  private changeDeliveryType() {
+    if(!['0', '1'].includes(this.formDateRight.deliveryType)) {
+      this.isRequired = true;
+    } else {
+      this.isRequired = false;
+    }
+  }
+
+  private selectLogis(val:any) {
+    this.formDateRight.logisticsComp = val.label || "";
+    if(this.formDateRight.deliveryLogistics != "") {
+      this.logisRequired = false;
+    } else {
+      this.logisRequired = true;
+    }
+  }
 
   //表单数据 右 收货信息与发货信息
   private formDateRight: any = {
     //表单数据 上 查询
-    receiveCompName: "", //收货单位
-    receiveMan: "", //收货人
-    receiveManTel: "", //联系电话
-    //收货信息
-    receiveComp: "", //收货单位名称
+    receiveComp: "", //收货单位
     receiver: "", //收货人
-    receiveAddress: "", //收货单位地址
     receiverMobile: "", //联系电话
+    //收货信息
+    receiveAddress: "", //收货单位地址
     //发货信息
-    address: "", //收货详细地址
+    streetAddress: "", //收货详细地址
     deliveryType: "", //配送方式
     transportCost: 0, //运输费用
     remark: "", //备注
@@ -334,11 +367,8 @@ export default class GoodsInfo extends Vue {
   private dictArr: Array<any> = new Array();
   //发货物流下拉框
   private logisArr: Array<any> = new Array();
+  private logisRequired:boolean = false;
 
-  //加上物流公司的名称
-  private logCom(val) {
-    this.formDateRight.logisticsComp = val;
-  }
   //查询
   private async searchInfo() {
     let data: any = {};
@@ -360,7 +390,19 @@ export default class GoodsInfo extends Vue {
   private saveInfo() {
     const ref: any = this.$refs["formTwo"];
     ref.validate(async (valid: any) => {
-      if (valid) {
+      let logisc:boolean = false;
+      if(!this.isRequired) {
+        logisc = true;
+      } else {
+        if(!!this.formDateRight.deliveryLogistics) {
+          logisc = true;
+          this.logisRequired = false;
+        } else {
+          this.logisRequired = true;
+          logisc = false;
+        }
+      }
+      if (valid && logisc) {
         // this.saveId(this.tableData);
         let res = await fapi.saveGoodsInfo({
           ...this.formDateRight,
@@ -378,26 +420,28 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
-    console.log(row)
+    this.reset();
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    console.log(row.logisticsRecordVO)
     if (row.logisticsRecordVO) {
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight = { ...row.logisticsRecordVO };
+      this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+      this.formDateRight.settleType = this.formDateRight.settleType + "";
     } else {
-      this.formDateRight = { ...row };
-      this.formDateRight.id = null;
+      this.formDateRight.logisticsId = row.id;
+      this.formDateRight.receiveComp = row.receiveCompName;
+      this.formDateRight.streetAddress = row.streetAddress;
+      this.formDateRight.receiver = row.receiveMan;
+      this.formDateRight.receiverMobile = row.receiveManTel;
+      this.formDateRight.provinceId = row.provinceId;
+      this.formDateRight.cityId = row.cityId;
+      this.formDateRight.countyId = row.countyId;
+      this.formDateRight.guestId = row.guestId;
+      this.formDateRight.receiveAddress = row.address;
     }
-    this.formDateRight.transportCost =  this.formDateRight.transportCost ? this.formDateRight.transportCost : 0;
-    //其它数据
-    this.formDateRight.logisticsId = row.id;
-    this.formDateRight.guestId = row.guestId;
-    this.formDateRight.provinceId = row.provinceId;
-    this.formDateRight.cityId = row.cityId;
-    this.formDateRight.countyId = row.countyId;
-    // console.log(this.formDateRight);
+    this.changeDeliveryType();
   }
   //传入保存id
   private saveId(row) {
@@ -410,10 +454,10 @@ export default class GoodsInfo extends Vue {
 
   private reset() {
     this.formDateTop = {
-      receiveCompName: null, //收货单位
-      receiveMan: null, //收货人
-      address: null, //详细收货地址
-      receiveManTel: null //联系电话
+      receiveComp: null, //收货单位
+      receiver: null, //收货人
+      streetAddress: null, //详细收货地址
+      receiverMobile: null //联系电话
     };
     const ref: any = this.$refs["formTwo"];
     ref.resetFields();
@@ -421,16 +465,13 @@ export default class GoodsInfo extends Vue {
     xTable1.clearRadioRow();
     this.formDateRight = {
       //表单数据 上 查询
-      receiveCompName: "", //收货单位
-      receiveMan: "", //收货人
-      receiveManTel: "", //联系电话
-      //收货信息
-      receiveComp: "", //收货单位名称
+      receiveComp: "", //收货单位
       receiver: "", //收货人
-      receiveAddress: "", //收货单位地址
       receiverMobile: "", //联系电话
+      //收货信息
+      receiveAddress: "", //收货单位地址
       //发货信息
-      address: "", //收货详细地址
+      streetAddress: "", //收货详细地址
       deliveryType: "", //配送方式
       transportCost: 0, //运输费用
       remark: "", //备注
@@ -458,4 +499,5 @@ export default class GoodsInfo extends Vue {
   color: #000;
   background-color: #e8e8e8;
 }
+.c {}
 </style>
