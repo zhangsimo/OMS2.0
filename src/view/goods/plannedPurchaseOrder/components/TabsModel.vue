@@ -7,6 +7,18 @@
   >
     <div class="pb20">
       <Tabs value="name1">
+        <TabPane label="滞销信息" name="name0" v-if="type === '外采'">
+          <Table
+            height="420"
+            size="small"
+            highlight-row
+            border
+            :stripe="true"
+            :loading="loading"
+            :columns="Tab0columns"
+            :data="Tab0tableData"
+          ></Table>
+        </TabPane>
         <TabPane label="本店库存" name="name1">
           <Table
             height="420"
@@ -27,11 +39,11 @@
             border
             :stripe="true"
             :loading="loading"
-            :columns="Tab1columns"
+            :columns="Tab2columns"
             :data="Tab2tableData"
           ></Table>
         </TabPane>
-        <TabPane label="采购记录" name="name3">
+        <TabPane :label="type === '外采' ? '外采记录':  '采购记录'" name="name3">
           <Table
             height="420"
             size="small"
@@ -39,7 +51,7 @@
             border
             :stripe="true"
             :loading="loading"
-            :columns="Tab2columns"
+            :columns="Tab3columns"
             :data="Tab3tableData"
           ></Table>
         </TabPane>
@@ -60,6 +72,35 @@ export default class TabsModel extends Vue {
   private loading: boolean = false;
 
   @Prop(String) readonly partId;
+  @Prop({ default: "" }) readonly type;
+
+  private Tab0columns: Array<Tableth> = [
+    {
+      title: "序号",
+      minWidth: 50,
+      type: 'index'
+    },
+    {
+      title: "公司名称",
+      key: "companyName",
+      minWidth: 100
+    },
+    {
+      title: "配件编码",
+      key: "partCode",
+      minWidth: 100
+    },
+    {
+      title: "配件名称",
+      key: "partName",
+      minWidth: 100
+    },
+    {
+      title: "仓库",
+      key: "storeName",
+      minWidth: 100
+    },
+  ];
 
   private Tab1columns: Array<Tableth> = [
     {
@@ -132,6 +173,75 @@ export default class TabsModel extends Vue {
     }
   ];
 
+  private Tab3columns:  Array<Tableth> = [
+    {
+      title: "序号",
+      minWidth: 50,
+      type: 'index'
+    },
+    {
+      title: "配件编码",
+      key: "partCode",
+      minWidth: 120
+    },
+    {
+      title: "配件名称",
+      key: "partName",
+      minWidth: 120
+    },
+    {
+      title: "仓库",
+      key: "storeName",
+      minWidth: 120
+    },
+    {
+      title: "单位",
+      key: "unit",
+      minWidth: 120
+    },
+    {
+      title: "采购数量",
+      key: "orderQty",
+      minWidth: 120
+    },
+    {
+      title: "税点",
+      key: "taxRate",
+      minWidth: 120
+    },
+    {
+      title: "含税单价",
+      key: "taxPrice",
+      minWidth: 120
+    },
+    {
+      title: "不含税单价",
+      key: "noTaxPrice",
+      minWidth: 120
+    },
+    {
+      title: "供应商",
+      key: "guestName",
+      minWidth: 120
+    },
+    {
+      title: "第一个供应商",
+      key: "guestName",
+      minWidth: 120
+    },
+    {
+      title: "入库单号",
+      key: "serviceId",
+      minWidth: 120
+    },
+    {
+      title: "入库日期",
+      key: "orderDate",
+      minWidth: 120
+    },
+  ]
+
+  private Tab0tableData: Array<any> = new Array();
   private Tab1tableData: Array<any> = new Array();
   private Tab2tableData: Array<any> = new Array();
   private Tab3tableData: Array<any> = new Array();
@@ -144,6 +254,9 @@ export default class TabsModel extends Vue {
   private async getlist() {
     let res:any = await api.queryPartStockAndLog(this.partId);
     if(res.code == 0) {
+      if(this.type === "外采") {
+        this.Tab0tableData = res.data.unsalableStock // 滞销信息
+      }
       this.Tab1tableData = res.data.orgStock // 本地
       this.Tab2tableData = res.data.chainStock // 连锁
       this.Tab3tableData = res.data.pchsLog // 采购
