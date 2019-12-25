@@ -30,12 +30,10 @@
           size="mini"
           height="400"
           :data="tableData"
-          @current-change="echoDate"
-          highlight-current-row
-          :radio-config="{trigger: 'row'}"
+          @radio-change="echoDate"
+          :radio-config="{highlight: true}"
         >
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-          <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>
           <vxe-table-column field="address" title="收货地址" width="100"></vxe-table-column>
@@ -200,6 +198,8 @@ export default {
       }
     },
     echoDate({row}) {
+      console.log('dsfsadf')
+      console.log(row)
       if (row.logisticsRecordVO) {
         this.formDateRight.receiveComp = row.logisticsRecordVO.receiveComp
         this.formDateRight.receiver = row.logisticsRecordVO.receiver
