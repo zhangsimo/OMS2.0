@@ -415,7 +415,6 @@ export default {
         createUname:this.createUname,
         documentStatus: this.startStatusName
       };
-      console.log(data);
       getReceiptsPaymentsSummary(data).then(res => {
         console.log(res);
         if (res.data.length !== 0) {

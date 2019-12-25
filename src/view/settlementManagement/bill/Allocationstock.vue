@@ -285,8 +285,8 @@ export default {
     // 主表查询
     getTransferStock() {
       let obj = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startTime: this.value[0],
+        endTime: this.value[1],
         orgId: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type

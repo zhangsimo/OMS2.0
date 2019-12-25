@@ -71,6 +71,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -115,7 +116,7 @@ export default {
         },
         {
           title: "往来类型",
-          key: "orderTypeName",
+          key: "belongSystem",
           className: "tc"
         },
         {
@@ -202,21 +203,21 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "Warehousing",
-          label: "内部客户"
+          value: 0,
+          label: "华胜连锁"
         },
         {
-          value: "Return",
-          label: "外部客户"
+          value: 1,
+          label: "体系外"
         },
         {
-          value: "huasheng",
-          label: "华胜"
+          value: 2,
+          label: "体系内"
         }
       ],
       company: "", //往来单位
       companyId: "", //往来单位id
-      type:'',
+      type:0,
     };
   },
   async mounted() {
@@ -265,7 +266,13 @@ export default {
     },
     // 总表查询
     getGeneral() {
-      let obj ={}
+      let obj ={
+        belongSystem: this.type,
+        startTime: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        endTime: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgId: this.model1,
+        guestId: this.companyId
+      }
       getOrderlist(obj).then(res => {
         // console.log(res);
         if(res.data.length !== 0){

@@ -321,8 +321,8 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        startTime: this.value[0],
-        endTime: this.value[1],
+        outDateStart: this.value[0],
+        outDateEnd: this.value[1],
         orgId: this.model1,
         guestId: this.companyId,
         enterTypeId: this.typeName

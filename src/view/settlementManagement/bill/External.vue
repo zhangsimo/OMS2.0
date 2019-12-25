@@ -318,6 +318,7 @@ export default {
         enterTypeId: this.type
       };
       if (this.type === "050101") {
+        console.log(obj)
         getWarehousingList(obj).then(res => {
           // console.log(res);
           if (res.data.length !== 0) {

@@ -274,8 +274,8 @@ export default {
     // 主表查询
     getTransferWarehousing() {
       let obj = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        createTimeStart: this.value[0],
+        createTimeEnd: this.value[1],
         orgId: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
