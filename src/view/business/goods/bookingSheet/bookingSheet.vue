@@ -381,6 +381,7 @@ export default {
     addProoo(){
       this.buttonDisable = false
       this.presentrowMsg = 0
+      this.rowId = ''
       if (!this.isAdd) {
         return this.$Message.error('请先保存数据');
       }
@@ -408,12 +409,12 @@ export default {
     SaveMsg(){
       this.$refs.formPlan.validate((valid) => {
         if (valid) {
+          console.log(this.rowId)
           let data = {}
           data.id = this.rowId
           data.salesman =  this.formPlan.salesman
           data.orderNo =  this.formPlan.Reservation
           data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-          console.log(tools.transDate(this.formPlan.orderDate))
           data.remark = this.formPlan.remark
           data.detailVOList = this.Right.tbdata
           // console.log(this.Right.tbdata)
@@ -663,7 +664,7 @@ export default {
         this.formPlan.remark = this.datadata.remark
         this.Right.tbdata = this.datadata.detailVOList
         this.presentrowMsg = row.status.value
-        console.log(this.presentrowMsg)
+        // console.log(this.presentrowMsg)
         this.rowId = row.id
         this.buttonDisable = false
       }else {
@@ -671,6 +672,7 @@ export default {
         this.formPlan.Reservation = ''
         this.formPlan.orderDate = ''
         this.formPlan.remark = ''
+        this.rowId = ''
         this.Right.tbdata = []
       }
     },

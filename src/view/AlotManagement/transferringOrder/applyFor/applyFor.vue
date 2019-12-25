@@ -59,10 +59,10 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12">
                         <Row class="w500">
                           <Col span="22">
-                            <!--<Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled=""></Input>-->
-                            <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">
-                              <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-                            </Select>
+                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
+                            <!--<Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">-->
+                              <!--<Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>-->
+                            <!--</Select>-->
                           </Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
@@ -226,7 +226,7 @@
                orderMan:'',
                orderDate: tools.transTime(new Date()),
                printing: '',
-               createTime: tools.transTime(new Date()),
+               createTime: '',
                 detailVOS: [],
           },
           //表单验证
@@ -350,7 +350,7 @@
           formPlan: {
             guestName:'',//调出方
             storeId: '', //调入仓库
-            orderDate: tools.transTime(new Date()), //申请调拨日期
+            orderDate: '', //申请调拨日期
             remark: '', //备注
             createUname: '', //创建人
             serviceId: '', //申请单号
@@ -390,7 +390,7 @@
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
             this.formPlan.storeId =  '', //调入仓库
-            this.formPlan.orderDate =  new Date(), //申请调拨日期
+            this.formPlan.orderDate =  '', //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
@@ -415,7 +415,7 @@
               data.orgid = this.rowOrgId
               data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
               data.guestId = this.guestidId
-              data.guestId = this.formPlan.guestName
+              // data.guestId = this.formPlan.guestName
               data.storeId = this.formPlan.storeId
               // data.guestName = this.formPlan.guestName
               data.orderDate = tools.transTime(this.formPlan.orderDate)
@@ -432,6 +432,7 @@
                     this.formPlan.remark =  '',
                     this.formPlan.createUname =  '',
                     this.formPlan.serviceId =  '',
+                    this.formPlan.orderDate = ''
                     this.Right.tbdata = []
                     this.$refs.formPlan.resetFields();
                 }
@@ -511,12 +512,12 @@
           this.leftgetList()
         },
         //供应商下拉查询
-        selecQuery(){
-          let req = {}
-          findForAllot(req).then(res => {
-            this.ArraySelect = res.data.content||[];
-          })
-        },
+        // selecQuery(){
+        //   let req = {}
+        //   findForAllot(req).then(res => {
+        //     this.ArraySelect = res.data.content||[];
+        //   })
+        // },
         //footer计算
         addFooter ({ columns, data }) {
           return [
@@ -565,8 +566,8 @@
               carBrandName : item.adapterCarBrand,
               carModelName : item.adapterCarModel,
               carTypef : item.baseType ? item.baseType.firstType ? item.baseType.firstType.typeName ? item.baseType.firstType.typeName : '' : '' : '',
-              // cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
-              // carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
+              cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
+              carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
               spec : item.specifications,
               partId : item.id,
               fullName : item.fullName,
@@ -590,9 +591,11 @@
         // 供应商子组件内容
         getSupplierName(a){
           // console.log(a)
+          // this.isInternalId = a.isInternalId
+          // this.formPlan.guestName = a.id
+          this.formPlan.guestName = a.fullName
+          this.guestidId = a.id
           this.isInternalId = a.isInternalId
-          this.formPlan.guestName = a.id
-          // this.guestidId = a.id
         },
         leftgetList(){
           let params = {}
@@ -640,11 +643,11 @@
             console.log(row)
             this.rowOrgId = row.orgid
             this.mainId = row.id
-            // this.guestidId = row.guestId
+            this.guestidId = row.guestId
             // console.log(this.guestidId,123)
             this.datadata = row
             // console.log(this.datadata)
-            this.formPlan.guestName = this.datadata.guestId
+            this.formPlan.guestName = this.datadata.guestName
             this.formPlan.storeId = this.datadata.storeId
             this.formPlan.orderDate = this.datadata.orderDate
             this.formPlan.remark = this.datadata.remark
@@ -693,7 +696,8 @@
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.id = this.rowId
                     data.orgId = this.rowOrgId
-                    data.guestId = this.formPlan.guestName
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     data.orderDate = tools.transTime(this.formPlan.orderDate)
                     data.remark = this.formPlan.remark
@@ -733,7 +737,7 @@
         });
           this.leftgetList();
           this.warehouse();
-          this.selecQuery();
+          // this.selecQuery();
       }
     }
 </script>

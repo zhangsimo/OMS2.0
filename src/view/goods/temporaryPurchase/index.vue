@@ -262,7 +262,7 @@
                   <FormItem class="form-Item" label="订单号：">
                     <Input
                       readonly
-                      placeholder="请输入订单号"
+                      placeholder=""
                       class="w160"
                       v-model="formPlanmain.serviceId"
                       :disabled="isInput"

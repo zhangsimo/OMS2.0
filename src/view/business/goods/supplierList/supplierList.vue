@@ -235,7 +235,7 @@
           _highlight: true,
           billStatusId: {name: "草稿", value: 0, enum: "DRAFT"},
           guestId : ''  , //调出方
-          orderMan : '',   //退货员
+          orderMan : this.$store.state.user.userData.id ,   //退货员
           orderDate : tools.transTime(new Date()),  //退货日期
           serviceId : '',  //采退单号
           rtnReasonId : '',  //退货原因
@@ -361,7 +361,7 @@
           cause: '',  //退货原因
           clearing: '', //结算方式
           guestName:'',//供应商
-          storeId: '', //退货员id
+          storeId: this.$store.state.user.userData.id , //退货员id
           storeName: '', //退货员名称
           orderDate: tools.transTime(new Date()), //退货日期
           remark: '', //备注
@@ -382,9 +382,10 @@
         sellOrderReturn(data).then(res => {
             if(res.code === 0){
               this.$Message.success('删除成功')
+              this.$refs.formPlan.resetFields();
               this.leftgetList()
               this.formPlan.guestName = ''   //调出方
-              data.orderMan = ''   //退货员
+              data.orderMan = ''  //退货员
               // tools.transTime(this.formPlan.orderDate)  //退货日期
               this.formPlan.numbers = '' //采退单号
               this.formPlan.cause  = '' //退货原因
@@ -413,7 +414,7 @@
           this.formPlan.cause =  '',  //退货原因
           this.formPlan.clearing =  '', //结算方式
           this.formPlan.guestName = '',//供应商
-          this.formPlan.storeId =  '', //退货员
+          this.formPlan.storeId =  this.$store.state.user.userData.id , //退货员
           this.formPlan.orderDate =  tools.transTime(new Date()), //退货日期
           this.formPlan.remark =  '', //备注
           this.formPlan.warehouse =  '', //退货仓库
@@ -486,26 +487,28 @@
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
             data.code = this.formPlan.serviceId //采购订单
-            data.details = this.Right.tbdata.map(item => {
-              return {
-                partId : item.partId,
-                partCode : item.partCode,
-                partName : item.partName,
-                partBrand : item.partBrand,
-                outUnitId : item.outUnitId,
-                canReQty : item.canReQty,
-                orderQty : item.orderQty,
-                orderPrice : item.orderPrice,
-                orderAmt : item.orderAmt,
-                remark : item.remark,
-                stockOutQty : item.stockOutQty,
-                oemCode : item.oemCode,
-                spec : item.spec
-              }
-            }) //子表格
+            data.details = this.Right.tbdata
+            // data.details = this.Right.tbdata.map(item => {
+            //   return {
+            //     partId : item.partId,
+            //     partCode : item.partCode,
+            //     partName : item.partName,
+            //     partBrand : item.partBrand,
+            //     outUnitId : item.outUnitId,
+            //     canReQty : item.canReQty,
+            //     orderQty : item.orderQty,
+            //     orderPrice : item.orderPrice,
+            //     orderAmt : item.orderAmt,
+            //     remark : item.remark,
+            //     stockOutQty : item.stockOutQty,
+            //     oemCode : item.oemCode,
+            //     spec : item.spec
+            //   }
+            // }) //子表格
             saveDraft(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
+                this.$refs.formPlan.resetFields();
                 this.leftgetList()
                 this.isAdd = true;
                 this.formPlan.guestName = ''   //调出方
@@ -766,23 +769,24 @@
               data.remark = this.formPlan.remark  //备注
               data.storeId = this.formPlan.warehouse  //退货仓库
               data.code = this.formPlan.serviceId //采购订单
-              data.details = this.Right.tbdata.map(item => {
-                return {
-                  partId : item.partId,
-                  partCode : item.partCode,
-                  partName : item.partName,
-                  partBrand : item.partBrand,
-                  outUnitId : item.outUnitId,
-                  canReQty : item.canReQty,
-                  orderQty : item.orderQty,
-                  orderPrice : item.orderPrice,
-                  orderAmt : item.orderAmt,
-                  remark : item.remark,
-                  stockOutQty : item.stockOutQty,
-                  oemCode : item.oemCode,
-                  spec : item.spec
-                }
-              }) //子表格
+              data.details = this.Right.tbdata
+              // data.details = this.Right.tbdata.map(item => {
+              //   return {
+              //     partId : item.partId,
+              //     partCode : item.partCode,
+              //     partName : item.partName,
+              //     partBrand : item.partBrand,
+              //     outUnitId : item.outUnitId,
+              //     canReQty : item.canReQty,
+              //     orderQty : item.orderQty,
+              //     orderPrice : item.orderPrice,
+              //     orderAmt : item.orderAmt,
+              //     remark : item.remark,
+              //     stockOutQty : item.stockOutQty,
+              //     oemCode : item.oemCode,
+              //     spec : item.spec
+              //   }
+              // }) //子表格
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');
