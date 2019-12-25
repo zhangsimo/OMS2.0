@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" value="车享汽配" />
+            <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -37,7 +37,7 @@
             </Select>
           </div>
           <div class="db ml5">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
@@ -56,13 +56,29 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
-          @on-row-click="election" max-height="400"></Table>
+        <Table
+          border
+          :columns="columns"
+          :data="data"
+          ref="summary"
+          show-summary
+          highlight-row
+          @on-row-click="election"
+          max-height="400"
+        ></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary max-height="400"></Table>
+        <Table
+          border
+          :columns="columns1"
+          :data="data1"
+          class="mt10"
+          ref="parts"
+          show-summary
+          max-height="400"
+        ></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" />
+    <selectDealings ref="selectDealings" @getOne="getOne" />
   </div>
 </template>
 
@@ -70,7 +86,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
-import { getWarehousingList, getWarehousingPart } from "@/api/bill/saleOrder";
+import { getWarehousingList, getWarehousingPart,getOutStockList } from "@/api/bill/saleOrder";
 export default {
   components: {
     quickDate,
@@ -242,7 +258,9 @@ export default {
           label: "采购退货"
         }
       ],
-      type:'050101'
+      type: "050101",
+      company: "", //往来单位
+      companyId: "" //往来单位id
     };
   },
   async mounted() {
@@ -250,9 +268,18 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral({enterTypeId: this.type});
+    this.getGeneral();
   },
   methods: {
+    //查询
+    query() {
+      this.getGeneral();
+    },
+    // 往来单位选择
+    getOne(data) {
+      this.company = data.fullName;
+      this.companyId = data.id;
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -282,32 +309,54 @@ export default {
       }
     },
     // 总表查询
-    getGeneral(obj) {
-      getWarehousingList(obj).then(res => {
-        // console.log(res);
-        if(res.data.length !==0){
-          res.data.map((item,index)=>{
-            item.num = index + 1
-            item.taxSign = item.taxSign ? '是' : '否'
-            item.auditSign = item.auditSign ? '已审' : '未审'
-          })
-          this.data = res.data
-        } else {
-          this.data = []
-        }
-      });
+    getGeneral() {
+      let obj = {
+        enterDateStart: this.value[0],
+        enterDateEnd: this.value[1],
+        orgId: this.model1,
+        guestId: this.companyId,
+        enterTypeId: this.type
+      };
+      if (this.type === "050101") {
+        getWarehousingList(obj).then(res => {
+          // console.log(res);
+          if (res.data.length !== 0) {
+            res.data.map((item, index) => {
+              item.num = index + 1;
+              item.taxSign = item.taxSign ? "是" : "否";
+              item.auditSign = item.auditSign ? "已审" : "未审";
+            });
+            this.data = res.data;
+          } else {
+            this.data = [];
+          }
+        });
+      } else if (this.type === "050201") {
+        getOutStockList(obj).then(res => {
+          if (res.data.length !== 0) {
+            res.data.map((item, index) => {
+              item.num = index + 1;
+              item.taxSign = item.taxSign ? "是" : "否";
+              item.auditSign = item.auditSign ? "已审" : "未审";
+            });
+            this.data = res.data;
+          } else {
+            this.data = [];
+          }
+        });
+      }
     },
     // 选中总表查询明细
     election(row) {
       getWarehousingPart({ mainId: roww.id }).then(res => {
-        if(res.data.length!==0){
-          res.data.map((item,index)=>{
-            item.num = index +1
-            item.taxSign = item.taxSign ? '是' : '否'
-          })
-          this.data1 = res.data
+        if (res.data.length !== 0) {
+          res.data.map((item, index) => {
+            item.num = index + 1;
+            item.taxSign = item.taxSign ? "是" : "否";
+          });
+          this.data1 = res.data;
         } else {
-          this.data1 = []
+          this.data1 = [];
         }
       });
     }
