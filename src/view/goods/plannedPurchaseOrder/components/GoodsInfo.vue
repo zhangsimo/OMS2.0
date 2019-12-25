@@ -176,7 +176,7 @@
                 size="small"
               />
             </FormItem>
-            <FormItem label="结算方式：">
+            <FormItem label="结算方式：" prop="settleType">
               <Select
                 v-model="formDateRight.settleType"
                 class="w200"
@@ -267,6 +267,9 @@ export default class GoodsInfo extends Vue {
     deliveryType: [
       { required: true, message: "配送方式不能为空", trigger: "change" }
     ],
+    settleType: [
+      { required: true, message: "结算方式不能为空", trigger: "change" }
+    ]
   };
 
   private ok() {
@@ -496,4 +499,5 @@ export default class GoodsInfo extends Vue {
   color: #000;
   background-color: #e8e8e8;
 }
+.c {}
 </style>
