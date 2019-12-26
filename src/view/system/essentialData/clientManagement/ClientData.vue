@@ -782,7 +782,6 @@ export default {
     addInoice() {
       this.addInoiceOne = {};
       this.tit = '新增开票'
-      console.log(this.addInoiceOne)
       this.newInoiceShow = true;
       this.$refs.AddInoice.resetFields();
     },
