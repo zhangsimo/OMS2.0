@@ -188,7 +188,7 @@
                   field="orderQty"
                   title="数量"
                   width="100"
-                  :edit-render="{name: 'input'}"
+                  :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
                 <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                 <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
@@ -257,6 +257,7 @@ export default {
   },
   data() {
     return {
+      numberValue: "",
       mainid: "",
       split1: 0.2,
       tabIndex: 0,
@@ -474,6 +475,9 @@ export default {
     this.getList();
   },
   methods: {
+    numChangeEvent({ row }, evnt) {
+      this.numberValue = evnt.target.value;
+    },
     //获取左侧列表
     getList() {
       //获取右边仓库数据
@@ -629,6 +633,10 @@ export default {
         this.$Message.error("只有草稿状态才能保存");
         return;
       }
+      if (this.numberValue < 0) {
+        this.$Message.error("数量不可小于0");
+        return;
+      }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
@@ -743,7 +751,7 @@ export default {
     //左边列表选中当前行
     selectTabelData(row) {
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
         this.currentData = [];
