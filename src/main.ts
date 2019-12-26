@@ -21,6 +21,7 @@ import XEUtils from 'xe-utils'
 import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+// @ts-ignore
 import {rightButtonShow} from './utils/button'
 
 import loadmore from "./directive/loadmore";
