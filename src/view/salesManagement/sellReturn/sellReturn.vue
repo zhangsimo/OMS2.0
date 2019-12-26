@@ -182,6 +182,7 @@
                       class="w160"
                       v-model="formPlan.remark"
                       :disabled="draftShow != 0||isNew"
+                      :edit-render="{name: 'input',attrs: {disabled: false}}"
                     />
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
@@ -231,6 +232,7 @@
                   auto-resize
                   @select-change="selectTable"
                   @select-all="selectAllTable"
+                  @edit-actived="editActivedEvent"
                   ref="xTable"
                   height='500'
                   :data="formPlan.details"
@@ -253,8 +255,8 @@
                     field="partBrand"
                     title="品牌"
                   ></vxe-table-column>
-                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input'}"></vxe-table-column>
-                  <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input'}"></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="数量"   :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
+                  <vxe-table-column field="orderPrice" title="销价"  :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
                   <vxe-table-column title="金额">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) |priceFilters}} </span>
@@ -263,7 +265,7 @@
                   <vxe-table-column
                     field="remark"
                     title="备注"
-                    :edit-render="{name: 'input'}"
+                    :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="storeName"
@@ -553,6 +555,17 @@
       this.getAllSales()
     },
     methods: {
+      //判断表格能不能编辑
+      editActivedEvent({ row }) {
+        let xTable = this.$refs.xTable;
+        let orderQtyColumn = xTable.getColumnByField("orderQty");
+        let orderPriceColumn = xTable.getColumnByField("orderPrice");
+        let remarkColumn = xTable.getColumnByField("remark");
+        let isDisabled = this.draftShow != 0;
+        orderQtyColumn.editRender.attrs.disabled = isDisabled;
+        orderPriceColumn.editRender.attrs.disabled = isDisabled;
+        remarkColumn.editRender.attrs.disabled = isDisabled;
+      },
       //获取销售员
       async getAllSales() {
         let res = await getSales();
