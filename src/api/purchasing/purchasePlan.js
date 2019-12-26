@@ -122,6 +122,16 @@ export function getCarParts(data) {
   })
 }
 
+//获取品牌订单
+//获取全品牌
+export function getParamsBrand(data) {
+  return axios.request({
+    url: `${api.omsOrder}/optGroup/optPartBrand`,
+    method: 'post',
+    data
+  })
+}
+
 // ====> 调拨所需接口
 export function getCarPartsTwo(params) {
   return axios.request({

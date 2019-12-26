@@ -8,7 +8,8 @@ import {
   saveReverse,
   exportXls,
   upxlxs,
-  deleteparts
+  deleteparts,
+  getParamsBrand
 } from "_api/purchasing/purchasePlan";
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
@@ -18,6 +19,7 @@ import { TOKEN_KEY } from "@/libs/util";
 export const mixGoodsData = {
   data() {
     return {
+      ArrayList: [],
       upurl: "",
       //计划采购信息
       formPlan: {
@@ -65,7 +67,6 @@ export const mixGoodsData = {
       companyMap: [],
       //选中的采购计划单
       selectPlanOrderItem: {},
-
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }
@@ -100,6 +101,7 @@ export const mixGoodsData = {
       }
     });
   },
+
   methods: {
     //初始化
     async getList() {
@@ -147,7 +149,6 @@ export const mixGoodsData = {
     },
     //采购计划列表选中数据
     selectVxeData({ selection, rowIndex, reserves }) {
-      console.log(selection, 's.tableData.concat(v) =>267"');
       this.delArr = selection;
     },
     selectAll({ checked }) {
@@ -264,8 +265,8 @@ export const mixGoodsData = {
     //添加配件数据
     getPartNameList(v) {
       this.tableData = this.tableData.concat(v);
-      console.log(this.tableData, "this.tableData  ==>267");
-      console.log(this.tableData, "this.tableData.concat(v) =>267");
+      // console.log(this.tableData, "this.tableData  ==>267");
+      // console.log(this.tableData, "this.tableData.concat(v) =>267");
       var oldArr = this.tableData;
       // console.log(oldArr, "oldArr =>269");
       var allArr = [];
@@ -365,8 +366,11 @@ export const mixGoodsData = {
           this.upurl = upxlxs + v.id;
         }
       }
+      this.$refs.selectSupplier.getList();
     },
-
+    getArray(data) {
+      this.ArrayList = data;
+    },
     //新增采购计划单
     addOrder() {
       if (this.newadd) {
