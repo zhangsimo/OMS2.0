@@ -1379,7 +1379,7 @@ export default [
           {
             path: "/essentialData/clientCredit",
             name: "clientCredit",
-            // mark: "54",
+            mark: "9113",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1464,7 +1464,7 @@ export default [
           {
             path: "/system/basicdata/mixture",
             name: "mixtureRatio",
-            // mark: "60",
+            mark: "9115",
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
@@ -1475,7 +1475,7 @@ export default [
           {
             path: "/lease/dataDictionary/",
             name: "dataDictionary",
-            // mark: 'gpart_oms_policy',
+            mark: '9116',
             meta: {
               icon: "gear-b",
               title: "数据字典"
@@ -1510,7 +1510,7 @@ export default [
           {
             path: "/system/systemSetting/navigationFater/sysetmset",
             name: "sysetmset",
-            // mark: '62',
+            mark: '9204',
             meta: {
               // hideInMenu: true,
               title: "业务参数"
@@ -1523,7 +1523,7 @@ export default [
           {
             path: "/system/systemSetting/navigationFater/SettlementAccount",
             name: "SettlementAccount",
-            // mark: 'oms_orders_approve',
+            mark: '9205',
             meta: {
               // hideInMenu: true,
               title: "结算账户"
