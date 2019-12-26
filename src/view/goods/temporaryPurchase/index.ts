@@ -53,20 +53,20 @@ export default class InterPurchase extends Vue {
   private adjustButtonDisable: boolean = true;
 
   // 选中的采购订单列表的状态;
-  private selectRowState:orderState| null = null;
-  private serviceId:string = '';
+  private selectRowState: orderState | null = null;
+  private serviceId: string = '';
 
   // 快速查询订单状态
   private purchaseType: string | number = "";
   // 快速查询订单状态选项
   private purchaseTypeArr: Array<Option> = []
-  private headers={
-    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
+  private headers = {
+    Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
   };//请求头
   private upurl = api.getup;//导入地址
   // 采购订单列表——被选中行
   private selectTableRow: any = null;
-  private mainId: string|null = null;
+  private mainId: string | null = null;
 
   // 采购订单列表
   private purchaseOrderTable = {
@@ -141,24 +141,24 @@ export default class InterPurchase extends Vue {
     this.$Message.error('只支持xls xlsx后缀的文件')
   };
   // 上传成功函数
-  onSuccess (response) {
-    if(response.code == 0 ){
-      if(response.data.list&& response.data.list.length > 0){
+  onSuccess(response) {
+    if (response.code == 0) {
+      if (response.data.list && response.data.list.length > 0) {
         this.warning(response.data.list[0])
       }
-    }else {
+    } else {
       this.$Message.error(response.message)
     }
   }
-  warning(nodesc){
+  warning(nodesc) {
     this.$Notice.warning({
       title: '上传错误信息',
       desc: nodesc
     });
   };
   //上传之前清空
-  beforeUpload(){
-    let upload : any=this.$refs.upload;
+  beforeUpload() {
+    let upload: any = this.$refs.upload;
     upload.clearFiles()
   };
   // 合计采购金额
@@ -177,7 +177,7 @@ export default class InterPurchase extends Vue {
   private formPlanmain: any = {
     guestId: "", // 供应商id
     guestName: "", // 供应商
-    advanceAmt:"",//预付款
+    advanceAmt: "",//预付款
     orderMan: "", // 采购员
     orderManId: "",
     billTypeId: "", // 票据类型
@@ -200,33 +200,33 @@ export default class InterPurchase extends Vue {
   // 采购订单信息表格数据
   private tableData: Array<any> = new Array();
 
-  private options1:any = {
-    disabledDate (date:any) {
+  private options1: any = {
+    disabledDate(date: any) {
       return date && date.valueOf() < Date.now() - 86400000;
     }
   }
 
-  private options2:any = {
+  private options2: any = {
     disabledDate: this.options2DisabledDate,
   }
 
-  private options2DisabledDate (date:any) {
+  private options2DisabledDate(date: any) {
     const orderDate = this.formPlanmain.orderDate;
     return date && orderDate && date.valueOf() < orderDate;
   }
 
-  private salesList:Array<any> = new Array();
+  private salesList: Array<any> = new Array();
   private async getAllSales() {
-    let res:any = await getSales();
+    let res: any = await getSales();
     if (res.code === 0) {
       this.salesList = res.data.content;
-      this.salesList.forEach((item:any) => {
+      this.salesList.forEach((item: any) => {
         item.label = item.userName;
         item.value = item.id;
       })
     }
   }
-  private selectOrderMan(val:any){
+  private selectOrderMan(val: any) {
     this.formPlanmain.orderMan = val.label || "";
     this.formPlanmain.orderManId = val.value || "";
   }
@@ -275,8 +275,21 @@ export default class InterPurchase extends Vue {
       return this.$Message.error('请先保存数据');
     }
     ref.resetFields();
-    this.formPlanmain.guestId = '';
-    this.formPlanmain.serviceId = '';
+    this.formPlanmain = {
+      guestId: "", // 供应商id
+      guestName: "", // 供应商
+      advanceAmt: "",//预付款
+      orderMan: "", // 采购员
+      orderManId: "",
+      billTypeId: "", // 票据类型
+      settleTypeId: "",  // 结算方式
+      storeId: "", // 入库仓
+      orderDate: "", // 订货日期
+      planArriveDate: "", // 预计到货日期
+      remark: "", // 备注
+      directGuestId: "", // 直发门店
+      serviceId: "", // 订单号
+    }
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
@@ -306,7 +319,7 @@ export default class InterPurchase extends Vue {
           remark: this.formPlanmain.remark,
           directGuestId: this.formPlanmain.directGuestId,
           serviceId: this.formPlanmain.serviceId,
-          advanceAmt:this.formPlanmain.advanceAmt,
+          advanceAmt: this.formPlanmain.advanceAmt,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -336,9 +349,7 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
-    if (this.selectTableRow.id) {
-      data = Object.assign({}, this.selectTableRow, data);
-    }
+    data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
@@ -376,23 +387,36 @@ export default class InterPurchase extends Vue {
 
   // 选择要删除配件
   private deletePartArr: Array<any> = new Array();
+  private tmpDeletePartArr: Array<any> = new Array();
   private selectAll({ checked }) {
     if (checked) {
       this.tableData.forEach((el: any) => {
         if (el.isOldFlag) {
           this.deletePartArr.push(el)
+        } else {
+          this.tmpDeletePartArr.push(el);
         }
       })
     } else {
       this.deletePartArr = new Array();
+      this.tmpDeletePartArr = new Array();
     }
   }
   private selectChange({ checked, row }) {
     if (checked) {
-      this.deletePartArr.push(row);
+      if (row.isOldFlag) {
+        this.deletePartArr.push(row);
+      } else {
+        this.tmpDeletePartArr.push(row);
+      }
     } else {
       this.deletePartArr.forEach((el: any, index: number, arr: Array<any>) => {
         if (el.isOldFlag && row.id == el.id) {
+          arr.splice(index, 1);
+        }
+      })
+      this.tmpDeletePartArr.forEach((el: any, index: number, arr: Array<any>) => {
+        if (row.oid == el.oid) {
           arr.splice(index, 1);
         }
       })
@@ -401,14 +425,40 @@ export default class InterPurchase extends Vue {
 
   // 删除配件
   private delPart() {
-    if (this.deletePartArr.length <= 0) return this.$Message.error('请选择要删除的配件');
+    if (this.deletePartArr.length <= 0 && this.tmpDeletePartArr.length <= 0) return this.$Message.error('请选择要删除的配件');
+    let delOk: boolean = false;
+    let delOk2: boolean = false;
+    let isNetWork: boolean = false;
     this.$Modal.confirm({
       title: '是否要删除配件',
       onOk: async () => {
-        let res: any = await api.delPchsOrderDetail(this.deletePartArr);
-        if (res.code == 0) {
+        if (this.deletePartArr.length > 0) {
+          let res: any = await api.delPchsOrderDetail(this.deletePartArr);
+          if (res.code == 0) {
+            delOk = true;
+            isNetWork = true;
+          }
+        } else {
+          delOk = true;
+        }
+        if (this.tmpDeletePartArr.length > 0) {
+          this.tmpDeletePartArr.forEach((els: any) => {
+            this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+              if (el.oid == els.oid) {
+                arr.splice(index, 1);
+              }
+            })
+          })
+          this.tmpDeletePartArr = [];
+          delOk2 = true;
+        } else {
+          delOk2 = true;
+        }
+        if (delOk && delOk2) {
           this.$Message.success('删除成功');
-          this.getListData();
+          if (isNetWork) {
+            this.getListData();
+          }
         }
       },
       onCancel: () => {
@@ -419,7 +469,7 @@ export default class InterPurchase extends Vue {
 
   // 废弃
   private abandoned() {
-    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.$Modal.confirm({
       title: '是否要作废',
       onOk: async () => {
@@ -437,20 +487,20 @@ export default class InterPurchase extends Vue {
 
   // 打印
   private print() {
-    const ref:any = this.$refs.PrintModel;
+    const ref: any = this.$refs.PrintModel;
     ref.openModal();
   }
 
   //表格单选选中
   private selectTabelData(v: any) {
-    if(v == null) return;
+    if (v == null) return;
     const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
       this.$Modal.confirm({
         title: '您正在编辑单据，是否需要保存',
         onOk: () => {
           currentRowTable.clearCurrentRow();
-          this.purchaseOrderTable.tbdata[0] = {...this.selectTableRow, ...this.formPlanmain,  _highlight: true };
+          this.purchaseOrderTable.tbdata[0] = { ...this.selectTableRow, ...this.formPlanmain, _highlight: true };
           const row = this.purchaseOrderTable.tbdata[0];
           this.selectTableRow = this.purchaseOrderTable.tbdata[0];
           this.purchaseOrderTable.tbdata.push();
@@ -469,25 +519,27 @@ export default class InterPurchase extends Vue {
           this.purchaseOrderTable.tbdata.splice(0, 1);
           this.isAdd = true;
           currentRowTable.clearCurrentRow();
+          const ref: any = this.$refs['formplanref']
+          ref.resetFields();
         },
       })
     } else {
-      if(this.isAdd) {
+      if (this.isAdd) {
         const ref: any = this.$refs['formplanref']
         ref.resetFields();
       }
-      if(v) {
+      if (v) {
         this.selectTableRow = v;
         this.mainId = v.id;
         this.tableData = v.details || [];
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
-        if(['草稿', '退回'].includes(v.billStatusId.name)) {
+        if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {
           this.isInput = true;
         }
-        if(['待收货', '部分入库'].includes(v.billStatusId.name)) {
+        if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
           this.adjustButtonDisable = false;
         } else {
           this.adjustButtonDisable = true;
@@ -555,25 +607,25 @@ export default class InterPurchase extends Vue {
 
   // 费用登记
   private showFee() {
-    if(this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
+    if (this.selectRowState === null || !this.mainId) return this.$Message.error('请先保存数据');
     this.showModel('feeRegistration');
   }
 
   // 收货信息
   private showGoodsInfo() {
-    if(!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
+    if (!this.selectTableRow || this.selectTableRow.new) return this.$Message.error('请先保存数据');
     this.showModel('goodsInfo');
   }
   //查看审批
-  private showStatus(){
+  private showStatus() {
     this.showModel('StatusModel');
   }
   //添加配件
-  private addAcc(){
-   this.showModel('selectPartCom')
+  private addAcc() {
+    this.showModel('selectPartCom')
   }
   //添加配件数据
-  private getPartNameList(v){
+  private getPartNameList(v) {
     this.tableData = this.tableData.concat(v)
   }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
@@ -582,8 +634,8 @@ export default class InterPurchase extends Vue {
     ref.init();
   }
   //导入
-  private getRUl(){
-    this.upurl=api.getup+'id=' + this.mainId;
+  private getRUl() {
+    this.upurl = api.getup + 'id=' + this.mainId;
   }
   // 调节大小
   private getDomHeight() {
@@ -606,7 +658,7 @@ export default class InterPurchase extends Vue {
   private async init() {
     let res: any = await api.optGroupInit();
     if (res.code == 0) {
-      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap } = res.data;
+      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap, defaultStore } = res.data;
       // 票据类型
       for (let el in invoiceMap) {
         this.pjTypes.push({ value: invoiceMap[el], label: el })
@@ -623,8 +675,11 @@ export default class InterPurchase extends Vue {
       for (let el in companyMap) {
         this.putStores.push({ value: companyMap[el], label: el })
       }
-      for(let el in billStatusMap) {
+      for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+      }
+      if (defaultStore) {
+        this.formPlanmain.storeId = defaultStore;
       }
     }
   }
@@ -688,11 +743,11 @@ export default class InterPurchase extends Vue {
 
   // 选择供应商
   private selectSupplierName(row: any) {
-    if(row) {
+    if (row) {
       this.formPlanmain.guestName = row.fullName;
       this.formPlanmain.guestId = row.id;
       //结算方式
-      this.formPlanmain.settleTypeId =  row.settTypeId || ''
+      this.formPlanmain.settleTypeId = row.settTypeId || ''
       //票据类型
       this.formPlanmain.billTypeId = row.billTypeId || ''
     }
@@ -700,7 +755,8 @@ export default class InterPurchase extends Vue {
 
   // 采购计划单据
   private getPlanOrder(row: any) {
-    if(!row) return;
+    if (!row) return;
+    this.formPlanmain.code = row.serviceId;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
@@ -708,8 +764,8 @@ export default class InterPurchase extends Vue {
         }
       })
     })
-    this.tableData = this.tableData.concat(...row.details);
-    this.selectTableRow.details = this.tableData;
+    this.tableData = row.details;
+    // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
         el = this.selectTableRow;
@@ -726,7 +782,7 @@ export default class InterPurchase extends Vue {
     this.amt = amt;
   }
   // 操作-查看
-  private partId:string = '';
+  private partId: string = '';
   private watch(id: any) {
     this.partId = id || null;
     this.$nextTick(() => {

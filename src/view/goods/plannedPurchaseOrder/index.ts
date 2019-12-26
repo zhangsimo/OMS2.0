@@ -268,16 +268,26 @@ export default class PlannedPurchaseOrder extends Vue {
       return this.$Message.error('请先保存数据');
     }
     ref.resetFields();
-    this.formPlanmain.guestId = '';
-    this.formPlanmain.serviceId = '';
-    this.formPlanmain.code = "";
-    this.formPlanmain.codeId = "";
+    this.formPlanmain = {
+      guestId: "", // 供应商id
+      guestName: "", // 供应商
+      orderMan: "", // 采购员
+      orderManId: "",
+      billTypeId: "", // 票据类型
+      settleTypeId: "",  // 结算方式
+      storeId: "", // 入库仓
+      orderDate: "", // 订货日期
+      planArriveDate: "", // 预计到货日期
+      remark: "", // 备注
+      directGuestId: "", // 直发门店
+      serviceId: "", // 订单号
+      code: "", // 往来单号
+      codeId: "",
+    }
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
-    this.formPlanmain.orderMan = this.user.userData.staffName;
-    this.formPlanmain.orderManId = this.user.userData.id;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
@@ -332,9 +342,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (!data) return;
-    if (this.selectTableRow.id) {
-      data = Object.assign({}, this.selectTableRow, data);
-    }
+    data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.saveDraft(data);
     if (res.code == 0) {
@@ -352,7 +360,7 @@ export default class PlannedPurchaseOrder extends Vue {
         let data: any = this.formdata(refname);
         if (!data) return;
         if (this.selectTableRow.id) {
-          data = Object.assign({}, this.selectTableRow, data);
+          data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
         let res = await api.saveCommit(data);
@@ -372,23 +380,36 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 选择要删除配件
   private deletePartArr: Array<any> = new Array();
+  private tmpDeletePartArr: Array<any> = new Array();
   private selectAll({ checked }) {
     if (checked) {
       this.tableData.forEach((el: any) => {
         if (el.isOldFlag) {
           this.deletePartArr.push(el)
+        } else {
+          this.tmpDeletePartArr.push(el);
         }
       })
     } else {
       this.deletePartArr = new Array();
+      this.tmpDeletePartArr = new Array();
     }
   }
   private selectChange({ checked, row }) {
     if (checked) {
-      this.deletePartArr.push(row);
+      if(row.isOldFlag) {
+        this.deletePartArr.push(row);
+      } else {
+        this.tmpDeletePartArr.push(row);
+      }
     } else {
       this.deletePartArr.forEach((el: any, index: number, arr: Array<any>) => {
         if (el.isOldFlag && row.id == el.id) {
+          arr.splice(index, 1);
+        }
+      })
+      this.tmpDeletePartArr.forEach((el: any, index: number, arr: Array<any>) => {
+        if (row.oid == el.oid) {
           arr.splice(index, 1);
         }
       })
@@ -397,14 +418,40 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 删除配件
   private delPart() {
-    if (this.deletePartArr.length <= 0) return this.$Message.error('请选择要删除的配件');
+    if (this.deletePartArr.length <= 0 && this.tmpDeletePartArr.length <= 0 ) return this.$Message.error('请选择要删除的配件');
+    let delOk:boolean = false;
+    let delOk2:boolean = false;
+    let isNetWork:boolean = false;
     this.$Modal.confirm({
       title: '是否要删除配件',
       onOk: async () => {
-        let res: any = await api.delPchsOrderDetail(this.deletePartArr);
-        if (res.code == 0) {
+        if(this.deletePartArr.length > 0) {
+          let res:any = await api.delPchsOrderDetail(this.deletePartArr);
+          if(res.code == 0) {
+            delOk = true;
+            isNetWork = true;
+          }
+        } else {
+          delOk = true;
+        }
+        if(this.tmpDeletePartArr.length > 0) {
+          this.tmpDeletePartArr.forEach((els:any) => {
+            this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+              if(el.oid == els.oid) {
+                arr.splice(index, 1);
+              }
+            })
+          })
+          this.tmpDeletePartArr = [];
+          delOk2 = true;
+        } else {
+          delOk2 = true;
+        }
+        if (delOk && delOk2) {
           this.$Message.success('删除成功');
-          this.getListData();
+          if(isNetWork) {
+            this.getListData();
+          }
         }
       },
       onCancel: () => {
@@ -465,6 +512,8 @@ export default class PlannedPurchaseOrder extends Vue {
           this.purchaseOrderTable.tbdata.splice(0, 1);
           this.isAdd = true;
           currentRowTable.clearCurrentRow();
+          const ref: any = this.$refs['formplanref']
+          ref.resetFields();
         },
       })
     } else {
@@ -588,7 +637,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private async init() {
     let res: any = await api.optGroupInit();
     if (res.code == 0) {
-      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap } = res.data;
+      const { companyMap, invoiceMap, guestMap, levelMap, settlementMap, billStatusMap, storeMap, defaultStore } = res.data;
       // 票据类型
       for (let el in invoiceMap) {
         this.pjTypes.push({ value: invoiceMap[el], label: el })
@@ -607,6 +656,9 @@ export default class PlannedPurchaseOrder extends Vue {
       }
       for (let el in billStatusMap) {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+      }
+      if(defaultStore) {
+        this.formPlanmain.storeId = defaultStore;
       }
     }
   }
@@ -691,8 +743,7 @@ export default class PlannedPurchaseOrder extends Vue {
         }
       })
     })
-    this.tableData = this.selectTableRow.details;
-    this.tableData = this.tableData.concat(...row.details);
+    this.tableData = row.details;
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {
