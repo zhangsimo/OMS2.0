@@ -576,7 +576,7 @@
           // createTime: tools.transTime(new Date())
         },
         selectTableList: [], //右侧table表格选中的数据
-        isCommit: false, //判断是否已提交
+        // isCommit: false, //判断是否已提交
         planSendDatePicker: {
           disabledDate: function (date) {
             //不能选择小于当前时间的日期；
@@ -788,6 +788,9 @@
             let res = await getSave(data)
             if (res.code === 0) {
               this.getLeftList()
+              this.formPlan={}
+              this.isNew=true
+              this.$refs.formPlan.resetFields()
             }
           } else {
             this.$Message.error('*为必填项');
@@ -910,6 +913,7 @@
                 this.getLeftList()
                 this.id = null
                 this.formPlan = {}
+                this.isNew=true
                 this.$refs.formPlan.resetFields();
               }
             },
@@ -934,7 +938,8 @@
               let res = await getSave(this.formPlan)
               if (res.code === 0) {
                 this.isAdd = true;
-                this.isCommit = true
+                this.isNew=true
+                // this.isCommit = true
                 this.$Message.success('保存成功');
                 this.getLeftList()
                 this.formPlan = {}
@@ -952,9 +957,9 @@
       },
       //提交
       isSubmit() {
-        if (!this.isCommit||!this.formPlan.id) {
-          return this.$Message.error('请先保存数据')
-        }
+        // if (!this.isCommit||!this.formPlan.id) {
+        //   return this.$Message.error('请先保存数据')
+        // }
 
         this.$Modal.confirm({
           title: '是否确定提交订单',
@@ -965,7 +970,7 @@
             if (res.code == 0) {
               this.$Message.success('提交成功');
               this.getLeftList()
-              this.isCommit = false;
+              // this.isCommit = false;
               this.isNew = true
               this.formPlan = {}
               this.id = null
@@ -1013,9 +1018,12 @@
           })
           getDeleteList(data).then(res => {
             if (res.code === 0) {
-              this.formPlan = {}
               this.$Message.success('删除配件成功');
               this.getLeftList()
+              this.formPlan = {}
+              this.tableData = []
+              this.$refs.formPlan.resetFields();
+              this.isNew=true
             }
           })
         } else {
