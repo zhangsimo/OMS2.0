@@ -137,10 +137,10 @@
                   </FormItem>
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Input
+                      disabled = 'disabled'
                       class="w160"
                       v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
-                      :disabled="Leftcurrentrow.status.value !== 0"
                     />
                   </FormItem>
                 </Form>
@@ -423,6 +423,7 @@ export default {
       rightTableHeight: 0,
       //配件组装信息 表单model
       formModel: [],
+      warehouseList: [],
       Leftcurrentrow: {
         status: {
           value: 0
@@ -457,7 +458,7 @@ export default {
   },
   watch: {
     purchaseType: function(val, old) {
-      console.log(val, old);
+      // console.log(val, old);
       this.Left.page.num = 1;
       this.Left.page.size = 10;
       this.getList();
@@ -499,7 +500,6 @@ export default {
       let size = this.Left.page.size;
       getLeftList(data, page, size)
         .then(res => {
-          console.log(res);
           if (res.code === 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -517,7 +517,7 @@ export default {
         .catch(err => {
           this.$Message.info("获取移仓列表失败");
         });
-      console.log(this.$store.state.user.userData);
+      // console.log(this.$store.state.user.userData);
     },
     //获取表格高度
     getDomHeight() {
@@ -536,7 +536,7 @@ export default {
     setTab(index) {
       this.tabIndex = index;
       if (this.tabIndex == 1) {
-        console.log("配件拆分");
+        // console.log("配件拆分");
       }
     },
     //快速查询日期
@@ -548,7 +548,6 @@ export default {
     },
     //改变移仓时间
     commitDate(data) {
-      console.log(data);
       this.Leftcurrentrow.commitDate = data + " " + "00:00:00";
     },
     //更多按钮
@@ -630,30 +629,36 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      updata(params)
-        .then(res => {
-          if (res.code == 0) {
-            console.log(res, "res=>616");
-            this.$Message.success("保存成功");
-            this.getList();
-          }
-        })
-        .catch(e => {
-          this.$Message.info("保存失败");
-        });
+      this.$refs.Leftcurrentrow.validate(valid => {
+                    if (valid) {
+                        //成功
+                        updata(params)
+                          .then(res => {
+                            if (res.code == 0) {
+                              // console.log(res, "res=>616");
+                              this.$Message.success("保存成功");
+                              this.getList();
+                            }
+                          })
+                          .catch(e => {
+                            this.$Message.info("保存失败");
+                          });
+                    } else {
+                        this.$Message.error('*都是必填项');
+                    }
+                })
+
     },
     // 提交
     editPro() {
       //判断是否为草稿状态
-      this.$refs.Leftcurrentrow.validate(valid => {
-        if (valid) {
-          //成功
-          console.log("成功", "成功=>651");
-        } else {
-          console.log("失败", "失败=>653");
-          return;
-        }
-      });
+      // this.$refs.Leftcurrentrow.validate(valid => {
+      //   if (valid) {
+      //     //成功
+      //   } else {
+      //     return;
+      //   }
+      // });
       if (!this.Leftcurrentrow.id) {
         this.$Message.error("请选择数据");
         return;
@@ -738,7 +743,7 @@ export default {
     //左边列表选中当前行
     selectTabelData(row) {
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
         this.currentData = [];
@@ -755,7 +760,7 @@ export default {
       }
       if (this.Leftcurrentrow.id != undefined) {
         getRightDatas(this.Leftcurrentrow.id).then(res => {
-          console.log(res, "res=>728");
+          // console.log(res, "res=>728");
           this.Right.tbdata = res.data;
           this.Leftcurrentrow.detailVOList = res.data;
         });
@@ -764,16 +769,15 @@ export default {
 
     //添加配件
     getPartNameList(val) {
-      console.log(val, 999);
       // console.log(conversionList(val),8888)
       var datas = conversionList(val);
-      console.log(datas, "datas=>738");
+      // console.log(datas, "datas=>738");
       datas.forEach(item => {
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });
-      console.log(this.Right.tbdata);
-      console.log(this.Leftcurrentrow);
+      // console.log(this.Right.tbdata);
+      // console.log(this.Leftcurrentrow);
       // getSubmitList(this.Leftcurrentrow)
       //   .then(res => {
       //     console.log(res);
@@ -788,7 +792,7 @@ export default {
     deletePar() {
       const seleList = this.$refs.xTable1.getSelectRecords();
       const ids = [];
-      console.log(seleList, "seleList =>753");
+      // console.log(seleList, "seleList =>753");
       // seleList.forEach(item => {
       //   ids.push(Number(item.id));
       // });
@@ -796,7 +800,7 @@ export default {
         ids.push(seleList[i].id);
         this.mainid = seleList[i].mainId;
       }
-      console.log(ids, this.mainId);
+      // console.log(ids, this.mainId);
       let arrParams = {
         ids: ids,
         mainId: this.mainid
@@ -806,7 +810,7 @@ export default {
       // console.log(arrParams, "arrParams781");
       delectTable(arrParams)
         .then(res => {
-          console.log(res, "783");
+          // console.log(res, "783");
           if (res.code == 0) {
             this.$Message.success("删除成功");
             // this.selectTabelData();
