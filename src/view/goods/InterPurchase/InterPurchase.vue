@@ -478,37 +478,32 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="carBrand"
+                  field="carBrandName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="enterUnitId"
+                  field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="oeCode"
+                  field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="specifications"
+                  field="spec"
                   title="规格"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="direction"
-                  title="方向"
-                  width="100"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="cancelQty"
+                  field="notEnterQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="acceptQty"
+                  field="trueEnterQty"
                   title="验收数量"
                   width="100"
                 ></vxe-table-column>

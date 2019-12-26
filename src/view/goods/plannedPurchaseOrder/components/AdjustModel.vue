@@ -37,6 +37,9 @@
             </span>
           </Button>
         </div>
+        <div class="db ml15">
+          <Checkbox v-model="showModify" @on-change="query">显示已调整</Checkbox>
+        </div>
       </div>
       <div>
         <vxe-table
@@ -112,12 +115,14 @@ export default class AdjustModel extends Vue {
   @Prop(String) readonly mainId;
 
   private tableData: Array<any> = new Array();
+  private showModify:boolean = false;
 
   private partCode: string = "";
   private partName: string = "";
 
   private init(): void {
     this.show = true;
+    this.showModify = false;
     this.reset();
     this.getList();
   }
@@ -139,6 +144,7 @@ export default class AdjustModel extends Vue {
     this.loading = true;
     let data: any = {};
     data.mainId = this.mainId;
+    data.showModify = this.showModify;
     if (this.partCode.trim()) {
       data.partCode = this.partCode.trim();
     }

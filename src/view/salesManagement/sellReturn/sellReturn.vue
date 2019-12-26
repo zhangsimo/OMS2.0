@@ -257,7 +257,7 @@
                   <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input'}"></vxe-table-column>
                   <vxe-table-column title="金额">
                     <template v-slot="{ row }">
-                      <span>{{ countAmount(row) }} </span>
+                      <span>{{ countAmount(row) |priceFilters}} </span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column
@@ -444,7 +444,7 @@
             {
               title: '状态',
               render: (h, params) => {
-                let tex = params.row.billStatusId.name
+                let tex = params.row.billStatusName
                 return h('span', {}, tex)
 
               },
@@ -579,6 +579,7 @@
       //计算表格数据
       countAmount(row) {
         return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
+
       },
       //获取左侧表格一行选中的数据
       selectTabelData(v) {
@@ -765,6 +766,7 @@
       },
       // 计算尾部总和
       countAllAmount(data) {
+        // console.log('33333333',data)
         let count = 0
         data.forEach(row => {
           count += this.countAmount(row)
@@ -810,7 +812,7 @@
               data.billStatusId = null
               // data.orderDate=this.formPlan.orderDate
               let res = await getSave(data)
-              console.log('打印出来的保存数据888',res)
+              // console.log('打印出来的保存数据888',res)
               if (res.code === 0) {
                 this.isAdd = true;
                 this.isNew=true

@@ -692,7 +692,6 @@ export default {
             this.Left.tbdata.splice(0, 1);
             currentRowTable.clearCurrentRow();
             this.isAdd = true;
-            console.log(this.isAdd);
             this.formPlan.salesman =  '', //业务员
               this.formPlan.Reservation =  '',
               this.formPlan.remark =  '',
@@ -700,12 +699,9 @@ export default {
           },
         })
       }else{
-        // console.log(row)
-        // console.log(row.id)
         this.mainId = row.id
         this.guestidId = row.guestId
         this.datadata = row
-        // console.log(this.datadata)
         if(row.id){
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo
@@ -755,6 +751,7 @@ export default {
                             this.formPlan.Reservation =  '',
                             this.formPlan.remark =  '',
                             this.Right.tbdata = []
+                            this.Flaga = true
                         }
                       })
                   } else {

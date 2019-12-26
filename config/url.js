@@ -8,9 +8,9 @@ const dev = {
   // omsApi: 'http://192.168.30.21:9240', // 付玮琳
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
-  omsApi: "http://192.168.30.179:9240", // 陈舒
-  wmsApi: "http://192.168.30.16:9250", // 陈舒
-  omsOrder: "http://192.168.30.16:9210", // 陈舒
+  omsApi: 'http://192.168.30.179:9240', // 陈舒
+  wmsApi: 'http://192.168.30.234:9250', // 陈舒
+  omsOrder: 'http://192.168.30.84:9210', // 陈舒
   // omsOrder: 'http://192.168.30.179:9210', // 常国地
 
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
@@ -64,7 +64,8 @@ const test = {
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   getFileApi: "https://tsoms2.g-parts.cn",
-  downApi: "https://tsapi2.g-parts.cn/oms-oss-provider"
+  downApi: "https://tsapi2.g-parts.cn/oms-oss-provider",
+  omsTpApi:"https://tsapi2.g-parts.cn/oms-thirdparty-provider"
 };
 
 const audit = {

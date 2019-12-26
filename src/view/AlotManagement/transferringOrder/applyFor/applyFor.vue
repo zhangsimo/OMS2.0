@@ -40,7 +40,7 @@
                   <div class="pane-made-hd">
                     调拨申请列表
                   </div>
-                  <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                  <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
                   <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
                         @on-page-size-change="changeSizeLeft" show-sizer show-total>
                   </Page>
@@ -141,7 +141,7 @@
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
                     <vxe-table-column title="紧销品" width="100" type="checkbox">
                       <template v-slot="{ row,rowIndex }">
-                        <Checkbox disabled :value="row.isTight == 1"></Checkbox>
+                        <Checkbox disabled :value="row.isTightPart"></Checkbox>
                       </template>
                     </vxe-table-column>
                     <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
@@ -356,7 +356,8 @@
             serviceId: '', //申请单号
           },
           mainId: null, //选中行的id
-          clickdelivery: false
+          clickdelivery: false,
+          Flaga: false
         }
       },
       methods: {
@@ -395,6 +396,7 @@
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
+            this.rowId = ''
           // console.log(this.Left.tbdata)
         },
         //添加配件按钮
@@ -434,6 +436,7 @@
                     this.formPlan.serviceId =  '',
                     this.formPlan.orderDate = ''
                     this.Right.tbdata = []
+                    this.isAdd = true
                     this.$refs.formPlan.resetFields();
                 }
               })
@@ -573,6 +576,7 @@
               partId : item.id,
               fullName : item.fullName,
               systemUnitId : item.minUnit,
+              isTightPart: !!item.isTightPart,
             }
           })
           console.log(parts)
@@ -640,28 +644,85 @@
         },
         // 左边部分的当前行
         selection(row){
-          if(row.id){
-            console.log(row)
-            this.rowOrgId = row.orgid
-            this.mainId = row.id
-            this.guestidId = row.guestId
-            // console.log(this.guestidId,123)
-            this.datadata = row
-            // console.log(this.datadata)
-            this.formPlan.guestName = this.datadata.guestName
-            this.formPlan.storeId = this.datadata.storeId
-            this.formPlan.orderDate = this.datadata.orderDate
-            this.formPlan.remark = this.datadata.remark
-            this.formPlan.createUname = this.datadata.createUname
-            this.formPlan.serviceId = this.datadata.serviceId
-            // this.guestidId = this
-            this.presentrowMsg = row.status.value
-            console.log(this.presentrowMsg)
-            this.rowId = row.id
+          if (row == null) return;
+          let currentRowTable = this.$refs["currentRowTable"];
+          if(!this.Flaga && !this.isAdd){
+            this.$Modal.confirm({
+              title: '您正在编辑单据，是否需要保存',
+              onOk: () => {
+                currentRowTable.clearCurrentRow();
+                this.$refs.formPlan.validate((valid) => {
+                  if (valid) {
+                    let data = {}
+                    data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+                    save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('保存成功！')
+                        this.leftgetList()
+                        this.formPlan.guestName = '',
+                          this.formPlan.storeId =  '',
+                          this.formPlan.remark =  '',
+                          this.formPlan.createUname =  '',
+                          this.formPlan.serviceId =  '',
+                          this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.$refs.formPlan.resetFields();
+                      }
+                    })
+                  } else {
+                    this.$Message.error('*为必填！');
+                  }
+                })
+              },
+              onCancel: () => {
+                this.Left.tbdata.splice(0, 1);
+                currentRowTable.clearCurrentRow();
+                this.isAdd = true;
+                this.formPlan.guestName = '',
+                this.formPlan.storeId =  '',
+                this.formPlan.remark =  '',
+                this.formPlan.createUname =  '',
+                this.formPlan.serviceId =  '',
+                this.formPlan.orderDate = ''
+                this.Right.tbdata = []
+                this.$refs.formPlan.resetFields();
+              },
+            })
+          }else{
+            if(row.id){
+              this.rowOrgId = row.orgid
+              this.mainId = row.id
+              this.guestidId = row.guestId
+              // console.log(this.guestidId,123)
+              this.datadata = row
+              // console.log(this.datadata)
+              this.formPlan.guestName = this.datadata.guestName
+              this.formPlan.storeId = this.datadata.storeId
+              this.formPlan.orderDate = this.datadata.orderDate
+              this.formPlan.remark = this.datadata.remark
+              this.formPlan.createUname = this.datadata.createUname
+              this.formPlan.serviceId = this.datadata.serviceId
+              // this.guestidId = this
+              this.presentrowMsg = row.status.value
+              console.log(this.presentrowMsg)
+              this.rowId = row.id
 
-            this.buttonDisable = false
-            this.getRightlist()
+              this.buttonDisable = false
+              this.getRightlist()
+            }
           }
+
         },
         //右部分接口
         getRightlist(){
