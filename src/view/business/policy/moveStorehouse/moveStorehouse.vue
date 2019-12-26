@@ -122,7 +122,6 @@
                     <Input
                       v-model="Leftcurrentrow.createUname"
                       class="w160"
-                      clearable
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />
                   </FormItem>
@@ -137,10 +136,10 @@
                   </FormItem>
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Input
+                      disabled="disabled"
                       class="w160"
                       v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
-                      :disabled="Leftcurrentrow.status.value !== 0"
                     />
                   </FormItem>
                 </Form>
@@ -189,7 +188,7 @@
                   field="orderQty"
                   title="数量"
                   width="100"
-                  :edit-render="{name: 'input'}"
+                  :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
                 <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                 <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
@@ -258,6 +257,7 @@ export default {
   },
   data() {
     return {
+      numberValue: "",
       mainid: "",
       split1: 0.2,
       tabIndex: 0,
@@ -280,7 +280,7 @@ export default {
         },
         {
           label: "已作废",
-          value: 3
+          value: 5
         }
       ],
       showMore: false, //更多模块的弹框
@@ -417,12 +417,14 @@ export default {
         ],
         tbdata: []
       },
+      salesman: "",
       // 所需零件数据
       components: [],
       //右侧表格高度
       rightTableHeight: 0,
       //配件组装信息 表单model
       formModel: [],
+      warehouseList: [],
       Leftcurrentrow: {
         status: {
           value: 0
@@ -457,7 +459,7 @@ export default {
   },
   watch: {
     purchaseType: function(val, old) {
-      console.log(val, old);
+      // console.log(val, old);
       this.Left.page.num = 1;
       this.Left.page.size = 10;
       this.getList();
@@ -473,6 +475,9 @@ export default {
     this.getList();
   },
   methods: {
+    numChangeEvent({ row }, evnt) {
+      this.numberValue = evnt.target.value;
+    },
     //获取左侧列表
     getList() {
       //获取右边仓库数据
@@ -491,16 +496,16 @@ export default {
         this.purchaseType = null;
       }
       if (this.queryTime) {
-        data.startTime = this.queryTime[0] || "";
-        data.endTime = this.queryTime[1] || "";
+        data.createStartDate = this.queryTime[0] || "";
+        data.createEndDate = this.queryTime[1] || "";
       }
       data.status = this.purchaseType;
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size)
         .then(res => {
-          console.log(res);
           if (res.code === 0) {
+            this.salesman = res.data.content[0].updateUname;
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;
@@ -517,7 +522,7 @@ export default {
         .catch(err => {
           this.$Message.info("获取移仓列表失败");
         });
-      console.log(this.$store.state.user.userData);
+      // console.log(this.$store.state.user.userData);
     },
     //获取表格高度
     getDomHeight() {
@@ -536,7 +541,7 @@ export default {
     setTab(index) {
       this.tabIndex = index;
       if (this.tabIndex == 1) {
-        console.log("配件拆分");
+        // console.log("配件拆分");
       }
     },
     //快速查询日期
@@ -548,7 +553,6 @@ export default {
     },
     //改变移仓时间
     commitDate(data) {
-      console.log(data);
       this.Leftcurrentrow.commitDate = data + " " + "00:00:00";
     },
     //更多按钮
@@ -629,31 +633,40 @@ export default {
         this.$Message.error("只有草稿状态才能保存");
         return;
       }
+      if (this.numberValue < 0) {
+        this.$Message.error("数量不可小于0");
+        return;
+      }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      updata(params)
-        .then(res => {
-          if (res.code == 0) {
-            console.log(res, "res=>616");
-            this.$Message.success("保存成功");
-            this.getList();
-          }
-        })
-        .catch(e => {
-          this.$Message.info("保存失败");
-        });
+      this.$refs.Leftcurrentrow.validate(valid => {
+        if (valid) {
+          //成功
+          updata(params)
+            .then(res => {
+              if (res.code == 0) {
+                // console.log(res, "res=>616");
+                this.$Message.success("保存成功");
+                this.getList();
+              }
+            })
+            .catch(e => {
+              this.$Message.info("保存失败");
+            });
+        } else {
+          this.$Message.error("*都是必填项");
+        }
+      });
     },
     // 提交
     editPro() {
       //判断是否为草稿状态
-      this.$refs.Leftcurrentrow.validate(valid => {
-        if (valid) {
-          //成功
-          console.log("成功", "成功=>651");
-        } else {
-          console.log("失败", "失败=>653");
-          return;
-        }
-      });
+      // this.$refs.Leftcurrentrow.validate(valid => {
+      //   if (valid) {
+      //     //成功
+      //   } else {
+      //     return;
+      //   }
+      // });
       if (!this.Leftcurrentrow.id) {
         this.$Message.error("请选择数据");
         return;
@@ -738,7 +751,7 @@ export default {
     //左边列表选中当前行
     selectTabelData(row) {
       this.Leftcurrentrow = row;
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
         this.currentData = [];
@@ -755,25 +768,27 @@ export default {
       }
       if (this.Leftcurrentrow.id != undefined) {
         getRightDatas(this.Leftcurrentrow.id).then(res => {
-          console.log(res, "res=>728");
+          // console.log(res, "res=>728");
           this.Right.tbdata = res.data;
           this.Leftcurrentrow.detailVOList = res.data;
         });
+      }
+      if (this.Leftcurrentrow.createUname == "") {
+        this.Leftcurrentrow.createUname = this.salesman;
       }
     },
 
     //添加配件
     getPartNameList(val) {
-      console.log(val, 999);
       // console.log(conversionList(val),8888)
       var datas = conversionList(val);
-      console.log(datas, "datas=>738");
+      // console.log(datas, "datas=>738");
       datas.forEach(item => {
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });
-      console.log(this.Right.tbdata);
-      console.log(this.Leftcurrentrow);
+      // console.log(this.Right.tbdata);
+      // console.log(this.Leftcurrentrow);
       // getSubmitList(this.Leftcurrentrow)
       //   .then(res => {
       //     console.log(res);
@@ -788,7 +803,7 @@ export default {
     deletePar() {
       const seleList = this.$refs.xTable1.getSelectRecords();
       const ids = [];
-      console.log(seleList, "seleList =>753");
+      // console.log(seleList, "seleList =>753");
       // seleList.forEach(item => {
       //   ids.push(Number(item.id));
       // });
@@ -796,7 +811,7 @@ export default {
         ids.push(seleList[i].id);
         this.mainid = seleList[i].mainId;
       }
-      console.log(ids, this.mainId);
+      // console.log(ids, this.mainId);
       let arrParams = {
         ids: ids,
         mainId: this.mainid
@@ -806,7 +821,7 @@ export default {
       // console.log(arrParams, "arrParams781");
       delectTable(arrParams)
         .then(res => {
-          console.log(res, "783");
+          // console.log(res, "783");
           if (res.code == 0) {
             this.$Message.success("删除成功");
             // this.selectTabelData();

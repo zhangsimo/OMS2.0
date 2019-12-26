@@ -87,6 +87,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { getWarehousingList, getWarehousingPart,getOutStockList } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -311,14 +312,13 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        enterDateStart: this.value[0],
-        enterDateEnd: this.value[1],
-        orgId: this.model1,
+        enterDateStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        enterDateEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.type
       };
       if (this.type === "050101") {
-        console.log(obj)
         getWarehousingList(obj).then(res => {
           // console.log(res);
           if (res.data.length !== 0) {

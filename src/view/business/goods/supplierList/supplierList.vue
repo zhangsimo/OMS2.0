@@ -43,7 +43,7 @@
                 <div class="pane-made-hd">
                   采购退货列表
                 </div>
-                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
                 <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
                       @on-page-size-change="changeSizeLeft" show-sizer show-total>
                 </Page>
@@ -329,7 +329,7 @@
             {
               title: '提交日期',
               align:'center',
-              key: 'auditStartTime',
+              key: 'auditDate',
               minWidth: 170
             }
           ],
@@ -370,7 +370,8 @@
           numbers: '' ,//采退单号
         },
         mainId: null, //选中行的id
-        clickdelivery: false
+        clickdelivery: false,
+        Flaga: false //判断是否出现退出弹框
       }
     },
     methods: {
@@ -406,6 +407,7 @@
       },
       // 新增按钮
       addProoo(){
+        this.$refs.formPlan.resetFields();
         this.buttonDisable = false
         this.presentrowMsg = 0
         if (!this.isAdd) {
@@ -424,6 +426,7 @@
           this.isAdd = false;
         this.Left.tbdata.unshift(this.PTrow)
         this.datadata = this.PTrow
+        this.rowId = ''
 
         // console.log(this.Left.tbdata)
       },
@@ -448,7 +451,7 @@
       },
       //获取销售员
       selectOrderMan(val){
-        console.log(val)
+        // console.log(val)
         this.formPlan.storeId = val.value
         // this.formPlan.orderManId = val.value
       },
@@ -511,6 +514,7 @@
                 this.$refs.formPlan.resetFields();
                 this.leftgetList()
                 this.isAdd = true;
+                this.rowId = '';
                 this.formPlan.guestName = ''   //调出方
                 this.formPlan.storeId = ''   //退货员
                 // tools.transTime(this.formPlan.orderDate)  //退货日期
@@ -725,27 +729,120 @@
       },
       // 左边部分的当前行
       selection(row){
-        // console.log(row.id)
-        this.mainId = row.id
-        this.guestidId = row.guestId
-        // console.log(this.guestidId)
-        this.datadata = row
-        // console.log(this.datadata)
-        this.formPlan.guestName = this.datadata.guestId
-        this.formPlan.storeId = this.datadata.orderManId
-        this.formPlan.orderDate = this.datadata.orderDate
-        this.formPlan.numbers = this.datadata.serviceId
-        this.formPlan.cause = this.datadata.rtnReasonId
-        this.formPlan.clearing = this.datadata.settleTypeId
-        this.formPlan.remark = this.datadata.remark
-        this.formPlan.warehouse = this.datadata.storeId
-        this.formPlan.serviceId = this.datadata.code
-        this.Right.tbdata = row.details
-        this.presentrowMsg = row.billStatusId.value
-        // console.log(this.presentrowMsg)
-        this.rowId = row.id
-        if(row.id){
-          this.buttonDisable = false
+        if (row == null) return;
+        let currentRowTable = this.$refs["currentRowTable"];
+        if(!this.Flaga && !this.isAdd){
+          this.$Modal.confirm({
+            title: '您正在编辑单据，是否需要保存',
+            onOk: () => {
+              currentRowTable.clearCurrentRow();
+              this.$refs.formPlan.validate((valid) => {
+                if (valid) {
+                  let data = {}
+                  data.id = this.rowId
+                  // data.guestId = this.guestidId   //调出方
+                  data.guestId = this.formPlan.guestName   //调出方
+                  data.orderManId = this.formPlan.storeId     //退货员id
+                  data.orderMan = this.formPlan.orderMan //退货员
+                  data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+                  data.serviceId = this.formPlan.numbers  //采退单号
+                  data.rtnReasonId = this.formPlan.cause  //退货原因
+                  data.settleTypeId = this.formPlan.clearing  //结算方式
+                  data.remark = this.formPlan.remark  //备注
+                  data.storeId = this.formPlan.warehouse  //退货仓库
+                  data.code = this.formPlan.serviceId //采购订单
+                  data.details = this.Right.tbdata
+                  // data.details = this.Right.tbdata.map(item => {
+                  //   return {
+                  //     partId : item.partId,
+                  //     partCode : item.partCode,
+                  //     partName : item.partName,
+                  //     partBrand : item.partBrand,
+                  //     outUnitId : item.outUnitId,
+                  //     canReQty : item.canReQty,
+                  //     orderQty : item.orderQty,
+                  //     orderPrice : item.orderPrice,
+                  //     orderAmt : item.orderAmt,
+                  //     remark : item.remark,
+                  //     stockOutQty : item.stockOutQty,
+                  //     oemCode : item.oemCode,
+                  //     spec : item.spec
+                  //   }
+                  // }) //子表格
+                  saveDraft(data).then(res => {
+                    if(res.code === 0){
+                      this.$message.success('保存成功！')
+                      this.$refs.formPlan.resetFields();
+                      this.leftgetList()
+                      this.isAdd = true;
+                      this.rowId = '';
+                      this.formPlan.guestName = ''   //调出方
+                      this.formPlan.storeId = ''   //退货员
+                      // tools.transTime(this.formPlan.orderDate)  //退货日期
+                      this.formPlan.numbers = '' //采退单号
+                      this.formPlan.cause  = '' //退货原因
+                      this.formPlan.clearing = '' //结算方式
+                      this.formPlan.remark  = '' //备注
+                      this.formPlan.warehouse = ''  //退货仓库
+                      this.formPlan.serviceId = '' //采购订单
+                      this.Right.tbdata  =  [] //子表格
+                      this.$refs.formPlan.resetFields();
+                    }
+                  })
+                } else {
+                  this.$Message.error('*为必填！');
+                }
+              })
+            },
+            onCancel: () => {
+              this.Left.tbdata.splice(0, 1);
+              currentRowTable.clearCurrentRow();
+              this.isAdd = true;
+              this.rowId = '';
+              this.formPlan.guestName = ''   //调出方
+              this.formPlan.storeId = ''   //退货员
+              // tools.transTime(this.formPlan.orderDate)  //退货日期
+              this.formPlan.numbers = '' //采退单号
+              this.formPlan.cause  = '' //退货原因
+              this.formPlan.clearing = '' //结算方式
+              this.formPlan.remark  = '' //备注
+              this.formPlan.warehouse = ''  //退货仓库
+              this.formPlan.serviceId = '' //采购订单
+              this.Right.tbdata  =  [] //子表格
+            },
+          })
+        }else{
+          if(row.id){
+            this.mainId = row.id
+            this.guestidId = row.guestId
+            this.datadata = row
+            this.formPlan.guestName = this.datadata.guestId
+            this.formPlan.storeId = this.datadata.orderManId
+            this.formPlan.orderDate = this.datadata.orderDate
+            this.formPlan.numbers = this.datadata.serviceId
+            this.formPlan.cause = this.datadata.rtnReasonId
+            this.formPlan.clearing = this.datadata.settleTypeId
+            this.formPlan.remark = this.datadata.remark
+            this.formPlan.warehouse = this.datadata.storeId
+            this.formPlan.serviceId = this.datadata.code
+            this.Right.tbdata = row.details
+            this.presentrowMsg = row.billStatusId.value
+            // console.log(this.presentrowMsg)
+            this.rowId = row.id
+            this.buttonDisable = false
+          }else {
+            this.formPlan.guestName = ''
+            this.formPlan.storeId = ''
+            this.formPlan.orderDate = ''
+            this.formPlan.numbers = ''
+            this.formPlan.cause = ''
+            this.formPlan.clearing = ''
+            this.formPlan.remark = ''
+            this.formPlan.warehouse = ''
+            this.formPlan.serviceId = ''
+            this.Right.tbdata = []
+            this.$refs.formPlan.resetFields();
+          }
         }
       },
 
@@ -754,14 +851,15 @@
       Determined(){},
       // 提交按钮
       instance () {
-        this.$Modal.confirm({
-          title: '是否提交',
-          onOk: async () => {
+        if(this.Right.tbdata.length > 0){
+          this.$Modal.confirm({
+            title: '是否提交',
+            onOk: async () => {
               let data = {}
               data.id = this.rowId
-            data.guestId = this.formPlan.guestName   //调出方
-            data.orderManId = this.formPlan.storeId     //退货员id
-            data.orderMan = this.formPlan.orderMan //退货员
+              data.guestId = this.formPlan.guestName   //调出方
+              data.orderManId = this.formPlan.storeId     //退货员id
+              data.orderMan = this.formPlan.orderMan //退货员
               data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
               data.serviceId = this.formPlan.numbers  //采退单号
               data.rtnReasonId = this.formPlan.cause  //退货原因
@@ -770,34 +868,21 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              // data.details = this.Right.tbdata.map(item => {
-              //   return {
-              //     partId : item.partId,
-              //     partCode : item.partCode,
-              //     partName : item.partName,
-              //     partBrand : item.partBrand,
-              //     outUnitId : item.outUnitId,
-              //     canReQty : item.canReQty,
-              //     orderQty : item.orderQty,
-              //     orderPrice : item.orderPrice,
-              //     orderAmt : item.orderAmt,
-              //     remark : item.remark,
-              //     stockOutQty : item.stockOutQty,
-              //     oemCode : item.oemCode,
-              //     spec : item.spec
-              //   }
-              // }) //子表格
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');
                 this.leftgetList();
                 this.isAdd = true;
               }
-          },
-          onCancel: () => {
-            this.$Message.info('取消提交');
-          },
-        })
+            },
+            onCancel: () => {
+              this.$Message.info('取消提交');
+            },
+          })
+        }else {
+          this.$Message.warning('请添加配件后再提交!')
+        }
+
       },
       // 退货
       salesReturn(){

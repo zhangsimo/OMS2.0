@@ -354,15 +354,17 @@
                      data.single =  data.single ? 1 : 0
                      data.singtwo =  data.single ? 1 : 0
                      data.groundIds = JSON.stringify(data.groundIds)
-                     data.entryTime = moment(data.entryTime).format('YYYY-MM-DD')
+                     // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
                      editUser(data , this.$store.state.user.userData.groupId).then( res => {
                          stop()
                          if(res.code ==0){
                              this.$Message.success('新增成功')
+                             this.$refs.child.resetFields()
                              this. cancel()
                              this.getAllStaffList()
                          }
                      }).catch(err => {
+                         this.$refs.child.resetFields()
                          stop()
                      })
                  }else {
@@ -371,7 +373,7 @@
                      data.single =  data.single ? 1 : 0
                      data.singtwo =  data.single ? 1 : 0
                      data.groundIds = JSON.stringify(data.groundIds)
-                     data.entryTime = moment(data.entryTime).format('YYYY-MM-DD')
+                     // data.entryTime = moment(data.entryTime).format('yyyy-MM-dd HH:mm:ss')
                      changeeditUser(data).then( res => {
                          stop()
                          if(res.code ==0){
@@ -391,7 +393,7 @@
           },
           //修改信息
           changStaffList(){
-              if(!this.oneStaffChange){
+              if(!this.oneStaffChange.id){
                   this.$Message.error('请至选择一条员工信息')
                   return false
               }

@@ -87,6 +87,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { transferStock, transferParts } from "@/api/bill/saleOrder";
+import moment from 'moment';
 export default {
   components: {
     quickDate,
@@ -285,9 +286,9 @@ export default {
     // 主表查询
     getTransferStock() {
       let obj = {
-        startTime: this.value[0],
-        endTime: this.value[1],
-        orgId: this.model1,
+        startTime:moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        endTime:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
       };

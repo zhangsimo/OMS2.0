@@ -158,8 +158,14 @@ export const mixSelectPartCom = {
       }
       // console.log(this.searchType,'this.searchType')
       if (this.searchType == "编码") {
-        req.partName = +this.partName;
+        req.partName = this.partName;
       }
+      // if (this.searchType == "名称") {
+      //   req.partName = this.partName;
+      // }
+      // if (this.searchType == "车型") {
+      //   req.partName = this.partName;
+      // }
       // req.partCode ='24507568428'
       // req.carModelBrand = "92A";
       req.page = this.page.num;

@@ -70,6 +70,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { transferWarehousing, transferParts } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -274,9 +275,9 @@ export default {
     // 主表查询
     getTransferWarehousing() {
       let obj = {
-        createTimeStart: this.value[0],
-        createTimeEnd: this.value[1],
-        orgId: this.model1,
+        createTimeStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        createTimeEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
       };
@@ -295,9 +296,6 @@ export default {
         }
       });
     },
-    // 高级查询
-    ok() {},
-    cancel() {},
     // 导出汇总/配件明细
     report(type) {
       if (type) {

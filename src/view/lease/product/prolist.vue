@@ -523,7 +523,7 @@
         }
       },
       getProductDetailFun(){
-        getProductDetail({"productId":this.selectTable.id,"resId":this.selectTable.resId}).then(res => {
+        getProductDetail({"id":this.selectTable.id,"resId":this.selectTable.resId}).then(res => {
           if(res.code==0){
             this.tbdata2 = res.data||[]
           }

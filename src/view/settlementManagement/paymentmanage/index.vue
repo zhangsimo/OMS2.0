@@ -98,7 +98,7 @@
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <!-- <selectDealings ref="selectDealings" @getOne="getOne" /> -->
     <Modal v-model="modal1" title="高级查询" @on-ok="senior">
       <div class="db pro mt20">
         <span>转单日期：</span>
@@ -177,7 +177,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from "./../bill/components/selectCompany";
+// import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
 import PrintShow from "./component/PrintShow";
 import {
@@ -190,7 +190,7 @@ import { creat } from "./../components";
 export default {
   components: {
     quickDate,
-    selectDealings,
+    // selectDealings,
     Monthlyreconciliation,
     PrintShow
   },
@@ -813,6 +813,10 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
+    // // 子组件传参
+    // getOne(val){
+
+    // },
     // 快速查询
     quickDate(data) {
       this.value = data;
@@ -887,10 +891,10 @@ export default {
         }
       });
     },
-    // 往来单位
-    Dealings() {
-      this.$refs.selectDealings.openModel();
-    },
+    // // 往来单位
+    // Dealings() {
+    //   this.$refs.selectDealings.openModel();
+    // },
     // 月结对账
     Monthlyreconciliation() {
       // this.$refs.Monthlyreconciliation.modal = true;

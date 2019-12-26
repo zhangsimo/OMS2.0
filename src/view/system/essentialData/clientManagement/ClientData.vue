@@ -323,6 +323,7 @@
               ref="validData"
               :mouse-config="{selected: true}"
               :data="invoice"
+              height='300px'
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -334,7 +335,7 @@
               <vxe-table-column field="accountBankNo" title="开户行及账号" :edit-render="{name: 'input'}"></vxe-table-column>
             </vxe-table>
           </div>
-          <Modal v-model="newInoiceShow" title="新增开票">
+          <Modal v-model="newInoiceShow" :title="tit">
             <AddInoice :data="addInoiceOne" ref="AddInoice"></AddInoice>
             <div slot="footer">
               <Button type="primary" @click="addNewBank">确定</Button>
@@ -384,7 +385,7 @@ export default {
           callback();
         }
       } else {
-        callback();
+        callback(new Error("只能输入数字"));
       }
     };
     const paragraph = (rule, value, callback) => {
@@ -395,7 +396,7 @@ export default {
           callback();
         }
       } else {
-        callback();
+        callback(new Error("只能输入数字和字母"));
       }
     };
     return {
@@ -591,7 +592,8 @@ export default {
       customerName: "", //客户名称
       pitchOnClientList: [], //选中关联客户
       deleteOneClient: [], //获取删除项
-      pitchOneBank: []
+      pitchOneBank: [],
+      tit:''//开票弹窗
     };
   },
   // computed:{
@@ -779,6 +781,7 @@ export default {
     //新增银行
     addInoice() {
       this.addInoiceOne = {};
+      this.tit = '新增开票'
       this.newInoiceShow = true;
       this.$refs.AddInoice.resetFields();
     },
@@ -818,6 +821,8 @@ export default {
         this.$Message.error("请先选中需要修改的信息");
         return false;
       }
+      this.tit = '修改开票信息'
+      this.addInoiceOne = this.addInoiceOne.row
       this.newInoiceShow = true;
     },
     //删除银行

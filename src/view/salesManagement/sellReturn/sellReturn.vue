@@ -257,7 +257,7 @@
                   <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input'}"></vxe-table-column>
                   <vxe-table-column title="金额">
                     <template v-slot="{ row }">
-                      <span>{{ countAmount(row) }} </span>
+                      <span>{{ countAmount(row) |priceFilters}} </span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column
@@ -409,7 +409,8 @@
         isWms: true,//判断是否提交,返回
         PTrow: {
           _highlight: true,
-          billStatusId: {name: '草稿', value: 0},
+          // billStatusId: {name: '草稿', value: 0},
+          billStatusName:'草稿',
           orderManId:  this.$store.state.user.userData.id
           // status: {"name":"草稿","value":0},
         },
@@ -444,7 +445,7 @@
             {
               title: '状态',
               render: (h, params) => {
-                let tex = params.row.billStatusId.name
+                let tex = params.row.billStatusName
                 return h('span', {}, tex)
 
               },
@@ -579,6 +580,7 @@
       //计算表格数据
       countAmount(row) {
         return this.$utils.toNumber(row.orderQty) * this.$utils.toNumber(row.orderPrice)
+
       },
       //获取左侧表格一行选中的数据
       selectTabelData(v) {
@@ -645,7 +647,7 @@
          return   item.id === value
        })
 
-       console.log(oneClient,5656)
+       console.log(this.formPlan,5656)
        for(var i  in  oneClient){
          // console.log((oneClient[i].settTypeId))
          this.formPlan.settleTypeId=oneClient[i].settTypeId
@@ -751,7 +753,7 @@
               }
             },
             onCancel: () => {
-              this.$Message.info('取消提交');
+              this.$Message.info('取消作废');
             },
           })
         } else {
@@ -765,6 +767,7 @@
       },
       // 计算尾部总和
       countAllAmount(data) {
+        // console.log('33333333',data)
         let count = 0
         data.forEach(row => {
           count += this.countAmount(row)
@@ -790,7 +793,7 @@
               }
             },
             onCancel: () => {
-              this.$Message.info('取消提交');
+              this.$Message.info('取消成功');
             },
           })
         } else {
@@ -801,7 +804,9 @@
       //保存
       isSave() {
         this.$refs.formPlan.validate(async (valid) => {
+          let preTime = ''
           if (valid) {
+              preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate))
             try {
               await this.$refs.xTable.validate()
               let data = {}
@@ -810,7 +815,7 @@
               data.billStatusId = null
               // data.orderDate=this.formPlan.orderDate
               let res = await getSave(data)
-              console.log('打印出来的保存数据888',res)
+              // console.log('打印出来的保存数据888',res)
               if (res.code === 0) {
                 this.isAdd = true;
                 this.isNew=true
@@ -819,6 +824,11 @@
                 this.getLeftList()
                 this.$refs.formPlan.resetFields();
                 this.formPlan = {}
+              }else{
+                this.formPlan.orderDate = preTime
+                // console.log(this.formPlan , 999)
+
+                // this.$refs.formPlan.resetFields();
               }
             } catch (errMap) {
               this.$XModal.message({status: 'error', message: '表格校验不通过！'})
@@ -868,11 +878,13 @@
         data.orderDate = tools.transTime(this.formPlan.orderDate)
         data.billStatusId = null
         getSave(data).then(res => {
-          this.$Message.success('选择销售出库单成功');
-          this.formPlan = {}
-          this.$refs.formPlan.resetFields();
-          this.isNew=true
-          this.getLeftList()
+        if(res.code==0){
+         this.$Message.success('选择销售出库单成功');
+         this.formPlan = {}
+         this.$refs.formPlan.resetFields();
+         this.isNew=true
+         this.getLeftList()
+       }
         })
       },
 

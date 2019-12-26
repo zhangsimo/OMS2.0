@@ -329,6 +329,7 @@ export default {
       data.supplierTypeFirst = this.supplier.id;
       let res = await getSupplierformation(data);
       if (res.code == 0) {
+        console.log(res, "res ===>332");
         this.loading = false;
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
@@ -370,6 +371,7 @@ export default {
     //选中一条信息
     pitchSupplier(currentRow) {
       this.pitchSupplierOne = currentRow;
+      console.log(currentRow, "currentRow");
     },
     addClient() {
       this.clientList = {};
@@ -387,6 +389,8 @@ export default {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
+          console.log(data, "this.clientList=>388");
+
           let res = await getNewSupplier(data);
           if (res.code === 0) {
             this.clientDataShow = false;
@@ -415,6 +419,7 @@ export default {
         ? (this.pitchSupplierOne.isClient = true)
         : (this.pitchSupplierOne.isClient = false);
       this.clientList = this.pitchSupplierOne;
+      console.log(this.clientList, "this.clientList =>418");
     },
     //批量上传失败
     onFormatError(file) {
@@ -427,12 +432,12 @@ export default {
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
-          desc: response.message
+          desc: response
         });
       } else {
         this.$Notice.success({
           title: "导入成功",
-          desc: response.message
+          desc: response
         });
       }
     },

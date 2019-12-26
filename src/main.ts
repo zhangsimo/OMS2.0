@@ -21,6 +21,8 @@ import XEUtils from 'xe-utils'
 import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
+// @ts-ignore
+import {rightButtonShow} from './utils/button'
 
 import loadmore from "./directive/loadmore";
 import VueQriously from 'vue-qriously'
@@ -52,6 +54,9 @@ Vue.prototype._ = _;
 Vue.prototype.hasPermission = (mark:any) => {
   return store.state.user.access.indexOf(mark) > -1
 }
+
+//全局方法判断当前角色按钮的使用权
+Vue.prototype.$ButtonShow = rightButtonShow
 //全局过滤
 Vue.filter("priceFilters",function(value){
   if(!value){
@@ -121,3 +126,5 @@ windows.globalVue = new Vue({
   store,
   render: h => h(App)
 })
+
+export default windows

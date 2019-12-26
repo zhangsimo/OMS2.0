@@ -60,11 +60,11 @@
                         <span>{{row.status.name}}</span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="orderDate" title="提交日期"></vxe-table-column>
-                  <vxe-table-column field="createTime" title="申请日期"></vxe-table-column>
+                  <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
+                  <vxe-table-column field="orderDate" title="申请日期"></vxe-table-column>
                   <vxe-table-column field="remark" title="备注"></vxe-table-column>
-                  <vxe-table-column field="" title="受理人"></vxe-table-column>
-                  <vxe-table-column field="" title="受理日期"></vxe-table-column>
+                  <vxe-table-column field="acceptUname" title="受理人"></vxe-table-column>
+                  <vxe-table-column field="acceptTime" title="受理日期"></vxe-table-column>
                 </vxe-table>
                 <Page class-name="page-con" :current="topRight.page.num" :total="topRight.page.total" :page-size="topRight.page.size" @on-change="changePageTop"
                       @on-page-size-change="changeSizeTop" show-sizer show-total>
@@ -187,8 +187,8 @@
           return [
             columns.map((column, columnIndex) => {
               if (columnIndex === 0) {
-                let tex = this.Bottom.tbdata.length
-                return tex
+                // let tex = this.Bottom.tbdata.length
+                return '合计'
               }
               if (['applyQty'].includes(column.property)) {
                 return this.$utils.sum(data, column.property)
