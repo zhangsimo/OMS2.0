@@ -122,7 +122,6 @@
                     <Input
                       v-model="Leftcurrentrow.createUname"
                       class="w160"
-                      clearable
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />
                   </FormItem>
@@ -137,7 +136,7 @@
                   </FormItem>
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Input
-                      disabled = 'disabled'
+                      disabled="disabled"
                       class="w160"
                       v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
@@ -417,6 +416,7 @@ export default {
         ],
         tbdata: []
       },
+      salesman: "",
       // 所需零件数据
       components: [],
       //右侧表格高度
@@ -501,6 +501,7 @@ export default {
       getLeftList(data, page, size)
         .then(res => {
           if (res.code === 0) {
+            this.salesman = res.data.content[0].updateUname;
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;
@@ -630,24 +631,23 @@ export default {
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.$refs.Leftcurrentrow.validate(valid => {
-                    if (valid) {
-                        //成功
-                        updata(params)
-                          .then(res => {
-                            if (res.code == 0) {
-                              // console.log(res, "res=>616");
-                              this.$Message.success("保存成功");
-                              this.getList();
-                            }
-                          })
-                          .catch(e => {
-                            this.$Message.info("保存失败");
-                          });
-                    } else {
-                        this.$Message.error('*都是必填项');
-                    }
-                })
-
+        if (valid) {
+          //成功
+          updata(params)
+            .then(res => {
+              if (res.code == 0) {
+                // console.log(res, "res=>616");
+                this.$Message.success("保存成功");
+                this.getList();
+              }
+            })
+            .catch(e => {
+              this.$Message.info("保存失败");
+            });
+        } else {
+          this.$Message.error("*都是必填项");
+        }
+      });
     },
     // 提交
     editPro() {
@@ -743,7 +743,7 @@ export default {
     //左边列表选中当前行
     selectTabelData(row) {
       this.Leftcurrentrow = row;
-      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
         this.currentData = [];
@@ -764,6 +764,9 @@ export default {
           this.Right.tbdata = res.data;
           this.Leftcurrentrow.detailVOList = res.data;
         });
+      }
+      if (this.Leftcurrentrow.createUname == "") {
+        this.Leftcurrentrow.createUname = this.salesman;
       }
     },
 
