@@ -450,8 +450,9 @@
                 let data = {}
                 data.status = 8
                 data.id = this.rowId
-                data.orgId = this.rowOrgId
+                data.orgid = this.rowOrgId
                 data.guestId = this.guestidId
+                data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                 data.storeId = this.formPlan.storeId
                 data.orderDate = tools.transTime(this.formPlan.orderDate)
                 data.remark = this.formPlan.remark
@@ -695,7 +696,7 @@
                     let data = {}
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.id = this.rowId
-                    data.orgId = this.rowOrgId
+                    data.orgid = this.rowOrgId
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId

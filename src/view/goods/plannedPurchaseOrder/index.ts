@@ -683,6 +683,7 @@ export default class PlannedPurchaseOrder extends Vue {
   // 采购计划单据
   private getPlanOrder(row: any) {
     if (!row) return;
+    this.formPlanmain.code = row.serviceId;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {
