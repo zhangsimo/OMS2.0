@@ -93,6 +93,7 @@ import {
   getReturnGoodsPart,
   getWarehousingList
 } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -321,9 +322,9 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        outDateStart: this.value[0],
-        outDateEnd: this.value[1],
-        orgId: this.model1,
+        outDateStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
+        outDateEnd: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.typeName
       };

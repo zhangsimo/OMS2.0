@@ -314,12 +314,11 @@ export default {
       let obj = {
         enterDateStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
         enterDateEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
-        orgId: this.model1,
+        orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.type
       };
       if (this.type === "050101") {
-        console.log(obj)
         getWarehousingList(obj).then(res => {
           // console.log(res);
           if (res.data.length !== 0) {
