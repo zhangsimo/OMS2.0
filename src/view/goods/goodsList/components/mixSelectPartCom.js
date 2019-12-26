@@ -113,7 +113,7 @@ export const mixSelectPartCom = {
         total: 0
       },
       //配件查询分类
-      searchType: "fullName",
+      searchType: 'fullName',
       searchTypeArr: [
         {
           value: "partCode",
@@ -142,15 +142,15 @@ export const mixSelectPartCom = {
   },
   mounted() {},
   methods: {
-    //初始化数据
+    // 初始化数据
     getList() {
       this.loading = true;
       let req = {};
       if (this.selectTreeItem.id) {
         req.typeId = this.selectTreeItem.id;
       }
-      if (this.selectBrand && this.selectBrand != "9999") {
-        req.partBrandCode = this.selectBrand;
+      if (this.selectBrand && this.selectBrand !== "9999") {
+        req.partBrandCode = [this.selectBrand];
       }
 
       if (this.searchValue.trim()) {
@@ -160,12 +160,6 @@ export const mixSelectPartCom = {
       if (this.searchType == "编码") {
         req.partName = this.partName;
       }
-      // if (this.searchType == "名称") {
-      //   req.partName = this.partName;
-      // }
-      // if (this.searchType == "车型") {
-      //   req.partName = this.partName;
-      // }
       // req.partCode ='24507568428'
       // req.carModelBrand = "92A";
       req.page = this.page.num;
@@ -177,6 +171,42 @@ export const mixSelectPartCom = {
         this.page.total = res.data.totalElements;
       });
     },
+
+    // getList() {
+    //   this.loading = true
+    //   let params = {}
+    //   let req = {}
+    //   if (this.selectTreeItem.id) {
+    //     req.typeId = this.selectTreeItem.id
+    //   }
+    //   if (this.selectBrand && this.selectBrand != '9999') {
+    //     req.partCodes = []
+    //     req.partBrandCodes = [this.selectBrand]
+    //   }
+    //
+    //   if (this.partName.trim()) {
+    //     if (this.searchType == 'adapterCarModels') {
+    //       req[this.searchType] = [this.partName]
+    //     } else {
+    //       req[this.searchType] = this.partName.trim()
+    //     }
+    //   }
+    //   params.page = this.page.num
+    //   params.size = this.page.size
+    //   // req.matchingId = this.$parent.levelId
+    //   // req.partInnerId = this.$parent.code
+    //   // console.log(req){matchingId:this.$parent.levelId,partInnerId:this.$parent.code,page:this.page.num}
+    //   getCarParts({req:req,params:params}).then(res => {
+    //     this.loading = false;
+    //     this.partData = res.data.content || [];
+    //     this.partData.map(item=>{
+    //       // console.log(item.isMatching)
+    //       item._disabled = item.isMatching === 0 ? true:false
+    //     })
+    //     this.page.total = res.data.totalElements
+    //   })
+    //
+    // },
 
     //获取配件品牌
     getPartBrandAll() {

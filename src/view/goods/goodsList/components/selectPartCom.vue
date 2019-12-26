@@ -29,8 +29,7 @@
         </div>
       </div>
       <div slot='footer'>
-        <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
-        <!--<Button type='default' @click='proModal = false'>取消</Button>-->
+
       </div>
     </Modal>
     <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun" :show-spe="false"></part-info>
@@ -40,7 +39,7 @@
 <script>
   import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
   import PartInfo from "_c/partInfo/partInfo";
-  import {mixSelectPartCom} from "./mixSelectPartCom";
+  import { mixSelectPartCom } from "./mixSelectPartCom";
 
   export default {
     name: "selectPartCom",

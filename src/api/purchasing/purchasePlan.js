@@ -113,7 +113,7 @@ export function getCarPartClass(data) {
   })
 }
 
-// 配件分类菜单树
+// 配件分类
 export function getCarParts(data) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/getParts`,
