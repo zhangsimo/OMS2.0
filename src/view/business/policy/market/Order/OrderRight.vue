@@ -48,13 +48,19 @@
             </Button>
           </Row>
         </FormItem>
-<!--        <FormItem label="销售员：" prop="orderMan">-->
-<!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
-<!--        </FormItem>-->
+        <!--        <FormItem label="销售员：" prop="orderMan">-->
+        <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
+        <!--        </FormItem>-->
         <FormItem label="销售员：" prop="orderManId">
           <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
-          <Select :value="formPlan.orderManId"
-                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0"  label-in-value>
+          <Select
+            :value="formPlan.orderManId"
+            @on-change="selectOrderMan"
+            filterable
+            style="width: 240px"
+            :disabled="draftShow != 0"
+            label-in-value
+          >
             <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
           </Select>
         </FormItem>
@@ -372,12 +378,14 @@ export default {
       limitList: {}, //额度信息
       totalMoney: "", //总价
       client: [], //客户列表
-      salesList:[],//销售员列表
+      salesList: [], //销售员列表
       ruleValidate: {
         guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderManId: [{ required: true, type:'string',message: "  ", trigger: "change" }],
+        orderManId: [
+          { required: true, type: "string", message: "  ", trigger: "change" }
+        ],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
@@ -402,7 +410,7 @@ export default {
     this.getType();
     this.getWarehouse();
     this.getClassifyList();
-    this.getAllSales()
+    this.getAllSales();
   },
   computed: {
     getOneOrder() {
@@ -428,12 +436,9 @@ export default {
       // this.draftShow = this.draftShow.value
     },
     //获取销售员
-    selectOrderMan(val){
-      console.log('77777777',val)
-      this.formPlan.orderMan = val.label
-      this.formPlan.orderManId = val.value
-
-      console.log(val, 123456)
+    selectOrderMan(val) {
+      this.formPlan.orderMan = val.label;
+      this.formPlan.orderManId = val.value;
     },
     //获取销售员
     async getAllSales() {
@@ -441,8 +446,8 @@ export default {
       if (res.code === 0) {
         this.salesList = res.data.content;
         this.salesList.map(item => {
-          item.label = item.userName
-        })
+          item.label = item.userName;
+        });
       }
     },
     //获取客户额度
@@ -464,20 +469,17 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      console.log('客户8888',value)
       let data = {};
       if (!value) {
         return false;
       }
-      let oneClient = []
-      oneClient = this.client.filter( item => {
-       return   item.id === value
-      })
-
-      console.log(oneClient,5656)
-      for(var i  in  oneClient){
-        this.formPlan.billTypeId=oneClient[i].billTypeId
-        this.formPlan.settleTypeId=oneClient[i].settTypeId
+      let oneClient = [];
+      oneClient = this.client.filter(item => {
+        return item.id === value;
+      });
+      for (var i in oneClient) {
+        this.formPlan.billTypeId = oneClient[i].billTypeId;
+        this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
       data.guestId = value;
       let res = await getLimit(data);
@@ -501,10 +503,10 @@ export default {
       let res = await getClient();
       if (res.code === 0) {
         this.client = res.data;
-        this.client.map( item => {
-          item.label = item.fullName
-        })
-        console.log(res.data)
+        this.client.map(item => {
+          item.label = item.fullName;
+        });
+        //console.log(res.data);
       }
     },
     // 获取仓库
@@ -575,9 +577,9 @@ export default {
       data.forEach(row => {
         count += this.countAmount(row);
       });
-      // console.log(count,count.toFixed(2))
+      // //console.log(count,count.toFixed(2))
       this.totalMoney = count.toFixed(2);
-      // console.log(this.totalMoney)
+      // //console.log(this.totalMoney)
       return count;
     },
     //获取尾部总数
@@ -588,7 +590,7 @@ export default {
             return "和值";
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
-            // console.log(this.$utils.sum(data, column.property))
+            // //console.log(this.$utils.sum(data, column.property))
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 8) {
@@ -650,10 +652,10 @@ export default {
         this.selectTableList.forEach(item => {
           data.push(item.id);
         });
-        console.log(data);
+        //console.log(data);
         const that = this;
         shanqu(data).then(res => {
-          console.log(res.code === 0, "dafadsf");
+          //console.log(res.code === 0, "dafadsf");
           if (res.code === 0) {
             that.getChangeList();
           }
@@ -728,7 +730,7 @@ export default {
       data.partIds = [val.id];
       data.type = 2;
       data.details = [val];
-      console.log("dianjiafasong");
+      //console.log("dianjiafasong");
       let res = await baocun(data);
       if (res.code === 0) {
         this.getChangeList();
@@ -743,7 +745,6 @@ export default {
     },
     //保存
     save() {
-
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -752,7 +753,7 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            console.log(this.formPlan, "sfah");
+            //console.log(this.formPlan, "sfah");
             if (this.formPlan.billStatusId.value) {
               this.formPlan.billStatusId = this.formPlan.billStatusId.value;
             }
@@ -776,11 +777,11 @@ export default {
     },
     //获取搜索框内的数据
     setOneClient(val) {
-        console.log(val)
+      //console.log(val);
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "fullName", val.fullName);
-        this.$set(this.formPlan,"billTypeId",val.billTypeId)
-      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+      this.$set(this.formPlan, "billTypeId", val.billTypeId);
+      this.$set(this.formPlan, "settleTypeId", val.settTypeId);
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
@@ -806,10 +807,10 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            console.log("jinlaile");
+            //console.log("jinlaile");
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await outDataList(this.formPlan);
-            console.log("fasong");
+            //console.log("fasong");
             if (res.code === 0) {
               this.$Message.success("出库成功成功");
               this.getChangeList();
@@ -851,7 +852,6 @@ export default {
     },
     //获取选择入库单的信息
     async getGodown(val) {
-
       let data = {};
       data = this.formPlan;
       let arr = [];
