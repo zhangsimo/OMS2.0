@@ -496,8 +496,8 @@ export default {
         this.purchaseType = null;
       }
       if (this.queryTime) {
-        data.startTime = this.queryTime[0] || "";
-        data.endTime = this.queryTime[1] || "";
+        data.createStartDate = this.queryTime[0] || "";
+        data.createEndDate = this.queryTime[1] || "";
       }
       data.status = this.purchaseType;
       let page = this.Left.page.num - 1;
