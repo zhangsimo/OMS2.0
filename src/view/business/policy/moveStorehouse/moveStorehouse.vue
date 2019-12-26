@@ -280,7 +280,7 @@ export default {
         },
         {
           label: "已作废",
-          value: 3
+          value: 5
         }
       ],
       showMore: false, //更多模块的弹框
