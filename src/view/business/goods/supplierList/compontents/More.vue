@@ -15,7 +15,7 @@
           <Row class="mt15">
             <span class="ml5">供 应 商：</span>
             <!--<Input v-model="callout" placeholder="请选择供应商" style="width: 410px" disabled/>-->
-            <Select v-model="callout" filterable style="width: 410px">
+            <Select v-model="callout" filterable style="width: 410px" @on-change="SelectChange">
               <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
             <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
@@ -64,7 +64,7 @@
 
 <script>
   import SelectSupplier from "../../../../goods/goodsList/components/supplier/selectSupplier";
-  import {findForAllot} from "_api/purchasing/purchasePlan";
+  import { getSupplierList } from "_api/purchasing/purchasePlan";
 
   export default {
         name: "More",
@@ -130,8 +130,8 @@
         //供应商下拉查询
         selecQuery(){
           let req = {}
-          findForAllot(req).then(res => {
-            this.ArraySelect = res.data.content||[];
+          getSupplierList(req).then(res => {
+            this.ArraySelect = res.data || [];
           })
         },
         //更多弹框的确定按钮
@@ -157,6 +157,10 @@
         // 取消
         cancel(){
           this.moreAndMore = false
+        },
+        //供应商下拉框改变
+        SelectChange(val){
+          this.guestId = val
         }
       },
     mounted(){
