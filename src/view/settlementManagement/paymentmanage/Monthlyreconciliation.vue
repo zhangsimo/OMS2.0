@@ -169,7 +169,7 @@
 </template>
 
 <script>
-import selectDealings from "./../bill/components/selectCompany";
+import selectDealings from "./component/selectCompany";
 import { creat } from "./../components";
 import {
   getReconciliation,

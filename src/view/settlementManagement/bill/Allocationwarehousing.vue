@@ -277,7 +277,7 @@ export default {
       let obj = {
         createTimeStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
         createTimeEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
-        orgId: this.model1,
+        orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
       };
