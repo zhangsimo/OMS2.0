@@ -94,7 +94,7 @@
                 >
                   <FormItem label="移出仓库" prop="storeId">
                     <Select
-                      :model="Leftcurrentrow.storeId"
+                      v-model="Leftcurrentrow.storeId"
                       style="width:100px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
@@ -107,7 +107,7 @@
                   </FormItem>
                   <FormItem label="移入仓库" prop="receiveStoreId">
                     <Select
-                      :model="Leftcurrentrow.receiveStoreId"
+                      v-model="Leftcurrentrow.receiveStoreId"
                       style="width:100px"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
@@ -120,11 +120,11 @@
                   </FormItem>
                   <FormItem label="业务员：" prop="createUname">
                     <Input
-                      :model="Leftcurrentrow.createUname"
+                      v-model="Leftcurrentrow.createUname"
                       class="w160"
-                      value
+                      clearable
                       :disabled="Leftcurrentrow.status.value !== 0"
-                    ></Input>
+                    />
                   </FormItem>
                   <FormItem label="移仓日期" prop="commitDate">
                     <DatePicker
@@ -138,10 +138,10 @@
                   <FormItem label="移仓单号" prop="planOrderNum">
                     <Input
                       class="w160"
-                      :model="Leftcurrentrow.serviceId"
+                      v-model="Leftcurrentrow.serviceId"
                       value="YCSDFD839239320"
                       :disabled="Leftcurrentrow.status.value !== 0"
-                    ></Input>
+                    />
                   </FormItem>
                 </Form>
               </div>
@@ -648,9 +648,9 @@ export default {
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功
-          console.log("成功",'成功=>651');
+          console.log("成功", "成功=>651");
         } else {
-          console.log("失败",'失败=>653');
+          console.log("失败", "失败=>653");
           return;
         }
       });

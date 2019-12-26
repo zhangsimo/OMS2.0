@@ -1,5 +1,6 @@
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
 import {
+  getParamsBrand,
   getAllBrand,
   getCarClassifys,
   getCarPartName

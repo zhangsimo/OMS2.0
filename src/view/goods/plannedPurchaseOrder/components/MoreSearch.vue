@@ -1,9 +1,5 @@
 <template>
-  <Modal
-    title="高级查询"
-    v-model="serchN"
-    :styles="{ top: '50px', width: '500px' }"
-  >
+  <Modal title="高级查询" v-model="serchN" :styles="{ top: '50px', width: '500px' }">
     <div class="data ml30 pl25">
       <Row class="mb30" v-if="!['采购计划'].includes(type)">
         <span>订货日期:</span>
@@ -50,8 +46,7 @@
             v-for="option in guseData.lists"
             :value="option.id"
             :key="option.id"
-            >{{ option.fullName }}</Option
-          >
+          >{{ option.fullName }}</Option>
         </Select>
       </FormItem>
       <FormItem label="订单单号: ">
@@ -64,31 +59,18 @@
         <Input type="text" class="w300 ml5" size="large" v-model="partName" />
       </FormItem>
       <FormItem label="品牌: ">
-        <Input type="text" class="w300 ml5" v-model="partBrand" />
+        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
+          <Option v-for="item in getBrand" :value="item" :key="item">{{ item }}</Option>
+        </Select>
       </FormItem>
       <FormItem label="提交人: ">
         <Select v-model="auditor" class="w300 ml5" label-in-value filterable>
-          <Option
-            v-for="item in salesList"
-            :value="item.label"
-            :key="item.value"
-            >{{ item.label }}</Option
-          >
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem label="创建人: ">
-        <Select
-          v-model="createUname"
-          class="w300 ml5"
-          label-in-value
-          filterable
-        >
-          <Option
-            v-for="item in salesList"
-            :value="item.label"
-            :key="item.value"
-            >{{ item.label }}</Option
-          >
+        <Select v-model="createUname" class="w300 ml5" label-in-value filterable>
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem>
@@ -100,15 +82,11 @@
       <Button @click="cancel">取消</Button>
     </div>
     <!-- 供应商资料 -->
-    <select-supplier
-      @selectSearchName="selectSupplierName"
-      ref="selectSupplier"
-      headerTit="供应商资料"
-    ></select-supplier>
+    <select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="供应商资料"></select-supplier>
   </Modal>
 </template>
-
 <script lang="ts">
+// import "./text";
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
@@ -123,6 +101,7 @@ import { getSales } from "@/api/salesManagment/salesOrder";
 })
 export default class MoreSearch extends Vue {
   @Prop({ default: "" }) private readonly type!: string;
+  @Prop(Array) private readonly getBrand;
 
   private serchN: boolean = false;
 
@@ -138,6 +117,7 @@ export default class MoreSearch extends Vue {
   private guestId: string = "";
   private guestName: string = "";
   private showSelf: boolean = true;
+  private aaaa: string = "";
 
   private salesList: Array<any> = new Array();
   private async getAllSales() {
@@ -150,7 +130,10 @@ export default class MoreSearch extends Vue {
       });
     }
   }
-
+  mounted() {
+    // alert(this.getBrand)
+    // console.log(this.getBrand);
+  }
   private reset() {
     this.orderDate = new Array();
     this.createDate = new Array();

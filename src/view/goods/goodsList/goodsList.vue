@@ -415,7 +415,7 @@
       @selectSupplierName="getSupplierName"
     ></select-supplier>
     <!-- 更多 -->
-    <more-search type="采购计划" @getmoreData="getmoreData" ref="moreSearch"></more-search>
+    <more-search type="采购计划" :getBrand="getBrand" @getmoreData="getmoreData" ref="moreSearch"></more-search>
     <!-- 订单调整 -->
     <adjust-model ref="adjustModel" :mainId="mainId"></adjust-model>
     <!--审批状态-->
@@ -435,7 +435,7 @@ import QuickDate from "../../../components/getDate/dateget";
 import { mixGoodsData } from "./mixGoodsList";
 import SelectPartCom from "./components/selectPartCom";
 import SelectSupplier from "./components/supplier/selectSupplier";
-
+import { getParamsBrand } from "_api/purchasing/purchasePlan";
 export default {
   name: "goodsList",
   components: {
@@ -490,6 +490,7 @@ export default {
       }
     };
     return {
+      getBrand: [],
       newadd: false,
       isinput: true,
       isMore: false,
@@ -623,6 +624,12 @@ export default {
           });
         }
       }
+    });
+  },
+  created() {
+    getParamsBrand().then(res => {
+      // console.log(res.data, 11111111111);
+      this.getBrand = res.data;
     });
   },
   methods: {

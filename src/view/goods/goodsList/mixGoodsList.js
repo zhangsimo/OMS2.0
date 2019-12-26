@@ -8,7 +8,8 @@ import {
   saveReverse,
   exportXls,
   upxlxs,
-  deleteparts
+  deleteparts,
+  getParamsBrand
 } from "_api/purchasing/purchasePlan";
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
@@ -18,7 +19,7 @@ import { TOKEN_KEY } from "@/libs/util";
 export const mixGoodsData = {
   data() {
     return {
-      ArrayList : [],
+      ArrayList: [],
       upurl: "",
       //计划采购信息
       formPlan: {
@@ -66,7 +67,6 @@ export const mixGoodsData = {
       companyMap: [],
       //选中的采购计划单
       selectPlanOrderItem: {},
-
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }
@@ -101,6 +101,7 @@ export const mixGoodsData = {
       }
     });
   },
+
   methods: {
     //初始化
     async getList() {
@@ -367,8 +368,8 @@ export const mixGoodsData = {
       }
       this.$refs.selectSupplier.getList();
     },
-    getArray(data){
-      this.ArrayList = data
+    getArray(data) {
+      this.ArrayList = data;
     },
     //新增采购计划单
     addOrder() {

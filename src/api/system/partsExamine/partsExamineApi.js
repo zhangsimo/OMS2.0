@@ -28,6 +28,14 @@ export function getAllBrand(data) {
   })
 }
 
+//获取全品牌
+export function getParamsBrand(data) {
+  return axios.request({
+    url: `${api.wmsApi}/optGroup/optPartBrand`,
+    method: 'post',
+    data
+  })
+}
 //获取全部车型
 export function getAllCar(data) {
   return axios.request({
