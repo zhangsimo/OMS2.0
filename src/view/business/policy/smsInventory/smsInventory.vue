@@ -214,7 +214,7 @@
     <!--添加配件-->
     <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
     <!--更多弹框-->
-    <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
+    <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData" ref="More"></More>
     <!-- 作废提示 -->
     <Modal v-model="showRemove" title="提示" @on-ok="removeOk" @on-cancel="removeCancel">
       <p>是否确定作废</p>
@@ -470,8 +470,6 @@ export default {
       getLeftList(data, page, size)
         .then(res => {
           if (res.code === 0) {
-            // this.Left.tbdata = res.data.content || []
-            // this.Left.page.total = res.data.totalElementscreateUname
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;
@@ -530,6 +528,7 @@ export default {
     // },
     //更多按钮
     More() {
+      this.$refs.More.reset()
       this.showMore = true;
     },
     //更多弹窗恢复false
@@ -538,8 +537,8 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      this.Left.tbdata = val.data || [];
-      this.Left.page.total = bal.totalElements;
+      this.Left.tbdata = val.data.content || [];
+      this.Left.page.total = val.totalElements;
     },
     //新增
     addProoo() {
@@ -718,7 +717,7 @@ export default {
       this.array_diff(this.Right.tbdata, seleList);
       delectTable(ids)
         .then(res => {
-          if (code == 0) {
+          if (res.code == 0) {
             this.$Message.success("删除成功");
           }
         })
