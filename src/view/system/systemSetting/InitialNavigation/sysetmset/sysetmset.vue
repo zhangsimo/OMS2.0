@@ -138,6 +138,17 @@
             </RadioGroup>
           </Col>
         </Row>
+        <Row class="row" type="flex" align="middle">
+          <Col :span="12">
+            <p class="end">是否开启调拨自动受理流程:</p>
+          </Col>
+          <Col :span="12">
+            <RadioGroup v-model="isAuto">
+              <Radio label="1">开启</Radio>
+              <Radio label="0">关闭</Radio>
+            </RadioGroup>
+          </Col>
+        </Row>
       </div>
     </section>
   </main>
@@ -159,7 +170,8 @@ const data = () => {
     isLv: "", // 是否开启分级提成
     isPPA: "", // 是否开启采购计划审批
     isTPA: "", // 是否开启临时采购审批
-    isEAOM: "" // 是否开启门店外采审批
+    isEAOM: "", // 是否开启门店外采审批
+    isAuto: "", // 是否开启调拨自动受理流程
   };
 };
 
@@ -174,39 +186,42 @@ const methods = {
     if (res.code === 0) {
       this.setarr = res.data;
       this.setarr.forEach(el => {
-        switch (el.keyidName) {
-          case "打印表格是否换行":
+        switch (el.keyidId) {
+          case 3:
             this.isrow = el.keyidValue;
             break;
-          case "是否开启采购计划审批":
+          case 8:
             this.isPPA = el.keyidValue;
             break;
-          case "业务员是否可见自己客户和订单":
+          case 5:
             this.isMe = el.keyidValue;
             break;
-          case "销售单、销售出库配件选择tab切换成批次选择":
+          case 0:
             this.trun = el.keyidValue;
             break;
-          case "是否开启临时采购审批":
+          case 9:
             this.isTPA = el.keyidValue;
             break;
-          case "是否开启门店外采审批":
+          case 10:
             this.isEAOM = el.keyidValue;
             break;
-          case "是否开启分级提成":
+          case 7:
             this.isLv = el.keyidValue;
             break;
-          case "业务员是否禁止可见采购价":
+          case 6:
             this.isWatch = el.keyidValue;
             break;
-          case "销售单、销售出库单打印内容":
+          case "2":
             this.content = el.keyidValue;
             break;
-          case "启用额度审批流程":
+          case 4:
             this.isQuota = el.keyidValue;
             break;
-          case "打印抬头显示":
+          case 1:
             this.printHeader = el.keyidValue;
+            break;
+          case 11:
+            this.isAuto = el.keyidValue;
             break;
           default:
             return;
@@ -218,45 +233,47 @@ const methods = {
   async save() {
     this.setarr = this.setarr.map(el => {
       switch (el.keyidName) {
-        case "打印表格是否换行":
+        case 3:
           el.keyidValue = this.isrow;
           break;
-        case "是否开启采购计划审批":
+        case 8:
           el.keyidValue = this.isPPA;
           break;
-        case "业务员是否可见自己客户和订单":
+        case 5:
           el.keyidValue = this.isMe;
           break;
-        case "销售单、销售出库配件选择tab切换成批次选择":
+        case 0:
           el.keyidValue = this.trun;
           break;
-        case "是否开启临时采购审批":
+        case 9:
           el.keyidValue = this.isTPA;
           break;
-        case "是否开启门店外采审批":
+        case 10:
           el.keyidValue = this.isEAOM;
           break;
-        case "是否开启分级提成":
+        case 7:
           el.keyidValue = this.isLv;
           break;
-        case "业务员是否禁止可见采购价":
+        case 6:
           el.keyidValue = this.isWatch;
           break;
-        case "销售单、销售出库单打印内容":
+        case "2":
           el.keyidValue = this.content;
           break;
-        case "启用额度审批流程":
+        case 4:
           el.keyidValue = this.isQuota;
           break;
-        case "打印抬头显示":
+        case 1:
           el.keyidValue = this.printHeader;
+          break;
+        case 11:
+          el.keyidValue = this.isAuto;
           break;
         default:
           break;
       }
       return el;
     });
-    console.log(this.setarr);
     let res = await api.saveSys(this.setarr)
     if(res.code === 0) {
       this.$Message.success('保存成功');

@@ -6,7 +6,7 @@
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiveComp"
+              v-model="formDateTop.receiveCompName"
               placeholder="收货单位"
             />
           </FormItem>
@@ -20,14 +20,14 @@
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiver"
+              v-model="formDateTop.receiveMan"
               placeholder="收货人"
             />
           </FormItem>
           <FormItem>
             <Input
               type="text"
-              v-model="formDateTop.receiverMobile"
+              v-model="formDateTop.receiveManTel"
               placeholder="联系电话"
             />
           </FormItem>
@@ -291,7 +291,7 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     this.showInfo = true;
-    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId, guestId: this.row.guestId });
+    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -454,10 +454,10 @@ export default class GoodsInfo extends Vue {
 
   private reset() {
     this.formDateTop = {
-      receiveComp: null, //收货单位
-      receiver: null, //收货人
+      receiveCompName: null, //收货单位
+      receiveMan: null, //收货人
       streetAddress: null, //详细收货地址
-      receiverMobile: null //联系电话
+      receiveManTel: null //联系电话
     };
     const ref: any = this.$refs["formTwo"];
     ref.resetFields();
