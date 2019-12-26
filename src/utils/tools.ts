@@ -180,3 +180,5 @@ export function checkPhone(rule:any, value:string, callback:Function) {
     }
   }
 };
+
+

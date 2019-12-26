@@ -389,7 +389,6 @@
           },
           //获取当前数据
           selection(currentRow){
-                console.log(currentRow , 999)
               this.oneStaffChange = currentRow
           },
           //修改信息
