@@ -647,7 +647,7 @@
          return   item.id === value
        })
 
-       console.log(oneClient,5656)
+       console.log(this.formPlan,5656)
        for(var i  in  oneClient){
          // console.log((oneClient[i].settTypeId))
          this.formPlan.settleTypeId=oneClient[i].settTypeId
@@ -804,7 +804,9 @@
       //保存
       isSave() {
         this.$refs.formPlan.validate(async (valid) => {
+          let preTime = ''
           if (valid) {
+              preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate))
             try {
               await this.$refs.xTable.validate()
               let data = {}
@@ -822,6 +824,11 @@
                 this.getLeftList()
                 this.$refs.formPlan.resetFields();
                 this.formPlan = {}
+              }else{
+                this.formPlan.orderDate = preTime
+                // console.log(this.formPlan , 999)
+
+                // this.$refs.formPlan.resetFields();
               }
             } catch (errMap) {
               this.$XModal.message({status: 'error', message: '表格校验不通过！'})
