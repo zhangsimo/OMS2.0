@@ -160,7 +160,7 @@
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择配件-->
-      <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
+      <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></Select-part-com>
       <!--编辑收货信息-->
       <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
       <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
@@ -180,12 +180,12 @@
 
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
-  // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+  import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
   import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
   import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
-  import supplier from './compontents/supplier'
+  // import supplier from './compontents/supplier'
   import PrintShow from "./compontents/PrintShow";
   import Cookies from 'js-cookie'
   import { optGroup ,deleteit, save, commitOrder, invalid, getup} from '../../../../api/business/advanceOrder';
@@ -196,8 +196,8 @@ export default {
   components: {
     QuickDate,
     More,
-    supplier,
-    // SelectPartCom,
+    // supplier,
+    SelectPartCom,
     GoodsInfo,
     SelectSupplier,
     PrintShow
@@ -410,7 +410,7 @@ export default {
     SaveMsg(){
       this.$refs.formPlan.validate((valid) => {
         if (valid) {
-          console.log(this.rowId)
+          // console.log(this.rowId)
           let data = {}
           data.id = this.rowId
           data.salesman =  this.formPlan.salesman
@@ -439,7 +439,7 @@ export default {
     //checkbox全选
     selectAll(a){
       this.checkboxArr = a.selection
-      console.log(this.checkboxArr)
+      // console.log(this.checkboxArr)
     },
     //作废
     cancellation(){
@@ -496,7 +496,7 @@ export default {
     // 上传成功函数
     onSuccess (response) {
       if(response.code == 0 ){
-        console.log(response.data)
+        // console.log(response.data)
         if (response.data.list && response.data.list.length > 0) {
           this.warning(response.data.List[0])
         }
@@ -511,7 +511,7 @@ export default {
     //右侧表格复选框选中
     selectChange(msg){
       this.checkboxArr = msg.selection
-      console.log(this.checkboxArr)
+      // console.log(this.checkboxArr)
     },
     //分页
     changePageLeft(p) {
@@ -535,7 +535,7 @@ export default {
     },
     // 查询下拉框
     getDataQuick(v){
-      console.log(v)
+      // console.log(v)
       this.selectArr = v
       this.leftgetList()
     },
@@ -601,7 +601,7 @@ export default {
     },
     // 供应商子组件内容
     getSupplierName(a){
-      console.log(a)
+      // console.log(a)
       this.formPlan.guestName = a.shortName
       this.formPlan.guestidId = a.id
     },
@@ -626,7 +626,7 @@ export default {
         data.commitTimeEnd = this.moreArr.submitData[1] + " 23:59:59"
       }
       if(this.moreArr.callout){
-        console.log(this.moreArr.callout)
+        // console.log(this.moreArr.callout)
         data.salesman = this.moreArr.callout
       }
       if(this.moreArr.numbers){
@@ -727,33 +727,33 @@ export default {
     },
     // 提交按钮
     instance () {
-      this.$refs.formPlan.validate((valid) => {
-        if (valid) {
-          if(this.Right.tbdata.length > 0){
+      if(this.Right.tbdata !==  null){
+        this.$refs.formPlan.validate((valid) => {
+          if (valid) {
             this.$Modal.confirm({
               title: '是否提交',
               onOk: async () => {
                 this.$refs.formPlan.validate((valid) => {
                   if (valid) {
-                      let data = {}
-                      data.id = this.rowId
-                      data.salesman =  this.formPlan.salesman
-                      data.orderNo =  this.formPlan.Reservation
-                      data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-                      console.log(tools.transDate(this.formPlan.orderDate))
-                      data.remark = this.formPlan.remark
-                      data.detailVOList = this.Right.tbdata
-                      commitOrder(data).then(res => {
-                        if(res.code === 0){
-                          this.$message.success('提交成功！')
-                          this.leftgetList(),
-                            this.formPlan.salesman =  '', //业务员
-                            this.formPlan.Reservation =  '',
-                            this.formPlan.remark =  '',
-                            this.Right.tbdata = []
-                            this.Flaga = true
-                        }
-                      })
+                    let data = {}
+                    data.id = this.rowId
+                    data.salesman =  this.formPlan.salesman
+                    data.orderNo =  this.formPlan.Reservation
+                    data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+                    // console.log(tools.transDate(this.formPlan.orderDate))
+                    data.remark = this.formPlan.remark
+                    data.detailVOList = this.Right.tbdata
+                    commitOrder(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('提交成功！')
+                        this.leftgetList(),
+                          this.formPlan.salesman =  '', //业务员
+                          this.formPlan.Reservation =  '',
+                          this.formPlan.remark =  '',
+                          this.Right.tbdata = []
+                        this.Flaga = true
+                      }
+                    })
                   } else {
                     this.$Message.error('*为必填！');
                   }
@@ -763,14 +763,13 @@ export default {
                 this.$Message.info('取消提交');
               },
             })
-          }else {
-            this.$Message.warning('请添加配件或完善订单信息后再提交!')
+          } else {
+            this.$Message.error('*为必填！');
           }
-        } else {
-          this.$Message.error('*为必填！');
-        }
-      })
-
+        })
+      }else {
+        this.$Message.warning('请添加配件或完善订单信息后再提交!')
+      }
     }
   },
   mounted(){

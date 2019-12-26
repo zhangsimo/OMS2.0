@@ -47,7 +47,7 @@
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span><span>{{ onelist.orgTel }}</span>
+              <span>联系电话:</span><span>{{ onelist.guestTel }}</span>
             </p>
             <p>
               <span>结算方式:</span><span>{{ onelist.settleTypeName }}</span>
