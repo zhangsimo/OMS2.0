@@ -404,9 +404,9 @@
             this.state = row.isGuestResearch
             this.ID = row.guestId
             // console.log(this.ID)
-            this.Limitstate = JSON.parse(row.researchStatus).value
+            this.Limitstate = row.auditSign?JSON.parse(row.auditSign).value:"";
              this.creaditList = row
-            console.log(this.creaditList)
+            // console.log(this.creaditList)
             this.researchStatus = row.researchStatus?JSON.parse(row.researchStatus).value:'';
             this.credit()
           },
