@@ -178,7 +178,7 @@
                     >
                       <Option
                         v-for="item in invoiceMap"
-                        :value="item.label"
+                        :value="item.value"
                         :key="item.value"
                       >{{ item.label }}</Option>
                     </Select>

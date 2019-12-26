@@ -162,13 +162,8 @@
       <!--选择配件-->
       <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></Select-part-com>
       <!--编辑收货信息-->
-      <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
       <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
-      <!--<div slot='footer'>-->
-      <!--<Button type='primary' @click="Determined">确定</Button>-->
-      <!--<Button type='default' >取消</Button>-->
-      <!--</div>-->
-      <!--</Modal>-->
+
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
