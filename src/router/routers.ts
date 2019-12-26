@@ -1266,7 +1266,7 @@ export default [
   {
     path: "/systemSetting",
     name: "systemSetting",
-    mark: '9101',
+    mark: '9',
     meta: {
       icon: "md-settings",
       title: "系统设置"
