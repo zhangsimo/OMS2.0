@@ -199,6 +199,7 @@ export default {
       data.code = this.clientCode;
       data.shortName = this.clientName;
       data.tel = this.clientPhone;
+      console.log(data)
       let res = await getTreeClient(data);
       if (res.code === 0) {
         this.tableData = res.data.content;
@@ -253,7 +254,7 @@ export default {
     //选择
     select() {
       if (this.oneClinet.isDisabled == 1) {
-        this.$message.error("改客户已被禁用");
+        this.$message.error("该客户已被禁用");
         return false;
       } else {
         this.$emit("getOne", this.oneClinet);

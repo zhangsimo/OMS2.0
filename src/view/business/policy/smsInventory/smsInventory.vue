@@ -100,12 +100,12 @@
                   <FormItem label="盘点员：" prop="orderMan">
                     <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" />
                   </FormItem>
-                  <FormItem label="盘点日期" prop="auditDate">
+                  <FormItem label="盘点日期" prop="checkDate">
                     <DatePicker
                       :disabled="draftShow != 0"
                       type="datetime"
                       class="w160"
-                      v-model="formPlan.auditDate"
+                      v-model="formPlan.checkDate"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="盘点单号" prop="serviceId">
@@ -318,7 +318,7 @@ export default {
           },
           {
             title: "盘点日期",
-            key: "auditDate",
+            key: "checkDate",
             minWidth: 120
           },
           {
@@ -383,12 +383,7 @@ export default {
       //右边仓库数据
       warehouseList: {},
       //配件组装信息 表单model
-      formPlan: {
-        // storeId:{},
-        // orderMan: "",
-        // auditDate: "",
-        // serviceId: ""
-      },
+      formPlan: {},
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
@@ -416,7 +411,7 @@ export default {
             trigger: "change"
           }
         ],
-        auditDate: [
+        checkDate: [
           {
             required: true,
             type: "date",
@@ -560,7 +555,7 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        auditDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        checkDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: "",
         serviceId: "",
         print: "",
@@ -596,7 +591,7 @@ export default {
       }
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+          this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
             "YYYY-MM-DD HH:mm:ss"
           );
           this.formPlan.billStatusId = 1;
@@ -621,7 +616,7 @@ export default {
               this.$Message.error("只有草稿状态才能保存");
               return;
             }
-            this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+            this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
               "YYYY-MM-DD HH:mm:ss"
             );
             getSubmitList(this.formPlan).then(res => {
@@ -751,7 +746,7 @@ export default {
         if (valid) {
           var datas = conversionList(val);
           this.formPlan.detailVOList = datas;
-          this.formPlan.auditDate = moment(this.formPlan.auditDate).format(
+          this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
             "YYYY-MM-DD HH:mm:ss"
           );
           getSubmitList(this.formPlan)
