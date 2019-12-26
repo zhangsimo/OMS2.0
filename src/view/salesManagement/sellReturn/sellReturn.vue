@@ -409,7 +409,8 @@
         isWms: true,//判断是否提交,返回
         PTrow: {
           _highlight: true,
-          billStatusId: {name: '草稿', value: 0},
+          // billStatusId: {name: '草稿', value: 0},
+          billStatusName:'草稿',
           orderManId:  this.$store.state.user.userData.id
           // status: {"name":"草稿","value":0},
         },
@@ -870,11 +871,13 @@
         data.orderDate = tools.transTime(this.formPlan.orderDate)
         data.billStatusId = null
         getSave(data).then(res => {
-          this.$Message.success('选择销售出库单成功');
-          this.formPlan = {}
-          this.$refs.formPlan.resetFields();
-          this.isNew=true
-          this.getLeftList()
+        if(res.code==0){
+         this.$Message.success('选择销售出库单成功');
+         this.formPlan = {}
+         this.$refs.formPlan.resetFields();
+         this.isNew=true
+         this.getLeftList()
+       }
         })
       },
 

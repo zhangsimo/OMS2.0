@@ -736,6 +736,7 @@ export default {
         getDeleteList(data).then(res => {
           if (res.code === 0) {
             this.getList();
+
           }
         });
       } else {
