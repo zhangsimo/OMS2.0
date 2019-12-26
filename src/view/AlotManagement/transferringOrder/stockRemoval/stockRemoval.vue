@@ -833,8 +833,9 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       this.dayinCureen = row;
-      // console.log(row, this.dayinCureen, "234");
+      console.log(row, this.dayinCureen, "234");
       this.Leftcurrentrow = row;
+
       const params = {
         mainId: row.id
       };
