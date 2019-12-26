@@ -753,7 +753,7 @@
               }
             },
             onCancel: () => {
-              this.$Message.info('取消提交');
+              this.$Message.info('取消作废');
             },
           })
         } else {
@@ -793,7 +793,7 @@
               }
             },
             onCancel: () => {
-              this.$Message.info('取消提交');
+              this.$Message.info('取消成功');
             },
           })
         } else {
