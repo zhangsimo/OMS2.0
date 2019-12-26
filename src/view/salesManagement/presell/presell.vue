@@ -790,7 +790,9 @@
               this.getLeftList()
               this.formPlan={}
               this.isNew=true
+              this.id = null
               this.$refs.formPlan.resetFields()
+              this.$Message.success('添加配件成功')
             }
           } else {
             this.$Message.error('*为必填项');
@@ -1024,6 +1026,7 @@
               this.tableData = []
               this.$refs.formPlan.resetFields();
               this.isNew=true
+              this.id=null
             }
           })
         } else {

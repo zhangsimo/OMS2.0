@@ -123,7 +123,6 @@ export default {
             commit('setUserData', data)
             commit('setUserShopName', data.shopName)
           loginIsOpen = true
-          console.log(123123123131231323233,12313131313123)
           // localStorage.tenantId = data.tenantId
           resolve(data)
         }).catch(err => {
