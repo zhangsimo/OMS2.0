@@ -70,6 +70,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { transferWarehousing, transferParts } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
@@ -295,9 +296,6 @@ export default {
         }
       });
     },
-    // 高级查询
-    ok() {},
-    cancel() {},
     // 导出汇总/配件明细
     report(type) {
       if (type) {

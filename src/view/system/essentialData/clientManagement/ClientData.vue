@@ -323,6 +323,7 @@
               ref="validData"
               :mouse-config="{selected: true}"
               :data="invoice"
+              height='300px'
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -384,7 +385,7 @@ export default {
           callback();
         }
       } else {
-        callback();
+        callback(new Error("只能输入数字"));
       }
     };
     const paragraph = (rule, value, callback) => {
@@ -395,7 +396,7 @@ export default {
           callback();
         }
       } else {
-        callback();
+        callback(new Error("只能输入数字和字母"));
       }
     };
     return {
