@@ -27,6 +27,26 @@
           <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
         </span>
       </Button>
+      <Upload
+        ref="upload"
+        style="display: inline-block"
+        :show-upload-list="false"
+        :action="upurl"
+        :headers="headers"
+        :format="['xlsx','xls']"
+        :on-format-error="onFormatError"
+        :on-success="onSuccess"
+        :before-upload="beforeUpload"
+      >
+        <Button type="default" class="mr10">
+          <Icon custom="iconfont icondaoruicon icons" />导入
+        </Button>
+      </Upload>
+      <Button class="mr10" @click="downTemplate">
+        <span class="center">
+          <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+        </span>
+      </Button>
     </div>
     <div class="tabeBox">
       <div style="width: 3000px">
@@ -89,7 +109,10 @@ import {
   getCustomerDetails
 } from "@/api/system/essentialData/clientManagement";
 import { area } from "@/api/lease/registerApi";
-
+import { getup } from "@/api/system/essentialData/supplierManagement";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   name: "CustomerData",
   components: {
@@ -260,7 +283,11 @@ export default {
       moreQueryShow: false,
       clientDataShow: false,
       clientList: {},
-      supplier: "" //客户信息
+      supplier: "", //客户信息
+      headers: {
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+      }, //请求头
+      upurl: getup + "?type=" + "1212" //批量导入地址
     };
   },
   created() {
@@ -273,6 +300,39 @@ export default {
     }
   },
   methods: {
+    //下载模板
+    downTemplate() {
+      location.href =
+        baseUrl.downApi +
+        "/file/get?fileId=" +
+        1300000000 +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
+    },
+    //批量上传失败
+    onFormatError(file) {
+      // console.log(file)
+      this.$Message.error("只支持xls xlsx后缀的文件");
+    },
+    // 上传成功函数
+    onSuccess(response) {
+      this.getlist();
+      if (response.code != 0) {
+        this.$Notice.warning({
+          title: "导入失败",
+          desc: response
+        });
+      } else {
+        this.$Notice.success({
+          title: "导入成功",
+          desc: response
+        });
+      }
+    },
+    //上传之前清空
+    beforeUpload() {
+      this.$refs.upload.clearFiles();
+    },
     //获取全部表格数据
     async getlist() {
       this.loading = true;
@@ -382,9 +442,9 @@ export default {
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
-          this.$refs.child.placeList = this.clientList.guestLogisticsVOList
-          this.$refs.child.relevanceClientShow = this.clientList.guestVOList
-          this.$refs.child.invoice = this.clientList.guestTaxpayerVOList
+          this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
+          this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
+          this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
         }
         // console.log(this.clientList);
         this.clientDataShow = true;

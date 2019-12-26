@@ -32,16 +32,16 @@
         </span>
       </Button>
       <Upload
-        ref="upload"
-        style="display: inline-block"
-        :show-upload-list="false"
-        :action="upurl"
-        :headers="headers"
-        :format="['xlsx','xls']"
-        :on-format-error="onFormatError"
-        :on-success="onSuccess"
-        :before-upload="beforeUpload"
-      >
+          ref="upload"
+          style="display: inline-block"
+          :show-upload-list="false"
+          :action="upurl"
+          :headers="headers"
+          :format="['xlsx','xls']"
+          :on-format-error="onFormatError"
+          :on-success="onSuccess"
+          :before-upload="beforeUpload"
+        >
         <Button type="default" class="mr10">
           <Icon custom="iconfont icondaoruicon icons" />导入
         </Button>
