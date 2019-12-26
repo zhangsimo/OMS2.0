@@ -668,64 +668,31 @@ export default {
     report(type) {
       if (type) {
         if (this.data1.length !== 0 || this.data2.length !== 0) {
-          let arr = [];
+          let str1 ='';
+          let str2 ='';
           this.data1.map(item => {
-            arr.push({
-              orderCode: item.serviceId,
-              orderType: item.serviceType.value
-            });
+            str1+=`${item.serviceId}*${item.serviceType.value},`
+            // arr.push({
+            //   orderCode: item.serviceId,
+            //   orderType: item.serviceType.value
+            // });
           });
           this.data2.map(item => {
-            arr.push({
-              orderCode: item.serviceId,
-              orderType: item.serviceType.value
-            });
+            str2+=`${item.serviceId}*${item.serviceType.value},`
+            // arr.push({
+            //   orderCode: item.serviceId,
+            //   orderType: item.serviceType.value
+            // });
           });
-          // console.log(encodeURI(arr))
-          // console.log(JSON.stringify(arr))
-          // location.href = `${
-          //   baseUrl.omsOrder
-          // }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
-          //   TOKEN_KEY
-          // )}&jsonObject=${JSON.stringify(arr)}`;
+          str1 = str1.substring(1,str1.length-1)
+          str2 = str2.substring(1,str2.length-1)
+          console.log(str1,str2)
           location.href = `${
             baseUrl.omsOrder
           }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
             TOKEN_KEY
-          )}&jsonObject=${encodeURI(arr)}`;
-
-          // reportParts({ one: this.data1, two: this.data2, three: obj }).then(
-          //   res => {
-          // var blob = new Blob([res]); //创建一个blob对象
-          // var a = document.createElement("a"); //创建一个<a></ a>标签
-          // a.href = URL.createObjectURL(blob); // response is a blob
-          // a.download = "用户列表.csv"; //文件名称
-          // a.style.display = "none";
-          // document.body.appendChild(a);
-          // a.click();
-          // a.remove();
-
-          // const blob = new Blob([res]);
-          // const fileName = "配件明细.csv";
-          // const elink = document.createElement("a");
-          // elink.download = fileName;
-          // elink.style.display = "none";
-          // elink.href = URL.createObjectURL(blob);
-          // document.body.appendChild(elink);
-          // elink.click();
-          // URL.revokeObjectURL(elink.href); // 释放URL 对象
-          // document.body.removeChild(elink);
-
-          // const link = document.createElement("a");
-          // let blob = new Blob([res]);
-          // link.style.display = "none";
-          // link.href = URL.createObjectURL(blob);
-          // link.setAttribute("download", "配件明细.csv");
-          // document.body.appendChild(link);
-          // link.click();
-          // document.body.removeChild(link);
-          // }
-          // );
+          )}&aOrderCode=${str1}&bOrderCode=${str2}`;
+          
         } else {
           this.$message.error("应收/应付暂无数据");
         }
