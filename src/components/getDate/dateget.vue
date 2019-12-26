@@ -1,8 +1,8 @@
 <template>
-    <Select v-model="searchQuick" class="w90" @on-change="getval">
-      <Option v-for="item in dateQiuck" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      <slot></slot>
-    </Select>
+  <Select v-model="searchQuick" class="w90" @on-change="getval">
+    <Option v-for="item in dateQiuck" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <slot></slot>
+  </Select>
 </template>
 
 <script>
@@ -33,6 +33,14 @@ export default {
     };
   },
   props: {},
+  watch: {
+    dataSource: {
+      immediate: true, // 这句重要
+      handler(val) {
+        this.searchQuick = val;
+      }
+    }
+  },
   created() {},
   mounted() {},
   methods: {
@@ -41,7 +49,7 @@ export default {
       switch (type) {
         case 0:
         case "0":
-          this.val = '';
+          this.val = "";
           break;
         case 1:
         case "1":

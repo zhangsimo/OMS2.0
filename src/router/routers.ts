@@ -1404,7 +1404,7 @@ export default [
           {
             path: "/essentialData/ lineOfCredit",
             name: "LineOfCredit",
-            mark: '9114',
+            // mark: '9114',
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",

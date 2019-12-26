@@ -87,6 +87,7 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
 import { getWarehousingList, getWarehousingPart,getOutStockList } from "@/api/bill/saleOrder";
+import moment from 'moment'
 export default {
   components: {
     quickDate,
