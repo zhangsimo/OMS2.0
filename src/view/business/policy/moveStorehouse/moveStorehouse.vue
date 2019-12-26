@@ -280,7 +280,7 @@ export default {
         },
         {
           label: "已作废",
-          value: 3
+          value: 5
         }
       ],
       showMore: false, //更多模块的弹框
@@ -496,8 +496,8 @@ export default {
         this.purchaseType = null;
       }
       if (this.queryTime) {
-        data.startTime = this.queryTime[0] || "";
-        data.endTime = this.queryTime[1] || "";
+        data.createStartDate = this.queryTime[0] || "";
+        data.createEndDate = this.queryTime[1] || "";
       }
       data.status = this.purchaseType;
       let page = this.Left.page.num - 1;

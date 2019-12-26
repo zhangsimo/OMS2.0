@@ -6,7 +6,7 @@
         <Input class="w100 mr10" v-model="code" placeholder="编码" />
         <Input class="w100 mr10" v-model="contactorTel" placeholder="电话" />
         │
-        <Checkbox class="mr20 ml10" v-model="single"> 显示禁用</Checkbox>
+        <!-- <Checkbox class="mr20 ml10" v-model="single" @on-change="search"> 显示禁用</Checkbox> -->
         <Button @click="search" class="mr10" type="primary"
           ><Icon type="ios-search" size="14" /> 查询</Button
         >
@@ -212,7 +212,6 @@ export default class SelectSupplier extends Vue {
         params[key] = this[key];
       }
     })
-    params.isDisabled = this.single ? 1 : 0;
     if (this.selectTreeItem) {
       params.supplierTypeFirst = this.selectTreeItem.id;
     }
