@@ -470,6 +470,7 @@ export default {
   methods: {
        //配件返回的参数
             getPartNameList(val){
+              console.log(val,'val =>473')
               val.forEach( item => {
                   item.partName =  item.partStandardName
                   item.hasAcceptQty = '1'
