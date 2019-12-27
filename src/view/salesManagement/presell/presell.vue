@@ -256,6 +256,7 @@
                   height='500'
                   @select-change="selectTable"
                   @select-all="selectAllTable"
+                  @edit-actived="editActivedEvent"
                   :data="formPlan.detailVOList"
                   :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
                 >
@@ -281,17 +282,17 @@
                     field="partBrand"
                     title="品牌"
                   ></vxe-table-column>
-                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input'}"></vxe-table-column>
-                  <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input'}"></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
+                  <vxe-table-column field="orderPrice" title="销价" :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
                   <vxe-table-column title="金额">
                     <template v-slot="{ row }">
-                      <span>{{ countAmount(row) }} </span>
+                      <span>{{ countAmount(row) | priceFilters}} </span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column
                     field="remark"
                     title="备注"
-                    :edit-render="{name: 'input'}"
+                    :edit-render="{name: 'input',attrs: {disabled: false}}"
                   ></vxe-table-column>
                   <vxe-table-column
                     field="storeName"
@@ -596,6 +597,17 @@
 
     },
     methods: {
+      //判断表格能不能编辑
+      editActivedEvent({ row }) {
+        let xTable = this.$refs.xTable;
+        let orderQtyColumn = xTable.getColumnByField("orderQty");
+        let orderPriceColumn = xTable.getColumnByField("orderPrice");
+        let remarkColumn = xTable.getColumnByField("remark");
+        let isDisabled = this.draftShow != 0;
+        orderQtyColumn.editRender.attrs.disabled = isDisabled;
+        orderPriceColumn.editRender.attrs.disabled = isDisabled;
+        remarkColumn.editRender.attrs.disabled = isDisabled;
+      },
       //获取销售员
       async getAllSales() {
         let res = await getSales();

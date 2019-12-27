@@ -113,18 +113,18 @@ export const mixSelectPartCom = {
         total: 0
       },
       //配件查询分类
-      searchType: "fullName",
+      searchType: '1',
       searchTypeArr: [
         {
-          value: "partCode",
+          value: "0",
           label: "编码"
         },
         {
-          value: "fullName",
+          value: "1",
           label: "名称"
         },
         {
-          value: "applyCarModel",
+          value: "2",
           label: "车型"
         }
       ],
@@ -142,41 +142,48 @@ export const mixSelectPartCom = {
   },
   mounted() {},
   methods: {
-    //初始化数据
+    // 初始化数据
     getList() {
       this.loading = true;
-      let req = {};
+      let data = {};
+      let params = {}
+      params.page = this.page.num;
+      params.size = this.page.size;
       if (this.selectTreeItem.id) {
-        req.typeId = this.selectTreeItem.id;
+        data.typeId = this.selectTreeItem.id;
       }
-      if (this.selectBrand && this.selectBrand != "9999") {
-        req.partBrandCode = this.selectBrand;
+      if (this.selectBrand && this.selectBrand !== "9999") {
+        data.partCodes = [];
+        data.partBrandCodes = [this.selectBrand];
+      }
+      const qurry = this.partName.trim();
+      console.log(this.partName)
+      if(qurry.length > 0) {
+        switch (this.searchType) {
+          case "0":
+            data.partCode = qurry;
+            break;
+          case "1":
+            data.fullName = qurry;
+            break;
+          case "2":
+            data.adapterCarModels = [qurry];
+            break;
+          case "3":
+            data.pinyin = qurry;
+            break;
+          default:
+            break;
+        }
       }
 
-      if (this.searchValue.trim()) {
-        req[this.searchType] = this.searchValue.trim();
-      }
-      // console.log(this.searchType,'this.searchType')
-      if (this.searchType == "编码") {
-        req.partName = this.partName;
-      }
-      // if (this.searchType == "名称") {
-      //   req.partName = this.partName;
-      // }
-      // if (this.searchType == "车型") {
-      //   req.partName = this.partName;
-      // }
-      // req.partCode ='24507568428'
-      // req.carModelBrand = "92A";
-      req.page = this.page.num;
-      req.size = this.page.size;
-      // console.log(req, "req=>161");
-      getCarParts(req).then(res => {
+      getCarParts({data:data,params:params}).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
       });
     },
+
 
     //获取配件品牌
     getPartBrandAll() {

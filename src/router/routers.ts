@@ -66,7 +66,7 @@ export default [
       {
         path: "goodsList",
         name: "goodsList",
-        mark: '1000',
+        mark: '1',
         meta: {
           icon: "arrow-graph-up-right",
           title: "采购计划"
