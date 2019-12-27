@@ -782,7 +782,7 @@ export default {
         })
         str1 = str1.substring(1,str1.length-1)
         str2 = str2.substring(1,str2.length-1)
-        console.log(str1,str2)
+        // console.log(str1,str2)
         location.href = `${
             baseUrl.omsOrder
           }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
