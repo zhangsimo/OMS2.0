@@ -238,6 +238,11 @@
                       </Upload>
                     </div>
                     <div class="fl mb5">
+                      <Button size="small" @click="down">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
+                    </div>
+                    <div class="fl mb5">
                       <Button size="small" class="mr10" @click="openAddressShow" :disabled="draftShow != 0||isNew">
                         编辑发货信息
                       </Button>
@@ -1067,6 +1072,13 @@
       getRUl() {
         let id = this.id
         this.upurl = getup + 'id=' + id
+      },
+      //下载模板
+      down() {
+        location.href =
+          baseUrl.omsOrder +
+          "/guestOrderMain/template?access_token=" +
+          Cookies.get(TOKEN_KEY);
       },
     },
     watch: {
