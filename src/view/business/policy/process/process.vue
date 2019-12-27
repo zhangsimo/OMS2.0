@@ -1014,7 +1014,7 @@ export default {
     },
     getDataQuick(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListzu(params);
@@ -1022,7 +1022,7 @@ export default {
     //快速查询日期
     getDataQuick1(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListchai(params);
@@ -1185,7 +1185,7 @@ export default {
     },
     getListzu(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
         delete params.qucikTime;
       } else {
@@ -1213,7 +1213,7 @@ export default {
     },
     getListchai(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
       }
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
