@@ -176,6 +176,9 @@ import {
   getSettlement,
   Preservation
 } from "@/api/bill/saleOrder";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   components: {
     selectDealings
@@ -767,7 +770,28 @@ export default {
       }
     },
     // 导出配件明细
-    getReportParts() {}
+    getReportParts() {
+      if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
+        let str1=''
+        let str2=''
+        this.paymentlist.map(item=>{
+          str1+=`${item.serviceId}*${item.serviceType.value},`
+        })
+        this.collectlist.map(item=>{
+          str2+=`${item.serviceId}*${item.serviceType.value},`
+        })
+        str1 = str1.substring(1,str1.length-1)
+        str2 = str2.substring(1,str2.length-1)
+        console.log(str1,str2)
+        location.href = `${
+            baseUrl.omsOrder
+          }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
+            TOKEN_KEY
+          )}&aOrderCode=${str1}&bOrderCode=${str2}`;
+      } else {
+        this.$message.error('请先勾选数据')
+      }
+    }
   }
 };
 </script>
