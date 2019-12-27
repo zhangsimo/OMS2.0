@@ -225,7 +225,7 @@ export const mixSelectPartCom = {
       }
       req.page = this.page.num;
       req.size = this.page.size;
-      getwbParts(req).then(res => {
+      getwbParts({},req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;
