@@ -661,6 +661,8 @@ export default {
     },
     xinzeng() {
       this.Leftcurrentrow.guestName = "";
+      this.Leftcurrentrow.createTime = ''
+      this.Leftcurrentrow.serviceId = ''
       this.buttonShow = false;
       if (this.Left.tbdata.length === 0) {
       } else {
