@@ -641,9 +641,7 @@ export default {
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info(
-            "当前加工单列表已有一个新增单等待操作,请先保存当前操作新增单据"
-          );
+          this.$Message.info("请先保存数据");
           return;
         }
       }
@@ -842,7 +840,7 @@ export default {
       }
       console.log(row.id);
       if (row.id == undefined) {
-        row.id = "1212";
+        row.id = "";
       }
       const params = {
         mainId: row.id
