@@ -109,8 +109,9 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
+<!--                          :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
-                            :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"
+                           disabled
                             :value="Leftcurrentrow.createTime"
                             format="yyyy-MM-dd HH:mm:ss"
                             type="date"
@@ -120,7 +121,7 @@
                         <FormItem label="操作员：" prop="planDate">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.orderMan"
                           ></Input>
                         </FormItem>
@@ -134,7 +135,7 @@
                         <FormItem label="组装单号：" prop="planOrderNum">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.serviceId"
                           ></Input>
                         </FormItem>
@@ -342,8 +343,9 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
+<!--                          :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
-                            :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.createTime"
                             format="yyyy-MM-dd HH:mm:ss"
                             type="date"
@@ -353,7 +355,7 @@
                         <FormItem label="操作员：" prop="planDate">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.orderMan"
                           ></Input>
                         </FormItem>
@@ -365,9 +367,10 @@
                           ></Input>
                         </FormItem>
                         <FormItem label="拆分单号：" prop="planOrderNum">
+<!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                          disabled
                             :value="Leftcurrentrow.serviceId"
                           ></Input>
                         </FormItem>
