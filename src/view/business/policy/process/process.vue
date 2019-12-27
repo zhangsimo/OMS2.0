@@ -901,34 +901,43 @@ export default {
         this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
-      const id = this.Leftcurrentrow.id;
-      if (this.tabKey === "0") {
-        // 配件组装作废
-        zuofei(id)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListzu(this.form);
-              this.$Message.success("作废成功");
+
+        this.$Modal.confirm({
+          title: '是否确定作废',
+          onOk: async () => {
+            const id = this.Leftcurrentrow.id;
+            if (this.tabKey === "0") {
+              // 配件组装作废
+              zuofei(id)
+                .then(res => {
+                  // 点击列表行==>配件组装信息
+                  if (res.code == 0) {
+                    this.getListzu(this.form);
+                    this.$Message.success("作废成功");
+                  }
+                })
+                .catch(e => {
+                  this.$Message.info("作废配件组装信息失败");
+                });
+            } else {
+              // 配件拆分作废
+              zuofei2(id)
+                .then(res => {
+                  // 点击列表行==>配件组装信息
+                  if (res.code == 0) {
+                    this.getListchai(this.form);
+                    this.$Message.success("作废成功");
+                  }
+                })
+                .catch(e => {
+                  this.$Message.info("作废配件拆分信息失败");
+                });
             }
-          })
-          .catch(e => {
-            this.$Message.info("作废配件组装信息失败");
-          });
-      } else {
-        // 配件拆分作废
-        zuofei2(id)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListchai(this.form);
-              this.$Message.success("作废成功");
-            }
-          })
-          .catch(e => {
-            this.$Message.info("作废配件拆分信息失败");
-          });
-      }
+          },
+          onCancel: () => {
+            this.$Message.info('取消作废');
+          },
+        })
     },
     //选择单据
     selectAddlierName(row) {
@@ -1014,7 +1023,7 @@ export default {
     },
     getDataQuick(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListzu(params);
@@ -1022,7 +1031,7 @@ export default {
     //快速查询日期
     getDataQuick1(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListchai(params);
@@ -1185,7 +1194,7 @@ export default {
     },
     getListzu(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
         delete params.qucikTime;
       } else {
@@ -1213,7 +1222,7 @@ export default {
     },
     getListchai(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
       }
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
