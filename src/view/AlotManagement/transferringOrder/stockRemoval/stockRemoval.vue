@@ -169,7 +169,12 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addMountings">
+                      <Button
+                        size="small"
+                        :disabled="buttonDisable == 1"
+                        class="mr10"
+                        @click="addMountings"
+                      >
                         <Icon type="md-add" />添加配件
                       </Button>
                     </div>
