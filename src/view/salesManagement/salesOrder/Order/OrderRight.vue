@@ -690,7 +690,7 @@ export default {
           this.warning(response.data.list[0]);
         }
       } else {
-        this.$Message.error("上传失败");
+        this.$Message.error("导入失败");
       }
     },
     warning(nodesc) {
