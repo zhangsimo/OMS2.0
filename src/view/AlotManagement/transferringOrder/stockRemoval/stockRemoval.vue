@@ -646,6 +646,8 @@ export default {
         }
       }
       const item = {
+        new: true,
+        _highlight: true,
         index: 1,
         xinzeng: "1",
         status: {
@@ -838,29 +840,28 @@ export default {
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
       }
-      console.log(row.id);
       if (row.id == undefined) {
         row.id = "";
       }
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
-      this.Leftcurrentrow.detailVOS = res.data;
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
-            });
-            this.cangkuListall = res.data;
-            this.dcData = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+      if(row.id){
+        const params = {
+          mainId: row.id
+        };
+        const res = await getListDetail(params);
+        this.Leftcurrentrow.detailVOS = res.data;
+        // cangkulist2(this.$store.state.user.userData.groupId).then(res => {
+        //   if (res.code == 0) {
+        //     res.data.map(item => {
+        //       item["label"] = item.name;
+        //       item["value"] = item.id;
+        //     });
+        //     this.cangkuListall = res.data;
+        //     this.dcData = res.data;
+        //   }
+        // }).catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
+      }
     },
     //打开添加配件模态框
     addMountings() {
