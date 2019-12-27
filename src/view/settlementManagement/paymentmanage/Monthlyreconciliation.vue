@@ -634,7 +634,7 @@ export default {
     },
     // 应收取消全选
     collectNoCheckoutAll() {
-      this.collectlist = 0;
+      this.collectlist = [];
       this.totalcollect = 0;
       this.Actualtotalcollect = 0;
       this.getSettlementComputed();
@@ -720,11 +720,7 @@ export default {
             billingType: this.totalvalue,
             rebateNo: this.Rebateid,
             badDebNo: this.BadDebtid,
-            buttonStatus: num,
-            incomeType,
-            startDate,
-            endDate,
-            remark
+            buttonStatus: num
           }
         ];
         let obj = {

@@ -163,6 +163,7 @@
             size="mini"
             height="300"
             :data="formValidate.specVOS"
+            :edit-rules="validRules"
             :edit-config="{trigger: 'dblclick', mode: 'cell'}">
             <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
             <vxe-table-column field="meterCompany" title="计量单位" width="102">
