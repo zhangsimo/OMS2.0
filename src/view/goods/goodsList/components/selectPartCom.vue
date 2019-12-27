@@ -3,9 +3,9 @@
     <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
         <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
-          <Option v-for="item in searchTypeArr" :value="item.label" :key="item.value">{{item.label}}</Option>
+          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
         </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+        <Input class="w150 mr10" v-model="partName" placeholder="请输入查询的内容"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -29,8 +29,7 @@
         </div>
       </div>
       <div slot='footer'>
-        <!--<Button type='primary' @click='submit("proModal")'>确定</Button>-->
-        <!--<Button type='default' @click='proModal = false'>取消</Button>-->
+
       </div>
     </Modal>
     <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun" :show-spe="false"></part-info>
@@ -40,7 +39,7 @@
 <script>
   import {getAllBrand,getCarClassifys,getCarPartName} from "_api/system/partsExamine/partsExamineApi";
   import PartInfo from "_c/partInfo/partInfo";
-  import {mixSelectPartCom} from "./mixSelectPartCom";
+  import { mixSelectPartCom } from "./mixSelectPartCom";
 
   export default {
     name: "selectPartCom",

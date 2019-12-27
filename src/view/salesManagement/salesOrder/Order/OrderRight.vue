@@ -246,7 +246,7 @@
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注"  :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
           <vxe-table-column field title="批次">
@@ -690,7 +690,7 @@ export default {
           this.warning(response.data.list[0]);
         }
       } else {
-        this.$Message.error("上传失败");
+        this.$Message.error("导入失败");
       }
     },
     warning(nodesc) {
@@ -877,10 +877,11 @@ export default {
       let xTable = this.$refs.xTable;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       let orderPriceColumn = xTable.getColumnByField("orderPrice");
-      let sexColumn = xTable.getColumnByField("sex");
+      let remarkColumn = xTable.getColumnByField("remark");
       let isDisabled = this.draftShow != 0;
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+      remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     //出库
     stockOut() {

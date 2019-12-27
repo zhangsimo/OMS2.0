@@ -275,3 +275,19 @@ export function reportParts(data){
         data
     })
 }
+// // 供应商类型树：  /supplierType/findType
+// export function typeTree(params){
+//     return axios.request({
+//         url: `${api.omsOrder}/supplierType/findType`,
+//         method: 'get',
+//         params
+//     })
+// }
+// // 根据条件查询供应商(分页)：/guest/queryAllSupplier
+// export function typeSelect(params){
+//     return axios.request({
+//         url: `${api.omsOrder}/guest/queryAllSupplier`,
+//         method: 'get',
+//         params
+//     })
+// }
