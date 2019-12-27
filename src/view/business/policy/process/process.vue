@@ -38,7 +38,7 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1">
+                  <Button type="default" class="mr10" @click="baocun1" >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
@@ -216,7 +216,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="需要数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ currentNum * row.qty}}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="storeStockQty" title="库存" width="100"></vxe-table-column>
@@ -448,7 +448,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ row.qty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
@@ -527,6 +527,7 @@ export default {
         status: 99,
         qucikTime: ""
       },
+      rowId:'',//选择配件明细的id
       tabKey: "0",
       modal2: true,
       split1: 0.2,
@@ -752,6 +753,9 @@ export default {
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
+      console.log('勾选',row)
+      this.rowId=row.id
+      console.log( this.rowId)
       console.log(checked ? "勾选事件" : "取消事件");
     },
     tabChange(key) {
@@ -790,6 +794,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu(this.form);
+             this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -803,6 +814,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai(this.form);
+              this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -1130,12 +1148,17 @@ export default {
     shanchu() {
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
+        this.rowId=''
+        return;
+      }
+      if(!this.rowId){
+        this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
       if (this.tabKey === "0") {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log(seleList);
+        console.log('rrr',seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1146,10 +1169,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListzu(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       } else {
@@ -1166,10 +1192,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListchai(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       }
@@ -1205,6 +1234,7 @@ export default {
       }
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
+          console.log('配件组装数量',res)
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];

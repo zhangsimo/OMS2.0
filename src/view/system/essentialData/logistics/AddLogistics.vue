@@ -3,7 +3,7 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled"></Checkbox>
+        <Checkbox v-model="data.isDisabled" :true-value="1" :false-value="0"></Checkbox>
       </span>
     </div>
     <div style="display: flex">

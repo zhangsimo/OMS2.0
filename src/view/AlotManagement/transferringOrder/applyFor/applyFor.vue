@@ -98,7 +98,7 @@
                         <Button size="small" class="mr10" @click="addPro" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
                       </div>
                       <div class="fl mb5">
-                        <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                        <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlaji调拨申请信息tongicon"></i> 删除配件</Button>
                       </div>
                       <div class="fl mb5">
                         <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
@@ -139,7 +139,7 @@
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column title="紧销品" width="100" type="checkbox">
+                    <vxe-table-column title="紧销品" width="100" >
                       <template v-slot="{ row,rowIndex }">
                         <Checkbox disabled :value="row.isTightPart"></Checkbox>
                       </template>

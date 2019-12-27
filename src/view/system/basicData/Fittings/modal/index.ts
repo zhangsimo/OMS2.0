@@ -38,15 +38,15 @@ let price2 = (rule: any, value: any, callback: Function) => {
 };
 //数字加字母校验
 const NumberA = (rule, value, callback) => {
-  // 模拟异步验证效果
-  let reg = /^[0-9a-zA-Z]*$/;
-  if (!value) {
-    callback(new Error('请输入配件编码！'));
-  } else if(!reg.test(value)){
-    callback(new Error('请输入正确配件编码格式!'));
-  }else {
-    callback()
-  }
+    // 模拟异步验证效果
+    let reg = /^[0-9a-zA-Z]*$/;
+    if (!value) {
+        callback(new Error('请输入配件编码！'));
+    } else if (!reg.test(value)) {
+        callback(new Error('请输入正确配件编码格式!'));
+    } else {
+        callback()
+    }
 };
 
 @Component
@@ -147,6 +147,15 @@ export default class Accessories extends Vue {
         value: "",
         keySen: ""
     };
+    private validRules: Kv = {
+        companyNum: [{ required: true, message: "单位数量不能为空且只能是数字", trigger: "change" ,pattern:/^\d{1,}$/}],
+        longNum: [{ required: true, message: "长不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+        wide: [{ required: true, message: "宽不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+        high: [{ required: true, message: "高不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+        volume: [{ required: true, message: "体积不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+        weight: [{ required: true, message: "重量不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+        volumeRong: [{ required: true, message: "容积不能为空且最多保留两位小数", trigger: "change" ,pattern:/^\d{1,}+(\.\d{1,2})?$/}],
+    }
     // 配件全称
     get fullName(): string {
         let fullName: string = "";
@@ -726,7 +735,7 @@ export default class Accessories extends Vue {
             pageSize: 10,
             page: 0
         };
-        if(this.proModal && this.update) {
+        if (this.proModal && this.update) {
             this.getpartinfo();
         }
     }
@@ -739,8 +748,8 @@ export default class Accessories extends Vue {
                 size: 10
             }
         };
-        if(this.proModal) {
-         this.getPartsName();
+        if (this.proModal) {
+            this.getPartsName();
         }
         this.treeData = this._.cloneDeep(this.treeDataOrgin);
     }

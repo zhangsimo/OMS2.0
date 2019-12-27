@@ -169,7 +169,6 @@ export default {
     //初始化数据左边表格
     let res = await getGoodsInfo()
     this.tableData = res.data
-    console.log(res)
 
     //获取物流下拉框
     let log = await logistics()
@@ -193,7 +192,6 @@ export default {
         this.formDateTop.streetAddress= null,//详细收货地址
         this.formDateTop.receiveManTel= null//联系电话
       let res = await getGoodsInfo(this.formDateTop)
-      console.log(res)
     },
     getParams() {
       return this.formDateRight
@@ -206,7 +204,6 @@ export default {
         this.$Message.success(res.data)
         this.$refs.formTwo.resetFields()
         this.init1()
-        console.log(res)
       }
     },
     echoDate({row}) {
