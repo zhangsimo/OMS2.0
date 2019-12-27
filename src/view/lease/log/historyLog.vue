@@ -5,7 +5,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <Button type="warning" class="w90 mr10" @click="putlog">
+            <Button type="warning" class="w90 mr10" @click="putlog" v-has="'publish'">
               <span class="center">
                 <Icon type="ios-arrow-dropdown" />发布日志
               </span>

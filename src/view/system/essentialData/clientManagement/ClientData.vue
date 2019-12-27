@@ -3,11 +3,11 @@
     <div class="header-box clearfix">
       <span class="isDisabeld">
         是否禁用
-        <Checkbox v-model="data.isDisabled" />
+        <Checkbox v-model="data.isDisabled" :false-value="0" :true-value="1" />
       </span>
       <span class="isDisabeld">
         供应商
-        <Checkbox v-model="data.isSupplier" />
+        <Checkbox v-model="data.isSupplier" :false-value="0" :true-value="1" />
       </span>
       <span class="isDisabeld">
         客户
@@ -323,7 +323,7 @@
               ref="validData"
               :mouse-config="{selected: true}"
               :data="invoice"
-              height='300px'
+              height="300px"
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
               :edit-config="{trigger: 'dblclick', mode: 'cell'}"
@@ -593,7 +593,7 @@ export default {
       pitchOnClientList: [], //选中关联客户
       deleteOneClient: [], //获取删除项
       pitchOneBank: [],
-      tit:''//开票弹窗
+      tit: "" //开票弹窗
     };
   },
   // computed:{
@@ -697,7 +697,7 @@ export default {
         return false;
       }
       this.newplace = true;
-      this.title = '修改收货地址'
+      this.title = "修改收货地址";
     },
     //新增地址
     addPlace() {
@@ -781,7 +781,7 @@ export default {
     //新增银行
     addInoice() {
       this.addInoiceOne = {};
-      this.tit = '新增开票'
+      this.tit = "新增开票";
       this.newInoiceShow = true;
       this.$refs.AddInoice.resetFields();
     },
@@ -821,8 +821,8 @@ export default {
         this.$Message.error("请先选中需要修改的信息");
         return false;
       }
-      this.tit = '修改开票信息'
-      this.addInoiceOne = this.addInoiceOne.row
+      this.tit = "修改开票信息";
+      this.addInoiceOne = this.addInoiceOne.row;
       this.newInoiceShow = true;
     },
     //删除银行

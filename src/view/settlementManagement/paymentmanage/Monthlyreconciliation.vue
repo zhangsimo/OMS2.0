@@ -17,8 +17,15 @@
               </div>
               <div class="db ml20">
                 <span>往来单位：</span>
-                <input type="text" class="h30" :value="companyInfo" />
-                <i class="iconfont iconcaidan input" @click="Dealings"></i>
+                <Select v-model="companyInfo" style="width:200px">
+                  <Option
+                    v-for="item in companyList"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <!-- <input type="text" class="h30" :value="companyInfo" />
+                <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
               </div>
               <div class="db ml5">
                 <button class="mr10 ivu-btn ivu-btn-default" type="button">
@@ -58,14 +65,21 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Input type="text" class="w140 mr10" />
-                <i class="iconfont iconcaidan input" @click="Dealings"></i>
+                <Select v-model="collectionAccountName" style="width:200px" class="mr10">
+                  <Option
+                    v-for="item in collectionAccountList"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <!-- <Input type="text" class="w140 mr10" />
+                <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
                 <span>开户行：</span>
-                <Input type="text" class="w140 mr10" />
+                <Input v-model="openingBank" class="w140 mr10" disabled />
                 <span>收款账号：</span>
-                <Input type="text" class="w140 mr10" />
+                <Input v-model="collectionAccount" class="w140 mr10" disabled />
                 <span>本次申请付款账户：</span>
-                <Input type="text" class="w140 mr10" />
+                <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
             </div>
             <div class="db mt20">
@@ -176,12 +190,25 @@ import {
   getSettlement,
   Preservation
 } from "@/api/bill/saleOrder";
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   components: {
     selectDealings
   },
   data() {
     return {
+      collectionAccountList:[
+        {
+          value:'1',
+          label:''
+        }
+      ],
+      companyList:[{
+          value:'1',
+          label:''
+        }],
       info: false,
       store: "",
       bill: "",
@@ -631,7 +658,7 @@ export default {
     },
     // 应收取消全选
     collectNoCheckoutAll() {
-      this.collectlist = 0;
+      this.collectlist = [];
       this.totalcollect = 0;
       this.Actualtotalcollect = 0;
       this.getSettlementComputed();
@@ -717,11 +744,7 @@ export default {
             billingType: this.totalvalue,
             rebateNo: this.Rebateid,
             badDebNo: this.BadDebtid,
-            buttonStatus: num,
-            incomeType,
-            startDate,
-            endDate,
-            remark
+            buttonStatus: num
           }
         ];
         let obj = {
@@ -767,7 +790,28 @@ export default {
       }
     },
     // 导出配件明细
-    getReportParts() {}
+    getReportParts() {
+      if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
+        let str1 = "";
+        let str2 = "";
+        this.paymentlist.map(item => {
+          str1 += `${item.serviceId}*${item.serviceType.value},`;
+        });
+        this.collectlist.map(item => {
+          str2 += `${item.serviceId}*${item.serviceType.value},`;
+        });
+        str1 = str1.substring(1, str1.length - 1);
+        str2 = str2.substring(1, str2.length - 1);
+        // console.log(str1,str2)
+        location.href = `${
+          baseUrl.omsOrder
+        }/pchsEnterMain/export/in/detail?access_token=${Cookies.get(
+          TOKEN_KEY
+        )}&aOrderCode=${str1}&bOrderCode=${str2}`;
+      } else {
+        this.$message.error("请先勾选数据");
+      }
+    }
   }
 };
 </script>

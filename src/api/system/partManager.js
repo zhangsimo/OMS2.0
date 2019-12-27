@@ -12,22 +12,22 @@ export function findAllByTree(data = {}) {
 
 // 平台配件资料
 export function attrQueryAll(params, data) {
-    return axios.request({
-      url: `${api.wmsApi}/attribute/findPage`,
-      method: "post",
-      params,
-      data
-    });
+  return axios.request({
+    url: `${api.wmsApi}/attribute/findPage`,
+    method: "post",
+    params,
+    data
+  });
 }
 
 // 本地配件资料
 export function attrQueryAllPage(params, data) {
-    return axios.request({
-      url: `${api.wmsApi}/attribute/findAllPage`,
-      method: "post",
-      params,
-      data
-    });
+  return axios.request({
+    url: `${api.wmsApi}/attribute/findAllPage`,
+    method: "post",
+    params,
+    data
+  });
 }
 
 // 平台配件资料-系统管理员
@@ -68,10 +68,11 @@ export function getWbPartBrand(data = { pageSize: 1000, page: 0 }) {
 }
 
 // wb配件资料
-export function getwbParts(data) {
+export function getwbParts(params, data) {
   return axios.request({
-    url: `${api.wmsApi}/wbParts/queryAll?page=${data.page}&size=${data.size}`,
+    url: `${api.wmsApi}/wbParts/queryAll?page=${params.page}&size=${params.size}`,
     method: "post",
+    params,
     data
   });
 }
@@ -126,7 +127,7 @@ export function findCarModel(data = {}) {
   return axios.request({
     url: `${api.wmsApi}/wbPub/getCarModel`,
     method: "post",
-    data,
+    data
   });
 }
 
@@ -134,7 +135,7 @@ export function findCarModel(data = {}) {
 export function classification() {
   return axios.request({
     url: `${api.omsProduct}/dictionaries/findByCustomAll`,
-    method: "get",
+    method: "get"
   });
 }
 
@@ -142,12 +143,12 @@ export function classification() {
 export function getdictCode() {
   return axios.request({
     url: `${api.omsProduct}/dictionaries/findByCode?dictCode=UNIT_CODE_001`,
-    method: "get",
+    method: "get"
   });
 }
 
 // 配件名称
-export function getPartName(data={}) {
+export function getPartName(data = {}) {
   return axios.request({
     url: `${api.wmsApi}/wbPub/getPartStandardName`,
     method: "post",
@@ -156,7 +157,7 @@ export function getPartName(data={}) {
 }
 
 // 配件名称保存
-export function savePartName(data={}) {
+export function savePartName(data = {}) {
   return axios.request({
     url: `${api.wmsApi}/partName/saveOrUpdate`,
     method: "post",
@@ -165,7 +166,7 @@ export function savePartName(data={}) {
 }
 
 //保存配件管理(新增或修改)
-export function savePart(data={}) {
+export function savePart(data = {}) {
   return axios.request({
     url: `${api.wmsApi}/attribute/save`,
     method: "post",

@@ -2,7 +2,7 @@
   <Modal v-model="showNew" title="新增采购订单" width="600">
     <div class="newOrderInfo">
       <div class="header">
-        <Form  ref="formPlan" :model="formPlan" :label-width="80">
+        <Form  ref="formPlan" :model="formPlan"  :rules="ruleValidate" :label-width="80">
           <Row>
             <FormItem label="往来单位:">
               <Col span="19">
@@ -31,7 +31,7 @@
           <Row>
             <Col span="12">
               <FormItem
-                label="票据类型:">
+                label="票据类型:" prop="billTypeId">
                 <Select v-model="formPlan.billTypeId"
                         placeholder="请选择票据类型">
                   <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
@@ -39,7 +39,7 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="结算方式:">
+              <FormItem label="结算方式:" prop="settleTypeId">
                 <Select v-model="formPlan.settleTypeId"
                         placeholder="请选择结算方式">
                   <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
@@ -125,16 +125,28 @@
       data:''
     },
     data() {
+      // let changeNumber = (rule, value, callback) => {
+      //   if (!value && value != '0') {
+      //     callback(new Error("请输入大于或等于0的正整数"));
+      //   } else {
+      //     const reg = /^([0]|[1-9][0-9]*)$/
+      //     if (reg.test(value)) {
+      //       callback();
+      //     } else {
+      //       callback(new Error("请输入大于或等于0的正整数"));
+      //
+      //     }
+      //   }
+      // };
       let changeNumber = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("请输入大于或等于0的正整数"));
+        if (!value && value != "0") {
+          callback(new Error("请输入大于0的正整数"));
         } else {
-          const reg = /^([0]|[1-9][0-9]*)$/
+          const reg = /^[1-9]+\d?$/;
           if (reg.test(value)) {
             callback();
           } else {
-            callback(new Error("请输入大于或等于0的正整数"));
-
+            callback(new Error("请输入大于0的正整数"));
           }
         }
       };
@@ -166,6 +178,15 @@
             { required: true, validator:changeNumber }
           ]
         }, //表格校验
+        ruleValidate: { //表单校验
+          billTypeId: [
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
+          ],
+          settleTypeId: [
+            {required: true, type: 'string', message: ' ', trigger: 'change'}
+          ]
+
+        },
       }
 
     },
@@ -217,23 +238,48 @@
       },
        //生成采购订单
       addPurchaseOrder(){
-        let data={}
-        data = this.formPlan
-        data.id = this.data.id
-        data.guestId=this.formPlan.guestId
-        data.details= this.data.detailVOList
-        newPurchaseOrder(data).then(res=>{
-          // console.log('88888888888',res)
-          if(res.code==0){
-            this.$Message.success('新增采购订单成功');
-            this.formPlan.supplyName=""
-            this.formPlan.billTypeId=""
-            this.formPlan.remark=""
-            this.formPlan.settleTypeId=""
-            this.showNew = false;
-            this.$parent.getTopList();
+        // let data={}
+        // data = this.formPlan
+        // data.id = this.data.id
+        // data.guestId=this.formPlan.guestId
+        // data.details= this.data.detailVOList
+        // newPurchaseOrder(data).then(res=>{
+        //   // console.log('88888888888',res)
+        //   if(res.code==0){
+        //     this.$Message.success('新增采购订单成功');
+        //     this.formPlan.supplyName=""
+        //     this.formPlan.billTypeId=""
+        //     this.formPlan.remark=""
+        //     this.formPlan.settleTypeId=""
+        //     this.showNew = false;
+        //     this.$parent.getTopList();
+        //   }
+        // })
+        this.$refs.formPlan.validate(async (valid) => {
+          if (valid) {
+            let data={}
+            data = this.formPlan
+            data.id = this.data.id
+            data.guestId=this.formPlan.guestId
+            data.details= this.data.detailVOList
+            newPurchaseOrder(data).then(res=>{
+              // console.log('88888888888',res)
+              if(res.code==0){
+                this.$Message.success('新增采购订单成功');
+                this.formPlan.supplyName=""
+                this.formPlan.billTypeId=""
+                this.formPlan.remark=""
+                this.formPlan.settleTypeId=""
+                this.showNew = false;
+                this.$parent.getTopList();
+                this.$refs.formPlan.resetFields()
+              }
+            })
+          } else {
+            this.$Message.error('*为必填项');
           }
         })
+
       },
       handleReset(){
         this.showNew=false
@@ -241,6 +287,7 @@
         this.formPlan.billTypeId=""
         this.formPlan.remark=""
         this.formPlan.settleTypeId=""
+        this.$refs.formPlan.resetFields()
       }
 
     }

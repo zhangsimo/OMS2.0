@@ -38,7 +38,7 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1">
+                  <Button type="default" class="mr10" @click="baocun1" >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
@@ -109,8 +109,9 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
+<!--                          :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
-                            :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"
+                           disabled
                             :value="Leftcurrentrow.createTime"
                             format="yyyy-MM-dd HH:mm:ss"
                             type="date"
@@ -120,7 +121,7 @@
                         <FormItem label="操作员：" prop="planDate">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.orderMan"
                           ></Input>
                         </FormItem>
@@ -134,7 +135,7 @@
                         <FormItem label="组装单号：" prop="planOrderNum">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.serviceId"
                           ></Input>
                         </FormItem>
@@ -215,7 +216,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="需要数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ currentNum * row.qty}}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="storeStockQty" title="库存" width="100"></vxe-table-column>
@@ -238,7 +239,7 @@
             <More ref="naform"></More>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
-              <Button type="default">取消</Button>
+              <Button type="default" @click="cancel">取消</Button>
             </div>
           </Modal>
         </div>
@@ -251,7 +252,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick1"></quick-date>
-                  <Select v-model="purchaseType" @on-change="getDataType1" class="w90 mr10">
+                  <Select v-model="form.status" @on-change="getDataType1" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -342,8 +343,9 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
+<!--                          :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
-                            :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.createTime"
                             format="yyyy-MM-dd HH:mm:ss"
                             type="date"
@@ -353,7 +355,7 @@
                         <FormItem label="操作员：" prop="planDate">
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            disabled
                             :value="Leftcurrentrow.orderMan"
                           ></Input>
                         </FormItem>
@@ -365,9 +367,10 @@
                           ></Input>
                         </FormItem>
                         <FormItem label="拆分单号：" prop="planOrderNum">
+<!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
                           <Input
                             class="w160"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                          disabled
                             :value="Leftcurrentrow.serviceId"
                           ></Input>
                         </FormItem>
@@ -445,7 +448,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ row.qty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
@@ -467,7 +470,7 @@
             <More ref="naform"></More>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
-              <Button type="default">取消</Button>
+              <Button type="default" @click="cancel">取消</Button>
             </div>
           </Modal>
         </div>
@@ -524,6 +527,7 @@ export default {
         status: 99,
         qucikTime: ""
       },
+      rowId:'',//选择配件明细的id
       tabKey: "0",
       modal2: true,
       split1: 0.2,
@@ -749,6 +753,9 @@ export default {
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
+      console.log('勾选',row)
+      this.rowId=row.id
+      console.log( this.rowId)
       console.log(checked ? "勾选事件" : "取消事件");
     },
     tabChange(key) {
@@ -787,6 +794,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu(this.form);
+             this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -800,6 +814,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai(this.form);
+              this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -898,34 +919,43 @@ export default {
         this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
-      const id = this.Leftcurrentrow.id;
-      if (this.tabKey === "0") {
-        // 配件组装作废
-        zuofei(id)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListzu(this.form);
-              this.$Message.success("作废成功");
+
+        this.$Modal.confirm({
+          title: '是否确定作废',
+          onOk: async () => {
+            const id = this.Leftcurrentrow.id;
+            if (this.tabKey === "0") {
+              // 配件组装作废
+              zuofei(id)
+                .then(res => {
+                  // 点击列表行==>配件组装信息
+                  if (res.code == 0) {
+                    this.getListzu(this.form);
+                    this.$Message.success("作废成功");
+                  }
+                })
+                .catch(e => {
+                  this.$Message.info("作废配件组装信息失败");
+                });
+            } else {
+              // 配件拆分作废
+              zuofei2(id)
+                .then(res => {
+                  // 点击列表行==>配件组装信息
+                  if (res.code == 0) {
+                    this.getListchai(this.form);
+                    this.$Message.success("作废成功");
+                  }
+                })
+                .catch(e => {
+                  this.$Message.info("作废配件拆分信息失败");
+                });
             }
-          })
-          .catch(e => {
-            this.$Message.info("作废配件组装信息失败");
-          });
-      } else {
-        // 配件拆分作废
-        zuofei2(id)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListchai(this.form);
-              this.$Message.success("作废成功");
-            }
-          })
-          .catch(e => {
-            this.$Message.info("作废配件拆分信息失败");
-          });
-      }
+          },
+          onCancel: () => {
+            this.$Message.info('取消作废');
+          },
+        })
     },
     //选择单据
     selectAddlierName(row) {
@@ -1011,7 +1041,7 @@ export default {
     },
     getDataQuick(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListzu(params);
@@ -1019,7 +1049,7 @@ export default {
     //快速查询日期
     getDataQuick1(v) {
       const params = {
-        createTime: v[0],
+       startTime: v[0],
         endTime: v[1]
       };
       this.getListchai(params);
@@ -1111,16 +1141,24 @@ export default {
       this.advanced = false;
     },
     ok() {},
-    cancel() {},
+    cancel() {
+      this.$refs.naform.reset();
+      this.advanced = false;
+    },
     shanchu() {
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
+        this.rowId=''
+        return;
+      }
+      if(!this.rowId){
+        this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
       if (this.tabKey === "0") {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log(seleList);
+        console.log('rrr',seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1131,10 +1169,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListzu(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       } else {
@@ -1151,10 +1192,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListchai(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       }
@@ -1182,7 +1226,7 @@ export default {
     },
     getListzu(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
         delete params.qucikTime;
       } else {
@@ -1190,6 +1234,7 @@ export default {
       }
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
+          console.log('配件组装数量',res)
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -1209,9 +1254,16 @@ export default {
         });
     },
     getListchai(params) {
+      // if (params.qucikTime) {
+      //   (params.startTime = params.qucikTime[0]),
+      //     (params.endTime = params.qucikTime[1]);
+      // }
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
+        (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
+        delete params.qucikTime;
+      } else {
+        delete params.qucikTime;
       }
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
         .then(res => {

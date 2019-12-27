@@ -239,6 +239,7 @@
             ref="xTable"
             border
             stripe
+            :edit-rules="validRules"
             :auto-resize="true"
             :data="formValidate.specVOS"
             :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"

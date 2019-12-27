@@ -323,7 +323,6 @@
             selection(currentRow){
                 this.logisticsOne = currentRow;
                 this.id= currentRow.id
-                cosole.log(this.logisticsOne,'this.logisticsOne => 327')
                 // currentRow.isDisabled == 0 ? this.logisticsOne.isDisabled =true : this.logisticsOne.isDisabled = false
                 this.logisticsOne.isDisabled= this.logisticsOne.isDisabled ? this.logisticsOne.isDisabled :0
             },

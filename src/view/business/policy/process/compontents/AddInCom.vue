@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择配件" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="选择配件" width="1000" @on-ok="ok" footer-hide>
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">

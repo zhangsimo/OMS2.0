@@ -143,8 +143,10 @@ export default class InterPurchase extends Vue {
   // 上传成功函数
   onSuccess(response) {
     if (response.code == 0) {
-      if (response.data.list && response.data.list.length > 0) {
-        this.warning(response.data.list[0])
+      if (response.data.errosMsg.length > 0) {
+        this.warning(response.data.errosMsg);
+        this.tableData = [...this.tableData, ...response.data.details]
+        this.tableData.push();
       }
     } else {
       this.$Message.error(response.message)

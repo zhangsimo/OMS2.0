@@ -4,7 +4,7 @@ import axios from '@/libs/api.request';
 //获取调拨申请列表
 export function getList(params) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/queryAll?orderTypeId=3`,
+    url: `${api.omsOrder}/allotEnterMain/queryAll`,
     method: 'get',
     params
   });

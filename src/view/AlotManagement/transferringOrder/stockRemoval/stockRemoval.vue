@@ -34,7 +34,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="tijiao1">
+              <Button class="mr10" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -92,12 +92,16 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
-                          <Input
+                          <!-- <Input
                             readonly
-                            disabled
                             v-model="Leftcurrentrow.guestName"
-                            placeholder="请选择调出方"
+                            placeholder="请选择调入方"
                           ></Input>
+                            placeholder="请选择调出方"
+                          ></Input>-->
+                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
+                            <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                          </Select>
                         </Col>
                         <Col span="2">
                           <Button
@@ -117,7 +121,7 @@
                         <Col span="24">
                           <Select
                             v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
+                            :disabled="Leftcurrentrow.status.value !== 0 || tuneOut"
                           >
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
@@ -169,7 +173,12 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addMountings">
+                      <Button
+                        size="small"
+                        :disabled="buttonDisable == 1"
+                        class="mr10"
+                        @click="addMountings"
+                      >
                         <Icon type="md-add" />添加配件
                       </Button>
                     </div>
@@ -245,6 +254,7 @@
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
+      @getArray="getArray"
       ref="selectSupplier"
       header-tit="调出方资料"
       @selectSupplierName="selectSupplierName"
@@ -305,6 +315,10 @@ export default {
   },
   data() {
     return {
+      tuneOut: true,
+      flag: 0,
+      ArrayValue: [],
+      buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
       GainInformation: false, //编辑收获信息
@@ -540,6 +554,10 @@ export default {
     this.getList(this.form);
   },
   methods: {
+    //  获取子组件逐渐传过来的值
+    getArray(data) {
+      this.ArrayValue = data;
+    },
     //配件返回的参数
     getPartNameList(val) {
       val.forEach(item => {
@@ -596,22 +614,23 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.info("请先选择加工单");
+      //     return;
+      //   }
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      console.log(params)
       if (params.xinzeng) {
         delete params.status;
       }
-      if (params.status && params.status.name) {
+      if (params.status) {
         params.status = params.status.value;
       }
       if (params.orderTypeId && params.orderTypeId.name) {
@@ -629,6 +648,15 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
+                // this.Leftcurrentrow.storeId = ""
+                // this.Leftcurrentrow.guestName = ""
+                // this.Leftcurrentrow.storeName =  "",
+                // this.Leftcurrentrow.createTime =  "",
+                // this.Leftcurrentrow.orderMan = "",
+                // this.Leftcurrentrow.remark =  "",
+                // this.Leftcurrentrow.serviceId =  "",
+                // this.Leftcurrentrow.detailVOS =  []
+
           }
         })
         .catch(e => {
@@ -636,17 +664,25 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow.guestName = "";
+      this.Leftcurrentrow.createTime = ''
+      this.Leftcurrentrow.serviceId = ''
       this.buttonShow = false;
+      this.tuneOut = false;
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info(
-            "当前加工单列表已有一个新增单等待操作,请先保存当前操作新增单据"
-          );
+          this.$Message.info("请先保存数据");
           return;
         }
       }
+      this.flag = 1;
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       const item = {
+        new: true,
+        _highlight: true,
         index: 1,
         xinzeng: "1",
         status: {
@@ -672,10 +708,10 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.info("当前加工单号已提交审核!无需重复操作");
         return;
@@ -832,28 +868,44 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      this.dayinCureen = row;
-      // console.log(row, this.dayinCureen, "234");
-      this.Leftcurrentrow = row;
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
-      this.Leftcurrentrow.detailVOS = res.data;
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
-            });
-            this.cangkuListall = res.data;
-            this.dcData = res.data;
+      console.log(row)
+      console.log(row, "row ==>862");
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun1();
+          },
+          onCancel: () => {
+            this.getList(this.form);
+            this.flag = 0;
           }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
         });
+        return;
+      }
+      this.buttonDisable = 0;
+      this.dayinCureen = row;
+      this.Leftcurrentrow = row;
+      if (row.statuName == "待出库") {
+        this.buttonDisable = 1;
+      }
+      if (row.id == undefined) {
+        row.id = "";
+      }
+      if (row.id) {
+        const params = {
+          mainId: row.id
+        };
+        const res = await getListDetail(params);
+        this.Leftcurrentrow.detailVOS = res.data;
+      }
+      if(row.status.value === 0){
+        this.buttonShow = false
+      }
+      if(row.status.value === 1){
+        // this.tuneOut = false
+        console.log(row.code)
+      }
     },
     //打开添加配件模态框
     addMountings() {
@@ -890,11 +942,11 @@ export default {
       const seleList = this.$refs.xTable1.getSelectRecords();
       let arr = [];
       seleList.map(item => {
-        arr.push(parseInt(item.id));
+        arr.push(item.id);
       });
       const params = {
         ids: arr,
-        mainId: parseInt(this.Leftcurrentrow.id)
+        mainId: this.Leftcurrentrow.id
       };
       shanqu(params)
         .then(res => {
@@ -950,6 +1002,11 @@ export default {
       queryByOrgid().then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
+          res.data.map(item => {
+            if (item.isDefault === true) {
+              this.Leftcurrentrow.storeId = item.id;
+            }
+          });
         }
       });
     },

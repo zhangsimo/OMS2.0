@@ -147,7 +147,7 @@
                   <vxe-table-column field="acceptQty" title="受理数量" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                  <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
+                  <!--<vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>-->
                   <vxe-table-column field="partInnerId" title="配件内码" width="150"></vxe-table-column>
                 </vxe-table>
                 <div ref="planPage">
@@ -162,13 +162,8 @@
       <!--选择配件-->
       <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></Select-part-com>
       <!--编辑收货信息-->
-      <!--<Modal v-model="GainInformation" title="编辑收获信息" width="1200px">-->
       <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
-      <!--<div slot='footer'>-->
-      <!--<Button type='primary' @click="Determined">确定</Button>-->
-      <!--<Button type='default' >取消</Button>-->
-      <!--</div>-->
-      <!--</Modal>-->
+
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -569,16 +564,15 @@ export default {
       ChildMessage.map( item => {
         parts.push({
           partCode : item.partCode, //编码
-          partName : item.partStandardName, //名称
-          unit : item.minUnit, //单位
+          partName : item.partName, //名称
+          unit : item.unit, //单位
           partBrand : item.partBrand, //品牌
           spec : item.specifications,  //规格
           preQty : '', //预定数量
           remark : '', //备注
           acceptQty: 0, //受理数量
-          oemCode : item.oeCode, //oe码
-          direction: item.direction, //方向
-          partInnerId: item.code, //配件内码
+          oemCode : item.oemCode, //oe码
+          partInnerId: item.partInnerId, //配件内码
           partId : item.id,
         })
       })

@@ -27,7 +27,7 @@
               </div>
             </div>
             <div slot="right" class="demo-split-pane">
-              <div style="overflow: hidden;overflow-x: scroll">
+              <div style="overflow: auto">
                 <vxe-table
                   border
                   resizable
@@ -40,8 +40,9 @@
                   highlight-current-row
                   @current-change="getOneClinet"
                   show-overflow
-                  height="500"
+                  height="400"
                   style="width: 1500px"
+                  v-if="flag"
                 >
                   <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
                   <vxe-table-column field="fullName" title="名称" show-overflow></vxe-table-column>
@@ -60,6 +61,17 @@
                   </vxe-table-column>
                   <vxe-table-column field="advantageCarbrandId" title="优势品牌/产品"></vxe-table-column>
                 </vxe-table>
+                <Table
+                  class="table-highlight-row w1200"
+                  highlight-row
+                  height="400"
+                  border
+                  :stripe="true"
+                  :columns="columns"
+                  :data="managementList"
+                  @on-current-change="getOneClinet"
+                  v-else
+                ></Table>
               </div>
               <Page
                 size="small"
@@ -85,17 +97,165 @@
 <script>
 import { area } from "@/api/lease/registerApi";
 import { getTreeClient, getClientType } from "@/api/salesManagment/salesOrder";
-
+import {
+  getSupplierTreeList,
+  getSupplierformation
+} from "@/api/system/essentialData/supplierManagement";
 export default {
   name: "SelectTheCustomer",
   data() {
     return {
+      columns: [
+        { title: "序号", align: "center", type: "index", key: "name" },
+        {
+          title: "基本信息",
+          align: "center",
+          children: [
+            {
+              title: "序号",
+              align: "center",
+              render: (h, params) => {
+                return h("span", { class: "table-radio" });
+              }
+            },
+            {
+              title: "供应商简称",
+              key: "shortName",
+              align: "center"
+            },
+            {
+              title: "供应商全称",
+              key: "fullName",
+              align: "center"
+            }
+          ]
+        },
+        {
+          title: "联系人信息",
+          align: "center",
+          children: [
+            {
+              title: "联系人",
+              key: "contactor",
+              align: "center"
+            },
+            {
+              title: "职务",
+              key: "salesmanDutyName",
+              align: "center"
+            },
+            {
+              title: "联系人手机",
+              key: "contactorTel",
+              align: "center"
+            },
+            {
+              title: "业务员",
+              key: "salesman",
+              align: "center"
+            },
+            {
+              title: "业务员手机",
+              key: "salesmanTel",
+              align: "center"
+            }
+          ]
+        },
+        {
+          title: "财务信息",
+          align: "center",
+          children: [
+            {
+              title: "票据类型",
+              key: "billTypeName",
+              align: "center"
+            },
+            {
+              title: "结算方式",
+              key: "settTypeName",
+              align: "center"
+            }
+          ]
+        },
+        {
+          title: "其他信息",
+          align: "center",
+          children: [
+            {
+              title: "省份",
+              key: "provinceName",
+              align: "center"
+            },
+            {
+              title: "城市",
+              key: "cityName",
+              align: "center"
+            },
+            {
+              title: "电话",
+              key: "tel",
+              align: "center"
+            },
+            {
+              title: "供应商类型",
+              key: "supplierTypeName",
+              align: "center"
+            },
+            {
+              title: "优势品牌/产品",
+              key: "advantageCarbrandId",
+              align: "center"
+            },
+            {
+              title: "传真",
+              key: "fax",
+              align: "center"
+            },
+            {
+              title: "备注",
+              key: "remark",
+              align: "center"
+            }
+          ]
+        },
+        {
+          title: "操作信息",
+          align: "center",
+          children: [
+            {
+              title: "最后操作人",
+              key: "updateUname",
+              align: "center"
+            },
+            {
+              title: "最后操作时间",
+              key: "updateTime",
+              align: "center"
+            },
+            {
+              title: "禁用",
+
+              align: "center",
+              render: (h, params) => {
+                let text = "";
+                params.row.isDisabled == 0 ? (text = "否") : (text = "是");
+                return h("span", {}, text);
+              }
+            },
+            {
+              title: "供应商编码",
+              key: "code",
+              align: "center"
+            }
+          ]
+        }
+      ],
+      managementList: [],
       addressShow: false,
       clientName: "", //名称
       clientCode: "", //编码
       clientPhone: "", //电话
       clientType: [], //类型
-      
       split1: 0.3, //分割线
       Loading: true, //加载中
       treeList: [], //树形图数组
@@ -117,6 +277,7 @@ export default {
           label: "供应商"
         }
       ],
+      flag: true,
       treeData: [], //全国地址
       // 省
       Provinces: {},
@@ -185,7 +346,25 @@ export default {
     //点击树形图获取信息
     clickTree(val) {
       this.clickCity = val[0];
-      this.getList();
+      if (this.type) {
+        this.getSupplier();
+      } else {
+        this.getList();
+      }
+    },
+    // 获取供应商
+    getSupplier() {
+      let obj = {
+        page: this.page1.num - 1,
+        size: this.page1.size,
+        supplierTypeFirst: this.clickCity.id
+      };
+      getSupplierformation(obj).then(res => {
+        if (res.code === 0) {
+          this.managementList = res.data.content;
+          this.page1.total = res.data.totalElements;
+        }
+      });
     },
     // 获取客户
     async getList() {
@@ -199,7 +378,6 @@ export default {
       data.code = this.clientCode;
       data.shortName = this.clientName;
       data.tel = this.clientPhone;
-      console.log(data)
       let res = await getTreeClient(data);
       if (res.code === 0) {
         this.tableData = res.data.content;
@@ -232,13 +410,13 @@ export default {
     },
     //切换页面
     selectNum(val) {
-      this.page.num = val;
+      this.page1.num = val;
       this.getList();
     },
     //切换页数
     selectPage(val) {
-      this.page.num = 1;
-      this.page.size = val;
+      this.page1.num = 1;
+      this.page1.size = val;
       this.getList();
     },
     //级联选择器
@@ -247,9 +425,17 @@ export default {
     },
     //查询
     query() {
-      this.page.num = 1;
+      this.page1.num = 1;
       this.clickCity = {};
-      this.getList();
+      if (this.type) {
+        this.flag = false;
+        getSupplierTreeList().then(res => {
+          this.treeData = res.data;
+        });
+      } else {
+        this.flag = true;
+        this.getList();
+      }
     },
     //选择
     select() {
