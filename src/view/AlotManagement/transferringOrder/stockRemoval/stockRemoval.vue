@@ -34,7 +34,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="tijiao1">
+              <Button class="mr10" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -305,6 +305,7 @@ export default {
   },
   data() {
     return {
+      buttonDisable:0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
       GainInformation: false, //编辑收获信息
@@ -832,10 +833,13 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      this.buttonDisable = 0
       this.dayinCureen = row;
       console.log(row, this.dayinCureen, "234");
       this.Leftcurrentrow = row;
-
+      if (row.statuName == '待出库') {
+          this.buttonDisable = 1
+      }
       const params = {
         mainId: row.id
       };
