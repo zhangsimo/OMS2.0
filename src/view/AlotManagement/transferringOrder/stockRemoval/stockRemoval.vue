@@ -95,6 +95,8 @@
                           <!-- <Input
                             readonly
                             v-model="Leftcurrentrow.guestName"
+                            placeholder="请选择调入方"
+                          ></Input>
                             placeholder="请选择调出方"
                           ></Input>-->
                           <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
@@ -119,7 +121,7 @@
                         <Col span="24">
                           <Select
                             v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
+                            :disabled="Leftcurrentrow.status.value !== 0 || tuneOut"
                           >
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
@@ -137,7 +139,7 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
-                        disabled="true"
+                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
                         @on-change="changeDate"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
@@ -313,6 +315,7 @@ export default {
   },
   data() {
     return {
+      tuneOut: true,
       flag: 0,
       ArrayValue: [],
       buttonDisable: 0,
@@ -623,7 +626,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      console.log(params);
+      console.log(params)
       if (params.xinzeng) {
         delete params.status;
       }
@@ -645,14 +648,15 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
-            // this.Leftcurrentrow.storeId = ""
-            // this.Leftcurrentrow.guestName = ""
-            // this.Leftcurrentrow.storeName =  "",
-            // this.Leftcurrentrow.createTime =  "",
-            // this.Leftcurrentrow.orderMan = "",
-            // this.Leftcurrentrow.remark =  "",
-            // this.Leftcurrentrow.serviceId =  "",
-            // this.Leftcurrentrow.detailVOS =  []
+                // this.Leftcurrentrow.storeId = ""
+                // this.Leftcurrentrow.guestName = ""
+                // this.Leftcurrentrow.storeName =  "",
+                // this.Leftcurrentrow.createTime =  "",
+                // this.Leftcurrentrow.orderMan = "",
+                // this.Leftcurrentrow.remark =  "",
+                // this.Leftcurrentrow.serviceId =  "",
+                // this.Leftcurrentrow.detailVOS =  []
+
           }
         })
         .catch(e => {
@@ -664,6 +668,7 @@ export default {
       this.Leftcurrentrow.createTime = ''
       this.Leftcurrentrow.serviceId = ''
       this.buttonShow = false;
+      this.tuneOut = false;
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -863,6 +868,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      console.log(row)
       console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -879,7 +885,6 @@ export default {
       }
       this.buttonDisable = 0;
       this.dayinCureen = row;
-      console.log(row, this.dayinCureen, "234");
       this.Leftcurrentrow = row;
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
@@ -893,18 +898,13 @@ export default {
         };
         const res = await getListDetail(params);
         this.Leftcurrentrow.detailVOS = res.data;
-        // cangkulist2(this.$store.state.user.userData.groupId).then(res => {
-        //   if (res.code == 0) {
-        //     res.data.map(item => {
-        //       item["label"] = item.name;
-        //       item["value"] = item.id;
-        //     });
-        //     this.cangkuListall = res.data;
-        //     this.dcData = res.data;
-        //   }
-        // }).catch(e => {
-        //   this.$Message.info("获取仓库列表失败");
-        // });
+      }
+      if(row.status.value === 0){
+        this.buttonShow = false
+      }
+      if(row.status.value === 1){
+        // this.tuneOut = false
+        console.log(row.code)
       }
     },
     //打开添加配件模态框
