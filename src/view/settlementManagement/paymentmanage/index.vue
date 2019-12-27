@@ -855,6 +855,8 @@ export default {
             item.num = index + 1;
           });
           this.data = res.data;
+        } else {
+          this.data = []
         }
       });
     },

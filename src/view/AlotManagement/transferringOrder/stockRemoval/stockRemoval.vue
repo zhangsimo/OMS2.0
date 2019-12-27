@@ -34,7 +34,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="tijiao1">
+              <Button class="mr10" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -135,7 +135,7 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
+                        disabled="true"
                         @on-change="changeDate"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
@@ -169,7 +169,12 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addMountings">
+                      <Button
+                        size="small"
+                        :disabled="buttonDisable == 1"
+                        class="mr10"
+                        @click="addMountings"
+                      >
                         <Icon type="md-add" />添加配件
                       </Button>
                     </div>
@@ -305,6 +310,7 @@ export default {
   },
   data() {
     return {
+      buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
       GainInformation: false, //编辑收获信息
@@ -640,13 +646,16 @@ export default {
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info(
-            "当前加工单列表已有一个新增单等待操作,请先保存当前操作新增单据"
-          );
+          this.$Message.info("请先保存数据");
           return;
         }
       }
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       const item = {
+        new: true,
+        _highlight: true,
         index: 1,
         xinzeng: "1",
         status: {
@@ -832,29 +841,35 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      this.buttonDisable = 0;
       this.dayinCureen = row;
       console.log(row, this.dayinCureen, "234");
       this.Leftcurrentrow = row;
-
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
-      this.Leftcurrentrow.detailVOS = res.data;
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
-            });
-            this.cangkuListall = res.data;
-            this.dcData = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+      if (row.statuName == "待出库") {
+        this.buttonDisable = 1;
+      }
+      if (row.id == undefined) {
+        row.id = "";
+      }
+      if (row.id) {
+        const params = {
+          mainId: row.id
+        };
+        const res = await getListDetail(params);
+        this.Leftcurrentrow.detailVOS = res.data;
+        // cangkulist2(this.$store.state.user.userData.groupId).then(res => {
+        //   if (res.code == 0) {
+        //     res.data.map(item => {
+        //       item["label"] = item.name;
+        //       item["value"] = item.id;
+        //     });
+        //     this.cangkuListall = res.data;
+        //     this.dcData = res.data;
+        //   }
+        // }).catch(e => {
+        //   this.$Message.info("获取仓库列表失败");
+        // });
+      }
     },
     //打开添加配件模态框
     addMountings() {

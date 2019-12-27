@@ -118,7 +118,8 @@ export function getCarParts(data) {
   return axios.request({
     url: `${api.omsOrder}/pchsPlanMain/getParts`,
     method: 'post',
-    data
+    params: data.params,
+    data: data.data,
   })
 }
 

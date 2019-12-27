@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1000" @on-cancel="CancelModal">
       <div class="partCheck-hd">
         <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
-          <Option v-for="item in searchTypeArr" :value="item.label" :key="item.value">{{item.label}}</Option>
+          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
         </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+        <Input class="w150 mr10" v-model="partName" placeholder="请输入查询的内容"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>

@@ -269,6 +269,7 @@
       },
       handleReset () {
         this.$refs.formInline.resetFields();
+        this.data.nature = this.dataMsg.CS00117[0].id
       },
       clownFile2(){
         if(this.data.purchaseName == null){
