@@ -252,7 +252,7 @@
                 <div class="db">
                   <span>快速查询：</span>
                   <quick-date class="mr10" v-on:quickDate="getDataQuick1"></quick-date>
-                  <Select v-model="purchaseType" @on-change="getDataType1" class="w90 mr10">
+                  <Select v-model="form.status" @on-change="getDataType1" class="w90 mr10">
                     <Option
                       v-for="item in purchaseTypeArr"
                       :value="item.value"
@@ -1254,9 +1254,16 @@ export default {
         });
     },
     getListchai(params) {
+      // if (params.qucikTime) {
+      //   (params.startTime = params.qucikTime[0]),
+      //     (params.endTime = params.qucikTime[1]);
+      // }
       if (params.qucikTime) {
         (params.startTime = params.qucikTime[0]),
           (params.endTime = params.qucikTime[1]);
+        delete params.qucikTime;
+      } else {
+        delete params.qucikTime;
       }
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
