@@ -14,13 +14,22 @@ export const mixPartInfo = {
       let reg = /^[0-9a-zA-Z]*$/;
       if (!value) {
         callback(new Error('不能为空！'));
-      } else if(!reg.test(value)){
+      } else if (!reg.test(value)) {
         callback(new Error('格式不正确!'));
-      }else {
+      } else {
         callback()
       }
     };
     return {
+      validRules: {
+        companyNum: [{ required: true, message: "单位数量不能为空且只能是数字", trigger: "change", pattern: /^\d{1,}$/ }],
+        longNum: [{ required: true, message: "长不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+        wide: [{ required: true, message: "宽不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+        high: [{ required: true, message: "高不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+        volume: [{ required: true, message: "体积不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+        weight: [{ required: true, message: "重量不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+        volumeRong: [{ required: true, message: "容积不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
+      },
       //是否禁用
       prohibit: false,
       //是否禁售
@@ -122,8 +131,8 @@ export const mixPartInfo = {
   },
   methods: {
     // 弹框打开关闭
-    visible(type){
-      if(type){
+    visible(type) {
+      if (type) {
         this.$refs.proModalForm.resetFields()
       }
     },
@@ -326,79 +335,85 @@ export const mixPartInfo = {
     submit(name, auditSign) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          //判断包装规格计量单位是否为空
-          let errorT = 0
-          this.formValidate.specVOS.map(item => {
-            if (item.meterCompany == "") {
-              errorT++
+          this.$refs.vxeTable.validate(val => {
+            if (val) {
+              //判断包装规格计量单位是否为空
+              let errorT = 0
+              this.formValidate.specVOS.map(item => {
+                if (item.meterCompany == "") {
+                  errorT++
+                }
+              })
+              if (errorT > 0) {
+                this.$message.error('包装规格计量单位必填')
+                return
+              }
+              let objReq = {}
+              //品质
+              objReq.qualityTypeId = this.formValidate.qualityTypeId
+              //品质名称
+              let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
+              if (arrData.length > 0) {
+                objReq.qualityName = arrData[0].quality
+              }
+              //品牌
+              objReq.partBrandId = this.formValidate.partBrandId
+              //获取品牌code
+              let brandCodeFilter = this.brandArr.filter(item => item.id == this.formValidate.partBrandId)
+              if (brandCodeFilter.length > 0) {
+                objReq.brandPartCode = brandCodeFilter[0].code
+                objReq.partBrandName = brandCodeFilter[0].name
+              }
+              //编码
+              objReq.code = this.formValidate.code
+              //产品名
+              objReq.name = this.formValidate.name
+              //产品Id
+              objReq.partNameId = this.formValidate.partNameId
+              //单位
+              objReq.unitId = this.formValidate.unitId
+              //oeCode
+              objReq.oemCode = this.formValidate.oemCode
+              //规格
+              objReq.spec = this.formValidate.spec
+              //型号
+              objReq.model = this.formValidate.model
+
+              //使用车型品牌
+              let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
+              if (selectBrandData.length > 0) {
+                objReq.carBrand = selectBrandData[0].nameCn
+                objReq.carBrandName = selectBrandData[0].id
+              }
+              objReq.carModelName = this.formValidate.carModelName
+
+              objReq.commonId = this.formValidate.commonId
+              objReq.manufacture = this.formValidate.manufacture
+              objReq.prdtPlace = this.formValidate.prdtPlace
+              objReq.fullName = this.formValidate.fullName
+              objReq.customType = this.customClassName.itemCode
+
+              objReq.direction = this.formValidate.direction
+              //审批状态
+              objReq.auditSign = auditSign
+              //配件 1 2 3级类别
+              objReq.carTypeF = this.formValidate.carTypeF
+              objReq.carTypeS = this.formValidate.carTypeS
+              objReq.carTypeT = this.formValidate.carTypeT
+              objReq.carTypefName = this.formValidate.carTypefName
+              objReq.carTypesName = this.formValidate.carTypesName
+              objReq.carTypetName = this.formValidate.carTypetName
+
+              //包装规格
+              objReq.specVOS = this.formValidate.specVOS
+              //禁用禁售
+              objReq.disabled = this.prohibit ? 1 : 0
+              objReq.isStopSell = this.forbidsale ? 1 : 0
+              this.$emit('throwData', objReq)
+            } else {
+              this.$message.error('带*必填')
             }
           })
-          if (errorT > 0) {
-            this.$message.error('包装规格计量单位必填')
-            return
-          }
-          let objReq = {}
-          //品质
-          objReq.qualityTypeId = this.formValidate.qualityTypeId
-          //品质名称
-          let arrData = this.qualityArr.filter(item => item.qualityCode == this.formValidate.qualityTypeId)
-          if (arrData.length > 0) {
-            objReq.qualityName = arrData[0].quality
-          }
-          //品牌
-          objReq.partBrandId = this.formValidate.partBrandId
-          //获取品牌code
-          let brandCodeFilter = this.brandArr.filter(item => item.id == this.formValidate.partBrandId)
-          if (brandCodeFilter.length > 0) {
-            objReq.brandPartCode = brandCodeFilter[0].code
-            objReq.partBrandName = brandCodeFilter[0].name
-          }
-          //编码
-          objReq.code = this.formValidate.code
-          //产品名
-          objReq.name = this.formValidate.name
-          //产品Id
-          objReq.partNameId = this.formValidate.partNameId
-          //单位
-          objReq.unitId = this.formValidate.unitId
-          //oeCode
-          objReq.oemCode = this.formValidate.oemCode
-          //规格
-          objReq.spec = this.formValidate.spec
-          //型号
-          objReq.model = this.formValidate.model
-
-          //使用车型品牌
-          let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
-          if (selectBrandData.length > 0) {
-            objReq.carBrand = selectBrandData[0].nameCn
-            objReq.carBrandName = selectBrandData[0].id
-          }
-          objReq.carModelName = this.formValidate.carModelName
-
-          objReq.commonId = this.formValidate.commonId
-          objReq.manufacture = this.formValidate.manufacture
-          objReq.prdtPlace = this.formValidate.prdtPlace
-          objReq.fullName = this.formValidate.fullName
-          objReq.customType = this.customClassName.itemCode
-
-          objReq.direction = this.formValidate.direction
-          //审批状态
-          objReq.auditSign = auditSign
-          //配件 1 2 3级类别
-          objReq.carTypeF = this.formValidate.carTypeF
-          objReq.carTypeS = this.formValidate.carTypeS
-          objReq.carTypeT = this.formValidate.carTypeT
-          objReq.carTypefName = this.formValidate.carTypefName
-          objReq.carTypesName = this.formValidate.carTypesName
-          objReq.carTypetName = this.formValidate.carTypetName
-
-          //包装规格
-          objReq.specVOS = this.formValidate.specVOS
-          //禁用禁售
-          objReq.disabled = this.prohibit ? 1 : 0
-          objReq.isStopSell = this.forbidsale ? 1 : 0
-          this.$emit('throwData', objReq)
         } else {
           this.$Message.error('带*必填')
           return
