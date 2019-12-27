@@ -26,7 +26,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun" type="default" class="mr10">
+            <Button @click="baocun" type="default" class="mr10" :disabled="this.Leftcurrentrow.status.value !== 0">
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
           </div>
@@ -36,17 +36,17 @@
             </Button>
           </div>-->
           <div class="db">
-            <Button class="mr10" @click="editPro">
+            <Button class="mr10" @click="editPro" :disabled="this.Leftcurrentrow.status.value !== 0">
               <Icon type="md-checkmark" size="14" />提交
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="cancellation">
+            <Button class="mr10" @click="cancellation" :disabled="this.Leftcurrentrow.status.value !== 0">
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable">
+            <Button class="mr10" @click="printTable" :disabled="this.Leftcurrentrow.status.value !== 0">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
