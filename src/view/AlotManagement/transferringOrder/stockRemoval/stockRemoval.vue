@@ -305,7 +305,7 @@ export default {
   },
   data() {
     return {
-      buttonDisable:0,
+      buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
       GainInformation: false, //编辑收获信息
@@ -833,12 +833,16 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      this.buttonDisable = 0
+      this.buttonDisable = 0;
       this.dayinCureen = row;
       console.log(row, this.dayinCureen, "234");
       this.Leftcurrentrow = row;
-      if (row.statuName == '待出库') {
-          this.buttonDisable = 1
+      if (row.statuName == "待出库") {
+        this.buttonDisable = 1;
+      }
+      console.log(row.id);
+      if (row.id == undefined) {
+        row.id = "1212";
       }
       const params = {
         mainId: row.id
