@@ -174,7 +174,6 @@ export default {
     //获取物流下拉框
     let log = await logistics()
     this.logisArr = log.data
-    console.log(log)
   },
   mounted() {
 
