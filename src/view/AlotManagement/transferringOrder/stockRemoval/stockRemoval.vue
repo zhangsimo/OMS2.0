@@ -135,7 +135,7 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
+                        disabled="true"
                         @on-change="changeDate"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
@@ -650,6 +650,9 @@ export default {
           return;
         }
       }
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       const item = {
         new: true,
         _highlight: true,
@@ -848,7 +851,7 @@ export default {
       if (row.id == undefined) {
         row.id = "";
       }
-      if(row.id){
+      if (row.id) {
         const params = {
           mainId: row.id
         };
