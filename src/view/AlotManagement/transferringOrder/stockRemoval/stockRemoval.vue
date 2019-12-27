@@ -92,12 +92,14 @@
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
-                          <Input
+                          <!-- <Input
                             readonly
-                            disabled
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
-                          ></Input>
+                          ></Input> -->
+                          <Select v-model="Leftcurrentrow.guestName"  label-in-value filterable>
+                            <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                          </Select>
                         </Col>
                         <Col span="2">
                           <Button
@@ -250,6 +252,7 @@
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
+      @getArray = "getArray"
       ref="selectSupplier"
       header-tit="调出方资料"
       @selectSupplierName="selectSupplierName"
@@ -310,6 +313,7 @@ export default {
   },
   data() {
     return {
+      ArrayValue:[],
       buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
@@ -546,6 +550,10 @@ export default {
     this.getList(this.form);
   },
   methods: {
+    //  获取子组件逐渐传过来的值
+    getArray(data){
+        this.ArrayValue = data
+    },
     //配件返回的参数
     getPartNameList(val) {
       val.forEach(item => {
