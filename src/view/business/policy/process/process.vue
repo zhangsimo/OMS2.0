@@ -38,7 +38,7 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1">
+                  <Button type="default" class="mr10" @click="baocun1" >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
@@ -216,7 +216,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="需要数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ currentNum * row.qty}}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="storeStockQty" title="库存" width="100"></vxe-table-column>
@@ -448,7 +448,7 @@
                         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                         <vxe-table-column field="orderQty" title="拆分数量" width="100">
                           <template v-slot="{ row, seq }">
-                            <span>{{ row.orderQty * currentNum }}</span>
+                            <span>{{ row.qty * currentNum }}</span>
                           </template>
                         </vxe-table-column>
                         <vxe-table-column field="costRatio" title="成本比例" width="100"></vxe-table-column>
@@ -794,6 +794,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu(this.form);
+             this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -807,6 +814,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai(this.form);
+              this.Leftcurrentrow.processProductVO=[]
+              this.currentData=[]
+              this.Leftcurrentrow.createTime=''
+              this.Leftcurrentrow.serviceId=''
+              this.Leftcurrentrow.storeId=''
+              this.Leftcurrentrow.orderMan=''
+              this.Leftcurrentrow.remark=''
               this.$Message.success("保存成功");
             }
           })
@@ -1220,6 +1234,7 @@ export default {
       }
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
+          console.log('配件组装数量',res)
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
