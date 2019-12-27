@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>产品名称：</span>
-            <Input v-model="searchValue" placeholder="请填写产品名称" class="w200 mr10"></Input>
+            <Input v-model="searchValue" placeholder="请填写产品名称" class="w200 mr10" />
             <Button type="warning" @click="search" class="mr10 w90">
               <i class="iconfont mr5 iconchaxunicon"></i>查询
             </Button>
@@ -60,7 +60,7 @@
               <Button @click="inHideShow(true)" class="mr10">
                 <i class="iconfont iconsuoxiaoicon"></i>
               </Button>
-              <Input v-model="searchValue" placeholder="请填写产品名称" class="w150 mr10" clearable></Input>
+              <Input v-model="searchValue" placeholder="请填写产品名称" class="w150 mr10" clearable />
               <Button type="warning" @click="getLeaseSelect" class="w90">
                 <i class="iconfont mr5 iconchaxunicon"></i>查询
               </Button>
@@ -69,8 +69,8 @@
           </div>
           <div slot="right" class="lease-model-right">
             <div class="model-left-hd flex">
-              <Input v-model="selectTable.id" class="w180 mr10" clearable></Input>
-              <Input v-model="selectTable.resId" placeholder="资源ID" class="w150 mr10" clearable></Input>
+              <Input v-model="selectTable.id" class="w180 mr10" clearable />
+              <Input v-model="selectTable.resId" placeholder="资源ID" class="w150 mr10" clearable />
               <Button type="default" @click="getProductDetailFun" class="mr10 w90">
                 <i class="iconfont mr5 iconshuaxinicon"></i>刷新
               </Button>
@@ -105,7 +105,7 @@
         <Row>
           <Col span="11">
             <FormItem label="产品名称：" prop="name">
-              <Input v-model="formValidate.name"></Input>
+              <Input v-model="formValidate.name" />
             </FormItem>
           </Col>
           <Col span="11">
@@ -119,26 +119,26 @@
         <Row v-if="formValidate.type==1">
           <Col span="22">
             <FormItem label="接口地址：" prop="address">
-              <Input v-model="formValidate.address"></Input>
+              <Input v-model="formValidate.address" />
             </FormItem>
           </Col>
         </Row>
         <Row v-if="formValidate.type==1">
           <Col span="11">
             <FormItem label="单次扣减华币：" prop="coin">
-              <Input v-model="formValidate.coin"></Input>
+              <Input v-model="formValidate.coin" />
             </FormItem>
           </Col>
         </Row>
         <Row v-if="formValidate.type!=1">
           <Col span="11">
             <FormItem label="销售价：" prop="salesPrice">
-              <Input v-model="formValidate.salesPrice"></Input>
+              <Input v-model="formValidate.salesPrice" />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="有效期(天)：" prop="isCycle">
-              <Input v-model="formValidate.isCycle"></Input>
+              <Input v-model="formValidate.isCycle" />
             </FormItem>
           </Col>
         </Row>
@@ -149,7 +149,7 @@
                 v-model="formValidate.remark"
                 type="textarea"
                 :autosize="{minRows: 2,maxRows: 5}"
-              ></Input>
+              />
             </FormItem>
           </Col>
         </Row>
@@ -168,7 +168,7 @@
         </Row>
       </Form>
       <div slot="footer">
-        <Button type="primary" @click="submit("proModal")">确定</Button>
+        <Button type="primary" @click="submit('proModal')">确定</Button>
         <Button type="default" @click="proModal = false">取消</Button>
       </div>
     </Modal>
@@ -481,7 +481,8 @@ export default {
       //删除数据列表
       delList: [],
       //选中的树形
-      selectTreeData: []
+      selectTreeData: [],
+      orginTree:[]
     };
   },
   mounted() {
@@ -569,13 +570,41 @@ export default {
     },
     // 弹框左侧查询
     getLeaseSelect() {
-      getOmsAuth().then(res => {
-        if (res.code == 0) {
-          let arrData = res.data.childs || [];
-          this.treeData = this.resetTreeData(arrData);
-        }
-      });
+      this.treeData = JSON.parse(JSON.stringify(this.orginTree))
+      this.findTree(this.treeData,this.searchValue)
     },
+    findTree(tree, content) {
+      let reg = new RegExp(content, "gi");
+      let remove = [];
+      let filter = (tree, index, remove) => {
+        if (Array.isArray(tree.children) && tree.children.length > 0) {
+          let inarr = [];
+          tree.children.forEach((el, i) => {
+            filter(el, i, inarr);
+          });
+          if (!reg.test(tree.title)) {
+            for (let j = inarr.length - 1; j >= 0; j--) {
+              tree.children.splice(inarr[j], 1);
+              
+            }
+            if (tree.children.length === 0) {
+              remove.push(index);
+            }
+          }
+        } else {
+          if (!reg.test(tree.title)) {
+            remove.push(index);
+          }
+        }
+      };
+      tree.forEach((el, index) => {
+        filter(el, index, remove);
+      });
+      for (let j = remove.length - 1; j >= 0; j--) {
+        tree.splice(remove[j], 1);
+      }
+    },
+
     //相关产品资源
     linkProMadel() {
       if (this.selectTable.id) {
@@ -584,6 +613,7 @@ export default {
           if (res.code == 0) {
             let arrData = res.data.childs || [];
             this.treeData = this.resetTreeData(arrData);
+            this.orginTree = JSON.parse(JSON.stringify(this.treeData));
           }
         });
         this.getProductDetailFun();
