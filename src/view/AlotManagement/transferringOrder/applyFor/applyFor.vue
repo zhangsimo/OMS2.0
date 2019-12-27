@@ -68,7 +68,7 @@
                         </Row>
                       </FormItem>
                       <FormItem label="调入仓库：" prop="storeId" >
-                        <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId">
+                        <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
@@ -211,6 +211,7 @@
           }
         };
         return {
+          StoreId :'', //默认仓
           ArraySelect: [], //供应商下拉框
           isInternalId:'',//后端需要的供应商的一个id
           rowOrgId: '',
@@ -349,7 +350,7 @@
            isAdd:true, //判断是否能新增
           formPlan: {
             guestName:'',//调出方
-            storeId: '', //调入仓库
+            storeId: this.$store.state.user.userId, //调入仓库
             orderDate: '', //申请调拨日期
             remark: '', //备注
             createUname: '', //创建人
@@ -390,7 +391,7 @@
           this.isAdd = false;
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
-            this.formPlan.storeId =  '', //调入仓库
+            this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  '', //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
@@ -398,6 +399,10 @@
             this.Right.tbdata = []
             this.rowId = ''
           // console.log(this.Left.tbdata)
+        },
+        // 调入仓库下拉改变事件
+        selectStoreId(val){
+          // console.log(val)
         },
         //添加配件按钮
         addPro(){
@@ -715,7 +720,7 @@
               this.formPlan.serviceId = this.datadata.serviceId
               // this.guestidId = this
               this.presentrowMsg = row.status.value
-              console.log(this.presentrowMsg)
+              // console.log(this.presentrowMsg)
               this.rowId = row.id
 
               this.buttonDisable = false
@@ -740,6 +745,12 @@
           queryByOrgid().then(res => {
               if(res.code === 0){
                 this.List = res.data
+                 res.data.map(item => {
+                   if(item.isDefault == true){
+                     this.formPlan.storeId = item.id
+                     this.StoreId = item.id
+                   }
+                 })
               }
           })
         },

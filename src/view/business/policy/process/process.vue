@@ -239,7 +239,7 @@
             <More ref="naform"></More>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
-              <Button type="default">取消</Button>
+              <Button type="default" @click="cancel">取消</Button>
             </div>
           </Modal>
         </div>
@@ -470,7 +470,7 @@
             <More ref="naform"></More>
             <div slot="footer">
               <Button type="primary" @click="Determined">确定</Button>
-              <Button type="default">取消</Button>
+              <Button type="default" @click="cancel">取消</Button>
             </div>
           </Modal>
         </div>
@@ -1123,7 +1123,10 @@ export default {
       this.advanced = false;
     },
     ok() {},
-    cancel() {},
+    cancel() {
+      this.$refs.naform.reset();
+      this.advanced = false;
+    },
     shanchu() {
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");

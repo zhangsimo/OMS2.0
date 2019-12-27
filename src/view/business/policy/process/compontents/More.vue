@@ -3,7 +3,7 @@
     <Row>
       <Col span="12">
         <span class="w40">创建日期从：</span>
-        <DatePicker v-model="form.createTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 180px"></DatePicker>
+        <DatePicker v-model="form.startTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width: 180px"></DatePicker>
       </Col>
       <Col span="12">
         <span class="w40 ml10">至：</span>
@@ -30,7 +30,7 @@
     </row>
     <row class="mt15">
       <span class="ml5">单 号：</span>
-      <Input v-model="form.showPerson" style="width: 398px" />
+      <Input v-model="form.serviceId" style="width: 398px" />
     </row>
   </div>
 </template>
@@ -48,7 +48,7 @@ export default {
         productPartCode: '', //编码
         endAuditDate: '', //配件人
         startAuditDate: '', //配件名称,
-        createTime: '',
+        startTime: '',
         endTime: ''
       }
     }
@@ -56,7 +56,7 @@ export default {
   methods: {
     //选择创建开始日期
     establish(date) {
-      this.form.createTime = data
+      this.form.startTime = data
     },
     //选择创建结束日期
     submit(date) {
@@ -71,8 +71,8 @@ export default {
       this.form.shenEndTime = data
     },
     getITPWE() {
-      if (this.form.createTime) {
-        this.form.createTime = moment(this.form.createTime).format('YYYY-MM-DD HH:mm:ss')
+      if (this.form.startTime) {
+        this.form.startTime = moment(this.form.startTime).format('YYYY-MM-DD HH:mm:ss')
       }
       if (this.form.endTime) {
         this.form.endTime = moment(this.form.endTime).format('YYYY-MM-DD HH:mm:ss')
@@ -92,7 +92,7 @@ export default {
         productPartCode: '', //编码
         endAuditDate: '', //配件人
         startAuditDate: '', //配件名称,
-        createTime: '',
+        startTime: '',
         endTime: ''
       }
     }
