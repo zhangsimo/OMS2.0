@@ -527,6 +527,7 @@ export default {
         status: 99,
         qucikTime: ""
       },
+      rowId:'',//选择配件明细的id
       tabKey: "0",
       modal2: true,
       split1: 0.2,
@@ -752,6 +753,9 @@ export default {
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
+      console.log('勾选',row)
+      this.rowId=row.id
+      console.log( this.rowId)
       console.log(checked ? "勾选事件" : "取消事件");
     },
     tabChange(key) {
@@ -1130,12 +1134,17 @@ export default {
     shanchu() {
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
+        this.rowId=''
+        return;
+      }
+      if(!this.rowId){
+        this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
       if (this.tabKey === "0") {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log(seleList);
+        console.log('rrr',seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1146,10 +1155,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListzu(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       } else {
@@ -1166,10 +1178,13 @@ export default {
                 seleList
               );
               this.currentData = [];
+              this.getListchai(this.form);
+              this.rowId=''
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
+            this.rowId=''
             this.$Message.info("删除成品失败");
           });
       }
