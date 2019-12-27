@@ -23,9 +23,9 @@
             <Button type="warning" class="mr10 w90" @click="search"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" v-if="buttonsShow.audit" @click="Audit"><span class="center"><Icon custom="iconfont iconshenheicon icons" />审核</span></Button>
-            <Button class="mr10 w90" v-show="jin && buttonsShow.start" @click="warning"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用</span></Button>
-            <Button class="mr10 w90" v-show="qi && buttonsShow.start" @click="JinOrQi2"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用</span></Button>
+            <Button class="mr10 w90" v-has="'audit'"  @click="Audit"><span class="center"><Icon custom="iconfont iconshenheicon icons" />审核</span></Button>
+            <Button class="mr10 w90" v-has="'start'" v-show="jin" @click="warning"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用</span></Button>
+            <Button class="mr10 w90" v-has="'start'" v-show="qi" @click="JinOrQi2"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用</span></Button>
           </div>
           <Modal v-model="tenant_audit" title="租户审核" width="450px">
             <!--<div class="audit_header"><h1>租户审核</h1><Icon type="close-round" @click="cancel" class="cl_white"></Icon></div>-->
@@ -195,12 +195,12 @@
               total: 0
             },
             radioSelect:'QXS01',
-            buttonsShow:{},//权限按钮展示
+            // buttonsShow:{},//权限按钮展示
           }
         },
       mounted(){
         this.getList()
-         this.buttonsShow = this.$ButtonShow()
+         // this.buttonsShow = this.$ButtonShow()
       },
 
       created(){

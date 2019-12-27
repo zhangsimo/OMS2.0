@@ -18,17 +18,17 @@
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
-            <Button class="w90 mr10" @click="add">
+            <Button class="w90 mr10" @click="add" v-has="'add'">
               <span class="center">
                 <Icon type="md-add" />新增
               </span>
             </Button>
-            <Button class="w90 mr10" @click="update">
+            <Button class="w90 mr10" @click="update" v-has="'change'">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
             </Button>
-            <Button class="w90 mr10" @click="save">
+            <Button class="w90 mr10" @click="save" v-has="'save'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>

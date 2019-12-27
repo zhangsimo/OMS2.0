@@ -36,7 +36,7 @@
           <div class="db">
             <Button class="mr10" @click="get30Day"><Icon type="md-time" size="14" /> 即将到期(30天内)</Button>
             <Button class="mr10 w90" @click="noPay"><Icon type="md-card" size="14"/> 未付款</Button>
-            <Button class="mr10" v-if="selectTableDataStatus==0" @click="closeNoPayOrder"><Icon type="md-close" size="14" /> 关闭未付款订单</Button>
+            <Button class="mr10" v-has="'close'" v-if="selectTableDataStatus==0" @click="closeNoPayOrder"><Icon type="md-close" size="14" /> 关闭未付款订单</Button>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
 import 'vxe-table/lib/index.css'
 // @ts-ignore
-import {rightButtonShow} from './utils/button'
+import {rightButtonShow , authButton} from './utils/button'
 
 import loadmore from "./directive/loadmore";
 import VueQriously from 'vue-qriously'
@@ -40,7 +40,7 @@ Vue.use(VXETable)
 Vue.use(iView)
 Vue.config.productionTip = false
 Vue.use(VXEUtils, XEUtils)
-
+Vue.use(authButton)
 
 /**
  * @description 全局注册应用配置

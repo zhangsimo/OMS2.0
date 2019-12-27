@@ -23,8 +23,17 @@ export default {
       this.$nextTick(() => {
         this.isRouterAlive = true;
       })
-    }
+    },
   },
+
+  watch: {
+      $route:{
+          handler(val) {
+          this.$ButtonShow()
+          },
+          deep:true
+      }
+  }
 };
 </script>
 

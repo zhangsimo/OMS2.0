@@ -9,13 +9,13 @@
             <Button type="warning" @click="search" class="mr10 w90">
               <i class="iconfont mr5 iconchaxunicon"></i>查询
             </Button>
-            <Button class="mr10 w90" @click="addPro">
+            <Button v-has="'add'" class="mr10 w90" @click="addPro">
               <Icon type="md-add" />新增
             </Button>
-            <Button class="mr10 w90" @click="editPro">
+            <Button v-has="'change'" class="mr10 w90" @click="editPro">
               <i class="iconfont mr5 iconbianjixiugaiicon"></i>修改
             </Button>
-            <Button @click="linkProMadel" class="mr10">
+            <Button v-has="'resource'" @click="linkProMadel" class="mr10">
               <i class="iconfont mr5 iconchakanchanpinicon"></i>相关产品资源
             </Button>
           </div>
@@ -585,7 +585,7 @@ export default {
           if (!reg.test(tree.title)) {
             for (let j = inarr.length - 1; j >= 0; j--) {
               tree.children.splice(inarr[j], 1);
-              
+
             }
             if (tree.children.length === 0) {
               remove.push(index);
