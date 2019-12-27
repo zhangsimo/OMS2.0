@@ -602,22 +602,23 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.info("请先选择加工单");
+      //     return;
+      //   }
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      console.log(params)
       if (params.xinzeng) {
         delete params.status;
       }
-      if (params.status && params.status.name) {
+      if (params.status) {
         params.status = params.status.value;
       }
       if (params.orderTypeId && params.orderTypeId.name) {
@@ -635,6 +636,15 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
+                // this.Leftcurrentrow.storeId = ""
+                // this.Leftcurrentrow.guestName = ""
+                // this.Leftcurrentrow.storeName =  "",
+                // this.Leftcurrentrow.createTime =  "",
+                // this.Leftcurrentrow.orderMan = "",
+                // this.Leftcurrentrow.remark =  "",
+                // this.Leftcurrentrow.serviceId =  "",
+                // this.Leftcurrentrow.detailVOS =  []
+
           }
         })
         .catch(e => {
@@ -681,10 +691,10 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.info("当前加工单号已提交审核!无需重复操作");
         return;
@@ -906,11 +916,11 @@ export default {
       const seleList = this.$refs.xTable1.getSelectRecords();
       let arr = [];
       seleList.map(item => {
-        arr.push(parseInt(item.id));
+        arr.push(item.id);
       });
       const params = {
         ids: arr,
-        mainId: parseInt(this.Leftcurrentrow.id)
+        mainId: this.Leftcurrentrow.id
       };
       shanqu(params)
         .then(res => {
@@ -966,6 +976,11 @@ export default {
       queryByOrgid().then(res => {
         if (res.code === 0) {
           this.cangkuListall = res.data;
+          res.data.map(item => {
+            if(item.isDefault === true){
+              this.Leftcurrentrow.storeId = item.id
+            }
+          })
         }
       });
     },
