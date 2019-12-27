@@ -505,7 +505,7 @@ export default {
       getLeftList(data, page, size)
         .then(res => {
           if (res.code === 0) {
-            this.salesman = res.data.content[0].updateUname;
+            // this.salesman = res.data.content[0].updateUname;
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;
@@ -519,9 +519,9 @@ export default {
             }
           }
         })
-        .catch(err => {
-          this.$Message.info("获取移仓列表失败");
-        });
+        // .catch(err => {
+        //   // this.$Message.info("获取移仓列表失败");
+        // });
       // console.log(this.$store.state.user.userData);
     },
     //获取表格高度
