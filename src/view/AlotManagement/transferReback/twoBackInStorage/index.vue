@@ -339,7 +339,7 @@ export default {
         .then(res => {
           console.log(res)
           if (res.code === 0) {
-            this.$Message.info('成功')
+            // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || []
             this.Left.page = res.data.pageable
             this.Left.page.total = res.totalElements
