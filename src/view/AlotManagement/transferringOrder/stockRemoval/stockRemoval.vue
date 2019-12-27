@@ -96,8 +96,8 @@
                             readonly
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
-                          ></Input> -->
-                          <Select v-model="Leftcurrentrow.guestName"  label-in-value filterable>
+                          ></Input>-->
+                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
@@ -252,7 +252,7 @@
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
-      @getArray = "getArray"
+      @getArray="getArray"
       ref="selectSupplier"
       header-tit="调出方资料"
       @selectSupplierName="selectSupplierName"
@@ -313,7 +313,8 @@ export default {
   },
   data() {
     return {
-      ArrayValue:[],
+      flag: 0,
+      ArrayValue: [],
       buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
@@ -551,8 +552,8 @@ export default {
   },
   methods: {
     //  获取子组件逐渐传过来的值
-    getArray(data){
-        this.ArrayValue = data
+    getArray(data) {
+      this.ArrayValue = data;
     },
     //配件返回的参数
     getPartNameList(val) {
@@ -622,7 +623,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      console.log(params)
+      console.log(params);
       if (params.xinzeng) {
         delete params.status;
       }
@@ -644,15 +645,14 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
-                // this.Leftcurrentrow.storeId = ""
-                // this.Leftcurrentrow.guestName = ""
-                // this.Leftcurrentrow.storeName =  "",
-                // this.Leftcurrentrow.createTime =  "",
-                // this.Leftcurrentrow.orderMan = "",
-                // this.Leftcurrentrow.remark =  "",
-                // this.Leftcurrentrow.serviceId =  "",
-                // this.Leftcurrentrow.detailVOS =  []
-
+            // this.Leftcurrentrow.storeId = ""
+            // this.Leftcurrentrow.guestName = ""
+            // this.Leftcurrentrow.storeName =  "",
+            // this.Leftcurrentrow.createTime =  "",
+            // this.Leftcurrentrow.orderMan = "",
+            // this.Leftcurrentrow.remark =  "",
+            // this.Leftcurrentrow.serviceId =  "",
+            // this.Leftcurrentrow.detailVOS =  []
           }
         })
         .catch(e => {
@@ -660,6 +660,7 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow.guestName = "";
       this.buttonShow = false;
       if (this.Left.tbdata.length === 0) {
       } else {
@@ -668,6 +669,7 @@ export default {
           return;
         }
       }
+      this.flag = 1;
       this.Leftcurrentrow.createTime = moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
@@ -859,6 +861,20 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      console.log(row, "row ==>862");
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun1();
+          },
+          onCancel: () => {
+            this.getList(this.form);
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       this.buttonDisable = 0;
       this.dayinCureen = row;
       console.log(row, this.dayinCureen, "234");
@@ -985,10 +1001,10 @@ export default {
         if (res.code === 0) {
           this.cangkuListall = res.data;
           res.data.map(item => {
-            if(item.isDefault === true){
-              this.Leftcurrentrow.storeId = item.id
+            if (item.isDefault === true) {
+              this.Leftcurrentrow.storeId = item.id;
             }
-          })
+          });
         }
       });
     },
