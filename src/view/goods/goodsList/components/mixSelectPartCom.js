@@ -157,7 +157,6 @@ export const mixSelectPartCom = {
         data.partBrandCodes = [this.selectBrand];
       }
       const qurry = this.partName.trim();
-      console.log(this.partName)
       if(qurry.length > 0) {
         switch (this.searchType) {
           case "0":
@@ -255,6 +254,10 @@ export const mixSelectPartCom = {
     },
     cancel() {
       this.searchPartLayer = false;
+    },
+    //modal 关闭事件
+    CancelModal(){
+      this.selectTableItem = []
     },
     //分页
     changePage(p) {
