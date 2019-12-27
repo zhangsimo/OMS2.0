@@ -10,6 +10,7 @@
         :options="options3"
         @on-change="dateChange"
         placeholder="请选择日期"
+        @on-clear="dateList.startApplyTime='';dateList.endApplyTime=''"
       ></Date-picker>
       <Button type="warning" class="mr20" @click="serchCredit">
         <Icon custom="iconfont iconchaxunicon icons" />查询
