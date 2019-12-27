@@ -27,7 +27,7 @@
               </div>
             </div>
             <div slot="right" class="demo-split-pane">
-              <div style="overflow: hidden;overflow-x: scroll">
+              <div style="overflow: auto">
                 <vxe-table
                   border
                   resizable
@@ -40,7 +40,7 @@
                   highlight-current-row
                   @current-change="getOneClinet"
                   show-overflow
-                  height="500"
+                  height="400"
                   style="width: 1500px"
                   v-if="flag"
                 >
@@ -64,6 +64,7 @@
                 <Table
                   class="table-highlight-row w1200"
                   highlight-row
+                  height="400"
                   border
                   :stripe="true"
                   :columns="columns"
@@ -361,6 +362,7 @@ export default {
       getSupplierformation(obj).then(res => {
         if (res.code === 0) {
           this.managementList = res.data.content;
+          this.page1.total = res.data.totalElements;
         }
       });
     },
