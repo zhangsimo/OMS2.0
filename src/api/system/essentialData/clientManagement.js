@@ -56,3 +56,11 @@ export function getCustomerDetails (params) {
     params
   })
 }
+// 检测客户全称
+export function getCustomer(params) {
+  return axios.request({
+    url:`${api.wmsApi}/guest/checkByFullName`,
+    method:'get',
+    params
+  })
+}
