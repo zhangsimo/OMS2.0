@@ -94,14 +94,14 @@
                         <Col span="22">
                           <Input
                             readonly
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            :disabled="Leftcurrentrow.status.value != 0"
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
                           ></Input>
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            :disabled="Leftcurrentrow.status.value != 0"
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -117,7 +117,7 @@
                         <Col span="24">
                           <Select
                             v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value !== 0"
+                            :disabled="Leftcurrentrow.status.value != 0"
                           >
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
@@ -135,7 +135,7 @@
                     </FormItem>
                     <FormItem label="调拨申请日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"
+                        :disabled=" Leftcurrentrow.status.value != 0"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
@@ -144,7 +144,7 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Input
-                        :disabled="Leftcurrentrow.status.value !== 0"
+                        :disabled="Leftcurrentrow.status.value != 0"
                         :value="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
@@ -152,18 +152,18 @@
                     <FormItem label="创建人：" prop="planDate">
                       <Input
                         class="w160"
-                        :disabled="Leftcurrentrow.status.value !== 0"
+                        :disabled="Leftcurrentrow.status.value != 0"
                         :value="Leftcurrentrow.orderMan"
                       ></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="planOrderNum">
-                      <Input class="w160" :disabled="Leftcurrentrow.status.value !== 0"></Input>
+                      <Input class="w160" :disabled="Leftcurrentrow.status.value != 0"></Input>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
                       <Input
                         class="w160"
-                        :value="Leftcurrentrow.status.value !== 0"
-                        v-model="Leftcurrentrow.serviceId"
+                        :disabled="Leftcurrentrow.status.value != 0"
+                        :value="Leftcurrentrow.serviceId"
                       ></Input>
                     </FormItem>
                   </Form>
@@ -497,7 +497,7 @@ export default {
       currentData: [],
       Leftcurrentrow: {
         status: {
-          value: 0
+          value: 1
         },
         storeName: "",
         createTime: "",
