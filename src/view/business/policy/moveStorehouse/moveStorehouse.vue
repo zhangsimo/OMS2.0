@@ -565,8 +565,9 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      this.Left.tbdata = val.data || [];
-      this.Left.page.total = bal.totalElements;
+      console.log('66666',val)
+      this.Left.tbdata = val.data.content;
+      this.Left.page.total = val.data.totalElements;
     },
     //新增
     addProoo() {

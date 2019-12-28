@@ -39,7 +39,7 @@
                   <vxe-table-column field="guestName" title="供应商"></vxe-table-column>
                   <vxe-table-column field="orderMan" title="采购员"></vxe-table-column>
                   <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
-                  <vxe-table-column field="createName" title="创建人"></vxe-table-column>
+                  <vxe-table-column field="createUname" title="创建人"></vxe-table-column>
                   <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
                   <vxe-table-column field="print" title="打印次数"></vxe-table-column>
                   <vxe-table-column field="orderDate" title="入库日期"></vxe-table-column>
@@ -159,7 +159,7 @@
                       <span>{{ countAmount(row) |priceFilters }} </span>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="remark" title="备注"></vxe-table-column>
+                  <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
                   <vxe-table-column title="不含税单价" >
                     <template v-slot="{row}">
                       <span>{{countTaxRate(row) |priceFilters}}</span>
@@ -208,6 +208,7 @@
     </div>
   </div>
 </template>
+
 
 <script src="./index.js">
 

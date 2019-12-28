@@ -40,7 +40,9 @@
 </template>
 
 <script>
-import { getDataMoreList } from '../../../../../api/putStorage'
+// import { getDataMoreList } from '../../../../../api/putStorage'
+import {getLeftList} from "../../../../../api/business/moveStorehouse.js";
+import * as tools from "../../../../../utils/tools";
 export default {
   name: 'More',
   data() {
@@ -54,32 +56,49 @@ export default {
         partCode: '', //配件编码
         partName: '', //配件名称
       },
+      Left:{
+        page: {
+          num: 1,
+          size: 10,
+          total: 0
+        },
+      }
     }
   },
   props: {
     getShowMore: Boolean
+
   },
   methods: {
     //选择创建日期
     establish(date) {
-      this.moreData.createStartDate = date[0] || ""
-      this.moreData.createEndDate = date[1] || ""
+      this.moreData.createStartDate = tools.transTime(date[0])
+      this.moreData.createEndDate = tools.transTime(date[1])
     },
     //选择提交日期
     submit(date) {
       console.log(date)
-      this.moreData.commitStartDate = date[0] || ""
-      this.moreData.commitEndDat = date[1] || ""
+      this.moreData.commitStartDate =tools.transTime(date[0])
+      this.moreData.commitEndDate = tools.transTime(date[1])
     },
     //更多弹窗-确定
     moreOk() {
       console.log(this.moreData)
-      getDataMoreList(this.moreData)
+
+      let page = this.Left.page.num - 1;
+      let size = this.Left.page.size;
+      getLeftList(this.moreData,page, size)
         .then(res => {
+          console.log('res',res)
           if (res.code === 0) {
             //res传出去
+            res.data.content.map((item, index) => {
+              item["index"] = index + 1;
+              item["statuName"] = item.status.name;
+            });
             this.$emit('getMoreData', res) //更多查询调拨申请列表传出
             this.$emit('getMoreStatus', false) //弹框false传出
+            this.moreData={}
           } else {
             this.$Message.info('更多查询调拨申请列表错误')
             this.$emit('getMoreStatus', false)
