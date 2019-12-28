@@ -73,7 +73,7 @@
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="申请单" width="100"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="status" title="受理状态" width="100"></vxe-table-column>
+          <vxe-table-column field="status.name" title="受理状态" width="100"></vxe-table-column>
           <vxe-table-column field="orderMan" title="申请人" width="100"></vxe-table-column>
           <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
           <vxe-table-column field="createUname" title="提交人" width="100"></vxe-table-column>
