@@ -105,9 +105,9 @@ export const mixSelectSupplier = {
       }
     };
   },
-  mounted() {
-    this.getList();
-  },
+  // mounted() {
+  //   this.getList();
+  // },
   methods: {
     //获取供应商分类
     getfindTypeListFun() {
@@ -143,12 +143,12 @@ export const mixSelectSupplier = {
         this.partData = res.data.content || [];
         this.page.total = res.data.total;
         const { content } = res.data;
-
+        // console.log(content, "content ==>146");
         content.forEach(item => {
           this.ArrayList.push(item.fullName);
         });
         //   向父组件传值
-        this.$emit('getArray',this.ArrayList)
+        // this.$emit("getArray", this.ArrayList);
       });
     },
     search() {
