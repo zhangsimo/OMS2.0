@@ -531,6 +531,7 @@ export default class Fittings extends Vue {
   }
   // tab切换
   private setTab(index: number) {
+    this.isCanbutton = false
     this.tabIndex = index;
     this.queryValue = '';
     this.query = '';
