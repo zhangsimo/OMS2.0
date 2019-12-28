@@ -852,6 +852,7 @@ export default {
             if (res.code === 0) {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);
+              this.$refs.formPlan.resetFields()
               this.isAdd=true
             }
           } catch (errMap) {
