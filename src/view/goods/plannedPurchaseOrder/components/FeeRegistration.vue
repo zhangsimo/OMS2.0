@@ -95,7 +95,7 @@
               </template>
             </vxe-table-column>
             <vxe-table-column
-              field="guestName"
+              field="fullName"
               title="往来单位"
               width="120"
             ></vxe-table-column>
@@ -107,6 +107,7 @@
             >
               <template v-slot:edit="scope">
                 <Select
+                  transfer
                   style="width:100px"
                   v-model="scope.row.serviceType"
                   @on-change="changeSelect(scope)"
