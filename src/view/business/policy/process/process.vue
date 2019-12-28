@@ -528,7 +528,7 @@ export default {
         qucikTime: ""
       },
       rowId:'',//选择配件明细的id
-      tabKey: "0",
+      tabKey: 0,
       modal2: true,
       split1: 0.2,
       tabIndex: 0,
@@ -733,7 +733,7 @@ export default {
     }
   },
   created() {
-    if (this.tabKey === "0") {
+    if (this.tabKey === 0) {
       // 调接口获取配件组装列表信息
       this.getListzu(this.form);
     } else {
@@ -762,6 +762,7 @@ export default {
       this.tabKey = key;
       console.log(this.tabKey);
       if (this.tabKey === 0) {
+        // console.log(444444)
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -787,7 +788,7 @@ export default {
       params.processProductVO = params.processProductVO.length
         ? params.processProductVO[0]
         : {};
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         //配件组装保存
         baocun(params)
           .then(res => {
@@ -878,7 +879,7 @@ export default {
         ...this.Leftcurrentrow
       };
       params.processProductVO = params.processProductVO[0];
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         // 配件组装提交
         tijiao(params)
           .then(res => {
@@ -924,7 +925,7 @@ export default {
           title: '是否确定作废',
           onOk: async () => {
             const id = this.Leftcurrentrow.id;
-            if (this.tabKey === "0") {
+            if (this.tabKey === 0) {
               // 配件组装作废
               zuofei(id)
                 .then(res => {
@@ -1111,7 +1112,7 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -1119,7 +1120,7 @@ export default {
     },
     changeSize(size) {
       this.Left.page.size = size;
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -1132,7 +1133,7 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(params);
       } else {
         this.getListchai(params);
@@ -1155,7 +1156,7 @@ export default {
         this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
         console.log('rrr',seleList);
