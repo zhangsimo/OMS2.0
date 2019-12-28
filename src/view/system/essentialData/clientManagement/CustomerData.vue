@@ -396,6 +396,7 @@ export default {
     },
     //打开新增客户
     addClient() {
+      this.$refs.child.$refs.form.resetFields()
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
@@ -439,6 +440,7 @@ export default {
       }
       let data = {};
       data.id = this.clientList.id;
+      this.$refs.child.$refs.form.resetFields()
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
