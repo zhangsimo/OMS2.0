@@ -774,7 +774,9 @@ export default {
           four
         };
         Preservation(obj).then(res => {
-          console.log(res);
+          if(res.code === 0){
+            this.$message.success('保存成功')
+          }
         });
       } else {
         this.$message.error("请选择要对账的数据");
