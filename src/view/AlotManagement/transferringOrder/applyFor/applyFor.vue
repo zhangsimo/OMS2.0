@@ -202,7 +202,7 @@
           if (!value && value != '0') {
             callback(new Error("请输入大于或等于0的正整数"));
           } else {
-            const reg = /^([0]|[1-9][0-9]*)$/
+            const reg = /^[1-9]\d*$/;
             if (reg.test(value)) {
               callback();
             } else {

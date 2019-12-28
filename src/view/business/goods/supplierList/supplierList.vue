@@ -63,7 +63,7 @@
                       <Row class="w350">
                         <Col span="22">
                           <!--<Input placeholder="请选择供应商" v-model="formPlan.guestName" disabled></Input>-->
-                          <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0">
+                          <Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" @on-change="SelectGuest">
                             <Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                           </Select>
                         </Col>
@@ -182,7 +182,7 @@
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择采购计划弹窗-->
-      <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder"></procurement-modal>
+      <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder" @selectRow="selectRow"></procurement-modal>
     </div>
     <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
@@ -371,7 +371,9 @@
         },
         mainId: null, //选中行的id
         clickdelivery: false,
-        Flaga: false //判断是否出现退出弹框
+        Flaga: false, //判断是否出现退出弹框
+        Acode: '', //保存,提交时需给后台传的code
+        AcodeId: '', //保存,提交时需给后台传的codeId
       }
     },
     methods: {
@@ -462,15 +464,25 @@
           this.ArraySelect = res.data||[];
         })
       },
+      //供应商下拉框发生改变
+      SelectGuest(val){
+        // console.log(val)
+        this.guestidId = val
+      },
       //选择采购入库单
       getPlanOrder(Msg){
         let arr = Msg.details || []
-        console.log(arr)
+        // console.log(arr)
         arr.map(item => {
           item.outUnitId = item.unit
           item.stockOutQty = item.totalStockQty
         })
         this.Right.tbdata = this.Right.tbdata.concat(arr);
+      },
+      //选择采购入库单的主表code
+      selectRow(val){
+        this.Acode =  val.code
+        this.AcodeId =  val.codeId
       },
       selectTabelData(){},
       //保存按钮
@@ -478,6 +490,8 @@
         this.$refs.formPlan.validate((valid) => {
           if (valid) {
             let data = {}
+            data.code = this.Acode || this.formPlan.serviceId
+            data.codeId = this.AcodeId
             data.id = this.rowId
             // data.guestId = this.guestidId   //调出方
             data.guestId = this.formPlan.guestName   //调出方
@@ -489,25 +503,9 @@
             data.settleTypeId = this.formPlan.clearing  //结算方式
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
-            data.code = this.formPlan.serviceId //采购订单
+            // data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata
-            // data.details = this.Right.tbdata.map(item => {
-            //   return {
-            //     partId : item.partId,
-            //     partCode : item.partCode,
-            //     partName : item.partName,
-            //     partBrand : item.partBrand,
-            //     outUnitId : item.outUnitId,
-            //     canReQty : item.canReQty,
-            //     orderQty : item.orderQty,
-            //     orderPrice : item.orderPrice,
-            //     orderAmt : item.orderAmt,
-            //     remark : item.remark,
-            //     stockOutQty : item.stockOutQty,
-            //     oemCode : item.oemCode,
-            //     spec : item.spec
-            //   }
-            // }) //子表格
+            console.log(data.code)
             saveDraft(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
@@ -856,6 +854,8 @@
             title: '是否提交',
             onOk: async () => {
               let data = {}
+              data.code = this.Acode || this.formPlan.serviceId
+              data.codeId = this.AcodeId
               data.id = this.rowId
               data.guestId = this.formPlan.guestName   //调出方
               data.orderManId = this.formPlan.storeId     //退货员id
@@ -866,7 +866,7 @@
               data.settleTypeId = this.formPlan.clearing  //结算方式
               data.remark = this.formPlan.remark  //备注
               data.storeId = this.formPlan.warehouse  //退货仓库
-              data.code = this.formPlan.serviceId //采购订单
+              // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
               let res = await saveCommit(data);
               if (res.code == 0) {
