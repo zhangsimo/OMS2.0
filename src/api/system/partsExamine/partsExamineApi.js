@@ -92,3 +92,13 @@ export function savePartInfo(data) {
 }
 
 
+//   配件详情
+export function getParticulars(params) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyDetail/findApplyDetails`,
+    method: 'get',
+    params
+  })
+}
+
+

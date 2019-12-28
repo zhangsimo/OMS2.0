@@ -26,7 +26,7 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input v-model="penSalesData.guestName" style="width: 128px" />
+            <Input disabled v-model="penSalesData.guestName" style="width: 128px" />
             <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
             </Button>
@@ -66,7 +66,6 @@
           highlight-hover-row
           @current-change="selectTabelData"
           :radio-config="{labelField: 'name', trigger: 'row'}"
-          @radio-change="radioChangeEvent"
         >
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
@@ -120,6 +119,8 @@
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
 import moment from "moment";
+import { getParticulars } from "_api/system/partsExamine/partsExamineApi";
+
 export default {
   data() {
     return {
@@ -201,11 +202,11 @@ export default {
     }
   },
   methods: {
-    radioChangeEvent({ row }) {
-      console.log(row);
-      this.checkRow = row;
-      this.currentData = row.detailVOS;
-    },
+    // radioChangeEvent({ row }) {
+    //   console.log(row);
+    //   this.checkRow = row;
+    //   this.currentData = row.detailVOS;
+    // },
     //分页
     changePage(p) {
       this.pageList.page = p;
@@ -247,6 +248,9 @@ export default {
         }
       }
       this.$emit("search21", this.penSalesData, size, num);
+      // setTimeout(() => {
+      //   this.$parent.addProoo();
+      // }, 2000);
     },
     getParams() {
       this.$emit("getLisw", this.penSalesData);
@@ -262,7 +266,15 @@ export default {
     selectTabelData({ row }) {
       console.log(row);
       this.checkRow = row;
-      this.currentData = row.voList;
+
+      var params = {
+        mainId: row.id
+      };
+      getParticulars(params).then(res => {
+        console.log(res, "res");
+        this.currentData = res.data;
+        this.$emit("getArray", this.currentData);
+      });
     },
     ok() {
       // 将选好的成品传父组件

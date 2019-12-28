@@ -1,7 +1,7 @@
 import env from "./env";
 
 const dev = {
-  tokenApi: "http://192.168.2.47:5600", // 登录接口API
+  tokenApi: "http://192.168.2.48:5600", // 登录接口API
   // tokenApi: 'https://api.g-parts.cn', // 登录接口API
   // wmsApi: 'https://api.g-parts.cn/wms-order-provider',
   // omsApi: 'http://192.168.30.209:9240', // 张佳岩
@@ -42,7 +42,7 @@ const dev = {
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
-  passportApi: "http://192.168.2.47:5200", // passport微服务API
+  passportApi: "http://192.168.2.48:5200", // passport微服务API
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
 };

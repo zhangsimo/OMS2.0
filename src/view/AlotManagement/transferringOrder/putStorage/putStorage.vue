@@ -157,12 +157,12 @@
                       ></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="planOrderNum">
-                      <Input class="w160" :disabled="Leftcurrentrow.status.value != 0"></Input>
+                      <Input disabled :value="Leftcurrentrow.planOrderNum" class="w160"></Input>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
                       <Input
                         class="w160"
-                        :disabled="Leftcurrentrow.status.value != 0"
+                        disabled
                         :value="Leftcurrentrow.serviceId"
                       ></Input>
                     </FormItem>
@@ -193,7 +193,7 @@
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
-                  :data="Leftcurrentrow.detailVOS"
+                  :data="ArrayValue"
                   :footer-method="addFooter"
                   :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                 >
@@ -246,6 +246,7 @@
     ></select-supplier>
 
     <add-in-com
+      @getArray="getArray"
       :tbdata="tableData1"
       @getName="showModel3"
       :dcName="diaochuName"
@@ -299,6 +300,8 @@ export default {
   },
   data() {
     return {
+      serviceIdValue:'',
+      ArrayValue: [],
       staaa: false,
       dcData: [],
       showit: true,
@@ -504,6 +507,7 @@ export default {
         orderMan: "",
         remark: "",
         serviceId: "",
+        planOrderNum:'',
         detailVOS: []
       },
       currentDataP: [],
@@ -530,6 +534,11 @@ export default {
     this.getWareHouse();
   },
   methods: {
+    getArray(data) {
+      this.ArrayValue = data;
+      // this.Leftcurrentrow.detailVOS = data;
+      console.log(getArray, "getArray");
+    },
     warehouse() {
       queryByOrgid().then(res => {
         if (res.code === 0) {
@@ -617,7 +626,7 @@ export default {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
           this.$Message.info(
-            "当前加工单列表已有一个新增单等待操作,请先保存当前操作新增单据"
+            "调拨入库单已有一个新增单等待操作,请先保存当前操作新增单据"
           );
           return;
         }
@@ -690,14 +699,14 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
-      chengping({}, 10, 1)
+      chengping({ enterSelect: 123 }, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            console.log(this.tableData1,'this.tableData1')
+            console.log(this.tableData1, "this.tableData1");
             //console.log(this.tableData1);
-            this.$Message.success("获取成品列表成功");
+            // this.$Message.success("获取成品列表成功");
           }
         })
         .catch(e => {
@@ -735,9 +744,10 @@ export default {
       //console.log(params, "huoqucanshu");
       chengping({ ...params }, size, page)
         .then(res => {
+          console.log(res, "res =>754");
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
-            this.tableData1 = res.data;
+            this.tableData1 = res.data.content;
           }
         })
         .catch(e => {
@@ -776,19 +786,21 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.Leftcurrentrow.planOrderNum = this.serviceIdValue
       const params = {
         mainId: row.id
       };
       const res = await getListDetail(params);
       this.showit = false;
-      this.Leftcurrentrow.detailVOS = res.data;
       //console.log(this.Leftcurrentrow);
       const that = this;
       setTimeout(() => {
         that.showit = true;
       }, 100);
+
       cangkulist2(this.$store.state.user.userData.groupId)
         .then(res => {
           if (res.code == 0) {
@@ -901,6 +913,8 @@ export default {
       }
     },
     getOkList(list) {
+      console.log(list, "list  =912");
+      this.serviceIdValue = list.serviceId
       const item = {
         index: 1,
         xinzeng: "1",
@@ -916,8 +930,8 @@ export default {
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
-        serviceId: list.serviceId,
-        detailVOS: list.detailVOS
+        serviceId:'',
+        detailVOS: this.ArrayValue
       };
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {

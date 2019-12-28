@@ -1,4 +1,4 @@
-import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
+import {getParticulars,getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
 import {getwbParts} from "_api/system/partManager";
 import {getDetails} from '@/api/salesManagment/salesOrder'
 
