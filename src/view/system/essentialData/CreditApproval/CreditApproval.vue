@@ -86,7 +86,7 @@
         :data="creaditList"
         :customerIfo="customerIfo"
         :customerDetails="customerDetails"
-        :sixsixMonthPerformance="sixMonthPerformance"
+        :sixMonthPerformance="sixMonthPerformance"
         :sellOrderList="sellOrderList"
       ></CreditLineApplication>
       <div slot="footer">
@@ -343,10 +343,11 @@ export default {
           console.log(res.data)
           if (res.code === 0) {
             this.creaditList = this.creditData
-            this.customerIfo = this.guestAdjustVOList
+            this.customerIfo = res.data.guestAdjustVOList
             this.customerDetails = res.data.guestAdjustVO;
             this.sixMonthPerformance = res.data.sixMonthPerformance;
             this.sellOrderList = res.data.sellOrderList;
+            console.log(this.customerIfo,this.sixMonthPerformance)
           }
         });
       }
