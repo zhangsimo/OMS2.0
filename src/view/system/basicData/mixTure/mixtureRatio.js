@@ -370,9 +370,15 @@ const methods = {
   // 保存配件
   saveCustomer() {
     this.customer.page.num = 1;
+    let sum = 0
     this.customer.tbdata.forEach(item => {
       item.parentId = this.levelId;
+      sum += item.ratio *1
     });
+    if(sum!==1) {
+      this.$Message.error('成本比例合计必须等于1')
+      return
+    }
     let newArr = [];
     // console.log(this.checkboxArr)
     if (this.checkboxArr.length !== 0) {
@@ -425,7 +431,6 @@ const methods = {
   },
   //右边内容初始化
   rightgetList() {
-    console.log(this.levelId)
     let params = {};
     if (this.Type === 0 && this.customer.fullname !== "") {
       params.partCode = this.customer.fullname;
@@ -487,7 +492,6 @@ const methods = {
   },
   //左边内容单某行
   selction(a) {
-    console.log(a)
     let arrr = [];
     arrr.push(a);
     let arrrr = arrr.map(item => {
