@@ -226,13 +226,7 @@ export default {
           key: "applyMan"
         }
       ],
-      creditList: [
-        {
-          serviceId: "12231456",
-          auditSign: "5656",
-          id:'45'
-        }
-      ],
+      creditList: [],
       creditData: {
         guestId: "",
         adjustType: 0,
@@ -277,7 +271,7 @@ export default {
   methods: {
     // 获取页面数据
     getCredit() {
-      getCreditApprovalTable().then(res => {
+      getCreditApprovalTable({adjustType:0}).then(res => {
         if (res.code === 0) {
           this.creditList = res.data;
         }
@@ -292,9 +286,9 @@ export default {
         this.dateList.startTime = this.quickArray[0] || "";
         this.dateList.endTime = this.quickArray[1] || "";
       }
+      this.dateList.adjustType = 0
       conditionalQuery(this.dateList).then(res => {
         if (res.code === 0) {
-          console.log("特特特特", res);
           this.creditList = res.data;
         }
       });

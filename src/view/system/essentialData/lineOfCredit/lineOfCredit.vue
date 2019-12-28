@@ -176,6 +176,7 @@ export default {
         data.startTime = this.dateVal[0] + " " + "00:00:00";
         data.endTime = this.dateVal[1] + " " + "23:59:59";
       }
+      data.adjustType = 1
       getTableList(data).then(res => {
         if (res.code === 0) {
           this.staffList = res.data;
