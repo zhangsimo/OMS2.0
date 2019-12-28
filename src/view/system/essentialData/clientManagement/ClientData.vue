@@ -32,33 +32,9 @@
               <FormItem label="客户简称:" prop="shortName">
                 <Input v-model="data.shortName" style="width: 180px" maxlength="10" />
               </FormItem>
-            </div>
-            <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="结算方式:" prop="settTypeId">
-                <Select v-model="data.settTypeId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00106"
-                    :value="item.itemCode"
-                    :key="item.id"
-                  >{{ item.itemName }}</Option>
-                </Select>
+              <FormItem label="客户全称:" prop="fullName">
+                <Input v-model="data.fullName" style="width: 180px" />
               </FormItem>
-              <FormItem label="票据类型:" prop="billTypeId">
-                <Select v-model="data.billTypeId" style="width:180px" class="mr10">
-                  <Option
-                    v-for="item in dataList.CS00107"
-                    :value="item.itemCode"
-                    :key="item.id"
-                  >{{ item.itemName }}</Option>
-                </Select>
-              </FormItem>
-            </div>
-          </div>
-          <FormItem label="客户全称:" prop="fullName">
-            <Input v-model="data.fullName" style="width: 380px" />
-          </FormItem>
-          <div style="display: flex">
-            <div style="flex-flow: row nowrap;width: 100%">
               <FormItem label="联系人:" prop="contactor">
                 <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
               </FormItem>
@@ -74,6 +50,33 @@
               </FormItem>
             </div>
             <div style="flex-flow: row nowrap;width: 100%">
+              <FormItem label="所属体系:" prop="belongSystem" class="h40">
+                <Select v-model="data.belongSystem" style="width:180px" class="mr10">
+                  <Option
+                    v-for="item in Subordinate"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+              </FormItem>
+              <FormItem label="票据类型:" prop="billTypeId">
+                <Select v-model="data.billTypeId" style="width:180px" class="mr10">
+                  <Option
+                    v-for="item in dataList.CS00107"
+                    :value="item.itemCode"
+                    :key="item.id"
+                  >{{ item.itemName }}</Option>
+                </Select>
+              </FormItem>
+              <FormItem label="结算方式:" prop="settTypeId">
+                <Select v-model="data.settTypeId" style="width:180px" class="mr10">
+                  <Option
+                    v-for="item in dataList.CS00106"
+                    :value="item.itemCode"
+                    :key="item.id"
+                  >{{ item.itemName }}</Option>
+                </Select>
+              </FormItem>
               <FormItem label="联系人手机:" prop="contactorTel">
                 <Input v-model="data.contactorTel" style="width: 180px" />
               </FormItem>
@@ -156,10 +159,13 @@
           <div>
             <p style="margin-bottom: 10px">财务信息</p>
             <div>
-              <FormItem label="银行账号:">
+              <FormItem label="收款户名:" prop="receiveName">
+                <Input v-model="data.receiveName" style="width: 450px" />
+              </FormItem>
+              <FormItem label="银行账号:" prop="accountBankNo">
                 <Input v-model="data.accountBankNo" style="width: 450px" />
               </FormItem>
-              <FormItem label="开户银行:">
+              <FormItem label="开户银行:" prop="accountBank">
                 <Input v-model="data.accountBank" style="width: 450px" />
               </FormItem>
               <div style="display: flex">
@@ -385,7 +391,7 @@ export default {
           callback();
         }
       } else {
-        callback(new Error("只能输入数字"));
+        callback();
       }
     };
     const paragraph = (rule, value, callback) => {
@@ -400,6 +406,20 @@ export default {
       }
     };
     return {
+      Subordinate: [
+        {
+          label: "华胜连锁",
+          value: 0
+        },
+        {
+          label: "体系外",
+          value: 1
+        },
+        {
+          label: "体系内",
+          value: 2
+        }
+      ],
       tree: this.treelist,
       clinet: true, //是否客户 //是
       list: [
@@ -562,12 +582,23 @@ export default {
       relevanceClient: [],
       addInoiceOne: {},
       rules: {
+        belongSystem: [
+          {
+            required: true,
+            message: "不能为空",
+            trigger: "change",
+            type: "number"
+          }
+        ],
         creditLimit: [
           {
             validator: creditLimit,
             trigger: "change"
           }
         ],
+        receiveName: [{ required: true, message: " 不能为空", trigger: "change" }],
+        accountBankNo: [{ required: true, message: "",validator: creditLimit, trigger: "change" }],
+        accountBank: [{ required: true, message: " 不能为空", trigger: "change" }],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],

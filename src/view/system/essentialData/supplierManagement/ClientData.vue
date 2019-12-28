@@ -18,11 +18,26 @@
     <div class="tabList">
       <Tabs type="card">
         <TabPane label="基本信息">
-          <div style="display: flex" class="h60">
+          <div style="display: flex">
             <div style="flex-flow: row nowrap;width: 100%">
-              <FormItem label="供应商简称:" prop="shortName">
-                <Input v-model="data.shortName" style="width: 180px" />
-              </FormItem>
+              <Row>
+                <Col span="12">
+                  <FormItem label="所属体系:" prop="belongSystem" class="h40">
+                    <Select v-model="data.belongSystem" style="width:180px" class="mr10">
+                      <Option
+                        v-for="item in Subordinate"
+                        :value="item.value"
+                        :key="item.value"
+                      >{{ item.label }}</Option>
+                    </Select>
+                  </FormItem>
+                </Col>
+                <Col span="12">
+                  <FormItem label="供应商简称:" prop="shortName" class="h50">
+                    <Input v-model="data.shortName" style="width: 180px" />
+                  </FormItem>
+                </Col>
+              </Row>
             </div>
           </div>
           <FormItem class="h50" label="供应商全称:" prop="fullName">
@@ -239,6 +254,20 @@ export default {
       }
     };
     return {
+      Subordinate: [
+        {
+          label: '华胜连锁',
+          value: 0
+        },
+        {
+          label: '体系外',
+          value: 1
+        },
+        {
+          label: '体系内',
+          value: 2
+        }
+      ],
       list: [
         {
           label: 123,
@@ -256,6 +285,14 @@ export default {
             message: "只能填写整数或者两位小数",
             pattern: /^\d+(?:\.\d{2})?$/,
             trigger: "blur" ///^[0-9]{1}([0-9]|[.])*$/
+          }
+        ],
+        belongSystem: [
+          {
+            required: true,
+            message: "不能为空",
+            trigger: "change",
+            type: "number"
           }
         ],
         shortName: [{ required: true, message: "不能为空", trigger: "blur" }],

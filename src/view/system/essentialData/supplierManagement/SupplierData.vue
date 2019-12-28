@@ -391,11 +391,11 @@ export default {
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
           console.log(data, "this.clientList=>388");
 
-          let res = await getNewSupplier(data);
-          if (res.code === 0) {
-            this.clientDataShow = false;
-            this.getlist();
-          }
+          // let res = await getNewSupplier(data);
+          // if (res.code === 0) {
+          //   this.clientDataShow = false;
+          //   this.getlist();
+          // }
         } else {
           this.$Message.error("信息填写错误");
         }

@@ -555,14 +555,14 @@ export default {
     },
     selectAllEvent({ checked }) {},
     getDataType() {
-      console.log(121);
+      //console.log(121);
       const params = {
         status: this.form.status
       };
       this.getList(params);
     },
     selectChangeEvent({ checked, row }) {
-      console.log(checked ? "勾选事件" : "取消事件");
+      //console.log(checked ? "勾选事件" : "取消事件");
     },
     baocun1() {
       if (
@@ -591,7 +591,7 @@ export default {
       if (params.status && params.status.name) {
         params.status = params.status.value;
       }
-      console.log(params.orderTypeId);
+      //console.log(params.orderTypeId);
       if (params.orderTypeId && params.orderTypeId.name) {
         params.orderTypeId = params.orderTypeId.value;
       }
@@ -695,7 +695,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            console.log(this.tableData1);
+            //console.log(this.tableData1);
             this.$Message.success("获取成品列表成功");
           }
         })
@@ -731,7 +731,7 @@ export default {
         });
     },
     searchPro(params, size, page) {
-      console.log(params, "huoqucanshu");
+      //console.log(params, "huoqucanshu");
       chengping({ ...params }, size, page)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
@@ -783,7 +783,7 @@ export default {
       const res = await getListDetail(params);
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
-      console.log(this.Leftcurrentrow);
+      //console.log(this.Leftcurrentrow);
       const that = this;
       setTimeout(() => {
         that.showit = true;
@@ -850,7 +850,7 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
-      console.log(seleList);
+      //console.log(seleList);
       const id = seleList[0].id;
       shanqu(id)
         .then(res => {
@@ -878,14 +878,14 @@ export default {
     },
     showModel3(val) {
       this.val = val;
-      console.log(val);
+      //console.log(val);
       this.$refs.selectSupplier.init();
     },
     //选择方
     selectSupplierName(row) {
-      console.log(row);
+      //console.log(row);
       if (this.val === "0") {
-        console.log(row.fullName);
+        //console.log(row.fullName);
         this.showit = false;
         this.Leftcurrentrow.guestName = row.fullName;
         this.Leftcurrentrow.guestId = row.id;
@@ -895,7 +895,7 @@ export default {
         }, 200);
       } else {
         this.diaochuName = row.fullName;
-        console.log(row.id);
+        //console.log(row.id);
         this.diaochuID = row.id;
       }
     },
@@ -932,7 +932,7 @@ export default {
       } else {
         delete params.qucikTime;
       }
-      console.log(params);
+      //console.log(params);
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {
