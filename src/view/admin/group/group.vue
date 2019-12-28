@@ -18,7 +18,7 @@
             <span v-if="curName != null">【{{curName}}】-人员列表</span>
             <span v-else>点击左侧【查看人员】按钮，查看组织人员</span>
 
-            <Button v-if="curName != null" type="primary" icon="plus-round" class="mr15 mt10 fr" @click='addStaff'>添加人员</Button>
+<!--            <Button v-if="curName != null" type="primary" icon="plus-round" class="mr15 mt10 fr" @click='addStaff'>添加人员</Button>-->
           </div>
           <div slot="footer" style="text-align: right;padding-right: 15px">
             共{{tbdata.length}}人

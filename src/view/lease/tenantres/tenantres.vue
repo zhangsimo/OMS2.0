@@ -5,7 +5,7 @@
       <Split v-model="split">
         <div slot="left" class="left-warp left pt10 pb10">
           <div class="db left title-warp pb10">
-            <Button class="mr10" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0)">
+            <Button class="mr10" v-has="'save1'" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0)">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
@@ -45,12 +45,12 @@
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
-            <Button class="mr10 w90" @click="delTable">
+            <Button class="mr10 w90" @click="delTable" v-has="'delete'">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
-            <Button class="mr10 w90" @click="saveTable">
+            <Button class="mr10 w90" @click="saveTable" v-has="'save2'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>

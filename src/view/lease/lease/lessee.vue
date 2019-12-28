@@ -85,7 +85,7 @@
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
-            <Button class="mr15 w90" v-if="buttonsShow.change" @click="changeNav">
+            <Button v-has="'change'" class="mr15 w90"  @click="changeNav">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
@@ -94,7 +94,8 @@
               @click="startUse"
               class="mr15 w90"
               type="warning"
-              v-if="Message.isDisabled == 1 && buttonsShow.start"
+              v-has="'start'"
+              v-if="Message.isDisabled == 1"
             >
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />启用
@@ -104,13 +105,16 @@
               @click="endUse"
               class="mr15 w90"
               type="warning"
-              v-else-if="Message.isDisabled == 0 && buttonsShow.start"
+              v-has="'start'"
+              v-else-if="Message.isDisabled == 0 "
             >
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>
             </Button>
-            <Button class="mr15 w90" type="warning" v-else-if="Message.isDisabled != 0 && Message.isDisabled != 1 && buttonsShow.start">
+            <Button
+              v-has="'start'"
+              class="mr15 w90" type="warning" v-else>
               <span class="center">未选中</span>
             </Button>
             <Button class="mr15" @click="viewProduct">
@@ -857,14 +861,14 @@ export default {
         size: 10,
         total: 0
       },
-      buttonsShow:{},//权限按钮展示
+      // buttonsShow:{},//权限按钮展示
 
     };
   },
   methods: {
     // 修改弹框
     visChange(type) {
-      this.$refs.formValidate2.resetFields();
+      // this.$refs.formValidate2.resetFields();
     },
     //时间
     lt9(v) {
