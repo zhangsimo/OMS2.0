@@ -66,7 +66,7 @@
         <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
         <vxe-table-column field="orderAmt" title="入库金额"></vxe-table-column>
         <vxe-table-column field="orderDate" title="入库日期"></vxe-table-column>
-        <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
+        <vxe-table-column field="code" title="采购单号"></vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
       <div class="page-warp">
@@ -159,6 +159,7 @@ export default class ProcurementModal extends Vue {
   }
 
   @Emit('getPlanOrder')
+  @Emit('selectRow')
   private ok() {
     if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
     this.shows = false;
@@ -193,10 +194,11 @@ export default class ProcurementModal extends Vue {
   }
 
   private cellClickEvent() {
-    console.log("单元格点击事件");
+    // console.log("单元格点击事件");
   }
   private radioChangeEvent({ row }) {
     this.selectRow = row;
+    // console.log(this.selectRow)
     this.tableDataBm = row.details || [];
   }
 

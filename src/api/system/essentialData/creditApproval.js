@@ -21,7 +21,7 @@ return axios.request({
 // 查看明细接口
 export function viewDetails (params) {
   return axios.request({
-      url: `${api.wmsApi}/guestAdjust/guestCreditHistory`,
+      url: `${api.wmsApi}/guestAdjust/findById`,
       method: 'get',
       params
   })

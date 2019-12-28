@@ -183,8 +183,8 @@
                         title="组装数量"
                         width="100"
                       ></vxe-table-column>
-                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>
-                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>
+<!--                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>-->
+<!--                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>-->
                       <vxe-table-column field="TaxPrice" title="含税单价" width="100"></vxe-table-column>
                       <vxe-table-column field="TaxAmt" title="含税金额" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
@@ -404,6 +404,7 @@
                       :height="rightTableHeight"
                       :data="Leftcurrentrow.processProductVO"
                       :footer-method="addFooter"
+                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                     >
                       <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -413,7 +414,7 @@
                       <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                       <vxe-table-column
                         field="orderQty"
-                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}} "
+                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="数量"
                         width="100"
                       ></vxe-table-column>
@@ -528,7 +529,7 @@ export default {
         qucikTime: ""
       },
       rowId:'',//选择配件明细的id
-      tabKey: "0",
+      tabKey: 0,
       modal2: true,
       split1: 0.2,
       tabIndex: 0,
@@ -733,7 +734,7 @@ export default {
     }
   },
   created() {
-    if (this.tabKey === "0") {
+    if (this.tabKey === 0) {
       // 调接口获取配件组装列表信息
       this.getListzu(this.form);
     } else {
@@ -762,6 +763,7 @@ export default {
       this.tabKey = key;
       console.log(this.tabKey);
       if (this.tabKey === 0) {
+        // console.log(444444)
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -787,7 +789,7 @@ export default {
       params.processProductVO = params.processProductVO.length
         ? params.processProductVO[0]
         : {};
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         //配件组装保存
         baocun(params)
           .then(res => {
@@ -878,7 +880,7 @@ export default {
         ...this.Leftcurrentrow
       };
       params.processProductVO = params.processProductVO[0];
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         // 配件组装提交
         tijiao(params)
           .then(res => {
@@ -924,7 +926,7 @@ export default {
           title: '是否确定作废',
           onOk: async () => {
             const id = this.Leftcurrentrow.id;
-            if (this.tabKey === "0") {
+            if (this.tabKey === 0) {
               // 配件组装作废
               zuofei(id)
                 .then(res => {
@@ -1111,7 +1113,7 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -1119,7 +1121,7 @@ export default {
     },
     changeSize(size) {
       this.Left.page.size = size;
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(this.form);
       } else {
         this.getListchai(this.form);
@@ -1132,7 +1134,7 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         this.getListzu(params);
       } else {
         this.getListchai(params);
@@ -1155,7 +1157,7 @@ export default {
         this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
-      if (this.tabKey === "0") {
+      if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
         console.log('rrr',seleList);

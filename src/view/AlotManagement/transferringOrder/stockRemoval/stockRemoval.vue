@@ -254,7 +254,6 @@
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
-      @getArray="getArray"
       ref="selectSupplier"
       header-tit="调出方资料"
       @selectSupplierName="selectSupplierName"
@@ -288,7 +287,7 @@ import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
 import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
-
+import { findForAllot } from "_api/purchasing/purchasePlan";
 import {
   getList1,
   baocun,
@@ -315,6 +314,7 @@ export default {
   },
   data() {
     return {
+      getArray: [],
       tuneOut: true,
       flag: 0,
       ArrayValue: [],
@@ -552,12 +552,26 @@ export default {
   created() {
     // 调接口获取配件组装列表信息
     this.getList(this.form);
+    this.getArrayParams();
   },
   methods: {
-    //  获取子组件逐渐传过来的值
-    getArray(data) {
-      this.ArrayValue = data;
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        const { content } = res.data;
+        this.getArray = content;
+        console.log(content, "req");
+        content.forEach(item => {
+          this.ArrayValue.push(item.fullName);
+        });
+      });
     },
+    //  获取子组件逐渐传过来的值
+    // getArray(data) {
+    //   this.ArrayValue = data;
+    // },
     //配件返回的参数
     getPartNameList(val) {
       val.forEach(item => {
@@ -626,7 +640,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      console.log(params)
+      console.log(params);
       if (params.xinzeng) {
         delete params.status;
       }
@@ -639,24 +653,29 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      params.guestOrgid = this.guestOrgid;
+      for (var i = 0; i < this.getArray.length; i++) {
+        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+          // console.log(this.getArray[i], "this.getArray[i]");
+          params.guestOrgid = this.getArray[i].isInternalId;
+          params.guestId = this.getArray[i].id;
+        }
+      }
       //配件组装保存
-      // console.log(params, "params =>550");
       baocun(params)
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
-                // this.Leftcurrentrow.storeId = ""
-                // this.Leftcurrentrow.guestName = ""
-                // this.Leftcurrentrow.storeName =  "",
-                // this.Leftcurrentrow.createTime =  "",
-                // this.Leftcurrentrow.orderMan = "",
-                // this.Leftcurrentrow.remark =  "",
-                // this.Leftcurrentrow.serviceId =  "",
-                // this.Leftcurrentrow.detailVOS =  []
-
+            this.flag = 0;
+            // this.Leftcurrentrow.storeId = ""
+            // this.Leftcurrentrow.guestName = ""
+            // this.Leftcurrentrow.storeName =  "",
+            // this.Leftcurrentrow.createTime =  "",
+            // this.Leftcurrentrow.orderMan = "",
+            // this.Leftcurrentrow.remark =  "",
+            // this.Leftcurrentrow.serviceId =  "",
+            // this.Leftcurrentrow.detailVOS =  []
           }
         })
         .catch(e => {
@@ -665,8 +684,8 @@ export default {
     },
     xinzeng() {
       this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.createTime = ''
-      this.Leftcurrentrow.serviceId = ''
+      this.Leftcurrentrow.createTime = "";
+      this.Leftcurrentrow.serviceId = "";
       this.buttonShow = false;
       this.tuneOut = false;
       if (this.Left.tbdata.length === 0) {
@@ -868,7 +887,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row)
+      console.log(row);
       console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -899,12 +918,12 @@ export default {
         const res = await getListDetail(params);
         this.Leftcurrentrow.detailVOS = res.data;
       }
-      if(row.status.value === 0){
-        this.buttonShow = false
+      if (row.status.value === 0) {
+        this.buttonShow = false;
       }
-      if(row.status.value === 1){
+      if (row.status.value === 1) {
         // this.tuneOut = false
-        console.log(row.code)
+        console.log(row.code);
       }
     },
     //打开添加配件模态框

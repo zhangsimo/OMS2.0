@@ -4,22 +4,37 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询: </span>
+            <span>快速查询:</span>
           </div>
           <div class="db mr10">
-              <span class="">申请日期从：</span>
-              <DatePicker v-model="penSalesData.allotEnterTimeStart" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+            <span class>申请日期从：</span>
+            <DatePicker
+              v-model="penSalesData.allotEnterTimeStart"
+              type="datetime"
+              format="yyyy-MM-dd HH:mm:ss"
+              style="width:120px"
+            ></DatePicker>
           </div>
           <div class="db mr10">
-              <span class=" ml10">至：</span>
-              <DatePicker v-model="penSalesData.allotEnterTimeEnd" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+            <span class="ml10">至：</span>
+            <DatePicker
+              v-model="penSalesData.allotEnterTimeEnd"
+              type="datetime"
+              format="yyyy-MM-dd HH:mm:ss"
+              style="width:120px"
+            ></DatePicker>
           </div>
           <div class="db mr10">
-             <span>调 出 方 ：</span>
-              <Input v-model="penSalesData.guestName" style="width: 128px" />
-              <Button @click="getName" class="ml5" size="small" type="default">
-                                <i class="iconfont iconxuanzetichengchengyuanicon"></i>
-              </Button>
+            <span>调 出 方 ：</span>
+            <Input
+              clearable
+              @on-focus="getName"
+              v-model="penSalesData.guestName"
+              style="width: 128px"
+            />
+            <Button @click="getName" class="ml5" size="small" type="default">
+              <i class="iconfont iconxuanzetichengchengyuanicon"></i>
+            </Button>
           </div>
           <div class="db mr10">
             <Input
@@ -56,14 +71,13 @@
           highlight-hover-row
           @current-change="selectTabelData"
           :radio-config="{labelField: 'name', trigger: 'row'}"
-          @radio-change="radioChangeEvent"
         >
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="申请单" width="100"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="status" title="受理状态" width="100"></vxe-table-column>
+          <vxe-table-column field="status.name" title="受理状态" width="100"></vxe-table-column>
           <vxe-table-column field="orderMan" title="申请人" width="100"></vxe-table-column>
           <vxe-table-column field="createTime" title="申请日期" width="100"></vxe-table-column>
           <vxe-table-column field="createUname" title="提交人" width="100"></vxe-table-column>
@@ -81,7 +95,8 @@
               :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
-              @on-change="changePage" @on-page-size-change="changeSize"
+              @on-change="changePage"
+              @on-page-size-change="changeSize"
             />
           </div>
         </Col>
@@ -101,15 +116,16 @@
         </vxe-table>
       </div>
     </section>
-     <div slot="footer">
-      </div>
+    <div slot="footer"></div>
   </Modal>
 </template>
 
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
-import moment from 'moment'
+import moment from "moment";
+import { getParticulars } from "_api/system/partsExamine/partsExamineApi";
+
 export default {
   data() {
     return {
@@ -119,14 +135,14 @@ export default {
       tabList: [],
       // 调出方查询
       penSalesData: {
-        allotEnterTimeEnd: '', //申请单号
-        allotEnterTimeStart: '',
-        guestName: '',
-        guestId: '',
-        serviceId: ''
+        allotEnterTimeEnd: "", //申请单号
+        allotEnterTimeStart: "",
+        guestName: "",
+        guestId: "",
+        serviceId: ""
       },
       customerListOptions: [], //调出方下拉列表
-      tableData: [{name1: '123'}, {}, {}, {}],
+      tableData: [{ name1: "123" }, {}, {}, {}],
       TopTableData: [], //上侧表格list
       BottomTableData: [], //下侧表格list
       // 分页数据
@@ -139,31 +155,31 @@ export default {
       },
       xuanzhognList: [],
       checkRow: {},
-      currentData:[]
-    }
+      currentData: []
+    };
   },
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal
+        this.tabList = newVal;
       },
       deep: true
     },
     dcList: {
       handler(newVal) {
-        this.diaochuList = newVal
+        this.diaochuList = newVal;
       },
       deep: true
     },
-     dcName: {
+    dcName: {
       handler(newVal) {
-        this.penSalesData.guestName = newVal
+        this.penSalesData.guestName = newVal;
       },
       deep: true
     },
     dcId: {
       handler(newVal) {
-        this.penSalesData.guestId = newVal
+        this.penSalesData.guestId = newVal;
       },
       deep: true
     }
@@ -172,70 +188,77 @@ export default {
     tbdata: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     dcList: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     dcName: {
       type: String,
-      default: ''
+      default: ""
     },
     dcId: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   methods: {
-    radioChangeEvent({row}) {
-      console.log(row)
-      this.checkRow = row
-      this.currentData = row.detailVOS
-    },
+    // radioChangeEvent({ row }) {
+    //   console.log(row);
+    //   this.checkRow = row;
+    //   this.currentData = row.detailVOS;
+    // },
     //分页
     changePage(p) {
-      this.pageList.page = p
-      this.search(this.pageList.size, p)
+      this.pageList.page = p;
+      this.search(this.pageList.size, p);
     },
     changeSize(size) {
-      this.pageList.size = size
-      this.search(size, this.pageList.page)
+      this.pageList.size = size;
+      this.search(size, this.pageList.page);
     },
     getName() {
-      this.$emit('getName', 2)
+      this.$emit("getName", 2);
     },
     init() {
-      this.searchPartLayer = true
+      this.searchPartLayer = true;
     },
     init1() {
-      this.searchPartLayer = false
+      this.searchPartLayer = false;
     },
     //选中的日期
     selectDate(date) {
-      this.penSalesData.option1 = date
-      console.log(this.penSalesData.option1)
+      this.penSalesData.option1 = date;
+      // console.log(this.penSalesData.option1);
     },
     //搜索
-    search(size, num ) {
+    search(size, num) {
       if (this.penSalesData.allotEnterTimeStart) {
-        this.penSalesData.allotEnterTimeStart = moment(this.penSalesData.allotEnterTimeStart).format('YYYY-MM-DD HH:mm:ss')
+        this.penSalesData.allotEnterTimeStart = moment(
+          this.penSalesData.allotEnterTimeStart
+        ).format("YYYY-MM-DD HH:mm:ss");
       }
       if (this.penSalesData.allotEnterTimeEnd) {
-        this.penSalesData.allotEnterTimeEnd = moment(this.penSalesData.allotEnterTimeEnd).format('YYYY-MM-DD HH:mm:ss')
+        this.penSalesData.allotEnterTimeEnd = moment(
+          this.penSalesData.allotEnterTimeEnd
+        ).format("YYYY-MM-DD HH:mm:ss");
       }
-      for(var k in this.penSalesData) {
-        if(!this.penSalesData[k]) {
-          delete this.penSalesData[k]
+      for (var k in this.penSalesData) {
+        if (!this.penSalesData[k]) {
+          delete this.penSalesData[k];
         }
       }
-      this.$emit('search21', this.penSalesData, size, num)
+      this.$emit("search21", this.penSalesData, size, num);
+      // setTimeout(() => {
+      //   this.$parent.addProoo();
+      // }, 2000);
     },
     getParams() {
-      this.$emit('getLisw', this.penSalesData)
+      this.$emit("getLisw", this.penSalesData);
     },
     //确定
     chose() {
@@ -245,18 +268,23 @@ export default {
     //取消
     cancel() {},
     echoDate() {},
-    selectTabelData({row}) {
-      console.log(row)
-      this.checkRow = row
-      this.currentData = row.voList
+    selectTabelData({ row }) {
+      this.checkRow = row;
+
+      var params = {
+        mainId: row.id
+      };
+      getParticulars(params).then(res => {
+        this.currentData = res.data;
+        this.$emit("getArray", this.currentData);
+      });
     },
     ok() {
-       // 将选好的成品传父组件
-       console.log(this.checkRow)
-      this.$emit('ok', this.checkRow)
+      // 将选好的成品传父组件
+      this.$emit("ok", this.checkRow);
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -379,7 +407,7 @@ export default {
 
           &:after {
             background: #f8f8f8;
-            content: '';
+            content: "";
             position: absolute;
             left: 0px;
             top: 0px;

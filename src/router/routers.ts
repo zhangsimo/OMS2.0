@@ -1969,7 +1969,7 @@ export default [
       {
         path: '/auth/role',
         name: 'role',
-        mark: '10003',
+        // mark: '10003',
         meta: {
           icon: 'arrow-graph-up-right',
           title: '角色管理',
