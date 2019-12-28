@@ -52,10 +52,10 @@
           <Input :value='customerDetails.payableAmt' style="width: 150px" disabled ></Input>
         </FormItem>
         <FormItem label='信用等级:' >
-            <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
-            <Select style="width:150px">
+            <Input v-model='customerDetails.tgrade' style="width: 150px" disabled></Input>
+            <!-- <Select style="width:150px">
               <Option v-for="item in customerDetails" :value="item.id" :key="item.id">{{ item.tgrade }}</Option>
-            </Select>
+            </Select> -->
           </FormItem>
         </Col>
         <Col span="8">
@@ -105,19 +105,19 @@
     <div>
       <p class="title">近6个月及以上业绩情况</p>
       <div class=boxheight>
-        <Table :columns="columns" :data="sixMonthPerformance " border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns" :data="sixMonthPerformance" border stripe size="small" height="200" show-summary ></Table>
       </div>
     </div>
     <div>
       <p class="title">近6个月额度调整记录</p>
       <div class=boxheight>
-        <Table :columns="columns2" :data="customerIfo" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns2" :data="customerIfo" border stripe size="small" height="200" show-summary></Table>
       </div>
     </div>
     <div>
       <p class="title">未清销售订单</p>
       <div class=boxheight>
-        <Table :columns="columns3" :data="sellOrderList" border stripe size="small" height="200" show-summary :summary-method="handleSummary"></Table>
+        <Table :columns="columns3" :data="sellOrderList" border stripe size="small" height="200" show-summary></Table>
       </div>
     </div>
   </div>
