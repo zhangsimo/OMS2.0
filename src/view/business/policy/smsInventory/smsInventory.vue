@@ -26,18 +26,18 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun" type="default" class="mr10">保存</Button>
+            <Button @click="baocun" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">保存</Button>
           </div>
           <div class="db">
-            <Button @click="editPro" type="default" class="mr10">提交</Button>
+            <Button @click="editPro" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">提交</Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="cancellation">
+            <Button class="mr10" @click="cancellation" :disabled="this.formPlan.statuName!== '草稿'">
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable">
+            <Button class="mr10" @click="printTable" :disabled="this.formPlan.statuName!== '草稿'">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -256,6 +256,7 @@ import More from "./components/More";
 import moment from "moment";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
+import * as tools from "../../../../utils/tools";
 export default {
   name: "smsInventory",
   components: {
@@ -589,22 +590,46 @@ export default {
         this.$Message.error("只有草稿状态才能提交");
         return;
       }
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-          this.formPlan.billStatusId = 1;
-          getSubmitList(this.formPlan).then(res => {
-            if (res.code == 0) {
-              this.$Message.success("提交成功");
-              this.getList();
+      // this.$refs.form.validate(valid => {
+      //   if (valid) {
+      //     this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
+      //       "YYYY-MM-DD HH:mm:ss"
+      //     );
+      //     this.formPlan.billStatusId = 1;
+      //     getSubmitList(this.formPlan).then(res => {
+      //       if (res.code == 0) {
+      //         this.$Message.success("提交成功");
+      //         this.getList();
+      //       }
+      //     });
+      //   } else {
+      //     callback(new Error("带*必填"));
+      //   }
+      // });
+      this.$Modal.confirm({
+        title: '是否确定提交订单',
+        onOk: async () => {
+          this.$refs.form.validate(valid => {
+            if (valid) {
+              this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
+                "YYYY-MM-DD HH:mm:ss"
+              );
+              this.formPlan.billStatusId = 1;
+              getSubmitList(this.formPlan).then(res => {
+                if (res.code == 0) {
+                  this.$Message.success("提交成功");
+                  this.getList();
+                }
+              });
+            } else {
+              callback(new Error("带*必填"));
             }
           });
-        } else {
-          callback(new Error("带*必填"));
-        }
-      });
+        },
+        onCancel: () => {
+          this.$Message.info('取消提交');
+        },
+      })
     },
     //保存
     baocun() {
