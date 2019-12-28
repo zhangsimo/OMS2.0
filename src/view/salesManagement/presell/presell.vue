@@ -962,6 +962,7 @@
                 this.$Message.success('保存成功');
                 this.getLeftList()
                 this.formPlan = {}
+                this.limitList = {};
                 this.$refs.formPlan.resetFields();
               }
             } catch (errMap) {
@@ -993,6 +994,7 @@
               this.isNew = true
               this.formPlan = {}
               this.id = null
+              this.limitList = {};
               this.$refs.formPlan.resetFields();
               this.getLeftList()
             }
@@ -1015,6 +1017,7 @@
                 this.$Message.success('操作成功');
                 this.getLeftList()
                 this.id = null
+                this.limitList = {};
                 this.$refs.formPlan.resetFields();
                 this.formPlan = {}
               }
@@ -1041,6 +1044,7 @@
               this.getLeftList()
               this.formPlan = {}
               this.tableData = []
+              this.limitList = {};
               this.$refs.formPlan.resetFields();
               this.isNew=true
               this.id=null

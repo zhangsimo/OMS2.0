@@ -359,7 +359,8 @@ import Newplace from "./Newplace";
 import AddInoice from "./AddInoice";
 import {
   getDigitalDictionary,
-  getCustomerInformation
+  getCustomerInformation,
+  getCustomer
 } from "@/api/system/essentialData/clientManagement";
 
 export default {
@@ -405,6 +406,27 @@ export default {
         callback(new Error("只能输入数字和字母"));
       }
     };
+    const fullName = (rule, value, callback) => {
+      if(value){
+        let obj = {}
+        if(this.data.id){
+          obj.id = this.data.id
+          obj.name = this.data.fullName
+        } else {
+          obj.name = this.data.fullName
+        }
+        // callback()
+        getCustomer(obj).then(res=>{
+         if(res.data){
+           callback(new Error('客户名称不可重复'))
+         } else {
+           callback();
+         }
+        })
+      } else {
+        callback(new Error('客户全称不可为空'))
+      }
+    }
     return {
       Subordinate: [
         {
@@ -603,7 +625,7 @@ export default {
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
         billTypeId: [{ required: true, message: " ", trigger: "change" }],
-        fullName: [{ required: true, message: " ", trigger: "blur" }],
+        fullName: [{ required: true, validator: fullName, trigger: "blur" }],
         contactor: [{ required: true, message: " ", trigger: "blur" }],
         provinceId: [{ required: true, message: " ", trigger: "change" }],
         contactorTel: [

@@ -86,7 +86,7 @@
         :data="creaditList"
         :customerIfo="customerIfo"
         :customerDetails="customerDetails"
-        :sixsixMonthPerformance="sixMonthPerformance"
+        :sixMonthPerformance="sixMonthPerformance"
         :sellOrderList="sellOrderList"
       ></CreditLineApplication>
       <div slot="footer">
@@ -129,7 +129,7 @@ export default {
       // 客户信息数据
       customerIfo: [],
       // 客户数据明细
-      customerDetails: [],
+      customerDetails: {},
       sixMonthPerformance: [],
       sellOrderList: [],
       // 申请日期数据
@@ -310,14 +310,7 @@ export default {
     },
     // 获取日期
     dateChange(value) {
-      // console.log(value)
       this.dateArray = value;
-      // if(value[0] === ""){
-      //   this.dateList = {}
-      // }else {
-      //   this.dateList.startApplyTime = value[0] + " " + "00:00:00"
-      //   this.dateList.endApplyTime = value[1] + " " + "23:59:59"
-      // }
     },
     handleSummary({ columns, data }) {
       // console.log(columns, data);
@@ -341,26 +334,28 @@ export default {
     },
     // 查看明细
     openDetail() {
-      if (this.creditData.guestId === "") {
+      if (this.creditData.id === "") {
         this.$Message.error("请选择一条数据");
       } else {
         this.CreditLineApplicationShow = true;
-        viewDetails(this.creditData).then(res => {
+        console.log(this.creditData)
+        viewDetails({id:this.creditData.id}).then(res => {
           console.log(res.data)
           if (res.code === 0) {
-            this.customerIfo = res.data.changeVOList;
-            this.customerDetails = res.data.guestAdjustVOList;
+            this.creaditList = this.creditData
+            this.customerIfo = res.data.guestAdjustVOList
+            this.customerDetails = res.data.guestAdjustVO;
             this.sixMonthPerformance = res.data.sixMonthPerformance;
             this.sellOrderList = res.data.sellOrderList;
+            console.log(this.customerIfo,this.sixMonthPerformance)
           }
         });
       }
     },
     // 单击表格行获取行数据
     onRowClick(value) {
-      // console.log(value)
       this.flag = true;
-      this.creditData.guestId = value.guestId;
+      this.creditData = value;
       approvalStatus({ instanceId: value.id }).then(res => {
         if (res.code == "0") {
           this.statusData = res.data.operationRecords;

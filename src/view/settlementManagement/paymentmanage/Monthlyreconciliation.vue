@@ -7,7 +7,7 @@
             <div class="wlf">
               <div class="db ml20">
                 <span>对账门店：</span>
-                <Select v-model="model1" class="w150">
+                <Select v-model="model1" class="w150" @on-change="storeAccount">
                   <Option
                     v-for="item in Branchstore"
                     :value="item.value"
@@ -65,15 +65,15 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Select v-model="collectionAccountName" style="width:200px" class="mr10">
+                <!-- <Select v-model="collectionAccountName" style="width:200px" class="mr10">
                   <Option
                     v-for="item in collectionAccountList"
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select>
-                <!-- <Input type="text" class="w140 mr10" />
-                <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
+                </Select> -->
+                <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled/>
+                <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
                 <span>开户行：</span>
                 <Input v-model="openingBank" class="w140 mr10" disabled />
                 <span>收款账号：</span>
@@ -188,7 +188,8 @@ import { creat } from "./../components";
 import {
   getReconciliation,
   getSettlement,
-  Preservation
+  Preservation,
+  getStore
 } from "@/api/bill/saleOrder";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -199,12 +200,6 @@ export default {
   },
   data() {
     return {
-      collectionAccountList:[
-        {
-          value:'1',
-          label:''
-        }
-      ],
       companyList:[{
           value:'1',
           label:''
@@ -535,6 +530,7 @@ export default {
       this.companyInfoId = this.parameter.guestId;
       this.store = this.parameter.orgId;
       let obj = { orgId, startDate, endDate, guestId };
+      this.storeAccount(orgId)
       getReconciliation(obj).then(res => {
         let Statementexcludingtax = 0;
         let Taxincludedpartsstatement = 0;
@@ -589,9 +585,13 @@ export default {
       this.companyInfo = data.shortName;
       this.companyInfoId = data.id;
     },
-    // 往来单位
-    Dealings() {
-      this.$refs.selectDealings.openModel();
+    // 对账门店
+    storeAccount(val) {
+      console.log(val)
+      getStore({orgId:val}).then(res=>{
+        console.log(res)
+        this.companyList
+      })
     },
     // 已勾选结算类型计算
     getSettlementComputed() {
