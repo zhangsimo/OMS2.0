@@ -404,6 +404,7 @@
                       :height="rightTableHeight"
                       :data="Leftcurrentrow.processProductVO"
                       :footer-method="addFooter"
+                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                     >
                       <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -413,7 +414,7 @@
                       <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                       <vxe-table-column
                         field="orderQty"
-                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}} "
+                        :edit-render="{name: 'input', attrs: {type: 'number'}, events: {keyup: keydownEvent}}"
                         title="数量"
                         width="100"
                       ></vxe-table-column>
