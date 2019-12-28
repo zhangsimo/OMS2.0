@@ -121,19 +121,19 @@
                   <FormItem label="供应商：" prop="supplyName">
                     <Row class="w160">
                       <Col span="19">
-                        <!-- <Input
+                        <Input
                           v-model="formPlan.supplyName"
                           :disabled="isinput"
                           placeholder="请选择供应商"
                           readonly
-                        />-->
-                        <Select v-model="formPlan.supplyName" label-in-value filterable readonly>
+                        />
+                        <!-- <Select v-model="formPlan.supplyName" label-in-value filterable readonly>
                           <Option
                             v-for="item in this.ArrayList"
                             :value="item"
                             :key="item"
                           >{{ item }}</Option>
-                        </Select>
+                        </Select> -->
                       </Col>
                       <Col span="5">
                         <Button
