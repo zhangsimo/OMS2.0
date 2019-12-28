@@ -853,6 +853,7 @@ export default {
               this.$Message.success("保存成功");
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields()
+              this.limitList = {};
               this.isAdd=true
             }
           } catch (errMap) {
@@ -925,6 +926,7 @@ export default {
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("提交成功");
+              this.limitList = {};
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
