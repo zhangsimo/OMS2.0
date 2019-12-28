@@ -150,21 +150,13 @@
                       ></Input>
                     </FormItem>
                     <FormItem label="创建人：" prop="planDate">
-                      <Input
-                        class="w160"
-                        :disabled="Leftcurrentrow.status.value != 0"
-                        :value="Leftcurrentrow.orderMan"
-                      ></Input>
+                      <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="planOrderNum">
                       <Input disabled :value="Leftcurrentrow.planOrderNum" class="w160"></Input>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
-                      <Input
-                        class="w160"
-                        disabled
-                        :value="Leftcurrentrow.serviceId"
-                      ></Input>
+                      <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
                     </FormItem>
                   </Form>
                 </div>
@@ -300,7 +292,7 @@ export default {
   },
   data() {
     return {
-      serviceIdValue:'',
+      serviceIdValue: "",
       ArrayValue: [],
       staaa: false,
       dcData: [],
@@ -507,7 +499,7 @@ export default {
         orderMan: "",
         remark: "",
         serviceId: "",
-        planOrderNum:'',
+        planOrderNum: "",
         detailVOS: []
       },
       currentDataP: [],
@@ -704,8 +696,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            console.log(this.tableData1, "this.tableData1");
-            //console.log(this.tableData1);
+            // console.log(this.tableData1, "this.tableData1");
             // this.$Message.success("获取成品列表成功");
           }
         })
@@ -741,10 +732,9 @@ export default {
         });
     },
     searchPro(params, size, page) {
-      //console.log(params, "huoqucanshu");
       chengping({ ...params }, size, page)
         .then(res => {
-          console.log(res, "res =>754");
+          // console.log(res, "res =>754");
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
@@ -786,10 +776,9 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      this.Leftcurrentrow.planOrderNum = this.serviceIdValue
+      this.Leftcurrentrow.planOrderNum = this.serviceIdValue;
       const params = {
         mainId: row.id
       };
@@ -913,8 +902,8 @@ export default {
       }
     },
     getOkList(list) {
-      console.log(list, "list  =912");
-      this.serviceIdValue = list.serviceId
+      // console.log(list, "list  =912");
+      this.serviceIdValue = list.serviceId;
       const item = {
         index: 1,
         xinzeng: "1",
@@ -923,6 +912,7 @@ export default {
           name: "草稿",
           value: 0
         },
+        codeId: list.id,
         code: list.serviceId,
         statuName: "草稿",
         storeName: "",
@@ -930,7 +920,7 @@ export default {
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
-        serviceId:'',
+        serviceId: "",
         detailVOS: this.ArrayValue
       };
       this.Left.tbdata.unshift(item);
