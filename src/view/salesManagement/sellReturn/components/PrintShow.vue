@@ -207,11 +207,11 @@
 
                if(this.id){
                  let id=this.id
-                 console.log('我是IDIDiidididid',id)
+                 // console.log('我是IDIDiidididid',id)
                  getPrint(id).then(res=>{
                    this.onelist = res.data;
                    this.details = res.data.details;
-                   console.log('哈哈哈哈哈',res)
+                   // console.log('哈哈哈哈哈',res)
                    if(res.code === 0){
                      this.printShow = true
                      this.onelist = res.data
