@@ -348,10 +348,10 @@ export default {
         viewDetails(this.creditData).then(res => {
           console.log(res.data)
           if (res.code === 0) {
-            this.customerIfo = res.data.changeVOList;
-            this.customerDetails = res.data.guestAdjustVOList;
-            this.sixMonthPerformance = res.data.sixMonthPerformance;
-            this.sellOrderList = res.data.sellOrderList;
+            // this.customerIfo = res.data.changeVOList;
+            // this.customerDetails = res.data.guestAdjustVOList;
+            // this.sixMonthPerformance = res.data.sixMonthPerformance;
+            // this.sellOrderList = res.data.sellOrderList;
           }
         });
       }
