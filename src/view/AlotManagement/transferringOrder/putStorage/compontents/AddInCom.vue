@@ -26,7 +26,7 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input disabled v-model="penSalesData.guestName" style="width: 128px" />
+            <Input @on-focus="getName" v-model="penSalesData.guestName" style="width: 128px" />
             <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
             </Button>
