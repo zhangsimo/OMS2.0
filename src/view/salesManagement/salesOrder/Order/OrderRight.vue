@@ -156,7 +156,7 @@
                 size="small"
                 class="mr10"
                 @click="getRUl"
-                :disabled="draftShow != 0 || !formPlan.id"
+                :disabled="draftShow != 0 "
               >
                 <span class="center">
                   <Icon custom="iconfont icondaoruicon icons" />导入配件
@@ -180,7 +180,7 @@
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0 || !formPlan.id"
+              :disabled="draftShow != 0 "
               class="mr10"
               @click="openGodownEntryModal"
 
@@ -189,7 +189,7 @@
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0 || !formPlan.id"
+              :disabled="draftShow != 0 "
               class="mr10"
               @click="openAddressShow"
             >编辑发货信息</Button>

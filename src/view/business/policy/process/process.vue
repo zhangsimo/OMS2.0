@@ -418,7 +418,7 @@
                         title="数量"
                         width="100"
                       ></vxe-table-column>
-                      <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+                      <vxe-table-column field="remark" title="备注" width="100"  :edit-render="{name: 'input'}"></vxe-table-column>
                       <vxe-table-column field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
                       <vxe-table-column field="outableQty" title="可用数量" width="100"></vxe-table-column>
                       <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>

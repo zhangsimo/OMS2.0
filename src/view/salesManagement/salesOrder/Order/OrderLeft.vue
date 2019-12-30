@@ -92,7 +92,7 @@ export default {
       this.isAdd=false
 
       this.tableData.unshift({
-        billStatusId: { enum: "", value: "", name: "" },
+        billStatusId: { enum: "", value: "0", name: "草稿" },
         orderMan: this.$store.state.user.userData.staffName,
         orderManId:  this.$store.state.user.userData.id
       });
