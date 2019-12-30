@@ -444,6 +444,7 @@ export default {
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
+          this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
           this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;
