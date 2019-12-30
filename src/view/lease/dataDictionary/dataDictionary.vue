@@ -22,8 +22,8 @@
                 </div>
               </div>
               <div class="p10 dicTypeTop">
-                <Button type="default" @click="addNewModelFun" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-                <Button @click="changeModelFun" type="default" class="mr10 w90"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
+                <Button type="default" @click="addNewModelFun" class="mr10 w90" v-has="'addLedt'"><Icon type="md-add" size="14" /> 新增</Button>
+                <Button @click="changeModelFun" type="default" class="mr10 w90" v-has="'changeLedt'"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
               </div>
               <div class="data-dic-wrap">
                 <Tree @on-check-change="checkChange" :data="treeData"  multiple></Tree>
@@ -35,8 +35,8 @@
               数据字典项
             </div>
             <div class="p10">
-              <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-              <Button @click="changeNew" type="default" class="mr10 w90"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
+              <Button type="default" @click="addNew" class="mr10 w90" v-has="'addRight'"><Icon type="md-add" size="14" /> 新增</Button>
+              <Button @click="changeNew" type="default" class="mr10 w90" v-has="'changeRight'"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
             </div>
             <Table class="table-highlight-row" @on-current-change="selectTable"  size="small" highlight-row :loading="loading" border :stripe="true" :columns="columns" :data="tbdata"></Table>
 

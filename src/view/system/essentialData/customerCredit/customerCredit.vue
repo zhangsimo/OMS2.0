@@ -12,14 +12,15 @@
           <Icon custom="iconfont iconchaxunicon icons" />查询
         </span>
       </Button>
-      <Button class="mr10" @click="addLimit">
+      <Button class="mr10" @click="addLimit" v-has="'applyCredit'">
         <span class="center">申请信用额度</span>
       </Button>
-      <Button class="mr10" @click="opensurveyShow" v-show="this.state == 0">
+      <Button class="mr10" @click="opensurveyShow" v-show="this.state == 0" v-has="'credit'">
         <span class="center">申请信用调查</span>
       </Button>
       <Button
         class="mr10"
+        v-has="'credit'"
         v-show="this.state === 1 && this.researchStatus === 2"
         @click="opensurveyShow"
       >
@@ -28,6 +29,7 @@
       <Button
         class="mr10"
         @click="openAdjustment"
+        v-has="'credit'"
         v-show="this.state === 1 && this.researchStatus === 2"
       >
         <span class="center">额度调整</span>

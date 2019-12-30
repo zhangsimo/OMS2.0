@@ -38,21 +38,25 @@
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationDraft"
+                  v-has="'save'"
                 >保存草稿</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="preservationSubmission"
+                  v-has="'save'"
                 >保存并提交</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="getReportReconciliationt"
+                  v-has="'export'"
                 >导出对账清单</button>
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
                   type="button"
                   @click="getReportParts"
+                  v-has="'export'"
                 >导出配件明细</button>
               </div>
             </div>

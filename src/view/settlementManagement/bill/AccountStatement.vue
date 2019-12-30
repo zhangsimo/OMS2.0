@@ -46,7 +46,7 @@
           </div>
           <div class="db ml10">
             <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
                 <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
                 <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
@@ -66,9 +66,10 @@
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement"
+          v-has="'examine'"
         >对账单结算</button>
-        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="viewStatement">查看对账单</button>
-        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Revoke">撤销</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="viewStatement" v-has="'examine'">查看对账单</button>
+        <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Revoke" v-has="'revoke'">撤销</button>
         <Table
           border
           :columns="columns1"

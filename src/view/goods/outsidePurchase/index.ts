@@ -275,7 +275,7 @@ export default class InterPurchase extends Vue {
     this.selectRowState = null;
     this.formPlanmain.orderMan = this.user.userData.staffName;
     this.formPlanmain.orderManId = this.user.userData.id;
-    his.formPlanmain.storeId = this.defaultStore;
+    this.formPlanmain.storeId = this.defaultStore;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();

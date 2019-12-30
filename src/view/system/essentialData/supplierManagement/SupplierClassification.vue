@@ -1,12 +1,12 @@
 <template>
     <div style="height: 100%">
       <div class="mb20">
-        <Button class=" mr10" @click="addClientType">
+        <Button class=" mr10" @click="addClientType" v-has="'addLeft'">
               <span class="center">
                 <Icon type="md-add" />添加客户分类
               </span>
         </Button>
-        <Button class=" mr10" style="border: none" @click="changeClient">
+        <Button class=" mr10" style="border: none" @click="changeClient" v-has="'changeLeft'">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
