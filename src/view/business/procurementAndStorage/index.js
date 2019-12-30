@@ -29,29 +29,53 @@ export default {
     SelectSupplier
   },
   data() {
+    // let changeNumber = (rule, value, callback) => {
+    //   if (!value && value != '0') {
+    //     callback(new Error("请输入大于或等于0的正整数"));
+    //   } else {
+    //     const reg = /^([0]|[1-9][0-9]*)$/
+    //     if (reg.test(value)) {
+    //       callback();
+    //     } else {
+    //       callback(new Error("请输入大于或等于0的正整数"));
+    //
+    //     }
+    //   }
+    // };
     let changeNumber = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("请输入大于或等于0的正整数"));
+      if (!value && value != "0") {
+        callback(new Error("请输入大于0的正整数"));
       } else {
-        const reg = /^([0]|[1-9][0-9]*)$/
+        const reg = /^[1-9]+\d?$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("请输入大于或等于0的正整数"));
-
+          callback(new Error("请输入大于0的正整数"));
         }
       }
     };
+    // let money = (rule, value, callback) => {
+    //   if (!value && value != '0') {
+    //     callback(new Error("最多保留4位小数"));
+    //   } else {
+    //     const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+    //     if (reg.test(value)) {
+    //       callback();
+    //     } else {
+    //       callback(new Error("最多保留4位小数"));
+    //
+    //     }
+    //   }
+    // };
     let money = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("最多保留4位小数"));
+      if (!value && value != "0") {
+        callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+        const reg = /^\d+(\.\d{0,2})?$/i;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("最多保留4位小数"));
-
+          callback(new Error("最多保留2位小数"));
         }
       }
     };
@@ -205,6 +229,7 @@ export default {
     },
     //选择状态
     selectTypetList(val) {
+      console.log(val)
       this.leftPage.num = 1
       this.moreQueryList = {}
       this.getLeftLists()
@@ -464,33 +489,43 @@ export default {
 
     //入库
     godown() {
-      this.$refs.formPlan.validate(async (valid) => {
-        if (valid) {
-          if (this.formPlan.details && this.formPlan.details.length < 1) {
-            this.$message.error('请至少选择一条配件')
-            return
-          }
-          try {
-            await this.$refs.xTable.validate()
-            this.formPlan.billStatusValue = 4
-            this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
-            let res = await saveList(this.formPlan)
-            if (res.code === 0) {
-              this.getLeftLists()
-              this.formPlan = {
-                billStatusValue: 0,
-                code: ''
+      if (this.formPlan.details && this.formPlan.details.length < 1) {
+        this.$message.error('请至少选择一条配件')
+        return
+      }
+      this.$Modal.confirm({
+        title: '是否确定入库',
+        onOk: async () => {
+          this.$refs.formPlan.validate(async (valid) => {
+            if (valid) {
+
+              try {
+                await this.$refs.xTable.validate()
+                this.formPlan.billStatusValue = 4
+                this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
+                let res = await saveList(this.formPlan)
+                if (res.code === 0) {
+                  this.getLeftLists()
+                  this.formPlan = {
+                    billStatusValue: 0,
+                    code: ''
+                  }
+                  this.allMoney = 0
+                  this.$Message.success('保存成功');
+                }
+              } catch (errMap) {
+                this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
               }
-              this.allMoney = 0
-              this.$Message.success('保存成功');
+            } else {
+              this.$Message.error('*为必填项');
             }
-          } catch (errMap) {
-            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
-          }
-        } else {
-          this.$Message.error('*为必填项');
-        }
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消成功');
+        },
       })
+
 
     },
 
@@ -527,8 +562,9 @@ export default {
         billStatusName: '草稿',
         details: [],
         code: '',
-       storeId :this.StoreId, //调入仓库
-        orderMan: this.$store.state.user.userData.staffName,
+        storeId :this.StoreId, //调入仓库
+        orderMan: this.$store.state.user.userData.staffName
+
       }
       this.legtTableData.unshift(this.formPlan)
     },
