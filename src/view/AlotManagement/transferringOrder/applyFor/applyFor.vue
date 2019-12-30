@@ -558,6 +558,7 @@
         },
         //右侧表格复选框选中
         selectChange(msg){
+          console.log(msg,'msg')
           this.checkboxArr = msg.selection
           console.log(this.checkboxArr)
         },
