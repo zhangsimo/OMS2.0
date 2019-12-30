@@ -226,7 +226,6 @@
                       type="date"
                       placeholder="请选择订货日期"
                       v-model="formPlanmain.orderDate"
-                      :options="options1"
                       :disabled="isInput"
                     ></DatePicker>
                   </FormItem>
