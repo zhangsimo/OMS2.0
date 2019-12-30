@@ -34,7 +34,6 @@ export default {
   methods: {
     getList() {
       getClientTreeList().then(res => {
-        // console.log(res)
         if (res.code == 0) {
           this.list = res.data;
           let leverOne = [];

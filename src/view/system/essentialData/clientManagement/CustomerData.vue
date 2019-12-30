@@ -17,12 +17,12 @@
       </Button>
     </div>
     <div class="operation">
-      <Button class="w90 mr10" @click="addClient">
+      <Button class="w90 mr10" @click="addClient" v-has="'addRight'">
         <span class="center">
           <Icon type="md-add" />新增
         </span>
       </Button>
-      <Button class="w90 mr10" @click="changeClient">
+      <Button class="w90 mr10" @click="changeClient" v-has="'changeRight'">
         <span class="center">
           <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
         </span>
@@ -38,11 +38,11 @@
         :on-success="onSuccess"
         :before-upload="beforeUpload"
       >
-        <Button type="default" class="mr10">
+        <Button type="default" class="mr10" v-has="'import'">
           <Icon custom="iconfont icondaoruicon icons" />导入
         </Button>
       </Upload>
-      <Button class="mr10" @click="downTemplate">
+      <Button class="mr10" @click="downTemplate" v-has="'down'">
         <span class="center">
           <Icon custom="iconfont iconxiazaiicon icons" />下载模板
         </span>
@@ -444,6 +444,7 @@ export default {
       getCustomerDetails(data).then(res => {
         if (res.code == 0) {
           this.clientList = res.data;
+          this.clientList.belongSystem = JSON.parse(this.clientList.belongSystem).value
           this.$refs.child.placeList = this.clientList.guestLogisticsVOList;
           this.$refs.child.relevanceClientShow = this.clientList.guestVOList;
           this.$refs.child.invoice = this.clientList.guestTaxpayerVOList;

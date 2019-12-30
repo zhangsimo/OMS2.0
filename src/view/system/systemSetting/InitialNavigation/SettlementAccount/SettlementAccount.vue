@@ -5,28 +5,28 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <Button class="mr10 w90" @click="add">
+            <Button class="mr10 w90" @click="add" v-has="'add'">
               <span class="center">
                 <Icon custom="iconfont iconxinzengicon icons" />新增
               </span>
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable" @click="update">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="update" v-has="'change'">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable" @click="del">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="del" v-has="'delelte'">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable" @click="onOffAccount">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="onOffAccount" v-has="'disabled'">
               <span class="center" v-if="buttonOn">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>

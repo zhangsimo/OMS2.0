@@ -60,7 +60,7 @@
       </FormItem>
       <FormItem label="品牌: ">
         <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in getBrand" :value="item" :key="item">{{ item }}</Option>
+          <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="提交人: ">
@@ -93,6 +93,8 @@ import SelectSupplier from "./selectSupplier.vue";
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
+// @ts-ignore
+import { getParamsBrand } from "_api/purchasing/purchasePlan";
 
 @Component({
   components: {
@@ -101,7 +103,6 @@ import { getSales } from "@/api/salesManagment/salesOrder";
 })
 export default class MoreSearch extends Vue {
   @Prop({ default: "" }) private readonly type!: string;
-  @Prop(Array) private readonly getBrand;
 
   private serchN: boolean = false;
 
@@ -149,6 +150,14 @@ export default class MoreSearch extends Vue {
     this.showSelf = true;
   }
 
+  private brandLists:Array<any> = new Array();
+  private async getBrand() {
+    let res:any = await getParamsBrand();
+    if(res.code == 0) {
+      this.brandLists = res.data;
+    }
+  }
+
   private guseData = {
     loading: false,
     lists: new Array()
@@ -176,6 +185,9 @@ export default class MoreSearch extends Vue {
     this.reset();
     if (this.salesList.length <= 0) {
       this.getAllSales();
+    }
+    if(this.brandLists.length <= 0) {
+      this.getBrand();
     }
     this.serchN = true;
   }

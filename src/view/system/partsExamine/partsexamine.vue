@@ -20,7 +20,7 @@
         <span>审核日期：</span>
         <DatePicker @on-change="selectDate" type="daterange" placeholder="年/月/日 - 年/月/日" class="w200 mr10"></DatePicker>
         <Button type="warning" @click="search" class="mr10 w90"><Icon type="ios-search" size="14" /> 查询</Button>
-        <Button :loading="approvalLoading" v-if="selectTable.auditSign==0" type="default" @click="approval" class="mr10"><i class="iconfont mr5 iconshenheicon"></i>配件审核</Button>
+        <Button :loading="approvalLoading" v-if="selectTable.auditSign==0" type="default" @click="approval" class="mr10" v-has="'audit'"><i class="iconfont mr5 iconshenheicon"></i>配件审核</Button>
       </div>
     </div>
     </div>

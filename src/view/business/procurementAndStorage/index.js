@@ -29,33 +29,58 @@ export default {
     SelectSupplier
   },
   data() {
+    // let changeNumber = (rule, value, callback) => {
+    //   if (!value && value != '0') {
+    //     callback(new Error("请输入大于或等于0的正整数"));
+    //   } else {
+    //     const reg = /^([0]|[1-9][0-9]*)$/
+    //     if (reg.test(value)) {
+    //       callback();
+    //     } else {
+    //       callback(new Error("请输入大于或等于0的正整数"));
+    //
+    //     }
+    //   }
+    // };
     let changeNumber = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("请输入大于或等于0的正整数"));
+      if (!value && value != "0") {
+        callback(new Error("请输入大于0的正整数"));
       } else {
-        const reg = /^([0]|[1-9][0-9]*)$/
+        const reg = /^[1-9]+\d?$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("请输入大于或等于0的正整数"));
-
+          callback(new Error("请输入大于0的正整数"));
         }
       }
     };
+    // let money = (rule, value, callback) => {
+    //   if (!value && value != '0') {
+    //     callback(new Error("最多保留4位小数"));
+    //   } else {
+    //     const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+    //     if (reg.test(value)) {
+    //       callback();
+    //     } else {
+    //       callback(new Error("最多保留4位小数"));
+    //
+    //     }
+    //   }
+    // };
     let money = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("最多保留4位小数"));
+      if (!value && value != "0") {
+        callback(new Error("最多保留2位小数"));
       } else {
-        const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
+        const reg = /^\d+(\.\d{0,2})?$/i;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("最多保留4位小数"));
-
+          callback(new Error("最多保留2位小数"));
         }
       }
     };
     return {
+      StoreId :'', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
       orderType: 99,
@@ -133,16 +158,21 @@ export default {
       this.$refs.selectSupplier.init();
     },
     //获取选中供应商
-    getSupplierName(v) {
-      if (v) {
-        //赋值供应商名称
-        this.formPlan.supplyName = v.fullName || "";
-        //赋值供应商id
-        let guestId = v.id || "";
-        this.$set(this.formPlan, 'guestId', guestId)
-        //赋值票据类型id
-        this.formPlan.billType = v.billTypeId || "";
-      }
+    getSupplierName(val) {
+      this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "supplyName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+      // if (v) {
+      //   //赋值供应商名称
+      //   this.formPlan.supplyName = v.fullName || "";
+      //   //赋值供应商id
+      //   let guestId = v.id || "";
+      //   this.$set(this.formPlan, 'guestId', guestId)
+      //   //赋值票据类型id
+      //   this.formPlan.billType = v.billTypeId || "";
+      // }
+
     },
     //快速查询获取日期
     getDataQuick(v) {
@@ -199,6 +229,7 @@ export default {
     },
     //选择状态
     selectTypetList(val) {
+      console.log(val)
       this.leftPage.num = 1
       this.moreQueryList = {}
       this.getLeftLists()
@@ -268,10 +299,40 @@ export default {
     },
     // 获取仓库
     async getWarehouse() {
+      this.$refs.formPlan.resetFields()
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
-        this.WarehouseList = res.data
+        if(res.code === 0){
+          this.WarehouseList = res.data
+          res.data.map(item => {
+            if(item.isDefault == true){
+              this.formPlan.storeId = item.id
+              this.StoreId = item.id
+            }
+          })
+        }
+
       }
+    },
+
+    //改变客户
+    async changeClient(value) {
+      // console.log('44444',value)
+      if (!value) {
+        return false;
+      }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+        return   item.id === value
+      })
+
+      console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
+
+      }
+      console.log( this.formPlan.billTypeId,  this.formPlan.settleTypeId)
     },
     //计算表格内总价格数据
     countAmount(row) {
@@ -428,33 +489,43 @@ export default {
 
     //入库
     godown() {
-      this.$refs.formPlan.validate(async (valid) => {
-        if (valid) {
-          if (this.formPlan.details && this.formPlan.details.length < 1) {
-            this.$message.error('请至少选择一条配件')
-            return
-          }
-          try {
-            await this.$refs.xTable.validate()
-            this.formPlan.billStatusValue = 4
-            this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
-            let res = await saveList(this.formPlan)
-            if (res.code === 0) {
-              this.getLeftLists()
-              this.formPlan = {
-                billStatusValue: 0,
-                code: ''
+      if (this.formPlan.details && this.formPlan.details.length < 1) {
+        this.$message.error('请至少选择一条配件')
+        return
+      }
+      this.$Modal.confirm({
+        title: '是否确定入库',
+        onOk: async () => {
+          this.$refs.formPlan.validate(async (valid) => {
+            if (valid) {
+
+              try {
+                await this.$refs.xTable.validate()
+                this.formPlan.billStatusValue = 4
+                this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
+                let res = await saveList(this.formPlan)
+                if (res.code === 0) {
+                  this.getLeftLists()
+                  this.formPlan = {
+                    billStatusValue: 0,
+                    code: ''
+                  }
+                  this.allMoney = 0
+                  this.$Message.success('保存成功');
+                }
+              } catch (errMap) {
+                this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
               }
-              this.allMoney = 0
-              this.$Message.success('保存成功');
+            } else {
+              this.$Message.error('*为必填项');
             }
-          } catch (errMap) {
-            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
-          }
-        } else {
-          this.$Message.error('*为必填项');
-        }
+          })
+        },
+        onCancel: () => {
+          this.$Message.info('取消成功');
+        },
       })
+
 
     },
 
@@ -490,7 +561,10 @@ export default {
         billStatusValue: 0,
         billStatusName: '草稿',
         details: [],
-        code: ''
+        code: '',
+        storeId :this.StoreId, //调入仓库
+        orderMan: this.$store.state.user.userData.staffName
+
       }
       this.legtTableData.unshift(this.formPlan)
     },

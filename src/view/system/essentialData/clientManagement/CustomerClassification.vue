@@ -1,12 +1,12 @@
 <template>
   <div style="height: 100%">
     <div class="mb20">
-      <Button class="mr10" @click="addClientType">
+      <Button class="mr10" @click="addClientType" v-has="'addLeft'">
         <span class="center">
           <Icon type="md-add" />添加客户分类
         </span>
       </Button>
-      <Button class="mr10" style="border: none" @click="changeClient">
+      <Button class="mr10" style="border: none" @click="changeClient" v-has="'changeLeft'">
         <span class="center">
           <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
         </span>
@@ -18,7 +18,7 @@
     <Modal v-model="modalShow" :title="title">
       <Form ref="form" :label-width="100" :rules="rules" :model="newOne">
         <FormItem label="分类名称：" prop="title">
-          <Input placeholder="请输入分类名称" v-model="newOne.title" style="width: 250px"/>
+          <Input placeholder="请输入分类名称" v-model="newOne.title" style="width: 250px" />
         </FormItem>
         <FormItem label="上级名称:">
           <Select
@@ -92,11 +92,8 @@ export default {
     },
     //点击获取当前信息
     changeOneList(data) {
-      this.newOne = data[0];
-      this.$store.commit(
-        "setManagementId",
-        data[0]
-      );
+      this.newOne = Object.assign({},data[0]);
+      this.$store.commit("setManagementId", data[0]);
     },
     //新增客户分类
     addClientType() {

@@ -11,9 +11,9 @@
       <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <Button type="warning" class="mr20" @click="queryTight"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
-    <Button type="warning" class="mr20" @click="addNew">新增紧俏品</Button>
+    <Button type="warning" class="mr20" @click="addNew" v-has="'add'">新增紧俏品</Button>
 <!--    <Button type="default" class="mr10 w90"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>-->
-    <Button type="default"  class="mr10 w90" @click="deleteTight"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
+    <Button type="default"  class="mr10 w90" @click="deleteTight" v-has="'delete'"><i class="iconfont mr5 iconlajitongicon"></i>删除</Button>
     <Upload
       ref="upload"
       style="display: inline-block"
@@ -25,9 +25,9 @@
       :on-success="onSuccess"
       :before-upload ='beforeUpload'
     >
-      <Button type="default" class="mr10"  > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧</Button>
+      <Button type="default" class="mr10" v-has="'import'" > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧</Button>
     </Upload>
-    <Button class="mr10" @click="downTemplate">
+    <Button class="mr10" @click="downTemplate" v-has="'down'">
       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
     </Button>
   </div>

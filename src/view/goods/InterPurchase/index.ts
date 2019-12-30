@@ -269,6 +269,7 @@ export default class InterPurchase extends Vue {
     this.selectRowState = null;
     this.formPlanmain.orderMan = this.user.userData.staffName;
     this.formPlanmain.orderManId = this.user.userData.id;
+    this.formPlanmain.storeId = this.defaultStore;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
@@ -624,6 +625,7 @@ export default class InterPurchase extends Vue {
     })
   }
 
+  private defaultStore:string = '';
   // 初始化字典
   private async init() {
     let res: any = await api.optGroupInit();
@@ -654,6 +656,7 @@ export default class InterPurchase extends Vue {
         this.currencyMap.push({ value: currencyMap[el], label: el })
       }
       if(defaultStore) {
+        this.defaultStore = defaultStore;
         this.formPlanmain.storeId = defaultStore;
       }
     }

@@ -30,6 +30,7 @@
           </div>
           <div class="db">
             <Button class="mr10" @click="addPro"
+            v-has="'add'"
               ><Icon type="md-add" /> 新增</Button
             >
           </div>
@@ -39,6 +40,7 @@
               @click="saveHandle('formplanref')"
               class="mr10"
               :disabled="isInput"
+              v-has="'save'"
               ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
             >
           </div>
@@ -47,21 +49,25 @@
               class="mr10"
               @click="submit('formplanref')"
               :disabled="isInput"
+              v-has="'submit'"
               ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
             >
           </div>
           <div class="db">
             <Button @click="print" class="mr10" :disabled="selectTableRow === null"
+            v-has="'print'"
               ><i class="iconfont mr5 icondayinicon"></i> 打印</Button
             >
           </div>
           <div class="db">
             <Button @click="abandoned" class="mr10" :disabled="!selectTableRow || selectTableRow.billStatusId.name != '草稿'"
+            v-has="'invalidate'"
               ><Icon type="md-close" size="14" /> 作废</Button
             >
           </div>
           <div class="db">
             <Button @click="showFee" class="mr10"
+            v-has="'reg'"
               ><i class="iconfont mr5 iconshenheicon"></i> 费用登记</Button
             >
           </div>
@@ -135,6 +141,7 @@
                           size="small"
                           type="default"
                           :disabled="isInput"
+                          v-has="'supplier'"
                           ><i
                             class="iconfont iconxuanzetichengchengyuanicon"
                           ></i></Button
@@ -213,7 +220,6 @@
                       placeholder="请选择订货日期"
                       v-model="formPlanmain.orderDate"
                       :disabled="isInput"
-                      :options="options1"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="预计到货日期：">
@@ -277,6 +283,7 @@
                       class="mr10"
                       @click="selectPlan"
                       :disabled="isInput || formPlanmain.guestId.length <= 0"
+                      v-has="'selectProject'"
                       >选择采购计划</Button
                     >
                   </div>
@@ -286,6 +293,7 @@
                       class="mr10"
                       @click="delPart"
                       :disabled="isInput"
+                      v-has="'delete'"
                       ><Icon custom="iconfont iconlajitongicon icons" />
                       删除配件</Button
                     >
@@ -296,6 +304,7 @@
                       class="mr10"
                       :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"
+                      v-has="'adj'"
                       >订单调整</Button
                     >
                   </div>
@@ -305,6 +314,7 @@
                       class="mr10"
                       :disabled="isInput"
                       @click="showGoodsInfo"
+                      v-has="'info'"
                       >收货信息</Button
                     >
                   </div>
@@ -314,6 +324,7 @@
                       class="mr10"
                       @click="showModel('purchaseAmount')"
                       :disabled="isInput"
+                      v-has="'amount'"
                       >采购金额填写</Button
                     >
                   </div>
@@ -323,6 +334,7 @@
                       class="mr10"
                       @click="showModel('apportionmentExpenses')"
                       :disabled="isInput"
+                      v-has="'expenses'"
                       >分摊费用填写</Button
                     >
                   </div>

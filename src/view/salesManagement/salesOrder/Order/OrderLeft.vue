@@ -5,6 +5,7 @@
     </div>
     <div class="orderCenter">
       <vxe-table
+        ref="currentRowTable"
         border
         align="center"
         size="mini"
@@ -59,17 +60,23 @@ export default {
   },
   data() {
     return {
+      PtRow:{
+        billStatusId: { enum: "", value: "0", name: "草稿" },
+        orderMan: this.$store.state.user.userData.staffName,
+        orderManId: this.$store.state.user.userData.id,
+        new: true,
+        _highlight: true
+      },
       page: {
         total: 0,
         size: 10,
         num: 1
       },
       tableData: [],
-      isAdd:true,//判断是否新增
       query: {
         showPerson: 1
       }, //更多搜索信息
-
+      Flaga: false
     };
   },
   mounted() {
@@ -86,13 +93,15 @@ export default {
   methods: {
     // 新增展示
     getAdd() {
-      if (!this.isAdd) {
+      if (!this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
       this.isAdd=false
 
+      this.tableData.unshift(this.PtRow);
+      this.$parent.$parent.isAdd = false
       this.tableData.unshift({
-        billStatusId: { enum: "", value: "", name: "" },
+        billStatusId: { enum: "", value: "0", name: "草稿" },
         orderMan: this.$store.state.user.userData.staffName,
         orderManId:  this.$store.state.user.userData.id
       });
@@ -148,10 +157,26 @@ export default {
       // else{
       //
       // }
-      this.$emit("getOneOrder", data.row);
-      this.$store.commit("setOneOrder", data.row);
-      // console.log('00000',data)
-
+      if(data.row == null) return;
+      let currentRowTable = this.$refs["currentRowTable"];
+      if(!this.Flaga && !this.isAdd){
+        this.$Modal.confirm({
+          title: '您正在编辑单据，是否需要保存',
+          onOk: () => {
+            currentRowTable.clearCurrentRow();
+            this.$emit('refresh','你好！');
+            this.Flaga = true
+          },
+          onCancel: () => {
+            this.isAdd = true;
+            this.tableData.splice(0, 1);
+            currentRowTable.clearCurrentRow();
+          },
+        })
+      }else {
+        this.$emit("getOneOrder", data.row);
+        this.$store.commit("setOneOrder", data.row);
+      }
     }
   },
   watch: {

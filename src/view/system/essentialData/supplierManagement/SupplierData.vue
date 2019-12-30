@@ -21,12 +21,12 @@
       </Button>
     </div>
     <div class="operation">
-      <Button class="w90 mr10" @click="addClient">
+      <Button class="w90 mr10" @click="addClient" v-has="'addRight'">
         <span class="center">
           <Icon type="md-add" />新增
         </span>
       </Button>
-      <Button class="w90 mr10" @click="changeClient">
+      <Button class="w90 mr10" @click="changeClient" v-has="'changeRight'">
         <span class="center">
           <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
         </span>
@@ -42,11 +42,11 @@
           :on-success="onSuccess"
           :before-upload="beforeUpload"
         >
-        <Button type="default" class="mr10">
+        <Button type="default" class="mr10" v-has="'import'">
           <Icon custom="iconfont icondaoruicon icons" />导入
         </Button>
       </Upload>
-      <Button class="mr10" @click="downTemplate">
+      <Button class="mr10" @click="downTemplate" v-has="'down'">
         <span class="center">
           <Icon custom="iconfont iconxiazaiicon icons" />下载模板
         </span>
@@ -329,7 +329,6 @@ export default {
       data.supplierTypeFirst = this.supplier.id;
       let res = await getSupplierformation(data);
       if (res.code == 0) {
-        console.log(res, "res ===>332");
         this.loading = false;
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
@@ -371,7 +370,6 @@ export default {
     //选中一条信息
     pitchSupplier(currentRow) {
       this.pitchSupplierOne = currentRow;
-      console.log(currentRow, "currentRow");
     },
     addClient() {
       this.clientList = {};
@@ -389,13 +387,11 @@ export default {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
-          console.log(data, "this.clientList=>388");
-
-          // let res = await getNewSupplier(data);
-          // if (res.code === 0) {
-          //   this.clientDataShow = false;
-          //   this.getlist();
-          // }
+          let res = await getNewSupplier(data)
+          if (res.code === 0) {
+            this.clientDataShow = false;
+            this.getlist();
+          }
         } else {
           this.$Message.error("信息填写错误");
         }
@@ -418,8 +414,9 @@ export default {
       this.pitchSupplierOne.isClient == 1
         ? (this.pitchSupplierOne.isClient = true)
         : (this.pitchSupplierOne.isClient = false);
+      this.pitchSupplierOne.belongSystem = JSON.parse(this.pitchSupplierOne.belongSystem).value
       this.clientList = this.pitchSupplierOne;
-      console.log(this.clientList, "this.clientList =>418");
+      console.log(this.pitchSupplierOne, "this.clientList =>418");
     },
     //批量上传失败
     onFormatError(file) {
@@ -429,15 +426,16 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       this.getlist();
+      console.log(response)
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
-          desc: response
+          desc: response.message
         });
       } else {
         this.$Notice.success({
           title: "导入成功",
-          desc: response
+          desc: response.message
         });
       }
     },

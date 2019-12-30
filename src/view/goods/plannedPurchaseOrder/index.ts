@@ -111,7 +111,7 @@ export default class PlannedPurchaseOrder extends Vue {
       },
       {
         title: '提交人',
-        key: 'updateUname',
+        key: 'auditor',
         minWidth: 100
       },
       {
@@ -288,6 +288,9 @@ export default class PlannedPurchaseOrder extends Vue {
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
+    this.formPlanmain.orderMan = this.user.userData.staffName;
+    this.formPlanmain.orderManId = this.user.userData.id;
+    this.formPlanmain.storeId = this.defaultStore;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
@@ -633,6 +636,7 @@ export default class PlannedPurchaseOrder extends Vue {
     })
   }
 
+  private defaultStore:string = '';
   // 初始化字典
   private async init() {
     let res: any = await api.optGroupInit();
@@ -658,6 +662,7 @@ export default class PlannedPurchaseOrder extends Vue {
         this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
       }
       if(defaultStore) {
+        this.defaultStore = defaultStore;
         this.formPlanmain.storeId = defaultStore;
       }
     }

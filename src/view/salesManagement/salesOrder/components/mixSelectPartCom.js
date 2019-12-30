@@ -292,7 +292,6 @@ export const mixSelectPartCom = {
       this.selectTableItem = v;
     },
     throwData() {
-      console.log("selectPartName");
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         // this.searchPartLayer = false;

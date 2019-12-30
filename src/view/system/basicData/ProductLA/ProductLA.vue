@@ -59,13 +59,14 @@
               :before-upload="handleBeforeUpload"
               :on-success="handleSuccess"
             >
-              <Button class="mr10">
+              <Button class="mr10" v-has="'import'"
+              >
                 <span class="center"><Icon custom="iconfont icondaoruicon icons" />批量导入产品线分配关系</span>
               </Button>
             </Upload>
           </div>
           <div class="db">
-            <Button class="mr10" @click="down">
+            <Button class="mr10" @click="down" v-has="'down'">
               <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
             </Button>
           </div>
@@ -159,12 +160,12 @@
             ></Page>
           </div>
           <div class="trans-btn w110">
-            <Button class="ml10 w90" @click="moveOn">
+            <Button class="ml10 w90" @click="moveOn" v-has="'shfit-in'">
               <span class="center">
                 <Icon custom="iconfont iconziyuan14 icons" />移入
               </span>
             </Button>
-            <Button class="ml10 mt30 w90" @click="moveOff">
+            <Button class="ml10 mt30 w90" @click="moveOff" v-has="'shfit-out'">
               <span class="center">
                 <Icon custom="iconfont iconfanhuiicon icons" />移出
               </span>
