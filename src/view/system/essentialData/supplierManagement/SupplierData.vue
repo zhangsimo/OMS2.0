@@ -389,13 +389,13 @@ export default {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
-          console.log(data, "this.clientList=>388");
+          // console.log(data, "this.clientList=>388");
 
           // let res = await getNewSupplier(data);
-          // if (res.code === 0) {
-          //   this.clientDataShow = false;
-          //   this.getlist();
-          // }
+          if (res.code === 0) {
+            this.clientDataShow = false;
+            this.getlist();
+          }
         } else {
           this.$Message.error("信息填写错误");
         }
