@@ -19,7 +19,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" :disabled="buttonDisable" @click="del" v-has="'delete'">
+            <Button class="mr10 w90" :disabled="buttonDisable" @click="del" v-has="'delelte'">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
