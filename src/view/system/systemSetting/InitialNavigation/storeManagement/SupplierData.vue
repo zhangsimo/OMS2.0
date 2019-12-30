@@ -224,6 +224,7 @@ export default {
         let data = this.clientList;
         data.softOpenDate = this.changeTime(data.softOpenDate);
         let res = await getNewSupplier(data);
+        console.log(res)
         if (res.code == 0) {
           this.$message.success("保存成功");
           this.clientDataShow = false;

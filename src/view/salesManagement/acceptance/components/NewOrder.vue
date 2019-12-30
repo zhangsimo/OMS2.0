@@ -92,7 +92,7 @@
           <vxe-table-column
             field="orderQty"
             title="采购数量"
-            :edit-render="{name: 'input'}"
+            disabled
           ></vxe-table-column>
           <vxe-table-column
             field="orderPrice"

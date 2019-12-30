@@ -405,6 +405,8 @@ export default class Fittings extends Vue {
       })
       this.cloud.page.total = res.data.totalElements;
       this.cloud.loading = false;
+    } else {
+      this.$Message.error('添加失败')
     }
   }
   // 查询
