@@ -222,8 +222,8 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
-          <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button v-has="'Determined'" type="primary" @click="Determined">确定</Button>
+          <Button v-has="'cancel'" type="default">取消</Button>
         </div>
       </Modal>
     </div>

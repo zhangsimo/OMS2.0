@@ -19,7 +19,7 @@
               </Select>
             </div>
             <div class="db">
-              <Button type="default"  @click="more" class="mr10">
+              <Button type="default" @click="more" class="mr10">
                 <i class="iconfont mr5 iconchaxunicon"></i>更多
               </Button>
             </div>
@@ -29,7 +29,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button  v-has="'save'" type="default" class="mr10" @click="baocun1">
+              <Button v-has="'save'" type="default" class="mr10" @click="baocun1">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
@@ -39,7 +39,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button  v-has="'delivery'"   class="mr10" @click="chuku">
+              <Button v-has="'delivery'" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
@@ -174,6 +174,7 @@
                   <div class="clearfix">
                     <div class="fl mb5">
                       <Button
+                        v-has="'addMountings'"
                         size="small"
                         :disabled="buttonDisable == 1"
                         class="mr10"
@@ -183,12 +184,17 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="GoodsInfoModal">
+                      <Button
+                        v-has="'GoodsInfoModal'"
+                        size="small"
+                        class="mr10"
+                        @click="GoodsInfoModal"
+                      >
                         <i class="iconfont mr5 iconlajitongicon"></i> 编辑发货信息
                       </Button>
                     </div>
@@ -236,8 +242,8 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
-          <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button v-has="'Determined'" type="primary" @click="Determined">确定</Button>
+          <Button v-has="'cancel'" type="default">取消</Button>
         </div>
       </Modal>
     </div>
@@ -314,6 +320,7 @@ export default {
   },
   data() {
     return {
+      idsId: [],
       getArray: [],
       tuneOut: true,
       flag: 0,
@@ -611,7 +618,8 @@ export default {
     // },
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
-      console.log(msg);
+      this.idsId.push(msg.row.id);
+      console.log(msg.row.id, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -960,10 +968,11 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
+      console.log(seleList, "seleList");
       let arr = [];
       console.log(seleList, "seleList");
       seleList.map(item => {
-        arr.push(item.partId);
+        arr.push(item.id);
       });
       const params = {
         ids: arr,
