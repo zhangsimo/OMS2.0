@@ -438,6 +438,7 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.provinceId = row.provinceId;
       this.formDateRight.cityId = row.cityId;
       this.formDateRight.countyId = row.countyId;
+      
       this.formDateRight.guestId = row.guestId;
       this.formDateRight.receiveAddress = row.address;
     }

@@ -428,12 +428,12 @@ export default {
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
-          desc: response
+          desc: response.message
         });
       } else {
         this.$Notice.success({
           title: "导入成功",
-          desc: response
+          desc: response.message
         });
       }
     },

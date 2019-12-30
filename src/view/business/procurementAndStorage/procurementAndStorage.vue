@@ -156,7 +156,7 @@
                   <vxe-table-column field="orderPrice" title="单价" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
                   <vxe-table-column  title="金额">
                     <template v-slot="{ row }">
-                      <span>{{ countAmount(row) |priceFilters }} </span>
+                      <span>{{ countAmount(row) | priceFilters }} </span>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>

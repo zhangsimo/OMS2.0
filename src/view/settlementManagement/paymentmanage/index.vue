@@ -42,7 +42,7 @@
           </div>
           <div class="db ml10">
             <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button">导出</button>
+              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
               <div slot="content">
                 <button
                   class="mr10 ivu-btn ivu-btn-default"
@@ -56,6 +56,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="Monthlyreconciliation"
+              v-has="'reconciliation'"
             >月结对账</button>
           </div>
         </div>
@@ -140,8 +141,8 @@
     </Modal>
     <Modal v-model="outStock" title="出库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)">导出</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print" v-has="'print'">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)" v-has="'export'">导出</button>
       </div>
       <Table
         border
@@ -156,8 +157,8 @@
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)">导出</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print" v-has="'print'">打印</button>
+        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)" v-has="'export'">导出</button>
       </div>
       <Table
         border

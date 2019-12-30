@@ -40,7 +40,17 @@
                   <div class="pane-made-hd">
                     调拨申请列表
                   </div>
-                  <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                  <Table
+                    ref="currentRowTable"
+                    :height="leftTableHeight"
+                    @on-current-change="selectTabelData"
+                    size="small"
+                    highlight-row
+                    border
+                    :stripe="true"
+                    :columns="Left.columns"
+                    :data="Left.tbdata"
+                    @on-row-click="selection"></Table>
                   <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
                         @on-page-size-change="changeSizeLeft" show-sizer show-total>
                   </Page>
@@ -55,10 +65,10 @@
                           ref="formPlan"
                           :rules="ruleValidate"
                           :label-width="120">
-                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable>
+                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                           </Col>
@@ -104,6 +114,7 @@
                     </div>
                   </div>
                   <vxe-table
+                    ref="xTable"
                     border
                     resizable
                     show-footer
@@ -114,22 +125,20 @@
                     :height="rightTableHeight"
                     :data="Right.tbdata"
                     :footer-method="addFooter"
+                    showOverflow="true"
+                    height="400"
                     @select-all="selectAll"
+                    @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
                     <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                     <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                     <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
-                      <template v-slot:edit="{ row }">
-                        <InputNumber
-                          :max="9999"
-                          :min="0"
-                          v-model="row.applyQty"
-                          :disabled="presentrowMsg !== 0"
-                        ></InputNumber>
-                      </template>
+                     <vxe-table-column
+                       field="applyQty"
+                       title="申请数量"
+                       :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
                     <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
                     <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
@@ -198,20 +207,25 @@
       },
       data() {
         let changeNumber = (rule, value, callback) => {
-          if (!value && value != '0') {
-            callback(new Error("请输入大于或等于0的正整数"));
+          if (!value && value != "0") {
+            callback(new Error("请输入大于0的正整数"));
           } else {
-            const reg =  /^\+?[1-9]\d*$/;
+            const reg = /^[1-9]+\d?$/;
             if (reg.test(value)) {
               callback();
             } else {
-              callback(new Error("请输入大于或等于0的正整数"));
+              callback(new Error("请输入大于0的正整数"));
             }
           }
         };
         return {
-          getArray:[],
-          ArrayValue:[],
+          //校验输入框的值
+          validRules: {
+            applyQty:[{ required: true, validator: changeNumber }]
+            // remark: [
+            //   { required: true, validator:changeNumber }
+            // ]
+          },
           StoreId :'', //默认仓
           ArraySelect: [], //供应商下拉框
           isInternalId:'',//后端需要的供应商的一个id
@@ -256,15 +270,6 @@
             { label:'已拒绝',value:'REJECTED' },
             { label:'已作废',value:'INVALID' },
           ],
-          //校验输入框的值
-          validRules: {
-            applyQty: [
-              { required: true, validator:changeNumber },
-            ],
-            // remark: [
-            //   { required: true, validator:changeNumber }
-            // ]
-          },
           List:[],
           Left: {
             page: {
@@ -360,7 +365,8 @@
           },
           mainId: null, //选中行的id
           clickdelivery: false,
-          Flaga: false
+          Flaga: false,
+          ArrayValue: []
         }
       },
       created() {
@@ -374,7 +380,6 @@
           findForAllot(req).then(res => {
             const { content } = res.data;
             this.getArray = content;
-            console.log(content, "req");
             content.forEach(item => {
               this.ArrayValue.push(item.fullName);
             });
@@ -425,6 +430,15 @@
         selectStoreId(val){
           // console.log(val)
         },
+        //判断表格能不能编辑
+        editActivedEvent({row}){
+          let xTable = this.$refs.xTable;
+          let orderQtyColumn = xTable.getColumnByField("applyQty");
+          let remarkColumn = xTable.getColumnByField("remark");
+          let isDisabled = this.presentrowMsg !== 0
+          orderQtyColumn.editRender.attrs.disabled = isDisabled;
+          remarkColumn.editRender.attrs.disabled = isDisabled;
+        },
         //添加配件按钮
         addPro(){
           this.$refs.SelectPartCom.init()
@@ -433,27 +447,38 @@
         SelectChange(){
           this.leftgetList()
         },
-        selectTabelData(){
-
-        },
+        selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          this.$refs.formPlan.validate((valid) => {
-            if (valid) {
-              let data = {}
-              data.id = this.rowId
-              data.orgid = this.rowOrgId
-              // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-              // data.guestId = this.guestidId
-              // data.guestId = this.formPlan.guestName
-              data.storeId = this.formPlan.storeId
-              // data.guestName = this.formPlan.guestName
-              data.orderDate = tools.transTime(this.formPlan.orderDate)
-              data.remark = this.formPlan.remark
-              data.createUname  = this.formPlan.createUname
-              data.serviceId = this.formPlan.serviceId
-              data.detailVOS = this.Right.tbdata
+              this.$refs.formPlan.validate(async valid => {
+                if (valid) {
+                  try {
+                    await this.$refs.xTable.validate();
 
+                    let data = {}
+                    data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+
+                    var date = new Date()
+                    var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                    // console.log(dataTime)
+                    var orderDateTime = this.formPlan.orderDate
+                    var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+                    console.log(orderTime,'orderDateTime')
+                    if (orderTime < dataTime) {
+                      this.$Message.error('调拨申请日期不小于当前日期')
+                      return
+                    }
               var date = new Date()
               var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
               // console.log(dataTime)
@@ -471,25 +496,31 @@
                 }
               }
 
-              save(data).then(res => {
-                if(res.code === 0){
-                  this.$message.success('保存成功！')
-                  this.leftgetList()
-                  this.formPlan.guestName = '',
-                    this.formPlan.storeId =  '',
-                    this.formPlan.remark =  '',
-                    this.formPlan.createUname =  '',
-                    this.formPlan.serviceId =  '',
-                    this.formPlan.orderDate = ''
-                    this.Right.tbdata = []
-                    this.isAdd = true
-                    this.$refs.formPlan.resetFields();
+                    save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('保存成功！')
+                        this.leftgetList()
+                        this.formPlan.guestName = '',
+                          this.formPlan.storeId =  '',
+                          this.formPlan.remark =  '',
+                          this.formPlan.createUname =  '',
+                          this.formPlan.serviceId =  '',
+                          this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.isAdd = true
+                        this.$refs.formPlan.resetFields();
+                      }
+                    })
+                  } catch (errMap) {
+                    this.$XModal.message({
+                      status: "error",
+                      message: "表格校验不通过！"
+                    });
+                  }
+                } else {
+                  this.$Message.error('*为必填！');
                 }
               })
-            } else {
-              this.$Message.error('*为必填！');
-            }
-          })
         },
         //作废
         cancellation(){
@@ -527,6 +558,7 @@
         },
         //右侧表格复选框选中
         selectChange(msg){
+          console.log(msg,'msg')
           this.checkboxArr = msg.selection
           console.log(this.checkboxArr)
         },
@@ -593,6 +625,7 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
+          console.log(ChildMessage)
         // let aaa =   ChildMessage.map(item => {
         //   return{
         //     name : item.baseType.firstType.typeName
@@ -688,11 +721,15 @@
             }
           })
         },
-
+        roleChangeEvent({ row }, evnt) {
+          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
+          console.log(evnt,'evnt')
+          // console.log(evnt.target.value)
+          // this.currentrow.storeId = evnt.target.value
+        },
 
         // 左边部分的当前行
         selection(row){
-          console.log(row,'row')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd){
@@ -779,7 +816,6 @@
           params.id = this.rowId
           findById(params).then(res => {
             if(res.code === 0){
-              console.log(res,'res ===>787')
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
             }
@@ -864,10 +900,11 @@
   .con-box{
     height: 700px;
   }
-  .w550{
-    width: 580px;
+  .w640{
+    width: 620px;
   }
-  .formItem {
-    margin-bottom: 15px;
-  }
+
+  /*.formItem {*/
+    /*margin-bottom: 15px;*/
+  /*}*/
 </style>
