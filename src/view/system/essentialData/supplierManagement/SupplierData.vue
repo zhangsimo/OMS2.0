@@ -426,6 +426,7 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       this.getlist();
+      console.log(response)
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",
