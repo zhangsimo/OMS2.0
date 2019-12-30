@@ -497,11 +497,11 @@ export default {
     },
     // 上传成功函数
     onSuccess (response) {
-      if(response.code == 0 ){
-        // console.log(response.data)
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.List[0])
-        }
+      if(response.code === 0 ){
+        // if (response.data.list && response.data.list.length > 0) {
+        //   this.warning(response.data.List[0])
+        // }
+        this.$Message.success(response.message)
       }else {
         this.$Message.error(response.message)
       }
