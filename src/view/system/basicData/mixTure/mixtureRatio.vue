@@ -7,12 +7,12 @@
           <div class="leftnav">
             <div class="db btn-title">
               <p class="mr10">配比清单:</p>
-              <Button class="mr10 w90" @click="add">
+              <Button class="mr10 w90" @click="add" v-has="'addLeft'">
                 <span class="center">
                   <Icon type="md-add" style="margin-right:2px"/>新增
                 </span>
               </Button>
-              <Button class="mr10 w90" @click="save">
+              <Button class="mr10 w90" @click="save" v-has="'saveLeft'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
@@ -50,17 +50,17 @@
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
               </Button>
-              <Button class="mr10 w90" @click="addCustomer">
+              <Button class="mr10 w90" @click="addCustomer" v-has="'addRight'">
                 <span class="center">
                   <Icon type="md-add" />添加物料
                 </span>
               </Button>
-              <Button class="mr10 w90" @click="removeCustomer">
+              <Button class="mr10 w90" @click="removeCustomer" v-has="'delete'">
                 <span class="center">
                   <Icon custom="iconfont iconlajitongicon icons" />删除配件
                 </span>
               </Button>
-              <Button class="mr10 w90" @click="saveCustomer">
+              <Button class="mr10 w90" @click="saveCustomer" v-has="'saveRight'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>

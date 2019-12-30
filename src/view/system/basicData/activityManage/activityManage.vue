@@ -33,16 +33,18 @@
             <Button type="warning" class="mr10 w90" @click="selectActApply">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
-            <Button type="warning" class="mr10 w90" @click="showApplication('apply')">申请活动</Button>
-            <Button @click="cancelApply" type="warning" class="mr10 w90">取消申请</Button>
+            <Button type="warning" class="mr10 w90" @click="showApplication('apply')" v-has="'apply'">申请活动</Button>
+            <Button @click="cancelApply" type="warning" class="mr10 w90" v-has="'noApply'">取消申请</Button>
             <Button
               type="warning"
               class="mr10"
               @click="showApplication('edit')"
               v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
+              v-has="'audit'"
             >编辑/重新提交</Button>
-            <Button type="warning" class="mr10 w90" @click="showReview" 
-              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'">审核</Button>
+            <Button type="warning" class="mr10 w90" @click="showReview"
+                    v-has="'audit'"
+                    v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'">审核</Button>
           </div>
         </div>
       </div>
@@ -85,7 +87,7 @@
             <Button @click="getActivity" type="warning" class="mr20">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
-            <Button @click="cancelActivity" type="warning" class="mr20">取消活动</Button>
+            <Button @click="cancelActivity" type="warning" class="mr20" v-has="'cancel'">取消活动</Button>
           </div>
         </div>
       </div>
@@ -149,10 +151,10 @@
     </section>
 
     <!-- 申请活动弹框 -->
-    <Modal 
-      width="900" 
-      v-model="applicationDialog" 
-      title="申请活动" 
+    <Modal
+      width="900"
+      v-model="applicationDialog"
+      title="申请活动"
       :mask-closable="false"
       @on-cancel="closeDialog">
       <div>
@@ -877,7 +879,7 @@ export default {
         this.data4 = res.data
         })
       }
-      
+
     },
     // 取消申请
     cancelApply() {
@@ -995,7 +997,7 @@ export default {
             this.data4 = []
           }
         })
-      } 
+      }
     },
     // 活动申请保存并提交按钮
     saveAndSubmit(){

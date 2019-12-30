@@ -19,37 +19,37 @@
               </Select>
             </div>
             <div class="db">
-              <Button type="default" @click="more" class="mr10">
+              <Button type="default"  @click="more" class="mr10">
                 <i class="iconfont mr5 iconchaxunicon"></i>更多
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="xinzeng">
+              <Button v-has="'add'" class="mr10" @click="xinzeng">
                 <Icon type="md-add" />新增
               </Button>
             </div>
             <div class="db">
-              <Button type="default" class="mr10" @click="baocun1">
+              <Button  v-has="'save'" type="default" class="mr10" @click="baocun1">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="buttonDisable == 1" @click="tijiao1">
+              <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="chuku">
+              <Button  v-has="'delivery'"   class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="zuofei1">
+              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="printTable">
+              <Button v-has="'print'" class="mr10" @click="printTable">
                 <Icon type="md-close" size="14" />打印
               </Button>
             </div>
