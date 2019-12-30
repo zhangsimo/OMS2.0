@@ -26,7 +26,12 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input @on-focus="getName" v-model="penSalesData.guestName" style="width: 128px" />
+            <Input
+              clearable
+              @on-focus="getName"
+              v-model="penSalesData.guestName"
+              style="width: 128px"
+            />
             <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
             </Button>
@@ -228,7 +233,7 @@ export default {
     //选中的日期
     selectDate(date) {
       this.penSalesData.option1 = date;
-      console.log(this.penSalesData.option1);
+      // console.log(this.penSalesData.option1);
     },
     //搜索
     search(size, num) {
@@ -264,21 +269,18 @@ export default {
     cancel() {},
     echoDate() {},
     selectTabelData({ row }) {
-      console.log(row);
       this.checkRow = row;
 
       var params = {
         mainId: row.id
       };
       getParticulars(params).then(res => {
-        console.log(res, "res");
         this.currentData = res.data;
         this.$emit("getArray", this.currentData);
       });
     },
     ok() {
       // 将选好的成品传父组件
-      console.log(this.checkRow);
       this.$emit("ok", this.checkRow);
     }
   }

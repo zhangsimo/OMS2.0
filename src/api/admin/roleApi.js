@@ -52,13 +52,10 @@ export function deleteById (data) {
 }
 
 // 添加或修改资源
-export function addOrUpdate (data, groupId) {
+export function addOrUpdate (data,) {
   return axios.request({
     url: `${api.authApi}/role/save`,
     method: 'post',
-    params: {
-      groupId
-    },
     data
   })
 }

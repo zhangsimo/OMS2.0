@@ -785,6 +785,7 @@ export default {
       var datas = conversionList(val);
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
+        this.Right.tbdata=[]
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });

@@ -1076,6 +1076,9 @@
       getRUl() {
         let id = this.id
         this.upurl = getup + 'id=' + id
+        this.limitList = {};
+        this.$refs.formPlan.resetFields();
+        this.formPlan = {}
       },
       //下载模板
       down() {

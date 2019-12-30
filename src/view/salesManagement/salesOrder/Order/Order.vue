@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      isAdd:true,//判断是否新增
       orderType: 6,
       typeList: [
         { value: 6, name: "全部" },
@@ -111,7 +112,6 @@ export default {
   methods: {
     //  调用left方法
     parentGetleft() {
-      console.log(252525);
       this.$refs.OrderLeft.gitlistValue();
     },
     //获取时间

@@ -71,4 +71,16 @@ export const approvalStatus = (data)=>{
   })
 }
 
+//切换企业号更换token
+export const changeToken = ( data ) =>{
+    data.grant_type = 'password',
+    data.client_id = 'oos',
+    data.client_secret = 'oosecret'
+  return axios.request({
+    url: api.tokenApi + '/uaa/token',
+    method: 'post',
+    data
+  })
+}
+
 

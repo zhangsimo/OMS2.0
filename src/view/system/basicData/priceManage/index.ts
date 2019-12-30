@@ -130,9 +130,9 @@ export default class PriceManage extends Vue {
     let res = await api.queryPart(params, data);
     if (res.code == 0) {
       this.part.loading = false;
-      console.log(res.data.content, "res.data.content ==>13311111");
       this.part.tbdata = res.data.content.map((el: any) => {
-        el.sellPrice = Number(el.sellPrice);
+        el.sellPrice =parseFloat(el.sellPrice).toFixed(2);
+        el.costPrice = parseFloat(el.costPrice).toFixed(2);
         return el;
       });
       this.part.page.total = res.data.totalElements;

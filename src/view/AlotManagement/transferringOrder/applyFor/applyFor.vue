@@ -52,27 +52,25 @@
                   <div class="clearfix purchase" ref="planForm">
                     <Form inline
                           :model="formPlan"
-                          :show-message="false"
                           ref="formPlan"
                           :rules="ruleValidate"
-                          :label-width="100">
-                      <FormItem label="调出方：" prop="guestName" class="fs12">
-                        <Row class="w500">
+                          :label-width="120">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
+                        <Row >
                           <Col span="22">
-                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
-                            <!--<Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">-->
-                              <!--<Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>-->
-                            <!--</Select>-->
+                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable>
+                            <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                          </Select>
                           </Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="storeId" >
+                      <FormItem class="formItem" label="调入仓库：" prop="storeId" >
                         <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
                         <DatePicker
                           type="date"
                           style="width: 160px"
@@ -81,8 +79,8 @@
                           :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
                       </FormItem>
-                      <FormItem label="备注：" prop="remark">
-                        <Input class="w500" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                      <FormItem class="formItem" label="备注：" prop="remark">
+                        <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
@@ -123,10 +121,10 @@
                     <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                    <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
+                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: roleChangeEvent}}" width="100">
                       <template v-slot:edit="{ row }">
                         <InputNumber
-                          :max="999999"
+                          :max="9"
                           :min="0"
                           v-model="row.applyQty"
                           :disabled="presentrowMsg !== 0"
@@ -139,9 +137,9 @@
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column title="紧销品" width="100" >
+                    <vxe-table-column title="紧销品" width="100">
                       <template v-slot="{ row,rowIndex }">
-                        <Checkbox disabled :value="row.isTightPart"></Checkbox>
+                        <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
                     <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
@@ -186,6 +184,7 @@
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";
+
     export default {
       name: "applyFor",
       components: {
@@ -211,6 +210,8 @@
           }
         };
         return {
+          getArray:[],
+          ArrayValue:[],
           StoreId :'', //默认仓
           ArraySelect: [], //供应商下拉框
           isInternalId:'',//后端需要的供应商的一个id
@@ -234,7 +235,8 @@
           ruleValidate: {
             guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'change' }],
             storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'change' }],
-            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }]
+            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+            remark:[{max: 100, message:'备注长度输入小于100个字符', trigger:'blur'}]
           },
           datadata: null,
           rowId:'', //当前行的id
@@ -361,7 +363,23 @@
           Flaga: false
         }
       },
+      created() {
+        this.getArrayParams()
+      },
       methods: {
+        getArrayParams() {
+          var req = {};
+          req.page = 1;
+          req.size = 20;
+          findForAllot(req).then(res => {
+            const { content } = res.data;
+            this.getArray = content;
+            console.log(content, "req");
+            content.forEach(item => {
+              this.ArrayValue.push(item.fullName);
+            });
+          });
+        },
         //删除配件
         Delete(){
           var set = this.checkboxArr.map(item=>item.id)
@@ -381,6 +399,8 @@
         },
         // 新增按钮
         addProoo(){
+          var date = new Date()
+          var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
           this.buttonDisable = false
           this.presentrowMsg = 0
           if (!this.isAdd) {
@@ -392,12 +412,13 @@
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
             this.formPlan.storeId =  this.StoreId, //调入仓库
-            this.formPlan.orderDate =  '', //申请调拨日期
+            this.formPlan.orderDate =  dataTime, //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
+
           // console.log(this.Left.tbdata)
         },
         // 调入仓库下拉改变事件
@@ -412,7 +433,9 @@
         SelectChange(){
           this.leftgetList()
         },
-        selectTabelData(){},
+        selectTabelData(){
+
+        },
         //保存按钮
         SaveMsg(){
           this.$refs.formPlan.validate((valid) => {
@@ -420,8 +443,8 @@
               let data = {}
               data.id = this.rowId
               data.orgid = this.rowOrgId
-              data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-              data.guestId = this.guestidId
+              // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+              // data.guestId = this.guestidId
               // data.guestId = this.formPlan.guestName
               data.storeId = this.formPlan.storeId
               // data.guestName = this.formPlan.guestName
@@ -430,6 +453,24 @@
               data.createUname  = this.formPlan.createUname
               data.serviceId = this.formPlan.serviceId
               data.detailVOS = this.Right.tbdata
+
+              var date = new Date()
+              var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+              // console.log(dataTime)
+              var orderDateTime = this.formPlan.orderDate
+              var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+              console.log(orderTime,'orderDateTime')
+              if (orderTime < dataTime) {
+                this.$Message.error('调拨申请日期不小于当前日期')
+                return
+              }
+              for (var i = 0; i < this.getArray.length; i++) {
+                if (this.getArray[i].fullName == this.formPlan.guestName) {
+                  data.guestOrgid = this.getArray[i].isInternalId;
+                  data.guestId = this.getArray[i].id;
+                }
+              }
+
               save(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -552,7 +593,6 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          console.log(ChildMessage)
         // let aaa =   ChildMessage.map(item => {
         //   return{
         //     name : item.baseType.firstType.typeName
@@ -560,13 +600,14 @@
         //   })
         //   console.log(aaa)
           let parts = ChildMessage.map( item => {
+
             return {
               partName : item.partStandardName,
               unit : item.minUnit,
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : '',
+              applyQty : 1,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -581,7 +622,7 @@
               partId : item.id,
               fullName : item.fullName,
               systemUnitId : item.minUnit,
-              isTightPart: !!item.isTightPart,
+              isTight: !!item.isTightPart == true? 1:0,
             }
           })
           console.log(parts)
@@ -647,8 +688,16 @@
             }
           })
         },
+        roleChangeEvent({ row }, evnt) {
+          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
+          console.log(evnt,'evnt')
+          // console.log(evnt.target.value)
+          // this.currentrow.storeId = evnt.target.value
+        },
+
         // 左边部分的当前行
         selection(row){
+          console.log(row,'row')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd){
@@ -681,8 +730,8 @@
                           this.formPlan.createUname =  '',
                           this.formPlan.serviceId =  '',
                           this.formPlan.orderDate = ''
-                        this.Right.tbdata = []
-                        this.$refs.formPlan.resetFields();
+                          this.Right.tbdata = []
+                          this.$refs.formPlan.resetFields();
                       }
                     })
                   } else {
@@ -735,6 +784,7 @@
           params.id = this.rowId
           findById(params).then(res => {
             if(res.code === 0){
+              console.log(res,'res ===>787')
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
             }
@@ -821,5 +871,8 @@
   }
   .w550{
     width: 580px;
+  }
+  .formItem {
+    margin-bottom: 15px;
   }
 </style>
