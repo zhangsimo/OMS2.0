@@ -29,7 +29,7 @@ export default {
   watch: {
       $route:{
           handler(val) {
-          this.$ButtonShow()
+              this.$ButtonShow()
           },
           deep:true
       }

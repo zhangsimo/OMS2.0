@@ -1290,7 +1290,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 配件管理"
+              title: "配件管理"
             },
             component: () =>
               import("@/view/system/basicData/Fittings/Fittings.vue")
@@ -1302,7 +1302,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 配件审核与标定"
+              title: "配件审核与标定"
             },
             component: () => import("@/view/system/partsExamine/partsexamine.vue")
           },
@@ -1313,7 +1313,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 产品分配"
+              title: "产品分配"
             },
             component: () => import('@/view/system/basicData/ProductLA/ProductLA.vue')
           },
@@ -1324,7 +1324,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 紧俏品管理"
+              title: "紧俏品管理"
             },
             component: () => import('@/view/system/essentialData/commoditiesInShortSupply/commoditiesInShortSupply.vue')
           },
@@ -1335,7 +1335,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 价格管理"
+              title: "价格管理"
             },
             component: () =>
               import("@/view/system/basicData/priceManage/priceManage.vue")
@@ -1358,7 +1358,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 活动管理"
+              title: "活动管理"
             },
             component: () => import("@/view/system/basicData/activityManage/activityManage.vue")
           },
@@ -1369,7 +1369,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 客户管理"
+              title: "客户管理"
             },
             component: () =>
               import(
@@ -1383,7 +1383,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 客户信用管理"
+              title: "客户信用管理"
             },
             component: () => import('@/view/system/essentialData/customerCredit/customerCredit.vue')
           },
@@ -1394,7 +1394,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 额度审批数据查询"
+              title: "额度审批数据查询"
             },
             component: () =>
               import(
@@ -1408,7 +1408,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 信用额度调整查询"
+              title: "信用额度调整查询"
             },
             component: () =>
               import(
@@ -1422,7 +1422,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 供应商管理"
+              title: "供应商管理"
             },
             component: () => import('@/view/system/essentialData/supplierManagement/supplierManagement.vue')
           },
@@ -1433,7 +1433,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 物流快递管理"
+              title: "物流快递管理"
             },
             component: () =>
               import("@/view/system/essentialData/logistics/logistics.vue")
@@ -1468,7 +1468,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 配比清单"
+              title: "配比清单"
             },
             component: () => import("@/view/system/basicData/mixTure/mixtureRatio.vue")
           },

@@ -198,10 +198,10 @@ export default class index extends Vue{
     let stop:any = this.$loading()
     // this.role.id = ''
     addOrUpdate(this.role, this.role.resIds).then(res => {
-      stop()
       if (res.code == 0) {
           this.getLeftList()
           this.$Message.success('修改成功')
+        stop()
       }
     }).catch(err => {
       this.$Message.success('修改失败')

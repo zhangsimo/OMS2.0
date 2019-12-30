@@ -44,7 +44,8 @@
 </template>
 
 <script>
-    import {getUserAllCompany , setCompany} from '@/api/base/user'
+    import {getUserAllCompany , setCompany ,changeToken} from '@/api/base/user'
+    import {setToken} from '@/libs/util'
     export default {
     name: 'other-item',
       components: {
@@ -91,7 +92,6 @@
           },
           //点击查询获取当前数据
           selectOne(val){
-              console.log(val.row, 777)
           this.companyOneList = val.row
           },
           //选择公司
@@ -100,6 +100,7 @@
              let data = {}
                   data.shopId = this.companyOneList.id
                   data.userId = this.$store.state.user.userData.id
+             //切换公司跟换token(权限设置)
              let res = await setCompany(data)
                       console.log(res)
                   if(res.code === 0){
@@ -109,6 +110,12 @@
                       data.shopId = res.data.shopId
                       data.shopkeeper = res.data.shopkeeper
                       localStorage.setItem('oms2-userList' , JSON.stringify(data))
+                     res.data.username = this.$store.state.user.userData.username
+                    let token = await changeToken( res.data)
+                      if(token.code == 0){
+                          setToken(token.data.access_token)
+                      }
+                      console.log(token)
                       this.$nextTick( () => {
                           this.$router.go(0);
                       })

@@ -42,7 +42,7 @@ class httpRequest {
     let that = this
     // 添加请求拦截器
     instance.interceptors.request.use(config => {
-      if(Cookies.get(TOKEN_KEY)){
+      if(Cookies.get(TOKEN_KEY) && !config.url.includes('/token')){
         // config.headers.Authorization = "Bearer "+Cookies.get(TOKEN_KEY)
           // if(isTokenExpired()){
           //   if(!this.isRefreshing){
@@ -87,6 +87,7 @@ class httpRequest {
             }
       }else{
         if(config.url.includes('/token')){
+          console.log(123123123123123)
           config.data = qs.stringify(config.data);
           config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
@@ -147,7 +148,9 @@ class httpRequest {
         }
       }
       //Message.error('服务内部错误')
+
       if(error.response.config.url.includes('/token')){
+        console.log(231212222)
         globalVue.$Message.error(error.response.data.data.errorMessage)
       }else{
         globalVue.$Message.error(error.message)
