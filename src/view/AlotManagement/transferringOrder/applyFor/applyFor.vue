@@ -121,10 +121,10 @@
                     <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: roleChangeEvent}}" width="100">
+                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
                       <template v-slot:edit="{ row }">
                         <InputNumber
-                          :max="9"
+                          :max="9999"
                           :min="0"
                           v-model="row.applyQty"
                           :disabled="presentrowMsg !== 0"
@@ -201,7 +201,7 @@
           if (!value && value != '0') {
             callback(new Error("请输入大于或等于0的正整数"));
           } else {
-            const reg = /^[1-9]\d*$/;
+            const reg =  /^\+?[1-9]\d*$/;
             if (reg.test(value)) {
               callback();
             } else {
@@ -259,7 +259,7 @@
           //校验输入框的值
           validRules: {
             applyQty: [
-              { required: true,validator:changeNumber },
+              { required: true, validator:changeNumber },
             ],
             // remark: [
             //   { required: true, validator:changeNumber }
@@ -688,12 +688,7 @@
             }
           })
         },
-        roleChangeEvent({ row }, evnt) {
-          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-          console.log(evnt,'evnt')
-          // console.log(evnt.target.value)
-          // this.currentrow.storeId = evnt.target.value
-        },
+
 
         // 左边部分的当前行
         selection(row){

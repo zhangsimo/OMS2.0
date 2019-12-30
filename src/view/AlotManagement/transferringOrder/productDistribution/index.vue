@@ -163,8 +163,8 @@
 </template>
 
 <script>
-import '../../../lease/product/lease.less'
-import '../../../goods/goodsList/goodsList.less'
+import "../../../lease/product/lease.less";
+import "../../../goods/goodsList/goodsList.less";
 import {
   getcangku,
   getPartBrand,
@@ -173,9 +173,9 @@ import {
   baocun,
   shenqingdanliebiao,
   daochu
-} from '../../../../api/AlotManagement/productDistribution.js'
+} from "../../../../api/AlotManagement/productDistribution.js";
 export default {
-  name: 'productDistribution',
+  name: "productDistribution",
   data() {
     return {
       modal1: false,
@@ -183,30 +183,30 @@ export default {
       storeArray: [],
       //锁定弹窗
       formItem: {
-        partCode: '',
-        partName: '',
-        partBrandName: '',
-        stockId: '',
-        occupyQty: '',
-        lockQty: ''
+        partCode: "",
+        partName: "",
+        partBrandName: "",
+        stockId: "",
+        occupyQty: "",
+        lockQty: ""
       },
       //搜索
       form: {
         pageNumber: 0,
         pageSize: 10,
-        partCode: '',
-        partName: '',
-        partBrandName: '',
-        storeId: ''
+        partCode: "",
+        partName: "",
+        partBrandName: "",
+        storeId: ""
       },
       // 快速查询-品牌
       quickArray: [],
 
       // 代销售条件查询
       penSalesData: {
-        character: '', // 快速查询
-        company: '', //公司选择
-        customer: '' //客户
+        character: "", // 快速查询
+        company: "", //公司选择
+        customer: "" //客户
       },
       customerListOptions: [], //选择客户下拉列表
       companyListOptions: [], //选择公司下拉列表
@@ -221,139 +221,145 @@ export default {
       },
       pageTotal: 10,
       fenpeiCurrent: {}
-    }
+    };
   },
   created() {
-    this.search(this.form)
-    this.searchPartBrand()
+    this.search(this.form);
+    this.searchPartBrand();
   },
   methods: {
     //获取配件品牌
     searchPartBrand() {
-      let data = { pageSize: 10000 }
+      let data = { pageSize: 10000 };
       getPartBrand(data)
         .then(res => {
+          console.log(res, "res =>236");
           if (res.code == 0) {
             res.data.content.forEach(element => {
               this.quickArray.push({
                 value: element.qualityCode,
                 label: element.quality
-              })
-            })
-            console.log(this.quickArray)
+              });
+            });
+            console.log(this.quickArray);
           }
         })
         .catch(e => {
-          this.$Message.info('获取配件品牌失败')
-        })
+          this.$Message.info("获取配件品牌失败");
+        });
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res)
+            console.log(res, "res =253");
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name })
-            })
+              this.storeArray.push({ value: element.id, label: element.name });
+            });
+            for (var i = 0; i < res.data.length; i++) {
+              if (res.data[i].isDefault == true) {
+                this.form.storeId = res.data[i].id;
+              }
+            }
           }
         })
         .catch(e => {
-          this.$Message.info('获取仓库失败')
-        })
+          this.$Message.info("获取仓库失败");
+        });
     },
     search(params) {
       jinqiaopinliebiao(params)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.code == 0) {
-            this.TopTableData = res.data.content || []
-            this.pageList.total = res.totalElements
+            this.TopTableData = res.data.content || [];
+            this.pageList.total = res.totalElements;
           }
         })
         .catch(e => {
-          this.$Message.info('获取列表信息失败失败')
-        })
+          this.$Message.info("获取列表信息失败失败");
+        });
     },
     changePage(p) {
-      this.params.page = p
-      this.search(this.form)
+      this.params.page = p;
+      this.search(this.form);
     },
     changeSize(s) {
-      this.params.page = 1
-      this.params.size = s
-      this.search(this.form)
+      this.params.page = 1;
+      this.params.size = s;
+      this.search(this.form);
     },
 
     baocunfenpei(row) {
-      if (row.hasAcceptQty === '' || row.hasAcceptQty === '0') {
-        this.$Message.info('请输入分配数')
-        return
+      if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
+        this.$Message.info("请输入分配数");
+        return;
       }
       baocun(row)
         .then(res => {
           if (res.code == 0) {
-            this.BottomTableData = res.data || []
-            this.BottomTableData = []
+            this.BottomTableData = res.data || [];
+            this.BottomTableData = [];
           }
         })
         .catch(e => {
-          this.$Message.info('保存失败')
-        })
+          this.$Message.info("保存失败");
+        });
     },
     update() {
       // 更新列表信息
-      console.log(this.formItem)
+      console.log(this.formItem);
 
       genxin(this.formItem)
         .then(res => {
           if (res.code == 0) {
             // 获取列表
             this.formItem = {
-              partCode: '',
-              partName: '',
-              partBrandName: '',
-              stockId: '',
-              occupyQty: '',
-              lockQty: ''
-            }
-            this.modal1 = false
-            this.search(this.form)
+              partCode: "",
+              partName: "",
+              partBrandName: "",
+              stockId: "",
+              occupyQty: "",
+              lockQty: ""
+            };
+            this.modal1 = false;
+            this.search(this.form);
           }
         })
         .catch(e => {
-          this.$Message.info('更新锁定数量失败')
-        })
+          this.$Message.info("更新锁定数量失败");
+        });
     },
     suoding() {
       if (!this.formItem.partCode) {
-        this.$Message.info('请先点击列表选择更改项')
-        return
+        this.$Message.info("请先点击列表选择更改项");
+        return;
       }
-      this.modal1 = true
+      this.modal1 = true;
     },
     currentChangeEvent({ row }) {
-      console.log('当前行' + row.partCode)
+      console.log("当前行" + row.partCode);
       if (row.partCode) {
-        this.formItem = row
-        this.getList(row)
+        this.formItem = row;
+        this.getList(row);
       } else {
-        this.$Message.info('没有当前行')
+        this.$Message.info("没有当前行");
       }
     },
     getList(row) {
       const params = {
         id: row.id
-      }
+      };
       shenqingdanliebiao(params)
         .then(res => {
           if (res.code == 0) {
-            this.BottomTableData = res.data || []
+            this.BottomTableData = res.data || [];
           }
         })
         .catch(e => {
-          this.$Message.info('请求静悄品待分配列表失败')
-        })
+          this.$Message.info("请求静悄品待分配列表失败");
+        });
     }
   }
-}
+};
 </script>
 
 <style scoped>
