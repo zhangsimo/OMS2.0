@@ -17,7 +17,7 @@
               </div>
               <div class="db ml20">
                 <span>往来单位：</span>
-                <Select v-model="companyInfo" style="width:200px">
+                <Select v-model="companyInfo" style="width:200px" @on-change="companySelect">
                   <Option
                     v-for="item in companyList"
                     :value="item.value"
@@ -65,14 +65,14 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <!-- <Select v-model="collectionAccountName" style="width:200px" class="mr10">
+                <Select v-model="collectionAccountName" style="width:200px" class="mr10">
                   <Option
                     v-for="item in collectionAccountList"
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select> -->
-                <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled/>
+                </Select>
+                <!-- <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled /> -->
                 <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
                 <span>开户行：</span>
                 <Input v-model="openingBank" class="w140 mr10" disabled />
@@ -200,10 +200,7 @@ export default {
   },
   data() {
     return {
-      companyList:[{
-          value:'1',
-          label:''
-        }],
+      companyList: [],
       info: false,
       store: "",
       bill: "",
@@ -480,7 +477,8 @@ export default {
       paymentlist: [],
       collectlist: [],
       companyInfoId: "",
-      flag: false
+      flag: false,
+      infoGet: []
     };
   },
   async mounted() {
@@ -526,11 +524,12 @@ export default {
       this.flag = false;
       this.info = false;
       let { orgId, startDate, endDate, guestId } = this.parameter;
-      this.companyInfo = this.parameter.guestName;
-      this.companyInfoId = this.parameter.guestId;
+      console.log(guestId,this.parameter)
+      this.companyInfo = guestId;
+      // this.companyInfoId = this.parameter.guestId;
       this.store = this.parameter.orgId;
       let obj = { orgId, startDate, endDate, guestId };
-      this.storeAccount(orgId)
+      this.storeAccount(orgId);
       getReconciliation(obj).then(res => {
         let Statementexcludingtax = 0;
         let Taxincludedpartsstatement = 0;
@@ -587,11 +586,33 @@ export default {
     },
     // 对账门店
     storeAccount(val) {
-      console.log(val)
-      getStore({orgId:val}).then(res=>{
-        console.log(res)
-        this.companyList
-      })
+      this.Branchstore.map(item => {
+        if (item.value === val) {
+          getStore({ orgId: val, orgName: item.label }).then(res => {
+            this.infoGet = res.data;
+            this.companyList = []
+            res.data.map(item => {
+              this.companyList.push({
+                value: item.id,
+                label: item.fullName
+              });
+            });
+            this.collectionAccountName = res.data[0].accountName;
+            this.openingBank = res.data[0].accountBank;
+            this.collectionAccount = res.data[0].accountBankNo;
+          });
+        }
+      });
+    },
+    // 切换往来单位
+    companySelect(val) {
+      this.infoGet.map(item => {
+        if (item.id === val) {
+          this.collectionAccountName = item.accountName;
+          this.openingBank = item.accountBank;
+          this.collectionAccount = item.accountBankNo;
+        }
+      });
     },
     // 已勾选结算类型计算
     getSettlementComputed() {
@@ -754,7 +775,9 @@ export default {
           four
         };
         Preservation(obj).then(res => {
-          console.log(res);
+          if(res.code === 0){
+            this.$message.success('保存成功')
+          }
         });
       } else {
         this.$message.error("请选择要对账的数据");

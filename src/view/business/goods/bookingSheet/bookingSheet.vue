@@ -94,9 +94,6 @@
                     <div class="fl mb5">
                       <Button size="small" class="mr10" :disabled="presentrowMsg !== 0 || buttonDisable" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                     </div>
-                    <!--<div class="fl mb5">-->
-                      <!--<Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>-->
-                    <!--</div>-->
                     <div class="fl mb5">
                       <Upload
                         ref="upload"
@@ -109,8 +106,13 @@
                         :on-success="onSuccess"
                         :before-upload ='beforeUpload'
                       >
-                    <Button size="small" class="mr10" @click="getRUl" :disabled="presentrowMsg !== 0 || buttonDisable"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
+                    <Button size="small" class="mr10" @click="getRUl" :disabled="LeadIn"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
                    </Upload>
+                    </div>
+                    <div class="fl mb5">
+                      <Button size="small" @click="down" :disabled="presentrowMsg !== 0 || buttonDisable">
+                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -211,6 +213,7 @@ export default {
       }
     };
     return {
+      LeadIn: true, //判断导入配件的按钮是否启用
       checkboxArr:[],// checkbox选中
       disSave: false, // 保存按钮是否禁用
       PTrow: {//新增当前行
@@ -396,6 +399,10 @@ export default {
     addPro(){
       this.$refs.SelectPartCom.init()
     },
+    //下载模板
+    down(){
+      location.href = baseUrl.omsOrder + "/preOrderMain/template?access_token=" + Cookies.get(TOKEN_KEY);
+    },
     // 下拉框查询
     SelectChange(){
       this.leftgetList()
@@ -490,13 +497,13 @@ export default {
     },
     // 上传成功函数
     onSuccess (response) {
-      if(response.code == 0 ){
-        // console.log(response.data)
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.List[0])
-        }
+      if(response.code === 0 ){
+        // if (response.data.list && response.data.list.length > 0) {
+        //   this.warning(response.data.List[0])
+        // }
+        this.$Message.success(response.message)
       }else {
-        this.$Message.error('上传失败')
+        this.$Message.error(response.message)
       }
     },
     //上传之前清空
@@ -578,9 +585,16 @@ export default {
       })
       if(this.Right.tbdata){
         this.Right.tbdata = [...this.Right.tbdata,...parts]
+        // this.Right.tbdata.map(item => {
+        //   if(item.id){
+        //
+        //   }
+        // })
+        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
       } else {
         this.Right.tbdata = parts
       }
+
       this.Right.tbdata.map(item => item.preQty = item.preQty > 0 ? item.preQty : 1);
     },
     //编辑收货信息弹框显示
@@ -697,6 +711,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
+          this.LeadIn = false
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo
           this.formPlan.orderDate = this.datadata.expectedArrivalDate
@@ -764,7 +779,12 @@ export default {
       }else {
         this.$Message.warning('请添加配件或完善订单信息后再提交!')
       }
-    }
+    },
+    // unique(arr) { // 根据唯一标识Id来对数组进行过滤
+    //   const res = new Map();  //定义常量 res,值为一个Map对象实例
+    //   //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
+    //   return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
+    // }
   },
   mounted(){
     this.$nextTick(()=>{
