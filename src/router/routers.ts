@@ -1468,7 +1468,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: " 配比清单"
+              title: "配比清单"
             },
             component: () => import("@/view/system/basicData/mixTure/mixtureRatio.vue")
           },
@@ -1691,7 +1691,7 @@ export default [
             mark: '9202',
             meta: {
               // hideInMenu: true,
-              title: " 员工管理"
+              title: "员工管理"
             },
             component: () =>
               import(
@@ -1704,7 +1704,7 @@ export default [
           //   // mark: '59',
           //   meta: {
           //     // hideInMenu: true,
-          //     title: ' 配件审核与标定'
+          //     title: '配件审核与标定'
           //   },
           //   component: () => import("@/view/system/partsExamine/partsexamine.vue")
           // },
