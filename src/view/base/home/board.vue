@@ -1,26 +1,12 @@
 <template>
     <div style="display: flex">
       <div class="boardLeft">
-        <h5 style="margin-bottom: 20px">今日看板</h5>
-        <div style="display: flex;margin-bottom: 20px">
-          <div class="flex board-one" style="margin-right: 20px">待处理销售订单
-            <span style="font-size: 18px;font-weight: 700;margin-left: 20px">15单</span>
-            <img src="../../../assets/images/home/daichulijihua.png" width="26" height="26" alt="">
-          </div>
-          <div class="flex board-two">待入库订单
-            <span style="font-size: 18px;font-weight: 700;margin-left: 20px">15单</span>
-            <img src="../../../assets/images/home/dengdai.png" width="26" height="26" alt="">
-          </div>
-        </div>
-        <div style="display: flex">
-          <div class="flex board-three" style="margin-right: 20px">待处理售后订单
-            <span style="font-size: 18px;font-weight: 700;margin-left: 20px">15单</span>
-            <img src="../../../assets/images/home/daichuli (1).png" width="26" height="26" alt="">
-          </div>
-          <div class="flex board-four">待出库订单
-            <span style="font-size: 18px;font-weight: 700;margin-left: 20px">15单</span>
-            <img src="../../../assets/images/home/wait.png" width="26" height="26" alt="">
-          </div>
+        <h5 style="margin-bottom: 20px">库存统计</h5>
+        <div>
+          <Row>
+            <Col span="12">col-12</Col>
+            <Col span="12">col-12</Col>
+          </Row>
         </div>
       </div>
       <div class="boardRight">
