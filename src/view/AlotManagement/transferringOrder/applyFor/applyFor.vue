@@ -122,10 +122,10 @@
                     <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                    <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
+                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: roleChangeEvent}}" width="100">
                       <template v-slot:edit="{ row }">
                         <InputNumber
-                          :max="999999"
+                          :max="9"
                           :min="0"
                           v-model="row.applyQty"
                           :disabled="presentrowMsg !== 0"
@@ -647,6 +647,13 @@
             }
           })
         },
+        roleChangeEvent({ row }, evnt) {
+          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
+          console.log(evnt,'evnt')
+          // console.log(evnt.target.value)
+          // this.currentrow.storeId = evnt.target.value
+        },
+
         // 左边部分的当前行
         selection(row){
           if (row == null) return;
