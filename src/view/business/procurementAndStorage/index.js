@@ -135,6 +135,10 @@ export default {
     },
     //获取选中供应商
     getSupplierName(val) {
+      this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "supplyName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
       // if (v) {
       //   //赋值供应商名称
       //   this.formPlan.supplyName = v.fullName || "";
@@ -144,10 +148,7 @@ export default {
       //   //赋值票据类型id
       //   this.formPlan.billType = v.billTypeId || "";
       // }
-      this.$set(this.formPlan, "guestId", val.id);
-      this.$set(this.formPlan, "supplyName", val.fullName);
-      this.$set(this.formPlan,"billTypeId",val.billTypeId)
-      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+
     },
     //快速查询获取日期
     getDataQuick(v) {

@@ -61,7 +61,7 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="供应商：" prop="guestId">
                     <Row style="width: 310px">
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @on-change="changeClient">
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px" @on-change="changeClient"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" >
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
                       <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @click="addSuppler">
