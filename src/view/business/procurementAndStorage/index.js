@@ -56,6 +56,7 @@ export default {
       }
     };
     return {
+      StoreId :'', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
       orderType: 99,
@@ -133,16 +134,21 @@ export default {
       this.$refs.selectSupplier.init();
     },
     //获取选中供应商
-    getSupplierName(v) {
-      if (v) {
-        //赋值供应商名称
-        this.formPlan.supplyName = v.fullName || "";
-        //赋值供应商id
-        let guestId = v.id || "";
-        this.$set(this.formPlan, 'guestId', guestId)
-        //赋值票据类型id
-        this.formPlan.billType = v.billTypeId || "";
-      }
+    getSupplierName(val) {
+      this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "supplyName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+      // if (v) {
+      //   //赋值供应商名称
+      //   this.formPlan.supplyName = v.fullName || "";
+      //   //赋值供应商id
+      //   let guestId = v.id || "";
+      //   this.$set(this.formPlan, 'guestId', guestId)
+      //   //赋值票据类型id
+      //   this.formPlan.billType = v.billTypeId || "";
+      // }
+
     },
     //快速查询获取日期
     getDataQuick(v) {
@@ -268,10 +274,40 @@ export default {
     },
     // 获取仓库
     async getWarehouse() {
+      this.$refs.formPlan.resetFields()
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
-        this.WarehouseList = res.data
+        if(res.code === 0){
+          this.WarehouseList = res.data
+          res.data.map(item => {
+            if(item.isDefault == true){
+              this.formPlan.storeId = item.id
+              this.StoreId = item.id
+            }
+          })
+        }
+
       }
+    },
+
+    //改变客户
+    async changeClient(value) {
+      // console.log('44444',value)
+      if (!value) {
+        return false;
+      }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+        return   item.id === value
+      })
+
+      console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
+
+      }
+      console.log( this.formPlan.billTypeId,  this.formPlan.settleTypeId)
     },
     //计算表格内总价格数据
     countAmount(row) {
@@ -490,7 +526,9 @@ export default {
         billStatusValue: 0,
         billStatusName: '草稿',
         details: [],
-        code: ''
+        code: '',
+       storeId :this.StoreId, //调入仓库
+        orderMan: this.$store.state.user.userData.staffName,
       }
       this.legtTableData.unshift(this.formPlan)
     },

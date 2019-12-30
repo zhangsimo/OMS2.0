@@ -111,7 +111,7 @@ export default class PlannedPurchaseOrder extends Vue {
       },
       {
         title: '提交人',
-        key: 'updateUname',
+        key: 'auditor',
         minWidth: 100
       },
       {
@@ -288,6 +288,8 @@ export default class PlannedPurchaseOrder extends Vue {
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
+    this.formPlanmain.orderMan = this.user.userData.staffName;
+    this.formPlanmain.orderManId = this.user.userData.id;
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();

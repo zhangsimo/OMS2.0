@@ -1,7 +1,7 @@
 import env from "./env";
 
 const dev = {
-  tokenApi: "http://192.168.2.48:5600", // 登录接口API
+  tokenApi: "http://192.168.2.47:5600", // 登录接口API
   // tokenApi: 'https://api.g-parts.cn', // 登录接口API
   // wmsApi: 'https://api.g-parts.cn/wms-order-provider',
   // omsApi: 'http://192.168.30.209:9240', // 张佳岩
@@ -9,8 +9,8 @@ const dev = {
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
   omsApi: "http://192.168.30.16:9240", // 陈舒
-  wmsApi: "http://192.168.30.221:9250", // 陈舒
-  omsOrder: "http://192.168.30.221:9210", // 陈舒
+  wmsApi: "http://192.168.30.69:9250", // 陈舒
+  omsOrder: "http://192.168.30.69:9210", // 陈舒
   // omsOrder: 'http://192.168.30.179:9210', // 常国地
 
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
@@ -23,7 +23,7 @@ const dev = {
   // omsOrder:'http://192.168.30.179:9210', //陈舒
   omsSettle: "http://192.168.30.84:9270",
   /**oms系统接口设定 */
-  authApi: "http://192.168.2.48:5200", // 系统资源 5200
+  authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.179:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -42,7 +42,7 @@ const dev = {
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
-  passportApi: "http://192.168.2.47:5200", // passport微服务API
+  passportApi: "http://192.168.2.48:5200", // passport微服务API
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
 };
