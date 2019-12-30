@@ -311,6 +311,7 @@ import barch from "../batch/selectPartCom";
 import baseUrl from "_conf/url";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { baocun, shanqu, outDataList, zuofei } from "@/api/business/market.js";
+import * as tools from "../../../../../utils/tools";
 
 export default {
   name: "OrderRight",
@@ -800,32 +801,42 @@ export default {
         this.$message.error("请先保存");
         return false;
       }
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
-              return this.$message.error("可用余额不足");
+      this.$Modal.confirm({
+        title: '是否确定出库',
+        onOk: async () => {
+          this.$refs.formPlan.validate(async valid => {
+            if (valid) {
+              try {
+                await this.$refs.xTable.validate();
+                if (+this.totalMoney > +this.limitList.sumAmt) {
+                  return this.$message.error("可用余额不足");
+                }
+                //console.log("jinlaile");
+                this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+                let res = await outDataList(this.formPlan);
+                //console.log("fasong");
+                if (res.code === 0) {
+                  this.$Message.success("出库成功成功");
+                  this.getChangeList();
+                  return res;
+                }
+              } catch (errMap) {
+                this.$XModal.message({
+                  status: "error",
+                  message: "表格校验不通过！"
+                });
+              }
+            } else {
+              this.$Message.error("*为必填项");
             }
-            //console.log("jinlaile");
-            this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-            let res = await outDataList(this.formPlan);
-            //console.log("fasong");
-            if (res.code === 0) {
-              this.$Message.success("出库成功成功");
-              this.getChangeList();
-              return res;
-            }
-          } catch (errMap) {
-            this.$XModal.message({
-              status: "error",
-              message: "表格校验不通过！"
-            });
-          }
-        } else {
-          this.$Message.error("*为必填项");
-        }
-      });
+          });
+        },
+        onCancel: () => {
+          this.$Message.info('取消成功');
+        },
+      })
+
+
     },
     //提交
     submitList() {
