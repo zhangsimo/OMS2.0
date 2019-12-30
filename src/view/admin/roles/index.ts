@@ -204,7 +204,7 @@ export default class index extends Vue{
         stop()
       }
     }).catch(err => {
-      this.$Message.success('修改失败')
+      this.$Message.error('修改失败')
       stop()
     })
   }
