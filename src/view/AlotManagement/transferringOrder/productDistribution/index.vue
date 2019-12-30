@@ -29,7 +29,7 @@
             </Button>
           </div>
           <div class="db mr10">
-            <Button class="mr20" @click="suoding">锁定数量调整</Button>
+            <Button class="mr20" v-has="'number'" @click="suoding">锁定数量调整</Button>
             <Modal v-model="modal1" title="锁定数量调整">
               <i-form :model="formItem" :label-width="80" style="padding: 0 40px">
                 <Form-item label="配件编码:">
