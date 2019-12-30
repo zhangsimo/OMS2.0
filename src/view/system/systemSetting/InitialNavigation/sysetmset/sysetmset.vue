@@ -5,7 +5,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db">
-            <Button class="mr10" @click="save">
+            <Button class="mr10" @click="save" v-has="'save'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
