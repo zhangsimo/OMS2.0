@@ -337,6 +337,7 @@
                       class="mr10"
                       @click="showModel('purchaseAmount')"
                       :disabled="isInput"
+                      v-has="'amount'"
                       >采购金额填写</Button
                     >
                   </div>
