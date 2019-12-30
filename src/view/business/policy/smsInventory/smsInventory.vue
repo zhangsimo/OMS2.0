@@ -178,13 +178,13 @@
                   field="trueQty"
                   title="实盘数量"
                   width="100"
-                  :edit-render="{name: 'input'}"
+                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? false : true : false}}"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="truePrice"
                   title="成本单价"
                   width="100"
-                  :edit-render="{name: 'input'}"
+                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? row.sysQty- row.trueQty < 0 ? false : true : true : false}}"
                 ></vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
@@ -776,6 +776,7 @@ export default {
           );
           getSubmitList(this.formPlan)
             .then(res => {
+              this.$refs.SelectPartRef.searchPartLayer = false
               this.getList();
             })
             .catch(err => {

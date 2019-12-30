@@ -497,11 +497,11 @@ export default {
     },
     // 上传成功函数
     onSuccess (response) {
-      if(response.code == 0 ){
-        // console.log(response.data)
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.List[0])
-        }
+      if(response.code === 0 ){
+        // if (response.data.list && response.data.list.length > 0) {
+        //   this.warning(response.data.List[0])
+        // }
+        this.$Message.success(response.message)
       }else {
         this.$Message.error(response.message)
       }
@@ -585,9 +585,16 @@ export default {
       })
       if(this.Right.tbdata){
         this.Right.tbdata = [...this.Right.tbdata,...parts]
+        // this.Right.tbdata.map(item => {
+        //   if(item.id){
+        //
+        //   }
+        // })
+        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
       } else {
         this.Right.tbdata = parts
       }
+
       this.Right.tbdata.map(item => item.preQty = item.preQty > 0 ? item.preQty : 1);
     },
     //编辑收货信息弹框显示
@@ -772,7 +779,12 @@ export default {
       }else {
         this.$Message.warning('请添加配件或完善订单信息后再提交!')
       }
-    }
+    },
+    // unique(arr) { // 根据唯一标识Id来对数组进行过滤
+    //   const res = new Map();  //定义常量 res,值为一个Map对象实例
+    //   //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
+    //   return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
+    // }
   },
   mounted(){
     this.$nextTick(()=>{

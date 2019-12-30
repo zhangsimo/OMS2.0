@@ -15,7 +15,7 @@
               <ul class="item">
                 <li v-for="(item,index) in combo" :key="index" class="discountBox itemss" @click="selectClass(index,item)" :class="[selectClassA !== index?'weixuan':'xuan']">
                   <p style="font-size: 16px;font-weight: bold;"> ￥{{ item.sellPrice }}</p>
-                  <p style="padding-top: 5px"> 售价 ￥{{ item.totalCoin }}</p>
+                  <p style="padding-top: 5px"> 售价 <span style="text-decoration: line-through">￥{{ item.totalCoin }}</span></p>
                   <p class="zhekou" v-if="item.sellPrice !== item.totalCoin">
                     <img v-if="selectClassA !== index" class="zhekou_img" src="../../../../../assets/images/recharge/unselected.png" alt="">
                     <img v-else class="zhekou_img" src="../../../../../assets/images/recharge/selected.png" alt="">

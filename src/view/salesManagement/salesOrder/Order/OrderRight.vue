@@ -781,6 +781,8 @@ export default {
           let res = await getAccessories(data);
           if (res.code === 0) {
             this.$emit("parentGetleft");
+            this.$Message.success('添加配件成功')
+            this.$refs.formPlan.resetFields()
           }
         } else {
           this.$Message.error("*为必填项");
@@ -851,10 +853,10 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
+              this.$parent.$parent.isAdd=true
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields()
               this.limitList = {};
-              this.isAdd=true
             }
           } catch (errMap) {
             this.$XModal.message({
