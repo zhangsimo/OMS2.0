@@ -56,6 +56,7 @@ export default {
       }
     };
     return {
+      StoreId :'', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
       orderType: 99,
@@ -270,7 +271,16 @@ export default {
     async getWarehouse() {
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
-        this.WarehouseList = res.data
+        if(res.code === 0){
+          this.WarehouseList = res.data
+          res.data.map(item => {
+            if(item.isDefault == true){
+              this.formPlan.storeId = item.id
+              this.StoreId = item.id
+            }
+          })
+        }
+
       }
     },
     //计算表格内总价格数据
@@ -490,7 +500,8 @@ export default {
         billStatusValue: 0,
         billStatusName: '草稿',
         details: [],
-        code: ''
+        code: '',
+       storeId :this.StoreId, //调入仓库
       }
       this.legtTableData.unshift(this.formPlan)
     },
