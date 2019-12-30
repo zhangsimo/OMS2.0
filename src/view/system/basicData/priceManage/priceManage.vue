@@ -6,17 +6,17 @@
         <div slot="left" class="left">
           <div class="db btn-title">
             <p class="mr10">级别定义:</p>
-            <Button class="mr10 w90" @click="add">
+            <Button class="mr10 w90" @click="add" v-has="'addLeft'">
               <span class="center">
                 <Icon type="md-add" />新增
               </span>
             </Button>
-            <Button class="mr10 w90" @click="save">
+            <Button class="mr10 w90" @click="save" v-has="'saveLeft'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
             </Button>
-            <Button class="mr10 w90" :disabled="curronly" @click="remove">
+            <Button class="mr10 w90" :disabled="curronly" @click="remove" v-has="'deleteLeft'">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
@@ -78,17 +78,17 @@
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="addCustomer">
+              <Button :disabled="disabled" class="mr10 w90" @click="addCustomer" v-has="'addRight'">
                 <span class="center">
                   <Icon type="md-add" />添加客户
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="removeCustomer">
+              <Button :disabled="disabled" class="mr10 w90" @click="removeCustomer" v-has="'deleteRight'">
                 <span class="center">
                   <Icon custom="iconfont iconlajitongicon icons" />删除客户
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="saveCustomer">
+              <Button :disabled="disabled" class="mr10 w90" @click="saveCustomer" v-has="'saveRight'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>
@@ -136,7 +136,7 @@
                   <Icon custom="iconfont iconchaxunicon icons" />查询
                 </span>
               </Button>
-              <Button :disabled="disabled" class="mr10 w90" @click="savePart">
+              <Button :disabled="disabled" class="mr10 w90" @click="savePart" v-has="'saveRight3'">
                 <span class="center">
                   <Icon custom="iconfont iconbaocunicon icons" />保存
                 </span>

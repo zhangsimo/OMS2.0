@@ -1600,91 +1600,91 @@ export default [
                 "@/view/system/systemSetting/InitialNavigation/AccessoriesBrand/AccessoriesBrand.vue"
               )
           },
-          {
-            path:
-              "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
-            name: "brandCarModel",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "品牌车型",
-              activeName: 'navigationFater'
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/brandCarModel/brandCar.vue"
-              )
-          },
-          {
-            path:
-              "/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment",
-            name: "receiptPayment",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "期初应收应付"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment.vue"
-              )
-          },
-          {
-            path:
-              "/system/systemSetting/InitialNavigation/AccessoriesCategory/AccessoriesCategory",
-            name: "AccessoriesCategory",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "配件分类"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/AccessoriesCategory/AccessoriesCategory.vue"
-              )
-          },
-          {
-            path:
-              "/systemSetting/InitialNavigation/storeManagement/storeManagement",
-            name: "storeManagement",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "门店设置"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/storeManagement/storeManagement.vue"
-              )
-          },
-          {
-            path:
-              "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
-            name: "setWarehouse",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "仓库设置"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/setWarehouse/setWarehouse.vue"
-              )
-          },
-          {
-            path:
-              "/systemSetting/InitialNavigation/setBank",
-            name: "setBank",
-            // mark: '59',
-            meta: {
-              hideInMenu: true,
-              title: "初期现金银行"
-            },
-            component: () =>
-              import(
-                "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
-              )
-          },
+          // {
+          //   path:
+          //     "/system/systemSetting/InitialNavigation/brandCarModel/brandCar",
+          //   name: "brandCarModel",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "品牌车型",
+          //     activeName: 'navigationFater'
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/brandCarModel/brandCar.vue"
+          //     )
+          // },
+          // {
+          //   path:
+          //     "/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment",
+          //   name: "receiptPayment",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "期初应收应付"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/receiptPayment/receiptPayment.vue"
+          //     )
+          // },
+          // {
+          //   path:
+          //     "/system/systemSetting/InitialNavigation/AccessoriesCategory/AccessoriesCategory",
+          //   name: "AccessoriesCategory",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "配件分类"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/AccessoriesCategory/AccessoriesCategory.vue"
+          //     )
+          // },
+          // {
+          //   path:
+          //     "/systemSetting/InitialNavigation/storeManagement/storeManagement",
+          //   name: "storeManagement",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "门店设置"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/storeManagement/storeManagement.vue"
+          //     )
+          // },
+          // {
+          //   path:
+          //     "/systemSetting/InitialNavigation/setWarehouse/setWarehouse",
+          //   name: "setWarehouse",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "仓库设置"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/setWarehouse/setWarehouse.vue"
+          //     )
+          // },
+          // {
+          //   path:
+          //     "/systemSetting/InitialNavigation/setBank",
+          //   name: "setBank",
+          //   // mark: '59',
+          //   meta: {
+          //     hideInMenu: true,
+          //     title: "初期现金银行"
+          //   },
+          //   component: () =>
+          //     import(
+          //       "@/view/system/systemSetting/InitialNavigation/setBank/setBank.vue"
+          //     )
+          // },
           {
             path: "/system/staff/management",
             name: "staffManagement",
