@@ -213,7 +213,6 @@
                       placeholder="请选择订货日期"
                       v-model="formPlanmain.orderDate"
                       :disabled="isInput"
-                      :options="options1"
                     ></DatePicker>
                   </FormItem>
                   <FormItem class="form-Item" label="预计到货日期：">
