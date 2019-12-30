@@ -123,7 +123,7 @@
                       :on-success="onSuccess"
                       :before-upload ='beforeUpload'
                     >
-                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 || !formPlan.code" type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入</Button>
+                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 " type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入配件</Button>
                     </Upload>
                   </div>
                 </div>
