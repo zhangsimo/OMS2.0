@@ -19,7 +19,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addOrder">
+            <Button class="mr10" @click="addOrder" v-has="'add'">
               <Icon type="md-add" />新增
             </Button>
           </div>
@@ -28,6 +28,7 @@
               type="default"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(1)"
+              v-has="'save'"
               class="mr10"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
@@ -38,6 +39,7 @@
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(2)"
+              v-has="submit"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -47,6 +49,7 @@
               class="mr10"
               @click="saveObsoleteFun(1)"
               :disabled="selectPlanOrderItem.billStatusId != 0"
+              v-has="'invalidate'"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -56,12 +59,13 @@
               @click="saveObsoleteFun(2)"
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 5"
+              v-has="'invalid'"
             >
               <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="exportHandle">
+            <Button class="mr10" @click="exportHandle" v-has="'invalid'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
           </div>
@@ -70,6 +74,7 @@
               class="mr10"
               :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
+              v-has="check"
             >
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
@@ -239,6 +244,7 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="addPro"
+                      v-has="'AddAccessories'"
                     >
                       <Icon type="md-add" />添加配件
                     </Button>
@@ -257,6 +263,7 @@
                       <Button
                         size="small"
                         class="mr10"
+                        v-has="'import'"
                         :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
                       >导入</Button>
                     </Upload>
@@ -267,6 +274,7 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="delTableData"
+                      v-has="'delete'"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i>
                       删除
