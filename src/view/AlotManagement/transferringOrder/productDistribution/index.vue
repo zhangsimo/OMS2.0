@@ -178,6 +178,7 @@ export default {
   name: "productDistribution",
   data() {
     return {
+      idValue: "",
       modal1: false,
       modal2: false,
       storeArray: [],
@@ -224,8 +225,10 @@ export default {
     };
   },
   created() {
-    this.search(this.form);
     this.searchPartBrand();
+    setTimeout(() => {
+      this.search(this.form);
+    }, 1000);
   },
   methods: {
     //获取配件品牌
@@ -257,6 +260,7 @@ export default {
             for (var i = 0; i < res.data.length; i++) {
               if (res.data[i].isDefault == true) {
                 this.form.storeId = res.data[i].id;
+                this.idValue = res.data[i].id;
               }
             }
           }
@@ -266,6 +270,8 @@ export default {
         });
     },
     search(params) {
+      console.log(params, "params");
+      params.storeId = this.idValue;
       jinqiaopinliebiao(params)
         .then(res => {
           console.log(res);
