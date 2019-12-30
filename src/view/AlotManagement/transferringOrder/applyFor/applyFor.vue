@@ -56,12 +56,11 @@
                           :rules="ruleValidate"
                           :label-width="120">
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
-                        <Row class="w500">
+                        <Row >
                           <Col span="22">
-                            <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
-                            <!--<Select v-model="formPlan.guestName" filterable :disabled="buttonDisable || presentrowMsg !== 0" label-in-value @on-change="selectGuestName">-->
-                              <!--<Option v-for="item in ArraySelect" :value="item.id" :key="item.id">{{ item.fullName }}</Option>-->
-                            <!--</Select>-->
+                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable>
+                            <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                          </Select>
                           </Col>
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
@@ -138,9 +137,9 @@
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
-                    <vxe-table-column title="紧销品" width="100" >
+                    <vxe-table-column title="紧销品" width="100">
                       <template v-slot="{ row,rowIndex }">
-                        <Checkbox disabled :value="row.isTightPart"></Checkbox>
+                        <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
                     <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
@@ -185,6 +184,7 @@
   import PrintShow from "./compontents/PrintShow";
   import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
   import {findForAllot} from "_api/purchasing/purchasePlan";
+
     export default {
       name: "applyFor",
       components: {
@@ -210,6 +210,8 @@
           }
         };
         return {
+          getArray:[],
+          ArrayValue:[],
           StoreId :'', //默认仓
           ArraySelect: [], //供应商下拉框
           isInternalId:'',//后端需要的供应商的一个id
@@ -361,11 +363,23 @@
           Flaga: false
         }
       },
-      // created() {
-      //   this.Right.tbdata.applyQty = 1
-      //   console.log(this.Right.tbdata.applyQty,'this.Right.tbdata.applyQty')
-      // },
+      created() {
+        this.getArrayParams()
+      },
       methods: {
+        getArrayParams() {
+          var req = {};
+          req.page = 1;
+          req.size = 20;
+          findForAllot(req).then(res => {
+            const { content } = res.data;
+            this.getArray = content;
+            console.log(content, "req");
+            content.forEach(item => {
+              this.ArrayValue.push(item.fullName);
+            });
+          });
+        },
         //删除配件
         Delete(){
           var set = this.checkboxArr.map(item=>item.id)
@@ -404,7 +418,7 @@
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
-            
+
           // console.log(this.Left.tbdata)
         },
         // 调入仓库下拉改变事件
@@ -419,7 +433,9 @@
         SelectChange(){
           this.leftgetList()
         },
-        selectTabelData(){},
+        selectTabelData(){
+
+        },
         //保存按钮
         SaveMsg(){
           this.$refs.formPlan.validate((valid) => {
@@ -427,8 +443,8 @@
               let data = {}
               data.id = this.rowId
               data.orgid = this.rowOrgId
-              data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-              data.guestId = this.guestidId
+              // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+              // data.guestId = this.guestidId
               // data.guestId = this.formPlan.guestName
               data.storeId = this.formPlan.storeId
               // data.guestName = this.formPlan.guestName
@@ -447,6 +463,12 @@
               if (orderTime < dataTime) {
                 this.$Message.error('调拨申请日期不小于当前日期')
                 return
+              }
+              for (var i = 0; i < this.getArray.length; i++) {
+                if (this.getArray[i].fullName == this.formPlan.guestName) {
+                  data.guestOrgid = this.getArray[i].isInternalId;
+                  data.guestId = this.getArray[i].id;
+                }
               }
 
               save(data).then(res => {
@@ -571,7 +593,6 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          console.log(ChildMessage)
         // let aaa =   ChildMessage.map(item => {
         //   return{
         //     name : item.baseType.firstType.typeName
@@ -579,6 +600,7 @@
         //   })
         //   console.log(aaa)
           let parts = ChildMessage.map( item => {
+
             return {
               partName : item.partStandardName,
               unit : item.minUnit,
@@ -600,7 +622,7 @@
               partId : item.id,
               fullName : item.fullName,
               systemUnitId : item.minUnit,
-              isTightPart: !!item.isTightPart,
+              isTight: !!item.isTightPart == true? 1:0,
             }
           })
           console.log(parts)
@@ -675,6 +697,7 @@
 
         // 左边部分的当前行
         selection(row){
+          console.log(row,'row')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd){
@@ -707,8 +730,8 @@
                           this.formPlan.createUname =  '',
                           this.formPlan.serviceId =  '',
                           this.formPlan.orderDate = ''
-                        this.Right.tbdata = []
-                        this.$refs.formPlan.resetFields();
+                          this.Right.tbdata = []
+                          this.$refs.formPlan.resetFields();
                       }
                     })
                   } else {
@@ -761,6 +784,7 @@
           params.id = this.rowId
           findById(params).then(res => {
             if(res.code === 0){
+              console.log(res,'res ===>787')
               this.rowData = res.data
               this.Right.tbdata = res.data.detailVOS
             }
