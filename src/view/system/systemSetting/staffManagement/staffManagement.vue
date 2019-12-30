@@ -12,13 +12,13 @@
           <i-button  type="warning" class="staff-btn" @click="inquireStaff"><Icon custom="iconfont iconchaxunicon" /> 查询</i-button>
         </div>
       <div class="staff-change">
-       <a class="mr10" @click="findRootGroup"><Icon custom="iconfont iconxinzengicon icons"/> 新增 </a>
-        <a class="mr10" @click="changStaffList"><Icon custom="iconfont iconbianjixiugaiicon icons"/> 修改</a>
-        <a class="mr10" @click =changeDimission v-if="!oneStaffChange.office"><Icon custom="iconfont iconlizhiicon icons"/> 离职</a>
-        <a class="mr10" @click =changeDimission v-if="oneStaffChange.office"><Icon type="md-person-add" /> 复职</a>
-        <a class="mr10" @click="giveUser" v-if="!oneStaffChange.office && oneStaffChange.openSystem == 1" ><Icon custom="iconfont iconziyuan1 icons"/> 开通账号</a>
-        <a class="mr10" @click="restPassword"><Icon custom="iconfont iconziyuan1 icons"/> 重置密码</a>
-        <i-button  type="warning" class="staff-btn mr10" @click="openCompany"><Icon custom="iconfont iconxuanzetichengchengyuanicon" /> 新增兼职公司</i-button>
+       <a class="mr10" @click="findRootGroup" v-has="'add'"><Icon custom="iconfont iconxinzengicon icons"/> 新增 </a>
+        <a class="mr10" @click="changStaffList" v-has="'change'"><Icon custom="iconfont iconbianjixiugaiicon icons"/> 修改</a>
+        <a class="mr10" @click =changeDimission v-if="!oneStaffChange.office" v-has="'dimission'"><Icon custom="iconfont iconlizhiicon icons"/> 离职</a>
+        <a class="mr10" @click =changeDimission v-if="oneStaffChange.office" v-has="'dimission'"><Icon type="md-person-add" /> 复职</a>
+        <a class="mr10" @click="giveUser" v-if="!oneStaffChange.office && oneStaffChange.openSystem == 1" ><Icon custom="iconfont iconziyuan1 icons" /> 开通账号</a>
+        <a class="mr10" @click="restPassword" v-has="'reset'"><Icon custom="iconfont iconziyuan1 icons"/> 重置密码</a>
+        <i-button  type="warning" class="staff-btn mr10" @click="openCompany" v-has="'open'"><Icon custom="iconfont iconxuanzetichengchengyuanicon" /> 新增兼职公司</i-button>
         <i-button  type="warning" class="staff-btn mr10" @click="lookCompany"><Icon custom="iconfont iconchaxunicon" />查看兼职公司</i-button>
       </div>
       <div class="staffList">

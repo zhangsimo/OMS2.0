@@ -4,32 +4,32 @@
       <!--      左侧顶部快速导航-->
       <div class="quick-navigation">
         <div style="display: flex">
-          <div class="quick-one quick-all">
-            <span>快速报价</span>
-          </div>
-          <div class="quick-two quick-all">
-            <span>新建采购单</span>
-          </div>
-          <div class="quick-three quick-all">
-            <span>新建销售单</span>
-          </div>
-          <div class="quick-four quick-all">
-            <span>EPC云服务</span>
-          </div>
+          <a class="quick-one quick-all">
+            <span>采购计划</span>
+          </a>
+          <a class="quick-two quick-all">
+            <span>采购计划订单</span>
+          </a>
+          <a class="quick-three quick-all">
+            <span>临时采购订单</span>
+          </a>
+          <a class="quick-four quick-all">
+            <span>外采订单</span>
+          </a>
         </div>
         <div style="margin: 20px 0px;display: flex">
-          <div class="quick-five quick-all">
-            <span>打包发货</span>
-          </div>
-          <div class="quick-six quick-all">
-            <span>月结对账</span>
-          </div>
-          <div class="quick-seven quick-all">
+          <a class="quick-five quick-all">
+            <span>销售订单</span>
+          </a>
+          <a class="quick-six quick-all">
+            <span>调拨申请</span>
+          </a>
+          <a class="quick-seven quick-all">
             <span>应收应付结算</span>
-          </div>
-          <div class="quick-enigth quick-all">
-            <span>其他费用支出</span>
-          </div>
+          </a>
+          <a class="quick-enigth quick-all">
+            <span>库存查询</span>
+          </a>
         </div>
       </div>
       <!--      今日数据-->
