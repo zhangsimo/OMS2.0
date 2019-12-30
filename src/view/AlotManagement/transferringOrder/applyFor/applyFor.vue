@@ -361,6 +361,10 @@
           Flaga: false
         }
       },
+      // created() {
+      //   this.Right.tbdata.applyQty = 1
+      //   console.log(this.Right.tbdata.applyQty,'this.Right.tbdata.applyQty')
+      // },
       methods: {
         //删除配件
         Delete(){
@@ -566,7 +570,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : '',
+              applyQty : 1,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
