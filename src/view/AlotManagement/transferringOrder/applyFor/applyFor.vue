@@ -65,10 +65,10 @@
                           ref="formPlan"
                           :rules="ruleValidate"
                           :label-width="120">
-                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable>
+                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                           </Col>
@@ -365,7 +365,8 @@
           },
           mainId: null, //选中行的id
           clickdelivery: false,
-          Flaga: false
+          Flaga: false,
+          ArrayValue: []
         }
       },
       created() {
@@ -379,7 +380,6 @@
           findForAllot(req).then(res => {
             const { content } = res.data;
             this.getArray = content;
-            console.log(content, "req");
             content.forEach(item => {
               this.ArrayValue.push(item.fullName);
             });
@@ -899,10 +899,11 @@
   .con-box{
     height: 700px;
   }
-  .w550{
-    width: 580px;
+  .w640{
+    width: 620px;
   }
-  .formItem {
-    margin-bottom: 15px;
-  }
+
+  /*.formItem {*/
+    /*margin-bottom: 15px;*/
+  /*}*/
 </style>
