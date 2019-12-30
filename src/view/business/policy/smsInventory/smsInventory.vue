@@ -758,6 +758,7 @@ export default {
       if (res.code == 0) {
         self.$Message.success("导入成功");
         this.Right.tbdata = res.data.details;
+        this.getList()
       } else {
         self.$Message.error(res.message);
       }
