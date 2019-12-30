@@ -610,7 +610,8 @@ export default {
     //   this.GainInformation = false
     // },
     selectAllEvent({ checked }) {},
-    selectChangeEvent({ checked, row }) {
+    selectChangeEvent(msg) {
+      console.log(msg);
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -960,8 +961,9 @@ export default {
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
       let arr = [];
+      console.log(seleList, "seleList");
       seleList.map(item => {
-        arr.push(item.id);
+        arr.push(item.partId);
       });
       const params = {
         ids: arr,

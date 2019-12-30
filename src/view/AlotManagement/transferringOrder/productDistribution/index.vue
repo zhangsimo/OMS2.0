@@ -259,6 +259,7 @@ export default {
             });
             for (var i = 0; i < res.data.length; i++) {
               if (res.data[i].isDefault == true) {
+                console.log(res.data[i], "res.data[i]");
                 this.form.storeId = res.data[i].id;
                 this.idValue = res.data[i].id;
               }
