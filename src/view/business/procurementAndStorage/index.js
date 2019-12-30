@@ -134,16 +134,20 @@ export default {
       this.$refs.selectSupplier.init();
     },
     //获取选中供应商
-    getSupplierName(v) {
-      if (v) {
-        //赋值供应商名称
-        this.formPlan.supplyName = v.fullName || "";
-        //赋值供应商id
-        let guestId = v.id || "";
-        this.$set(this.formPlan, 'guestId', guestId)
-        //赋值票据类型id
-        this.formPlan.billType = v.billTypeId || "";
-      }
+    getSupplierName(val) {
+      // if (v) {
+      //   //赋值供应商名称
+      //   this.formPlan.supplyName = v.fullName || "";
+      //   //赋值供应商id
+      //   let guestId = v.id || "";
+      //   this.$set(this.formPlan, 'guestId', guestId)
+      //   //赋值票据类型id
+      //   this.formPlan.billType = v.billTypeId || "";
+      // }
+      this.$set(this.formPlan, "guestId", val.id);
+      this.$set(this.formPlan, "supplyName", val.fullName);
+      this.$set(this.formPlan,"billTypeId",val.billTypeId)
+      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
     },
     //快速查询获取日期
     getDataQuick(v) {
@@ -269,6 +273,7 @@ export default {
     },
     // 获取仓库
     async getWarehouse() {
+      this.$refs.formPlan.resetFields()
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
         if(res.code === 0){
@@ -282,6 +287,26 @@ export default {
         }
 
       }
+    },
+
+    //改变客户
+    async changeClient(value) {
+      // console.log('44444',value)
+      if (!value) {
+        return false;
+      }
+      let oneClient = []
+      oneClient = this.client.filter( item => {
+        return   item.id === value
+      })
+
+      console.log(oneClient,5656)
+      for(var i  in  oneClient){
+        this.formPlan.billTypeId=oneClient[i].billTypeId
+        this.formPlan.settleTypeId=oneClient[i].settTypeId
+
+      }
+      console.log( this.formPlan.billTypeId,  this.formPlan.settleTypeId)
     },
     //计算表格内总价格数据
     countAmount(row) {
@@ -502,6 +527,7 @@ export default {
         details: [],
         code: '',
        storeId :this.StoreId, //调入仓库
+        orderMan: this.$store.state.user.userData.staffName,
       }
       this.legtTableData.unshift(this.formPlan)
     },
