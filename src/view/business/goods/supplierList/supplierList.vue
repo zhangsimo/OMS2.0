@@ -648,9 +648,14 @@
             systemUnitId : item.minUnit,
           }
         })
-        // console.log(ChildMessage)
-        this.Right.tbdata = [...this.Right.tbdata,...parts]
-        // console.log(this.Right.tbdata)
+        if(this.Right.tbdata){
+          this.Right.tbdata = [...this.Right.tbdata,...parts]
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata)
+        } else {
+          this.Right.tbdata = parts
+        }
+
+
       },
       //供应商弹框
       addSuppler(){
