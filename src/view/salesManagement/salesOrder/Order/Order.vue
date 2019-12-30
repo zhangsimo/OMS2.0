@@ -50,6 +50,7 @@
               :orderType="orderType"
               @getOneOrder="getOrder"
               :changeLeftList="changeLeft"
+              @refresh= "getDutyInfo"
             ></OrderLeft>
           </div>
           <div slot="right" class="demo-split-pane">
@@ -110,6 +111,10 @@ export default {
     };
   },
   methods: {
+    //用于父子组件之间的方法通信
+    getDutyInfo(){
+      this.setSave()
+    },
     //  调用left方法
     parentGetleft() {
       this.$refs.OrderLeft.gitlistValue();
