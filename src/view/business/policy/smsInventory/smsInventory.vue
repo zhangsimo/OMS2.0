@@ -159,6 +159,7 @@
                 border
                 resizable
                 @edit-closed="editClosedEvent"
+                @edit-actived="editActivedEvent"
                 size="mini"
                 :height="rightTableHeight"
                 :data="Right.tbdata"
@@ -184,7 +185,7 @@
                   field="truePrice"
                   title="成本单价"
                   width="100"
-                  :edit-render="{name: 'input',attrs:{disabled:formPlan.billStatusId ? formPlan.billStatusId.value === 0 ? row.sysQty- row.trueQty < 0 ? false : true : true : false}}"
+                  :edit-render="{name: 'input',attrs:{disabled:dis}}"
                 ></vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
@@ -267,6 +268,7 @@ export default {
   },
   data() {
     return {
+      dis: false,
       split1: 0.2,
       tabIndex: 0,
       curronly: false,
@@ -440,6 +442,9 @@ export default {
     }
   },
   methods: {
+    editActivedEvent({row}){
+      this.dis = this.formPlan.billStatusId ? this.formPlan.billStatusId.value === 0 ?   row.sysQty- row.trueQty < 0 ? false: true : true : false
+    },
     //获取左侧列表
     getList() {
       //获取右边仓库数据
@@ -679,7 +684,6 @@ export default {
     },
     //确认作废
     removeOk() {
-      console.log(this.formPlan.id);
       if (this.Right.tbdata.length < 1) {
         this.$Message.error("请选择数据");
         return;
