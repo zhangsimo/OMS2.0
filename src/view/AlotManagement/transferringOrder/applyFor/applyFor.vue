@@ -52,11 +52,10 @@
                   <div class="clearfix purchase" ref="planForm">
                     <Form inline
                           :model="formPlan"
-                          :show-message="false"
                           ref="formPlan"
                           :rules="ruleValidate"
-                          :label-width="100">
-                      <FormItem label="调出方：" prop="guestName" class="fs12">
+                          :label-width="120">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
                         <Row class="w500">
                           <Col span="22">
                             <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
@@ -67,12 +66,12 @@
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="storeId" >
+                      <FormItem class="formItem" label="调入仓库：" prop="storeId" >
                         <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
                         <DatePicker
                           type="date"
                           style="width: 160px"
@@ -81,8 +80,8 @@
                           :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
                       </FormItem>
-                      <FormItem label="备注：" prop="remark">
-                        <Input class="w500" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                      <FormItem class="formItem" label="备注：" prop="remark">
+                        <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
@@ -234,7 +233,8 @@
           ruleValidate: {
             guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'change' }],
             storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'change' }],
-            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }]
+            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+            remark:[{max: 100, message:'备注长度输入小于100个字符', trigger:'blur'}]
           },
           datadata: null,
           rowId:'', //当前行的id
@@ -821,5 +821,8 @@
   }
   .w550{
     width: 580px;
+  }
+  .formItem {
+    margin-bottom: 15px;
   }
 </style>
