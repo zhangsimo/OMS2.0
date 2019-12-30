@@ -781,6 +781,8 @@ export default {
           let res = await getAccessories(data);
           if (res.code === 0) {
             this.$emit("parentGetleft");
+            this.$Message.success('添加配件成功')
+            this.$refs.formPlan.resetFields()
           }
         } else {
           this.$Message.error("*为必填项");
