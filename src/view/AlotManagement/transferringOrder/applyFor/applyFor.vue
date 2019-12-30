@@ -52,11 +52,10 @@
                   <div class="clearfix purchase" ref="planForm">
                     <Form inline
                           :model="formPlan"
-                          :show-message="false"
                           ref="formPlan"
                           :rules="ruleValidate"
-                          :label-width="100">
-                      <FormItem label="调出方：" prop="guestName" class="fs12">
+                          :label-width="120">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem">
                         <Row class="w500">
                           <Col span="22">
                             <Input placeholder="请选择调出方" v-model="formPlan.guestName" disabled></Input>
@@ -67,12 +66,12 @@
                           <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
                         </Row>
                       </FormItem>
-                      <FormItem label="调入仓库：" prop="storeId" >
+                      <FormItem class="formItem" label="调入仓库：" prop="storeId" >
                         <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
                           <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
-                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 ml50">
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
                         <DatePicker
                           type="date"
                           style="width: 160px"
@@ -81,8 +80,8 @@
                           :disabled="presentrowMsg !== 0 || buttonDisable"
                         ></DatePicker>
                       </FormItem>
-                      <FormItem label="备注：" prop="remark">
-                        <Input class="w500" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                      <FormItem class="formItem" label="备注：" prop="remark">
+                        <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                       </FormItem>
                       <FormItem label="创建人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
@@ -123,10 +122,10 @@
                     <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                     <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                     <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                    <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input'}" width="100">
+                     <vxe-table-column field="applyQty" title="申请数量" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: roleChangeEvent}}" width="100">
                       <template v-slot:edit="{ row }">
                         <InputNumber
-                          :max="999999"
+                          :max="9"
                           :min="0"
                           v-model="row.applyQty"
                           :disabled="presentrowMsg !== 0"
@@ -234,7 +233,8 @@
           ruleValidate: {
             guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'change' }],
             storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'change' }],
-            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }]
+            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+            remark:[{max: 100, message:'备注长度输入小于100个字符', trigger:'blur'}]
           },
           datadata: null,
           rowId:'', //当前行的id
@@ -361,6 +361,10 @@
           Flaga: false
         }
       },
+      // created() {
+      //   this.Right.tbdata.applyQty = 1
+      //   console.log(this.Right.tbdata.applyQty,'this.Right.tbdata.applyQty')
+      // },
       methods: {
         //删除配件
         Delete(){
@@ -566,7 +570,7 @@
               // oemCode : item.brandPartCode,
               // spec : item.specifications,
               enterUnitId : item.direction,
-              applyQty : '',
+              applyQty : 1,
               remark : '',
               partInnerId : item.code,
               partCode : item.partCode,
@@ -647,6 +651,13 @@
             }
           })
         },
+        roleChangeEvent({ row }, evnt) {
+          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
+          console.log(evnt,'evnt')
+          // console.log(evnt.target.value)
+          // this.currentrow.storeId = evnt.target.value
+        },
+
         // 左边部分的当前行
         selection(row){
           if (row == null) return;
@@ -821,5 +832,8 @@
   }
   .w550{
     width: 580px;
+  }
+  .formItem {
+    margin-bottom: 15px;
   }
 </style>
