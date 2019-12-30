@@ -659,6 +659,9 @@ export default {
           //console.log(res.code === 0, "dafadsf");
           if (res.code === 0) {
             that.getChangeList();
+            this.formPlan={}
+            this.$store.state.dataList.oneOrder={}
+            this.$refs.formPlan.resetFields();
           }
         });
       } else {
@@ -763,6 +766,8 @@ export default {
 
             if (res.code === 0) {
               this.$Message.success("保存成功");
+              this.formPlan={}
+              this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
