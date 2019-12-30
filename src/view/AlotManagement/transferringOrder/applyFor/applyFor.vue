@@ -385,6 +385,8 @@
         },
         // 新增按钮
         addProoo(){
+          var date = new Date()
+          var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
           this.buttonDisable = false
           this.presentrowMsg = 0
           if (!this.isAdd) {
@@ -396,12 +398,13 @@
           this.datadata = this.PTrow
           this.formPlan.guestName = '',//调出方
             this.formPlan.storeId =  this.StoreId, //调入仓库
-            this.formPlan.orderDate =  '', //申请调拨日期
+            this.formPlan.orderDate =  dataTime, //申请调拨日期
             this.formPlan.remark =  '', //备注
             this.formPlan.createUname =  '', //创建人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
+            
           // console.log(this.Left.tbdata)
         },
         // 调入仓库下拉改变事件
