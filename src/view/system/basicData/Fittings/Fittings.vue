@@ -42,12 +42,12 @@
         </div>
         <div slot="right" class="right table-warp">
           <div class="btn-title" v-if="tabIndex == 0">
-            <Button class="mr10 w90" @click="add">
+            <Button class="mr10 w90" @click="add" v-has="'add'">
               <span class="center">
                 <Icon type="md-add" />新增
               </span>
             </Button>
-            <Button :disabled="!isCanbutton" class="mr10 w90" @click="change">
+            <Button :disabled="!isCanbutton" class="mr10 w90" @click="change" v-has="'change'">
               <span class="center">
                 <Icon custom="iconfont iconbianjixiugaiicon icons" />修改
               </span>
@@ -57,22 +57,24 @@
               :disabled="!isCanbutton"
               @click="changeDisable"
               v-if="!isDisable"
+              v-has="'disabled'"
             >
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />启用
               </span>
             </Button>
-            <Button class="mr10 w90" @click="changeDisable" :disabled="!isCanbutton" v-else>
+            <Button class="mr10 w90" @click="changeDisable" :disabled="!isCanbutton"               v-has="'disabled'"
+                    v-else>
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁用
               </span>
             </Button>
-            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale">
+            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-if="isSale" v-has="'noSales'">
               <span class="center">
                 <Icon custom="iconfont iconjinzhijinyongicon icons" />禁售
               </span>
             </Button>
-            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-else>
+            <Button class="mr10 w90" :disabled="!isCanbutton" @click="changeSale" v-else v-has="'noSales'">
               <span class="center">
                 <Icon custom="iconfont iconqiyongicon icons" />可售
               </span>
