@@ -434,6 +434,18 @@
               data.createUname  = this.formPlan.createUname
               data.serviceId = this.formPlan.serviceId
               data.detailVOS = this.Right.tbdata
+
+              var date = new Date()
+              var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+              // console.log(dataTime)
+              var orderDateTime = this.formPlan.orderDate
+              var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+              console.log(orderTime,'orderDateTime')
+              if (orderTime < dataTime) {
+                this.$Message.error('调拨申请日期不小于当前日期')
+                return
+              }
+
               save(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
