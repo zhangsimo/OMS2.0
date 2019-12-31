@@ -153,7 +153,7 @@ export default class PlannedPurchaseOrder extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    directGuestId: "", // 直发门店
+    directCompanyId: "", // 直发门店
     serviceId: "", // 订单号
     code: "", // 往来单号
     codeId: "",
@@ -279,7 +279,7 @@ export default class PlannedPurchaseOrder extends Vue {
       orderDate: "", // 订货日期
       planArriveDate: "", // 预计到货日期
       remark: "", // 备注
-      directGuestId: "", // 直发门店
+      directCompanyId: "", // 直发门店
       serviceId: "", // 订单号
       code: "", // 往来单号
       codeId: "",
@@ -312,7 +312,7 @@ export default class PlannedPurchaseOrder extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          directGuestId: this.formPlanmain.directGuestId,
+          directCompanyId: this.formPlanmain.directCompanyId,
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
