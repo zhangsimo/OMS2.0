@@ -619,7 +619,7 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
-      console.log(msg.row.id, "msg");
+      console.log(msg, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -692,6 +692,7 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.serviceId = "";
