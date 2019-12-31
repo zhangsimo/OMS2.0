@@ -261,7 +261,7 @@
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
       ref="selectSupplier"
-      header-tit="调出方资料"
+      header-tit="调入方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
 
