@@ -288,7 +288,7 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "总价"
+            value: "合计"
           };
           return;
         }

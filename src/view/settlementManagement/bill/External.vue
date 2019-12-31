@@ -286,7 +286,7 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "总价"
+            value: "合计"
           };
           return;
         }
@@ -393,7 +393,8 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getWarehousingPart({ mainId: roww.id }).then(res => {
+      getWarehousingPart({ mainId: row.id }).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
