@@ -74,7 +74,7 @@
               class="mr10"
               :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
-              v-has="check"
+              v-has="'check'"
             >
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
@@ -398,7 +398,7 @@
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
+                <vxe-table-column field="notEnterQty" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
