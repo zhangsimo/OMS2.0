@@ -152,10 +152,14 @@
                     </Row>
                   </FormItem>
                   <FormItem class="form-Item" label="预付款：" prop="advanceAmt">
-                    <Input
-                      class="w160"
+                    <el-input-number
+                      :min="0"
                       v-model="formPlanmain.advanceAmt"
+                      :controls="false"
+                      size="small"
+                      :precision="2"
                       :disabled="isInput"
+                      class="w160"
                     />
                   </FormItem>
                   <FormItem class="form-Item" label="采购员：" prop="orderManId">
@@ -254,7 +258,7 @@
                   <FormItem class="form-Item" label="直发门店：">
                     <Select
                       class="w160"
-                      v-model="formPlanmain.directGuestId"
+                      v-model="formPlanmain.directCompanyId"
                       :disabled="isInput"
                     >
                       <Option

@@ -31,3 +31,19 @@ export function logistics() {
     method: "get"
   });
 }
+// 获取
+export function getGoodsInfos(data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/queryOrderLogistics`,
+    method: "post",
+    data
+  });
+}
+//保存
+export function saveGoodsInfos(data = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderMain/saveOrderLogistics`,
+    method: "post",
+    data
+  });
+}

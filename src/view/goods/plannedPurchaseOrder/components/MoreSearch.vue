@@ -86,7 +86,6 @@
   </Modal>
 </template>
 <script lang="ts">
-// import "./text";
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
 import SelectSupplier from "./selectSupplier.vue";
@@ -150,10 +149,10 @@ export default class MoreSearch extends Vue {
     this.showSelf = true;
   }
 
-  private brandLists:Array<any> = new Array();
+  private brandLists: Array<any> = new Array();
   private async getBrand() {
-    let res:any = await getParamsBrand();
-    if(res.code == 0) {
+    let res: any = await getParamsBrand();
+    if (res.code == 0) {
       this.brandLists = res.data;
     }
   }
@@ -186,7 +185,7 @@ export default class MoreSearch extends Vue {
     if (this.salesList.length <= 0) {
       this.getAllSales();
     }
-    if(this.brandLists.length <= 0) {
+    if (this.brandLists.length <= 0) {
       this.getBrand();
     }
     this.serchN = true;

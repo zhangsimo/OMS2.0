@@ -55,8 +55,10 @@ export default class AddRolse extends Vue {
     form.validate(async valid => {
       if (valid) {
         let data: any = {};
+        var arr: any = []
         data = this.list;
         data.resIds = [];
+        // for(var i = 0 ; i<arr.length; i++) {}
         let res = await addNewStaffe(data);
         if (res.code === 0) {
           this.$message.success("添加成功");

@@ -263,14 +263,24 @@
                     {
                         title: '库存单价',
                         align: 'center',
-                        key: 'costPrice',
-                        minWidth: 120
+                        // key: 'costPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.costPrice.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '库存金额',
                         align: 'center',
-                        key: 'stockAmt',
-                        minWidth: 120
+                        // key: 'stockAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.stockAmt.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '规格',
@@ -301,7 +311,25 @@
                         align: 'center',
                         key: 'downLimitWinter',
                         minWidth: 120
-                    }
+                    },
+                  {
+                    title: '采购在途库存',
+                    align: 'center',
+                    key: 'pchRoadQty',
+                    minWidth: 120
+                  },
+                  {
+                    title: '调拨在途库存',
+                    align: 'center',
+                    key: 'attotRoadQty',
+                    minWidth: 120
+                  },
+                  {
+                    title: '合计在途库存',
+                    align: 'center',
+                    key: 'onRoadQty',
+                    minWidth: 120
+                  }
                 ],
                 //批次库存列表
                 columns2: [
@@ -385,14 +413,25 @@
                     {
                         title: '库存单价',
                         align: 'center',
-                        key: 'enterPrice',
-                        minWidth: 120
+                        // key: 'enterPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.enterPrice.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
+
                     },
                     {
                         title: '库存金额',
                         align: 'center',
-                        key: 'enterAmt',
-                        minWidth: 120
+                        // key: 'enterAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.enterAmt.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '税率',
@@ -403,15 +442,31 @@
                     {
                         title: '不含税单价',
                         align: 'center',
-                        key: 'noTaxPrice',
-                        minWidth: 120
+                        // key: 'noTaxPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.noTaxPrice.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '不含税金额',
                         align: 'center',
-                        key: 'noTaxAmt',
-                        minWidth: 120
+                        // key: 'noTaxAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = params.row.noTaxAmt.toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
+                  {
+                    title: '连锁库龄',
+                    align: 'center',
+                    key: 'chainStockAge',
+                    minWidth: 120
+                  },
                     {
                         title: '本店库龄',
                         align: 'center',
@@ -428,6 +483,24 @@
                     },
                         minWidth: 120
                     },
+                  {
+                    title: '入库单号',
+                    align: 'center',
+                    key: 'serviceId',
+                    minWidth: 120
+                  },
+                  {
+                    title: '第一供应商',
+                    align: 'center',
+                    key: 'originGuestName',
+                    minWidth: 120
+                  },
+                  {
+                    title: '最近供应商',
+                    align: 'center',
+                    key: 'guestName',
+                    minWidth: 120
+                  },
                 ],
                 // 汇总库存的数据
                   contentOne: {
@@ -534,6 +607,7 @@
                 if (res.code == 0) {
                     this.storeList = res.data;
                 }
+              // this.storeList.unshift({ name: "全部", id: '全部' })
             },
 
             //获取品牌

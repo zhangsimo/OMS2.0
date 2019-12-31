@@ -69,14 +69,14 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Select v-model="collectionAccountName" style="width:200px" class="mr10">
+                <!-- <Select v-model="collectionAccountName" style="width:200px" class="mr10">
                   <Option
                     v-for="item in collectionAccountList"
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select>
-                <!-- <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled /> -->
+                </Select> -->
+                <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
                 <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
                 <span>开户行：</span>
                 <Input v-model="openingBank" class="w140 mr10" disabled />
@@ -158,7 +158,6 @@
             </div>
           </div>
         </section>
-        <selectDealings ref="selectDealings" @getOne="getOne" />
       </div>
       <div slot="footer"></div>
     </Modal>
@@ -198,12 +197,14 @@ import {
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
+import index from "../../admin/roles";
 export default {
   components: {
     selectDealings
   },
   data() {
     return {
+      collectionAccountList: [],
       companyList: [],
       info: false,
       store: "",
@@ -528,7 +529,6 @@ export default {
       this.flag = false;
       this.info = false;
       let { orgId, startDate, endDate, guestId } = this.parameter;
-      this.companyInfo = guestId;
       this.store = this.parameter.orgId;
       this.model1 = this.parameter.orgId;
       let obj = { orgId, startDate, endDate, guestId };
@@ -582,27 +582,33 @@ export default {
         }
       });
     },
-    // 选择往来单位
-    getOne(data) {
-      this.companyInfo = data.shortName;
-      this.companyInfoId = data.id;
-    },
     // 对账门店
     storeAccount(val) {
       this.Branchstore.map(item => {
         if (item.value === val) {
           getStore({ orgId: val, orgName: item.label }).then(res => {
             this.infoGet = res.data;
-            this.companyList = []
-            res.data.map(item => {
+            this.companyList = [];
+            this.collectionAccountList = [];
+            res.data.map((item, index) => {
+              if (item.id === this.companyInfo) {
+                this.collectionAccountName = item.receiveName;
+                this.openingBank = item.accountBank;
+                this.collectionAccount = item.accountBankNo;
+              } else {
+                this.collectionAccountName = res.data[0].receiveName;
+                this.openingBank = res.data[0].accountBank;
+                this.collectionAccount = res.data[0].accountBankNo;
+              }
               this.companyList.push({
                 value: item.id,
                 label: item.fullName
               });
             });
-            this.collectionAccountName = res.data[0].accountName;
-            this.openingBank = res.data[0].accountBank;
-            this.collectionAccount = res.data[0].accountBankNo;
+            // this.collectionAccountList.push({
+            //   value: 0,
+            //   label: res.data[0].receiveName
+            // });
           });
         }
       });
@@ -611,7 +617,11 @@ export default {
     companySelect(val) {
       this.infoGet.map(item => {
         if (item.id === val) {
-          this.collectionAccountName = item.accountName;
+          // this.collectionAccountList.push({
+          //   value: 0,
+          //   label: item.receiveName
+          // });
+          this.collectionAccountName = item.receiveName;
           this.openingBank = item.accountBank;
           this.collectionAccount = item.accountBankNo;
         }
@@ -778,8 +788,8 @@ export default {
           four
         };
         Preservation(obj).then(res => {
-          if(res.code === 0){
-            this.$message.success('保存成功')
+          if (res.code === 0) {
+            this.$message.success("保存成功");
           }
         });
       } else {

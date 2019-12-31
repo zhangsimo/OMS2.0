@@ -22,7 +22,7 @@
             </Select>
           </div>
           <div class="db ml20">
-            <span>供应商：</span>
+            <span>往来单位：</span>
             <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
@@ -286,7 +286,7 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "总价"
+            value: "合计"
           };
           return;
         }
@@ -393,7 +393,7 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getWarehousingPart({ mainId: roww.id }).then(res => {
+      getWarehousingPart({ mainId: row.id }).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
