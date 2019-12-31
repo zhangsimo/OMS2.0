@@ -235,6 +235,9 @@ export default class SelectSupplier extends Vue {
   }
   //显示层
   private init() {
+    this.fullName = "";
+    this.code = "";
+    this.contactorTel = "";
     this.selectTableItem = null;
     this.searchPartLayer = true;
     this.getCarClassifysFun();

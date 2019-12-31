@@ -28,10 +28,11 @@
           v-model="formInline.exchangeRate"
           :controls="false"
           size="small"
+          :precision="2"
         />
       </FormItem>
       <FormItem label="关税比例: " prop="tariffScale">
-        <el-input-number
+        <InputNumber
           :min="0"
           :max="100"
           v-model="formInline.tariffScale"
@@ -44,7 +45,7 @@
         />
       </FormItem>
       <FormItem label="运杂费比例: " prop="transportScale">
-        <el-input-number
+        <InputNumber
           :min="0"
           :max="100"
           v-model="formInline.transportScale"
@@ -57,7 +58,7 @@
         />
       </FormItem>
       <FormItem label="增值税比例: " prop="vatScale">
-        <el-input-number
+        <InputNumber
           :min="0"
           :max="100"
           v-model="formInline.vatScale"

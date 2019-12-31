@@ -107,7 +107,6 @@
             >
               <template v-slot:edit="scope">
                 <Select
-                  transfer
                   style="width:100px"
                   v-model="scope.row.serviceType"
                   @on-change="changeSelect(scope)"
@@ -231,6 +230,7 @@ export default class FeeRegistration extends Vue {
     this.isCost = true;
     this.tableData = new Array();
     this.tableInfoData = new Array();
+    this.selectrow = null;
     this.loading = false;
     this.loading2 = false;
     this.page = {
@@ -244,6 +244,7 @@ export default class FeeRegistration extends Vue {
   private query() {
     if (!this.selectValue) return this.$Message.error("请选择筛选条件");
     this.tableInfoData = new Array();
+    this.selectrow = null;
     this.getList();
   }
 
@@ -365,6 +366,9 @@ export default class FeeRegistration extends Vue {
 
   // 添加
   private add() {
+    if(!this.selectrow) {
+      return this.$Message.error("请先选择往来单位");
+    }
     if (this.tableInfoData.length >= this.selectrow.revenueTypes.length) {
       return this.$Message.error("总条数不能超过收支项目条数");
     }
