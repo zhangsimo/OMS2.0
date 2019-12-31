@@ -72,7 +72,9 @@
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                           </Col>
-                          <Col span="2"><Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button></Col>
+                          <Col span="2">
+                            <Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
+                          </Col>
                         </Row>
                       </FormItem>
                       <FormItem class="formItem" label="调入仓库：" prop="storeId" >
@@ -82,7 +84,7 @@
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
                         <DatePicker
-                          type="date"
+                          type="datetime"
                           style="width: 160px"
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
@@ -240,7 +242,7 @@
                createUname: '',
                serviceId: '',
                orderMan:'',
-               orderDate: tools.transTime(new Date()),
+               // orderDate: tools.transTime(new Date()),
                printing: '',
                createTime: '',
                 detailVOS: [],
@@ -316,13 +318,13 @@
               },
               {
                 title: '提交人',
-                key: 'orderMan',
+                key: 'auditOr',
                 minWidth: 100
               },
               {
                 title: '提交日期',
                 align:'center',
-                key: 'orderDate',
+                key: 'auditDate',
                 minWidth: 170
               },
               {
@@ -405,7 +407,8 @@
         // 新增按钮
         addProoo(){
           var date = new Date()
-          var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+          // date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+          var dataTime = tools.transTime(date)
           this.buttonDisable = false
           this.presentrowMsg = 0
           if (!this.isAdd) {
@@ -518,7 +521,12 @@
                     });
                   }
                 } else {
-                  this.$Message.error('*为必填！');
+                  if(!this.formPlan.guestName){
+                    this.$Message.warning('请选择调出方！')
+                  }
+                  if(!this.guestidId && !this.formPlan.storeId && !formPlan.orderDate){
+                    this.$Message.error('*为必填！');
+                  }
                 }
               })
         },
