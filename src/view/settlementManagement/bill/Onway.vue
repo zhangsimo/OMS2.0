@@ -44,7 +44,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary></Table>
+        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @getOne="getOne"/>

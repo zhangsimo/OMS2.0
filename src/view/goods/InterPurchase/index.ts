@@ -155,7 +155,7 @@ export default class InterPurchase extends Vue {
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
     remark: "", // 备注
-    directGuestId: "", // 直发门店
+    directCompanyId: "", // 直发门店
     serviceId: "", // 订单号
     code: "", // 往来单号
     codeId: "",
@@ -258,7 +258,7 @@ export default class InterPurchase extends Vue {
       orderDate: "", // 订货日期
       planArriveDate: "", // 预计到货日期
       remark: "", // 备注
-      directGuestId: "", // 直发门店
+      directCompanyId: "", // 直发门店
       serviceId: "", // 订单号
       code: "", // 往来单号
       codeId: "",
@@ -291,7 +291,7 @@ export default class InterPurchase extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          directGuestId: this.formPlanmain.directGuestId,
+          directCompanyId: this.formPlanmain.directCompanyId,
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
@@ -544,7 +544,7 @@ export default class InterPurchase extends Vue {
         if (columnIndex === 0) {
           return '合计'
         }
-        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt'].includes(column.property) || columnIndex === 14) {
+        if (['orderQty', 'orderPrice', 'noTaxPrice', 'noTaxAmt', 'tariffAmt', 'transportAmt', 'vatAmt', 'otherAmt', 'notEnterQty', 'trueEnterQty'].includes(column.property) || columnIndex === 14) {
           return this.sum(data, column.property, columnIndex)
         }
         return null

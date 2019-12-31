@@ -153,15 +153,6 @@ export default {
     this.getAllClient()
   },
   methods: {
-    //判断表格能不能编辑
-    editActivedEvent({ row }) {
-      let xTable = this.$refs.xTable;
-      let orderQtyColumn = xTable.getColumnByField("orderQty");
-      let orderPriceColumn = xTable.getColumnByField("orderPrice");
-      let isDisabled = this.formPlan.billStatusValue != 0;
-      orderQtyColumn.editRender.attrs.disabled = isDisabled;
-      orderPriceColumn.editRender.attrs.disabled = isDisabled;
-    },
     //选择供应商
     addSuppler() {
       this.$refs.selectSupplier.init();

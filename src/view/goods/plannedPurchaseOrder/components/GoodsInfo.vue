@@ -99,7 +99,6 @@
             inline
             :model="formDateRight"
             ref="formTwo"
-            :rules="ruleValidate"
             :label-width="100"
           >
             <FormItem label="收货单位：" prop="receiveComp">
@@ -137,7 +136,6 @@
                 v-model="formDateRight.deliveryType"
                 class="w200"
                 :disabled="disabled"
-                @on-change="changeDeliveryType"
               >
                 <Option value="0">自配</Option>
                 <Option value="1">客户自提</Option>
@@ -198,7 +196,7 @@
               <Input
                 v-model="formDateRight.businessNum"
                 class="w200"
-                :disabled="disabled"
+                readonly
               />
             </FormItem>
             <FormItem label="关联单号：">
@@ -291,7 +289,8 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     this.showInfo = true;
-    let res:any = await fapi.getGoodsInfo({ mainId: this.mainId });
+    const directCompanyId = this.row.directCompanyId || null;
+    let res:any = await fapi.getGoodsInfos({ mainId: this.mainId, directCompanyId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -380,7 +379,9 @@ export default class GoodsInfo extends Vue {
         data[k] = v;
       }
     }
-    let res = await fapi.getGoodsInfo(data);
+    const directCompanyId = this.row.directCompanyId || null;
+    data.directCompanyId = directCompanyId;
+    let res = await fapi.getGoodsInfos(data);
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -404,18 +405,17 @@ export default class GoodsInfo extends Vue {
       }
       if (valid && logisc) {
         // this.saveId(this.tableData);
-        let res = await fapi.saveGoodsInfo({
+        let res = await fapi.saveGoodsInfos({
           ...this.formDateRight,
           mainId: this.mainId
         });
         if (res.code == 0) {
           this.$Message.success("保存成功");
           this.reset();
-          // this.getLists();
-          this.cancel();
+          this.searchInfo();
         }
       } else {
-        this.$Message.error("请添加配件或完善订单信息后再提交!");
+        this.$Message.error("请完善收货信息后再保存!");
       }
     });
   }
@@ -424,31 +424,34 @@ export default class GoodsInfo extends Vue {
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    if (row.logisticsRecordVO) {
-      this.formDateRight.id = row.logisticsRecordVO.id;
-      this.formDateRight = { ...row.logisticsRecordVO };
-      this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-      this.formDateRight.settleType = this.formDateRight.settleType + "";
-    } else {
-      this.formDateRight.logisticsId = row.id;
-      this.formDateRight.receiveComp = row.receiveCompName;
-      this.formDateRight.streetAddress = row.streetAddress;
-      this.formDateRight.receiver = row.receiveMan;
-      this.formDateRight.receiverMobile = row.receiveManTel;
-      this.formDateRight.provinceId = row.provinceId;
-      this.formDateRight.cityId = row.cityId;
-      this.formDateRight.countyId = row.countyId;
-      
-      this.formDateRight.guestId = row.guestId;
-      this.formDateRight.receiveAddress = row.address;
-    }
-    this.changeDeliveryType();
+    this.formDateRight = row.logisticsRecord
+    this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
+    this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+    this.formDateRight.settleType = this.formDateRight.settleType + "";
+    // if (row.logisticsRecord) {
+    //   this.formDateRight.id = row.logisticsRecord.id;
+    //   this.formDateRight = { ...row.logisticsRecord };
+    //   this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+    //   this.formDateRight.settleType = this.formDateRight.settleType + "";
+    // } else {
+    //   this.formDateRight.logisticsId = row.id;
+    //   this.formDateRight.receiveComp = row.receiveCompName;
+    //   this.formDateRight.streetAddress = row.streetAddress;
+    //   this.formDateRight.receiver = row.receiveMan;
+    //   this.formDateRight.receiverMobile = row.receiveManTel;
+    //   this.formDateRight.provinceId = row.provinceId;
+    //   this.formDateRight.cityId = row.cityId;
+    //   this.formDateRight.countyId = row.countyId;
+    //   this.formDateRight.guestId = row.guestId;
+    //   this.formDateRight.receiveAddress = row.address;
+    // }
+    // this.changeDeliveryType();
   }
   //传入保存id
   private saveId(row) {
     row.forEach(item => {
-      if (item.logisticsRecordVO) {
-        this.formDateRight.id = item.logisticsRecordVO.id;
+      if (item.logisticsRecord) {
+        this.formDateRight.id = item.logisticsRecord.id;
       }
     });
   }

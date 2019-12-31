@@ -53,6 +53,7 @@
           ref="summary"
           show-summary
           highlight-row
+          :summary-method="handleSummary"
           @on-row-click="election"
           max-height="400"
         ></Table>
@@ -347,6 +348,45 @@ export default {
     this.getGeneral();
   },
   methods: {
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     //查询
     query() {
       this.getGeneral();
