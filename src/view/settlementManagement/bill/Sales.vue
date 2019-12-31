@@ -56,7 +56,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row
+        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row :summary-method="handleSummary"
           @on-row-click="election" max-height="400"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
@@ -228,6 +228,45 @@ export default {
     this.getGeneral()
   },
   methods: {
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "总价"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     //查询
     query() {
       this.getGeneral();
