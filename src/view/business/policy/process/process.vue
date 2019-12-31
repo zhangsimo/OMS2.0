@@ -33,22 +33,22 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="xinzeng">
+                  <Button class="mr10" @click="xinzeng" v-has="'add'">
                     <Icon type="md-add" />新增
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1" >
+                  <Button type="default" class="mr10" @click="baocun1" v-has="'save'">
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1">
+                  <Button class="mr10" @click="tijiao1" v-has="'submit'">
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1">
+                  <Button class="mr10" @click="zuofei1" v-has="'zuofei'">
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -144,12 +144,12 @@
                     <div class="flex plan-cz-btn" ref="planBtn">
                       <div class="clearfix">
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="addProoo">
+                          <Button size="small" class="mr10" @click="addProoo" v-has="'ddProoo'">
                             <Icon type="md-add" />选择成品
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu">
+                          <Button size="small" class="mr10" @click="shanchu"  v-has="'delete'">
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除
                           </Button>
                         </div>
@@ -266,22 +266,22 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="xinzeng">
+                  <Button class="mr10" @click="xinzeng" v-has="'add1'">
                     <Icon type="md-add" />新增
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1">
+                  <Button type="default" class="mr10" @click="baocun1" v-has="'save1'">
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1">
+                  <Button class="mr10" @click="tijiao1" v-has="'submit1'">
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1">
+                  <Button class="mr10" @click="zuofei1" v-has="'zuofei1'">
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -379,12 +379,12 @@
                     <div class="flex plan-cz-btn" ref="planBtn">
                       <div class="clearfix">
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="addProoo">
+                          <Button size="small" class="mr10" @click="addProoo" v-has="'addProoo1'">
                             <Icon type="md-add" />选择成品
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu">
+                          <Button size="small" class="mr10" @click="shanchu" v-has="'shanchu1'" >
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除
                           </Button>
                         </div>

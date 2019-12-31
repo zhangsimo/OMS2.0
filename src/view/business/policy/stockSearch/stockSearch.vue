@@ -39,7 +39,7 @@
                 <Icon type="ios-search" size="14"/>
                 查询
               </Button>
-              <Button class="mr10 w90" @click="exportTheSummary"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
+              <Button class="mr10 w90" @click="exportTheSummary" v-has="'export'"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
 <!--              <Button class="mr10 w120" @click="sfy"> 安全库存设置</Button>-->
           </div>
         </div>
@@ -78,8 +78,8 @@
                 <Icon type="ios-search" size="14"/>
                 查询
               </Button>
-              <Button class="mr10 w90" @click="exportBatch"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button>
-              <Button class="mr10 w120" @click="sfy"> 安全库存设置</Button>
+              <Button class="mr10 w90" @click="exportBatch"><i class="iconfont mr5 icondaochuicon" v-has="'exportBatch'"></i> 导出</Button>
+              <Button class="mr10 w120" @click="sfy" v-has="'safe'"> 安全库存设置</Button>
           </div>
         </div>
         <!--        表-->

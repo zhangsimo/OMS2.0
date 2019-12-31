@@ -7,12 +7,12 @@
         <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
       </Select>
       <Button type="default"   @click="openQueryModal" class="mr10"><Icon type="ios-more" />更多</Button>
-      <Button type="default" class="mr10 w90" @click="addNew"><Icon type="md-add" size="14" /> 新增</Button>
-      <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusValue != 0" ><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
-      <Button class="mr10" @click="godown" :disabled="formPlan.billStatusValue != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
-      <Button class="mr10" :disabled="formPlan.billStatusValue != 0" @click="selectPlan"> 选择采购订单</Button>
-      <Button class="mr10" @click="setPrint"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
-      <Button class="mr10" @click="showFee" :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
+      <Button type="default" class="mr10 w90" @click="addNew" v-has="'add'"><Icon type="md-add" size="14"/> 新增</Button>
+      <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusValue != 0"   v-has="'save'"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+      <Button class="mr10" @click="godown" :disabled="formPlan.billStatusValue != 0"  v-has="'godown'"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
+      <Button class="mr10" :disabled="formPlan.billStatusValue != 0" @click="selectPlan" v-has="'selectPlan'"> 选择采购订单</Button>
+      <Button class="mr10" @click="setPrint" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+      <Button class="mr10" @click="showFee" v-has="'showFee'" :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
     </div>
     <div class="conter">
       <div class="demo-split">
@@ -103,13 +103,13 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix pt10 pb10">
                   <div class="fl mb5">
-                    <Button :disabled="formPlan.billStatusValue != 0" size="small" class="mr10" @click="addMountings">
+                    <Button :disabled="formPlan.billStatusValue != 0" size="small" class="mr10" v-has="'addMountings'" @click="addMountings">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button @click="delect" :disabled="formPlan.billStatusValue != 0" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                    <Button @click="delect" :disabled="formPlan.billStatusValue != 0" v-has="'delete'" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                   </div>
                   <div class="fl mb5">
                     <Upload
@@ -123,7 +123,7 @@
                       :on-success="onSuccess"
                       :before-upload ='beforeUpload'
                     >
-                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 " type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入配件</Button>
+                      <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 " v-has="'export'" type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入配件</Button>
                     </Upload>
                   </div>
                 </div>

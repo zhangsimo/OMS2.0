@@ -28,6 +28,7 @@
           <div class="db">
             <Button class="mr10"
                     @click="addOrder"
+                    v-has="'add'"
             >
               <Icon type="md-add"/>
               新增
@@ -38,6 +39,7 @@
             <Button type="default" class="mr10"
                     :disabled="draftShow != 0||isNew"
                     @click="isSave"
+                    v-has="'save'"
             ><i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button
             >
@@ -46,6 +48,7 @@
             <Button class="mr10"
                     @click="isSubmit"
                     :disabled="draftShow != 0||isNew"
+                    v-has="'submit'"
             ><i class="iconfont mr5 iconziyuan2"></i>提交
             </Button
             >
@@ -53,6 +56,7 @@
           <div class="db">
             <Button class="mr10"
                     @click="printTable"
+                    v-has="'print'"
             ><i class="iconfont mr5 icondayinicon"></i> 打印
             </Button
             >
@@ -62,6 +66,7 @@
             <Button class="mr10"
                     @click="isDelete"
                     :disabled="draftShow != 0"
+                    v-has="'delete'"
             >
               <Icon type="md-close" size="14"/>
               作废
@@ -71,6 +76,7 @@
           <div class="db">
             <Button class="mr10"
                     @click="Output"
+                    v-has="'output'"
             ><i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button
             >
@@ -79,6 +85,7 @@
             <Button class="mr10"
                     :disabled="draftShow != 3"
                     @click="finish"
+                    v-has="'finish'"
             ><i class="iconfont mr5 "></i> 完成销售
             </Button
             >
@@ -206,7 +213,7 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addMountings " :disabled="draftShow != 0||isNew">
+                      <Button size="small" class="mr10" v-has="'addMountings'" @click="addMountings " :disabled="draftShow != 0||isNew">
                         <Icon type="md-add"/>
                         添加配件
                       </Button>
@@ -214,6 +221,7 @@
                     <div class="fl mb5">
                       <Button size="small" class="mr10" :disabled="draftShow != 0||isNew"
                               @click="deletePart"
+                              v-has="'deletePart'"
                       >
                         <Icon custom="iconfont iconlajitongicon icons"/>
                         删除配件
@@ -232,18 +240,18 @@
                         :on-success="onSuccess"
                         :before-upload='beforeUpload'
                       >
-                        <Button size="small" class="mr10" @click="getRUl" :disabled="draftShow != 0||isNew">
+                        <Button size="small" class="mr10" @click="getRUl" v-has="'getRUl'" :disabled="draftShow != 0||isNew">
                           <span class="center"><Icon custom="iconfont icondaoruicon icons"/>导入配件</span>
                         </Button>
                       </Upload>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" @click="down">
+                      <Button size="small" @click="down" v-has="'down'">
                         <Icon custom="iconfont iconxiazaiicon icons" />下载模板
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="openAddressShow" :disabled="draftShow != 0||isNew">
+                      <Button size="small" class="mr10" @click="openAddressShow" v-has="'editAddress'" :disabled="draftShow != 0||isNew">
                         编辑发货信息
                       </Button>
                     </div>

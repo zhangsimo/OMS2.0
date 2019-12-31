@@ -21,23 +21,23 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addProoo">
+            <Button class="mr10" @click="addProoo" v-has="'add'">
               <Icon type="md-add" />新增
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">保存</Button>
+            <Button @click="baocun"  v-has="'save'" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">保存</Button>
           </div>
           <div class="db">
-            <Button @click="editPro" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">提交</Button>
+            <Button @click="editPro"  v-has="'submit'" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">提交</Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="cancellation" :disabled="this.formPlan.statuName!== '草稿'">
+            <Button class="mr10"  v-has="'cancellation'" @click="cancellation" :disabled="this.formPlan.statuName!== '草稿'">
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable" :disabled="this.formPlan.statuName!== '草稿'">
+            <Button class="mr10" @click="printTable" v-has="'print'" :disabled="this.formPlan.statuName!== '草稿'">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -121,12 +121,12 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addPro" :disabled="draftShow != 0">
+                    <Button size="small" class="mr10" @click="addPro" v-has="'addPro'" :disabled="draftShow != 0">
                       <Icon type="md-add" />添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="shanchu" :disabled="draftShow != 0">
+                    <Button size="small" class="mr10" @click="shanchu" v-has="'delete'" :disabled="draftShow != 0">
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除
                     </Button>
                   </div>
@@ -145,6 +145,7 @@
                         @click="importAss"
                         size="small"
                         class="mr10"
+                        v-has="'import'"
                         :disabled="draftShow != 0"
                       >导入</Button>
                     </Upload>
