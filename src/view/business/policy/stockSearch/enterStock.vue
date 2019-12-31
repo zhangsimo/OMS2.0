@@ -245,7 +245,7 @@
                     {
                         title: '不含税金额',
                         align: 'center',
-                        key: 'noTaxPrice',
+                        key: 'noTaxAmt',
                         minWidth: 120
                     },
                     {

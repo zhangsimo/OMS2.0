@@ -242,8 +242,8 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
-          <Button v-has="'Determined'" type="primary" @click="Determined">确定</Button>
-          <Button v-has="'cancel'" type="default">取消</Button>
+          <Button type="primary" @click="Determined">确定</Button>
+          <Button type="default">取消</Button>
         </div>
       </Modal>
     </div>
@@ -261,7 +261,7 @@
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
       ref="selectSupplier"
-      header-tit="调出方资料"
+      header-tit="调入方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
 

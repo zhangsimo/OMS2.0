@@ -529,6 +529,7 @@ export const mixGoodsData = {
       let self = this;
       if (res.code == 0) {
         self.$Message.success("导入成功");
+        self.$Message.warning(res.data.errosMsg[0])
         this.tableData = res.data.details;
       } else {
         self.$Message.error(res.message);

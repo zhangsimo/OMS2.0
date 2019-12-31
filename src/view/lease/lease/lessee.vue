@@ -420,7 +420,11 @@ export default {
         {
           value: 1,
           name: "一月内"
-        }
+        },
+        {
+          value: 2,
+          name: "所有"
+        },
       ],
       ListFour: [
         {

@@ -9,7 +9,7 @@
           <div class="db mr10">
             <span class>申请日期从：</span>
             <DatePicker
-              v-model="penSalesData.allotEnterTimeStart"
+              v-model="penSalesData.startTime"
               type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               style="width:120px"
@@ -18,7 +18,7 @@
           <div class="db mr10">
             <span class="ml10">至：</span>
             <DatePicker
-              v-model="penSalesData.allotEnterTimeEnd"
+              v-model="penSalesData.endTime"
               type="datetime"
               format="yyyy-MM-dd HH:mm:ss"
               style="width:120px"
@@ -135,8 +135,8 @@ export default {
       tabList: [],
       // 调出方查询
       penSalesData: {
-        allotEnterTimeEnd: "", //申请单号
-        allotEnterTimeStart: "",
+        endTime: "", //申请单号
+        startTime: "",
         guestName: "",
         guestId: "",
         serviceId: ""
@@ -237,21 +237,22 @@ export default {
     },
     //搜索
     search(size, num) {
-      if (this.penSalesData.allotEnterTimeStart) {
-        this.penSalesData.allotEnterTimeStart = moment(
-          this.penSalesData.allotEnterTimeStart
+      if (this.penSalesData.startTime) {
+        this.penSalesData.startTime = moment(
+          this.penSalesData.startTime
         ).format("YYYY-MM-DD HH:mm:ss");
       }
-      if (this.penSalesData.allotEnterTimeEnd) {
-        this.penSalesData.allotEnterTimeEnd = moment(
-          this.penSalesData.allotEnterTimeEnd
-        ).format("YYYY-MM-DD HH:mm:ss");
+      if (this.penSalesData.endTime) {
+        this.penSalesData.endTime = moment(this.penSalesData.endTime).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
       }
       for (var k in this.penSalesData) {
         if (!this.penSalesData[k]) {
           delete this.penSalesData[k];
         }
       }
+      this.penSalesData.enterSelect = 123;
       this.$emit("search21", this.penSalesData, size, num);
       // setTimeout(() => {
       //   this.$parent.addProoo();

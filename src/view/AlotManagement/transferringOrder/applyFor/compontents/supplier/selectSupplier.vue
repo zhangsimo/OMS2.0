@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="调入方资料" width="1000">
+    <Modal v-model="searchPartLayer" :title="headerTit" width="1000">
       <div class="partCheck-hd">
         <Input class="w150 mr10" v-model="fullName" placeholder="名称"></Input>
         <Input class="w200 mr10" v-model="code" placeholder="编码"></Input>
