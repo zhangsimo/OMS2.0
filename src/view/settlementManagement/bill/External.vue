@@ -394,7 +394,6 @@ export default {
     // 选中总表查询明细
     election(row) {
       getWarehousingPart({ mainId: row.id }).then(res => {
-        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
