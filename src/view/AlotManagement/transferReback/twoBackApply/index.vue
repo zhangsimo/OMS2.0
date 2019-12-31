@@ -21,32 +21,32 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="xinzeng">
+                  <Button v-has="'add'"  class="mr10" @click="xinzeng">
                     <Icon type="md-add" />新增
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1">
+                  <Button type="default" v-has="'save'" class="mr10" @click="baocun1">
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1">
+                  <Button class="mr10" v-has="'submit'"  @click="tijiao1">
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button :disabled="Leftcurrentrow.status.value !== 2" class="mr10" @click="chuku">
+                  <Button v-has="'delivery'" :disabled="Leftcurrentrow.status.value !== 2" class="mr10" @click="chuku">
                     <Icon type="md-checkmark" size="14" />出库
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1">
+                  <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="printTable">
+                  <Button v-has="'print'" class="mr10" @click="printTable">
                     <Icon type="md-close" size="14" />打印
                   </Button>
                 </div>
@@ -123,12 +123,12 @@
                     <div class="flex plan-cz-btn" ref="planBtn">
                       <div class="clearfix">
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="addProoo">
+                          <Button v-has="'addProoo'" size="small" class="mr10" @click="addProoo">
                             <Icon type="md-add"/>选择调拨入库单
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu">
+                          <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                           </Button>
                         </div>
