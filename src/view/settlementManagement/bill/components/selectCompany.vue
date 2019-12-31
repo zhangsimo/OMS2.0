@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
+  <Modal v-model="addressShow" title="往来单位" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
         <Input v-model="clientName" placeholder="名称" class="mr10" style="width: 150px" />
