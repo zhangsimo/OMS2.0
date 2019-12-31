@@ -529,6 +529,8 @@
             async getEnters() {
                 this.oneTime = ''
                 this.twoTime = ''
+              this.searchForm2.startEnterDate = ''
+              this.searchForm2.endEnterDate = ''
                 this.modal1 = true
                 this.tIndex = 1
                 this.getList()
