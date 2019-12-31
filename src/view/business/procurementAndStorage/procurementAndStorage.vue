@@ -143,6 +143,7 @@
                   height="425"
                   @select-change="selectSameList"
                   @select-all = 'selectAllList'
+                  @edit-actived="editActivedEvent"
                   :data="formPlan.details"
                   style="width: 2000px"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -152,8 +153,8 @@
                   <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
-                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
-                  <vxe-table-column field="orderPrice" title="单价" :edit-render="{name: 'input',immediate: true, events: {input: updateFooterEvent}}"></vxe-table-column>
+                  <vxe-table-column field="orderQty" title="数量" :edit-render="{name: 'input',immediate: true,attrs: {disabled: false}, events: {input: updateFooterEvent}}"></vxe-table-column>
+                  <vxe-table-column field="orderPrice" title="单价" :edit-render="{name: 'input',immediate: true,attrs: {disabled: false}, events: {input: updateFooterEvent}}"></vxe-table-column>
                   <vxe-table-column  title="金额">
                     <template v-slot="{ row }">
                       <span>{{ countAmount(row) | priceFilters }} </span>
