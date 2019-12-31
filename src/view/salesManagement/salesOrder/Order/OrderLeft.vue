@@ -76,7 +76,7 @@ export default {
       query: {
         showPerson: 1
       }, //更多搜索信息
-      Flaga: false
+      Flaga: true
     };
   },
   mounted() {
@@ -105,6 +105,10 @@ export default {
       //   orderMan: this.$store.state.user.userData.staffName,
       //   orderManId:  this.$store.state.user.userData.id
       // });
+    },
+    change(){
+      this.Flaga = false
+      console.log(this.Flaga)
     },
     //获取表格数据
     async gitlistValue() {
@@ -165,7 +169,7 @@ export default {
           onOk: () => {
             currentRowTable.clearCurrentRow();
             this.$emit('refresh','你好！');
-            this.Flaga = true
+            this.Flaga = false
           },
           onCancel: () => {
             this.isAdd = true;
