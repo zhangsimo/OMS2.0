@@ -412,6 +412,12 @@
                         key: 'noTaxAmt',
                         minWidth: 120
                     },
+                  {
+                    title: '连锁库龄',
+                    align: 'center',
+                    key: 'chainStockAge',
+                    minWidth: 120
+                  },
                     {
                         title: '本店库龄',
                         align: 'center',
@@ -428,6 +434,24 @@
                     },
                         minWidth: 120
                     },
+                  {
+                    title: '入库单号',
+                    align: 'center',
+                    key: 'serviceId',
+                    minWidth: 120
+                  },
+                  {
+                    title: '第一供应商',
+                    align: 'center',
+                    key: 'originGuestName',
+                    minWidth: 120
+                  },
+                  {
+                    title: '最近供应商',
+                    align: 'center',
+                    key: 'guestName',
+                    minWidth: 120
+                  },
                 ],
                 // 汇总库存的数据
                   contentOne: {
@@ -534,6 +558,7 @@
                 if (res.code == 0) {
                     this.storeList = res.data;
                 }
+              // this.storeList.unshift({ name: "全部", id: '全部' })
             },
 
             //获取品牌
