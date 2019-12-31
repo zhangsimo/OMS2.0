@@ -33,11 +33,11 @@
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
-            <div class="db">
+            <!-- <div class="db">
               <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
-            </div>
+            </div> -->
             <div class="db">
               <Button v-has="'delivery'" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
@@ -242,8 +242,8 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
-          <Button v-has="'Determined'" type="primary" @click="Determined">确定</Button>
-          <Button v-has="'cancel'" type="default">取消</Button>
+          <Button type="primary" @click="Determined">确定</Button>
+          <Button type="default">取消</Button>
         </div>
       </Modal>
     </div>
@@ -261,7 +261,7 @@
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
       ref="selectSupplier"
-      header-tit="调出方资料"
+      header-tit="调入方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
 
@@ -619,7 +619,7 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
-      console.log(msg.row.id, "msg");
+      console.log(msg, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -692,6 +692,7 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.serviceId = "";
@@ -731,35 +732,35 @@ export default {
         item.index = index + 1;
       });
     },
-    tijiao1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
-      const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
-      tijiao(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("提交成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("提交失败");
-        });
-    },
+    // tijiao1() {
+    //   if (this.Leftcurrentrow.xinzeng === "1") {
+    //     this.$Message.info("请先保存新增加工单");
+    //     return;
+    //   }
+    //   // if (!this.Leftcurrentrow.serviceId) {
+    //   //   this.$Message.info("请先选择加工单");
+    //   //   return;
+    //   // }
+    //   if (this.Leftcurrentrow.status.value === 1) {
+    //     this.$Message.info("当前加工单号已提交审核!无需重复操作");
+    //     return;
+    //   }
+    //   const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+    //   params.status = params.status.value;
+    //   params.settleStatus = params.settleStatus.value;
+    //   params.orderTypeId = params.orderTypeId.value;
+    //   tijiao(params)
+    //     .then(res => {
+    //       // 点击列表行==>配件组装信息
+    //       if (res.code == 0) {
+    //         this.getList(this.form);
+    //         this.$Message.success("提交成功");
+    //       }
+    //     })
+    //     .catch(e => {
+    //       this.$Message.info("提交失败");
+    //     });
+    // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");

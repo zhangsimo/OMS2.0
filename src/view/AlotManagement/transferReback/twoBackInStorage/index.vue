@@ -20,12 +20,12 @@
             </Button>
           </div>
           <div class="db">
-            <Button :disabled="btnIn" type="default" @click="inPro" class="mr10">
+            <Button v-has="'godown'" :disabled="btnIn" type="default" @click="inPro" class="mr10">
               <i class="iconfont mr5 iconbaocunicon"></i>入库
             </Button>
           </div>
           <div class="db">
-            <Button :disabled="true" @click="stamp" class="mr10">
+            <Button v-has="'print'" :disabled="true" @click="stamp" class="mr10">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>

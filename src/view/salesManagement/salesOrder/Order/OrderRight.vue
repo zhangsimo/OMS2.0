@@ -123,12 +123,12 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings ">
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings " v-has="'addMountings'">
               <Icon type="md-add" />添加配件
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart">
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart" v-has="'deletePart'">
               <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
             </Button>
           </div>
@@ -138,6 +138,7 @@
               :disabled="draftShow != 0"
               class="mr10"
               @click="openBarchModal"
+              v-has="'Barch'"
             >批次配件</Button>
           </div>
           <div class="fl mb5">
@@ -157,6 +158,7 @@
                 class="mr10"
                 @click="getRUl"
                 :disabled="draftShow != 0 "
+                v-has="'getBarch'"
               >
                 <span class="center">
                   <Icon custom="iconfont icondaoruicon icons" />导入配件
@@ -165,7 +167,7 @@
             </Upload>
           </div>
           <div class="fl mr10">
-            <Button size="small" @click="down">
+            <Button size="small" @click="down"  v-has="'down'">
               <Icon custom="iconfont iconxiazaiicon icons" />下载模板
             </Button>
           </div>
@@ -183,7 +185,7 @@
               :disabled="draftShow != 0 "
               class="mr10"
               @click="openGodownEntryModal"
-
+              v-has="'goDown'"
             >选择入库单</Button>
           </div>
           <div class="fl mb5">
@@ -192,6 +194,7 @@
               :disabled="draftShow != 0 "
               class="mr10"
               @click="openAddressShow"
+              v-has="'openAddress'"
             >编辑发货信息</Button>
           </div>
         </div>

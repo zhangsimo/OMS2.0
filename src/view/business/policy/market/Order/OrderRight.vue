@@ -111,12 +111,12 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings ">
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings " v-has="'addMountings'">
               <Icon type="md-add" />添加配件
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart">
+            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart" v-has="'deletePart'">
               <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
             </Button>
           </div>
@@ -126,6 +126,7 @@
               :disabled="draftShow != 0"
               class="mr10"
               @click="openBarchModal"
+              v-has="'Barch'"
             >批次配件</Button>
           </div>
           <!-- <div class="fl mb5">
@@ -157,6 +158,7 @@
               :disabled="draftShow != 0"
               class="mr10"
               @click="openActivityModal"
+              v-has="'Activity'"
             >选择活动</Button>
           </div>
           <div class="fl mb5">
@@ -164,6 +166,7 @@
               size="small"
               :disabled="draftShow != 0 || !formPlan.id"
               class="mr10"
+              v-has="'Godown'"
               @click="openGodownEntryModal"
             >选择入库单</Button>
           </div>

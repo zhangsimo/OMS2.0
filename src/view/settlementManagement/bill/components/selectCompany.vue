@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="addressShow" title="选择客户" width="1000" class="modalBox">
+  <Modal v-model="addressShow" title="往来单位" width="1000" class="modalBox">
     <div>
       <header class="titleHeader">
         <Input v-model="clientName" placeholder="名称" class="mr10" style="width: 150px" />
@@ -235,13 +235,13 @@ export default {
     },
     //切换页面
     selectNum(val) {
-      this.page.num = val;
+      this.page1.num = val;
       this.getList();
     },
     //切换页数
     selectPage(val) {
-      this.page.num = 1;
-      this.page.size = val;
+      this.page1.num = 1;
+      this.page1.size = val;
       this.getList();
     },
     //级联选择器
@@ -250,7 +250,7 @@ export default {
     },
     //查询
     query() {
-      this.page.num = 1;
+      this.page1.num = 1;
       this.clickCity = {};
       this.getList();
     },

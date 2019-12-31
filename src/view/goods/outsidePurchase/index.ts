@@ -527,7 +527,7 @@ export default class InterPurchase extends Vue {
       }
     }
   }
-  
+
   private editActivedEvent({ row, column }, event) {
     //console.log(`打开 ${column.title} 列编辑`)
   }

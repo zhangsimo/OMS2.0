@@ -49,7 +49,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button  v-has="'print'" class="mr10" @click="printTable">
+              <Button v-has="'print'" class="mr10" @click="printTable">
                 <Icon type="md-close" size="14" />打印
               </Button>
             </div>
@@ -163,12 +163,12 @@
                 <div v-show="staaa" class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div v-show="staaa" class="fl mb5">
-                      <Button size="small" class="mr10" @click="addProoo">
+                      <Button v-has="'addProoo'" size="small" class="mr10" @click="addProoo">
                         <Icon type="md-add" />选择调拨入库单
                       </Button>
                     </div>
                     <div v-show="staaa" class="fl mb5">
-                      <Button size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -222,8 +222,8 @@
       <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
-          <Button v-has="'Determined'" type="primary" @click="Determined">确定</Button>
-          <Button v-has="'cancel'" type="default">取消</Button>
+          <Button type="primary" @click="Determined">确定</Button>
+          <Button type="default">取消</Button>
         </div>
       </Modal>
     </div>
@@ -885,6 +885,8 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
+      console.log(row, "row==>891");
+      row.fullName
       //console.log(row);
       if (this.val === "0") {
         //console.log(row.fullName);
@@ -896,6 +898,7 @@ export default {
           tata.showit = true;
         }, 200);
       } else {
+        this.Leftcurrentrow.guestName = row.fullName;
         this.diaochuName = row.fullName;
         //console.log(row.id);
         this.diaochuID = row.id;

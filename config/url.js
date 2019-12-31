@@ -1,16 +1,16 @@
 import env from "./env";
 
 const dev = {
-  tokenApi: "http://192.168.2.48:5600", // 登录接口API
+  tokenApi: "http://192.168.2.47:5600", // 登录接口API
   // tokenApi: 'https://api.g-parts.cn', // 登录接口API
   // wmsApi: 'https://api.g-parts.cn/wms-order-provider',
   // omsApi: 'http://192.168.30.209:9240', // 张佳岩
   // omsApi: 'http://192.168.30.21:9240', // 付玮琳
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
-  omsApi: "http://192.168.30.179:9240", // 陈舒
-  wmsApi: "http://192.168.30.221:9250", // 陈舒
-  omsOrder: "http://192.168.30.221:9210", // 陈舒
+  omsApi: "http://192.168.30.69:9240", // 陈舒
+  wmsApi: "http://192.168.30.191:9250", // 陈舒
+  omsOrder: "http://192.168.30.191:9210", // 陈舒
   // omsOrder: 'http://192.168.30.179:9210', // 常国地
 
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
@@ -19,11 +19,11 @@ const dev = {
   // omsOrder: 'http://192.168.30.21:9210',
   // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
   omsStore: "http://192.168.30.179:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.221:9200",
+  omsProduct: "http://192.168.30.21:9200",
   // omsOrder:'http://192.168.30.179:9210', //陈舒
-  omsSettle: "http://192.168.30.179:9270",
+  omsSettle: "http://192.168.30.191:9270",
   /**oms系统接口设定 */
-  authApi: "http://192.168.2.48:5200", // 系统资源 5200
+  authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.179:9210', // 9210
   // omsEdit: '', // 9220salesOrder

@@ -153,6 +153,15 @@ export default {
     this.getAllClient()
   },
   methods: {
+    //判断表格能不能编辑
+    editActivedEvent({ row }) {
+      let xTable = this.$refs.xTable;
+      let orderQtyColumn = xTable.getColumnByField("orderQty");
+      let orderPriceColumn = xTable.getColumnByField("orderPrice");
+      let isDisabled = this.formPlan.billStatusValue != 0;
+      orderQtyColumn.editRender.attrs.disabled = isDisabled;
+      orderPriceColumn.editRender.attrs.disabled = isDisabled;
+    },
     //选择供应商
     addSuppler() {
       this.$refs.selectSupplier.init();
@@ -255,6 +264,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      this.settleTypeList.CS00107=[]
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {
@@ -395,7 +405,7 @@ export default {
             return '和值'
           }
           if (['orderQty', 'orderPrice', 'orderAmt', 'noTaxPrice', 'noTaxAmt'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+            return this.$utils.sum(data, column.property).toFixed(2)
           }
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `
