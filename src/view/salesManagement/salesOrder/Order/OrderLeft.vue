@@ -97,8 +97,8 @@ export default {
         return this.$Message.error('请先保存数据');
       }
       this.isAdd=false
-
       this.tableData.unshift(this.PtRow);
+      this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
       // this.tableData.unshift({
       //   billStatusId: { enum: "", value: "0", name: "草稿" },
@@ -108,7 +108,6 @@ export default {
     },
     change(){
       this.Flaga = false
-      console.log(this.Flaga)
     },
     //获取表格数据
     async gitlistValue() {
