@@ -39,7 +39,7 @@
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(2)"
-              v-has="submit"
+              v-has="'submit'"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
