@@ -386,11 +386,17 @@
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
-                <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                <vxe-table-column field="recentPrice" title="最近采购单价" width="100"></vxe-table-column>
+                <vxe-table-column title="不含税单价" width="100">
+                  <template v-slot="{ row }">{{ row.noTaxPrice.toFixed(2) }}</template>
+                </vxe-table-column>
+                <vxe-table-column title="不含税金额" width="100">
+                  <template v-slot="{ row }">{{ row.noTaxAmt.toFixed(2) }}</template>
+                </vxe-table-column>
+                <vxe-table-column title="最近采购单价" width="100">
+                  <template v-slot="{ row }">{{ row.recentPrice.toFixed(2) }}</template>
+                </vxe-table-column>
                 <vxe-table-column title="单价差" width="100">
-                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice) | priceFilters }}</template>
+                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice).toFixed(2) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column field="upLimit" title="库存上限" width="100"></vxe-table-column>
                 <vxe-table-column field="downLimit" title="库存下限" width="100"></vxe-table-column>
