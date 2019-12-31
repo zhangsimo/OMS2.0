@@ -1,11 +1,18 @@
 <template>
-  <Modal v-model="addressShow" title="往来单位" width="1000" class="modalBox">
+  <Modal
+    v-model="addressShow"
+    title="往来单位"
+    width="1000"
+    class="modalBox"
+    @on-visible-change="visChange"
+  >
     <div>
       <header class="titleHeader">
         <Input v-model="clientName" placeholder="名称" class="mr10" style="width: 150px" />
         <Input v-model="clientCode" placeholder="编码" class="mr10" style="width: 150px" />
         <Input v-model="clientPhone" placeholder="电话" class="mr10" style="width: 150px" />
         <Cascader
+          v-model="queryType"
           :data="clientType"
           @on-change="getType"
           change-on-select
@@ -20,7 +27,7 @@
         <Button class="mr10" @click="select" type="default">
           <Icon type="md-checkmark" />选择
         </Button>
-        <Button class="mr10" type="default">
+        <Button class="mr10" type="default" @click="addressShow=false">
           <Icon type="md-close" />取消
         </Button>
       </header>
@@ -129,7 +136,7 @@ export default {
       // 区
       Area: {},
       clickCity: {}, //当前获取的地址
-      queryType: {}, //获取到当前类型
+      queryType: [], //获取到当前类型
       oneClinet: {} //点击当前的信息
     };
   },
@@ -138,6 +145,12 @@ export default {
     this.getClientTypeList();
   },
   methods: {
+    visChange() {
+      this.clientName = "";
+      this.clientCode = "";
+      this.clientPhone = "";
+      this.queryType = []
+    },
     openModel() {
       this.addressShow = true;
     },
@@ -198,8 +211,8 @@ export default {
       data.id = this.clickCity.id;
       data.page = this.page1.num - 1;
       data.size = this.page1.size;
-      data.lever = this.queryType.lever;
-      data.leverId = this.queryType.id;
+      data.lever = this.queryType[0].lever;
+      data.leverId = this.queryType[0].id;
       data.code = this.clientCode;
       data.shortName = this.clientName;
       data.tel = this.clientPhone;
@@ -246,7 +259,8 @@ export default {
     },
     //级联选择器
     getType(value, selectedData) {
-      this.queryType = selectedData[selectedData.length - 1];
+      this.queryType = []
+      this.queryType.push(selectedData[selectedData.length - 1]) ;
     },
     //查询
     query() {
