@@ -19,7 +19,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addOrder">
+            <Button class="mr10" @click="addOrder" v-has="'add'">
               <Icon type="md-add" />新增
             </Button>
           </div>
@@ -28,6 +28,7 @@
               type="default"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(1)"
+              v-has="'save'"
               class="mr10"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
@@ -38,6 +39,7 @@
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 0"
               @click="submit(2)"
+              v-has="'submit'"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
@@ -47,6 +49,7 @@
               class="mr10"
               @click="saveObsoleteFun(1)"
               :disabled="selectPlanOrderItem.billStatusId != 0"
+              v-has="'invalidate'"
             >
               <Icon type="md-close" size="14" />作废
             </Button>
@@ -56,12 +59,13 @@
               @click="saveObsoleteFun(2)"
               class="mr10"
               :disabled="selectPlanOrderItem.billStatusId != 5"
+              v-has="'invalid'"
             >
               <i class="iconfont mr5 iconfanhuiicon"></i> 反作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="exportHandle">
+            <Button class="mr10" @click="exportHandle" v-has="'invalid'">
               <i class="iconfont mr5 icondaochuicon"></i> 导出
             </Button>
           </div>
@@ -70,6 +74,7 @@
               class="mr10"
               :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 "
               @click="showStatus"
+              v-has="'check'"
             >
               <i class="iconfont mr5 iconshenheicon"></i> 查看审批
             </Button>
@@ -239,6 +244,7 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="addPro"
+                      v-has="'AddAccessories'"
                     >
                       <Icon type="md-add" />添加配件
                     </Button>
@@ -257,6 +263,7 @@
                       <Button
                         size="small"
                         class="mr10"
+                        v-has="'import'"
                         :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
                       >导入</Button>
                     </Upload>
@@ -267,6 +274,7 @@
                       class="mr10"
                       :disabled="selectPlanOrderItem.billStatusId != 0"
                       @click="delTableData"
+                      v-has="'delete'"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i>
                       删除
@@ -378,11 +386,17 @@
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
-                <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
-                <vxe-table-column field="recentPrice" title="最近采购单价" width="100"></vxe-table-column>
+                <vxe-table-column title="不含税单价" width="100">
+                  <template v-slot="{ row }">{{ row.noTaxPrice.toFixed(2) }}</template>
+                </vxe-table-column>
+                <vxe-table-column title="不含税金额" width="100">
+                  <template v-slot="{ row }">{{ row.noTaxAmt.toFixed(2) }}</template>
+                </vxe-table-column>
+                <vxe-table-column title="最近采购单价" width="100">
+                  <template v-slot="{ row }">{{ row.recentPrice.toFixed(2) }}</template>
+                </vxe-table-column>
                 <vxe-table-column title="单价差" width="100">
-                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice) | priceFilters }}</template>
+                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice).toFixed(2) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column field="upLimit" title="库存上限" width="100"></vxe-table-column>
                 <vxe-table-column field="downLimit" title="库存下限" width="100"></vxe-table-column>
@@ -390,7 +404,7 @@
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
+                <vxe-table-column field="notEnterQty" title="计划取消数量" width="100"></vxe-table-column>
               </vxe-table>
               <!--<div ref="planPage">-->
               <!--<Page size="small" class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->

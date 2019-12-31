@@ -62,6 +62,7 @@
           :data="data"
           ref="summary"
           show-summary
+          :summary-method="handleSummary"
           highlight-row
           @on-row-click="election"
           max-height="400"
@@ -278,6 +279,45 @@ export default {
     this.getGeneral({ enterTypeId: this.typeName });
   },
   methods: {
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "总价"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     //查询
     query() {
       this.getGeneral();

@@ -4,9 +4,9 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <Input v-model="form.partCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
-            <Input v-model="form.partName" placeholder="配件名称/拼音" style="width: 160px" class="mr10"></Input>
-            <Select v-model="form.partBrandName" class="w100 mr10" clearable placeholder="--品牌--">
+            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.fullName" placeholder="配件名称/拼音" style="width: 160px" class="mr10"></Input>
+            <Select v-model="form.partBrandCode" class="w100 mr10" clearable placeholder="--品牌--">
               <Option
                 v-for="item in quickArray"
                 :value="item.value"
@@ -195,9 +195,9 @@ export default {
       form: {
         pageNumber: 0,
         pageSize: 10,
-        partCode: "",
-        partName: "",
-        partBrandName: "",
+        queryCode: "",
+        fullName: "",
+        partBrandCode: "",
         storeId: ""
       },
       // 快速查询-品牌

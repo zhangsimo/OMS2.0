@@ -1,14 +1,19 @@
 import { Vue, Component } from "vue-property-decorator";
-import Cookies from 'js-cookie'
-import { TOKEN_KEY } from '@/libs/util'
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
 // @ts-ignore
 import * as api from "_api/system/partManager";
 // @ts-ignore
 import * as tools from "_utils/tools";
 // @ts-ignore
-import accessories from './modal/Accessories';
+import accessories from "./modal/Accessories";
 
-import {getSaveNewTight , getCloudList , getLocalList , getGmList} from '@/api/system/essentialData/commoditiesInShortSupply'
+import {
+  getSaveNewTight,
+  getCloudList,
+  getLocalList,
+  getGmList
+} from "@/api/system/essentialData/commoditiesInShortSupply";
 
 @Component({
   components: {
@@ -19,10 +24,12 @@ export default class Fittings extends Vue {
   /**===================Data======================== */
   private isSys: boolean = true; // window.localStorage.tenantId == 0;
   // 品牌列表
-  private bands: SelectTypes[] = [{
-    value: "0",
-    label: "全部"
-  }];
+  private bands: SelectTypes[] = [
+    {
+      value: "0",
+      label: "全部"
+    }
+  ];
   // 侧树形菜单
   private treeData: Array<Tree> = [];
   // 查询条件数组
@@ -51,9 +58,9 @@ export default class Fittings extends Vue {
       key: "brandName",
       children: [
         {
-          type: 'selection',
+          type: "selection",
           minWidth: 60,
-          align: 'center',
+          align: "center"
         },
         {
           title: "序号",
@@ -104,7 +111,7 @@ export default class Fittings extends Vue {
           title: "单位",
           key: "minUnit",
           minWidth: 120
-        },
+        }
       ]
     },
     {
@@ -130,35 +137,35 @@ export default class Fittings extends Vue {
           title: "一级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text:string = '';
+            let text: string = "";
             try {
-              text = params.row.baseType.firstType.typeName
-            } catch(e) {}
-            return h('span', text);
+              text = params.row.baseType.firstType.typeName;
+            } catch (e) {}
+            return h("span", text);
           }
         },
         {
           title: "二级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text:string = ''
+            let text: string = "";
             try {
-              text = params.row.baseType.secondType.typeName
-            } catch(e) {}
-            return h('span', text);
+              text = params.row.baseType.secondType.typeName;
+            } catch (e) {}
+            return h("span", text);
           }
         },
         {
           title: "三级分类",
           minWidth: 120,
           render: (h, params) => {
-            let text:string = ''
+            let text: string = "";
             try {
-              text = params.row.baseType.thirdType.typeName
-            } catch(e) {}
-            return h('span', text);
+              text = params.row.baseType.thirdType.typeName;
+            } catch (e) {}
+            return h("span", text);
           }
-        },
+        }
       ]
     },
     {
@@ -174,34 +181,34 @@ export default class Fittings extends Vue {
           title: "状态",
           minWidth: 80,
           render: (h, params) => {
-            let text:string = params.row.isDisabled ? '禁用' : '启用';
-            return h('span', text);
+            let text: string = params.row.isDisabled ? "禁用" : "启用";
+            return h("span", text);
           }
         },
         {
           title: "禁售",
           minWidth: 80,
           render: (h, params) => {
-            let text:string = params.row.isSale ? '禁售' : '可售';
-            return h('span', text);
+            let text: string = params.row.isSale ? "禁售" : "可售";
+            return h("span", text);
           }
         },
         {
           title: "生产厂家",
           key: "manufactor",
           minWidth: 120
-        },
+        }
       ]
-    },
+    }
   ];
   //日期控件不可选择
-  private  options3: any = {
-    disabledDate (date) {
+  private options3: any = {
+    disabledDate(date) {
       return date && date.valueOf() < Date.now() - 86400000;
     }
-  }
+  };
 
-  private  expireDate: string = '' //过期时间
+  private expireDate: string = ""; //过期时间
   // local表格
   private local: any = {
     // 表头
@@ -215,8 +222,8 @@ export default class Fittings extends Vue {
       num: 1,
       total: 0,
       size: 10
-    },
-  }
+    }
+  };
   // 平台
   private cloud: any = {
     // 表头
@@ -230,8 +237,8 @@ export default class Fittings extends Vue {
       num: 1,
       total: 0,
       size: 10
-    },
-  }
+    }
+  };
   private split: number = 0.33;
   private queryValue: string = "0"; // 选中的查询条件
   private query: string = ""; // 查询条件文字
@@ -246,11 +253,11 @@ export default class Fittings extends Vue {
   // 选中的行
   private currRow: any = null;
   // 按钮可用
-  private isCanbutton:boolean = false;
+  private isCanbutton: boolean = false;
   // 上传 请求头
   private headers = {
-    Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
-  }
+    Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+  };
   private upurl = api.upxlxs;
   /**===================Mounted======================== */
   private mounted() {
@@ -272,7 +279,7 @@ export default class Fittings extends Vue {
       num: 1,
       total: 0,
       size: 10
-    }
+    };
     this.local.page = this._.cloneDeep(page);
     this.cloud.page = this._.cloneDeep(page);
   }
@@ -282,22 +289,22 @@ export default class Fittings extends Vue {
     let res: any = await api.findWbAllByTree();
     if (res.code == 0) {
       this.treeData = res.data.content;
-      tools.transTree(this.treeData, 'typeName');
+      tools.transTree(this.treeData, "typeName");
     }
   }
   // 获取品牌
   private async getBand() {
     let res = await api.getWbPartBrand();
     if (res.code == 0) {
-      for(let quality of res.data.content) {
-        if(quality.children.length <= 0) {
+      for (let quality of res.data.content) {
+        if (quality.children.length <= 0) {
           break;
         }
-        quality.children.forEach((el:any) => {
+        quality.children.forEach((el: any) => {
           el.label = el.name;
           el.value = el.code;
           this.bands.push(el);
-        })
+        });
       }
       // res.data.content.forEach((el: any) => {
       //   el.label = el.name;
@@ -331,21 +338,21 @@ export default class Fittings extends Vue {
     //     break;
     // }
     switch (this.queryValue) {
-        case "0":
-          data.partCode = this.query;
-          break;
-        case "1":
-          data.fullName = this.query;
-          break;
-        case "2":
-          data.applyCarModel = this.query;
-          break;
-        case "3":
-          data.keyWord = this.query;
-          break;
-        default:
-          break;
-      }
+      case "0":
+        data.partCode = this.query;
+        break;
+      case "1":
+        data.fullName = this.query;
+        break;
+      case "2":
+        data.applyCarModel = this.query;
+        break;
+      case "3":
+        data.keyWord = this.query;
+        break;
+      default:
+        break;
+    }
     if (this.band != "0") {
       // data.partBrandId = this.band;
       data.brandCode = this.band;
@@ -395,22 +402,23 @@ export default class Fittings extends Vue {
       data.typeId = this.selectTreeId;
     }
     // console.log(params,data)
-    let res: any = await getLocalList({...params, ...data});
+    let res: any = await getLocalList({ ...params, ...data });
     if (res.code == 0) {
       this.cloud.tbdata = res.data.content;
-      res.data.content.map( item => {
-        if (item.isTight ==0){
-          item._disabled= true
+      res.data.content.map(item => {
+        if (item.isTight == 0) {
+          item._disabled = true;
         }
-      })
+      });
       this.cloud.page.total = res.data.totalElements;
       this.cloud.loading = false;
     } else {
-      this.$Message.error('添加失败')
+      this.$Message.error("添加失败");
     }
   }
   // 查询
   private queryHandle() {
+    this.cloud.page.num = 1;
     if (this.tabIndex === 0) {
       this.initLocalPartInfo();
     } else {
@@ -443,44 +451,44 @@ export default class Fittings extends Vue {
     accessories.proModal = true;
   }
   //修改时间
-  private changTime(data){
-    this.expireDate = data
+  private changTime(data) {
+    this.expireDate = data;
   }
 
   // 选择数据
   private async changeDisable() {
-    let self:any = this;
-    if(!self.expireDate){
-      self.$Message.error('请先选中结束日期')
-      return false
+    let self: any = this;
+    if (!self.expireDate) {
+      self.$Message.error("请先选中结束日期");
+      return false;
     }
-    if(!self.currRow){
-      self.$Message.error('至少选中一条信息')
-      return false
+    if (!self.currRow) {
+      self.$Message.error("至少选中一条信息");
+      return false;
     }
-    let data:any = []
-    let pastTime:any = self.expireDate +' '+ '23:59:59'
-    self.currRow.forEach( item => {
-      item.passTime = pastTime
-      data.push(item)
-    })
-    let res:any = await getSaveNewTight(data)
-      if(res.code == 0){
-        this.$emit('getNewList' , res)
-        if(this.isSys) {
-          this.initCloudPartInfo();
-          this.$Message.success('保存成功')
-        } else {
-          this.initLocalPartInfo();
-        }
+    let data: any = [];
+    let pastTime: any = self.expireDate + " " + "23:59:59";
+    self.currRow.forEach(item => {
+      item.passTime = pastTime;
+      data.push(item);
+    });
+    let res: any = await getSaveNewTight(data);
+    if (res.code == 0) {
+      this.$emit("getNewList", res);
+      if (this.isSys) {
+        this.initCloudPartInfo();
+        this.$Message.success("保存成功");
+      } else {
+        this.initLocalPartInfo();
       }
+    }
   }
   //关闭新增页面
-  private closeShow(){
-    this.$emit('setShow', this.currRow )
+  private closeShow() {
+    this.$emit("setShow", this.currRow);
   }
   // 导入
-  private importOpen() { }
+  private importOpen() {}
   // 下载模板
   private downTemplate() {}
   // 刷新
@@ -489,19 +497,19 @@ export default class Fittings extends Vue {
   }
   // 可售 禁售
   private async changeSale() {
-    let self:any = this;
+    let self: any = this;
     let id = this.currRow.id;
-    let res:any = await api.toggleSale(id);
-    let success:string = '';
-    if(this.isDisable) {
-      success = '禁售成功';
+    let res: any = await api.toggleSale(id);
+    let success: string = "";
+    if (this.isDisable) {
+      success = "禁售成功";
     } else {
-      success = '可售成功';
+      success = "可售成功";
     }
-    if(res.code == 0) {
+    if (res.code == 0) {
       self.$Message.success(success);
     }
-    if(this.isSys) {
+    if (this.isSys) {
       this.initCloudPartInfo();
     } else {
       this.initLocalPartInfo();
@@ -543,15 +551,15 @@ export default class Fittings extends Vue {
   }
   // 上传前
   private handleBeforeUpload() {
-    let refs:any =  this.$refs;
+    let refs: any = this.$refs;
     refs.upload.clearFiles();
   }
   // 上传成功
-  private handleSuccess(res, file){
-    let self:any = this;
-    if(res.code == 0) {
-      self.$Message.success('导入成功');
-      if(this.isSys) {
+  private handleSuccess(res, file) {
+    let self: any = this;
+    if (res.code == 0) {
+      self.$Message.success("导入成功");
+      if (this.isSys) {
         this.initCloudPartInfo();
       } else {
         this.initLocalPartInfo();

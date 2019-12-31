@@ -19,7 +19,7 @@
               </Select>
             </div>
             <div class="db">
-              <Button type="default"  @click="more" class="mr10">
+              <Button type="default" @click="more" class="mr10">
                 <i class="iconfont mr5 iconchaxunicon"></i>更多
               </Button>
             </div>
@@ -29,17 +29,17 @@
               </Button>
             </div>
             <div class="db">
-              <Button  v-has="'save'" type="default" class="mr10" @click="baocun1">
+              <Button v-has="'save'" type="default" class="mr10" @click="baocun1">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
-            <div class="db">
+            <!-- <div class="db">
               <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
-            </div>
+            </div> -->
             <div class="db">
-              <Button  v-has="'delivery'"   class="mr10" @click="chuku">
+              <Button v-has="'delivery'" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
@@ -174,6 +174,7 @@
                   <div class="clearfix">
                     <div class="fl mb5">
                       <Button
+                        v-has="'addMountings'"
                         size="small"
                         :disabled="buttonDisable == 1"
                         class="mr10"
@@ -183,12 +184,17 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="GoodsInfoModal">
+                      <Button
+                        v-has="'GoodsInfoModal'"
+                        size="small"
+                        class="mr10"
+                        @click="GoodsInfoModal"
+                      >
                         <i class="iconfont mr5 iconlajitongicon"></i> 编辑发货信息
                       </Button>
                     </div>
@@ -255,7 +261,7 @@
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
       ref="selectSupplier"
-      header-tit="调出方资料"
+      header-tit="调入方资料"
       @selectSupplierName="selectSupplierName"
     ></select-supplier>
 
@@ -314,6 +320,7 @@ export default {
   },
   data() {
     return {
+      idsId: [],
       getArray: [],
       tuneOut: true,
       flag: 0,
@@ -611,7 +618,8 @@ export default {
     // },
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
-      console.log(msg);
+      this.idsId.push(msg.row.id);
+      console.log(msg, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -684,6 +692,7 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.serviceId = "";
@@ -723,35 +732,35 @@ export default {
         item.index = index + 1;
       });
     },
-    tijiao1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
-      const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
-      tijiao(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("提交成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("提交失败");
-        });
-    },
+    // tijiao1() {
+    //   if (this.Leftcurrentrow.xinzeng === "1") {
+    //     this.$Message.info("请先保存新增加工单");
+    //     return;
+    //   }
+    //   // if (!this.Leftcurrentrow.serviceId) {
+    //   //   this.$Message.info("请先选择加工单");
+    //   //   return;
+    //   // }
+    //   if (this.Leftcurrentrow.status.value === 1) {
+    //     this.$Message.info("当前加工单号已提交审核!无需重复操作");
+    //     return;
+    //   }
+    //   const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+    //   params.status = params.status.value;
+    //   params.settleStatus = params.settleStatus.value;
+    //   params.orderTypeId = params.orderTypeId.value;
+    //   tijiao(params)
+    //     .then(res => {
+    //       // 点击列表行==>配件组装信息
+    //       if (res.code == 0) {
+    //         this.getList(this.form);
+    //         this.$Message.success("提交成功");
+    //       }
+    //     })
+    //     .catch(e => {
+    //       this.$Message.info("提交失败");
+    //     });
+    // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
@@ -960,10 +969,11 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
+      console.log(seleList, "seleList");
       let arr = [];
       console.log(seleList, "seleList");
       seleList.map(item => {
-        arr.push(item.partId);
+        arr.push(item.id);
       });
       const params = {
         ids: arr,

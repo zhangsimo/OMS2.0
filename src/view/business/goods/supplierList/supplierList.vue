@@ -15,22 +15,22 @@
               <Button type="default" @click="moreaa" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
+              <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
             </div>
             <div class="db">
-              <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+              <Button type="default" @click='SaveMsg' v-has="'save'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="instance" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+              <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="presentrowMsg !== 1" @click="salesReturn"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
+              <Button class="mr10" :disabled="presentrowMsg !== 1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
             </div>
             <div class="db">
-              <Button @click="cancellation" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+              <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
             </div>
             <div class="db">
-              <Button @click="stamp" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+              <Button @click="stamp" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
             </div>
           </div>
         </div>
@@ -113,10 +113,10 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 选择采购入库单</Button>
+                      <Button size="small" class="mr10" @click="addPro" v-has="'selectProject'" :disabled="presentrowMsg !== 0"><Icon type="md-add"/> 选择采购入库单</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0" @click="Delete" v-has="'delete'"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                     </div>
                   </div>
                 </div>
@@ -185,7 +185,7 @@
       <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder" @selectRow="selectRow"></procurement-modal>
     </div>
     <!--供应商资料-->
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName" @isDisabled="isDisabled"></select-supplier>
     <!--打印弹框-->
     <print-show ref="PrintModel" :orderId="mainId"></print-show>
   </div>

@@ -28,6 +28,7 @@
           <div class="db">
             <Button class="mr10"
                     @click="addOneList"
+                    v-has="'add'"
             >
               <Icon type="md-add"/>
               新增
@@ -38,6 +39,7 @@
             <Button type="default" class="mr10"
                     :disabled="draftShow != 0||isNew"
                     @click="isSave"
+                    v-has="'save'"
             ><i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button
             >
@@ -46,6 +48,7 @@
             <Button class="mr10"
                     :disabled="draftShow != 0||isNew"
                     @click="isSubmit"
+                    v-has="'submit'"
             ><i class="iconfont mr5 iconziyuan2"></i>提交
             </Button
             >
@@ -54,6 +57,7 @@
             <Button class="mr10"
                     @click="returnWarehouse"
                     :disabled="formPlan.isWms"
+                    v-has="'returnWarehouse'"
             ><i class="iconfont mr5 iconshenheicon"></i> 退货入库
             </Button
             >
@@ -62,6 +66,7 @@
             <Button class="mr10"
                     @click="cancellation"
                     :disabled="draftShow != 0||!formPlan.id"
+                    v-has="'cancellation'"
             >
               <Icon type="md-close" size="14"/>
               作废
@@ -71,6 +76,7 @@
           <div class="db">
             <Button class="mr10"
                     @click="printTable"
+                    v-has="'print'"
             ><i class="iconfont mr5 icondayinicon"></i> 打印
             </Button
             >
@@ -202,6 +208,7 @@
                         size="small"
                         class="mr10"
                         @click="SalesOutboundShowModel"
+                        v-has="'SalesOutbound'"
                         :disabled="draftShow != 0 || isNew"
                       >
                         <Icon type="md-add"/>
@@ -213,6 +220,7 @@
                       <Button size="small" class="mr10"
                               :disabled="draftShow != 0||isNew"
                               @click="deletePart"
+                              v-has="'deletePart'"
                       >
                         <Icon custom="iconfont iconlajitongicon icons"/>
                         删除配件

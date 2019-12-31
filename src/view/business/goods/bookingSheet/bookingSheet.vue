@@ -15,19 +15,19 @@
               <Button type="default" @click="moreaa" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="addProoo"><Icon type="md-add"/> 新增</Button>
+              <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
             </div>
             <div class="db">
-              <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+              <Button type="default" @click='SaveMsg' v-has="'save'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
             </div>
             <div class="db">
-              <Button class="mr10" @click="instance" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+              <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button @click="cancellation" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+              <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
             </div>
             <div class="db">
-              <Button @click="derive" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 导出</Button>
+              <Button @click="derive" v-has="'export'" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 导出</Button>
             </div>
           </div>
         </div>
@@ -89,10 +89,10 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro" :disabled="presentrowMsg !== 0 || buttonDisable"><Icon type="md-add"/> 添加配件</Button>
+                      <Button size="small" class="mr10" @click="addPro" v-has="'AddAccessories'" :disabled="presentrowMsg !== 0 || buttonDisable"><Icon type="md-add"/> 添加配件</Button>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0 || buttonDisable" @click="Delete"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
+                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0 || buttonDisable" @click="Delete" v-has="'deletePart'"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                     </div>
                     <div class="fl mb5">
                       <Upload
@@ -106,11 +106,11 @@
                         :on-success="onSuccess"
                         :before-upload ='beforeUpload'
                       >
-                    <Button size="small" class="mr10" @click="getRUl" :disabled="LeadIn"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
+                    <Button size="small" class="mr10" @click="getRUl" v-has="'import'" :disabled="LeadIn"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
                    </Upload>
                     </div>
                     <div class="fl mb5">
-                      <Button size="small" @click="down" :disabled="presentrowMsg !== 0 || buttonDisable">
+                      <Button size="small" @click="down" :disabled="presentrowMsg !== 0 || buttonDisable" v-has="'download'">
                         <Icon custom="iconfont iconxiazaiicon icons" />下载模板
                       </Button>
                     </div>
@@ -162,7 +162,7 @@
       <!--更多弹框-->
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择配件-->
-      <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></Select-part-com>
+      <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true" @isShow="false"></Select-part-com>
       <!--编辑收货信息-->
       <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
 
@@ -353,24 +353,26 @@ export default {
     },
     //删除配件
     Delete(){
-      // var set = this.checkboxArr.map(item=>item.id)
-      // var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
-      // this.Right.tbdata = resArr
-      let data = this.checkboxArr.map(item => {
-        return {
-          id: item.id
-        }
-      })
-      deleteit(data).then(res => {
-        if(res.code === 0){
-          this.$message.warning('删除成功！')
-          this.leftgetList()
-          this.formPlan.salesman = ''
-          this.formPlan.Reservation = ''
-          this.formPlan.remark = ''
-          this.Right.tbdata = []
-        }
-      })
+      if(this.checkboxArr.length > 0){
+        let data = this.checkboxArr.map(item => {
+          return {
+            id: item.id
+          }
+        })
+        deleteit(data).then(res => {
+          if(res.code === 0){
+            this.$message.warning('删除成功！')
+            this.leftgetList()
+            this.formPlan.salesman = ''
+            this.formPlan.Reservation = ''
+            this.formPlan.remark = ''
+            this.Right.tbdata = []
+          }
+        })
+      } else {
+        this.$Message.warning('请选择要删除的配件!')
+      }
+
     },
     //更多按钮
     moreaa(){

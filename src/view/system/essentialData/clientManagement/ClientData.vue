@@ -407,26 +407,26 @@ export default {
       }
     };
     const fullName = (rule, value, callback) => {
-      if(value){
-        let obj = {}
-        if(this.data.id){
-          obj.id = this.data.id
-          obj.name = this.data.fullName
+      if (value) {
+        let obj = {};
+        if (this.data.id) {
+          obj.id = this.data.id;
+          obj.name = this.data.fullName;
         } else {
-          obj.name = this.data.fullName
+          obj.name = this.data.fullName;
         }
         // callback()
-        getCustomer(obj).then(res=>{
-         if(res.data){
-           callback(new Error('客户名称不可重复'))
-         } else {
-           callback();
-         }
-        })
+        getCustomer(obj).then(res => {
+          if (res.data) {
+            callback(new Error("客户名称不可重复"));
+          } else {
+            callback();
+          }
+        });
       } else {
-        callback(new Error('客户全称不可为空'))
+        callback(new Error("客户全称不可为空"));
       }
-    }
+    };
     return {
       Subordinate: [
         {
@@ -618,9 +618,20 @@ export default {
             trigger: "change"
           }
         ],
-        receiveName: [{ required: true, message: " 不能为空", trigger: "change" }],
-        accountBankNo: [{ required: true, message: "",validator: creditLimit, trigger: "change" }],
-        accountBank: [{ required: true, message: " 不能为空", trigger: "change" }],
+        receiveName: [
+          { required: true, message: " 不能为空", trigger: "change" }
+        ],
+        accountBankNo: [
+          {
+            required: true,
+            message: "",
+            validator: creditLimit,
+            trigger: "change"
+          }
+        ],
+        accountBank: [
+          { required: true, message: " 不能为空", trigger: "change" }
+        ],
         guestProperty: [{ required: true, message: " ", trigger: "change" }],
         shortName: [{ required: true, message: " ", trigger: "blur" }],
         settTypeId: [{ required: true, message: " ", trigger: "change" }],
@@ -790,22 +801,35 @@ export default {
     //加入查询
     joinClientList() {
       let can = true;
-      if (this.pitchOnClientList.length !== 0) {
-        this.pitchOnClientList.forEach(item => {
-          this.relevanceClientShow.forEach(val => {
-            if (item.id == val.id) {
-              can = false;
-            }
-          });
-        });
-      } else {
-        this.$message.error("请勾选客户");
-        return;
-      }
+      // console.log(this.pitchOnClientList, "this.pitchOnClientList");
+      // console.log(this.relevanceClientShow, "this.relevanceClientShow");
+      // if (this.pitchOnClientList.length != 0) {
+      //   for (var i = 0; i < this.pitchOnClientList.length; i++) {
+      //     console.log(1212);
+      //     for (var k = 0; k < this.relevanceClientShow.length; k++) {
+      //       if (
+      //         this.pitchOnClientList[i].id == this.relevanceClientShow[k].id
+      //       ) {
+      //         can = false;
+      //       }
+      //     }
+      //   }
+      this.relevanceClientShow = this.pitchOnClientList;
+      // this.pitchOnClientList.forEach(item => {
+      //   this.relevanceClientShow.forEach(val => {
+      //     if (item.id == val.id) {
+      //       can = false;
+      //     }
+      //   });
+      // });
+      // } else {
+      //   this.$message.error("请勾选客户");
+      //   return;
+      // }
       if (can) {
         this.relevanceClientShow = [
-          ...this.relevanceClientShow,
-          ...this.pitchOnClientList
+          ...this.relevanceClientShow
+          // ...this.pitchOnClientList
         ];
         this.data.guestVOList = this.relevanceClientShow;
       } else {

@@ -21,12 +21,12 @@
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="addProoo">
+            <Button class="mr10" @click="addProoo" v-has="'add'">
               <Icon type="md-add" />新增
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun" type="default" class="mr10" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button @click="baocun" v-has="'save'" type="default" class="mr10" :disabled="this.Leftcurrentrow.status.value !== 0">
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
           </div>
@@ -36,17 +36,17 @@
             </Button>
           </div>-->
           <div class="db">
-            <Button class="mr10" @click="editPro" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button class="mr10" @click="editPro" v-has="'submit'"  :disabled="this.Leftcurrentrow.status.value !== 0">
               <Icon type="md-checkmark" size="14" />提交
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="cancellation" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button class="mr10" @click="cancellation" v-has="'cancellation'" :disabled="this.Leftcurrentrow.status.value !== 0">
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button class="mr10" @click="printTable" v-has="'print'" :disabled="this.Leftcurrentrow.status.value !== 0">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -151,6 +151,7 @@
                       size="small"
                       class="mr10"
                       @click="addPro"
+                      v-has="'addPro'"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
                       <Icon type="md-add" />添加配件
@@ -161,6 +162,7 @@
                       size="small"
                       class="mr10"
                       @click="deletePar"
+                      v-has="'deletePar'"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     >
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除
@@ -588,12 +590,13 @@ export default {
           name: "草稿",
           value: 0
         },
+
         statuName: "草稿",
         commitDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         createUname: "",
         serviceId: "",
         printing: "",
-        createUname: "",
+        createUname: this.$store.state.user.userData.staffName,
         createTime: "",
         commitUname: "",
         //commitDate:"",
@@ -601,6 +604,7 @@ export default {
         //createUname: this.$store.state.user.userData.staffName,
         detailVOList: []
       };
+      this.Leftcurrentrow.createUname=item.createUname
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -785,7 +789,7 @@ export default {
       var datas = conversionList(val);
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
-        this.Right.tbdata=[]
+        // this.Right.tbdata=[]
         this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });
