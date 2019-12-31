@@ -7,13 +7,13 @@
           <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
-        <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" /> 新增</Button>
-        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType != 0"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+        <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" v-has="'add'" /> 新增</Button>
+        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType != 0" v-has="'save'"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <!-- <Button class="mr10" @click="sumbit" :disabled="orderlistType != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button> -->
-        <Button class="mr10" @click="setStockOut" :disabled="orderlistType != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
-        <Button class="mr10" @click="printTable"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+        <Button class="mr10" @click="setStockOut" :disabled="orderlistType != 0" v-has="'StockOut'"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
+        <Button class="mr10" @click="printTable"  v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
         <!-- <Button class="mr10" @click="setBackOrder" :disabled="orderlistType.value != 1"><i class="iconfont mr5 iconziyuan14"></i> 返单</Button> -->
-        <Button class="mr10" @click="setCancellation" :disabled="orderlistType != 0"><Icon type="md-close" size="14" /> 作废</Button>
+        <Button class="mr10" @click="setCancellation" :disabled="orderlistType != 0"  v-has="'Cancellation'"><Icon type="md-close" size="14" /> 作废</Button>
         <!-- <Button class="" @click="setDerive"><i class="iconfont mr5 icondaochuicon"></i> 导出</Button> -->
       </div>
       <div class="conter">
