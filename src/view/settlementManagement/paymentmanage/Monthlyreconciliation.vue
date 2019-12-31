@@ -528,10 +528,9 @@ export default {
       this.flag = false;
       this.info = false;
       let { orgId, startDate, endDate, guestId } = this.parameter;
-      console.log(guestId,this.parameter)
       this.companyInfo = guestId;
-      // this.companyInfoId = this.parameter.guestId;
       this.store = this.parameter.orgId;
+      this.model1 = this.parameter.orgId;
       let obj = { orgId, startDate, endDate, guestId };
       this.storeAccount(orgId);
       getReconciliation(obj).then(res => {

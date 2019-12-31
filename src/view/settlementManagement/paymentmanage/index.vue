@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" class="w150" @on-change="orgName">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -814,6 +814,11 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
+    // 切换分店
+    orgName(val){
+      // this.model1 = val
+      console.log(this.model1)
+    },
     // // 子组件传参
     // getOne(val){
 

@@ -262,8 +262,8 @@
                 <Select v-model="billTypeName" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
-                    :key="item.id"
-                    :value="item.id"
+                    :key="item.itemCode"
+                    :value="item.itemCode"
                   >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -273,8 +273,8 @@
                 <Select v-model="settleTypeName" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
-                    :key="item.id"
-                    :value="item.id"
+                    :key="item.itemCode"
+                    :value="item.itemCode"
                   >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -325,8 +325,8 @@
                 <Select v-model="billTypeName" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
-                    :key="item.id"
-                    :value="item.id"
+                    :key="item.itemCode"
+                    :value="item.itemCode"
                   >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -336,8 +336,8 @@
                 <Select v-model="settleTypeName" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
-                    :key="item.id"
-                    :value="item.id"
+                    :key="item.itemCode"
+                    :value="item.itemCode"
                   >{{item.itemName}}</Option>
                 </Select>
               </FormItem>
@@ -829,7 +829,7 @@ export default {
       PjType().then(res => {
         if (res.code === 0) {
           this.ticketTypeList = res.data;
-          this.billTypeId = res.data.id;
+          this.billTypeId = res.data.itemCode;
           this.billTypeName = res.data.itemName;
         }
       });
@@ -860,7 +860,7 @@ export default {
       JsStyle().then(res => {
         if (res.code === 0) {
           this.settlementMethodList = res.data;
-          this.settleTypeId = res.data.id;
+          this.settleTypeId = res.data.itemCode;
           this.settleTypeName = res.data.Name;
         }
       });
