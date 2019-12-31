@@ -49,7 +49,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button  v-has="'print'" class="mr10" @click="printTable">
+              <Button v-has="'print'" class="mr10" @click="printTable">
                 <Icon type="md-close" size="14" />打印
               </Button>
             </div>
@@ -885,6 +885,8 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
+      console.log(row, "row==>891");
+      row.fullName
       //console.log(row);
       if (this.val === "0") {
         //console.log(row.fullName);
@@ -896,6 +898,7 @@ export default {
           tata.showit = true;
         }, 200);
       } else {
+        this.Leftcurrentrow.guestName = row.fullName;
         this.diaochuName = row.fullName;
         //console.log(row.id);
         this.diaochuID = row.id;
