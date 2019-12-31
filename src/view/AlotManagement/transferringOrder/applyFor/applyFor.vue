@@ -387,9 +387,9 @@
         },
         //删除配件
         Delete(){
-          var set = this.checkboxArr.map(item=>item.id)
+          var set = this.checkboxArr.map(item=>item.partId)
           // console.log(set)
-          var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
+          var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
           console.log(resArr)
           this.Right.tbdata = resArr
         },
@@ -560,7 +560,7 @@
         selectChange(msg){
           console.log(msg,'msg')
           this.checkboxArr = msg.selection
-          console.log(this.checkboxArr)
+          console.log(this.checkboxArr,'this.checkboxArr')
         },
         // 全选
         selectAll(val){
