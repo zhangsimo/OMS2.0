@@ -482,7 +482,7 @@ export default {
       delList: [],
       //选中的树形
       selectTreeData: [],
-      orginTree:[]
+      orginTree: []
     };
   },
   mounted() {
@@ -510,11 +510,12 @@ export default {
           if (this.proModalTit == "编辑产品") {
             objReq.id = this.formValidate.id;
           }
-
           saveProduct(objReq).then(res => {
             if (res.code == 0) {
               this.proModal = false;
-              this.$Message.success("添加成功");
+              objReq.id
+                ? this.$Message.success("修改成功")
+                : this.$Message.success("添加成功");
               this.getList();
             }
           });
@@ -546,7 +547,13 @@ export default {
     addPro() {
       this.proModal = true;
       this.proModalTit = "新增产品";
-      this.$refs["proModal"].resetFields();
+      this.formValidate.name=""
+      this.formValidate.salesPrice = '';
+      this.formValidate.isCycle = '';
+      this.formValidate.remark = '';
+      this.formValidate.address = '';
+      this.formValidate.coin ='';
+      this.$refs.proModal.resetFields();
     },
     //编辑产品
     editPro() {
@@ -570,8 +577,8 @@ export default {
     },
     // 弹框左侧查询
     getLeaseSelect() {
-      this.treeData = JSON.parse(JSON.stringify(this.orginTree))
-      this.findTree(this.treeData,this.searchValue)
+      this.treeData = JSON.parse(JSON.stringify(this.orginTree));
+      this.findTree(this.treeData, this.searchValue);
     },
     findTree(tree, content) {
       let reg = new RegExp(content, "gi");
@@ -585,7 +592,6 @@ export default {
           if (!reg.test(tree.title)) {
             for (let j = inarr.length - 1; j >= 0; j--) {
               tree.children.splice(inarr[j], 1);
-
             }
             if (tree.children.length === 0) {
               remove.push(index);
@@ -734,7 +740,7 @@ export default {
           // })
           // console.log(arrData,'arrData')
           for (var i = 0; i < arrData.length; i++) {
-            var objData = {};
+            let objData = {};
             objData.productId = this.selectTable.id;
             objData.resId = arrData[i].id;
             objData.resName = arrData[i].title;
@@ -745,7 +751,6 @@ export default {
             objData.scope = 0;
             this.reqData.push(objData);
           }
-          // console.log(this.reqData,'arrData =>629')
           getLeasesaveProduct(this.reqData).then(res => {
             if (res.code == 0) {
               this.$Message.success("添加成功！");

@@ -360,13 +360,13 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        enterDateStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        enterDateEnd: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.type
       };  
       if (this.type === "050101") {
+         obj.enterDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        obj.enterDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         getWarehousingList(obj).then(res => {
           if (res.data) {
             res.data.map((item, index) => {
@@ -380,6 +380,8 @@ export default {
           }
         });
       } else if (this.type === "050201") {
+         obj.outDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        obj.outDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         getOutStockList(obj).then(res => {
           if (res.data.length !== 0) {
             res.data.map((item, index) => {

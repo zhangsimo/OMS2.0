@@ -366,15 +366,14 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        outDateStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        outDateEnd: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
         orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.typeName
       };
       if (this.typeName === "050202") {
+        obj.outDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        obj.outDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         getOutStockList(obj).then(res => {
-          console.log(res);
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
               item.num = index + 1;
@@ -386,8 +385,9 @@ export default {
           }
         });
       } else if(this.typeName === "050102") {
+        obj.enterDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        obj.enterDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         getWarehousingList(obj).then(res=>{
-          console.log(res);
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
               item.num = index + 1;
