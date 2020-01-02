@@ -573,12 +573,12 @@ export default {
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           align: "center"
         },
         {
           title: "配件内码",
-          key: "partId",
+          key: "partInnerId",
           align: "center"
         },
         {
@@ -868,7 +868,8 @@ export default {
     },
     // 获取页面数据
     getBrand() {
-      getBrandList().then(res => {
+      getBrandList(this.conditionData).then(res => {
+        // 撒打发
         // console.log(res)
         if (res.code === 0) {
           this.data = res.data.content;
