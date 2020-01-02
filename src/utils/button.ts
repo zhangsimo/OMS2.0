@@ -4,7 +4,6 @@ export function rightButtonShow() {
   let VOSList :any = windows.globalVue.$store.state.user.userData.resourceVOS,
     VOSID:any = VOSList.filter(item => item.displayName == windows.globalVue.$route.meta.title)
   let buttons:any =[]
-  console.log(VOSID)
   if(VOSID.length == 0) {
     sessionStorage.removeItem('btnContext')
     return

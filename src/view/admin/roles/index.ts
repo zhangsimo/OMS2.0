@@ -101,6 +101,9 @@ export default class index extends Vue{
   private ch(arr) {
     arr.map(item => {
       item.expand = true
+      if(this.right != 0){
+        item.disabled = true
+      }
       if (item.resType == 1 || item.childs.length == 0) {
         if (this.role.resIds.indexOf(item.id) != -1) {
           item.checked = true

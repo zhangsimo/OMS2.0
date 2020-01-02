@@ -15,7 +15,7 @@
           <div class="wlf" style="line-height: 54px">
               <Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>
               <Input v-model="searchForm.partName" placeholder="配件名称/拼音" class="w200 mr10"></Input>
-              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌">
+              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>
                 <!-- <Option value="9999" v-for="item in partBrandList">品牌</Option> -->
                 <Option
                   v-for="item in partBrandList"

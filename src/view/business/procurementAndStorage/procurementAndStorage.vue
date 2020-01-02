@@ -143,7 +143,6 @@
                   height="425"
                   @select-change="selectSameList"
                   @select-all = 'selectAllList'
-                  @edit-actived="editActivedEvent"
                   :data="formPlan.details"
                   style="width: 2000px"
                   :edit-config="{trigger: 'click', mode: 'cell'}"
