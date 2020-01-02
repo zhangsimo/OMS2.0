@@ -34,7 +34,7 @@ export default class index extends Vue{
    private oneStaff:any = {}
    //右侧权限树形图
   private treeList:any = []
-  //不知道的值
+  //权限变量
   private role:any =  {
     id: null,
     name: null,
@@ -47,10 +47,14 @@ export default class index extends Vue{
   private organization:string = ''
 
   private  staffName:string = ''
+
+  //按钮权限
+  private right:number = 1
   //-------------------mounted-----------------------------------------------
 
   private mounted() {
     this.getLeftList()
+    this.right = this.$store.state.user.userData.shopkeeper
   }
   //-------------------------------methods-----------------------------------------
     //获取左侧全部员工

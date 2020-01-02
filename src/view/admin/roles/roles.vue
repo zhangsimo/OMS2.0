@@ -4,15 +4,15 @@
       <Split v-model="split1">
         <div slot="left" class="demo-split-pane">
           <div class="headerBox">
-            <Button class="mr10" @click="openAdd">
+            <Button class="mr10" @click="openAdd" :disabled="right != 0">
               <span class="center">
                 <Icon custom="iconfont iconxinzengicon icons" />新增
               </span>
             </Button>
-            <Button type="default" class="mr10 w90" @click="changeStaff">
+            <Button type="default" class="mr10 w90" @click="changeStaff" :disabled="right != 0">
               <i class="iconfont mr5 iconbianjixiugaiicon"></i>修改
             </Button>
-            <Button type="default" class="mr10 w90" @click="delectStaff">
+            <Button type="default" class="mr10 w90" @click="delectStaff" :disabled="right != 0">
               <i class="iconfont mr5 iconlajitongicon"></i>删除
             </Button>
           </div>
