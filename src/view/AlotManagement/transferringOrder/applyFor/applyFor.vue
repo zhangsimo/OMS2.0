@@ -142,7 +142,7 @@
                        title="申请数量"
                        :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
                     </vxe-table-column>
-                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
+                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="100"></vxe-table-column>
                     <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
                     <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                     <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -187,7 +187,7 @@
   import QuickDate from '../../../../components/getDate/dateget'
   import More from './compontents/More'
   // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
-  import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
+  import GoodsInfo from './compontents/goodsInfo/GoodsInfo'
   import SelectSupplier from "./compontents/supplier/selectSupplier";
   import '../../../lease/product/lease.less';
   import "../../../goods/goodsList/goodsList.less";
@@ -517,7 +517,7 @@
                   } catch (errMap) {
                     this.$XModal.message({
                       status: "error",
-                      message: "表格校验不通过！"
+                      message: "申请数量必须输入大于0的正整数！"
                     });
                   }
                 } else {
