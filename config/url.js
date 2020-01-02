@@ -64,7 +64,7 @@ const test = {
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   getFileApi: "https://tsoms2.g-parts.cn",
-  downApi: "https://tsapi2.g-parts.cn/oms-oss-provider",
+  downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
 };
 
