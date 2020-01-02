@@ -146,9 +146,11 @@ export default class InterPurchase extends Vue {
     if (response.code == 0) {
       if (response.data.errosMsg.length > 0) {
         this.warning(response.data.errosMsg);
-        this.tableData = [...this.tableData, ...response.data.details]
-        this.tableData.push();
+      } else {
+        this.$Message.success("导入成功");
       }
+      this.tableData = [...this.tableData, ...response.data.details]
+      this.tableData.push();
     } else {
       this.$Message.error(response.message)
     }
@@ -414,6 +416,13 @@ export default class InterPurchase extends Vue {
           if(res.code == 0) {
             delOk = true;
             isNetWork = true;
+            this.deletePartArr.forEach((els: any) => {
+              this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+                if (el.oid == els.oid) {
+                  arr.splice(index, 1);
+                }
+              })
+            })
           }
         } else {
           delOk = true;
@@ -433,9 +442,9 @@ export default class InterPurchase extends Vue {
         }
         if (delOk && delOk2) {
           this.$Message.success('删除成功');
-          if(isNetWork) {
-            this.getListData();
-          }
+          // if(isNetWork) {
+          //   this.getListData();
+          // }
         }
       },
       onCancel: () => {

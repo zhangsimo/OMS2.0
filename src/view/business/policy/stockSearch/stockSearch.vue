@@ -15,7 +15,7 @@
           <div class="wlf" style="line-height: 54px">
               <Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>
               <Input v-model="searchForm.partName" placeholder="配件名称/拼音" class="w200 mr10"></Input>
-              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌">
+              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>
                 <!-- <Option value="9999" v-for="item in partBrandList">品牌</Option> -->
                 <Option
                   v-for="item in partBrandList"
@@ -141,7 +141,7 @@
                 ],
                 //默认仓库选项
                 storeList: [
-
+                  {name: '全部', id: 1}
                 ],
                 //汇总库存查询条件表单
                 searchForm: {
@@ -244,8 +244,12 @@
                     {
                         title: '可售数量',
                         align: 'center',
-                        key: 'outableQty',
-                        minWidth: 80
+                        // key: 'outableQty',
+                        minWidth: 80,
+                      render:(h,params)=>{
+                      let tex =   params.row.sellSign? 0 : params.row.outableQty
+                        return h('span' ,{},tex)
+                      }
                     },
                     {
                         title: '仓库',
@@ -396,6 +400,7 @@
                         align: 'center',
                         key: 'outableQty',
                         minWidth: 80
+
                     },
                     {
                         title: '仓库',
@@ -550,17 +555,20 @@
                 data.noStock = data.noStock ? 1 : 0
                 let res = await getAllStock(data)
                 if (res.code == 0) {
+                  console.log('汇总库存数据',res)
                     this.contentOne.dataOne = res.data.content
                     this.contentOne.page.total = res.data.totalElements
                 }
             },
             //汇总分页
             changePageAlways(val){
-                this.contentOne.page.num = val
+              // console.log('11',val)
+                this.contentOne.page.num =val
                 this.getAllStocks()
             },
             //汇总条数
             changeSizeAlways(val){
+              // console.log('22',val)
                 this.contentOne.page.num = 1
                 this.contentOne.page.size = val
                 this.getAllStocks()
@@ -574,9 +582,10 @@
             async getLotStocks() {
                 let data ={}
                     data = this.searchForm1
-                data.page= this.contentOne.page.num -1
-                data.size= this.contentOne.page.size
+                data.page= this.contentTwo.page.num -1
+                data.size= this.contentTwo.page.size
                 data.noStock = data.noStock ? 1 : 0
+              // console.log('数据',data)
                 let res = await getLotStock(data)
                 if (res.code == 0) {
                     this.contentTwo.dataTwo = res.data.content
@@ -589,13 +598,15 @@
             },
             // 修改每页显示条数-客户信息
             changeSizeCus(val) {
+              // console.log('22',val)
                 this.contentTwo.page.num = 1
-                this.contentTwo.page.total = val
-                this.getLotStocks()
+                this.contentTwo.page.size = val
+             this.getLotStocks()
             },
             changePageCus(val) {
+              // console.log('22',val)
                 this.contentTwo.page.num = val
-                this.getLotStocks()
+             this.getLotStocks()
             },
             //安全库存弹窗
             sfy() {
@@ -605,15 +616,22 @@
             async getStoreHoure() {
                 let res = await getwarehouse({});
                 if (res.code == 0) {
-                    this.storeList = res.data;
+                    // this.storeList = res.data;
+                  console.log('222',res)
+                  res.data.forEach(el => {
+                      el.name = el.name;
+                      el.id = el.id;
+                      this.storeList.push(el);
+                  })
                 }
-              // this.storeList.unshift({ name: "全部", id: '全部' })
+              // this.storeList.unshift({ name: "全部", storeId: '1' })
             },
 
             //获取品牌
             async getBand() {
                 let res = await api.getPartBrand();
                 if (res.code == 0) {
+                  // console.log('11',res)
                     res.data.forEach(el => {
                         if (el.parentId != '0') {
                             el.partBrandName = el.name;
@@ -638,7 +656,7 @@
             },
             //导出批次
             exportBatch(){
-                if(this.contentTwo.dataOne.length > 0){
+                if(this.contentTwo.dataTwo.length > 0){
                     this.$refs.table2.exportCsv({
                         filename: '批次库存'
                     });

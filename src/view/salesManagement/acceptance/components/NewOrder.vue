@@ -34,7 +34,7 @@
                 label="票据类型:" prop="billTypeId">
                 <Select v-model="formPlan.billTypeId"
                         placeholder="请选择票据类型">
-                  <Option v-for="item in settleTypeList.CS00107" :value="item.id" :key="item.id">{{ item.itemName  }}</Option>
+                  <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
                 </Select>
               </FormItem>
             </Col>
@@ -42,7 +42,7 @@
               <FormItem label="结算方式:" prop="settleTypeId">
                 <Select v-model="formPlan.settleTypeId"
                         placeholder="请选择结算方式">
-                  <Option v-for="item in settleTypeList.CS00106" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
+                  <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
                 </Select>
               </FormItem>
             </Col>

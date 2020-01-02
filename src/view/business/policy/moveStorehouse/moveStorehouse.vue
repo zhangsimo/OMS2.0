@@ -807,7 +807,9 @@ export default {
     },
     //删除
     deletePar() {
+
       const seleList = this.$refs.xTable1.getSelectRecords();
+      if(seleList.length==0) return  this.$Message.error("请选择一条数据");
       const ids = [];
       // console.log(seleList, "seleList =>753");
       // seleList.forEach(item => {
@@ -822,9 +824,11 @@ export default {
         ids: ids,
         mainId: this.mainid
       };
+
       // console.log(arrParams, "arrParams =>774");
       this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
       // console.log(arrParams, "arrParams781");
+
       delectTable(arrParams)
         .then(res => {
           // console.log(res, "783");

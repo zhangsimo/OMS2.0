@@ -163,8 +163,8 @@ export default class ProductLA extends Vue {
             minWidth: 80
         },
         {
-            title: "型号",
-            key: "",
+            title: "车型",
+            key: "adapterCarModel",
             minWidth: 100
         },
     ]
@@ -292,7 +292,7 @@ export default class ProductLA extends Vue {
                     data.fullName = this.waitPartTransListContent;
                     break;
                 case "2":
-                    data.adapterCarModels = [this.waitPartTransListContent];
+                    data.adapterCarModel = this.waitPartTransListContent;
                     break;
                 case "3":
                     data.keyWord = this.waitPartTransListContent;

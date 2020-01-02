@@ -9,7 +9,7 @@
       <span class="mr5">供应商类型:</span>
       <Select v-model="supplierTypeOne" style="width:120px" class="mr10">
         <Option
-          v-for="item in supplierType.CS00110"
+          v-for="item in supplierType.CS00111"
           :key="item.itemCode"
           :value="item.id"
         >{{ item.itemName}}</Option>
@@ -356,7 +356,7 @@ export default {
     //数字字典
     async getsupplierTypeList() {
       let data = {};
-      data = ["CS00110"];
+      data = ["CS00111"];
       let res = await getDigitalDictionary(data);
       if (res.code == 0) {
         this.supplierType = res.data;
@@ -416,7 +416,6 @@ export default {
         : (this.pitchSupplierOne.isClient = false);
       this.pitchSupplierOne.belongSystem = JSON.parse(this.pitchSupplierOne.belongSystem).value
       this.clientList = this.pitchSupplierOne;
-      console.log(this.pitchSupplierOne, "this.clientList =>418");
     },
     //批量上传失败
     onFormatError(file) {
@@ -426,7 +425,6 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       this.getlist();
-      console.log(response)
       if (response.code != 0) {
         this.$Notice.warning({
           title: "导入失败",

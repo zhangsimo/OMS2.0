@@ -201,6 +201,7 @@
             border
             :data="data3"
             max-height="570"
+            ref="tableBox"
           ></Table>
           <Row>
             <Col span="12">
@@ -572,12 +573,12 @@ export default {
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           align: "center"
         },
         {
           title: "配件内码",
-          key: "partId",
+          key: "partInnerId",
           align: "center"
         },
         {
@@ -867,7 +868,8 @@ export default {
     },
     // 获取页面数据
     getBrand() {
-      getBrandList().then(res => {
+      getBrandList(this.conditionData).then(res => {
+        // 撒打发
         // console.log(res)
         if (res.code === 0) {
           this.data = res.data.content;
@@ -1057,6 +1059,7 @@ export default {
     },
     // 待采购订单单选
     onSelect(row, selection) {
+      console.log(row)
       // console.log(selection)
       this.generateBrand = row;
       this.data4 = row;
@@ -1081,7 +1084,7 @@ export default {
     // 待采购页面生成采购订单按钮
     showGeneratePurchaseOrder() {
       if (this.data4.length < 1) {
-        this.$Message.error("请选择代采购的配件！");
+        this.$Message.error("请选择待采购的配件！");
       } else {
         this.addPurchaseOrderDialog = true;
       }
@@ -1089,6 +1092,8 @@ export default {
     closedPurchaseOrderDialog() {
       //关闭生成采购按钮
       this.addPurchaseOrderDialog = false;
+      this.$refs.tableBox.selectAll(false)
+
       // this.data4 = []
     },
     // 直发采购订单

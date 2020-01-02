@@ -4,8 +4,26 @@
         <h5 style="margin-bottom: 20px">库存统计</h5>
         <div>
           <Row>
-            <Col span="12">col-12</Col>
-            <Col span="12">col-12</Col>
+            <Col span="12" class="pr10">
+              <div class="static pl20" >
+                <div class="staticTop">
+                  库存总成本
+                </div>
+                <h5 class="staticBottom">
+                  ￥123123
+                </h5>
+              </div>
+            </Col>
+            <Col span="12"  class="pl10">
+              <div class="static staticColor pl20">
+                <div class="staticTop">
+                  库存SKU种类
+                </div>
+                <h5 class="staticBottom">
+                  3123
+                </h5>
+              </div>
+            </Col>
           </Row>
         </div>
       </div>
@@ -61,6 +79,24 @@
 </script>
 
 <style scoped lang="less">
+.static {
+  width: 100% ;
+  height: 150px;
+  background-color: #F7F0FC;
+  .staticTop{
+    /*height: 50%;*/
+    line-height: 75px;
+    font-size: 16px;
+  }
+  .staticBottom {
+    /*height: 50%;*/
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+.staticColor {
+  background-color: #E8F8F0;
+}
 .boardLeft {
   flex-flow: row nowrap;
   margin-right: 20px;

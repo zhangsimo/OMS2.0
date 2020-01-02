@@ -211,7 +211,7 @@ const methods = {
           case 6:
             this.isWatch = el.keyidValue;
             break;
-          case "2":
+          case 2:
             this.content = el.keyidValue;
             break;
           case 4:
@@ -232,7 +232,7 @@ const methods = {
   // 保存
   async save() {
     this.setarr = this.setarr.map(el => {
-      switch (el.keyidName) {
+      switch (el.keyidId) {
         case 3:
           el.keyidValue = this.isrow;
           break;
@@ -257,7 +257,7 @@ const methods = {
         case 6:
           el.keyidValue = this.isWatch;
           break;
-        case "2":
+        case 2:
           el.keyidValue = this.content;
           break;
         case 4:

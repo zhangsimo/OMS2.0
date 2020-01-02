@@ -328,20 +328,17 @@ export default {
     },
     // 查看明细
     openDetail() {
-      if (this.creditData.id === "") {
+      if (!this.creditData.id) {
         this.$Message.error("请选择一条数据");
       } else {
         this.CreditLineApplicationShow = true;
-        console.log(this.creditData)
         viewDetails({id:this.creditData.id}).then(res => {
-          console.log(res.data)
           if (res.code === 0) {
             this.creaditList = this.creditData
             this.customerIfo = res.data.guestAdjustVOList
             this.customerDetails = res.data.guestAdjustVO;
             this.sixMonthPerformance = res.data.sixMonthPerformance;
             this.sellOrderList = res.data.sellOrderList;
-            console.log(this.customerIfo,this.sixMonthPerformance)
           }
         });
       }

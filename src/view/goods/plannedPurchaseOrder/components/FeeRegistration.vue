@@ -376,6 +376,8 @@ export default class FeeRegistration extends Vue {
       guestName: "",
       duePayableAmt: 0,
       remark: "",
+      serviceType: "",
+      fullName: this.selectrow.fullName,
       createUname: this.user.userData.staffName,
       createTime: tools.transTime(new Date())
     };
