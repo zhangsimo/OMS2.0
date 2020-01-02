@@ -141,7 +141,7 @@
                 ],
                 //默认仓库选项
                 storeList: [
-
+                  {name: '全部', id: 1}
                 ],
                 //汇总库存查询条件表单
                 searchForm: {
@@ -610,15 +610,22 @@
             async getStoreHoure() {
                 let res = await getwarehouse({});
                 if (res.code == 0) {
-                    this.storeList = res.data;
+                    // this.storeList = res.data;
+                  console.log('222',res)
+                  res.data.forEach(el => {
+                      el.name = el.name;
+                      el.id = el.id;
+                      this.storeList.push(el);
+                  })
                 }
-              // this.storeList.unshift({ name: "全部", id: '全部' })
+              // this.storeList.unshift({ name: "全部", storeId: '1' })
             },
 
             //获取品牌
             async getBand() {
                 let res = await api.getPartBrand();
                 if (res.code == 0) {
+                  // console.log('11',res)
                     res.data.forEach(el => {
                         if (el.parentId != '0') {
                             el.partBrandName = el.name;
@@ -643,7 +650,7 @@
             },
             //导出批次
             exportBatch(){
-                if(this.contentTwo.dataOne.length > 0){
+                if(this.contentTwo.dataTwo.length > 0){
                     this.$refs.table2.exportCsv({
                         filename: '批次库存'
                     });
