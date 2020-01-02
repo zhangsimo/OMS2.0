@@ -232,7 +232,7 @@ const methods = {
   // 保存
   async save() {
     this.setarr = this.setarr.map(el => {
-      switch (el.keyidName) {
+      switch (el.keyidId) {
         case 3:
           el.keyidValue = this.isrow;
           break;
