@@ -244,8 +244,12 @@
                     {
                         title: '可售数量',
                         align: 'center',
-                        key: 'outableQty',
-                        minWidth: 80
+                        // key: 'outableQty',
+                        minWidth: 80,
+                      render:(h,params)=>{
+                      let tex =   params.row.sellSign? 0 : params.row.outableQty
+                        return h('span' ,{},tex)
+                      }
                     },
                     {
                         title: '仓库',
@@ -396,6 +400,7 @@
                         align: 'center',
                         key: 'outableQty',
                         minWidth: 80
+
                     },
                     {
                         title: '仓库',
@@ -550,6 +555,7 @@
                 data.noStock = data.noStock ? 1 : 0
                 let res = await getAllStock(data)
                 if (res.code == 0) {
+                  console.log('汇总库存数据',res)
                     this.contentOne.dataOne = res.data.content
                     this.contentOne.page.total = res.data.totalElements
                 }
