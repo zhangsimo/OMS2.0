@@ -303,7 +303,7 @@ const methods = {
     })
     let res2 = await api.updatetenant(this.tbdata);
     if(res2.code === 0) {
-      this.$Message.success('保存成功');
+      this.$Message.success('删除成功');
       this.qureyTable();
     }
   },
