@@ -33,7 +33,7 @@
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
-             <div class="db">
+            <div class="db">
               <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
@@ -99,7 +99,7 @@
                           ></Input>
                             placeholder="请选择调出方"
                           ></Input>-->
-                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
+                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable :disabled="buttonShow || Leftcurrentrow.status.value !== 0">
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
@@ -243,7 +243,7 @@
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button type="default" @click="advanced=false">取消</Button>
         </div>
       </Modal>
     </div>
@@ -322,7 +322,7 @@ export default {
     return {
       idsId: [],
       getArray: [],
-      tuneOut: true,
+      tuneOut: false,
       flag: 0,
       ArrayValue: [],
       buttonDisable: 0,
@@ -345,7 +345,7 @@ export default {
       purchaseTypeArr: [
         {
           label: "所有",
-          value: ""
+          value: 99
         },
         {
           label: "草稿",
@@ -569,7 +569,6 @@ export default {
       findForAllot(req).then(res => {
         const { content } = res.data;
         this.getArray = content;
-        console.log(content, "req");
         content.forEach(item => {
           this.ArrayValue.push(item.fullName);
         });
@@ -619,7 +618,6 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
-      console.log(msg, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -1066,12 +1064,16 @@ export default {
     },
     getList(params) {
       if (params.qucikTime) {
-        (params.createTime = params.qucikTime[0]),
-          (params.endTime = params.qucikTime[1]);
+        (params.createTimeStart = params.qucikTime[0]),
+          (params.createTimeEnd = params.qucikTime[1]);
         delete params.qucikTime;
       } else {
+        (params.createTimeStart = params.createTime),
+          (params.createTimeEnd = params.endTime);
         delete params.qucikTime;
       }
+      params.statusVaule = params.status || 99
+      delete params.status
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

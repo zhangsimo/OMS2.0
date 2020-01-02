@@ -9,7 +9,7 @@
             >{{onelist.orgName || ' '}}</h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>销售出库:</p>
+            <p>{{title}}:</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
@@ -126,6 +126,7 @@ import { Printing } from "@/api/bill/saleOrder";
 
 export default {
   name: "PrintShow",
+  props: { title: "" },
   data() {
     return {
       printShow: false, //模态框隐藏
@@ -221,16 +222,22 @@ export default {
     },
     async openModal() {
       this.printShow = true;
+      let arr = [];
+      if (this.title === "销售出库") {
+        arr = this.$parent.data3[0];
+      } else if (this.title === "采购入库") {
+        arr = this.$parent.data4[0];
+      }
       let data = {
-        orderCode: this.$parent.data3[0].orderCode,
-        orderType: this.$parent.data3[0].orderType,
-        orgId: this.$parent.data3[0].orgId,
-        guestId: this.$parent.data3[0].guestId
+        orderCode: arr.orderCode,
+        orderType: arr.orderType,
+        orgId: arr.orgId,
+        guestId: arr.guestId
       };
       let res = await Printing(data);
-      res.data.orderDetailList.map((item,index)=>{
-        item.num = index + 1
-      })
+      res.data.orderDetailList.map((item, index) => {
+        item.num = index + 1;
+      });
       if (res.code === 0) {
         this.onelist = res.data;
       }

@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150" >
+            <Select v-model="model1" class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -141,8 +141,18 @@
     </Modal>
     <Modal v-model="outStock" title="出库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print" v-has="'print'">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(0)" v-has="'export'">导出</button>
+        <button
+          class="mr10 ivu-btn ivu-btn-default"
+          type="button"
+          @click="print(0)"
+          v-has="'print'"
+        >打印</button>
+        <button
+          class="mr10 ivu-btn ivu-btn-default"
+          type="button"
+          @click="exportDetail(0)"
+          v-has="'export'"
+        >导出</button>
       </div>
       <Table
         border
@@ -157,8 +167,18 @@
     </Modal>
     <Modal v-model="onStock" title="入库明细" width="1200">
       <div class="db">
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="print" v-has="'print'">打印</button>
-        <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="exportDetail(1)" v-has="'export'">导出</button>
+        <button
+          class="mr10 ivu-btn ivu-btn-default"
+          type="button"
+          @click="print(1)"
+          v-has="'print'"
+        >打印</button>
+        <button
+          class="mr10 ivu-btn ivu-btn-default"
+          type="button"
+          @click="exportDetail(1)"
+          v-has="'export'"
+        >导出</button>
       </div>
       <Table
         border
@@ -172,7 +192,7 @@
       <div slot="footer"></div>
     </Modal>
     <Monthlyreconciliation ref="Monthlyreconciliation" />
-    <PrintShow ref="PrintShow" />
+    <PrintShow ref="PrintShow" :title="tit" />
   </div>
 </template>
 
@@ -197,6 +217,7 @@ export default {
   },
   data() {
     return {
+      tit: "",
       detailedList: "key1",
       value: [],
       model1: "",
@@ -495,6 +516,12 @@ export default {
                       orderType: params.row.serviceType.value
                     };
                     let res = await this.getList(obj);
+                    res.detailed.map(item => {
+                      item.orderCode = params.row.serviceId;
+                      item.orderType = params.row.serviceType.value;
+                      item.orgId = params.row.orgId;
+                      item.guestId = params.row.guestId;
+                    });
                     this.data4 = res.detailed;
                   }
                 }
@@ -814,7 +841,6 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
-    
     // // 子组件传参
     // getOne(val){
 
@@ -858,7 +884,7 @@ export default {
           });
           this.data = res.data;
         } else {
-          this.data = []
+          this.data = [];
         }
       });
     },
@@ -975,8 +1001,8 @@ export default {
       }
     },
     // 打印
-    print() {
-      // console.log(this.$refs.PrintShow)
+    print(type) {
+      type ? (this.tit = "采购入库") : (this.tit = "销售出库");
       this.$refs.PrintShow.openModal();
     }
   }
