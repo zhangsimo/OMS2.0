@@ -504,8 +504,11 @@ export default {
         //   this.warning(response.data.List[0])
         // }
         this.$Message.success(response.message)
+        this.$Message.warning(response.data.toString())
+        this.leftgetList()
       }else {
         this.$Message.error(response.message)
+        this.leftgetList()
       }
     },
     //上传之前清空
