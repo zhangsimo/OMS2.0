@@ -163,8 +163,17 @@
                       placeholder="选择日期"
                     ></DatePicker>
                   </FormItem>
-                  <FormItem label="计划员：" prop="planner">
-                    <Input class="w160" v-model="formPlan.planner" />
+                  <FormItem label="计划员：" prop="orderManId">
+                    <!-- <Input class="w160" v-model="formPlan.planner" /> -->
+                    <Select v-model="formPlan.orderManId"
+                      class="w160"
+                      :disabled="isinput"
+                      label-in-value
+                      @on-change="selectOrderMan"
+                      filterable
+                    >
+                      <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    </Select>
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
@@ -258,6 +267,7 @@
                       :headers="headers"
                       :before-upload="handleBeforeUpload"
                       :on-success="handleSuccess"
+                      :on-format-error="onFormatError"
                       :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
                     >
                       <Button
@@ -387,16 +397,16 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column title="不含税单价" width="100">
-                  <template v-slot="{ row }">{{ row.noTaxPrice.toFixed(2) }}</template>
+                  <template v-slot="{ row }">{{ row.noTaxPrice | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column title="不含税金额" width="100">
-                  <template v-slot="{ row }">{{ row.noTaxAmt.toFixed(2) }}</template>
+                  <template v-slot="{ row }">{{ row.noTaxAmt | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column title="最近采购单价" width="100">
-                  <template v-slot="{ row }">{{ row.recentPrice.toFixed(2) }}</template>
+                  <template v-slot="{ row }">{{ row.recentPrice | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column title="单价差" width="100">
-                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice).toFixed(2) | priceFilters }}</template>
+                  <template v-slot="{ row }">{{ (row.orderPrice - row.recentPrice) | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column field="upLimit" title="库存上限" width="100"></vxe-table-column>
                 <vxe-table-column field="downLimit" title="库存下限" width="100"></vxe-table-column>
@@ -450,6 +460,7 @@ import { mixGoodsData } from "./mixGoodsList";
 import SelectPartCom from "./components/selectPartCom";
 import SelectSupplier from "./components/supplier/selectSupplier";
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
+import { getSales } from "@/api/salesManagment/salesOrder";
 export default {
   name: "goodsList",
   components: {
@@ -614,7 +625,8 @@ export default {
       //左侧表格高度
       leftTableHeight: 0,
       //右侧表格高度
-      rightTableHeight: 0
+      rightTableHeight: 0,
+      salesList: [],
     };
   },
   mounted() {
@@ -639,6 +651,8 @@ export default {
         }
       }
     });
+
+    this.getAllSales()
   },
   created() {
     getParamsBrand().then(res => {
@@ -662,6 +676,17 @@ export default {
     },
     initStart() {
       this.getList();
+    },
+
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.forEach(item => {
+          item.label = item.userName;
+          item.value = item.id;
+        })
+      }
     },
 
     showStatus() {

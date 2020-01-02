@@ -159,12 +159,12 @@ export default class ApportionmentExpenses extends Vue {
     const formInline: any = this.$refs["formInline"];
     formInline.validate((valid: any) => {
       if (valid) {
-        this.cancel();
         res = this.formInline;
       } else {
         this.$Message.error("请添加配件或完善订单信息后再提交!");
       }
     });
+    this.cancel();
     return res;
   }
 
