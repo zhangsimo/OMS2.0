@@ -435,9 +435,9 @@ export default class InterPurchase extends Vue {
         }
         if (delOk && delOk2) {
           this.$Message.success('删除成功');
-          if(isNetWork) {
-            this.getListData();
-          }
+          // if(isNetWork) {
+          //   this.getListData();
+          // }
         }
       },
       onCancel: () => {
