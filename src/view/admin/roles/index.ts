@@ -1,6 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , addOrUpdate , getStaff , saveStaffJurisdiction} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder} from '_api/admin/roleApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -201,7 +201,7 @@ export default class index extends Vue{
     // @ts-ignore
     let stop:any = this.$loading()
     // this.role.id = ''
-    addOrUpdate(this.role, this.role.resIds).then(res => {
+    saveOrder(this.role, this.role.resIds).then(res => {
       if (res.code == 0) {
           this.getLeftList()
           this.$Message.success('修改成功')

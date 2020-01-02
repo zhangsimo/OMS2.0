@@ -77,3 +77,12 @@ export function saveStaffJurisdiction (data) {
     data
   })
 }
+
+//保存功能
+export function saveOrder (data) {
+  return axios.request({
+    url: `${api.authApi}/role/updateRole`,
+    method: 'post',
+    data
+  })
+}
