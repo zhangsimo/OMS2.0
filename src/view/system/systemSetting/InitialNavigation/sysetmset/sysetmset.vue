@@ -211,7 +211,7 @@ const methods = {
           case 6:
             this.isWatch = el.keyidValue;
             break;
-          case "2":
+          case 2:
             this.content = el.keyidValue;
             break;
           case 4:
@@ -257,7 +257,7 @@ const methods = {
         case 6:
           el.keyidValue = this.isWatch;
           break;
-        case "2":
+        case 2:
           el.keyidValue = this.content;
           break;
         case 4:
