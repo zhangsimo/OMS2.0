@@ -442,6 +442,13 @@ export default class InterPurchase extends Vue {
           if (res.code == 0) {
             delOk = true;
             isNetWork = true;
+            this.deletePartArr.forEach((els: any) => {
+              this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
+                if (el.oid == els.oid) {
+                  arr.splice(index, 1);
+                }
+              })
+            })
           }
         } else {
           delOk = true;
