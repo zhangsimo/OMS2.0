@@ -556,11 +556,13 @@
             },
             //汇总分页
             changePageAlways(val){
-                this.contentOne.page.num = val
+              // console.log('11',val)
+                this.contentOne.page.num =val
                 this.getAllStocks()
             },
             //汇总条数
             changeSizeAlways(val){
+              // console.log('22',val)
                 this.contentOne.page.num = 1
                 this.contentOne.page.size = val
                 this.getAllStocks()
@@ -574,9 +576,10 @@
             async getLotStocks() {
                 let data ={}
                     data = this.searchForm1
-                data.page= this.contentOne.page.num -1
-                data.size= this.contentOne.page.size
+                data.page= this.contentTwo.page.num -1
+                data.size= this.contentTwo.page.size
                 data.noStock = data.noStock ? 1 : 0
+              // console.log('数据',data)
                 let res = await getLotStock(data)
                 if (res.code == 0) {
                     this.contentTwo.dataTwo = res.data.content
@@ -589,13 +592,15 @@
             },
             // 修改每页显示条数-客户信息
             changeSizeCus(val) {
+              // console.log('22',val)
                 this.contentTwo.page.num = 1
-                this.contentTwo.page.total = val
-                this.getLotStocks()
+                this.contentTwo.page.size = val
+             this.getLotStocks()
             },
             changePageCus(val) {
+              // console.log('22',val)
                 this.contentTwo.page.num = val
-                this.getLotStocks()
+             this.getLotStocks()
             },
             //安全库存弹窗
             sfy() {
