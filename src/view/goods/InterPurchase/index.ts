@@ -782,7 +782,7 @@ export default class InterPurchase extends Vue {
     this.feeform = form;
     let data = Object.assign({}, this.selectTableRow, { details: this.tableData }, this.feeform);
     let res: any = await api.calculatAmt(data);
-    if (res.cdoe == 0) {
+    if (res.code == 0) {
       this.tableData = res.data || [];
     }
   }
