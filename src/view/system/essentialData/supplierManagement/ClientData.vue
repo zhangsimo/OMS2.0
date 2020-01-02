@@ -365,7 +365,6 @@ export default {
       if (res.code == 0) {
         this.dataList = res.data;
       }
-      console.log(this.dataList)
     },
     //清除内容
     resetFields() {

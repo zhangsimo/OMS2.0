@@ -9,7 +9,7 @@
       <span class="mr5">供应商类型:</span>
       <Select v-model="supplierTypeOne" style="width:120px" class="mr10">
         <Option
-          v-for="item in supplierType.CS00110"
+          v-for="item in supplierType.CS00111"
           :key="item.itemCode"
           :value="item.id"
         >{{ item.itemName}}</Option>
@@ -356,7 +356,7 @@ export default {
     //数字字典
     async getsupplierTypeList() {
       let data = {};
-      data = ["CS00110"];
+      data = ["CS00111"];
       let res = await getDigitalDictionary(data);
       if (res.code == 0) {
         this.supplierType = res.data;
