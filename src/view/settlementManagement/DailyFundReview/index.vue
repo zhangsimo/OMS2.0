@@ -9,7 +9,7 @@
           </div>
           <div class="db ml20">
             <span>查询期间：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -467,6 +467,10 @@ export default {
     };
   },
   methods: {
+    // 日期选择
+    dateChange(data){
+      this.value = data
+    },
     // 撤销原因
     removeChange(event){
       if(event.target.value.length<100) {

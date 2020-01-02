@@ -14,8 +14,8 @@
           </Row>
           <Row class="mt15">
             <span class="ml5">调 出 方：</span>
-            <Select placeholder="请选择调出方" v-model="callout" label-in-value filterable style="width: 450px">
-              <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+            <Select placeholder="请选择调出方" v-model="callout" filterable style="width: 450px" @on-change="getSupplierNamea">
+              <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
             <!--<Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>-->
             <!--<Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>-->
@@ -81,8 +81,7 @@
           this.submitData = date
         },
         getSupplierNamea(a) {
-          this.callout = a.fullName
-          this.guestId = a.id
+          this.guestId = a
         },
         init(){
           this.moreAndMore = true
@@ -116,11 +115,9 @@
           req.page = 1;
           req.size = 20;
           findForAllot(req).then(res => {
-            const { content } = res.data;
-            this.getArray = content;
-            content.forEach(item => {
-              this.ArrayValue.push(item.fullName);
-            });
+            if(res.code === 0){
+              this.ArrayValue = res.data.content
+            }
           });
         }
       },

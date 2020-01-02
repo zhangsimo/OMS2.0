@@ -9,7 +9,7 @@
           </div>
           <div class="db ml20">
             <span>制单日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -277,6 +277,10 @@ export default {
     this.getGeneral();
   },
   methods: {
+    // 日期选择
+    dateChange(data){
+      this.value = data
+    },
     // 表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)
@@ -356,16 +360,15 @@ export default {
     // 总表查询
     getGeneral() {
       let obj = {
-        enterDateStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        enterDateEnd: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        enterDateStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        enterDateEnd: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.type
-      };
+      };  
       if (this.type === "050101") {
         getWarehousingList(obj).then(res => {
-          // console.log(res);
-          if (res.data.length !== 0) {
+          if (res.data) {
             res.data.map((item, index) => {
               item.num = index + 1;
               item.taxSign = item.taxSign ? "是" : "否";

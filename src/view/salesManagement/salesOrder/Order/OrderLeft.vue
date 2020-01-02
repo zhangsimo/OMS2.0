@@ -76,7 +76,7 @@ export default {
       query: {
         showPerson: 1
       }, //更多搜索信息
-      Flaga: false
+      Flaga: true
     };
   },
   mounted() {
@@ -97,14 +97,17 @@ export default {
         return this.$Message.error('请先保存数据');
       }
       this.isAdd=false
-
       this.tableData.unshift(this.PtRow);
+      this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
       // this.tableData.unshift({
       //   billStatusId: { enum: "", value: "0", name: "草稿" },
       //   orderMan: this.$store.state.user.userData.staffName,
       //   orderManId:  this.$store.state.user.userData.id
       // });
+    },
+    change(){
+      this.Flaga = false
     },
     //获取表格数据
     async gitlistValue() {
@@ -165,7 +168,7 @@ export default {
           onOk: () => {
             currentRowTable.clearCurrentRow();
             this.$emit('refresh','你好！');
-            this.Flaga = true
+            this.Flaga = false
           },
           onCancel: () => {
             this.isAdd = true;

@@ -28,7 +28,7 @@
                 <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
               </div>
               <div class="db ml5">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button">
+                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
                 </button>
@@ -75,7 +75,7 @@
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select> -->
+                </Select>-->
                 <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
                 <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
                 <span>开户行：</span>
@@ -524,15 +524,21 @@ export default {
     }
   },
   methods: {
+    query() {
+      this.Initialization();
+    },
     // 对账单弹框出现加载数据
     hander() {
       this.flag = false;
       this.info = false;
-      let { orgId, startDate, endDate, guestId } = this.parameter;
       this.store = this.parameter.orgId;
       this.model1 = this.parameter.orgId;
-      let obj = { orgId, startDate, endDate, guestId };
-      this.storeAccount(orgId);
+      this.storeAccount(this.parameter.orgId);
+    },
+    // 获取数据
+    Initialization() {
+      let { orgId, startDate, endDate, guestId } = this.parameter;
+      let obj = { orgId: this.model1, guestId: this.companyInfo };
       getReconciliation(obj).then(res => {
         let Statementexcludingtax = 0;
         let Taxincludedpartsstatement = 0;
@@ -572,6 +578,8 @@ export default {
             item.speciesName = item.species.name;
           });
           this.data1 = res.data.two;
+        } else {
+          this.data1 = [];
         }
         if (res.data.three.length !== 0) {
           res.data.three.map(item => {
@@ -579,10 +587,11 @@ export default {
             item.speciesName = item.species.name;
           });
           this.data2 = res.data.three;
+        } else {
+          this.data2 = [];
         }
       });
-    },
-    // 对账门店
+    }, // 对账门店
     storeAccount(val) {
       this.Branchstore.map(item => {
         if (item.value === val) {
@@ -591,24 +600,22 @@ export default {
             this.companyList = [];
             this.collectionAccountList = [];
             res.data.map((item, index) => {
-              if (item.id === this.companyInfo) {
-                this.collectionAccountName = item.receiveName;
-                this.openingBank = item.accountBank;
-                this.collectionAccount = item.accountBankNo;
-              } else {
-                this.collectionAccountName = res.data[0].receiveName;
-                this.openingBank = res.data[0].accountBank;
-                this.collectionAccount = res.data[0].accountBankNo;
-              }
               this.companyList.push({
                 value: item.id,
                 label: item.fullName
               });
             });
-            // this.collectionAccountList.push({
-            //   value: 0,
-            //   label: res.data[0].receiveName
-            // });
+            this.companyInfo = this.parameter.guestId;
+            if (item.id === this.companyInfo) {
+              this.collectionAccountName = item.receiveName;
+              this.openingBank = item.accountBank;
+              this.collectionAccount = item.accountBankNo;
+            } else {
+              this.collectionAccountName = res.data[0].receiveName;
+              this.openingBank = res.data[0].accountBank;
+              this.collectionAccount = res.data[0].accountBankNo;
+            }
+            this.Initialization();
           });
         }
       });
