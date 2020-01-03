@@ -911,6 +911,7 @@ export default {
               let res = await getStockOut(this.formPlan);
               if (res.code === 0) {
                 this.$Message.success("出库成功");
+                this.$store.commit("setleftList", res);
                 this.door.outStockDoor =true
                 return res;
               }else {
