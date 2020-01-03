@@ -3,6 +3,7 @@
     title="选择采购订单"
     v-model="shows"
     :styles="{ top: '50px', width: '1000px' }"
+    @on-visible-change="showChange"
   >
     <div class="top-plan">
       <div class="tools-bar mb10">
@@ -113,8 +114,6 @@
       </vxe-table>
     </div>
     <div slot="footer">
-      <Button class="mr15" type="primary" @click="ok">确定</Button>
-      <Button @click="cancel">取消</Button>
     </div>
      <!-- 供应商资料
     <select-supplier
@@ -162,7 +161,11 @@ export default class ProcurementModal extends Vue {
     this.reset();
     this.getPchsPlanList();
   }
-
+  private showChange(type){
+    if(!type){
+      this.selectRow = null
+    }
+  }
   @Emit('getPlanOrder')
   private ok() {
     if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};

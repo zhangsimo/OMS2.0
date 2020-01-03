@@ -41,3 +41,11 @@ export function getOccupy (data) {
     data
   });
 }
+
+export function getPartBrand(data = {}) {
+  return axios.request({
+    url: `${api.wmsApi}/wbPub/getPartBrand`,
+    method: "post",
+    data
+  });
+}

@@ -375,7 +375,7 @@ export default {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
       } else {
-        const reg = /^[1-9]+\d?$/;
+        const reg = /^[1-9]\d{0,}$/;
         if (reg.test(value)) {
           callback();
         } else {

@@ -420,8 +420,8 @@ export default class GoodsInfo extends Vue {
     let ref: any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = row;
-    console.log(row);
+    this.formDateRight = row
+    this.formDateRight.businessNum = this.row.id;
     // this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
     // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     // this.formDateRight.settleType = this.formDateRight.settleType + "";

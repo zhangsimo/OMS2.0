@@ -26,10 +26,10 @@
           <Input v-model="data.partName"  style="width: 350px" />
         </FormItem>
         <FormItem label="退货员:">
-          <Input v-model="data.createUname"  style="width: 350px" />
+          <Input v-model="data.orderMan"  style="width: 350px" />
         </FormItem>
         <FormItem label="创建人:">
-          <Input v-model="data.commitUname"  style="width: 350px" />
+          <Input v-model="data.createUname"  style="width: 350px" />
         </FormItem>
 
       </Form>

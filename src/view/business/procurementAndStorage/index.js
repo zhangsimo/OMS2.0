@@ -14,6 +14,7 @@ import { TOKEN_KEY } from '@/libs/util'
 import PrintShow from './components/PrintShow'
 import SelectSupplier from "./../../goods/goodsList/components/supplier/selectSupplier";
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
+import { Object } from 'core-js'
 
 
 
@@ -80,7 +81,7 @@ export default {
       }
     };
     return {
-      StoreId :'', //默认仓
+      StoreId: '', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
       orderType: 99,
@@ -161,8 +162,8 @@ export default {
     getSupplierName(val) {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "supplyName", val.fullName);
-      this.$set(this.formPlan,"billTypeId",val.billTypeId)
-      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+      this.$set(this.formPlan, "billTypeId", val.billTypeId)
+      this.$set(this.formPlan, "settleTypeId", val.settTypeId)
       // if (v) {
       //   //赋值供应商名称
       //   this.formPlan.supplyName = v.fullName || "";
@@ -254,7 +255,6 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-       this.settleTypeList.CS00107=[]
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {
@@ -302,10 +302,10 @@ export default {
       // this.$refs.formPlan.resetFields()
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
-        if(res.code === 0){
+        if (res.code === 0) {
           this.WarehouseList = res.data
           res.data.map(item => {
-            if(item.isDefault == true){
+            if (item.isDefault == true) {
               this.formPlan.storeId = item.id
               this.StoreId = item.id
             }
@@ -322,17 +322,17 @@ export default {
         return false;
       }
       let oneClient = []
-      oneClient = this.client.filter( item => {
-        return   item.id === value
+      oneClient = this.client.filter(item => {
+        return item.id === value
       })
 
-      console.log(oneClient,5656)
-      for(var i  in  oneClient){
-        this.formPlan.billTypeId=oneClient[i].billTypeId
-        this.formPlan.settleTypeId=oneClient[i].settTypeId
+      console.log(oneClient, 5656)
+      for (var i in oneClient) {
+        this.formPlan.billTypeId = oneClient[i].billTypeId
+        this.formPlan.settleTypeId = oneClient[i].settTypeId
 
       }
-      console.log( this.formPlan.billTypeId,  this.formPlan.settleTypeId)
+      console.log(this.formPlan.billTypeId, this.formPlan.settleTypeId)
     },
     //计算表格内总价格数据
     countAmount(row) {
@@ -427,36 +427,29 @@ export default {
     },
     //采购订单打开
     selectPlan() {
-      // if (!this.formPlan.guestId) return this.$Message.error('一条有效的数据');
       this.$refs.procurementModal.init()
     },
     //获取采购订单数据
-    getPlanOrder(val) {
-      this.formPlan.pchsOrderId = val.id
-      this.$refs.formPlan.validate(async (valid) => {
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate()
-            this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
-            let res = await saveList(this.formPlan)
-            if (res.code === 0) {
-              this.getLeftLists()
-              this.formPlan = {
-                billStatusValue: 0,
-                code: ''
-
-              }
-              this.allMoney = 0
-              this.$Message.success('保存成功');
+    async getPlanOrder(val) {
+      if(val){
+        this.formPlan.pchsOrderId = val.id
+        try {
+          await this.$refs.xTable.validate()
+          this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+          let res = await saveList(this.formPlan)
+          if (res.code === 0) {
+            this.getLeftLists()
+            this.formPlan = {
+              billStatusValue: 0,
+              code: ''
             }
-          } catch (errMap) {
-            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+            this.allMoney = 0
+            this.$Message.success('保存成功');
           }
-        } else {
-          this.$Message.error('*为必填项');
+        } catch (errMap) {
+          this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
         }
-      })
-
+      }
     },
 
     //保存
@@ -465,7 +458,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate()
-            this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
+            this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
             let res = await saveList(this.formPlan)
             if (res.code === 0) {
               this.getLeftLists()
@@ -557,13 +550,13 @@ export default {
     },
     //新增
     addNew() {
-      if(this.legtTableData[0].guestId){
+      if (this.legtTableData[0].guestId) {
         this.formPlan = {
           billStatusValue: 0,
           billStatusName: '草稿',
           details: [],
           code: '',
-          storeId :this.StoreId, //调入仓库
+          storeId: this.StoreId, //调入仓库
           orderMan: this.$store.state.user.userData.staffName
         }
         this.legtTableData.unshift(this.formPlan)

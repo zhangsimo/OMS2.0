@@ -10,7 +10,7 @@
       <Button type="default" class="mr10 w90" @click="addNew" v-has="'add'"><Icon type="md-add" size="14"/> 新增</Button>
       <Button class="mr10 w90" @click="save" :disabled="formPlan.billStatusValue != 0"   v-has="'save'"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
       <Button class="mr10" @click="godown" :disabled="formPlan.billStatusValue != 0"  v-has="'godown'"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>入库</Button>
-      <Button class="mr10" :disabled="formPlan.billStatusValue != 0" @click="selectPlan" v-has="'selectPlan'"> 选择采购订单</Button>
+      <Button class="mr10" :disabled="formPlan.billStatusValue != 0 || !formPlan.hasOwnProperty('guestId')" @click="selectPlan" v-has="'selectPlan'"> 选择采购订单</Button>
       <Button class="mr10" @click="setPrint" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
       <Button class="mr10" @click="showFee" v-has="'showFee'" :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"><i class="iconfont mr5 iconshenheicon"/> 登记费用</Button>
     </div>

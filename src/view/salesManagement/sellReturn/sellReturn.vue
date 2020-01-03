@@ -111,7 +111,7 @@
                 @on-current-change="selectTabelData"
               ></Table>
 <!--              分页-->
-              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total size="small"
                     class-name="page-con"
                     @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
@@ -865,29 +865,46 @@
         // if (!this.isCommit || !this.formPlan.id) {
         //   return this.$Message.error('请先保存数据')
         // }
-        this.$Modal.confirm({
-          title: '是否确定提交订单',
-          onOk: async () => {
-            let data = {}
-            data = this.formPlan
-            data.billStatusId = null
-            data.orderDate = tools.transTime(this.formPlan.orderDate)
-            let res = await getSubmit(data);
-            if (res.code == 0) {
-              this.$Message.success('提交成功');
-              this.getLeftList()
-              // this.isCommit = false;
-              this.isNew = true
-              this.formPlan = {}
-              this.id = null
-              this.$refs.formPlan.resetFields();
-              this.getLeftList()
+
+        this.$refs.formPlan.validate(async valid => {
+          let preTime = ''
+          if (valid) {
+            preTime = JSON.parse(JSON.stringify(this.formPlan.orderDate))
+            try {
+              await this.$refs.xTable.validate();
+              this.$Modal.confirm({
+                title: '是否确定提交订单',
+                onOk: async () => {
+                  let data = {}
+                  data = this.formPlan
+                  data.billStatusId = null
+                  data.orderDate = tools.transTime(this.formPlan.orderDate)
+                  let res = await getSubmit(data);
+                  if (res.code == 0) {
+                    this.$Message.success('提交成功');
+                    this.getLeftList()
+                    // this.isCommit = false;
+                    this.isNew = true
+                    this.formPlan = {}
+                    this.id = null
+                    this.$refs.formPlan.resetFields();
+                    this.getLeftList()
+                  }else{
+                    this.formPlan.orderDate = preTime
+                  }
+                },
+                onCancel: () => {
+                  this.$Message.info('取消提交');
+                },
+              })
+            } catch (errMap) {
+              // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
             }
-          },
-          onCancel: () => {
-            this.$Message.info('取消提交');
-          },
-        })
+          } else {
+            this.$Message.error("*为必填项");
+          }
+        });
+
 
       },
 
