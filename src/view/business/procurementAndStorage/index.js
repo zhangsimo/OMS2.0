@@ -107,24 +107,24 @@ export default {
       client: [], //客户
       WarehouseList: [],//仓库
       ruleValidate: {
-        guestId: [
-          { required: true, type: 'string', message: ' ', trigger: 'change' }
-        ],
-        orderMan: [
-          { required: true, message: '  ', trigger: 'blur' }
-        ],
-        orderDate: [
-          { required: true, type: 'date', message: ' ', trigger: 'change' }
-        ],
-        billTypeId: [
-          { required: true, type: 'string', message: ' ', trigger: 'change' }
-        ],
-        settleTypeId: [
-          { required: true, type: 'string', message: ' ', trigger: 'change' }
-        ],
-        storeId: [
-          { required: true, type: 'string', message: ' ', trigger: 'change' }
-        ]
+        // guestId: [
+        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
+        // ],
+        // orderMan: [
+        //   { required: true, message: '  ', trigger: 'blur' }
+        // ],
+        // orderDate: [
+        //   { required: true, type: 'date', message: ' ', trigger: 'change' }
+        // ],
+        // billTypeId: [
+        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
+        // ],
+        // settleTypeId: [
+        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
+        // ],
+        // storeId: [
+        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
+        // ]
       },//表单校验
       validRules: {
         orderQty: [
@@ -299,7 +299,7 @@ export default {
     },
     // 获取仓库
     async getWarehouse() {
-      this.$refs.formPlan.resetFields()
+      // this.$refs.formPlan.resetFields()
       let res = await getWarehouseList({ groupId: this.$store.state.user.userData.groupId })
       if (res.code === 0) {
         if(res.code === 0){

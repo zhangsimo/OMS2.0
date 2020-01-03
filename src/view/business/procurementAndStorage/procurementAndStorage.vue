@@ -61,57 +61,57 @@
                 <div class="clearfix purchase" ref="planForm">
                   <FormItem label="供应商：" prop="guestId">
                     <Row style="width: 310px">
-                      <Select v-model="formPlan.guestId" filterable style="width: 240px" @on-change="changeClient"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" >
+                      <Select v-model="formPlan.guestId" filterable style="width: 240px" @on-change="changeClient"  :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined" >
                         <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
                       </Select>
-                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @click="addSuppler">
+                      <Button class="ml5" size="small" type="default" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined" @click="addSuppler">
                         <Icon type="md-checkmark"/>
                       </Button>
                     </Row>
                   </FormItem>
                   <FormItem label="采购员：" prop="orderMan">
-                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"/>
+                    <Input class="w160" v-model="formPlan.orderMan" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined"/>
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
-                    <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss"  v-model="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"></DatePicker>
+                    <DatePicker type="datetime" placeholder="选择日期" format="yyyy-MM-dd HH:mm:ss"  v-model="formPlan.orderDate" style="width: 200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined"></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
                     <Input class="w160" v-model="formPlan.serviceId" disabled/>
                   </FormItem>
                   <FormItem label="票据类型:" prop="billTypeId" props="billTypeId" >
-                    <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''" @on-change="getBillType">
+                    <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined" @on-change="getBillType">
                       <Option v-for="item in settleTypeList.CS00107" :value="item.itemCode" :key="item.itemCode">{{ item.itemName  }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="结算方式：" prop="settleTypeId" >
-                    <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                    <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined">
                       <Option v-for="item in settleTypeList.CS00106" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
                     </Select>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"/>
+                    <Input style="width: 370px" v-model="formPlan.remark" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined"/>
                   </FormItem>
                   <FormItem label="往来单号：" >
                     <Input class="w210" v-model="formPlan.code" disabled/>
                   </FormItem>
                   <FormItem label="交货仓库：" prop="storeId">
-                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''">
+                    <Select v-model="formPlan.storeId" style="width:200px" :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== undefined">
                       <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                   </FormItem>
                 </div>
               <div class="flex plan-cz-btn" ref="planBtn">
-                <div class="clearfix pt10 pb10">
-                  <div class="fl mb5">
-                    <Button :disabled="formPlan.billStatusValue != 0" size="small" class="mr10" v-has="'addMountings'" @click="addMountings">
+                <div class="clearfix pt5 pb5">
+                  <!-- <div class="fl mb5">
+                    <Button :disabled="formPlan.billStatusValue != 0 ? true : formPlan.code ? true : false" size="small" class="mr10" v-has="'addMountings'" @click="addMountings">
                       <Icon type="md-add"/>
                       添加配件
                     </Button>
-                  </div>
+                  </div> -->
                   <div class="fl mb5">
                     <Button @click="delect" :disabled="formPlan.billStatusValue != 0" v-has="'delete'" size="small" class="mr10"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
                   </div>
-                  <div class="fl mb5">
+                  <!-- <div class="fl mb5">
                     <Upload
                       ref="upload"
                       style="display: inline-block"
@@ -125,7 +125,7 @@
                     >
                       <Button size="small"  class="mr10" :disabled="formPlan.billStatusValue != 0 " v-has="'export'" type="default"  @click="getRUl"> <i class="iconfont icondaoruicon icons" /> 导入配件</Button>
                     </Upload>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="tableBox">
