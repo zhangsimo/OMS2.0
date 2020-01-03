@@ -69,7 +69,7 @@
                         <Row >
                           <Col span="22">
                             <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
-                            <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                              <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                           </Col>
                           <Col span="2">
@@ -834,6 +834,7 @@
           queryByOrgid().then(res => {
               if(res.code === 0){
                 this.List = res.data
+                console.log(res,'res==>837')
                  res.data.map(item => {
                    if(item.isDefault == true){
                      this.formPlan.storeId = item.id

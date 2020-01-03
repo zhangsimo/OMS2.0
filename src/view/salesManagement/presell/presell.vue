@@ -121,7 +121,7 @@
               ></Table>
 
 
-              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total size="small"
                     class-name="page-con"
                     @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
@@ -815,6 +815,7 @@
               this.getLeftList()
               this.formPlan={}
               this.isNew=true
+              this.isAdd=true
               this.id = null
               this.$refs.formPlan.resetFields()
               this.$Message.success('添加配件成功')
@@ -988,29 +989,44 @@
         // if (!this.isCommit||!this.formPlan.id) {
         //   return this.$Message.error('请先保存数据')
         // }
-
-        this.$Modal.confirm({
-          title: '是否确定提交订单',
-          onOk: async () => {
-            let data = {}
-            data = this.formPlan
-            let res = await getSubmit(data);
-            if (res.code == 0) {
-              this.$Message.success('提交成功');
-              this.getLeftList()
-              // this.isCommit = false;
-              this.isNew = true
-              this.formPlan = {}
-              this.id = null
-              this.limitList = {};
-              this.$refs.formPlan.resetFields();
-              this.getLeftList()
+        this.$refs.formPlan.validate(async valid => {
+          if (valid) {
+            try {
+              await this.$refs.xTable.validate();
+              if (+this.totalMoney > +this.limitList.sumAmt) {
+                return this.$message.error("可用余额不足");
+              }
+              this.$Modal.confirm({
+                title: '是否确定提交订单',
+                onOk: async () => {
+                  let data = {}
+                  data = this.formPlan
+                  let res = await getSubmit(data);
+                  if (res.code == 0) {
+                    this.$Message.success('提交成功');
+                    this.getLeftList()
+                    // this.isCommit = false;
+                    this.isNew = true
+                    this.isAdd = true;
+                    this.formPlan = {}
+                    this.id = null
+                    this.limitList = {};
+                    this.$refs.formPlan.resetFields();
+                    this.getLeftList()
+                  }
+                },
+                onCancel: () => {
+                  this.$Message.info('取消提交');
+                },
+              })
+            } catch (errMap) {
+              // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
             }
-          },
-          onCancel: () => {
-            this.$Message.info('取消提交');
-          },
-        })
+          } else {
+            this.$Message.error("*为必填项");
+          }
+        });
+
       },
 
       //完成销售

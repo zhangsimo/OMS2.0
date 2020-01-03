@@ -91,15 +91,16 @@ export default {
     }
   },
   methods: {
+
     // 新增展示
     getAdd() {
       if (!this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
-      this.isAdd = false
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
+      this.$parent.$parent.isNew=false
       // this.tableData.unshift({
       //   billStatusId: { enum: "", value: "0", name: "草稿" },
       //   orderMan: this.$store.state.user.userData.staffName,
@@ -160,6 +161,7 @@ export default {
       // else{
       //
       // }
+
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       if(!this.Flaga && !this.$parent.$parent.isAdd){
@@ -170,9 +172,11 @@ export default {
             this.$emit('refresh','你好！');
             this.Flaga = false
             this.$parent.$parent.isAdd = true
+            // this.$parent.$parent.isNew=true
           },
           onCancel: () => {
             this.$parent.$parent.isAdd = true
+            this.$parent.$parent.isNew=true
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
           },
