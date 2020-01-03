@@ -19,7 +19,7 @@
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
-            <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0" @on-change="changeClient">
+            <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0|| this.$parent.$parent.ispart" @on-change="changeClient">
                   <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
 <!--            <Input-->
@@ -33,7 +33,7 @@
               size="small"
               type="default"
               @click="openAddCustomer"
-              :disabled="draftShow != 0"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
             >
               <Icon type="md-checkmark" />
             </Button>
@@ -51,7 +51,7 @@
         <FormItem label="销售员：" prop="orderManId">
 <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
           <Select :value="formPlan.orderManId"
-                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0"  label-in-value>
+                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0|| this.$parent.$parent.ispart"  label-in-value>
             <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
           </Select>
         </FormItem>
@@ -64,7 +64,7 @@
           <Input class="w210" v-model="formPlan.code" disabled />
         </FormItem>
         <FormItem label="票据类型:" prop="billTypeId">
-          <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0">
+          <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
             <Option
               v-for="item in settleTypeList.CS00107"
               :value="item.itemCode"
@@ -73,7 +73,7 @@
           </Select>
         </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
-          <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0">
+          <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
             <Option
               v-for="item in settleTypeList.CS00106"
               :value="item.itemCode"
@@ -82,7 +82,7 @@
           </Select>
         </FormItem>
         <FormItem label="备注：">
-          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0" />
+          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0|| this.$parent.$parent.ispart" />
         </FormItem>
         <FormItem label="订单号:">
           <Input class="w210" v-model="formPlan.serviceId" disabled />
@@ -96,7 +96,7 @@
             @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
-            :disabled="draftShow != 0"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
 
             clearable
           ></DatePicker>
@@ -109,13 +109,13 @@
             type="date"
             placeholder="选择日期"
             style="width: 120px"
-            :disabled="draftShow != 0"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
              clearable
             ref="clearplanArriveDate"
           ></DatePicker>
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
-          <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
+          <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
             <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
@@ -123,19 +123,19 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings " v-has="'addMountings'">
+            <Button size="small" :disabled="draftShow != 0|| this.$parent.$parent.ispart" class="mr10" @click="addMountings " v-has="'addMountings'">
               <Icon type="md-add" />添加配件
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart" v-has="'deletePart'">
+            <Button size="small" :disabled="draftShow != 0 || this.$parent.$parent.ispart" class="mr10" @click="deletePart" v-has="'deletePart'">
               <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
             </Button>
           </div>
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
               class="mr10"
               @click="openBarchModal"
               v-has="'Barch'"
@@ -157,7 +157,7 @@
                 size="small"
                 class="mr10"
                 @click="getRUl"
-                :disabled="draftShow != 0 "
+                :disabled="draftShow != 0 || this.$parent.$parent.ispart"
                 v-has="'getBarch'"
               >
                 <span class="center">
@@ -174,7 +174,7 @@
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
               class="mr10"
               @click="openActivityModal"
             >选择活动</Button>
@@ -182,7 +182,7 @@
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0 "
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart "
               class="mr10"
               @click="openGodownEntryModal"
               v-has="'goDown'"
@@ -191,7 +191,7 @@
           <div class="fl mb5">
             <Button
               size="small"
-              :disabled="draftShow != 0 "
+              :disabled="draftShow != 0 || this.$parent.$parent.ispart"
               class="mr10"
               @click="openAddressShow"
               v-has="'openAddress'"
@@ -472,7 +472,8 @@ export default {
       selectTableList: [], //table表格选中的数据
       door:{
         outStockDoor:true
-      }
+      },
+      ispart:true,//添加配件状态
     }
   },
   mounted() {
@@ -789,6 +790,7 @@ export default {
             this.$emit("parentGetleft");
             this.$Message.success('添加配件成功')
             this.$refs.formPlan.resetFields()
+            this.$parent.$parent.ispart=true
           }
         } else {
           this.$Message.error("*为必填项");
@@ -909,6 +911,7 @@ export default {
               let res = await getStockOut(this.formPlan);
               if (res.code === 0) {
                 this.$Message.success("出库成功");
+                this.$store.commit("setleftList", res);
                 this.door.outStockDoor =true
                 return res;
               }else {

@@ -373,7 +373,9 @@ export default {
             }
           })
         } else if(resultTwo){
-          console.log("有真有假！！！")
+          // console.log("有真有假！！！")
+          // let haveId = this.checkboxArr.filter(item => item.id)
+          // console.log(haveId)
         }else {
           var set = this.checkboxArr.map(item => item.partCode)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
