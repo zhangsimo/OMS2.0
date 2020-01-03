@@ -174,13 +174,17 @@
             </Col>
           </Row>
         </TabPane>
-        <TabPane label="其他信息">
+        <TabPane label="其他信息" tab="clientBox">
           <div>
+            <p style="margin-bottom: 10px">财务信息</p>
             <div>
-              <FormItem label="银行账号:">
+              <FormItem label="收款户名:" prop="receiveName">
+                <Input v-model="data.receiveName" style="width: 450px" />
+              </FormItem>
+              <FormItem label="银行账号:" prop="accountBankNo">
                 <Input v-model="data.accountBankNo" style="width: 450px" />
               </FormItem>
-              <FormItem label="开户银行:">
+              <FormItem label="开户银行:" prop="accountBank">
                 <Input v-model="data.accountBank" style="width: 450px" />
               </FormItem>
               <div style="display: flex">
@@ -219,8 +223,8 @@
                 </FormItem>
               </div>
               <div style="flex-flow: row nowrap;width: 100%">
-                <FormItem label="信誉额度:" prop="creditLimit">
-                  <Input v-model="data.creditLimit" style="width: 150px" />
+                <FormItem label="邮政编码:" prop="phone">
+                  <Input v-model="data.postalCode" style="width: 150px" />
                 </FormItem>
               </div>
             </div>
@@ -232,7 +236,7 @@
 </template>
 
 <script>
-import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
+import { getDigitalDictionary,getCustomer } from "@/api/system/essentialData/clientManagement";
 
 export default {
   name: "Data",
@@ -253,18 +257,50 @@ export default {
         callback();
       }
     };
+    const creditLimit = (rule, value, callback) => {
+      if (value) {
+        if (!/^\d{1,}$/.test(value)) {
+          callback(new Error("只能输入数字"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
+    const fullName = (rule, value, callback) => {
+      if (value) {
+        let obj = {};
+        if (this.data.id) {
+          obj.id = this.data.id;
+          obj.name = this.data.fullName;
+        } else {
+          obj.name = this.data.fullName;
+        }
+        // callback()
+        getCustomer(obj).then(res => {
+          if (res.data) {
+            callback(new Error("供应商全称不可重复"));
+          } else {
+            callback();
+          }
+        });
+      } else {
+        callback(new Error("供应商全称不可为空"));
+      }
+    };
     return {
       Subordinate: [
         {
-          label: '华胜连锁',
+          label: "华胜连锁",
           value: 0
         },
         {
-          label: '体系外',
+          label: "体系外",
           value: 1
         },
         {
-          label: '体系内',
+          label: "体系内",
           value: 2
         }
       ],
@@ -280,13 +316,6 @@ export default {
       ],
       clientDisable: true,
       rules: {
-        creditLimit: [
-          {
-            message: "只能填写整数或者两位小数",
-            pattern: /^\d+(?:\.\d{2})?$/,
-            trigger: "blur" ///^[0-9]{1}([0-9]|[.])*$/
-          }
-        ],
         belongSystem: [
           {
             required: true,
@@ -295,60 +324,44 @@ export default {
             type: "number"
           }
         ],
-        shortName: [{ required: true, message: "不能为空", trigger: "blur" }],
-        fullName: [{ required: true, message: "不能为空", trigger: "blur" }],
-        billTypeId: [
+        creditLimit: [
           {
-            required: true,
-            message: "不能为空",
-            trigger: "change",
-            type: "string"
+            message: "只能填写整数或者两位小数",
+            pattern: /^\d+(?:\.\d{2})?$/,
+            trigger: "blur" ///^[0-9]{1}([0-9]|[.])*$/
           }
         ],
-        contactor: [{ required: true, message: "不能为空", trigger: "blur" }],
-        provinceId: [
-          { required: true, message: "不能为空", trigger: "change" }
+        receiveName: [
+          { required: true, message: " 不能为空", trigger: "change" }
         ],
-        settTypeId: [
+        accountBankNo: [
           {
             required: true,
-            message: "不能为空",
-            trigger: "change",
-            type: "string"
+            message: "",
+            validator: creditLimit,
+            trigger: "change"
           }
         ],
+        accountBank: [
+          { required: true, message: " 不能为空", trigger: "change" }
+        ],
+        guestProperty: [{ required: true, message: " ", trigger: "change" }],
+        shortName: [{ required: true, message: " ", trigger: "blur" }],
+        settTypeId: [{ required: true, message: " ", trigger: "change" }],
+        billTypeId: [{ required: true, message: " ", trigger: "change" }],
+        fullName: [{ required: true, validator: fullName, trigger: "blur" }],
+        contactor: [{ required: true, message: " ", trigger: "blur" }],
+        provinceId: [{ required: true, message: " ", trigger: "change" }],
         contactorTel: [
-          {
-            required: true,
-            validator: validatePhone,
-            trigger: "blur",
-            type: "string"
-          }
+          { required: true, validator: validatePhone, trigger: "blur" }
         ],
-        cityId: [
-          {
-            required: true,
-            message: "不能为空",
-            trigger: "change",
-            type: "string"
-          }
+        tel: [{ required: true, validator: validatePhone, trigger: "blur" }],
+        salesmanTel: [
+          { required: true, validator: validatePhone, trigger: "blur" }
         ],
-        supplierTypeFirst: [
-          {
-            required: true,
-            message: "不能为空",
-            trigger: "change",
-            type: "string"
-          }
-        ],
-        supplierTypeSecond: [
-          {
-            required: true,
-            message: "不能为空",
-            trigger: "change",
-            type: "string"
-          }
-        ]
+        cityId: [{ required: true, message: " ", trigger: "change" }],
+        guestType: [{ required: true, message: " ", trigger: "change" }],
+        guestTypeFloor: [{ required: true, message: " ", trigger: "change" }]
       },
       dataList: ""
     };

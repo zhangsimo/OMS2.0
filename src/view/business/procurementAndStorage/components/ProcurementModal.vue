@@ -80,6 +80,7 @@
           :page-size="page.size"
           @on-change="changePageToTable"
           @on-page-size-change="changeSizeToTable"
+          size="small"
           show-sizer
           show-total
           show-elevator
