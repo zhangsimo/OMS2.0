@@ -103,7 +103,7 @@
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
                             filterable
-                            :disabled="buttonShow || Leftcurrentrow.status.value != 0"
+                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
                           >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
@@ -231,7 +231,7 @@
                     title="受理数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column field="hasOutQty" title="缺货数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="orderPrice" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -895,8 +895,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      // console.log(row, "row ==>862");
-
+      console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -930,8 +929,12 @@ export default {
       if (row.status.value === 0) {
         this.buttonShow = false;
       }
-      if (row.code == null || row.code == "") {
-        this.Leftcurrentrow.status.value = 0;
+      if (row.status.value === 1) {
+        // this.tuneOut = false
+        console.log(row.code);
+      }
+      if (row.code != "") {
+        this.Leftcurrentrow.status.value = 1;
       }
     },
     //打开添加配件模态框
