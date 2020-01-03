@@ -585,6 +585,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      console.log(val, "val");
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -597,10 +598,41 @@ export default {
         delete item.id;
         delete item.orderPrice;
       });
+
+      var allArr = []; //新数组
+
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
         ...val
       ];
+      var allArr = [];
+      var oldArr = this.Leftcurrentrow.detailVOS;
+      for (var i = 0; i < oldArr.length; i++) {
+        var flag = true;
+        for (var j = 0; j < allArr.length; j++) {
+          if (oldArr[i].oemCode == allArr[j].oemCode) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          allArr.push(oldArr[i]);
+        }
+      }
+      this.Leftcurrentrow.detailVOS = allArr;
+
+      // var arrSet = this.Leftcurrentrow.detailVOS;
+      // console.log(arrSet, "arrSet==606");
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   var flag = true;
+      //   for (var j = 0; j < allArr.length; j++) {
+      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
+      //       flag = false;
+      //     }
+      //   }
+      //   if (flag) {
+      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
+      //   }
+      // }
       // this.$refs.formPlan.validate(async (valid) => {
       //     if (valid) {
       //         let data ={}
