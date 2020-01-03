@@ -110,6 +110,7 @@
           :page-size="contentOne.page.size"
           @on-change="changePageAlways"
           @on-page-size-change="changeSizeAlways"
+          size="small"
           show-sizer
           show-total
         ></Page>
@@ -121,6 +122,7 @@
           :page-size="contentTwo.page.size"
           @on-change="changePageCus"
           @on-page-size-change="changeSizeCus"
+          size="small"
           show-sizer
           show-total
         ></Page>

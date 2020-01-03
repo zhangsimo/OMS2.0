@@ -43,13 +43,17 @@ export default {
     //     }
     //   }
     // };
-    let changeNumber = (rule, value, callback) => {
+    let changeNumber = (rule, value, callback, { rules, row, column, rowIndex, columnIndex }) => {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
       } else {
         const reg = /^[1-9]\d{0,}$/;
         if (reg.test(value)) {
-          callback();
+          if (value <= row.sourceEnterableQty) {
+            callback();
+          } else {
+            callback(new Error('配件数量不可大于可入库数量'))
+          }
         } else {
           callback(new Error("请输入大于0的正整数"));
         }
@@ -326,7 +330,6 @@ export default {
         return item.id === value
       })
 
-      console.log(oneClient, 5656)
       for (var i in oneClient) {
         this.formPlan.billTypeId = oneClient[i].billTypeId
         this.formPlan.settleTypeId = oneClient[i].settTypeId
@@ -422,7 +425,7 @@ export default {
     },
     // 费用登记
     showFee() {
-      if (!this.formPlan.serviceId) return this.$Message.error('请先保存数据');
+      // if (!this.formPlan.serviceId) return this.$Message.error('请先保存数据');
       this.$refs.feeRegistration.init()
     },
     //采购订单打开
@@ -431,7 +434,7 @@ export default {
     },
     //获取采购订单数据
     async getPlanOrder(val) {
-      if(val){
+      if (val) {
         this.formPlan.pchsOrderId = val.id
         try {
           await this.$refs.xTable.validate()
@@ -465,11 +468,10 @@ export default {
               this.formPlan = {
                 billStatusValue: 0,
                 code: ''
-
               }
               this.allMoney = 0
               this.$Message.success('保存成功');
-            }
+            } 
           } catch (errMap) {
             this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
           }
@@ -495,7 +497,7 @@ export default {
               try {
                 await this.$refs.xTable.validate()
                 this.formPlan.billStatusValue = 4
-                this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
+                this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
                 let res = await saveList(this.formPlan)
                 if (res.code === 0) {
                   this.getLeftLists()
@@ -531,7 +533,7 @@ export default {
       this.$refs.formPlan.validate(async (valid) => {
         if (valid) {
           let data = {}
-          this.formPlan.orderDate = moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss')
+          this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
           data = this.formPlan
           data.details = conversionList(val)
           let res = await saveList(data)
@@ -555,6 +557,7 @@ export default {
           billStatusValue: 0,
           billStatusName: '草稿',
           details: [],
+          guestId: '',
           code: '',
           storeId: this.StoreId, //调入仓库
           orderMan: this.$store.state.user.userData.staffName
