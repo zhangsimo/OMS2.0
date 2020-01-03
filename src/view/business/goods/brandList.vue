@@ -957,6 +957,10 @@ export default {
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
       this.guestId = value
+      let btype = this.transitUnitList.filter(item => item.id = value)
+      console.log(btype)
+      this.billTypeName = btype.billTypeId
+      this.settleTypeName = btype.settTypeId
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
