@@ -161,7 +161,7 @@ export default {
       // else{
       //
       // }
-
+      this.$parent.$parent.ispart=false
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       if(!this.Flaga && !this.$parent.$parent.isAdd){
@@ -172,7 +172,7 @@ export default {
             this.$emit('refresh','你好！');
             this.Flaga = false
             this.$parent.$parent.isAdd = true
-            // this.$parent.$parent.isNew=true
+
           },
           onCancel: () => {
             this.$parent.$parent.isAdd = true
