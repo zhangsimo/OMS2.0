@@ -46,7 +46,7 @@ export default {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
       } else {
-        const reg = /^[1-9]+\d?$/;
+        const reg = /^[1-9]\d{0,}$/;
         if (reg.test(value)) {
           callback();
         } else {
@@ -229,7 +229,6 @@ export default {
     },
     //选择状态
     selectTypetList(val) {
-      console.log(val)
       this.leftPage.num = 1
       this.moreQueryList = {}
       this.getLeftLists()
@@ -558,20 +557,22 @@ export default {
     },
     //新增
     addNew() {
-      this.formPlan = {
-        billStatusValue: 0,
-        billStatusName: '草稿',
-        details: [],
-        code: '',
-        storeId :this.StoreId, //调入仓库
-        orderMan: this.$store.state.user.userData.staffName
-
+      if(this.legtTableData[0].guestId){
+        this.formPlan = {
+          billStatusValue: 0,
+          billStatusName: '草稿',
+          details: [],
+          code: '',
+          storeId :this.StoreId, //调入仓库
+          orderMan: this.$store.state.user.userData.staffName
+        }
+        this.legtTableData.unshift(this.formPlan)
+      } else {
+        this.$message.error('请先保存数据')
       }
-      this.legtTableData.unshift(this.formPlan)
     },
     //右侧表格多选
     selectSameList(val) {
-      console.log(val.selection)
       this.rightList = val.selection
     },
     //右侧全选
