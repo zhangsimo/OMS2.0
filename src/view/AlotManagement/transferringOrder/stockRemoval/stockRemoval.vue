@@ -743,10 +743,10 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
+      if (!this.Leftcurrentrow.serviceId) {
+        this.$Message.info("请先选择加工单");
+        return;
+      }
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.info("当前加工单号已提交审核!无需重复操作");
         return;
