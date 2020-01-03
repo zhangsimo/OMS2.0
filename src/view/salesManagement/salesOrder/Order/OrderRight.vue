@@ -460,9 +460,9 @@ export default {
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        storeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ]
+        // storeId: [
+        //   { required: true, type: "string", message: " ", trigger: "change" }
+        // ]
       },
       //form表单校验
       validRules: {
@@ -859,7 +859,7 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd=true
+              this.$parent.$parent.isAdd = true
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields()
               this.limitList = {};

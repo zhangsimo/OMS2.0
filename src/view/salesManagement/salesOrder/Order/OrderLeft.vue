@@ -96,7 +96,7 @@ export default {
       if (!this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
-      this.isAdd=false
+      this.isAdd = false
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
@@ -162,16 +162,17 @@ export default {
       // }
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
-      if(!this.Flaga && !this.isAdd){
+      if(!this.Flaga && !this.$parent.$parent.isAdd){
         this.$Modal.confirm({
           title: '您正在编辑单据，是否需要保存',
           onOk: () => {
             currentRowTable.clearCurrentRow();
             this.$emit('refresh','你好！');
             this.Flaga = false
+            this.$parent.$parent.isAdd = true
           },
           onCancel: () => {
-            this.isAdd = true;
+            this.$parent.$parent.isAdd = true
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
           },
