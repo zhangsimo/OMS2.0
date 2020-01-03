@@ -354,21 +354,48 @@ export default {
     //删除配件
     Delete(){
       if(this.checkboxArr.length > 0){
-        let data = this.checkboxArr.map(item => {
-          return {
-            id: item.id
-          }
-        })
-        deleteit(data).then(res => {
-          if(res.code === 0){
-            this.$message.warning('删除成功！')
-            this.leftgetList()
-            this.formPlan.salesman = ''
-            this.formPlan.Reservation = ''
-            this.formPlan.remark = ''
-            this.Right.tbdata = []
-          }
-        })
+        var result = this.checkboxArr.every(item => item.id)
+        var resultTwo = this.checkboxArr.some(item => item.id)
+        if(result){
+          let dataaa = this.checkboxArr.map(item => {
+            return {
+              id: item.id
+            }
+          })
+          deleteit(dataaa).then(res => {
+            if(res.code === 0){
+              this.$message.warning('删除成功！')
+              this.leftgetList()
+              this.formPlan.salesman = ''
+              this.formPlan.Reservation = ''
+              this.formPlan.remark = ''
+              this.Right.tbdata = []
+            }
+          })
+        } else if(resultTwo){
+          console.log("有真有假！！！")
+        }else {
+          var set = this.checkboxArr.map(item => item.partCode)
+          var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
+          let data = {}
+          data.id = this.rowId
+          data.salesman =  this.formPlan.salesman
+          data.orderNo =  this.formPlan.Reservation
+          data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+          data.remark = this.formPlan.remark
+          data.detailVOList = resArr
+          console.log(resArr)
+          save(data).then(res => {
+            if (res.code === 0) {
+              this.$message.success('删除成功！')
+              this.leftgetList(),
+                this.formPlan.salesman = '', //业务员
+                this.formPlan.Reservation = '',
+                this.formPlan.remark = '',
+                this.Right.tbdata = []
+            }
+          })
+        }
       } else {
         this.$Message.warning('请选择要删除的配件!')
       }
