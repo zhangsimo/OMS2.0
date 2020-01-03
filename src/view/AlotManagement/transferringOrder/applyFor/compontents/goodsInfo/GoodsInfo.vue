@@ -425,7 +425,7 @@ export default class GoodsInfo extends Vue {
       if (valid && logisc) {
         // this.saveId(this.tableData);
         //  this.formDateRight.id = this.formDateRight.logisticsId
-        let aaa = {}
+        let aaa:any = {}
         aaa.logisticsId = this.formDateRight.id
         delete this.formDateRight.id
 
