@@ -33,11 +33,11 @@
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
-            <div class="db">
+            <!-- <div class="db">
               <Button v-has="'submit'" class="mr10" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
-            </div>
+            </div>-->
             <div class="db">
               <Button v-has="'godown'" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />入库
@@ -625,35 +625,35 @@ export default {
       }
       this.addProoo();
     },
-    tijiao1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
-      const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
-      tijiao(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("提交成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("提交失败");
-        });
-    },
+    // tijiao1() {
+    //   if (this.Leftcurrentrow.xinzeng === "1") {
+    //     this.$Message.info("请先保存新增加工单");
+    //     return;
+    //   }
+    //   if (!this.Leftcurrentrow.serviceId) {
+    //     this.$Message.info("请先选择加工单");
+    //     return;
+    //   }
+    //   if (this.Leftcurrentrow.status.value === 1) {
+    //     this.$Message.info("当前加工单号已提交审核!无需重复操作");
+    //     return;
+    //   }
+    //   const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+    //   params.status = params.status.value;
+    //   params.settleStatus = params.settleStatus.value;
+    //   params.orderTypeId = params.orderTypeId.value;
+    //   tijiao(params)
+    //     .then(res => {
+    //       // 点击列表行==>配件组装信息
+    //       if (res.code == 0) {
+    //         this.getList(this.form);
+    //         this.$Message.success("提交成功");
+    //       }
+    //     })
+    //     .catch(e => {
+    //       this.$Message.info("提交失败");
+    //     });
+    // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
@@ -886,7 +886,7 @@ export default {
     //选择方
     selectSupplierName(row) {
       console.log(row, "row==>891");
-      row.fullName
+      row.fullName;
       //console.log(row);
       if (this.val === "0") {
         //console.log(row.fullName);
