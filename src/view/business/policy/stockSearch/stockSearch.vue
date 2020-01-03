@@ -15,15 +15,26 @@
           <div class="wlf" style="line-height: 54px">
               <Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>
               <Input v-model="searchForm.partName" placeholder="配件名称/拼音" class="w200 mr10"></Input>
-              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>
-                <!-- <Option value="9999" v-for="item in partBrandList">品牌</Option> -->
-                <Option
-                  v-for="item in partBrandList"
-                  :value="item.partBrandValue"
-                  :key="item.partBrandValue"
-                >{{ item.partBrandName}}
-                </Option>
-              </Select>
+<!--              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>-->
+<!--                &lt;!&ndash; <Option value="9999" v-for="item in partBrandList">品牌</Option> &ndash;&gt;-->
+<!--                <Option-->
+<!--                  v-for="item in partBrandList"-->
+<!--                  :value="item.partBrandValue"-->
+<!--                  :key="item.partBrandValue"-->
+<!--                >{{ item.partBrandName}}-->
+<!--                </Option>-->
+<!--              </Select>-->
+            <Select   filterable
+                      clearable
+                      class="w120 mr10" v-model="searchForm.brandCode" placeholder="品牌">
+              <!--                <Option-->
+              <!--                  v-for="item in partBrandList"-->
+              <!--                  :value="item.partBrandValue"-->
+              <!--                  :key="item.partBrandValue"-->
+              <!--                >{{ item.partBrandName}}-->
+              <!--                </Option>-->
+              <Option v-for="item in partBrandList" :value="item.code" :key="item.id">{{ item.name}}</Option>
+            </Select>
               <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
                 <Option
                   v-for="item in storeList"
@@ -55,13 +66,16 @@
           <div class="wlf" style="line-height: 54px">
               <Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>
               <Input v-model="searchForm1.partName" placeholder="配件名称/拼音" class="w200 mr10"></Input>
-              <Select class="w120 mr10" v-model="searchForm1.partBrandValue" placeholder="品牌">
-                <Option
-                  v-for="item in partBrandList"
-                  :value="item.partBrandValue"
-                  :key="item.partBrandValue"
-                >{{ item.partBrandName}}
-                </Option>
+              <Select   filterable
+                        clearable
+                        class="w120 mr10" v-model="searchForm1.brandCode" placeholder="品牌">
+<!--                <Option-->
+<!--                  v-for="item in partBrandList"-->
+<!--                  :value="item.partBrandValue"-->
+<!--                  :key="item.partBrandValue"-->
+<!--                >{{ item.partBrandName}}-->
+<!--                </Option>-->
+                <Option v-for="item in partBrandList" :value="item.code" :key="item.id">{{ item.name}}</Option>
               </Select>
               <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
                 <Option
@@ -124,10 +138,10 @@
   </div>
 </template>
 <script>
-    import {getAllStock, getLotStock} from "@/api/business/stockSearch";
+    import {getAllStock, getLotStock,getPartBrand} from "@/api/business/stockSearch";
     import EnterStock from "./enterStock";
     import {getwarehouse} from "@/api/system/setWarehouse";
-    import * as api from "_api/system/partManager";
+    // import * as api from "_api/system/partManager";
 
 
     export default {
@@ -137,7 +151,6 @@
             return {
                 // 品牌选项
                 partBrandList: [
-                    {partBrandName: '全部', partBrandValue: 1}
                 ],
                 //默认仓库选项
                 storeList: [
@@ -145,7 +158,7 @@
                 ],
                 //汇总库存查询条件表单
                 searchForm: {
-                    partBrandValue: '',   //品牌id
+                    brandCode: '',   //品牌id
                     partCode: '',         //配件编码
                     storeId: '',            //仓库id
                     partName: '',         //配件名称
@@ -154,7 +167,7 @@
                 },
                 //批次库存查询条件表单
                 searchForm1: {
-                    partBrandValue: '',   //品牌id
+                  brandCode: '',   //品牌id
                     partCode:'',         //配件编码
                     storeId:'',            //仓库id
                     partName:'',         //配件名称
@@ -628,19 +641,30 @@
             },
 
             //获取品牌
-            async getBand() {
-                let res = await api.getPartBrand();
-                if (res.code == 0) {
-                  // console.log('11',res)
-                    res.data.forEach(el => {
-                        if (el.parentId != '0') {
-                            el.partBrandName = el.name;
-                            el.partBrandValue = el.id;
-                            this.partBrandList.push(el);
-                        }
-                    })
-                }
-            },
+            // async getBand() {
+          //     let res = await getPartBrand({});
+          //     if (res.code == 0) {
+          //       // console.log('11',res)
+          //         res.data.forEach(el => {
+          //             if (el.parentId != '0') {
+          //                 el.partBrandName = el.name;
+          //                 el.partBrandValue = el.id;
+          //                 this.partBrandList.push(el);
+          //             }
+          //         })
+          //     }
+          // },
+          async getBand() {
+            let res = await getPartBrand({ pageSize: 10000 });
+            if (res.code === 0) {
+              let arr = [];
+              res.data.content.forEach(item => {
+                arr.push(...item.children);
+              });
+              this.partBrandList = arr;
+              console.log('4455555',this.partBrandList)
+            }
+          },
             //查询批次
             queryBatch(){
                 this.contentTwo.page.num = 1
