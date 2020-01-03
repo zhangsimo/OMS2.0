@@ -89,6 +89,7 @@ export default {
   },
   data() {
     return {
+      isNew:true,//页面开始禁用
       isAdd:true,//判断是否新增
       orderType: 6,
       typeList: [
@@ -246,6 +247,7 @@ export default {
     //新增
     addNew() {
       this.$refs.OrderLeft.change();
+      this.orderlistType.value = 0
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
     }
