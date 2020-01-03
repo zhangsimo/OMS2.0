@@ -378,7 +378,7 @@
         if (!value && value != "0") {
           callback(new Error("请输入大于0的正整数"));
         } else {
-          const reg = /^[1-9]+\d?$/;
+          const reg =/^[1-9]\d{0,}$/;
           if (reg.test(value)) {
             callback();
           } else {
@@ -419,7 +419,7 @@
         isWms: true,//判断是否提交,返回
         PTrow: {
           _highlight: true,
-          // billStatusId: {name: '草稿', value: 0},
+          billStatusId: {name: '草稿', value: 0},
           billStatusName:'草稿',
           orderManId:  this.$store.state.user.userData.id
           // status: {"name":"草稿","value":0},
