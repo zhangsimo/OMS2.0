@@ -121,7 +121,7 @@
               ></Table>
 
 
-              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total
+              <Page :total="page.total" :page-size="page.size" :current="page.num" show-sizer show-total size="small"
                     class-name="page-con"
                     @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
             </div>
