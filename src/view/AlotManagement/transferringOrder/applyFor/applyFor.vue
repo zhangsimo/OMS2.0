@@ -318,13 +318,13 @@
               },
               {
                 title: '提交人',
-                key: 'auditOr',
+                key: 'createUname',
                 minWidth: 100
               },
               {
                 title: '提交日期',
                 align:'center',
-                key: 'auditDate',
+                key: 'createTime',
                 minWidth: 170
               },
               {
