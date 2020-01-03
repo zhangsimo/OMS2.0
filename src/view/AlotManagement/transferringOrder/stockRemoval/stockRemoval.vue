@@ -124,10 +124,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select
-                            v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value !== 0 || tuneOut"
-                          >
+                          <Select v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -153,11 +150,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input :value="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
