@@ -99,12 +99,7 @@
                           ></Input>
                             placeholder="请选择调出方"
                           ></Input>-->
-                          <Select
-                            v-model="Leftcurrentrow.guestName"
-                            label-in-value
-                            filterable
-                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
-                          >
+                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
@@ -244,11 +239,11 @@
         </div>
       </section>
       <!--更多弹框-->
-      <Modal v-model="advanced" title="高级查询" width="600px" @on-visible-change="moreChange">
+      <Modal v-model="advanced" title="高级查询" width="600px">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default" @click="advanced=false">取消</Button>
+          <Button type="default">取消</Button>
         </div>
       </Modal>
     </div>
@@ -327,7 +322,7 @@ export default {
     return {
       idsId: [],
       getArray: [],
-      tuneOut: false,
+      tuneOut: true,
       flag: 0,
       ArrayValue: [],
       buttonDisable: 0,
@@ -339,8 +334,7 @@ export default {
       showit: true,
       form: {
         status: "",
-        createTimeStart: "",
-        createTimeEnd: ""
+        qucikTime: ""
       },
       tabKey: "0",
       modal2: true,
@@ -351,7 +345,7 @@ export default {
       purchaseTypeArr: [
         {
           label: "所有",
-          value: 99
+          value: ""
         },
         {
           label: "草稿",
@@ -564,16 +558,10 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList();
+    this.getList(this.form);
     this.getArrayParams();
   },
   methods: {
-    // 高级查询弹框
-    moreChange(type){
-      if(!type){
-        this.$refs.naform.reset()
-      }
-    },
     getArrayParams() {
       var req = {};
       req.page = 1;
@@ -581,6 +569,7 @@ export default {
       findForAllot(req).then(res => {
         const { content } = res.data;
         this.getArray = content;
+        console.log(content, "req");
         content.forEach(item => {
           this.ArrayValue.push(item.fullName);
         });
@@ -630,10 +619,14 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
+      console.log(msg, "msg");
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
-      this.getList();
+      const params = {
+        status: this.form.status
+      };
+      this.getList(params);
     },
     baocun1() {
       if (
@@ -656,6 +649,7 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      console.log(params);
       if (params.xinzeng) {
         delete params.status;
       }
@@ -680,7 +674,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList();
+            this.getList(this.form);
             this.$Message.success("保存成功");
             this.flag = 0;
             // this.Leftcurrentrow.storeId = ""
@@ -743,17 +737,10 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-<<<<<<< HEAD
       if (!this.Leftcurrentrow.serviceId) {
         this.$Message.info("请先选择加工单");
         return;
       }
-=======
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
->>>>>>> dfc0f7340e2b3ac4b9d0126df062aa6b4c982d0f
       if (this.Leftcurrentrow.status.value === 1) {
         this.$Message.info("当前加工单号已提交审核!无需重复操作");
         return;
@@ -766,11 +753,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-<<<<<<< HEAD
             this.getList(this.form);
-=======
-            this.getList();
->>>>>>> dfc0f7340e2b3ac4b9d0126df062aa6b4c982d0f
             this.$Message.success("提交成功");
           }
         })
@@ -799,7 +782,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList();
+            this.getList(this.form);
             this.$Message.success("作废成功");
           }
         })
@@ -857,7 +840,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList();
+            this.getList(this.form);
             this.$Message.success("出库成功");
           }
         })
@@ -897,9 +880,17 @@ export default {
       });
     },
     getDataQuick(v) {
-      (this.form.createTimeStart = v[0]), (this.form.createTimeEnd = v[1]);
-      this.getList();
+      const params = {
+        createTime: v[0],
+        endTime: v[1]
+      };
+      this.getList(params);
     },
+    // //快速查询日期
+    // getDataQuick(v) {
+    //   this.form.qucikTime = v
+    //   console.log(v)
+    // },
     //更多按钮
     more() {
       this.advanced = true;
@@ -915,7 +906,7 @@ export default {
             this.baocun1();
           },
           onCancel: () => {
-            this.getList();
+            this.getList(this.form);
             this.flag = 0;
           }
         });
@@ -952,11 +943,11 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      this.getList();
+      this.getList(this.form);
     },
     changeSize(size) {
       this.Left.page.size = size;
-      this.getList();
+      this.getList(this.form);
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
@@ -964,8 +955,8 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
-      this.getList();
+      const params = { ...this.form, ...this.$refs.naform.getITPWE() };
+      this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
     },
@@ -1073,13 +1064,14 @@ export default {
       });
       this.$refs.addInCom.init1();
     },
-    getList() {
-      let params = {
-        statusVaule: this.form.status==="" ? 99 : this.form.status
-      };
-      params = {...params,...this.form}
-      delete params.status
-      delete params.guestName
+    getList(params) {
+      if (params.qucikTime) {
+        (params.createTime = params.qucikTime[0]),
+          (params.endTime = params.qucikTime[1]);
+        delete params.qucikTime;
+      } else {
+        delete params.qucikTime;
+      }
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {
