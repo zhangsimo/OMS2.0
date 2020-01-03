@@ -14,8 +14,11 @@
           </Row>
           <Row class="mt15">
             <span class="ml5">调 出 方：</span>
-            <Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>
-            <Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
+            <Select placeholder="请选择调出方" v-model="callout" filterable style="width: 450px" @on-change="getSupplierNamea">
+              <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
+            <!--<Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>-->
+            <!--<Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>-->
           </Row>
           <Row class="mt15">
             <span>申请单号：</span>
@@ -45,6 +48,7 @@
 </template>
 
 <script>
+  import {findForAllot} from "_api/purchasing/purchasePlan";
   import SelectSupplier from "../compontents/supplier/selectSupplier";
     export default {
         name: "More",
@@ -53,6 +57,7 @@
       },
       data(){
           return {
+            ArrayValue: [], //调出方下拉框
             callout: '', //调出方
             numbers: '', //申请单号
             coding: '', //编码
@@ -76,8 +81,7 @@
           this.submitData = date
         },
         getSupplierNamea(a) {
-          this.callout = a.fullName
-          this.guestId = a.id
+          this.guestId = a
         },
         init(){
           this.moreAndMore = true
@@ -105,7 +109,20 @@
         //取消
         cancel(){
           this.moreAndMore = false
+        },
+        getArrayParams() {
+          var req = {};
+          req.page = 1;
+          req.size = 20;
+          findForAllot(req).then(res => {
+            if(res.code === 0){
+              this.ArrayValue = res.data.content
+            }
+          });
         }
+      },
+      mounted(){
+          this.getArrayParams()
       }
 
     }

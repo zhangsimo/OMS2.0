@@ -9,7 +9,7 @@
           </div>
           <div class="db ml20">
             <span>制单日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -228,6 +228,10 @@ export default {
     this.getGeneral()
   },
   methods: {
+    // 日期选择
+    dateChange(data){
+      this.value = data
+    },
     // 表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)

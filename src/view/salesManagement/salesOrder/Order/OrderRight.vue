@@ -460,9 +460,9 @@ export default {
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        storeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
-        ]
+        // storeId: [
+        //   { required: true, type: "string", message: " ", trigger: "change" }
+        // ]
       },
       //form表单校验
       validRules: {
@@ -470,6 +470,9 @@ export default {
         orderPrice: [{ required: true, validator: money }]
       }, //表格校验
       selectTableList: [], //table表格选中的数据
+      door:{
+        outStockDoor:true
+      }
     }
   },
   mounted() {
@@ -856,7 +859,7 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd=true
+              this.$parent.$parent.isAdd = true
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields()
               this.limitList = {};
@@ -892,31 +895,37 @@ export default {
     },
     //出库
     stockOut() {
-      this.$refs.formPlan.validate(async valid => {
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate();
+      if(this.door.outStockDoor) {
+        this.door.outStockDoor = false
+        this.$refs.formPlan.validate(async valid => {
+          if (valid) {
+            try {
+              await this.$refs.xTable.validate();
+              if (+this.totalMoney > +this.limitList.sumAmt) {
+                return this.$message.error("可用余额不足");
+              }
 
-            if (+this.totalMoney > +this.limitList.sumAmt) {
-              return this.$message.error("可用余额不足");
-            }
+              // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+              let res = await getStockOut(this.formPlan);
+              if (res.code === 0) {
+                this.$Message.success("出库成功");
+                this.door.outStockDoor =true
+                return res;
+              }else {
+                this.door.outStockDoor =true
+              }
 
-            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-            let res = await getStockOut(this.formPlan);
-            if (res.code === 0) {
-              this.$Message.success("出库成功");
-              return res;
+            } catch (errMap) {
+              this.$XModal.message({
+                status: "error",
+                message: "表格校验不通过！"
+              });
             }
-          } catch (errMap) {
-            this.$XModal.message({
-              status: "error",
-              message: "表格校验不通过！"
-            });
+          } else {
+            this.$Message.error("*为必填项");
           }
-        } else {
-          this.$Message.error("*为必填项");
-        }
-      });
+        });
+      }
     },
     //提交
     submitList() {
@@ -1015,5 +1024,8 @@ export default {
 <style scoped>
 .purchase >>> .ivu-form-item {
   margin-bottom: 10px;
+}
+.demo-spin-icon-load{
+  animation: ani-demo-spin 1s linear infinite;
 }
 </style>

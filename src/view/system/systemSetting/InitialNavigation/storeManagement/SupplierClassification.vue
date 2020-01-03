@@ -3,7 +3,7 @@
       <div class="mb20">
         <Button class=" mr10" @click="addClientType">
               <span class="center">
-                <Icon type="md-add" />添加客户分类
+                <Icon type="md-add" />添加门店分类
               </span>
         </Button>
         <Button class=" mr10" style="border: none" @click="changeClient">

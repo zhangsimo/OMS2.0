@@ -4,7 +4,10 @@ export function rightButtonShow() {
   let VOSList :any = windows.globalVue.$store.state.user.userData.resourceVOS,
     VOSID:any = VOSList.filter(item => item.displayName == windows.globalVue.$route.meta.title)
   let buttons:any =[]
-  if(!VOSID) return
+  if(VOSID.length == 0) {
+    sessionStorage.removeItem('btnContext')
+    return
+  }
   buttons = VOSList.filter( item => item.parentId == VOSID[0].id)
   let arr :any = []
       if(buttons.length > 0){
@@ -12,7 +15,8 @@ export function rightButtonShow() {
            arr.push(item.name.split('_')[1])
          })
       }
-      if (arr.length > 0){
+
+  if (arr.length > 0){
         sessionStorage.setItem('btnContext' , JSON.stringify(arr))
       }
   // return arr

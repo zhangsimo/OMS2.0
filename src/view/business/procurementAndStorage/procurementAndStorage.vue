@@ -42,7 +42,7 @@
                   <vxe-table-column field="createUname" title="创建人"></vxe-table-column>
                   <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
                   <vxe-table-column field="print" title="打印次数"></vxe-table-column>
-                  <vxe-table-column field="orderDate" title="入库日期"></vxe-table-column>
+                  <vxe-table-column field="finishDate" title="入库日期"></vxe-table-column>
                   <vxe-table-column field="orderMan" title="入库人"></vxe-table-column>
                 </vxe-table>
               </div>
@@ -143,7 +143,6 @@
                   height="425"
                   @select-change="selectSameList"
                   @select-all = 'selectAllList'
-                  @edit-actived="editActivedEvent"
                   :data="formPlan.details"
                   style="width: 2000px"
                   :edit-config="{trigger: 'click', mode: 'cell'}"

@@ -255,7 +255,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      this.settleTypeList.CS00107=[]
+       this.settleTypeList.CS00107=[]
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {

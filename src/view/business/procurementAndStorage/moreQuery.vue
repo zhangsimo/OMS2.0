@@ -40,7 +40,8 @@
 </template>
 
 <script>
-    import {getClient} from '@/api/salesManagment/salesOrder'
+    // import {getClient} from '@/api/salesManagment/salesOrder'
+    import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
     export default {
         name: "MoreQuery",
         props:{
@@ -64,12 +65,12 @@
                 this.moreQueryShow = true
             },
             //获取公司
-            async getAllClient(){
-                let res = await getClient()
-                if(res.code === 0 ){
-                    this.client = res.data
-                }
-            },
+          async getAllClient() {
+            let res = await getSupplierList({})
+            if (res.code === 0) {
+              this.client = res.data
+            }
+          },
             //获取创建时间
             getCreatDate(date){
                 if (date[0]){

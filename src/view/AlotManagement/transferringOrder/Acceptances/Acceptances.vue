@@ -114,7 +114,7 @@
               <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
               <vxe-table-column field title="紧销品" type="checkbox">
                 <template v-slot="{ row,rowIndex }">
-                  <Checkbox disabled :value="row.isTightPart == 1"></Checkbox>
+                  <Checkbox disabled :value="row.isTight == 1"></Checkbox>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="remark" title="备注"></vxe-table-column>

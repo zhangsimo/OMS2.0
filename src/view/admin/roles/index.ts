@@ -1,6 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , addOrUpdate , getStaff , saveStaffJurisdiction} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder} from '_api/admin/roleApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -34,7 +34,7 @@ export default class index extends Vue{
    private oneStaff:any = {}
    //右侧权限树形图
   private treeList:any = []
-  //不知道的值
+  //权限变量
   private role:any =  {
     id: null,
     name: null,
@@ -47,10 +47,14 @@ export default class index extends Vue{
   private organization:string = ''
 
   private  staffName:string = ''
+
+  //按钮权限
+  private right:number = 1
   //-------------------mounted-----------------------------------------------
 
   private mounted() {
     this.getLeftList()
+    this.right = this.$store.state.user.userData.shopkeeper
   }
   //-------------------------------methods-----------------------------------------
     //获取左侧全部员工
@@ -97,6 +101,9 @@ export default class index extends Vue{
   private ch(arr) {
     arr.map(item => {
       item.expand = true
+      if(this.right != 0){
+        item.disabled = true
+      }
       if (item.resType == 1 || item.childs.length == 0) {
         if (this.role.resIds.indexOf(item.id) != -1) {
           item.checked = true
@@ -197,7 +204,7 @@ export default class index extends Vue{
     // @ts-ignore
     let stop:any = this.$loading()
     // this.role.id = ''
-    addOrUpdate(this.role, this.role.resIds).then(res => {
+    saveOrder(this.role, this.role.resIds).then(res => {
       if (res.code == 0) {
           this.getLeftList()
           this.$Message.success('修改成功')

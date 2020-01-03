@@ -19,9 +19,9 @@ const dev = {
   // omsOrder: 'http://192.168.30.21:9210',
   // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
   omsStore: "http://192.168.30.179:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.21:9200",
-  // omsOrder:'http://192.168.30.179:9210', //陈舒
-  omsSettle: "http://192.168.30.21:9270",
+  omsProduct: "http://192.168.30.179:9200",
+  omsOrder:'http://192.168.30.16:9210', //陈舒
+  omsSettle: "http://192.168.30.179:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -42,7 +42,7 @@ const dev = {
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
-  passportApi: "http://192.168.2.48:5200", // passport微服务API
+  passportApi: "http://192.168.2.47:5200", // passport微服务API
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
 };
@@ -64,7 +64,7 @@ const test = {
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   getFileApi: "https://tsoms2.g-parts.cn",
-  downApi: "https://tsapi2.g-parts.cn/oms-oss-provider",
+  downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
 };
 

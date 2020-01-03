@@ -29,7 +29,8 @@ export const mixGoodsData = {
         planArriveDate: "", //计划日期
         // planDateformat: "",
 
-        planner: this.$store.state.user.userData.staffName || "", //计划人
+        orderMan: this.$store.state.user.userData.staffName || "", //计划人
+        orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
         directGuestId: "", //直发门店
@@ -49,7 +50,7 @@ export const mixGoodsData = {
             trigger: "change"
           }
         ],
-        planner: [
+        orderManId: [
           { required: true, message: "计划员不能为空", trigger: "blur" }
         ],
         billType: [
@@ -136,7 +137,7 @@ export const mixGoodsData = {
           supplyName: "", //供应商
           guestId: "", //供应商id
           planArriveDate: "", //计划日期
-          planner: this.$store.state.user.userData.staffName || "", //计划人
+          orderMan: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
           billType: "", //票据类型
           directGuestId: "", //直发门店
@@ -205,7 +206,8 @@ export const mixGoodsData = {
               "orderPrice",
               "noTaxPrice",
               "noTaxAmt",
-              "recentPrice"
+              "recentPrice",
+              "notEnterQty",
             ].includes(column.property) ||
             columnIndex === 12 ||
             columnIndex === 17
@@ -282,6 +284,11 @@ export const mixGoodsData = {
         }
       }
       this.tableData = allArr;
+    },
+
+    selectOrderMan(val) {
+      this.formPlan.orderMan = val.label || ""
+      this.formPlan.orderManId = val.value || ""
     },
 
     //获取选中供应商
@@ -386,7 +393,8 @@ export const mixGoodsData = {
 
         planArriveDate: new Date(), //计划日期
 
-        planner: this.$store.state.user.userData.staffName || "", //计划人
+        orderMan: this.$store.state.user.userData.staffName || "", //计划人
+        orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
         directGuestId: "", //直发门店
@@ -454,7 +462,8 @@ export const mixGoodsData = {
           //计划日期
           objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name
-          objReq.orderMan = this.formPlan.planner;
+          objReq.orderMan = this.formPlan.orderMan;
+          objReq.orderManId = this.formPlan.orderManId;
           //备注
           objReq.remark = this.formPlan.remark;
           //票据类型
@@ -528,12 +537,25 @@ export const mixGoodsData = {
     handleSuccess(res, file) {
       let self = this;
       if (res.code == 0) {
-        self.$Message.success("导入成功");
-        self.$Message.warning(res.data.errosMsg[0])
-        this.tableData = res.data.details;
+        if (res.data.errosMsg.length > 0) {
+          this.warning(res.data.errosMsg);
+        } else  {
+          self.$Message.success("导入成功");
+        }
+        this.tableData = [...this.tableData, ...res.data.details]
+        this.tableData.push();
       } else {
         self.$Message.error(res.message);
       }
+    },
+    warning(nodesc) {
+      this.$Notice.warning({
+        title: '上传错误信息',
+        desc: nodesc
+      });
+    },
+    onFormatError(file) {
+      this.$Message.error('只支持xls xlsx后缀的文件')
     },
 
     changeTotals() {

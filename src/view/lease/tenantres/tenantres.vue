@@ -45,16 +45,16 @@
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
-            <Button class="mr10 w90" @click="delTable" v-has="'delete'">
+            <Button class="mr10 w90" @click="saveTable" v-has="'delete'">
               <span class="center">
                 <Icon custom="iconfont iconlajitongicon icons" />删除
               </span>
             </Button>
-            <Button class="mr10 w90" @click="saveTable" v-has="'save2'">
+            <!-- <Button class="mr10 w90" @click="saveTable" v-has="'save2'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
-            </Button>
+            </Button> -->
           </div>
           <Table
             border

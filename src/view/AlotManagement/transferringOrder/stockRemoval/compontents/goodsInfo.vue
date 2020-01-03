@@ -78,7 +78,7 @@
           </FormItem>
           <FormItem label="发货物流：">
             <Select v-model="formDateRight.deliveryLogistics" class="w200">
-              <Option @on-change="logCom(item.logisticsComp)" v-for="item in logisArr" :value="item.id" :key="item.id">{{ item.defaultLogistics }}</Option>
+              <Option @on-change="logCom(item.logisticsComp)" v-for="item in logisArr" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
           </FormItem>
           <FormItem label="运输费用：">

@@ -245,6 +245,7 @@ export default {
     },
     //新增
     addNew() {
+      this.$refs.OrderLeft.change();
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
     }

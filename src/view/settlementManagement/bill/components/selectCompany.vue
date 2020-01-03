@@ -127,7 +127,7 @@ export default {
         size: 20,
         sizeOpts: [20, 40, 60, 80, 100]
       },
-      tableData: [{ name: 23 }],
+      tableData: [],
       treeData: [], //全国地址
       // 省
       Provinces: {},
@@ -211,8 +211,8 @@ export default {
       data.id = this.clickCity.id;
       data.page = this.page1.num - 1;
       data.size = this.page1.size;
-      data.lever = this.queryType[0].lever;
-      data.leverId = this.queryType[0].id;
+      data.lever = this.queryType.length !==0 ? this.queryType.lever : '';
+      data.leverId = this.queryType.length !==0 ? this.queryType[0].id : '';
       data.code = this.clientCode;
       data.shortName = this.clientName;
       data.tel = this.clientPhone;
@@ -259,7 +259,6 @@ export default {
     },
     //级联选择器
     getType(value, selectedData) {
-      this.queryType = []
       this.queryType.push(selectedData[selectedData.length - 1]) ;
     },
     //查询

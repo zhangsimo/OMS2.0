@@ -4,6 +4,7 @@
       title="库存查询"
       closable
       v-model="modal1"
+      @on-visible-change="hander"
       width="1100"
       :loading="loading">
       <section class="oper-box">
@@ -221,14 +222,24 @@
                     {
                         title: '入库单价',
                         align: 'center',
-                        key: 'enterPrice',
-                        minWidth: 120
+                        // key: 'enterPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = parseFloat(params.row.enterPrice).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '金额',
                         align: 'center',
-                        key: 'noTaxAmt',
-                        minWidth: 120
+                        // key: 'orderAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex =  parseFloat(params.row.orderAmt).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '税率',
@@ -239,14 +250,26 @@
                     {
                         title: '不含税单价',
                         align: 'center',
-                        key: 'noTaxPrice',
-                        minWidth: 120
+                        // key: 'noTaxPrice',
+
+                        minWidth: 120,
+                       render: (h, params) => {
+                        let tex = parseFloat(params.row.noTaxPrice).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '不含税金额',
                         align: 'center',
-                        key: 'noTaxAmt',
-                        minWidth: 120
+                        // key: 'noTaxAmt',
+
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = parseFloat(params.row.noTaxAmt).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '入库单号',
@@ -335,14 +358,26 @@
                     {
                         title: '出库单价',
                         align: 'center',
-                        key: 'sellPrice',
-                        minWidth: 120
+                        // key: 'sellPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = parseFloat(arams.row.sellPrice).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
+
                     },
                     {
                         title: '出库金额',
                         align: 'center',
-                        key: 'sellAmt',
-                        minWidth: 120
+                        // key: 'sellAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex =parseFloat(params.row.sellAmt).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
+
                     },
                     {
                         title: '税率',
@@ -353,14 +388,24 @@
                     {
                         title: '不含税单价',
                         align: 'center',
-                        key: 'noTaxPrice',
-                        minWidth: 120
+                        // key: 'noTaxPrice',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = parseFloat(params.row.noTaxPrice).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     {
                         title: '不含税金额',
                         align: 'center',
-                        key: 'noTaxAmt',
-                        minWidth: 120
+                        // key: 'noTaxAmt',
+                        minWidth: 120,
+                      render: (h, params) => {
+                        let tex = parseFloat(params.row.noTaxAmt).toFixed(2)
+                        return h('span', {}, tex)
+
+                      },
                     },
                     // {
                     //     title: '出库批次',
@@ -473,10 +518,7 @@
                 // 入库明细数据
                 contentOne: {
                     //数据
-                    dataOne: [{
-                        aaa: '暂无字段',
-                        bbb: 5
-                    }],
+                    dataOne: [],
                     // 分页
                     page: {
                         num: 1,
@@ -529,12 +571,19 @@
             async getEnters() {
                 this.oneTime = ''
                 this.twoTime = ''
-              this.searchForm2.startEnterDate = ''
-              this.searchForm2.endEnterDate = ''
+                this.searchForm2.startEnterDate = ''
+                this.searchForm2.endEnterDate = ''
                 this.modal1 = true
                 this.tIndex = 1
                 this.getList()
               },
+          hander(type){
+            // this.modal1 = true
+            if(type){
+              this.getEnters()
+            }
+
+          },
             //入库明细请求
             async getList() {
                 let data ={}
