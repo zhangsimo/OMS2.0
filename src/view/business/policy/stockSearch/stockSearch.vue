@@ -218,7 +218,7 @@
                         title: '配件编码',
                         align: 'center',
                         key: 'partCode',
-                        minWidth: 170,
+                        minWidth: 170
                     },
                     {
                         title: '配件名称',

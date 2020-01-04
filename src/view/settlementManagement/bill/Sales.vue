@@ -285,7 +285,7 @@ export default {
       this.value = data;
     },
     Dealings() {
-      this.$refs.selectDealings.openModel();
+      this.$refs.selectDealings.init();
     },
     // 导出汇总/配件明细
     report(type) {

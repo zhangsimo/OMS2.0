@@ -351,7 +351,7 @@ export default {
     },
     // 往来单位
     Dealings() {
-      this.$refs.selectDealings.openModel();
+      this.$refs.selectDealings.init();
     },
     // 高级查询
     ok() {},
