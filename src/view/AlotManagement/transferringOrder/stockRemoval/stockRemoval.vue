@@ -1035,38 +1035,31 @@ export default {
       let arr = [];
       console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
-        
+        seleList.map(item => {
+          arr.push(item.id);
+        });
+        const params = {
+          ids: arr,
+          mainId: this.Leftcurrentrow.id
+        };
+        shanqu(params)
+          .then(res => {
+            // 导入成品, 并把成品覆盖掉当前配件组装信息list
+            if (res.code == 0) {
+              this.Leftcurrentrow.detailVOS = this.array_diff(
+                this.Leftcurrentrow.detailVOS,
+                seleList
+              );
+              this.$Message.success("删除成功");
+            }
+          })
+          .catch(e => {
+            this.$Message.info("删除成品失败");
+          });
       } else {
         this.$Message.error("请选择要删除的配件!");
         return;
       }
-      // this.checkboxArr.map(item => {
-      //   arr.push(item.id);
-      // });
-      seleList.map(item => {
-        arr.push(item.id);
-      });
-      const params = {
-        ids: arr,
-        mainId: this.Leftcurrentrow.id
-      };
-
-      // this.Leftcurrentrow.detailVOS
-
-      shanqu(params)
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.Leftcurrentrow.detailVOS = this.array_diff(
-              this.Leftcurrentrow.detailVOS,
-              seleList
-            );
-            this.$Message.success("删除成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("删除成品失败");
-        });
     },
     //展示方
     showModel() {
