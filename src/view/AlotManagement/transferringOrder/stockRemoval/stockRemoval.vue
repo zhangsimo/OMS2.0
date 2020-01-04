@@ -700,6 +700,8 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      console.log(params, "30.221:9210");
+      params.id = "";
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -805,11 +807,11 @@ export default {
         this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
-      const params = {
+      const paramster = {
         id: this.Leftcurrentrow.id
       };
       // 配件组装作废
-      zuofei(params)
+      zuofei(paramster)
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
