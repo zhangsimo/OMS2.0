@@ -88,7 +88,7 @@
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
                 <div class="pane-made-hd">调拨受理信息</div>
                 <div v-if="showit" class="clearfix purchase" ref="planForm">
-                  <Form inline :show-message="false" ref="formPlan" :label-width="120">
+                  <Form :model="Leftcurrentrow" inline ref="formPlan" :label-width="120">
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
@@ -150,7 +150,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input :value="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input v-model="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
@@ -205,12 +205,12 @@
                   size="mini"
                   highlight-current-row
                   highlight-hover-row
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :footer-method="addFooter"
-                  :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -220,9 +220,9 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="hasAcceptQty"
-                    :edit-render="{name: 'input'}"
-                    title="受理数量"
+                    :edit-render="{name:'input'}"
                     width="100"
+                    title="受理数量"
                   ></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
@@ -238,7 +238,13 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px" @on-visible-change="moreChange">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          :ArrayValue="ArrayValue"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced=false">取消</Button>
@@ -447,12 +453,12 @@ export default {
           },
           {
             title: "提交人",
-            key: "orderMan",
+            key: "createUname",
             minWidth: 100
           },
           {
             title: "提交日期",
-            key: "orderDate",
+            key: "commitDate",
             minWidth: 160
           },
           {
@@ -585,6 +591,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      console.log(val, "val");
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -597,10 +604,41 @@ export default {
         delete item.id;
         delete item.orderPrice;
       });
+
+      var allArr = []; //新数组
+
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
         ...val
       ];
+      var allArr = [];
+      var oldArr = this.Leftcurrentrow.detailVOS;
+      for (var i = 0; i < oldArr.length; i++) {
+        var flag = true;
+        for (var j = 0; j < allArr.length; j++) {
+          if (oldArr[i].oemCode == allArr[j].oemCode) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          allArr.push(oldArr[i]);
+        }
+      }
+      this.Leftcurrentrow.detailVOS = allArr;
+
+      // var arrSet = this.Leftcurrentrow.detailVOS;
+      // console.log(arrSet, "arrSet==606");
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   var flag = true;
+      //   for (var j = 0; j < allArr.length; j++) {
+      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
+      //       flag = false;
+      //     }
+      //   }
+      //   if (flag) {
+      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
+      //   }
+      // }
       // this.$refs.formPlan.validate(async (valid) => {
       //     if (valid) {
       //         let data ={}
@@ -629,6 +667,10 @@ export default {
       this.getList();
     },
     baocun1() {
+      if (this.Leftcurrentrow.remark.length > 100) {
+        this.$Message.info("备注小于100个字符");
+        return;
+      }
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.createTime ||
@@ -644,6 +686,7 @@ export default {
       //     return;
       //   }
       // }
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -668,6 +711,8 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      console.log(params, "30.221:9210");
+      params.id = "";
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -740,10 +785,10 @@ export default {
       //   this.$Message.info("请先选择加工单");
       //   return;
       // }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value === 1) {
+      //   this.$Message.info("当前加工单号已提交审核!无需重复操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       params.status = params.status.value;
       params.settleStatus = params.settleStatus.value;
@@ -761,33 +806,43 @@ export default {
         });
     },
     zuofei1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
       if (!this.Leftcurrentrow.serviceId) {
         this.$Message.info("请先选择加工单");
+        return;
+      }
+      if (this.Leftcurrentrow.xinzeng === "1") {
+        this.$Message.info("请先保存新增加工单");
         return;
       }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
-      const params = {
+      const paramster = {
         id: this.Leftcurrentrow.id
       };
-      // 配件组装作废
-      zuofei(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList();
-            this.$Message.success("作废成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
+      this.$Modal.confirm({
+        title: "是否确定作废",
+        onOk: () => {
+          // 配件组装作废
+          zuofei(paramster)
+            .then(res => {
+              // 点击列表行==>配件组装信息
+              if (res.code == 0) {
+                this.$Message.success("作废成功");
+                this.getList();
+              }
+            })
+            .catch(e => {
+              this.$Message.info("作废失败");
+              this.getList();
+            });
+        },
+        onCancel: () => {
+          this.getList();
+          this.Leftcurrentrow.serviceId = "";
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {
@@ -950,6 +1005,12 @@ export default {
     // 确定
     Determined() {
       this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      for (var i = 0; i < this.getArray.length; i++) {
+        console.log(this.form.guestName, "this.form.guestName");
+        if (this.getArray[i].fullName == this.form.guestName) {
+          this.form.guestId = this.getArray[i].id;
+        }
+      }
       this.getList();
       this.$refs.naform.reset();
       this.advanced = false;
@@ -1065,6 +1126,7 @@ export default {
       params = { ...params, ...this.form };
       delete params.status;
       delete params.guestName;
+      // console.log(params, "params");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

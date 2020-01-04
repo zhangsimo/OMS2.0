@@ -143,6 +143,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单信息——表单
   private formPlanmain: any = {
+    createUid: "",
     guestId: "", // 供应商id
     guestName: "", // 供应商
     orderMan: "", // 采购员
@@ -284,6 +285,7 @@ export default class PlannedPurchaseOrder extends Vue {
       code: "", // 往来单号
       codeId: "",
     }
+    this.formPlanmain.createUid = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
@@ -303,6 +305,7 @@ export default class PlannedPurchaseOrder extends Vue {
     ref.validate((valid: any) => {
       if (valid) {
         data = {
+          createUid: this.formPlanmain.createUid,
           guestId: this.formPlanmain.guestId,
           orderMan: this.formPlanmain.orderMan,
           orderManId: this.formPlanmain.orderManId,
@@ -530,6 +533,7 @@ export default class PlannedPurchaseOrder extends Vue {
         this.tableData = v.details || [];
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
+        this.formPlanmain.createUid = v.createUid;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {

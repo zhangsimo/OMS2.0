@@ -23,6 +23,7 @@ export const mixGoodsData = {
       upurl: "",
       //计划采购信息
       formPlan: {
+        createUid: "",
         supplyName: "", //供应商
         guestId: "", //供应商id
         // settleTypeId: "", // 结算方式
@@ -338,6 +339,7 @@ export const mixGoodsData = {
             this.selectPlanOrderItem = this.tbdata[0];
             this.tbdata.push();
             this.submit(1);
+            this.formPlan.createUid = "";
             this.formPlan.supplyName = this.tbdata[0].supplyName || "";
             this.formPlan.guestId = this.tbdata[0].guestId || "";
             this.formPlan.planArriveDate = this.tbdata[0].orderDate || "";
@@ -371,6 +373,7 @@ export const mixGoodsData = {
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
           this.formPlan.supplyName = v.guestName || "";
+          this.formPlan.createUid = v.createUid || "";
           this.formPlan.guestId = v.guestId || "";
           this.formPlan.planArriveDate = new Date(v.orderDate) || "";
           // this.formPlan.planDateformat = v.orderDate || "";
@@ -468,6 +471,7 @@ export const mixGoodsData = {
           if (this.selectPlanOrderItem.id) {
             objReq.id = this.selectPlanOrderItem.id;
           }
+          objReq.createUid = this.formPlan.createUid;
           //供应商id
           objReq.guestId = this.formPlan.guestId;
           objReq.guestName = this.formPlan.supplyName;
