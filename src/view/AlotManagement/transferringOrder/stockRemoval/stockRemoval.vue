@@ -686,7 +686,6 @@ export default {
       //     return;
       //   }
       // }
-
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -712,7 +711,9 @@ export default {
         }
       }
       console.log(params, "30.221:9210");
-      params.id = "";
+      if (this.Leftcurrentrow.guestName == '' || this.Leftcurrentrow.guestName == null) {
+        params.id = "";
+      }
       //配件组装保存
       baocun(params)
         .then(res => {
