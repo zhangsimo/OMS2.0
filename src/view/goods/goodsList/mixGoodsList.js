@@ -312,7 +312,7 @@ export const mixGoodsData = {
         //赋值供应商id
         this.formPlan.guestId = v.id || "";
         //赋值票据类型id
-        this.formPlan.billType = v.billTypeName || "";
+        this.formPlan.billType = v.billTypeId || "";
       }
     },
     //选择日期
