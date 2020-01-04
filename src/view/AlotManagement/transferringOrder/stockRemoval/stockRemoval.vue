@@ -785,10 +785,10 @@ export default {
       //   this.$Message.info("请先选择加工单");
       //   return;
       // }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value === 1) {
+      //   this.$Message.info("当前加工单号已提交审核!无需重复操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       params.status = params.status.value;
       params.settleStatus = params.settleStatus.value;
@@ -806,12 +806,12 @@ export default {
         });
     },
     zuofei1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
       if (!this.Leftcurrentrow.serviceId) {
         this.$Message.info("请先选择加工单");
+        return;
+      }
+      if (this.Leftcurrentrow.xinzeng === "1") {
+        this.$Message.info("请先保存新增加工单");
         return;
       }
       if (this.Leftcurrentrow.status.value !== 0) {
@@ -821,18 +821,28 @@ export default {
       const paramster = {
         id: this.Leftcurrentrow.id
       };
-      // 配件组装作废
-      zuofei(paramster)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList();
-            this.$Message.success("作废成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
+      this.$Modal.confirm({
+        title: "是否确定作废",
+        onOk: () => {
+          // 配件组装作废
+          zuofei(paramster)
+            .then(res => {
+              // 点击列表行==>配件组装信息
+              if (res.code == 0) {
+                this.$Message.success("作废成功");
+                this.getList();
+              }
+            })
+            .catch(e => {
+              this.$Message.info("作废失败");
+              this.getList();
+            });
+        },
+        onCancel: () => {
+          this.getList();
+          this.Leftcurrentrow.serviceId = "";
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {
