@@ -103,7 +103,7 @@
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
                             filterable
-                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
+                            :disabled="buttonShow || this.flagValue !== 0"
                           >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
@@ -124,7 +124,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select v-model="Leftcurrentrow.storeId">
+                          <Select :disabled="buttonShow || this.flagValue1 !== 0" v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -141,7 +141,6 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
                         @on-change="changeDate"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
@@ -329,6 +328,8 @@ export default {
       getArray: [],
       tuneOut: false,
       flag: 0,
+      flagValue: 0,
+      flagValue1: 0,
       ArrayValue: [],
       buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
@@ -689,11 +690,10 @@ export default {
       //     return;
       //   }
       // }
-
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态才能进行保存操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value !== 0) {
+      //   this.$Message.info("只有草稿状态才能进行保存操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -721,6 +721,7 @@ export default {
       ) {
         params.id = "";
       }
+      console.log(params,'params')
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -951,6 +952,9 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      console.log(row, "row");
+      this.flagValue = 0;
+      this.flagValue1 = 0;
       // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -989,8 +993,13 @@ export default {
         // this.tuneOut = false
         console.log(row.code);
       }
+      if (row.statuName != "草稿") {
+        this.flagValue = 1;
+        this.flagValue1 = 1;
+      }
       if (row.code != "") {
-        this.Leftcurrentrow.status.value = 1;
+        this.flagValue = 1;
+        // this.Leftcurrentrow.status.value = 1;
       }
     },
     //打开添加配件模态框
