@@ -134,7 +134,7 @@
                 <span class="titler mr5">临时余额:</span>
                 <span class="titler mr10">{{this.limitList.tempQuota |priceFilters}}</span>
                 <span class="titler mr5">可用余额:</span>
-                <span class="titler mr5">{{ this.limitList.sumAmt |priceFilters}}</span>
+                <span class="titler mr5">{{ this.limitList.sumAmt - (+totalMoney)|priceFilters}}</span>
               </div>
               <Form
                 inline
@@ -733,7 +733,6 @@
       getplanSendDate(data) {
         // this.formPlan.planSendDate = data + ' ' + "00:00:00"
         this.formPlan.planSendDate= tools.transTime(data)
-        console.log('11',this.formPlan.planSendDate)
 
         //选择日期时，不能小于预计发货日期
         let statDt = this.formPlan.planSendDate
@@ -1084,10 +1083,18 @@
       },
       // 上传成功函数
       onSuccess(response) {
-        if (response.code != 0) {
-          this.$Message.error(response.message)
+        if (response.code == 0) {
+            let txt = '上传成功'
+              if(response.data.length > 0){
+                  txt = response.data.join(',')
+              }
+            this.$Notice.warning({
+                title: '导入失败',
+                desc: txt,
+                duration:0
+            })
         } else {
-          this.$Message.success(response.message)
+            this.$Message.error(response.message)
         }
         this.getLeftList()
       },
@@ -1100,9 +1107,9 @@
       getRUl() {
         let id = this.id
         this.upurl = getup + 'id=' + id
-        this.limitList = {};
-        this.$refs.formPlan.resetFields();
-        this.formPlan = {}
+        // this.limitList = {};
+        // this.$refs.formPlan.resetFields();
+        // this.formPlan = {}
       },
       //下载模板
       down() {

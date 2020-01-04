@@ -54,7 +54,7 @@
       return {
         moreQueryShow: false,//模态框是否展示
         clientList:[],//客户下拉框
-        data:{},  //表单数据
+        // data:{},  //表单数据 prop已经赋值过了你再赋值干嘛???
         page: {
           total: 0,
           size: 10,
