@@ -22,7 +22,7 @@
             </Select>
           </div>
           <div class="db ml20">
-            <span>往来单位：</span>
+            <span>供应商：</span>
             <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
