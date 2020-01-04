@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="addressShow"
-    title="往来单位"
+    title="供应商"
     width="1000"
     class="modalBox"
     @on-visible-change="visChange"
