@@ -32,7 +32,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.16:9280", //9280
+  omsSotck: "http://192.168.30.221:9280", //9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310
