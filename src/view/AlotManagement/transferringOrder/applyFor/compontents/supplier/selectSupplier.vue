@@ -15,13 +15,13 @@
         <!--<Button type='default' @click="addPartModal=true"><Icon type="md-add" /> 新增配件名称</Button>-->
       </div>
       <div class="partCheck-main clearfix">
-        <div class="partCheck-left fl">
+        <!-- <div class="partCheck-left fl">
           <div class="partCheck-left-tit">供应商分类</div>
           <div class="partCheck-left-tree">
             <Tree :data="treeData" v-loading="treeLoading" @on-select-change="selectTree"></Tree>
           </div>
-        </div>
-        <div class="fr partCheck-right" style="width: 758px">
+        </div>-->
+        <div>
           <Table
             height="389"
             @on-current-change="selectTabelData"
