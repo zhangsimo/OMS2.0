@@ -65,7 +65,7 @@
                     </div>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="guestName" title="申请公司"></vxe-table-column>
+                <vxe-table-column field="orgName" title="申请公司"></vxe-table-column>
                 <vxe-table-column field="serviceId" title="调拨申请单号"></vxe-table-column>
                 <vxe-table-column field="status" title="状态">
                   <template v-slot="{row,rowIndex}">
@@ -275,6 +275,7 @@ export default {
         if (res.code === 0) {
           this.topRight.tbdata = res.data.content;
           this.topRight.page.total = res.data.totalElements;
+          console.log(this.topRight.tbdata, "this.topRight.tbdata");
         }
       });
     },
