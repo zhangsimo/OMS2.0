@@ -8,9 +8,9 @@ const dev = {
   // omsApi: 'http://192.168.30.21:9240', // 付玮琳
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
-  omsApi: "http://192.168.30.179:9240", // 陈舒
-  wmsApi: "http://192.168.30.179:9250", // 陈舒
-  omsOrder: "http://192.168.30.179:9210", // 陈舒
+  omsApi: "http://192.168.30.221:9240", // 陈舒
+  wmsApi: "http://192.168.30.221:9250", // 陈舒
+  omsOrder: "http://192.168.30.16:9210", // 陈舒
   // omsOrder: 'http://192.168.30.179:9210', // 常国地
 
   // wmsApi: 'http://192.168.30.179:9250', // 常国地
@@ -18,12 +18,12 @@ const dev = {
   // omsOrder: "http://192.168.30.234:9210", // 曾史强
   // omsOrder: 'http://192.168.30.21:9210',
   // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
-  omsStore: "http://192.168.30.179:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.179:9200",
-  omsOrder:'http://192.168.30.16:9210', //陈舒
-  omsSettle: "http://192.168.30.179:9270",
+  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.221:9200",
+  omsOrder: "http://192.168.30.16:9210", //陈舒
+  omsSettle: "http://192.168.30.221:9270",
   /**oms系统接口设定 */
-  authApi: "http://192.168.2.48:5200", // 系统资源 5200
+  authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.179:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -32,7 +32,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.179:9280", //9280
+  omsSotck: "http://192.168.30.221:9280", //9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310
@@ -42,7 +42,7 @@ const dev = {
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
-  passportApi: "http://192.168.2.48:5200", // passport微服务API
+  passportApi: "http://192.168.2.47:5200", // passport微服务API
   essentialApi: "https://api2.g-parts.cn/gpart-essential-provider", // 基础服务API
   omsTpApi: "http://192.168.30.181:9290" //钉钉审批流程api
 };

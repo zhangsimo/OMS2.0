@@ -99,7 +99,12 @@
                           ></Input>
                             placeholder="请选择调出方"
                           ></Input>-->
-                          <Select v-model="Leftcurrentrow.guestName" label-in-value filterable :disabled="buttonShow || Leftcurrentrow.status.value !== 0">
+                          <Select
+                            v-model="Leftcurrentrow.guestName"
+                            label-in-value
+                            filterable
+                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
+                          >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
@@ -119,10 +124,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select
-                            v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value !== 0 || tuneOut"
-                          >
+                          <Select v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -148,11 +150,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="Leftcurrentrow.status.value !== 0 || buttonShow"
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input :value="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
@@ -226,9 +224,9 @@
                     title="受理数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column field="hasOutQty" title="缺货数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="orderPrice" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
@@ -239,7 +237,7 @@
         </div>
       </section>
       <!--更多弹框-->
-      <Modal v-model="advanced" title="高级查询" width="600px">
+      <Modal v-model="advanced" title="高级查询" width="600px" @on-visible-change="moreChange">
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
@@ -334,7 +332,8 @@ export default {
       showit: true,
       form: {
         status: "",
-        qucikTime: ""
+        createTimeStart: "",
+        createTimeEnd: ""
       },
       tabKey: "0",
       modal2: true,
@@ -558,10 +557,16 @@ export default {
   },
   created() {
     // 调接口获取配件组装列表信息
-    this.getList(this.form);
+    this.getList();
     this.getArrayParams();
   },
   methods: {
+    // 高级查询弹框
+    moreChange(type) {
+      if (!type) {
+        this.$refs.naform.reset();
+      }
+    },
     getArrayParams() {
       var req = {};
       req.page = 1;
@@ -580,6 +585,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      console.log(val, "val");
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -592,10 +598,41 @@ export default {
         delete item.id;
         delete item.orderPrice;
       });
+
+      var allArr = []; //新数组
+
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
         ...val
       ];
+      var allArr = [];
+      var oldArr = this.Leftcurrentrow.detailVOS;
+      for (var i = 0; i < oldArr.length; i++) {
+        var flag = true;
+        for (var j = 0; j < allArr.length; j++) {
+          if (oldArr[i].oemCode == allArr[j].oemCode) {
+            flag = false;
+          }
+        }
+        if (flag) {
+          allArr.push(oldArr[i]);
+        }
+      }
+      this.Leftcurrentrow.detailVOS = allArr;
+
+      // var arrSet = this.Leftcurrentrow.detailVOS;
+      // console.log(arrSet, "arrSet==606");
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   var flag = true;
+      //   for (var j = 0; j < allArr.length; j++) {
+      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
+      //       flag = false;
+      //     }
+      //   }
+      //   if (flag) {
+      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
+      //   }
+      // }
       // this.$refs.formPlan.validate(async (valid) => {
       //     if (valid) {
       //         let data ={}
@@ -621,10 +658,7 @@ export default {
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
-      const params = {
-        status: this.form.status
-      };
-      this.getList(params);
+      this.getList();
     },
     baocun1() {
       if (
@@ -647,7 +681,6 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      console.log(params);
       if (params.xinzeng) {
         delete params.status;
       }
@@ -667,12 +700,14 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      console.log(params, "30.221:9210");
+      params.id = "";
       //配件组装保存
       baocun(params)
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("保存成功");
             this.flag = 0;
             // this.Leftcurrentrow.storeId = ""
@@ -751,7 +786,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("提交成功");
           }
         })
@@ -772,15 +807,15 @@ export default {
         this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
-      const params = {
+      const paramster = {
         id: this.Leftcurrentrow.id
       };
       // 配件组装作废
-      zuofei(params)
+      zuofei(paramster)
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("作废成功");
           }
         })
@@ -838,7 +873,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
-            this.getList(this.form);
+            this.getList();
             this.$Message.success("出库成功");
           }
         })
@@ -878,24 +913,15 @@ export default {
       });
     },
     getDataQuick(v) {
-      const params = {
-        createTime: v[0],
-        endTime: v[1]
-      };
-      this.getList(params);
+      (this.form.createTimeStart = v[0]), (this.form.createTimeEnd = v[1]);
+      this.getList();
     },
-    // //快速查询日期
-    // getDataQuick(v) {
-    //   this.form.qucikTime = v
-    //   console.log(v)
-    // },
     //更多按钮
     more() {
       this.advanced = true;
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row);
       console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -904,12 +930,13 @@ export default {
             this.baocun1();
           },
           onCancel: () => {
-            this.getList(this.form);
+            this.getList();
             this.flag = 0;
           }
         });
         return;
       }
+
       this.buttonDisable = 0;
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
@@ -933,6 +960,9 @@ export default {
         // this.tuneOut = false
         console.log(row.code);
       }
+      if (row.code != "") {
+        this.Leftcurrentrow.status.value = 1;
+      }
     },
     //打开添加配件模态框
     addMountings() {
@@ -941,11 +971,11 @@ export default {
     //分页
     changePage(p) {
       this.Left.page.num = p;
-      this.getList(this.form);
+      this.getList();
     },
     changeSize(size) {
       this.Left.page.size = size;
-      this.getList(this.form);
+      this.getList();
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
@@ -953,8 +983,8 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      this.getList(params);
+      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      this.getList();
       this.$refs.naform.reset();
       this.advanced = false;
     },
@@ -1062,18 +1092,13 @@ export default {
       });
       this.$refs.addInCom.init1();
     },
-    getList(params) {
-      if (params.qucikTime) {
-        (params.createTimeStart = params.qucikTime[0]),
-          (params.createTimeEnd = params.qucikTime[1]);
-        delete params.qucikTime;
-      } else {
-        (params.createTimeStart = params.createTime),
-          (params.createTimeEnd = params.endTime);
-        delete params.qucikTime;
-      }
-      params.statusVaule = params.status || 99
-      delete params.status
+    getList() {
+      let params = {
+        statusVaule: this.form.status === "" ? 99 : this.form.status
+      };
+      params = { ...params, ...this.form };
+      delete params.status;
+      delete params.guestName;
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

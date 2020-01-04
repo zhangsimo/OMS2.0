@@ -89,6 +89,7 @@ export default {
   },
   data() {
     return {
+      isNew:true,//页面开始禁用
       isAdd:true,//判断是否新增
       orderType: 6,
       typeList: [
@@ -108,7 +109,8 @@ export default {
       orderlistType: {
         value: 0
       }, //默认状态
-      changeLeft: "" //发生改变数据调动左侧list
+      changeLeft: "" ,//发生改变数据调动左侧list
+      ispart:true
     };
   },
   methods: {
@@ -135,6 +137,7 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
+
       this.orderlistType = data.billStatusId;
     },
     //保存
@@ -246,6 +249,9 @@ export default {
     //新增
     addNew() {
       this.$refs.OrderLeft.change();
+      this.ispart=false
+      // console.log('22222',this.$refs.right.ispart)
+      this.orderlistType.value = 0
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
     }

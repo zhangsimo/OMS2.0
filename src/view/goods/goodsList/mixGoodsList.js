@@ -176,10 +176,22 @@ export const mixGoodsData = {
         this.$Modal.confirm({
           title: "是否要删除配件",
           onOk: async () => {
-            let res = await deleteparts(this.delArr);
-            if (res.code == 0) {
+            if(!this.selectPlanOrderItem.id) {
+              this.delArr.forEach(els => {
+                this.tableData.forEach((el, index, arr) => {
+                  if(el.partCode == els.partCode) {
+                    arr.splice(index, 1);
+                  }
+                })
+              })
+              this.delArr = [];
               this.$Message.success("删除成功");
-              this.getList();
+            } else {
+              let res = await deleteparts(this.delArr);
+              if (res.code == 0) {
+                this.$Message.success("删除成功");
+                this.getList();
+              }
             }
           },
           onCancel: () => {
