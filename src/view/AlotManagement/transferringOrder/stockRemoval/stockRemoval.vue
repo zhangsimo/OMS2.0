@@ -721,6 +721,7 @@ export default {
       ) {
         params.id = "";
       }
+      console.log(params,'params')
       //配件组装保存
       baocun(params)
         .then(res => {
