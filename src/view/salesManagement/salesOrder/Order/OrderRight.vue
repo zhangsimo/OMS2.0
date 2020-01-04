@@ -693,11 +693,17 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       if (response.code == 0) {
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.list[0]);
-        }
+          let txt = '上传成功'
+          if(response.data.length > 0){
+              txt = response.data.join(',')
+          }
+          this.$Notice.warning({
+              title: '导入失败',
+              desc: txt,
+              duration:0
+          })
       } else {
-        this.$Message.error("导入失败");
+          this.$Message.error(response.message)
       }
     },
     warning(nodesc) {
