@@ -689,6 +689,7 @@ export default {
       //     return;
       //   }
       // }
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -1011,7 +1012,7 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      this.form = { ...this.form, ...this.$refs.naform.getITPWE()};
       for (var i = 0; i < this.getArray.length; i++) {
         console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
