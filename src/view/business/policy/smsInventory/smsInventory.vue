@@ -726,19 +726,19 @@ export default {
     //左边列表选中当前行
     selectTabelData(data) {
       this.$refs.form.resetFields()
-      if (this.flag === 1) {
-        this.$Modal.confirm({
-          title: "您正在编辑单据，是否需要保存",
-          onOk: () => {
-            this.baocun1();
-          },
-          onCancel: () => {
-            this.getList();
-            this.flag = 0;
-          }
-        });
-        return;
-      }
+      // if (this.flag === 1) {
+      //   this.$Modal.confirm({
+      //     title: "您正在编辑单据，是否需要保存",
+      //     onOk: () => {
+      //       this.baocun();
+      //     },
+      //     onCancel: () => {
+      //       this.getList();
+      //       this.flag = 0;
+      //     }
+      //   });
+      //   return;
+      // }
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;

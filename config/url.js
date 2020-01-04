@@ -18,10 +18,10 @@ const dev = {
   // omsOrder: "http://192.168.30.234:9210", // 曾史强
   // omsOrder: 'http://192.168.30.21:9210',
   // omsOrder: 'http://192.168.30.191:9210', //system/staff/management
-  omsStore: "http://192.168.30.16:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.16:9200",
-  omsOrder: "http://192.168.30.16:9210", //陈舒
-  omsSettle: "http://192.168.30.16:9270",
+  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.221:9200",
+  omsOrder: "http://192.168.30.221:9210", //陈舒
+  omsSettle: "http://192.168.30.221:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -32,7 +32,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.16:9280", //9280
+  omsSotck: "http://192.168.30.221:9280", //9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310
