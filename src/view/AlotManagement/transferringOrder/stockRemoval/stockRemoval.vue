@@ -88,7 +88,7 @@
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
                 <div class="pane-made-hd">调拨受理信息</div>
                 <div v-if="showit" class="clearfix purchase" ref="planForm">
-                  <Form inline :show-message="false" ref="formPlan" :label-width="120">
+                  <Form :model="Leftcurrentrow" inline ref="formPlan" :label-width="120">
                     <FormItem label="调入方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
@@ -150,7 +150,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input :value="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input v-model="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="受理人：" prop="createUname">
                       <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
@@ -661,6 +661,10 @@ export default {
       this.getList();
     },
     baocun1() {
+      if (this.Leftcurrentrow.remark.length > 100) {
+        this.$Message.info("备注小于100个字符");
+        return;
+      }
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.createTime ||
@@ -676,6 +680,7 @@ export default {
       //     return;
       //   }
       // }
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;

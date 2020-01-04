@@ -145,6 +145,7 @@ export default class InterPurchase extends Vue {
 
   // 采购订单信息——表单
   private formPlanmain: any = {
+    createUid: "",
     guestId: "", // 供应商id
     guestName: "", // 供应商
     orderMan: "", // 采购员
@@ -263,6 +264,7 @@ export default class InterPurchase extends Vue {
       code: "", // 往来单号
       codeId: "",
     }
+    this.formPlanmain.createUid = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
@@ -282,6 +284,7 @@ export default class InterPurchase extends Vue {
     ref.validate((valid: any) => {
       if (valid) {
         data = {
+          createUid: this.formPlanmain.createUid,
           guestId: this.formPlanmain.guestId,
           orderMan: this.formPlanmain.orderMan,
           orderManId: this.formPlanmain.orderManId,
@@ -510,6 +513,7 @@ export default class InterPurchase extends Vue {
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
         // orderState['草稿'], orderState['退回']
+        this.formPlanmain.createUid = v.createUid;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {
