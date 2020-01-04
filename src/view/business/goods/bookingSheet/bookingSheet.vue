@@ -343,7 +343,9 @@ export default {
       upurl: getup,//导入地址
       mainId: null, //选中行的id
       clickdelivery: false,
-      Flaga: false
+      Flaga: false,
+      successNOid: false,
+      successHaveId: false
     }
   },
   methods: {
@@ -373,9 +375,47 @@ export default {
             }
           })
         } else if(resultTwo){
-          // console.log("有真有假！！！")
-          // let haveId = this.checkboxArr.filter(item => item.id)
-          // console.log(haveId)
+           let haveId = this.checkboxArr.filter(item => item.id)
+           let NoId = this.checkboxArr.filter(item => !item.id)
+           let NoIdPartCode = NoId.map(item => item.partCode)
+           let AddNoId = this.Right.tbdata.filter(item => !item.id)
+           let NoRepeat = AddNoId.filter(item => !NoIdPartCode.includes(item.partCode))
+            //console.log(NoRepeat)
+           let dataOne = {}
+           dataOne.id = this.rowId
+          dataOne.salesman =  this.formPlan.salesman
+          dataOne.orderNo =  this.formPlan.Reservation
+          dataOne.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+          dataOne.remark = this.formPlan.remark
+          dataOne.detailVOList = NoRepeat
+          save(dataOne).then(res => {
+            if(res.code == 0){
+              this.successNOid = true
+            }
+          })
+
+          let dataTwo = haveId.map(item => {
+            return {
+              id: item.id
+            }
+          })
+          deleteit(dataTwo).then(res => {
+            if(res.code == 0){
+             this.successHaveId = true
+            }
+          })
+          setTimeout(() => {
+            this.$nextTick( () => {
+              if(this.successNOid && this.successHaveId){
+              this.$message.success('删除成功！')
+              this.leftgetList(),
+                this.formPlan.salesman = '', //业务员
+                this.formPlan.Reservation = '',
+                this.formPlan.remark = '',
+                this.Right.tbdata = []
+            }
+          })
+          },1000)
         }else {
           var set = this.checkboxArr.map(item => item.partCode)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
@@ -386,7 +426,6 @@ export default {
           data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
           data.remark = this.formPlan.remark
           data.detailVOList = resArr
-          console.log(resArr)
           save(data).then(res => {
             if (res.code === 0) {
               this.$message.success('删除成功！')
@@ -423,8 +462,6 @@ export default {
       this.formPlan.orderDate =  tools.transTime(new Date()), //期望到货日期
       this.formPlan.remark =  '' //备注
       this.Right.tbdata = []
-      // console.log(this.$store.state.user.userData.staffName)
-      // console.log(this.Left.tbdata)
     },
     //添加配件按钮
     addPro(){

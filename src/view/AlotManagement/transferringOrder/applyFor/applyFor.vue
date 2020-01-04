@@ -392,8 +392,37 @@
           var set = this.checkboxArr.map(item=>item.partId)
           // console.log(set)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
-          console.log(resArr)
+         // console.log(resArr)
           this.Right.tbdata = resArr
+          let data = {}
+           data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = resArr
+               save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('删除成功！！！')
+                        this.leftgetList()
+                        this.formPlan.guestName = '',
+                          this.formPlan.storeId =  '',
+                          this.formPlan.remark =  '',
+                          this.formPlan.createUname =  '',
+                          this.formPlan.serviceId =  '',
+                          this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.isAdd = true
+                        this.$refs.formPlan.resetFields();
+                      }
+                    })
+
         },
         //更多按钮
         moreaa(){
@@ -666,9 +695,10 @@
               isTight: !!item.isTightPart == true? 1:0,
             }
           })
-          console.log(parts)
+          // console.log(parts)
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          console.log(this.Right.tbdata)
+          //console.log(this.Right.tbdata)
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
         },
         //编辑收货信息弹框显示
         GoodsInfoModal(){

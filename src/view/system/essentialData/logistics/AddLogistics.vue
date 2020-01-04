@@ -125,6 +125,7 @@ export default {
     typelist: ""
   },
   data() {
+    console.log(this.typelist)
     const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("手机号不能为空"));
