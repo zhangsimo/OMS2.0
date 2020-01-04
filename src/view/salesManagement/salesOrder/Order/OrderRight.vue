@@ -14,7 +14,7 @@
         <span class="titler mr5">临时额度:</span>
         <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
         <span class="titler mr5">可用余额:</span>
-        <span class="titler mr5">{{ limitList.sumAmt |priceFilters}}</span>
+        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">
@@ -693,11 +693,17 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       if (response.code == 0) {
-        if (response.data.list && response.data.list.length > 0) {
-          this.warning(response.data.list[0]);
-        }
+          let txt = '上传成功'
+          if(response.data.length > 0){
+              txt = response.data.join(',')
+          }
+          this.$Notice.warning({
+              title: '导入失败',
+              desc: txt,
+              duration:0
+          })
       } else {
-        this.$Message.error("导入失败");
+          this.$Message.error(response.message)
       }
     },
     warning(nodesc) {

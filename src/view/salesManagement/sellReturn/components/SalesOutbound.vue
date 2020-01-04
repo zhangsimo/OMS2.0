@@ -39,8 +39,8 @@
             />
           </FormItem>
 
-          <Button type="warning mr15" @click="search">查询</Button>
-          <Button type="warning mr15" @click="selectEnter">选入</Button>
+          <Button type="warning" @click="search">查询</Button>
+          <Button type="warning" @click="selectEnter">选入</Button>
           <Button @click="cancel">取消</Button>
         </Form>
       </div>
@@ -74,11 +74,8 @@
           ></vxe-table-column>
           <vxe-table-column
             title="出库金额"
-
+            field="orderAmt"
           >
-            <template v-slot="{ row }">
-              <span>{{ countAmount(row) }} </span>
-            </template>
           </vxe-table-column>
           <vxe-table-column
             field="code"
@@ -281,9 +278,9 @@
         })
       },
       //计算表格数据
-      countAmount(row) {
-        return this.$utils.toNumber(row.trueOutQty) * this.$utils.toNumber(row.orderPrice)
-      },
+      // countAmount(row) {
+      //   return this.$utils.toNumber(row.trueOutQty) * this.$utils.toNumber(row.orderPrice)
+      // },
       // 计算尾部总和
       countAllAmount(data) {
         let count = 0

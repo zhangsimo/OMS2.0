@@ -416,6 +416,8 @@ export default {
             }
           })
           },1000)
+
+
         }else {
           var set = this.checkboxArr.map(item => item.partCode)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))

@@ -1021,7 +1021,7 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      this.form = { ...this.form, ...this.$refs.naform.getITPWE()};
       for (var i = 0; i < this.getArray.length; i++) {
         console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
