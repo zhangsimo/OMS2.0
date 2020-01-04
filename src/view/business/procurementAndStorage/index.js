@@ -85,6 +85,7 @@ export default {
       }
     };
     return {
+      dataChange: {},//左侧当前数据
       StoreId: '', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
@@ -259,6 +260,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      this.dataChange = data
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {
@@ -441,11 +443,13 @@ export default {
           this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
           let res = await saveList(this.formPlan)
           if (res.code === 0) {
-            this.getLeftLists()
-            this.formPlan = {
-              billStatusValue: 0,
-              code: ''
-            }
+            await this.getLeftLists()
+            this.legtTableData.map(item => {
+              if (item.id === this.dataChange.row.id) {
+                this.$set(this.dataChange, 'row', item)
+              }
+            })
+            await this.clickOnesList(this.dataChange)
             this.allMoney = 0
             this.$Message.success('保存成功');
           }
@@ -471,7 +475,7 @@ export default {
               }
               this.allMoney = 0
               this.$Message.success('保存成功');
-            } 
+            }
           } catch (errMap) {
             this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
           }
@@ -584,11 +588,14 @@ export default {
       //     })
       let res = await deletList(this.rightList)
       if (res.code === 0) {
-        this.getLeftLists()
-        this.formPlan = {
-          billStatusValue: 0,
-          code: ''
-        }
+        this.$message.success(res.data)
+        await this.getLeftLists()
+        this.legtTableData.map(item => {
+          if (item.id === this.dataChange.row.id) {
+            this.$set(this.dataChange, 'row', item)
+          }
+        })
+        await this.clickOnesList(this.dataChange)
         this.allMoney = 0
       }
     },
