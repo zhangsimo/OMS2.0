@@ -324,6 +324,7 @@ export default {
   },
   data() {
     return {
+      checkboxArr: [], // checkbox选中
       idsId: [],
       getArray: [],
       tuneOut: false,
@@ -661,6 +662,8 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
+      this.checkboxArr = msg.selection;
+
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -711,7 +714,10 @@ export default {
         }
       }
       console.log(params, "30.221:9210");
-      if (this.Leftcurrentrow.guestName == '' || this.Leftcurrentrow.guestName == null) {
+      if (
+        this.Leftcurrentrow.guestName == "" ||
+        this.Leftcurrentrow.guestName == null
+      ) {
         params.id = "";
       }
       //配件组装保存
@@ -944,7 +950,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row, "row ==>862");
+      // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1025,9 +1031,18 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
-      console.log(seleList, "seleList");
+      // console.log(seleList, "seleList");
       let arr = [];
-      console.log(seleList, "seleList");
+      console.log(this.checkboxArr.length, "this.checkboxArr.length");
+      if (this.checkboxArr.length > 0) {
+        
+      } else {
+        this.$Message.error("请选择要删除的配件!");
+        return;
+      }
+      // this.checkboxArr.map(item => {
+      //   arr.push(item.id);
+      // });
       seleList.map(item => {
         arr.push(item.id);
       });
@@ -1035,6 +1050,9 @@ export default {
         ids: arr,
         mainId: this.Leftcurrentrow.id
       };
+
+      // this.Leftcurrentrow.detailVOS
+
       shanqu(params)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
