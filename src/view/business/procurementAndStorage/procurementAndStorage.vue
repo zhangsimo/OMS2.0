@@ -117,7 +117,7 @@
                         filterable
                         style="width: 240px"
                         @on-change="changeClient"
-                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                       >
                         <Option
                           v-for="item in client"
@@ -129,7 +129,7 @@
                         class="ml5"
                         size="small"
                         type="default"
-                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                         @click="addSuppler"
                       >
                         <Icon type="md-checkmark" />
@@ -140,7 +140,7 @@
                     <Input
                       class="w160"
                       v-model="formPlan.orderMan"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                     />
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
@@ -150,7 +150,7 @@
                       format="yyyy-MM-dd HH:mm:ss"
                       v-model="formPlan.orderDate"
                       style="width: 200px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
@@ -160,7 +160,7 @@
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                       @on-change="getBillType"
                     >
                       <Option
@@ -174,7 +174,7 @@
                     <Select
                       v-model="formPlan.settleTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00106"
@@ -187,7 +187,7 @@
                     <Input
                       style="width: 370px"
                       v-model="formPlan.remark"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                     />
                   </FormItem>
                   <FormItem label="往来单号：">
@@ -197,7 +197,7 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:200px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData[0].guestId !== ''"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
                     >
                       <Option
                         v-for="item in WarehouseList"

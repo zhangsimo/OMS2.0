@@ -42,7 +42,10 @@
     </row>
     <row class="mt15">
       <span>调 入 方 ：</span>
-      <Input v-model="form.guestName" style="width: 398px" readonly />
+      <!-- <Input v-model="form.guestName" style="width: 398px" readonly /> -->
+      <Select style="width: 398px" v-model="form.guestName" label-in-value filterable>
+        <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+      </Select>
       <Button @click="showModel" class="ml5" size="small" type="default">
         <i class="iconfont iconxuanzetichengchengyuanicon"></i>
       </Button>
@@ -110,10 +113,17 @@ export default {
       type: String,
       default: ""
     },
+    ArrayValue: {
+      type: Array,
+      default: ""
+    },
     dcId: {
       type: String,
       default: ""
     }
+  },
+  created() {
+    this.showModel();
   },
   methods: {
     //展示方

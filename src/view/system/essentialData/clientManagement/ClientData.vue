@@ -832,6 +832,7 @@ export default {
           // ...this.pitchOnClientList
         ];
         this.data.guestVOList = this.relevanceClientShow;
+        console.log("......"+this.data.guestVOList);
       } else {
         this.$Message.error("选择重复");
       }

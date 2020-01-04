@@ -337,7 +337,7 @@ export default {
     },
     // 往来单位
     Dealings() {
-      this.$refs.selectDealings.openModel();
+      this.$refs.selectDealings.init();
     },
     // 导出汇总/配件明细
     report(type) {

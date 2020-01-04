@@ -205,12 +205,12 @@
                   size="mini"
                   highlight-current-row
                   highlight-hover-row
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :footer-method="addFooter"
-                  :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -220,9 +220,9 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="hasAcceptQty"
-                    :edit-render="{name: 'input'}"
-                    title="受理数量"
+                    :edit-render="{name:'input'}"
                     width="100"
+                    title="受理数量"
                   ></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
@@ -238,7 +238,13 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px" @on-visible-change="moreChange">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          :ArrayValue="ArrayValue"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced=false">取消</Button>
@@ -318,6 +324,7 @@ export default {
   },
   data() {
     return {
+      checkboxArr: [], // checkbox选中
       idsId: [],
       getArray: [],
       tuneOut: false,
@@ -447,7 +454,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "commitUname",
+            key: "createUname",
             minWidth: 100
           },
           {
@@ -655,6 +662,8 @@ export default {
     selectAllEvent({ checked }) {},
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
+      this.checkboxArr = msg.selection;
+
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -680,7 +689,6 @@ export default {
       //     return;
       //   }
       // }
-
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -706,7 +714,12 @@ export default {
         }
       }
       console.log(params, "30.221:9210");
-      params.id = "";
+      if (
+        this.Leftcurrentrow.guestName == "" ||
+        this.Leftcurrentrow.guestName == null
+      ) {
+        params.id = "";
+      }
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -779,10 +792,10 @@ export default {
       //   this.$Message.info("请先选择加工单");
       //   return;
       // }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value === 1) {
+      //   this.$Message.info("当前加工单号已提交审核!无需重复操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       params.status = params.status.value;
       params.settleStatus = params.settleStatus.value;
@@ -800,12 +813,12 @@ export default {
         });
     },
     zuofei1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
       if (!this.Leftcurrentrow.serviceId) {
         this.$Message.info("请先选择加工单");
+        return;
+      }
+      if (this.Leftcurrentrow.xinzeng === "1") {
+        this.$Message.info("请先保存新增加工单");
         return;
       }
       if (this.Leftcurrentrow.status.value !== 0) {
@@ -815,18 +828,28 @@ export default {
       const paramster = {
         id: this.Leftcurrentrow.id
       };
-      // 配件组装作废
-      zuofei(paramster)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList();
-            this.$Message.success("作废成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
+      this.$Modal.confirm({
+        title: "是否确定作废",
+        onOk: () => {
+          // 配件组装作废
+          zuofei(paramster)
+            .then(res => {
+              // 点击列表行==>配件组装信息
+              if (res.code == 0) {
+                this.$Message.success("作废成功");
+                this.getList();
+              }
+            })
+            .catch(e => {
+              this.$Message.info("作废失败");
+              this.getList();
+            });
+        },
+        onCancel: () => {
+          this.getList();
+          this.Leftcurrentrow.serviceId = "";
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {
@@ -927,7 +950,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row, "row ==>862");
+      // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -989,6 +1012,12 @@ export default {
     // 确定
     Determined() {
       this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      for (var i = 0; i < this.getArray.length; i++) {
+        console.log(this.form.guestName, "this.form.guestName");
+        if (this.getArray[i].fullName == this.form.guestName) {
+          this.form.guestId = this.getArray[i].id;
+        }
+      }
       this.getList();
       this.$refs.naform.reset();
       this.advanced = false;
@@ -1002,30 +1031,35 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
-      console.log(seleList, "seleList");
+      // console.log(seleList, "seleList");
       let arr = [];
-      console.log(seleList, "seleList");
-      seleList.map(item => {
-        arr.push(item.id);
-      });
-      const params = {
-        ids: arr,
-        mainId: this.Leftcurrentrow.id
-      };
-      shanqu(params)
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.Leftcurrentrow.detailVOS = this.array_diff(
-              this.Leftcurrentrow.detailVOS,
-              seleList
-            );
-            this.$Message.success("删除成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("删除成品失败");
+      console.log(this.checkboxArr.length, "this.checkboxArr.length");
+      if (this.checkboxArr.length > 0) {
+        seleList.map(item => {
+          arr.push(item.id);
         });
+        const params = {
+          ids: arr,
+          mainId: this.Leftcurrentrow.id
+        };
+        shanqu(params)
+          .then(res => {
+            // 导入成品, 并把成品覆盖掉当前配件组装信息list
+            if (res.code == 0) {
+              this.Leftcurrentrow.detailVOS = this.array_diff(
+                this.Leftcurrentrow.detailVOS,
+                seleList
+              );
+              this.$Message.success("删除成功");
+            }
+          })
+          .catch(e => {
+            this.$Message.info("删除成品失败");
+          });
+      } else {
+        this.$Message.error("请选择要删除的配件!");
+        return;
+      }
     },
     //展示方
     showModel() {
@@ -1104,6 +1138,7 @@ export default {
       params = { ...params, ...this.form };
       delete params.status;
       delete params.guestName;
+      // console.log(params, "params");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

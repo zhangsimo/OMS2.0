@@ -409,12 +409,12 @@ export default {
           },
           {
             title: "入库人",
-            key: "orderMan",
+            key: "commitUname",
             minWidth: 100
           },
           {
             title: "入库日期",
-            key: "orderDate",
+            key: "commitDate",
             minWidth: 160
           },
           {
@@ -556,7 +556,6 @@ export default {
     },
     selectAllEvent({ checked }) {},
     getDataType() {
-      //console.log(121);
       const params = {
         status: this.form.status
       };
@@ -764,9 +763,10 @@ export default {
       });
     },
     getDataQuick(v) {
+      console.log(v, "v");
       const params = {
-        createTime: v[0],
-        endTime: v[1]
+        createTimeStart: v[0],
+        createTimeEnd: v[1]
       };
       this.getList(params);
     },

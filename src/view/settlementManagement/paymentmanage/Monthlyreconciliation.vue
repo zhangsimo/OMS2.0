@@ -674,13 +674,17 @@ export default {
     // 应收全选
     collectCheckoutAll(selection) {
       this.collectlist = selection;
-      this.totalcollect = selection[selection.length - 1].thisAccountAmt;
+      selection.map(item => {
+        this.totalcollect += item.thisAccountAmt;
+      });
       this.getSettlementComputed();
     },
     // 应付全选
     paymentCheckoutAll(selection) {
       this.paymentlist = selection;
-      this.totalpayment = selection[selection.length - 1].thisAccountAmt;
+      selection.map(item => {
+        this.totalpayment += item.thisAccountAmt;
+      });
       this.getSettlementComputed();
     },
     // 应付取消选中
