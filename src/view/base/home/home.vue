@@ -4,30 +4,30 @@
       <!--      左侧顶部快速导航-->
       <div class="quick-navigation">
         <div style="display: flex">
-          <a class="quick-one quick-all">
+          <a class="quick-one quick-all" @click="go(1000)">
             <span>采购计划</span>
           </a>
-          <a class="quick-two quick-all">
-            <span>采购计划订单</span>
+          <a class="quick-two quick-all" @click="go(1001)">
+            <span>计划采购订单</span>
           </a>
-          <a class="quick-three quick-all">
+          <a class="quick-three quick-all" @click="go(1003)">
             <span>临时采购订单</span>
           </a>
-          <a class="quick-four quick-all">
+          <a class="quick-four quick-all" @click="go(1004)">
             <span>外采订单</span>
           </a>
         </div>
         <div style="margin: 20px 0px;display: flex">
-          <a class="quick-five quick-all">
+          <a class="quick-five quick-all" @click="go(2000)">
             <span>销售订单</span>
           </a>
-          <a class="quick-six quick-all">
+          <a class="quick-six quick-all" @click="go(3101)">
             <span>调拨申请</span>
           </a>
-          <a class="quick-seven quick-all">
+          <a class="quick-seven quick-all" @click="go(5200)">
             <span>应收应付结算</span>
           </a>
-          <a class="quick-enigth quick-all">
+          <a class="quick-enigth quick-all" @click="go(4000)">
             <span>库存查询</span>
           </a>
         </div>
@@ -103,7 +103,44 @@ export default {
           });
         }
       }
-    }
+    },
+      go(v){
+        let right = this.$store.state.user.userData.resourceVOS
+          if (right.some(item => item.name == v)){
+              switch (v) {
+                  case 1000:
+                      this.$router.push({ name: 'goodsList'})
+                      break
+                  case 1001:
+                      this.$router.push({ name: 'plannedPurchaseOrder'})
+                      break
+                  case 1003:
+                      this.$router.push({ name: 'temporaryPurchase'})
+                      break
+                  case 1004:
+                      this.$router.push({ name: 'outsidePurchase'})
+                      break
+                  case 2000:
+                      this.$router.push({ name: 'salesOrder'})
+                      break
+                  case 3101:
+                      this.$router.push({ name: 'applyFor'})
+                      break
+                  case 5200:
+                      this.$router.push({ name: 'settlementManagement-paymentmanage'})
+                      break
+                  case 4000:
+                      this.$router.push({ name: 'stockSearch'})
+                      break
+              }
+          }else{
+              this.$Message['error']({
+                  background: true,
+                  content: '暂无权限!需联系管理员开启权限'
+              });
+
+          }
+      }
   }
 };
 </script>
