@@ -109,9 +109,9 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
-<!--                          :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
+                          <!--                          :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
-                           disabled
+                            disabled
                             :value="Leftcurrentrow.createTime"
                             format="yyyy-MM-dd HH:mm:ss"
                             type="date"
@@ -119,11 +119,7 @@
                           ></DatePicker>
                         </FormItem>
                         <FormItem label="操作员：" prop="planDate">
-                          <Input
-                            class="w160"
-                            disabled
-                            :value="Leftcurrentrow.orderMan"
-                          ></Input>
+                          <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Input
@@ -133,11 +129,7 @@
                           ></Input>
                         </FormItem>
                         <FormItem label="组装单号：" prop="planOrderNum">
-                          <Input
-                            class="w160"
-                            disabled
-                            :value="Leftcurrentrow.serviceId"
-                          ></Input>
+                          <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
                         </FormItem>
                       </Form>
                     </div>
@@ -149,7 +141,7 @@
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu"  v-has="'delete'">
+                          <Button size="small" class="mr10" @click="shanchu" v-has="'delete'">
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除
                           </Button>
                         </div>
@@ -183,8 +175,8 @@
                         title="组装数量"
                         width="100"
                       ></vxe-table-column>
-<!--                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>-->
-<!--                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>-->
+                      <!--                      <vxe-table-column field="orderPrice" title="单价" width="100"></vxe-table-column>-->
+                      <!--                      <vxe-table-column field="orderAmt" title="金额" width="100"></vxe-table-column>-->
                       <vxe-table-column field="TaxPrice" title="含税单价" width="100"></vxe-table-column>
                       <vxe-table-column field="TaxAmt" title="含税金额" width="100"></vxe-table-column>
                       <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
@@ -343,7 +335,7 @@
                           </Row>
                         </FormItem>
                         <FormItem label="创建日期：" prop="billType" class="redIT">
-<!--                          :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
+                          <!--                          :disabled=" Leftcurrentrow.xinzeng || Leftcurrentrow.status.value !== 0"-->
                           <DatePicker
                             disabled
                             :value="Leftcurrentrow.createTime"
@@ -353,11 +345,7 @@
                           ></DatePicker>
                         </FormItem>
                         <FormItem label="操作员：" prop="planDate">
-                          <Input
-                            class="w160"
-                            disabled
-                            :value="Leftcurrentrow.orderMan"
-                          ></Input>
+                          <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                         </FormItem>
                         <FormItem label="备注：" prop="remark">
                           <Input
@@ -367,12 +355,8 @@
                           ></Input>
                         </FormItem>
                         <FormItem label="拆分单号：" prop="planOrderNum">
-<!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
-                          <Input
-                            class="w160"
-                          disabled
-                            :value="Leftcurrentrow.serviceId"
-                          ></Input>
+                          <!--                          :disabled="Leftcurrentrow.status.value !== 0"-->
+                          <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
                         </FormItem>
                       </Form>
                     </div>
@@ -384,7 +368,7 @@
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu" v-has="'shanchu1'" >
+                          <Button size="small" class="mr10" @click="shanchu" v-has="'shanchu1'">
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除
                           </Button>
                         </div>
@@ -418,7 +402,12 @@
                         title="数量"
                         width="100"
                       ></vxe-table-column>
-                      <vxe-table-column field="remark" title="备注" width="100"  :edit-render="{name: 'input'}"></vxe-table-column>
+                      <vxe-table-column
+                        field="remark"
+                        title="备注"
+                        width="100"
+                        :edit-render="{name: 'input'}"
+                      ></vxe-table-column>
                       <vxe-table-column field="storeStockQty" title="库存数量" width="100"></vxe-table-column>
                       <vxe-table-column field="outableQty" title="可用数量" width="100"></vxe-table-column>
                       <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
@@ -528,7 +517,7 @@ export default {
         status: 99,
         qucikTime: ""
       },
-      rowId:'',//选择配件明细的id
+      rowId: "", //选择配件明细的id
       tabKey: 0,
       modal2: true,
       split1: 0.2,
@@ -605,6 +594,7 @@ export default {
           total: 0
         },
         loading: false,
+        flag: 0,
         columns: [
           {
             title: "序号",
@@ -754,9 +744,9 @@ export default {
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
-      console.log('勾选',row)
-      this.rowId=row.id
-      console.log( this.rowId)
+      console.log("勾选", row);
+      this.rowId = row.id;
+      console.log(this.rowId);
       console.log(checked ? "勾选事件" : "取消事件");
     },
     tabChange(key) {
@@ -770,6 +760,7 @@ export default {
       }
     },
     baocun1() {
+      this.flag = 0;
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.orderMan) {
         this.$Message.info("仓库和创建时间为必输项");
         return;
@@ -796,13 +787,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListzu(this.form);
-             this.Leftcurrentrow.processProductVO=[]
-              this.currentData=[]
-              this.Leftcurrentrow.createTime=''
-              this.Leftcurrentrow.serviceId=''
-              this.Leftcurrentrow.storeId=''
-              this.Leftcurrentrow.orderMan=''
-              this.Leftcurrentrow.remark=''
+              this.Leftcurrentrow.processProductVO = [];
+              this.currentData = [];
+              this.Leftcurrentrow.createTime = "";
+              this.Leftcurrentrow.serviceId = "";
+              this.Leftcurrentrow.storeId = "";
+              this.Leftcurrentrow.orderMan = "";
+              this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
             }
           })
@@ -816,13 +807,13 @@ export default {
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.getListchai(this.form);
-              this.Leftcurrentrow.processProductVO=[]
-              this.currentData=[]
-              this.Leftcurrentrow.createTime=''
-              this.Leftcurrentrow.serviceId=''
-              this.Leftcurrentrow.storeId=''
-              this.Leftcurrentrow.orderMan=''
-              this.Leftcurrentrow.remark=''
+              this.Leftcurrentrow.processProductVO = [];
+              this.currentData = [];
+              this.Leftcurrentrow.createTime = "";
+              this.Leftcurrentrow.serviceId = "";
+              this.Leftcurrentrow.storeId = "";
+              this.Leftcurrentrow.orderMan = "";
+              this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
             }
           })
@@ -832,6 +823,7 @@ export default {
       }
     },
     xinzeng() {
+      this.flag = 1;
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -922,42 +914,42 @@ export default {
         return;
       }
 
-        this.$Modal.confirm({
-          title: '是否确定作废',
-          onOk: async () => {
-            const id = this.Leftcurrentrow.id;
-            if (this.tabKey === 0) {
-              // 配件组装作废
-              zuofei(id)
-                .then(res => {
-                  // 点击列表行==>配件组装信息
-                  if (res.code == 0) {
-                    this.getListzu(this.form);
-                    this.$Message.success("作废成功");
-                  }
-                })
-                .catch(e => {
-                  this.$Message.info("作废配件组装信息失败");
-                });
-            } else {
-              // 配件拆分作废
-              zuofei2(id)
-                .then(res => {
-                  // 点击列表行==>配件组装信息
-                  if (res.code == 0) {
-                    this.getListchai(this.form);
-                    this.$Message.success("作废成功");
-                  }
-                })
-                .catch(e => {
-                  this.$Message.info("作废配件拆分信息失败");
-                });
-            }
-          },
-          onCancel: () => {
-            this.$Message.info('取消作废');
-          },
-        })
+      this.$Modal.confirm({
+        title: "是否确定作废",
+        onOk: async () => {
+          const id = this.Leftcurrentrow.id;
+          if (this.tabKey === 0) {
+            // 配件组装作废
+            zuofei(id)
+              .then(res => {
+                // 点击列表行==>配件组装信息
+                if (res.code == 0) {
+                  this.getListzu(this.form);
+                  this.$Message.success("作废成功");
+                }
+              })
+              .catch(e => {
+                this.$Message.info("作废配件组装信息失败");
+              });
+          } else {
+            // 配件拆分作废
+            zuofei2(id)
+              .then(res => {
+                // 点击列表行==>配件组装信息
+                if (res.code == 0) {
+                  this.getListchai(this.form);
+                  this.$Message.success("作废成功");
+                }
+              })
+              .catch(e => {
+                this.$Message.info("作废配件拆分信息失败");
+              });
+          }
+        },
+        onCancel: () => {
+          this.$Message.info("取消作废");
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {
@@ -1043,7 +1035,7 @@ export default {
     },
     getDataQuick(v) {
       const params = {
-       startTime: v[0],
+        startTime: v[0],
         endTime: v[1]
       };
       this.getListzu(params);
@@ -1051,7 +1043,7 @@ export default {
     //快速查询日期
     getDataQuick1(v) {
       const params = {
-       startTime: v[0],
+        startTime: v[0],
         endTime: v[1]
       };
       this.getListchai(params);
@@ -1081,6 +1073,25 @@ export default {
     //左边列表选中当前行
     selectTabelData(row) {
       this.Leftcurrentrow = row;
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun1();
+          },
+          onCancel: () => {
+            if (this.tabKey === 0) {
+              // 调接口获取配件组装列表信息
+              this.getListzu(this.form);
+            } else {
+              // 调接口获取配件拆分列表信息
+              this.getListchai(this.form);
+            }
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       if (!row.processProductVO) {
         row["processProductVO"] = [];
         this.currentData = [];
@@ -1150,17 +1161,17 @@ export default {
     shanchu() {
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
-        this.rowId=''
+        this.rowId = "";
         return;
       }
-      if(!this.rowId){
+      if (!this.rowId) {
         this.$Message.info("请先选中至少一个需要删除的配件");
         return;
       }
       if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log('rrr',seleList);
+        console.log("rrr", seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1172,12 +1183,12 @@ export default {
               );
               this.currentData = [];
               this.getListzu(this.form);
-              this.rowId=''
+              this.rowId = "";
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
-            this.rowId=''
+            this.rowId = "";
             this.$Message.info("删除成品失败");
           });
       } else {
@@ -1195,12 +1206,12 @@ export default {
               );
               this.currentData = [];
               this.getListchai(this.form);
-              this.rowId=''
+              this.rowId = "";
               this.$Message.success("删除成功");
             }
           })
           .catch(e => {
-            this.rowId=''
+            this.rowId = "";
             this.$Message.info("删除成品失败");
           });
       }
@@ -1236,7 +1247,7 @@ export default {
       }
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
-          console.log('配件组装数量',res)
+          console.log("配件组装数量", res);
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];

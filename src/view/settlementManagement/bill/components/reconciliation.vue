@@ -513,7 +513,7 @@ export default {
     },
     // 往来单位
     Dealings() {
-      this.$refs.selectDealings.openModel();
+      this.$refs.selectDealings.init();
     },
     // 已勾选结算类型计算
     getSettlementComputed() {
