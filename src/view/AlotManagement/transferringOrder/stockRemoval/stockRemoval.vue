@@ -447,12 +447,12 @@ export default {
           },
           {
             title: "提交人",
-            key: "orderMan",
+            key: "commitUname",
             minWidth: 100
           },
           {
             title: "提交日期",
-            key: "orderDate",
+            key: "commitDate",
             minWidth: 160
           },
           {
