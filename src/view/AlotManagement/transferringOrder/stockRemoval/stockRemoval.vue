@@ -205,12 +205,12 @@
                   size="mini"
                   highlight-current-row
                   highlight-hover-row
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :footer-method="addFooter"
-                  :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -220,9 +220,9 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="hasAcceptQty"
-                    :edit-render="{name: 'input'}"
-                    title="受理数量"
+                    :edit-render="{name:'input'}"
                     width="100"
+                    title="受理数量"
                   ></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
