@@ -238,7 +238,13 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px" @on-visible-change="moreChange">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          :ArrayValue="ArrayValue"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced=false">取消</Button>
@@ -989,6 +995,12 @@ export default {
     // 确定
     Determined() {
       this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      for (var i = 0; i < this.getArray.length; i++) {
+        console.log(this.form.guestName, "this.form.guestName");
+        if (this.getArray[i].fullName == this.form.guestName) {
+          this.form.guestId = this.getArray[i].id;
+        }
+      }
       this.getList();
       this.$refs.naform.reset();
       this.advanced = false;
@@ -1104,6 +1116,7 @@ export default {
       params = { ...params, ...this.form };
       delete params.status;
       delete params.guestName;
+      // console.log(params, "params");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {
