@@ -790,7 +790,7 @@ export default {
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]
-        this.Right.tbdata.push(item);
+        // this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });
       // console.log(this.Right.tbdata);
@@ -834,6 +834,7 @@ export default {
           // console.log(res, "783");
           if (res.code == 0) {
             this.$Message.success("删除成功");
+            this.selectTabelData(this.Leftcurrentrow)
             // this.selectTabelData();
           }
         })
