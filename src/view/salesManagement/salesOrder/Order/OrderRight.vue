@@ -249,6 +249,7 @@
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
+          <vxe-table-column field="averagePrice" title="采购价"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"  :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
@@ -745,11 +746,17 @@ export default {
         this.selectTableList.forEach(item => {
           data.push({ id: item.id });
         });
-        console.log(data);
+        const arr = this.formPlan.detailList.filter(item=>!this.selectTableList.includes(item))
+        this.$parent.$parent.$refs.OrderLeft.tableData.map((item,index)=>{
+          if(item.id===this.formPlan.id){
+            this.$set(this.$parent.$parent.$refs.OrderLeft.tableData[index],'detailList',arr)
+          }
+        })
+        this.formPlan.detailList = arr
         getDeleteList(data).then(res => {
           if (res.code === 0) {
-            this.getList();
-
+            // this.getList();
+            this.$message.success(res.data)
           }
         });
       } else {
@@ -788,16 +795,17 @@ export default {
     getPartNameList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          let data = {};
-          data = this.formPlan;
-          data.detailList = conversionList(val);
-          let res = await getAccessories(data);
-          if (res.code === 0) {
-            this.$emit("parentGetleft");
-            this.$Message.success('添加配件成功')
-            this.$refs.formPlan.resetFields()
-            this.$parent.$parent.ispart=true
-          }
+          // let data = [];
+          // data = this.formPlan;
+          // data = conversionList(val);
+          this.formPlan.detailList=[...this.formPlan.detailList,...conversionList(val)]
+          // let res = await getAccessories(data);
+          // if (res.code === 0) {
+          //   this.$emit("parentGetleft");
+          //   this.$Message.success('添加配件成功')
+          //   this.$refs.formPlan.resetFields()
+          //   this.$parent.$parent.ispart=true
+          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -908,6 +916,7 @@ export default {
         this.$refs.formPlan.validate(async valid => {
           if (valid) {
             try {
+
               await this.$refs.xTable.validate();
               if (+this.totalMoney > +this.limitList.sumAmt) {
                 return this.$message.error("可用余额不足");
@@ -946,12 +955,40 @@ export default {
               return this.$message.error("可用余额不足");
             }
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-            let res = await getSubmitList(this.formPlan);
-            if (res.code === 0) {
-              this.$Message.success("提交成功");
-              this.limitList = {};
-              this.$store.commit("setleftList", res);
-            }
+            let orderList = []
+              orderList = this.formPlan.detailList.filter( item => item.orderPrice < item.averagePrice)
+              console.log(orderList , 9999)
+              if(orderList.length > 0){
+                  let text = ''
+                  orderList.forEach(item => {
+                      text += `<p>${item.partName}的销售价格低于进货价</p>`
+                  })
+                  let timer = null
+                  clearTimeout(timer)
+                 timer = setTimeout( ()=> {
+                      this.$Modal.confirm({
+                          title: '提示',
+                          content: text,
+                          onOk: async() => {
+                              let res = await getSubmitList(this.formPlan);
+                              if (res.code === 0) {
+                                  this.$Message.success("提交成功");
+                                  this.limitList = {};
+                                  this.$store.commit("setleftList", res);
+                              }
+                          },
+                          onCancel: () => {
+                          }
+                      })
+                  },500)
+              }else {
+                  let res = await getSubmitList(this.formPlan);
+                  if (res.code === 0) {
+                      this.$Message.success("提交成功");
+                      this.limitList = {};
+                      this.$store.commit("setleftList", res);
+                  }
+              }
           } catch (errMap) {
             // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
           }

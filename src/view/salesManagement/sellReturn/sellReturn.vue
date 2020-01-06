@@ -47,19 +47,19 @@
               @click="isSubmit"
               v-has="'submit'"
             >
-              <i class="iconfont mr5 iconziyuan2"></i>提交
+              <i class="iconfont mr5 iconziyuan2"></i>提交并入库
             </Button>
           </div>
-          <div class="db">
-            <Button
-              class="mr10"
-              @click="returnWarehouse"
-              :disabled="formPlan.isWms"
-              v-has="'returnWarehouse'"
-            >
-              <i class="iconfont mr5 iconshenheicon"></i> 退货入库
-            </Button>
-          </div>
+<!--          <div class="db">-->
+<!--            <Button-->
+<!--              class="mr10"-->
+<!--              @click="returnWarehouse"-->
+<!--              :disabled="formPlan.isWms"-->
+<!--              v-has="'returnWarehouse'"-->
+<!--            >-->
+<!--              <i class="iconfont mr5 iconshenheicon"></i> 退货入库-->
+<!--            </Button>-->
+<!--          </div>-->
           <div class="db">
             <Button
               class="mr10"
@@ -567,7 +567,7 @@ export default {
 
       id: "", //点击左侧表格拿到的id
       selectTableList: [], //右侧table表格选中的数据
-      Flaga: false //判断是否已提交
+      Flag: false //判断是否已提交
     };
   },
   mounted() {
@@ -624,7 +624,7 @@ export default {
       console.log("左侧数据数据", v);
       if (v == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
-      if (!this.Flaga && !this.isAdd) {
+      if (!this.Flag && !this.isAdd) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
@@ -675,10 +675,12 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
+      this
       this.formPlan = {
         details:[],
-        orderManId:this.PTrow.orderManId
+        orderManId:this.PTrow.orderManId,
       };
+      // console.log('退货员',orderManId)
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
@@ -850,30 +852,30 @@ export default {
       return count.toFixed(2);
     },
 
-    //退货入库
-    returnWarehouse() {
-      if (this.id) {
-        this.$Modal.confirm({
-          title: "是否确定已完成销售",
-          onOk: async () => {
-            let id = this.id;
-            let res = await returnWareHouse(id);
-            if (res.code == 0) {
-              this.$Message.success("操作成功");
-              this.getLeftList();
-              this.id = null;
-              this.formPlan = {};
-              this.$refs.formPlan.resetFields();
-            }
-          },
-          onCancel: () => {
-            this.$Message.info("取消成功");
-          }
-        });
-      } else {
-        this.$message.error("至少选择一条信息");
-      }
-    },
+    // //退货入库
+    // returnWarehouse() {
+    //   if (this.id) {
+    //     this.$Modal.confirm({
+    //       title: "是否确定已完成销售",
+    //       onOk: async () => {
+    //         let id = this.id;
+    //         let res = await returnWareHouse(id);
+    //         if (res.code == 0) {
+    //           this.$Message.success("操作成功");
+    //           this.getLeftList();
+    //           this.id = null;
+    //           this.formPlan = {};
+    //           this.$refs.formPlan.resetFields();
+    //         }
+    //       },
+    //       onCancel: () => {
+    //         this.$Message.info("取消成功");
+    //       }
+    //     });
+    //   } else {
+    //     this.$message.error("至少选择一条信息");
+    //   }
+    // },
 
     //保存
     isSave() {
