@@ -783,6 +783,8 @@ export default {
         mainId: row.id
       };
       const res = await getListDetail(params);
+      this.ArrayValue = res.data
+      console.log(res, "res");
       this.showit = false;
       //console.log(this.Leftcurrentrow);
       const that = this;
@@ -799,6 +801,7 @@ export default {
       //       });
       //       // this.cangkuListall = res.data
       //       this.dcData = res.data;
+      //       console.log(this.dcData)
       //     }
       //   })
       //   .catch(e => {
