@@ -695,6 +695,7 @@ export default {
     },
     // 应收取消选中
     collectNoCheckout(selection, row) {
+      console.log(selection)
       this.collectlist = selection;
       this.totalcollect -= row.thisAccountAmt;
       this.getSettlementComputed();
@@ -794,7 +795,8 @@ export default {
             billingType: this.totalvalue,
             rebateNo: this.Rebateid,
             badDebNo: this.BadDebtid,
-            buttonStatus: num
+            buttonStatus: num,
+            incomeType:this.totalvalue
           }
         ];
         let obj = {
@@ -803,11 +805,12 @@ export default {
           three: this.paymentlist,
           four
         };
-        Preservation(obj).then(res => {
-          if (res.code === 0) {
-            this.$message.success("保存成功");
-          }
-        });
+        console.log(this.collectlist)
+        // Preservation(obj).then(res => {
+        //   if (res.code === 0) {
+        //     this.$message.success("保存成功");
+        //   }
+        // });
       } else {
         this.$message.error("请选择要对账的数据");
       }
