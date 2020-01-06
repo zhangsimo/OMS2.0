@@ -522,7 +522,7 @@
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!--审批状态-->
-      <status-model ref="StatusModel" :orderId="selectTableRow" ></status-model>
+    <status-model ref="StatusModel" :orderId="selectTableRow" ></status-model>
     <!--添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
   </div>

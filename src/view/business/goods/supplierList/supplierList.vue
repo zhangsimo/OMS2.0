@@ -145,30 +145,12 @@
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
-                    <!--<template v-slot:edit="{ row }">-->
-                      <!--<InputNumber-->
-                        <!--:max="999999"-->
-                        <!--:min="0"-->
-                        <!--v-model="row.orderQty"-->
-                        <!--:disabled="presentrowMsg !== 0"-->
-                      <!--&gt;</InputNumber>-->
-                    <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
-                    <template v-slot:edit="{ row }">
-                      <el-input-number
-                        :min="0"
-                        v-model="row.orderPrice"
-                        :disabled="presentrowMsg !== 0"
-                        :precision="2"
-                        :controls="false"
-                        size="small"
-                      ></el-input-number>
-                    </template>
                   </vxe-table-column>
                   <vxe-table-column field="orderAmt" title="退货金额" width="100">
                     <template v-slot="{ row }">
-                      {{ (row.orderPrice * row.orderQty) | priceFilters }}
+                      {{ countAmount(row) | priceFilters }}
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
@@ -232,6 +214,19 @@
           }
         }
       };
+      //价格（2位小数）
+      let money = (rule, value, callback) => {
+        if (!value && value != "0") {
+          callback(new Error("最多保留2位小数"));
+        } else {
+          const reg = /^\d+(\.\d{0,2})?$/i;
+          if (reg.test(value)) {
+            callback();
+          } else {
+            callback(new Error("最多保留2位小数"));
+          }
+        }
+      };
       return {
         ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中
@@ -272,9 +267,8 @@
         userMap: [], //退货员
         //校验输入框的值
         validRules: {
-          orderQty: [
-            { required: true,validator:changeNumber },
-          ],
+          orderQty: [{ required: true,validator:changeNumber }],
+          orderPrice:[{required: true,validator:money}]
           // remark: [
           //   { required: true, validator:changeNumber }
           // ]
@@ -385,6 +379,13 @@
       }
     },
     methods: {
+      //计算表格数据
+      countAmount(row) {
+        return (
+          this.$utils.toNumber(row.orderQty) *
+          this.$utils.toNumber(row.orderPrice)
+        );
+      },
       //判断从表input能不能编辑
       editActivedEvent({row}){
         let xTable = this.$refs.xTable;
@@ -493,6 +494,16 @@
       //更多按钮
       moreaa(){
         this.$refs.moremore.init()
+      },
+      // 计算尾部总和
+      countAllAmount(data) {
+        let count = 0;
+        data.forEach(row => {
+          count += this.countAmount(row);
+        });
+        count = count.toFixed(2)
+        this.totalMoney = count;
+        return count;
       },
       // 新增按钮
       addProoo(){
@@ -690,8 +701,14 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['canReQty','orderQty'].includes(column.property) || columnIndex === 9) {
+            // if (columnIndex === 9) {
+            //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
+            // }
+            if(['canReQty','orderQty'].includes(column.property)){
               return this.$utils.sum(data, column.property,columnIndex)
+            }
+            if (columnIndex === 9) {
+              return ` ${this.countAllAmount(data)} `;
             }
             return null
           })
@@ -924,6 +941,9 @@
             this.formPlan.remark = this.datadata.remark
             this.formPlan.warehouse = this.datadata.storeId
             this.formPlan.serviceId = this.datadata.code
+            row.details.map(item => {
+             item.orderPrice = Number(item.orderPrice).toFixed(2)
+            })
             this.Right.tbdata = row.details
             this.presentrowMsg = row.billStatusId.value
             // console.log(this.presentrowMsg)

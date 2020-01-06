@@ -77,6 +77,7 @@
             <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
               <div class="pane-made-hd">预销售单列表</div>
               <Table
+                ref="currentRowTable"
                 :queryTime="queryTime"
                 :orderType="orderType"
                 height="660"
@@ -600,19 +601,19 @@ export default {
       ruleValidate: {
         //表单校验
         guestId: [
-          { required: true, type: "string", message: " ", trigger: "blur" }
+          { required: true, type: "string", message: " ", trigger: "change" }
         ],
         orderManId: [
-          { required: true, type: "string", message: "  ", trigger: "blur" }
+          { required: true, type: "string", message: "  ", trigger: "change" }
         ],
         billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "blur" }
+          { required: true, type: "string", message: " ", trigger: "change" }
         ],
         settleTypeId: [
-          { required: true, type: "string", message: " ", trigger: "blur" }
+          { required: true, type: "string", message: " ", trigger: "change" }
         ],
         storeId: [
-          { required: true, type: "string", message: " ", trigger: "blur" }
+          { required: true, type: "string", message: " ", trigger: "change" }
         ]
       },
       validRules: {
@@ -622,6 +623,7 @@ export default {
       },
       queryTime: "", //快速查询时间
       isAdd: true, //判断是否新增
+      Flag: false, //判断是否已提交
       salesList: [], //业务员列表
       id: "", //左侧表格id
       PTrow: {
@@ -855,19 +857,6 @@ export default {
           datas.forEach(item => {
             this.formPlan.detailVOList.push(item);
           });
-          // let data = {}
-          // data = this.formPlan
-          // data.detailVOList = conversionList(val)
-          // let res = await getSave(data)
-          // if (res.code === 0) {
-          //   this.getLeftList()
-          //   this.formPlan={}
-          //   this.isNew=true
-          //   this.isAdd=true
-          //   this.id = null
-          //   this.$refs.formPlan.resetFields()
-          //   this.$Message.success('添加配件成功')
-          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -899,14 +888,51 @@ export default {
     },
     //获取左侧表格一行选中的数据
     selectTabelData(v) {
-      console.log("左侧数据", v);
-      console.log(v);
-      this.currentRow = v;
-      this.id = v.id;
-      this.isNew = false;
-      this.draftShow = v.status.value;
-      this.tableData = v.detailVOList;
-      this.formPlan = v;
+      if (v == null) return;
+      let currentRowTable = this.$refs["currentRowTable"];
+      if (!this.Flag && !this.isAdd) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            currentRowTable.clearCurrentRow();
+            this.isSave();
+          },
+          onCancel: () => {
+            this.preSellOrderTable.tbData.splice(0, 1);
+            currentRowTable.clearCurrentRow();
+            this.isAdd = true;
+            this.currentRow = v;
+            this.id = v.id;
+            this.tableData = v.detailVOList;
+            this.formPlan = v;
+            this.draftShow = v.status.value;
+            this.selectTableList = [];
+            this.$refs.formPlan.resetFields();
+          }
+        });
+
+        {
+        }
+      } else {
+        if (v.id) {
+          this.isNew = false;
+          this.currentRow = v;
+          this.id = v.id;
+          this.tableData = v.detailVOList;
+          this.formPlan = v;
+          this.draftShow = v.status.value;
+          this.selectTableList = [];
+          this.limitList={}
+        }
+      }
+      // console.log("左侧数据", v);
+      // console.log(v);
+      // this.currentRow = v;
+      // this.id = v.id;
+      // this.isNew = false;
+      // this.draftShow = v.status.value;
+      // this.tableData = v.detailVOList;
+      // this.formPlan = v;
     },
     // 获取仓库
     async getWarehouse() {
@@ -966,17 +992,22 @@ export default {
 
     //新增按钮
     addOrder() {
+      this.formPlan = {}
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
+      this.formPlan = {
+        detailVOList:[],
+        orderMan:this.PTrow.orderMan,
+        orderManId:this.PTrow.orderManId
+      };
+      this.limitList=[]
       // this.formPlan = {};
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
       this.preSellOrderTable.tbData.unshift(this.PTrow);
-      this.formPlan.orderManId = this.PTrow.orderManId;
-      this.formPlan.orderMan = this.PTrow.orderMan;
       this.isAdd = false;
     },
     //作废按钮
@@ -1063,7 +1094,7 @@ export default {
                   this.isAdd = true;
                   this.formPlan = {};
                   this.id = null;
-                  this.limitList = {};
+                  this.limitList = [];
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
                 }
@@ -1093,7 +1124,7 @@ export default {
               this.$Message.success("操作成功");
               this.getLeftList();
               this.id = null;
-              this.limitList = {};
+              this.limitList = [];
               this.$refs.formPlan.resetFields();
               this.formPlan = {};
             }
@@ -1220,9 +1251,11 @@ export default {
     },
     formPlan: {
       handler(val, old) {
+        console.log(val , 999)
         if (!val.id) {
           return false;
         }
+        console.log(123)
         this.getAllLimit();
       },
       deep: true
