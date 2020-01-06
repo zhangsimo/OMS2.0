@@ -779,34 +779,38 @@ export default {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       // console.log(row, "row==>781");
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
-      this.ArrayValue = res.data;
-      console.log(res, "res");
+      // console.log(row.id, "row.id");
+      if (row.id == undefined) {
+        this.ArrayValue = row.detailVOS;
+      } else {
+        const params = {
+          mainId: row.id
+        };
+        const res = await getListDetail(params);
+        // console.log(params, "params");
+        this.ArrayValue = res.data;
+      }
+
       this.showit = false;
-      //console.log(this.Leftcurrentrow);
       const that = this;
       setTimeout(() => {
         that.showit = true;
       }, 100);
-      // this.getWareHouse();
-      // cangkulist2(this.$store.state.user.userData.groupId)
-      //   .then(res => {
-      //     if (res.code == 0) {
-      //       res.data.map(item => {
-      //         item["label"] = item.name;
-      //         item["value"] = item.id;
-      //       });
-      //       // this.cangkuListall = res.data
-      //       this.dcData = res.data;
-      //       console.log(this.dcData)
-      //     }
-      //   })
-      //   .catch(e => {
-      //     this.$Message.info("获取仓库列表失败");
-      //   });
+      cangkulist2(this.$store.state.user.userData.groupId)
+        .then(res => {
+          if (res.code == 0) {
+            res.data.map(item => {
+              item["label"] = item.name;
+              item["value"] = item.id;
+            });
+            // this.cangkuListall = res.data
+            this.dcData = res.data;
+            console.log(this.dcData);
+          }
+        })
+        .catch(e => {
+          this.$Message.info("获取仓库列表失败");
+        });
     },
     //获取仓库
     getWareHouse() {
@@ -909,7 +913,7 @@ export default {
     },
     getOkList(list) {
       console.log(list, "list");
-      this.codeValue = list.id
+      this.codeValue = list.id;
       const item = {
         index: 1,
         xinzeng: "1",
