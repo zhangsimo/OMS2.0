@@ -598,7 +598,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      params["voList"] = params.detailVOS;
+      params["voList"] = this.ArrayValue
       //配件组装保存
       baocun(params)
         .then(res => {
