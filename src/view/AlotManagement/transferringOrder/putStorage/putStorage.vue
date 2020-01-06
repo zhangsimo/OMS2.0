@@ -715,7 +715,8 @@ export default {
     },
     chuku() {
       const params = {
-        id: this.Leftcurrentrow.id
+        id: this.Leftcurrentrow.id,
+        voList: this.ArrayValue
       };
       // 配件组装作废
       outDataList(params)

@@ -110,7 +110,7 @@
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
+                            :disabled="buttonShow || this.flagValue !== 0"
                             @click="showModel"
                             class="ml5"
                             size="small"
