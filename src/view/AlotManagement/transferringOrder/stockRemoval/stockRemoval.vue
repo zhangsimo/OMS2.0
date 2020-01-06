@@ -748,6 +748,8 @@ export default {
         });
     },
     xinzeng() {
+      this.flagValue = 0;
+      this.flagValue1 = 0;
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
@@ -1053,7 +1055,7 @@ export default {
             return itm.oemCode == item.oemCode;
           });
         });
-        
+
         // let haveId = this.checkboxArr.filter(item => item.id);
         // let NoId = this.checkboxArr.filter(item => !item.id);
         let NoIdPartCode = this.checkboxArr.map(item => item.partCode);
