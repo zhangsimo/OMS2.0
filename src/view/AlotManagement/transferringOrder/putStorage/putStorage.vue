@@ -779,31 +779,31 @@ export default {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       this.Leftcurrentrow.planOrderNum = this.serviceIdValue;
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
+      // const params = {
+      //   mainId: row.id
+      // };
+      // const res = await getListDetail(params);
       this.showit = false;
       //console.log(this.Leftcurrentrow);
       const that = this;
       setTimeout(() => {
         that.showit = true;
       }, 100);
-
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
-            });
-            // this.cangkuListall = res.data
-            this.dcData = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
+      // this.getWareHouse();
+      // cangkulist2(this.$store.state.user.userData.groupId)
+      //   .then(res => {
+      //     if (res.code == 0) {
+      //       res.data.map(item => {
+      //         item["label"] = item.name;
+      //         item["value"] = item.id;
+      //       });
+      //       // this.cangkuListall = res.data
+      //       this.dcData = res.data;
+      //     }
+      //   })
+      //   .catch(e => {
+      //     this.$Message.info("获取仓库列表失败");
+      //   });
     },
     //获取仓库
     getWareHouse() {
