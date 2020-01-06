@@ -168,7 +168,7 @@
                   </vxe-table-column>
                   <vxe-table-column field="orderAmt" title="退货金额" width="100">
                     <template v-slot="{ row }">
-                      {{ (row.orderPrice * row.orderQty) | priceFilters }}
+                      {{ countAmount(row) | priceFilters }}
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
@@ -397,6 +397,13 @@
       }
     },
     methods: {
+      //计算表格数据
+      countAmount(row) {
+        return (
+          this.$utils.toNumber(row.orderQty) *
+          this.$utils.toNumber(row.orderPrice)
+        );
+      },
       //判断从表input能不能编辑
       editActivedEvent({row}){
         let xTable = this.$refs.xTable;
@@ -702,7 +709,10 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['canReQty','orderQty'].includes(column.property) || columnIndex === 9) {
+            if (columnIndex === 9) {
+              return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
+            }
+            if(['canReQty','orderQty'].includes(column.property)){
               return this.$utils.sum(data, column.property,columnIndex)
             }
             return null
