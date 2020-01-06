@@ -394,24 +394,25 @@
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
          // console.log(resArr)
           this.Right.tbdata = resArr
-          let data = {}
-           data.id = this.rowId
-                    data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.guestidId
-                    // data.guestId = this.formPlan.guestName
-                    data.storeId = this.formPlan.storeId
-                    // data.guestName = this.formPlan.guestName
-                    data.orderDate = tools.transTime(this.formPlan.orderDate)
-                    data.remark = this.formPlan.remark
-                    data.createUname  = this.formPlan.createUname
-                    data.serviceId = this.formPlan.serviceId
-                    data.detailVOS = resArr
-               save(data).then(res => {
-                      if(res.code === 0){
-                        this.$message.success('删除成功！！！')
-                      }
-                    })
+          this.$Message.warning('删除成功！')
+          // let data = {}
+          //  data.id = this.rowId
+          //           data.orgid = this.rowOrgId
+          //           data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+          //           data.guestId = this.guestidId
+          //           // data.guestId = this.formPlan.guestName
+          //           data.storeId = this.formPlan.storeId
+          //           // data.guestName = this.formPlan.guestName
+          //           data.orderDate = tools.transTime(this.formPlan.orderDate)
+          //           data.remark = this.formPlan.remark
+          //           data.createUname  = this.formPlan.createUname
+          //           data.serviceId = this.formPlan.serviceId
+          //           data.detailVOS = resArr
+          //      save(data).then(res => {
+          //             if(res.code === 0){
+          //               this.$message.success('删除成功！！！')
+          //             }
+          //           })
 
         },
         //更多按钮
@@ -814,7 +815,7 @@
             })
           }else{
             if(row.id){
-              this.leftgetList()
+              // this.leftgetList()
               this.rowOrgId = row.orgid
               this.mainId = row.id
               this.guestidId = row.guestId
