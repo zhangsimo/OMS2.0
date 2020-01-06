@@ -159,7 +159,7 @@
                     <!--                      :disabled="draftShow != 0||isNew"-->
                     <!--                    />-->
                     <Select
-                      :value="formPlan.orderManId"
+                      v-model="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 240px"
@@ -319,7 +319,6 @@
                     </div>
                   </div>
                 </div>
-                {{formPlan.detailVOList}}
                 <vxe-table
                   border
                   :edit-rules="validRules"
@@ -584,7 +583,11 @@ export default {
       ],
       //右侧表格数据
       tableData: [],
-      formPlan: {}, //表单对象
+      formPlan: {
+        orderMan: "",
+        orderManId: "",
+        detailVOList: []
+      }, //表单对象
       addressShow: false, //收货地址显示
       query: {}, //更多搜索信息
       client: [], //客户列表
@@ -592,19 +595,19 @@ export default {
       ruleValidate: {
         //表单校验
         guestId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         orderManId: [
-          { required: true, type: "string", message: "  ", trigger: "change" }
+          { required: true, type: "string", message: "  ", trigger: "blur" }
         ],
         billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         settleTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         storeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ]
       },
       validRules: {
@@ -961,7 +964,7 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
-      this.formPlan = {};
+      // this.formPlan = {};
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
