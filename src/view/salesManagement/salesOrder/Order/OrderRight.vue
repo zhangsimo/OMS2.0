@@ -746,11 +746,17 @@ export default {
         this.selectTableList.forEach(item => {
           data.push({ id: item.id });
         });
-        console.log(data);
+        const arr = this.formPlan.detailList.filter(item=>!this.selectTableList.includes(item))
+        this.$parent.$parent.$refs.OrderLeft.tableData.map((item,index)=>{
+          if(item.id===this.formPlan.id){
+            this.$set(this.$parent.$parent.$refs.OrderLeft.tableData[index],'detailList',arr)
+          }
+        })
+        this.formPlan.detailList = arr
         getDeleteList(data).then(res => {
           if (res.code === 0) {
-            this.getList();
-
+            // this.getList();
+            this.$message.success(res.data)
           }
         });
       } else {
@@ -789,16 +795,17 @@ export default {
     getPartNameList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          let data = {};
-          data = this.formPlan;
-          data.detailList = conversionList(val);
-          let res = await getAccessories(data);
-          if (res.code === 0) {
-            this.$emit("parentGetleft");
-            this.$Message.success('添加配件成功')
-            this.$refs.formPlan.resetFields()
-            this.$parent.$parent.ispart=true
-          }
+          // let data = [];
+          // data = this.formPlan;
+          // data = conversionList(val);
+          this.formPlan.detailList=[...this.formPlan.detailList,...conversionList(val)]
+          // let res = await getAccessories(data);
+          // if (res.code === 0) {
+          //   this.$emit("parentGetleft");
+          //   this.$Message.success('添加配件成功')
+          //   this.$refs.formPlan.resetFields()
+          //   this.$parent.$parent.ispart=true
+          // }
         } else {
           this.$Message.error("*为必填项");
         }
