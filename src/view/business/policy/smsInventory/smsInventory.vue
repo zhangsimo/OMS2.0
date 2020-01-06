@@ -606,7 +606,7 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+        checkDate:'',
         orderMan: "",
         serviceId: "",
         print: "",
@@ -617,21 +617,14 @@ export default {
         //commitDate:"",
         //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         //createUname: this.$store.state.user.userData.staffName,
-        detailVOList: []
+        detailVOList: [],
+        _highlight:true
       };
       this.Left.tbdata.unshift(item);
-      console.log(item)
-      console.log(this.Left.tbdata[0])
-      this.selectTabelData(this.Left.tbdata[0])
       this.flag = 1;
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
-      this.formPlan.billStatusId = {
-        enum: "DRAFT",
-        name: "草稿",
-        value: 0
-      };
     },
     // 提交
     editPro() {
@@ -772,8 +765,7 @@ export default {
       this.$refs.SelectPartRef.init();
     },
     //左边列表选中当前行
-    selectTabelData(data) {
-      console.log(data)
+    selectTabelData(data,val) {
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",

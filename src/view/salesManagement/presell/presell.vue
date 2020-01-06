@@ -841,33 +841,29 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      var datas = conversionList(val);
-      datas.forEach(item => {
-        this.formPlan.detailVOList.push(item);
+      this.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          var datas = conversionList(val);
+          datas.forEach(item => {
+            this.formPlan.detailVOList.push(item);
+          });
+          // let data = {}
+          // data = this.formPlan
+          // data.detailVOList = conversionList(val)
+          // let res = await getSave(data)
+          // if (res.code === 0) {
+          //   this.getLeftList()
+          //   this.formPlan={}
+          //   this.isNew=true
+          //   this.isAdd=true
+          //   this.id = null
+          //   this.$refs.formPlan.resetFields()
+          //   this.$Message.success('添加配件成功')
+          // }
+        } else {
+          this.$Message.error("*为必填项");
+        }
       });
-      // this.$nextTick(()=>{
-      //   this.$set(this.formPlan,'detailVOList',datas)
-      // console.log(this.formPlan)
-      // })
-      // this.$refs.formPlan.validate(async (valid) => {
-      //   if (valid) {
-      //     let data = {}
-      //     data = this.formPlan
-      //     data.detailVOList = conversionList(val)
-      //     let res = await getSave(data)
-      //     if (res.code === 0) {
-      //       this.getLeftList()
-      //       this.formPlan={}
-      //       this.isNew=true
-      //       this.isAdd=true
-      //       this.id = null
-      //       this.$refs.formPlan.resetFields()
-      //       this.$Message.success('添加配件成功')
-      //     }
-      //   } else {
-      //     this.$Message.error('*为必填项');
-      //   }
-      // })
     },
     //客户列表
     getAllClient() {
