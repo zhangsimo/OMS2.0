@@ -779,10 +779,10 @@ export default {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       this.Leftcurrentrow.planOrderNum = this.serviceIdValue;
-      // const params = {
-      //   mainId: row.id
-      // };
-      // const res = await getListDetail(params);
+      const params = {
+        mainId: row.id
+      };
+      const res = await getListDetail(params);
       this.showit = false;
       //console.log(this.Leftcurrentrow);
       const that = this;
