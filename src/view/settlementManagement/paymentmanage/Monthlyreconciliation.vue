@@ -604,22 +604,18 @@ export default {
             this.infoGet = res.data;
             this.companyList = [];
             this.collectionAccountList = [];
+            this.companyInfo = this.parameter.guestId;
             res.data.map((item, index) => {
               this.companyList.push({
                 value: item.id,
                 label: item.fullName
               });
+              if (item.id === this.companyInfo) {
+                this.collectionAccountName = item.receiveName;
+                this.openingBank = item.accountBank;
+                this.collectionAccount = item.accountBankNo;
+              }
             });
-            this.companyInfo = this.parameter.guestId;
-            if (item.id === this.companyInfo) {
-              this.collectionAccountName = item.receiveName;
-              this.openingBank = item.accountBank;
-              this.collectionAccount = item.accountBankNo;
-            } else {
-              this.collectionAccountName = res.data[0].receiveName;
-              this.openingBank = res.data[0].accountBank;
-              this.collectionAccount = res.data[0].accountBankNo;
-            }
             this.Initialization();
           });
         }
@@ -794,7 +790,8 @@ export default {
             billingType: this.totalvalue,
             rebateNo: this.Rebateid,
             badDebNo: this.BadDebtid,
-            buttonStatus: num
+            buttonStatus: num,
+            incomeType: this.totalvalue
           }
         ];
         let obj = {

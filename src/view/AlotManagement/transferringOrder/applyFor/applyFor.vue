@@ -394,34 +394,25 @@
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
          // console.log(resArr)
           this.Right.tbdata = resArr
-          let data = {}
-           data.id = this.rowId
-                    data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.guestidId
-                    // data.guestId = this.formPlan.guestName
-                    data.storeId = this.formPlan.storeId
-                    // data.guestName = this.formPlan.guestName
-                    data.orderDate = tools.transTime(this.formPlan.orderDate)
-                    data.remark = this.formPlan.remark
-                    data.createUname  = this.formPlan.createUname
-                    data.serviceId = this.formPlan.serviceId
-                    data.detailVOS = resArr
-               save(data).then(res => {
-                      if(res.code === 0){
-                        this.$message.success('删除成功！！！')
-                        // this.leftgetList()
-                        // this.formPlan.guestName = '',
-                        //   this.formPlan.storeId =  '',
-                        //   this.formPlan.remark =  '',
-                        //   this.formPlan.createUname =  '',
-                        //   this.formPlan.serviceId =  '',
-                        //   this.formPlan.orderDate = ''
-                        // this.Right.tbdata = []
-                        // this.isAdd = true
-                        // this.$refs.formPlan.resetFields();
-                      }
-                    })
+          this.$Message.warning('删除成功！')
+          // let data = {}
+          //  data.id = this.rowId
+          //           data.orgid = this.rowOrgId
+          //           data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+          //           data.guestId = this.guestidId
+          //           // data.guestId = this.formPlan.guestName
+          //           data.storeId = this.formPlan.storeId
+          //           // data.guestName = this.formPlan.guestName
+          //           data.orderDate = tools.transTime(this.formPlan.orderDate)
+          //           data.remark = this.formPlan.remark
+          //           data.createUname  = this.formPlan.createUname
+          //           data.serviceId = this.formPlan.serviceId
+          //           data.detailVOS = resArr
+          //      save(data).then(res => {
+          //             if(res.code === 0){
+          //               this.$message.success('删除成功！！！')
+          //             }
+          //           })
 
         },
         //更多按钮
@@ -527,10 +518,9 @@
                   data.guestId = this.getArray[i].id;
                 }
               }
-
                     save(data).then(res => {
                       if(res.code === 0){
-                        this.$message.success('保存成功！')
+                        this.$message.success('保存成功！');
                         this.leftgetList()
                         this.formPlan.guestName = '',
                           this.formPlan.storeId =  '',
@@ -770,7 +760,7 @@
         selection(row){
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
-          if(!this.Flaga && !this.isAdd){
+          if(!this.Flaga && !this.isAdd && row.id){
             this.$Modal.confirm({
               title: '您正在编辑单据，是否需要保存',
               onOk: () => {
@@ -825,12 +815,11 @@
             })
           }else{
             if(row.id){
+              // this.leftgetList()
               this.rowOrgId = row.orgid
               this.mainId = row.id
               this.guestidId = row.guestId
-              // console.log(this.guestidId,123)
               this.datadata = row
-              // console.log(this.datadata)
               this.formPlan.guestName = this.datadata.guestName
               this.formPlan.storeId = this.datadata.storeId
               this.formPlan.orderDate = this.datadata.orderDate

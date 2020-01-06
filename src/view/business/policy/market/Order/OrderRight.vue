@@ -607,7 +607,6 @@ export default {
             return "和值";
           }
           if (["orderQty", "orderPrice"].includes(column.property)) {
-            console.log(this.$utils.sum(data, column.property))
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 8) {

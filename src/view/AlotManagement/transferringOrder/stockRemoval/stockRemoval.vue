@@ -110,7 +110,7 @@
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="buttonShow || Leftcurrentrow.status.value !== 0"
+                            :disabled="buttonShow || this.flagValue !== 0"
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -124,7 +124,10 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select :disabled="buttonShow || this.flagValue1 !== 0" v-model="Leftcurrentrow.storeId">
+                          <Select
+                            :disabled="buttonShow || this.flagValue1 !== 0"
+                            v-model="Leftcurrentrow.storeId"
+                          >
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -664,7 +667,7 @@ export default {
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
-
+      // console.log(this.checkboxArr,'this.checkboxArr')
       // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
@@ -721,7 +724,7 @@ export default {
       ) {
         params.id = "";
       }
-      console.log(params,'params')
+      console.log(params, "params");
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -745,6 +748,8 @@ export default {
         });
     },
     xinzeng() {
+      this.flagValue = 0;
+      this.flagValue1 = 0;
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
@@ -1021,7 +1026,7 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      this.form = { ...this.form, ...this.$refs.naform.getITPWE()};
+      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
       for (var i = 0; i < this.getArray.length; i++) {
         console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
@@ -1041,10 +1046,28 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
-      // console.log(seleList, "seleList");
       let arr = [];
-      console.log(this.checkboxArr.length, "this.checkboxArr.length");
+      // console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
+        this.checkboxArr.forEach(item => {
+          console.log(item.oemCode);
+          this.Leftcurrentrow.detailVOS.filter(itm => {
+            return itm.oemCode == item.oemCode;
+          });
+        });
+
+        // let haveId = this.checkboxArr.filter(item => item.id);
+        // let NoId = this.checkboxArr.filter(item => !item.id);
+        let NoIdPartCode = this.checkboxArr.map(item => item.partCode);
+        // let AddNoId = this.Leftcurrentrow.detailVOS.filter(item => !item.id);
+        let NoRepeat = this.Leftcurrentrow.detailVOS.filter(
+          item => !NoIdPartCode.includes(item.partCode)
+        );
+        setTimeout(() => {
+          this.Leftcurrentrow.detailVOS = NoRepeat;
+          // console.log(this.Leftcurrentrow.detailVOS, "NoRepeat");
+        }, 1000);
+
         seleList.map(item => {
           arr.push(item.id);
         });
@@ -1056,10 +1079,10 @@ export default {
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
-              this.Leftcurrentrow.detailVOS = this.array_diff(
-                this.Leftcurrentrow.detailVOS,
-                seleList
-              );
+              // this.Leftcurrentrow.detailVOS = this.array_diff(
+              //   this.Leftcurrentrow.detailVOS,
+              //   seleList
+              // );
               this.$Message.success("删除成功");
             }
           })
@@ -1070,6 +1093,7 @@ export default {
         this.$Message.error("请选择要删除的配件!");
         return;
       }
+      console.log(this.Leftcurrentrow.detailVOS, "this.checkboxArr");
     },
     //展示方
     showModel() {

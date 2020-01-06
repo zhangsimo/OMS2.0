@@ -19,15 +19,21 @@
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">
           <Row style="width: 310px">
-            <Select v-model="formPlan.guestId" filterable style="width: 240px" :disabled="draftShow != 0|| this.$parent.$parent.ispart" @on-change="changeClient">
-                  <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            <Select
+              v-model="formPlan.guestId"
+              filterable
+              style="width: 240px"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+              @on-change="changeClient"
+            >
+              <Option v-for="item in client" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
-<!--            <Input-->
-<!--              class="w240"-->
-<!--              v-model="formPlan.fullName"-->
-<!--              :disabled="draftShow != 0"-->
-<!--              @on-change="changeClient"-->
-<!--            />-->
+            <!--            <Input-->
+            <!--              class="w240"-->
+            <!--              v-model="formPlan.fullName"-->
+            <!--              :disabled="draftShow != 0"-->
+            <!--              @on-change="changeClient"-->
+            <!--            />-->
             <Button
               class="ml5"
               size="small"
@@ -49,9 +55,15 @@
           </Row>
         </FormItem>
         <FormItem label="销售员：" prop="orderManId">
-<!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
-          <Select :value="formPlan.orderManId"
-                  @on-change="selectOrderMan" filterable style="width: 240px" :disabled="draftShow != 0|| this.$parent.$parent.ispart"  label-in-value>
+          <!--          <Input class="w160" v-model="formPlan.orderMan" :disabled="draftShow != 0" />-->
+          <Select
+            :value="formPlan.orderManId"
+            @on-change="selectOrderMan"
+            filterable
+            style="width: 240px"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+            label-in-value
+          >
             <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
           </Select>
         </FormItem>
@@ -64,7 +76,11 @@
           <Input class="w210" v-model="formPlan.code" disabled />
         </FormItem>
         <FormItem label="票据类型:" prop="billTypeId">
-          <Select v-model="formPlan.billTypeId" style="width:100px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
+          <Select
+            v-model="formPlan.billTypeId"
+            style="width:100px"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+          >
             <Option
               v-for="item in settleTypeList.CS00107"
               :value="item.itemCode"
@@ -73,7 +89,11 @@
           </Select>
         </FormItem>
         <FormItem label="结算方式：" prop="settleTypeId">
-          <Select v-model="formPlan.settleTypeId" style="width:100px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
+          <Select
+            v-model="formPlan.settleTypeId"
+            style="width:100px"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+          >
             <Option
               v-for="item in settleTypeList.CS00106"
               :value="item.itemCode"
@@ -82,7 +102,11 @@
           </Select>
         </FormItem>
         <FormItem label="备注：">
-          <Input style="width: 370px" v-model="formPlan.remark" :disabled="draftShow != 0|| this.$parent.$parent.ispart" />
+          <Input
+            style="width: 370px"
+            v-model="formPlan.remark"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+          />
         </FormItem>
         <FormItem label="订单号:">
           <Input class="w210" v-model="formPlan.serviceId" disabled />
@@ -97,7 +121,6 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-
             clearable
           ></DatePicker>
         </FormItem>
@@ -110,12 +133,16 @@
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
-             clearable
+            clearable
             ref="clearplanArriveDate"
           ></DatePicker>
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
-          <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0|| this.$parent.$parent.ispart">
+          <Select
+            v-model="formPlan.storeId"
+            style="width:200px"
+            :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+          >
             <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
@@ -123,12 +150,24 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0|| this.$parent.$parent.ispart" class="mr10" @click="addMountings " v-has="'addMountings'">
+            <Button
+              size="small"
+              :disabled="draftShow != 0|| this.$parent.$parent.ispart"
+              class="mr10"
+              @click="addMountings "
+              v-has="'addMountings'"
+            >
               <Icon type="md-add" />添加配件
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0 || this.$parent.$parent.ispart" class="mr10" @click="deletePart" v-has="'deletePart'">
+            <Button
+              size="small"
+              :disabled="draftShow != 0 || this.$parent.$parent.ispart"
+              class="mr10"
+              @click="deletePart"
+              v-has="'deletePart'"
+            >
               <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
             </Button>
           </div>
@@ -167,7 +206,7 @@
             </Upload>
           </div>
           <div class="fl mr10">
-            <Button size="small" @click="down"  v-has="'down'">
+            <Button size="small" @click="down" v-has="'down'">
               <Icon custom="iconfont iconxiazaiicon icons" />下载模板
             </Button>
           </div>
@@ -242,14 +281,18 @@
             <template v-slot="{ row }">
               <span>{{ countPrice(row) |priceFilters}}</span>
             </template>
-
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
               <span>{{ countAmount(row) |priceFilters}}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注"  :edit-render="{name: 'input',attrs: {disabled: false}}"></vxe-table-column>
+          <vxe-table-column field="averagePrice" title="采购价"></vxe-table-column>
+          <vxe-table-column
+            field="remark"
+            title="备注"
+            :edit-render="{name: 'input',attrs: {disabled: false}}"
+          ></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
           <vxe-table-column field title="批次">
@@ -407,20 +450,22 @@ export default {
         }
       }
     };
-    let options2DisabledDate = (date) => {
+    let options2DisabledDate = date => {
       const orderDate = this.formPlan.planSendDate;
       return date && orderDate && date.valueOf() < orderDate;
-    }
+    };
     return {
       options1: {
-        disabledDate (date) {
+        disabledDate(date) {
           return date && date.valueOf() < Date.now() - 86400000;
         }
       },
       options2: {
-        disabledDate: options2DisabledDate,
+        disabledDate: options2DisabledDate
       },
-      formPlan: {}, //获取到数据
+      formPlan: {
+        detailList:[]
+      }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //请求头
@@ -448,18 +493,20 @@ export default {
       limitList: {}, //额度信息
       totalMoney: "", //总价
       client: [], //客户列表
-      salesList:[],//销售员列表
+      salesList: [], //销售员列表
       ruleValidate: {
         guestId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
-        orderManId: [{ required: true, type:'string',message: "  ", trigger: "change" }],
+        orderManId: [
+          { required: true, type: "string", message: "  ", trigger: "change" }
+        ],
         billTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
-        ],
+        ]
         // storeId: [
         //   { required: true, type: "string", message: " ", trigger: "change" }
         // ]
@@ -470,11 +517,11 @@ export default {
         orderPrice: [{ required: true, validator: money }]
       }, //表格校验
       selectTableList: [], //table表格选中的数据
-      door:{
-        outStockDoor:true
+      door: {
+        outStockDoor: true
       },
-      ispart:true,//添加配件状态
-    }
+      ispart: true //添加配件状态
+    };
   },
   mounted() {
     this.getAdress();
@@ -482,8 +529,7 @@ export default {
     this.getType();
     this.getWarehouse();
     this.getClassifyList();
-    this.getAllSales()
-
+    this.getAllSales();
   },
   computed: {
     getOneOrder() {
@@ -512,9 +558,9 @@ export default {
       }
     },
     //获取销售员
-    selectOrderMan(val){
-      this.formPlan.orderMan = val.label
-      this.formPlan.orderManId = val.value
+    selectOrderMan(val) {
+      this.formPlan.orderMan = val.label;
+      this.formPlan.orderManId = val.value;
     },
     //获取客户额度
     async getAllLimit() {
@@ -531,14 +577,14 @@ export default {
       if (!value) {
         return false;
       }
-      let oneClient = []
-      oneClient = this.client.filter( item => {
-        return   item.id === value
-      })
+      let oneClient = [];
+      oneClient = this.client.filter(item => {
+        return item.id === value;
+      });
       // console.log(oneClient,5656)
-      for(var i  in  oneClient){
-        this.formPlan.billTypeId=oneClient[i].billTypeId
-        this.formPlan.settleTypeId=oneClient[i].settTypeId
+      for (var i in oneClient) {
+        this.formPlan.billTypeId = oneClient[i].billTypeId;
+        this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
       data.guestId = value;
       let res = await getLimit(data);
@@ -546,7 +592,6 @@ export default {
         this.limitList = res.data;
       }
     },
-
 
     //获取客户属性
     async getType() {
@@ -572,8 +617,8 @@ export default {
       if (res.code === 0) {
         this.salesList = res.data.content;
         this.salesList.map(item => {
-          item.label = item.userName
-        })
+          item.label = item.userName;
+        });
       }
     },
     // 获取仓库
@@ -638,8 +683,8 @@ export default {
         this.$utils.toNumber(row.orderPrice)
       );
     },
-    countPrice(row){
-      return  this.$utils.toNumber(row.orderPrice)
+    countPrice(row) {
+      return this.$utils.toNumber(row.orderPrice);
     },
     // 计算尾部总和
     countAllAmount(data) {
@@ -647,17 +692,17 @@ export default {
       data.forEach(row => {
         count += this.countAmount(row);
       });
-      count = count.toFixed(2)
+      count = count.toFixed(2);
       this.totalMoney = count;
       return count;
     },
-    countAllPrice(data){
-      let count=0
-      data.forEach(row=>{
-        count +=this.countPrice(row)
-        count = count.toFixed(2)
+    countAllPrice(data) {
+      let count = 0;
+      data.forEach(row => {
+        count += this.countPrice(row);
+        count = count.toFixed(2);
         return count;
-      })
+      });
     },
     //获取尾部总数
     footerMethod({ columns, data }) {
@@ -693,17 +738,17 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       if (response.code == 0) {
-          let txt = '上传成功'
-          if(response.data.length > 0){
-              txt = response.data.join(',')
-          }
-          this.$Notice.warning({
-              title: '导入失败',
-              desc: txt,
-              duration:0
-          })
+        let txt = "上传成功";
+        if (response.data.length > 0) {
+          txt = response.data.join(",");
+        }
+        this.$Notice.warning({
+          title: "导入失败",
+          desc: txt,
+          duration: 0
+        });
       } else {
-          this.$Message.error(response.message)
+        this.$Message.error(response.message);
       }
     },
     warning(nodesc) {
@@ -745,11 +790,24 @@ export default {
         this.selectTableList.forEach(item => {
           data.push({ id: item.id });
         });
-        console.log(data);
+        const arr = this.formPlan.detailList.filter(
+          item => !this.selectTableList.includes(item)
+        );
+        this.formPlan.detailList = arr;
+        if(!data[0].id) return
+        this.$parent.$parent.$refs.OrderLeft.tableData.map((item, index) => {
+          if (item.id === this.formPlan.id) {
+            this.$set(
+              this.$parent.$parent.$refs.OrderLeft.tableData[index],
+              "detailList",
+              arr
+            );
+          }
+        });
         getDeleteList(data).then(res => {
           if (res.code === 0) {
-            this.getList();
-
+            // this.getList();
+            this.$message.success(res.data);
           }
         });
       } else {
@@ -759,45 +817,48 @@ export default {
     //计划发货日期
     getplanSendDate(data) {
       // this.formPlan.planSendDate = data + " " + "00:00:00";
-      this.formPlan.planSendDate = tools.transTime(data)
+      this.formPlan.planSendDate = tools.transTime(data);
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
           return date && orderDate && date.valueOf() < new Date(orderDate);
         }
-      }
+      };
     },
     //计划到货日期
     getplanArriveDate(data) {
       // this.formPlan.planArriveDate = data + " " + "00:00:00";
-      this.formPlan.planArriveDate=tools.transTime(data)
+      this.formPlan.planArriveDate = tools.transTime(data);
     },
-  // //清空日期
-  //
-  //   cleadplanSendDate(data){
-  //     this.formPlan.planSendDate=null
-  //     console.log('4444',this.formPlan.planSendDate)
-  //   },
-  //   clearplanArriveDate(data){
-  //     this.formPlan.planArriveDate=null
-  //     console.log('55', this.formPlan.planArriveDate)
-  //   },
-
+    // //清空日期
+    //
+    //   cleadplanSendDate(data){
+    //     this.formPlan.planSendDate=null
+    //     console.log('4444',this.formPlan.planSendDate)
+    //   },
+    //   clearplanArriveDate(data){
+    //     this.formPlan.planArriveDate=null
+    //     console.log('55', this.formPlan.planArriveDate)
+    //   },
 
     //配件返回的参数
     getPartNameList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          let data = {};
-          data = this.formPlan;
-          data.detailList = conversionList(val);
-          let res = await getAccessories(data);
-          if (res.code === 0) {
-            this.$emit("parentGetleft");
-            this.$Message.success('添加配件成功')
-            this.$refs.formPlan.resetFields()
-            this.$parent.$parent.ispart=true
-          }
+          // let data = [];
+          // data = this.formPlan;
+          // data = conversionList(val);
+          this.formPlan.detailList = [
+            ...this.formPlan.detailList,
+            ...conversionList(val)
+          ];
+          // let res = await getAccessories(data);
+          // if (res.code === 0) {
+          //   this.$emit("parentGetleft");
+          //   this.$Message.success('添加配件成功')
+          //   this.$refs.formPlan.resetFields()
+          //   this.$parent.$parent.ispart=true
+          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -867,9 +928,9 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd = true
+              this.$parent.$parent.isAdd = true;
               this.$store.commit("setleftList", res);
-              this.$refs.formPlan.resetFields()
+              this.$refs.formPlan.resetFields();
               this.limitList = {};
             }
           } catch (errMap) {
@@ -887,8 +948,8 @@ export default {
     setOneClient(val) {
       this.$set(this.formPlan, "guestId", val.id);
       this.$set(this.formPlan, "fullName", val.fullName);
-      this.$set(this.formPlan,"billTypeId",val.billTypeId)
-      this.$set(this.formPlan,"settleTypeId",val.settTypeId)
+      this.$set(this.formPlan, "billTypeId", val.billTypeId);
+      this.$set(this.formPlan, "settleTypeId", val.settTypeId);
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {
@@ -903,8 +964,8 @@ export default {
     },
     //出库
     stockOut() {
-      if(this.door.outStockDoor) {
-        this.door.outStockDoor = false
+      if (this.door.outStockDoor) {
+        this.door.outStockDoor = false;
         this.$refs.formPlan.validate(async valid => {
           if (valid) {
             try {
@@ -918,12 +979,11 @@ export default {
               if (res.code === 0) {
                 this.$Message.success("出库成功");
                 this.$store.commit("setleftList", res);
-                this.door.outStockDoor =true
+                this.door.outStockDoor = true;
                 return res;
-              }else {
-                this.door.outStockDoor =true
+              } else {
+                this.door.outStockDoor = true;
               }
-
             } catch (errMap) {
               this.$XModal.message({
                 status: "error",
@@ -946,11 +1006,40 @@ export default {
               return this.$message.error("可用余额不足");
             }
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-            let res = await getSubmitList(this.formPlan);
-            if (res.code === 0) {
-              this.$Message.success("提交成功");
-              this.limitList = {};
-              this.$store.commit("setleftList", res);
+            let orderList = [];
+            orderList = this.formPlan.detailList.filter(
+              item => item.orderPrice < item.averagePrice
+            );
+            console.log(orderList, 9999);
+            if (orderList.length > 0) {
+              let text = "";
+              orderList.forEach(item => {
+                text += `<p>${item.partName}的销售价格低于进货价</p>`;
+              });
+              let timer = null;
+              clearTimeout(timer);
+              timer = setTimeout(() => {
+                this.$Modal.confirm({
+                  title: "提示",
+                  content: text,
+                  onOk: async () => {
+                    let res = await getSubmitList(this.formPlan);
+                    if (res.code === 0) {
+                      this.$Message.success("提交成功");
+                      this.limitList = {};
+                      this.$store.commit("setleftList", res);
+                    }
+                  },
+                  onCancel: () => {}
+                });
+              }, 500);
+            } else {
+              let res = await getSubmitList(this.formPlan);
+              if (res.code === 0) {
+                this.$Message.success("提交成功");
+                this.limitList = {};
+                this.$store.commit("setleftList", res);
+              }
             }
           } catch (errMap) {
             // this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
@@ -986,7 +1075,8 @@ export default {
           this.formPlan = {
             billStatusId: { name: "草稿", value: 0 },
             orderMan: this.$store.state.user.userData.username || "",
-            orderManId:  this.$store.state.user.userData.id
+            orderManId: this.$store.state.user.userData.id,
+            detailList:[]
           };
           this.draftShow = 0;
           return false;
@@ -1034,7 +1124,7 @@ export default {
 .purchase >>> .ivu-form-item {
   margin-bottom: 10px;
 }
-.demo-spin-icon-load{
+.demo-spin-icon-load {
   animation: ani-demo-spin 1s linear infinite;
 }
 </style>
