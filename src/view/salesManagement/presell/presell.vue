@@ -804,25 +804,29 @@
 
       //配件返回的参数
       getPartNameList(val) {
-        this.$refs.formPlan.validate(async (valid) => {
-          if (valid) {
-            let data = {}
-            data = this.formPlan
-            data.detailVOList = conversionList(val)
-            let res = await getSave(data)
-            if (res.code === 0) {
-              this.getLeftList()
-              this.formPlan={}
-              this.isNew=true
-              this.isAdd=true
-              this.id = null
-              this.$refs.formPlan.resetFields()
-              this.$Message.success('添加配件成功')
-            }
-          } else {
-            this.$Message.error('*为必填项');
-          }
-        })
+        var datas = conversionList(val);
+        datas.forEach(item => {
+          this.formPlan.detailVOList.push(item);
+        });
+        // this.$refs.formPlan.validate(async (valid) => {
+        //   if (valid) {
+        //     let data = {}
+        //     data = this.formPlan
+        //     data.detailVOList = conversionList(val)
+        //     let res = await getSave(data)
+        //     if (res.code === 0) {
+        //       this.getLeftList()
+        //       this.formPlan={}
+        //       this.isNew=true
+        //       this.isAdd=true
+        //       this.id = null
+        //       this.$refs.formPlan.resetFields()
+        //       this.$Message.success('添加配件成功')
+        //     }
+        //   } else {
+        //     this.$Message.error('*为必填项');
+        //   }
+        // })
 
       },
       //客户列表
@@ -1056,26 +1060,53 @@
 
       //删除配件
       deletePart() {
-        if (this.selectTableList.length > 0) {
-          let data = []
-          this.selectTableList.forEach(item => {
-            data.push({id: item.id})
-          })
-          getDeleteList(data).then(res => {
-            if (res.code === 0) {
-              this.$Message.success('删除配件成功');
-              this.getLeftList()
-              this.formPlan = {}
-              this.tableData = []
-              this.limitList = {};
-              this.$refs.formPlan.resetFields();
-              this.isNew=true
-              this.id=null
+        let checkedData=this.$refs.xTable.getSelectRecords()
+        console.log('数据',checkedData)
+        if(checkedData.length>0){
+         const arr= this.tableData.filter(v => !checkedData.includes(v));
+          this.preSellOrderTable.tbData.map((item,index)=>{
+            if (item.id===this.formPlan.id){
+              this.$set(this.preSellOrderTable.tbData[index],'detailVOList',arr)
             }
           })
-        } else {
-          this.$Message.error('请选择一条有效数据')
-        }
+          this.$set(this.formPlan,'detailVOList',arr)
+          let data = []
+          this.selectTableList.forEach(item => {
+                data.push({id: item.id})
+              })
+            getDeleteList(data).then(res => {
+              if (res.code === 0) {
+                this.$Message.success('删除配件成功');
+                // this.getLeftList()
+                // this.formPlan = {}
+                // this.tableData = []
+                // this.limitList = {};
+                // this.$refs.formPlan.resetFields();
+                // this.isNew=true
+                // this.id=null
+              }
+            })
+        }else{this.$Message.error('请选择一条有效数据')}
+        // if (this.selectTableList.length > 0) {
+        //   let data = []
+        //   this.selectTableList.forEach(item => {
+        //     data.push({id: item.id})
+        //   })
+        //   getDeleteList(data).then(res => {
+        //     if (res.code === 0) {
+        //       this.$Message.success('删除配件成功');
+        //       this.getLeftList()
+        //       this.formPlan = {}
+        //       this.tableData = []
+        //       this.limitList = {};
+        //       this.$refs.formPlan.resetFields();
+        //       this.isNew=true
+        //       this.id=null
+        //     }
+        //   })
+        // } else {
+        //   this.$Message.error('请选择一条有效数据')
+        // }
       },
       //批量上传失败
       onFormatError(file) {
@@ -1117,7 +1148,7 @@
           baseUrl.omsOrder +
           "/guestOrderMain/template?access_token=" +
           Cookies.get(TOKEN_KEY);
-      },
+      }
     },
     watch: {
       //监听时间
