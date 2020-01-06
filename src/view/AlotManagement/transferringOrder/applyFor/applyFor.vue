@@ -517,10 +517,18 @@
                   data.guestId = this.getArray[i].id;
                 }
               }
-
                     save(data).then(res => {
                       if(res.code === 0){
-                        this.$message.success('保存成功！')
+                        this.$message.success('保存成功！');
+                        this.leftgetList()
+                        this.formPlan.guestName = '',
+                          this.formPlan.storeId =  '',
+                          this.formPlan.remark =  '',
+                          this.formPlan.createUname =  '',
+                          this.formPlan.serviceId =  '',
+                          this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.isAdd = true
                         this.$refs.formPlan.resetFields();
                       }
                     })

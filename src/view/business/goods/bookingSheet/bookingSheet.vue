@@ -494,11 +494,11 @@ export default {
             save(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
-                // this.leftgetList();
-                //   this.formPlan.salesman =  '', //业务员
-                //   this.formPlan.Reservation =  '',
-                //   this.formPlan.remark =  '',
-                //   this.Right.tbdata = []
+                this.leftgetList();
+                  this.formPlan.salesman =  '', //业务员
+                  this.formPlan.Reservation =  '',
+                  this.formPlan.remark =  '',
+                  this.Right.tbdata = []
                 this.isAdd = true
                 this.Flaga = true
               }
