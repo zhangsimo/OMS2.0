@@ -152,8 +152,8 @@
                     <FormItem label="创建人：" prop="planDate">
                       <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                     </FormItem>
-                    <FormItem label="申请单号：" prop="planOrderNum">
-                      <Input disabled :value="Leftcurrentrow.planOrderNum" class="w160"></Input>
+                    <FormItem label="申请单号：" prop="code">
+                      <Input disabled :value="Leftcurrentrow.code" class="w160"></Input>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
                       <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
@@ -292,7 +292,7 @@ export default {
   },
   data() {
     return {
-      serviceIdValue: "",
+      codeValue: "",
       ArrayValue: [],
       staaa: false,
       dcData: [],
@@ -778,12 +778,12 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      this.Leftcurrentrow.planOrderNum = this.serviceIdValue;
+      // console.log(row, "row==>781");
       const params = {
         mainId: row.id
       };
       const res = await getListDetail(params);
-      this.ArrayValue = res.data
+      this.ArrayValue = res.data;
       console.log(res, "res");
       this.showit = false;
       //console.log(this.Leftcurrentrow);
@@ -908,8 +908,8 @@ export default {
       }
     },
     getOkList(list) {
-      // console.log(list, "list  =912");
-      this.serviceIdValue = list.serviceId;
+      console.log(list, "list");
+      this.codeValue = list.id
       const item = {
         index: 1,
         xinzeng: "1",
@@ -919,7 +919,7 @@ export default {
           value: 0
         },
         codeId: list.id,
-        code: list.serviceId,
+        code: list.id,
         statuName: "草稿",
         storeName: "",
         guestName: list.guestName,
