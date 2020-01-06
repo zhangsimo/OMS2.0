@@ -117,6 +117,7 @@
                   </div>
                 </div>
                 <vxe-table
+                  ref="xTable"
                   border
                   resizable
                   show-footer
@@ -128,6 +129,9 @@
                   :height="rightTableHeight"
                   :data="Right.tbdata"
                   :footer-method="addFooter"
+                  showOverflow="true"
+                  height="400"
+                  @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column width="60" type="checkbox"></vxe-table-column>
@@ -135,7 +139,11 @@
                   <vxe-table-column field="partName" title="配件名称" width="150"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="preQty" title="预定数量" :edit-render="{name: 'input'}" width="100">
+                  <vxe-table-column
+                    field="preQty"
+                    title="预定数量"
+                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    width="100">
                     <template v-slot:edit="{ row }">
                       <InputNumber
                         :max="999999"
@@ -145,7 +153,7 @@
                       ></InputNumber>
                     </template>
                   </vxe-table-column>
-                  <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
+                  <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0},maxlength:100}" width="100"></vxe-table-column>
                   <vxe-table-column field="acceptQty" title="受理数量" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
@@ -213,6 +221,12 @@ export default {
       }
     };
     return {
+      //校验输入框的值
+      validRules: {
+        preQty: [
+          { required: true,validator:changeNumber },
+        ]
+      },
       LeadIn: true, //判断导入配件的按钮是否启用
       checkboxArr:[],// checkbox选中
       disSave: false, // 保存按钮是否禁用
@@ -246,12 +260,6 @@ export default {
         { label:'已受理',value:'3' },
         { label:'已作废',value:'5' },
       ],
-      //校验输入框的值
-      validRules: {
-        applyQty: [
-          { required: true,validator:changeNumber },
-        ]
-      },
       List:[],
       Left: {
         page: {
@@ -416,8 +424,6 @@ export default {
             }
           })
           },1000)
-
-
         }else {
           var set = this.checkboxArr.map(item => item.partCode)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
@@ -447,6 +453,15 @@ export default {
     //更多按钮
     moreaa(){
       this.$refs.moremore.init()
+    },
+    //判断表格能不能编辑
+    editActivedEvent({row}){
+      let xTable = this.$refs.xTable;
+      let orderQtyColumn = xTable.getColumnByField("preQty");
+      let remarkColumn = xTable.getColumnByField("remark");
+      let isDisabled = this.presentrowMsg !== 0
+      orderQtyColumn.editRender.attrs.disabled = isDisabled;
+      remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     // 新增按钮
     addProoo(){
@@ -480,29 +495,37 @@ export default {
     selectTabelData(){},
     //保存按钮
     SaveMsg(){
-      this.$refs.formPlan.validate((valid) => {
+      this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // console.log(this.rowId)
-          let data = {}
-          data.id = this.rowId
-          data.salesman =  this.formPlan.salesman
-          data.orderNo =  this.formPlan.Reservation
-          data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-          data.remark = this.formPlan.remark
-          data.detailVOList = this.Right.tbdata
-          // console.log(this.Right.tbdata)
-          save(data).then(res => {
-            if(res.code === 0){
-              this.$message.success('保存成功！')
-              this.leftgetList(),
-                this.formPlan.salesman =  '', //业务员
-                this.formPlan.Reservation =  '',
-                this.formPlan.remark =  '',
-                this.Right.tbdata = []
+          try {
+            await this.$refs.xTable.validate();
+            let data = {}
+            data.id = this.rowId
+            data.salesman =  this.formPlan.salesman
+            data.orderNo =  this.formPlan.Reservation
+            data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+            data.remark = this.formPlan.remark
+            data.detailVOList = this.Right.tbdata
+            // console.log(this.Right.tbdata)
+            save(data).then(res => {
+              if(res.code === 0){
+                this.$message.success('保存成功！')
+                this.leftgetList(),
+                  this.formPlan.salesman =  '', //业务员
+                  this.formPlan.Reservation =  '',
+                  this.formPlan.remark =  '',
+                  this.Right.tbdata = []
                 this.isAdd = true
                 this.Flaga = true
-            }
-          })
+              }
+            })
+          } catch (errMap) {
+            this.$XModal.message({
+              status: "error",
+              message: "申请数量必须输入大于0的正整数！"
+            });
+          }
         } else {
           this.$Message.error('*为必填！');
         }
