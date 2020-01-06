@@ -144,14 +144,6 @@
                     title="预定数量"
                     :edit-render="{name: 'input',attrs: {disabled: false}}"
                     width="100">
-                    <template v-slot:edit="{ row }">
-                      <InputNumber
-                        :max="999999"
-                        :min="1"
-                        v-model="row.preQty"
-                        :disabled="presentrowMsg !== 0"
-                      ></InputNumber>
-                    </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0},maxlength:100}" width="100"></vxe-table-column>
                   <vxe-table-column field="acceptQty" title="受理数量" width="100"></vxe-table-column>
