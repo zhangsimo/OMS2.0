@@ -675,7 +675,6 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
-      this
       this.formPlan = {
         details:[],
         orderManId:this.PTrow.orderManId,

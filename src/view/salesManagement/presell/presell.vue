@@ -857,19 +857,6 @@ export default {
           datas.forEach(item => {
             this.formPlan.detailVOList.push(item);
           });
-          // let data = {}
-          // data = this.formPlan
-          // data.detailVOList = conversionList(val)
-          // let res = await getSave(data)
-          // if (res.code === 0) {
-          //   this.getLeftList()
-          //   this.formPlan={}
-          //   this.isNew=true
-          //   this.isAdd=true
-          //   this.id = null
-          //   this.$refs.formPlan.resetFields()
-          //   this.$Message.success('添加配件成功')
-          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -946,8 +933,6 @@ export default {
       // this.draftShow = v.status.value;
       // this.tableData = v.detailVOList;
       // this.formPlan = v;
-
-
     },
     // 获取仓库
     async getWarehouse() {
@@ -1011,6 +996,11 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
+      this.formPlan = {
+        detailVOList:[],
+        orderMan:this.PTrow.orderMan,
+        orderManId:this.PTrow.orderManId
+      };
       this.limitList=[]
       // this.formPlan = {};
       this.draftShow = 0;
@@ -1018,8 +1008,6 @@ export default {
         return this.$Message.error("请先保存数据");
       }
       this.preSellOrderTable.tbData.unshift(this.PTrow);
-      this.formPlan.orderManId = this.PTrow.orderManId;
-      this.formPlan.orderMan = this.PTrow.orderMan;
       this.isAdd = false;
     },
     //作废按钮
