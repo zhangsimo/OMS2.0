@@ -708,8 +708,6 @@
        oneClient = this.client.filter( item => {
          return   item.id === value
        })
-
-       console.log(this.formPlan,5656)
        for(var i  in  oneClient){
          // console.log((oneClient[i].settTypeId))
          this.formPlan.settleTypeId=oneClient[i].settTypeId

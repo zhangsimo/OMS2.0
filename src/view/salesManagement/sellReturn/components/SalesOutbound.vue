@@ -40,7 +40,7 @@
           </FormItem>
 
           <Button type="warning" @click="search">查询</Button>
-          <Button type="warning" @click="selectEnter">选入</Button>
+          <Button type="warning" @click="selectEnter" class="ml10 mr10">选入</Button>
           <Button @click="cancel">取消</Button>
         </Form>
       </div>
