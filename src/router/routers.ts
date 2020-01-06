@@ -313,7 +313,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/productDistribution",
             name: "productDistribution",
-            mark: "3105",
+            // mark: "3105",
             meta: {
               // hideInMenu: true,
               title: "紧俏品分配"
