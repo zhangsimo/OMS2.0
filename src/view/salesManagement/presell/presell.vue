@@ -922,7 +922,7 @@ export default {
           this.formPlan = v;
           this.draftShow = v.status.value;
           this.selectTableList = [];
-          this.limitList={}
+          this.limitList = {};
         }
       }
       // console.log("左侧数据", v);
@@ -992,16 +992,16 @@ export default {
 
     //新增按钮
     addOrder() {
-      this.formPlan = {}
+      this.formPlan = {};
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
       this.formPlan = {
-        detailVOList:[],
-        orderMan:this.PTrow.orderMan,
-        orderManId:this.PTrow.orderManId
+        detailVOList: [],
+        orderMan: this.PTrow.orderMan,
+        orderManId: this.PTrow.orderManId
       };
-      this.limitList=[]
+      this.limitList = [];
       // this.formPlan = {};
       this.draftShow = 0;
       if (!this.isAdd) {
@@ -1141,9 +1141,16 @@ export default {
     //删除配件
     deletePart() {
       let checkedData = this.$refs.xTable.getSelectRecords();
-      console.log("数据", checkedData);
       if (checkedData.length > 0) {
-        const arr = this.tableData.filter(v => !checkedData.includes(v));
+        let data = [];
+        this.selectTableList.forEach(item => {
+          data.push({ id: item.id });
+        });
+        const arr = this.formPlan.detailVOList.filter(v => !checkedData.includes(v));
+        // console.log(arr,this.tableData)
+        this.$set(this.formPlan, "detailVOList", arr);
+        console.log(this.formPlan)
+        if(!data[0].id) return
         this.preSellOrderTable.tbData.map((item, index) => {
           if (item.id === this.formPlan.id) {
             this.$set(
@@ -1152,11 +1159,6 @@ export default {
               arr
             );
           }
-        });
-        this.$set(this.formPlan, "detailVOList", arr);
-        let data = [];
-        this.selectTableList.forEach(item => {
-          data.push({ id: item.id });
         });
         getDeleteList(data).then(res => {
           if (res.code === 0) {
@@ -1251,11 +1253,9 @@ export default {
     },
     formPlan: {
       handler(val, old) {
-        console.log(val , 999)
         if (!val.id) {
           return false;
         }
-        console.log(123)
         this.getAllLimit();
       },
       deep: true

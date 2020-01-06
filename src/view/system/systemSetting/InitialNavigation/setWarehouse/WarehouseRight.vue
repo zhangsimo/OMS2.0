@@ -131,13 +131,13 @@ export default {
   data() {
     //自定义校验方法
     const validatePass = (rule, value, callback) => {
-      let reg = /^[A-Za-z0-9\-]+$/
-        if (!reg.test(value)) {
-          callback(new Error('编码不能输入汉字、字符且不能为空!'));
-        } else {
-          callback();
-        }
-      };
+      let reg = /^[A-Za-z0-9\-]+$/;
+      if (!reg.test(value)) {
+        callback(new Error("编码不能输入汉字、字符且不能为空!"));
+      } else {
+        callback();
+      }
+    };
     return {
       columns1: [
         {
@@ -192,7 +192,7 @@ export default {
         total: 0
       },
       validRules: {
-        name: [{ required: true, message: "不能为空",validator: validatePass}]
+        name: [{ required: true, message: "不能为空", validator: validatePass }]
       },
       storeId: "",
       oneWarehouse: "",
@@ -238,8 +238,8 @@ export default {
           getSaveWarehouse(this.warehouseList).then(res => {
             if (res.code == 0) {
               this.$Message.success(res.message);
-              this.getAllWarehouseList();
             }
+            this.getAllWarehouseList();
           });
         } else {
           this.$Message.error("验证不通过");
