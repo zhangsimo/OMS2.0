@@ -159,7 +159,7 @@
                     <!--                      :disabled="draftShow != 0||isNew"-->
                     <!--                    />-->
                     <Select
-                      :value="formPlan.orderManId"
+                      v-model="formPlan.orderManId"
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 240px"
@@ -584,9 +584,9 @@ export default {
       //右侧表格数据
       tableData: [],
       formPlan: {
-        detailVOList: [],
+        orderMan: "",
         orderManId: "",
-        orderMan: ""
+        detailVOList: []
       }, //表单对象
       addressShow: false, //收货地址显示
       query: {}, //更多搜索信息
@@ -595,19 +595,19 @@ export default {
       ruleValidate: {
         //表单校验
         guestId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         orderManId: [
-          { required: true, type: "string", message: "  ", trigger: "change" }
+          { required: true, type: "string", message: "  ", trigger: "blur" }
         ],
         billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         settleTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ],
         storeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "blur" }
         ]
       },
       validRules: {
@@ -844,24 +844,10 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      var datas = val;
-      console.log(datas, "datas");
+      var datas = conversionList(val);
       datas.forEach(item => {
         this.formPlan.detailVOList.push(item);
       });
-      console.log(this.formPlan.detailVOList, "this.formPlan.detailVOList");
-
-      this.$refs.formPlan.validate((valid) => {
-        if (valid){
-          var datas = conversionList(val);
-          datas.forEach(item => {
-            this.formPlan.detailVOList.push(item);
-          });
-        }else{
-          this.$Message.error('*为必填项');
-        }
-      })
-
       // this.$nextTick(()=>{
       //   this.$set(this.formPlan,'detailVOList',datas)
       // console.log(this.formPlan)
