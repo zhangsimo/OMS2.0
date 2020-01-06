@@ -155,16 +155,16 @@
                     <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
-                    <template v-slot:edit="{ row }">
-                      <el-input-number
-                        :min="0"
-                        v-model="row.orderPrice"
-                        :disabled="presentrowMsg !== 0"
-                        :precision="2"
-                        :controls="false"
-                        size="small"
-                      ></el-input-number>
-                    </template>
+                    <!--<template v-slot:edit="{ row }">-->
+                      <!--<el-input-number-->
+                        <!--:min="0"-->
+                        <!--v-model="row.orderPrice"-->
+                        <!--:disabled="presentrowMsg !== 0"-->
+                        <!--:precision="2"-->
+                        <!--:controls="false"-->
+                        <!--size="small"-->
+                      <!--/>-->
+                    <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderAmt" title="退货金额" width="100">
                     <template v-slot="{ row }">
@@ -232,6 +232,19 @@
           }
         }
       };
+      //价格（2位小数）
+      let money = (rule, value, callback) => {
+        if (!value && value != "0") {
+          callback(new Error("最多保留2位小数"));
+        } else {
+          const reg = /^\d+(\.\d{0,2})?$/i;
+          if (reg.test(value)) {
+            callback();
+          } else {
+            callback(new Error("最多保留2位小数"));
+          }
+        }
+      };
       return {
         ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中
@@ -272,9 +285,8 @@
         userMap: [], //退货员
         //校验输入框的值
         validRules: {
-          orderQty: [
-            { required: true,validator:changeNumber },
-          ],
+          orderQty: [{ required: true,validator:changeNumber }],
+          orderPrice:[{required: true,validator:money}]
           // remark: [
           //   { required: true, validator:changeNumber }
           // ]
@@ -924,6 +936,9 @@
             this.formPlan.remark = this.datadata.remark
             this.formPlan.warehouse = this.datadata.storeId
             this.formPlan.serviceId = this.datadata.code
+            row.details.map(item => {
+             item.orderPrice = Number(item.orderPrice).toFixed(2)
+            })
             this.Right.tbdata = row.details
             this.presentrowMsg = row.billStatusId.value
             // console.log(this.presentrowMsg)
