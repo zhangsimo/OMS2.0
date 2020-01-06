@@ -315,7 +315,7 @@ export const mixSelectPartCom = {
     throwData() {
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
-        this.searchPartLayer = false;
+        // this.searchPartLayer = false;
       } else {
         this.$Message.error("请选择数据");
       }

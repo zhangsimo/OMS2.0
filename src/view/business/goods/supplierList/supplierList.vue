@@ -156,12 +156,14 @@
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
-                      <InputNumber
-                        :max="999999"
+                      <el-input-number
                         :min="0"
                         v-model="row.orderPrice"
                         :disabled="presentrowMsg !== 0"
-                      ></InputNumber>
+                        :precision="2"
+                        :controls="false"
+                        size="small"
+                      ></el-input-number>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="orderAmt" title="退货金额" width="100">
@@ -405,17 +407,8 @@
               if(res.code === 0){
                 this.$Message.success('删除成功')
                 this.$refs.formPlan.resetFields();
-                this.leftgetList()
-                this.formPlan.guestName = ''   //调出方
-                data.orderMan = ''  //退货员
-                // tools.transTime(this.formPlan.orderDate)  //退货日期
-                this.formPlan.numbers = '' //采退单号
-                this.formPlan.cause  = '' //退货原因
-                this.formPlan.clearing = '' //结算方式
-                this.formPlan.remark  = '' //备注
-                this.formPlan.warehouse = ''  //退货仓库
-                this.formPlan.serviceId = '' //采购订单
-                this.Right.tbdata  =  [] //子表格
+                let checkBoxArr = this.checkboxArr.map(item => item.id)
+                this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
               }
             })
           }else if(resultTwo){
@@ -460,12 +453,9 @@
             setTimeout(() => {
               this.$nextTick( () => {
                 if(this.successNOid && this.successHaveId){
-                  this.$message.success('删除成功！')
-                  this.leftgetList(),
-                    this.formPlan.salesman = '', //业务员
-                    this.formPlan.Reservation = '',
-                    this.formPlan.remark = '',
-                    this.Right.tbdata = []
+                  this.$message.success('删除成功！');
+                  let checkBoxArr = this.checkboxArr.map(item => item.id)
+                  this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
                 }
               })
             },1000)
@@ -491,20 +481,8 @@
               if(res.code === 0){
                 this.$message.success('删除成功！')
                 this.$refs.formPlan.resetFields();
-                this.leftgetList()
-                this.isAdd = true;
-                this.rowId = '';
-                this.formPlan.guestName = ''   //调出方
-                this.formPlan.storeId = ''   //退货员
-                // tools.transTime(this.formPlan.orderDate)  //退货日期
-                this.formPlan.numbers = '' //采退单号
-                this.formPlan.cause  = '' //退货原因
-                this.formPlan.clearing = '' //结算方式
-                this.formPlan.remark  = '' //备注
-                this.formPlan.warehouse = ''  //退货仓库
-                this.formPlan.serviceId = '' //采购订单
-                this.Right.tbdata  =  [] //子表格
-                this.$refs.formPlan.resetFields();
+                let checkBoxArr = this.checkboxArr.map(item => item.partCode)
+                this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
               }
             })
           }
@@ -933,6 +911,7 @@
           })
         }else{
           if(row.id){
+            this.leftgetList();
             this.mainId = row.id
             this.guestidId = row.guestId
             this.datadata = row

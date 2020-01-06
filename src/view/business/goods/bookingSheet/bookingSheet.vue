@@ -366,13 +366,9 @@ export default {
           })
           deleteit(dataaa).then(res => {
             if(res.code === 0){
-              this.$message.warning('删除成功！')
-              this.selection()
-              // this.leftgetList()
-              // this.formPlan.salesman = ''
-              // this.formPlan.Reservation = ''
-              // this.formPlan.remark = ''
-              // this.Right.tbdata = []
+              this.$message.warning('删除成功！');
+              let checkBoxArr = this.checkboxArr.map(item => item.id)
+              this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
             }
           })
         } else if(resultTwo){
@@ -409,11 +405,8 @@ export default {
             this.$nextTick( () => {
               if(this.successNOid && this.successHaveId){
               this.$message.success('删除成功！')
-              // this.leftgetList(),
-              //   this.formPlan.salesman = '', //业务员
-              //   this.formPlan.Reservation = '',
-              //   this.formPlan.remark = '',
-              //   this.Right.tbdata = []
+                let checkBoxArr = this.checkboxArr.map(item => item.id)
+                this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
             }
           })
           },1000)
@@ -430,11 +423,8 @@ export default {
           save(data).then(res => {
             if (res.code === 0) {
               this.$message.success('删除成功！')
-              // this.leftgetList(),
-              //   this.formPlan.salesman = '', //业务员
-              //   this.formPlan.Reservation = '',
-              //   this.formPlan.remark = '',
-              //   this.Right.tbdata = []
+              let checkBoxArr = this.checkboxArr.map(item => item.partCode)
+              this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
             }
           })
         }
@@ -504,7 +494,7 @@ export default {
             save(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
-                this.leftgetList(),
+                this.leftgetList();
                   this.formPlan.salesman =  '', //业务员
                   this.formPlan.Reservation =  '',
                   this.formPlan.remark =  '',
@@ -753,7 +743,7 @@ export default {
       if (row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       // console.log(currentRowTable.clearCurrentRow)
-      if(!this.Flaga && !this.isAdd){
+      if(!this.Flaga && !this.isAdd && row.id){
         this.$Modal.confirm({
           title: '您正在编辑单据，是否需要保存',
           onOk: () => {
@@ -800,6 +790,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
+          this.leftgetList();
           this.LeadIn = false
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo

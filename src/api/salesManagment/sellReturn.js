@@ -69,7 +69,7 @@ export function getSave(data) {
 //提交
 export function getSubmit(data) {
   return axios.request({
-    url: `${api.omsOrder}/pchsReturnOrdeMain/commitOrder`,
+    url: `${api.omsOrder}/pchsReturnOrdeMain/commitAndEnter`,
     method: 'post',
     data
   })
