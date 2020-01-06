@@ -133,8 +133,8 @@
                   height="400"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column width="60" type="checkbox"></vxe-table-column>
+                  <vxe-table-column type="index" title="序号"></vxe-table-column>
+                  <vxe-table-column type="checkbox"></vxe-table-column>
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="150"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
@@ -367,11 +367,12 @@ export default {
           deleteit(dataaa).then(res => {
             if(res.code === 0){
               this.$message.warning('删除成功！')
-              this.leftgetList()
-              this.formPlan.salesman = ''
-              this.formPlan.Reservation = ''
-              this.formPlan.remark = ''
-              this.Right.tbdata = []
+              this.selection()
+              // this.leftgetList()
+              // this.formPlan.salesman = ''
+              // this.formPlan.Reservation = ''
+              // this.formPlan.remark = ''
+              // this.Right.tbdata = []
             }
           })
         } else if(resultTwo){
@@ -408,11 +409,11 @@ export default {
             this.$nextTick( () => {
               if(this.successNOid && this.successHaveId){
               this.$message.success('删除成功！')
-              this.leftgetList(),
-                this.formPlan.salesman = '', //业务员
-                this.formPlan.Reservation = '',
-                this.formPlan.remark = '',
-                this.Right.tbdata = []
+              // this.leftgetList(),
+              //   this.formPlan.salesman = '', //业务员
+              //   this.formPlan.Reservation = '',
+              //   this.formPlan.remark = '',
+              //   this.Right.tbdata = []
             }
           })
           },1000)
@@ -429,11 +430,11 @@ export default {
           save(data).then(res => {
             if (res.code === 0) {
               this.$message.success('删除成功！')
-              this.leftgetList(),
-                this.formPlan.salesman = '', //业务员
-                this.formPlan.Reservation = '',
-                this.formPlan.remark = '',
-                this.Right.tbdata = []
+              // this.leftgetList(),
+              //   this.formPlan.salesman = '', //业务员
+              //   this.formPlan.Reservation = '',
+              //   this.formPlan.remark = '',
+              //   this.Right.tbdata = []
             }
           })
         }
