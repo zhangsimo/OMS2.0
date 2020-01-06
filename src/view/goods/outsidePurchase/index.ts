@@ -180,6 +180,7 @@ export default class InterPurchase extends Vue {
 
   // 采购订单信息——表单
   private formPlanmain: any = {
+    createUid: "",
     guestId: "", // 供应商id
     guestName: "", // 供应商
     advanceAmt:"",//预付款
@@ -190,6 +191,7 @@ export default class InterPurchase extends Vue {
     storeId: "", // 入库仓
     remark: "", // 备注
     serviceId: "", // 订单号
+    processInstanceId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
@@ -252,6 +254,7 @@ export default class InterPurchase extends Vue {
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
+    processInstanceId: "",
   }
   //---- 新增方法
   private addPro() {
@@ -271,7 +274,9 @@ export default class InterPurchase extends Vue {
       storeId: "", // 入库仓
       remark: "", // 备注
       serviceId: "", // 订单号
+      processInstanceId: "",
     }
+    this.formPlanmain.createUid = "";
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
@@ -290,6 +295,7 @@ export default class InterPurchase extends Vue {
     ref.validate((valid: any) => {
       if (valid) {
         data = {
+          createUid: this.formPlanmain.createUid,
           guestId: this.formPlanmain.guestId,
           orderMan: this.formPlanmain.orderMan,
           orderManId: this.formPlanmain.orderManId,
@@ -298,7 +304,8 @@ export default class InterPurchase extends Vue {
           storeId: this.formPlanmain.storeId,
           remark: this.formPlanmain.remark,
           serviceId: this.formPlanmain.serviceId,
-          advanceAmt:this.formPlanmain.advanceAmt
+          advanceAmt:this.formPlanmain.advanceAmt,
+          processInstanceId: this.formPlanmain.processInstanceId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -418,7 +425,7 @@ export default class InterPurchase extends Vue {
             isNetWork = true;
             this.deletePartArr.forEach((els: any) => {
               this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-                if (el.oid == els.oid) {
+                if (el.partCode == els.partCode) {
                   arr.splice(index, 1);
                 }
               })
@@ -430,7 +437,7 @@ export default class InterPurchase extends Vue {
         if(this.tmpDeletePartArr.length > 0) {
           this.tmpDeletePartArr.forEach((els:any) => {
             this.tableData.forEach((el: any, index: number, arr: Array<any>) => {
-              if(el.oid == els.oid) {
+              if(el.partCode == els.partCode) {
                 arr.splice(index, 1);
               }
             })
@@ -520,6 +527,8 @@ export default class InterPurchase extends Vue {
         this.tableData = v.details || [];
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
+        this.formPlanmain.createUid = v.createUid;
+        this.formPlanmain.processInstanceId = v.processInstanceId;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {

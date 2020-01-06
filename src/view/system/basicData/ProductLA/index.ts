@@ -370,6 +370,7 @@ export default class ProductLA extends Vue {
                 empName: this.loginName,
             }
         })
+        this.distPartListData = JSON.parse(JSON.stringify(this.selectionWaitPartArr))
         this.selectionWaitPartArr = [];
         let res:any = await api.employeeAddPart(data);
         if(res.code == 0) {

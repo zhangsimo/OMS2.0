@@ -529,6 +529,15 @@ export default {
       this.info = false;
       this.store = this.parameter.orgId;
       this.model1 = this.parameter.orgId;
+      this.Rebateid = "";
+      this.BadDebtid = "";
+      this.remark = "";
+      this.totalpayment = 0;
+      this.paymentBaddebt = 0;
+      this.paymentRebate = 0;
+      this.totalcollect = 0;
+      this.collectBaddebt = 0;
+      this.collectRebate = 0;
       this.storeAccount(this.parameter.orgId);
     },
     // 获取数据
@@ -665,13 +674,17 @@ export default {
     // 应收全选
     collectCheckoutAll(selection) {
       this.collectlist = selection;
-      this.totalcollect = selection[selection.length - 1].thisAccountAmt;
+      selection.map(item => {
+        this.totalcollect += item.thisAccountAmt;
+      });
       this.getSettlementComputed();
     },
     // 应付全选
     paymentCheckoutAll(selection) {
       this.paymentlist = selection;
-      this.totalpayment = selection[selection.length - 1].thisAccountAmt;
+      selection.map(item => {
+        this.totalpayment += item.thisAccountAmt;
+      });
       this.getSettlementComputed();
     },
     // 应付取消选中

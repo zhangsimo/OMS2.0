@@ -85,6 +85,7 @@ export default {
       }
     };
     return {
+      dataChange: {},//左侧当前数据
       StoreId: '', //默认仓
       moment: moment,
       advanced: false, //更多模块的弹框
@@ -259,6 +260,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      this.dataChange = data
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {
@@ -441,6 +443,31 @@ export default {
           this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
           let res = await saveList(this.formPlan)
           if (res.code === 0) {
+            await this.getLeftLists()
+            this.legtTableData.map(item => {
+              if (item.id === this.dataChange.row.id) {
+                this.$set(this.dataChange, 'row', item)
+              }
+            })
+            await this.clickOnesList(this.dataChange)
+            this.allMoney = 0
+            this.$Message.success('保存成功');
+          }
+        } catch (errMap) {
+          this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+        }
+      }
+    },
+
+    //保存
+    async save() {
+      if (this.dataChange.row) {
+        if(!this.dataChange.row.guestId) return this.$message.error('请先选择采购订单')
+        try {
+          await this.$refs.xTable.validate()
+          this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+          let res = await saveList(this.formPlan)
+          if (res.code === 0) {
             this.getLeftLists()
             this.formPlan = {
               billStatusValue: 0,
@@ -452,34 +479,9 @@ export default {
         } catch (errMap) {
           this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
         }
+      } else {
+        this.$message.error('请先选择要保存的数据')
       }
-    },
-
-    //保存
-    save() {
-      this.$refs.formPlan.validate(async (valid) => {
-        if (valid) {
-          try {
-            await this.$refs.xTable.validate()
-            this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
-            let res = await saveList(this.formPlan)
-            if (res.code === 0) {
-              this.getLeftLists()
-              this.formPlan = {
-                billStatusValue: 0,
-                code: ''
-              }
-              this.allMoney = 0
-              this.$Message.success('保存成功');
-            } 
-          } catch (errMap) {
-            this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
-          }
-        } else {
-          this.$Message.error('*为必填项');
-        }
-      })
-
     },
 
     //入库
@@ -552,7 +554,7 @@ export default {
     },
     //新增
     addNew() {
-      if (this.legtTableData[0].guestId) {
+      if (!this.legtTableData.hasOwnProperty('guestId') || this.legtTableData[0].guestId) {
         this.formPlan = {
           billStatusValue: 0,
           billStatusName: '草稿',
@@ -584,11 +586,14 @@ export default {
       //     })
       let res = await deletList(this.rightList)
       if (res.code === 0) {
-        this.getLeftLists()
-        this.formPlan = {
-          billStatusValue: 0,
-          code: ''
-        }
+        this.$message.success(res.data)
+        await this.getLeftLists()
+        this.legtTableData.map(item => {
+          if (item.id === this.dataChange.row.id) {
+            this.$set(this.dataChange, 'row', item)
+          }
+        })
+        await this.clickOnesList(this.dataChange)
         this.allMoney = 0
       }
     },

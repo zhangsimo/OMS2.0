@@ -275,7 +275,7 @@
                       :before-upload ='beforeUpload'
                       v-has="'import'"
                     >
-                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput||mainId">
+                      <Button size="small" class="mr10" @click="getRUl" :disabled="isInput">
                         <span class="center"><Icon custom="iconfont icondaoruicon icons" />导入配件</span>
                       </Button>
                     </Upload>

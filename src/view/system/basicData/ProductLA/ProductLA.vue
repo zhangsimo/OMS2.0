@@ -165,7 +165,7 @@
                 <Icon custom="iconfont iconziyuan14 icons" />移入
               </span>
             </Button>
-            <Button class="ml10 mt30 w90" @click="moveOff" v-has="'shfit-out'">
+            <Button class="ml10 mt30 w90" @click="moveOff" v-has="'shfit-in'">
               <span class="center">
                 <Icon custom="iconfont iconfanhuiicon icons" />移出
               </span>

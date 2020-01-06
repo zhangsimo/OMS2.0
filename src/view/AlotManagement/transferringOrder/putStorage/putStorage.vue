@@ -152,8 +152,8 @@
                     <FormItem label="创建人：" prop="planDate">
                       <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
                     </FormItem>
-                    <FormItem label="申请单号：" prop="planOrderNum">
-                      <Input disabled :value="Leftcurrentrow.planOrderNum" class="w160"></Input>
+                    <FormItem label="申请单号：" prop="code">
+                      <Input disabled :value="Leftcurrentrow.code" class="w160"></Input>
                     </FormItem>
                     <FormItem label="入库单号：" prop="serviceId">
                       <Input class="w160" disabled :value="Leftcurrentrow.serviceId"></Input>
@@ -292,7 +292,7 @@ export default {
   },
   data() {
     return {
-      serviceIdValue: "",
+      codeValue: "",
       ArrayValue: [],
       staaa: false,
       dcData: [],
@@ -409,12 +409,12 @@ export default {
           },
           {
             title: "入库人",
-            key: "orderMan",
+            key: "commitUname",
             minWidth: 100
           },
           {
             title: "入库日期",
-            key: "orderDate",
+            key: "commitDate",
             minWidth: 160
           },
           {
@@ -556,7 +556,6 @@ export default {
     },
     selectAllEvent({ checked }) {},
     getDataType() {
-      //console.log(121);
       const params = {
         status: this.form.status
       };
@@ -599,7 +598,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      params["voList"] = params.detailVOS;
+      params["voList"] = this.ArrayValue
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -764,9 +763,10 @@ export default {
       });
     },
     getDataQuick(v) {
+      console.log(v, "v");
       const params = {
-        createTime: v[0],
-        endTime: v[1]
+        createTimeStart: v[0],
+        createTimeEnd: v[1]
       };
       this.getList(params);
     },
@@ -778,18 +778,24 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      this.Leftcurrentrow.planOrderNum = this.serviceIdValue;
-      const params = {
-        mainId: row.id
-      };
-      const res = await getListDetail(params);
+      // console.log(row, "row==>781");
+      // console.log(row.id, "row.id");
+      if (row.id == undefined) {
+        this.ArrayValue = row.detailVOS;
+      } else {
+        const params = {
+          mainId: row.id
+        };
+        const res = await getListDetail(params);
+        // console.log(params, "params");
+        this.ArrayValue = res.data;
+      }
+
       this.showit = false;
-      //console.log(this.Leftcurrentrow);
       const that = this;
       setTimeout(() => {
         that.showit = true;
       }, 100);
-
       cangkulist2(this.$store.state.user.userData.groupId)
         .then(res => {
           if (res.code == 0) {
@@ -799,6 +805,7 @@ export default {
             });
             // this.cangkuListall = res.data
             this.dcData = res.data;
+            console.log(this.dcData);
           }
         })
         .catch(e => {
@@ -905,8 +912,8 @@ export default {
       }
     },
     getOkList(list) {
-      // console.log(list, "list  =912");
-      this.serviceIdValue = list.serviceId;
+      console.log(list, "list");
+      this.codeValue = list.id;
       const item = {
         index: 1,
         xinzeng: "1",
@@ -916,7 +923,7 @@ export default {
           value: 0
         },
         codeId: list.id,
-        code: list.serviceId,
+        code: list.id,
         statuName: "草稿",
         storeName: "",
         guestName: list.guestName,

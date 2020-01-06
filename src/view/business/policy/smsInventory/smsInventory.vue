@@ -544,6 +544,7 @@ export default {
     },
     //新增
     addProoo() {
+      this.flag = 1
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -639,6 +640,7 @@ export default {
     },
     //保存
     baocun() {
+      this.flag = 0
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
@@ -723,6 +725,19 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(data) {
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun();
+          },
+          onCancel: () => {
+            this.getList();
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       this.$refs.form.resetFields()
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;

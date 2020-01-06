@@ -23,6 +23,7 @@ export const mixGoodsData = {
       upurl: "",
       //计划采购信息
       formPlan: {
+        createUid: "",
         supplyName: "", //供应商
         guestId: "", //供应商id
         // settleTypeId: "", // 结算方式
@@ -36,7 +37,8 @@ export const mixGoodsData = {
         directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
-        totalPrice: 0 //合计总金额
+        totalPrice: 0, //合计总金额
+        processInstanceId: ""
       },
       rulePlan: {
         supplyName: [
@@ -143,7 +145,8 @@ export const mixGoodsData = {
           directGuestId: "", //直发门店
           planOrderNum: "新计划采购", //计划单号
           otherPrice: 0, //其他费用
-          totalPrice: 0 //合计总金额
+          totalPrice: 0, //合计总金额
+          processInstanceId: "",
         };
         this.page.total = res.data.totalElements;
       }
@@ -311,7 +314,7 @@ export const mixGoodsData = {
         //赋值供应商id
         this.formPlan.guestId = v.id || "";
         //赋值票据类型id
-        this.formPlan.billType = v.billTypeName || "";
+        this.formPlan.billType = v.billTypeId || "";
       }
     },
     //选择日期
@@ -338,6 +341,7 @@ export const mixGoodsData = {
             this.selectPlanOrderItem = this.tbdata[0];
             this.tbdata.push();
             this.submit(1);
+            this.formPlan.createUid = "";
             this.formPlan.supplyName = this.tbdata[0].supplyName || "";
             this.formPlan.guestId = this.tbdata[0].guestId || "";
             this.formPlan.planArriveDate = this.tbdata[0].orderDate || "";
@@ -348,6 +352,7 @@ export const mixGoodsData = {
             this.formPlan.planOrderNum = this.tbdata[0].serviceId || "";
             this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
             this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
+            this.formPlan.processInstanceId = this.tbdata[0].processInstanceId || "";
           },
           onCancel: () => {
             if (this.newadd && this.selectPlanOrderItem.new) {
@@ -371,6 +376,7 @@ export const mixGoodsData = {
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
           this.formPlan.supplyName = v.guestName || "";
+          this.formPlan.createUid = v.createUid || "";
           this.formPlan.guestId = v.guestId || "";
           this.formPlan.planArriveDate = new Date(v.orderDate) || "";
           // this.formPlan.planDateformat = v.orderDate || "";
@@ -380,6 +386,7 @@ export const mixGoodsData = {
           this.formPlan.planOrderNum = v.serviceId || "";
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
+          this.formPlan.processInstanceId = v.processInstanceId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
           this.upurl = upxlxs + v.id;
@@ -412,7 +419,8 @@ export const mixGoodsData = {
         directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
-        totalPrice: 0 //合计总金额
+        totalPrice: 0, //合计总金额
+        processInstanceId: "",
       };
       this.tableData = [];
       let row = {
@@ -462,12 +470,14 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
+      this.submitloading = true;
       this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
             objReq.id = this.selectPlanOrderItem.id;
           }
+          objReq.createUid = this.formPlan.createUid;
           //供应商id
           objReq.guestId = this.formPlan.guestId;
           objReq.guestName = this.formPlan.supplyName;
@@ -484,6 +494,7 @@ export const mixGoodsData = {
           objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
+          objReq.processInstanceId = this.formPlan.processInstanceId;
           if (
             this.formPlan.planOrderNum &&
             this.formPlan.planOrderNum != "新计划采购"
@@ -520,7 +531,9 @@ export const mixGoodsData = {
               }
             });
           }
+          this.submitloading = false;
         } else {
+          this.submitloading = false;
           this.$Message.error("必填数据未填写");
         }
       });

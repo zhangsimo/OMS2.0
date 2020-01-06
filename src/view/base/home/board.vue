@@ -31,41 +31,61 @@
         <h5 style="margin-bottom: 20px">待办事项</h5>
         <ul>
           <li>
+            <a @click="go(1000)">
             <img src="../../../assets/images/home/rukuguanli.png" alt="">
-            未入库采购订单
+              待提交采购计划
             <span class="munber">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/chukuguanli.png" alt="">
-            未入出库销售订单
+              待提交销售订单
             <span class="munber2">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/fukuan.png" alt="">
-            未付款对账单
+              待收货计划采购订单
             <span class="munber">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/yingshoukuan.png" alt="">
-            未收款对账单
+              已提交销售订单
             <span class="munber2">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/duizhangdan .png" alt="">
-            本月月结未对账
+            待收货临时采购订单
             <span class="munber">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/caigouguanli .png" alt="">
-            待受理采购订单
+            待受理调拨申请单
             <span class="munber2">15</span>
+            </a>
           </li>
           <li>
+            <a>
             <img src="../../../assets/images/home/tuidanguanli.png" alt="">
-            待受理客户退单
+            待收货外采订单
             <span class="munber">15</span>
+            </a>
           </li>
-
+          <li>
+            <a>
+              <img src="../../../assets/images/home/tuidanguanli.png" alt="">
+              草稿对账单
+              <span class="munber2">15</span>
+            </a>
+          </li>
 
         </ul>
       </div>
@@ -74,7 +94,46 @@
 
 <script>
     export default {
-        name: "board"
+        name: "board",
+        methods:{
+            go(v){
+                let right = this.$store.state.user.userData.resourceVOS
+                if (right.some(item => item.name == v)){
+                    switch (v) {
+                        case 1000:
+                            this.$router.push({ name: 'goodsList',params:{}})
+                            break
+                        case 2000:
+                            this.$router.push({ name: 'salesOrder'})
+                            break
+                        case 1001:
+                            this.$router.push({ name: 'plannedPurchaseOrder'})
+                            break
+                        case 2000:
+                            this.$router.push({ name: 'salesOrder'})
+                            break
+                        case 2000:
+                            this.$router.push({ name: 'salesOrder'})
+                            break
+                        case 3101:
+                            this.$router.push({ name: 'applyFor'})
+                            break
+                        case 5200:
+                            this.$router.push({ name: 'settlementManagement-paymentmanage'})
+                            break
+                        case 4000:
+                            this.$router.push({ name: 'stockSearch'})
+                            break
+                    }
+                }else{
+                    this.$Message['error']({
+                        background: true,
+                        content: '暂无权限!需联系管理员开启权限'
+                    });
+
+                }
+            }
+        }
     }
 </script>
 

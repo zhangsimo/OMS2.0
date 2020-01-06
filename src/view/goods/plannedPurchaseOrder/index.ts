@@ -143,6 +143,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购订单信息——表单
   private formPlanmain: any = {
+    createUid: "",
     guestId: "", // 供应商id
     guestName: "", // 供应商
     orderMan: "", // 采购员
@@ -157,6 +158,7 @@ export default class PlannedPurchaseOrder extends Vue {
     serviceId: "", // 订单号
     code: "", // 往来单号
     codeId: "",
+    processInstanceId: "",
   }
   private ruleValidate: ruleValidate = {
     guestId: [{ required: true, message: '供应商不能为空', trigger: 'change' }],
@@ -260,6 +262,7 @@ export default class PlannedPurchaseOrder extends Vue {
     billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
+    processInstanceId: "",
   }
   //---- 新增方法
   private addPro() {
@@ -283,7 +286,9 @@ export default class PlannedPurchaseOrder extends Vue {
       serviceId: "", // 订单号
       code: "", // 往来单号
       codeId: "",
+      processInstanceId: "",
     }
+    this.formPlanmain.createUid = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
     this.isAdd = false;
     this.isInput = false;
@@ -303,6 +308,7 @@ export default class PlannedPurchaseOrder extends Vue {
     ref.validate((valid: any) => {
       if (valid) {
         data = {
+          createUid: this.formPlanmain.createUid,
           guestId: this.formPlanmain.guestId,
           orderMan: this.formPlanmain.orderMan,
           orderManId: this.formPlanmain.orderManId,
@@ -316,6 +322,7 @@ export default class PlannedPurchaseOrder extends Vue {
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
+          processInstanceId: this.formPlanmain.processInstanceId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -530,6 +537,8 @@ export default class PlannedPurchaseOrder extends Vue {
         this.tableData = v.details || [];
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
+        this.formPlanmain.createUid = v.createUid;
+        this.formPlanmain.processInstanceId = v.processInstanceId;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {
