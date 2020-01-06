@@ -319,7 +319,6 @@
                     </div>
                   </div>
                 </div>
-                {{formPlan.detailVOList}}
                 <vxe-table
                   border
                   :edit-rules="validRules"
@@ -841,10 +840,17 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      var datas = conversionList(val);
-      datas.forEach(item => {
-        this.formPlan.detailVOList.push(item);
-      });
+      this.$refs.formPlan.validate((valid) => {
+        if (valid){
+          var datas = conversionList(val);
+          datas.forEach(item => {
+            this.formPlan.detailVOList.push(item);
+          });
+        }else{
+          this.$Message.error('*为必填项');
+        }
+      })
+
       // this.$nextTick(()=>{
       //   this.$set(this.formPlan,'detailVOList',datas)
       // console.log(this.formPlan)
