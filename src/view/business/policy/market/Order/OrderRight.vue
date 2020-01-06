@@ -111,12 +111,24 @@
       <div class="flex plan-cz-btn" ref="planBtn">
         <div class="clearfix">
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="addMountings " v-has="'addMountings'">
+            <Button
+              size="small"
+              :disabled="draftShow != 0"
+              class="mr10"
+              @click="addMountings "
+              v-has="'addMountings'"
+            >
               <Icon type="md-add" />添加配件
             </Button>
           </div>
           <div class="fl mb5">
-            <Button size="small" :disabled="draftShow != 0" class="mr10" @click="deletePart" v-has="'deletePart'">
+            <Button
+              size="small"
+              :disabled="draftShow != 0"
+              class="mr10"
+              @click="deletePart"
+              v-has="'deletePart'"
+            >
               <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
             </Button>
           </div>
@@ -220,7 +232,7 @@
               <span>{{ countAmount(row) }}</span>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="remark" title="备注"    :edit-render="{name: 'input'}"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input'}"></vxe-table-column>
           <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
           <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
           <vxe-table-column field title="批次">
@@ -315,6 +327,7 @@ import baseUrl from "_conf/url";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { baocun, shanqu, outDataList, zuofei } from "@/api/business/market.js";
 import * as tools from "../../../../../utils/tools";
+import { set } from "xe-utils/methods";
 
 export default {
   name: "OrderRight",
@@ -654,17 +667,30 @@ export default {
       if (this.selectTableList.length > 0) {
         let data = [];
         this.selectTableList.forEach(item => {
+          this.formPlan.details.map((itm, index) => {
+            if (item.id === itm.id) {
+              this.formPlan.details.splice(index, 1);
+            }
+          });
           data.push(item.id);
         });
-        //console.log(data);
-        const that = this;
+        const form = this.$parent.$parent.$refs.leftorder.tableData;
+        form.map((item, index) => {
+          if (item.id === this.formPlan.id) {
+            this.$set(
+              this.$parent.$parent.$refs.leftorder.tableData[index],
+              "details",
+              this.formPlan.details
+            );
+          }
+        });
         shanqu(data).then(res => {
-          //console.log(res.code === 0, "dafadsf");
           if (res.code === 0) {
-            that.getChangeList();
-            this.formPlan={}
-            this.$store.state.dataList.oneOrder={}
-            this.$refs.formPlan.resetFields();
+            this.$message.success(res.data);
+            //   // that.getChangeList();
+            //   this.formPlan={}
+            // this.$store.state.dataList.oneOrder={}
+            // this.$refs.formPlan.resetFields();
           }
         });
       } else {
@@ -684,13 +710,12 @@ export default {
     getPartNameList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          let data = {};
-          data = this.formPlan;
-          data.details = conversionList(val);
-          let res = await baocun(data);
-          if (res.code === 0) {
-            this.getChangeList();
-          }
+          let data = this.formPlan.details;
+          const form = conversionList(val)
+          form.map(item=>{
+            data.push(item);
+          })
+          this.$set(this.formPlan, "details", data);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -769,8 +794,8 @@ export default {
 
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.formPlan={}
-              this.$refs.formPlan.resetFields();
+              // this.formPlan = {};
+              // this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
@@ -810,7 +835,7 @@ export default {
         return false;
       }
       this.$Modal.confirm({
-        title: '是否确定出库',
+        title: "是否确定出库",
         onOk: async () => {
           this.$refs.formPlan.validate(async valid => {
             if (valid) {
@@ -820,7 +845,9 @@ export default {
                   return this.$message.error("可用余额不足");
                 }
                 //console.log("jinlaile");
-                this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+                this.formPlan.orderType = JSON.stringify(
+                  this.formPlan.orderType
+                );
                 let res = await outDataList(this.formPlan);
                 //console.log("fasong");
                 if (res.code === 0) {
@@ -840,11 +867,9 @@ export default {
           });
         },
         onCancel: () => {
-          this.$Message.info('取消成功');
-        },
-      })
-
-
+          this.$Message.info("取消成功");
+        }
+      });
     },
     //提交
     submitList() {
