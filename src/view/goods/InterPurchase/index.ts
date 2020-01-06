@@ -160,6 +160,7 @@ export default class InterPurchase extends Vue {
     serviceId: "", // 订单号
     code: "", // 往来单号
     codeId: "",
+    processInstanceId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
@@ -240,6 +241,7 @@ export default class InterPurchase extends Vue {
     billStatusId: '',
     createTime: tools.transTime(new Date()),
     details: [],
+    processInstanceId: "",
   }
   //---- 新增方法
   private addPro() {
@@ -263,6 +265,7 @@ export default class InterPurchase extends Vue {
       serviceId: "", // 订单号
       code: "", // 往来单号
       codeId: "",
+      processInstanceId: "",
     }
     this.formPlanmain.createUid = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
@@ -298,6 +301,7 @@ export default class InterPurchase extends Vue {
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
+          processInstanceId: this.formPlanmain.processInstanceId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -514,6 +518,7 @@ export default class InterPurchase extends Vue {
         this.serviceId = v.serviceId;
         // orderState['草稿'], orderState['退回']
         this.formPlanmain.createUid = v.createUid;
+        this.formPlanmain.processInstanceId = v.processInstanceId;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {

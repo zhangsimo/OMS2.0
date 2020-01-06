@@ -37,7 +37,8 @@ export const mixGoodsData = {
         directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
-        totalPrice: 0 //合计总金额
+        totalPrice: 0, //合计总金额
+        processInstanceId: ""
       },
       rulePlan: {
         supplyName: [
@@ -144,7 +145,8 @@ export const mixGoodsData = {
           directGuestId: "", //直发门店
           planOrderNum: "新计划采购", //计划单号
           otherPrice: 0, //其他费用
-          totalPrice: 0 //合计总金额
+          totalPrice: 0, //合计总金额
+          processInstanceId: "",
         };
         this.page.total = res.data.totalElements;
       }
@@ -350,6 +352,7 @@ export const mixGoodsData = {
             this.formPlan.planOrderNum = this.tbdata[0].serviceId || "";
             this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
             this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
+            this.formPlan.processInstanceId = this.tbdata[0].processInstanceId || "";
           },
           onCancel: () => {
             if (this.newadd && this.selectPlanOrderItem.new) {
@@ -383,6 +386,7 @@ export const mixGoodsData = {
           this.formPlan.planOrderNum = v.serviceId || "";
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
+          this.formPlan.processInstanceId = v.processInstanceId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
           this.upurl = upxlxs + v.id;
@@ -415,7 +419,8 @@ export const mixGoodsData = {
         directGuestId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
-        totalPrice: 0 //合计总金额
+        totalPrice: 0, //合计总金额
+        processInstanceId: "",
       };
       this.tableData = [];
       let row = {
@@ -465,6 +470,7 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
+      this.submitloading = true;
       this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};
@@ -488,6 +494,7 @@ export const mixGoodsData = {
           objReq.directGuestId = this.formPlan.directGuestId;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
+          objReq.processInstanceId = this.formPlan.processInstanceId;
           if (
             this.formPlan.planOrderNum &&
             this.formPlan.planOrderNum != "新计划采购"
@@ -524,7 +531,9 @@ export const mixGoodsData = {
               }
             });
           }
+          this.submitloading = false;
         } else {
+          this.submitloading = false;
           this.$Message.error("必填数据未填写");
         }
       });
