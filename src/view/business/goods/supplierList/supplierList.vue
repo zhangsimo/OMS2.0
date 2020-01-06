@@ -145,26 +145,8 @@
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
-                    <!--<template v-slot:edit="{ row }">-->
-                      <!--<InputNumber-->
-                        <!--:max="999999"-->
-                        <!--:min="0"-->
-                        <!--v-model="row.orderQty"-->
-                        <!--:disabled="presentrowMsg !== 0"-->
-                      <!--&gt;</InputNumber>-->
-                    <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
-                    <!--<template v-slot:edit="{ row }">-->
-                      <!--<el-input-number-->
-                        <!--:min="0"-->
-                        <!--v-model="row.orderPrice"-->
-                        <!--:disabled="presentrowMsg !== 0"-->
-                        <!--:precision="2"-->
-                        <!--:controls="false"-->
-                        <!--size="small"-->
-                      <!--/>-->
-                    <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderAmt" title="退货金额" width="100">
                     <template v-slot="{ row }">
@@ -513,6 +495,16 @@
       moreaa(){
         this.$refs.moremore.init()
       },
+      // 计算尾部总和
+      countAllAmount(data) {
+        let count = 0;
+        data.forEach(row => {
+          count += this.countAmount(row);
+        });
+        count = count.toFixed(2)
+        this.totalMoney = count;
+        return count;
+      },
       // 新增按钮
       addProoo(){
         this.$refs.formPlan.resetFields();
@@ -709,11 +701,14 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (columnIndex === 9) {
-              return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
-            }
+            // if (columnIndex === 9) {
+            //   return this.$utils.sum(data, column.property,columnIndex).toFixed(2)
+            // }
             if(['canReQty','orderQty'].includes(column.property)){
               return this.$utils.sum(data, column.property,columnIndex)
+            }
+            if (columnIndex === 9) {
+              return ` ${this.countAllAmount(data)} `;
             }
             return null
           })
