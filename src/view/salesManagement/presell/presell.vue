@@ -319,7 +319,7 @@
                     </div>
                   </div>
                 </div>
-                {{formPlan.detailVOList}}
+                <!-- {{formPlan.detailVOList}} -->
                 <vxe-table
                   border
                   :edit-rules="validRules"
@@ -584,7 +584,11 @@ export default {
       ],
       //右侧表格数据
       tableData: [],
-      formPlan: {}, //表单对象
+      formPlan: {
+        detailVOList: [],
+        orderManId: "",
+        orderMan: ""
+      }, //表单对象
       addressShow: false, //收货地址显示
       query: {}, //更多搜索信息
       client: [], //客户列表
@@ -841,10 +845,12 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      var datas = conversionList(val);
+      var datas = val;
+      console.log(datas, "datas");
       datas.forEach(item => {
         this.formPlan.detailVOList.push(item);
       });
+      console.log(this.formPlan.detailVOList, "this.formPlan.detailVOList");
       // this.$nextTick(()=>{
       //   this.$set(this.formPlan,'detailVOList',datas)
       // console.log(this.formPlan)
@@ -965,7 +971,7 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
-      this.formPlan = {};
+      // this.formPlan = {};
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
