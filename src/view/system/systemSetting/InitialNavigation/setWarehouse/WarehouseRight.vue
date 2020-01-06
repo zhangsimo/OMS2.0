@@ -237,7 +237,7 @@ export default {
         if (valid) {
           getSaveWarehouse(this.warehouseList).then(res => {
             if (res.code == 0) {
-              this.$Message.success("验证成功");
+              this.$Message.success(res.message);
               this.getAllWarehouseList();
             }
           });
