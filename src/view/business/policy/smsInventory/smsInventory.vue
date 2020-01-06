@@ -26,18 +26,40 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun"  v-has="'save'" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">保存</Button>
+            <Button
+              @click="baocun"
+              v-has="'save'"
+              type="default"
+              class="mr10"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >保存</Button>
           </div>
           <div class="db">
-            <Button @click="editPro"  v-has="'submit'" type="default" class="mr10" :disabled="this.formPlan.statuName!== '草稿'">提交</Button>
+            <Button
+              @click="editPro"
+              v-has="'submit'"
+              type="default"
+              class="mr10"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >提交</Button>
           </div>
           <div class="db">
-            <Button class="mr10"  v-has="'cancellation'" @click="cancellation" :disabled="this.formPlan.statuName!== '草稿'">
+            <Button
+              class="mr10"
+              v-has="'cancellation'"
+              @click="cancellation"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable" v-has="'print'" :disabled="this.formPlan.statuName!== '草稿'">
+            <Button
+              class="mr10"
+              @click="printTable"
+              v-has="'print'"
+              :disabled="this.formPlan.statuName!== '草稿'"
+            >
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -121,12 +143,24 @@
               <div class="flex plan-cz-btn" ref="planBtn">
                 <div class="clearfix">
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="addPro" v-has="'addPro'" :disabled="draftShow != 0">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="addPro"
+                      v-has="'addPro'"
+                      :disabled="draftShow != 0"
+                    >
                       <Icon type="md-add" />添加配件
                     </Button>
                   </div>
                   <div class="fl mb5">
-                    <Button size="small" class="mr10" @click="shanchu" v-has="'delete'" :disabled="draftShow != 0">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="shanchu"
+                      v-has="'delete'"
+                      :disabled="draftShow != 0"
+                    >
                       <i class="iconfont mr5 iconlajitongicon"></i> 删除
                     </Button>
                   </div>
@@ -216,7 +250,12 @@
     <!--添加配件-->
     <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
     <!--更多弹框-->
-    <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData" ref="More"></More>
+    <More
+      :getShowMore="showMore"
+      @getMoreStatus="getMoreStatus"
+      @getMoreData="getMoreData"
+      ref="More"
+    ></More>
     <!-- 作废提示 -->
     <Modal v-model="showRemove" title="提示" @on-ok="removeOk" @on-cancel="removeCancel">
       <p>是否确定作废</p>
@@ -255,7 +294,7 @@ import "../../../lease/product/lease.less";
 import SelectPartCom from "../../../salesManagement/salesOrder/components/selectPartCom";
 import PrintShow from "./components/PrintShow";
 import More from "./components/More";
-import moment from "moment";
+import moment, { months } from "moment";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import * as tools from "../../../../utils/tools";
@@ -443,8 +482,14 @@ export default {
     }
   },
   methods: {
-    editActivedEvent({row}){
-      this.dis = this.formPlan.billStatusId ? this.formPlan.billStatusId.value === 0 ?   row.sysQty- row.trueQty < 0 ? false: true : true : false
+    editActivedEvent({ row }) {
+      this.dis = this.formPlan.billStatusId
+        ? this.formPlan.billStatusId.value === 0
+          ? row.sysQty - row.trueQty < 0
+            ? false
+            : true
+          : true
+        : false;
     },
     //获取左侧列表
     getList() {
@@ -491,7 +536,7 @@ export default {
     },
 
     //清除表单校验
-    handleReset () {
+    handleReset() {
       this.$refs.form.resetFields();
     },
     //获取表格高度
@@ -530,7 +575,7 @@ export default {
     // },
     //更多按钮
     More() {
-      this.$refs.More.reset()
+      this.$refs.More.reset();
       this.showMore = true;
     },
     //更多弹窗恢复false
@@ -544,9 +589,7 @@ export default {
     },
     //新增
     addProoo() {
-      this.flag = 1
-      if (this.Left.tbdata.length === 0) {
-      } else {
+      if (this.Left.tbdata.length !== 0) {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
           this.$Message.info(
             "当前列表已有一个新增单等待操作,请先保存当前操作新增单据"
@@ -577,6 +620,10 @@ export default {
         detailVOList: []
       };
       this.Left.tbdata.unshift(item);
+      console.log(item)
+      console.log(this.Left.tbdata[0])
+      this.selectTabelData(this.Left.tbdata[0])
+      this.flag = 1;
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
@@ -614,7 +661,7 @@ export default {
       //   }
       // });
       this.$Modal.confirm({
-        title: '是否确定提交订单',
+        title: "是否确定提交订单",
         onOk: async () => {
           this.$refs.form.validate(valid => {
             if (valid) {
@@ -634,13 +681,13 @@ export default {
           });
         },
         onCancel: () => {
-          this.$Message.info('取消提交');
-        },
-      })
+          this.$Message.info("取消提交");
+        }
+      });
     },
     //保存
     baocun() {
-      this.flag = 0
+      this.flag = 0;
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
@@ -655,11 +702,12 @@ export default {
             getSubmitList(this.formPlan).then(res => {
               if (res.code == 0) {
                 this.isAddRight = true;
+                this.Right.tbdata = [];
                 this.formPlan = {};
                 this.$Message.success("保存成功");
                 this.getList();
               }
-              this.handleReset()
+              this.handleReset();
             });
           } else {
             this.$message.error("带*必填");
@@ -725,6 +773,7 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(data) {
+      console.log(data)
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -738,7 +787,6 @@ export default {
         });
         return;
       }
-      this.$refs.form.resetFields()
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;
@@ -755,6 +803,11 @@ export default {
         ids.push(item.id);
       });
       this.array_diff(this.Right.tbdata, seleList);
+      this.Left.tbdata.map((item, index) => {
+        if (item.id === this.formPlan.id) {
+          this.$set(this.Left.tbdata[index], "detailVOList", this.Right.tbdata);
+        }
+      });
       delectTable(ids)
         .then(res => {
           if (res.code == 0) {
@@ -774,7 +827,7 @@ export default {
       if (res.code == 0) {
         self.$Message.success("导入成功");
         this.Right.tbdata = res.data.details;
-        this.getList()
+        this.getList();
       } else {
         self.$Message.error(res.message);
       }
@@ -788,36 +841,34 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          var datas = conversionList(val);
-          this.formPlan.detailVOList = datas;
-          this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
-            "YYYY-MM-DD HH:mm:ss"
-          );
-          getSubmitList(this.formPlan)
-            .then(res => {
-              this.$refs.SelectPartRef.searchPartLayer = false
-              this.getList();
-            })
-            .catch(err => {
-              this.showRemove = false;
-              this.$Message.info("添加失败");
-            });
-        } else {
-          this.$message.error("带*必填");
-        }
-      });
+      // this.$refs.form.resetFields()
+      // console.log(this.formPlan)
+      var datas = conversionList(val);
+      this.formPlan.detailVOList = datas;
+      this.Right.tbdata = [...this.Right.tbdata, ...datas];
+      // this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
+      //   "YYYY-MM-DD HH:mm:ss"
+      // );
+      this.$refs.SelectPartRef.searchPartLayer = false;
+      // getSubmitList(this.formPlan)
+      //   .then(res => {
+      //
+      //     this.getList();
+      //   })
+      //   .catch(err => {
+      //     this.showRemove = false;
+      //     this.$Message.info("添加失败");
+      //   });
     },
     //分页
     changePage(p) {
-      this.Left.page.num = p
-      this.getList()
+      this.Left.page.num = p;
+      this.getList();
     },
     changeSize(size) {
-      this.Left.page.num = 1
-      this.Left.page.size = size
-      this.getList()
+      this.Left.page.num = 1;
+      this.Left.page.size = size;
+      this.getList();
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},

@@ -910,6 +910,7 @@
 
       //选择销售出库单
       getOutList(val) {
+        console.log(val)
         let data = {}
         data = this.formPlan
         data.details = val
