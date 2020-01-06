@@ -951,9 +951,12 @@
 
       //选择销售出库单
       getOutList(val) {
-        // console.log('222222',this.formPlan.details)
         val.forEach(item => {
-          this.formPlan.details.push(item);
+          if(this.formPlan.details){
+            this.formPlan.details.push(item)
+          } else {
+            this.formPlan.details = [item]
+          }
         });
        //  let data = {}
        //  data = this.formPlan
