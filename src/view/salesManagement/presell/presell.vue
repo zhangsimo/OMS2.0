@@ -586,7 +586,12 @@ export default {
       formPlan: {
         orderMan: "",
         orderManId: "",
-        detailVOList: []
+        detailVOList: [],
+        guestId: "",
+        orderManId: "",
+        billTypeId: "",
+        settleTypeId: "",
+        storeId: ""
       }, //表单对象
       addressShow: false, //收货地址显示
       query: {}, //更多搜索信息
