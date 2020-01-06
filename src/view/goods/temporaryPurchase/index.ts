@@ -193,6 +193,7 @@ export default class InterPurchase extends Vue {
     remark: "", // 备注
     directCompanyId: "", // 直发门店
     serviceId: "", // 订单号
+    processInstanceId: "",
   }
   private ruleValidate: ruleValidate = {
     guestName: [{ required: true, message: '供应商不能为空', trigger: 'blur' }],
@@ -272,6 +273,7 @@ export default class InterPurchase extends Vue {
     billStatusId: '0',
     createTime: tools.transTime(new Date()),
     details: [],
+    processInstanceId: "",
   }
   //---- 新增方法
   private addPro() {
@@ -294,6 +296,7 @@ export default class InterPurchase extends Vue {
       remark: "", // 备注
       directCompanyId: "", // 直发门店
       serviceId: "", // 订单号
+      processInstanceId: "",
     }
     this.formPlanmain.createUid = "";
     this.formPlanmain.orderDate = this.PTrow.createTime;
@@ -328,6 +331,7 @@ export default class InterPurchase extends Vue {
           directCompanyId: this.formPlanmain.directCompanyId,
           serviceId: this.formPlanmain.serviceId,
           advanceAmt: this.formPlanmain.advanceAmt,
+          processInstanceId: this.formPlanmain.processInstanceId,
         };
         for (let k in this.amt) {
           if (this.amt[k] > 0) {
@@ -550,6 +554,7 @@ export default class InterPurchase extends Vue {
         this.selectRowState = v.billStatusId.name;
         this.serviceId = v.serviceId;
         this.formPlanmain.createUid = v.createUid;
+        this.formPlanmain.processInstanceId = v.processInstanceId;
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {
