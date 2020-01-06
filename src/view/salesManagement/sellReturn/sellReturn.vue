@@ -98,6 +98,7 @@
                 销售退货列表
               </div>
               <Table
+                ref="currentRowTable"
                 :queryTime="queryTime"
                 :billStatusId="billStatusId"
                 height="660"
@@ -350,6 +351,7 @@
   import PrintShow from "./components/PrintShow";
   import MoreSearch from "./components/MoreSearch";
   import * as tools from "../../../utils/tools";
+  import {save} from "../../../api/AlotManagement/transferringOrder";
 
   export default {
     name: 'sellReturn',
@@ -552,7 +554,7 @@
 
         id: '',  //点击左侧表格拿到的id
         selectTableList: [], //右侧table表格选中的数据
-        // isCommit: false//判断是否已提交
+        Flaga: false//判断是否已提交
       }
     },
     mounted() {
@@ -606,14 +608,53 @@
       //获取左侧表格一行选中的数据
       selectTabelData(v) {
         console.log('左侧数据数据',v)
-        this.isNew = false
-        this.currentRow = v
-        this.id = v.id
-        this.formPlan.orderDate = tools.transTime(v.orderDate)
-        this.tableData = v.details
-        this.formPlan = v
-        this.draftShow = v.billStatusId.value
-        this.selectTableList=[]
+         if(v==null) return
+        let currentRowTable = this.$refs["currentRowTable"];
+        if(!this.Flaga && !this.isAdd){
+          this.$Modal.confirm({
+            title: '您正在编辑单据，是否需要保存',
+            onOk: () => {
+              currentRowTable.clearCurrentRow();
+              this.isSave()
+            },
+            onCancel: () => {
+              this.sellOrderTable.tbdata.splice(0, 1);
+              currentRowTable.clearCurrentRow();
+              this.isAdd = true;
+              this.currentRow = v
+              this.id = v.id
+              this.formPlan.orderDate = tools.transTime(v.orderDate)
+              this.tableData = v.details
+              this.formPlan = v
+              this.draftShow = v.billStatusId.value
+              this.selectTableList=[]
+              this.$refs.formPlan.resetFields();
+            },
+          })
+
+          {
+        }
+        }else{
+          if (v.id){
+            this.isNew = false
+            this.currentRow = v
+            this.id = v.id
+            this.formPlan.orderDate = tools.transTime(v.orderDate)
+            this.tableData = v.details
+            this.formPlan = v
+            this.draftShow = v.billStatusId.value
+            this.selectTableList=[]
+          }
+        }
+
+        // this.isNew = false
+        // this.currentRow = v
+        // this.id = v.id
+        // this.formPlan.orderDate = tools.transTime(v.orderDate)
+        // this.tableData = v.details
+        // this.formPlan = v
+        // this.draftShow = v.billStatusId.value
+        // this.selectTableList=[]
       },
       //新增按钮
       addOneList() {
@@ -910,6 +951,7 @@
 
       //选择销售出库单
       getOutList(val) {
+        // console.log('222222',this.formPlan.details)
         val.forEach(item => {
           this.formPlan.details.push(item);
         });
