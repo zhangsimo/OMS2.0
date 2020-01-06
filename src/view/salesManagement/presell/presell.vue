@@ -319,7 +319,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- {{formPlan.detailVOList}} -->
                 <vxe-table
                   border
                   :edit-rules="validRules"
@@ -851,6 +850,18 @@ export default {
         this.formPlan.detailVOList.push(item);
       });
       console.log(this.formPlan.detailVOList, "this.formPlan.detailVOList");
+
+      this.$refs.formPlan.validate((valid) => {
+        if (valid){
+          var datas = conversionList(val);
+          datas.forEach(item => {
+            this.formPlan.detailVOList.push(item);
+          });
+        }else{
+          this.$Message.error('*为必填项');
+        }
+      })
+
       // this.$nextTick(()=>{
       //   this.$set(this.formPlan,'detailVOList',datas)
       // console.log(this.formPlan)
