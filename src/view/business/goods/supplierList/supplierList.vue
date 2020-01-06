@@ -121,6 +121,7 @@
                   </div>
                 </div>
                 <vxe-table
+                  ref="xTable"
                   border
                   resizable
                   show-footer
@@ -132,6 +133,9 @@
                   :height="rightTableHeight"
                   :data="Right.tbdata"
                   :footer-method="addFooter"
+                  showOverflow="true"
+                  height="400"
+                  @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -140,15 +144,15 @@
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input'}" width="100">
-                    <template v-slot:edit="{ row }">
-                      <InputNumber
-                        :max="999999"
-                        :min="0"
-                        v-model="row.orderQty"
-                        :disabled="presentrowMsg !== 0"
-                      ></InputNumber>
-                    </template>
+                  <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
+                    <!--<template v-slot:edit="{ row }">-->
+                      <!--<InputNumber-->
+                        <!--:max="999999"-->
+                        <!--:min="0"-->
+                        <!--v-model="row.orderQty"-->
+                        <!--:disabled="presentrowMsg !== 0"-->
+                      <!--&gt;</InputNumber>-->
+                    <!--</template>-->
                   </vxe-table-column>
                   <vxe-table-column field="orderPrice" title="退货单价" :edit-render="{name: 'input'}" width="100">
                     <template v-slot:edit="{ row }">
@@ -185,7 +189,7 @@
       <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder" @selectRow="selectRow"></procurement-modal>
     </div>
     <!--供应商资料-->
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName" @isDisabled="isDisabled"></select-supplier>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     <!--打印弹框-->
     <print-show ref="PrintModel" :orderId="mainId"></print-show>
   </div>
@@ -266,7 +270,7 @@
         userMap: [], //退货员
         //校验输入框的值
         validRules: {
-          applyQty: [
+          orderQty: [
             { required: true,validator:changeNumber },
           ],
           // remark: [
@@ -374,34 +378,139 @@
         Flaga: false, //判断是否出现退出弹框
         Acode: '', //保存,提交时需给后台传的code
         AcodeId: '', //保存,提交时需给后台传的codeId
+        successNOid: '', //没有id
+        successHaveId: '', //有id
       }
     },
     methods: {
+      //判断从表input能不能编辑
+      editActivedEvent({row}){
+        let xTable = this.$refs.xTable;
+        let orderQtyColumn = xTable.getColumnByField("orderQty");
+        let remarkColumn = xTable.getColumnByField("remark");
+        let isDisabled = this.presentrowMsg !== 0
+        orderQtyColumn.editRender.attrs.disabled = isDisabled;
+        remarkColumn.editRender.attrs.disabled = isDisabled;
+      },
       //删除配件
       Delete(){
-        let data = this.checkboxArr.map(item => {
-          return item.id
-        })
-        sellOrderReturn(data).then(res => {
-            if(res.code === 0){
-              this.$Message.success('删除成功')
-              this.$refs.formPlan.resetFields();
-              this.leftgetList()
-              this.formPlan.guestName = ''   //调出方
-              data.orderMan = ''  //退货员
-              // tools.transTime(this.formPlan.orderDate)  //退货日期
-              this.formPlan.numbers = '' //采退单号
-              this.formPlan.cause  = '' //退货原因
-              this.formPlan.clearing = '' //结算方式
-              this.formPlan.remark  = '' //备注
-              this.formPlan.warehouse = ''  //退货仓库
-              this.formPlan.serviceId = '' //采购订单
-              this.Right.tbdata  =  [] //子表格
-            }
-        })
-        // var set = this.checkboxArr.map(item=>item.id)
-        // var resArr = this.Right.tbdata.filter(item => !set.includes(item.id))
-        // this.Right.tbdata = resArr
+        if(this.checkboxArr.length > 0){
+          var result = this.checkboxArr.every(item => item.id)
+          var resultTwo = this.checkboxArr.some(item => item.id)
+          if(result){
+            let data = this.checkboxArr.map(item => {
+              return item.id
+            })
+            sellOrderReturn(data).then(res => {
+              if(res.code === 0){
+                this.$Message.success('删除成功')
+                this.$refs.formPlan.resetFields();
+                this.leftgetList()
+                this.formPlan.guestName = ''   //调出方
+                data.orderMan = ''  //退货员
+                // tools.transTime(this.formPlan.orderDate)  //退货日期
+                this.formPlan.numbers = '' //采退单号
+                this.formPlan.cause  = '' //退货原因
+                this.formPlan.clearing = '' //结算方式
+                this.formPlan.remark  = '' //备注
+                this.formPlan.warehouse = ''  //退货仓库
+                this.formPlan.serviceId = '' //采购订单
+                this.Right.tbdata  =  [] //子表格
+              }
+            })
+          }else if(resultTwo){
+            let haveId = this.checkboxArr.filter(item => item.id)
+            let NoId = this.checkboxArr.filter(item => !item.id)
+            let NoIdPartCode = NoId.map(item => item.partCode)
+            let AddNoId = this.Right.tbdata.filter(item => !item.id)
+            let NoRepeat = AddNoId.filter(item => !NoIdPartCode.includes(item.partCode))
+            let data = {}
+            data.code = this.Acode || this.formPlan.serviceId
+            data.codeId = this.AcodeId
+            data.id = this.rowId
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
+            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+            data.serviceId = this.formPlan.numbers  //采退单号
+            data.rtnReasonId = this.formPlan.cause  //退货原因
+            data.settleTypeId = this.formPlan.clearing  //结算方式
+            data.remark = this.formPlan.remark  //备注
+            data.storeId = this.formPlan.warehouse  //退货仓库
+            // data.code = this.formPlan.serviceId //采购订单
+            data.details = NoRepeat
+            //保存假增的数据
+            saveDraft(data).then(res => {
+              if(res.code === 0){
+                this.successHaveId = true
+              }
+            })
+
+            let dataTwo = haveId.map(item => {
+              return {
+                id: item.id
+              }
+            })
+            //删除真增加的数据
+            sellOrderReturn(dataTwo).then(res => {
+              if(res.code == 0){
+                this.successHaveId = true
+              }
+            })
+            setTimeout(() => {
+              this.$nextTick( () => {
+                if(this.successNOid && this.successHaveId){
+                  this.$message.success('删除成功！')
+                  this.leftgetList(),
+                    this.formPlan.salesman = '', //业务员
+                    this.formPlan.Reservation = '',
+                    this.formPlan.remark = '',
+                    this.Right.tbdata = []
+                }
+              })
+            },1000)
+          }else {
+            var set = this.checkboxArr.map(item => item.partCode)
+            var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
+            let data = {}
+            data.code = this.Acode || this.formPlan.serviceId
+            data.codeId = this.AcodeId
+            data.id = this.rowId
+            // data.guestId = this.guestidId   //调出方
+            data.guestId = this.formPlan.guestName   //调出方
+            data.orderManId = this.formPlan.storeId     //退货员id
+            data.orderMan = this.formPlan.orderMan //退货员
+            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+            data.serviceId = this.formPlan.numbers  //采退单号
+            data.rtnReasonId = this.formPlan.cause  //退货原因
+            data.settleTypeId = this.formPlan.clearing  //结算方式
+            data.remark = this.formPlan.remark  //备注
+            data.storeId = this.formPlan.warehouse  //退货仓库
+            data.details = resArr
+            saveDraft(data).then(res => {
+              if(res.code === 0){
+                this.$message.success('删除成功！')
+                this.$refs.formPlan.resetFields();
+                this.leftgetList()
+                this.isAdd = true;
+                this.rowId = '';
+                this.formPlan.guestName = ''   //调出方
+                this.formPlan.storeId = ''   //退货员
+                // tools.transTime(this.formPlan.orderDate)  //退货日期
+                this.formPlan.numbers = '' //采退单号
+                this.formPlan.cause  = '' //退货原因
+                this.formPlan.clearing = '' //结算方式
+                this.formPlan.remark  = '' //备注
+                this.formPlan.warehouse = ''  //退货仓库
+                this.formPlan.serviceId = '' //采购订单
+                this.Right.tbdata  =  [] //子表格
+                this.$refs.formPlan.resetFields();
+              }
+            })
+          }
+        }else {
+          this.$Message.warning('请选择要删除的配件！')
+        }
       },
       //更多按钮
       moreaa(){
@@ -487,45 +596,53 @@
       selectTabelData(){},
       //保存按钮
       SaveMsg(){
-        this.$refs.formPlan.validate((valid) => {
+        this.$refs.formPlan.validate(async valid => {
           if (valid) {
-            let data = {}
-            data.code = this.Acode || this.formPlan.serviceId
-            data.codeId = this.AcodeId
-            data.id = this.rowId
-            // data.guestId = this.guestidId   //调出方
-            data.guestId = this.formPlan.guestName   //调出方
-            data.orderManId = this.formPlan.storeId     //退货员id
-            data.orderMan = this.formPlan.orderMan //退货员
-            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
-            data.serviceId = this.formPlan.numbers  //采退单号
-            data.rtnReasonId = this.formPlan.cause  //退货原因
-            data.settleTypeId = this.formPlan.clearing  //结算方式
-            data.remark = this.formPlan.remark  //备注
-            data.storeId = this.formPlan.warehouse  //退货仓库
-            // data.code = this.formPlan.serviceId //采购订单
-            data.details = this.Right.tbdata
-            console.log(data.code)
-            saveDraft(data).then(res => {
-              if(res.code === 0){
-                this.$message.success('保存成功！')
-                this.$refs.formPlan.resetFields();
-                this.leftgetList()
-                this.isAdd = true;
-                this.rowId = '';
-                this.formPlan.guestName = ''   //调出方
-                this.formPlan.storeId = ''   //退货员
-                // tools.transTime(this.formPlan.orderDate)  //退货日期
-                this.formPlan.numbers = '' //采退单号
-                this.formPlan.cause  = '' //退货原因
-                this.formPlan.clearing = '' //结算方式
-                this.formPlan.remark  = '' //备注
-                this.formPlan.warehouse = ''  //退货仓库
-                this.formPlan.serviceId = '' //采购订单
-                this.Right.tbdata  =  [] //子表格
-                this.$refs.formPlan.resetFields();
-              }
-            })
+            try {
+              await this.$refs.xTable.validate();
+              let data = {}
+              data.code = this.Acode || this.formPlan.serviceId
+              data.codeId = this.AcodeId
+              data.id = this.rowId
+              // data.guestId = this.guestidId   //调出方
+              data.guestId = this.formPlan.guestName   //调出方
+              data.orderManId = this.formPlan.storeId     //退货员id
+              data.orderMan = this.formPlan.orderMan //退货员
+              data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+              data.serviceId = this.formPlan.numbers  //采退单号
+              data.rtnReasonId = this.formPlan.cause  //退货原因
+              data.settleTypeId = this.formPlan.clearing  //结算方式
+              data.remark = this.formPlan.remark  //备注
+              data.storeId = this.formPlan.warehouse  //退货仓库
+              // data.code = this.formPlan.serviceId //采购订单
+              data.details = this.Right.tbdata
+              console.log(data.code)
+              saveDraft(data).then(res => {
+                if(res.code === 0){
+                  this.$message.success('保存成功！')
+                  this.$refs.formPlan.resetFields();
+                  this.leftgetList()
+                  this.isAdd = true;
+                  this.rowId = '';
+                  this.formPlan.guestName = ''   //调出方
+                  this.formPlan.storeId = ''   //退货员
+                  // tools.transTime(this.formPlan.orderDate)  //退货日期
+                  this.formPlan.numbers = '' //采退单号
+                  this.formPlan.cause  = '' //退货原因
+                  this.formPlan.clearing = '' //结算方式
+                  this.formPlan.remark  = '' //备注
+                  this.formPlan.warehouse = ''  //退货仓库
+                  this.formPlan.serviceId = '' //采购订单
+                  this.Right.tbdata  =  [] //子表格
+                  this.$refs.formPlan.resetFields();
+                }
+              })
+            } catch (errMap) {
+              this.$XModal.message({
+                status: "error",
+                message: "申请数量必须输入大于0的正整数！"
+              });
+            }
           } else {
             // console.log(this.isAdd)
             this.$Message.error('*为必填！');

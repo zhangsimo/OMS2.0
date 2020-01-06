@@ -110,7 +110,7 @@
             },
             //左侧点击数据
             getOrder( data ){
-              console.log(data , 999)
+              console.log(data,555)
                 this.orderlistType = data.billStatusId
             },
             //保存

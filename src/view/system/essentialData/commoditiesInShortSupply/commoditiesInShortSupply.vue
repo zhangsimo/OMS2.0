@@ -223,7 +223,7 @@
                       data.fullName = this.query;
                       break;
                   case "2":
-                      data.applyCarModel = this.query;
+                      data.carBrandModel = this.query;
                       break;
                   case "3":
                       data.namePy = this.query;
