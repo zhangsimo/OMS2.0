@@ -283,11 +283,11 @@ export function getStore(params){
         params
     })
 }
-// // 根据条件查询供应商(分页)：/guest/queryAllSupplier
-// export function typeSelect(params){
-//     return axios.request({
-//         url: `${api.omsOrder}/guest/queryAllSupplier`,
-//         method: 'get',
-//         params
-//     })
-// }
+// 根据条件查询供应商(分页)：/guest/queryAllSupplier
+export function typeSelect(params){
+    return axios.request({
+        url: `${api.wmsApi}/guest/queryAllSupplier`,
+        method: 'get',
+        params
+    })
+}

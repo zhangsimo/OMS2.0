@@ -215,6 +215,45 @@ export default {
     this.getGeneral()
   },
   methods: {
+    // 总表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     // 日期选择
     dateChange(data){
       this.value = data
@@ -232,7 +271,7 @@ export default {
       this.value = data
     },
     Dealings() {
-      this.$refs.selectDealings.openModel()
+      this.$refs.selectDealings.init()
     },
     // 导出
     report(){
@@ -254,7 +293,6 @@ export default {
         guestId:this.companyId
       }
       getOnWay(data).then(res => {
-        console.log(res);
         if(res.data.length !==0){
           res.data.map(item=>{
             item.taxSign = item.taxSign ? '是' : '否'
