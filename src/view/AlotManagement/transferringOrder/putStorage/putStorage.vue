@@ -655,7 +655,7 @@ export default {
     // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
+        this.$Message.info("请先保存新增入库单！");
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
