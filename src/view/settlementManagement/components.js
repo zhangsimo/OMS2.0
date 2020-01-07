@@ -13,7 +13,7 @@ export function creat(dates, store) {
           label: res.data[key]
         })
       });
-      
+      console.log(store.state.user.userData)
       model = Branchstore[0].value
     }
     return [value, model, Branchstore]
