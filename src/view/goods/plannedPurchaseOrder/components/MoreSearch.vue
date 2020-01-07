@@ -224,6 +224,16 @@ export default class MoreSearch extends Vue {
       guestId: this.guestId,
       showSelf: this.showSelf
     };
+    if(data.endTime) {
+      data.endTime = data.endTime.split(" ")[0] + " 23:59:59"
+    }
+    if(data.orderEndDate) {
+      data.orderEndDate = data.orderEndDate.split(" ")[0] + " 23:59:59"
+    }
+    if(data.auditEndDate) {
+      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
+    }
+    // console.log(data)
     let subdata: Map<string, string> = new Map();
     for (let key in data) {
       if (["showSelf"].includes(key)) {

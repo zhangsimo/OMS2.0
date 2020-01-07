@@ -154,17 +154,17 @@ export default class ProductLA extends Vue {
         },
         {
             title: "单位",
-            key: "minUnit",
+            key: "unit",
             minWidth: 80
         },
         {
             title: "规格",
-            key: "specifications",
+            key: "spec",
             minWidth: 80
         },
         {
             title: "车型",
-            key: "adapterCarModel",
+            key: "carModelName",
             minWidth: 100
         },
     ]
