@@ -129,9 +129,9 @@ export const mixSelectSupplier = {
       if (this.selectTreeItem) {
         req.supplierTypeFirst = this.selectTreeItem.id;
       }
-      req.isDisabled = this.isDisable ? 1 : 0;
+      // req.isDisabled = this.isDisable ? 1 : 0;
 
-      req.page = this.page.num;
+      req.page = this.page.num - 1;
       req.size = this.page.size;
       this.params = req;
       this.getNameList();
@@ -140,8 +140,8 @@ export const mixSelectSupplier = {
       this.ArrayList = [];
       api.getSupplier(this.params).then(res => {
         this.loading = false;
-        this.partData = res.data || [];
-        this.page.total = res.data.total;
+        this.partData = res.data.content || [];
+        this.page.total = res.data.totalElements;
         // console.log(res.data, "res =>135");
         for (var i = 0; i < res.data.length; i++) {
           this.ArrayList.push(res.data[i].fullName);
