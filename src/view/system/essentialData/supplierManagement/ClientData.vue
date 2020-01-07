@@ -150,7 +150,7 @@
           <Row id="rowMargin" style="marginBottom: 60px">
             <Col span="12">
               <FormItem label="一级分类:" prop="supplierTypeFirst">
-                <Select v-model="data.supplierTypeFirst" style="width:180px">
+                <Select v-model="data.supplierTypeFirst" style="width:180px" placement="top">
                   <Option
                     v-for="item in treelist"
                     v-if="item.lever == 1"
@@ -162,7 +162,7 @@
             </Col>
             <Col span="12">
               <FormItem label="二级分类:" prop="supplierTypeSecond">
-                <Select v-model="data.supplierTypeSecond" style="width:180px">
+                <Select v-model="data.supplierTypeSecond" style="width:180px" placement="top">
                   <Option
                     v-for="item in treelist "
                     v-if="data.supplierTypeFirst == item.parentId"
