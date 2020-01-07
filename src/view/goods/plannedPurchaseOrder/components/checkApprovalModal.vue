@@ -1,50 +1,52 @@
 <template>
   <Modal title="查看审批" v-model="canShow" :styles="{ top: '100px', width: '800px' }">
-    <section class="data-container">
-      <div class="modal-data">
-        <span class="data-name">审批人:</span>
-        <div class="data-value flex-center">
-          <template v-for="(item,i) in statusData">
-            <div class="status-box flex-center">
-              <span class="status">{{item.userid}}</span>
-              <span class="arrow-box" v-if="i<statusData.length-1"></span>
-            </div>
-          </template>
+    <section class="warp">
+      <section class="data-container">
+        <div class="modal-data">
+          <p class="data-name">审批人:</p>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="status">{{item.userName}}</span>
+                <span class="arrow-box" v-if="i<statusData.length-1"></span>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
-      <div class="modal-data">
-        <span class="data-name">审批状态:</span>
-        <div class="data-value flex-center">
-          <template v-for="(item,i) in statusData">
-            <div class="status-box flex-center">
-              <span
-                class="words"
-                :class="{res:item.operationResult=='REFUSE'}"
-              >{{item.operationResult|status}}</span>
-            </div>
-          </template>
+        <div class="modal-data">
+          <p class="data-name">审批状态:</p>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span
+                  class="words"
+                  :class="{res:item.operationResult=='REFUSE'}"
+                >{{item.operationResult|status}}</span>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
-      <div class="modal-data">
-        <span class="data-name">审批日期:</span>
-        <div class="data-value flex-center">
-          <template v-for="(item,i) in statusData">
-            <div class="status-box flex-center">
-              <span class="date">{{item.date | date}}</span>
-            </div>
-          </template>
+        <div class="modal-data">
+          <p class="data-name">审批日期:</p>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="date">{{item.date | date}}</span>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
-      <div class="modal-data">
-        <span class="data-name">审批意见:</span>
-        <div class="data-value flex-center">
-          <template v-for="(item,i) in statusData">
-            <div class="status-box flex-center">
-              <span class="remark">{{item.remark}}</span>
-            </div>
-          </template>
+        <div class="modal-data">
+          <p class="data-name">审批意见:</p>
+          <div class="data-value flex-center">
+            <template v-for="(item,i) in statusData">
+              <div class="status-box flex-center" :key="i">
+                <span class="remark">{{item.remark}}</span>
+              </div>
+            </template>
+          </div>
         </div>
-      </div>
+      </section>
     </section>
   </Modal>
 </template>
@@ -71,7 +73,7 @@
                 let instanceId=this.orderId.processInstanceId||'';
                 approvalStatus({instanceId:instanceId}).then(res=>{
                     if(res.code=='0'){
-                        this.statusData=res.data.processInstance.operationRecords;
+                        this.statusData=res.data.operationRecords;
                     }
                 })
             }
@@ -140,19 +142,25 @@
   align-items: center;
   justify-content: center;
 }
+.warp {
+  overflow-x: auto;
+  width: 100%;
+}
 .data-container {
   padding: 20px 0;
   .modal-data {
+    // width: auto;
     height: 34px;
     margin-bottom: 20px;
     line-height: 34px;
+    display: inline-flex;
     .data-name {
-      width: 70px;
-      margin-right: 40px;
-      float: left;
+      width: 80px;
+      margin-right: 20px;
     }
     .data-value {
-      float: left;
+      // flex: auto;
+      // float: left;
     }
   }
   .status-box {
