@@ -368,6 +368,7 @@ export default {
             if(res.code === 0){
               console.log(res)
               this.$message.warning('删除成功！');
+              this.leftgetList();
               let checkBoxArr = this.checkboxArr.map(item => item.id)
               this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
             }
@@ -581,6 +582,7 @@ export default {
       if(response.code === 0 ){
         if(response.data.length === 0){
           this.$Message.warning('导入成功！')
+          this.leftgetList();
         }else {
          this.$Message.error(response.data.join(';'))
           }
@@ -794,7 +796,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
-          this.leftgetList();
+          // this.leftgetList();
           this.LeadIn = false
             this.formPlan.salesman = this.datadata.salesman
             this.formPlan.Reservation = this.datadata.orderNo
