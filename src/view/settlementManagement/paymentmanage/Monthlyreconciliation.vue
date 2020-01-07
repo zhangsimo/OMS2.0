@@ -779,7 +779,7 @@ export default {
             tenantId: 0,
             orgId: this.store,
             orgName: "null",
-            guestId: this.companyInfoId,
+            guestId: this.companyInfo,
             serviceId: "XSCDS001-20191000071",
             accountReceivable: this.totalcollect,
             badDebtReceivable: this.collectBaddebt,

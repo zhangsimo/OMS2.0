@@ -378,6 +378,7 @@ export default {
     // 选中数据
     election(row) {
       transferParts({ mainId: row.orderManId }).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
