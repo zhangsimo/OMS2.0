@@ -53,7 +53,7 @@ export const mixGoodsData = {
           }
         ],
         orderManId: [
-          { required: true, message: "计划员不能为空", trigger: "blur" }
+          { required: true, message: "计划员不能为空", trigger: "change" }
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
