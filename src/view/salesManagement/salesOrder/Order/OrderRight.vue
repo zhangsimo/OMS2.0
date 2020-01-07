@@ -278,9 +278,9 @@
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
-            <template v-slot="{ row }">
-              <span>{{ countPrice(row) |priceFilters}}</span>
-            </template>
+<!--            <template v-slot="{ row }">-->
+<!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
+<!--            </template>-->
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
@@ -506,10 +506,10 @@ export default {
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
+        ],
+        storeId: [
+          { required: true, type: "string", message: " ", trigger: "change" }
         ]
-        // storeId: [
-        //   { required: true, type: "string", message: " ", trigger: "change" }
-        // ]
       },
       //form表单校验
       validRules: {
@@ -683,9 +683,9 @@ export default {
         this.$utils.toNumber(row.orderPrice)
       );
     },
-    countPrice(row) {
-      return this.$utils.toNumber(row.orderPrice);
-    },
+    // countPrice(row) {
+    //   return this.$utils.toNumber(row.orderPrice);
+    // },
     // 计算尾部总和
     countAllAmount(data) {
       let count = 0;
@@ -696,14 +696,14 @@ export default {
       this.totalMoney = count;
       return count;
     },
-    countAllPrice(data) {
-      let count = 0;
-      data.forEach(row => {
-        count += this.countPrice(row);
-        count = count.toFixed(2);
-        return count;
-      });
-    },
+    // countAllPrice(data) {
+    //   let count = 0;
+    //   data.forEach(row => {
+    //     count += this.countPrice(row);
+    //     count = count.toFixed(2);
+    //     return count;
+    //   });
+    // },
     //获取尾部总数
     footerMethod({ columns, data }) {
       return [
