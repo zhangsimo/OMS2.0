@@ -50,16 +50,16 @@
               <i class="iconfont mr5 iconziyuan2"></i>提交并入库
             </Button>
           </div>
-<!--          <div class="db">-->
-<!--            <Button-->
-<!--              class="mr10"-->
-<!--              @click="returnWarehouse"-->
-<!--              :disabled="formPlan.isWms"-->
-<!--              v-has="'returnWarehouse'"-->
-<!--            >-->
-<!--              <i class="iconfont mr5 iconshenheicon"></i> 退货入库-->
-<!--            </Button>-->
-<!--          </div>-->
+          <!--          <div class="db">-->
+          <!--            <Button-->
+          <!--              class="mr10"-->
+          <!--              @click="returnWarehouse"-->
+          <!--              :disabled="formPlan.isWms"-->
+          <!--              v-has="'returnWarehouse'"-->
+          <!--            >-->
+          <!--              <i class="iconfont mr5 iconshenheicon"></i> 退货入库-->
+          <!--            </Button>-->
+          <!--          </div>-->
           <div class="db">
             <Button
               class="mr10"
@@ -676,8 +676,8 @@ export default {
       this.isNew = false;
       this.tableData = [];
       this.formPlan = {
-        details:[],
-        orderManId:this.PTrow.orderManId,
+        details: [],
+        orderManId: this.PTrow.orderManId
       };
       // console.log('退货员',orderManId)
       this.draftShow = 0;
@@ -987,18 +987,19 @@ export default {
     //删除配件
     deletePart() {
       if (this.selectTableList.length > 0) {
+        let data = [];
+        this.selectTableList.forEach(item => {
+          data.push({ id: item.id });
+        });
         const arr = this.tableData.filter(
           v => !this.selectTableList.includes(v)
         );
+        this.$set(this.formPlan, "details", arr);
+        console.log(this.selectTableList)
         this.sellOrderTable.tbdata.map((item, index) => {
           if (item.id === this.formPlan.id) {
             this.$set(this.sellOrderTable.tbdata[index], "details", arr);
           }
-        });
-        this.$set(this.formPlan, "details", arr);
-        let data = [];
-        this.selectTableList.forEach(item => {
-          data.push({ id: item.id });
         });
         getDeleteList(data).then(res => {
           if (res.code === 0) {

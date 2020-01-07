@@ -134,7 +134,7 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="400"
+                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -418,32 +418,29 @@
             let NoIdPartCode = NoId.map(item => item.partCode)
             let AddNoId = this.Right.tbdata.filter(item => !item.id)
             let NoRepeat = AddNoId.filter(item => !NoIdPartCode.includes(item.partCode))
-            let data = {}
-            data.code = this.Acode || this.formPlan.serviceId
-            data.codeId = this.AcodeId
-            data.id = this.rowId
-            data.guestId = this.formPlan.guestName   //调出方
-            data.orderManId = this.formPlan.storeId     //退货员id
-            data.orderMan = this.formPlan.orderMan //退货员
-            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
-            data.serviceId = this.formPlan.numbers  //采退单号
-            data.rtnReasonId = this.formPlan.cause  //退货原因
-            data.settleTypeId = this.formPlan.clearing  //结算方式
-            data.remark = this.formPlan.remark  //备注
-            data.storeId = this.formPlan.warehouse  //退货仓库
-            // data.code = this.formPlan.serviceId //采购订单
-            data.details = NoRepeat
-            //保存假增的数据
-            saveDraft(data).then(res => {
-              if(res.code === 0){
-                this.successHaveId = true
-              }
-            })
-
+            // let data = {}
+            // data.code = this.Acode || this.formPlan.serviceId
+            // data.codeId = this.AcodeId
+            // data.id = this.rowId
+            // data.guestId = this.formPlan.guestName   //调出方
+            // data.orderManId = this.formPlan.storeId     //退货员id
+            // data.orderMan = this.formPlan.orderMan //退货员
+            // data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+            // data.serviceId = this.formPlan.numbers  //采退单号
+            // data.rtnReasonId = this.formPlan.cause  //退货原因
+            // data.settleTypeId = this.formPlan.clearing  //结算方式
+            // data.remark = this.formPlan.remark  //备注
+            // data.storeId = this.formPlan.warehouse  //退货仓库
+            // // data.code = this.formPlan.serviceId //采购订单
+            // data.details = NoRepeat
+            // //保存假增的数据
+            // saveDraft(data).then(res => {
+            //   if(res.code === 0){
+            //     this.successHaveId = true
+            //   }
+            // })
             let dataTwo = haveId.map(item => {
-              return {
-                id: item.id
-              }
+              return item.id
             })
             //删除真增加的数据
             sellOrderReturn(dataTwo).then(res => {
@@ -453,39 +450,44 @@
             })
             setTimeout(() => {
               this.$nextTick( () => {
-                if(this.successNOid && this.successHaveId){
-                  this.$message.success('删除成功！');
+                // if(this.successNOid && this.successHaveId){
+                  if(this.successHaveId){
+                    this.$message.success('删除成功！');
                   let checkBoxArr = this.checkboxArr.map(item => item.id)
                   this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
                 }
               })
             },1000)
           }else {
-            var set = this.checkboxArr.map(item => item.partCode)
-            var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
-            let data = {}
-            data.code = this.Acode || this.formPlan.serviceId
-            data.codeId = this.AcodeId
-            data.id = this.rowId
-            // data.guestId = this.guestidId   //调出方
-            data.guestId = this.formPlan.guestName   //调出方
-            data.orderManId = this.formPlan.storeId     //退货员id
-            data.orderMan = this.formPlan.orderMan //退货员
-            data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
-            data.serviceId = this.formPlan.numbers  //采退单号
-            data.rtnReasonId = this.formPlan.cause  //退货原因
-            data.settleTypeId = this.formPlan.clearing  //结算方式
-            data.remark = this.formPlan.remark  //备注
-            data.storeId = this.formPlan.warehouse  //退货仓库
-            data.details = resArr
-            saveDraft(data).then(res => {
-              if(res.code === 0){
-                this.$message.success('删除成功！')
-                this.$refs.formPlan.resetFields();
+            // var set = this.checkboxArr.map(item => item.partCode)
+            // var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
+            // let data = {}
+            // data.code = this.Acode || this.formPlan.serviceId
+            // data.codeId = this.AcodeId
+            // data.id = this.rowId
+            // // data.guestId = this.guestidId   //调出方
+            // data.guestId = this.formPlan.guestName   //调出方
+            // data.orderManId = this.formPlan.storeId     //退货员id
+            // data.orderMan = this.formPlan.orderMan //退货员
+            // data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+            // data.serviceId = this.formPlan.numbers  //采退单号
+            // data.rtnReasonId = this.formPlan.cause  //退货原因
+            // data.settleTypeId = this.formPlan.clearing  //结算方式
+            // data.remark = this.formPlan.remark  //备注
+            // data.storeId = this.formPlan.warehouse  //退货仓库
+            // data.details = resArr
+            // saveDraft(data).then(res => {
+            //   if(res.code === 0){
+            //     this.$message.success('删除成功！')
+            //     this.$refs.formPlan.resetFields();
+            //     let checkBoxArr = this.checkboxArr.map(item => item.partCode)
+            //     this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
+            //   }
+            // })
                 let checkBoxArr = this.checkboxArr.map(item => item.partCode)
-                this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
-              }
-            })
+                this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
+                console.log(this.Right.tbdata)
+                this.$Message.warning('删除成功！')
           }
         }else {
           this.$Message.warning('请选择要删除的配件！')
@@ -736,8 +738,9 @@
       //子组件的参数
       getPartNameList(ChildMessage){
         // console.log(ChildMessage)
-        let parts = ChildMessage.map( item => {
-          return {
+        let parts = []
+        ChildMessage.map( item => {
+          parts.push({
             partName : item.partStandardName,
             unit : item.minUnit,
             // oemCode : item.brandPartCode,
@@ -758,15 +761,16 @@
             partId : item.id,
             fullName : item.fullName,
             systemUnitId : item.minUnit,
-          }
+          })
         })
         if(this.Right.tbdata){
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata)
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode')
+          console.log(this.Right.tbdata)
         } else {
+          console.log(this.Right.tbdata)
           this.Right.tbdata = parts
         }
-
 
       },
       //供应商弹框
@@ -928,7 +932,7 @@
           })
         }else{
           if(row.id){
-            this.leftgetList();
+            // this.leftgetList();
             this.mainId = row.id
             this.guestidId = row.guestId
             this.datadata = row

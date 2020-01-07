@@ -65,6 +65,7 @@ export default {
         orderMan: this.$store.state.user.userData.staffName,
         orderManId: this.$store.state.user.userData.id,
         new: true,
+        detailList:[],
         _highlight: true
       },
       page: {

@@ -620,6 +620,7 @@ export default {
         detailVOList: [],
         _highlight:true
       };
+      this.formPlan = item
       this.Left.tbdata.unshift(item);
       this.flag = 1;
       this.Left.tbdata.map((item, index) => {
@@ -784,7 +785,7 @@ export default {
       this.draftShow = data.billStatusId.value;
     },
     shanchu() {
-      if (this.formPlan.billStatusId.value !== 0) {
+      if (this.formPlan.hasOwnProperty('billStatusId')&&this.formPlan.billStatusId.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
         return;
       }
@@ -794,7 +795,10 @@ export default {
       seleList.forEach(item => {
         ids.push(item.id);
       });
-      this.array_diff(this.Right.tbdata, seleList);
+      console.log(this.formPlan)
+      this.Right.tbdata = this.Right.tbdata.filter(item=>!seleList.includes(item))
+      if(!ids[0]) return
+      // this.array_diff(this.Right.tbdata, seleList);
       this.Left.tbdata.map((item, index) => {
         if (item.id === this.formPlan.id) {
           this.$set(this.Left.tbdata[index], "detailVOList", this.Right.tbdata);

@@ -40,7 +40,7 @@
                 <div class="pane-made-hd">
                   预订单列表
                 </div>
-                <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
+                <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
                 <Page
                   class-name="fl pt10"
                   size="small"
@@ -130,7 +130,7 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="400"
+                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" title="序号"></vxe-table-column>
@@ -378,18 +378,18 @@ export default {
            let AddNoId = this.Right.tbdata.filter(item => !item.id)
            let NoRepeat = AddNoId.filter(item => !NoIdPartCode.includes(item.partCode))
             //console.log(NoRepeat)
-           let dataOne = {}
-           dataOne.id = this.rowId
-          dataOne.salesman =  this.formPlan.salesman
-          dataOne.orderNo =  this.formPlan.Reservation
-          dataOne.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-          dataOne.remark = this.formPlan.remark
-          dataOne.detailVOList = NoRepeat
-          save(dataOne).then(res => {
-            if(res.code == 0){
-              this.successNOid = true
-            }
-          })
+          //  let dataOne = {}
+          //  dataOne.id = this.rowId
+          // dataOne.salesman =  this.formPlan.salesman
+          // dataOne.orderNo =  this.formPlan.Reservation
+          // dataOne.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+          // dataOne.remark = this.formPlan.remark
+          // dataOne.detailVOList = NoRepeat
+          // save(dataOne).then(res => {
+          //   if(res.code == 0){
+          //     this.successNOid = true
+          //   }
+          // })
 
           let dataTwo = haveId.map(item => {
             return {
@@ -403,30 +403,34 @@ export default {
           })
           setTimeout(() => {
             this.$nextTick( () => {
-              if(this.successNOid && this.successHaveId){
-              this.$message.success('删除成功！')
+              // if(this.successNOid && this.successHaveId){
+              if(this.successHaveId){
+                this.$message.success('删除成功！')
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
             }
           })
           },1000)
         }else {
-          var set = this.checkboxArr.map(item => item.partCode)
-          var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
-          let data = {}
-          data.id = this.rowId
-          data.salesman =  this.formPlan.salesman
-          data.orderNo =  this.formPlan.Reservation
-          data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-          data.remark = this.formPlan.remark
-          data.detailVOList = resArr
-          save(data).then(res => {
-            if (res.code === 0) {
-              this.$message.success('删除成功！')
-              let checkBoxArr = this.checkboxArr.map(item => item.partCode)
-              this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
-            }
-          })
+          // var set = this.checkboxArr.map(item => item.partCode)
+          // var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
+          // let data = {}
+          // data.id = this.rowId
+          // data.salesman =  this.formPlan.salesman
+          // data.orderNo =  this.formPlan.Reservation
+          // data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+          // data.remark = this.formPlan.remark
+          // data.detailVOList = resArr
+          // save(data).then(res => {
+          //   if (res.code === 0) {
+          //     this.$message.success('删除成功！')
+          //     let checkBoxArr = this.checkboxArr.map(item => item.partCode)
+          //     this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
+          //   }
+          // })
+          let checkBoxArr = this.checkboxArr.map(item => item.partCode)
+          this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
+          this.$Message.warning('删除成功！')
         }
       } else {
         this.$Message.warning('请选择要删除的配件!')
@@ -664,11 +668,6 @@ export default {
       })
       if(this.Right.tbdata){
         this.Right.tbdata = [...this.Right.tbdata,...parts]
-        // this.Right.tbdata.map(item => {
-        //   if(item.id){
-        //
-        //   }
-        // })
         this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
       } else {
         this.Right.tbdata = parts
@@ -790,7 +789,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
-          this.leftgetList();
+          // this.leftgetList();
           this.LeadIn = false
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo
