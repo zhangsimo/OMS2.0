@@ -1149,7 +1149,7 @@ export default {
         const arr = this.formPlan.detailVOList.filter(v => !checkedData.includes(v));
         // console.log(arr,this.tableData)
         this.$set(this.formPlan, "detailVOList", arr);
-        console.log(this.formPlan)
+        // console.log(this.formPlan)
         if(!data[0].id) return
         this.preSellOrderTable.tbData.map((item, index) => {
           if (item.id === this.formPlan.id) {
