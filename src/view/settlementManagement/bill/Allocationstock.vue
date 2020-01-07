@@ -333,7 +333,7 @@ export default {
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         endTime:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
-        guestId: this.companyId,
+        guestid: this.companyId,
         orderTypeId:this.type
       };
       transferStock(obj).then(res => {
@@ -377,7 +377,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      stockParts({ main: row.id }).then(res => {
+      stockParts({ mainId: row.id }).then(res => {
         console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {

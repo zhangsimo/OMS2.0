@@ -94,31 +94,28 @@
                         <Col span="22">
                           <Input
                             readonly
-                            :disabled="Leftcurrentrow.status.value != 0"
+                            :disabled="true"
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
                           ></Input>
                         </Col>
-                        <Col span="2">
-                          <Button
-                            :disabled="Leftcurrentrow.status.value != 0"
-                            @click="showModel"
-                            class="ml5"
-                            size="small"
-                            type="default"
-                          >
-                            <i class="iconfont iconxuanzetichengchengyuanicon"></i>
-                          </Button>
-                        </Col>
+                        <!--<Col span="2">-->
+                        <!--&lt;!&ndash;<Button&ndash;&gt;-->
+                        <!--&lt;!&ndash;:disabled="Leftcurrentrow.status.value != 0"&ndash;&gt;-->
+                        <!--&lt;!&ndash;@click="showModel"&ndash;&gt;-->
+                        <!--&lt;!&ndash;class="ml5"&ndash;&gt;-->
+                        <!--&lt;!&ndash;size="small"&ndash;&gt;-->
+                        <!--&lt;!&ndash;type="default"&ndash;&gt;-->
+                        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<i class="iconfont iconxuanzetichengchengyuanicon"></i>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</Button>&ndash;&gt;-->
+                        <!--</Col>-->
                       </Row>
                     </FormItem>
                     <FormItem label="调入仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select
-                            v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value != 0"
-                          >
+                          <Select v-model="Leftcurrentrow.storeId" :disabled="true">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -135,7 +132,7 @@
                     </FormItem>
                     <FormItem label="调拨申请日期：" prop="billType" class="redIT">
                       <DatePicker
-                        disabled
+                        :disabled="true"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
@@ -144,7 +141,7 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Input
-                        :disabled="Leftcurrentrow.status.value != 0"
+                        disabled
                         :value="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
@@ -292,6 +289,7 @@ export default {
   },
   data() {
     return {
+      // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
       staaa: false,
@@ -779,7 +777,7 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      console.log(row, "row==>781");
+      // console.log(row, "row==>781");
       // console.log(row.id, "row.id");
       if (row.id == undefined) {
         this.ArrayValue = row.detailVOS;
@@ -914,6 +912,7 @@ export default {
     },
     getOkList(list) {
       console.log(list, "list");
+      // this.serviceIdValue = list.serviceId;
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -924,7 +923,7 @@ export default {
           value: 0
         },
         codeId: list.id,
-        code: list.id,
+        code: list.serviceId,
         statuName: "草稿",
         storeName: "",
         guestName: list.guestName,

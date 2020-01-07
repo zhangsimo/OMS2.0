@@ -832,6 +832,7 @@ export default {
           if (res.code === 0) {
             // this.$message.success("保存成功");
             this.$message({message:'保存成功',type:'success',customClass:'zZindex'});
+            this.modal = false
           }
         });
       } else {

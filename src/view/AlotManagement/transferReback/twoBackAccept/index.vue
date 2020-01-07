@@ -207,7 +207,7 @@ export default {
   },
   data() {
     return {
-      danhao: "123123qawseqwe",
+      danhao: "",
       modal3: false,
       modal1: false,
       modal2: false,
@@ -362,6 +362,7 @@ export default {
           if (res.code == 0) {
             this.tbdata = res.data || [];
             this.modal3 = true;
+            this.danhao = res.data.serviceId;
           } else if (res.code == 1) {
             this.$Message.info("请选择受理仓库");
           }

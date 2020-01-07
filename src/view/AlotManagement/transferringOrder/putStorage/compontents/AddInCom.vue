@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择调拨申请单" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="选择调拨入库单" width="1000" @on-ok="ok">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
