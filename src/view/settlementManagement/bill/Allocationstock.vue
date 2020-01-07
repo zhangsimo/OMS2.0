@@ -333,7 +333,7 @@ export default {
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         endTime:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
-        guestId: this.companyId,
+        guestid: this.companyId,
         orderTypeId:this.type
       };
       transferStock(obj).then(res => {
