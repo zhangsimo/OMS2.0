@@ -387,6 +387,7 @@ export const mixGoodsData = {
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
           this.formPlan.processInstanceId = v.processInstanceId || "";
+          this.formPlan.orderManId = v.orderManId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
           this.upurl = upxlxs + v.id;
