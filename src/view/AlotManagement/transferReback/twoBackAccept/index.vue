@@ -301,6 +301,7 @@ export default {
             console.log(res);
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.totalElements;
+            // console.log(this.TopTableData, "this.TopTableData");
           }
         })
         .catch(e => {
