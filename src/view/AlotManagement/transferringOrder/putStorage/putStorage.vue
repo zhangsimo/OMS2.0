@@ -100,25 +100,22 @@
                           ></Input>
                         </Col>
                         <!--<Col span="2">-->
-                          <!--&lt;!&ndash;<Button&ndash;&gt;-->
-                            <!--&lt;!&ndash;:disabled="Leftcurrentrow.status.value != 0"&ndash;&gt;-->
-                            <!--&lt;!&ndash;@click="showModel"&ndash;&gt;-->
-                            <!--&lt;!&ndash;class="ml5"&ndash;&gt;-->
-                            <!--&lt;!&ndash;size="small"&ndash;&gt;-->
-                            <!--&lt;!&ndash;type="default"&ndash;&gt;-->
-                          <!--&lt;!&ndash;&gt;&ndash;&gt;-->
-                            <!--&lt;!&ndash;<i class="iconfont iconxuanzetichengchengyuanicon"></i>&ndash;&gt;-->
-                          <!--&lt;!&ndash;</Button>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<Button&ndash;&gt;-->
+                        <!--&lt;!&ndash;:disabled="Leftcurrentrow.status.value != 0"&ndash;&gt;-->
+                        <!--&lt;!&ndash;@click="showModel"&ndash;&gt;-->
+                        <!--&lt;!&ndash;class="ml5"&ndash;&gt;-->
+                        <!--&lt;!&ndash;size="small"&ndash;&gt;-->
+                        <!--&lt;!&ndash;type="default"&ndash;&gt;-->
+                        <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+                        <!--&lt;!&ndash;<i class="iconfont iconxuanzetichengchengyuanicon"></i>&ndash;&gt;-->
+                        <!--&lt;!&ndash;</Button>&ndash;&gt;-->
                         <!--</Col>-->
                       </Row>
                     </FormItem>
                     <FormItem label="调入仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select
-                            v-model="Leftcurrentrow.storeId"
-                            :disabled="true"
-                          >
+                          <Select v-model="Leftcurrentrow.storeId" :disabled="true">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -144,7 +141,7 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Input
-                        :disabled="Leftcurrentrow.status.value != 0"
+                        disabled
                         :value="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
@@ -292,6 +289,7 @@ export default {
   },
   data() {
     return {
+      // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
       staaa: false,
@@ -914,6 +912,7 @@ export default {
     },
     getOkList(list) {
       console.log(list, "list");
+      // this.serviceIdValue = list.serviceId;
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -924,7 +923,7 @@ export default {
           value: 0
         },
         codeId: list.id,
-        code: list.id,
+        code: list.serviceId,
         statuName: "草稿",
         storeName: "",
         guestName: list.guestName,
