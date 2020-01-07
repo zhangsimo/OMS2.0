@@ -53,7 +53,7 @@ export const mixGoodsData = {
           }
         ],
         orderManId: [
-          { required: true, message: "计划员不能为空", trigger: "blur" }
+          { required: true, message: "计划员不能为空", trigger: "change" }
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
@@ -372,7 +372,11 @@ export const mixGoodsData = {
             this.newadd = false;
             this.$refs.planOrderTable.clearCurrentRow();
           }
-          this.isinput = false;
+          if (['草稿', '退回'].includes(v.billStatusId.name)) {
+            this.isinput = false;
+          } else {
+            this.isinput = true;
+          }
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
           this.formPlan.supplyName = v.guestName || "";
@@ -387,6 +391,7 @@ export const mixGoodsData = {
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
           this.formPlan.processInstanceId = v.processInstanceId || "";
+          this.formPlan.orderManId = v.orderManId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
           this.upurl = upxlxs + v.id;

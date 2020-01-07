@@ -4,22 +4,32 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询: </span>
+            <span>快速查询:</span>
           </div>
           <div class="db mr10">
-              <span class="">入库日期从：</span>
-              <DatePicker v-model="penSalesData.allotEnterTimeStart" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+            <span class>入库日期从：</span>
+            <DatePicker
+              v-model="penSalesData.allotEnterTimeStart"
+              type="datetime"
+              format="yyyy-MM-dd HH:mm:ss"
+              style="width:120px"
+            ></DatePicker>
           </div>
           <div class="db mr10">
-              <span class=" ml10">至：</span>
-              <DatePicker v-model="penSalesData.allotEnterTimeEnd" type="datetime" format="yyyy-MM-dd HH:mm:ss" style="width:120px"></DatePicker>
+            <span class="ml10">至：</span>
+            <DatePicker
+              v-model="penSalesData.allotEnterTimeEnd"
+              type="datetime"
+              format="yyyy-MM-dd HH:mm:ss"
+              style="width:120px"
+            ></DatePicker>
           </div>
           <div class="db mr10">
-             <span>调 出 方 ：</span>
-              <Input v-model="penSalesData.guestName" style="width: 398px" />
-              <Button @click="getName" class="ml5" size="small" type="default">
-                                <i class="iconfont iconxuanzetichengchengyuanicon"></i>
-              </Button>
+            <span>调 出 方 ：</span>
+            <Input v-model="penSalesData.guestName" style="width: 398px" />
+            <Button @click="getName" class="ml5" size="small" type="default">
+              <i class="iconfont iconxuanzetichengchengyuanicon"></i>
+            </Button>
           </div>
           <div class="db mr10">
             <Input
@@ -54,6 +64,7 @@
           :data="tabList"
           highlight-current-row
           highlight-hover-row
+          @select-change="selectTabelData"
           @current-change="selectTabelData"
         >
           <vxe-table-column type="checkbox" title="选择" width="60"></vxe-table-column>
@@ -76,7 +87,8 @@
               :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
-              @on-change="changePage" @on-page-size-change="changeSize"
+              @on-change="changePage"
+              @on-page-size-change="changeSize"
             />
           </div>
         </Col>
@@ -96,16 +108,15 @@
         </vxe-table>
       </div>
     </section>
-     <div slot="footer">
-      </div>
+    <div slot="footer"></div>
   </Modal>
 </template>
 
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
-import { chengpingDetail } from '@/api/AlotManagement/twoBackApply.js'
-import moment from 'moment'
+import { chengpingDetail } from "@/api/AlotManagement/twoBackApply.js";
+import moment from "moment";
 export default {
   data() {
     return {
@@ -115,14 +126,14 @@ export default {
       tabList: [],
       // 调出方查询
       penSalesData: {
-        allotEnterTimeEnd: '', //申请单号
-        allotEnterTimeStart: '',
-        guestName: '',
-        guestId: '',
-        serviceId: ''
+        allotEnterTimeEnd: "", //申请单号
+        allotEnterTimeStart: "",
+        guestName: "",
+        guestId: "",
+        serviceId: ""
       },
       customerListOptions: [], //调出方下拉列表
-      tableData: [{name1: '123'}, {}, {}, {}],
+      tableData: [{ name1: "123" }, {}, {}, {}],
       TopTableData: [], //上侧表格list
       BottomTableData: [], //下侧表格list
       // 分页数据
@@ -135,31 +146,31 @@ export default {
       },
       xuanzhognList: [],
       checkRow: {},
-      currentData:[]
-    }
+      currentData: []
+    };
   },
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal
+        this.tabList = newVal;
       },
       deep: true
     },
     dcList: {
       handler(newVal) {
-        this.diaochuList = newVal
+        this.diaochuList = newVal;
       },
       deep: true
     },
-     dcName: {
+    dcName: {
       handler(newVal) {
-        this.penSalesData.guestName = newVal
+        this.penSalesData.guestName = newVal;
       },
       deep: true
     },
     dcId: {
       handler(newVal) {
-        this.penSalesData.guestId = newVal
+        this.penSalesData.guestId = newVal;
       },
       deep: true
     }
@@ -168,65 +179,69 @@ export default {
     tbdata: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     dcList: {
       type: Array,
       default: function() {
-        return []
+        return [];
       }
     },
     dcName: {
       type: String,
-      default: ''
+      default: ""
     },
     dcId: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   methods: {
     //分页
     changePage(p) {
-      this.pageList.page = p
-      this.search(this.pageList.size, p)
+      this.pageList.page = p;
+      this.search(this.pageList.size, p);
     },
     changeSize(size) {
-      this.pageList.size = size
-      this.search(size, this.pageList.page)
+      this.pageList.size = size;
+      this.search(size, this.pageList.page);
     },
     getName() {
-      this.$emit('getName', 2)
+      this.$emit("getName", 2);
     },
     init() {
-      this.searchPartLayer = true
+      this.searchPartLayer = true;
     },
     init1() {
-      this.searchPartLayer = false
+      this.searchPartLayer = false;
     },
     //选中的日期
     selectDate(date) {
-      this.penSalesData.option1 = date
-      console.log(this.penSalesData.option1)
+      this.penSalesData.option1 = date;
+      console.log(this.penSalesData.option1);
     },
     //搜索
-    search(size, num ) {
+    search(size, num) {
       if (this.penSalesData.allotEnterTimeStart) {
-        this.penSalesData.allotEnterTimeStart = moment(this.penSalesData.allotEnterTimeStart).format('YYYY-MM-DD HH:mm:ss')
+        this.penSalesData.allotEnterTimeStart = moment(
+          this.penSalesData.allotEnterTimeStart
+        ).format("YYYY-MM-DD HH:mm:ss");
       }
       if (this.penSalesData.allotEnterTimeEnd) {
-        this.penSalesData.allotEnterTimeEnd = moment(this.penSalesData.allotEnterTimeEnd).format('YYYY-MM-DD HH:mm:ss')
+        this.penSalesData.allotEnterTimeEnd = moment(
+          this.penSalesData.allotEnterTimeEnd
+        ).format("YYYY-MM-DD HH:mm:ss");
       }
-      for(var k in this.penSalesData) {
-        if(!this.penSalesData[k]) {
-          delete this.penSalesData[k]
+      for (var k in this.penSalesData) {
+        if (!this.penSalesData[k]) {
+          delete this.penSalesData[k];
         }
       }
-      this.$emit('search21', this.penSalesData, size, num)
+      this.$emit("search21", this.penSalesData, size, num);
     },
     getParams() {
-      this.$emit('getLisw', this.penSalesData)
+      this.$emit("getLisw", this.penSalesData);
     },
     //确定
     chose() {
@@ -236,29 +251,28 @@ export default {
     //取消
     cancel() {},
     echoDate() {},
-    async selectTabelData({row}) {
-      console.log(row)
-      this.checkRow = row
+    async selectTabelData({ row }) {
+      console.log(row);
+      this.checkRow = row;
       const params = {
         mainId: row.id
-      }
-      const res = await chengpingDetail(params)
-      this.currentData = res.data
-
+      };
+      const res = await chengpingDetail(params);
+      this.currentData = res.data;
     },
     ok() {
       // 将选好的成品传父组件
-      const sendList = this.$refs.xtale.getSelectRecords()
+      const sendList = this.$refs.xtale.getSelectRecords();
       if (sendList.length === 0) {
-        this.$Message.info('请勾选需要选入的行')
-        return
+        this.$Message.info("请勾选需要选入的行");
+        return;
       }
-      console.log('jinru')
-      this.$emit('ok', this.currentData)
-      this.searchPartLayer = false
+      console.log("jinru");
+      this.$emit("ok", this.currentData);
+      this.searchPartLayer = false;
     }
   }
-}
+};
 </script>
 
 <style lang="less" scoped>
@@ -381,7 +395,7 @@ export default {
 
           &:after {
             background: #f8f8f8;
-            content: '';
+            content: "";
             position: absolute;
             left: 0px;
             top: 0px;

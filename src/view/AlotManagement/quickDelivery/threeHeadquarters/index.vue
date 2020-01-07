@@ -212,7 +212,7 @@ export default {
           res.data.forEach(element => {
             this.storeArray.push({ value: element.id, label: element.name });
           });
-          console.log(11, this.storeArray);
+          //console.log(11, this.storeArray);
         }
       });
     },
@@ -220,7 +220,7 @@ export default {
     search() {
       let page = this.pageList.page;
       let size = this.pageList.size;
-      console.log(this.form, "this.form");
+      //console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form)
         .then(res => {
           if (res.code === 0) {
@@ -234,19 +234,19 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      console.log(val);
+      //console.log(val);
       this.form.auditStartDate = val[0];
       this.form.auditEndDate = val[1];
     },
     //time2
     selectDate(val) {
-      console.log(val);
+      //console.log(val);
       this.form.startDate = val[0] + " " + "00:00:00";
       this.form.endDate = val[1] + " " + "23:59:59";
     },
     //选择当前行
     currentChangeEvent({ row }) {
-      console.log("当前行" + row);
+      //console.log("当前行" + row);
       this.BottomTableData = row.details;
       this.currentrow = row;
     },
@@ -264,7 +264,7 @@ export default {
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
+            //console.log(res);
             this.$Message.info("入库成功");
           }
         })
@@ -279,12 +279,12 @@ export default {
       this.modal2 = true;
     },
     numChangeEvent({ row }, evnt) {
-      console.log(evnt.target.value);
+      //console.log(evnt.target.value);
       this.currentrow.details.trueEnterQty = evnt.target.value;
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      console.log(evnt.target.value);
+      //console.log(evnt.target.value);
       this.currentrow.enterStoreId = evnt.target.value;
     }
   }

@@ -80,7 +80,7 @@
 
           <vxe-table-column field="code" title="业务单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
-          <vxe-table-column field="billStatusId.name" title="状态"></vxe-table-column>
+          <vxe-table-column field="billStatusName" title="状态"></vxe-table-column>
 
           <vxe-table-column field="orderMan" title="采购员"></vxe-table-column>
           <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
@@ -160,18 +160,18 @@
 </template>
 
 <script>
-import QuickDate from '../../../../components/getDate/dateget'
-import '../../../lease/product/lease.less'
-import '../../../goods/goodsList/goodsList.less'
+import QuickDate from "../../../../components/getDate/dateget";
+import "../../../lease/product/lease.less";
+import "../../../goods/goodsList/goodsList.less";
 import {
   zongbuzhidiaoList,
   ListDetail,
   getbayer,
   daohuoruku,
   getcangku
-} from '../../../../api/AlotManagement/threeSupplier.js'
+} from "../../../../api/AlotManagement/threeSupplier.js";
 export default {
-  name: 'threeSupplier',
+  name: "threeSupplier",
   components: {
     QuickDate
   },
@@ -179,15 +179,15 @@ export default {
     return {
       modal2: false,
       form: {
-        auditStartDate: '',
-        auditEndDate: '',
-        startDate: '',
-        endDate: '',
-        billStatusId: '',
-        serviceId: '',
-        guestId: '',
-        partCode: '',
-        partName: '',
+        auditStartDate: "",
+        auditEndDate: "",
+        startDate: "",
+        endDate: "",
+        billStatusId: "",
+        serviceId: "",
+        guestId: "",
+        partCode: "",
+        partName: "",
         step: 4
       },
       TopTableData: [], //上侧表格list
@@ -200,109 +200,110 @@ export default {
         pageSizeOpts: [10, 20, 30, 40, 50]
       },
       pageTotal: 10,
-      selectOne: '',
-      dateTime: '',
+      selectOne: "",
+      dateTime: "",
       currentrow: {},
       storeArray: [],
       customerListOptions: []
-    }
+    };
   },
   created() {
-    this.log()
-    this.search()
+    this.log();
+    this.search();
   },
   methods: {
     log() {
       getcangku().then(res => {
         if (res.code === 0) {
           res.data.forEach(element => {
-            this.storeArray.push({ value: element.id, label: element.name })
-          })
-          console.log(11, this.storeArray)
+            this.storeArray.push({ value: element.id, label: element.name });
+          });
+          console.log(11, this.storeArray);
         }
-      })
+      });
       getbayer()
         .then(res => {
           if (res.code == 0) {
-            console.log(res)
+            console.log(res);
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.id,
                 label: element.fullName
-              })
-            })
+              });
+            });
           }
         })
         .catch(e => {
-          this.$Message.info('拒绝失败')
-        })
+          this.$Message.info("拒绝失败");
+        });
     },
     //time1
     getDataQuick(val) {
-      this.form.auditStartDate = val[0]
-      this.form.auditEndDate = val[1]
+      this.form.auditStartDate = val[0];
+      this.form.auditEndDate = val[1];
     },
     //time2
     selectDate(val) {
-      this.form.auditStartDate = val[0] + ' ' + '00:00:00'
-      this.form.auditEndDate = val[1] + ' ' + '23:59:59'
+      this.form.auditStartDate = val[0] + " " + "00:00:00";
+      this.form.auditEndDate = val[1] + " " + "23:59:59";
     },
     //搜索
     search() {
-      let page = this.pageList.page
-      let size = this.pageList.size
+      let page = this.pageList.page;
+      let size = this.pageList.size;
+      console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
-          this.TopTableData = res.data.content || []
-          this.pageList.total = res.totalElements
+          this.TopTableData = res.data.content || [];
+          this.pageList.total = res.totalElements;
         }
-      })
+      });
     },
     changeSize(s) {
-      this.pageList.page = 0
-      this.pageList.size = s
-      this.search(this.form)
+      this.pageList.page = 0;
+      this.pageList.size = s;
+      this.search(this.form);
     },
     changePage(p) {
-      this.pageList.page = p
-      this.search(this.form)
+      this.pageList.page = p;
+      this.search(this.form);
     },
     //点击当前
     currentChangeEvent({ row }) {
-      console.log('当前行' + row)
-      this.BottomTableData = row.details
-      this.currentrow = row
+      console.log("当前行" + row);
+      this.BottomTableData = row.details;
+      this.currentrow = row;
     },
 
     ok1() {
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code === 0) {
-            console.log(res)
-            this.$Message.info('入库成功')
+            console.log(res);
+            this.$Message.info("入库成功");
           }
         })
         .catch(e => {
-          this.$Message.info('入库失败')
-        })
+          this.$Message.info("入库失败");
+        });
     },
     cancel() {
-      this.$Message.info('点击了取消')
+      this.$Message.info("点击了取消");
     },
     ruku() {
-      this.modal2 = true
+      this.modal2 = true;
     },
     numChangeEvent({ row }, evnt) {
-      console.log(evnt.target.value)
-      this.currentrow.details.trueEnterQty = evnt.target.value
+      console.log(evnt.target.value);
+      this.currentrow.details.trueEnterQty = evnt.target.value;
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      console.log(evnt.target.value)
-      this.currentrow.details.storeId = evnt.target.value
+      console.log(evnt.target.value);
+      this.currentrow.details.storeId = evnt.target.value;
     }
   }
-}
+};
 </script>
 
 <style scoped>

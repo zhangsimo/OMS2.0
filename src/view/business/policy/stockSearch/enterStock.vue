@@ -233,10 +233,10 @@
                     {
                         title: '金额',
                         align: 'center',
-                        // key: 'orderAmt',
+                        // key: 'enterAmt',
                         minWidth: 120,
                       render: (h, params) => {
-                        let tex =  parseFloat(params.row.orderAmt).toFixed(2)
+                        let tex =  parseFloat(params.row.enterAmt).toFixed(2)
                         return h('span', {}, tex)
 
                       },
@@ -592,6 +592,7 @@
                   data.page =  this.contentOne.page.num -1
                   data.size =  this.contentOne.page.size
                 let res = await getEnter(data)
+               console.log('我是res',res)
                 if (res.code == 0) {
                     this.contentOne.dataOne = res.data.content
                     this.contentOne.page.total = res.data.totalElements

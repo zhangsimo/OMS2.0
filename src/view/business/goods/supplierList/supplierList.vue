@@ -43,7 +43,7 @@
                 <div class="pane-made-hd">
                   采购退货列表
                 </div>
-                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
+                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
                 <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
                       @on-page-size-change="changeSizeLeft" show-sizer show-total>
                 </Page>
@@ -406,8 +406,9 @@
             })
             sellOrderReturn(data).then(res => {
               if(res.code === 0){
-                this.$Message.success('删除成功')
-                this.$refs.formPlan.resetFields();
+                this.$Message.success('删除成功！')
+                this.leftgetList();
+                // this.$refs.formPlan.resetFields();
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
               }
@@ -486,7 +487,6 @@
             // })
                 let checkBoxArr = this.checkboxArr.map(item => item.partCode)
                 this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
-                console.log(this.Right.tbdata)
                 this.$Message.warning('删除成功！')
           }
         }else {
@@ -535,7 +535,7 @@
       //删除配件的全选
       selectAll(aaa){
         this.checkboxArr = aaa.selection
-        console.log(this.checkboxArr)
+        // console.log(this.checkboxArr)
       },
       //添加配件按钮
       addPro(){
@@ -572,12 +572,16 @@
       //选择采购入库单
       getPlanOrder(Msg){
         let arr = Msg.details || []
-        // console.log(arr)
         arr.map(item => {
           item.outUnitId = item.unit
           item.stockOutQty = item.totalStockQty
         })
-        this.Right.tbdata = this.Right.tbdata.concat(arr);
+        if(this.Right.tbdata){
+          this.Right.tbdata = [...this.Right.tbdata,...arr];
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+        } else {
+          this.Right.tbdata = arr
+        }
       },
       //选择采购入库单的主表code
       selectRow(val){
@@ -607,7 +611,7 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              console.log(data.code)
+              // console.log(data.code)
               saveDraft(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -735,44 +739,6 @@
         this.leftgetList()
         // console.log(msg)
       },
-      //子组件的参数
-      getPartNameList(ChildMessage){
-        // console.log(ChildMessage)
-        let parts = []
-        ChildMessage.map( item => {
-          parts.push({
-            partName : item.partStandardName,
-            unit : item.minUnit,
-            // oemCode : item.brandPartCode,
-            // spec : item.specifications,
-            enterUnitId : item.direction,
-            applyQty : '',
-            remark : '',
-            partInnerId : item.code,
-            partCode : item.partCode,
-            oemCode : item.oeCode,
-            partBrand : item.partBrand,
-            carBrandName : item.adapterCarBrand,
-            carModelName : item.adapterCarModel,
-            carTypef : item.baseType.firstType.typeName,
-            cartypes : item.baseType.secondType.typeName,
-            carTypet : item.baseType.thirdType.typeName,
-            spec : item.specifications,
-            partId : item.id,
-            fullName : item.fullName,
-            systemUnitId : item.minUnit,
-          })
-        })
-        if(this.Right.tbdata){
-          this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode')
-          console.log(this.Right.tbdata)
-        } else {
-          console.log(this.Right.tbdata)
-          this.Right.tbdata = parts
-        }
-
-      },
       //供应商弹框
       addSuppler(){
         this.$refs.selectSupplier.init()
@@ -850,7 +816,7 @@
       selection(row){
         if (row == null) return;
         let currentRowTable = this.$refs["currentRowTable"];
-        if(!this.Flaga && !this.isAdd){
+        if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({
             title: '您正在编辑单据，是否需要保存',
             onOk: () => {
@@ -936,23 +902,23 @@
             this.mainId = row.id
             this.guestidId = row.guestId
             this.datadata = row
-            this.formPlan.guestName = this.datadata.guestId
-            this.formPlan.storeId = this.datadata.orderManId
-            this.formPlan.orderDate = this.datadata.orderDate
-            this.formPlan.numbers = this.datadata.serviceId
-            this.formPlan.cause = this.datadata.rtnReasonId
-            this.formPlan.clearing = this.datadata.settleTypeId
-            this.formPlan.remark = this.datadata.remark
-            this.formPlan.warehouse = this.datadata.storeId
-            this.formPlan.serviceId = this.datadata.code
-            row.details.map(item => {
-             item.orderPrice = Number(item.orderPrice).toFixed(2)
-            })
-            this.Right.tbdata = row.details
-            this.presentrowMsg = row.billStatusId.value
-            // console.log(this.presentrowMsg)
-            this.rowId = row.id
-            this.buttonDisable = false
+              this.formPlan.guestName = this.datadata.guestId
+              this.formPlan.storeId = this.datadata.orderManId
+              this.formPlan.orderDate = this.datadata.orderDate
+              this.formPlan.numbers = this.datadata.serviceId
+              this.formPlan.cause = this.datadata.rtnReasonId
+              this.formPlan.clearing = this.datadata.settleTypeId
+              this.formPlan.remark = this.datadata.remark
+              this.formPlan.warehouse = this.datadata.storeId
+              this.formPlan.serviceId = this.datadata.code
+              row.details.map(item => {
+                item.orderPrice = Number(item.orderPrice).toFixed(2)
+              })
+              this.Right.tbdata = this.datadata.details
+              this.presentrowMsg = row.billStatusId.value
+              // console.log(this.presentrowMsg)
+              this.rowId = row.id
+              this.buttonDisable = false
           }else {
             this.formPlan.guestName = ''
             this.formPlan.storeId = ''

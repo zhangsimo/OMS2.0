@@ -404,7 +404,7 @@
     <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
-    <goods-info ref="goodsInfo" :mainId="id"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="id" :row="this.currentRow"></goods-info>
   </div>
 </template>
 
@@ -510,6 +510,7 @@ export default {
       model1: "",
       WareHouseList: [], //交货仓库
       limitList: [], //客户额度
+      currentRow:{},
       //分页
       page: {
         total: 0,
@@ -631,12 +632,8 @@ export default {
         status: { name: "草稿", value: 0 },
         orderMan: this.$store.state.user.userData.staffName,
         orderManId: this.$store.state.user.userData.id
-
-        // id: '0',
-        // details: [],
-        // createTime: tools.transTime(new Date())
       },
-      selectTableList: [], //右侧table表格选中的数据
+      selectTableList: [], //右侧table表格选的数据
       // isCommit: false, //判断是否已提交
       planSendDatePicker: {
         disabledDate: function(date) {
@@ -710,14 +707,11 @@ export default {
     printTable() {
       this.$refs.printBox.openModal();
     },
-    // getLimit() {
-    //   this.getAllLimit()
-    // },
+
     //获取客户额度
     getAllLimit() {
       let guestId = this.formPlan.guestId;
       getLimit(guestId).then(res => {
-        // console.log('客户额度数据',res)
         if (res.code === 0) {
           this.limitList = res.data;
         }
@@ -725,7 +719,6 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      // console.log('44444',value)
       if (!value) {
         return false;
       }
@@ -793,13 +786,10 @@ export default {
     getplanArriveDate(data) {
       // this.formPlan.planArriveDate = data + ' ' + "00:00:00"
       this.formPlan.planArriveDate = tools.transTime(data);
-      // console.log('22', this.formPlan.planArriveDate)
     },
     //清空日期
     clearplanSendDate(v) {
-      // console.log('77',v)
       this.formPlan.planSendDate = null;
-      // console.log('222', this.formPlan.planSendDate)
     },
     clearplanArriveDate(v) {
       this.formPlan.planArriveDate = null;
@@ -851,6 +841,7 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
+      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           var datas = conversionList(val);
@@ -910,7 +901,6 @@ export default {
             this.$refs.formPlan.resetFields();
           }
         });
-
         {
         }
       } else {
@@ -925,14 +915,6 @@ export default {
           this.limitList = {};
         }
       }
-      // console.log("左侧数据", v);
-      // console.log(v);
-      // this.currentRow = v;
-      // this.id = v.id;
-      // this.isNew = false;
-      // this.draftShow = v.status.value;
-      // this.tableData = v.detailVOList;
-      // this.formPlan = v;
     },
     // 获取仓库
     async getWarehouse() {
@@ -1070,9 +1052,6 @@ export default {
     },
     //提交
     isSubmit() {
-      // if (!this.isCommit||!this.formPlan.id) {
-      //   return this.$Message.error('请先保存数据')
-      // }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -1149,7 +1128,7 @@ export default {
         const arr = this.formPlan.detailVOList.filter(v => !checkedData.includes(v));
         // console.log(arr,this.tableData)
         this.$set(this.formPlan, "detailVOList", arr);
-        console.log(this.formPlan)
+        // console.log(this.formPlan)
         if(!data[0].id) return
         this.preSellOrderTable.tbData.map((item, index) => {
           if (item.id === this.formPlan.id) {
@@ -1163,38 +1142,11 @@ export default {
         getDeleteList(data).then(res => {
           if (res.code === 0) {
             this.$Message.success("删除配件成功");
-            // this.getLeftList()
-            // this.formPlan = {}
-            // this.tableData = []
-            // this.limitList = {};
-            // this.$refs.formPlan.resetFields();
-            // this.isNew=true
-            // this.id=null
           }
         });
       } else {
         this.$Message.error("请选择一条有效数据");
       }
-      // if (this.selectTableList.length > 0) {
-      //   let data = []
-      //   this.selectTableList.forEach(item => {
-      //     data.push({id: item.id})
-      //   })
-      //   getDeleteList(data).then(res => {
-      //     if (res.code === 0) {
-      //       this.$Message.success('删除配件成功');
-      //       this.getLeftList()
-      //       this.formPlan = {}
-      //       this.tableData = []
-      //       this.limitList = {};
-      //       this.$refs.formPlan.resetFields();
-      //       this.isNew=true
-      //       this.id=null
-      //     }
-      //   })
-      // } else {
-      //   this.$Message.error('请选择一条有效数据')
-      // }
     },
     //批量上传失败
     onFormatError(file) {
@@ -1226,9 +1178,6 @@ export default {
     getRUl() {
       let id = this.id;
       this.upurl = getup + "id=" + id;
-      // this.limitList = {};
-      // this.$refs.formPlan.resetFields();
-      // this.formPlan = {}
     },
     //下载模板
     down() {

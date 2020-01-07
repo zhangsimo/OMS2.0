@@ -278,9 +278,9 @@
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
-            <template v-slot="{ row }">
-              <span>{{ countPrice(row) |priceFilters}}</span>
-            </template>
+            <!--            <template v-slot="{ row }">-->
+            <!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
+            <!--            </template>-->
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
@@ -334,7 +334,7 @@
 
     <!--  编辑发货地址 -->
     <!--      <Modal v-model="addressShow" title="收货信息"  width="1000">-->
-    <goods-info ref="goodsInfo" :mainId="formPlan.id"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
     <!--        <div slot='footer'>-->
     <!--          <Button type='primary' @click = changeShippingAddress>确定</Button>-->
     <!--          <Button type='default' @click='addressShow = false'>取消</Button>-->
@@ -464,7 +464,7 @@ export default {
         disabledDate: options2DisabledDate
       },
       formPlan: {
-        detailList:[]
+        detailList: []
       }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -506,10 +506,10 @@ export default {
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
+        ],
+        storeId: [
+          { required: true, type: "string", message: " ", trigger: "change" }
         ]
-        // storeId: [
-        //   { required: true, type: "string", message: " ", trigger: "change" }
-        // ]
       },
       //form表单校验
       validRules: {
@@ -559,8 +559,8 @@ export default {
     },
     //获取销售员
     selectOrderMan(val) {
-      this.formPlan.orderMan = val.label;
-      this.formPlan.orderManId = val.value;
+      this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
+      this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
     },
     //获取客户额度
     async getAllLimit() {
@@ -683,9 +683,6 @@ export default {
         this.$utils.toNumber(row.orderPrice)
       );
     },
-    countPrice(row) {
-      return this.$utils.toNumber(row.orderPrice);
-    },
     // 计算尾部总和
     countAllAmount(data) {
       let count = 0;
@@ -695,14 +692,6 @@ export default {
       count = count.toFixed(2);
       this.totalMoney = count;
       return count;
-    },
-    countAllPrice(data) {
-      let count = 0;
-      data.forEach(row => {
-        count += this.countPrice(row);
-        count = count.toFixed(2);
-        return count;
-      });
     },
     //获取尾部总数
     footerMethod({ columns, data }) {
@@ -794,20 +783,21 @@ export default {
           item => !this.selectTableList.includes(item)
         );
         this.formPlan.detailList = arr;
-        if(!data[0].id) return
-        this.$parent.$parent.$refs.OrderLeft.tableData.map((item, index) => {
-          if (item.id === this.formPlan.id) {
-            this.$set(
-              this.$parent.$parent.$refs.OrderLeft.tableData[index],
-              "detailList",
-              arr
-            );
-          }
-        });
+        if (!data[0].id) return;
         getDeleteList(data).then(res => {
           if (res.code === 0) {
-            // this.getList();
             this.$message.success(res.data);
+            this.$parent.$parent.$refs.OrderLeft.tableData.map(
+              (item, index) => {
+                if (item.id === this.formPlan.id) {
+                  this.$set(
+                    this.$parent.$parent.$refs.OrderLeft.tableData[index],
+                    "detailList",
+                    arr
+                  );
+                }
+              }
+            );
           }
         });
       } else {
@@ -843,6 +833,7 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
+      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = [];
@@ -852,6 +843,8 @@ export default {
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
+         // this.formPlan.detailList.map(item => item.orderQty = item.orderQty > 0 ? item.orderQty : 1);
+         //  this.formPlan.detailList.map(item => item.salePrice = item.salePrice > 0 ? item.salePrice : 0);
           // let res = await getAccessories(data);
           // if (res.code === 0) {
           //   this.$emit("parentGetleft");
@@ -1076,7 +1069,7 @@ export default {
             billStatusId: { name: "草稿", value: 0 },
             orderMan: this.$store.state.user.userData.username || "",
             orderManId: this.$store.state.user.userData.id,
-            detailList:[]
+            detailList: []
           };
           this.draftShow = 0;
           return false;

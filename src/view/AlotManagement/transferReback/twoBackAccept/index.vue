@@ -30,8 +30,7 @@
                 v-for="item in customerListOptions"
                 :value="item.value"
                 :key="item.value"
-              >{{ item.label }}
-              </Option>
+              >{{ item.label }}</Option>
             </Select>
           </div>
           <!-- <div class="db mr10">
@@ -83,21 +82,26 @@
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row,rowIndex }">
-              <Button type="text" @click="shouli(row, 2)">受理</Button>
-              <Button type="text" @click="shouli(row, 7)">拒绝</Button>
+              <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 2)">受理</Button>
+              <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
-
-          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="orgName" title="申请方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
           <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
-            field="storeId"
+          <!-- <vxe-table-column
+            field=""
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
+          ></vxe-table-column>-->
+
+          <vxe-table-column
+            field="defaultValue"
+            title="受理仓库"
+            :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
@@ -170,66 +174,66 @@
 </template>
 
 <script>
-  import { findForAllot } from "_api/purchasing/purchasePlan";
-  import QuickDate from '../../../../components/getDate/dateget'
-import '../../../lease/product/lease.less'
-import '../../../goods/goodsList/goodsList.less'
+import { findForAllot } from "_api/purchasing/purchasePlan";
+import QuickDate from "../../../../components/getDate/dateget";
+import "../../../lease/product/lease.less";
+import "../../../goods/goodsList/goodsList.less";
 import {
   getcangku,
   getbayer,
   tuihuishouli,
   tuihuishouliliebiao,
   tuihuishouliliebiaomingxi
-} from '../../../../api/AlotManagement/twoBackAccept.js'
+} from "../../../../api/AlotManagement/twoBackAccept.js";
 export default {
-  name: 'twoBackAccept',
+  name: "twoBackAccept",
   components: {
     QuickDate
   },
   data() {
     return {
-      danhao: '123123qawseqwe',
+      danhao: "123123qawseqwe",
       modal3: false,
       modal1: false,
       modal2: false,
       form: {
-        createTime: '',
-        endTime: '',
-        createDate: '',
-        endDate: '',
-        status: '',
-        id: '',
-        serviceId: ''
+        createTime: "",
+        endTime: "",
+        createDate: "",
+        endDate: "",
+        status: "",
+        id: "",
+        serviceId: ""
       },
-      productName: '',
+      productName: "",
       // 快速查询数据1
       quickArray: [
         {
-          value: '本周',
-          label: '本周'
+          value: "本周",
+          label: "本周"
         },
         {
-          value: '上周',
-          label: '上周'
+          value: "上周",
+          label: "上周"
         },
         {
-          value: '本月',
-          label: '本月'
+          value: "本月",
+          label: "本月"
         },
         {
-          value: '上月',
-          label: '上月'
+          value: "上月",
+          label: "上月"
         },
         {
-          label: '本年',
-          value: '本年'
+          label: "本年",
+          value: "本年"
         }
       ],
       // 代销售条件查询
       penSalesData: {
-        character: '', // 快速查询
-        company: '', //公司选择
-        customer: '' //客户
+        character: "", // 快速查询
+        company: "", //公司选择
+        customer: "" //客户
       },
       customerListOptions: [], //选择客户下拉列表
       // companyListOptions: [], //选择公司下拉列表
@@ -245,83 +249,87 @@ export default {
 
       storeArray: [],
       currentrow: {}
-    }
+    };
   },
   created() {
-    this.log()
-    this.search()
+    this.log();
+    this.search();
   },
   methods: {
     log() {
-      let params = {}
-      findForAllot(params).then(res => {
+      let params = {};
+      findForAllot(params)
+        .then(res => {
           if (res.code == 0) {
             // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.id,
                 label: element.fullName
-              })
-            })
+              });
+            });
           }
         })
         .catch(e => {
-          this.$Message.info('拒绝失败')
-        })
+          this.$Message.info("拒绝失败");
+        });
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res)
+            console.log(res);
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name })
-            })
+              this.storeArray.push({ value: element.id, label: element.name });
+            });
           }
         })
         .catch(e => {
-          this.$Message.info('获取仓库失败')
-        })
+          this.$Message.info("获取仓库失败");
+        });
     },
     //time1
     getDataQuick(val) {
-      console.log(val)
-      this.form.startTime = val[0]
-      this.form.endTime = val[1]
+      console.log(val);
+      this.form.startTime = val[0];
+      this.form.endTime = val[1];
     },
     //time2
     selectDate(val) {
-      console.log(val)
-      this.form.commitDateStart = val[0] + ' ' + '00:00:00'
-      this.form.commitDateEnd = val[1] + ' ' + '23:59:59'
+      console.log(val);
+      this.form.commitDateStart = val[0] + " " + "00:00:00";
+      this.form.commitDateEnd = val[1] + " " + "23:59:59";
     },
     //搜索
     search() {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            console.log(res)
-            this.TopTableData = res.data.content || []
-            this.pageList.total = res.totalElements
+            console.log(res);
+            this.TopTableData = res.data.content || [];
+            this.pageList.total = res.totalElements;
+            console.log(this.TopTableData, "this.TopTableData");
+            for (var i = 0; i < this.TopTableData.length; i++) {
+              this.TopTableData[i]["defaultValue"] = "受理默认仓库";
+            }
           }
         })
         .catch(e => {
-          this.$Message.info('获取受理列表失败')
-        })
+          this.$Message.info("获取受理列表失败");
+        });
     },
     //current
     async currentChangeEvent({ row }) {
-      console.log('当前行' + row)
+      console.log("当前行" + row);
       const params = {
         mainId: row.id
-      }
-      const res = await tuihuishouliliebiaomingxi(params)
-      this.BottomTableData = res.data
-
+      };
+      const res = await tuihuishouliliebiaomingxi(params);
+      this.BottomTableData = res.data;
     },
     copy() {
-      var number = document.getElementById('danhao').value //获取需要复制的值(innerHTML)
-      document.getElementById('danhao').select() // 选择对象
-      document.execCommand('Copy') // 执行浏览器复制命令
-      console.log(number)
+      var number = document.getElementById("danhao").value; //获取需要复制的值(innerHTML)
+      document.getElementById("danhao").select(); // 选择对象
+      document.execCommand("Copy"); // 执行浏览器复制命令
+      console.log(number);
     },
     ok() {
       // const params = {
@@ -329,23 +337,23 @@ export default {
       //   storeId: this.currentrow.storeId,
       //   status: 2
       // }
-      this.currentrow.orderTypeId = this.currentrow.orderTypeId.value
-      this.currentrow.settleStatus = this.currentrow.settleStatus.value
-      this.currentrow.status = 2
-      let params = this.currentrow
+      this.currentrow.orderTypeId = this.currentrow.orderTypeId.value;
+      this.currentrow.settleStatus = this.currentrow.settleStatus.value;
+      this.currentrow.status = 2;
+      let params = this.currentrow;
       // params['']
       tuihuishouli(params)
         .then(res => {
           if (res.code == 0) {
-            this.tbdata = res.data || []
-            this.modal3 = true
+            this.tbdata = res.data || [];
+            this.modal3 = true;
           } else if (res.code == 1) {
-            this.$Message.info('请选择受理仓库')
+            this.$Message.info("请选择受理仓库");
           }
         })
         .catch(e => {
-          this.$Message.info('受理失败')
-        })
+          this.$Message.info("受理失败");
+        });
     },
     ok1() {
       // const params = {
@@ -353,45 +361,46 @@ export default {
       //   storeId: this.currentrow.storeId,
       //   status: 7
       // }'
-      this.currentrow.orderTypeId = this.currentrow.orderTypeId.value
-      this.currentrow.settleStatus = this.currentrow.settleStatus.value
-      this.currentrow.status = 7
-      let params = this.currentrow
+      this.currentrow.orderTypeId = this.currentrow.orderTypeId.value;
+      this.currentrow.settleStatus = this.currentrow.settleStatus.value;
+      this.currentrow.status = 7;
+      let params = this.currentrow;
       tuihuishouli(params)
         .then(res => {
           if (res.code == 0) {
             if (res.code == 0) {
-              console.log(1)
+              console.log(1);
             } else if (res.code == 1) {
-              this.$Message.info('请选择受理仓库')
+              this.$Message.info("请选择受理仓库");
             }
           }
         })
         .catch(e => {
-          this.$Message.info('拒绝失败')
-        })
+          this.$Message.info("拒绝失败");
+        });
     },
     ok3() {
-      this.$router.push(`/allot/two/backInStorage`)
+      this.$router.push(`/allot/two/backInStorage`);
     },
     cancel() {
-      this.$Message.info('点击了取消')
+      this.$Message.info("点击了取消");
     },
     shouli(row, index) {
-      this.currentrow = row
+      this.currentrow = row;
+      console.log(row);
       if (index === 2) {
-        this.modal1 = true
+        this.modal1 = true;
       } else {
-        this.modal2 = true
+        this.modal2 = true;
       }
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      console.log(evnt.target.value)
-      this.currentrow.storeId = evnt.target.value
+      console.log(evnt.target.value);
+      this.currentrow.storeId = evnt.target.value;
     }
   }
-}
+};
 </script>
 
 <style scoped>

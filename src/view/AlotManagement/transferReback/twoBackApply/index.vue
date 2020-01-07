@@ -103,7 +103,12 @@
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
                           ></Input>-->
-                          <Select v-model="Leftcurrentrow.guestName" :disabled="Leftcurrentrow.status.value != 0" label-in-value filterable>
+                          <Select
+                            v-model="Leftcurrentrow.guestName"
+                            :disabled="Leftcurrentrow.status.value != 0"
+                            label-in-value
+                            filterable
+                          >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
@@ -204,7 +209,12 @@
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="unit" title="申请退回数量" width="100"></vxe-table-column>
+                  <vxe-table-column
+                    field="applyQty"
+                    :edit-render="{name: 'input'}"
+                    title="申请退回数量"
+                    width="100"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
                     :edit-render="{name: 'input'}"
@@ -212,7 +222,7 @@
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="orderPrice" title="单位" width="100"></vxe-table-column>
+                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 </vxe-table>
@@ -600,7 +610,11 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      console.log(params);
+      console.log(params, "params =>608");
+      for (var i = 0; i < params.detailVOS.length; i++) {
+        params.detailVOS[i].id = "";
+      }
+
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -737,8 +751,8 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            console.log(this.tableData1);
-            this.$Message.success("获取成品列表成功");
+            // console.log(this.tableData1);
+            // this.$Message.success("获取成品列表成功");
           }
         })
         .catch(e => {

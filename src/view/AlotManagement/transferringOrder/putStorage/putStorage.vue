@@ -655,7 +655,7 @@ export default {
     // },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
+        this.$Message.info("请先保存新增入库单！");
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
@@ -724,11 +724,11 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList(this.form);
-            this.$Message.success("出库成功");
+            this.$Message.success("入库成功");
           }
         })
         .catch(e => {
-          this.$Message.info("出库失败");
+          this.$Message.info("入库失败");
         });
     },
     searchPro(params, size, page) {

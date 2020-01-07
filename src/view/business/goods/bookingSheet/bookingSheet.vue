@@ -106,7 +106,7 @@
                         :on-success="onSuccess"
                         :before-upload ='beforeUpload'
                       >
-                    <Button size="small" class="mr10" @click="getRUl" v-has="'import'" :disabled="LeadIn"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
+                    <Button size="small" class="mr10" @click="getRUl" v-has="'import'" :disabled="LeadIn || presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
                    </Upload>
                     </div>
                     <div class="fl mb5">
@@ -366,7 +366,9 @@ export default {
           })
           deleteit(dataaa).then(res => {
             if(res.code === 0){
+              console.log(res)
               this.$message.warning('删除成功！');
+              this.leftgetList();
               let checkBoxArr = this.checkboxArr.map(item => item.id)
               this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
             }
@@ -494,7 +496,7 @@ export default {
             data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
             data.remark = this.formPlan.remark
             data.detailVOList = this.Right.tbdata
-            // console.log(this.Right.tbdata)
+            console.log(this.Right.tbdata)
             save(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
@@ -578,16 +580,21 @@ export default {
     // 上传成功函数
     onSuccess (response) {
       if(response.code === 0 ){
-        // if (response.data.list && response.data.list.length > 0) {
-        //   this.warning(response.data.List[0])
-        // }
-        this.$Message.success(response.message)
-        this.$Message.warning(response.data.toString())
-        this.leftgetList()
+        if(response.data.length === 0){
+          this.$Message.warning('导入成功！')
+          this.leftgetList();
+        }else {
+         this.$Message.error(response.data.join(';'))
+          }
       }else {
         this.$Message.error(response.message)
-        this.leftgetList()
       }
+    },
+    warning(nodesc) {
+      this.$Notice.warning({
+        title: "上传错误信息",
+        desc: nodesc
+      });
     },
     //上传之前清空
     beforeUpload(){
@@ -657,13 +664,13 @@ export default {
           partName : item.partName, //名称
           unit : item.unit, //单位
           partBrand : item.partBrand, //品牌
-          spec : item.specifications,  //规格
+          spec : item.spec,  //规格
           preQty : '', //预定数量
           remark : '', //备注
           acceptQty: 0, //受理数量
           oemCode : item.oemCode, //oe码
           partInnerId: item.partInnerId, //配件内码
-          partId : item.id,
+          partId : item.partId,
         })
       })
       if(this.Right.tbdata){
@@ -791,15 +798,16 @@ export default {
         if(row.id){
           // this.leftgetList();
           this.LeadIn = false
-          this.formPlan.salesman = this.datadata.salesman
-          this.formPlan.Reservation = this.datadata.orderNo
-          this.formPlan.orderDate = this.datadata.expectedArrivalDate
-          this.formPlan.remark = this.datadata.remark
-          this.Right.tbdata = this.datadata.detailVOList
-          this.presentrowMsg = row.status.value
-          // console.log(this.presentrowMsg)
-          this.rowId = row.id
-          this.buttonDisable = false
+            this.formPlan.salesman = this.datadata.salesman
+            this.formPlan.Reservation = this.datadata.orderNo
+            this.formPlan.orderDate = this.datadata.expectedArrivalDate
+            this.formPlan.remark = this.datadata.remark
+            this.Right.tbdata = this.datadata.detailVOList
+            console.log(this.datadata.detailVOList,"13456")
+            this.presentrowMsg = row.status.value
+            // console.log(this.presentrowMsg)
+            this.rowId = row.id
+            this.buttonDisable = false
         }else {
           this.formPlan.salesman = this.$store.state.user.userData.staffName
           this.formPlan.Reservation = ''

@@ -6,6 +6,7 @@
       <div class="orderCenter">
         <vxe-table
           border
+          ref="xTab"
           align="center"
           size="mini"
           @current-change="clickOnesList"

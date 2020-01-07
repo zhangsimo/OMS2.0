@@ -61,7 +61,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <selectDealings ref="selectDealings" @selectSearchName="getOne"  />
   </div>
 </template>
 
@@ -69,7 +69,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
-import { transferWarehousing, transferParts } from "@/api/bill/saleOrder";
+import { transferWarehousing, wouseParts } from "@/api/bill/saleOrder";
 import moment from 'moment'
 export default {
   components: {
@@ -318,8 +318,8 @@ export default {
     // 主表查询
     getTransferWarehousing() {
       let obj = {
-        createTimeStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        createTimeEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
@@ -361,7 +361,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      transferParts({mainId: row.id}).then(res => {
+      wouseParts({main: row.id}).then(res => {
         console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{

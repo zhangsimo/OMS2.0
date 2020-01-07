@@ -79,15 +79,15 @@
         ></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <selectDealings ref="selectDealings" @getOne="getOne"  />
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from "./components/selectCompany";
+import selectDealings from "./components/SelectTheCustomer";
 import { creat } from "./../components";
-import { transferStock, transferParts } from "@/api/bill/saleOrder";
+import { transferStock, stockParts } from "@/api/bill/saleOrder";
 import moment from 'moment';
 export default {
   components: {
@@ -330,8 +330,8 @@ export default {
     // 主表查询
     getTransferStock() {
       let obj = {
-        startTime:moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        endTime:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type
@@ -341,7 +341,7 @@ export default {
           res.data.map((item, index) => {
             item.num = index + 1;
             item.billstate = "已审";
-            item.orderTypeId = item.orderTypeId === 2 ? "调拨出库" : "调出退货";
+            item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
             this.data = res.data;
           });
         } else {
@@ -351,7 +351,7 @@ export default {
     },
     // 往来单位
     Dealings() {
-      this.$refs.selectDealings.init();
+      this.$refs.selectDealings.addressShow = true
     },
     // 高级查询
     ok() {},
@@ -377,7 +377,8 @@ export default {
     },
     // 选中数据
     election(row) {
-      transferParts({ mainId: row.orderManId }).then(res => {
+      stockParts({ main: row.id }).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;

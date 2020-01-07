@@ -39,7 +39,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'delivery'" class="mr10" @click="chuku">
+              <Button
+                :disabled="this.flagValue !== 0"
+                v-has="'delivery'"
+                class="mr10"
+                @click="chuku"
+              >
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
@@ -160,7 +165,7 @@
                     <FormItem label="申请单号：" prop="code">
                       <Input class="w160" disabled :value="Leftcurrentrow.code"></Input>
                     </FormItem>
-                    <FormItem label="受理单号：" prop="planOrderNum">
+                    <FormItem label="受理单号：" prop="serviceId">
                       <Input
                         class="w160"
                         :disabled="Leftcurrentrow.status.value !== 0"
@@ -203,16 +208,18 @@
                 <vxe-table
                   border
                   resizable
+                  show-footer
                   ref="xTable1"
                   size="mini"
-                  highlight-current-row
-                  highlight-hover-row
-                  :edit-config="{trigger: 'click', mode: 'cell'}"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
                   :footer-method="addFooter"
+                  :edit-rules="validRules"
+                  showOverflow="true"
+                  show-overflow
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -226,7 +233,13 @@
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
-                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                  <!-- <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column> -->
+                  <vxe-table-column
+                    field="stockOutQty"
+                    title="缺货数量"
+                    :edit-render="{name: 'input',attrs: {disabled: false}}"
+                    width="100"
+                  ></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -325,7 +338,22 @@ export default {
     selectPartCom
   },
   data() {
+    let changeNumber = (rule, value, callback) => {
+      if (!value && value != "0") {
+        callback(new Error("请输入大于或等于0的正整数"));
+      } else {
+        const reg = /^([0]|[1-9][0-9]*)$/;
+        if (reg.test(value)) {
+          callback();
+        } else {
+          callback(new Error("请输入大于或等于0的正整数"));
+        }
+      }
+    };
     return {
+      validRules: {
+        stockOutQty: [{ required: true, validator: changeNumber }]
+      },
       checkboxArr: [], // checkbox选中
       idsId: [],
       getArray: [],
@@ -374,6 +402,7 @@ export default {
           value: 3
         }
       ],
+
       advanced: false, //更多模块的弹框
       //左侧表格高度
       leftTableHeight: 0,
@@ -458,7 +487,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "commitUname",
             minWidth: 100
           },
           {
@@ -673,7 +702,7 @@ export default {
     getDataType() {
       this.getList();
     },
-    baocun1() {
+    async baocun1() {
       if (this.Leftcurrentrow.remark.length > 100) {
         this.$Message.info("备注小于100个字符");
         return;
@@ -725,34 +754,45 @@ export default {
         params.id = "";
       }
       console.log(params, "params");
-      //配件组装保存
-      baocun(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList();
-            this.$Message.success("保存成功");
-            this.flag = 0;
-            // this.Leftcurrentrow.storeId = ""
-            // this.Leftcurrentrow.guestName = ""
-            // this.Leftcurrentrow.storeName =  "",
-            // this.Leftcurrentrow.createTime =  "",
-            // this.Leftcurrentrow.orderMan = "",
-            // this.Leftcurrentrow.remark =  "",
-            // this.Leftcurrentrow.serviceId =  "",
-            // this.Leftcurrentrow.detailVOS =  []
-          }
-        })
-        .catch(e => {
-          this.$Message.info("保存配件组装信息失败");
+      try {
+        await this.$refs.xTable1.validate();
+        //配件组装保存
+        baocun(params)
+          .then(res => {
+            // 点击列表行==>配件组装信息
+            if (res.code == 0) {
+              this.getList();
+              this.$Message.success("保存成功");
+              this.flag = 0;
+              // this.Leftcurrentrow.storeId = ""
+              // this.Leftcurrentrow.guestName = ""
+              // this.Leftcurrentrow.storeName =  "",
+              // this.Leftcurrentrow.createTime =  "",
+              // this.Leftcurrentrow.orderMan = "",
+              // this.Leftcurrentrow.remark =  "",
+              // this.Leftcurrentrow.serviceId =  "",
+              // this.Leftcurrentrow.detailVOS =  []
+            }
+          })
+          .catch(e => {
+            this.$Message.info("保存配件组装信息失败");
+          });
+      } catch (errMap) {
+        this.$XModal.message({
+          status: "error",
+          message: "申请数量必须输入大于0的正整数！"
         });
+      }
     },
     xinzeng() {
       this.flagValue = 0;
       this.flagValue1 = 0;
+      // this.Leftcurrentrow = {}
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
+      this.Leftcurrentrow.code = "";
+      this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
       this.buttonShow = false;
       this.tuneOut = false;
@@ -957,10 +997,9 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row, "row");
       this.flagValue = 0;
       this.flagValue1 = 0;
-      // console.log(row, "row ==>862");
+      console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -974,7 +1013,6 @@ export default {
         });
         return;
       }
-
       this.buttonDisable = 0;
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
@@ -983,6 +1021,17 @@ export default {
       }
       if (row.id == undefined) {
         row.id = "";
+      }
+      if (row.code != "") {
+        this.flagValue = 1;
+        // this.Leftcurrentrow.status.value = 1;
+      }
+      if (row.statuName != "草稿") {
+        this.flagValue = 1;
+        this.flagValue1 = 1;
+      } else {
+        this.flagValue = 0;
+        this.flagValue1 = 0;
       }
       if (row.id) {
         const params = {
@@ -997,14 +1046,6 @@ export default {
       if (row.status.value === 1) {
         // this.tuneOut = false
         console.log(row.code);
-      }
-      if (row.statuName != "草稿") {
-        this.flagValue = 1;
-        this.flagValue1 = 1;
-      }
-      if (row.code != "") {
-        this.flagValue = 1;
-        // this.Leftcurrentrow.status.value = 1;
       }
     },
     //打开添加配件模态框
@@ -1026,16 +1067,21 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
-      this.form = { ...this.form, ...this.$refs.naform.getITPWE() };
+      this.$refs.naform.cancelTrim();
+
+      this.form = {
+        ...this.form,
+        ...this.$refs.naform.getITPWE()
+      };
       for (var i = 0; i < this.getArray.length; i++) {
         console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
       }
+      this.advanced = false;
       this.getList();
       this.$refs.naform.reset();
-      this.advanced = false;
     },
     ok() {},
     cancel() {},
@@ -1049,12 +1095,12 @@ export default {
       let arr = [];
       // console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
-        this.checkboxArr.forEach(item => {
-          console.log(item.oemCode);
-          this.Leftcurrentrow.detailVOS.filter(itm => {
-            return itm.oemCode == item.oemCode;
-          });
-        });
+        // this.checkboxArr.forEach(item => {
+        //   console.log(item.oemCode);
+        //   this.Leftcurrentrow.detailVOS.filter(itm => {
+        //     return itm.oemCode == item.oemCode;
+        //   });
+        // });
 
         // let haveId = this.checkboxArr.filter(item => item.id);
         // let NoId = this.checkboxArr.filter(item => !item.id);
