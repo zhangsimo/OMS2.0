@@ -535,7 +535,7 @@
       //删除配件的全选
       selectAll(aaa){
         this.checkboxArr = aaa.selection
-        console.log(this.checkboxArr)
+        // console.log(this.checkboxArr)
       },
       //添加配件按钮
       addPro(){
@@ -611,7 +611,7 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              console.log(data.code)
+              // console.log(data.code)
               saveDraft(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -750,7 +750,6 @@
         this.guestidId = a.id
       },
       leftgetList(){
-        console.log('接口')
         let data = {}
         let params = {}
         params.page = this.Left.page.num - 1
