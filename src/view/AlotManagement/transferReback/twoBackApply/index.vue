@@ -236,7 +236,7 @@
         <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button type="default" @click="advanced = false">取消</Button>
         </div>
       </Modal>
     </div>
@@ -429,12 +429,12 @@ export default {
           },
           {
             title: "提交人",
-            key: "orderMan",
+            key: "commitUname",
             minWidth: 100
           },
           {
             title: "提交日期",
-            key: "orderDate",
+            key: "commitDate",
             minWidth: 160
           },
           {
