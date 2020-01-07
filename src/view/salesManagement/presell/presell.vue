@@ -719,7 +719,6 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      // console.log('44444',value)
       if (!value) {
         return false;
       }
@@ -902,7 +901,6 @@ export default {
             this.$refs.formPlan.resetFields();
           }
         });
-
         {
         }
       } else {
@@ -917,14 +915,6 @@ export default {
           this.limitList = {};
         }
       }
-      // console.log("左侧数据", v);
-      // console.log(v);
-      // this.currentRow = v;
-      // this.id = v.id;
-      // this.isNew = false;
-      // this.draftShow = v.status.value;
-      // this.tableData = v.detailVOList;
-      // this.formPlan = v;
     },
     // 获取仓库
     async getWarehouse() {
@@ -1062,9 +1052,6 @@ export default {
     },
     //提交
     isSubmit() {
-      // if (!this.isCommit||!this.formPlan.id) {
-      //   return this.$Message.error('请先保存数据')
-      // }
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -1155,38 +1142,11 @@ export default {
         getDeleteList(data).then(res => {
           if (res.code === 0) {
             this.$Message.success("删除配件成功");
-            // this.getLeftList()
-            // this.formPlan = {}
-            // this.tableData = []
-            // this.limitList = {};
-            // this.$refs.formPlan.resetFields();
-            // this.isNew=true
-            // this.id=null
           }
         });
       } else {
         this.$Message.error("请选择一条有效数据");
       }
-      // if (this.selectTableList.length > 0) {
-      //   let data = []
-      //   this.selectTableList.forEach(item => {
-      //     data.push({id: item.id})
-      //   })
-      //   getDeleteList(data).then(res => {
-      //     if (res.code === 0) {
-      //       this.$Message.success('删除配件成功');
-      //       this.getLeftList()
-      //       this.formPlan = {}
-      //       this.tableData = []
-      //       this.limitList = {};
-      //       this.$refs.formPlan.resetFields();
-      //       this.isNew=true
-      //       this.id=null
-      //     }
-      //   })
-      // } else {
-      //   this.$Message.error('请选择一条有效数据')
-      // }
     },
     //批量上传失败
     onFormatError(file) {
@@ -1218,9 +1178,6 @@ export default {
     getRUl() {
       let id = this.id;
       this.upurl = getup + "id=" + id;
-      // this.limitList = {};
-      // this.$refs.formPlan.resetFields();
-      // this.formPlan = {}
     },
     //下载模板
     down() {
