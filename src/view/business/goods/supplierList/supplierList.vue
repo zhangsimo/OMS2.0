@@ -486,7 +486,6 @@
             // })
                 let checkBoxArr = this.checkboxArr.map(item => item.partCode)
                 this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
-                console.log(this.Right.tbdata)
                 this.$Message.warning('删除成功！')
           }
         }else {
@@ -572,12 +571,16 @@
       //选择采购入库单
       getPlanOrder(Msg){
         let arr = Msg.details || []
-        // console.log(arr)
         arr.map(item => {
           item.outUnitId = item.unit
           item.stockOutQty = item.totalStockQty
         })
-        this.Right.tbdata = this.Right.tbdata.concat(arr);
+        if(this.Right.tbdata){
+          this.Right.tbdata = [...this.Right.tbdata,...arr];
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+        } else {
+          this.Right.tbdata = arr
+        }
       },
       //选择采购入库单的主表code
       selectRow(val){
@@ -734,44 +737,6 @@
         // console.log(this.moreArr)
         this.leftgetList()
         // console.log(msg)
-      },
-      //子组件的参数
-      getPartNameList(ChildMessage){
-        // console.log(ChildMessage)
-        let parts = []
-        ChildMessage.map( item => {
-          parts.push({
-            partName : item.partStandardName,
-            unit : item.minUnit,
-            // oemCode : item.brandPartCode,
-            // spec : item.specifications,
-            enterUnitId : item.direction,
-            applyQty : '',
-            remark : '',
-            partInnerId : item.code,
-            partCode : item.partCode,
-            oemCode : item.oeCode,
-            partBrand : item.partBrand,
-            carBrandName : item.adapterCarBrand,
-            carModelName : item.adapterCarModel,
-            carTypef : item.baseType.firstType.typeName,
-            cartypes : item.baseType.secondType.typeName,
-            carTypet : item.baseType.thirdType.typeName,
-            spec : item.specifications,
-            partId : item.id,
-            fullName : item.fullName,
-            systemUnitId : item.minUnit,
-          })
-        })
-        if(this.Right.tbdata){
-          this.Right.tbdata = [...this.Right.tbdata,...parts]
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode')
-          console.log(this.Right.tbdata)
-        } else {
-          console.log(this.Right.tbdata)
-          this.Right.tbdata = parts
-        }
-
       },
       //供应商弹框
       addSuppler(){
