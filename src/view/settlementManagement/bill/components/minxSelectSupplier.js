@@ -1,4 +1,5 @@
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
+import {typeSelect} from '@/api/bill/saleOrder'
 import {
   getAllBrand,
   getCarClassifys,
@@ -130,7 +131,7 @@ export const mixSelectSupplier = {
 
       req.page = this.page.num;
       req.size = this.page.size;
-      getSupplierList(req).then(res => {
+      typeSelect(req).then(res => {
         this.loading = false;
         this.partData = res.data || [];
         this.page.total = res.data.total;

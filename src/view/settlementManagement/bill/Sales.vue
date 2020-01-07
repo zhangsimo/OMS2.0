@@ -22,7 +22,7 @@
             </Select>
           </div>
           <div class="db ml20">
-            <span>供应商：</span>
+            <span>客户名称：</span>
             <input type="text" class="h30" v-model="company" />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
@@ -62,13 +62,13 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary :summary-method="summary"></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
+    <selectDealings ref="selectDealings" @getOne="getOne" />
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from "./components/selectCompany";
+import selectDealings from "./components/SelectTheCustomer";
 import { getOrderlist, getPartList } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
 import moment from 'moment'
@@ -322,7 +322,7 @@ export default {
       this.value = data;
     },
     Dealings() {
-      this.$refs.selectDealings.init();
+      this.$refs.selectDealings.addressShow= true;
     },
     // 导出汇总/配件明细
     report(type) {

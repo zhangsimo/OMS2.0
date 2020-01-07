@@ -79,13 +79,13 @@
         ></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
+    <selectDealings ref="selectDealings" @getOne="getOne"  />
   </div>
 </template>
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from "./components/selectCompany";
+import selectDealings from "./components/SelectTheCustomer";
 import { creat } from "./../components";
 import { transferStock, transferParts } from "@/api/bill/saleOrder";
 import moment from 'moment';
@@ -351,7 +351,7 @@ export default {
     },
     // 往来单位
     Dealings() {
-      this.$refs.selectDealings.init();
+      this.$refs.selectDealings.addressShow = true
     },
     // 高级查询
     ok() {},
