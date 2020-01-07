@@ -458,7 +458,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "commitUname",
             minWidth: 100
           },
           {
