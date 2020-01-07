@@ -9,7 +9,13 @@
           </div>
           <div class="db ml20">
             <span>对账期间：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
+            <Date-picker
+              :value="value"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+              @on-change="dateChange"
+            ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -23,8 +29,11 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <input type="text" class="h30" v-model="company" />
-            <i class="iconfont iconcaidan input" @click="Dealings"></i>
+            <Select v-model="companyId" class="w150" @on-change="fendian" filterable>
+              <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            </Select>
+            <!-- <input type="text" class="h30" v-model="company" />
+            <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
           </div>
           <div class="db ml5">
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -39,7 +48,12 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report" v-has="'export'">导出</button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="report"
+              v-has="'export'"
+            >导出</button>
           </div>
         </div>
       </div>
@@ -83,7 +97,7 @@
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <!-- <selectDealings ref="selectDealings" @selectSupplierName="getOne"  /> -->
     <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
       <Form label-width="120">
         <FormItem label="对账单号：">
@@ -107,17 +121,20 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import selectDealings from "./components/selectCompany";
+import { getbayer } from "@/api/AlotManagement/threeSupplier";
+// import selectDealings from "./components/selectCompany";
+import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { creat } from "./../components";
 import {
   getReceiptsPaymentsSummary,
   getReceiptsPaymentsList
 } from "@/api/bill/saleOrder";
-import moment from 'moment'
+import moment from "moment";
+import { set } from "xe-utils/methods";
+import index from "../../admin/roles";
 export default {
   components: {
-    quickDate,
-    selectDealings
+    quickDate
   },
   data() {
     return {
@@ -332,12 +349,12 @@ export default {
       data: [],
       data1: [],
       data2: [],
-      company: "", //往来单位
+      company: [], //往来单位
       companyId: "", //往来单位id
       fno: "", //更多查询收付款单号
       accountNo: "", //更多查询对账单号
       createUname: "", //收付款人
-      startStatusName:''//审核状态
+      startStatusName: "" //审核状态
     };
   },
   async mounted() {
@@ -346,11 +363,12 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     this.getGeneral();
+    this.getOne();
   },
   methods: {
     // 日期选择
-    dateChange(data){
-      this.value = data
+    dateChange(data) {
+      this.value = data;
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -396,9 +414,33 @@ export default {
       this.getGeneral();
     },
     // 往来单位选择
-    getOne(data) {
-      this.company = data.fullName;
-      this.companyId = data.id;
+    async getOne() {
+      const res = await getSupplierList({});
+      const res1 = await getbayer({});
+      this.company = [];
+      let data = []
+      let result = []
+      let obj = {}
+      if(res.data.length!==0&&res1.data.content.length!==0){
+        data = [...res.data, ...res1.data.content];
+      } else if(res.data.length!==0){
+        data = res.data
+      } else if(res1.data.content.length!==0){
+        data = res.data.content
+      }
+      for(let i in data) {
+        if(!obj[data[i].id]) {
+          result.push(data[i])
+          obj[data[i].id] = 1
+        }
+      }
+      data = result
+      data.map(item=>{
+        this.company.push({
+          label:item.fullName,
+          value:item.id
+        })
+      })
     },
     // 分店切换
     fendian(val) {
@@ -445,23 +487,22 @@ export default {
     },
     // 高级查询确认
     ok() {
-      this.getGeneral()
+      this.getGeneral();
     },
     cancel() {},
     // 总表查询
     getGeneral() {
       let data = {
-        startTime: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        endTime: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.BranchstoreId,
         guestId: this.companyId,
-        accountNo:this.accountNo,
-        fno:this.fno,
-        createUname:this.createUname,
+        accountNo: this.accountNo,
+        fno: this.fno,
+        createUname: this.createUname,
         documentStatus: this.startStatusName
       };
       getReceiptsPaymentsSummary(data).then(res => {
-        console.log(res);
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;

@@ -278,9 +278,9 @@
             title="单价"
             :edit-render="{name: 'input' ,attrs: {disabled: false}}"
           >
-<!--            <template v-slot="{ row }">-->
-<!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
-<!--            </template>-->
+            <!--            <template v-slot="{ row }">-->
+            <!--              <span>{{ countPrice(row) |priceFilters}}</span>-->
+            <!--            </template>-->
           </vxe-table-column>
           <vxe-table-column title="金额">
             <template v-slot="{ row }">
@@ -464,7 +464,7 @@ export default {
         disabledDate: options2DisabledDate
       },
       formPlan: {
-        detailList:[]
+        detailList: []
       }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -559,8 +559,8 @@ export default {
     },
     //获取销售员
     selectOrderMan(val) {
-      this.formPlan.orderMan = val.label;
-      this.formPlan.orderManId = val.value;
+      this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
+      this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
     },
     //获取客户额度
     async getAllLimit() {
@@ -794,20 +794,21 @@ export default {
           item => !this.selectTableList.includes(item)
         );
         this.formPlan.detailList = arr;
-        if(!data[0].id) return
-        this.$parent.$parent.$refs.OrderLeft.tableData.map((item, index) => {
-          if (item.id === this.formPlan.id) {
-            this.$set(
-              this.$parent.$parent.$refs.OrderLeft.tableData[index],
-              "detailList",
-              arr
-            );
-          }
-        });
+        if (!data[0].id) return;
         getDeleteList(data).then(res => {
           if (res.code === 0) {
-            // this.getList();
             this.$message.success(res.data);
+            this.$parent.$parent.$refs.OrderLeft.tableData.map(
+              (item, index) => {
+                if (item.id === this.formPlan.id) {
+                  this.$set(
+                    this.$parent.$parent.$refs.OrderLeft.tableData[index],
+                    "detailList",
+                    arr
+                  );
+                }
+              }
+            );
           }
         });
       } else {
@@ -1076,7 +1077,7 @@ export default {
             billStatusId: { name: "草稿", value: 0 },
             orderMan: this.$store.state.user.userData.username || "",
             orderManId: this.$store.state.user.userData.id,
-            detailList:[]
+            detailList: []
           };
           this.draftShow = 0;
           return false;

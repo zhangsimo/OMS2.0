@@ -61,7 +61,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
   </div>
 </template>
 
@@ -318,8 +318,8 @@ export default {
     // 主表查询
     getTransferWarehousing() {
       let obj = {
-        createTimeStart: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        createTimeEnd:  moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        createTimeStart: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        createTimeEnd:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
         guestId: this.companyId,
         orderTypeId:this.type

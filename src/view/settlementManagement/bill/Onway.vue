@@ -47,7 +47,7 @@
         <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary"></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne"/>
+    <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
   </div>
 </template>
 
@@ -247,8 +247,8 @@ export default {
     // 总表查询
     getGeneral() {
       let data={
-        startTime:moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'),
-        endTime:moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'),
+        startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId:this.model1,
         code:this.fno,
         guestId:this.companyId

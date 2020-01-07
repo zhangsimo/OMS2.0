@@ -898,7 +898,7 @@
           })
         }else{
           if(row.id){
-            this.leftgetList();
+            // this.leftgetList();
             this.mainId = row.id
             this.guestidId = row.guestId
             this.datadata = row
