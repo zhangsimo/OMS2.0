@@ -5,7 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
             <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
               <Option
                 v-for="item in purchaseTypeArr"
@@ -25,7 +25,7 @@
             </Button>
           </div>
           <div class="db">
-            <Button v-has="'print'" :disabled="true" @click="stamp" class="mr10">
+            <Button v-has="'print'" @click="stamp" class="mr10">
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -77,18 +77,19 @@
                   <FormItem label="申请方：" class="fs12">
                     <Row class="w500">
                       <Col span="22">
-                        <Input readonly v-model="formPlan.orgid" placeholder></Input>
+                        <Input disabled readonly v-model="formPlan.guestName" placeholder></Input>
                       </Col>
                     </Row>
                   </FormItem>
                   <FormItem label="入库仓库：">
-                    <Select v-model="formPlan.storeId" class="w150">
+                    <Select disabled v-model="formPlan.storeId" class="w150">
                       <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                     <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
                   <FormItem label="调出退回日期：" class="fs12 ml50">
                     <Date-picker
+                      disabled
                       readonly
                       v-model="formPlan.finishDate"
                       type="date"
@@ -97,16 +98,22 @@
                     ></Date-picker>
                   </FormItem>
                   <FormItem label="备注：">
-                    <Input class="w500" v-model="formPlan.remark" placeholder="选填" maxlength="100"></Input>
+                    <Input
+                      disabled
+                      class="w500"
+                      v-model="formPlan.remark"
+                      placeholder="选填"
+                      maxlength="100"
+                    ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
-                    <Input readonly class="w160" v-model="formPlan.code" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>
                   </FormItem>
                   <FormItem label="退回单号：" class="ml50">
-                    <Input readonly class="w160" v-model="formPlan.serviceId" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.serviceId" placeholder></Input>
                   </FormItem>
                 </Form>
               </div>
@@ -114,7 +121,7 @@
                 <div class="clearfix"></div>
               </div>
               <vxe-table
-              v-if="showit"
+                v-if="showit"
                 border
                 resizable
                 show-footer
@@ -128,7 +135,7 @@
                 <vxe-table-column field="carBrandName" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
-                <vxe-table-column field="enterUnitId" title="单位" width="100"></vxe-table-column>
+                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                 <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
@@ -154,15 +161,15 @@ import {
   inDataList,
   stampDataList,
   getListDetail
-} from '../../../../api/AlotManagement/twoBackInStorage.js'
-import More from './compontents/More'
-import QuickDate from '../../../../components/getDate/dateget'
-import '../../../lease/product/lease.less'
-import '../../../goods/goodsList/goodsList.less'
-import { queryByOrgid } from '../../../../api/AlotManagement/transferringOrder';
+} from "../../../../api/AlotManagement/twoBackInStorage.js";
+import More from "./compontents/More";
+import QuickDate from "../../../../components/getDate/dateget";
+import "../../../lease/product/lease.less";
+import "../../../goods/goodsList/goodsList.less";
+import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
-  name: 'twoBackInStorage',
+  name: "twoBackInStorage",
   components: {
     More,
     QuickDate
@@ -171,26 +178,26 @@ export default {
     return {
       List: [],
       form: {
-        createTimeStart: '',
-        createTimeEnd: '',
-        status: ''
+        createTimeStart: "",
+        createTimeEnd: "",
+        status: ""
       },
       showit: true,
       split1: 0.2,
       selectDayTypeArr: [
-        { label: '所有', value: '' },
-        { label: '本日', value: 0 },
-        { label: '昨日', value: 1 },
-        { label: '本周', value: 2 },
-        { label: '上周', value: 3 },
-        { label: '本月', value: 4 },
-        { label: '上月', value: 5 }
+        { label: "所有", value: "" },
+        { label: "本日", value: 0 },
+        { label: "昨日", value: 1 },
+        { label: "本周", value: 2 },
+        { label: "上周", value: 3 },
+        { label: "本月", value: 4 },
+        { label: "上月", value: 5 }
       ],
       purchaseTypeArr: [
-        { label: '所有', value: '' },
-        { label: '待出库', value: 0 },
-        { label: '待入库', value: 1 },
-        { label: '已入库', value: 2 }
+        { label: "所有", value: "" },
+        { label: "待出库", value: 0 },
+        { label: "待入库", value: 1 },
+        { label: "已入库", value: 2 }
       ],
       //查询
       params: {
@@ -210,45 +217,49 @@ export default {
         loading: false,
         columns: [
           {
-            title: '序号',
+            title: "序号",
             minWidth: 50,
-            type: 'index'
+            type: "index"
           },
           {
-            title: '状态',
-            key: 'status',
-            minWidth: 70
+            title: "状态",
+            key: "name",
+            minWidth: 70,
+            render: (h, params) => {
+              let name = params.row.status.name;
+              return h("span", name);
+            }
           },
           {
-            title: '申请方',
-            key: 'orgid',
+            title: "申请方",
+            key: "guestName",
             minWidth: 170
           },
           {
-            title: '受理日期',
-            key: 'createTime',
+            title: "受理日期",
+            key: "createTime",
             minWidth: 120
           },
           {
-            title: '受理人',
-            key: 'createUname',
+            title: "受理人",
+            key: "createUname",
             minWidth: 140
           },
 
           {
-            title: '退回单号',
-            key: 'serviceId',
+            title: "退回单号",
+            key: "serviceId",
             minWidth: 200
           },
           {
-            title: '入库人',
-            key: 'createUname',
+            title: "入库人",
+            key: "createUname",
             minWidth: 100
           },
           {
-            title: '调出回退日期',
-            align: 'center',
-            key: 'finishDate',
+            title: "调出回退日期",
+            align: "center",
+            key: "finishDate",
             minWidth: 170
           }
         ],
@@ -256,13 +267,13 @@ export default {
       },
       //right信息
       formPlan: {
-        orgid: '', //申请方
-        storeId: '', //入库仓库
-        finishDate: '', //调出退回日期
-        remark: '', //备注
-        orderMan: '', //入库人
-        code: '', //申请单号
-        serviceId: '' //退回单号
+        orgid: "", //申请方
+        storeId: "", //入库仓库
+        finishDate: "", //调出退回日期
+        remark: "", //备注
+        orderMan: "", //入库人
+        code: "", //申请单号
+        serviceId: "" //退回单号
       },
       //right表格
       tableData: [],
@@ -274,83 +285,83 @@ export default {
         loading: false,
         columns: [
           {
-            title: '序号',
+            title: "序号",
             minWidth: 50,
-            key: 'id'
+            key: "id"
           },
           {
-            title: '状态',
-            key: 'venderSkuNo',
+            title: "状态",
+            key: "venderSkuNo",
             minWidth: 70
           },
           {
-            title: '调出方',
-            key: 'name',
+            title: "调出方",
+            key: "name",
             minWidth: 170
           },
           {
-            title: '创建日期',
-            key: 'address',
+            title: "创建日期",
+            key: "address",
             minWidth: 120
           },
           {
-            title: '申请人',
-            key: 'isCycle',
+            title: "申请人",
+            key: "isCycle",
             minWidth: 140
           },
           {
-            title: '申请单号',
-            key: 'disable',
+            title: "申请单号",
+            key: "disable",
             minWidth: 200
           },
           {
-            title: '提交人',
-            key: 'remark',
+            title: "提交人",
+            key: "remark",
             minWidth: 100
           },
           {
-            title: '提交日期',
-            align: 'center',
-            key: 'qualitySourceName',
+            title: "提交日期",
+            align: "center",
+            key: "qualitySourceName",
             minWidth: 170
           },
           {
-            title: '打印次数',
-            key: 'categoryName',
+            title: "打印次数",
+            key: "categoryName",
             minWidth: 170
           }
         ],
         tbdata: []
       },
-      inID: { id: '' }, //入库ID
+      inID: { id: "" }, //入库ID
       btnIn: false, //入库按钮禁用
       showMore: false, //更多模块的弹框
       showIn: false, //是否确定入库弹框
-      inStatus: '' //单据状态
-    }
+      inStatus: "" //单据状态
+    };
   },
   created() {
-    this.getinfo(this.params)
+    this.getinfo(this.params);
   },
   methods: {
     //获取调拨申请列表
     getinfo(params) {
       getList(params)
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.code === 0) {
             // this.$Message.info('成功')
-            this.Left.tbdata = res.data.content || []
-            this.Left.page = res.data.pageable
-            this.Left.page.total = res.totalElements
+            this.Left.tbdata = res.data.content || [];
+            this.Left.page = res.data.pageable;
+            this.Left.page.total = res.totalElements;
           } else if (res.code === 1) {
-            this.$Message.info('未查到数据')
-            this.Left.tbdata = []
+            this.$Message.info("未查到数据");
+            this.Left.tbdata = [];
           }
         })
         .catch(err => {
-          this.$Message.info('初始化数据失败')
-        })
+          this.$Message.info("初始化数据失败");
+        });
     },
     // //快速查询-时间
     // getDataQuick(v) {
@@ -360,127 +371,126 @@ export default {
     // },
     //time1
     getDataQuick(val) {
-      console.log(val)
-      this.form.createTimeStart = val[0]
-      this.form.createTimeEnd = val[1]
-      this.getinfo(this.form)
+      console.log(val);
+      this.form.createTimeStart = val[0];
+      this.form.createTimeEnd = val[1];
+      this.getinfo(this.form);
     },
     //类型查询
     getDataType() {
-      this.getinfo(this.form)
+      this.getinfo(this.form);
     },
     //显示更多弹窗
     more() {
-      this.showMore = true
-      console.log(this.showMore)
+      this.showMore = true;
+      console.log(this.showMore);
     },
     //更多弹窗恢复false
     getMoreStatus(val) {
-      this.showMore = val
+      this.showMore = val;
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      console.log(val)
-      this.params = { ...this.params, ...val }
-      this.getinfo(this.params)
+      console.log(val);
+      this.params = { ...this.params, ...val };
+      this.getinfo(this.params);
     },
     //
     // 仓库下拉框
-    warehouse(){
+    warehouse() {
       queryByOrgid().then(res => {
-        if(res.code === 0){
-          this.List = res.data
+        if (res.code === 0) {
+          this.List = res.data;
         }
-      })
+      });
     },
     //入库按钮
     inPro() {
-      this.showIn = true
+      this.showIn = true;
     },
     //确定入库
     inOk() {
       inDataList(this.inID)
         .then(res => {
           if (res.code === 0) {
-            this.showIn = false
-            this.$Message.info('确定入库成功')
+            this.showIn = false;
+            this.$Message.info("确定入库成功");
           } else if (res.code === 1) {
-            this.$Message.info('提示入库失败')
+            this.$Message.info("提示入库失败");
           }
         })
         .catch(err => {
-          this.$Message.info('确定入库失败')
-        })
+          this.$Message.info("确定入库失败");
+        });
     },
     //取消入库
     inCancel() {
-      this.showIn = false
+      this.showIn = false;
     },
 
     // 打印
     stamp() {
       stampDataList()
         .then(res => {
-          console.log(res)
+          console.log(res);
           if (res.code === 0) {
-            this.$Message.info('打印成功')
+            this.$Message.info("打印成功");
           }
         })
         .catch(err => {
-          this.$Message.info('打印失败')
-        })
+          this.$Message.info("打印失败");
+        });
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
-      this.inID.id = currentRow.id
-      this.formPlan = currentRow
+      this.inID.id = currentRow.id;
+      this.formPlan = currentRow;
       const params = {
         mainId: currentRow.id
-      }
-      const res = await getListDetail(params)
-      console.log(res)
-      this.tableData = res.data
+      };
+      const res = await getListDetail(params);
+      console.log(res);
+      this.tableData = res.data;
       if (currentRow.status === 0) {
-        this.inStatus = '未入库'
-        this.btnIn = false
+        this.inStatus = "未入库";
+        this.btnIn = false;
       } else if (currentRow.status === 1) {
-        this.inStatus = '部分'
-        this.btnIn = false
+        this.inStatus = "部分";
+        this.btnIn = false;
       } else if (currentRow.status === 2) {
-        this.inStatus = '已入库'
-        this.btnIn = true
+        this.inStatus = "已入库";
+        this.btnIn = true;
       } else {
-        this.$Message.info('状态错误')
+        // this.$Message.info("状态错误");
       }
     },
     //分页
     changePage(p) {
-      console.log(p)
-      this.params.page = p
-      this.getinfo(this.params)
+      console.log(p);
+      this.params.page = p;
+      this.getinfo(this.params);
     },
     changeSize(s) {
-      console.log(s)
-      this.params.page = 1
-      this.params.size = s
-      this.getinfo(this.params)
+      console.log(s);
+      this.params.page = 1;
+      this.params.size = s;
+      this.getinfo(this.params);
     }
   },
   mounted() {
     this.$nextTick(() => {
-      let wrapH = this.$refs.paneLeft.offsetHeight
-      let planFormH = this.$refs.planForm.offsetHeight
-      let planBtnH = this.$refs.planBtn.offsetHeight
+      let wrapH = this.$refs.paneLeft.offsetHeight;
+      let planFormH = this.$refs.planForm.offsetHeight;
+      let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH - 104
+      this.leftTableHeight = wrapH - 104;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH - planFormH - planBtnH - 65
-    })
-    this.warehouse()
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
+    });
+    this.warehouse();
   }
-
-}
+};
 </script>
 
 <style scoped>
