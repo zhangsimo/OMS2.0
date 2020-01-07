@@ -372,7 +372,11 @@ export const mixGoodsData = {
             this.newadd = false;
             this.$refs.planOrderTable.clearCurrentRow();
           }
-          this.isinput = false;
+          if (['草稿', '退回'].includes(v.billStatusId.name)) {
+            this.isinput = false;
+          } else {
+            this.isinput = true;
+          }
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
           this.formPlan.supplyName = v.guestName || "";

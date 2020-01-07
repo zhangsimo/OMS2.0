@@ -125,7 +125,7 @@
               }}</template>
             </vxe-table-column>
             <vxe-table-column
-              field="duePayableAmt"
+              field="rpAmt"
               title="应付金额"
               width="100"
               :edit-render="{ name: 'input' }"
@@ -135,7 +135,7 @@
                   :max="999999"
                   :min="0"
                   :precision="2"
-                  v-model="row.duePayableAmt"
+                  v-model="row.rpAmt"
                   :controls="false"
                   size="small"
                 />
@@ -280,14 +280,17 @@ export default class FeeRegistration extends Vue {
   }
 
   private async getInfo(data) {
+    this.tableInfoData = new Array();
     this.loading2 = true;
     let res: any = await api.getFee({}, data);
     if (res.code == 0) {
       this.loading2 = false;
       let resData = res.data || [];
       this.tableInfoData = resData.map((el: any) => {
-        el.serviceType = JSON.parse(el.serviceType).value;
-        for (let o of this.selectrow.revenueTypes) {
+        el.serviceType = el.serviceType.value;
+        el.fullName = el.guestName;
+        for (let index in this.selectrow.revenueTypes) {
+          let o = this.selectrow.revenueTypes[index]
           if (o.value == el.serviceType) {
             o.disabled = true;
             break;
@@ -325,6 +328,7 @@ export default class FeeRegistration extends Vue {
     if (res.code == 0) {
       this.$Message.success("保存成功");
       this.tableInfoData = res.data;
+      this.tableInfoData.push();
       this.loading2 = false;
     }
   }
@@ -379,21 +383,24 @@ export default class FeeRegistration extends Vue {
       serviceType: "",
       fullName: this.selectrow.fullName,
       createUname: this.user.userData.staffName,
-      createTime: tools.transTime(new Date())
+      createTime: tools.transTime(new Date()),
+      guestId: this.selectrow.id,
     };
     this.tableInfoData.push(row);
   }
 
   // 删除
-  private del(index: number) {
+  private async del(index: number) {
     const row = this.tableInfoData[index];
     const val = row.serviceType;
+    // console.log(row)
     this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el: any) => {
       if (el.value == val) {
         el.disabled = false;
       }
       return el;
     });
+    let res:any = await api.delFee(row.id);
     this.tableInfoData.splice(index, 1);
   }
 }
