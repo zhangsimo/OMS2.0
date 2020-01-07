@@ -125,7 +125,11 @@ export default {
   created() {
     this.showModel();
   },
+
   methods: {
+    cancelTrim () {
+      this.form.serviceId = this.form.serviceId.trim();
+    },
     //展示方
     showModel() {
       this.$emit("getName", "1");
