@@ -200,6 +200,10 @@ export default {
   },
   data() {
     return {
+      collectionAccountName: '',
+      openingBank: '',
+      collectionAccount: '',
+      thisApplyAccount: '',
       collectionAccountList: [],
       companyList: [],
       info: false,
@@ -713,7 +717,11 @@ export default {
     noReconciliation() {
       if (this.flag) {
         if (this.Reason) {
-          this.$message({message:'差异原因必填',type:'error',customClass:'zZindex'});
+          this.$message({
+            message: "差异原因必填",
+            type: "error",
+            customClass: "zZindex"
+          });
           return "";
         }
       }
@@ -740,20 +748,32 @@ export default {
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
         if (!this.BadDebtid) {
           // this.$message.error("请输入应收坏账请示单号");
-          this.$message({message:'请输入应收坏账请示单号',type:'error',customClass:'zZindex'});
+          this.$message({
+            message: "请输入应收坏账请示单号",
+            type: "error",
+            customClass: "zZindex"
+          });
           return "";
         }
       }
       if (this.collectRebate - this.paymentRebate > 100) {
         if (!this.Rebateid) {
           // this.$message.error("请输入应收返利请示单号");
-          this.$message({message:'请输入应收返利请示单号',type:'error',customClass:'zZindex'});
+          this.$message({
+            message: "请输入应收返利请示单号",
+            type: "error",
+            customClass: "zZindex"
+          });
           return "";
         }
       }
       if (!this.remark) {
         // this.$message.error("请填写备注");
-        this.$message({message:'请填写备注',type:'error',customClass:'zZindex'});
+        this.$message({
+          message: "请填写备注",
+          type: "error",
+          customClass: "zZindex"
+        });
         return "";
       }
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
@@ -777,7 +797,7 @@ export default {
         let four = [
           {
             tenantId: 0,
-            orgId: this.store,
+            orgId: this.model1,
             orgName: "null",
             guestId: this.companyInfo,
             serviceId: "XSCDS001-20191000071",
@@ -795,7 +815,11 @@ export default {
             badDebNo: this.BadDebtid,
             buttonStatus: num,
             incomeType: this.totalvalue,
-            remark:this.remark,
+            remark: this.remark,
+            collectionName: this.collectionAccountName,
+            bankName: this.openingBank,
+            collectionAccount: this.collectionAccount,
+            thisPaymentAccount: this.thisApplyAccount
           }
         ];
         let obj = {
@@ -812,7 +836,11 @@ export default {
         });
       } else {
         // this.$message.error("请选择要对账的数据");
-        this.$message({message:'请选择要对账的数据',type:'error',customClass:'zZindex'});
+        this.$message({
+          message: "请选择要对账的数据",
+          type: "error",
+          customClass: "zZindex"
+        });
       }
     },
     // 保存草稿
@@ -842,7 +870,11 @@ export default {
         }
       } else {
         // this.$message.error("请勾选要导出的对账清单");
-        this.$message({message:'请勾选要导出的对账清单',type:'error',customClass:'zZindex'});
+        this.$message({
+          message: "请勾选要导出的对账清单",
+          type: "error",
+          customClass: "zZindex"
+        });
       }
     },
     // 导出配件明细
@@ -866,7 +898,11 @@ export default {
         )}&aOrderCode=${str1}&bOrderCode=${str2}`;
       } else {
         // this.$message.error("请先勾选数据");
-        this.$message({message:'请先勾选数据',type:'error',customClass:'zZindex'});
+        this.$message({
+          message: "请先勾选数据",
+          type: "error",
+          customClass: "zZindex"
+        });
       }
     }
   }
@@ -903,6 +939,6 @@ export default {
   left: -30px;
 }
 .zZindex {
-    z-index:3000 !important;
-  }
+  z-index: 3000 !important;
+}
 </style>

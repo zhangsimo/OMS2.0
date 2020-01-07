@@ -107,10 +107,18 @@ export function transferWarehousing(data) {
     })
 }
 
-// 调拨出/入库配件明细查询
-export function transferParts(params) {
+// 调拨出库配件明细查询
+export function stockParts(params) {
     return axios.request({
-        url: `${api.omsOrder}/allotOutDetail/findByMainId`,
+        url: `${api.omsOrder}/allotEnterDetail/findAllotOutDetail`,
+        method: 'get',
+        params
+    })
+}
+// 调拨入库配件明细查询
+export function wouseParts(params) {
+    return axios.request({
+        url: `${api.omsOrder}/allotEnterDetail/findEnterDetails`,
         method: 'get',
         params
     })

@@ -69,7 +69,7 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/selectCompany";
 import { creat } from "./../components";
-import { transferWarehousing, transferParts } from "@/api/bill/saleOrder";
+import { transferWarehousing, wouseParts } from "@/api/bill/saleOrder";
 import moment from 'moment'
 export default {
   components: {
@@ -361,7 +361,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      transferParts({mainId: row.id}).then(res => {
+      wouseParts({main: row.id}).then(res => {
         console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{

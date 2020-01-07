@@ -58,7 +58,6 @@ export default {
       this.$refs.form.resetFields();
     },
     handleSubmit(callback) {
-      console.log(this.data)
       this.$refs.form.validate(valid => {
         if (valid) {
           callback && callback();

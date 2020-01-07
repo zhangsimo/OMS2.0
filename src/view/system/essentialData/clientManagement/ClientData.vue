@@ -116,7 +116,7 @@
                 <Input v-model="data.remark" style="width: 180px" />
               </FormItem>
               <FormItem label="一级分类:" prop="guestType">
-                <Select v-model="data.guestType" style="width:180px" class="mr10">
+                <Select v-model="data.guestType" style="width:180px" class="mr10" placement="top">
                   <Option
                     v-for="item in treelist"
                     v-if="item.lever == 1"
@@ -140,7 +140,7 @@
                 <Input v-model="data.defaultLogistics" style="width: 180px" />
               </FormItem>
               <FormItem label="二级分类:" prop="guestTypeFloor">
-                <Select v-model="data.guestTypeFloor" style="width:180px" class="mr10">
+                <Select v-model="data.guestTypeFloor" style="width:180px" class="mr10" placement="top">
                   <Option
                     v-for="item in treelist "
                     v-if="data.guestType == item.parentId"
@@ -624,8 +624,8 @@ export default {
         accountBankNo: [
           {
             required: true,
-            message: "",
-            validator: creditLimit,
+            // validator: creditLimit,
+            message:'不能为空',
             trigger: "change"
           }
         ],
