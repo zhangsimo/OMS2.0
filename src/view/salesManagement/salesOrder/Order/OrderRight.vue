@@ -334,7 +334,7 @@
 
     <!--  编辑发货地址 -->
     <!--      <Modal v-model="addressShow" title="收货信息"  width="1000">-->
-    <goods-info ref="goodsInfo" :mainId="formPlan.id"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
     <!--        <div slot='footer'>-->
     <!--          <Button type='primary' @click = changeShippingAddress>确定</Button>-->
     <!--          <Button type='default' @click='addressShow = false'>取消</Button>-->
@@ -844,6 +844,7 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
+      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = [];
@@ -853,6 +854,8 @@ export default {
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
+         // this.formPlan.detailList.map(item => item.orderQty = item.orderQty > 0 ? item.orderQty : 1);
+         //  this.formPlan.detailList.map(item => item.salePrice = item.salePrice > 0 ? item.salePrice : 0);
           // let res = await getAccessories(data);
           // if (res.code === 0) {
           //   this.$emit("parentGetleft");

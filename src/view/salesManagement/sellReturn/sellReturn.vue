@@ -965,6 +965,7 @@ export default {
 
     //选择销售出库单
     getOutList(val) {
+      console.log('val',val)
       val.forEach(item => {
         this.formPlan.details.push(item);
       });

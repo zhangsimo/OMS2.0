@@ -404,7 +404,7 @@
     <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
-    <goods-info ref="goodsInfo" :mainId="id"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="id" :row="this.currentRow"></goods-info>
   </div>
 </template>
 
@@ -510,6 +510,7 @@ export default {
       model1: "",
       WareHouseList: [], //交货仓库
       limitList: [], //客户额度
+      currentRow:{},
       //分页
       page: {
         total: 0,
@@ -851,6 +852,7 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
+      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           var datas = conversionList(val);
