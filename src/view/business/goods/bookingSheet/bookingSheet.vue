@@ -789,7 +789,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
-          this.leftgetList();
+          // this.leftgetList();
           this.LeadIn = false
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo

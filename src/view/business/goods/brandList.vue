@@ -150,13 +150,13 @@
               :data="data"
               height="330"
             >
-              <template slot-scope="{ row, index }" slot="action">
-                <Button
-                  type="default"
-                  @click.stop="showAcceptance($event, index)"
-                  v-if="row.status.value == 1"
-                >受理</Button>
-              </template>
+              <!--<template slot-scope="{ row, index }" slot="action">-->
+                <!--<Button-->
+                  <!--type="default"-->
+                  <!--@click.stop="showAcceptance($event, index)"-->
+                  <!--v-if="row.status.value == 1"-->
+                <!--&gt;受理</Button>-->
+              <!--</template>-->
             </Table>
           </div>
 
@@ -242,15 +242,10 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select
-                  v-model="transitUnit"
-                  filterable
-                  clearable
-                  @on-change="addChange1"
-                >
+                <Select v-model="transitUnit" filterable clearable @on-change="addChange1">
                   <Option
-                    v-for="item in transitUnitList"
-                    :key="item.id"
+                    v-for="(item,index) in transitUnitList"
+                    :key="index"
                     :value="item.id"
                   >{{item.fullName}}</Option>
                 </Select>
@@ -310,10 +305,10 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit" @on-change="addChange1">
+                <Select v-model="transitUnit"  filterable clearable @on-change="addChange1">
                   <Option
-                    v-for="item in transitUnitList"
-                    :key="item.id"
+                    v-for="(item,index) in transitUnitList"
+                    :key="index"
                     :value="item.id"
                   >{{item.fullName}}</Option>
                 </Select>
@@ -510,7 +505,27 @@ export default {
         {
           title: "操作",
           slot: "action",
-          align: "center"
+          align: "center",
+          render: (h, params) => {
+            let className = 'white'
+            return h('div', [
+              h('Button', {
+                props: {
+                  type: 'info',
+                  size: 'small',
+                },
+                style: {
+                  color: "white"
+                },
+                class: className,
+                on: {
+                  click: () => {
+                    this.showAcceptance()
+                  }
+                }
+              }, '受理')
+            ]);
+          }
         },
         {
           title: "公司",
@@ -956,11 +971,14 @@ export default {
     },
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
+      // console.log(value)
       this.guestId = value
-      let btype = this.transitUnitList.filter(item => item.id = value)
-      console.log(btype)
-      this.billTypeName = btype.billTypeId
-      this.settleTypeName = btype.settTypeId
+      let btype = this.transitUnitList.filter(item => {
+        return  item.id === value
+      })
+      // let btype = this.transitUnitList.filter(item => item.id = value)
+      this.billTypeName = btype[0].billTypeId
+      this.settleTypeName = btype[0].settTypeId
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
@@ -1314,4 +1332,9 @@ export default {
   margin: 10px 0px;
   line-height: 30px;
 }
+</style>
+<style>
+  .ivu-table .white span{
+    color: white!important;
+  }
 </style>
