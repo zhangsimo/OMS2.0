@@ -795,7 +795,7 @@ export default {
             badDebNo: this.BadDebtid,
             buttonStatus: num,
             incomeType: this.totalvalue,
-            remark,
+            remark:this.remark,
           }
         ];
         let obj = {
