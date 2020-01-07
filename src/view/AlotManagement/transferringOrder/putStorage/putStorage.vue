@@ -135,7 +135,7 @@
                     </FormItem>
                     <FormItem label="调拨申请日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled=" Leftcurrentrow.status.value != 0"
+                        disabled
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
@@ -598,7 +598,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
-      params["voList"] = this.ArrayValue
+      params["voList"] = this.ArrayValue;
       //配件组装保存
       baocun(params)
         .then(res => {
@@ -779,7 +779,7 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      // console.log(row, "row==>781");
+      console.log(row, "row==>781");
       // console.log(row.id, "row.id");
       if (row.id == undefined) {
         this.ArrayValue = row.detailVOS;

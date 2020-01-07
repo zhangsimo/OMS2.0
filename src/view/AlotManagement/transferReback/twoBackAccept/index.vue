@@ -7,6 +7,7 @@
             <span>快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
+
           <div class="db mt40 mrt10">
             <span class="mr10">提交日期：</span>
             <DatePicker
@@ -103,6 +104,20 @@
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>
+
+          <vxe-table-column title="插槽测试">
+            <template v-slot="{ row,rowIndex }">
+              <select>
+                <option
+                  v-for="(item,index) in storeArray"
+                  :key="index"
+                  :value="item.value"
+                >{{item.label}}</option>
+              </select>
+            </template>
+          </vxe-table-column>
+
+          <vxe-table-column></vxe-table-column>
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
@@ -276,7 +291,7 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
+            // console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
             });
