@@ -327,8 +327,11 @@ export default class FeeRegistration extends Vue {
     let res: any = await api.saveFee(data);
     if (res.code == 0) {
       this.$Message.success("保存成功");
-      this.tableInfoData = res.data;
-      this.tableInfoData.push();
+      this.tableInfoData = res.data.map((el:any) => {
+        el.fullName = el.guestName;
+        el.serviceType = el.serviceType.value;
+        return el;
+      });
       this.loading2 = false;
     }
   }
