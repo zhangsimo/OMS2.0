@@ -1041,9 +1041,9 @@ export default {
           this.form.guestId = this.getArray[i].id;
         }
       }
+      this.advanced = false;
       this.getList();
       this.$refs.naform.reset();
-      this.advanced = false;
     },
     ok() {},
     cancel() {},

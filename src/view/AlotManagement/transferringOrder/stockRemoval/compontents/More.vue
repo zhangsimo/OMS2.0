@@ -127,8 +127,10 @@ export default {
   },
 
   methods: {
-    cancelTrim () {
-      this.form.serviceId = this.form.serviceId.trim();
+    cancelTrim() {
+      if (this.form.serviceId != undefined) {
+        this.form.serviceId = this.form.serviceId.trim();
+      }
     },
     //展示方
     showModel() {
