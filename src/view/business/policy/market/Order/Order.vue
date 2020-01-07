@@ -110,16 +110,15 @@
             },
             //左侧点击数据
             getOrder( data ){
-              console.log(data,555)
                 this.orderlistType = data.billStatusId
             },
             //保存
             setSave(){
-              let res =  this.$refs.right.save()
+                this.$refs.right.save()
             },
             //出库
             setStockOut(){
-                let res =  this.$refs.right.stockOut()
+                this.$refs.right.stockOut()
             },
             //提交
             sumbit(){

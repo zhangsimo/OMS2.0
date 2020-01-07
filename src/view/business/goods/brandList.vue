@@ -645,12 +645,12 @@ export default {
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           align: "center"
         },
         {
           title: "配件内码",
-          key: "partId",
+          key: "partInnerId",
           align: "center"
         },
         {

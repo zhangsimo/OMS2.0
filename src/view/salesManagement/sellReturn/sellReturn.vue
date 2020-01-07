@@ -995,7 +995,7 @@ export default {
           v => !this.selectTableList.includes(v)
         );
         this.$set(this.formPlan, "details", arr);
-        console.log(this.selectTableList)
+        // console.log(this.selectTableList)
         this.sellOrderTable.tbdata.map((item, index) => {
           if (item.id === this.formPlan.id) {
             this.$set(this.sellOrderTable.tbdata[index], "details", arr);

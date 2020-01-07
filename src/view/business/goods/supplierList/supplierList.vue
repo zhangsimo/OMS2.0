@@ -406,8 +406,8 @@
             })
             sellOrderReturn(data).then(res => {
               if(res.code === 0){
-                this.$Message.success('删除成功')
-                this.$refs.formPlan.resetFields();
+                this.$Message.success('删除成功！')
+                // this.$refs.formPlan.resetFields();
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
               }
@@ -749,6 +749,7 @@
         this.guestidId = a.id
       },
       leftgetList(){
+        console.log('接口')
         let data = {}
         let params = {}
         params.page = this.Left.page.num - 1
@@ -896,28 +897,28 @@
             },
           })
         }else{
-          this.mainId = row.id
-          this.guestidId = row.guestId
-          this.datadata = row
           if(row.id){
             this.leftgetList();
-            this.formPlan.guestName = this.datadata.guestId
-            this.formPlan.storeId = this.datadata.orderManId
-            this.formPlan.orderDate = this.datadata.orderDate
-            this.formPlan.numbers = this.datadata.serviceId
-            this.formPlan.cause = this.datadata.rtnReasonId
-            this.formPlan.clearing = this.datadata.settleTypeId
-            this.formPlan.remark = this.datadata.remark
-            this.formPlan.warehouse = this.datadata.storeId
-            this.formPlan.serviceId = this.datadata.code
-            row.details.map(item => {
-             item.orderPrice = Number(item.orderPrice).toFixed(2)
-            })
-            this.Right.tbdata = row.details
-            this.presentrowMsg = row.billStatusId.value
-            // console.log(this.presentrowMsg)
-            this.rowId = row.id
-            this.buttonDisable = false
+            this.mainId = row.id
+            this.guestidId = row.guestId
+            this.datadata = row
+              this.formPlan.guestName = this.datadata.guestId
+              this.formPlan.storeId = this.datadata.orderManId
+              this.formPlan.orderDate = this.datadata.orderDate
+              this.formPlan.numbers = this.datadata.serviceId
+              this.formPlan.cause = this.datadata.rtnReasonId
+              this.formPlan.clearing = this.datadata.settleTypeId
+              this.formPlan.remark = this.datadata.remark
+              this.formPlan.warehouse = this.datadata.storeId
+              this.formPlan.serviceId = this.datadata.code
+              row.details.map(item => {
+                item.orderPrice = Number(item.orderPrice).toFixed(2)
+              })
+              this.Right.tbdata = this.datadata.details
+              this.presentrowMsg = row.billStatusId.value
+              // console.log(this.presentrowMsg)
+              this.rowId = row.id
+              this.buttonDisable = false
           }else {
             this.formPlan.guestName = ''
             this.formPlan.storeId = ''
