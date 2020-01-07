@@ -47,7 +47,7 @@
         <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary"></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
+    <selectDealings ref="selectDealings" @selectSearchName="getOne" />
   </div>
 </template>
 

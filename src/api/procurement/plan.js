@@ -216,6 +216,18 @@ export function saveFee(data) {
     data,
   });
 }
+
+// 费用登记-删除
+export function delFee(id) {
+  return axios.request({
+    url: `${api.omsSettle}/receivable/payable/delete`,
+    method: "post",
+    data: {},
+    params: { id }
+  });
+}
+
+
 //临时采购导入配件地址
 export const getup = `${api.omsOrder}/pchsOrderMain/importExcel?`;
 

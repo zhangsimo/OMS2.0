@@ -407,6 +407,7 @@
             sellOrderReturn(data).then(res => {
               if(res.code === 0){
                 this.$Message.success('删除成功！')
+                this.leftgetList();
                 // this.$refs.formPlan.resetFields();
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))

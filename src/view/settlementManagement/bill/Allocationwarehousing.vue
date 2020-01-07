@@ -61,7 +61,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
+    <selectDealings ref="selectDealings" @selectSearchName="getOne"  />
   </div>
 </template>
 

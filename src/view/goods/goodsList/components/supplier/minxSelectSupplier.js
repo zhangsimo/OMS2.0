@@ -5,7 +5,7 @@ import {
   getCarClassifys,
   getCarPartName
 } from "_api/system/partsExamine/partsExamineApi";
-
+import * as api from "_api/procurement/plan";
 export const mixSelectSupplier = {
   data() {
     return {
@@ -138,7 +138,7 @@ export const mixSelectSupplier = {
     },
     getNameList() {
       this.ArrayList = [];
-      getSupplierList(this.params).then(res => {
+      api.getSupplier(this.params).then(res => {
         this.loading = false;
         this.partData = res.data || [];
         this.page.total = res.data.total;

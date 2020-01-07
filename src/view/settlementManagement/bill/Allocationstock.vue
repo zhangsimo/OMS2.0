@@ -337,11 +337,13 @@ export default {
         orderTypeId:this.type
       };
       transferStock(obj).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
             item.billstate = "已审";
-            item.orderTypeId = item.orderTypeId === 2 ? "调拨出库" : "调出退货";
+            console.log(item.orderTypeId === 1)
+            item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
             this.data = res.data;
           });
         } else {
@@ -378,6 +380,7 @@ export default {
     // 选中数据
     election(row) {
       transferParts({ mainId: row.orderManId }).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
