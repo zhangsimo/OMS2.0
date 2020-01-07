@@ -377,7 +377,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      stockParts({ main: row.id }).then(res => {
+      stockParts({ mainId: row.id }).then(res => {
         console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {

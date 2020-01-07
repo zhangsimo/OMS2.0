@@ -365,6 +365,7 @@ export default {
     },
     // 总表查询
     getGeneral() {
+      this.data1 = []
       let obj = {
         orgid: this.model1,
         guestId: this.companyId,
@@ -392,6 +393,7 @@ export default {
             res.data.map((item, index) => {
               item.num = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
+              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
             this.data = res.data;
           } else {
