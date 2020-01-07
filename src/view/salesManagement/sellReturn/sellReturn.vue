@@ -644,7 +644,6 @@ export default {
         details: [],
         orderManId: this.PTrow.orderManId
       };
-      // console.log('退货员',orderManId)
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
@@ -681,7 +680,6 @@ export default {
     },
     //改变客户
     changeClient(value) {
-      // console.log('44444',value)
       if (!value) {
         return false;
       }
@@ -690,9 +688,7 @@ export default {
         return item.id === value;
       });
       for (var i in oneClient) {
-        // console.log((oneClient[i].settTypeId))
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
-        // console.log('8888', this.formPlan.settleTypeId)
       }
     },
     //选择销售出库单
@@ -807,7 +803,6 @@ export default {
     },
     // 计算尾部总和
     countAllAmount(data) {
-      // console.log('33333333',data)
       let count = 0;
       data.forEach(row => {
         count += this.countAmount(row);
@@ -815,32 +810,6 @@ export default {
       this.totalMoney = count.toFixed(2);
       return count.toFixed(2);
     },
-
-    // //退货入库
-    // returnWarehouse() {
-    //   if (this.id) {
-    //     this.$Modal.confirm({
-    //       title: "是否确定已完成销售",
-    //       onOk: async () => {
-    //         let id = this.id;
-    //         let res = await returnWareHouse(id);
-    //         if (res.code == 0) {
-    //           this.$Message.success("操作成功");
-    //           this.getLeftList();
-    //           this.id = null;
-    //           this.formPlan = {};
-    //           this.$refs.formPlan.resetFields();
-    //         }
-    //       },
-    //       onCancel: () => {
-    //         this.$Message.info("取消成功");
-    //       }
-    //     });
-    //   } else {
-    //     this.$message.error("至少选择一条信息");
-    //   }
-    // },
-
     //保存
     isSave() {
       this.$refs.formPlan.validate(async valid => {
@@ -853,9 +822,7 @@ export default {
             data = this.formPlan;
             data.orderDate = tools.transTime(this.formPlan.orderDate);
             data.billStatusId = null;
-            // data.orderDate=this.formPlan.orderDate
             let res = await getSave(data);
-            // console.log('打印出来的保存数据888',res)
             if (res.code === 0) {
               this.isAdd = true;
               this.isNew = true;
@@ -866,8 +833,6 @@ export default {
               this.formPlan = {};
             } else {
               this.formPlan.orderDate = preTime;
-              // console.log(this.formPlan , 999)
-
               // this.$refs.formPlan.resetFields();
             }
           } catch (errMap) {
@@ -884,10 +849,6 @@ export default {
 
     //提交
     isSubmit() {
-      // if (!this.isCommit || !this.formPlan.id) {
-      //   return this.$Message.error('请先保存数据')
-      // }
-
       this.$refs.formPlan.validate(async valid => {
         let preTime = "";
         if (valid) {
@@ -934,20 +895,6 @@ export default {
       val.forEach(item => {
         this.formPlan.details.push(item);
       });
-      //  let data = {}
-      //  data = this.formPlan
-      //  data.details = val
-      //  data.orderDate = tools.transTime(this.formPlan.orderDate)
-      //  data.billStatusId = null
-      //  getSave(data).then(res => {
-      //  if(res.code==0){
-      //   this.$Message.success('选择销售出库单成功');
-      //   this.formPlan = {}
-      //   this.$refs.formPlan.resetFields();
-      //   this.isNew=true
-      //   this.getLeftList()
-      // }
-      //  })
     },
 
     //删除配件
@@ -970,13 +917,6 @@ export default {
         getDeleteList(data).then(res => {
           if (res.code === 0) {
             this.$Message.success("删除配件成功");
-            // this.getLeftList()
-            // this.formPlan = {}
-            // this.tableData = []
-            // this.limitList = {};
-            // this.$refs.formPlan.resetFields();
-            // this.isNew=true
-            // this.id=null
           }
         });
       } else {
