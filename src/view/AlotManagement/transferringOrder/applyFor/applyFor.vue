@@ -128,7 +128,7 @@
                     :data="Right.tbdata"
                     :footer-method="addFooter"
                     showOverflow="true"
-                    height="400"
+                    height="500"
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
