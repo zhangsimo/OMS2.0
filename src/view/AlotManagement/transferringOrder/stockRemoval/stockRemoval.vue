@@ -160,7 +160,7 @@
                     <FormItem label="申请单号：" prop="code">
                       <Input class="w160" disabled :value="Leftcurrentrow.code"></Input>
                     </FormItem>
-                    <FormItem label="受理单号：" prop="planOrderNum">
+                    <FormItem label="受理单号：" prop="serviceId">
                       <Input
                         class="w160"
                         :disabled="Leftcurrentrow.status.value !== 0"
@@ -750,9 +750,12 @@ export default {
     xinzeng() {
       this.flagValue = 0;
       this.flagValue1 = 0;
+      // this.Leftcurrentrow = {}
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
+      this.Leftcurrentrow.code = "";
+      this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
       this.buttonShow = false;
       this.tuneOut = false;
@@ -1054,12 +1057,12 @@ export default {
       let arr = [];
       // console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
-        this.checkboxArr.forEach(item => {
-          console.log(item.oemCode);
-          this.Leftcurrentrow.detailVOS.filter(itm => {
-            return itm.oemCode == item.oemCode;
-          });
-        });
+        // this.checkboxArr.forEach(item => {
+        //   console.log(item.oemCode);
+        //   this.Leftcurrentrow.detailVOS.filter(itm => {
+        //     return itm.oemCode == item.oemCode;
+        //   });
+        // });
 
         // let haveId = this.checkboxArr.filter(item => item.id);
         // let NoId = this.checkboxArr.filter(item => !item.id);
