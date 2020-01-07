@@ -13,8 +13,7 @@ export function creat(dates, store) {
           label: res.data[key]
         })
       });
-      console.log(store.state.user.userData)
-      model = Branchstore[0].value
+      model = store.state.user.userData.shopId
     }
     return [value, model, Branchstore]
   }

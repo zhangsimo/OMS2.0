@@ -131,7 +131,7 @@ export default {
         },
         {
           title: "订单号",
-          key: "orderId",
+          key: "orderCode",
           className: "tc"
         },
         {
