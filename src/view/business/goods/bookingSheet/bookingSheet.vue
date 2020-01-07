@@ -494,7 +494,7 @@ export default {
             data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
             data.remark = this.formPlan.remark
             data.detailVOList = this.Right.tbdata
-            // console.log(this.Right.tbdata)
+            console.log(this.Right.tbdata)
             save(data).then(res => {
               if(res.code === 0){
                 this.$message.success('保存成功！')
@@ -657,13 +657,13 @@ export default {
           partName : item.partName, //名称
           unit : item.unit, //单位
           partBrand : item.partBrand, //品牌
-          spec : item.specifications,  //规格
+          spec : item.spec,  //规格
           preQty : '', //预定数量
           remark : '', //备注
           acceptQty: 0, //受理数量
           oemCode : item.oemCode, //oe码
           partInnerId: item.partInnerId, //配件内码
-          partId : item.id,
+          partId : item.partId,
         })
       })
       if(this.Right.tbdata){
@@ -789,7 +789,7 @@ export default {
         this.guestidId = row.guestId
         this.datadata = row
         if(row.id){
-          // this.leftgetList();
+          this.leftgetList();
           this.LeadIn = false
           this.formPlan.salesman = this.datadata.salesman
           this.formPlan.Reservation = this.datadata.orderNo
