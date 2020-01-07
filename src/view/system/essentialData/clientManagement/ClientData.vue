@@ -624,8 +624,8 @@ export default {
         accountBankNo: [
           {
             required: true,
-            message: "",
-            validator: creditLimit,
+            // validator: creditLimit,
+            message:'不能为空',
             trigger: "change"
           }
         ],

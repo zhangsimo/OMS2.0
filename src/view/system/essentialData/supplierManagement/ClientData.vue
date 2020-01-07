@@ -178,52 +178,52 @@
           <div>
             <p style="margin-bottom: 10px">财务信息</p>
             <div>
-              <FormItem label="收款户名:" prop="receiveName">
+              <FormItem label="收款户名:" prop="receiveName" class="h50">
                 <Input v-model="data.receiveName" style="width: 450px" />
               </FormItem>
-              <FormItem label="银行账号:" prop="accountBankNo">
+              <FormItem label="银行账号:" prop="accountBankNo" class="h50">
                 <Input v-model="data.accountBankNo" style="width: 450px" />
               </FormItem>
-              <FormItem label="开户银行:" prop="accountBank">
+              <FormItem label="开户银行:" prop="accountBank" class="h50">
                 <Input v-model="data.accountBank" style="width: 450px" />
               </FormItem>
               <div style="display: flex">
                 <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人编码:" prop="phone">
+                  <FormItem label="纳税人编码:" prop="phone" class="h50">
                     <Input v-model="data.taxpayerCode" style="width: 150px" />
                   </FormItem>
                 </div>
                 <div style="flex-flow: row nowrap;width: 100%">
-                  <FormItem label="纳税人电话:" prop="phone">
+                  <FormItem label="纳税人电话:" prop="phone" class="h50">
                     <Input v-model="data.taxpayerTel" style="width: 150px" />
                   </FormItem>
                 </div>
               </div>
-              <FormItem label="纳税人名称:">
+              <FormItem label="纳税人名称:" class="h50">
                 <Input v-model="data.taxpayerName" style="width: 450px" />
               </FormItem>
             </div>
             <p style="margin-bottom: 10px">其他信息</p>
-            <FormItem label="网址:">
+            <FormItem label="网址:" class="h50">
               <Input v-model="data.website" style="width: 450px" />
             </FormItem>
-            <FormItem label="传真:">
+            <FormItem label="传真:" class="h50">
               <Input v-model="data.fax" style="width: 450px" />
             </FormItem>
-            <FormItem label="经营地址:">
+            <FormItem label="经营地址:" class="h50">
               <Input v-model="data.addr" style="width: 450px" />
             </FormItem>
-            <FormItem label="会员卡号:">
+            <FormItem label="会员卡号:" class="h50">
               <Input v-model="data.memCarNo" style="width: 450px" />
             </FormItem>
             <div style="display: flex">
               <div style="flex-flow: row nowrap;width: 100%">
-                <FormItem label="会员等级:" prop="phone">
+                <FormItem label="会员等级:" prop="phone" class="h50">
                   <Input v-model="data.memLevelId" style="width: 150px" />
                 </FormItem>
               </div>
               <div style="flex-flow: row nowrap;width: 100%">
-                <FormItem label="邮政编码:" prop="phone">
+                <FormItem label="邮政编码:" prop="phone" class="h50">
                   <Input v-model="data.postalCode" style="width: 150px" />
                 </FormItem>
               </div>
@@ -337,8 +337,8 @@ export default {
         accountBankNo: [
           {
             required: true,
-            message: "",
-            validator: creditLimit,
+            message: "不能为空",
+            // validator: creditLimit,
             trigger: "change"
           }
         ],
