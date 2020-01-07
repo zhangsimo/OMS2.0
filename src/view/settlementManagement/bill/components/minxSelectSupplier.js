@@ -1,5 +1,5 @@
 import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
-import {typeSelect} from '@/api/bill/saleOrder'
+// import {typeSelect} from '@/api/bill/saleOrder'
 import {
   getAllBrand,
   getCarClassifys,
@@ -127,11 +127,11 @@ export const mixSelectSupplier = {
       if (this.selectTreeItem) {
         req.supplierTypeFirst = this.selectTreeItem.id;
       }
-      // req.isDisabled = this.isDisable ? 1 : 0;
-      
+      req.isDisabled = this.isDisable ? 1 : 0;
+
       req.page = this.page.num;
       req.size = this.page.size;
-      typeSelect(req).then(res => {
+      getSupplierList(req).then(res => {
         this.loading = false;
         this.partData = res.data || [];
         this.page.total = res.data.totalElements;
