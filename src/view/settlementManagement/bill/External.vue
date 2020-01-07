@@ -79,7 +79,7 @@
         ></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
+    <selectDealings ref="selectDealings" @selectSearchName="getOne"  />
   </div>
 </template>
 

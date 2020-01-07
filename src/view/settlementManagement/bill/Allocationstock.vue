@@ -337,6 +337,7 @@ export default {
         orderTypeId:this.type
       };
       transferStock(obj).then(res => {
+        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
