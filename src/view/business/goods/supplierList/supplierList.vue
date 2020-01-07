@@ -43,7 +43,7 @@
                 <div class="pane-made-hd">
                   采购退货列表
                 </div>
-                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="true" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
+                <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
                 <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
                       @on-page-size-change="changeSizeLeft" show-sizer show-total>
                 </Page>
@@ -815,7 +815,7 @@
       selection(row){
         if (row == null) return;
         let currentRowTable = this.$refs["currentRowTable"];
-        if(!this.Flaga && !this.isAdd){
+        if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({
             title: '您正在编辑单据，是否需要保存',
             onOk: () => {
@@ -896,11 +896,11 @@
             },
           })
         }else{
+          this.mainId = row.id
+          this.guestidId = row.guestId
+          this.datadata = row
           if(row.id){
-            // this.leftgetList();
-            this.mainId = row.id
-            this.guestidId = row.guestId
-            this.datadata = row
+            this.leftgetList();
             this.formPlan.guestName = this.datadata.guestId
             this.formPlan.storeId = this.datadata.orderManId
             this.formPlan.orderDate = this.datadata.orderDate
