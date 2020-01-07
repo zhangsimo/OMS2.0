@@ -209,7 +209,12 @@
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                   <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
                   <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="applyQty" :edit-render="{name: 'input'}" title="申请退回数量" width="100"></vxe-table-column>
+                  <vxe-table-column
+                    field="applyQty"
+                    :edit-render="{name: 'input'}"
+                    title="申请退回数量"
+                    width="100"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="orderQty"
                     :edit-render="{name: 'input'}"
@@ -605,7 +610,11 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      console.log(params);
+      console.log(params, "params =>608");
+      for (var i = 0; i < params.detailVOS.length; i++) {
+        params.detailVOS[i].id = "";
+      }
+
       //配件组装保存
       baocun(params)
         .then(res => {
