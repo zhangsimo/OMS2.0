@@ -444,7 +444,11 @@ export default {
       if (res.xinzeng !== "1") {
         res.orderType = res.orderType;
         this.draftShow = res.billStatusId === 0 ? false : true;
-        res.orderTypeValue = res.orderType.value;
+        res.orderTypeValue = res.orderType
+          ? res.orderType.value
+            ? res.orderType.value
+            : 0
+          : 0;
         this.formPlan = res;
       } else {
         this.draftShow = 0;
@@ -710,10 +714,10 @@ export default {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           let data = this.formPlan.details;
-          const form = conversionList(val)
-          form.map(item=>{
+          const form = conversionList(val);
+          form.map(item => {
             data.push(item);
-          })
+          });
           this.$set(this.formPlan, "details", data);
         } else {
           this.$Message.error("*为必填项");
@@ -780,11 +784,9 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            //console.log(this.formPlan, "sfah");
             if (this.formPlan.billStatusId.value) {
               this.formPlan.billStatusId = this.formPlan.billStatusId.value;
             }
@@ -793,9 +795,21 @@ export default {
 
             if (res.code === 0) {
               this.$Message.success("保存成功");
+              const id = this.formPlan.id;
+              const ldata = await this.$parent.$parent.$refs.leftorder.getList();
+              this.$parent.$parent.$refs.leftorder.tableData.map(item => {
+                if (item.id === id) {
+                  this.formPlan = item;
+                }
+              });
+              // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
+              //   this.formPlan
+              // );
+              // console.log(this.$parent.$parent.$refs)
+              // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
               // this.formPlan = {};
               // this.$refs.formPlan.resetFields();
-              this.$store.commit("setleftList", res);
+              this.$store.commit("setleftList", this.formPlan);
             }
           } catch (errMap) {
             this.$XModal.message({
