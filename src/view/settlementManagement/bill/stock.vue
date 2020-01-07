@@ -161,7 +161,7 @@ export default {
         },
         {
           title: "审核日期",
-          key: "auditDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -379,6 +379,7 @@ export default {
             res.data.map((item, index) => {
               item.num = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
+              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
             this.data = res.data;
           } else {
@@ -414,7 +415,7 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getOutStockPart({ mainId: "1204603211449745408" }).then(res => {
+      getOutStockPart({ mainId: row.id }).then(res => {
         console.log(res);
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
