@@ -443,7 +443,7 @@ export default {
       const res = this.$store.state.dataList.oneOrder;
       if (res.xinzeng !== "1") {
         res.orderType = res.orderType;
-        this.draftShow = res.billStatusId === 0 ? false : true;
+        this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
         res.orderTypeValue = res.orderType
           ? res.orderType.value
             ? res.orderType.value
@@ -458,8 +458,8 @@ export default {
     },
     //获取销售员
     selectOrderMan(val) {
-      this.formPlan.orderMan = val.label;
-      this.formPlan.orderManId = val.value;
+      this.formPlan.orderMan = val ? val.label ? val.label : '':'';
+      this.formPlan.orderManId = val ? val.value ? val.value : '':'';
     },
     //获取销售员
     async getAllSales() {
@@ -802,9 +802,9 @@ export default {
                   this.formPlan = item;
                 }
               });
-              // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
-              //   this.formPlan
-              // );
+              this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
+                this.formPlan
+              );
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
               // this.formPlan = {};
