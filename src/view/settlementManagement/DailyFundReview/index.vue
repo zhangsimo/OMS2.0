@@ -78,7 +78,7 @@
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
     <Modal v-model="capitalexamine" title="资金审核" @on-ok="confirmExamine">
       <p class="tc">确认审核?</p>
     </Modal>

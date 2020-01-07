@@ -158,8 +158,12 @@ export const mixSelectSupplier = {
       this.selectTableItem = v;
     },
     throwData() {
-      this.$emit("selectSupplierName", this.selectTableItem);
-      this.searchPartLayer = false;
+      if(Object.keys(this.selectTableItem).length!==0){
+        this.$emit("selectSupplierName", this.selectTableItem);
+        this.searchPartLayer = false;
+      } else {
+        this.$message.error('请先选择供应商')
+      }
     },
     //分页
     changePage(p) {

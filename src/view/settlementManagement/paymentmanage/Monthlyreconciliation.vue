@@ -713,7 +713,7 @@ export default {
     noReconciliation() {
       if (this.flag) {
         if (this.Reason) {
-          this.$message.error("差异原因必填");
+          this.$message({message:'差异原因必填',type:'error',customClass:'zZindex'});
           return "";
         }
       }
@@ -739,18 +739,21 @@ export default {
     getPreservation(num) {
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
         if (!this.BadDebtid) {
-          this.$message.error("请输入应收坏账请示单号");
+          // this.$message.error("请输入应收坏账请示单号");
+          this.$message({message:'请输入应收坏账请示单号',type:'error',customClass:'zZindex'});
           return "";
         }
       }
       if (this.collectRebate - this.paymentRebate > 100) {
         if (!this.Rebateid) {
-          this.$message.error("请输入应收返利请示单号");
+          // this.$message.error("请输入应收返利请示单号");
+          this.$message({message:'请输入应收返利请示单号',type:'error',customClass:'zZindex'});
           return "";
         }
       }
       if (!this.remark) {
-        this.$message.error("请填写备注");
+        // this.$message.error("请填写备注");
+        this.$message({message:'请填写备注',type:'error',customClass:'zZindex'});
         return "";
       }
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
@@ -802,11 +805,13 @@ export default {
         };
         Preservation(obj).then(res => {
           if (res.code === 0) {
-            this.$message.success("保存成功");
+            // this.$message.success("保存成功");
+            this.$message({message:'保存成功',type:'success',customClass:'zZindex'});
           }
         });
       } else {
-        this.$message.error("请选择要对账的数据");
+        // this.$message.error("请选择要对账的数据");
+        this.$message({message:'请选择要对账的数据',type:'error',customClass:'zZindex'});
       }
     },
     // 保存草稿
@@ -835,7 +840,8 @@ export default {
           });
         }
       } else {
-        this.$message.error("请勾选要导出的对账清单");
+        // this.$message.error("请勾选要导出的对账清单");
+        this.$message({message:'请勾选要导出的对账清单',type:'error',customClass:'zZindex'});
       }
     },
     // 导出配件明细
@@ -858,7 +864,8 @@ export default {
           TOKEN_KEY
         )}&aOrderCode=${str1}&bOrderCode=${str2}`;
       } else {
-        this.$message.error("请先勾选数据");
+        // this.$message.error("请先勾选数据");
+        this.$message({message:'请先勾选数据',type:'error',customClass:'zZindex'});
       }
     }
   }
@@ -894,4 +901,7 @@ export default {
   position: relative;
   left: -30px;
 }
+.zZindex {
+    z-index:3000 !important;
+  }
 </style>

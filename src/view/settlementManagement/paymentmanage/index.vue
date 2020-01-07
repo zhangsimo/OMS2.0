@@ -99,7 +99,6 @@
         </Tabs>
       </div>
     </section>
-    <!-- <selectDealings ref="selectDealings" @getOne="getOne" /> -->
     <Modal v-model="modal1" title="高级查询" @on-ok="senior">
       <div class="db pro mt20">
         <span>转单日期：</span>

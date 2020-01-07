@@ -62,7 +62,7 @@
         <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne" />
+    <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
   </div>
 </template>
 
@@ -311,8 +311,8 @@ export default {
     getGeneral() {
       let obj ={
         belongSystem: this.type,
-        startTime: moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"),
-        endTime: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"),
+        startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.model1,
         guestId: this.companyId
       }
