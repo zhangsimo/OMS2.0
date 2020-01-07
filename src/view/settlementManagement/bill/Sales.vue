@@ -59,7 +59,7 @@
         <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row :summary-method="handleSummary"
           @on-row-click="election" max-height="400"></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
-        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary></Table>
+        <Table border :columns="columns1" :data="data1" class="mt10" ref="parts" show-summary :summary-method="summary"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
@@ -153,7 +153,7 @@ export default {
       columns1: [
         {
           title: "序号",
-          key: "bum",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -232,7 +232,44 @@ export default {
     dateChange(data){
       this.value = data
     },
-    // 表格合计方式
+    // 配件明细合计
+    summary({ columns, data }){
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index >= 6) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+    },
+    // 总表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)
       const sums = {};
@@ -334,14 +371,8 @@ export default {
     // 选中总表查询明细
     election(row) {
       getPartList({ mainId: row.id }).then(res => {
-        // console.log(res);
-        if(res.data.length !==0){
-          res.data.map((item,index)=>{
-            item.num = index + 1
-          })
-          this.data1 = res.data
-        } else {
-          this.data1 = []
+        if(res.code===0){
+          this.data1 = res.data.content
         }
       });
     }
