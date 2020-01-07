@@ -828,12 +828,12 @@ export default {
           three: this.paymentlist,
           four
         };
-        // Preservation(obj).then(res => {
-        //   if (res.code === 0) {
-        //     // this.$message.success("保存成功");
-        //     this.$message({message:'保存成功',type:'success',customClass:'zZindex'});
-        //   }
-        // });
+        Preservation(obj).then(res => {
+          if (res.code === 0) {
+            // this.$message.success("保存成功");
+            this.$message({message:'保存成功',type:'success',customClass:'zZindex'});
+          }
+        });
       } else {
         // this.$message.error("请选择要对账的数据");
         this.$message({

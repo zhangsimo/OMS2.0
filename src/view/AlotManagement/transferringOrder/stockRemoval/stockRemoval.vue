@@ -40,7 +40,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="this.flagValue !== 0"
+                :disabled="this.buttonDisable !== 1"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"

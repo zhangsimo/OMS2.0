@@ -361,7 +361,7 @@
                         // key: 'sellPrice',
                         minWidth: 120,
                       render: (h, params) => {
-                        let tex = parseFloat(arams.row.sellPrice).toFixed(2)
+                        let tex = parseFloat(params.row.sellPrice).toFixed(2)
                         return h('span', {}, tex)
 
                       },
