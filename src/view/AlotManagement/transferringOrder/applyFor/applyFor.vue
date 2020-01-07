@@ -394,26 +394,25 @@
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
          // console.log(resArr)
           this.Right.tbdata = resArr
-          this.$Message.warning('删除成功！')
-          // let data = {}
-          //  data.id = this.rowId
-          //           data.orgid = this.rowOrgId
-          //           data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-          //           data.guestId = this.guestidId
-          //           // data.guestId = this.formPlan.guestName
-          //           data.storeId = this.formPlan.storeId
-          //           // data.guestName = this.formPlan.guestName
-          //           data.orderDate = tools.transTime(this.formPlan.orderDate)
-          //           data.remark = this.formPlan.remark
-          //           data.createUname  = this.formPlan.createUname
-          //           data.serviceId = this.formPlan.serviceId
-          //           data.detailVOS = resArr
-          //      save(data).then(res => {
-          //             if(res.code === 0){
-          //               this.$message.success('删除成功！！！')
-          //             }
-          //           })
-
+          // this.$Message.warning('删除成功！')
+          let data = {}
+           data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = resArr
+               save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('删除成功！！！')
+                      }
+                    })
         },
         //更多按钮
         moreaa(){
@@ -585,9 +584,7 @@
         },
         //右侧表格复选框选中
         selectChange(msg){
-          console.log(msg,'msg')
           this.checkboxArr = msg.selection
-          console.log(this.checkboxArr,'this.checkboxArr')
         },
         // 全选
         selectAll(val){
