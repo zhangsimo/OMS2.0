@@ -76,7 +76,7 @@
                 <vxe-table-column field="createTime" title="申请日期"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注"></vxe-table-column>
                 <vxe-table-column field="acceptUname" title="受理人"></vxe-table-column>
-                <vxe-table-column field="orderDate" title="受理日期"></vxe-table-column>
+                <vxe-table-column field="acceptTime" title="受理日期"></vxe-table-column>
               </vxe-table>
               <Page
                 class-name="page-con"
