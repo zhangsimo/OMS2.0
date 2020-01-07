@@ -632,12 +632,8 @@ export default {
         status: { name: "草稿", value: 0 },
         orderMan: this.$store.state.user.userData.staffName,
         orderManId: this.$store.state.user.userData.id
-
-        // id: '0',
-        // details: [],
-        // createTime: tools.transTime(new Date())
       },
-      selectTableList: [], //右侧table表格选中的数据
+      selectTableList: [], //右侧table表格选的数据
       // isCommit: false, //判断是否已提交
       planSendDatePicker: {
         disabledDate: function(date) {
@@ -711,14 +707,11 @@ export default {
     printTable() {
       this.$refs.printBox.openModal();
     },
-    // getLimit() {
-    //   this.getAllLimit()
-    // },
+
     //获取客户额度
     getAllLimit() {
       let guestId = this.formPlan.guestId;
       getLimit(guestId).then(res => {
-        // console.log('客户额度数据',res)
         if (res.code === 0) {
           this.limitList = res.data;
         }
@@ -794,13 +787,10 @@ export default {
     getplanArriveDate(data) {
       // this.formPlan.planArriveDate = data + ' ' + "00:00:00"
       this.formPlan.planArriveDate = tools.transTime(data);
-      // console.log('22', this.formPlan.planArriveDate)
     },
     //清空日期
     clearplanSendDate(v) {
-      // console.log('77',v)
       this.formPlan.planSendDate = null;
-      // console.log('222', this.formPlan.planSendDate)
     },
     clearplanArriveDate(v) {
       this.formPlan.planArriveDate = null;

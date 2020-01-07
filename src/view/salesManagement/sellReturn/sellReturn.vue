@@ -380,19 +380,6 @@ export default {
     PrintShow
   },
   data() {
-    // let changeNumber = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("请输入大于或等于0的正整数"));
-    //   } else {
-    //     const reg = /^([0]|[1-9][0-9]*)$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("请输入大于或等于0的正整数"));
-    //
-    //     }
-    //   }
-    // };
     let changeNumber = (rule, value, callback) => {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
@@ -405,19 +392,6 @@ export default {
         }
       }
     };
-    // let money = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("最多保留2位小数"));
-    //   } else {
-    //     const reg = /^\d+(\.\d{0,2})?$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("最多保留2位小数"));
-    //
-    //     }
-    //   }
-    // };
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
         callback(new Error("最多保留2位小数"));
@@ -441,7 +415,6 @@ export default {
         billStatusId: { name: "草稿", value: 0 },
         billStatusName: "草稿",
         orderManId: this.$store.state.user.userData.id
-        // status: {"name":"草稿","value":0},
       },
       page: {
         total: 0,
@@ -661,14 +634,6 @@ export default {
         }
       }
 
-      // this.isNew = false
-      // this.currentRow = v
-      // this.id = v.id
-      // this.formPlan.orderDate = tools.transTime(v.orderDate)
-      // this.tableData = v.details
-      // this.formPlan = v
-      // this.draftShow = v.billStatusId.value
-      // this.selectTableList=[]
     },
     //新增按钮
     addOneList() {
