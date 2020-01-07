@@ -751,8 +751,8 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            console.log(this.tableData1);
-            this.$Message.success("获取成品列表成功");
+            // console.log(this.tableData1);
+            // this.$Message.success("获取成品列表成功");
           }
         })
         .catch(e => {

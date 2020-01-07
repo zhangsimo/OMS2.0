@@ -253,7 +253,7 @@ export default {
           },
           {
             title: "入库人",
-            key: "createUname",
+            key: "commitUname",
             minWidth: 100
           },
           {

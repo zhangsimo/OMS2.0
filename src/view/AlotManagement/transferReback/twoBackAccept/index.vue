@@ -86,17 +86,22 @@
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
-
           <vxe-table-column field="orgName" title="申请方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
           <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
-            field="remark"
+          <!-- <vxe-table-column
+            field=""
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
+          ></vxe-table-column>-->
+
+          <vxe-table-column
+            field="defaultValue"
+            title="受理仓库"
+            :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
@@ -301,7 +306,10 @@ export default {
             console.log(res);
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.totalElements;
-            // console.log(this.TopTableData, "this.TopTableData");
+            console.log(this.TopTableData, "this.TopTableData");
+            for (var i = 0; i < this.TopTableData.length; i++) {
+              this.TopTableData[i]["defaultValue"] = "受理默认仓库";
+            }
           }
         })
         .catch(e => {
@@ -379,6 +387,7 @@ export default {
     },
     shouli(row, index) {
       this.currentrow = row;
+      console.log(row);
       if (index === 2) {
         this.modal1 = true;
       } else {
