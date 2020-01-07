@@ -13,6 +13,7 @@ export function creat(dates, store) {
           label: res.data[key]
         })
       });
+      
       model = Branchstore[0].value
     }
     return [value, model, Branchstore]

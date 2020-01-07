@@ -125,7 +125,7 @@ export default {
         },
         {
           title: "客户名称",
-          key: "Customer",
+          key: "guestName",
           width: 120,
           className: "tc"
         },
@@ -171,7 +171,7 @@ export default {
         },
         {
           title: "单据状态",
-          key: "auditSign",
+          key: "accountSign",
           className: "tc"
         },
         {
