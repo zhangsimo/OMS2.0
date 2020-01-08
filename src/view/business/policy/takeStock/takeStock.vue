@@ -481,7 +481,6 @@ export default {
       }; //新增左侧
       this.isAddRight = false;
       this.Left.tbdata.push(TrowLeft);
-      console.log(this.Left.tbdata)
     },
     // 提交
     editPro() {
@@ -532,7 +531,6 @@ export default {
         return;
       }
       getSubmitList(this.formPlan).then(res => {
-        console.log(res);
         if (res.code == 0) {
           his.$Message.error("保存成功");
         }
