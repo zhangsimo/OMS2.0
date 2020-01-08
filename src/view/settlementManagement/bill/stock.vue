@@ -431,7 +431,7 @@ export default {
         getWarehousingList(obj).then(res=>{
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
-              item.num = index + 1;
+              item.index = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
               item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
