@@ -69,7 +69,7 @@
           <vxe-table-column field="serviceId" title="调拨出库单号"></vxe-table-column>
           <vxe-table-column field="code" title="受理单号"></vxe-table-column>
           <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
-          <vxe-table-column field="allotFinishDate" title="出库日期"></vxe-table-column>
+          <vxe-table-column field="createTime" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <!-- <vxe-table-column
             field="enterStoreId"
@@ -124,7 +124,7 @@
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="orderQty" title="出库数量"></vxe-table-column>
+          <vxe-table-column field="hasOutQty" title="出库数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
             field="trueEnterQty"

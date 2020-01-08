@@ -732,10 +732,11 @@ export default {
           txt = response.data.join(",");
         }
         this.$Notice.warning({
-          title: "导入失败",
+          title: "导入成功",
           desc: txt,
           duration: 0
         });
+        this.getList()
       } else {
         this.$Message.error(response.message);
       }
@@ -1057,7 +1058,8 @@ export default {
         this.getList();
       }
     },
-    getRUl() {
+    getRUl(val) {
+      console.log('11',val)
       this.upurl = getup + "id=" + this.formPlan.id;
     }
   },

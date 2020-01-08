@@ -53,9 +53,10 @@
     "vuex-class": "^0.3.2",
     "vuex-persistedstate": "^2.7.0",
     "vxe-table": "^2.6.16",
+    "vxe-table-plugin-iview": "^1.5.10",
     "vxe-utils": "^1.7.2",
     "wangeditor": "^3.1.1",
-    "xe-utils": "^2.2.14"
+    "xe-utils": "^2.3.0"
   },
   "devDependencies": {
     "@types/chai": "^4.2.4",

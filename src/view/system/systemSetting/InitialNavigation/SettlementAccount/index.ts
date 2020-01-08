@@ -170,7 +170,7 @@ export default class SettlementAccount extends Vue {
                 }
             },
             onCancel: () => {
-                this.$Message.info('取消删除');
+                // this.$Message.info('取消删除');
             }
        })
     }

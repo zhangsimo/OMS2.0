@@ -406,7 +406,6 @@ export default {
     };
     return {
       isNew: true, //页面开始禁用
-      // isCommit: true,//是否提交
       draftShow: "", //判定是不是草稿
       isAdd: true, //判断是否新增
       isWms: true, //判断是否提交,返回
@@ -772,7 +771,6 @@ export default {
     },
 
     //作废按钮
-
     cancellation() {
       if (this.id) {
         this.$Modal.confirm({
@@ -833,7 +831,6 @@ export default {
               this.formPlan = {};
             } else {
               this.formPlan.orderDate = preTime;
-              // this.$refs.formPlan.resetFields();
             }
           } catch (errMap) {
             this.$XModal.message({
@@ -866,7 +863,6 @@ export default {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getLeftList();
-                  // this.isCommit = false;
                   this.isNew = true;
                   this.formPlan = {};
                   this.id = null;
@@ -892,9 +888,13 @@ export default {
     //选择销售出库单
     getOutList(val) {
       console.log('val',val)
+      if(this.formPlan.details==null){
+        this.formPlan.details=[]
+      }
       val.forEach(item => {
         this.formPlan.details.push(item);
       });
+      // console.log('我是formplan',this.formPlan.details)
     },
 
     //删除配件
@@ -904,11 +904,11 @@ export default {
         this.selectTableList.forEach(item => {
           data.push({ id: item.id });
         });
-        const arr = this.tableData.filter(
+        const arr = this.formPlan.details.filter(
           v => !this.selectTableList.includes(v)
         );
         this.$set(this.formPlan, "details", arr);
-        // console.log(this.selectTableList)
+        console.log('11',this.sellOrderTable.tbdata)
         this.sellOrderTable.tbdata.map((item, index) => {
           if (item.id === this.formPlan.id) {
             this.$set(this.sellOrderTable.tbdata[index], "details", arr);
