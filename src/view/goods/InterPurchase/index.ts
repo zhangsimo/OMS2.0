@@ -309,7 +309,7 @@ export default class InterPurchase extends Vue {
           }
         }
         for (let k in this.feeform) {
-          if (this.feeform[k] > 0) {
+          if (this.feeform[k]) {
             data[k] = this.feeform[k];
           }
         }
