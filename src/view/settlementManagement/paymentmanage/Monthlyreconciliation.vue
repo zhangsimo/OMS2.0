@@ -560,11 +560,11 @@ export default {
         // let Taxincludedpartsstatement1 = 0;
         // let Statementoilincludingtax1 = 0;
         for (let i of res.data.one) {
-          if (i.number === 1) {
+          if (i.number === 3) {
             this.arrId[0] = i.accountNo
             // Statementexcludingtax = i.accountNo;
             // Statementexcludingtax1 = i.accountSumAmt;
-          } else if (i.number === 2) {
+          } else if (i.number === 1) {
             this.arrId[1] = i.accountNo
             // Taxincludedpartsstatement = i.accountNo;
             // Taxincludedpartsstatement1 = i.accountSumAmt;
