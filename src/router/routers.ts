@@ -1938,7 +1938,7 @@ export default [
     mark: '10',
     redirect: '/multilevel/level_2_1',
     meta: {
-      icon: 'gear-b',
+      icon: 'ios-people',
       title: '权限管理',
       // access: []
     },

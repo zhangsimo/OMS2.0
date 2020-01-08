@@ -84,3 +84,11 @@ export const changeToken = ( data ) =>{
 }
 
 
+//获取客服信息
+export const getService =() =>{
+  return axios.request({
+    url:`${api.omsApi}/customer/userCustomer`,
+    method:'get'
+  })
+}
+
