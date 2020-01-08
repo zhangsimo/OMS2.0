@@ -30,6 +30,7 @@
             >
               <vxe-table-column title="序号" type="index" width="50"></vxe-table-column>
               <vxe-table-column field="displayName" title="角色名称"></vxe-table-column>
+              <vxe-table-column field="name" title="角色描述"></vxe-table-column>
             </vxe-table>
             <Page
               :total="page.total"

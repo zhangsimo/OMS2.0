@@ -447,19 +447,6 @@ export default {
     PrintShow
   },
   data() {
-    // let changeNumber = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("请输入大于或等于0的正整数"));
-    //   } else {
-    //     const reg = /^([0]|[1-9][0-9]*)$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("请输入大于或等于0的正整数"));
-    //
-    //     }
-    //   }
-    // };
     let changeNumber = (rule, value, callback) => {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
@@ -472,19 +459,6 @@ export default {
         }
       }
     };
-    // let money = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("最多保留2位小数"));
-    //   } else {
-    //     const reg = /^\d+(\.\d{0,2})?$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("最多保留2位小数"));
-    //
-    //     }
-    //   }
-    // };
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
         callback(new Error("最多保留2位小数"));
@@ -747,7 +721,6 @@ export default {
       let data = this.moreQueryList;
       getLeftList(size, page, data).then(res => {
         if (res.code === 0) {
-          // this.draftShow = value
           this.preSellOrderTable.tbData = res.data.content || [];
           this.page.total = res.data.totalElements;
         }
@@ -771,7 +744,6 @@ export default {
     },
     //获取表单预计发货时间
     getplanSendDate(data) {
-      // this.formPlan.planSendDate = data + ' ' + "00:00:00"
       this.formPlan.planSendDate = tools.transTime(data);
 
       //选择日期时，不能小于预计发货日期
@@ -784,7 +756,6 @@ export default {
     },
     //获取表单计划到货日期
     getplanArriveDate(data) {
-      // this.formPlan.planArriveDate = data + ' ' + "00:00:00"
       this.formPlan.planArriveDate = tools.transTime(data);
     },
     //清空日期
@@ -984,7 +955,6 @@ export default {
         orderManId: this.PTrow.orderManId
       };
       this.limitList = [];
-      // this.formPlan = {};
       this.draftShow = 0;
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
@@ -1026,12 +996,10 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.isAdd = true;
               this.isNew = true;
-              // this.isCommit = true
               this.$Message.success("保存成功");
               this.getLeftList();
               this.formPlan = {};
@@ -1068,7 +1036,6 @@ export default {
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
                   this.getLeftList();
-                  // this.isCommit = false;
                   this.isNew = true;
                   this.isAdd = true;
                   this.formPlan = {};
@@ -1160,7 +1127,7 @@ export default {
           txt = response.data.join(",");
         }
         this.$Notice.warning({
-          title: "导入失败",
+          title: "导入成功",
           desc: txt,
           duration: 0
         });

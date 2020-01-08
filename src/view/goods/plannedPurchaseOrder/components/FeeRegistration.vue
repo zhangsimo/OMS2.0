@@ -72,6 +72,7 @@
         </div>
         <div>
           <vxe-table
+            class="vxe-table-iview"
             border
             resizable
             stripe
@@ -99,14 +100,18 @@
               title="往来单位"
               width="120"
             ></vxe-table-column>
+            <!-- <vxe-table-column field="serviceType" title="收支项目" width="120" 
+            :edit-render="{name: 'Select', options: selectrow.revenueTypes}"
+            ></vxe-table-column> -->
             <vxe-table-column
               title="收支项目"
               width="120"
               field="serviceType"
-              :edit-render="{ type: 'default' }"
+              :edit-render="{ type: 'Select' }"
             >
               <template v-slot:edit="scope">
                 <Select
+                  transfer
                   style="width:100px"
                   v-model="scope.row.serviceType"
                   @on-change="changeSelect(scope)"
