@@ -74,6 +74,7 @@
           :data="data1"
           class="mt10"
           max-hight="400"
+          :summary-method="summary"
           ref="parts"
           show-summary
         ></Table>
@@ -198,7 +199,7 @@ export default {
         },
         {
           title: "车型",
-          key: "carModel",
+          key: "carModelName",
           className: "tc"
         },
         {
@@ -291,6 +292,45 @@ export default {
         }
         const values = data.map(item => Number(item[key]));
         if (index === 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 配件表格合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index >6) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);

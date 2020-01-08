@@ -60,7 +60,7 @@
         </section>
         <section class="con-box">
           <div class="inner-box">
-            <Table :columns="columns" :data="data" border max-height="400"></Table>
+            <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
             <div class="db mt10 info" v-if="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
@@ -200,10 +200,12 @@ export default {
   },
   data() {
     return {
-      collectionAccountName: '',
-      openingBank: '',
-      collectionAccount: '',
-      thisApplyAccount: '',
+      arrId:[],
+      handervis: false,
+      collectionAccountName: "",
+      openingBank: "",
+      collectionAccount: "",
+      thisApplyAccount: "",
       collectionAccountList: [],
       companyList: [],
       info: false,
@@ -529,6 +531,7 @@ export default {
     },
     // 对账单弹框出现加载数据
     hander() {
+      this.handervis = false
       this.flag = false;
       this.info = false;
       this.store = this.parameter.orgId;
@@ -543,45 +546,48 @@ export default {
       this.collectBaddebt = 0;
       this.collectRebate = 0;
       this.storeAccount(this.parameter.orgId);
-      this.Initialization()
+      this.Initialization();
     },
     // 获取数据
     Initialization() {
       let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
       getReconciliation(obj).then(res => {
-        let Statementexcludingtax = 0;
-        let Taxincludedpartsstatement = 0;
-        let Statementoilincludingtax = 0;
-        let Statementexcludingtax1 = 0;
-        let Taxincludedpartsstatement1 = 0;
-        let Statementoilincludingtax1 = 0;
+        // let Statementexcludingtax = 0;
+        // let Taxincludedpartsstatement = 0;
+        // let Statementoilincludingtax = 0;
+        // let Statementexcludingtax1 = 0;
+        // let Taxincludedpartsstatement1 = 0;
+        // let Statementoilincludingtax1 = 0;
         for (let i of res.data.one) {
           if (i.number === 1) {
-            Statementexcludingtax = i.accountNo;
-            Statementexcludingtax1 = i.accountSumAmt;
+            this.arrId[0] = i.accountNo
+            // Statementexcludingtax = i.accountNo;
+            // Statementexcludingtax1 = i.accountSumAmt;
           } else if (i.number === 2) {
-            Taxincludedpartsstatement = i.accountNo;
-            Taxincludedpartsstatement1 = i.accountSumAmt;
+            this.arrId[1] = i.accountNo
+            // Taxincludedpartsstatement = i.accountNo;
+            // Taxincludedpartsstatement1 = i.accountSumAmt;
           } else {
-            Statementoilincludingtax = i.accountNo;
-            Statementoilincludingtax1 = i.accountSumAmt;
+            this.arrId[2] = i.accountNo
+            // Statementoilincludingtax = i.accountNo;
+            // Statementoilincludingtax1 = i.accountSumAmt;
           }
         }
-        this.data = [
-          {
-            Detailedstatistics: "对账单号",
-            Statementexcludingtax,
-            Taxincludedpartsstatement,
-            Statementoilincludingtax
-          },
-          {
-            Detailedstatistics: "对账金额",
-            Statementexcludingtax: Statementexcludingtax1,
-            Taxincludedpartsstatement: Taxincludedpartsstatement1,
-            Statementoilincludingtax: Statementoilincludingtax1
-          }
-        ];
+        // this.data = [
+        //   {
+        //     Detailedstatistics: "对账单号",
+        //     Statementexcludingtax,
+        //     Taxincludedpartsstatement,
+        //     Statementoilincludingtax
+        //   },
+        //   {
+        //     Detailedstatistics: "对账金额",
+        //     Statementexcludingtax: Statementexcludingtax1,
+        //     Taxincludedpartsstatement: Taxincludedpartsstatement1,
+        //     Statementoilincludingtax: Statementoilincludingtax1
+        //   }
+        // ];
         if (res.data.two.length !== 0) {
           res.data.two.map(item => {
             item.serviceTypeName = item.serviceType.name;
@@ -644,12 +650,27 @@ export default {
     getSettlementComputed() {
       getSettlement({ one: this.collectlist, two: this.paymentlist }).then(
         res => {
-          this.$set(this.data, 1, {
-            Detailedstatistics: "对账金额",
-            Statementexcludingtax: res.data.one,
-            Taxincludedpartsstatement: res.data.two,
-            Statementoilincludingtax: res.data.three
-          });
+          this.handervis = true
+          this.data = [
+            {
+              Detailedstatistics: "对账单号",
+              Statementexcludingtax: res.data.hasOwnProperty('one') ? this.arrId[0] : '',
+              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? this.arrId[1] : '',
+              Statementoilincludingtax: res.data.hasOwnProperty('three') ? this.arrId[2] : ''
+            },
+            {
+              Detailedstatistics: "对账金额",
+              Statementexcludingtax: res.data.hasOwnProperty('one') ? res.data.one : 0,
+              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? res.data.two : 0,
+              Statementoilincludingtax: res.data.hasOwnProperty('three') ? res.data.three : 0
+            }
+          ];
+          // this.$set(this.data, 1, {
+          //   Detailedstatistics: "对账金额",
+          //   Statementexcludingtax: res.data.one,
+          //   Taxincludedpartsstatement: res.data.two,
+          //   Statementoilincludingtax: res.data.three
+          // });
         }
       );
     },
@@ -832,8 +853,12 @@ export default {
         Preservation(obj).then(res => {
           if (res.code === 0) {
             // this.$message.success("保存成功");
-            this.$message({message:'保存成功',type:'success',customClass:'zZindex'});
-            this.modal = false
+            this.$message({
+              message: "保存成功",
+              type: "success",
+              customClass: "zZindex"
+            });
+            this.modal = false;
           }
         });
       } else {
