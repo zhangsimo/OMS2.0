@@ -537,6 +537,7 @@ export default {
         this.info = false;
         this.store = this.parameter.orgId;
         this.model1 = this.parameter.orgId;
+        this.companyInfo = this.parameter.guestId
         this.Rebateid = "";
         this.BadDebtid = "";
         this.remark = "";
@@ -554,7 +555,7 @@ export default {
     },
     // 获取数据
     Initialization() {
-      let { orgId, startDate, endDate, guestId } = this.parameter;
+      // let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
       getReconciliation(obj).then(res => {
         // let Statementexcludingtax = 0;
