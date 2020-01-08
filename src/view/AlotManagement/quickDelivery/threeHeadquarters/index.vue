@@ -70,11 +70,22 @@
           <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
           <vxe-table-column field="allotFinishDate" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
+          <!-- <vxe-table-column
             field="enterStoreId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>
+          ></vxe-table-column> -->
+          <vxe-table-column title="入库仓库">
+            <template v-slot="{ row,rowIndex }">
+              <select>
+                <option
+                  v-for="(item,index) in storeArray"
+                  :key="index"
+                  :value="item.value"
+                >{{item.label}}</option>
+              </select>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="enterDate" title="入库日期" width="100"></vxe-table-column>
           <vxe-table-column field="enterUname" title="操作人" width="100"></vxe-table-column>
         </vxe-table>
