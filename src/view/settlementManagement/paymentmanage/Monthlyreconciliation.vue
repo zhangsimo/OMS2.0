@@ -530,23 +530,27 @@ export default {
       this.Initialization();
     },
     // 对账单弹框出现加载数据
-    hander() {
-      this.handervis = false
-      this.flag = false;
-      this.info = false;
-      this.store = this.parameter.orgId;
-      this.model1 = this.parameter.orgId;
-      this.Rebateid = "";
-      this.BadDebtid = "";
-      this.remark = "";
-      this.totalpayment = 0;
-      this.paymentBaddebt = 0;
-      this.paymentRebate = 0;
-      this.totalcollect = 0;
-      this.collectBaddebt = 0;
-      this.collectRebate = 0;
-      this.storeAccount(this.parameter.orgId);
-      this.Initialization();
+    hander(type) {
+      if(type){
+        this.handervis = false
+        this.flag = false;
+        this.info = false;
+        this.store = this.parameter.orgId;
+        this.model1 = this.parameter.orgId;
+        this.Rebateid = "";
+        this.BadDebtid = "";
+        this.remark = "";
+        this.totalpayment = 0;
+        this.paymentBaddebt = 0;
+        this.paymentRebate = 0;
+        this.totalcollect = 0;
+        this.collectBaddebt = 0;
+        this.collectRebate = 0;
+        this.collectlist = []
+        this.paymentlist = []
+        this.storeAccount(this.parameter.orgId);
+        this.Initialization();
+      }
     },
     // 获取数据
     Initialization() {
@@ -560,11 +564,11 @@ export default {
         // let Taxincludedpartsstatement1 = 0;
         // let Statementoilincludingtax1 = 0;
         for (let i of res.data.one) {
-          if (i.number === 1) {
+          if (i.number === 3) {
             this.arrId[0] = i.accountNo
             // Statementexcludingtax = i.accountNo;
             // Statementexcludingtax1 = i.accountSumAmt;
-          } else if (i.number === 2) {
+          } else if (i.number === 1) {
             this.arrId[1] = i.accountNo
             // Taxincludedpartsstatement = i.accountNo;
             // Taxincludedpartsstatement1 = i.accountSumAmt;
