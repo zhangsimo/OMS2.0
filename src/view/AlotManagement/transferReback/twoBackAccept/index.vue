@@ -116,8 +116,6 @@
               </select>
             </template>
           </vxe-table-column>
-
-          <vxe-table-column></vxe-table-column>
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
