@@ -71,7 +71,7 @@
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
             <FormItem label="配送方式：" prop="deliveryType">
-              <Select v-model="formDateRight.deliveryType" class="w200" :disabled="disabled">
+              <Select v-model="formDateRight.deliveryType" class="w200" :disabled="disabled" @on-change="distribution">
                 <Option
                   v-for="item in Delivery"
                   :value="item.value"
@@ -254,7 +254,14 @@ export default class GoodsInfo extends Vue {
 
   //获取物流下拉框
   private async inlogistics() {
-    let log: any = await fapi.logistics();
+    let params = {}
+    if(this.formDateRight.deliveryType == 2){
+      params.logisticsType = '020701'
+    }
+    if(this.formDateRight.deliveryType == 3){
+      params.logisticsType = '020702'
+    }
+    let log: any = await fapi.logistics(params);
     if (log.code == 0) {
       this.logisArr = log.data;
       console.log(log, "log.data");
@@ -376,6 +383,12 @@ export default class GoodsInfo extends Vue {
       this.tableData = res.data;
       this.loading = false;
     }
+  };
+  //快递下拉框
+  private distribution(val){
+    this.formDateRight.deliveryType = val
+    // console.log(this.formDateRight.deliveryType)
+    this.inlogistics()
   }
   //保存
   private saveInfo() {
@@ -422,7 +435,7 @@ export default class GoodsInfo extends Vue {
     ref.resetFields();
     this.disabled = false;
     this.formDateRight = row
-    this.formDateRight.businessNum = this.row.id;
+    this.formDateRight.businessNum = this.row.serviceId;
     // this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
     // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     // this.formDateRight.settleType = this.formDateRight.settleType + "";
