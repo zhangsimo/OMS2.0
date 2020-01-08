@@ -75,6 +75,7 @@
           class="mt10"
           ref="parts"
           show-summary
+          :summary-method="summary"
           max-height="400"
         ></Table>
       </div>
@@ -322,6 +323,43 @@ export default {
       return sums;
       //
     },
+     // 配件明细合计
+    summary({ columns, data }){
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index > 6) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+    },
     //查询
     query() {
       this.data1 = []
@@ -417,7 +455,6 @@ export default {
     // 选中总表查询明细
     election(row) {
       getOutStockPart({ mainId: row.id }).then(res => {
-        console.log(res);
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.taxSign = item.taxSign ? "是" : "否";
