@@ -4,8 +4,8 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
-            <Input v-model="form.fullName" placeholder="配件名称/拼音" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10"/>
+            <Input v-model="form.fullName" placeholder="配件名称" style="width: 160px" class="mr10"/>
             <Select v-model="form.partBrandCode" class="w100 mr10" clearable placeholder="--品牌--">
               <Option
                 v-for="item in quickArray"

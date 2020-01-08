@@ -804,6 +804,10 @@ export default {
         orgId: this.model1,
         statementStatus: this.Reconciliationtype
       };
+      this.data4 = []
+      this.data2 = []
+      this.data3 = []
+      this.falg = false
       this.getAccountStatement(obj);
     },
     // 更多查询

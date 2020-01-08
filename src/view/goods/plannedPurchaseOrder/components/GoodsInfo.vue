@@ -136,6 +136,7 @@
                 v-model="formDateRight.deliveryType"
                 class="w200"
                 :disabled="disabled"
+                @on-change="distribution"
               >
                 <Option value="0">自配</Option>
                 <Option value="1">客户自提</Option>
@@ -296,10 +297,22 @@ export default class GoodsInfo extends Vue {
       this.loading = false;
     }
   }
-
+  //快递下拉框
+  private distribution(val){
+    this.formDateRight.deliveryType = val
+    // console.log(this.formDateRight.deliveryType)
+    this.inlogistics()
+  }
   //获取物流下拉框
   private async inlogistics() {
-    let log:any = await fapi.logistics();
+    let params:any = {}
+    if(this.formDateRight.deliveryType == 2){
+      params.logisticsType = '020701'
+    }
+    if(this.formDateRight.deliveryType == 3){
+      params.logisticsType = '020702'
+    }
+    let log:any = await fapi.logistics(params);
     if (log.code == 0) {
       this.logisArr = log.data;
     }

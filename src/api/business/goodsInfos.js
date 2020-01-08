@@ -25,10 +25,11 @@ export function saveGoodsInfo(data = {}) {
 //   })
 // }
 //发货物流下拉框
-export function logistics() {
+export function logistics(params) {
   return axios.request({
     url: `${api.wmsApi}/guest/findAllLogistics`,
-    method: "get"
+    method: "get",
+    params
   });
 }
 // 获取

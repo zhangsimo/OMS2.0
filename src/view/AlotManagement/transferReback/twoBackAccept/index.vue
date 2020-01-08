@@ -99,15 +99,15 @@
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>-->
 
-          <vxe-table-column
+          <!-- <vxe-table-column
             field="defaultValue"
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray}"
-          ></vxe-table-column>
+          ></vxe-table-column>-->
 
-          <vxe-table-column title="插槽测试">
+          <vxe-table-column title="受理仓库">
             <template v-slot="{ row,rowIndex }">
-              <select>
+              <select v-model="row.value">
                 <option
                   v-for="(item,index) in storeArray"
                   :key="index"
@@ -116,8 +116,6 @@
               </select>
             </template>
           </vxe-table-column>
-
-          <vxe-table-column></vxe-table-column>
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
@@ -207,6 +205,7 @@ export default {
   },
   data() {
     return {
+      valueId: "",
       danhao: "",
       modal3: false,
       modal1: false,
@@ -294,6 +293,7 @@ export default {
             // console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
+              console.log(this.storeArray, "this.storeArray ==>298");
             });
           }
         })
@@ -347,16 +347,17 @@ export default {
       console.log(number);
     },
     ok() {
-      // const params = {
-      //   id: this.currentrow.id,
-      //   storeId: this.currentrow.storeId,
-      //   status: 2
-      // }
-      this.currentrow.orderTypeId = this.currentrow.orderTypeId.value;
-      this.currentrow.settleStatus = this.currentrow.settleStatus.value;
-      this.currentrow.status = 2;
-      let params = this.currentrow;
+      const params = {
+        id: this.currentrow.id,
+        storeId: this.valueId,
+        status: 2
+      };
+      // this.currentrow.orderTypeId = this.currentrow.orderTypeId.value;
+      // this.currentrow.settleStatus = this.currentrow.settleStatus.value;
+      // this.currentrow.status = 2;
+      // let params = this.currentrow;
       // params['']
+      console.log();
       tuihuishouli(params)
         .then(res => {
           if (res.code == 0) {
@@ -402,6 +403,7 @@ export default {
       this.$Message.info("点击了取消");
     },
     shouli(row, index) {
+      console.log(row, "row=>407");
       this.currentrow = row;
       console.log(row);
       if (index === 2) {

@@ -308,6 +308,11 @@ export default class InterPurchase extends Vue {
             data[k] = this.amt[k];
           }
         }
+        for (let k in this.feeform) {
+          if (this.feeform[k] > 0) {
+            data[k] = this.feeform[k];
+          }
+        }
       } else {
         this.$Message.error('请添加配件或完善订单信息后再提交!');
         data = null;

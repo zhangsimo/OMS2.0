@@ -112,7 +112,7 @@
                         <!--</Col>-->
                       </Row>
                     </FormItem>
-                    <FormItem label="调入仓库：" prop="supplyName" class="redIT">
+                    <FormItem label="调入仓库：" prop="storeId" class="redIT">
                       <Row class="w160">
                         <Col span="24">
                           <Select v-model="Leftcurrentrow.storeId" :disabled="true">
@@ -141,8 +141,8 @@
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
                       <Input
-                        disabled
-                        :value="Leftcurrentrow.remark"
+                        :disabled="this.Status !== 0"
+                        v-model="Leftcurrentrow.remark"
                         class="w160"
                       ></Input>
                     </FormItem>
@@ -289,6 +289,7 @@ export default {
   },
   data() {
     return {
+      Status: 0,
       // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
@@ -777,6 +778,9 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.Status = row.status.value
+      this.Leftcurrentrow.storeId = row.storeId;
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       // console.log(row, "row==>781");
       // console.log(row.id, "row.id");
       if (row.id == undefined) {
@@ -931,12 +935,17 @@ export default {
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
-        detailVOS: this.ArrayValue
+        storeId: list.storeId,
+        detailVOS: this.ArrayValue,
+        new: true,
+        _highlight: true,
       };
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.Leftcurrentrow = item;
+      this.Status = 0
       this.$refs.addInCom.init1();
     },
     getList(params) {

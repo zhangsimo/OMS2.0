@@ -26,7 +26,7 @@
           <div class="db">
             <Button
               type="default"
-              :disabled="selectPlanOrderItem.billStatusId != 0"
+              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(1)"
               v-has="'save'"
               class="mr10"
@@ -38,7 +38,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="selectPlanOrderItem.billStatusId != 0"
+              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(2)"
               v-has="'submit'"
               :loading="submitloading"
@@ -50,7 +50,7 @@
             <Button
               class="mr10"
               @click="saveObsoleteFun(1)"
-              :disabled="selectPlanOrderItem.billStatusId != 0"
+              :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               v-has="'invalidate'"
             >
               <Icon type="md-close" size="14" />作废
@@ -236,7 +236,7 @@
                   <FormItem label="合计总金额：">
                     <el-input-number
                       class="w160"
-                      :disabled="isinput"
+                      :disabled="true"
                       readonly
                       v-model="formPlan.totalPrice"
                       :min="0"

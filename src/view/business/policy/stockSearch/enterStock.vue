@@ -314,7 +314,7 @@
                     {
                         title: '单位',
                         align: 'center',
-                        key: 'unit',
+                        key: 'systemUnitId',
                         minWidth: 120
                     },
                     {
