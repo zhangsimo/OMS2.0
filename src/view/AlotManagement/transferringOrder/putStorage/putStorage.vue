@@ -112,7 +112,7 @@
                         <!--</Col>-->
                       </Row>
                     </FormItem>
-                    <FormItem label="调入仓库：" prop="supplyName" class="redIT">
+                    <FormItem label="调入仓库：" prop="storeId" class="redIT">
                       <Row class="w160">
                         <Col span="24">
                           <Select v-model="Leftcurrentrow.storeId" :disabled="true">
@@ -140,11 +140,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        disabled
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input disabled :value="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="创建人：" prop="planDate">
                       <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
@@ -777,6 +773,8 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.Leftcurrentrow.storeId = row.storeId;
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       // console.log(row, "row==>781");
       // console.log(row.id, "row.id");
       if (row.id == undefined) {
@@ -931,6 +929,7 @@ export default {
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
+        storeId: list.storeId,
         detailVOS: this.ArrayValue
       };
       this.Left.tbdata.unshift(item);
