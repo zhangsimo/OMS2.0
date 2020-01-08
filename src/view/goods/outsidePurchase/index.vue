@@ -435,12 +435,12 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="cancelQty"
+                  field="notEnterQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="acceptQty"
+                  field="trueEnterQty"
                   title="验收数量"
                   width="100"
                 ></vxe-table-column>
