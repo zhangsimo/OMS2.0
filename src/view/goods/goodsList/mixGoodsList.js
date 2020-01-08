@@ -432,7 +432,7 @@ export const mixGoodsData = {
         new: true,
         _highlight: true,
         id: "",
-        billStatusId: "",
+        billStatusId: 0,
         createTime: tools.transTime(new Date()),
         details: []
       };

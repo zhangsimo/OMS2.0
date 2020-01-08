@@ -511,6 +511,7 @@
     <purchase-amount
       ref="purchaseAmount"
       :totalAmt="totalAmt"
+      :parentAmt="selectTableRow"
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->

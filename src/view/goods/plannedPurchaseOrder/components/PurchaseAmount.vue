@@ -32,6 +32,7 @@ import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 @Component
 export default class PurchaseAmount extends Vue {
     @Prop(Number) private readonly totalAmt;
+    @Prop() private readonly parentAmt;
 
     private sumMod:boolean = false;
 
@@ -52,6 +53,12 @@ export default class PurchaseAmount extends Vue {
     private init() {
         this.reset();
         this.sumMod = true;
+        if(this.parentAmt.disAmt) {
+          this.formInline.disAmt = this.parentAmt.disAmt
+        }
+        if(this.parentAmt.rebateAmt) {
+          this.formInline.rebateAmt = this.parentAmt.rebateAmt
+        }
     }
 
     @Emit('amt')

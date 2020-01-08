@@ -153,7 +153,7 @@ export default {
     overflow: hidden;
   }
   .quick-all {
-    background-size: 100% 100%;
+    /*background-size: 100% 100%;*/
     background-repeat: no-repeat;
     height: 110px;
     width: 100%;
@@ -167,31 +167,31 @@ export default {
     }
   }
   .quick-one {
-    background-image: url("../../../assets/images/home/quick-one.png");
+    background-image: url("../../../assets/images/home/quick-one.svg");
   }
   .quick-two {
-    background-image: url("../../../assets/images/home/quick-two.png");
+    background-image: url("../../../assets/images/home/quick-two.svg");
     /*margin: 0 auto;*/
   }
   .quick-three {
-    background-image: url("../../../assets/images/home/quick-three.png");
+    background-image: url("../../../assets/images/home/quick-three.svg");
     /*margin: 0 auto;*/
   }
   .quick-four {
-    background-image: url("../../../assets/images/home/quick-four.png");
+    background-image: url("../../../assets/images/home/quick-four.svg");
     margin-right: 0;
   }
   .quick-five {
-    background-image: url("../../../assets/images/home/quick-five.png");
+    background-image: url("../../../assets/images/home/quick-five.svg");
   }
   .quick-six {
-    background-image: url("../../../assets/images/home/quick-six.png");
+    background-image: url("../../../assets/images/home/quick-six.svg");
   }
   .quick-seven {
-    background-image: url("../../../assets/images/home/quick-six.png");
+    background-image: url("../../../assets/images/home/quick-seven.svg");
   }
   .quick-enigth {
-    background-image: url("../../../assets/images/home/quick-enigth.png");
+    background-image: url("../../../assets/images/home/quick-enigth.svg");
     margin-right: 0;
   }
 }

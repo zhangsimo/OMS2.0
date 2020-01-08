@@ -805,24 +805,24 @@ export default {
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
         let one = [
           {
-            number: "1",
+            number: "3",
             accountNo: this.data[0].Statementexcludingtax,
             accountSumAmt: this.data[1].Statementexcludingtax
           },
           {
-            number: "2",
+            number: "1",
             accountNo: this.data[0].Statementoilincludingtax,
             accountSumAmt: this.data[1].Statementoilincludingtax
           },
           {
-            number: "3",
+            number: "2",
             accountNo: this.data[0].Taxincludedpartsstatement,
             accountSumAmt: this.data[1].Taxincludedpartsstatement
           }
         ];
         let four = [
           {
-            tenantId: 0,
+            tenantId: this.$store.state.user.userData.tenantId,
             orgId: this.model1,
             orgName: "null",
             guestId: this.companyInfo,
