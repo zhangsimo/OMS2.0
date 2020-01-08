@@ -300,6 +300,7 @@ export default {
       //
     },
     query(){
+      this.data1 = []
       this.getTransferWarehousing()
     },
     // 往来单位选择

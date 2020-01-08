@@ -543,6 +543,7 @@ export default {
       this.collectBaddebt = 0;
       this.collectRebate = 0;
       this.storeAccount(this.parameter.orgId);
+      this.Initialization()
     },
     // 获取数据
     Initialization() {
