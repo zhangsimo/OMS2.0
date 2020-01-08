@@ -29,12 +29,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'save'" type="default" class="mr10" @click="baocun1">
+              <Button v-has="'save'" type="default" class="mr10" @click="baocun1" :disabled="buttonDisable == 2">
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1" @click="tijiao1">
+              <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1 || buttonDisable == 2" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -49,7 +49,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
+              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="buttonDisable == 2">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
@@ -1018,6 +1018,9 @@ export default {
       this.Leftcurrentrow = row;
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
+      }
+      if (row.statuName == "已出库") {
+        this.buttonDisable = 2;
       }
       if (row.id == undefined) {
         row.id = "";

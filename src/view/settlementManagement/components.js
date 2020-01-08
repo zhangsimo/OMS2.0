@@ -13,7 +13,7 @@ export function creat(dates, store) {
           label: res.data[key]
         })
       });
-      model = Branchstore[0].value
+      model = store.state.user.userData.shopId
     }
     return [value, model, Branchstore]
   }

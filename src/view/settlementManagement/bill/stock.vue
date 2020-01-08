@@ -125,13 +125,13 @@ export default {
         },
         {
           title: "客户名称",
-          key: "Customer",
+          key: "guestName",
           width: 120,
           className: "tc"
         },
         {
           title: "订单号",
-          key: "orderId",
+          key: "orderCode",
           className: "tc"
         },
         {
@@ -161,7 +161,7 @@ export default {
         },
         {
           title: "审核日期",
-          key: "auditDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -171,7 +171,7 @@ export default {
         },
         {
           title: "单据状态",
-          key: "auditSign",
+          key: "accountSign",
           className: "tc"
         },
         {
@@ -365,6 +365,7 @@ export default {
     },
     // 总表查询
     getGeneral() {
+      this.data1 = []
       let obj = {
         orgid: this.model1,
         guestId: this.companyId,
@@ -378,6 +379,7 @@ export default {
             res.data.map((item, index) => {
               item.num = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
+              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
             this.data = res.data;
           } else {
@@ -392,6 +394,7 @@ export default {
             res.data.map((item, index) => {
               item.num = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
+              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
             this.data = res.data;
           } else {
@@ -412,7 +415,7 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getOutStockPart({ mainId: "1204603211449745408" }).then(res => {
+      getOutStockPart({ mainId: row.id }).then(res => {
         console.log(res);
         if (res.data.length !== 0) {
           res.data.map((item, index) => {

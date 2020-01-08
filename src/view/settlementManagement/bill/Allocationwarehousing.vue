@@ -361,7 +361,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      wouseParts({main: row.id}).then(res => {
+      wouseParts({mainId: row.id}).then(res => {
         console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{
