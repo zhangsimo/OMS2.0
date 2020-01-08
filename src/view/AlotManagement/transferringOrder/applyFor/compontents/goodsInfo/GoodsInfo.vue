@@ -254,7 +254,7 @@ export default class GoodsInfo extends Vue {
 
   //获取物流下拉框
   private async inlogistics() {
-    let params = {}
+    let params:any ={}
     if(this.formDateRight.deliveryType == 2){
       params.logisticsType = '020701'
     }
