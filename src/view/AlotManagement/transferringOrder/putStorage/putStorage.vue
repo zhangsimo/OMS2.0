@@ -140,7 +140,11 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input disabled :value="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input
+                        :disabled="this.Status !== 0"
+                        v-model="Leftcurrentrow.remark"
+                        class="w160"
+                      ></Input>
                     </FormItem>
                     <FormItem label="创建人：" prop="planDate">
                       <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
@@ -285,6 +289,7 @@ export default {
   },
   data() {
     return {
+      Status: 0,
       // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
@@ -773,6 +778,7 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.Status = row.status.value
       this.Leftcurrentrow.storeId = row.storeId;
       console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       // console.log(row, "row==>781");
@@ -930,12 +936,16 @@ export default {
         remark: "",
         serviceId: "",
         storeId: list.storeId,
-        detailVOS: this.ArrayValue
+        detailVOS: this.ArrayValue,
+        new: true,
+        _highlight: true,
       };
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.Leftcurrentrow = item;
+      this.Status = 0
       this.$refs.addInCom.init1();
     },
     getList(params) {
