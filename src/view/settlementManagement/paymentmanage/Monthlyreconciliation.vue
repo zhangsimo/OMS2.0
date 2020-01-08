@@ -822,7 +822,7 @@ export default {
         ];
         let four = [
           {
-            tenantId: 0,
+            tenantId: this.$store.state.user.userData.tenantId,
             orgId: this.model1,
             orgName: "null",
             guestId: this.companyInfo,
