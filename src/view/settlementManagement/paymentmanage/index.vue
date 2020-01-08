@@ -867,6 +867,8 @@ export default {
     },
     // 查询应收/应付总表
     query() {
+      this.data1 = []
+      this.data2 = []
       let obj = {
         orgId: this.model1,
         startDate: this.value[0],

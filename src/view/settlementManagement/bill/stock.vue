@@ -324,6 +324,7 @@ export default {
     },
     //查询
     query() {
+      this.data1 = []
       this.getGeneral();
     },
     // 往来单位选择
