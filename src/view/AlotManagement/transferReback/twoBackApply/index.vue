@@ -876,6 +876,7 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
+      console.log(params,'params  ==>879')
       this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
