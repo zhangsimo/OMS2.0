@@ -1106,6 +1106,9 @@ export default {
       } else {
         this.currentData = [];
       }
+
+    },
+    getWareHouse(){
       cangkulist2(this.$store.state.user.userData.shopId)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
@@ -1318,6 +1321,7 @@ export default {
     }
   },
   mounted() {
+    this.getWareHouse() //获取仓库列表
     setTimeout(() => {
       this.getDomHeight();
     }, 0);
