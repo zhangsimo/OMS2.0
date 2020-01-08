@@ -2,11 +2,18 @@
   <div>
     <div class="other-item">
       <a class="mr20" @click="openShow">{{getName || '请选择分店'}}</a>
-      <a class="mr20" href="#">客服</a>
+      <a class="mr20 service" href="#" @click="serviceShow = !serviceShow" v-if="service && shopkeeper == 0">客服
+       <div class="title" v-if="serviceShow">
+         <div><img src="@/assets/images/home/service.svg"  class="mr10"><span>{{serviceList.name}}</span></div>
+         <div><img src="@/assets/images/home/serviceTel.svg"  class="mr10"><span>{{serviceList.mobile}}</span></div>
+         <div><img src="@/assets/images/home/serviceQQ.svg"  class="mr10"><span>{{serviceList.qq}}</span></div>
+         <div><img src="@/assets/images/home/serviceWX.svg"  class="mr10"> <img :src="serviceList.wechatPhoto" alt="" style="width: 80px"></div>
+       </div>
+      </a>
       <a class="mr20" @click="toImage">反馈</a>
-      <Icon class="mr20" type="md-home" size="16"/>
-      <Icon class="mr20" type="md-sync" size="16"/>
-      <Icon class="mr20" type="md-close" size="16"/>
+      <Icon class="mr20" type="md-home" size="16" @click="goHome"/>
+      <Icon class="mr20" type="md-sync" size="16" @click="go"/>
+<!--      <Icon class="mr20" type="md-close" size="16"/>-->
     </div>
     <Modal
       v-model="show"
@@ -44,7 +51,7 @@
 </template>
 
 <script>
-    import {getUserAllCompany , setCompany ,changeToken} from '@/api/base/user'
+    import {getUserAllCompany , setCompany ,changeToken , getService} from '@/api/base/user'
     import {setToken} from '@/libs/util'
     export default {
     name: 'other-item',
@@ -56,13 +63,22 @@
             company:'',//公司
             tableData:[],//公司列表
             companyOneList:'',//点击获取到的公司信息
-
+            serviceShow:false,//客服显示
+            serviceList:{},//客服信息
+            service:false, //客服是否展示
+            shopkeeper:0,//判断是否为租户
         }
       },
       computed:{
         getName(){
             return this.$store.state.user.userShopName
         }
+      },
+      mounted(){
+          //获取客服信息
+          this.getServiceList()
+          //获取租户信息
+          this.shopkeeper = this.$store.state.user.userData.shopkeeper
       },
       methods: {
           toImage() {
@@ -71,7 +87,6 @@
           //打开公司选择模态框
           openShow(){
               this.show = true
-             console.log(this.$store.state.user)
             this.getList()
           },
           //获取所有公司信息
@@ -115,13 +130,28 @@
                       if(token.code == 0){
                           setToken(token.data.access_token)
                       }
-                      console.log(token)
                       this.$nextTick( () => {
                           this.$router.go(0);
                       })
                   }
 
 
+          },
+          //去首页
+          goHome(){
+              this.$router.push({path:'/'})
+          },
+          //刷新当前页
+          go(){
+              this.$router.go(0);
+          },
+          //获取客服信息
+         async getServiceList(){
+             let res = await getService()
+             if(res.code === 0){
+              this.serviceList = res.data
+                 this.service = true
+             }
           }
       }
   }
@@ -140,4 +170,26 @@
     left: 10%;
     background-color: rgba(255,255,255,.1);
   }
+ .service {
+   position: relative;
+   .title{
+     width: 180px;
+     padding: 0 0 10px 10px ;
+     border: 1px solid #999999;
+     background-color: #ffffff;
+     position: absolute;
+     top: 20px;
+     left: -70px;
+     div{
+       span {
+         font-size: 18px;
+         font-weight: 700;
+       }
+     }
+     img{
+       vertical-align:middle;
+       width: 20px;
+     }
+   }
+ }
 </style>

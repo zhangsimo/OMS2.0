@@ -545,6 +545,7 @@
     <purchase-amount
       ref="purchaseAmount"
       :totalAmt="totalAmt"
+      :parentAmt="selectTableRow"
       @amt="getAmt"
     ></purchase-amount>
     <!-- 收货信息 -->
@@ -556,7 +557,7 @@
     <!-- 打印 -->
     <print-model ref="PrintModel" :orderId="mainId"></print-model>
     <!-- 分摊费用 -->
-    <apportionment-expenses ref="apportionmentExpenses" :currencies="currencyMap" @currencyForm="getFeeForm"></apportionment-expenses>
+    <apportionment-expenses ref="apportionmentExpenses" :parentFeeform="selectTableRow" :currencies="currencyMap" @currencyForm="getFeeForm"></apportionment-expenses>
   </div>
 </template>
 

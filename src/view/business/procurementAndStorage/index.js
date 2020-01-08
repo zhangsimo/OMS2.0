@@ -150,6 +150,7 @@ export default {
         Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
       },//请求头
       upurl: getup,//批量导入地址
+      flag: 0
     }
   },
   mounted() {
@@ -260,6 +261,20 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      console.log(data)
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.save();
+          },
+          onCancel: () => {
+            this.getLeftLists();
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       this.dataChange = data
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
@@ -337,7 +352,6 @@ export default {
         this.formPlan.settleTypeId = oneClient[i].settTypeId
 
       }
-      console.log(this.formPlan.billTypeId, this.formPlan.settleTypeId)
     },
     //计算表格内总价格数据
     countAmount(row) {
@@ -475,6 +489,7 @@ export default {
             }
             this.allMoney = 0
             this.$Message.success('保存成功');
+            this.flag = 0
           }
         } catch (errMap) {
           this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
@@ -565,6 +580,9 @@ export default {
           orderMan: this.$store.state.user.userData.staffName
         }
         this.legtTableData.unshift(this.formPlan)
+        this.$refs.xTab.setCurrentRow(this.legtTableData[0])
+        this.dataChange.row = this.formPlan
+        this.flag = 1
       } else {
         this.$message.error('请先保存数据')
       }

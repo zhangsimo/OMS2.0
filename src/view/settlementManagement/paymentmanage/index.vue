@@ -82,6 +82,7 @@
               class="mt10"
               max-height="400"
               show-summary
+              :summary-method="handleSummary"
               ref="sale"
             ></Table>
           </Tab-pane>
@@ -93,6 +94,7 @@
               class="mt10"
               max-height="400"
               show-summary
+              :summary-method="handleSummary"
               ref="purchase"
             ></Table>
           </Tab-pane>
@@ -840,6 +842,45 @@ export default {
     this.Branchstore = arr[2];
   },
   methods: {
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index > 10 && index<18&&index!==14) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     // // 子组件传参
     // getOne(val){
 

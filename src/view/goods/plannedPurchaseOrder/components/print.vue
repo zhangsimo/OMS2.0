@@ -138,7 +138,7 @@ export default {
         },
         {
           title: "品牌车型",
-          key: "carBrand",
+          key: "carModelName",
           align: "center"
         },
         {

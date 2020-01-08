@@ -113,6 +113,7 @@ export default class ApportionmentExpenses extends Vue {
 
   // 币种
   @Prop(Array) private readonly currencies;
+  @Prop() private readonly parentFeeform;
 
   private formInline = {
     currency: "", // 币种
@@ -151,6 +152,11 @@ export default class ApportionmentExpenses extends Vue {
   private init() {
     this.reset();
     this.sumMod = true;
+    for(let key in this.formInline) {
+      if(this.parentFeeform[key]) {
+        this.formInline[key] = this.parentFeeform[key]
+      }
+    }
   }
 
   @Emit("currencyForm")

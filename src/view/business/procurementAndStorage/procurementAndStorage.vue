@@ -59,6 +59,7 @@
               </div>
               <div class="orderCenter">
                 <vxe-table
+                ref="xTab"
                   border
                   align="center"
                   size="mini"

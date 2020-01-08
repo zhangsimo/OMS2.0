@@ -434,29 +434,31 @@ export default class GoodsInfo extends Vue {
     let ref: any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = row
+    // this.formDateRight = row
     this.formDateRight.businessNum = this.row.serviceId;
     // this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
     // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     // this.formDateRight.settleType = this.formDateRight.settleType + "";
-    // if (row.logisticsRecord) {
-    //   this.formDateRight.id = row.logisticsRecord.id;
-    //   this.formDateRight = { ...row.logisticsRecord };
-    //   this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-    //   this.formDateRight.settleType = this.formDateRight.settleType + "";
-    // } else {
-    //   this.formDateRight.logisticsId = row.id;
-    //   this.formDateRight.receiveComp = row.receiveCompName;
-    //   this.formDateRight.streetAddress = row.streetAddress;
-    //   this.formDateRight.receiver = row.receiveMan;
-    //   this.formDateRight.receiverMobile = row.receiveManTel;
-    //   this.formDateRight.provinceId = row.provinceId;
-    //   this.formDateRight.cityId = row.cityId;
-    //   this.formDateRight.countyId = row.countyId;
-    //   this.formDateRight.guestId = row.guestId;
-    //   this.formDateRight.receiveAddress = row.address;
-    // }
-    // this.changeDeliveryType();
+    if (row.logisticsRecordVO) {
+      this.formDateRight.id = row.logisticsRecordVO.id;
+      this.formDateRight = { ...row.logisticsRecordVO };
+      this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+      this.formDateRight.settleType = this.formDateRight.settleType + "";
+      // this.formDateRight = row.logisticsRecordVO
+    } else {
+      this.formDateRight = row
+      this.formDateRight.logisticsId = row.id;
+      // this.formDateRight.receiveComp = row.receiveCompName;
+      // this.formDateRight.streetAddress = row.streetAddress;
+      // this.formDateRight.receiver = row.receiveMan;
+      // this.formDateRight.receiverMobile = row.receiveManTel;
+      // this.formDateRight.provinceId = row.provinceId;
+      // this.formDateRight.cityId = row.cityId;
+      // this.formDateRight.countyId = row.countyId;
+      // this.formDateRight.guestId = row.guestId;
+      // this.formDateRight.receiveAddress = row.address;
+    }
+    this.changeDeliveryType();
   }
   //传入保存id
   private saveId(row) {

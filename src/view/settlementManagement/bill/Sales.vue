@@ -84,8 +84,8 @@ export default {
       model1: "",
       columns: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -152,8 +152,8 @@ export default {
       ],
       columns1: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -283,7 +283,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index === 11) {
+        if (index === 10) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -361,7 +361,7 @@ export default {
             if(item.orderType){
               item.orderTypeName = item.orderType.name
             }
-            item.num = index + 1
+            item.index = index + 1
           })
           this.data = res.data
         } else {
@@ -374,6 +374,9 @@ export default {
       getPartList({ mainId: row.id }).then(res => {
         if(res.code===0){
           this.data1 = res.data.content
+          this.data1.map((item,index)=>{
+            item.index = index + 1
+          })
         }
       });
     }

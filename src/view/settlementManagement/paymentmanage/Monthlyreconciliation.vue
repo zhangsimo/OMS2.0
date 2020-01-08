@@ -530,27 +530,32 @@ export default {
       this.Initialization();
     },
     // 对账单弹框出现加载数据
-    hander() {
-      this.handervis = false
-      this.flag = false;
-      this.info = false;
-      this.store = this.parameter.orgId;
-      this.model1 = this.parameter.orgId;
-      this.Rebateid = "";
-      this.BadDebtid = "";
-      this.remark = "";
-      this.totalpayment = 0;
-      this.paymentBaddebt = 0;
-      this.paymentRebate = 0;
-      this.totalcollect = 0;
-      this.collectBaddebt = 0;
-      this.collectRebate = 0;
-      this.storeAccount(this.parameter.orgId);
-      this.Initialization();
+    hander(type) {
+      if(type){
+        this.handervis = false
+        this.flag = false;
+        this.info = false;
+        this.store = this.parameter.orgId;
+        this.model1 = this.parameter.orgId;
+        this.companyInfo = this.parameter.guestId
+        this.Rebateid = "";
+        this.BadDebtid = "";
+        this.remark = "";
+        this.totalpayment = 0;
+        this.paymentBaddebt = 0;
+        this.paymentRebate = 0;
+        this.totalcollect = 0;
+        this.collectBaddebt = 0;
+        this.collectRebate = 0;
+        this.collectlist = []
+        this.paymentlist = []
+        this.storeAccount(this.parameter.orgId);
+        this.Initialization();
+      }
     },
     // 获取数据
     Initialization() {
-      let { orgId, startDate, endDate, guestId } = this.parameter;
+      // let { orgId, startDate, endDate, guestId } = this.parameter;
       let obj = { orgId: this.model1, guestId: this.companyInfo };
       getReconciliation(obj).then(res => {
         // let Statementexcludingtax = 0;
@@ -560,11 +565,11 @@ export default {
         // let Taxincludedpartsstatement1 = 0;
         // let Statementoilincludingtax1 = 0;
         for (let i of res.data.one) {
-          if (i.number === 1) {
+          if (i.number === 3) {
             this.arrId[0] = i.accountNo
             // Statementexcludingtax = i.accountNo;
             // Statementexcludingtax1 = i.accountSumAmt;
-          } else if (i.number === 2) {
+          } else if (i.number === 1) {
             this.arrId[1] = i.accountNo
             // Taxincludedpartsstatement = i.accountNo;
             // Taxincludedpartsstatement1 = i.accountSumAmt;
@@ -767,6 +772,12 @@ export default {
     },
     // 保存接口
     getPreservation(num) {
+      if(this.totalvalue === '0'){
+        if(!this.collectionAccountName) return this.$message.error('收款户名不能为空')
+        if(!this.openingBank) return this.$message.error('开户行不能为空')
+        if(!this.collectionAccount) return this.$message.error('银行账号不能为空')
+        if(!this.thisApplyAccount) return this.$message.error('付款账户不能为空')
+      }
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
         if (!this.BadDebtid) {
           // this.$message.error("请输入应收坏账请示单号");
@@ -801,24 +812,24 @@ export default {
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
         let one = [
           {
-            number: "1",
+            number: "3",
             accountNo: this.data[0].Statementexcludingtax,
             accountSumAmt: this.data[1].Statementexcludingtax
           },
           {
-            number: "2",
+            number: "1",
             accountNo: this.data[0].Statementoilincludingtax,
             accountSumAmt: this.data[1].Statementoilincludingtax
           },
           {
-            number: "3",
+            number: "2",
             accountNo: this.data[0].Taxincludedpartsstatement,
             accountSumAmt: this.data[1].Taxincludedpartsstatement
           }
         ];
         let four = [
           {
-            tenantId: 0,
+            tenantId: this.$store.state.user.userData.tenantId,
             orgId: this.model1,
             orgName: "null",
             guestId: this.companyInfo,

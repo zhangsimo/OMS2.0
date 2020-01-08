@@ -102,9 +102,9 @@ export default {
       model1: "",
       modal1: false,
       columns: [
-        {
+       {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -176,8 +176,8 @@ export default {
       ],
       columns1: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -380,7 +380,7 @@ export default {
       transferStock(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
             item.billstate = "已审";
             item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
             this.data = res.data;
@@ -422,9 +422,9 @@ export default {
         console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
-            item.num = index + 1;
-            item.taxSign = 1;
-            item.taxSign = item.taxSign ? "是" : "否  ";
+            item.index = index + 1;
+            // item.taxSign = 1;
+            // item.taxSign = item.taxSign ? "是" : "否  ";
           });
           this.data1 = res.data;
         } else {

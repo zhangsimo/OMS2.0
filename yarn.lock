@@ -8751,6 +8751,11 @@ vuex@^3.0.1:
   resolved "https://registry.npm.taobao.org/vuex/download/vuex-3.1.1.tgz#0c264bfe30cdbccf96ab9db3177d211828a5910e"
   integrity sha1-DCZL/jDNvM+Wq52zF30hGCilkQ4=
 
+vxe-table-plugin-iview@^1.5.10:
+  version "1.5.10"
+  resolved "http://r.cnpmjs.org/vxe-table-plugin-iview/download/vxe-table-plugin-iview-1.5.10.tgz#5d437869c64fcc175fc796e3ba96c18a86c94e23"
+  integrity sha1-XUN4acZPzBdfx5bjupbBiobJTiM=
+
 vxe-table@^2.6.16:
   version "2.6.16"
   resolved "https://registry.npm.taobao.org/vxe-table/download/vxe-table-2.6.16.tgz#7d670fab35557a75184eb34c318f50b2564ec290"
@@ -9013,10 +9018,10 @@ ws@^6.0.0, ws@^6.2.1:
   dependencies:
     async-limiter "~1.0.0"
 
-xe-utils@^2.2.14:
-  version "2.2.14"
-  resolved "http://r.cnpmjs.org/xe-utils/download/xe-utils-2.2.14.tgz#a6c17147dbaf031be8f940a30b6b9690398cc721"
-  integrity sha1-psFxR9uvAxvo+UCjC2uWkDmMxyE=
+xe-utils@^2.3.0:
+  version "2.3.0"
+  resolved "http://r.cnpmjs.org/xe-utils/download/xe-utils-2.3.0.tgz#5db56893c39b6e65c267997a607acbac887c9e96"
+  integrity sha1-XbVok8ObbmXCZ5l6YHrLrIh8npY=
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"

@@ -24,6 +24,7 @@
       <Col span="12">
         <span class="w40">提交日期从：</span>
         <DatePicker
+          @on-change="establish1"
           v-model="form.commitDateStart"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
@@ -33,6 +34,7 @@
       <Col span="12">
         <span class="w40 ml10">至：</span>
         <DatePicker
+          @on-change="submit1"
           v-model="form.commitDateEnd"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
@@ -138,11 +140,19 @@ export default {
     },
     //选择创建开始日期
     establish(date) {
-      this.form.createTimeStart = data;
+      this.form.createTimeStart = date;
+    },
+    //选择创建开始日期
+    establish1(date) {
+      console.log(date, "date");
+      this.form.commitDateStart = date;
     },
     //选择创建结束日期
     submit(date) {
-      this.form.createTimeEnd = data;
+      this.form.createTimeEnd = date;
+    },
+    submit1(date) {
+      this.form.commitDateEnd = date;
     },
     // 选择审核开始日期
     check(date) {
@@ -165,12 +175,12 @@ export default {
         );
       }
       if (this.form.commitDateStart) {
-        this.form.commitDateStart = moment(this.form.startAuditDate).format(
+        this.form.commitDateStart = moment(this.form.commitDateStart).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
       if (this.form.commitDateEnd) {
-        this.form.commitDateEnd = moment(this.form.endAuditDate).format(
+        this.form.commitDateEnd = moment(this.form.commitDateEnd).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }

@@ -542,10 +542,7 @@
                         size: 10
                     },
                     //数据
-                    dataTwo: [{
-                        aaa: '批次库存',
-                        bbb: 5
-                    }]
+                    dataTwo: []
                 },
             }
         },
@@ -604,6 +601,9 @@
                 let res = await getLotStock(data)
                 if (res.code == 0) {
                     this.contentTwo.dataTwo = res.data.content
+                    this.contentTwo.dataTwo.map(item=>{
+                      item.outableQty = item.sellSign ? 0: item.outableQty
+                    })
                     this.contentTwo.page.total = res.data.totalElements
                 }
             },

@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span class="mr10">快速查询：</span>
+            <span class="mr10">快速：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">
@@ -78,7 +78,7 @@
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="code" title="业务单号"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="业务单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
           <vxe-table-column field="billStatusName" title="状态"></vxe-table-column>
 
@@ -89,7 +89,7 @@
           <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
-            field="storeId"
+            field="enterStoreId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>
@@ -151,7 +151,7 @@
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
 
-          <vxe-table-column field="oeCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
         </vxe-table>
       </div>

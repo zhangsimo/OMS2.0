@@ -85,8 +85,8 @@ export default {
       value: [],
       columns: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -159,8 +159,8 @@ export default {
       ],
       columns1: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -235,17 +235,17 @@ export default {
       data1: [],
       typelist: [
         {
-          value: "1",
+          value: "0",
           label: "调拨入库"
         },
         {
-          value: "3",
+          value: "2",
           label: "调入退货"
         }
       ],
       company: "", //往来单位
       companyId: "", //往来单位id
-      type: '1'//类型
+      type: '0'//类型
     };
   },
   async mounted() {
@@ -367,9 +367,9 @@ export default {
       transferWarehousing(obj).then(res => {
         if (res.data.length !== 0){
           res.data.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
             item.billstate = "已审";
-            item.orderTypeId = item.orderTypeId === 1 ? '调拨入库' : '调入退货'
+            item.orderTypeId = item.orderTypeId.value ? '调入退货' : '调拨入库'
             item.sourceType = item.sourceType === 3 ? '是' : '否'
           });
           this.data = res.data;
@@ -403,6 +403,7 @@ export default {
       wouseParts({mainId: row.id}).then(res => {
         if(res.data.length !== 0){
           res.data.map((item,index)=>{
+            item.index = index +1 
             item.taxSign = item.taxSign ? '是' : '否'
           })
           this.data1 = res.data

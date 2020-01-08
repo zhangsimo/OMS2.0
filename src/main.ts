@@ -17,6 +17,8 @@ import 'babel-polyfill'
 import Message from './components/message'
 import './assets/iconfonts/iconfont.css'
 import XEUtils from 'xe-utils'
+import VXETablePluginIView from 'vxe-table-plugin-iview'
+import 'vxe-table-plugin-iview/dist/style.css'
 
 import VXEUtils from 'vxe-utils'
 import VXETable from 'vxe-table'
@@ -37,6 +39,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI)
 Vue.use(VXETable)
+VXETable.use(VXETablePluginIView)
 Vue.use(iView)
 Vue.config.productionTip = false
 Vue.use(VXEUtils, XEUtils)

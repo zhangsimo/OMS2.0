@@ -140,11 +140,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="this.Status !== 0"
-                        v-model="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input disabled v-model="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="创建人：" prop="planDate">
                       <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
@@ -689,7 +685,7 @@ export default {
     // 新增按钮
     addProoo() {
       this.$refs.addInCom.init();
-      chengping({ enterSelect: 123 }, 10, 1)
+      chengping({ enterSelect: 123, orderTypeId: "ALLOT_APPLY" }, 10, 1)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -778,7 +774,7 @@ export default {
     async selectTabelData(row) {
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
-      this.Status = row.status.value
+      this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
       console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       // console.log(row, "row==>781");
@@ -938,14 +934,14 @@ export default {
         storeId: list.storeId,
         detailVOS: this.ArrayValue,
         new: true,
-        _highlight: true,
+        _highlight: true
       };
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
       this.Leftcurrentrow = item;
-      this.Status = 0
+      this.Status = 0;
       this.$refs.addInCom.init1();
     },
     getList(params) {

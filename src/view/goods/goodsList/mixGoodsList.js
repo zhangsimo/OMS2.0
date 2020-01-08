@@ -198,7 +198,7 @@ export const mixGoodsData = {
             }
           },
           onCancel: () => {
-            this.$Message.info("取消删除");
+            // this.$Message.info("取消删除");
           }
         });
       }
@@ -328,6 +328,7 @@ export const mixGoodsData = {
     // },
     //采购计划单选中
     selectTabelData(v, oldv) {
+      this.delArr = [];
       if (this.newadd && v) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -432,12 +433,13 @@ export const mixGoodsData = {
         new: true,
         _highlight: true,
         id: "",
-        billStatusId: "",
+        billStatusId: 0,
         createTime: tools.transTime(new Date()),
         details: []
       };
       this.selectPlanOrderItem = row;
       this.tbdata.unshift(row);
+      this.delArr = [];
     },
 
     //作废--反作废

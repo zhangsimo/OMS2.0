@@ -250,11 +250,7 @@
                     title="受理数量"
                   ></vxe-table-column>
                   <!-- <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column> -->
-                  <vxe-table-column
-                    field="stockOutQty"
-                    title="缺货数量"
-                    width="100"
-                  ></vxe-table-column>
+                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -640,7 +636,6 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
-      console.log(val, "val");
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -761,14 +756,12 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      console.log(params, "30.221:9210");
       if (
         this.Leftcurrentrow.guestName == "" ||
         this.Leftcurrentrow.guestName == null
       ) {
         params.id = "";
       }
-      console.log(params, "params");
       try {
         await this.$refs.xTable1.validate();
         //配件组装保存
@@ -1015,7 +1008,7 @@ export default {
     async selectTabelData(row) {
       this.flagValue = 0;
       this.flagValue1 = 0;
-      console.log(row, "row ==>862");
+      // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1087,13 +1080,12 @@ export default {
     // 确定
     Determined() {
       this.$refs.naform.cancelTrim();
-
       this.form = {
         ...this.form,
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        console.log(this.form.guestName, "this.form.guestName");
+        // console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
@@ -1158,7 +1150,7 @@ export default {
         this.$Message.error("请选择要删除的配件!");
         return;
       }
-      console.log(this.Leftcurrentrow.detailVOS, "this.checkboxArr");
+      // console.log(this.Leftcurrentrow.detailVOS, "this.checkboxArr");
     },
     //展示方
     showModel() {
