@@ -660,9 +660,9 @@ export default {
             },
             {
               Detailedstatistics: "对账金额",
-              Statementexcludingtax: res.data.hasOwnProperty('one') ? res.data.one : 0,
-              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? res.data.two : 0,
-              Statementoilincludingtax: res.data.hasOwnProperty('three') ? res.data.three : 0
+              Statementexcludingtax: res.data.hasOwnProperty('one') ? res.data.one : '',
+              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? res.data.two : '',
+              Statementoilincludingtax: res.data.hasOwnProperty('three') ? res.data.three : ''
             }
           ];
           // this.$set(this.data, 1, {
