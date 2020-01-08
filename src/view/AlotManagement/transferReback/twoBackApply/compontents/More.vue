@@ -4,7 +4,7 @@
       <Col span="12">
         <span class="w40">创建日期从：</span>
         <DatePicker
-          v-model="form.createTime"
+          v-model="form.startTime"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
@@ -82,7 +82,7 @@ export default {
         endTime: "",
         guestId: "",
         guestName: "",
-        createTime: ""
+        startTime: ""
       }
     };
   },
@@ -117,7 +117,7 @@ export default {
     },
     //选择创建开始日期
     establish(date) {
-      this.form.createTime = date;
+      this.form.startTime = date;
     },
     //选择创建结束日期
     submit(date) {
@@ -132,8 +132,8 @@ export default {
       this.form.shenEndTime = data;
     },
     getITPWE() {
-      if (this.form.createTime) {
-        this.form.createTime = moment(this.form.createTime).format(
+      if (this.form.startTime) {
+        this.form.startTime = moment(this.form.startTime).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
@@ -164,7 +164,7 @@ export default {
         endTime: "",
         guestId: "",
         guestName: "",
-        createTime: ""
+        startTime: ""
       };
     }
   }
