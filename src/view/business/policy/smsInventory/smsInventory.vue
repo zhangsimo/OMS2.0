@@ -681,7 +681,6 @@ export default {
     },
     //保存
     baocun() {
-      this.flag = 0;
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
@@ -695,6 +694,7 @@ export default {
             );
             getSubmitList(this.formPlan).then(res => {
               if (res.code == 0) {
+                this.flag = 0;
                 this.isAddRight = true;
                 this.Right.tbdata = [];
                 this.formPlan = {};
