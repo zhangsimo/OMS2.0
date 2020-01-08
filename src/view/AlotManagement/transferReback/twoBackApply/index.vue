@@ -322,27 +322,27 @@ export default {
         },
         {
           label: "草稿",
-          value: 0
+          value: "DRAFT"
         },
         {
           label: "待受理",
-          value: 1
+          value: "UNACCEPTED"
         },
         {
           label: "已受理",
-          value: 2
+          value: "ACCEPTED"
         },
         {
           label: "已出库",
-          value: 5
+          value: "STOCKING"
         },
         {
           label: "已拒绝",
-          value: 7
+          value: "REJECTED"
         },
         {
           label: "已作废",
-          value: 8
+          value: "INVALID"
         }
       ],
       advanced: false, //更多模块的弹框
@@ -560,9 +560,11 @@ export default {
 
     getDataType() {
       console.log(121);
+
       const params = {
         status: this.form.status
       };
+      console.log(params, "567");
       this.getList(params);
     },
     selectAllEvent({ checked }) {},
@@ -876,7 +878,7 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      console.log(params,'params  ==>879')
+      console.log(params, "params  ==>879");
       this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
@@ -956,9 +958,30 @@ export default {
       } else {
         delete params.qucikTime;
       }
+      var array = [];
+      var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {
+            // res.data.content.forEach((item, index, array) => {
+            //   return console.log(array.push(item.statue), "963");
+            // });
+            for (var i = 0; i < res.data.content.length; i++) {
+              array.push(res.data.content[i].status);
+            }
+            console.log(array, "array ==>969");
+
+            var result = [];
+            var obj = {};
+            for (var i = 0; i < array.length; i++) {
+              if (!obj[array[i].name]) {
+                result.push(array[i]);
+                obj[array[i].name] = true;
+              }
+            }
+            console.log(result);
+
+            console.log(res.data.content, "res==>970");
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;

@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span class="mr10">快速查询：</span>
+            <span class="mr10">快速：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">

@@ -4,7 +4,7 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <span>快速查询：</span>
+            <span>查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
 
@@ -78,7 +78,7 @@
           height="auto"
           :data="TopTableData"
           @current-change="currentChangeEvent"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
@@ -93,11 +93,11 @@
 
           <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <!-- <vxe-table-column
-            field=""
+          <vxe-table-column
+            field="defaultValue"
             title="受理仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>-->
+          ></vxe-table-column>
 
           <!-- <vxe-table-column
             field="defaultValue"
@@ -105,9 +105,9 @@
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>-->
 
-          <vxe-table-column title="受理仓库">
+          <!-- <vxe-table-column title="受理仓库">
             <template v-slot="{ row,rowIndex }">
-              <select v-model="row.value">
+              <select>
                 <option
                   v-for="(item,index) in storeArray"
                   :key="index"
@@ -115,7 +115,7 @@
                 >{{item.label}}</option>
               </select>
             </template>
-          </vxe-table-column>
+          </vxe-table-column>-->
           <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
@@ -290,7 +290,7 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            // console.log(res, "res==286");
+            console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
               console.log(this.storeArray, "this.storeArray ==>298");
@@ -320,8 +320,12 @@ export default {
           if (res.code == 0) {
             console.log(res);
             this.TopTableData = res.data.content || [];
+            // console.log(this.TopTableData, "this.TopTableData ==>323");
+            // for (var i = 0; i < this.TopTableData.length; i++) {
+            //   this.TopTableData[i]["storeIdValue"] = "受理默认仓库";
+            // }
             this.pageList.total = res.totalElements;
-            console.log(this.TopTableData, "this.TopTableData");
+            // console.log(this.TopTableData, "this.TopTableData");
             for (var i = 0; i < this.TopTableData.length; i++) {
               this.TopTableData[i]["defaultValue"] = "受理默认仓库";
             }
@@ -349,7 +353,7 @@ export default {
     ok() {
       const params = {
         id: this.currentrow.id,
-        storeId: this.valueId,
+        storeId: this.currentrow.defaultValue,
         status: 2
       };
       // this.currentrow.orderTypeId = this.currentrow.orderTypeId.value;
@@ -357,7 +361,6 @@ export default {
       // this.currentrow.status = 2;
       // let params = this.currentrow;
       // params['']
-      console.log();
       tuihuishouli(params)
         .then(res => {
           if (res.code == 0) {
@@ -403,8 +406,12 @@ export default {
       this.$Message.info("点击了取消");
     },
     shouli(row, index) {
-      console.log(row, "row=>407");
+      // console.log(row, "row=>407");
       this.currentrow = row;
+      // console.log(this.currentrow.defaultValue, "this.currentrow.defaultValue");
+      if (this.currentrow.defaultValue == "受理默认仓库") {
+        this.currentrow.defaultValue = "1212664645509201920";
+      }
       console.log(row);
       if (index === 2) {
         this.modal1 = true;
@@ -414,8 +421,8 @@ export default {
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      console.log(evnt.target.value);
-      this.currentrow.storeId = evnt.target.value;
+      this.currentrow.defaultValue = evnt.target.value;
+      console.log(evnt.target.value, "1212");
     }
   }
 };
