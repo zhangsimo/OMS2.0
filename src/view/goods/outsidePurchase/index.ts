@@ -118,7 +118,7 @@ export default class InterPurchase extends Vue {
       },
       {
         title: '提交人',
-        key: 'updateUname',
+        key: 'auditor',
         minWidth: 100
       },
       {
