@@ -107,8 +107,8 @@ export default {
       modal1: false,
       columns: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -180,9 +180,9 @@ export default {
         }
       ],
       columns1: [
-        {
+       {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -409,7 +409,7 @@ export default {
         getWarehousingList(obj).then(res => {
           if (res.data) {
             res.data.map((item, index) => {
-              item.num = index + 1;
+              item.index = index + 1;
               item.taxSign = item.taxSign ? "是" : "否";
               item.auditSign = item.auditSign ? "已审" : "未审";
             });
@@ -440,7 +440,7 @@ export default {
       getWarehousingPart({ mainId: row.id }).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
             item.taxSign = item.taxSign ? "是" : "否";
           });
           this.data1 = res.data;

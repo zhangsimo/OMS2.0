@@ -109,8 +109,8 @@ export default {
       modal1: false,
       columns: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -183,8 +183,8 @@ export default {
       ],
       columns1: [
         {
+          key:'index',
           title: "序号",
-          type: "index",
           width: 40,
           className: "tc"
         },
@@ -416,7 +416,7 @@ export default {
         getOutStockList(obj).then(res => {
           if (res.data.length !== 0) {
             res.data.map((item, index) => {
-              item.num = index + 1;
+              item.index = index + 1;
               item.accountSign = item.accountSign ? "已审" : "未审";
               item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
             });
@@ -458,7 +458,7 @@ export default {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.taxSign = item.taxSign ? "是" : "否";
-            item.num = index + 1;
+            item.index = index + 1;
           });
           this.data1 = res.data;
         }
