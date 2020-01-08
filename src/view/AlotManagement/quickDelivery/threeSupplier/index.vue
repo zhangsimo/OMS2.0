@@ -151,7 +151,7 @@
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
 
-          <vxe-table-column field="oeCode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
         </vxe-table>
       </div>
