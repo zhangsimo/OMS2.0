@@ -821,7 +821,7 @@ export default {
     //快速查询日期
     getDataQuick(v) {
       const params = {
-        createTime: v[0],
+        startTime: v[0],
         endTime: v[1]
       };
       this.getList(params);

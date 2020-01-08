@@ -236,7 +236,6 @@ export default {
       let data = { pageSize: 10000 };
       getPartBrand(data)
         .then(res => {
-          console.log(res, "res =>236");
           if (res.code == 0) {
             res.data.content.forEach(element => {
               this.quickArray.push({
@@ -244,7 +243,6 @@ export default {
                 label: element.quality
               });
             });
-            console.log(this.quickArray);
           }
         })
         .catch(e => {
@@ -253,15 +251,13 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res, "res =253");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
             });
             for (var i = 0; i < res.data.length; i++) {
               if (res.data[i].isDefault == true) {
-                console.log(res.data[i], "res.data[i]");
                 this.form.storeId = res.data[i].id;
-                this.idValue = res.data[i].id;
+                // this.idValue = res.data[i].id;
               }
             }
           }
@@ -271,11 +267,9 @@ export default {
         });
     },
     search(params) {
-      console.log(params, "params");
-      params.storeId = this.idValue;
+      // params.storeId = this.idValue;
       jinqiaopinliebiao(params)
         .then(res => {
-          console.log(res);
           if (res.code == 0) {
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.totalElements;
@@ -313,7 +307,6 @@ export default {
     },
     update() {
       // 更新列表信息
-      console.log(this.formItem);
 
       genxin(this.formItem)
         .then(res => {
@@ -343,7 +336,6 @@ export default {
       this.modal1 = true;
     },
     currentChangeEvent({ row }) {
-      console.log("当前行" + row.partCode);
       if (row.partCode) {
         this.formItem = row;
         this.getList(row);

@@ -24,7 +24,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="form.serviceId" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.code" placeholder="受理单号" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
             <Input v-model="form.partCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
@@ -67,14 +67,26 @@
           </vxe-table-column>
           <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调拨出库单号"></vxe-table-column>
+          <vxe-table-column field="code" title="受理单号"></vxe-table-column>
           <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
           <vxe-table-column field="allotFinishDate" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
+          <!-- <vxe-table-column
             field="enterStoreId"
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>
+          ></vxe-table-column>-->
+          <vxe-table-column title="入库仓库">
+            <template v-slot="{ row,rowIndex }">
+              <select>
+                <option
+                  v-for="(item,index) in storeArray"
+                  :key="index"
+                  :value="item.value"
+                >{{item.label}}</option>
+              </select>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="enterDate" title="入库日期" width="100"></vxe-table-column>
           <vxe-table-column field="enterUname" title="操作人" width="100"></vxe-table-column>
         </vxe-table>
@@ -112,7 +124,7 @@
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
           <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="orderQty" title="数量"></vxe-table-column>
+          <vxe-table-column field="orderQty" title="出库数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
             field="trueEnterQty"
@@ -152,7 +164,7 @@ export default {
         startDate: "",
         endDate: "",
         isEnter: "",
-        serviceId: "",
+        code: "",
         partCode: "",
         partName: ""
       },
@@ -220,7 +232,7 @@ export default {
     search() {
       let page = this.pageList.page;
       let size = this.pageList.size;
-      //console.log(this.form, "this.form");
+      console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form)
         .then(res => {
           if (res.code === 0) {
