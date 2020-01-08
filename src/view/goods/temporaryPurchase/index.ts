@@ -309,6 +309,8 @@ export default class InterPurchase extends Vue {
     this.purchaseOrderTable.tbdata.unshift(this.PTrow);
     this.selectTableRow = this.PTrow;
     this.tableData = new Array();
+    this.deletePartArr = new Array();
+    this.tmpDeletePartArr = new Array();
   }
 
   // 保存/修改/提交用数据
@@ -481,7 +483,7 @@ export default class InterPurchase extends Vue {
         }
       },
       onCancel: () => {
-        this.$Message.info('取消删除');
+        // this.$Message.info('取消删除');
       },
     })
   }
@@ -513,6 +515,8 @@ export default class InterPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    this.deletePartArr = new Array();
+    this.tmpDeletePartArr = new Array();
     const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
       this.$Modal.confirm({
