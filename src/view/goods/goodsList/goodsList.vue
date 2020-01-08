@@ -236,7 +236,7 @@
                   <FormItem label="合计总金额：">
                     <el-input-number
                       class="w160"
-                      :disabled="isinput"
+                      :disabled="true"
                       readonly
                       v-model="formPlan.totalPrice"
                       :min="0"

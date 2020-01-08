@@ -4,9 +4,9 @@
       <div class="titler">
         <Row style="border: 1px #000000 solid">
           <Col span="12" class="pl10">
-            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">
-              {{ onelist.orgName }}
-            </h5>
+            <h5
+              style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
+            >{{ onelist.orgName }}</h5>
           </Col>
           <Col span="12" class="pl10">
             <p>调拨申请单:</p>
@@ -15,12 +15,17 @@
         </Row>
         <Row class="pt10 pd10" style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址: {{ onelist.orgAdd }}</span></p>
-            <p><span>电话: {{ onelist.orgTel }}</span></p>
+            <p>
+              <span>地址: {{ onelist.orgAdd }}</span>
+            </p>
+            <p>
+              <span>电话: {{ onelist.orgTel }}</span>
+            </p>
           </Col>
           <Col span="12" class="pl10">
             <p>
-              <span>订单日期:</span><span>{{ onelist.createTime }}</span>
+              <span>订单日期:</span>
+              <span>{{ onelist.createTime }}</span>
             </p>
             <p>
               <span>打印日期:</span>
@@ -31,26 +36,32 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>调出方:</span> <span>{{ onelist.guestName }}</span>
+              <span>调出方:</span>
+              <span>{{ onelist.guestName }}</span>
             </p>
             <p>
-              <span>地址:</span> <span>{{ onelist.guestAdd }}</span>
+              <span>地址:</span>
+              <span>{{ onelist.guestAdd }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>联系人:</span> <span>{{ onelist.guestPeo }}</span>
+              <span>联系人:</span>
+              <span>{{ onelist.guestPeo }}</span>
             </p>
             <p>
-              <span>入库仓库:</span><span>{{ onelist.storeName }}</span>
+              <span>入库仓库:</span>
+              <span>{{ onelist.storeName }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
-              <span>联系电话:</span><span>{{ onelist.guestTel }}</span>
+              <span>联系电话:</span>
+              <span>{{ onelist.guestTel }}</span>
             </p>
             <p>
-              <span>备注:</span><span>{{ onelist.remark }}</span>
+              <span>备注:</span>
+              <span>{{ onelist.remark }}</span>
             </p>
           </Col>
         </Row>
@@ -65,19 +76,23 @@
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
-          <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
+          <!-- <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
             <span>{{ onelist.totalAmt | toChies }}</span>
-          </Col>
-          <Col class="pl10" span="12">
+          </Col>-->
+          <Col id="paddingLeft" class="pl10" span="24">
             <span>合计:</span>
-            <span>{{ onelist.totalAmt }}</span>
+            <span>{{ onelist.totalNum }}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{ onelist.orderMan }}</span>
+          </Col>
+          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+            <span>提交人:</span>
+            <span>{{ onelist.commitUname }}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
@@ -100,140 +115,143 @@
 </template>
 
 <script>
-  import * as api from "_api/procurement/plan";
-  import * as tools from "../../../../../utils/tools";
-  import { pointAdd } from '../../../../../api/AlotManagement/transferringOrder';
+import * as api from "_api/procurement/plan";
+import * as tools from "../../../../../utils/tools";
+import { pointAdd } from "../../../../../api/AlotManagement/transferringOrder";
 
-  export default {
-    name: "PrintShow",
-    props: ['orderId'],
-    data() {
-      return {
-        date: tools.transTime(new Date()),
-        printShow: false, //模态框隐藏
-        columns2: [
-          {
-            title: "序号",
-            type: "index",
-            align: "center"
-          },
-          {
-            title: "配件编码",
-            key: "partCode",
-            align: "center"
-          },
-          {
-            title: "配件名称",
-            key: "partName",
-            align: "center"
-          },
-          {
-            title: "品牌",
-            key: "partBrand",
-            align: "center"
-          },
-          {
-            title: "品牌车型",
-            // key: "carBrandName + carModelName",
-            align: "center",
-            render: (h,params) => {
-              let PinPai = params.row.carBrandName
-              let chexing = params.row.carModelName
-              let He = `${PinPai} ${chexing}`
-              return h('span',He)
-            }
-          },
-          {
-            title: "规格",
-            key: "spec",
-            align: "center"
-          },
-          {
-            title: "单位",
-            key: "unit",
-            align: "center"
-          },
-          {
-            title: "数量",
-            key: "applyQty",
-            align: "center"
-          },
-          {
-            title: "备注",
-            key: "remark",
-            align: "center"
+export default {
+  name: "PrintShow",
+  props: ["orderId"],
+  data() {
+    return {
+      date: tools.transTime(new Date()),
+      printShow: false, //模态框隐藏
+      columns2: [
+        {
+          title: "序号",
+          type: "index",
+          align: "center"
+        },
+        {
+          title: "配件编码",
+          key: "partCode",
+          align: "center"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          align: "center"
+        },
+        {
+          title: "品牌",
+          key: "partBrand",
+          align: "center"
+        },
+        {
+          title: "品牌车型",
+          // key: "carBrandName + carModelName",
+          align: "center",
+          render: (h, params) => {
+            let PinPai = params.row.carBrandName;
+            let chexing = params.row.carModelName;
+            let He = `${PinPai} ${chexing}`;
+            return h("span", He);
           }
-        ],
-        onelist: {}, //打印数据
-        details: [],
-        num: "12323.09",
-        num2: 78723
-      };
-    },
-    methods: {
-      //打印
-      print() {
-        // 1.设置要打印的区域 div的className
-        var newstr = document.getElementById("printBox").innerHTML;
-        // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
-        var oldstr = document.body.innerHTML;
-        // 3. 复制给body，并执行window.print打印功能
-        document.body.innerHTML = newstr;
-        window.print();
-        // 重新加载页面，以刷新数据
-        window.location.reload();
-        document.body.innerHTML = oldstr;
-      },
-      async openModal() {
-        if (this.orderId) {
-          let res = await pointAdd({id:this.orderId});
-          if (res.code === 0) {
-            this.printShow = true;
-            this.onelist = res.data;
-            // this.onelist.printDate = tools.transTime(new Date());
-            this.details = res.data.detailVOS;
-          }
-        } else {
-          this.$message.error("至少选择一条信息");
+        },
+        {
+          title: "规格",
+          key: "spec",
+          align: "center"
+        },
+        {
+          title: "单位",
+          key: "unit",
+          align: "center"
+        },
+        {
+          title: "数量",
+          key: "applyQty",
+          align: "center"
+        },
+        {
+          title: "备注",
+          key: "remark",
+          align: "center"
         }
-      },
-      //取消
-      printShowfalse(){
-        this.printShow = false
+      ],
+      onelist: {}, //打印数据
+      details: [],
+      num: "12323.09",
+      num2: 78723
+    };
+  },
+  methods: {
+    //打印
+    print() {
+      // 1.设置要打印的区域 div的className
+      var newstr = document.getElementById("printBox").innerHTML;
+      // 2. 还原：将旧的页面储存起来，当打印完成后返给给页面。
+      var oldstr = document.body.innerHTML;
+      // 3. 复制给body，并执行window.print打印功能
+      document.body.innerHTML = newstr;
+      window.print();
+      // 重新加载页面，以刷新数据
+      window.location.reload();
+      document.body.innerHTML = oldstr;
+    },
+    async openModal() {
+      if (this.orderId) {
+        let res = await pointAdd({ id: this.orderId });
+        if (res.code === 0) {
+          this.printShow = true;
+          this.onelist = res.data;
+          // this.onelist.printDate = tools.transTime(new Date());
+          this.details = res.data.detailVOS;
+        }
+      } else {
+        this.$message.error("至少选择一条信息");
       }
+    },
+    //取消
+    printShowfalse() {
+      this.printShow = false;
     }
-  };
+  }
+};
 </script>
 
 <style scoped lang="less">
-  .vertical-center-modal {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.vertical-center-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .ivu-modal {
-      top: 0;
-    }
+  .ivu-modal {
+    top: 0;
   }
-  #printBox {
-    width: 1000px;
-    margin: 0 auto;
-    overflow: hidden;
-    overflow-y: scroll;
-    .titler {
-      padding-left: 10px;
-    }
+}
+#printBox {
+  width: 1000px;
+  margin: 0 auto;
+  overflow: hidden;
+  overflow-y: scroll;
+  .titler {
+    padding-left: 10px;
   }
-  #printBox::-webkit-scrollbar {
-    display: none;
-  }
-  #printBox {
-    -ms-overflow-style: none;
-  }
-  #printBox::-webkit-scrollbar {
-    width: 0 !important;
-  }
-  #printBox {
-    overflow: -moz-scrollbars-none;
-  }
+}
+#printBox::-webkit-scrollbar {
+  display: none;
+}
+#printBox {
+  -ms-overflow-style: none;
+}
+#printBox::-webkit-scrollbar {
+  width: 0 !important;
+}
+#printBox {
+  overflow: -moz-scrollbars-none;
+}
+#paddingLeft {
+  margin-left: 460px;
+}
 </style>

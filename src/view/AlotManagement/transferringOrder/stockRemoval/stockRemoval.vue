@@ -29,12 +29,23 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'save'" type="default" class="mr10" @click="baocun1" :disabled="buttonDisable == 2">
+              <Button
+                v-has="'save'"
+                type="default"
+                class="mr10"
+                @click="baocun1"
+                :disabled="buttonDisable == 2"
+              >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" v-has="'submit'" :disabled="buttonDisable == 1 || buttonDisable == 2" @click="tijiao1">
+              <Button
+                class="mr10"
+                v-has="'submit'"
+                :disabled="buttonDisable == 1 || buttonDisable == 2"
+                @click="tijiao1"
+              >
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -49,7 +60,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="buttonDisable == 2">
+              <Button
+                v-has="'cancellation'"
+                class="mr10"
+                @click="zuofei1"
+                :disabled="buttonDisable == 2"
+              >
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
@@ -229,7 +245,7 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="hasAcceptQty"
-                    :edit-render="{name:'input'}"
+                    :edit-render="{name: 'input',attrs: {disabled: false}}"
                     width="100"
                     title="受理数量"
                   ></vxe-table-column>
@@ -237,7 +253,6 @@
                   <vxe-table-column
                     field="stockOutQty"
                     title="缺货数量"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
@@ -352,7 +367,7 @@ export default {
     };
     return {
       validRules: {
-        stockOutQty: [{ required: true, validator: changeNumber }]
+        hasAcceptQty: [{ required: true, validator: changeNumber }]
       },
       checkboxArr: [], // checkbox选中
       idsId: [],
@@ -787,6 +802,7 @@ export default {
     xinzeng() {
       this.flagValue = 0;
       this.flagValue1 = 0;
+      this.buttonDisable = 0;
       // this.Leftcurrentrow = {}
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
