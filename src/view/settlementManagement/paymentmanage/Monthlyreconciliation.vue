@@ -530,23 +530,27 @@ export default {
       this.Initialization();
     },
     // 对账单弹框出现加载数据
-    hander() {
-      this.handervis = false
-      this.flag = false;
-      this.info = false;
-      this.store = this.parameter.orgId;
-      this.model1 = this.parameter.orgId;
-      this.Rebateid = "";
-      this.BadDebtid = "";
-      this.remark = "";
-      this.totalpayment = 0;
-      this.paymentBaddebt = 0;
-      this.paymentRebate = 0;
-      this.totalcollect = 0;
-      this.collectBaddebt = 0;
-      this.collectRebate = 0;
-      this.storeAccount(this.parameter.orgId);
-      this.Initialization();
+    hander(type) {
+      if(type){
+        this.handervis = false
+        this.flag = false;
+        this.info = false;
+        this.store = this.parameter.orgId;
+        this.model1 = this.parameter.orgId;
+        this.Rebateid = "";
+        this.BadDebtid = "";
+        this.remark = "";
+        this.totalpayment = 0;
+        this.paymentBaddebt = 0;
+        this.paymentRebate = 0;
+        this.totalcollect = 0;
+        this.collectBaddebt = 0;
+        this.collectRebate = 0;
+        this.collectlist = []
+        this.paymentlist = []
+        this.storeAccount(this.parameter.orgId);
+        this.Initialization();
+      }
     },
     // 获取数据
     Initialization() {
