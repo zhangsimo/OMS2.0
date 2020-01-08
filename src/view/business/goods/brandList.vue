@@ -735,7 +735,7 @@ export default {
         },
         {
           title: "品牌",
-          key: "brand",
+          key: "partBrand",
           align: "center"
         },
         {
