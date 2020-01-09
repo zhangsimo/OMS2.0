@@ -202,13 +202,18 @@
         this.$refs.selectSupplier.init()
       },
       openModal() {
+        // console.log('父组件数据',this.$parent.TopTableData)
         this.showNew = true;
         this.tableDataBottom=this.$parent.BottomTableData
          let company=''
+        let guestId=''
           for(let i in this.$parent.TopTableData){
             company=this.$parent.TopTableData[i].company
+            guestId=this.$parent.TopTableData[i].guestId
+
           }
         this.formPlan.supplyName=company
+        this.formPlan.guestId=guestId
         // console.log('哈哈哈哈哈',this.$parent)
       },
       getSupplierName(v){
@@ -232,29 +237,11 @@
         let res = await getDigitalDictionary(data)
         if(res.code == 0){
           this.settleTypeList = res.data
-          // console.log('6666666666666',this.settleTypeList)
         }
 
       },
        //生成采购订单
       addPurchaseOrder(){
-        // let data={}
-        // data = this.formPlan
-        // data.id = this.data.id
-        // data.guestId=this.formPlan.guestId
-        // data.details= this.data.detailVOList
-        // newPurchaseOrder(data).then(res=>{
-        //   // console.log('88888888888',res)
-        //   if(res.code==0){
-        //     this.$Message.success('新增采购订单成功');
-        //     this.formPlan.supplyName=""
-        //     this.formPlan.billTypeId=""
-        //     this.formPlan.remark=""
-        //     this.formPlan.settleTypeId=""
-        //     this.showNew = false;
-        //     this.$parent.getTopList();
-        //   }
-        // })
         this.$refs.formPlan.validate(async (valid) => {
           if (valid) {
             let data={}
@@ -263,7 +250,6 @@
             data.guestId=this.formPlan.guestId
             data.details= this.data.detailVOList
             newPurchaseOrder(data).then(res=>{
-              // console.log('88888888888',res)
               if(res.code==0){
                 this.$Message.success('新增采购订单成功');
                 this.formPlan.supplyName=""

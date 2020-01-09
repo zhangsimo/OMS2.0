@@ -59,19 +59,7 @@ export default {
         }
       }
     };
-    // let money = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("最多保留4位小数"));
-    //   } else {
-    //     const reg = /^([1-9]\d{0,15}|0)(\.\d{1,4})?$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("最多保留4位小数"));
-    //
-    //     }
-    //   }
-    // };
+
     let money = (rule, value, callback) => {
       if (!value && value != "0") {
         callback(new Error("最多保留2位小数"));
