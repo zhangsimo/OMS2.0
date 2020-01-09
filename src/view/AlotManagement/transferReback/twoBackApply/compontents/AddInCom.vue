@@ -55,12 +55,12 @@
       <!--上表格-->
       <div class="topTableDate">
         <vxe-table
+          auto-resize
           border
           resizable
           ref="xtale"
           size="mini"
           height="200"
-          auto-resize
           align="center"
           :data="tabList"
           highlight-current-row
@@ -68,13 +68,13 @@
           @select-change="selectTabelData"
           @current-change="selectTabelData"
         >
-          <vxe-table-column type="checkbox" title="选择" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+          <vxe-table-column type="checkbox" title="选择" width="100"></vxe-table-column>
+          <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="serviceId" title="入库单号" width="100"></vxe-table-column>
-          <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="code" title="申请单号" width="100"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
+          <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
+          <vxe-table-column field="code" title="申请单号"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -154,7 +154,6 @@ export default {
     tbdata: {
       handler(newVal) {
         this.tabList = newVal
-        console.log(newVal, "newVal ==>157");
       },
       deep: true
     },

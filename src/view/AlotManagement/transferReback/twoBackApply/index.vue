@@ -834,6 +834,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      console.log(row, "row =>837");
       if (row.createUname == undefined || row.createUname == "") {
       } else {
         if (this.flag == 1) {
