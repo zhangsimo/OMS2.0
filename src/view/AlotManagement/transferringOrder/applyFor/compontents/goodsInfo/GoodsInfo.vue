@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="收货信息" width="1000">
+  <Modal v-model="showInfo" title="收货信息" width="1030">
     <div class="goodsInfo">
       <div class="header">
         <Form ref="formOne" :model="formDateTop" inline>
