@@ -85,6 +85,7 @@
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
                         <DatePicker
                           type="datetime"
+                          format="yyyy-MM-dd HH:mm:ss"
                           style="width: 160px"
                           placeholder="请选择调拨申请日期"
                           v-model="formPlan.orderDate"
@@ -827,7 +828,6 @@
               this.presentrowMsg = row.status.value
               // console.log(this.presentrowMsg)
               this.rowId = row.id
-
               this.buttonDisable = false
               this.getRightlist()
             }

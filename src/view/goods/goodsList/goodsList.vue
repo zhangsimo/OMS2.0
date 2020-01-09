@@ -74,7 +74,7 @@
           <div class="db">
             <Button
               class="mr10"
-              :disabled="mainId.length <= 0 || selectPlanOrderItem.billStatusId == 0 || !selectPlanOrderItem.processInstanceId"
+              :disabled="hideSp"
               @click="showStatus"
               v-has="'check'"
             >
