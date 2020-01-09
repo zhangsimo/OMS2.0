@@ -308,23 +308,23 @@ export default class GoodsInfo extends Vue {
       label: "月结"
     }
   ];
-  private isRequired: boolean = true;
+  private isRequired: boolean = false;
   private changeDeliveryType() {
     if (!["0", "1"].includes(this.formDateRight.deliveryType)) {
-      this.isRequired = true;
-    } else {
       this.isRequired = false;
+    } else {
+      this.isRequired = true;
     }
   }
 
   private selectLogis(val: any) {
     console.log(val);
-    this.formDateRight.logisticsComp = val.label || "";
-    if (this.formDateRight.deliveryLogistics != "") {
-      this.logisRequired = false;
-    } else {
-      this.logisRequired = true;
-    }
+    // this.formDateRight.logisticsComp = val.label || "";
+    // if (this.formDateRight.deliveryLogistics != "") {
+    //   this.logisRequired = false;
+    // } else {
+    //   this.logisRequired = true;
+    // }
   }
 
   //表单数据 右 收货信息与发货信息
@@ -387,8 +387,13 @@ export default class GoodsInfo extends Vue {
   //快递下拉框
   private distribution(val){
     this.formDateRight.deliveryType = val
-    // console.log(this.formDateRight.deliveryType)
     this.inlogistics()
+    console.log(val)
+    if(val == 2 || val == 3){
+      this.isRequired = true;
+    }else {
+      this.isRequired = false;
+    }
   }
   //保存
   private saveInfo() {
@@ -397,14 +402,14 @@ export default class GoodsInfo extends Vue {
     ref.validate(async (valid: any) => {
       let logisc: boolean = false;
       if (!this.isRequired) {
-        logisc = true;
+        logisc = false;
+        this.logisRequired = false;
       } else {
-        if (!!this.formDateRight.deliveryLogistics) {
-          logisc = true;
-          this.logisRequired = false;
-        } else {
+        // this.logisRequired = true;
+        if(!this.formDateRight.deliveryLogistics){
           this.logisRequired = true;
-          logisc = false;
+        }else {
+          this.logisRequired = false;
         }
       }
       if (valid && logisc) {
@@ -434,29 +439,31 @@ export default class GoodsInfo extends Vue {
     let ref: any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = row
+    // this.formDateRight = row
     this.formDateRight.businessNum = this.row.serviceId;
     // this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
     // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     // this.formDateRight.settleType = this.formDateRight.settleType + "";
-    // if (row.logisticsRecord) {
-    //   this.formDateRight.id = row.logisticsRecord.id;
-    //   this.formDateRight = { ...row.logisticsRecord };
-    //   this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-    //   this.formDateRight.settleType = this.formDateRight.settleType + "";
-    // } else {
-    //   this.formDateRight.logisticsId = row.id;
-    //   this.formDateRight.receiveComp = row.receiveCompName;
-    //   this.formDateRight.streetAddress = row.streetAddress;
-    //   this.formDateRight.receiver = row.receiveMan;
-    //   this.formDateRight.receiverMobile = row.receiveManTel;
-    //   this.formDateRight.provinceId = row.provinceId;
-    //   this.formDateRight.cityId = row.cityId;
-    //   this.formDateRight.countyId = row.countyId;
-    //   this.formDateRight.guestId = row.guestId;
-    //   this.formDateRight.receiveAddress = row.address;
-    // }
-    // this.changeDeliveryType();
+    if (row.logisticsRecordVO) {
+      this.formDateRight.id = row.logisticsRecordVO.id;
+      this.formDateRight = { ...row.logisticsRecordVO };
+      this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+      this.formDateRight.settleType = this.formDateRight.settleType + "";
+      // this.formDateRight = row.logisticsRecordVO
+    } else {
+      this.formDateRight = row
+      this.formDateRight.logisticsId = row.id;
+      // this.formDateRight.receiveComp = row.receiveCompName;
+      // this.formDateRight.streetAddress = row.streetAddress;
+      // this.formDateRight.receiver = row.receiveMan;
+      // this.formDateRight.receiverMobile = row.receiveManTel;
+      // this.formDateRight.provinceId = row.provinceId;
+      // this.formDateRight.cityId = row.cityId;
+      // this.formDateRight.countyId = row.countyId;
+      // this.formDateRight.guestId = row.guestId;
+      // this.formDateRight.receiveAddress = row.address;
+    }
+    this.changeDeliveryType();
   }
   //传入保存id
   private saveId(row) {

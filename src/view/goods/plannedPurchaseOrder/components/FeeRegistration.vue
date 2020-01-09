@@ -409,7 +409,7 @@ export default class FeeRegistration extends Vue {
       return el;
     });
     if(row.id) {
-       let res:any = await api.delFee(row.id);
+      let res:any = await api.delFee(row.id);
     }
     this.tableInfoData.splice(index, 1);
   }

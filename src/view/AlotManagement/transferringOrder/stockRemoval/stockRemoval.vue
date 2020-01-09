@@ -362,6 +362,7 @@ export default {
       }
     };
     return {
+      flag1: false,
       validRules: {
         hasAcceptQty: [{ required: true, validator: changeNumber }]
       },
@@ -756,10 +757,7 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      if (
-        this.Leftcurrentrow.guestName == "" ||
-        this.Leftcurrentrow.guestName == null
-      ) {
+      if (this.flag1 == true) {
         params.id = "";
       }
       try {
@@ -772,6 +770,7 @@ export default {
               this.getList();
               this.$Message.success("保存成功");
               this.flag = 0;
+              this.flag1 = false;
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -793,6 +792,8 @@ export default {
       }
     },
     xinzeng() {
+      this.flag1 = true;
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
@@ -869,10 +870,10 @@ export default {
         });
     },
     zuofei1() {
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
         return;
@@ -1008,7 +1009,7 @@ export default {
     async selectTabelData(row) {
       this.flagValue = 0;
       this.flagValue1 = 0;
-      // console.log(row, "row ==>862");
+      console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1085,7 +1086,7 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        // console.log(this.form.guestName, "this.form.guestName");
+        console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }

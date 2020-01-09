@@ -31,7 +31,7 @@
           <div class="data-value flex-center">
             <template v-for="(item,i) in statusData">
               <div class="status-box flex-center" :key="i">
-                <span class="date">{{item.date | date}}</span>
+                <span class="date">{{item.date}}</span>
               </div>
             </template>
           </div>
@@ -63,7 +63,7 @@
         },
         data(){
             return {
-                statusData:[{name:'提交',status:'已提交'},{name:'产品总监审批',status:'已审批'}],//数据
+                statusData:[{}],//数据
                 canShow:false,//判断弹窗是否显示
             }
         },
@@ -149,7 +149,7 @@
 .data-container {
   padding: 20px 0;
   .modal-data {
-    // width: auto;
+    min-width: 100%;
     height: 34px;
     margin-bottom: 20px;
     line-height: 34px;

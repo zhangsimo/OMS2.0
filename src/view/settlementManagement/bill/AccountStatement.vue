@@ -80,7 +80,7 @@
           highlight-row
           ref="accountStatement"
         ></Table>
-        <Page :total="pagetotal" show-elevator class="mt10 tr" @on-change="pageCode" show-total />
+        <Page :total="pagetotal" show-elevator class="mt10 tr" @on-change="pageCode" show-total size="small" />
         <div class="flex mt20">
           <div class="db" style="flex:1;">
             <button class="ivu-btn ivu-btn-default" type="button">收/付款单记录</button>
@@ -101,6 +101,7 @@
                 :data="data3"
                 max-height="400"
                 show-summary
+                :summary-method="handleSummary"
                 ref="collectBill"
               ></Table>
             </TabPane>
@@ -111,6 +112,7 @@
                 :data="data4"
                 max-height="400"
                 show-summary
+                :summary-method="handleSummary"
                 ref="payBill"
               ></Table>
             </TabPane>
@@ -410,7 +412,7 @@ export default {
       columns1: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           width: 40,
           className: "tc"
         },
@@ -576,7 +578,7 @@ export default {
       columns3: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           width: 40,
           className: "tc"
         },
@@ -629,7 +631,7 @@ export default {
       columns4: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           width: 40,
           className: "tc"
         },
@@ -726,6 +728,45 @@ export default {
     }
   },
   methods: {
+     // 总表格合计方式
+    handleSummary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index >4) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     // 快速查询日期
     quickDate(data) {
       this.value = data;
@@ -740,7 +781,7 @@ export default {
         // console.log(res);
         if (res.data.one.length !== 0) {
           res.data.one.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
           });
           this.data3 = res.data.one;
         } else {
@@ -748,7 +789,7 @@ export default {
         }
         if (res.data.two.length !== 0) {
           res.data.two.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
           });
           this.data4 = res.data.two;
         } else {
@@ -761,7 +802,7 @@ export default {
       Record(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
             item.sortName = item.sort.name;
           });
           this.data2 = res.data;
@@ -774,7 +815,7 @@ export default {
         this.pagetotal = res.data.totalElements;
         if (res.data.content.length !== 0) {
           res.data.content.map((item, index) => {
-            item.num = index + 1;
+            item.index = index + 1;
             item.paymentTypeName = item.paymentType.name;
             item.billingTypeName = item.billingType.name;
             item.statementStatusName = item.statementStatus.name;
