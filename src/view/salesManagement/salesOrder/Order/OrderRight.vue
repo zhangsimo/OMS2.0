@@ -867,6 +867,7 @@ export default {
     },
     //获取活动内的数据
     async activiyList(val) {
+      // console.log('val',val)
       let data = {};
       val.isMarkActivity = 1;
       data = this.formPlan;
