@@ -793,14 +793,13 @@ export default {
         });
     },
     searchPro(params, size, page) {
-      console.log(params, "huoqucanshu");
-      chengping({  ...params }, size, page)
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.tableData1 = res.data;
-          }
-        })
+      chengping({ ...params }, size, page).then(res => {
+        // 导入成品, 并把成品覆盖掉当前配件组装信息list
+        if (res.code == 0) {
+          this.tableData1 = res.data.content;
+          console.log(res.data, "res.datares.data =>801");
+        }
+      });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },

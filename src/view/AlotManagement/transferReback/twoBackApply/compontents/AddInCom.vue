@@ -59,8 +59,9 @@
           resizable
           ref="xtale"
           size="mini"
-          :height="200"
+          height="200"
           auto-resize
+          align="center"
           :data="tabList"
           highlight-current-row
           highlight-hover-row
@@ -95,7 +96,7 @@
       </Row>
       <!--        下表格-->
       <div class="bottomTableDate">
-        <vxe-table border resizable auto-resize height="150" :data="currentData">
+        <vxe-table auto-resize border resizable height="150" :data="currentData">
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
@@ -152,7 +153,8 @@ export default {
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal;
+        this.tabList = newVal
+        console.log(newVal, "newVal ==>157");
       },
       deep: true
     },
