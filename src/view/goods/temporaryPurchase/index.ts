@@ -42,6 +42,8 @@ export default class InterPurchase extends Vue {
   private split1: number = 0.2;
 
   private isInput: boolean = true;
+
+  private hideSp: boolean = true;
   //配件数据
   private accData: Array<Option> = [];
   //左侧表格高度
@@ -563,6 +565,11 @@ export default class InterPurchase extends Vue {
           this.isInput = false;
         } else {
           this.isInput = true;
+        }
+        if (['草稿', '已作废'].includes(v.billStatusId.name)) {
+          this.hideSp = true;
+        } else {
+          this.hideSp = false;
         }
         if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
           this.adjustButtonDisable = false;
