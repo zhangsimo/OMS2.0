@@ -195,7 +195,7 @@
         <vxe-table-column
           field="thisNoAccountAmt"
           title="本次不对账金额"
-          :edit-render="{name: 'input'}"
+          :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
           align="center"
         ></vxe-table-column>
         <vxe-table-column title="本次对账金额" align="center">
@@ -220,11 +220,7 @@
       ></Table>-->
       <div slot="footer">
         <Button class="mr10" type="primary" @click="noReconciliation">确认</Button>
-        <Button
-          class="mr10"
-          type="default"
-          @click="Reconciliation = false"
-        >取消</Button>
+        <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
       </div>
     </Modal>
   </div>
@@ -249,10 +245,16 @@ export default {
   },
   data() {
     const roleValid = (rule, value, callback, { row }) => {
-      if (value > row.amount - row.accountAmt) {
-        callback(new Error("配件本次不对账金额不能大于金额减掉前期已对账金额"));
+      if (value >= 0) {
+        if (value > row.amount - row.accountAmt) {
+          callback(
+            new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+          );
+        } else {
+          callback();
+        }
       } else {
-        callback();
+        callback(new Error('不能小于0'))
       }
     };
     const diffeReason = (rule, value, callback, { row }) => {
@@ -268,7 +270,7 @@ export default {
     };
     return {
       validRules: {
-        thisNoAccountAmt: [{ validator: roleValid }],
+        thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
         diffeReason: [{ validator: diffeReason }]
       },
       arrId: [],
@@ -405,7 +407,10 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
-                    this.store = params.row.orgName;
+                    const store = this.Branchstore.filter(
+                      item => item.value === this.model1
+                    );
+                    this.store = store[0].label;
                     this.bill = params.row.serviceId;
                     this.business = params.row.serviceTypeName;
                     this.thiscompanyInfo = params.row.guestName;
@@ -601,8 +606,26 @@ export default {
     }
   },
   methods: {
-    countAmount(row){
-      return this.$utils.toNumber(row.amount)  - this.$utils.toNumber(row.accountAmt)  - this.$utils.toNumber(row.thisNoAccountAmt) 
+    // 在值发生改变时更新表尾合计
+    updateFooterEvent(params) {
+      let xTable = this.$refs.xTable;
+      xTable.updateFooter();
+    },
+    countAmount(row) {
+      return (
+        this.$utils.toNumber(row.amount) -
+        this.$utils.toNumber(row.accountAmt) -
+        this.$utils.toNumber(row.thisNoAccountAmt)
+      );
+    },
+    // 计算尾部总和
+    countAllAmount(data) {
+      let count = 0
+      data.forEach(row => {
+        count += +this.countAmount(row)
+      })
+      count = count.toFixed(2)
+      return count
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {
@@ -618,11 +641,13 @@ export default {
               "amount",
               "accountAmt",
               "noAccountAmt",
-              "thisNoAccountAmt",
-              "thisAccountAmt"
+              "thisNoAccountAmt"
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
+          }
+          if (columnIndex === 11) {
+            return ` ${this.countAllAmount(data)} `
           }
           return null;
         })
@@ -992,7 +1017,7 @@ export default {
           {
             tenantId: this.$store.state.user.userData.tenantId,
             orgId: this.model1,
-            orgName: "null",
+            orgName: this.store,
             guestId: this.companyInfo,
             serviceId: "XSCDS001-20191000071",
             accountReceivable: this.totalcollect,

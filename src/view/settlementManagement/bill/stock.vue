@@ -168,7 +168,10 @@ export default {
         {
           title: "金额",
           key: "outQty",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.outQty).toFixed(2))
+          }
         },
         {
           title: "单据状态",
@@ -222,22 +225,34 @@ export default {
         {
           title: "不含税单价",
           key: "noTaxPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noTaxPrice).toFixed(2))
+          }
         },
         {
           title: "不含税金额",
           key: "noTaxAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noTaxAmt).toFixed(2))
+          }
         },
         {
           title: "含税单价",
           key: "taxPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.taxPrice).toFixed(2))
+          }
         },
         {
           title: "含税金额",
           key: "taxAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.taxAmt).toFixed(2))
+          }
         },
         {
           title: "数量",
@@ -247,12 +262,18 @@ export default {
         {
           title: "销售单价",
           key: "sellPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.sellPrice).toFixed(2))
+          }
         },
         {
           title: "销售金额",
           key: "sellAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.sellAmt).toFixed(2))
+          }
         }
       ],
       data: [],
@@ -310,7 +331,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -323,8 +344,9 @@ export default {
       return sums;
       //
     },
-     // 配件明细合计
-    summary({ columns, data }){
+    // 配件表格合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -336,7 +358,22 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 6) {
+        if (index > 6 && index !==11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else if(index === 11){
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -359,6 +396,7 @@ export default {
         }
       });
       return sums;
+      //
     },
     //查询
     query() {

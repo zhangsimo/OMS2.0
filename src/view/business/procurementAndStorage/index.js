@@ -30,19 +30,6 @@ export default {
     SelectSupplier
   },
   data() {
-    // let changeNumber = (rule, value, callback) => {
-    //   if (!value && value != '0') {
-    //     callback(new Error("请输入大于或等于0的正整数"));
-    //   } else {
-    //     const reg = /^([0]|[1-9][0-9]*)$/
-    //     if (reg.test(value)) {
-    //       callback();
-    //     } else {
-    //       callback(new Error("请输入大于或等于0的正整数"));
-    //
-    //     }
-    //   }
-    // };
     let changeNumber = (rule, value, callback, { rules, row, column, rowIndex, columnIndex }) => {
       if (!value && value != "0") {
         callback(new Error("请输入大于0的正整数"));
@@ -438,6 +425,7 @@ export default {
     },
     //获取采购订单数据
     async getPlanOrder(val) {
+      console.log('采购订单数据',val)
       if (val) {
         this.formPlan.pchsOrderId = val.id
         try {

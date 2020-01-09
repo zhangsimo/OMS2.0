@@ -80,6 +80,7 @@
               class="mt10"
               ref="receivables"
               show-summary
+              :summary-method="summary"
               max-height="400"
             ></Table>
           </Tab-pane>
@@ -91,6 +92,7 @@
               class="mt10"
               ref="payment"
               show-summary
+              :summary-method="summary"
               max-height="400"
             ></Table>
           </Tab-pane>
@@ -190,17 +192,26 @@ export default {
         {
           title: "收付款金额",
           key: "paymoney",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.paymoney).toFixed(2))
+          }
         },
         {
           title: "已冲减/已审核",
           key: "ycAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.ycAmt).toFixed(2))
+          }
         },
         {
           title: "未冲减/未审核",
           key: "wcAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.wcAmt).toFixed(2))
+          }
         },
         {
           title: "收款目的",
@@ -269,7 +280,10 @@ export default {
         {
           title: "收款金额",
           key: "checkAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.checkAmt).toFixed(2))
+          }
         },
         {
           title: "审核状态",
@@ -323,7 +337,10 @@ export default {
         {
           title: "付款金额",
           key: "checkAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.checkAmt).toFixed(2))
+          }
         },
         {
           title: "审核状态",
@@ -396,7 +413,46 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 表格合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 5) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
             };
           }
         } else {

@@ -161,7 +161,10 @@ export default {
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderAmt).toFixed(2))
+          }
         },
         {
           title: "单据状态",
@@ -215,22 +218,34 @@ export default {
         {
           title: "不含税单价",
           key: "noTaxPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noTaxPrice).toFixed(2))
+          }
         },
         {
           title: "不含税金额",
           key: "noTaxAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noTaxAmt).toFixed(2))
+          }
         },
         {
           title: "含税单价",
           key: "taxPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.taxPrice).toFixed(2))
+          }
         },
         {
           title: "含税金额",
           key: "taxAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.taxAmt).toFixed(2))
+          }
         },
         {
           title: "数量",
@@ -240,12 +255,18 @@ export default {
         {
           title: "销售单价",
           key: "orderPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderPrice).toFixed(2))
+          }
         },
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderAmt).toFixed(2))
+          }
         }
       ],
       data: [],
@@ -303,7 +324,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -330,7 +351,22 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index >6) {
+        if (index > 6 && index !==11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else if(index === 11){
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -381,7 +417,7 @@ export default {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
-            item.billstate = "已审";
+            item.settleStatus = item.settleStatus ? item.settleStatus.value ? '已出库':'未出库':'' 
             item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
             this.data = res.data;
           });

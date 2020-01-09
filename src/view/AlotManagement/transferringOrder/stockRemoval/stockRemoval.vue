@@ -738,7 +738,6 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      console.log(params, "740==>");
       if (params.xinzeng) {
         delete params.status;
       }
@@ -758,7 +757,6 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      console.log();
       if (this.flag1 == true) {
         params.id = "";
       }

@@ -127,7 +127,7 @@
           <vxe-table-column field="hasOutQty" title="出库数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
-            field="trueEnterQty"
+            field="hasInQty"
             title="入库数量"
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>

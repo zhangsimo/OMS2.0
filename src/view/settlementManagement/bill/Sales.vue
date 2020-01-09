@@ -137,7 +137,10 @@ export default {
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderAmt).toFixed(2))
+          }
         },
         {
           title: "备注",
@@ -191,12 +194,18 @@ export default {
         {
           title: "单价",
           key: "orderPrice",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderPrice).toFixed(2))
+          }
         },
         {
           title: "金额",
           key: "orderAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.orderAmt).toFixed(2))
+          }
         }
       ],
       data:[],
@@ -232,8 +241,9 @@ export default {
     dateChange(data){
       this.value = data
     },
-    // 配件明细合计
-    summary({ columns, data }){
+    // 配件表格合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
@@ -245,7 +255,22 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index >= 6) {
+        if (index > 6 && index !==11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else if(index === 11){
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -268,6 +293,7 @@ export default {
         }
       });
       return sums;
+      //
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {
@@ -295,7 +321,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
