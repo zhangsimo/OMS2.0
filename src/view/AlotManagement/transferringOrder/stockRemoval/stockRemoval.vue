@@ -756,6 +756,7 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      console.log();
       if (
         this.Leftcurrentrow.guestName == "" ||
         this.Leftcurrentrow.guestName == null
@@ -793,6 +794,7 @@ export default {
       }
     },
     xinzeng() {
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
@@ -869,10 +871,10 @@ export default {
         });
     },
     zuofei1() {
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
         return;
@@ -1059,6 +1061,7 @@ export default {
         // this.tuneOut = false
         console.log(row.code);
       }
+      this.Leftcurrentrow.id = "";
     },
     //打开添加配件模态框
     addMountings() {

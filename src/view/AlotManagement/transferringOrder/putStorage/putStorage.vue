@@ -255,6 +255,7 @@
 </template>
 
 <script>
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
@@ -263,7 +264,6 @@ import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
 
 import {
   getList1,
@@ -590,13 +590,13 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.info("请先选择加工单");
+      //     return;
+      //   }
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -690,12 +690,12 @@ export default {
         this.$Message.info("请先保存新增入库单！");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态加工单能进行作废操作");
+        this.$Message.info("只有草稿状态调拨入库单能进行作废操作");
         return;
       }
       const params = {
