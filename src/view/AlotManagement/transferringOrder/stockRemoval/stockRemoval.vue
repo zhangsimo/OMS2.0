@@ -362,6 +362,7 @@ export default {
       }
     };
     return {
+      flag1: false,
       validRules: {
         hasAcceptQty: [{ required: true, validator: changeNumber }]
       },
@@ -737,6 +738,7 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      console.log(params, "740==>");
       if (params.xinzeng) {
         delete params.status;
       }
@@ -757,10 +759,7 @@ export default {
         }
       }
       console.log();
-      if (
-        this.Leftcurrentrow.guestName == "" ||
-        this.Leftcurrentrow.guestName == null
-      ) {
+      if (this.flag1 == true) {
         params.id = "";
       }
       try {
@@ -773,6 +772,7 @@ export default {
               this.getList();
               this.$Message.success("保存成功");
               this.flag = 0;
+              this.flag1 = false;
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -794,7 +794,8 @@ export default {
       }
     },
     xinzeng() {
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
+      this.flag1 = true;
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
@@ -1010,7 +1011,7 @@ export default {
     async selectTabelData(row) {
       this.flagValue = 0;
       this.flagValue1 = 0;
-      // console.log(row, "row ==>862");
+      console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1061,7 +1062,6 @@ export default {
         // this.tuneOut = false
         console.log(row.code);
       }
-      this.Leftcurrentrow.id = "";
     },
     //打开添加配件模态框
     addMountings() {
