@@ -301,6 +301,7 @@ export default {
   },
   data() {
     return {
+      flag: 0,
       getArray: [],
       ArrayValue: [],
       dcData: [],
@@ -624,6 +625,7 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("保存成功");
+            this.flag = 0;
           }
         })
         .catch(e => {
@@ -639,6 +641,7 @@ export default {
           return;
         }
       }
+      this.flag = 1;
       const item = {
         index: 1,
         xinzeng: "1",
@@ -746,7 +749,7 @@ export default {
       }
       const params = {
         mainId: this.Leftcurrentrow.id,
-        status:'HAS_ENTER'
+        status: "HAS_ENTER"
       };
       this.$refs.addInCom.init();
       chengping(params, 10, 1)
@@ -835,6 +838,25 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      if (row.createUname == undefined || row.createUname == "") {
+      } else {
+        if (this.flag == 1) {
+          this.$Modal.confirm({
+            title: "您正在编辑单据，是否需要保存",
+            onOk: () => {
+              this.baocun1();
+            },
+            onCancel: () => {
+              this.getList(this.form);
+              this.flag = 0;
+            }
+          });
+          return;
+        }
+      }
+      console.log(row.createUname, "row.createUname =>844");
+      console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
+
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       const params = {
