@@ -198,7 +198,7 @@
           :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
           align="center"
         ></vxe-table-column>
-        <vxe-table-column title="本次对账金额" align="center" field="thisAccountAmt">
+        <vxe-table-column title="本次对账金额" align="center">
           <template v-slot="{ row }">
             <span>{{ countAmount(row) | priceFilters }}</span>
           </template>
@@ -618,6 +618,15 @@ export default {
         this.$utils.toNumber(row.thisNoAccountAmt)
       );
     },
+    // 计算尾部总和
+    countAllAmount(data) {
+      let count = 0
+      data.forEach(row => {
+        count += +this.countAmount(row)
+      })
+      count = count.toFixed(2)
+      return count
+    },
     // 总表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)return [
@@ -626,7 +635,6 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          console.log(column.property);
           if (
             [
               "quantity",
@@ -637,6 +645,9 @@ export default {
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
+          }
+          if (columnIndex === 11) {
+            return ` ${this.countAllAmount(data)} `
           }
           return null;
         })
