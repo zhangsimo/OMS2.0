@@ -794,16 +794,13 @@ export default {
     },
     searchPro(params, size, page) {
       console.log(params, "huoqucanshu");
-      chengping({ orderTypeId: "3", ...params }, size, page)
+      chengping({  ...params }, size, page)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data;
           }
         })
-        .catch(e => {
-          this.$Message.info("获取成品失败");
-        });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
     },
