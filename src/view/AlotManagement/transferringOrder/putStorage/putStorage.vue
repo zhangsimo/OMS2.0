@@ -545,7 +545,7 @@ export default {
         content.forEach(item => {
           this.ArrayValue1.push(item.fullName);
         });
-        console.log(this.ArrayValue1, "req =>542");
+        // console.log(this.ArrayValue1, "req =>542");
       });
     },
     warehouse() {
@@ -606,14 +606,14 @@ export default {
         delete params.status;
       }
 
-      console.log(
-        this.Leftcurrentrow.guestName,
-        "this.Leftcurrentrow.guestName"
-      );
+      // console.log(
+      //   this.Leftcurrentrow.guestName,
+      //   "this.Leftcurrentrow.guestName"
+      // );
       for (var i = 0; i < this.getArray.length; i++) {
         if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          console.log(this.getArray[i].fullName, "this.getArray[i].fullName");
-          console.log(this.getArray[i], "this.getArray[i]");
+          // console.log(this.getArray[i].fullName, "this.getArray[i].fullName");
+          // console.log(this.getArray[i], "this.getArray[i]");
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
@@ -813,9 +813,7 @@ export default {
       this.Leftcurrentrow = row;
       this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
-      // console.log(row, "row==>781");
-      // console.log(row.id, "row.id");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       if (row.id == undefined) {
         this.ArrayValue = row.detailVOS;
       } else {
@@ -823,7 +821,6 @@ export default {
           mainId: row.id
         };
         const res = await getListDetail(params);
-        // console.log(params, "params");
         this.ArrayValue = res.data;
       }
 
@@ -841,7 +838,7 @@ export default {
             });
             // this.cangkuListall = res.data
             this.dcData = res.data;
-            console.log(this.dcData);
+            // console.log(this.dcData);
           }
         })
         .catch(e => {
@@ -934,7 +931,7 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
-      console.log(row, "row==>891");
+      // console.log(row, "row==>891");
       row.fullName;
       //console.log(row);
       if (this.val === "0") {
@@ -972,7 +969,7 @@ export default {
         guestName: list.guestName,
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
-        remark: "",
+        remark: list.remark,
         serviceId: "",
         storeId: list.storeId,
         detailVOS: this.ArrayValue,
