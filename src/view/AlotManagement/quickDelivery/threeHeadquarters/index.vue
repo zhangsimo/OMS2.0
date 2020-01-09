@@ -11,8 +11,8 @@
             <span class="mr10">出库日期：</span>
             <DatePicker
               @on-change="selectDate"
+              v-model="form.dateValue"
               type="daterange"
-              placement="bottom-start"
               placeholder="选择日期"
               class="w200 mr20"
             ></DatePicker>
@@ -166,7 +166,8 @@ export default {
         isEnter: "",
         code: "",
         partCode: "",
-        partName: ""
+        partName: "",
+        dateValue: ""
       },
       // 快速查询数据1
       quickArray: [
@@ -232,6 +233,7 @@ export default {
     search() {
       let page = this.pageList.page;
       let size = this.pageList.size;
+
       console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form)
         .then(res => {
@@ -252,9 +254,15 @@ export default {
     },
     //time2
     selectDate(val) {
-      //console.log(val);
-      this.form.startDate = val[0] + " " + "00:00:00";
-      this.form.endDate = val[1] + " " + "23:59:59";
+      console.log(val, "value");
+
+      if (val[0] != "") {
+        this.form.startDate = val[0] + " " + "00:00:00";
+        this.form.endDate = val[1] + " " + "23:59:59";
+      } else {
+        this.form.startDate = "";
+        this.form.endDate = "";
+      }
     },
     //选择当前行
     currentChangeEvent({ row }) {

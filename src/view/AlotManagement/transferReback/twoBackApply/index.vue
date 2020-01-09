@@ -745,7 +745,8 @@ export default {
         return;
       }
       const params = {
-        mainId: this.Leftcurrentrow.id
+        mainId: this.Leftcurrentrow.id,
+        status:'HAS_ENTER'
       };
       this.$refs.addInCom.init();
       chengping(params, 10, 1)

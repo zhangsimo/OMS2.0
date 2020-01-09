@@ -213,10 +213,16 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          :ArrayValue1="ArrayValue1"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button type="default" @click="advanced = false">取消</Button>
         </div>
       </Modal>
     </div>
@@ -249,6 +255,7 @@
 </template>
 
 <script>
+import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
 import AddInCom from "./compontents/AddInCom";
 import More from "./compontents/More";
 import "../../../lease/product/lease.less";
@@ -257,7 +264,6 @@ import selectPartCom from "./compontents/selectPartCom";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
 // import SelectSupplier from './compontents/selectSupplier'
-import SelectSupplier from "../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
 
 import {
   getList1,
@@ -272,7 +278,7 @@ import {
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
-
+import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "backApply",
   components: {
@@ -289,6 +295,8 @@ export default {
       // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
+      ArrayValue1: [],
+      getArray: [],
       staaa: false,
       dcData: [],
       showit: true,
@@ -519,12 +527,26 @@ export default {
     this.getList(this.form);
     //调取仓库
     this.getWareHouse();
+    this.getArrayParams();
   },
   methods: {
     getArray(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
-      console.log(getArray, "getArray");
+      // console.log(getArray, "getArray");
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        const { content } = res.data;
+        this.getArray = content;
+        content.forEach(item => {
+          this.ArrayValue1.push(item.fullName);
+        });
+        // console.log(this.ArrayValue1, "req =>542");
+      });
     },
     warehouse() {
       queryByOrgid().then(res => {
@@ -568,13 +590,13 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.info("请先选择加工单");
+      //     return;
+      //   }
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行保存操作");
         return;
@@ -583,6 +605,20 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
+
+      // console.log(
+      //   this.Leftcurrentrow.guestName,
+      //   "this.Leftcurrentrow.guestName"
+      // );
+      for (var i = 0; i < this.getArray.length; i++) {
+        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+          // console.log(this.getArray[i].fullName, "this.getArray[i].fullName");
+          // console.log(this.getArray[i], "this.getArray[i]");
+          params.guestOrgid = this.getArray[i].isInternalId;
+          params.guestId = this.getArray[i].id;
+        }
+      }
+
       if (params.status && params.status.name) {
         params.status = params.status.value;
       }
@@ -593,6 +629,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
+
       params["voList"] = this.ArrayValue;
       //配件组装保存
       baocun(params)
@@ -653,12 +690,12 @@ export default {
         this.$Message.info("请先保存新增入库单！");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   this.$Message.info("请先选择加工单");
+      //   return;
+      // }
       if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态加工单能进行作废操作");
+        this.$Message.info("只有草稿状态调拨入库单能进行作废操作");
         return;
       }
       const params = {
@@ -776,9 +813,7 @@ export default {
       this.Leftcurrentrow = row;
       this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
-      // console.log(row, "row==>781");
-      // console.log(row.id, "row.id");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       if (row.id == undefined) {
         this.ArrayValue = row.detailVOS;
       } else {
@@ -786,7 +821,6 @@ export default {
           mainId: row.id
         };
         const res = await getListDetail(params);
-        // console.log(params, "params");
         this.ArrayValue = res.data;
       }
 
@@ -804,7 +838,7 @@ export default {
             });
             // this.cangkuListall = res.data
             this.dcData = res.data;
-            console.log(this.dcData);
+            // console.log(this.dcData);
           }
         })
         .catch(e => {
@@ -844,7 +878,13 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
+      // this.$refs.naform.getSupplierNamea();
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
+      for (var i = 0; i < this.getArray.length; i++) {
+        if (this.getArray[i].fullName == params.guestName) {
+          params.guestId = this.getArray[i].id;
+        }
+      }
       this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
@@ -891,7 +931,7 @@ export default {
     },
     //选择方
     selectSupplierName(row) {
-      console.log(row, "row==>891");
+      // console.log(row, "row==>891");
       row.fullName;
       //console.log(row);
       if (this.val === "0") {
@@ -929,7 +969,7 @@ export default {
         guestName: list.guestName,
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
-        remark: "",
+        remark: list.remark,
         serviceId: "",
         storeId: list.storeId,
         detailVOS: this.ArrayValue,
