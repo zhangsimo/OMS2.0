@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="showInfo" title="收货信息" width="1000">
+  <Modal v-model="showInfo" title="收货信息" width="1030">
     <div class="goodsInfo">
       <div class="header">
         <Form ref="formOne" :model="formDateTop" inline>
@@ -89,7 +89,6 @@
                 class="w200"
                 :disabled="disabled"
                 filterable
-                label-in-value
                 @on-change="selectLogis"
               >
                 <Option v-for="item in logisArr" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
@@ -318,13 +317,12 @@ export default class GoodsInfo extends Vue {
   }
 
   private selectLogis(val: any) {
-    console.log(val);
-    // this.formDateRight.logisticsComp = val.label || "";
-    // if (this.formDateRight.deliveryLogistics != "") {
-    //   this.logisRequired = false;
-    // } else {
-    //   this.logisRequired = true;
-    // }
+    this.formDateRight.logisticsComp = val|| "";
+    if (this.formDateRight.deliveryLogistics !== "") {
+      this.logisRequired = false;
+    } else {
+      this.logisRequired = true;
+    }
   }
 
   //表单数据 右 收货信息与发货信息
@@ -363,7 +361,7 @@ export default class GoodsInfo extends Vue {
   private dictArr: Array<any> = new Array();
   //发货物流下拉框
   private logisArr: Array<any> = new Array();
-  private logisRequired: boolean = false;
+  private logisRequired: boolean = false; //✳
 
   //查询
   private async searchInfo() {
@@ -388,7 +386,6 @@ export default class GoodsInfo extends Vue {
   private distribution(val){
     this.formDateRight.deliveryType = val
     this.inlogistics()
-    console.log(val)
     if(val == 2 || val == 3){
       this.isRequired = true;
     }else {
@@ -400,14 +397,15 @@ export default class GoodsInfo extends Vue {
     const ref: any = this.$refs["formTwo"];
     // console.log(this.formDateRight)
     ref.validate(async (valid: any) => {
-      let logisc: boolean = false;
+      let logisc: boolean = true;
       if (!this.isRequired) {
-        logisc = false;
+        logisc = true;
         this.logisRequired = false;
       } else {
-        // this.logisRequired = true;
-        if(!this.formDateRight.deliveryLogistics){
+        logisc = false;
+        if(!this.formDateRight.deliveryLogistics && this.formDateRight.deliveryType == 2 || this.formDateRight.deliveryType == 3){
           this.logisRequired = true;
+          logisc = false;
         }else {
           this.logisRequired = false;
           logisc = true;
@@ -431,6 +429,7 @@ export default class GoodsInfo extends Vue {
           this.searchInfo();
         }
       } else {
+        console.log(logisc)
         this.$Message.error("请完善收货信息后再保存!");
       }
     });
