@@ -163,22 +163,34 @@ export default {
         {
           title: '调拨单价',
           key: 'orderPrice',
-          className: 'tc'
+          className: 'tc',
+          render: (h,params) =>{
+            return h('span',(params.row.orderPrice).toFixed(2))
+          }
         },
         {
           title: '调拨金额',
           key: 'orderAmt',
-          className: 'tc'
+          className: 'tc',
+          render: (h,params) =>{
+            return h('span',(params.row.orderAmt).toFixed(2))
+          }
         },
         {
           title: '成本单价',
           key: 'taxPrice',
-          className: 'tc'
+          className: 'tc',
+          render: (h,params) =>{
+            return h('span',(params.row.taxPrice).toFixed(2))
+          }
         },
         {
           title: '成本金额',
           key: 'taxAmt',
-          className: 'tc'
+          className: 'tc',
+          render: (h,params) =>{
+            return h('span',(params.row.taxAmt).toFixed(2))
+          }
         },
         {
           title: '受理人',
@@ -241,7 +253,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {

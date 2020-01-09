@@ -1,3 +1,5 @@
+const timestart = " 00:00:00";
+const timeend = " 23:59:59"
 
 /*
 *获取今日的起始和结束时间
@@ -9,13 +11,13 @@ export const ToDayStr = () => {
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
     var day = date.getDate();
-    //var hour = date.getHours();
-    //var minutes = date.getMinutes();
-    //var second = date.getSeconds();
+    var hour = date.getHours();
+    var minutes = date.getMinutes();
+    var second = date.getSeconds();
     month = month < 10 ? "0" + month : month;
     day = day < 10 ? "0" + day : day;
-    returnStr[0] = year + "-" + month + "-" + day;       //起始时间
-    returnStr[1] = year + "-" + month + "-" + day;      //结束时间
+    returnStr[0] = year + "-" + month + "-" + day + timestart;       //起始时间
+    returnStr[1] = year + "-" + month + "-" + day + timeend;      //结束时间
     return returnStr;
 }
 
@@ -29,10 +31,13 @@ export const YesterDayStr = () => {
     var year = date.getFullYear();
     var month = date.getMonth() + 1;
     var day = date.getDate();
+    // var hour = date.getHours();
+    // var minutes = date.getMinutes();
+    // var second = date.getSeconds();
     month = month < 10 ? "0" + month : month;
     day = day < 10 ? "0" + day : day;
-    returnStr[0] = year + "-" + month + "-" + day;       //起始时间
-    returnStr[1] = year + "-" + month + "-" + day;      //结束时间
+    returnStr[0] = year + "-" + month + "-" + day + timestart;       //起始时间
+    returnStr[1] = year + "-" + month + "-" + day + timeend;      //结束时间
     return returnStr;
 }
 
@@ -61,8 +66,8 @@ export const ThisWeekStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
 
@@ -91,8 +96,8 @@ export const LastWeekStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
 
@@ -124,8 +129,8 @@ export const ThisMonthStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
 
@@ -157,8 +162,8 @@ export const prevMonthStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
 
@@ -224,8 +229,8 @@ export const prevYearStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
 /*
@@ -255,7 +260,7 @@ export const ThisYearStr = () => {
     month2 = month2 < 10 ? "0" + month2 : month2;
     day2 = day2 < 10 ? "0" + day2 : day2;
 
-    returnStr[0] = year1 + "-" + month1 + "-" + day1;       //起始时间
-    returnStr[1] = year2 + "-" + month2 + "-" + day2;      //结束时间
+    returnStr[0] = year1 + "-" + month1 + "-" + day1 + timestart;       //起始时间
+    returnStr[1] = year2 + "-" + month2 + "-" + day2 + timeend;      //结束时间
     return returnStr;
 }
