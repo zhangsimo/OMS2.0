@@ -410,6 +410,7 @@ export default class GoodsInfo extends Vue {
           this.logisRequired = true;
         }else {
           this.logisRequired = false;
+          logisc = true;
         }
       }
       if (valid && logisc) {
