@@ -66,7 +66,7 @@
             >
           </div>
           <div class="db">
-            <Button @click="showStatus" class="mr10" :disabled="selectTableRow === null||selectTableRow.processInstanceId===null"
+            <Button @click="showStatus" class="mr10" :disabled="hideSp"
             v-has="'approval'"
             ><i class="iconfont mr5 iconshenheicon"></i>查看审批</Button
             >

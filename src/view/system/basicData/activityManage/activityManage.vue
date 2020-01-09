@@ -196,7 +196,7 @@
             <Button type="primary" class="w90 mr10">活动导入</Button>
           </Upload>
           <Button type="default" class="w90 mr10" @click="deleteDate5">删除</Button>
-          <Button type="default" class="w90 mr10">下载模板</Button>
+          <Button type="default" class="w90 mr10" @click="down">下载模板</Button>
         </div>
         <div>
           <!-- 弹窗表格部分 -->
@@ -248,6 +248,7 @@ import {
 } from "../../../../api/system/activityManage.js";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
+import baseUrl from '_conf/url'
 const  headers =  {
   Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
 }
@@ -823,6 +824,10 @@ export default {
         // console.log(res)
         this.data3 = res.data
       })
+    },
+    //下载模板
+    down(){
+      // location.href = baseUrl.downApi + "/file/get?fileId=" + 1300000000 + "&access_token=" + Cookies.get(TOKEN_KEY);
     },
     // 根据条件查询活动信息
     getActivity() {

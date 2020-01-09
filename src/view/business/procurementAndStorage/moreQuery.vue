@@ -28,7 +28,7 @@
           <Input v-model="data.partName" placeholder="请输入配件名称" style="width: 350px"/>
         </FormItem>
         <FormItem label="创建人:">
-          <Input v-model="data.createName" placeholder="请输入创建人" style="width: 350px"/>
+          <Input v-model="data.createUname" placeholder="请输入创建人" style="width: 350px"/>
         </FormItem>
       </Form>
     </div>

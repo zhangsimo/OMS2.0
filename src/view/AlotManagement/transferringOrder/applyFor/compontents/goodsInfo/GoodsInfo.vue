@@ -308,23 +308,23 @@ export default class GoodsInfo extends Vue {
       label: "月结"
     }
   ];
-  private isRequired: boolean = true;
+  private isRequired: boolean = false;
   private changeDeliveryType() {
     if (!["0", "1"].includes(this.formDateRight.deliveryType)) {
-      this.isRequired = true;
-    } else {
       this.isRequired = false;
+    } else {
+      this.isRequired = true;
     }
   }
 
   private selectLogis(val: any) {
     console.log(val);
-    this.formDateRight.logisticsComp = val.label || "";
-    if (this.formDateRight.deliveryLogistics != "") {
-      this.logisRequired = false;
-    } else {
-      this.logisRequired = true;
-    }
+    // this.formDateRight.logisticsComp = val.label || "";
+    // if (this.formDateRight.deliveryLogistics != "") {
+    //   this.logisRequired = false;
+    // } else {
+    //   this.logisRequired = true;
+    // }
   }
 
   //表单数据 右 收货信息与发货信息
@@ -387,8 +387,13 @@ export default class GoodsInfo extends Vue {
   //快递下拉框
   private distribution(val){
     this.formDateRight.deliveryType = val
-    // console.log(this.formDateRight.deliveryType)
     this.inlogistics()
+    console.log(val)
+    if(val == 2 || val == 3){
+      this.isRequired = true;
+    }else {
+      this.isRequired = false;
+    }
   }
   //保存
   private saveInfo() {
@@ -397,14 +402,14 @@ export default class GoodsInfo extends Vue {
     ref.validate(async (valid: any) => {
       let logisc: boolean = false;
       if (!this.isRequired) {
-        logisc = true;
+        logisc = false;
+        this.logisRequired = false;
       } else {
-        if (!!this.formDateRight.deliveryLogistics) {
-          logisc = true;
-          this.logisRequired = false;
-        } else {
+        // this.logisRequired = true;
+        if(!this.formDateRight.deliveryLogistics){
           this.logisRequired = true;
-          logisc = false;
+        }else {
+          this.logisRequired = false;
         }
       }
       if (valid && logisc) {

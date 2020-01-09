@@ -824,7 +824,6 @@ export default {
             if (res.code === 0) {
               this.isAdd = true;
               this.isNew = true;
-              // this.isCommit = true
               this.$Message.success("保存成功");
               this.getLeftList();
               this.$refs.formPlan.resetFields();

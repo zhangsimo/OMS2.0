@@ -21,6 +21,7 @@ export const mixGoodsData = {
     return {
       ArrayList: [],
       upurl: "",
+      hideSp: true,
       //计划采购信息
       formPlan: {
         createUid: "",
@@ -377,6 +378,11 @@ export const mixGoodsData = {
             this.isinput = false;
           } else {
             this.isinput = true;
+          }
+          if (['草稿', '作废'].includes(v.billStatusId.name)) {
+            this.hideSp = true;
+          } else {
+            this.hideSp = false;
           }
           this.selectPlanOrderItem = v || {};
           this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
