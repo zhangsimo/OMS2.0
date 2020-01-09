@@ -870,7 +870,7 @@
               this.$Modal.confirm({
                 title: '是否提交',
                 onOk: async () => {
-                  if(this.clickdelivery){
+                  // if(this.clickdelivery){
                     let data = {}
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.id = this.rowId
@@ -889,9 +889,9 @@
                       this.leftgetList();
                       this.isAdd = true;
                     }
-                  }else{
-                    this.$Message.warning('请先编辑收货信息')
-                  }
+                  // }else{
+                  //   this.$Message.warning('请先编辑收货信息')
+                  // }
                 },
                 onCancel: () => {
                   this.$Message.info('取消提交');
