@@ -1085,7 +1085,7 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        // console.log(this.form.guestName, "this.form.guestName");
+        console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }

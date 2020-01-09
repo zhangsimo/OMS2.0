@@ -213,10 +213,16 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          :ArrayValue1="ArrayValue1"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
-          <Button type="default">取消</Button>
+          <Button type="default" @click="advanced = false">取消</Button>
         </div>
       </Modal>
     </div>
@@ -272,7 +278,7 @@ import {
 } from "@/api/AlotManagement/putStorage.js";
 
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
-
+import { findForAllot } from "_api/purchasing/purchasePlan";
 export default {
   name: "backApply",
   components: {
@@ -289,6 +295,8 @@ export default {
       // serviceIdValue: "",
       codeValue: "",
       ArrayValue: [],
+      ArrayValue1: [],
+      getArray: [],
       staaa: false,
       dcData: [],
       showit: true,
@@ -519,12 +527,26 @@ export default {
     this.getList(this.form);
     //调取仓库
     this.getWareHouse();
+    this.getArrayParams();
   },
   methods: {
     getArray(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
-      console.log(getArray, "getArray");
+      // console.log(getArray, "getArray");
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        const { content } = res.data;
+        this.getArray = content;
+        content.forEach(item => {
+          this.ArrayValue1.push(item.fullName);
+        });
+        console.log(this.ArrayValue1, "req =>542");
+      });
     },
     warehouse() {
       queryByOrgid().then(res => {
@@ -583,6 +605,20 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
+
+      console.log(
+        this.Leftcurrentrow.guestName,
+        "this.Leftcurrentrow.guestName"
+      );
+      for (var i = 0; i < this.getArray.length; i++) {
+        if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+          console.log(this.getArray[i].fullName, "this.getArray[i].fullName");
+          console.log(this.getArray[i], "this.getArray[i]");
+          params.guestOrgid = this.getArray[i].isInternalId;
+          params.guestId = this.getArray[i].id;
+        }
+      }
+
       if (params.status && params.status.name) {
         params.status = params.status.value;
       }
@@ -593,6 +629,7 @@ export default {
       if (params.settleStatus && params.settleStatus.name) {
         params.settleStatus = params.settleStatus.value;
       }
+
       params["voList"] = this.ArrayValue;
       //配件组装保存
       baocun(params)
@@ -844,7 +881,13 @@ export default {
     addFooter() {},
     // 确定
     Determined() {
+      // this.$refs.naform.getSupplierNamea();
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
+      for (var i = 0; i < this.getArray.length; i++) {
+        if (this.getArray[i].fullName == params.guestName) {
+          params.guestId = this.getArray[i].id;
+        }
+      }
       this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
