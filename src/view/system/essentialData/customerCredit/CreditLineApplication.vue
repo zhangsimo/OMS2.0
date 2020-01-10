@@ -126,7 +126,7 @@
           </FormItem>
         </Col>
       </Row>
-      <FormItem label="申请额度说明:" prop="fullName">
+      <FormItem label="申请额度说明:" prop="quotaReason">
         <Input v-model="data.quotaReason" style="width: 650px"></Input>
       </FormItem>
     </Form>
@@ -222,9 +222,9 @@ export default {
       value1: new Date(),
       value2: new Date(),
       ruls: {
-        // fullName:[
-        //     {required: true, message: '申请额度说明必填', trigger: 'change'}
-        // ],
+        quotaReason:[
+          { required: true, message: '申请额度说明必填！', trigger: 'blur' }
+        ],
         // applyQuota: [
         //   {
         //     message: "请输入大于0的正整数",
