@@ -128,6 +128,7 @@
                       type="datetime"
                       class="w160"
                       v-model="formPlan.checkDate"
+                      @on-change="dateType"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="盘点单号" prop="serviceId">
@@ -461,6 +462,7 @@ export default {
             message: "盘点日期必选",
             trigger: "change"
           }
+
           // {
           //   required: true,
           //   type: 'date',
@@ -607,7 +609,7 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate:'',
+        checkDate: '',
         orderMan: "",
         serviceId: "",
         print: "",
@@ -685,7 +687,9 @@ export default {
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
+          // let preTime = "";
           if (valid) {
+            // preTime = JSON.parse(JSON.stringify(this.formPlan.checkDate));
             if (this.formPlan.billStatusId.value !== 0) {
               this.$Message.error("只有草稿状态才能保存");
               return;
@@ -702,6 +706,9 @@ export default {
                 this.$Message.success("保存成功");
                 this.getList();
               }
+              // else{
+              //   this.formPlan.checkDate = preTime;
+              // }
               this.handleReset();
             });
           } else {
@@ -869,6 +876,12 @@ export default {
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
+    //改变时间类型
+    dateType(){
+      // this.formPlan.checkDate=moment(this.formPlan.checkDate).format(
+      //   "YYYY-MM-DD HH:mm:ss")
+    // console.log( this.formPlan.checkDate)
+    },
     //footer计算
     addFooter() {},
     // 确定
