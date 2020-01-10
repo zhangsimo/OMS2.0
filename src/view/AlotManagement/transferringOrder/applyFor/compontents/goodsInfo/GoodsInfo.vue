@@ -352,8 +352,10 @@ export default class GoodsInfo extends Vue {
     cityId: "",
     countyId: "",
     //物流中的数据
-    logisticsComp: "" //物流公司名字
+    logisticsComp: "", //物流公司名字，
   };
+  private  SaveId:any =  '';//保存id,
+  private  logisticsRecordVO: any = '';
   //表格 数据
   private tableData: Array<any> = new Array();
   private loading: boolean = false;
@@ -403,7 +405,7 @@ export default class GoodsInfo extends Vue {
         this.logisRequired = false;
       } else {
         logisc = false;
-        if(!this.formDateRight.deliveryLogistics && this.formDateRight.deliveryType == 2 || this.formDateRight.deliveryType == 3){
+        if(!this.formDateRight.deliveryLogistics && !['0', '1'].includes(this.formDateRight.deliveryType)){
           this.logisRequired = true;
           logisc = false;
         }else {
@@ -430,6 +432,23 @@ export default class GoodsInfo extends Vue {
         params.businessNum = this.formDateRight.businessNum;
         params.relationNum = this.formDateRight.relationNum;
         params.guestId = this.formDateRight.guestId;
+        if(this.SaveId){
+          console.log(this.SaveId)
+          params.id = this.SaveId;
+          params = this.logisticsRecordVO;
+          params.receiveComp = this.formDateRight.receiveCompName;
+          params.receiveAddress = this.formDateRight.streetAddress;
+          params.receiver = this.formDateRight.receiveMan;
+          params.receiverMobile = this.formDateRight.receiveManTel;
+          params.deliveryType = this.formDateRight.deliveryType;
+          params.deliveryLogistics = this.formDateRight.deliveryLogistics;
+          params.transportCost = this.formDateRight.transportCost;
+          params.settleType = this.formDateRight.settleType;
+          params.remark = this.formDateRight.remark;
+          params.businessNum = this.formDateRight.businessNum;
+          params.relationNum = this.formDateRight.relationNum;
+          params.guestId = this.formDateRight.guestId;
+        }
         let res = await fapi.saveGoodsInfo({
           ...aaa,
           ...params,
@@ -454,6 +473,8 @@ export default class GoodsInfo extends Vue {
     this.formDateRight.businessNum = this.row.serviceId;
     console.log(this.formDateRight.businessNum)
     if (row.logisticsRecordVO) {
+      this.logisticsRecordVO = row.logisticsRecordVO
+      this.SaveId = row.logisticsRecordVO.id
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       // this.formDateRight = { ...row.logisticsRecordVO };
