@@ -62,7 +62,33 @@
         </section>
         <section class="con-box">
           <div class="inner-box">
-            <Table :columns="columns" :data="data" border max-height="400"></Table>
+            <!-- <Table :columns="columns" :data="data" border max-height="400"></Table> -->
+            <Row>
+              <Col span="6">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
+              </Col>
+              <Col span="6">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
+              </Col>
+              <Col span="6">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
+              </Col>
+              <Col span="6">
+                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
+              </Col>
+            </Row>
+            <Row>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+            </Row>
+            <Row>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+              <Col span="6"><div style="border:1px solid #dddddd;line-height:40px" class="tc h40"></div></Col>
+            </Row>
             <div class="db mt10 info" v-if="info">
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
@@ -91,10 +117,6 @@
                 :data="data1"
                 border
                 max-height="400"
-                @on-select="collectCheckout"
-                @on-select-all="collectCheckoutAll"
-                @on-select-cancel="collectNoCheckout"
-                @on-select-all-cancel="collectNoCheckoutAll"
                 show-summary
                 ref="receivable"
               ></Table>
@@ -106,10 +128,6 @@
                 :data="data2"
                 border
                 max-height="400"
-                @on-select="paymentCheckout"
-                @on-select-all="paymentCheckoutAll"
-                @on-select-cancel="paymentNoCheckout"
-                @on-select-all-cancel="paymentNoCheckoutAll"
                 show-summary
                 ref="payable"
               ></Table>
