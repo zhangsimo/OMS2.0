@@ -497,7 +497,7 @@
                     // console.log(dataTime)
                     var orderDateTime = this.formPlan.orderDate
                     var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-                    console.log(orderTime,'orderDateTime')
+                    // console.log(orderTime,'orderDateTime')
                     if (orderTime < dataTime) {
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
@@ -507,7 +507,7 @@
               // console.log(dataTime)
               var orderDateTime = this.formPlan.orderDate
               var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-              console.log(orderTime,'orderDateTime')
+              // console.log(orderTime,'orderDateTime')
               if (orderTime < dataTime) {
                 this.$Message.error('调拨申请日期不小于当前日期')
                 return
@@ -589,7 +589,7 @@
         },
         // 全选
         selectAll(val){
-          console.log(val)
+          // console.log(val)
           this.checkboxArr = val.selection
         },
         //分页
@@ -614,7 +614,7 @@
         },
         // 查询下拉框
         getDataQuick(v){
-          console.log(v)
+          // console.log(v)
           this.selectArr = v
           this.leftgetList()
         },
@@ -650,7 +650,7 @@
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          console.log(ChildMessage)
+          // console.log(ChildMessage)
         // let aaa =   ChildMessage.map(item => {
         //   return{
         //     name : item.baseType.firstType.typeName
@@ -850,7 +850,7 @@
           queryByOrgid().then(res => {
               if(res.code === 0){
                 this.List = res.data
-                console.log(res,'res==>837')
+                // console.log(res,'res==>837')
                  res.data.map(item => {
                    if(item.isDefault == true){
                      this.formPlan.storeId = item.id
