@@ -116,7 +116,7 @@
                 <span class="titler mr5">临时余额:</span>
                 <span class="titler mr10">{{this.limitList.tempQuota |priceFilters}}</span>
                 <span class="titler mr5">可用余额:</span>
-                <span class="titler mr5">{{ this.limitList.sumAmt - (+totalMoney)|priceFilters}}</span>
+                <span class="titler mr5">{{ this.limitList.sumAmt | priceFilters}}</span>
               </div>
               <Form
                 inline
