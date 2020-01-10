@@ -60,11 +60,7 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
-    <select-supplier
-      ref="selectSupplier"
-      header-tit="供应商资料"
-      @selectSupplierName="getSupplierNamea"
-    ></select-supplier>
+    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea"></select-supplier>
   </Modal>
 </template>
 
@@ -98,19 +94,19 @@ export default {
   },
   mounted() {
     this.getArrayParams();
-    console.log(1212);
   },
   methods: {
     getArray(data) {
-      console.log(data, "data");
+      // console.log(data, "data");
     },
     // 子组件的参数
     getSupplierNamea(a) {
-      this.moreData.orderMan = a.fullName;
+      this.moreData.orderMan = a.id;
       this.moreData.guestId = a.id;
     },
     getSupplierNamea1(a) {
-      this.guestId = a;
+      this.moreData.guestId = a;
+      // console.log(this.moreData.orderMan, "this.moreData.orderMan");
     },
     getArrayParams() {
       var req = {};
@@ -119,6 +115,7 @@ export default {
       findForAllot(req).then(res => {
         if (res.code === 0) {
           this.ArrayValue = res.data.content;
+          // console.log(this.ArrayValue, "this.ArrayValue");
         }
       });
     },
@@ -127,14 +124,12 @@ export default {
       this.$emit("getMoreStatus", false);
     },
     establish(o) {
-      console.log(o, "o");
-      console.log(o[0]);
       this.moreData.acceptEnterTimeStart = o[0] + " 00:00:00";
       this.moreData.acceptEnterTimeEnd = o[1] + " 23:59:59";
     },
     //更多弹窗-确定
     moreOk() {
-      console.log(this.moreData, "this.moreData ==>94");
+      // console.log(this.moreData, "this.moreData ==>94");
       this.$emit("getMoreData", this.moreData);
       this.$emit("getMoreStatus", false); //弹框false传出
       this.Time1 = [];
