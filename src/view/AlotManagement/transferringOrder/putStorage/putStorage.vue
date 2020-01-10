@@ -532,6 +532,7 @@ export default {
   methods: {
     getArray(data) {
       this.ArrayValue = data;
+      // console.log(data, "data==>535");
       // this.Leftcurrentrow.detailVOS = data;
     },
     getArrayParams() {
@@ -976,6 +977,10 @@ export default {
         _highlight: true
       };
       this.ArrayValue = list.detailVOS;
+      for (var i = 0; i < this.ArrayValue.length; i++) {
+        this.ArrayValue[i].hasInQty = this.ArrayValue[i].hasOutQty;
+      }
+      // console.log(this.ArrayValue, "this.ArrayValue ==>980");
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
