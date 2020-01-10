@@ -30,7 +30,6 @@
               @click="submit(1)"
               v-has="'save'"
               class="mr10"
-              :loading="submitloading"
             >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
@@ -41,7 +40,6 @@
               :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
               @click="submit(2)"
               v-has="'submit'"
-              :loading="submitloading"
             >
               <i class="iconfont mr5 iconziyuan2"></i>提交
             </Button>
