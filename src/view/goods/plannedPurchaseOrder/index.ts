@@ -260,7 +260,6 @@ export default class PlannedPurchaseOrder extends Vue {
     _highlight: true,
     id: '',
     billStatusId: '',
-    createTime: new Date(),
     details: [],
     processInstanceId: "",
   }
@@ -292,7 +291,7 @@ export default class PlannedPurchaseOrder extends Vue {
       processInstanceId: "",
     }
     this.formPlanmain.createUid = "";
-    this.formPlanmain.orderDate = this.PTrow.createTime;
+    this.formPlanmain.orderDate = new Date();
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;

@@ -379,7 +379,7 @@ export const mixGoodsData = {
           } else {
             this.isinput = true;
           }
-          if (['草稿', '作废'].includes(v.billStatusId.name)) {
+          if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
             this.hideSp = true;
           } else {
             this.hideSp = false;
