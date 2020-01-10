@@ -386,7 +386,7 @@
                   field="orderQty"
                   title="采购数量"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -394,16 +394,16 @@
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"
-                      size="small"
                       :precision="0"
-                    />
+                      size="mini"
+                    ></el-input-number>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
                   field="orderPrice"
                   title="采购单价"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -412,12 +412,12 @@
                       v-model="row.orderPrice"
                       :precision="2"
                       :controls="false"
-                      size="small"
-                    />
+                      size="mini"
+                    ></el-input-number>
                   </template>
-                  <template v-slot="{ row }">
+                  <!-- <template v-slot="{ row }">
                     {{ row.orderPrice | priceFilters }}
-                  </template>
+                  </template> -->
                 </vxe-table-column>
                 <vxe-table-column title="采购金额" filed="orderAmt" width="120">
                   <template v-slot="{ row }">
