@@ -276,11 +276,13 @@ export default {
       };
       getParticulars(params).then(res => {
         this.currentData = res.data;
+
         this.$emit("getArray", this.currentData);
       });
     },
     ok() {
       // 将选好的成品传父组件
+      this.checkRow.detailVOS = this.currentData;
       this.$emit("ok", this.checkRow);
     }
   }

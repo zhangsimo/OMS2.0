@@ -122,7 +122,7 @@
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
         <span>
-          <Icon type="information"></Icon>是否确认受理,受理后生成【调出退回单】!
+          <Icon type="information"></Icon>是否确认受理 !
         </span>
       </Modal>
       <Modal v-model="modal3" title="提示" @on-ok="ok3" @on-cancel="cancel">
