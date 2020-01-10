@@ -273,7 +273,7 @@ export default class InterPurchase extends Vue {
     _highlight: true,
     id: '',
     billStatusId: '0',
-    createTime: tools.transTime(new Date()),
+    createTime: new Date(),
     details: [],
     processInstanceId: "",
   }
