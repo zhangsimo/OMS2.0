@@ -1010,13 +1010,13 @@ export default {
           },
           {
             number: "1",
-            accountNo: this.data[0].Statementoilincludingtax,
-            accountSumAmt: this.data[1].Statementoilincludingtax
+            accountNo: this.data[0].Taxincludedpartsstatement,
+            accountSumAmt: this.data[1].Taxincludedpartsstatement
           },
           {
             number: "2",
-            accountNo: this.data[0].Taxincludedpartsstatement,
-            accountSumAmt: this.data[1].Taxincludedpartsstatement
+            accountNo: this.data[0].Statementoilincludingtax,
+            accountSumAmt: this.data[1].Statementoilincludingtax
           }
         ];
         let four = [

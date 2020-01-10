@@ -151,6 +151,9 @@
             },
             //确定
             add(){
+              if( this.oneList.id==null){
+                return this.$message.error('请先选择一条数据')
+              }
                 this.$emit('getActivity' , this.oneList)
                 this.showInfo = false
             }
