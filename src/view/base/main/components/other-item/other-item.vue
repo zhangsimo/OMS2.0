@@ -117,7 +117,6 @@
                   data.userId = this.$store.state.user.userData.id
              //切换公司跟换token(权限设置)
              let res = await setCompany(data)
-                      console.log(res)
                   if(res.code === 0){
                       this.$store.commit('setUserShopName' , res.data.shopName)
                       let data = {}
