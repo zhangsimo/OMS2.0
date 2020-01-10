@@ -638,8 +638,8 @@ export default {
     },
     //确定申请
     Determined() {
-      // this.$refs.child.$refs.form.validate((valid) => {
-      //         if (valid) {
+      this.$refs.child.$refs.form.validate((valid) => {
+              if (valid) {
       let data = {};
       data.guestId = this.rowMessage.guestId;
       data.orgId = this.rowMessage.orgid;
@@ -676,10 +676,10 @@ export default {
           this.getListTop();
         }
       });
-      //     } else {
-      //         this.$Message.error('表单验证失败!');
-      //     }
-      // })
+          } else {
+              this.$Message.error('必填项必须填!');
+          }
+      })
     },
     //确定取消
     cancel2() {

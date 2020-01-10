@@ -127,6 +127,7 @@
                       :disabled="draftShow != 0"
                       type="datetime"
                       class="w160"
+                      format="yyyy-MM-dd HH:mm:ss"
                       v-model="formPlan.checkDate"
                       @on-change="dateType"
                     ></DatePicker>
@@ -625,7 +626,8 @@ export default {
         _highlight:true
       };
       this.formPlan = item
-      this.Left.tbdata.unshift(item);
+     let  newItem = JSON.parse(JSON.stringify(item))
+      this.Left.tbdata.unshift(newItem);
       this.flag = 1;
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -926,6 +928,14 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
+  },
+  watch:{
+        formPlan: {
+      handler(val, old) {
+        console.log(val, old)
+      },
+      deep: true
+    }
   }
 };
 </script>

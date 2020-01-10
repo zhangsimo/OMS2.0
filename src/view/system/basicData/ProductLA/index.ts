@@ -270,6 +270,8 @@ export default class ProductLA extends Vue {
         this.employeeId = id;
         this.buttonWaitQuery = false;
         this.loginName = row.loginName;
+        this.waitPartListLoading = false;
+        this.distPartLoading = false;
         this.getwaitEmps();
         this.getEmps();
     }
@@ -364,7 +366,7 @@ export default class ProductLA extends Vue {
                 partCode: el.partCode,
                 empId: this.employeeId,
                 partBrandCode: el.partBrandCode,
-                partId: el.id,
+                partId: el.partId,
                 partInnerId: el.code,
                 partBrand: el.partBrand,
                 empName: this.loginName,

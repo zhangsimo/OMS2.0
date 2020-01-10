@@ -8,9 +8,9 @@
             <span>查询项:</span>
             <Select v-model="employeeSelecteOption" style="width:140px">
               <Option
-                v-for="item in employeeOptions"
+                v-for="(item, index) in employeeOptions"
                 :value="item.value"
-                :key="item.value"
+                :key="index"
               >{{ item.label }}</Option>
             </Select>
           </div>
@@ -26,9 +26,9 @@
             <span>分配状态:</span>
             <Select v-model="DistributionStateSelecteOption" style="width:140px">
               <Option
-                v-for="item in DistributionStateOptions"
+                v-for="(item, index) in DistributionStateOptions"
                 :value="item.value"
-                :key="item.value"
+                :key="index"
               >{{ item.label }}</Option>
             </Select>
           </div>
@@ -36,9 +36,9 @@
             <span>角色:</span>
             <Select v-model="roleSelectOption" style="width:140px">
               <Option
-                v-for="item in roleOptions"
+                v-for="(item, index) in roleOptions"
                 :value="item.value"
-                :key="item.value"
+                :key="index"
               >{{ item.label }}</Option>
             </Select>
           </div>
@@ -113,9 +113,9 @@
                 <span>查询项: </span>
                 <Select v-model="waitPartTransListSelecteOption" style="width:120px">
                   <Option
-                    v-for="item in waitPartTransListOptions"
+                    v-for="(item, index) in waitPartTransListOptions"
                     :value="item.value"
-                    :key="item.value"
+                    :key="index"
                   >{{ item.label }}</Option>
                 </Select>
               </div>

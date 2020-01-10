@@ -29,7 +29,16 @@
         <!--placeholder="请选择申请方！"-->
         <!--style="width: 450px"-->
         <!--/>-->
-        <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled />
+        <!-- <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled /> -->
+        <Select
+          placeholder="请选择申请方！"
+          v-model="moreData.orderMan"
+          filterable
+          style="width: 400px"
+          @on-change="getSupplierNamea1"
+        >
+          <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+        </Select>
         <Button class="ml5" size="small" type="default" @click="addSuppler">
           <i class="iconfont iconxuanzetichengchengyuanicon"></i>
         </Button>
@@ -57,12 +66,14 @@
 
 <script>
 import SelectSupplier from "../../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import { findForAllot } from "_api/purchasing/purchasePlan";
 
 export default {
   name: "More",
   components: { SelectSupplier },
   data() {
     return {
+      ArrayValue: [],
       Time1: [],
       Time2: [],
       moreData: {
@@ -81,25 +92,44 @@ export default {
   props: {
     getShowMore: Boolean
   },
+  mounted() {
+    this.getArrayParams();
+  },
   methods: {
+    getArray(data) {
+      // console.log(data, "data");
+    },
     // 子组件的参数
     getSupplierNamea(a) {
-      this.moreData.orderMan = a.fullName;
+      this.moreData.orderMan = a.id;
       this.moreData.guestId = a.id;
+    },
+    getSupplierNamea1(a) {
+      this.moreData.guestId = a;
+      // console.log(this.moreData.orderMan, "this.moreData.orderMan");
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        if (res.code === 0) {
+          this.ArrayValue = res.data.content;
+          // console.log(this.ArrayValue, "this.ArrayValue");
+        }
+      });
     },
     //更多弹窗-取消
     moreCancel() {
       this.$emit("getMoreStatus", false);
     },
     establish(o) {
-      console.log(o, "o");
-      console.log(o[0]);
       this.moreData.acceptEnterTimeStart = o[0] + " 00:00:00";
       this.moreData.acceptEnterTimeEnd = o[1] + " 23:59:59";
     },
     //更多弹窗-确定
     moreOk() {
-      console.log(this.moreData, "this.moreData ==>94");
+      // console.log(this.moreData, "this.moreData ==>94");
       this.$emit("getMoreData", this.moreData);
       this.$emit("getMoreStatus", false); //弹框false传出
       this.Time1 = [];

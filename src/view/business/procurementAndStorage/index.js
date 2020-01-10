@@ -394,11 +394,11 @@ export default {
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `
           }
-          if (columnIndex === 9) {
+          if (columnIndex === 10) {
 
             return ` ${this.countAll(data)} `
           }
-          if (columnIndex === 10) {
+          if (columnIndex === 11) {
             return ` ${this.countTaxAll(data)} `
           }
           return null

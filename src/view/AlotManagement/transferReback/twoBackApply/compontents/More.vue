@@ -42,7 +42,16 @@
     </row>
     <row class="mt15">
       <span>调 出 方 ：</span>
-      <Input readonly v-model="form.guestName" style="width: 398px" />
+      <!-- <Input readonly v-model="form.guestName" style="width: 398px" /> -->
+      <Select
+        placeholder="请选择调出方！"
+        v-model="form.guestName"
+        filterable
+        style="width: 400px"
+        @on-change="getSupplierNamea1"
+      >
+        <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+      </Select>
       <Button @click="showModel" class="ml5" size="small" type="default">
         <i class="iconfont iconxuanzetichengchengyuanicon"></i>
       </Button>
@@ -68,10 +77,13 @@
 
 <script>
 import moment from "moment";
+import { findForAllot } from "_api/purchasing/purchasePlan";
+
 export default {
   name: "More",
   data() {
     return {
+      ArrayValue: [],
       moment: moment,
       form: {
         partCode: "", //申请单号
@@ -110,10 +122,28 @@ export default {
       default: ""
     }
   },
+  mounted() {
+    this.getArrayParams();
+  },
   methods: {
     //展示方
     showModel() {
       this.$emit("getName", "1");
+    },
+    getSupplierNamea1(a) {
+      this.form.guestId = a;
+      // console.log(this.moreData.orderMan, "this.moreData.orderMan");
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        if (res.code === 0) {
+          this.ArrayValue = res.data.content;
+          // console.log(this.ArrayValue, "this.ArrayValue");
+        }
+      });
     },
     //选择创建开始日期
     establish(date) {
