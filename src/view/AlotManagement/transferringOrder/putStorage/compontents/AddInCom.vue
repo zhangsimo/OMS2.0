@@ -271,7 +271,6 @@ export default {
     echoDate() {},
     selectTabelData({ row }) {
       this.checkRow = row;
-
       var params = {
         mainId: row.id
       };

@@ -533,7 +533,7 @@ export default {
     getArray(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
-      // console.log(getArray, "getArray");
+      console.log(data, "data");
     },
     getArrayParams() {
       var req = {};

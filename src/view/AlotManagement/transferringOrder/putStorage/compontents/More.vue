@@ -4,7 +4,7 @@
       <Col span="12">
         <span class="w40">创建日期从：</span>
         <DatePicker
-          v-model="form.createTime"
+          v-model="form.createTimeStart"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
@@ -13,7 +13,7 @@
       <Col span="12">
         <span class="w40 ml10">至：</span>
         <DatePicker
-          v-model="form.endTime"
+          v-model="form.createTimeEnd"
           type="datetime"
           format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
@@ -90,10 +90,10 @@ export default {
         productPartCode: "", //编码
         startDate: "", //配件人
         endDate: "",
-        endTime: "",
+        createTimeEnd: "",
         guestId: "",
         guestName: "",
-        createTime: "",
+        createTimeStart: "",
         code: ""
       }
     };
@@ -134,28 +134,28 @@ export default {
     },
     //选择创建开始日期
     establish(date) {
-      this.form.createTime = data;
+      this.form.createTimeStart = date;
     },
     //选择创建结束日期
     submit(date) {
-      this.form.endTime = data;
+      this.form.createTimeEnd = date;
     },
     // 选择审核开始日期
     check(date) {
-      this.form.shenCreateTime = data;
+      this.form.shenCreateTime = date;
     },
     // 选择审核结束日期
     checkSubmit(date) {
-      this.form.shenEndTime = data;
+      this.form.shenEndTime = date;
     },
     getITPWE() {
-      if (this.form.createTime) {
-        this.form.createTime = moment(this.form.createTime).format(
+      if (this.form.createTimeStart) {
+        this.form.createTimeStart = moment(this.form.createTimeStart).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
-      if (this.form.endTime) {
-        this.form.endTime = moment(this.form.endTime).format(
+      if (this.form.createTimeEnd) {
+        this.form.createTimeEnd = moment(this.form.createTimeEnd).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
@@ -183,10 +183,10 @@ export default {
         productPartCode: "", //编码
         startData: "", //配件人
         endDate: "",
-        endTime: "",
+        createTimeEnd: "",
         guestId: "",
         guestName: "",
-        createTime: ""
+        createTimeStart: ""
       };
     }
   }

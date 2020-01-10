@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择调拨入库单" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="已入库的调拨入库单" width="1000" @on-ok="ok">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -153,7 +153,7 @@ export default {
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal
+        this.tabList = newVal;
       },
       deep: true
     },
