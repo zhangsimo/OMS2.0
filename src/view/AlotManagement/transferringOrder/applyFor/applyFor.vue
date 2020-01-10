@@ -129,7 +129,7 @@
                     :data="Right.tbdata"
                     :footer-method="addFooter"
                     showOverflow="true"
-                    height="500"
+                    height="450"
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -213,7 +213,7 @@
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
-            const reg = /^[1-9]+\d?$/;
+            const reg = /^[0-9]*$/;
             if (reg.test(value)) {
               callback();
             } else {

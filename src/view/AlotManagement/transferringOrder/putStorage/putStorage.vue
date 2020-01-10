@@ -532,8 +532,8 @@ export default {
   methods: {
     getArray(data) {
       this.ArrayValue = data;
+      // console.log(data, "data==>535");
       // this.Leftcurrentrow.detailVOS = data;
-      console.log(data, "data");
     },
     getArrayParams() {
       var req = {};
@@ -796,7 +796,7 @@ export default {
       });
     },
     getDataQuick(v) {
-      console.log(v, "v");
+      // console.log(v, "v");
       const params = {
         createTimeStart: v[0],
         createTimeEnd: v[1]
@@ -951,8 +951,8 @@ export default {
       }
     },
     getOkList(list) {
-      console.log(list, "list");
-      // this.serviceIdValue = list.serviceId;
+      // console.log(list, "list");
+      // console.log(this.ArrayValue, "this.ArrayValue  = 956");
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -972,10 +972,15 @@ export default {
         remark: list.remark,
         serviceId: "",
         storeId: list.storeId,
-        detailVOS: this.ArrayValue,
+        detailVOS: list.detailVOS,
         new: true,
         _highlight: true
       };
+      this.ArrayValue = list.detailVOS;
+      for (var i = 0; i < this.ArrayValue.length; i++) {
+        this.ArrayValue[i].hasInQty = this.ArrayValue[i].hasOutQty;
+      }
+      // console.log(this.ArrayValue, "this.ArrayValue ==>980");
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;

@@ -413,7 +413,8 @@ export default {
         _highlight: true,
         billStatusId: { name: "草稿", value: 0 },
         billStatusName: "草稿",
-        orderManId: this.$store.state.user.userData.id
+        orderManId: this.$store.state.user.userData.id,
+        orderMan: this.$store.state.user.userData.staffName,
       },
       page: {
         total: 0,
@@ -573,8 +574,11 @@ export default {
     },
     //获取销售员
     selectOrderMan(val) {
-      this.formPlan.orderMan = val.label;
-      this.formPlan.orderManId = val.value;
+      console.log(val)
+      // this.formPlan.orderMan = val.label;
+      // this.formPlan.orderManId = val.value;
+      this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
+      this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
     },
     //多选内容
     selectTable(data) {
@@ -641,7 +645,8 @@ export default {
       this.tableData = [];
       this.formPlan = {
         details: [],
-        orderManId: this.PTrow.orderManId
+        orderManId: this.PTrow.orderManId,
+        orderMan:this.PTrow.orderMan
       };
       this.draftShow = 0;
       if (!this.isAdd) {
