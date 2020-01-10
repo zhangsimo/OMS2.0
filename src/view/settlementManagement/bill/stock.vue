@@ -9,7 +9,13 @@
           </div>
           <div class="db ml20">
             <span>制单日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
+            <Date-picker
+              :value="value"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+              @on-change="dateChange"
+            ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -80,7 +86,7 @@
         ></Table>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @getOne="getOne"  />
+    <selectDealings ref="selectDealings" @getOne="getOne" />
   </div>
 </template>
 
@@ -89,13 +95,12 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./components/SelectTheCustomer";
 import { creat } from "./../components";
 import {
+  getWarehousingList,
+  getWarehousingPart,
   getOutStockList,
-  getOutStockPart,
-  getReturnGoodsList,
-  getReturnGoodsPart,
-  getWarehousingList
+  getOutStockPart
 } from "@/api/bill/saleOrder";
-import moment from 'moment'
+import moment from "moment";
 export default {
   components: {
     quickDate,
@@ -109,7 +114,7 @@ export default {
       modal1: false,
       columns: [
         {
-          key:'index',
+          key: "index",
           title: "序号",
           width: 40,
           className: "tc"
@@ -169,8 +174,8 @@ export default {
           title: "金额",
           key: "outQty",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.outQty).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.outQty.toFixed(2));
           }
         },
         {
@@ -186,7 +191,7 @@ export default {
       ],
       columns1: [
         {
-          key:'index',
+          key: "index",
           title: "序号",
           width: 40,
           className: "tc"
@@ -226,32 +231,32 @@ export default {
           title: "不含税单价",
           key: "noTaxPrice",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.noTaxPrice).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.noTaxPrice.toFixed(2));
           }
         },
         {
           title: "不含税金额",
           key: "noTaxAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.noTaxAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.noTaxAmt.toFixed(2));
           }
         },
         {
           title: "含税单价",
           key: "taxPrice",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.taxPrice).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.taxPrice.toFixed(2));
           }
         },
         {
           title: "含税金额",
           key: "taxAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.taxAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.taxAmt.toFixed(2));
           }
         },
         {
@@ -263,16 +268,16 @@ export default {
           title: "销售单价",
           key: "sellPrice",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.sellPrice).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.sellPrice.toFixed(2));
           }
         },
         {
           title: "销售金额",
           key: "sellAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.sellAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.sellAmt.toFixed(2));
           }
         }
       ],
@@ -302,8 +307,8 @@ export default {
   },
   methods: {
     // 日期选择
-    dateChange(data){
-      this.value = data
+    dateChange(data) {
+      this.value = data;
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -358,7 +363,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 6 && index !==11) {
+        if (index > 6 && index !== 11) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -373,7 +378,7 @@ export default {
               value: v.toFixed(2)
             };
           }
-        } else if(index === 11){
+        } else if (index === 11) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -400,7 +405,7 @@ export default {
     },
     //查询
     query() {
-      this.data1 = []
+      this.data1 = [];
       this.getGeneral();
     },
     // 往来单位选择
@@ -442,59 +447,74 @@ export default {
     },
     // 总表查询
     getGeneral() {
-      this.data1 = []
+      this.data1 = [];
       let obj = {
         orgid: this.model1,
         guestId: this.companyId,
         enterTypeId: this.typeName
       };
       if (this.typeName === "050202") {
-        obj.outDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        obj.outDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-        getOutStockList(obj).then(res => {
-          if (res.data.length !== 0) {
-            res.data.map((item, index) => {
-              item.index = index + 1;
-              item.accountSign = item.accountSign ? "已审" : "未审";
-              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
-            });
-            this.data = res.data;
-          } else {
-            this.data = [];
-          }
-        });
-      } else if(this.typeName === "050102") {
-        obj.enterDateStart= this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        obj.enterDateEnd= this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
-        getWarehousingList(obj).then(res=>{
-          if (res.data.length !== 0) {
-            res.data.map((item, index) => {
-              item.index = index + 1;
-              item.accountSign = item.accountSign ? "已审" : "未审";
-              item.orderType = item.orderType ? item.orderType===1 ? '电商订单':'华胜订单':'销售开单'
-            });
-            this.data = res.data;
-          } else {
-            this.data = [];
-          }
-        })
+        (obj.outDateStart = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : ""),
+          (obj.outDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""),
+          getOutStockList(obj).then(res => {
+            if (res.data.length !== 0) {
+              res.data.map((item, index) => {
+                item.index = index + 1;
+                item.accountSign = item.accountSign ? "已审" : "未审";
+                item.orderType = item.orderType
+                  ? item.orderType === 1
+                    ? "电商订单"
+                    : "华胜订单"
+                  : "销售开单";
+              });
+              this.data = res.data;
+            } else {
+              this.data = [];
+            }
+          });
+      } else if (this.typeName === "050102") {
+        (obj.enterDateStart = this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : ""),
+          (obj.enterDateEnd = this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : ""),
+          getWarehousingList(obj).then(res => {
+            if (res.data.length !== 0) {
+              res.data.map((item, index) => {
+                item.index = index + 1;
+                item.accountSign = item.accountSign ? "已审" : "未审";
+                item.orderType = item.orderType
+                  ? item.orderType === 1
+                    ? "电商订单"
+                    : "华胜订单"
+                  : "销售开单";
+              });
+              this.data = res.data;
+            } else {
+              this.data = [];
+            }
+          });
       }
-
-      // if (this.typeName === "Warehousing") {
-      //   getOutStockList({}).then(res => {
-      //     console.log(res);
-      //   });
-      // } else if (this.typeName === "Return") {
-      //   getReturnGoodsList(obj).then(res => {
-      //     console.log(res);
-      //   });
-      // }
     },
     // 选中总表查询明细
     election(row) {
-      if(this.typeName === "050102"){
-        getReturnGoodsPart({mainId:row.id}).then(res => {
-          console.log(res);
+      if (this.typeName === "050102") {
+        getWarehousingPart({ mainId: row.id }).then(res => {
+          // console.log(res);
+          if (res.data.length !== 0) {
+            res.data.map((item, index) => {
+              item.taxSign = item.taxSign ? "是" : "否";
+              item.index = index + 1;
+            });
+            this.data1 = res.data;
+          } else {
+            this.data1 = [];
+          }
         });
       } else {
         getOutStockPart({ mainId: row.id }).then(res => {
@@ -504,6 +524,8 @@ export default {
               item.index = index + 1;
             });
             this.data1 = res.data;
+          } else {
+            this.data1 = [];
           }
         });
       }

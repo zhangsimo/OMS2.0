@@ -26,7 +26,7 @@ export function getWarehousingList(data) {
         data
     })
 }
-// 采购入库配件查询
+// 采购入库/销售退货配件查询
 export function getWarehousingPart(params) {
     return axios.request({
         url: `${api.omsOrder}/enterDetail/details`,
@@ -34,23 +34,8 @@ export function getWarehousingPart(params) {
         params
     })
 }
-// 销售退货单查询
-export function getReturnGoodsList(data) {
-    return axios.request({
-        url: `${api.omsOrder}/enterMain/findOutMainSellRtn`,
-        method: 'post',
-        data
-    })
-}
-// 销售退货配件查询
-export function getReturnGoodsPart(params) {
-    return axios.request({
-        url: `${api.omsOrder}/enterDetail/details`,
-        method: 'get',
-        params
-    })
-}
-// 采购退货单查询/销售出库单查询
+
+// 采购退货/销售出库单查询
 export function getOutStockList(data) {
     return axios.request({
         url: `${api.omsOrder}/outMain/findOutMainAll`,
@@ -58,7 +43,7 @@ export function getOutStockList(data) {
         data
     })
 }
-// 销售出库配件查询
+// 采购退货/销售出库配件查询
 export function getOutStockPart(params) {
     return axios.request({
         url: `${api.omsOrder}/outDetail/queryByMainId`,
