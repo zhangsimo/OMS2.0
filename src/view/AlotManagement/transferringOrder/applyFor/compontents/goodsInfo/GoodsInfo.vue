@@ -309,10 +309,10 @@ export default class GoodsInfo extends Vue {
   ];
   private isRequired: boolean = false;
   private changeDeliveryType() {
-    if (!["0", "1"].includes(this.formDateRight.deliveryType)) {
-      this.isRequired = false;
-    } else {
+    if (this.formDateRight.deliveryType == 2 || this.formDateRight.deliveryType == 3) {
       this.isRequired = true;
+    } else {
+      this.isRequired = false;
     }
   }
 
@@ -471,7 +471,6 @@ export default class GoodsInfo extends Vue {
     ref.resetFields();
     this.disabled = false;
     this.formDateRight.businessNum = this.row.serviceId;
-    console.log(this.formDateRight.businessNum)
     if (row.logisticsRecordVO) {
       this.logisticsRecordVO = row.logisticsRecordVO
       this.SaveId = row.logisticsRecordVO.id
@@ -493,6 +492,10 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.businessNum = row.logisticsRecordVO.businessNum;
       this.formDateRight.relationNum = row.logisticsRecordVO.relationNum;
       this.formDateRight.guestId = row.logisticsRecordVO.guestId;
+      if(this.formDateRight.deliveryType){
+        console.log(this.formDateRight.deliveryType)
+        this.changeDeliveryType()
+      }
     } else {
       this.formDateRight = row
       this.formDateRight.businessNum = this.row.serviceId;
@@ -556,7 +559,7 @@ export default class GoodsInfo extends Vue {
       //物流中的数据
       logisticsComp: "" //物流公司名字
     };
-  }
+  };
 }
 </script>
 
