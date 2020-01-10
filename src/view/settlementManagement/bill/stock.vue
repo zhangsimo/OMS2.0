@@ -147,7 +147,7 @@ export default {
         },
         {
           title: "仓库",
-          key: "enterTypeIdName",
+          key: "storeName",
           className: "tc"
         },
         {
