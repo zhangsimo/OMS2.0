@@ -254,7 +254,7 @@ export default {
           callback();
         }
       } else {
-        callback(new Error('不能小于0'))
+        callback(new Error("不能小于0"));
       }
     };
     const diffeReason = (rule, value, callback, { row }) => {
@@ -620,12 +620,12 @@ export default {
     },
     // 计算尾部总和
     countAllAmount(data) {
-      let count = 0
+      let count = 0;
       data.forEach(row => {
-        count += +this.countAmount(row)
-      })
-      count = count.toFixed(2)
-      return count
+        count += +this.countAmount(row);
+      });
+      count = count.toFixed(2);
+      return count;
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {
@@ -647,7 +647,7 @@ export default {
             return this.$utils.sum(data, column.property);
           }
           if (columnIndex === 11) {
-            return ` ${this.countAllAmount(data)} `
+            return ` ${this.countAllAmount(data)} `;
           }
           return null;
         })
@@ -933,20 +933,26 @@ export default {
             sum += item.thisNoAccountAmt * 1;
           });
           const index = this.Reconciliationcontent[0].index;
-          const sum1 =
-            this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
-          if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
-            return this.$message.error(
-              "本次不对账合计不能大于总金额减去前期已对账"
-            );
-          this.Reconciliation = false;
           if (this.business === "销售退货" || this.business === "销售出库") {
+            const sum1 =
+              this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
+            if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
+              return this.$message.error(
+                "本次不对账合计不能大于总金额减去前期已对账"
+              );
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
           } else {
+            const sum1 =
+              this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
+            if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
+              return this.$message.error(
+                "本次不对账合计不能大于总金额减去前期已对账"
+              );
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
           }
+          this.Reconciliation = false;
         } else {
           this.Reconciliation = true;
           this.$message.error("信息填写错误");
@@ -1004,13 +1010,13 @@ export default {
           },
           {
             number: "1",
-            accountNo: this.data[0].Statementoilincludingtax,
-            accountSumAmt: this.data[1].Statementoilincludingtax
+            accountNo: this.data[0].Taxincludedpartsstatement,
+            accountSumAmt: this.data[1].Taxincludedpartsstatement
           },
           {
             number: "2",
-            accountNo: this.data[0].Taxincludedpartsstatement,
-            accountSumAmt: this.data[1].Taxincludedpartsstatement
+            accountNo: this.data[0].Statementoilincludingtax,
+            accountSumAmt: this.data[1].Statementoilincludingtax
           }
         ];
         let four = [

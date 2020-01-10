@@ -4,8 +4,8 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10"/>
-            <Input v-model="form.fullName" placeholder="配件名称" style="width: 160px" class="mr10"/>
+            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10" />
+            <Input v-model="form.fullName" placeholder="配件名称" style="width: 160px" class="mr10" />
             <Select v-model="form.partBrandCode" class="w100 mr10" clearable placeholder="--品牌--">
               <Option
                 v-for="item in quickArray"
@@ -102,7 +102,7 @@
           <vxe-table-column title="最后订货日期"></vxe-table-column>
           <vxe-table-column title="最新预计到货日期" width="140"></vxe-table-column>
           <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
-          <vxe-table-column field="finishTime" title="结束日期"></vxe-table-column>
+          <vxe-table-column field="pastTime" title="结束日期"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -349,6 +349,7 @@ export default {
       };
       shenqingdanliebiao(params)
         .then(res => {
+          console.log(this.BottomTableData, "this.BottomTableData =>352");
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
           }

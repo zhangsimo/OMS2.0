@@ -269,6 +269,7 @@ export default {
       //console.log("当前行" + row);
       this.BottomTableData = row.details;
       this.currentrow = row;
+      console.log(row, "row ==>272");
     },
     changeSize(s) {
       this.pageList.page = 0;
@@ -281,6 +282,8 @@ export default {
     },
 
     ok1() {
+      this.currentrow.settleStatus = this.currentrow.settleStatus.value;
+      
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code == 0) {

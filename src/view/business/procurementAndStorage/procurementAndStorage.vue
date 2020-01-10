@@ -141,7 +141,7 @@
                     <Input
                       class="w160"
                       v-model="formPlan.orderMan"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      :disabled="formPlan.billStatusValue != 0"
                     />
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
@@ -161,7 +161,7 @@
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      :disabled="formPlan.billStatusValue != 0 "
                       @on-change="getBillType"
                     >
                       <Option
@@ -175,7 +175,7 @@
                     <Select
                       v-model="formPlan.settleTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      :disabled="formPlan.billStatusValue != 0"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00106"

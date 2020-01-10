@@ -8,7 +8,7 @@ const dev = {
   // omsApi: 'http://192.168.30.21:9240', // 付玮琳
   // wmsApi: 'http://192.168.30.84:9250', // 谢建明
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
-  omsApi: "http://192.168.30.191:9240", //徐林烽
+  omsApi: "http://192.168.30.69:9240", //徐林烽
   wmsApi: "http://192.168.30.16:9250", // 徐林烽
   omsOrder: "http://192.168.30.69:9210", // 徐林烽
   // omsOrder: 'http://192.168.30.191:9210', // 常国地
@@ -18,10 +18,10 @@ const dev = {
   // omsOrder: "http://192.168.30.234:9210", // 曾史强
   // omsOrder: 'http://192.168.30.221:9210',
   // omsOrder: 'http://192.168.30.221:9210', //system/staff/management
-  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.221:9200",
-  // omsOrder:'http://192.168.30.16:9210', //陈舒
-  omsSettle: "http://192.168.30.221:9270",
+  omsStore: "http://192.168.30.179:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.179:9200",
+  // omsOrder:'http://192.168.30.221:9210', //陈舒
+  omsSettle: "http://192.168.30.179:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -32,7 +32,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.221:9280", //9280
+  omsSotck: "http://192.168.30.179:9280", //9280
   /**oms财务接口 */
   // financeCore: '', // 9300
   // financeReport: '', // 9310

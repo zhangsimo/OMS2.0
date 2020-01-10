@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择调拨入库单" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="已入库的调拨入库单" width="1000" @on-ok="ok">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -153,7 +153,7 @@ export default {
   watch: {
     tbdata: {
       handler(newVal) {
-        this.tabList = newVal
+        this.tabList = newVal;
       },
       deep: true
     },
@@ -253,13 +253,14 @@ export default {
     cancel() {},
     echoDate() {},
     async selectTabelData({ row }) {
-      console.log(row);
+      console.log(row, "row ==>256");
       this.checkRow = row;
       const params = {
         mainId: row.id
       };
       const res = await chengpingDetail(params);
       this.currentData = res.data;
+      this.currentData[0].remark = this.checkRow.remark
     },
     ok() {
       // 将选好的成品传父组件
@@ -268,7 +269,6 @@ export default {
         this.$Message.info("请勾选需要选入的行");
         return;
       }
-      console.log("jinru");
       this.$emit("ok", this.currentData);
       this.searchPartLayer = false;
     }

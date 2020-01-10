@@ -273,7 +273,6 @@ export default class InterPurchase extends Vue {
     _highlight: true,
     id: '',
     billStatusId: '0',
-    createTime: tools.transTime(new Date()),
     details: [],
     processInstanceId: "",
   }
@@ -301,7 +300,7 @@ export default class InterPurchase extends Vue {
       processInstanceId: "",
     }
     this.formPlanmain.createUid = "";
-    this.formPlanmain.orderDate = this.PTrow.createTime;
+    this.formPlanmain.orderDate = new Date();
     this.isAdd = false;
     this.isInput = false;
     this.selectRowState = null;
@@ -566,7 +565,7 @@ export default class InterPurchase extends Vue {
         } else {
           this.isInput = true;
         }
-        if (['草稿', '已作废'].includes(v.billStatusId.name)) {
+        if (['草稿', '已作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
           this.hideSp = true;
         } else {
           this.hideSp = false;

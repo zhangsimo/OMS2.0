@@ -252,7 +252,7 @@ export default {
     },
     ok() {
        // 将选好的成品传父组件
-       console.log(this.checkRow)
+      console.log(this.checkRow)
       this.$emit('ok', this.checkRow)
     }
   }

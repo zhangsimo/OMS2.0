@@ -127,7 +127,9 @@
                       :disabled="draftShow != 0"
                       type="datetime"
                       class="w160"
+                      format="yyyy-MM-dd HH:mm:ss"
                       v-model="formPlan.checkDate"
+                      @on-change="dateType"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="盘点单号" prop="serviceId">
@@ -172,6 +174,7 @@
                       :action="upurl"
                       :format="['xlsx', 'xls', 'csv']"
                       :before-upload="handleBeforeUpload"
+                        :on-format-error="onFormatError"
                       :on-success="handleSuccess"
                       :disabled="draftShow != 0"
                     >
@@ -461,6 +464,7 @@ export default {
             message: "盘点日期必选",
             trigger: "change"
           }
+
           // {
           //   required: true,
           //   type: 'date',
@@ -607,7 +611,7 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate:'',
+        checkDate: '',
         orderMan: "",
         serviceId: "",
         print: "",
@@ -622,7 +626,8 @@ export default {
         _highlight:true
       };
       this.formPlan = item
-      this.Left.tbdata.unshift(item);
+     let  newItem = JSON.parse(JSON.stringify(item))
+      this.Left.tbdata.unshift(newItem);
       this.flag = 1;
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -685,7 +690,9 @@ export default {
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
         this.$refs.form.validate(valid => {
+          // let preTime = "";
           if (valid) {
+            // preTime = JSON.parse(JSON.stringify(this.formPlan.checkDate));
             if (this.formPlan.billStatusId.value !== 0) {
               this.$Message.error("只有草稿状态才能保存");
               return;
@@ -702,6 +709,9 @@ export default {
                 this.$Message.success("保存成功");
                 this.getList();
               }
+              // else{
+              //   this.formPlan.checkDate = preTime;
+              // }
               this.handleReset();
             });
           } else {
@@ -819,15 +829,34 @@ export default {
     importAss() {
       this.upurl = `${importAccessories}?id=${this.formPlan.id}`;
     },
-    handleSuccess(res, file) {
-      let self = this;
-      if (res.code == 0) {
-        self.$Message.success("导入成功");
-        this.Right.tbdata = res.data.details;
-        this.getList();
+    // handleSuccess(res, file) {
+    //   let self = this;
+    //   if (res.code == 0) {
+    //     self.$Message.success("导入成功");
+    //     this.Right.tbdata = res.data.details;
+    //     this.getList();
+    //   } else {
+    //     self.$Message.error(res.message);
+    //   }
+    // },
+    onFormatError(file){
+         this.$Message.error("只支持xls xlsx后缀的文件");
+    },
+    handleSuccess(response){
+      if (response.code == 0) {
+        let txt = "上传成功";
+        if (response.data.length > 0) {
+          txt = response.data.join(",");
+        }
+        this.$Notice.warning({
+          title: "导入成功",
+          desc: txt,
+          duration: 0
+        });
       } else {
-        self.$Message.error(res.message);
+        this.$Message.error(response.message);
       }
+      this.getList();
     },
     handleBeforeUpload() {
       if (!this.formPlan.billStatusId) {
@@ -869,6 +898,12 @@ export default {
     },
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
+    //改变时间类型
+    dateType(){
+      // this.formPlan.checkDate=moment(this.formPlan.checkDate).format(
+      //   "YYYY-MM-DD HH:mm:ss")
+    // console.log( this.formPlan.checkDate)
+    },
     //footer计算
     addFooter() {},
     // 确定
@@ -893,6 +928,14 @@ export default {
     window.onresize = () => {
       this.getDomHeight();
     };
+  },
+  watch:{
+        formPlan: {
+      handler(val, old) {
+        console.log(val, old)
+      },
+      deep: true
+    }
   }
 };
 </script>

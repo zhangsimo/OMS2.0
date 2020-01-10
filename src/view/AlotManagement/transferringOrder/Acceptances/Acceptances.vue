@@ -112,9 +112,9 @@
               <vxe-table-column field="unit" title="单位"></vxe-table-column>
               <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
               <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
-              <vxe-table-column field title="紧销品" type="checkbox">
+              <vxe-table-column title="紧销品" width="100">
                 <template v-slot="{ row,rowIndex }">
-                  <Checkbox disabled :value="row.isTight == 1"></Checkbox>
+                  <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                 </template>
               </vxe-table-column>
               <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -199,11 +199,11 @@ export default {
     selctionTopBottom(a) {},
     // 单元格被激活事件
     editActivedEvent({ row, column }, event) {
-      console.log(`打开 ${column.title} 列编辑`);
+      // console.log(`打开 ${column.title} 列编辑`);
     },
     // 单元格被关闭事件
     editClosedEvent({ row, column }, event) {
-      console.log(`关闭 ${column.title} 列编辑`);
+      // console.log(`关闭 ${column.title} 列编辑`);
     },
     //合计
     footerMethod({ columns, data }) {
@@ -250,6 +250,7 @@ export default {
       params.id = this.RowMessage.id;
       findById(params).then(res => {
         this.Bottom.tbdata = res.data.detailVOS;
+        // console.log(this.Bottom.tbdata, "this.Bottom.tbdata =>256");
       });
     },
     // 初始化
@@ -275,7 +276,7 @@ export default {
         if (res.code === 0) {
           this.topRight.tbdata = res.data.content;
           this.topRight.page.total = res.data.totalElements;
-          console.log(this.topRight.tbdata, "this.topRight.tbdata");
+          // console.log(this.topRight.tbdata, "this.topRight.tbdata");
         }
       });
     },

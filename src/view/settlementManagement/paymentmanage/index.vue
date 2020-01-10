@@ -209,6 +209,7 @@ import {
   getNumberList
 } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
+import moment from 'moment';
 export default {
   components: {
     quickDate,
@@ -833,8 +834,8 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     let obj = {
       orgId: arr[1],
-      startDate: arr[0][0],
-      endDate: arr[0][1]
+      startDate: this.value[0] ?  moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
+      endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
     };
     this.getGeneral(obj);
     this.value = arr[0];
@@ -887,7 +888,7 @@ export default {
     // },
     // 快速查询
     quickDate(data) {
-      this.value = data;
+       this.value = data ? data : ['',''];
     },
     // 选择日期
     changedate(daterange) {
@@ -897,8 +898,8 @@ export default {
     senior() {
       let obj = {
         orgId: this.model1,
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
+        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):'',
         guestType: this.model2,
         tenantName: this.nametext,
         serviceType: this.model3,
@@ -912,8 +913,8 @@ export default {
       this.data2 = []
       let obj = {
         orgId: this.model1,
-        startDate: this.value[0],
-        endDate: this.value[1]
+        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
+        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
       };
       this.getGeneral(obj);
     },
@@ -935,8 +936,8 @@ export default {
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
-        startDate: obj.startDate,
-        endDate: obj.endDate,
+        startDate: obj.startDate ? moment(obj.startDate).format('YYYY-MM-DD HH:mm:ss') : '',
+        endDate: obj.endDate ? moment(obj.endDate).format('YYYY-MM-DD HH:mm:ss') : '',
         guestId: data.guestId
       }).then(res => {
         if (res.data.one) {
@@ -979,8 +980,8 @@ export default {
     // 点击总汇表数据查询销售/采购清单
     selete(data) {
       let date = {
-        startDate: this.value[0],
-        endDate: this.value[1]
+        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
+        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
       };
       this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);

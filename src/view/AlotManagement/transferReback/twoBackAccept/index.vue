@@ -20,9 +20,9 @@
           </div>
           <div class="db mr10">
             <Select v-model="form.status" class="w100 mr10" clearable>
-              <Option value="1" label="待受理"></Option>
-              <Option value="2" label="已受理"></Option>
-              <Option value="7" label="已拒绝"></Option>
+              <Option value="UNACCEPTED" label="待受理"></Option>
+              <Option value="ACCEPTED" label="已受理"></Option>
+              <Option value="REJECTED" label="已拒绝"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -91,7 +91,7 @@
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
-          <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
+          <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
             field="defaultValue"
@@ -116,13 +116,13 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
         <span>
-          <Icon type="information"></Icon>是否确认受理,受理后生成【调出退回单】!
+          <Icon type="information"></Icon>是否确认受理 !
         </span>
       </Modal>
       <Modal v-model="modal3" title="提示" @on-ok="ok3" @on-cancel="cancel">

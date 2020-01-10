@@ -1,11 +1,11 @@
-import api from '_conf/url';
-import axios from '@/libs/api.request';
+import api from "_conf/url";
+import axios from "@/libs/api.request";
 
 //获取调拨申请列表
 export function getList(params) {
   return axios.request({
     url: `${api.omsOrder}/allotEnterMain/queryAll`,
-    method: 'get',
+    method: "get",
     params
   });
 }
@@ -14,7 +14,7 @@ export function getList(params) {
 export function getListDetail(params) {
   return axios.request({
     url: `${api.omsOrder}/allotEnterDetail/findEnterDetails`,
-    method: 'get',
+    method: "get",
     params
   });
 }
@@ -23,15 +23,15 @@ export function getListDetail(params) {
 export function inDataList(data) {
   return axios.request({
     url: `${api.omsOrder}/allotEnterMain/allotEnterStorage`,
-    method: 'post',
+    method: "post",
     data
   });
 }
 //打印
 export function stampDataList(params) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/allotEnterStorage`,
-    method: 'get',
+    url: `${api.omsOrder}/allotEnterMain/pointAdd`,
+    method: "get",
     params
   });
 }

@@ -111,7 +111,7 @@
           <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
           <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
-          <vxe-table-column field="hasInQty" title="入库数量"></vxe-table-column>
+          <vxe-table-column field="hasInQty" title="申请数量"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
@@ -271,17 +271,18 @@ export default {
     echoDate() {},
     selectTabelData({ row }) {
       this.checkRow = row;
-
       var params = {
         mainId: row.id
       };
       getParticulars(params).then(res => {
         this.currentData = res.data;
+
         this.$emit("getArray", this.currentData);
       });
     },
     ok() {
       // 将选好的成品传父组件
+      this.checkRow.detailVOS = this.currentData;
       this.$emit("ok", this.checkRow);
     }
   }

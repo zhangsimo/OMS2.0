@@ -89,7 +89,7 @@
             </vxe-table-column>
             <vxe-table-column field="orderQty" title="订单数量">
             </vxe-table-column>
-            <vxe-table-column title="订单金额" filed="orderAmt">
+            <vxe-table-column title="订单金额" field="orderAmt">
             </vxe-table-column>
             <vxe-table-column
               field="commitTime"
@@ -181,7 +181,7 @@
             <vxe-table-column field="orderPrice" title="销价"></vxe-table-column>
             <vxe-table-column title="金额">
               <template v-slot="{ row }">
-                <span>{{ countAmount(row) }} </span>
+                <span>{{ countAmount(row)| priceFilters }} </span>
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -403,7 +403,7 @@
           count += this.countAmount(row)
         })
         this.totalMoney = count
-        return count
+        return count.toFixed(2);
       },
       //获取尾部总数
       footerMethod({columns, data}) {
@@ -413,7 +413,7 @@
               return '和值'
             }
             if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
-              return this.$utils.sum(data, column.property)
+              return this.$utils.sum(data, column.property).toFixed(2);
             }
             if (columnIndex === 6) {
               return ` ${this.countAllAmount(data)} `

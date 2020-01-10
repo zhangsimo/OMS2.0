@@ -5,29 +5,37 @@
       <div class="quick-navigation">
         <div style="display: flex">
           <a class="quick-one quick-all" @click="go(1000)">
+            <img src="../../../assets/images/home/quick-one.svg" alt="">
             <span>采购计划</span>
           </a>
           <a class="quick-two quick-all" @click="go(1001)">
+            <img src="../../../assets/images/home/quick-two.svg" alt="">
             <span>计划采购订单</span>
           </a>
           <a class="quick-three quick-all" @click="go(1003)">
+            <img src="../../../assets/images/home/quick-three.svg" alt="">
             <span>临时采购订单</span>
           </a>
           <a class="quick-four quick-all" @click="go(1004)">
+            <img src="../../../assets/images/home/quick-four.svg" alt="">
             <span>外采订单</span>
           </a>
         </div>
         <div style="margin: 20px 0px;display: flex">
           <a class="quick-five quick-all" @click="go(2000)">
+            <img src="../../../assets/images/home/quick-five.svg" alt="">
             <span>销售订单</span>
           </a>
           <a class="quick-six quick-all" @click="go(3101)">
+            <img src="../../../assets/images/home/quick-six.svg" alt="">
             <span>调拨申请</span>
           </a>
           <a class="quick-seven quick-all" @click="go(5200)">
+            <img src="../../../assets/images/home/quick-seven.svg" alt="">
             <span>应收应付结算</span>
           </a>
           <a class="quick-enigth quick-all" @click="go(4000)">
+            <img src="../../../assets/images/home/quick-enigth.svg" alt="">
             <span>库存查询</span>
           </a>
         </div>
@@ -160,38 +168,43 @@ export default {
     line-height: 110px;
     margin-right: 20px;
     flex-flow: row nowrap;
+    border-radius: 20px 20px 0 0 ;
+    img {
+      padding-left: 20px;
+      width: 65px;
+      /*height: 50px;*/
+      vertical-align: middle;
+    }
     span {
-      margin-left: 25%;
+      margin-left: 10px;
       font-size: 16px;
       color: #ffffff;
     }
   }
   .quick-one {
-    background-image: url("../../../assets/images/home/quick-one.svg");
+    background-color: #FD5C5C;
   }
   .quick-two {
-    background-image: url("../../../assets/images/home/quick-two.svg");
-    /*margin: 0 auto;*/
+    background-color: #FF9920;
   }
   .quick-three {
-    background-image: url("../../../assets/images/home/quick-three.svg");
-    /*margin: 0 auto;*/
+    background-color: #7562FF;
   }
   .quick-four {
-    background-image: url("../../../assets/images/home/quick-four.svg");
+    background-color: #29ABFF;
     margin-right: 0;
   }
   .quick-five {
-    background-image: url("../../../assets/images/home/quick-five.svg");
+    background-color: #29ABFF;
   }
   .quick-six {
-    background-image: url("../../../assets/images/home/quick-six.svg");
+    background-color: #28C1C1;
   }
   .quick-seven {
-    background-image: url("../../../assets/images/home/quick-seven.svg");
+    background-color: #FF7743;
   }
   .quick-enigth {
-    background-image: url("../../../assets/images/home/quick-enigth.svg");
+    background-color: #8088A8;
     margin-right: 0;
   }
 }
