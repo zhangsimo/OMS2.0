@@ -157,117 +157,186 @@ export default {
         {
           title: "对账应收",
           key: "accountsReceivable",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.accountsReceivable).toFixed(2))
+          }
         },
         {
           title: "应收返利",
           key: "receivableRebate",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.receivableRebate).toFixed(2))
+          }
         },
         {
           title: "应收坏账",
           key: "badDebtReceivable",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.badDebtReceivable).toFixed(2))
+          }
         },
         {
           title: "对账应付",
           key: "reconciliation",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.reconciliation).toFixed(2))
+          }
         },
         {
           title: "应付返利",
           key: "dealingRebates",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.dealingRebates).toFixed(2))
+          }
         },
         {
           title: "应付坏账",
           key: "badDebtPaying",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.badDebtPaying).toFixed(2))
+          }
         },
         {
           title: "其他应收款",
           key: "otherAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.otherAmt).toFixed(2))
+          }
         },
         {
           title: "预收账款",
           key: "advanceReceipt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.advanceReceipt).toFixed(2))
+          }
         },
         {
           title: "收款合计",
           key: "sumAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.sumAmt).toFixed(2))
+          }
         },
         {
           title: "现金",
           key: "cashAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.cashAmt).toFixed(2))
+          }
         },
         {
           title: "A卡",
           key: "aCardAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.aCardAmt).toFixed(2))
+          }
         },
         {
           title: "B卡",
           key: "bCardAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.bCardAmt).toFixed(2))
+          }
         },
         {
           title: "C卡",
           key: "cCardAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.cCardAmt).toFixed(2))
+          }
         },
         {
           title: "D卡",
           key: "dCardAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.dCardAmt).toFixed(2))
+          }
         },
         {
           title: "基本开户A",
           key: "aBasicAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.aBasicAmt).toFixed(2))
+          }
         },
         {
           title: "基本开户B",
           key: "bBasicAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.bBasicAmt).toFixed(2))
+          }
         },
         {
           title: "一般户A",
           key: "aOrdinaryAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.aOrdinaryAmt).toFixed(2))
+          }
         },
         {
           title: "一般户B",
           key: "bOrdinaryAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.bOrdinaryAmt).toFixed(2))
+          }
         },
         {
           title: "运费",
           key: "freightAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.freightAmt).toFixed(2))
+          }
         },
         {
           title: "手续费",
           key: "formalitiesAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.formalitiesAmt).toFixed(2))
+          }
         },
         {
           title: "利息收入",
           key: "interestIncomeAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.interestIncomeAmt).toFixed(2))
+          }
         },
         {
           title: "利息支出",
           key: "interestExpenseAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.interestExpenseAmt).toFixed(2))
+          }
         },
         {
           title: "代收代付",
           key: "paymentAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.paymentAmt).toFixed(2))
+          }
         },
         {
           title: "收款所属门店",

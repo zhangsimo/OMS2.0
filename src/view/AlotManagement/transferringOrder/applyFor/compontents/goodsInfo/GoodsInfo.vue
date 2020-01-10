@@ -439,19 +439,18 @@ export default class GoodsInfo extends Vue {
     let ref: any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    // this.formDateRight = row
     this.formDateRight.businessNum = this.row.serviceId;
-    // this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
-    // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-    // this.formDateRight.settleType = this.formDateRight.settleType + "";
+    console.log(this.formDateRight.businessNum)
     if (row.logisticsRecordVO) {
+      this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       this.formDateRight = { ...row.logisticsRecordVO };
-      this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-      this.formDateRight.settleType = this.formDateRight.settleType + "";
+      // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
+      // this.formDateRight.settleType = this.formDateRight.settleType + "";
       // this.formDateRight = row.logisticsRecordVO
     } else {
       this.formDateRight = row
+      this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
       // this.formDateRight.receiveComp = row.receiveCompName;
       // this.formDateRight.streetAddress = row.streetAddress;
