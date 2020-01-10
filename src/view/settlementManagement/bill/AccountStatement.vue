@@ -439,57 +439,90 @@ export default {
         {
           title: "对账应收",
           key: "accountsReceivable",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.accountsReceivable).toFixed(2))
+          }
         },
         {
           title: "应收返利",
           key: "receivableRebate",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.receivableRebate).toFixed(2))
+          }
         },
         {
           title: "应收坏账",
           key: "badDebtReceivable",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.badDebtReceivable).toFixed(2))
+          }
         },
         {
           title: "对账应付",
           key: "reconciliation",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.reconciliation).toFixed(2))
+          }
         },
         {
           title: "应付返利",
           key: "dealingRebates",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.dealingRebates).toFixed(2))
+          }
         },
         {
           title: "应付坏账",
           key: "payingBadDebts",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.payingBadDebts).toFixed(2))
+          }
         },
         {
           title: "实际收款/付款",
           key: "receiptPayment",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.receiptPayment).toFixed(2))
+          }
         },
         {
           title: "已收金额",
           key: "amountReceived",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.amountReceived).toFixed(2))
+          }
         },
         {
           title: "未收金额",
           key: "noCharOffAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noCharOffAmt).toFixed(2))
+          }
         },
         {
           title: "已付金额",
           key: "amountPaid",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.amountPaid).toFixed(2))
+          }
         },
         {
           title: "未付金额",
           key: "unpaidAmount",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.unpaidAmount).toFixed(2))
+          }
         },
         {
           title: "计算结算类型",
@@ -552,7 +585,10 @@ export default {
         {
           title: "收/付款金额",
           key: "checkAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.checkAmt).toFixed(2))
+          }
         },
         {
           title: "审核状态",
@@ -605,27 +641,42 @@ export default {
         {
           title: "应收金额",
           key: "rpAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.rpAmt).toFixed(2))
+          }
         },
         {
           title: "前期已对账金额",
           key: "charOffAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.charOffAmt).toFixed(2))
+          }
         },
         {
           title: "前期未对账金额",
           key: "noCharOffAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noCharOffAmt).toFixed(2))
+          }
         },
         {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.thisNoAccountAmt).toFixed(2))
+          }
         },
         {
           title: "本次对账金额",
           key: "thisAccountAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.thisAccountAmt).toFixed(2))
+          }
         }
       ],
       columns4: [
@@ -658,27 +709,42 @@ export default {
         {
           title: "应付金额",
           key: "rpAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.rpAmt).toFixed(2))
+          }
         },
         {
           title: "前期已对账金额",
           key: "charOffAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.charOffAmt).toFixed(2))
+          }
         },
         {
           title: "前期未对账金额",
           key: "noCharOffAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.noCharOffAmt).toFixed(2))
+          }
         },
         {
           title: "本次不对账金额",
           key: "thisNoAccountAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.thisNoAccountAmt).toFixed(2))
+          }
         },
         {
           title: "本次对账金额",
           key: "thisAccountAmt",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            return h('span',(params.row.thisAccountAmt).toFixed(2))
+          }
         }
       ],
       data1: [],
@@ -754,7 +820,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {

@@ -396,7 +396,7 @@ export default {
           },
           {
             title: "提交日期",
-            key: "createTime",
+            key: "auditDate",
             minWidth: 200
           }
         ],
@@ -516,6 +516,7 @@ export default {
       let size = this.Left.page.size;
       getLeftList(data, page, size)
         .then(res => {
+          console.log(res)
           if (res.code === 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];

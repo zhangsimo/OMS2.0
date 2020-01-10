@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="searchPartLayer" title="选择调拨入库单" width="1000" @on-ok="ok">
+  <Modal v-model="searchPartLayer" title="已入库的调拨入库单" width="1000" @on-ok="ok">
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
@@ -55,25 +55,26 @@
       <!--上表格-->
       <div class="topTableDate">
         <vxe-table
+          auto-resize
           border
           resizable
           ref="xtale"
           size="mini"
-          :height="200"
-          auto-resize
+          height="200"
+          align="center"
           :data="tabList"
           highlight-current-row
           highlight-hover-row
           @select-change="selectTabelData"
           @current-change="selectTabelData"
         >
-          <vxe-table-column type="checkbox" title="选择" width="60"></vxe-table-column>
-          <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+          <vxe-table-column type="checkbox" title="选择" width="100"></vxe-table-column>
+          <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="serviceId" title="入库单号" width="100"></vxe-table-column>
-          <vxe-table-column field="guestName" title="调出方" width="100"></vxe-table-column>
-          <vxe-table-column field="code" title="申请单号" width="100"></vxe-table-column>
-          <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
+          <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
+          <vxe-table-column field="code" title="申请单号"></vxe-table-column>
+          <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
 
@@ -95,7 +96,7 @@
       </Row>
       <!--        下表格-->
       <div class="bottomTableDate">
-        <vxe-table border resizable auto-resize height="150" :data="currentData">
+        <vxe-table auto-resize border resizable height="150" :data="currentData">
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>

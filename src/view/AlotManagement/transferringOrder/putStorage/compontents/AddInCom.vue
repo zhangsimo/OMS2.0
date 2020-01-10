@@ -271,17 +271,18 @@ export default {
     echoDate() {},
     selectTabelData({ row }) {
       this.checkRow = row;
-
       var params = {
         mainId: row.id
       };
       getParticulars(params).then(res => {
         this.currentData = res.data;
+
         this.$emit("getArray", this.currentData);
       });
     },
     ok() {
       // 将选好的成品传父组件
+      this.checkRow.detailVOS = this.currentData;
       this.$emit("ok", this.checkRow);
     }
   }

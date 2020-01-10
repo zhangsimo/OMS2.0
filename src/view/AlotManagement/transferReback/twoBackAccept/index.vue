@@ -20,9 +20,9 @@
           </div>
           <div class="db mr10">
             <Select v-model="form.status" class="w100 mr10" clearable>
-              <Option value="1" label="待受理"></Option>
-              <Option value="2" label="已受理"></Option>
-              <Option value="7" label="已拒绝"></Option>
+              <Option value="UNACCEPTED" label="待受理"></Option>
+              <Option value="ACCEPTED" label="已受理"></Option>
+              <Option value="REJECTED" label="已拒绝"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -122,7 +122,7 @@
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
         <span>
-          <Icon type="information"></Icon>是否确认受理,受理后生成【调出退回单】!
+          <Icon type="information"></Icon>是否确认受理 !
         </span>
       </Modal>
       <Modal v-model="modal3" title="提示" @on-ok="ok3" @on-cancel="cancel">

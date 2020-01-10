@@ -157,7 +157,7 @@
       </div>
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="Reconciliation" title="本次不对账" width="1200" @on-ok="noReconciliation">
+    <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
         <input type="text" disabled class="w140 mr15 tc" :value="store" />
@@ -170,14 +170,58 @@
         <span class="mr5">单据日期</span>
         <input type="text" disabled class="w140 mr15 tc" :value="billDate" />
       </div>
-      <Table
+      <vxe-table
+        border
+        show-overflow
+        ref="xTable"
+        height="500px"
+        show-footer
+        auto-resize
+        :footer-method="handleSummary"
+        :data="Reconciliationcontent"
+        :edit-rules="validRules"
+        :edit-config="{trigger: 'click', mode: 'cell', showStatus: true}"
+      >
+        <vxe-table-column type="index" title="序号" align="center"></vxe-table-column>
+        <vxe-table-column field="partCode" title="配件编码" align="center"></vxe-table-column>
+        <vxe-table-column field="partName" title="配件名称" align="center"></vxe-table-column>
+        <vxe-table-column field="partSpecification" title="规格型号" align="center"></vxe-table-column>
+        <vxe-table-column field="Detailedstatistics" title="适用车型" align="center"></vxe-table-column>
+        <vxe-table-column field="price" title="单价" align="center"></vxe-table-column>
+        <vxe-table-column field="quantity" title="数量" align="center"></vxe-table-column>
+        <vxe-table-column field="amount" title="金额" align="center"></vxe-table-column>
+        <vxe-table-column field="accountAmt" title="前期已对账金额" align="center"></vxe-table-column>
+        <vxe-table-column field="noAccountAmt" title="前期未对账金额" align="center"></vxe-table-column>
+        <vxe-table-column
+          field="thisNoAccountAmt"
+          title="本次不对账金额"
+          :edit-render="{name: 'input',immediate:true,events: {input: updateFooterEvent}}"
+          align="center"
+        ></vxe-table-column>
+        <vxe-table-column title="本次对账金额" align="center">
+          <template v-slot="{ row }">
+            <span>{{ countAmount(row) | priceFilters }}</span>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column
+          field="diffeReason"
+          title="差异原因"
+          :edit-render="{name: 'input'}"
+          align="center"
+        ></vxe-table-column>
+      </vxe-table>
+      <!-- <Table
         :columns="Reconciliationlist"
         :data="Reconciliationcontent"
         border
         max-height="400"
         show-summary
         :summary-method="handleSummary"
-      ></Table>
+      ></Table>-->
+      <div slot="footer">
+        <Button class="mr10" type="primary" @click="noReconciliation">确认</Button>
+        <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
+      </div>
     </Modal>
   </div>
 </template>
@@ -200,8 +244,36 @@ export default {
     selectDealings
   },
   data() {
+    const roleValid = (rule, value, callback, { row }) => {
+      if (value >= 0) {
+        if (value > row.amount - row.accountAmt) {
+          callback(
+            new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+          );
+        } else {
+          callback();
+        }
+      } else {
+        callback(new Error('不能小于0'))
+      }
+    };
+    const diffeReason = (rule, value, callback, { row }) => {
+      if (row.thisNoAccountAmt > 0) {
+        if (!value) {
+          callback(new Error("差异原因必填"));
+        } else {
+          callback();
+        }
+      } else {
+        callback();
+      }
+    };
     return {
-      arrId:[],
+      validRules: {
+        thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
+        diffeReason: [{ validator: diffeReason }]
+      },
+      arrId: [],
       handervis: false,
       collectionAccountName: "",
       openingBank: "",
@@ -335,7 +407,10 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
-                    this.store = params.row.orgId;
+                    const store = this.Branchstore.filter(
+                      item => item.value === this.model1
+                    );
+                    this.store = store[0].label;
                     this.bill = params.row.serviceId;
                     this.business = params.row.serviceTypeName;
                     this.thiscompanyInfo = params.row.guestName;
@@ -435,6 +510,10 @@ export default {
               },
               on: {
                 "on-change": event => {
+                  if (event > params.row.amount - params.row.accountAmt)
+                    return this.$message.error(
+                      "配件的本次不对账金额不能大于金额减前期已对账金额"
+                    );
                   this.flag = true;
                   this.modifyAccountAmt = event;
                   this.$set(
@@ -527,43 +606,86 @@ export default {
     }
   },
   methods: {
+    // 在值发生改变时更新表尾合计
+    updateFooterEvent(params) {
+      let xTable = this.$refs.xTable;
+      xTable.updateFooter();
+    },
+    countAmount(row) {
+      return (
+        this.$utils.toNumber(row.amount) -
+        this.$utils.toNumber(row.accountAmt) -
+        this.$utils.toNumber(row.thisNoAccountAmt)
+      );
+    },
+    // 计算尾部总和
+    countAllAmount(data) {
+      let count = 0
+      data.forEach(row => {
+        count += +this.countAmount(row)
+      })
+      count = count.toFixed(2)
+      return count
+    },
     // 总表格合计方式
     handleSummary({ columns, data }) {
-      //   console.log(columns,data)
-      const sums = {};
-      columns.forEach((column, index) => {
-        const key = column.key;
-        if (index === 0) {
-          sums[key] = {
-            key,
-            value: "合计"
-          };
-          return;
-        }
-        const values = data.map(item => Number(item[key]));
-        if (index > 4 && index !==12) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v
-            };
+      //   console.log(columns,data)return [
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
           }
-        } else {
-          sums[key] = {
-            key,
-            value: " "
-          };
-        }
-      });
-      return sums;
+          if (
+            [
+              "quantity",
+              "amount",
+              "accountAmt",
+              "noAccountAmt",
+              "thisNoAccountAmt"
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property);
+          }
+          if (columnIndex === 11) {
+            return ` ${this.countAllAmount(data)} `
+          }
+          return null;
+        })
+      ];
+      // const sums = {};
+      // columns.forEach((column, index) => {
+      //   const key = column.key;
+      //   if (index === 0) {
+      //     sums[key] = {
+      //       key,
+      //       value: "合计"
+      //     };
+      //     return;
+      //   }
+      //   const values = data.map(item => Number(item[key]));
+      //   if (index > 4 && index !== 12) {
+      //     if (!values.every(value => isNaN(value))) {
+      //       const v = values.reduce((prev, curr) => {
+      //         const value = Number(curr);
+      //         if (!isNaN(value)) {
+      //           return prev + curr;
+      //         } else {
+      //           return prev;
+      //         }
+      //       }, 0);
+      //       sums[key] = {
+      //         key,
+      //         value: v
+      //       };
+      //     }
+      //   } else {
+      //     sums[key] = {
+      //       key,
+      //       value: " "
+      //     };
+      //   }
+      // });
+      // return sums;
       //
     },
     query() {
@@ -571,13 +693,13 @@ export default {
     },
     // 对账单弹框出现加载数据
     hander(type) {
-      if(type){
-        this.handervis = false
+      if (type) {
+        this.handervis = false;
         this.flag = false;
         this.info = false;
-        this.store = this.parameter.orgId;
+        this.store = this.parameter.orgName;
         this.model1 = this.parameter.orgId;
-        this.companyInfo = this.parameter.guestId
+        this.companyInfo = this.parameter.guestId;
         this.Rebateid = "";
         this.BadDebtid = "";
         this.remark = "";
@@ -587,8 +709,8 @@ export default {
         this.totalcollect = 0;
         this.collectBaddebt = 0;
         this.collectRebate = 0;
-        this.collectlist = []
-        this.paymentlist = []
+        this.collectlist = [];
+        this.paymentlist = [];
         this.storeAccount(this.parameter.orgId);
         this.Initialization();
       }
@@ -606,15 +728,15 @@ export default {
         // let Statementoilincludingtax1 = 0;
         for (let i of res.data.one) {
           if (i.number === 3) {
-            this.arrId[0] = i.accountNo
+            this.arrId[0] = i.accountNo;
             // Statementexcludingtax = i.accountNo;
             // Statementexcludingtax1 = i.accountSumAmt;
           } else if (i.number === 1) {
-            this.arrId[1] = i.accountNo
+            this.arrId[1] = i.accountNo;
             // Taxincludedpartsstatement = i.accountNo;
             // Taxincludedpartsstatement1 = i.accountSumAmt;
           } else {
-            this.arrId[2] = i.accountNo
+            this.arrId[2] = i.accountNo;
             // Statementoilincludingtax = i.accountNo;
             // Statementoilincludingtax1 = i.accountSumAmt;
           }
@@ -695,19 +817,31 @@ export default {
     getSettlementComputed() {
       getSettlement({ one: this.collectlist, two: this.paymentlist }).then(
         res => {
-          this.handervis = true
+          this.handervis = true;
           this.data = [
             {
               Detailedstatistics: "对账单号",
-              Statementexcludingtax: res.data.hasOwnProperty('one') ? this.arrId[0] : '',
-              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? this.arrId[1] : '',
-              Statementoilincludingtax: res.data.hasOwnProperty('three') ? this.arrId[2] : ''
+              Statementexcludingtax: res.data.hasOwnProperty("one")
+                ? this.arrId[0]
+                : "",
+              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+                ? this.arrId[1]
+                : "",
+              Statementoilincludingtax: res.data.hasOwnProperty("three")
+                ? this.arrId[2]
+                : ""
             },
             {
               Detailedstatistics: "对账金额",
-              Statementexcludingtax: res.data.hasOwnProperty('one') ? res.data.one : '',
-              Taxincludedpartsstatement: res.data.hasOwnProperty('two') ? res.data.two : '',
-              Statementoilincludingtax: res.data.hasOwnProperty('three') ? res.data.three : ''
+              Statementexcludingtax: res.data.hasOwnProperty("one")
+                ? res.data.one
+                : "",
+              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+                ? res.data.two
+                : "",
+              Statementoilincludingtax: res.data.hasOwnProperty("three")
+                ? res.data.three
+                : ""
             }
           ];
           // this.$set(this.data, 1, {
@@ -782,41 +916,53 @@ export default {
     },
     // 本次不对帐金额弹窗
     noReconciliation() {
-      if (this.flag) {
-        if (this.Reason) {
-          this.$message({
-            message: "差异原因必填",
-            type: "error",
-            customClass: "zZindex"
+      this.$refs.xTable.validate(val => {
+        if (val) {
+          // if (this.flag) {
+          //   if (this.Reason) {
+          //     this.$message({
+          //       message: "差异原因必填",
+          //       type: "error",
+          //       customClass: "zZindex"
+          //     });
+          //     return "";
+          //   }
+          // }
+          let sum = 0;
+          this.Reconciliationcontent.map(item => {
+            sum += item.thisNoAccountAmt * 1;
           });
-          return "";
+          const index = this.Reconciliationcontent[0].index;
+          const sum1 =
+            this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
+          if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
+            return this.$message.error(
+              "本次不对账合计不能大于总金额减去前期已对账"
+            );
+          this.Reconciliation = false;
+          if (this.business === "销售退货" || this.business === "销售出库") {
+            this.$set(this.data1[index], "thisNoAccountAmt", sum);
+            this.$set(this.data1[index], "thisAccountAmt", sum1);
+          } else {
+            this.$set(this.data2[index], "thisNoAccountAmt", sum);
+            this.$set(this.data2[index], "thisAccountAmt", sum1);
+          }
+        } else {
+          this.Reconciliation = true;
+          this.$message.error("信息填写错误");
         }
-      }
-      let sum = 0;
-      this.Reconciliationcontent.map(item => {
-        sum += item.thisNoAccountAmt * 1;
       });
-      if (this.business === "销售退货" || this.business === "销售出库") {
-        this.$set(
-          this.data1[this.Reconciliationcontent[0].index],
-          "thisNoAccountAmt",
-          sum
-        );
-      } else {
-        this.$set(
-          this.data2[this.Reconciliationcontent[0].index],
-          "thisNoAccountAmt",
-          sum
-        );
-      }
     },
     // 保存接口
     getPreservation(num) {
-      if(this.totalvalue === '0'){
-        if(!this.collectionAccountName) return this.$message.error('收款户名不能为空')
-        if(!this.openingBank) return this.$message.error('开户行不能为空')
-        if(!this.collectionAccount) return this.$message.error('银行账号不能为空')
-        if(!this.thisApplyAccount) return this.$message.error('付款账户不能为空')
+      if (this.totalvalue === "0") {
+        if (!this.collectionAccountName)
+          return this.$message.error("收款户名不能为空");
+        if (!this.openingBank) return this.$message.error("开户行不能为空");
+        if (!this.collectionAccount)
+          return this.$message.error("银行账号不能为空");
+        if (!this.thisApplyAccount)
+          return this.$message.error("付款账户不能为空");
       }
       if (this.collectBaddebt - this.paymentBaddebt > 100) {
         if (!this.BadDebtid) {
@@ -871,7 +1017,7 @@ export default {
           {
             tenantId: this.$store.state.user.userData.tenantId,
             orgId: this.model1,
-            orgName: "null",
+            orgName: this.store,
             guestId: this.companyInfo,
             serviceId: "XSCDS001-20191000071",
             accountReceivable: this.totalcollect,

@@ -150,7 +150,7 @@
     <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 入库提示 -->
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
-      <p>是否确定入库</p>
+      <p>是否定入库</p>
     </Modal>
   </div>
 </template>
