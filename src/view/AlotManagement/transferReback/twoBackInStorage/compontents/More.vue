@@ -29,7 +29,16 @@
         <!--placeholder="请选择申请方！"-->
         <!--style="width: 450px"-->
         <!--/>-->
-        <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled />
+        <!-- <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled /> -->
+        <Select
+          placeholder="请选择调出方"
+          v-model="moreData.orderMan"
+          filterable
+          style="width: 450px"
+          @on-change="getSupplierNamea1"
+        >
+          <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+        </Select>
         <Button class="ml5" size="small" type="default" @click="addSuppler">
           <i class="iconfont iconxuanzetichengchengyuanicon"></i>
         </Button>
@@ -51,18 +60,24 @@
         <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
       </row>
     </div>
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea"></select-supplier>
+    <select-supplier
+      ref="selectSupplier"
+      header-tit="供应商资料"
+      @selectSupplierName="getSupplierNamea"
+    ></select-supplier>
   </Modal>
 </template>
 
 <script>
 import SelectSupplier from "../../../transferringOrder/applyFor/compontents/supplier/selectSupplier";
+import { findForAllot } from "_api/purchasing/purchasePlan";
 
 export default {
   name: "More",
   components: { SelectSupplier },
   data() {
     return {
+      ArrayValue: [],
       Time1: [],
       Time2: [],
       moreData: {
@@ -81,11 +96,31 @@ export default {
   props: {
     getShowMore: Boolean
   },
+  mounted() {
+    this.getArrayParams();
+    console.log(1212);
+  },
   methods: {
+    getArray(data) {
+      console.log(data, "data");
+    },
     // 子组件的参数
     getSupplierNamea(a) {
       this.moreData.orderMan = a.fullName;
       this.moreData.guestId = a.id;
+    },
+    getSupplierNamea1(a) {
+      this.guestId = a;
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        if (res.code === 0) {
+          this.ArrayValue = res.data.content;
+        }
+      });
     },
     //更多弹窗-取消
     moreCancel() {
