@@ -260,17 +260,20 @@ export default class PlannedPurchaseOrder extends Vue {
     _highlight: true,
     id: '',
     billStatusId: '',
-    createTime: tools.transTime(new Date()),
+    createTime: new Date(),
     details: [],
     processInstanceId: "",
   }
   //---- 新增方法
   private addPro() {
     const ref: any = this.$refs['formplanref'];
+    ref.resetFields();
+    const currentRowTable: any = this.$refs["currentRowTable"];
+    currentRowTable.clearCurrentRow();
+    this.selectTableRow = null;
     if (!this.isAdd) {
       return this.$Message.error('请先保存数据');
     }
-    ref.resetFields();
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -341,6 +344,7 @@ export default class PlannedPurchaseOrder extends Vue {
         obj[k] = v;
       }
     }
+    console.log(data, obj)
     if (!data) {
       return null;
     }
@@ -351,7 +355,7 @@ export default class PlannedPurchaseOrder extends Vue {
   // 保存
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
-    if (!data) return;
+    if (Object.keys(data).length <= 0) return;
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.saveDraft(data);
@@ -368,7 +372,7 @@ export default class PlannedPurchaseOrder extends Vue {
       title: '是否提交',
       onOk: async () => {
         let data: any = this.formdata(refname);
-        if (!data) return;
+        if (Object.keys(data).length <= 0) return;
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
