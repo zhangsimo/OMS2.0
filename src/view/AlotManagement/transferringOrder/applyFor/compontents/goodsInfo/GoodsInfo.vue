@@ -207,7 +207,7 @@ export default class GoodsInfo extends Vue {
         required: true,
         message: "配送方式不能为空",
         trigger: "change",
-        type: "string"
+        type: "number"
       }
     ],
     settleType: [
@@ -215,7 +215,7 @@ export default class GoodsInfo extends Vue {
         required: true,
         message: "结算方式不能为空",
         trigger: "change",
-        type: "string"
+        type: "number"
       }
     ]
     // deliveryLogistics: [{ required: true, message: "发货物流不能为空", trigger: "change",type: 'string'}]
@@ -276,34 +276,34 @@ export default class GoodsInfo extends Vue {
 
   private Delivery: any = [
     {
-      value: "0",
+      value: 0,
       label: "自配"
     },
     {
-      value: "1",
+      value: 1,
       label: "客户自提"
     },
     {
-      value: "2",
+      value: 2,
       label: "快递"
     },
     {
-      value: "3",
+      value: 3,
       label: "物流"
     }
   ];
 
   private payment: any = [
     {
-      value: "0",
+      value: 0,
       label: "到付"
     },
     {
-      value: "1",
+      value: 1,
       label: "现结"
     },
     {
-      value: "2",
+      value: 2,
       label: "月结"
     }
   ];
@@ -417,10 +417,22 @@ export default class GoodsInfo extends Vue {
         let aaa: any = {};
         aaa.logisticsId = this.formDateRight.id;
         delete this.formDateRight.id;
-
+        let params:any = {};
+        params.receiveComp = this.formDateRight.receiveCompName;
+        params.receiveAddress = this.formDateRight.streetAddress;
+        params.receiver = this.formDateRight.receiveMan;
+        params.receiverMobile = this.formDateRight.receiveManTel;
+        params.deliveryType = this.formDateRight.deliveryType;
+        params.deliveryLogistics = this.formDateRight.deliveryLogistics;
+        params.transportCost = this.formDateRight.transportCost;
+        params.settleType = this.formDateRight.settleType;
+        params.remark = this.formDateRight.remark;
+        params.businessNum = this.formDateRight.businessNum;
+        params.relationNum = this.formDateRight.relationNum;
+        params.guestId = this.formDateRight.guestId;
         let res = await fapi.saveGoodsInfo({
           ...aaa,
-          ...this.formDateRight,
+          ...params,
           mainId: this.mainId
         });
         if (res.code == 0) {
@@ -444,15 +456,27 @@ export default class GoodsInfo extends Vue {
     if (row.logisticsRecordVO) {
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
-      this.formDateRight = { ...row.logisticsRecordVO };
+      // this.formDateRight = { ...row.logisticsRecordVO };
       // this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
       // this.formDateRight.settleType = this.formDateRight.settleType + "";
       // this.formDateRight = row.logisticsRecordVO
+      this.formDateRight.receiveCompName = row.logisticsRecordVO.receiveComp;
+      this.formDateRight.streetAddress = row.logisticsRecordVO.receiveAddress;
+      this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;
+      this.formDateRight.receiveManTel = row.logisticsRecordVO.receiverMobile;
+      this.formDateRight.deliveryType = row.logisticsRecordVO.deliveryType;
+      this.formDateRight.deliveryLogistics = row.logisticsRecordVO.deliveryLogistics;
+      this.formDateRight.transportCost = row.logisticsRecordVO.transportCost;
+      this.formDateRight.settleType = row.logisticsRecordVO.settleType;
+      this.formDateRight.remark = row.logisticsRecordVO.remark;
+      this.formDateRight.businessNum = row.logisticsRecordVO.businessNum;
+      this.formDateRight.relationNum = row.logisticsRecordVO.relationNum;
+      this.formDateRight.guestId = row.logisticsRecordVO.guestId;
     } else {
       this.formDateRight = row
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
-      // this.formDateRight.receiveComp = row.receiveCompName;
+      this.formDateRight.receiveComp = row.receiveCompName;
       // this.formDateRight.streetAddress = row.streetAddress;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;
