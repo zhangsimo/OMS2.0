@@ -106,8 +106,8 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     let obj = {
-      startDate: this.value[0],
-      endDate: this.value[1],
+      startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+      endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
       orgId: this.model1
     };
     this.getcapitalAudit(obj);
@@ -558,8 +558,8 @@ export default {
       let obj = {
         fno: this.collectPayId,
         serviceId: this.reconciliationId,
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.model1,
         guestId: this.companyDealingsId
       };

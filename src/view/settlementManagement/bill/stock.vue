@@ -492,24 +492,21 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getOutStockPart({ mainId: row.id }).then(res => {
-        if (res.data.length !== 0) {
-          res.data.map((item, index) => {
-            item.taxSign = item.taxSign ? "是" : "否";
-            item.index = index + 1;
-          });
-          this.data1 = res.data;
-        }
-      });
-      // if (this.typeName === "Warehousing") {
-      //   getOutStockPart({mainId:row.id}).then(res => {
-      //     console.log(res);
-      //   });
-      // } else if (this.typeName === "Return") {
-      //   getReturnGoodsPart({mainId:row.id}).then(res => {
-      //     console.log(res);
-      //   });
-      // }
+      if(this.typeName === "050102"){
+        getReturnGoodsPart({mainId:row.id}).then(res => {
+          console.log(res);
+        });
+      } else {
+        getOutStockPart({ mainId: row.id }).then(res => {
+          if (res.data.length !== 0) {
+            res.data.map((item, index) => {
+              item.taxSign = item.taxSign ? "是" : "否";
+              item.index = index + 1;
+            });
+            this.data1 = res.data;
+          }
+        });
+      }
     }
   }
 };
