@@ -20,9 +20,9 @@
           </div>
           <div class="db mr10">
             <Select v-model="form.status" class="w100 mr10" clearable>
-              <Option value="1" label="待受理"></Option>
-              <Option value="2" label="已受理"></Option>
-              <Option value="7" label="已拒绝"></Option>
+              <Option value="UNACCEPTED" label="待受理"></Option>
+              <Option value="ACCEPTED" label="已受理"></Option>
+              <Option value="REJECTED" label="已拒绝"></Option>
             </Select>
           </div>
           <div class="db mr10">
