@@ -87,7 +87,6 @@ class httpRequest {
             }
       }else{
         if(config.url.includes('/token')){
-          console.log(123123123123123)
           config.data = qs.stringify(config.data);
           config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }

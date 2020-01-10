@@ -116,8 +116,8 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column field="orderDate" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">

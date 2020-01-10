@@ -132,7 +132,7 @@ export default {
           className: "tc"
         },
         {
-          title: "审核日期",
+          title: "提交日期",
           key: "createTime",
           className: "tc"
         },

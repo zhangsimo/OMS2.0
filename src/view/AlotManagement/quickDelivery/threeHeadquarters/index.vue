@@ -282,7 +282,8 @@ export default {
     },
 
     ok1() {
-      console.log(this.currentrow, "this.currentrow =284");
+      this.currentrow.settleStatus = this.currentrow.settleStatus.value;
+      
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code == 0) {
