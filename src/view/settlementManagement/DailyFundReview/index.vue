@@ -93,6 +93,7 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
+import moment from 'moment'
 import { creat } from "./../components";
 import { capitalAudit, examineBtn, revokeBtn } from "@/api/bill/saleOrder";
 export default {
