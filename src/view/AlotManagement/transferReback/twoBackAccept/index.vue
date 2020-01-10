@@ -91,7 +91,7 @@
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
-          <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
+          <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
           <vxe-table-column
             field="defaultValue"

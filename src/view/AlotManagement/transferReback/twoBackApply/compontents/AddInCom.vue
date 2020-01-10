@@ -253,13 +253,14 @@ export default {
     cancel() {},
     echoDate() {},
     async selectTabelData({ row }) {
-      console.log(row);
+      console.log(row, "row ==>256");
       this.checkRow = row;
       const params = {
         mainId: row.id
       };
       const res = await chengpingDetail(params);
       this.currentData = res.data;
+      this.currentData[0].remark = this.checkRow.remark
     },
     ok() {
       // 将选好的成品传父组件
@@ -268,7 +269,6 @@ export default {
         this.$Message.info("请勾选需要选入的行");
         return;
       }
-      console.log("jinru");
       this.$emit("ok", this.currentData);
       this.searchPartLayer = false;
     }

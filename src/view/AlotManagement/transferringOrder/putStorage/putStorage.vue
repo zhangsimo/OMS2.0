@@ -142,8 +142,8 @@
                     <FormItem label="备注：" prop="remark">
                       <Input disabled v-model="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
-                    <FormItem label="创建人：" prop="planDate">
-                      <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
+                    <FormItem label="创建人：" prop="createUname">
+                      <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="申请单号：" prop="code">
                       <Input disabled :value="Leftcurrentrow.code" class="w160"></Input>

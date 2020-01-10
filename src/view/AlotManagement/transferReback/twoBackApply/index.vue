@@ -964,6 +964,8 @@ export default {
       console.log(list, "获取的条数");
       this.showit = false;
       this.Leftcurrentrow.detailVOS = list;
+      this.Leftcurrentrow.remark = list[0].remark;
+
       const tata = this;
       setTimeout(() => {
         tata.showit = true;
@@ -989,8 +991,6 @@ export default {
             for (var i = 0; i < res.data.content.length; i++) {
               array.push(res.data.content[i].status);
             }
-            console.log(array, "array ==>969");
-
             var result = [];
             var obj = {};
             for (var i = 0; i < array.length; i++) {
