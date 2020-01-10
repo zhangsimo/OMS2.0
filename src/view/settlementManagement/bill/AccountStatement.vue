@@ -309,6 +309,7 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { creat } from "./../components";
+import moment from 'moment'
 import {
   AccountStatement,
   Record,
@@ -760,8 +761,8 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     let obj = {
-      startDate: this.value[0],
-      endDate: this.value[1],
+      startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+      endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
       orgId: this.model1,
       statementStatus: this.Reconciliationtype
     };
@@ -895,8 +896,8 @@ export default {
     // 页码
     pageCode(page) {
       let obj = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.model1,
         page: page - 1,
         statementStatus: this.Reconciliationtype
@@ -906,8 +907,8 @@ export default {
     // 查询
     query() {
       let obj = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.model1,
         statementStatus: this.Reconciliationtype
       };
@@ -920,8 +921,8 @@ export default {
     // 更多查询
     senior() {
       let obj = {
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgId: this.model1,
         statementStatus: this.Reconciliationtype,
         guestType: this.model2,
@@ -948,15 +949,15 @@ export default {
         }
       );
       let date = {
-        startDate: this.value[0],
-        endDate: this.value[1]
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss')
       };
       this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
       this.$refs.reconciliation.parameter = { ...row, ...date };
       let obj = {
         orgId: row.orgId,
-        startDate: this.value[0],
-        endDate: this.value[1],
+        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         guestId: row.guestId,
         accountNo: row.accountNo,
         serviceId: row.serviceId
@@ -1275,7 +1276,7 @@ export default {
       accountRevoke({
         id: this.reconciliationStatement.id
       }).then(res => {
-        console.log(res);
+        // console.log(res);
       });
     }
   }
