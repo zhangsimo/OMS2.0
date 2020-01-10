@@ -697,33 +697,41 @@ export default {
         });
     },
     zuofei1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态加工单能进行作废操作");
-        return;
-      }
-      const params = {
-        id: this.Leftcurrentrow.id
-      };
-      // 配件组装作废
-      zuofei(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("作废成功");
+      this.$Modal.confirm({
+        title: "是否确定作废订单!",
+        onOk: () => {
+          if (this.Leftcurrentrow.xinzeng === "1") {
+            this.$Message.info("请先保存新增加工单");
+            return;
           }
-        })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
+          if (!this.Leftcurrentrow.serviceId) {
+            this.$Message.info("请先选择加工单");
+            return;
+          }
+          if (this.Leftcurrentrow.status.value !== 0) {
+            this.$Message.info("只有草稿状态加工单能进行作废操作");
+            return;
+          }
+          const params = {
+            id: this.Leftcurrentrow.id
+          };
+          // 配件组装作废
+          zuofei(params)
+            .then(res => {
+              // 点击列表行==>配件组装信息
+              if (res.code == 0) {
+                this.getList(this.form);
+                this.$Message.success("作废成功");
+              }
+            })
+            .catch(e => {
+              this.$Message.info("作废失败");
+            });
+        },
+        onCancel: () => {
+          this.getList(this.form);
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {

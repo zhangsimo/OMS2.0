@@ -26,7 +26,13 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Select v-model="form.id" class="w100 mr10" placeholder="选择客户" filterable clearable>
+            <Select
+              v-model="form.guestId"
+              class="w100 mr10"
+              placeholder="选择客户"
+              filterable
+              clearable
+            >
               <Option
                 v-for="item in customerListOptions"
                 :value="item.value"
@@ -216,7 +222,7 @@ export default {
         createDate: "",
         endDate: "",
         status: "",
-        id: "",
+        guestId: "",
         serviceId: ""
       },
       productName: "",
@@ -290,10 +296,10 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res, "res==286");
+            // console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
-              console.log(this.storeArray, "this.storeArray ==>298");
+              // console.log(this.storeArray, "this.storeArray ==>298");
             });
           }
         })
@@ -303,13 +309,11 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      console.log(val);
       this.form.startTime = val[0];
       this.form.endTime = val[1];
     },
     //time2
     selectDate(val) {
-      console.log(val);
       this.form.commitDateStart = val[0] + " " + "00:00:00";
       this.form.commitDateEnd = val[1] + " " + "23:59:59";
     },
@@ -318,7 +322,7 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
+            // console.log(res);
             this.TopTableData = res.data.content || [];
             // console.log(this.TopTableData, "this.TopTableData ==>323");
             // for (var i = 0; i < this.TopTableData.length; i++) {
@@ -337,7 +341,6 @@ export default {
     },
     //current
     async currentChangeEvent({ row }) {
-      console.log("当前行" + row);
       const params = {
         mainId: row.id
       };
@@ -348,7 +351,6 @@ export default {
       var number = document.getElementById("danhao").value; //获取需要复制的值(innerHTML)
       document.getElementById("danhao").select(); // 选择对象
       document.execCommand("Copy"); // 执行浏览器复制命令
-      console.log(number);
     },
     ok() {
       const params = {
@@ -389,7 +391,6 @@ export default {
         .then(res => {
           if (res.code == 0) {
             if (res.code == 0) {
-              console.log(1);
             } else if (res.code == 1) {
               this.$Message.info("请选择受理仓库");
             }
@@ -412,7 +413,6 @@ export default {
       if (this.currentrow.defaultValue == "受理默认仓库") {
         this.currentrow.defaultValue = "1212664645509201920";
       }
-      console.log(row);
       if (index === 2) {
         this.modal1 = true;
       } else {
@@ -422,7 +422,7 @@ export default {
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       this.currentrow.defaultValue = evnt.target.value;
-      console.log(evnt.target.value, "1212");
+      // console.log(evnt.target.value);
     }
   }
 };
