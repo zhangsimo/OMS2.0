@@ -173,6 +173,7 @@
                       :action="upurl"
                       :format="['xlsx', 'xls', 'csv']"
                       :before-upload="handleBeforeUpload"
+                        :on-format-error="onFormatError"
                       :on-success="handleSuccess"
                       :disabled="draftShow != 0"
                     >
@@ -826,15 +827,34 @@ export default {
     importAss() {
       this.upurl = `${importAccessories}?id=${this.formPlan.id}`;
     },
-    handleSuccess(res, file) {
-      let self = this;
-      if (res.code == 0) {
-        self.$Message.success("导入成功");
-        this.Right.tbdata = res.data.details;
-        this.getList();
+    // handleSuccess(res, file) {
+    //   let self = this;
+    //   if (res.code == 0) {
+    //     self.$Message.success("导入成功");
+    //     this.Right.tbdata = res.data.details;
+    //     this.getList();
+    //   } else {
+    //     self.$Message.error(res.message);
+    //   }
+    // },
+    onFormatError(file){
+         this.$Message.error("只支持xls xlsx后缀的文件");
+    },
+    handleSuccess(response){
+      if (response.code == 0) {
+        let txt = "上传成功";
+        if (response.data.length > 0) {
+          txt = response.data.join(",");
+        }
+        this.$Notice.warning({
+          title: "导入成功",
+          desc: txt,
+          duration: 0
+        });
       } else {
-        self.$Message.error(res.message);
+        this.$Message.error(response.message);
       }
+      this.getList();
     },
     handleBeforeUpload() {
       if (!this.formPlan.billStatusId) {
