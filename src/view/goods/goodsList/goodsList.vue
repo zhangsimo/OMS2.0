@@ -357,7 +357,8 @@
                   field="orderQty"
                   title="计划采购数量"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
+                  size="mini"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -374,7 +375,8 @@
                   field="orderPrice"
                   title="计划采购单价"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
+                  size="mini"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
