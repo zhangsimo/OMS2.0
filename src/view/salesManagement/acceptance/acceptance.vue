@@ -89,7 +89,7 @@
             </vxe-table-column>
             <vxe-table-column field="orderQty" title="订单数量">
             </vxe-table-column>
-            <vxe-table-column title="订单金额" filed="orderAmt">
+            <vxe-table-column title="订单金额" field="orderAmt">
             </vxe-table-column>
             <vxe-table-column
               field="commitTime"
