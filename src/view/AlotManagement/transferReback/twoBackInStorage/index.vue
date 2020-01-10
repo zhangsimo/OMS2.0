@@ -195,9 +195,9 @@ export default {
       ],
       purchaseTypeArr: [
         { label: "所有", value: "" },
-        { label: "待出库", value: 0 },
-        { label: "待入库", value: 1 },
-        { label: "已入库", value: 2 }
+        { label: "待出库", value: "PENDING_OUTER" },
+        { label: "待入库", value: "PENDING_ENTER" },
+        { label: "已入库", value: "HAS_ENTER" }
       ],
       //查询
       params: {
