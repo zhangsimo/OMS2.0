@@ -477,7 +477,7 @@ export default {
           getOutStockList(obj).then(res => {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
-                item.num = index + 1;
+                item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
                 item.auditSign = item.auditSign ? "已审" : "未审";
               });

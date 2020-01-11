@@ -417,7 +417,7 @@ export default {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
-            item.settleStatus = item.settleStatus ? item.settleStatus.value ? '已出库':'未出库':'' 
+            item.billstate = item.settleStatus ? item.settleStatus.value ? '已出库':'未出库':'' 
             item.orderTypeId = item.orderTypeId === 1 ? "调拨出库" : "调出退货";
             this.data = res.data;
           });
