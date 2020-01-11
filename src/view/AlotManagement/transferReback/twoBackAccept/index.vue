@@ -26,13 +26,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Select
-              v-model="form.orgid"
-              class="w100 mr10"
-              placeholder="选择客户"
-              filterable
-              clearable
-            >
+            <Select v-model="form.orgid" class="w100 mr10" placeholder="选择公司" filterable clearable>
               <Option
                 v-for="item in customerListOptions"
                 :value="item.value"
@@ -122,8 +116,8 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column field="acceptTime" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
@@ -284,7 +278,7 @@ export default {
             // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
-                value: element.id,
+                value: element.orgid,
                 label: element.fullName
               });
             });
@@ -296,10 +290,10 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            // console.log(res, "res==286");
+            console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
-              // console.log(this.storeArray, "this.storeArray ==>298");
+              console.log(this.storeArray, "this.storeArray ==>298");
             });
           }
         })
@@ -322,7 +316,7 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            // console.log(res);
+            console.log(res);
             this.TopTableData = res.data.content || [];
             // console.log(this.TopTableData, "this.TopTableData ==>323");
             // for (var i = 0; i < this.TopTableData.length; i++) {
@@ -331,7 +325,7 @@ export default {
             this.pageList.total = res.totalElements;
             // console.log(this.TopTableData, "this.TopTableData");
             for (var i = 0; i < this.TopTableData.length; i++) {
-              this.TopTableData[i]["defaultValue"] = "受理默认仓库";
+              this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             }
           }
         })
@@ -409,10 +403,6 @@ export default {
     shouli(row, index) {
       // console.log(row, "row=>407");
       this.currentrow = row;
-      // console.log(this.currentrow.defaultValue, "this.currentrow.defaultValue");
-      if (this.currentrow.defaultValue == "受理默认仓库") {
-        this.currentrow.defaultValue = "1212664645509201920";
-      }
       if (index === 2) {
         this.modal1 = true;
       } else {

@@ -810,6 +810,7 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
+      this.Leftcurrentrow.storeId = this.cangkuListall[0].id
       this.buttonShow = false;
       this.tuneOut = false;
       if (this.Left.tbdata.length === 0) {
