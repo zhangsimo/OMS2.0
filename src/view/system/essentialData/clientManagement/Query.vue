@@ -98,11 +98,10 @@ export default {
     //获取cs00112
     async getxingyong(){
        let data = {};
-       data = ['CS00112']
+       data = ['CS00112'];
        let res = await getDigitalDictionary(data);
        if (res.code == 0) {
          this.dataList = res.data.CS00112;
-
        }
 
      },

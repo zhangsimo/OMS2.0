@@ -199,7 +199,24 @@
                     {
                         title:'备注',
                         align: 'center',
-                        key:'remark'
+                        key:'remark',
+                        // render:(h,params)=> {
+                        //   const vm = this
+                        //   return h('Input', {
+                        //     props: {
+                        //       value: params.row.remark,
+                        //       size: 'small',
+                        //     },
+                        //     style:{
+                        //       width:'100%'
+                        //     },
+                        //     ondouble: {
+                        //       input: (val) => {
+                        //         this.list[params.index].remark = val
+                        //       }
+                        //     }
+                        //   })
+                        // }
                     },
                     {
                         title:'创建单位',
@@ -210,6 +227,7 @@
                         title:'创建人',
                         align: 'center',
                         key:'createUid'
+                        // key: 'createUname'
                     },
                     {
                         title:'创建日期',
