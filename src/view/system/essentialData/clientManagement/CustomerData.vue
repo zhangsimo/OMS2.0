@@ -317,10 +317,10 @@ export default {
     // 上传成功函数
     onSuccess(response) {
       this.getlist();
-      if (response.code != 0) {
+      if (response.code !== 0) {
         this.$Notice.warning({
           title: "导入失败",
-          desc: response
+          desc: response.message
         });
       } else {
         this.$Notice.success({

@@ -142,7 +142,7 @@
                       </Col>
                       <Col span="5">
                         <Button
-                          :disabled="selectPlanOrderItem.billStatusId != 0"
+                          :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                           @click="addSuppler"
                           class="ml5"
                           size="small"
@@ -157,7 +157,7 @@
                     <!--<Input class="w160" v-model="formValidate.planArriveDate"></Input>-->
                     <DatePicker
                       :disabled="isinput"
-                      :readonly="selectPlanOrderItem.billStatusId != 0"
+                      :readonly="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.planArriveDate"
                       class="w160"
                       placeholder="选择日期"
@@ -179,7 +179,7 @@
                     <Input
                       class="w160"
                       :disabled="isinput"
-                      :readonly="selectPlanOrderItem.billStatusId != 0"
+                      :readonly="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.remark"
                       maxlength="100"
                     />
@@ -187,7 +187,7 @@
                   <FormItem label="票据类型：" prop="billType">
                     <Select
                       class="w160"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
+                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.billType"
                     >
                       <Option
@@ -200,7 +200,7 @@
                   <FormItem label="直发门店：">
                     <Select
                       class="w160"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
+                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.directGuestId"
                     >
                       <Option
@@ -222,7 +222,7 @@
                     <el-input-number
                       class="w160"
                       :disabled="isinput"
-                      :readonly="selectPlanOrderItem.billStatusId != 0"
+                      :readonly="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.otherPrice"
                       @on-change="changeTotals"
                       :min="0"
@@ -251,7 +251,7 @@
                     <Button
                       size="small"
                       class="mr10"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
+                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       @click="addPro"
                       v-has="'AddAccessories'"
                     >
@@ -268,13 +268,13 @@
                       :before-upload="handleBeforeUpload"
                       :on-success="handleSuccess"
                       :on-format-error="onFormatError"
-                      :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
+                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
                     >
                       <Button
                         size="small"
                         class="mr10"
                         v-has="'import'"
-                        :disabled="selectPlanOrderItem.billStatusId != 0 || selectPlanOrderItem.new"
+                        :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId) || selectPlanOrderItem.new"
                       >导入</Button>
                     </Upload>
                   </div>
@@ -282,7 +282,7 @@
                     <Button
                       size="small"
                       class="mr10"
-                      :disabled="selectPlanOrderItem.billStatusId != 0"
+                      :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       @click="delTableData"
                       v-has="'delete'"
                     >
@@ -357,7 +357,8 @@
                   field="orderQty"
                   title="计划采购数量"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
+                  size="mini"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -374,7 +375,8 @@
                   field="orderPrice"
                   title="计划采购单价"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
+                  size="mini"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number

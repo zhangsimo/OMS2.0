@@ -220,6 +220,12 @@ export default class ProcurementModal extends Vue {
         formData[k] = data[k];
       }
     }
+    if(data.auditStartDate) {
+      data.auditStartDate = data.auditStartDate.split(" ")[0] + " 00:00:00"
+    }
+    if(data.auditStartDate) {
+      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
+    }
     let res:any = await api.getPchsPlan(params, formData);
     if(res.code == 0) {
       this.page.total = res.data.totalElements;

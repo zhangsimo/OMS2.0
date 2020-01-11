@@ -178,6 +178,7 @@ export default {
   name: "productDistribution",
   data() {
     return {
+      rowStatus: "",
       idValue: "",
       modal1: false,
       modal2: false,
@@ -226,6 +227,7 @@ export default {
   },
   created() {
     this.searchPartBrand();
+    this.getList();
     setTimeout(() => {
       this.search(this.form);
     }, 1000);
@@ -336,20 +338,22 @@ export default {
       this.modal1 = true;
     },
     currentChangeEvent({ row }) {
+      //console.log(row, "row");
       if (row.partCode) {
         this.formItem = row;
-        this.getList(row);
+        this.rowStatus = row;
+        this.getList();
       } else {
         this.$Message.info("没有当前行");
       }
     },
-    getList(row) {
+    getList() {
       const params = {
-        id: row.id
+        partCode: this.rowStatus.partCode
       };
       shenqingdanliebiao(params)
         .then(res => {
-          console.log(this.BottomTableData, "this.BottomTableData =>352");
+          //console.log(this.BottomTableData, "this.BottomTableData =>352");
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
           }

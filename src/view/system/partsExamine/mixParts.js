@@ -89,6 +89,7 @@ export const minxParts = {
             {
               title: "所属体系",
               key: "tenantName",
+              // key:"belongSystem",
               minWidth: 70
             },
             {

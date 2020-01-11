@@ -343,7 +343,6 @@ export default class PlannedPurchaseOrder extends Vue {
         obj[k] = v;
       }
     }
-    console.log(data, obj)
     if (!data) {
       return null;
     }
@@ -542,6 +541,8 @@ export default class PlannedPurchaseOrder extends Vue {
         this.serviceId = v.serviceId;
         this.formPlanmain.createUid = v.createUid;
         this.formPlanmain.processInstanceId = v.processInstanceId;
+        this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
+        this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {

@@ -236,7 +236,6 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      console.log(data)
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -266,13 +265,13 @@ export default {
         this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
       }
 
-      if (this.formPlan.details && this.formPlan.details.length > 0) {
-        this.$nextTick(
-          () => {
-            this.$set(this.formPlan.details, 1, this.formPlan.details[0])
-          }
-        )
-      }
+      // if (this.formPlan.details && this.formPlan.details.length > 0) {
+      //   this.$nextTick(
+      //     () => {
+      //       this.$set(this.formPlan.details, 1, this.formPlan.details[0])
+      //     }
+      //   )
+      // }
 
     },
     //获取客户属性

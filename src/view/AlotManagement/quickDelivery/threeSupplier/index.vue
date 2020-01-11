@@ -218,13 +218,13 @@ export default {
           res.data.forEach(element => {
             this.storeArray.push({ value: element.id, label: element.name });
           });
-          console.log(11, this.storeArray);
+          //console.log(11, this.storeArray);
         }
       });
       getbayer()
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
+            //console.log(res);
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.id,
@@ -251,11 +251,12 @@ export default {
     search() {
       let page = this.pageList.page;
       let size = this.pageList.size;
-      console.log(this.form, "this.form");
+      //console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form).then(res => {
         if (res.code === 0) {
           this.TopTableData = res.data.content || [];
           this.pageList.total = res.totalElements;
+          //console.log(this.TopTableData, "this.TopTableData ==>257");
         }
       });
     },
@@ -270,7 +271,7 @@ export default {
     },
     //点击当前
     currentChangeEvent({ row }) {
-      console.log("当前行" + row);
+      //console.log("当前行" + row);
       this.BottomTableData = row.details;
       this.currentrow = row;
     },
@@ -279,7 +280,7 @@ export default {
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code === 0) {
-            console.log(res);
+            //console.log(res);
             this.$Message.info("入库成功");
           }
         })
@@ -294,12 +295,12 @@ export default {
       this.modal2 = true;
     },
     numChangeEvent({ row }, evnt) {
-      console.log(evnt.target.value);
+      //console.log(evnt.target.value);
       this.currentrow.details.trueEnterQty = evnt.target.value;
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      console.log(evnt.target.value);
+      //console.log(evnt.target.value);
       this.currentrow.details.storeId = evnt.target.value;
     }
   }

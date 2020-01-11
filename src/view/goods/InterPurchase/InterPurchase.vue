@@ -383,7 +383,7 @@
                   field="orderQty"
                   title="采购数量"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -391,8 +391,8 @@
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"
-                      size="small"
                       :precision="0"
+                      size="mini"
                     />
                   </template>
                 </vxe-table-column>
@@ -409,7 +409,7 @@
                   field="rmbPrice"
                   title="采购裸价(人民币)"
                   :edit-render="{ name: 'input' }"
-                  width="130"
+                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -417,7 +417,7 @@
                       v-model="row.rmbPrice"
                       :precision="2"
                       :controls="false"
-                      size="small"
+                      size="mini"
                     />
                   </template>
                   <template v-slot="{ row }">
@@ -443,7 +443,7 @@
                   field="otherAmt"
                   title="其他费用"
                   :edit-render="{ name: 'input' }"
-                  width="120"
+                  width="160"
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
@@ -452,7 +452,7 @@
                       v-model="row.otherAmt"
                       :precision="2"
                       :controls="false"
-                      size="small"
+                      size="mini"
                     />
                   </template>
                   <template v-slot="{ row }">
