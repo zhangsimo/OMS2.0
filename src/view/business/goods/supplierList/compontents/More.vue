@@ -5,11 +5,11 @@
           <Row>
             <Col span="12">
               <span class="w40">创建日期：</span>
-              <DatePicker type="daterange" placeholder="请选择创建日期！"  @on-change="establish" style="width: 180px" v-model="create"></DatePicker>
+              <DatePicker type="daterange" placeholder="请选择创建日期！" @on-change="establish" style="width: 180px" v-model="create" @on-clear="ClearTime"></DatePicker>
             </Col>
             <Col span="12">
               <span class="w40">提交日期：</span>
-              <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px" v-model="submita"></DatePicker>
+              <DatePicker type="daterange" placeholder="请选择提交日期！" @on-change="submit" style="width: 180px" v-model="submita" @on-clear="clertSubmit"></DatePicker>
             </Col>
           </Row>
           <Row class="mt15">
@@ -94,13 +94,17 @@
       methods: {
           //选择创建日期
         establish(date){
-          console.log(date)
+          // console.log(date)
           this.createData = date
         },
         //选择提交日期
         submit(date){
-          console.log(date)
+          // console.log(date)
           this.submitData = date
+        },
+        // 提交日期清空
+        clertSubmit(){
+          this.submitData = null
         },
         getSupplierNamea(a) {
           console.log(a)
@@ -134,9 +138,13 @@
             this.ArraySelect = res.data || [];
           })
         },
+        //创建日期是的取消
+        ClearTime(){
+          this.createData = null
+          console.log(this.createData)
+        },
         //更多弹框的确定按钮
         Determined(){
-          console.log(this.Ischeck)
             this.sendMsg()
             this.moreAndMore = false
             this.callout = null ,

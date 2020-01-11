@@ -821,6 +821,7 @@
         params.size = this.Left.page.size
         //创建日期
         if(this.moreArr.createData != null){
+          console.log(this.moreArr.createData)
           data.startTime = this.moreArr.createData[0] + " 00:00:00"
           data.endTime = this.moreArr.createData[1] + " 23:59:59"
         }
@@ -863,7 +864,9 @@
         }
         //是否显示单据
         if (this.moreArr.Ischeck){
-          data.showSelf = this.moreArr.Ischeck
+          data.showSelf = true
+        }else {
+          data.showSelf = false
         }
         queryByConditions({params:params,data:data}).then(res => {
           if(res.code === 0){

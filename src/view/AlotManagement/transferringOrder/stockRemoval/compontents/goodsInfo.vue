@@ -50,20 +50,20 @@
         <Form
           inline
           :model="formDateRight"
-          :show-message="false"
           ref="formTwo"
           :label-width="100"
+          :rules="ruleValidate"
         >
-          <FormItem label="收货单位：">
+          <FormItem label="收货单位：" prop="receiveComp">
             <Input v-model="formDateRight.receiveComp" class="w200"></Input>
           </FormItem>
-          <FormItem label="收货地址：">
+          <FormItem label="收货地址：" prop="receiveAddress">
             <Input v-model="formDateRight.receiveAddress" class="w200"></Input>
           </FormItem>
-          <FormItem label="收货人：">
+          <FormItem label="收货人：" prop="receiver">
             <Input v-model="formDateRight.receiver" class="w200"></Input>
           </FormItem>
-          <FormItem label="联系电话：">
+          <FormItem label="联系电话：" prop="receiverMobile">
             <Input v-model="formDateRight.receiverMobile" class="w200"></Input>
           </FormItem>
           <!-- 发货信息 右-->
@@ -110,6 +110,19 @@ import { getGoodsInfo,saveGoodsInfo,logistics } from "_api/business/goodsInfos"
 export default {
   name: "goodsInfo",
   data() {
+    let checkPhone = (rule, value, callback) => {
+      if (!value) {
+        callback(new Error("手机号不能为空"));
+      } else {
+        // const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/;
+        const reg = /^1[3456789]\d{9}$/
+        if (!reg.test(value)) {
+          callback(new Error("请输入正确的手机号"));
+        } else {
+          callback();
+        }
+      }
+    };
     return {
       //表单数据查询 上
       formDateTop: {
@@ -161,7 +174,42 @@ export default {
       //发货物流下拉框
       logisArr: [
 
+      ],
+     ruleValidate: {
+       receiveComp: [
+        {
+          required: true,
+          message: "收货单位不能为空",
+          trigger: "blur",
+          type: "string"
+        }
+      ],
+       receiveAddress: [
+        {
+          required: true,
+          message: "收货地址不能为空",
+          trigger: "blur",
+          type: "string"
+        }
+      ],
+       receiver: [
+        {
+          required: true,
+          message: "收货人不能为空",
+          trigger: "blur",
+          type: "string"
+        }
+      ],
+       receiverMobile: [
+        {
+          required: true,
+          message: "联系电话错误",
+          validator: checkPhone,
+          trigger: "blur",
+          type: "string"
+        }
       ]
+    }
     };
   },
   components: {},
