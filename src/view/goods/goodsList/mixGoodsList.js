@@ -398,6 +398,7 @@ export const mixGoodsData = {
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
           this.formPlan.processInstanceId = v.processInstanceId || "";
+          this.formPlan.orderManId = v.orderMan || "";
           this.formPlan.orderManId = v.orderManId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
@@ -484,6 +485,7 @@ export const mixGoodsData = {
     //保存采购计划信息
     submit(subType) {
       this.submitloading = true;
+      console.log()
       this.$refs["formPlan"].validate(valid => {
         if (valid) {
           let objReq = {};

@@ -214,17 +214,17 @@ export default class ProcurementModal extends Vue {
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;
-    let formData = {};
+    let formData:any = {};
     for(let k in data) {
       if(data[k] && data[k].trim().length > 0) {
         formData[k] = data[k];
       }
     }
-    if(data.auditStartDate) {
-      data.auditStartDate = data.auditStartDate.split(" ")[0] + " 00:00:00"
+    if(formData.auditStartDate) {
+      formData.auditStartDate = formData.auditStartDate.split(" ")[0] + " 00:00:00"
     }
-    if(data.auditStartDate) {
-      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
+    if(formData.auditStartDate) {
+      formData.auditEndDate = formData.auditEndDate.split(" ")[0] + " 23:59:59"
     }
     let res:any = await api.getPchsPlan(params, formData);
     if(res.code == 0) {
