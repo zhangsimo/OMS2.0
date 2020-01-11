@@ -371,6 +371,7 @@ export default {
       getArray: [],
       tuneOut: false,
       flag: 0,
+      flagState: 0,
       flagValue: 0,
       flagValue1: 0,
       ArrayValue: [],
@@ -741,7 +742,9 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
-      if (params.status) {
+      if (this.flagState == 1) {
+        params.status = 0;
+      } else {
         params.status = params.status.value;
       }
       if (params.orderTypeId && params.orderTypeId.name) {
@@ -760,6 +763,8 @@ export default {
       if (this.flag1 == true) {
         params.id = "";
       }
+      console.log(params, "params");
+
       try {
         await this.$refs.xTable1.validate();
         //配件组装保存
@@ -793,11 +798,12 @@ export default {
     },
     xinzeng() {
       this.flag1 = true;
+      this.flagState = 1;
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
-      // this.Leftcurrentrow = {}
+      // this.Leftcurrentrow = {};
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
@@ -817,6 +823,7 @@ export default {
       this.Leftcurrentrow.createTime = moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
+      this.Leftcurrentrow.statuName = "草稿";
       const item = {
         new: true,
         _highlight: true,
@@ -1015,10 +1022,12 @@ export default {
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
             this.baocun1();
+            this.flagState = 0;
           },
           onCancel: () => {
             this.getList();
             this.flag = 0;
+            this.flagState = 0;
           }
         });
         return;

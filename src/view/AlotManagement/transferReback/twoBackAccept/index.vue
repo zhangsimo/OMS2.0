@@ -27,7 +27,7 @@
           </div>
           <div class="db mr10">
             <Select
-              v-model="form.guestId"
+              v-model="form.orgid"
               class="w100 mr10"
               placeholder="选择客户"
               filterable
@@ -222,7 +222,7 @@ export default {
         createDate: "",
         endDate: "",
         status: "",
-        guestId: "",
+        orgid: "",
         serviceId: ""
       },
       productName: "",
