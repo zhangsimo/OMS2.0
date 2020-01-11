@@ -189,7 +189,7 @@
   import PrintShow from "./compontents/PrintShow";
   // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import ProcurementModal from './compontents/ProcurementModal'
-  import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete } from '../../../../api/business/supplierListApi';
+  import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete,queryByConditions } from '../../../../api/business/supplierListApi';
   import { getSupplierList } from "_api/purchasing/purchasePlan";
   import { getSales } from "@/api/salesManagment/salesOrder";
   export default {
@@ -736,7 +736,7 @@
       getMsg(msg){
         this.moreArr = msg
         // console.log(this.moreArr)
-        this.leftgetList()
+        this.LeftgetlistTwo()
         // console.log(msg)
       },
       //供应商弹框
@@ -759,14 +759,70 @@
           data.startTime = this.selectArr[0]
           data.endTime = this.selectArr[1]
         }
+        // //创建日期
+        // if(this.moreArr.createData != null){
+        //   data.startTime = this.moreArr.createData[0] + " 00:00:00"
+        //   data.endTime = this.moreArr.createData[1] + " 23:59:59"
+        // }
+        //状态
+        if(this.purchaseType !== '99'){
+          data.billStatusId = this.purchaseType
+        }
+        //提交日期
+        // if(this.moreArr.submitData != null){
+        //   data.auditStartTime = this.moreArr.submitData[0] + " 00:00:00"
+        //   data.auditEndTime  = this.moreArr.submitData[1] + " 23:59:59"
+        // }
+        // 供应商
+        // if(this.moreArr.callout != null){
+        //   data.guestId = this.moreArr.guestId
+        // }
+        // //采退单号
+        // if(this.moreArr.numbers !=null ){
+        //   data.serviceId = this.moreArr.numbers
+        // }
+        // //配件编码
+        // if(this.moreArr.coding != null){
+        //   data.partCode = this.moreArr.coding
+        // }
+        // //配件名称
+        // if(this.moreArr.Name != null ){
+        //   data.partName = this.moreArr.Name
+        // }
+        // //采购订单
+        // if(this.moreArr.purchase != null ){
+        //   data.code = this.moreArr.purchase
+        // }
+        // //退货员
+        // if(this.moreArr.Return != null ){
+        //   data.orderMan = this.moreArr.Return
+        // }
+        // //创建人
+        // if(this.moreArr.Accessories != null ){
+        //   data.createUname = this.moreArr.Accessories
+        // }
+        // //提交人
+        // if(this.moreArr.submitter != null){
+        //   data.auditor = this.moreArr.submitter
+        // }
+
+        findPageByDynamicQuery({params:params,data:data}).then(res => {
+          if(res.code === 0){
+            this.Left.tbdata = res.data.content || []
+            this.Left.page.total = res.data.totalElements
+          }
+        })
+      },
+      // 更多查询单独接口
+      LeftgetlistTwo(){
+        let data = {}
+        let params = {}
+        params.page = this.Left.page.num - 1
+        params.size = this.Left.page.size
         //创建日期
         if(this.moreArr.createData != null){
           data.startTime = this.moreArr.createData[0] + " 00:00:00"
           data.endTime = this.moreArr.createData[1] + " 23:59:59"
-        }
-        //状态
-        if(this.purchaseType !== '99'){
-          data.billStatusId = this.purchaseType
         }
         //提交日期
         if(this.moreArr.submitData != null){
@@ -805,7 +861,11 @@
         if(this.moreArr.submitter != null){
           data.auditor = this.moreArr.submitter
         }
-        findPageByDynamicQuery({params:params,data:data}).then(res => {
+        //是否显示单据
+        if (this.moreArr.Ischeck){
+          data.showSelf = this.moreArr.Ischeck
+        }
+        queryByConditions({params:params,data:data}).then(res => {
           if(res.code === 0){
             this.Left.tbdata = res.data.content || []
             this.Left.page.total = res.data.totalElements
