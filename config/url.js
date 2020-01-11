@@ -40,6 +40,7 @@ const dev = {
   // financeEdit: '', // 9330
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
+  upbase64Api:'http://192.168.30.179:5100/file/uploadFileBase64',
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   passportApi: "http://192.168.2.47:5200", // passport微服务API
@@ -64,18 +65,32 @@ const test = {
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
+  upbase64Api:'https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileBase64',
   getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
 };
 
 const audit = {
-  tokenApi: "https://uatapi.g-parts.cn",
-  wmsApi: "https://uatapi.g-parts.cn/wms-order-provider",
-  omsApi: "https://uatapi.g-parts.cn/oms-product-provider",
-  omsOrderApi: "https://uatapi.g-parts.cn/oms-order-provider",
-  passportApi: "https://uatapi.g-parts.cn/gpart-passport-provider",
-  essentialApi: "https://uatapi.g-parts.cn/gpart-essential-provider"
+  omsTask: "https://uatapi2.g-part.cn/oms-task-provider",
+  omsEdit: "https://uatapi2.g-part.cn/oms-edi-provider",
+  omsApi: "https://uatapi2.g-part.cn/oms-lease-provider",
+  tokenApi: "https://uatapi2.g-part.cn",
+  wmsApi: "https://uatapi2.g-part.cn/oms-system-provider",
+  omsProduct: "https://uatapi2.g-part.cn/oms-product-provider",
+  omsOrder: "https://uatapi2.g-part.cn/oms-order-provider",
+  passportApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
+  essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
+  authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
+  omsBatch: "https://uatapi2.g-part.cn/oms-batch-provider",
+  omsSettle: "https://uatapi2.g-part.cn/oms-settlement-provider",
+  omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
+  uploadApi:
+    "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",
+  upbase64Api:'https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileBase64',
+  getFileApi: "https://uatoms2.g-part.cn.cn",
+  downApi: "https://uatapi2.g-part.cn/gpart-oss-provider",
+  omsTpApi: "https://uatapi2.g-part.cn/oms-thirdparty-provider"
 };
 
 const pro = {

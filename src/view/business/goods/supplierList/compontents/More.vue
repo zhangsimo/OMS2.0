@@ -123,9 +123,9 @@
               purchase: this.purchase,
               Return: this.Return,
               submitter: this.submitter,
+              Ischeck: this.Ischeck
             }
             this.$emit('sendMsg', a)
-            console.log(a)
         },
         //供应商下拉查询
         selecQuery(){
@@ -136,6 +136,7 @@
         },
         //更多弹框的确定按钮
         Determined(){
+          console.log(this.Ischeck)
             this.sendMsg()
             this.moreAndMore = false
             this.callout = null ,

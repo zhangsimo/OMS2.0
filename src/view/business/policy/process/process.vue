@@ -38,17 +38,17 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1" v-has="'save'">
+                  <Button type="default" class="mr10" @click="baocun1" v-has="'save'" :disabled="Leftcurrentrow.status.value!==0">
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1" v-has="'submit'">
+                  <Button class="mr10" @click="tijiao1" v-has="'submit'" :disabled="Leftcurrentrow.status.value!==0">
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1" v-has="'zuofei'">
+                  <Button class="mr10" @click="zuofei1" v-has="'zuofei'" :disabled="Leftcurrentrow.status.value!==0">
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -263,17 +263,17 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1" v-has="'save1'">
+                  <Button type="default" class="mr10" @click="baocun1" v-has="'save1'" :disabled="Leftcurrentrow.status.value!==0">
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1" v-has="'submit1'">
+                  <Button class="mr10" @click="tijiao1" v-has="'submit1'" :disabled="Leftcurrentrow.status.value!==0">
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1" v-has="'zuofei1'">
+                  <Button class="mr10" @click="zuofei1" v-has="'zuofei1'" :disabled="Leftcurrentrow.status.value!==0">
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -363,12 +363,12 @@
                     <div class="flex plan-cz-btn" ref="planBtn">
                       <div class="clearfix">
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="addProoo" v-has="'addProoo1'">
+                          <Button size="small" class="mr10" @click="addProoo" v-has="'ddProoo1'">
                             <Icon type="md-add" />选择成品
                           </Button>
                         </div>
                         <div class="fl mb5">
-                          <Button size="small" class="mr10" @click="shanchu" v-has="'shanchu1'">
+                          <Button size="small" class="mr10" @click="shanchu" v-has="'delete1'">
                             <i class="iconfont mr5 iconlajitongicon"></i> 删除
                           </Button>
                         </div>
@@ -717,7 +717,6 @@ export default {
   watch: {
     Leftcurrentrow: {
       handler(newVal) {
-        console.log(newVal);
         this.Leftcurrentrow = newVal;
       },
       deep: true
@@ -744,14 +743,23 @@ export default {
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
-      console.log("勾选", row);
       this.rowId = row.id;
-      console.log(this.rowId);
-      console.log(checked ? "勾选事件" : "取消事件");
     },
     tabChange(key) {
       this.tabKey = key;
-      console.log(this.tabKey);
+      this.Leftcurrentrow.processProductVO = [];
+      this.currentData = [];
+      this.Leftcurrentrow={
+        status: {
+          value: 0
+        },
+        storeName: "",
+        createTime: "",
+        orderMan: "",
+        remark: "",
+        serviceId: "",
+        processProductVO: []
+      }
       if (this.tabKey === 0) {
         // console.log(444444)
         this.getListzu(this.form);
@@ -853,6 +861,7 @@ export default {
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
+      this.Leftcurrentrow= item
       // this.Left.tbdata[0]['processProductVO'] = []
     },
     tijiao1() {
@@ -980,7 +989,6 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data;
-            console.log(this.tableData1);
             this.$refs.addInCom.init();
             this.$Message.success("获取成品列表成功");
           }
@@ -1106,9 +1114,8 @@ export default {
       } else {
         this.currentData = [];
       }
-
     },
-    getWareHouse(){
+    getWareHouse() {
       cangkulist2(this.$store.state.user.userData.shopId)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
@@ -1321,7 +1328,7 @@ export default {
     }
   },
   mounted() {
-    this.getWareHouse() //获取仓库列表
+    this.getWareHouse(); //获取仓库列表
     setTimeout(() => {
       this.getDomHeight();
     }, 0);

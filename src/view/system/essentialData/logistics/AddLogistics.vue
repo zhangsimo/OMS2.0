@@ -101,6 +101,9 @@
         <FormItem label="银行账户:" prop="accountBankNo">
           <Input placeholder="请输入银行账户" v-model="data.accountBankNo" style="width: 150px"></Input>
         </FormItem>
+        <FormItem label="备注:" prop="remark">
+          <Input placeholder="请输入备注" v-model="data.remark" style="width: 300px"></Input>
+        </FormItem>
       </div>
       <div style="flex-flow: row nowrap;width: 100%">
         <FormItem label="开户银行:" prop="accountBank">

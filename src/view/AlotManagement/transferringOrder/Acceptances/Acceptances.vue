@@ -28,7 +28,7 @@
             <Select v-model="productName" class="w100 mr10">
               <Option
                 v-for="item in purchaseNameArr"
-                :value="item.id"
+                :value="item.orgid"
                 :key="item.id"
               >{{item.fullName}}</Option>
             </Select>
@@ -270,7 +270,7 @@ export default {
         params.status = this.searchType2;
       }
       if (this.productName !== "9999") {
-        params.guestId = this.productName;
+        params.orgid = this.productName;
       }
       findAll(params).then(res => {
         if (res.code === 0) {
