@@ -57,7 +57,7 @@
           size="mini"
           height="auto"
           :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
@@ -76,9 +76,9 @@
             title="入库仓库"
             :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
           ></vxe-table-column>-->
-          <vxe-table-column title="入库仓库">
-            <template v-slot="{ row,rowIndex }">
-              <select>
+          <!-- <vxe-table-column title="入库仓库"> -->
+          <!-- <template v-slot="{ row,rowIndex }">
+              <select >
                 <option
                   v-for="(item,index) in storeArray"
                   :key="index"
@@ -86,7 +86,12 @@
                 >{{item.label}}</option>
               </select>
             </template>
-          </vxe-table-column>
+          </vxe-table-column>-->
+          <vxe-table-column
+            field="enterStoreId"
+            title="入库仓库"
+            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
+          ></vxe-table-column>
           <vxe-table-column field="enterDate" title="入库日期" width="100"></vxe-table-column>
           <vxe-table-column field="enterUname" title="操作人" width="100"></vxe-table-column>
         </vxe-table>
@@ -222,10 +227,11 @@ export default {
     log() {
       getcangku().then(res => {
         if (res.code === 0) {
+          //console.log(res.data, "res.data==>225");
           res.data.forEach(element => {
             this.storeArray.push({ value: element.id, label: element.name });
           });
-          //console.log(11, this.storeArray);
+          ////console.log(11, this.storeArray);
         }
       });
     },
@@ -234,12 +240,16 @@ export default {
       let page = this.pageList.page;
       let size = this.pageList.size;
 
-      console.log(this.form, "this.form");
+      //console.log(this.form, "this.form");
       zongbuzhidiaoList(page, size, this.form)
         .then(res => {
           if (res.code === 0) {
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.totalElements;
+            for (var i = 0; i < this.TopTableData.length; i++) {
+              this.TopTableData[i].enterStoreId = this.storeArray[0].value;
+            }
+            //console.log(this.TopTableData, "this.TopTableData ==>257");
           }
         })
         .catch(e => {
@@ -248,13 +258,13 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      //console.log(val);
+      ////console.log(val);
       this.form.auditStartDate = val[0];
       this.form.auditEndDate = val[1];
     },
     //time2
     selectDate(val) {
-      console.log(val, "value");
+      //console.log(val, "value");
 
       if (val[0] != "") {
         this.form.startDate = val[0] + " " + "00:00:00";
@@ -266,10 +276,10 @@ export default {
     },
     //选择当前行
     currentChangeEvent({ row }) {
-      //console.log("当前行" + row);
+      ////console.log("当前行" + row);
       this.BottomTableData = row.details;
       this.currentrow = row;
-      console.log(row, "row ==>272");
+      //console.log(row, "row ==>272");
     },
     changeSize(s) {
       this.pageList.page = 0;
@@ -282,12 +292,13 @@ export default {
     },
 
     ok1() {
+      //console.log(this.currentrow, "this.currentrow =>286");
       this.currentrow.settleStatus = this.currentrow.settleStatus.value;
-      
+      // this.currentrowthis.enterStoreId = this.storeArray[0].value;
       daohuoruku(this.currentrow)
         .then(res => {
           if (res.code == 0) {
-            //console.log(res);
+            ////console.log(res);
             this.$Message.info("入库成功");
           }
         })
@@ -302,12 +313,12 @@ export default {
       this.modal2 = true;
     },
     numChangeEvent({ row }, evnt) {
-      //console.log(evnt.target.value);
+      ////console.log(evnt.target.value);
       this.currentrow.details.trueEnterQty = evnt.target.value;
     },
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-      //console.log(evnt.target.value);
+      ////console.log(evnt.target.value);
       this.currentrow.enterStoreId = evnt.target.value;
     }
   }
