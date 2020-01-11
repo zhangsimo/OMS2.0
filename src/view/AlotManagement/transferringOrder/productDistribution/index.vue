@@ -143,18 +143,17 @@
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="orgid" title="申请方"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调拨申请单号" width="100"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="qualitySourceName" title="提交日期"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
           <vxe-table-column
             field="hasAcceptQty"
             title="分配数量"
             :edit-render="{name: 'input', attrs: {type: 'number'}}"
           ></vxe-table-column>
-
           <vxe-table-column field="hasCancelQty" title="缺货数量"></vxe-table-column>
         </vxe-table>
       </div>
