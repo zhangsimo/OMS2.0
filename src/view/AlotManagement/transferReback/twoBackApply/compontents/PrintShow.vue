@@ -6,10 +6,10 @@
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >{{onelist.guestName}}</h5>
+            >{{onelist.orgName}}</h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>销售退回申请:</p>
+            <p>调入退回申请:</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
@@ -203,6 +203,7 @@ export default {
         // 配件组装作废
         getprintList(params)
           .then(res => {
+            console.log(res, "res =>206");
             // 点击列表行==>配件组装信息
             if (res.code == 0) {
               this.printShow = true;

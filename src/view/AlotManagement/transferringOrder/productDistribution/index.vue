@@ -91,7 +91,7 @@
           <vxe-table-column field="partBrandName" title="品牌"></vxe-table-column>
 
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="OECode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="partCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="carBrandModel" title="品牌车型"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
           <vxe-table-column title="方向"></vxe-table-column>
@@ -144,7 +144,7 @@
           </vxe-table-column>
 
           <vxe-table-column field="orgid" title="申请方"></vxe-table-column>
-          <vxe-table-column field="code" title="调拨申请单号" width="100"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="调拨申请单号" width="100"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
           <vxe-table-column field="qualitySourceName" title="提交日期"></vxe-table-column>

@@ -301,6 +301,7 @@ export default {
   },
   data() {
     return {
+      flagValue: [],
       flag: 0,
       getArray: [],
       ArrayValue: [],
@@ -609,10 +610,12 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      // console.log(params, "params =>608");
-      for (var i = 0; i < params.detailVOS.length; i++) {
-        params.detailVOS[i].id = "";
-      }
+      // for (var i = 0; i < params.detailVOS.length; i++) {
+      //   params.detailVOS[i].id = "";
+      // }
+      // if (this.flagValue == []) {
+      //   params.detailVOS[i].id = "";
+      // }
 
       //配件组装保存
       baocun(params)
@@ -864,6 +867,8 @@ export default {
         mainId: row.id
       };
       const res = await getListDetail(params);
+      // console.log(res.data, "res.data==>867");
+      this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
       const that = this;
@@ -962,7 +967,20 @@ export default {
     getOkList(list) {
       // console.log(list, "获取的条数");
       this.showit = false;
-      this.Leftcurrentrow.detailVOS = list;
+      for (var i = 0; i < list.length; i++) {
+        list[i].id = "";
+        this.Leftcurrentrow.detailVOS.push(list[i]);
+      }
+
+      var result = [];
+      var obj = {};
+      for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+        if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
+          result.push(this.Leftcurrentrow.detailVOS[i]);
+          obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
+        }
+      }
+      this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
       const tata = this;
