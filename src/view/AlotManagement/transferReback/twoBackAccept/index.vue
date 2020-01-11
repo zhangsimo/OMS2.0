@@ -26,13 +26,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Select
-              v-model="form.orgid"
-              class="w100 mr10"
-              placeholder="选择公司"
-              filterable
-              clearable
-            >
+            <Select v-model="form.orgid" class="w100 mr10" placeholder="选择公司" filterable clearable>
               <Option
                 v-for="item in customerListOptions"
                 :value="item.value"
@@ -331,7 +325,7 @@ export default {
             this.pageList.total = res.totalElements;
             // console.log(this.TopTableData, "this.TopTableData");
             for (var i = 0; i < this.TopTableData.length; i++) {
-              this.TopTableData[i]["defaultValue"] = "受理默认仓库";
+              this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             }
           }
         })
@@ -409,10 +403,6 @@ export default {
     shouli(row, index) {
       // console.log(row, "row=>407");
       this.currentrow = row;
-      // console.log(this.currentrow.defaultValue, "this.currentrow.defaultValue");
-      if (this.currentrow.defaultValue == "受理默认仓库") {
-        this.currentrow.defaultValue = "1212664645509201920";
-      }
       if (index === 2) {
         this.modal1 = true;
       } else {
