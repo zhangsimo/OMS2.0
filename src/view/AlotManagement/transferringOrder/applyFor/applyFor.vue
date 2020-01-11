@@ -421,7 +421,7 @@
         },
         //调出方下拉框
         selectGuestName(val){
-          // console.log(val)
+          console.log(val)
           this.formPlan.guestName = val.value
         },
         // 新增按钮
@@ -765,10 +765,11 @@
                 currentRowTable.clearCurrentRow();
                 this.$refs.formPlan.validate((valid) => {
                   if (valid) {
-                    let data = {}
-                    data.id = this.rowId
-                    data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    console.log(this.guestidId);
+                    let data = {};
+                    data.id = this.rowId;
+                    data.orgid = this.rowOrgId;
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
                     data.guestId = this.guestidId
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
