@@ -70,12 +70,12 @@ const test = {
 };
 
 const audit = {
-  tokenApi: "https://uatapi.g-parts.cn",
-  wmsApi: "https://uatapi.g-parts.cn/wms-order-provider",
-  omsApi: "https://uatapi.g-parts.cn/oms-product-provider",
-  omsOrderApi: "https://uatapi.g-parts.cn/oms-order-provider",
-  passportApi: "https://uatapi.g-parts.cn/gpart-passport-provider",
-  essentialApi: "https://uatapi.g-parts.cn/gpart-essential-provider"
+  tokenApi: "https://uatapi2.g-part.cn",
+  wmsApi: "https://uatapi2.g-part.cn/wms-order-provider",
+  omsApi: "https://uatapi2.g-part.cn/oms-product-provider",
+  omsOrderApi: "https://uatapi2.g-part.cn/oms-order-provider",
+  passportApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
+  essentialApi: "https://uatapi2.g-part.cn/gpart-essential-provider"
 };
 
 const pro = {
