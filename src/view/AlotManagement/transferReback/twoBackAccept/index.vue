@@ -29,7 +29,7 @@
             <Select
               v-model="form.orgid"
               class="w100 mr10"
-              placeholder="选择客户"
+              placeholder="选择公司"
               filterable
               clearable
             >
