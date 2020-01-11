@@ -46,11 +46,11 @@
           <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
           <vxe-table-column type="radio" width="60" title=" "></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-          <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-          <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-          <vxe-table-column field="fullName" title="配件全称" width="100"></vxe-table-column>
-          <vxe-table-column field="carBrandModel" title="品牌车型" width="100"></vxe-table-column>
-          <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
+          <vxe-table-column field="carBrandModel" title="品牌车型"></vxe-table-column>
+          <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
         </vxe-table>
       </div>
 

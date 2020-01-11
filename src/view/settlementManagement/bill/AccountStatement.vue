@@ -976,7 +976,6 @@ export default {
       //   console.log(res);
       // });
       approvalStatus({ instanceId: row.id }).then(res => {
-        console.log(res)
         if (res.code == "0") {
           this.statusData = res.data.operationRecords;
         }
