@@ -610,7 +610,7 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
-          if (["orderQty", "orderPrice"].includes(column.property)) {
+          if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 8) {

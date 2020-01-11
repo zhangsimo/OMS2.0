@@ -66,7 +66,7 @@
               class="mr10"
               @click="printTable"
               v-has="'print'"
-              :disabled="this.Leftcurrentrow.status.value !== 0"
+              :disabled="this.Leftcurrentrow.status.value === 5"
             >
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
