@@ -25,7 +25,7 @@
       :on-success="onSuccess"
       :before-upload ='beforeUpload'
     >
-      <Button type="default" class="mr10" v-has="'import'" > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧</Button>
+      <Button type="default" class="mr10" v-has="'import'" > <Icon custom="iconfont icondaoruicon icons" /> 批量导入紧俏品</Button>
     </Upload>
     <Button class="mr10" @click="downTemplate" v-has="'down'">
       <span class="center"><Icon custom="iconfont iconxiazaiicon icons" />下载模板</span>
