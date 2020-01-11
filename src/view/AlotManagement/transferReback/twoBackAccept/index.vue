@@ -26,7 +26,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Select v-model="form.id" class="w100 mr10" placeholder="选择客户" filterable clearable>
+            <Select v-model="form.orgid" class="w100 mr10" placeholder="选择客户" filterable clearable>
               <Option
                 v-for="item in customerListOptions"
                 :value="item.value"
@@ -216,7 +216,7 @@ export default {
         createDate: "",
         endDate: "",
         status: "",
-        id: "",
+        orgid: "",
         serviceId: ""
       },
       productName: "",
@@ -278,7 +278,7 @@ export default {
             // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
-                value: element.id,
+                value: element.orgid,
                 label: element.fullName
               });
             });
