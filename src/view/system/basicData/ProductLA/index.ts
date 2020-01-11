@@ -144,7 +144,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "名称",
-            key: "partStandardName",
+            key: "partBrandName",
             minWidth: 100
         },
         {
@@ -154,7 +154,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "单位",
-            key: "unit",
+            key: "unitld",
             minWidth: 80
         },
         {
@@ -389,9 +389,10 @@ export default class ProductLA extends Vue {
         }
         let data:any = this.selectionDistPartArr.map((el:any) => {
             return {
-                id: el.empAttributeId,
-                attId: el.id,
-                empId: this.employeeId,
+                id: el.id
+                // id: el.empAttributeId,
+                // attId: el.id,
+                // empId: this.employeeId,
             }
         })
         this.selectionDistPartArr = [];
