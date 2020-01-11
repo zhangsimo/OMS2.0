@@ -212,7 +212,8 @@ import {
   getReconciliation,
   getSettlement,
   Preservation,
-  getStore
+  getStore,
+  account
 } from "@/api/bill/saleOrder";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
