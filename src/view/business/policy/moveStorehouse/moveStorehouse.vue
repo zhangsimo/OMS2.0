@@ -66,7 +66,7 @@
               class="mr10"
               @click="printTable"
               v-has="'print'"
-              :disabled="this.Leftcurrentrow.status.value !== 0"
+              :disabled="this.Leftcurrentrow.status.value === 5"
             >
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
@@ -281,6 +281,7 @@ export default {
   },
   data() {
     return {
+      flag:0,
       numberValue: "",
       mainid: "",
       split1: 0.2,
@@ -624,6 +625,7 @@ export default {
         detailVOList: [],
         _highlight: true
       };
+      this.flag = 1
       this.Leftcurrentrow= item;
       // this.Leftcurrentrow.createUname = item.createUname;
       // this.Leftcurrentrow.xinzeng = "1";
@@ -667,6 +669,7 @@ export default {
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功
+          this.flag = 0
           updata(params)
             .then(res => {
               if (res.code == 0) {
@@ -776,6 +779,19 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun();
+          },
+          onCancel: () => {
+            this.getList();
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       this.Leftcurrentrow = row;
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {

@@ -35,7 +35,7 @@
             <p style="width:33%"><span>移仓日期:</span> <span>{{onelist.auditDate}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
@@ -107,6 +107,11 @@
 
                     },
                     {
+                      title: '数量',
+                        key: 'orderQty',
+                        align: 'center'
+                    },
+                    {
                         title: '规格',
                         key: 'spec',
                         align: 'center'
@@ -163,7 +168,6 @@
                     document.body.innerHTML = oldstr
             },
             openModal(id){
-                console.log(id)
                 //let order = this.$store.state.dataList.oneOrder
                 if(id){
                     let data ={}
@@ -172,8 +176,8 @@
                      .then(res => {
                        if(res.code === 0){
                          console.log(res)
-                         this.onelist = res.data
                         this.printShow = true
+                         this.onelist = res.data
                         //this.onelist = res.data
                       }
                     })
