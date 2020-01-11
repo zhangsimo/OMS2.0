@@ -2,11 +2,11 @@
   <div class="customerCredit-box">
     <div class="customerCredit-header">
       <span>客户名称:</span>
-      <Input class="mr10" style="width: 150px" v-model="Name" placeholder="请输入客户名称！" />
-      <span>授权业务员:</span>
-      <Input class="mr10" style="width: 150px" v-model="salesman" placeholder="请输入授权业务员" />
-      <span>业务员电话:</span>
-      <Input class="mr10" style="width: 150px" v-model="telephone" placeholder="请输入业务员电话" />
+      <Input class="mr10" style="width: 150px" v-model="Name" placeholder="请输入客户名称" />
+      <span>授权采购员:</span>
+      <Input class="mr10" style="width: 150px" v-model="salesman" placeholder="请输入授权采购员" />
+      <span>采购员电话:</span>
+      <Input class="mr10" style="width: 150px" v-model="telephone" placeholder="请输入采购员电话" />
       <Button type="warning" class="w90 mr10" @click="search">
         <span class="center">
           <Icon custom="iconfont iconchaxunicon icons" />查询
@@ -38,9 +38,8 @@
     <div class="customerCredit-title">
       <div style="width: 3000px;padding-right: 10px">
         <Table
-          class="table-highlight-row"
-          size="small"
           highlight-row
+          size="small"
           :loading="Loading"
           border
           :columns="columns"
@@ -68,13 +67,13 @@
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信用额度记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns1" border stripe size="small" height="200" :data="creditArr"></Table>
+              <Table :columns="columns1" border highlight-row stripe size="small" height="200" :data="creditArr"></Table>
             </div>
           </Col>
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信息变更记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns2" border stripe size="small" height="200" :data="alterArr"></Table>
+              <Table :columns="columns2" highlight-row border stripe size="small" height="200" :data="alterArr"></Table>
             </div>
           </Col>
         </Row>
@@ -638,8 +637,8 @@ export default {
     },
     //确定申请
     Determined() {
-      // this.$refs.child.$refs.form.validate((valid) => {
-      //         if (valid) {
+      this.$refs.child.$refs.form.validate((valid) => {
+              if (valid) {
       let data = {};
       data.guestId = this.rowMessage.guestId;
       data.orgId = this.rowMessage.orgid;
@@ -676,10 +675,10 @@ export default {
           this.getListTop();
         }
       });
-      //     } else {
-      //         this.$Message.error('表单验证失败!');
-      //     }
-      // })
+          } else {
+              this.$Message.error('必填项必须填!');
+          }
+      })
     },
     //确定取消
     cancel2() {

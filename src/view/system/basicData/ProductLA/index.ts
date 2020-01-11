@@ -144,7 +144,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "名称",
-            key: "partStandardName",
+            key: "partBrandName",
             minWidth: 100
         },
         {
@@ -154,7 +154,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "单位",
-            key: "unit",
+            key: "unitld",
             minWidth: 80
         },
         {
@@ -270,6 +270,8 @@ export default class ProductLA extends Vue {
         this.employeeId = id;
         this.buttonWaitQuery = false;
         this.loginName = row.loginName;
+        this.waitPartListLoading = false;
+        this.distPartLoading = false;
         this.getwaitEmps();
         this.getEmps();
     }
@@ -364,7 +366,7 @@ export default class ProductLA extends Vue {
                 partCode: el.partCode,
                 empId: this.employeeId,
                 partBrandCode: el.partBrandCode,
-                partId: el.id,
+                partId: el.partId,
                 partInnerId: el.code,
                 partBrand: el.partBrand,
                 empName: this.loginName,
@@ -387,9 +389,10 @@ export default class ProductLA extends Vue {
         }
         let data:any = this.selectionDistPartArr.map((el:any) => {
             return {
-                id: el.empAttributeId,
-                attId: el.id,
-                empId: this.employeeId,
+                id: el.id
+                // id: el.empAttributeId,
+                // attId: el.id,
+                // empId: this.employeeId,
             }
         })
         this.selectionDistPartArr = [];

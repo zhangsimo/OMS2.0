@@ -523,6 +523,8 @@ export default class InterPurchase extends Vue {
         // orderState['草稿'], orderState['退回']
         this.formPlanmain.createUid = v.createUid;
         this.formPlanmain.processInstanceId = v.processInstanceId;
+        this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
+        this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
         if (['草稿', '退回'].includes(v.billStatusId.name)) {
           this.isInput = false;
         } else {

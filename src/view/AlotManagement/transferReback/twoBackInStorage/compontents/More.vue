@@ -31,10 +31,10 @@
         <!--/>-->
         <!-- <Input v-model="moreData.orderMan" placeholder="请选择申请方" style="width: 410px" disabled /> -->
         <Select
-          placeholder="请选择调出方"
+          placeholder="请选择申请方！"
           v-model="moreData.orderMan"
           filterable
-          style="width: 450px"
+          style="width: 400px"
           @on-change="getSupplierNamea1"
         >
           <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>

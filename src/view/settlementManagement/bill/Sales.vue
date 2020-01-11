@@ -196,7 +196,7 @@ export default {
           key: "orderPrice",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderPrice).toFixed(2))
+            return h('span',Number(params.row.orderPrice).toFixed(2))
           }
         },
         {
@@ -204,7 +204,7 @@ export default {
           key: "orderAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
+            return h('span',Number(params.row.orderAmt).toFixed(2))
           }
         }
       ],
@@ -384,9 +384,8 @@ export default {
         // console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{
-            if(item.orderType){
-              item.orderTypeName = item.orderType.name
-            }
+            item.orderTypeName = item.orderType ? item.orderType.name : ''
+            item.billstate = item.billStatusId ? item.billStatusId.name: ''
             item.index = index + 1
           })
           this.data = res.data

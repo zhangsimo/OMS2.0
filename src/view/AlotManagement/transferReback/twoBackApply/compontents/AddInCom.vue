@@ -8,21 +8,11 @@
           </div>
           <div class="db mr10">
             <span class>入库日期从：</span>
-            <DatePicker
-              v-model="penSalesData.allotEnterTimeStart"
-              type="datetime"
-              format="yyyy-MM-dd HH:mm:ss"
-              style="width:120px"
-            ></DatePicker>
+            <DatePicker v-model="penSalesData.allotEnterTimeStart" type="date" style="width:120px"></DatePicker>
           </div>
           <div class="db mr10">
             <span class="ml10">至：</span>
-            <DatePicker
-              v-model="penSalesData.allotEnterTimeEnd"
-              type="datetime"
-              format="yyyy-MM-dd HH:mm:ss"
-              style="width:120px"
-            ></DatePicker>
+            <DatePicker v-model="penSalesData.allotEnterTimeEnd" type="date" style="width:120px"></DatePicker>
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
@@ -73,6 +63,7 @@
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
+          <vxe-table-column field="finishDate" title="入库日期"></vxe-table-column>
           <vxe-table-column field="code" title="申请单号"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
@@ -228,11 +219,15 @@ export default {
         this.penSalesData.allotEnterTimeStart = moment(
           this.penSalesData.allotEnterTimeStart
         ).format("YYYY-MM-DD HH:mm:ss");
+        console.log(
+          this.penSalesData.allotEnterTimeStart,
+          "this.penSalesData.allotEnterTimeStart"
+        );
       }
       if (this.penSalesData.allotEnterTimeEnd) {
         this.penSalesData.allotEnterTimeEnd = moment(
           this.penSalesData.allotEnterTimeEnd
-        ).format("YYYY-MM-DD HH:mm:ss");
+        ).format("YYYY-MM-DD 00:59:59");
       }
       for (var k in this.penSalesData) {
         if (!this.penSalesData[k]) {
@@ -260,7 +255,7 @@ export default {
       };
       const res = await chengpingDetail(params);
       this.currentData = res.data;
-      this.currentData[0].remark = this.checkRow.remark
+      this.currentData[0].remark = this.checkRow.remark;
     },
     ok() {
       // 将选好的成品传父组件

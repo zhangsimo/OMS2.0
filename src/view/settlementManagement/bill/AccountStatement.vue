@@ -301,8 +301,7 @@
       </Row>
       <div slot="footer"></div>
     </Modal>
-    <reconciliation ref="reconciliation"></reconciliation>
-    <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
+    <reconciliation ref="reconciliation" :accountType="accountType"></reconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
   </div>
 </template>
@@ -331,6 +330,7 @@ export default {
   },
   data() {
     return {
+      accountType:false,
       statusData: [
         { name: "提交", status: "已提交" },
         { name: "产品总监审批", status: "已审批" }
@@ -952,7 +952,7 @@ export default {
         startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         endDate: moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss')
       };
-      this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
+      // this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
       this.$refs.reconciliation.parameter = { ...row, ...date };
       let obj = {
         orgId: row.orgId,
@@ -968,10 +968,11 @@ export default {
     // 查看对账单
     viewStatement() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
+        this.$refs.reconciliation.modal = true;
         if (this.reconciliationStatement.statementStatusName === "草稿") {
-          this.$refs.Monthlyreconciliation.modal = true;
+          this.accountType = false
         } else {
-          this.$refs.reconciliation.modal = true;
+          this.accountType = true
         }
       } else {
         this.$message.error("请勾选要查看的对账单");

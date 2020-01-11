@@ -533,7 +533,6 @@ export default {
   watch: {
     Leftcurrentrow: {
       handler(newVal) {
-        console.log(newVal);
         this.Leftcurrentrow = newVal;
       },
       deep: true
@@ -552,7 +551,7 @@ export default {
       findForAllot(req).then(res => {
         const { content } = res.data;
         this.getArray = content;
-        console.log(content, "req");
+        // console.log(content, "req");
         content.forEach(item => {
           this.ArrayValue.push(item.fullName);
         });
@@ -560,17 +559,15 @@ export default {
     },
 
     getDataType() {
-      console.log(121);
-
       const params = {
         status: this.form.status
       };
-      console.log(params, "567");
+      // console.log(params, "567");
       this.getList(params);
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
-      console.log(checked ? "勾选事件" : "取消事件");
+      // console.log(checked ? "勾选事件" : "取消事件");
     },
     baocun1() {
       if (
@@ -599,7 +596,6 @@ export default {
       if (params.status && params.status.name) {
         params.status = params.status.value;
       }
-      console.log(params.orderTypeId);
       if (params.orderTypeId && params.orderTypeId.name) {
         params.orderTypeId = params.orderTypeId.value;
       }
@@ -613,7 +609,7 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      console.log(params, "params =>608");
+      // console.log(params, "params =>608");
       for (var i = 0; i < params.detailVOS.length; i++) {
         params.detailVOS[i].id = "";
       }
@@ -633,7 +629,7 @@ export default {
         });
     },
     xinzeng() {
-      console.log(this.$store);
+      // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -701,33 +697,41 @@ export default {
         });
     },
     zuofei1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态加工单能进行作废操作");
-        return;
-      }
-      const params = {
-        id: this.Leftcurrentrow.id
-      };
-      // 配件组装作废
-      zuofei(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("作废成功");
+      this.$Modal.confirm({
+        title: "是否确定作废订单!",
+        onOk: () => {
+          if (this.Leftcurrentrow.xinzeng === "1") {
+            this.$Message.info("请先保存新增加工单");
+            return;
           }
-        })
-        .catch(e => {
-          this.$Message.info("作废失败");
-        });
+          if (!this.Leftcurrentrow.serviceId) {
+            this.$Message.info("请先选择加工单");
+            return;
+          }
+          if (this.Leftcurrentrow.status.value !== 0) {
+            this.$Message.info("只有草稿状态加工单能进行作废操作");
+            return;
+          }
+          const params = {
+            id: this.Leftcurrentrow.id
+          };
+          // 配件组装作废
+          zuofei(params)
+            .then(res => {
+              // 点击列表行==>配件组装信息
+              if (res.code == 0) {
+                this.getList(this.form);
+                this.$Message.success("作废成功");
+              }
+            })
+            .catch(e => {
+              this.$Message.info("作废失败");
+            });
+        },
+        onCancel: () => {
+          this.getList(this.form);
+        }
+      });
     },
     //选择单据
     selectAddlierName(row) {
@@ -797,7 +801,7 @@ export default {
         // 导入成品, 并把成品覆盖掉当前配件组装信息list
         if (res.code == 0) {
           this.tableData1 = res.data.content;
-          console.log(res.data, "res.datares.data =>801");
+          // console.log(res.data, "res.datares.data =>801");
         }
       });
       // 获取成品列表把data赋值给子组件中
@@ -834,7 +838,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      console.log(row, "row =>837");
+      // console.log(row, "row =>837");
       if (row.createUname == undefined || row.createUname == "") {
       } else {
         if (this.flag == 1) {
@@ -851,8 +855,8 @@ export default {
           return;
         }
       }
-      console.log(row.createUname, "row.createUname =>844");
-      console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
+      // console.log(row.createUname, "row.createUname =>844");
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
 
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
@@ -860,7 +864,6 @@ export default {
         mainId: row.id
       };
       const res = await getListDetail(params);
-      console.log(res);
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
       const that = this;
@@ -898,7 +901,7 @@ export default {
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
-      console.log(params, "params  ==>879");
+      // console.log(params, "params  ==>879");
       this.getList(params);
       this.$refs.naform.reset();
       this.advanced = false;
@@ -939,14 +942,11 @@ export default {
     },
     showModel3(val) {
       this.val = val;
-      console.log(val);
       this.$refs.selectSupplier.init();
     },
     //选择方
     selectSupplierName(row) {
-      console.log(row);
       if (this.val === "0") {
-        console.log(row.fullName);
         this.showit = false;
         this.Leftcurrentrow.guestName = row.fullName;
         this.Leftcurrentrow.guestId = row.id;
@@ -955,13 +955,12 @@ export default {
           tata.showit = true;
         }, 200);
       } else {
-        this.diaochuName = row.fullName;
-        console.log(row.id);
+        this.diaochuName = row.id;
         this.diaochuID = row.id;
       }
     },
     getOkList(list) {
-      console.log(list, "获取的条数");
+      // console.log(list, "获取的条数");
       this.showit = false;
       this.Leftcurrentrow.detailVOS = list;
       this.Leftcurrentrow.remark = list[0].remark;
@@ -999,9 +998,9 @@ export default {
                 obj[array[i].name] = true;
               }
             }
-            console.log(result);
+            // console.log(result);
 
-            console.log(res.data.content, "res==>970");
+            // console.log(res.data.content, "res==>970");
             if (!res.data.content) {
               this.Left.tbdata = [];
               this.Left.page.total = 0;

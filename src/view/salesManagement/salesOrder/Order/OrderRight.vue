@@ -14,7 +14,8 @@
         <span class="titler mr5">临时额度:</span>
         <span class="titler mr10">{{ limitList.tempQuota |priceFilters}}</span>
         <span class="titler mr5">可用余额:</span>
-        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>
+<!--        <span class="titler mr5">{{ limitList.sumAmt - (+totalMoney) |priceFilters}}</span>-->
+        <span class="titler mr5">{{ limitList.sumAmt  |priceFilters}}</span>
       </div>
       <div class="clearfix purchase" ref="planForm">
         <FormItem label="客户：" prop="guestId">

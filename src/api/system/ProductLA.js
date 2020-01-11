@@ -44,7 +44,7 @@ export function findByEmp (params, data) {
 // 已分配配件
 export function findAttByEmpId (params) {
   return axios.request({
-    url: `${api.wmsApi}/wbParts/findPartsByEmpId`,
+    url: `${api.wmsApi}/employeeAttribute/findAttByEmpId`,
     method: 'get',
     params
   })
