@@ -319,13 +319,13 @@
               },
               {
                 title: '提交人',
-                key: 'createUname',
+                key: 'commitUname',
                 minWidth: 100
               },
               {
                 title: '提交日期',
                 align:'center',
-                key: 'createTime',
+                key: 'commitDate',
                 minWidth: 170
               },
               {
