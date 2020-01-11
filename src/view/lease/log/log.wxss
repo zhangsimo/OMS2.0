@@ -1,0 +1,53 @@
+.hsl-con-box {
+  background-color: #fff;
+}
+.hsl-warp {
+  height: 768px;
+  overflow-y: auto;
+  border-top: 1px solid #e9e9e9;
+}
+.hsl-warp .hsl-item {
+  height: 296px;
+  border: 1px solid#e9e9e9;
+  border-left: none;
+  border-right: none;
+  margin-top: 20px;
+  padding-left: 30px;
+}
+.hsl-warp .hsl-item h5 {
+  padding-right: 30px;
+  line-height: 60px;
+  font-weight: normal;
+  display: flex;
+  justify-content: space-between;
+}
+.hsl-warp .hsl-item h5 .date-leading {
+  font-size: 18px;
+  color: #333333;
+  font-weight: 600;
+}
+.hsl-warp .hsl-item h5 .date-sub {
+  font-size: 14px;
+  color: #c3c3c3;
+}
+.hsl-warp .hsl-item .log-item-main {
+  height: 186px;
+  border: 1px solid #e9e9e9;
+  border-left: none;
+  border-right: none;
+  overflow: hidden;
+}
+.hsl-warp .hsl-item footer {
+  display: flex;
+  align-items: center;
+  height: 48px;
+}
+.log-item-main :nth-of-type(n+6) {
+  display: none;
+}
+.hsl-bottom {
+  border-top: 1px solid #e9e9e9;
+  height: 93px;
+  padding-right: 20px;
+  margin-bottom: 20px;
+}

@@ -1,0 +1,197 @@
+.flex{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mlr{
+  margin: 0 5px;
+  color: lightgray;
+  font-weight: bold;
+}
+.audit_header{
+  height: 50px;
+  background: #fd5c5c;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 5px 5px 0 0;
+}
+.audit_nav{
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+dt{
+  font-size: 14px;
+  margin-top: 15px;
+}
+dd{
+  padding-top: 10px;
+}
+
+.audit_nav2{
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.icons{
+  padding-right: 5px;
+  font-size: 12px!important;
+}
+
+.h25{
+  height: 25px!important;
+}
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+/*.Box{*/
+  /*padding-top: 10px!important;*/
+/*}*/
+.audit_nav .navgation{
+  width: 420px!important;
+}
+.cl_white{
+  color: white!important;
+}
+Button{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.audit_nav .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab{
+  padding: 10px 16px;
+  font-size: 14px;
+  border-radius: 5px 5px 0 0;
+}
+.audit_nav .ivu-radio-group-vertical .ivu-radio-wrapper{
+  margin-left: 30px;
+}
+.ivu-modal-close .ivu-icon-ios-close{
+  font-size: 35px;
+  color: #ffffff;
+}
+.change_nav>div>label{
+  width: 110px;
+  text-align: right;
+  margin-right: 5px;
+  display: block;
+}
+.change_nav>div>div>label{
+  width: 110px;
+  text-align: right;
+  margin-right: 5px;
+  display: block;
+}
+.change_nav>div{
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+}
+.change_nav>div>div{
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+}
+.difficult{
+  width: 110px;
+  text-align: right;
+  margin-right: 5px;
+  display: block;
+}
+.zs_red{
+  color: red;
+  padding: 3px;
+}
+.hint{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+}
+.hint2{
+  width: 329px;
+  height: 30px;
+  background-color: #fff7ec;
+  border-radius: 2px;
+  border: solid 1px #faebd6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fd5c5c;
+  font-size: 12px;
+}
+
+/*反馈管理*/
+.bigbox2{
+  width: 100%;
+  height: 920px;
+  background: #ffffff;
+}
+.header{
+  width: 100%;
+  padding: 20px 20px 20px
+}
+.boxnav{
+  padding: 0 20px;
+}
+.navone{
+  height: 80px;
+  border: 1px solid #e5e5e5;
+}
+.navone_one{
+  height: 40px;
+  background: #f6f8f9;
+  padding-left: 20px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+}
+.navone_two{
+  width: 60%;
+  padding-left: 20px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+}
+.navone_two>div{
+  flex: 1;
+  justify-content: left;
+  }
+.navone_three{
+  height: 110px;
+  display: flex;
+  padding: 0 20px;
+  justify-content: flex-start;
+  align-items: center;
+}
+.navtwo{
+  border: 1px solid #e5e5e5;
+}
+.header>button>span{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.audit_nav .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active{
+  color: #666666;
+}
+.audit_nav .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active{
+  border-color: #40a6ff;
+}
+.audit_nav .ivu-radio-inner:after{
+  background-color: #40a6ff!important;
+  width: 9px!important;
+  height: 9px!important;
+  left: 3px!important;
+  top: 3px!important;
+}
+.audit_nav .ivu-radio-checked .ivu-radio-inner{
+  border-color: #40a6ff!important;
+}
+.white{
+  color: #ffffff;
+}

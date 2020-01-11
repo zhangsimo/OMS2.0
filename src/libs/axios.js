@@ -42,7 +42,7 @@ class httpRequest {
     let that = this
     // 添加请求拦截器
     instance.interceptors.request.use(config => {
-      if(Cookies.get(TOKEN_KEY)){
+      if(Cookies.get(TOKEN_KEY) && !config.url.includes('/token')){
         // config.headers.Authorization = "Bearer "+Cookies.get(TOKEN_KEY)
           // if(isTokenExpired()){
           //   if(!this.isRefreshing){
@@ -73,7 +73,18 @@ class httpRequest {
           // else{
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-          // }
+            if(localStorage.getItem("oms2-userList") != null) {
+              let res = JSON.parse(localStorage.getItem('oms2-userList'))
+              config.params.tenantId = res.tenantId || 0
+              config.params.shopId = res.shopId || 0
+              config.params.shopkeeper = res.shopkeeper || 0
+            }
+            if(localStorage.getItem('userScope') != null){
+              let  scope = localStorage.getItem('userScope')
+              config.params.scope = scope || 'oms'
+            }else{
+              config.params.scope = 'oms'
+            }
       }else{
         if(config.url.includes('/token')){
           config.data = qs.stringify(config.data);
@@ -136,7 +147,15 @@ class httpRequest {
         }
       }
       //Message.error('服务内部错误')
-      globalVue.$Message.error(error.message)
+
+      if(error.response.config.url.includes('/token')){
+        console.log(231212222)
+        globalVue.$Message.error(error.response.data.data.errorMessage)
+      }else{
+        globalVue.$Message.error(error.message)
+      }
+
+
       // 对响应错误做点什么
       return Promise.reject(error)
     })
@@ -145,7 +164,7 @@ class httpRequest {
   create () {
     let conf = {
       baseURL: baseURL.omsApi,
-      // timeout: 2000,
+      timeout: 2000,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'X-URL-PATH': location.pathname

@@ -1,21 +1,19 @@
 <template>
   <div class="tags-nav">
     <div class="close-con">
-      <Dropdown transfer @on-click="handleTagsOption" style="margin-top:3px;">
-        <Button size="small" type="text">
-          <Icon :size="18" type="ios-close-outline"></Icon>
-        </Button>
+      <Dropdown transfer @on-click="handleTagsOption">
+        <Icon :size="18" type="ios-close-circle-outline"></Icon>
         <DropdownMenu slot="list">
           <DropdownItem name="close-all">关闭所有</DropdownItem>
           <DropdownItem name="close-others">关闭其他</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     </div>
-    <div class="btn-con left-btn">
-      <Button icon="chevron-left" type="text" @click="handleScroll(240)"></Button>
+    <div class="btn-con left-btn" :class="{'noActive':noLeftActive}">
+      <Button icon="ios-arrow-back" type="text" @click="handleScroll(240)"></Button>
     </div>
-    <div class="btn-con right-btn">
-      <Button icon="chevron-right" type="text" @click="handleScroll(-240)"></Button>
+    <div class="btn-con right-btn" :class="{'noActive':noRightActive}">
+      <Button icon="ios-arrow-forward" type="text" @click="handleScroll(-240)"></Button>
     </div>
     <div class="scroll-outer" ref="scrollOuter" @DOMMouseScroll="handlescroll" @mousewheel="handlescroll">
       <div ref="scrollBody" class="scroll-body" :style="{left: tagBodyLeft + 'px'}">
@@ -52,8 +50,13 @@ export default {
   },
   data () {
     return {
-      tagBodyLeft: 0
+      tagBodyLeft: 0,
+      noLeftActive:false,
+      noRightActive:false
     }
+  },
+  mounted(){
+    this.initBg()
   },
   methods: {
     handlescroll (e) {
@@ -73,11 +76,13 @@ export default {
             this.tagBodyLeft = this.tagBodyLeft
           } else {
             this.tagBodyLeft = Math.max(this.tagBodyLeft + offset, this.$refs.scrollOuter.offsetWidth - this.$refs.scrollBody.offsetWidth)
+
           }
         } else {
           this.tagBodyLeft = 0
         }
       }
+      this.initBg()
     },
     handleTagsOption (type) {
       if (type === 'close-all') {
@@ -93,12 +98,40 @@ export default {
     handleClose (e, name) {
       let res = this.list.filter(item => item.name !== name)
       this.$emit('on-close', res, undefined, name)
+      setTimeout(()=>{
+        this.initBg()
+      },500)
     },
     handleClick (item) {
       this.$emit('input', item)
     },
     showTitleInside (item) {
       return showTitle(item, this)
+    },
+    initBg(){
+      let that = this
+      this.$nextTick(()=>{
+        if(that.$refs.scrollOuter.offsetWidth < that.$refs.scrollBody.offsetWidth){
+          that.noRightActive = false
+          that.noLeftActive = false
+          if(that.tagBodyLeft==0){
+            that.noLeftActive = true
+          }else{
+            that.noRightActive = true
+          }
+        }else{
+          that.noRightActive = true
+          that.noLeftActive = true
+        }
+      })
+    }
+  },
+  watch:{
+    list:{
+      handler(v,ov){
+        this.initBg()
+      },
+      deep:true
     }
   }
 }

@@ -14,7 +14,7 @@
       </strong>
     </div>
     <div class="login-right">
-      <p class="login-right-top"><a href="javascript:void(0)">设为首页</a><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>
+      <p class="login-right-top"><a href="javascript:void(0)" @click="register">点击注册</a><a href="javascript:void(0)">设为首页</a><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>
       </p>
       <div class="login-con">
         <h3 class="login-con-header">极配正品</h3>
@@ -25,6 +25,11 @@
           </p>
           <div class="form-con-inner">
             <Form ref="loginForm" :model="form" :rules="rules">
+              <FormItem style="margin-bottom: 20px">
+                <Select v-model="form.scope" >
+                  <Option v-for="item in accountTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+              </FormItem>
               <FormItem prop="username" style="margin-bottom: 20px">
                 <Input v-model="form.username" :class="{nodata:!form.username}" placeholder="请输入用户名">
                 <span slot="prepend">
@@ -68,9 +73,15 @@
     components: {SlideValidate},
     data () {
       return {
+          accountTypeList:[
+              {label:"oms" , value:'oms'},
+              {label:"wms" , value:'wms'},
+              {label:"auth" , value:'auth'},
+          ],
         form: {
           username: localStorage.getItem('username') || '',
-          password: ''
+          password: '',
+          scope:'oms'
         },
         rules: {
           username: [
@@ -85,6 +96,9 @@
       }
     },
     methods: {
+      register() {
+        this.$router.push("/register")
+      },
       handleSubmit () {
         this.form.username = this.form.username.trim()
         this.loading = true
@@ -92,6 +106,8 @@
           if (valid) {
             let username = this.form.username
             let password = this.form.password
+            let scope = this.form.scope
+              localStorage.setItem('userScope' , scope )
             this.$emit('on-commit', {username, password, errCallback: this.errCallback})
           } else {
             this.loading = false

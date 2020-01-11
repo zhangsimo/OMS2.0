@@ -1,0 +1,21 @@
+.center{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.icons{
+  padding-right: 5px;
+  font-size: 12px!important;
+}
+.audit_nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.audit_nav>div{
+  margin: 10px 0;
+}
+.audit_nav2{
+  padding: 10px;
+}
