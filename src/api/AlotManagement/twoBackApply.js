@@ -15,7 +15,7 @@ export function getList1(data, size, num) {
 //获取调拨申请列表明细
 export function getListDetail(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyDetail/findApplyDetails`,
+    url: `${api.omsOrder}/allotOutDetail/findByMainId`,
     method: 'get',
     params: {
       ...data
