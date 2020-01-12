@@ -151,7 +151,6 @@ export default {
       findForAllot(req).then(res => {
         if (res.code === 0) {
           this.ArrayValue = res.data.content;
-          // console.log(this.ArrayValue, "this.ArrayValue");
         }
       });
     },
