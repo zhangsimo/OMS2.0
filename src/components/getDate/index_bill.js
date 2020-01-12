@@ -49,6 +49,9 @@ export const ThisWeekStr = () => {
     var returnStr = [];
     var date = new Date();      //当前时间
     var week = date.getDay();   //获取今天星期几
+    if(week == 0) {
+        week = 7
+    }
     var monday = GetDate2(week - 1, 1, date);      //获取星期一
     var sunday = GetDate2(7 - week, 2, date);   //获取星期天
     //起始时间的年月日
@@ -79,6 +82,9 @@ export const LastWeekStr = () => {
     var returnStr = [];
     var date = new Date();      //当前时间
     var week = date.getDay();   //获取今天星期几
+    if(week == 0) {
+        week = 7
+    }
     var monday = GetDate2(week + 6, 1, date);      //获取上周星期一
     var sunday = GetDate2(week, 1, date);          //获取上周星期天
     //起始时间的年月日
