@@ -460,7 +460,7 @@ export default {
               res.data.map((item, index) => {
                 item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
-                item.auditSign = item.auditSign ? "已审" : "未审";
+                item.auditSign = item. billStatusId ?  "已提交" : "草稿";
               });
               this.data = res.data;
             } else {
@@ -479,7 +479,7 @@ export default {
               res.data.map((item, index) => {
                 item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
-                item.auditSign = item.auditSign ? "已审" : "未审";
+                item.auditSign = item. billStatusId ? "已提交" : "草稿";
               });
               this.data = res.data;
             } else {
