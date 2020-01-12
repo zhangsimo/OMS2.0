@@ -147,7 +147,7 @@ import OtherItem from "./components/other-item/other-item";
 import MyBreadCrumb from "./components/header-bar/mybread-crumb/myBreadCrumb";
 import html2canvas from "html2canvas";
 
-import { feedbackRecord, up, compress } from "../../../api/lease/FeedbackManagement";
+import { feedbackRecord, compress,up } from "../../../api/lease/FeedbackManagement";
 
 export default {
   name: "Main",
@@ -368,55 +368,94 @@ export default {
 
     //确认添加
     async sureAdd() {
+      // let context = this.canvas.getContext('2d')
+      //   this.canvas.width = 400
+      //   this.canvas.height = 300
       let image = this.canvas.toDataURL("image/png");
-      let list = this.$route;
-      image = image.replace(/^data:image\/(png|jpg);base64,/, "");
+      // let list = this.$route;
+      // image = image.replace(/^data:image\/(png|jpg);base64,/, "");
       // console.log(this.query)
       // console.log(this.$route.meta.title)
       // console.log(image)
       // console.log(this.value17)
       // console.log(window.location.pathname)
       // base64编码的图片
+        console.log(image)
+        const blob = this.dataURItoBlob(image)
       let data = {};
-      //转换图片文件
-      var imgFile = this.dataURLtoFile(image);
-      let ress = await up(imgFile);
-      console.log(ress);
-      console.log(imgFile);
+        // console.log(image , 888)
+
+        //转换图片文件
+      // var imgFile = this.dataURLtoFile(image);
+      // console.log(imgFile , 9999)
+      let ress = await up(blob);
       if(ress.code == 0) {
         data.fileUrl = ress.data.url;
+          let type = this.query.map(item => {
+              return item.name;
+          });
+          var type2 = type.join(",");
+          data.funcAction = window.location.pathname;
+          data.funcName = this.$route.meta.title;
+          data.questionContent = this.value17;
+          data.questionType = type2;
+          feedbackRecord(data).then(res => {
+              if (res.code === 0) {
+                  this.$Message.warning("反馈成功");
+                  this.screenshot = false;
+              }
+          });
+      }else {
+          let type = this.query.map(item => {
+              return item.name;
+          });
+          var type2 = type.join(",");
+          data.funcAction = window.location.pathname;
+          data.funcName = this.$route.meta.title;
+          data.questionContent = this.value17;
+          data.questionType = type2;
+          feedbackRecord(data).then(res => {
+              if (res.code === 0) {
+                  this.$Message.warning("反馈成功");
+                  this.screenshot = false;
+              }
+          });
       }
-      var type = this.query.map(item => {
-        return item.name;
-      });
-      var type2 = type.join(",");
-      // console.log(type)
-      // data.fileUrl = image
-      data.funcAction = window.location.pathname;
-      data.funcName = this.$route.meta.title;
-      data.questionContent = this.value17;
-      data.questionType = type2;
-      console.log(data);
-      feedbackRecord(data).then(res => {
-        if (res.code === 0) {
-          this.$Message.warning("反馈成功");
-          this.screenshot = false;
-        }
-      });
     },
+      //base64转blob
+      dataURItoBlob(dataURI) {
+          // convert base64/URLEncoded data component to raw binary data held in a string
+          let byteString;
+          if (dataURI.split(',')[0].indexOf('base64') >= 0) {
+              byteString = atob(dataURI.split(',')[1]);
+          } else byteString = unescape(dataURI.split(',')[1]);
+          // separate out the mime component
+          const mimeString = dataURI
+              .split(',')[0]
+              .split(':')[1]
+              .split(';')[0];
+
+          // write the bytes of the string to a typed array
+          const ia = new Uint8Array(byteString.length);
+          for (let i = 0; i < byteString.length; i++) {
+              ia[i] = byteString.charCodeAt(i);
+          }
+          return new Blob([ia], { type: mimeString });
+      },
     // base转为文件
-    dataURLtoFile(dataurl, filename) {
-      //将base64转换为文件
-      var arr = ("data:image/png;base64," + dataurl).split(","),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]),
-        n = bstr.length,
-        u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new File([u8arr], filename, { type: mime });
-    }
+    // dataURLtoFile(dataurl) {
+    //   //将base64转换为文件
+    //   let filename = new Date()
+    //   var arr = ("data:image/png;base64," + dataurl).split(","),
+    //     mime = arr[0].match(/:(.*?);/)[1],
+    //     bstr = atob(arr[1]),
+    //     n = bstr.length,
+    //     u8arr = new Uint8Array(n);
+    //   while (n--) {
+    //     u8arr[n] = bstr.charCodeAt(n);
+    //   }
+    //   return new File([u8arr], filename, { type: mime });
+    // }
   },
   watch: {
     $route(newRoute) {
