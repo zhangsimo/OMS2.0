@@ -776,7 +776,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取成品失败");
+          this.$Message.info("数据加载失败");
         });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()

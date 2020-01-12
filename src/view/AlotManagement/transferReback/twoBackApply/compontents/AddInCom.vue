@@ -227,7 +227,7 @@ export default {
       if (this.penSalesData.allotEnterTimeEnd) {
         this.penSalesData.allotEnterTimeEnd = moment(
           this.penSalesData.allotEnterTimeEnd
-        ).format("YYYY-MM-DD 00:59:59");
+        ).format("YYYY-MM-DD 23:59:59");
       }
       for (var k in this.penSalesData) {
         if (!this.penSalesData[k]) {
