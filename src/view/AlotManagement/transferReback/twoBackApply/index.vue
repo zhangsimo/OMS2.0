@@ -1013,10 +1013,8 @@ export default {
       }
       var array = [];
       var allArr = []; //新数组
-      console.log(params, "parsams ==>1002");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
-          console.log(res, "res ==>1006");
 
           if (res.code == 0) {
             // res.data.content.forEach((item, index, array) => {

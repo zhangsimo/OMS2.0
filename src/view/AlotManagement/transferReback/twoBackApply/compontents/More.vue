@@ -130,11 +130,9 @@ export default {
   methods: {
     commitstart(date) {
       this.form.commitDateStart = date;
-      console.log(date);
     },
     commitend(date) {
       this.form.commitDateEnd = date;
-      console.log(date);
     },
     //展示方
     showModel() {

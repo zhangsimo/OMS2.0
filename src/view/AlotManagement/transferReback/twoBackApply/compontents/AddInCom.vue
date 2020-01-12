@@ -211,7 +211,6 @@ export default {
       req.size = 20;
       findForAllot(req).then(res => {
         if (res.code === 0) {
-          console.log(res, "haha");
           this.ArrayValue = res.data.content;
         }
       });
@@ -238,7 +237,6 @@ export default {
     //选中的日期
     selectDate(date) {
       this.penSalesData.option1 = date;
-      console.log(this.penSalesData.option1);
     },
     //搜索
     search(size, num) {
@@ -246,10 +244,6 @@ export default {
         this.penSalesData.allotEnterTimeStart = moment(
           this.penSalesData.allotEnterTimeStart
         ).format("YYYY-MM-DD HH:mm:ss");
-        console.log(
-          this.penSalesData.allotEnterTimeStart,
-          "this.penSalesData.allotEnterTimeStart"
-        );
       }
       if (this.penSalesData.allotEnterTimeEnd) {
         this.penSalesData.allotEnterTimeEnd = moment(
@@ -275,7 +269,6 @@ export default {
     cancel() {},
     echoDate() {},
     async selectTabelData({ row }) {
-      console.log(row, "row ==>256");
       this.checkRow = row;
       const params = {
         mainId: row.id
