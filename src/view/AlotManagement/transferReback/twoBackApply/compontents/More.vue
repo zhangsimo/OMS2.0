@@ -24,8 +24,9 @@
       <Col span="12">
         <span class="w40">提交日期从：</span>
         <DatePicker
-          v-model="form.startDate"
-          type="datetime"
+          v-model="form.commitDateStart"
+          @on-change="commitstart"
+          type="date"
           format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
         ></DatePicker>
@@ -33,8 +34,9 @@
       <Col span="12">
         <span class="w40 ml10">至：</span>
         <DatePicker
-          v-model="form.endDate"
-          type="datetime"
+          v-model="form.commitDateEnd"
+          type="date"
+          @on-change="commitend"
           format="yyyy-MM-dd HH:mm:ss"
           style="width: 180px"
         ></DatePicker>
@@ -89,8 +91,8 @@ export default {
         partCode: "", //申请单号
         partName: "", //申请单号
         productPartCode: "", //编码
-        startDate: "", //配件人
-        endDate: "",
+        commitDateStart: "", //配件人
+        commitDateEnd: "",
         endTime: "",
         guestId: "",
         guestName: "",
@@ -126,6 +128,14 @@ export default {
     this.getArrayParams();
   },
   methods: {
+    commitstart(date) {
+      this.form.commitDateStart = date;
+      console.log(date);
+    },
+    commitend(date) {
+      this.form.commitDateEnd = date;
+      console.log(date);
+    },
     //展示方
     showModel() {
       this.$emit("getName", "1");
@@ -162,26 +172,26 @@ export default {
       this.form.shenEndTime = data;
     },
     getITPWE() {
-      if (this.form.startTime) {
-        this.form.startTime = moment(this.form.startTime).format(
+      if (this.form.commitDateStart) {
+        this.form.commitDateStart = moment(this.form.commitDateStart).format(
           "YYYY-MM-DD HH:mm:ss"
         );
       }
-      if (this.form.endTime) {
-        this.form.endTime = moment(this.form.endTime).format(
-          "YYYY-MM-DD HH:mm:ss"
+      if (this.form.commitDateEnd) {
+        this.form.commitDateEnd = moment(this.form.commitDateEnd).format(
+          "YYYY-MM-DD 00:59:59"
         );
       }
-      if (this.form.startDate) {
-        this.form.startDate = moment(this.form.startAuditDate).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-      }
-      if (this.form.endDate) {
-        this.form.endDate = moment(this.form.endAuditDate).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-      }
+      // if (this.form.commitDateStart) {
+      //   this.form.commitDateStart = moment(this.form.startAuditDate).format(
+      //     "YYYY-MM-DD HH:mm:ss"
+      //   );
+      // }
+      // if (this.form.commitDateEnd) {
+      //   this.form.commitDateEnd = moment(this.form.endAuditDate).format(
+      //     "YYYY-MM-DD HH:mm:ss"
+      //   );
+      // }
       return this.form;
     },
     reset() {
@@ -190,7 +200,7 @@ export default {
         partName: "", //申请单号
         productPartCode: "", //编码
         startData: "", //配件人
-        endDate: "",
+        commitDateEnd: "",
         endTime: "",
         guestId: "",
         guestName: "",

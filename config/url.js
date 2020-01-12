@@ -10,7 +10,7 @@ const dev = {
   // omsProduct: "http://192.168.30.21:9200", // 张佳岩
   omsApi: "http://192.168.30.69:9240", //徐林烽
   wmsApi: "http://192.168.30.16:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsOrder: "http://192.168.30.16:9210", // 徐林烽
   // omsOrder: 'http://192.168.30.191:9210', // 常国地
 
   // wmsApi: 'http://192.168.30.21:9250', // 常国地
@@ -40,7 +40,7 @@ const dev = {
   // financeEdit: '', // 9330
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
-  upbase64Api:'http://192.168.30.179:5100/file/uploadFileBase64',
+  upbase64Api: "http://192.168.30.179:5100/file/uploadFileBase64",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   passportApi: "http://192.168.2.47:5200", // passport微服务API
@@ -65,7 +65,8 @@ const test = {
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
-  upbase64Api:'https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileBase64',
+  upbase64Api:
+    "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileBase64",
   getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
@@ -87,7 +88,8 @@ const audit = {
   omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",
-  upbase64Api:'https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileBase64',
+  upbase64Api:
+    "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileBase64",
   getFileApi: "https://uatoms2.g-part.cn.cn",
   downApi: "https://uatapi2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://uatapi2.g-part.cn/oms-thirdparty-provider"
