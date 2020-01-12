@@ -399,7 +399,7 @@ export default {
           },
           {
             title: "提交日期",
-            key: "auditDate",
+            key: "subDate",
             minWidth: 200
           }
         ],
@@ -520,7 +520,7 @@ export default {
       let size = this.Left.page.size;
       getLeftList(data, page, size)
         .then(res => {
-          console.log(res)
+          // console.log(res)
           if (res.code === 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -806,7 +806,7 @@ export default {
       seleList.forEach(item => {
         ids.push(item.id);
       });
-      console.log(this.formPlan)
+      // console.log(this.formPlan)
       this.Right.tbdata = this.Right.tbdata.filter(item=>!seleList.includes(item))
       if(!ids[0]) return
       // this.array_diff(this.Right.tbdata, seleList);
@@ -849,7 +849,7 @@ export default {
           txt = response.data.join(",");
         }
         this.$Notice.warning({
-          title: "导入成功",
+          title: "",
           desc: txt,
           duration: 0
         });
@@ -932,7 +932,7 @@ export default {
   watch:{
         formPlan: {
       handler(val, old) {
-        console.log(val, old)
+        // console.log(val, old)
       },
       deep: true
     }

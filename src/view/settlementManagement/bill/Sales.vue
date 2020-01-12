@@ -384,6 +384,14 @@ export default {
         // console.log(res);
         if(res.data.length !== 0){
           res.data.map((item,index)=>{
+            switch(item.sourceType){
+              case '0': item.sourceType = '普通单据'; break;
+              case '1': item.sourceType = '采购订单'; break;
+              case '2': item.sourceType = '销售出库'; break;
+              case '3': item.sourceType = 'WMS'; break;
+              default: item.sourceType = ''
+            }
+            item.belongSystem = item.belongSystem ? item.belongSystem === 1 ? '体系外':'体系内':'华胜连锁'
             item.orderTypeName = item.orderType ? item.orderType.name : ''
             item.billstate = item.billStatusId ? item.billStatusId.name: ''
             item.index = index + 1

@@ -47,7 +47,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>联系人:</span>
-              <span>{{ onelist.guestPeo }}</span>
+              <span>{{ logistics.receiver }}</span>
             </p>
             <p>
               <span>入库仓库:</span>
@@ -181,6 +181,7 @@ export default {
       ],
       onelist: {}, //打印数据
       details: [],
+      logistics: {},
       num: "12323.09",
       num2: 78723
     };
@@ -207,6 +208,7 @@ export default {
           this.onelist = res.data;
           // this.onelist.printDate = tools.transTime(new Date());
           this.details = res.data.detailVOS;
+          this.logistics = res.data.logisticsRecordVO;
         }
       } else {
         this.$message.error("至少选择一条信息");

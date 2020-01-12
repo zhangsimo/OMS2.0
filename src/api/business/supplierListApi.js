@@ -20,6 +20,15 @@ export function findPageByDynamicQuery (data) {
   })
 }
 
+//通过更多弹框查询左侧信息
+export function queryByConditions (data) {
+  return axios.request({
+    url: `${api.omsOrder}/sellOrderReturn/queryByConditions`,
+    method: 'post',
+    data:data.data,
+    params:data.params
+  })
+}
 //保存
 ///sellOrderReturn/saveDraft
 export function saveDraft (data) {

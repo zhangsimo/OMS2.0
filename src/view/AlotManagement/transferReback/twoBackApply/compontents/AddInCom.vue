@@ -16,7 +16,16 @@
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
-            <Input v-model="penSalesData.guestName" style="width: 398px" />
+            <!-- <Input v-model="penSalesData.guestName" style="width: 398px" /> -->
+            <Select
+              placeholder="请选择调出方！"
+              v-model="penSalesData.guestName"
+              filterable
+              style="width: 400px"
+              @on-change="getSupplierNamea1"
+            >
+              <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
             <Button @click="getName" class="ml5" size="small" type="default">
               <i class="iconfont iconxuanzetichengchengyuanicon"></i>
             </Button>
@@ -107,12 +116,14 @@
 <script >
 // import '@/view/lease/product/lease.less'
 // import '@/view/goods/goodsList/goodsList.less'
+import { findForAllot } from "_api/purchasing/purchasePlan";
 import { chengpingDetail } from "@/api/AlotManagement/twoBackApply.js";
 import moment from "moment";
 export default {
   data() {
     return {
       searchPartLayer: false,
+      ArrayValue: [],
       // 日期数据
       options1: [],
       tabList: [],
@@ -190,6 +201,20 @@ export default {
     }
   },
   methods: {
+    getSupplierNamea1(a) {
+      this.penSalesData.guestId = a;
+      // console.log(this.moreData.orderMan, "this.moreData.orderMan");
+    },
+    getArrayParams() {
+      var req = {};
+      req.page = 1;
+      req.size = 20;
+      findForAllot(req).then(res => {
+        if (res.code === 0) {
+          this.ArrayValue = res.data.content;
+        }
+      });
+    },
     //分页
     changePage(p) {
       this.pageList.page = p;
@@ -204,6 +229,7 @@ export default {
     },
     init() {
       this.searchPartLayer = true;
+      this.getArrayParams();
     },
     init1() {
       this.searchPartLayer = false;
@@ -211,7 +237,6 @@ export default {
     //选中的日期
     selectDate(date) {
       this.penSalesData.option1 = date;
-      console.log(this.penSalesData.option1);
     },
     //搜索
     search(size, num) {
@@ -219,15 +244,11 @@ export default {
         this.penSalesData.allotEnterTimeStart = moment(
           this.penSalesData.allotEnterTimeStart
         ).format("YYYY-MM-DD HH:mm:ss");
-        console.log(
-          this.penSalesData.allotEnterTimeStart,
-          "this.penSalesData.allotEnterTimeStart"
-        );
       }
       if (this.penSalesData.allotEnterTimeEnd) {
         this.penSalesData.allotEnterTimeEnd = moment(
           this.penSalesData.allotEnterTimeEnd
-        ).format("YYYY-MM-DD 00:59:59");
+        ).format("YYYY-MM-DD 23:59:59");
       }
       for (var k in this.penSalesData) {
         if (!this.penSalesData[k]) {
@@ -248,7 +269,6 @@ export default {
     cancel() {},
     echoDate() {},
     async selectTabelData({ row }) {
-      console.log(row, "row ==>256");
       this.checkRow = row;
       const params = {
         mainId: row.id

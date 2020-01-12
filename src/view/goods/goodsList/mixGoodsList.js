@@ -18,6 +18,13 @@ import { TOKEN_KEY } from "@/libs/util";
 
 export const mixGoodsData = {
   data() {
+    const validateOrderMan = (rule, value, callback) => {
+      if (value === '') {
+          callback(new Error('计划员不能为空'));
+      } else {
+          callback();
+      }
+    };
     return {
       ArrayList: [],
       upurl: "",
@@ -54,7 +61,7 @@ export const mixGoodsData = {
           }
         ],
         orderManId: [
-          { required: true, message: "计划员不能为空", trigger: "change" }
+          { required: true, validator: validateOrderMan, trigger: "change" }
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
@@ -164,6 +171,10 @@ export const mixGoodsData = {
       } else {
         this.delArr = new Array();
       }
+    },
+    filterOrderman() {
+      let val = this.salesList.filter(el => el.value == this.formPlan.orderManId)[0]
+      return val.label
     },
     //删除选中数据
     delTableData() {
@@ -390,7 +401,6 @@ export const mixGoodsData = {
           this.formPlan.createUid = v.createUid || "";
           this.formPlan.guestId = v.guestId || "";
           this.formPlan.planArriveDate = new Date(v.orderDate) || "";
-          // this.formPlan.planDateformat = v.orderDate || "";
           this.formPlan.remark = v.remark || "";
           this.formPlan.billType = v.billTypeId || "";
           this.formPlan.directGuestId = v.directGuestId || "";
@@ -398,6 +408,7 @@ export const mixGoodsData = {
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
           this.formPlan.processInstanceId = v.processInstanceId || "";
+          this.formPlan.orderMan = v.orderMan || "";
           this.formPlan.orderManId = v.orderManId || "";
           this.tableData = v.details || [];
           this.mainId = v.id;
@@ -484,7 +495,9 @@ export const mixGoodsData = {
     //保存采购计划信息
     submit(subType) {
       this.submitloading = true;
+      console.log(this.formPlan)
       this.$refs["formPlan"].validate(valid => {
+        console.log(valid)
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -497,7 +510,8 @@ export const mixGoodsData = {
           //计划日期
           objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name
-          objReq.orderMan = this.formPlan.orderMan;
+          // objReq.orderMan = this.formPlan.orderMan;
+          objReq.orderMan = this.filterOrderman();
           objReq.orderManId = this.formPlan.orderManId;
           //备注
           objReq.remark = this.formPlan.remark;

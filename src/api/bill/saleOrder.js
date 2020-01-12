@@ -284,3 +284,11 @@ export function typeSelect(params){
         params
     })
 }
+// 对账单查看对账
+export function account(params){
+    return axios.request({
+        url: `${api.omsSettle}/statement/master/query/statement`,
+        method:'get',
+        params
+    })
+}
