@@ -975,6 +975,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.zZindex {
+  z-index: 3000 !important;
+}
 .oper-top input {
   border: 1px solid #dddddd;
   text-indent: 4px;

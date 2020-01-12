@@ -1019,7 +1019,7 @@ export default {
           this.accountType = true;
         }
       } else {
-        this.$message.error("请勾选要查看的对账单");
+        this.$message({message:"请勾选要查看的对账单",customClass: "zZindex",type:'error'});
       }
     },
     // 对账单结算
@@ -1032,20 +1032,16 @@ export default {
         ) {
           this.Settlement = true;
         } else {
-          this.$message.error(
-            "请勾选流程通过且对账单状态为审核通过或结算中的数据"
+          this.$message(
+            {message:"请勾选流程通过且对账单状态为审核通过或结算中的数据",customClass: "zZindex",type:'error'}
           );
         }
       } else {
-        this.$message.error("请勾选要对账数据");
+        this.$message({message:"请勾选要对账数据",customClass: "zZindex",type:'error'});
       }
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt = row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
-      row.endAmt += row.checkAmt * 1;
-      row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
-      this.$set(this.BusinessType, rowIndex, row);
       let obj = {
         serviceTypeName: "合计",
         accountAmt: this.BusinessType[0].accountAmt,
@@ -1070,7 +1066,7 @@ export default {
               filename: "应收单据明细"
             });
           } else {
-            this.$message.error("应收单据明细暂无数据");
+            this.$message({message:"应收单据明细暂无数据",customClass: "zZindex",type:'info'});
           }
         } else if (this.tab === "name2") {
           if (this.data4.length !== 0) {
@@ -1078,7 +1074,7 @@ export default {
               filename: "应付单据明细"
             });
           } else {
-            this.$message.error("应付单据明细暂无数据");
+            this.$message({message:"应付单据明细暂无数据",customClass: "zZindex",type:'info'});
           }
         }
       } else {
@@ -1087,7 +1083,7 @@ export default {
             filename: "对账单"
           });
         } else {
-          this.$message.error("对账单暂无数据");
+          this.$message({message:"对账单暂无数据",customClass: "zZindex",type:'info'});
         }
       }
     },
@@ -1101,16 +1097,16 @@ export default {
         if (index < 5 && index !== 0) {
           if (index > 2) {
             obj.accountAmt += item.accountAmt * 1;
-            obj.endAmt += item.endAmt;
-            obj.uncollectedAmt += item.uncollectedAmt;
-            obj.checkAmt += item.checkAmt;
-            obj.unAmt += item.unAmt;
+            obj.endAmt += item.endAmt * 1;
+            obj.uncollectedAmt += item.uncollectedAmt * 1;
+            obj.checkAmt += item.checkAmt * 1;
+            obj.unAmt += item.unAmt * 1;
           } else {
             obj.accountAmt -= item.accountAmt * 1;
-            obj.endAmt -= item.endAmt;
-            obj.uncollectedAmt -= item.uncollectedAmt;
-            obj.checkAmt -= item.checkAmt;
-            obj.unAmt -= item.unAmt;
+            obj.endAmt -= item.endAmt * 1;
+            obj.uncollectedAmt -= item.uncollectedAmt * 1;
+            obj.checkAmt -= item.checkAmt * 1;
+            obj.unAmt -= item.unAmt * 1;
           }
         }
       });
@@ -1124,28 +1120,30 @@ export default {
         accountNo: this.reconciliationStatement.accountNo
       }).then(res => {
         if (res.data.one.length !== 0 && res.data.two.length !== 0) {
-          let accountAmt = 0;
-          let endAmt = 0;
-          let uncollectedAmt = 0;
-          let checkAmt = 0;
-          let unAmt = 0;
+          let accountAmt = res.data.one[0].accountAmt;
+          let endAmt = res.data.one[0].endAmt;
+          let uncollectedAmt = res.data.one[0].uncollectedAmt;
+          let checkAmt = res.data.one[0].checkAmt;
+          let unAmt = res.data.one[0].unAmt;
           res.data.one.map((item, index) => {
             item.serviceTypeName = item.serviceType.name;
-            if (
-              item.serviceTypeName === "供应商坏账" ||
-              item.serviceTypeName === "供应商返利"
-            ) {
-              accountAmt += item.accountAmt;
-              endAmt += item.endAmt;
-              uncollectedAmt += item.uncollectedAmt;
-              checkAmt += item.checkAmt;
-              unAmt += item.unAmt;
-            } else {
-              accountAmt -= item.accountAmt;
-              endAmt -= item.endAmt;
-              uncollectedAmt -= item.uncollectedAmt;
-              unAmt += item.unAmt;
-              checkAmt -= item.checkAmt;
+            if(index !==0){
+              if (
+                item.serviceTypeName === "供应商坏账" ||
+                item.serviceTypeName === "供应商返利"
+              ) {
+                accountAmt += item.accountAmt;
+                endAmt += item.endAmt;
+                uncollectedAmt += item.uncollectedAmt;
+                checkAmt += item.checkAmt;
+                unAmt += item.unAmt;
+              } else {
+                accountAmt -= item.accountAmt;
+                endAmt -= item.endAmt;
+                uncollectedAmt -= item.uncollectedAmt;
+                unAmt += item.unAmt;
+                checkAmt -= item.checkAmt;
+              }
             }
           });
           res.data.one.push({
@@ -1158,7 +1156,7 @@ export default {
           });
           res.data.two.map(item => {
             item.paymentAmtName = item.paymentAmt.name;
-            this.total += item.checkAmt;
+            // this.total += item.checkAmt;
           });
           this.BusinessType = res.data.one;
           this.tableData = res.data.two;
@@ -1267,6 +1265,9 @@ export default {
     },
     // 收付款保存
     conserve() {
+      this.BusinessType.map(item => {
+        item.endAmt += item.checkAmt * 1;
+      });
       if (this.total === this.BusinessType[5].checkAmt) {
         let one = [
           {
@@ -1284,16 +1285,27 @@ export default {
           two: this.BusinessType,
           three: this.tableData
         }).then(res => {
-          let ind = this.reconciliationStatement.index;
-          this.$set(
-            this.data1[ind],
-            "amountReceived",
-            this.BusinessType[5].endAmt
-          );
-          this.Settlement = false;
+          if (res.code === 0) {
+            let ind = this.reconciliationStatement.index;
+            this.$set(
+              this.data1[ind],
+              "amountReceived",
+              this.BusinessType[5].endAmt
+            );
+            this.Settlement = false;
+            this.$message({
+              message: "保存成功",
+              type: "success",
+              customClass: "zZindex"
+            });
+          }
         });
       } else {
-        this.$message.error("收款金额与本次核销金额不相等");
+        this.$message({
+              message: "收款金额与本次核销金额不相等",
+              type: "error",
+              customClass: "zZindex"
+            });
       }
     },
     // 收付款关闭
@@ -1310,10 +1322,12 @@ export default {
         ) {
           this.revoke = true;
         } else {
-          this.$message.error("此状态无法撤销");
+          this.$message({message:"此状态无法撤销",type:'error',
+              customClass: "zZindex"});
         }
       } else {
-        this.$message.error("请勾选要撤销的对账单");
+        this.$message({message:"请勾选要撤销的对账单",type:'error',
+              customClass: "zZindex"});
       }
     },
     // 确认撤销
@@ -1322,6 +1336,10 @@ export default {
         id: this.reconciliationStatement.id
       }).then(res => {
         // console.log(res);
+        if(res.code===0){
+          this.$message({message:'撤销成功',type:'success',
+              customClass: "zZindex"})
+        }
       });
     }
   }
@@ -1347,6 +1365,9 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.zZindex {
+  z-index: 3000 !important;
 }
 .data-container {
   padding: 20px 10px;

@@ -399,7 +399,7 @@ export default {
           },
           {
             title: "提交日期",
-            key: "auditDate",
+            key: "subDate",
             minWidth: 200
           }
         ],
