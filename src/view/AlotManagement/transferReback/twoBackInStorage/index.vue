@@ -107,7 +107,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input disabled readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.auditor" placeholder></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
                     <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>
@@ -271,7 +271,7 @@ export default {
         storeId: "", //入库仓库
         finishDate: "", //调出退回日期
         remark: "", //备注
-        orderMan: "", //入库人
+        auditor: "", //入库人
         code: "", //申请单号
         serviceId: "" //退回单号
       },
