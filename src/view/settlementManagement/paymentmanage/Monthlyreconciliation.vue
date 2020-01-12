@@ -1113,13 +1113,14 @@ export default {
         let str1 = "";
         let str2 = "";
         this.paymentlist.map(item => {
-          str1 += `${item.serviceId}*${item.serviceType.value},`;
+          str1 += `${item.serviceId}*${1*item.serviceType.value +1},`;
         });
         this.collectlist.map(item => {
-          str2 += `${item.serviceId}*${item.serviceType.value},`;
+          str2 += `${item.serviceId}*${1*item.serviceType.value +1},`;
         });
-        str1 = str1.substring(1, str1.length - 1);
-        str2 = str2.substring(1, str2.length - 1);
+        console.log(str1,str2)
+        str1 = str1.substring(0, str1.length - 1);
+        str2 = str2.substring(0, str2.length - 1);
         // console.log(str1,str2)
         location.href = `${
           baseUrl.omsOrder

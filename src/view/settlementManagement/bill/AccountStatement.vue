@@ -232,7 +232,7 @@
       </div>
       <div class="db p15 settlement mt10 mb10">
         <div class="db_top flex mb15">
-          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
+          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>  
           <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
           <span style="flex:1">收付类型：{{reconciliationStatement.billingTypeName}}</span>
         </div>

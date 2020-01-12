@@ -237,66 +237,66 @@ export default {
         },
         {
           title: "A卡",
-          key: "aCardAmt",
+          key: "acardAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.aCardAmt).toFixed(2))
+            return h('span',(params.row.acardAmt).toFixed(2))
           }
         },
         {
           title: "B卡",
-          key: "bCardAmt",
+          key: "bcardAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.bCardAmt).toFixed(2))
+            return h('span',(params.row.bcardAmt).toFixed(2))
           }
         },
         {
           title: "C卡",
-          key: "cCardAmt",
+          key: "ccardAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.cCardAmt).toFixed(2))
+            return h('span',(params.row.ccardAmt).toFixed(2))
           }
         },
         {
           title: "D卡",
-          key: "dCardAmt",
+          key: "dcardAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.dCardAmt).toFixed(2))
+            return h('span',(params.row.dcardAmt).toFixed(2))
           }
         },
         {
           title: "基本开户A",
-          key: "aBasicAmt",
+          key: "abasicAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.aBasicAmt).toFixed(2))
+            return h('span',(params.row.abasicAmt).toFixed(2))
           }
         },
         {
           title: "基本开户B",
-          key: "bBasicAmt",
+          key: "bbasicAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.bBasicAmt).toFixed(2))
+            return h('span',(params.row.bbasicAmt).toFixed(2))
           }
         },
         {
           title: "一般户A",
-          key: "aOrdinaryAmt",
+          key: "aordinaryAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.aOrdinaryAmt).toFixed(2))
+            return h('span',(params.row.aordinaryAmt).toFixed(2))
           }
         },
         {
           title: "一般户B",
-          key: "bOrdinaryAmt",
+          key: "bordinaryAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.bOrdinaryAmt).toFixed(2))
+            return h('span',(params.row.bordinaryAmt).toFixed(2))
           }
         },
         {
