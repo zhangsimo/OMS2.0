@@ -1066,7 +1066,7 @@ export default {
               filename: "应收单据明细"
             });
           } else {
-            this.$message({message:"应收单据明细暂无数据",customClass: "zZindex",type:'info'});
+            this.$message({message:"应收单据明细暂无数据",customClass: "zZindex",type:'error'});
           }
         } else if (this.tab === "name2") {
           if (this.data4.length !== 0) {
@@ -1074,7 +1074,7 @@ export default {
               filename: "应付单据明细"
             });
           } else {
-            this.$message({message:"应付单据明细暂无数据",customClass: "zZindex",type:'info'});
+            this.$message({message:"应付单据明细暂无数据",customClass: "zZindex",type:'error'});
           }
         }
       } else {
@@ -1083,7 +1083,7 @@ export default {
             filename: "对账单"
           });
         } else {
-          this.$message({message:"对账单暂无数据",customClass: "zZindex",type:'info'});
+          this.$message({message:"对账单暂无数据",customClass: "zZindex",type:'error'});
         }
       }
     },
