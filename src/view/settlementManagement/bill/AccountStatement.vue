@@ -893,6 +893,8 @@ export default {
           res.data.map((item, index) => {
             item.index = index + 1;
             item.sortName = item.sort.name;
+            item.paymentAmtType = item.paymentAmtType.name;
+            item.startStatus = item.startStatus.name;
           });
           this.data2 = res.data;
         }
@@ -1019,7 +1021,11 @@ export default {
           this.accountType = true;
         }
       } else {
-        this.$message({message:"请勾选要查看的对账单",customClass: "zZindex",type:'error'});
+        this.$message({
+          message: "请勾选要查看的对账单",
+          customClass: "zZindex",
+          type: "error"
+        });
       }
     },
     // 对账单结算
@@ -1032,12 +1038,18 @@ export default {
         ) {
           this.Settlement = true;
         } else {
-          this.$message(
-            {message:"请勾选流程通过且对账单状态为审核通过或结算中的数据",customClass: "zZindex",type:'error'}
-          );
+          this.$message({
+            message: "请勾选流程通过且对账单状态为审核通过或结算中的数据",
+            customClass: "zZindex",
+            type: "error"
+          });
         }
       } else {
-        this.$message({message:"请勾选要对账数据",customClass: "zZindex",type:'error'});
+        this.$message({
+          message: "请勾选要对账数据",
+          customClass: "zZindex",
+          type: "error"
+        });
       }
     },
     // 核销单元格编辑状态下被关闭时
@@ -1066,7 +1078,11 @@ export default {
               filename: "应收单据明细"
             });
           } else {
-            this.$message({message:"应收单据明细暂无数据",customClass: "zZindex",type:'error'});
+            this.$message({
+              message: "应收单据明细暂无数据",
+              customClass: "zZindex",
+              type: "error"
+            });
           }
         } else if (this.tab === "name2") {
           if (this.data4.length !== 0) {
@@ -1074,7 +1090,11 @@ export default {
               filename: "应付单据明细"
             });
           } else {
-            this.$message({message:"应付单据明细暂无数据",customClass: "zZindex",type:'error'});
+            this.$message({
+              message: "应付单据明细暂无数据",
+              customClass: "zZindex",
+              type: "error"
+            });
           }
         }
       } else {
@@ -1083,7 +1103,11 @@ export default {
             filename: "对账单"
           });
         } else {
-          this.$message({message:"对账单暂无数据",customClass: "zZindex",type:'error'});
+          this.$message({
+            message: "对账单暂无数据",
+            customClass: "zZindex",
+            type: "error"
+          });
         }
       }
     },
@@ -1127,7 +1151,7 @@ export default {
           let unAmt = res.data.one[0].unAmt;
           res.data.one.map((item, index) => {
             item.serviceTypeName = item.serviceType.name;
-            if(index !==0){
+            if (index !== 0) {
               if (
                 item.serviceTypeName === "供应商坏账" ||
                 item.serviceTypeName === "供应商返利"
@@ -1302,10 +1326,10 @@ export default {
         });
       } else {
         this.$message({
-              message: "收款金额与本次核销金额不相等",
-              type: "error",
-              customClass: "zZindex"
-            });
+          message: "收款金额与本次核销金额不相等",
+          type: "error",
+          customClass: "zZindex"
+        });
       }
     },
     // 收付款关闭
@@ -1322,12 +1346,18 @@ export default {
         ) {
           this.revoke = true;
         } else {
-          this.$message({message:"此状态无法撤销",type:'error',
-              customClass: "zZindex"});
+          this.$message({
+            message: "此状态无法撤销",
+            type: "error",
+            customClass: "zZindex"
+          });
         }
       } else {
-        this.$message({message:"请勾选要撤销的对账单",type:'error',
-              customClass: "zZindex"});
+        this.$message({
+          message: "请勾选要撤销的对账单",
+          type: "error",
+          customClass: "zZindex"
+        });
       }
     },
     // 确认撤销
@@ -1336,9 +1366,12 @@ export default {
         id: this.reconciliationStatement.id
       }).then(res => {
         // console.log(res);
-        if(res.code===0){
-          this.$message({message:'撤销成功',type:'success',
-              customClass: "zZindex"})
+        if (res.code === 0) {
+          this.$message({
+            message: "撤销成功",
+            type: "success",
+            customClass: "zZindex"
+          });
         }
       });
     }
