@@ -26,7 +26,13 @@
             </Button>
           </div>
           <div class="db">
-            <Button @click="baocun" v-has="'save'" type="default" class="mr10" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button
+              @click="baocun"
+              v-has="'save'"
+              type="default"
+              class="mr10"
+              :disabled="this.Leftcurrentrow.status.value !== 0"
+            >
               <i class="iconfont mr5 iconbaocunicon"></i>保存
             </Button>
           </div>
@@ -36,17 +42,32 @@
             </Button>
           </div>-->
           <div class="db">
-            <Button class="mr10" @click="editPro" v-has="'submit'"  :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button
+              class="mr10"
+              @click="editPro"
+              v-has="'submit'"
+              :disabled="this.Leftcurrentrow.status.value !== 0"
+            >
               <Icon type="md-checkmark" size="14" />提交
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="cancellation" v-has="'cancellation'" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button
+              class="mr10"
+              @click="cancellation"
+              v-has="'cancellation'"
+              :disabled="this.Leftcurrentrow.status.value !== 0"
+            >
               <Icon type="md-close" size="14" />作废
             </Button>
           </div>
           <div class="db">
-            <Button class="mr10" @click="printTable" v-has="'print'" :disabled="this.Leftcurrentrow.status.value !== 0">
+            <Button
+              class="mr10"
+              @click="printTable"
+              v-has="'print'"
+              :disabled="this.Leftcurrentrow.status.value === 5"
+            >
               <i class="iconfont mr5 icondayinicon"></i> 打印
             </Button>
           </div>
@@ -174,30 +195,30 @@
                 ref="xTable1"
                 border
                 resizable
+                auto-resize
                 @edit-closed="editClosedEvent"
-                size="mini"
-                :height="rightTableHeight"
+                max-height="500"
+                min-height="100"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
               >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column type="index" title="序号"></vxe-table-column>
+                <vxe-table-column type="checkbox"></vxe-table-column>
+                <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+                <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="数量"
-                  width="100"
                   :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
-                <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
-                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column field="systemUnitId" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="date12" title="方向" width="100"></vxe-table-column>
+                <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
+                <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
+                <vxe-table-column field="systemUnitId" title="单位"></vxe-table-column>
+                <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
+                <vxe-table-column field="spec" title="规格"></vxe-table-column>
+                <vxe-table-column field="date12" title="方向"></vxe-table-column>
               </vxe-table>
             </div>
           </Split>
@@ -249,6 +270,7 @@ import SelectPartCom from "../../../salesManagement/salesOrder/components/select
 import PrintShow from "./components/PrintShow";
 import More from "./components/More";
 import { conversionList } from "@/components/changeWbList/changewblist";
+import { transferWarehousing } from "../../../../api/bill/saleOrder";
 export default {
   name: "moveStorehouse",
   components: {
@@ -259,6 +281,7 @@ export default {
   },
   data() {
     return {
+      flag:0,
       numberValue: "",
       mainid: "",
       split1: 0.2,
@@ -449,7 +472,7 @@ export default {
           { required: true, message: "业务员不能为空", trigger: "blur" }
         ],
         commitDate: [
-          { required: true, message: "移仓时间不为空", trigger: "blur" }
+          { required: true, message: "移仓时间不为空", trigger: "change" }
         ]
       },
       showAudit: false, //审核提示
@@ -504,26 +527,25 @@ export default {
       data.status = this.purchaseType;
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
-      getLeftList(data, page, size)
-        .then(res => {
-          if (res.code === 0) {
-            // this.salesman = res.data.content[0].updateUname;
-            if (!res.data.content) {
-              this.Left.tbdata = [];
-              this.Left.page.total = 0;
-            } else {
-              res.data.content.map((item, index) => {
-                item["index"] = index + 1;
-                item["statuName"] = item.status.name;
-              });
-              this.Left.tbdata = res.data.content || [];
-              this.Left.page.total = res.data.totalElements;
-            }
+      getLeftList(data, page, size).then(res => {
+        if (res.code === 0) {
+          // this.salesman = res.data.content[0].updateUname;
+          if (!res.data.content) {
+            this.Left.tbdata = [];
+            this.Left.page.total = 0;
+          } else {
+            res.data.content.map((item, index) => {
+              item["index"] = index + 1;
+              item["statuName"] = item.status.name;
+            });
+            this.Left.tbdata = res.data.content || [];
+            this.Left.page.total = res.data.totalElements;
           }
-        })
-        // .catch(err => {
-        //   // this.$Message.info("获取移仓列表失败");
-        // });
+        }
+      });
+      // .catch(err => {
+      //   // this.$Message.info("获取移仓列表失败");
+      // });
       // console.log(this.$store.state.user.userData);
     },
     //获取表格高度
@@ -567,14 +589,12 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      console.log('66666',val)
       this.Left.tbdata = val.data.content;
       this.Left.page.total = val.data.totalElements;
     },
     //新增
     addProoo() {
-      if (this.Left.tbdata.length === 0) {
-      } else {
+      if (this.Left.tbdata.length !== 0) {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
           this.$Message.info(
             "当前列表已有一个新增单等待操作,请先保存当前操作新增单据"
@@ -602,9 +622,14 @@ export default {
         //commitDate:"",
         //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         //createUname: this.$store.state.user.userData.staffName,
-        detailVOList: []
+        detailVOList: [],
+        _highlight: true
       };
-      this.Leftcurrentrow.createUname=item.createUname
+      this.flag = 1
+      this.Leftcurrentrow= item;
+      // this.Leftcurrentrow.createUname = item.createUname;
+      // this.Leftcurrentrow.xinzeng = "1";
+      this.Right.tbdata = []
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -616,10 +641,8 @@ export default {
     //保存
     baocun() {
       if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
+        if (this.Leftcurrentrow.xinzeng !== "1") {
+          return this.$Message.info("请先选择加工单");
         }
       }
       // if (
@@ -646,6 +669,7 @@ export default {
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功
+          this.flag = 0
           updata(params)
             .then(res => {
               if (res.code == 0) {
@@ -755,6 +779,19 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
+      if (this.flag === 1) {
+        this.$Modal.confirm({
+          title: "您正在编辑单据，是否需要保存",
+          onOk: () => {
+            this.baocun();
+          },
+          onCancel: () => {
+            this.getList();
+            this.flag = 0;
+          }
+        });
+        return;
+      }
       this.Leftcurrentrow = row;
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
@@ -790,7 +827,7 @@ export default {
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]
-        // this.Right.tbdata.push(item);
+        this.Right.tbdata.push(item);
         this.Leftcurrentrow.detailVOList.push(item);
       });
       // console.log(this.Right.tbdata);
@@ -807,9 +844,8 @@ export default {
     },
     //删除
     deletePar() {
-
       const seleList = this.$refs.xTable1.getSelectRecords();
-      if(seleList.length==0) return  this.$Message.error("请选择一条数据");
+      if (seleList.length == 0) return this.$Message.error("请选择一条数据");
       const ids = [];
       // console.log(seleList, "seleList =>753");
       // seleList.forEach(item => {
@@ -834,7 +870,7 @@ export default {
           // console.log(res, "783");
           if (res.code == 0) {
             this.$Message.success("删除成功");
-            this.selectTabelData(this.Leftcurrentrow)
+            this.selectTabelData(this.Leftcurrentrow);
             // this.selectTabelData();
           }
         })

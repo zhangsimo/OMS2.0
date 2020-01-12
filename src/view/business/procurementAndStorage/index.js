@@ -260,6 +260,7 @@ export default {
     //更换票据类型获取税率
     getBillType(val) {
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == val })[0]
+      console.log(this.taxRate)
       if (this.taxRate) {
         this.formPlan.taxRate = this.taxRate.itemValueOne || ''
         this.formPlan.taxSign = this.taxRate.itemValueTwo || ''
@@ -424,7 +425,6 @@ export default {
     },
     //获取采购订单数据
     async getPlanOrder(val) {
-      console.log('采购订单数据',val)
       if (val) {
         this.formPlan.pchsOrderId = val.id
         try {
@@ -432,6 +432,7 @@ export default {
           this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
           let res = await saveList(this.formPlan)
           if (res.code === 0) {
+            this.flag = 0
             await this.getLeftLists()
             this.legtTableData.map(item => {
               if (item.id === this.dataChange.row.id) {
@@ -451,7 +452,6 @@ export default {
     //保存
     async save() {
       if (this.dataChange.row) {
-        if(!this.dataChange.row.guestId) return this.$message.error('请先选择采购订单')
         try {
           await this.$refs.xTable.validate()
           this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''

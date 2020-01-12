@@ -145,9 +145,11 @@
           <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
 
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="trueEnterQty" title="已入库数量"></vxe-table-column>
+          <vxe-table-column field="adjustQty" title="已取消数量"></vxe-table-column>
           <vxe-table-column
-            field="trueEnterQty"
-            title="入库数量"
+            field="thisQty"
+            title="本次入库数量"
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
 

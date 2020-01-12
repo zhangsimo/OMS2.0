@@ -582,6 +582,15 @@ export default {
       //console.log(checked ? "勾选事件" : "取消事件");
     },
     baocun1() {
+      if (this.ArrayValue != []) {
+        for (var i = 0; i < this.ArrayValue.length; i++) {
+          if (this.ArrayValue[i].hasInQty > this.ArrayValue[i].hasOutQty) {
+            this.$Message.error('入库数量不能大于出库数量')
+            return
+          }
+        }
+      }
+      console.log(this.ArrayValue, "this.ArrayValue ==>585");
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.createTime ||

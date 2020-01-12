@@ -301,6 +301,7 @@ export default {
   },
   data() {
     return {
+      flagValue: [],
       flag: 0,
       getArray: [],
       ArrayValue: [],
@@ -609,10 +610,12 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      // console.log(params, "params =>608");
-      for (var i = 0; i < params.detailVOS.length; i++) {
-        params.detailVOS[i].id = "";
-      }
+      // for (var i = 0; i < params.detailVOS.length; i++) {
+      //   params.detailVOS[i].id = "";
+      // }
+      // if (this.flagValue == []) {
+      //   params.detailVOS[i].id = "";
+      // }
 
       //配件组装保存
       baocun(params)
@@ -622,6 +625,13 @@ export default {
             this.getList(this.form);
             this.$Message.success("保存成功");
             this.flag = 0;
+            this.Leftcurrentrow.guestName = "";
+            this.Leftcurrentrow.storeId = "";
+            this.Leftcurrentrow.createTime = "";
+            this.Leftcurrentrow.remark = "";
+            this.Leftcurrentrow.serviceId = "";
+            this.Leftcurrentrow.orderMan = "";
+            this.Leftcurrentrow.detailVOS = [];
           }
         })
         .catch(e => {
@@ -673,11 +683,11 @@ export default {
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
+        this.$Message.info("请先选择保存申请单");
         return;
       }
       if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
+        this.$Message.info("当前申请单已提交审核!无需重复操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -766,7 +776,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取成品失败");
+          this.$Message.info("数据加载失败");
         });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
@@ -864,6 +874,8 @@ export default {
         mainId: row.id
       };
       const res = await getListDetail(params);
+      // console.log(res.data, "res.data==>867");
+      this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
       const that = this;
@@ -909,6 +921,8 @@ export default {
     ok() {},
     cancel() {},
     shanchu() {
+      var idArr = [];
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
         return;
@@ -919,17 +933,22 @@ export default {
         this.Leftcurrentrow.detailVOS,
         seleList
       );
-      //   console.log(seleList)
-      //   const id =  seleList[0].id
-      //   shanqu(id).then(res => {
-      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
-      //           if (res.code == 0) {
-      //             this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
-      //             this.$Message.success('删除成功');
-      //           }
-      //         }).catch(e => {
-      //         this.$Message.info('删除成品失败')
-      // })
+      const idValue = seleList[0].id;
+      idArr.push(idValue);
+      shanqu({ ids: idArr })
+        .then(res => {
+          // 导入成品, 并把成品覆盖掉当前配件组装信息list
+          if (res.code == 0) {
+            this.Leftcurrentrow.detailVOS = this.array_diff(
+              this.Leftcurrentrow.detailVOS,
+              seleList
+            );
+            this.$Message.success("删除成功");
+          }
+        })
+        .catch(e => {
+          this.$Message.info("删除成品失败");
+        });
     },
     //展示方
     showModel() {
@@ -948,7 +967,7 @@ export default {
     selectSupplierName(row) {
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.fullName;
+        this.Leftcurrentrow.guestName = row.id;
         this.Leftcurrentrow.guestId = row.id;
         const tata = this;
         setTimeout(() => {
@@ -962,7 +981,20 @@ export default {
     getOkList(list) {
       // console.log(list, "获取的条数");
       this.showit = false;
-      this.Leftcurrentrow.detailVOS = list;
+      for (var i = 0; i < list.length; i++) {
+        list[i].id = "";
+        this.Leftcurrentrow.detailVOS.push(list[i]);
+      }
+
+      var result = [];
+      var obj = {};
+      for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+        if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
+          result.push(this.Leftcurrentrow.detailVOS[i]);
+          obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
+        }
+      }
+      this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
       const tata = this;
@@ -983,6 +1015,7 @@ export default {
       var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
+
           if (res.code == 0) {
             // res.data.content.forEach((item, index, array) => {
             //   return console.log(array.push(item.statue), "963");

@@ -212,7 +212,8 @@ import {
   getReconciliation,
   getSettlement,
   Preservation,
-  getStore
+  getStore,
+  account
 } from "@/api/bill/saleOrder";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -974,6 +975,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.zZindex {
+  z-index: 3000 !important;
+}
 .oper-top input {
   border: 1px solid #dddddd;
   text-indent: 4px;

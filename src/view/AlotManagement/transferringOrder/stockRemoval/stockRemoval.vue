@@ -351,13 +351,13 @@ export default {
   data() {
     let changeNumber = (rule, value, callback) => {
       if (!value && value != "0") {
-        callback(new Error("请输入大于或等于0的正整数"));
+        callback(new Error("请输入大于0的正整数"));
       } else {
         const reg = /^[1-9]\d*$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("请输入大于或等于0的正整数"));
+          callback(new Error("请输入大于0的正整数"));
         }
       }
     };
@@ -792,7 +792,7 @@ export default {
       } catch (errMap) {
         this.$XModal.message({
           status: "error",
-          message: "申请数量必须输入大于0的正整数！"
+          message: "受理数量必须输入大于0的正整数！"
         });
       }
     },
@@ -810,7 +810,7 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.storeId = this.cangkuListall[0].id
+      this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
       this.buttonShow = false;
       this.tuneOut = false;
       if (this.Left.tbdata.length === 0) {
