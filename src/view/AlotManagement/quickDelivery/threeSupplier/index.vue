@@ -69,7 +69,7 @@
           size="mini"
           height="auto"
           :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
@@ -258,6 +258,9 @@ export default {
         if (res.code === 0) {
           this.TopTableData = res.data.content || [];
           this.pageList.total = res.totalElements;
+          for (var i = 0; i < this.TopTableData.length; i++) {
+            this.TopTableData[i].enterStoreId = this.storeArray[0].value;
+          }
           //console.log(this.TopTableData, "this.TopTableData ==>257");
         }
       });
@@ -303,7 +306,7 @@ export default {
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       //console.log(evnt.target.value);
-      this.currentrow.details.storeId = evnt.target.value;
+      this.currentrow.enterStoreId = evnt.target.value;
     }
   }
 };

@@ -68,8 +68,8 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
-                              <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                            <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
+                              <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select>
                           </Col>
                           <Col span="2">
@@ -210,7 +210,6 @@
       },
       data() {
         let changeNumber = (rule, value, callback) => {
-          console.log(rule,value, ' ==>213')
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
@@ -223,6 +222,7 @@
           }
         };
         return {
+          selectvalue: '',
           //校验输入框的值
           validRules: {
             applyQty:[{ required: true, validator: changeNumber }]
@@ -377,6 +377,10 @@
         this.getArrayParams()
       },
       methods: {
+        selectOption(date) {
+          this.selectvalue = date.value
+          // console.log(this.selectvalue,'this.selectvalue ==>383')
+        },
         getArrayParams() {
           var req = {};
           req.page = 1;
@@ -384,8 +388,9 @@
           findForAllot(req).then(res => {
             const { content } = res.data;
             this.getArray = content;
+            // console.log(content,'content ==>390')
             content.forEach(item => {
-              this.ArrayValue.push(item.fullName);
+              this.ArrayValue.push({value:item.id,label:item.fullName});
             });
           });
         },
@@ -478,7 +483,6 @@
                 if (valid) {
                   try {
                     await this.$refs.xTable.validate();
-
                     let data = {}
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
@@ -503,32 +507,32 @@
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
-              var date = new Date()
-              var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-              // console.log(dataTime)
-              var orderDateTime = this.formPlan.orderDate
-              var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-              // console.log(orderTime,'orderDateTime')
-              if (orderTime < dataTime) {
-                this.$Message.error('调拨申请日期不小于当前日期')
-                return
-              }
-              for (var i = 0; i < this.getArray.length; i++) {
-                if (this.getArray[i].fullName == this.formPlan.guestName) {
-                  data.guestOrgid = this.getArray[i].isInternalId;
-                  data.guestId = this.getArray[i].id;
-                }
-              }
+                    var date = new Date()
+                    var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                    // console.log(dataTime)
+                    var orderDateTime = this.formPlan.orderDate
+                    var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+                    // console.log(orderTime,'orderDateTime')
+                    if (orderTime < dataTime) {
+                      this.$Message.error('调拨申请日期不小于当前日期')
+                      return
+                    }
+                    for (var i = 0; i < this.getArray.length; i++) {
+                      if (this.getArray[i].fullName == this.formPlan.guestName) {
+                        data.guestOrgid = this.getArray[i].isInternalId;
+                        data.guestId = this.getArray[i].id;
+                      }
+                    }
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
                         this.leftgetList()
                         this.formPlan.guestName = '',
-                          this.formPlan.storeId =  '',
-                          this.formPlan.remark =  '',
-                          this.formPlan.createUname =  '',
-                          this.formPlan.serviceId =  '',
-                          this.formPlan.orderDate = ''
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
                         this.Right.tbdata = []
                         this.isAdd = true
                         this.$refs.formPlan.resetFields();
@@ -766,12 +770,11 @@
                 currentRowTable.clearCurrentRow();
                 this.$refs.formPlan.validate((valid) => {
                   if (valid) {
-                    console.log(this.guestidId);
                     let data = {};
                     data.id = this.rowId;
                     data.orgid = this.rowOrgId;
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
-                    data.guestId = this.guestidId
+                    data.guestId = this.selectvalue
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -782,16 +785,17 @@
                     data.detailVOS = this.Right.tbdata
                     save(data).then(res => {
                       if(res.code === 0){
+                        this.isAdd = true;
                         this.$message.success('保存成功！')
                         this.leftgetList()
                         this.formPlan.guestName = '',
-                          this.formPlan.storeId =  '',
-                          this.formPlan.remark =  '',
-                          this.formPlan.createUname =  '',
-                          this.formPlan.serviceId =  '',
-                          this.formPlan.orderDate = ''
-                          this.Right.tbdata = []
-                          this.$refs.formPlan.resetFields();
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.$refs.formPlan.resetFields();
                       }
                     })
                   } else {

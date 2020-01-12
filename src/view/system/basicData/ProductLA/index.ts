@@ -144,7 +144,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "名称",
-            key: "partBrandName",
+            key: "name",
             minWidth: 100
         },
         {

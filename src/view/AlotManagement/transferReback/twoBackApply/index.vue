@@ -921,6 +921,8 @@ export default {
     ok() {},
     cancel() {},
     shanchu() {
+      var idArr = [];
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
         return;
@@ -931,17 +933,22 @@ export default {
         this.Leftcurrentrow.detailVOS,
         seleList
       );
-      //   console.log(seleList)
-      //   const id =  seleList[0].id
-      //   shanqu(id).then(res => {
-      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
-      //           if (res.code == 0) {
-      //             this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
-      //             this.$Message.success('删除成功');
-      //           }
-      //         }).catch(e => {
-      //         this.$Message.info('删除成品失败')
-      // })
+      const idValue = seleList[0].id;
+      idArr.push(idValue);
+      shanqu({ ids: idArr })
+        .then(res => {
+          // 导入成品, 并把成品覆盖掉当前配件组装信息list
+          if (res.code == 0) {
+            this.Leftcurrentrow.detailVOS = this.array_diff(
+              this.Leftcurrentrow.detailVOS,
+              seleList
+            );
+            this.$Message.success("删除成功");
+          }
+        })
+        .catch(e => {
+          this.$Message.info("删除成品失败");
+        });
     },
     //展示方
     showModel() {
@@ -960,7 +967,7 @@ export default {
     selectSupplierName(row) {
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.fullName;
+        this.Leftcurrentrow.guestName = row.id;
         this.Leftcurrentrow.guestId = row.id;
         const tata = this;
         setTimeout(() => {
@@ -1006,10 +1013,8 @@ export default {
       }
       var array = [];
       var allArr = []; //新数组
-      console.log(params, "parsams ==>1002");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
-          console.log(res, "res ==>1006");
 
           if (res.code == 0) {
             // res.data.content.forEach((item, index, array) => {
