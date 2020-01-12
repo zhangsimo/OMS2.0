@@ -173,7 +173,7 @@ export const mixGoodsData = {
       }
     },
     filterOrderman() {
-      let val = this.salesList.filter(el => el.value == this.formPlan.orderManId)
+      let val = this.salesList.filter(el => el.value == this.formPlan.orderManId)[0]
       return val.label
     },
     //删除选中数据
@@ -511,7 +511,7 @@ export const mixGoodsData = {
           objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name
           // objReq.orderMan = this.formPlan.orderMan;
-          objReq.orderMan = this.filterOrderman()
+          objReq.orderMan = this.filterOrderman();
           objReq.orderManId = this.formPlan.orderManId;
           //备注
           objReq.remark = this.formPlan.remark;
