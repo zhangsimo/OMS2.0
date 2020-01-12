@@ -625,6 +625,13 @@ export default {
             this.getList(this.form);
             this.$Message.success("保存成功");
             this.flag = 0;
+            this.Leftcurrentrow.guestName = "";
+            this.Leftcurrentrow.storeId = "";
+            this.Leftcurrentrow.createTime = "";
+            this.Leftcurrentrow.remark = "";
+            this.Leftcurrentrow.serviceId = "";
+            this.Leftcurrentrow.orderMan = "";
+            this.Leftcurrentrow.detailVOS = [];
           }
         })
         .catch(e => {
@@ -676,11 +683,11 @@ export default {
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
+        this.$Message.info("请先选择保存申请单");
         return;
       }
       if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
+        this.$Message.info("当前申请单已提交审核!无需重复操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -769,7 +776,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取成品失败");
+          this.$Message.info("数据加载失败");
         });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
@@ -999,8 +1006,11 @@ export default {
       }
       var array = [];
       var allArr = []; //新数组
+      console.log(params, "parsams ==>1002");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
+          console.log(res, "res ==>1006");
+
           if (res.code == 0) {
             // res.data.content.forEach((item, index, array) => {
             //   return console.log(array.push(item.statue), "963");

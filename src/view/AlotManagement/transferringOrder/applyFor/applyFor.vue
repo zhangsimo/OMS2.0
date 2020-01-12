@@ -210,6 +210,7 @@
       },
       data() {
         let changeNumber = (rule, value, callback) => {
+          console.log(rule,value, ' ==>213')
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
