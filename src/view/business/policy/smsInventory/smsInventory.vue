@@ -625,7 +625,9 @@ export default {
         detailVOList: [],
         _highlight:true
       };
+      this.draftShow = 0
       this.formPlan = item
+      this.Right.tbdata = []
      let  newItem = JSON.parse(JSON.stringify(item))
       this.Left.tbdata.unshift(newItem);
       this.flag = 1;

@@ -590,7 +590,7 @@ export default {
           }
         }
       }
-      console.log(this.ArrayValue, "this.ArrayValue ==>585");
+      // console.log(this.ArrayValue, "this.ArrayValue ==>585");
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.createTime ||

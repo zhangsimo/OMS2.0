@@ -226,9 +226,6 @@ export default class SelectSupplier extends Vue {
   }
   //显示层
   private init() {
-    console.log('====================================')
-    console.log(11)
-    console.log('====================================')
     this.searchPartLayer = true
     this.getCarClassifysFun()
     this.getList()
