@@ -380,8 +380,9 @@ export default {
       // console.log(this.value17)
       // console.log(window.location.pathname)
       // base64编码的图片
-        console.log(image)
+      //   console.log(image)
         const blob = this.dataURItoBlob(image)
+        // console.log(blob)
       let data = {};
         // console.log(image , 888)
 
@@ -389,8 +390,8 @@ export default {
       // var imgFile = this.dataURLtoFile(image);
       // console.log(imgFile , 9999)
       let ress = await up(blob);
-      if(ress.code == 0) {
-        data.fileUrl = ress.data.url;
+      if(ress.data.code === 0) {
+        data.fileUrl = ress.data.data.url;
           let type = this.query.map(item => {
               return item.name;
           });
