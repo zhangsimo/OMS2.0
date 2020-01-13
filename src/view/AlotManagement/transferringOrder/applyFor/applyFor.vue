@@ -761,6 +761,7 @@
 
         // 左边部分的当前行
         selection(row){
+          console.log(row,'row ==>764')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
@@ -824,7 +825,7 @@
               this.mainId = row.id
               this.guestidId = row.guestId
               this.datadata = row
-              this.formPlan.guestName = this.datadata.guestName
+              this.formPlan.guestName = this.datadata.guestId
               this.formPlan.storeId = this.datadata.storeId
               this.formPlan.orderDate = this.datadata.orderDate
               this.formPlan.remark = this.datadata.remark
