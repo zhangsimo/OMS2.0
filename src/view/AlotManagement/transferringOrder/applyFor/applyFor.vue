@@ -213,7 +213,7 @@
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
-            const reg = /^[0-9]*$/;
+            const reg = /^[1-9]\d*$/;
             if (reg.test(value)) {
               callback();
             } else {
@@ -479,14 +479,21 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
+          console.log(this.datadata,'this.datadata =>482')
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
                   try {
                     await this.$refs.xTable.validate();
                     let data = {}
+                    for (var i = 0; i < this.getArray.length; i++) {
+                      if (this.getArray[i].id == this.formPlan.guestName) {
+                        data.guestOrgid = this.getArray[i].isInternalId;
+                        data.guestId = this.getArray[i].id;
+                      }
+                    }
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
                     data.guestId = this.selectvalue
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
@@ -517,12 +524,6 @@
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
-                    for (var i = 0; i < this.getArray.length; i++) {
-                      if (this.getArray[i].fullName == this.formPlan.guestName) {
-                        data.guestOrgid = this.getArray[i].isInternalId;
-                        data.guestId = this.getArray[i].id;
-                      }
-                    }
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
@@ -541,7 +542,7 @@
                   } catch (errMap) {
                     this.$XModal.message({
                       status: "error",
-                      message: "申请数量必须输入大于0的正整数！"
+                      message: "申请数量必须输入大于0的正整数"
                     });
                   }
                 } else {
@@ -761,6 +762,7 @@
 
         // 左边部分的当前行
         selection(row){
+          console.log(row,'row ==>764')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
@@ -824,7 +826,7 @@
               this.mainId = row.id
               this.guestidId = row.guestId
               this.datadata = row
-              this.formPlan.guestName = this.datadata.guestName
+              this.formPlan.guestName = this.datadata.guestId
               this.formPlan.storeId = this.datadata.storeId
               this.formPlan.orderDate = this.datadata.orderDate
               this.formPlan.remark = this.datadata.remark
