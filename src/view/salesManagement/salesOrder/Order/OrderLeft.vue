@@ -66,7 +66,6 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
-        _highlight: true
       },
       page: {
         total: 0,

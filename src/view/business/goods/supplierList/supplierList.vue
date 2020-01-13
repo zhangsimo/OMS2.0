@@ -1056,6 +1056,7 @@
             data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata.map(item => {
               return {
+                id: item.id,
                 partId: item.partId,
                 partCode: item.partCode,
                 partName: item.partName,
