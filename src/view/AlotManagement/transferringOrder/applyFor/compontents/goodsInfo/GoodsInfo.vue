@@ -263,7 +263,6 @@ export default class GoodsInfo extends Vue {
     let log: any = await fapi.logistics(params);
     if (log.code == 0) {
       this.logisArr = log.data;
-      console.log(log, "log.data");
     }
   }
 
