@@ -57,7 +57,7 @@
                 :current="params.page +1"
                 show-sizer
                 show-total
-                :page-size-opts="[10, 20, 30, 40]"
+                :page-size-opts="[20, 50, 100, 200]"
                 class-name="page-con"
                 @on-change="changePage"
                 @on-page-size-change="changeSize"
