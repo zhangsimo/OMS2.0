@@ -42,6 +42,7 @@
                 </div>
                 <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
                 <Page
+                  :page-size-opts="[20, 50, 100, 200]"
                   class-name="fl pt10"
                   size="small"
                   :current="Left.page.num"
@@ -256,7 +257,7 @@ export default {
       Left: {
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0
         },
         loading: false,
