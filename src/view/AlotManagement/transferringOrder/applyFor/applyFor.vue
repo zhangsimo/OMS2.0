@@ -213,7 +213,7 @@
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
-            const reg = /^[0-9]*$/;
+            const reg = /^[1-9]\d*$/;
             if (reg.test(value)) {
               callback();
             } else {
@@ -542,7 +542,7 @@
                   } catch (errMap) {
                     this.$XModal.message({
                       status: "error",
-                      message: "error"
+                      message: "申请数量必须输入大于0的正整数"
                     });
                   }
                 } else {
