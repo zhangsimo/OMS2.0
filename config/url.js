@@ -14,8 +14,8 @@ const dev = {
   // omsSettle: '', // 9270
   omsSotck: "http://192.168.30.179:9280", //9280
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
-  uploadApi: "http://192.168.30.181:5100/file/uploadFile",
-  upbase64Api:'http://192.168.30.181:5100/file/uploadFileNew',
+  uploadApi: "http://192.168.4.27:5100/file/uploadFile",
+  upbase64Api:'http://192.168.4.27:5100/file/uploadFileNew',
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   passportApi: "http://192.168.30.226:5200", // passport微服务API
