@@ -102,6 +102,7 @@
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
                 class="mr10"
+                :page-size-opts="[20, 50, 100, 200]"
               ></Page>
             </div>
             <!-- 右边表格-->

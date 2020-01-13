@@ -92,7 +92,7 @@
                   :stripe="true"
                   :columns="Left.columns"
                   :data="Left.tbdata"
-                ></Table>
+                />
                 <Page
                   size="small"
                   :total="Left.page.total"
@@ -223,6 +223,7 @@
                   </div>
                 </div>
                 <vxe-table
+                  auto-resize
                   border
                   resizable
                   show-footer
@@ -281,13 +282,15 @@
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
     <!--编辑收货信息-->
-    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">
-      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>
-      <div slot="footer">
-        <!-- <Button type="primary" @click="getMessage">确定</Button>
-        <Button type="default">取消</Button>-->
-      </div>
-    </Modal>
+<!--    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">-->
+<!--      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>-->
+<!--      <div slot="footer">-->
+<!--        &lt;!&ndash; <Button type="primary" @click="getMessage">确定</Button>-->
+<!--        <Button type="default">取消</Button>&ndash;&gt;-->
+<!--      </div>-->
+<!--    </Modal>-->
+     <!--编辑收货信息-->
+          <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
@@ -369,6 +372,8 @@ export default {
       },
       checkboxArr: [], // checkbox选中
       idsId: [],
+      MainID: '',
+      datadata:'',
       getArray: [],
       tuneOut: false,
       flag: 0,
@@ -599,7 +604,8 @@ export default {
       currentNum: 1,
       val: "0",
       diaochuName: "",
-      diaochuID: ""
+      diaochuID: "",
+      clickdelivery: false,
     };
   },
   watch: {
@@ -947,7 +953,8 @@ export default {
         this.$Message.info("请选择编辑项");
         return;
       }
-      this.GainInformation = true;
+          this.clickdelivery = true
+          this.$refs.goodsInfo.init()
     },
     //打印表格
     printTable() {
@@ -1057,6 +1064,8 @@ export default {
         this.flagValue1 = 0;
       }
       if (row.id) {
+        this.datadata = row
+        this.MainID = row.id
         const params = {
           mainId: row.id
         };
