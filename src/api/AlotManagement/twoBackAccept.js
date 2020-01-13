@@ -27,7 +27,7 @@ export function tuihuishouliliebiao(params, size, num) {
 // 退回受理列表mingxi
 export function tuihuishouliliebiaomingxi(params) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyDetail/findApplyDetails`,
+    url: `${api.omsOrder}/allotAcceptDetail/findAcceptDetails`,
     method: 'get',
     params
   });

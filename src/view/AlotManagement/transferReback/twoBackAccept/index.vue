@@ -87,7 +87,7 @@
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="orgName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
@@ -116,8 +116,8 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column field="acceptTime" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
@@ -258,7 +258,7 @@ export default {
         page: 1,
         total: 0,
         pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
 
       storeArray: [],

@@ -100,6 +100,7 @@
                 class-name="page-con"
                 @on-change="changePage"
                 @on-page-size-change="changeSize"
+                :page-size-opts="[20, 50, 100, 200]"
                 class="mr10"
               ></Page>
             </div>
@@ -315,7 +316,7 @@ export default {
         loading: false,
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0
         },
         columns: [

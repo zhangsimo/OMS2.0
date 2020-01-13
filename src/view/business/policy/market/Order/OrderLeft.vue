@@ -28,7 +28,7 @@
           <vxe-table-column field="outMan" title="出库人"></vxe-table-column>
         </vxe-table>
       </div>
-      <Page :total="page.total" :page-size="page.size" size="small" :current="page.num" show-sizer show-total class-name="page-con"
+      <Page :total="page.total" :page-size="page.size" size="small"  :page-size-opts="[20, 50, 100, 200]" :current="page.num" show-sizer show-total class-name="page-con"
             @on-change="selectNum" @on-page-size-change="selectPage" class="mr10"></Page>
     </div>
 </template>
@@ -48,7 +48,7 @@
             return {
                 page:{
                     total:0,
-                    size:10,
+                    size:20,
                     num:1
                 },
                 tableData:[],

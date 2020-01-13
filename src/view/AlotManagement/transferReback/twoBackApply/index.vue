@@ -66,6 +66,7 @@
                   :height="leftTableHeight"
                   @on-current-change="selectTabelData"
                   size="small"
+                  ref="xTable"
                   highlight-row
                   border
                   :stripe="true"
@@ -77,6 +78,7 @@
                   :total="Left.page.total"
                   :page-size="Left.page.size"
                   :current="Left.page.num"
+                  :page-size-opts="Left.page.opts"
                   show-sizer
                   show-total
                   class-name="page-con"
@@ -98,18 +100,14 @@
                             v-model="Leftcurrentrow.guestName"
                             placeholder="请选择调出方"
                           ></Input>-->
-                          <Select
-                            v-model="Leftcurrentrow.guestName"
-                            :disabled="Leftcurrentrow.status.value != 0"
-                            label-in-value
-                            filterable
-                          >
+                          <!-- <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
-                          </Select>
+                          </Select>-->
+                          <Input disabled :value="Leftcurrentrow.guestName" class="w160"></Input>
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="Leftcurrentrow.status.value != 0"
+                            disabled
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -123,10 +121,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select
-                            v-model="Leftcurrentrow.storeId"
-                            :disabled="Leftcurrentrow.status.value != 0"
-                          >
+                          <Select v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -143,29 +138,21 @@
                     </FormItem>
                     <FormItem label="退回申请日期：" prop="billType" class="redIT">
                       <DatePicker
-                        :disabled="Leftcurrentrow.xinzeng || Leftcurrentrow.status.value != 0"
                         :value="Leftcurrentrow.createTime"
+                        disabled
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
                         class="w160"
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="Leftcurrentrow.status.value != 0"
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input disabled :value="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
-                      <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
+                      <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="退回申请号：" prop="planOrderNum">
-                      <Input
-                        class="w160"
-                        :disabled="Leftcurrentrow.status.value != 0"
-                        :value="Leftcurrentrow.serviceId"
-                      ></Input>
+                      <Input disabled class="w160" :value="Leftcurrentrow.serviceId"></Input>
                     </FormItem>
                   </Form>
                 </div>
@@ -196,6 +183,7 @@
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
+                  :stripe="true"
                   :footer-method="addFooter"
                   :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                 >
@@ -390,8 +378,9 @@ export default {
       Left: {
         page: {
           num: 1,
-          size: 10,
-          total: 0
+          size: 20,
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
         loading: false,
         columns: [
@@ -514,7 +503,7 @@ export default {
         storeName: "",
         createTime: "",
         orderMan: "",
-        createUname:"",
+        createUname: "",
         remark: "",
         serviceId: "",
         detailVOS: []
@@ -644,7 +633,11 @@ export default {
           return;
         }
       }
+      // this.Leftcurrentrow.guestName = "";
+      // this.Leftcurrentrow.remark = "";
+      // this.Leftcurrentrow.storeId = "";
       this.flag = 1;
+      // console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "1212");
       const item = {
         index: 1,
         xinzeng: "1",
@@ -659,9 +652,19 @@ export default {
         orderMan: this.$store.state.user.userData.staffName,
         remark: "",
         serviceId: "",
-        detailVOS: []
+        detailVOS: [],
+        new: true,
+        _highlight: true
       };
+      this.Leftcurrentrow.guestName = "";
+      this.Leftcurrentrow.createUname = "";
+      this.Leftcurrentrow.remark = "";
+      this.Leftcurrentrow.serviceId = "";
+      this.Leftcurrentrow.createTime = "";
+      this.Leftcurrentrow.storeId = "";
       this.Left.tbdata.unshift(item);
+      // this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]);
+      // console.log(this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]));
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
@@ -747,17 +750,17 @@ export default {
     },
     // 新增按钮
     addProoo() {
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng) {
-        } else {
-          this.$Message.info("请先选择申请单");
-          return;
-        }
-      }
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态申请单能进行添加操作");
-        return;
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   if (this.Leftcurrentrow.xinzeng) {
+      //   } else {
+      //     this.$Message.info("请先选择申请单");
+      //     return;
+      //   }
+      // }
+      // if (this.Leftcurrentrow.status.value !== 0) {
+      //   this.$Message.info("只有草稿状态申请单能进行添加操作");
+      //   return;
+      // }
       const params = {
         mainId: this.Leftcurrentrow.id,
         status: "HAS_ENTER"
@@ -768,6 +771,7 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
+            // console.log(res.data.content, "res.data.content =>773");
             // console.log(this.tableData1);
             // this.$Message.success("获取成品列表成功");
           }
@@ -980,14 +984,15 @@ export default {
         this.diaochuID = row.id;
       }
     },
-    getOkList(list) {
+    getOkList(list, rowValue) {
+      // this.Leftcurrentrow = row;
+      // console.log(rowValue, " ==972");
       // console.log(list, "获取的条数");
       this.showit = false;
       for (var i = 0; i < list.length; i++) {
         list[i].id = "";
         this.Leftcurrentrow.detailVOS.push(list[i]);
       }
-
       var result = [];
       var obj = {};
       for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
@@ -999,6 +1004,13 @@ export default {
       this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
+      this.Leftcurrentrow.guestName = rowValue.guestName;
+      this.Leftcurrentrow.createUname = rowValue.commitUname;
+      this.Leftcurrentrow.remark = rowValue.remark;
+      this.Leftcurrentrow.serviceId = rowValue.serviceId;
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       const tata = this;
       setTimeout(() => {
         tata.showit = true;

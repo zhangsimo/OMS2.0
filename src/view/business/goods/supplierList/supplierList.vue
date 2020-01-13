@@ -45,7 +45,7 @@
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
                 <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
-                      @on-page-size-change="changeSizeLeft" show-sizer show-total>
+                      @on-page-size-change="changeSizeLeft" show-sizer show-total :page-size-opts="[20, 50, 100, 200]">
                 </Page>
               </div>
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
@@ -343,7 +343,7 @@
         Right: {
           page: {
             num: 1,
-            size: 10,
+            size: 20,
             total: 0
           },
           loading: false,
@@ -1056,6 +1056,7 @@
             data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata.map(item => {
               return {
+                id: item.id,
                 partId: item.partId,
                 partCode: item.partCode,
                 partName: item.partName,

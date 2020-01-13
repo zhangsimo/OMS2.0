@@ -42,7 +42,7 @@
       class-name="page-con"
       @on-change="selectNum"
       @on-page-size-change="selectPage"
-      :page-size-opts="[10,20,30,40,50]"
+      :page-size-opts="[20, 50, 100, 200]"
       class="mr10"
     ></Page>
   </div>
@@ -66,11 +66,10 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
-        _highlight: true
       },
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       tableData: [],

@@ -51,9 +51,29 @@
                     :columns="Left.columns"
                     :data="Left.tbdata"
                     @on-row-click="selection"></Table>
-                  <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
-                        @on-page-size-change="changeSizeLeft" show-sizer show-total>
+                  <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="Left.page.num"
+                    :total="Left.page.total"
+                    :page-size="Left.page.size"
+                    :page-size-opts="Left.page.opts"
+                    @on-change="changePageLeft"
+                    @on-page-size-change="changeSizeLeft"
+                    show-sizer
+                    show-total>
                   </Page>
+                  <!-- <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="page.num"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @on-change="changePage"
+                    @on-page-size-change="changeSize"
+                    show-sizer
+                    show-total
+                  ></Page> -->
                 </div>
                 <div slot="right" class="con-split-pane-right pl5 goods-list-form">
                   <div class="pane-made-hd">
@@ -278,8 +298,9 @@
           Left: {
             page: {
               num: 1,
-              size: 10,
-              total: 0
+              size: 20,
+              total: 0,
+              opts: [20, 50, 100, 200]
             },
             loading: false,
             columns: [
@@ -427,7 +448,6 @@
         },
         //调出方下拉框
         selectGuestName(val){
-          console.log(val)
           this.formPlan.guestName = val.value
         },
         // 新增按钮
@@ -479,7 +499,7 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          console.log(this.datadata,'this.datadata =>482')
+          // console.log(this.datadata,'this.datadata =>482')
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
                   try {
@@ -749,20 +769,24 @@
           }
           queryAll(params).then(res => {
             if(res.code === 0){
+              console.log(res.data.totalElements,'res.data.content =>772')
               this.Left.tbdata = res.data.content
+              this.Left.page.total = res.data.totalElements;
+            }else {
+              this.Left.page.total = 0
             }
           })
         },
         roleChangeEvent({ row }, evnt) {
           // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-          console.log(evnt,'evnt')
+          // console.log(evnt,'evnt')
           // console.log(evnt.target.value)
           // this.currentrow.storeId = evnt.target.value
         },
 
         // 左边部分的当前行
         selection(row){
-          console.log(row,'row ==>764')
+          // console.log(row,'row ==>764')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){

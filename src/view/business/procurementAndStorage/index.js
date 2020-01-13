@@ -73,7 +73,7 @@ export default {
       split1: 0.2,
       leftPage: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       }, //左侧分页
       legtTableData: [], //左侧数组

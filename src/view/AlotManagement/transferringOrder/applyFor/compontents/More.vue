@@ -93,7 +93,6 @@ export default {
     //选择创建日期
     establish(date) {
       this.createData = date;
-      console.log(this.createData, "this.createData");
     },
     //选择提交日期
     submit(date) {

@@ -34,7 +34,7 @@
               <span>供应商:</span> <span>{{ onelist.guestName }}</span>
             </p>
             <p>
-              <span>地址:</span> <span>{{ onelist.orgAddress }}</span>
+              <span>地址:</span> <span>{{ onelist.guestAddress }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
@@ -42,7 +42,7 @@
               <span>联系人:</span> <span>{{ onelist.contactor }}</span>
             </p>
             <p>
-              <span>票据类型:</span><span>{{ onelist.billTypeName }}</span>
+              <span>退货原因:</span><span>{{ onelist.rtnReasonName }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
