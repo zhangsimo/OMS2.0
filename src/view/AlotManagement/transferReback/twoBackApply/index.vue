@@ -39,12 +39,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button
-                v-has="'delivery'"
-                :disabled="Leftcurrentrow.status.value !== 2"
-                class="mr10"
-                @click="chuku"
-              >
+              <Button v-has="'delivery'" :disabled="this.flagStatus" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
@@ -301,6 +296,7 @@ export default {
   },
   data() {
     return {
+      flagStatus: false,
       flagValue: [],
       flag: 0,
       getArray: [],
@@ -625,6 +621,13 @@ export default {
             this.getList(this.form);
             this.$Message.success("保存成功");
             this.flag = 0;
+            this.Leftcurrentrow.guestName = "";
+            this.Leftcurrentrow.storeId = "";
+            this.Leftcurrentrow.createTime = "";
+            this.Leftcurrentrow.remark = "";
+            this.Leftcurrentrow.serviceId = "";
+            this.Leftcurrentrow.orderMan = "";
+            this.Leftcurrentrow.detailVOS = [];
           }
         })
         .catch(e => {
@@ -676,11 +679,11 @@ export default {
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
+        this.$Message.info("请先选择保存申请单");
         return;
       }
       if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
+        this.$Message.info("当前申请单已提交审核!无需重复操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -842,6 +845,11 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       // console.log(row, "row =>837");
+      if (row.status.name != "已受理") {
+        this.flagStatus = true;
+      } else {
+        this.flagStatus = false;
+      }
       if (row.createUname == undefined || row.createUname == "") {
       } else {
         if (this.flag == 1) {
@@ -914,6 +922,8 @@ export default {
     ok() {},
     cancel() {},
     shanchu() {
+      var idArr = [];
+
       if (this.Leftcurrentrow.status.value !== 0) {
         this.$Message.info("只有草稿状态才能进行删除操作");
         return;
@@ -924,17 +934,22 @@ export default {
         this.Leftcurrentrow.detailVOS,
         seleList
       );
-      //   console.log(seleList)
-      //   const id =  seleList[0].id
-      //   shanqu(id).then(res => {
-      //     // 导入成品, 并把成品覆盖掉当前配件组装信息list
-      //           if (res.code == 0) {
-      //             this.Leftcurrentrow.detailVOS = this.array_diff(this.Leftcurrentrow.detailVOS, seleList)
-      //             this.$Message.success('删除成功');
-      //           }
-      //         }).catch(e => {
-      //         this.$Message.info('删除成品失败')
-      // })
+      const idValue = seleList[0].id;
+      idArr.push(idValue);
+      shanqu({ ids: idArr })
+        .then(res => {
+          // 导入成品, 并把成品覆盖掉当前配件组装信息list
+          if (res.code == 0) {
+            this.Leftcurrentrow.detailVOS = this.array_diff(
+              this.Leftcurrentrow.detailVOS,
+              seleList
+            );
+            this.$Message.success("删除成功");
+          }
+        })
+        .catch(e => {
+          this.$Message.info("删除成品失败");
+        });
     },
     //展示方
     showModel() {
@@ -953,7 +968,7 @@ export default {
     selectSupplierName(row) {
       if (this.val === "0") {
         this.showit = false;
-        this.Leftcurrentrow.guestName = row.fullName;
+        this.Leftcurrentrow.guestName = row.id;
         this.Leftcurrentrow.guestId = row.id;
         const tata = this;
         setTimeout(() => {

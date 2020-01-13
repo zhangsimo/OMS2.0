@@ -31,7 +31,7 @@ export function inDataList(data) {
 export function stampDataList(params) {
   return axios.request({
     url: `${api.omsOrder}/allotEnterMain/pointAdd`,
-    method: "get",
+    method: "put",
     params
   });
 }
