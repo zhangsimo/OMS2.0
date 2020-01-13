@@ -144,7 +144,6 @@ export default {
     },
     //选择创建开始日期
     establish1(date) {
-      console.log(date, "date");
       this.form.commitDateStart = date;
     },
     //选择创建结束日期
@@ -163,7 +162,7 @@ export default {
       this.form.shenEndTime = data;
     },
     getITPWE() {
-      console.log(this.form.createTimeStart, "this.form.createTimeStart==>156");
+      // console.log(this.form.createTimeStart, "this.form.createTimeStart==>156");
       if (this.form.createTimeStart) {
         this.form.createTimeStart = moment(this.form.createTimeStart).format(
           "YYYY-MM-DD HH:mm:ss"

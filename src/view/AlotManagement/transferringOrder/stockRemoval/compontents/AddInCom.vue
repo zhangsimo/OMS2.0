@@ -192,7 +192,6 @@ export default {
   },
   methods: {
     radioChangeEvent({row}) {
-      console.log(row)
       this.checkRow = row
       this.currentData = row.detailVOS
     },
@@ -217,7 +216,6 @@ export default {
     //选中的日期
     selectDate(date) {
       this.penSalesData.option1 = date
-      console.log(this.penSalesData.option1)
     },
     //搜索
     search(size, num ) {
@@ -246,13 +244,11 @@ export default {
     cancel() {},
     echoDate() {},
     selectTabelData({row}) {
-      console.log(row)
       this.checkRow = row
       this.currentData = row.voList
     },
     ok() {
        // 将选好的成品传父组件
-      console.log(this.checkRow)
       this.$emit('ok', this.checkRow)
     }
   }

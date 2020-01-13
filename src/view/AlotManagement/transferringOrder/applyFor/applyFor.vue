@@ -427,7 +427,6 @@
         },
         //调出方下拉框
         selectGuestName(val){
-          console.log(val)
           this.formPlan.guestName = val.value
         },
         // 新增按钮
@@ -479,7 +478,7 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          console.log(this.datadata,'this.datadata =>482')
+          // console.log(this.datadata,'this.datadata =>482')
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
                   try {
@@ -755,14 +754,14 @@
         },
         roleChangeEvent({ row }, evnt) {
           // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-          console.log(evnt,'evnt')
+          // console.log(evnt,'evnt')
           // console.log(evnt.target.value)
           // this.currentrow.storeId = evnt.target.value
         },
 
         // 左边部分的当前行
         selection(row){
-          console.log(row,'row ==>764')
+          // console.log(row,'row ==>764')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){

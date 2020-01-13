@@ -763,8 +763,6 @@ export default {
       if (this.flag1 == true) {
         params.id = "";
       }
-      console.log(params, "params");
-
       try {
         await this.$refs.xTable1.validate();
         //配件组装保存
@@ -1017,7 +1015,7 @@ export default {
     async selectTabelData(row) {
       this.flagValue = 0;
       this.flagValue1 = 0;
-      console.log(row, "row ==>862");
+      // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1068,7 +1066,7 @@ export default {
       }
       if (row.status.value === 1) {
         // this.tuneOut = false
-        console.log(row.code);
+        // console.log(row.code);
       }
     },
     //打开添加配件模态框
@@ -1096,7 +1094,7 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        console.log(this.form.guestName, "this.form.guestName");
+        // console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
