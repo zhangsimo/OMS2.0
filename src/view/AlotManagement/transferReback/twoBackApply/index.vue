@@ -39,12 +39,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button
-                v-has="'delivery'"
-                :disabled="Leftcurrentrow.status.value !== 2"
-                class="mr10"
-                @click="chuku"
-              >
+              <Button v-has="'delivery'" :disabled="this.flagStatus" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
@@ -301,6 +296,7 @@ export default {
   },
   data() {
     return {
+      flagStatus: false,
       flagValue: [],
       flag: 0,
       getArray: [],
@@ -849,6 +845,11 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       // console.log(row, "row =>837");
+      if (row.status.name != "已受理") {
+        this.flagStatus = true;
+      } else {
+        this.flagStatus = false;
+      }
       if (row.createUname == undefined || row.createUname == "") {
       } else {
         if (this.flag == 1) {
@@ -1015,7 +1016,6 @@ export default {
       var allArr = []; //新数组
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
-
           if (res.code == 0) {
             // res.data.content.forEach((item, index, array) => {
             //   return console.log(array.push(item.statue), "963");
