@@ -487,7 +487,7 @@
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
                     data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.guestidId
+                    data.guestId = this.selectvalue
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName

@@ -199,6 +199,7 @@ export default {
         if (res.code == 0) {
           this.printShow = true;
           this.onelist = res.data;
+          console.log(this.onelist, "this.onelist ==>202");
         }
       } else {
         this.$message.error("至少选择一条信息");
@@ -240,6 +241,6 @@ export default {
   overflow: -moz-scrollbars-none;
 }
 .marginLeft {
-  margin-left: 460px
+  margin-left: 460px;
 }
 </style>
