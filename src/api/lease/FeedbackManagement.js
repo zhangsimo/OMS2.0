@@ -43,7 +43,7 @@ export function feedbackRecord(data) {
 
 
 // 图片上传地址
-export const putImgUrl = api.uploadApi;
+export const putImgUrl = api.upbase64Api;
 export function up(formData) {
   let param = new FormData();
   param.append("file", formData);
