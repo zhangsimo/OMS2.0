@@ -148,10 +148,7 @@
         },
       methods:{
         selection(a){
-          this.json = a
-          // console.log(a)
-          this.ID = a.id
-          // console.log(this.ID)
+
         },
         changePage(p) {
         // console.log(p)
@@ -193,10 +190,9 @@
         this.getList()
         },
         show(){
-          // if(this.ID){
-            console.log(this.json)
-            this.$router.push({name: 'feedback_management',query:{json: this.json}})
-          // }
+          localStorage.setItem('Datas',JSON.stringify(this.json));
+
+          this.$router.push({name: 'feedback_management',query:{json: this.json}});
         }
       },
       mounted(){
