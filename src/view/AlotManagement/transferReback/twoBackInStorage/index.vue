@@ -153,7 +153,7 @@
       <p>是否定入库</p>
     </Modal>
     <!-- 打印 -->
-    <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
+    <PrintShow ref="printBox" :curenrow="Leftcurrentrow"></PrintShow>
   </div>
 </template>
 
