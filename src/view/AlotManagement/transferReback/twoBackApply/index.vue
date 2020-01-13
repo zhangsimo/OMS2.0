@@ -158,7 +158,7 @@
                       ></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
-                      <Input class="w160" disabled :value="Leftcurrentrow.orderMan"></Input>
+                      <Input class="w160" disabled :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="退回申请号：" prop="planOrderNum">
                       <Input
@@ -514,6 +514,7 @@ export default {
         storeName: "",
         createTime: "",
         orderMan: "",
+        createUname:"",
         remark: "",
         serviceId: "",
         detailVOS: []
