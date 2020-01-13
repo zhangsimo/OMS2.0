@@ -1,17 +1,18 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder} from '_api/admin/lesseeApi.js';
 // @ts-ignore
 import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
 // import {allStaff} from '_api/admin/userApi.js'
-import AddRolse from "./AddRolse.vue"
-import ChangeRolse from "@/view/admin/roles/ChangeRolse.vue";
+import AddLessee from "./AddLessee.vue"
+// @ts-ignore
+import ChangeLessee from "@/view/admin/lessee/ChangeLessee.vue";
 
 @Component({
   components:{
-    AddRolse,
-    ChangeRolse
+    AddLessee,
+    ChangeLessee
   }
 })
 
@@ -54,6 +55,7 @@ export default class index extends Vue{
 
   private mounted() {
     this.getLeftList()
+    // @ts-ignore
     this.right = this.$store.state.user.userData.shopkeeper
   }
   //-------------------------------methods-----------------------------------------
@@ -81,7 +83,6 @@ export default class index extends Vue{
       let tmp = [res.data]
       this.ch(tmp)
       this.treeList = tmp
-      console.log(tmp)
     })
   this.getAllStaff()
     // console.log(val.row)
@@ -140,6 +141,7 @@ export default class index extends Vue{
     //修改员工
   private  changeStaff(){
       if(!this.oneStaff.id){
+        // @ts-ignore
         this.$message.error('请先选择需要修改的角色')
         return
       }
@@ -156,10 +158,12 @@ export default class index extends Vue{
   //删除员工
   private delectStaff(){
     if(!this.oneStaff.id){
+      // @ts-ignore
       this.$message.error('请先选择角色')
       return
     }
-      this.$Modal.confirm({
+    // @ts-ignore
+    this.$Modal.confirm({
         title: '是否删除',
         content: '<p>是否要删除当前角色</p>',
         onOk: async () => {
@@ -208,10 +212,12 @@ export default class index extends Vue{
     saveOrder(this.role, this.role.resIds).then(res => {
       if (res.code == 0) {
           this.getLeftList()
-          this.$Message.success('修改成功')
+        // @ts-ignore
+        this.$Message.success('修改成功')
         stop()
       }
     }).catch(err => {
+      // @ts-ignore
       this.$Message.error('修改失败')
       stop()
     })
@@ -225,6 +231,7 @@ export default class index extends Vue{
   //员工点击查询
  private search() {
    if(!this.oneStaff.id){
+     // @ts-ignore
      this.$message.error('请先选择角色')
      return
    }
@@ -245,6 +252,7 @@ export default class index extends Vue{
         })
     let res = await saveStaffJurisdiction(data)
     if(res.code === 0){
+      // @ts-ignore
       this.$message.success('保存成功')
       this.getAllStaff()
     }

@@ -5,7 +5,7 @@
       <Split v-model="split">
         <div slot="left" class="left-warp left pt10 pb10">
           <div class="db left title-warp pb10">
-            <Button class="mr10" v-has="'save1'" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0)">
+            <Button class="mr10" v-has="'save1'" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0) || tbdata.length == 0">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
@@ -30,6 +30,7 @@
           <div class="tree-warp">
             <Tree
               :data="treeData"
+              children-key="childs"
               @on-select-change="selectedTree"
               @on-check-change="selectedTree"
               show-checkbox
@@ -39,17 +40,17 @@
         <div slot="right" class="right-warp tab-warp">
           <div class="db right ml10 btn-title">
             <Input v-model="tenantID" placeholder="租户ID" style="width: 140px;" class="mr10" />
-            <Input v-model="resID" placeholder="资源ID" style="width: 140px;" class="mr10" />
+<!--            <Input v-model="resID" placeholder="资源ID" style="width: 140px;" class="mr10" />-->
             <Button class="mr10 w90" @click="qureyTable">
               <span class="center">
                 <Icon custom="iconfont iconchaxunicon icons" />查询
               </span>
             </Button>
-            <Button class="mr10 w90" @click="saveTable" v-has="'delete'">
-              <span class="center">
-                <Icon custom="iconfont iconlajitongicon icons" />删除
-              </span>
-            </Button>
+<!--            <Button class="mr10 w90" @click="saveTable" v-has="'delete'">-->
+<!--              <span class="center">-->
+<!--                <Icon custom="iconfont iconlajitongicon icons" />删除-->
+<!--              </span>-->
+<!--            </Button>-->
             <!-- <Button class="mr10 w90" @click="saveTable" v-has="'save2'">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
@@ -64,10 +65,6 @@
             :stripe="true"
             :columns="columns"
             :data="tbdata"
-            @on-select="selectRow"
-            @on-select-cancel="selectRowCancel"
-            @on-select-all="selectAll"
-            @on-select-all-cancel="selectAllcancel"
             height="440"
           ></Table>
         </div>
