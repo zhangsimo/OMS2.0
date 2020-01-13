@@ -427,6 +427,7 @@
     <!--添加配件-->
     <select-part-com
       ref="selectPartCom"
+      :formPlanmain="formPlan"
       @selectPartName="getPartNameList"
       :is-show-add-part-btn="true"
     ></select-part-com>
