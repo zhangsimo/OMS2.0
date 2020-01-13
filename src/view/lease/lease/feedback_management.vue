@@ -53,13 +53,12 @@
         </div>
       </div>
 
-      <div class="diff">
         <Modal width="1400px"
+               class-name="diff"
                v-model="modal10"
                footer-hide>
           <img :src='Image' style="width:100%;height: 100%" alt="">
         </Modal>
-      </div>
 
 
   </div>
@@ -123,11 +122,5 @@
 <style scoped>
   @import "./index.css";
 </style>
-<style>
-.diff >>> .ivu-modal{
-  height: 500px!important;
-}
-  .fiff >>> .ivu-modal .ivu-modal-content {
-    height: 100%!important;
-  }
+<style scoped>
 </style>
