@@ -107,7 +107,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input disabled readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.auditor" placeholder></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
                     <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>
@@ -152,6 +152,8 @@
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
       <p>是否定入库</p>
     </Modal>
+    <!-- 打印 -->
+    <Print-show ref="printBox" :curenrow="Leftcurrentrow"></Print-show>
   </div>
 </template>
 
@@ -166,16 +168,20 @@ import More from "./compontents/More";
 import QuickDate from "../../../../components/getDate/dateget";
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
+import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
   name: "twoBackInStorage",
   components: {
     More,
-    QuickDate
+    QuickDate,
+    PrintShow
   },
   data() {
     return {
+      Leftcurrentrow: {},
+      dayinCureen: {},
       List: [],
       form: {
         createTimeStart: "",
@@ -271,7 +277,7 @@ export default {
         storeId: "", //入库仓库
         finishDate: "", //调出退回日期
         remark: "", //备注
-        orderMan: "", //入库人
+        auditor: "", //入库人
         code: "", //申请单号
         serviceId: "" //退回单号
       },
@@ -348,7 +354,6 @@ export default {
     getinfo(params) {
       getList(params)
         .then(res => {
-          console.log(res);
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
@@ -371,7 +376,6 @@ export default {
     // },
     //time1
     getDataQuick(val) {
-      console.log(val);
       this.form.createTimeStart = val[0];
       this.form.createTimeEnd = val[1];
       this.getinfo(this.form);
@@ -383,7 +387,6 @@ export default {
     //显示更多弹窗
     more() {
       this.showMore = true;
-      console.log(this.showMore);
     },
     //更多弹窗恢复false
     getMoreStatus(val) {
@@ -391,7 +394,6 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      console.log(val);
       this.params = { ...this.params, ...val };
       this.getinfo(this.params);
     },
@@ -430,26 +432,32 @@ export default {
 
     // 打印
     stamp() {
-      stampDataList()
-        .then(res => {
-          console.log(res);
-          if (res.code === 0) {
-            this.$Message.info("打印成功");
-          }
-        })
-        .catch(err => {
-          this.$Message.info("打印失败");
-        });
+      if (!this.dayinCureen.id) {
+        this.$Message.info("请选择打印项");
+        return;
+      }
+      this.$refs.printBox.openModal();
+      // stampDataList()
+      //   .then(res => {
+      //     console.log(res);
+      //     if (res.code === 0) {
+      //       this.$Message.info("打印成功");
+      //     }
+      //   })
+      //   .catch(err => {
+      //     this.$Message.info("打印失败");
+      //   });
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
+      this.Leftcurrentrow = currentRow;
+      this.dayinCureen = currentRow;
       this.inID.id = currentRow.id;
       this.formPlan = currentRow;
       const params = {
         mainId: currentRow.id
       };
       const res = await getListDetail(params);
-      console.log(res);
       this.tableData = res.data;
       if (currentRow.status === 0) {
         this.inStatus = "未入库";
@@ -466,12 +474,10 @@ export default {
     },
     //分页
     changePage(p) {
-      console.log(p);
       this.params.page = p;
       this.getinfo(this.params);
     },
     changeSize(s) {
-      console.log(s);
       this.params.page = 1;
       this.params.size = s;
       this.getinfo(this.params);

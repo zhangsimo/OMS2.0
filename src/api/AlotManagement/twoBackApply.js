@@ -4,9 +4,8 @@ import axios from "@/libs/api.request";
 //获取调拨申请列表
 export function getList1(data, size, num) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/backApplyList?page=${num -
-      1}&size=${size}`,
-    method: "get",
+    url: `${api.omsOrder}/allotApplyMain/backApplyList?page=${num -1}&size=${size}`,
+    method: 'get',
     params: {
       ...data
     }
@@ -16,8 +15,8 @@ export function getList1(data, size, num) {
 //获取调拨申请列表明细
 export function getListDetail(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyDetail/findApplyDetails`,
-    method: "get",
+    url: `${api.omsOrder}/allotOutDetail/findByMainId`,
+    method: 'get',
     params: {
       ...data
     }
@@ -102,9 +101,8 @@ export function stampApplyDataList(data) {
 // c成品
 export function chengping(data, size, num) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/allotEnterList?page=${num -
-      1}&size=${size}`,
-    method: "get",
+    url: `${api.omsOrder}/allotEnterMain/allotEnterList?page=${num -1}&size=${size}`,
+    method: 'get',
     params: {
       ...data
     }
