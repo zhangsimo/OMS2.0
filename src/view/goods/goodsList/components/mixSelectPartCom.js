@@ -140,6 +140,9 @@ export const mixSelectPartCom = {
       ]
     };
   },
+  props: {
+    formPlanmain: Object
+  },
   mounted() {},
   methods: {
     // 初始化数据
@@ -175,7 +178,10 @@ export const mixSelectPartCom = {
             break;
         }
       }
-
+      console.log(this.formPlanmain.guestId)
+      if(this.formPlanmain.guestId) {
+        params.guestId = this.formPlanmain.guestId
+      }
       getCarParts({data:data,params:params}).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];

@@ -484,7 +484,7 @@
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectTableRow"></status-model>
     <!--添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
+    <select-part-com ref="selectPartCom" :formPlanmain="formPlanmain" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
   </div>
 </template>
 

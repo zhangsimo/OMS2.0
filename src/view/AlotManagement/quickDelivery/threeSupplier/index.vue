@@ -199,7 +199,7 @@ export default {
         page: 0,
         total: 0,
         pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
       selectOne: "",
