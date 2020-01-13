@@ -489,7 +489,7 @@ export default {
       //分页
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       split1: 0.2, //左右框
