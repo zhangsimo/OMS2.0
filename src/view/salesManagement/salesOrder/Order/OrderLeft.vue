@@ -70,7 +70,7 @@ export default {
       },
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       tableData: [],

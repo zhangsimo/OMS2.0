@@ -93,6 +93,7 @@
                 @on-change="changePage"
                 @on-page-size-change="changeSize"
                 class="mr10"
+                :page-size-opts="[20, 50, 100, 200]"
               ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
@@ -347,7 +348,7 @@ export default {
         loading: false,
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0
         },
         columns: [
