@@ -412,9 +412,12 @@
             if (columnIndex === 0) {
               return '和值'
             }
-            if (['orderQty', 'orderPrice', 'orderAmt'].includes(column.property)) {
+            if (['orderPrice', 'orderAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property).toFixed(2);
             }
+            // if (['orderQty'].includes(column.property)) {
+            //   return this.$utils.sum(data, column.property).toFixed(0);
+            // }
             if (columnIndex === 6) {
               return ` ${this.countAllAmount(data)} `
             }

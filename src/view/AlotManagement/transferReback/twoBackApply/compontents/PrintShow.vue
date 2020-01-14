@@ -72,7 +72,7 @@
           width="990"
           border
           :columns="columns2"
-          :data="onelist.detailList"
+          :data="onelist.detailVOS"
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
@@ -192,7 +192,6 @@ export default {
       document.body.innerHTML = oldstr;
     },
     async openModal() {
-      console.log(1212);
       if (!this.curenrow) {
         this.$message.error("请选择列表信息");
         return;
