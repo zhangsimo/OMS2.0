@@ -572,15 +572,19 @@ export default {
           return;
         }
       }
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态才能进行保存操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value !== 0) {
+      //   this.$Message.info("只有草稿状态才能进行保存操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>581");
+
       if (params.xinzeng) {
         delete params.status;
       }
-      if (params.status && params.status.name) {
+      // console.log(params.status, "params.status =>583");
+      if (params.status) {
         params.status = params.status.value;
       }
       if (params.orderTypeId && params.orderTypeId.name) {
@@ -662,6 +666,7 @@ export default {
       this.Leftcurrentrow.serviceId = "";
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.storeId = "";
+      this.Leftcurrentrow.detailVOS = [];
       this.Left.tbdata.unshift(item);
       // this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]);
       // console.log(this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]));
@@ -985,9 +990,6 @@ export default {
       }
     },
     getOkList(list, rowValue) {
-      // this.Leftcurrentrow = row;
-      // console.log(rowValue, " ==972");
-      // console.log(list, "获取的条数");
       this.showit = false;
       for (var i = 0; i < list.length; i++) {
         list[i].id = "";
@@ -1008,6 +1010,8 @@ export default {
       this.Leftcurrentrow.createUname = rowValue.commitUname;
       this.Leftcurrentrow.remark = rowValue.remark;
       this.Leftcurrentrow.serviceId = rowValue.serviceId;
+      this.Leftcurrentrow.guestId = rowValue.guestId;
+      this.Leftcurrentrow.guestOrgid = rowValue.guestOrgid;
       this.Leftcurrentrow.createTime = moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );
