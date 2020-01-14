@@ -198,7 +198,7 @@
                     <Select
                       class="w160"
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
-                      v-model="formPlan.directGuestId"
+                      v-model="formPlan.directCompanyId"
                     >
                       <Option
                         v-for="item in companyMap"
