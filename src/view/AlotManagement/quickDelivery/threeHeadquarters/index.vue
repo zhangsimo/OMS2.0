@@ -24,7 +24,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="form.code" placeholder="受理单号" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.serviceId" placeholder="受理单号" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
             <Input v-model="form.partCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>
@@ -65,9 +65,9 @@
               <Button type="text" @click="ruku">到货入库</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="guestName" title="调出方"></vxe-table-column>
+          <vxe-table-column field="orgName" title="调出方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调拨出库单号"></vxe-table-column>
-          <vxe-table-column field="code" title="受理单号"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="出单号库"></vxe-table-column>
           <vxe-table-column field="enterStatus" title="状态"></vxe-table-column>
           <vxe-table-column field="createTime" title="出库日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
@@ -169,7 +169,7 @@ export default {
         startDate: "",
         endDate: "",
         isEnter: "",
-        code: "",
+        serviceId: "",
         partCode: "",
         partName: "",
         dateValue: ""
@@ -213,7 +213,7 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        size: 10,
+        size: 50,
         pageSizeOpts: [50, 100, 150, 200]
       },
       storeArray: []
