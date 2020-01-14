@@ -866,50 +866,16 @@ export default {
       this.Leftcurrentrow= item
       // this.Left.tbdata[0]['processProductVO'] = []
     },
+    //提交
     tijiao1() {
-      if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
-        return;
-      }
-      if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择加工单");
-        return;
-      }
-      if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前加工单号已提交审核!无需重复操作");
-        return;
-      }
-      const params = {
-        ...this.Leftcurrentrow
-      };
-      params.processProductVO = params.processProductVO[0];
-      if (this.tabKey === 0) {
-        // 配件组装提交
-        tijiao(params)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListzu(this.form);
-              this.$Message.success("提交成功");
-            }
-          })
-          .catch(e => {
-            this.$Message.info("提交配件组装信息失败");
-          });
-      } else {
-        // 配件拆分提交
-        tijiao2(params)
-          .then(res => {
-            // 点击列表行==>配件组装信息
-            if (res.code == 0) {
-              this.getListchai(this.form);
-              this.$Message.success("提交成功");
-            }
-          })
-          .catch(e => {
-            this.$Message.info("提交配件拆分信息失败");
-          });
-      }
+      this.$Modal.confirm({
+        title: "是否需要提交",
+        onOk: () => {
+          this.editPro();
+        },
+        onCancel: () => {
+        }
+      })
     },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
@@ -1075,7 +1041,51 @@ export default {
       this.advanced = true;
     },
     // 提交
-    editPro() {},
+    editPro() {
+      if (this.Leftcurrentrow.xinzeng === "1") {
+        this.$Message.info("请先保存新增加工单");
+        return;
+      }
+      if (!this.Leftcurrentrow.serviceId) {
+        this.$Message.info("请先选择加工单");
+        return;
+      }
+      if (this.Leftcurrentrow.status.value === 1) {
+        this.$Message.info("当前加工单号已提交审核!无需重复操作");
+        return;
+      }
+      const params = {
+        ...this.Leftcurrentrow
+      };
+      params.processProductVO = params.processProductVO[0];
+      if (this.tabKey === 0) {
+        // 配件组装提交
+        tijiao(params)
+          .then(res => {
+            // 点击列表行==>配件组装信息
+            if (res.code == 0) {
+              this.getListzu(this.form);
+              this.$Message.success("提交成功");
+            }
+          })
+          .catch(e => {
+            this.$Message.info("提交配件组装信息失败");
+          });
+      } else {
+        // 配件拆分提交
+        tijiao2(params)
+          .then(res => {
+            // 点击列表行==>配件组装信息
+            if (res.code == 0) {
+              this.getListchai(this.form);
+              this.$Message.success("提交成功");
+            }
+          })
+          .catch(e => {
+            this.$Message.info("提交配件拆分信息失败");
+          });
+      }
+    },
     //作废
     cancellation() {},
     // 打印

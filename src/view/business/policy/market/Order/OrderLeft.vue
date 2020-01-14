@@ -103,6 +103,8 @@
                     this.tableData.map((item,index) => {
                         item.index = index + 1
                     })
+                    this.$refs.xTab.setCurrentRow(item)
+                    this.$store.commit('setOneOrder',item)
             },
             getData(data) {
                 // console.log(data, '该值')
