@@ -124,7 +124,6 @@ export default {
       this.$emit("getMoreStatus", false);
     },
     establish(o) {
-      console.log(o, "o =>127");
       if (o[0] == "") {
         this.moreData.acceptEnterTimeStart = "";
         this.moreData.acceptEnterTimeEnd = "";
