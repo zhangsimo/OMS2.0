@@ -415,9 +415,9 @@
             if (['orderPrice', 'orderAmt'].includes(column.property)) {
               return this.$utils.sum(data, column.property).toFixed(2);
             }
-            if (['orderQty'].includes(column.property)) {
-              return this.$utils.sum(data, column.property).toFixed(0);
-            }
+            // if (['orderQty'].includes(column.property)) {
+            //   return this.$utils.sum(data, column.property).toFixed(0);
+            // }
             if (columnIndex === 6) {
               return ` ${this.countAllAmount(data)} `
             }

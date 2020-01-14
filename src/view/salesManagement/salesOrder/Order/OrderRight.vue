@@ -684,9 +684,9 @@ export default {
           if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
-          if (["orderQty"].includes(column.property)) {
-            return this.$utils.sum(data, column.property).toFixed(0);
-          }
+          // if (["orderQty"].includes(column.property)) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 7) {
             return ` ${this.countAllPrice(data)} `;
           }
