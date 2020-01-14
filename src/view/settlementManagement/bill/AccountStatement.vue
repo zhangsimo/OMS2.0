@@ -1186,72 +1186,73 @@ export default {
           this.tableData = res.data.two;
         } else {
           dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
-            res.data.itemVOS[0] = {
-              serviceType: {
-                name: res.data.itemVOS[0].itemName,
-                enum: res.data.itemVOS[0].itemCode,
-                value: 0
-              },
-              serviceTypeName: res.data.itemVOS[0].itemName,
-              accountAmt: this.reconciliationStatement.accountsReceivable,
-              endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.accountsReceivable,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.accountsReceivable
-            };
-            res.data.itemVOS[1] = {
-              serviceType: {
-                name: res.data.itemVOS[1].itemName,
-                enum: res.data.itemVOS[1].itemCode,
-                value: 1
-              },
-              serviceTypeName: res.data.itemVOS[1].itemName,
-              accountAmt: this.reconciliationStatement.badDebtReceivable,
-              endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
-            };
+            console.log(res)
+            // res.data.itemVOS[0] = {
+            //   serviceType: {
+            //     name: res.data.itemVOS[0].itemName,
+            //     enum: res.data.itemVOS[0].itemCode,
+            //     value: 0
+            //   },
+            //   serviceTypeName: res.data.itemVOS[0].itemName,
+            //   accountAmt: this.reconciliationStatement.accountsReceivable,
+            //   endAmt: 0,
+            //   uncollectedAmt: this.reconciliationStatement.accountsReceivable,
+            //   checkAmt: this.reconciliationStatement.accountsReceivable,
+            //   unAmt: 0
+            // };
+            // res.data.itemVOS[1] = {
+            //   serviceType: {
+            //     name: res.data.itemVOS[1].itemName,
+            //     enum: res.data.itemVOS[1].itemCode,
+            //     value: 1
+            //   },
+            //   serviceTypeName: res.data.itemVOS[1].itemName,
+            //   accountAmt: this.reconciliationStatement.badDebtReceivable,
+            //   endAmt: 0,
+            //   uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
+            //   checkAmt: this.reconciliationStatement.noCharOffAmt,
+            //   unAmt: 0
+            // };
 
-            res.data.itemVOS[2] = {
-              serviceType: {
-                name: res.data.itemVOS[2].itemName,
-                enum: res.data.itemVOS[2].itemCode,
-                value: 2
-              },
-              serviceTypeName: res.data.itemVOS[2].itemName,
-              accountAmt: this.reconciliationStatement.receivableRebate,
-              endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.receivableRebate,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
-            };
-            res.data.itemVOS[3] = {
-              serviceType: {
-                name: res.data.itemVOS[3].itemName,
-                enum: res.data.itemVOS[3].itemCode,
-                value: 3
-              },
-              serviceTypeName: res.data.itemVOS[3].itemName,
-              accountAmt: this.reconciliationStatement.payingBadDebts,
-              endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.payingBadDebts,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
-            };
-            res.data.itemVOS[4] = {
-              serviceType: {
-                name: res.data.itemVOS[4].itemName,
-                enum: res.data.itemVOS[4].itemCode,
-                value: 4
-              },
-              serviceTypeName: res.data.itemVOS[4].itemName,
-              accountAmt: this.reconciliationStatement.dealingRebates,
-              endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.dealingRebates,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
-            };
+            // res.data.itemVOS[2] = {
+            //   serviceType: {
+            //     name: res.data.itemVOS[2].itemName,
+            //     enum: res.data.itemVOS[2].itemCode,
+            //     value: 2
+            //   },
+            //   serviceTypeName: res.data.itemVOS[2].itemName,
+            //   accountAmt: this.reconciliationStatement.receivableRebate,
+            //   endAmt: 0,
+            //   uncollectedAmt: this.reconciliationStatement.receivableRebate,
+            //   checkAmt: this.reconciliationStatement.noCharOffAmt,
+            //   unAmt: 0
+            // };
+            // res.data.itemVOS[3] = {
+            //   serviceType: {
+            //     name: res.data.itemVOS[3].itemName,
+            //     enum: res.data.itemVOS[3].itemCode,
+            //     value: 3
+            //   },
+            //   serviceTypeName: res.data.itemVOS[3].itemName,
+            //   accountAmt: this.reconciliationStatement.payingBadDebts,
+            //   endAmt: 0,
+            //   uncollectedAmt: this.reconciliationStatement.payingBadDebts,
+            //   checkAmt: this.reconciliationStatement.noCharOffAmt,
+            //   unAmt: 0
+            // };
+            // res.data.itemVOS[4] = {
+            //   serviceType: {
+            //     name: res.data.itemVOS[4].itemName,
+            //     enum: res.data.itemVOS[4].itemCode,
+            //     value: 4
+            //   },
+            //   serviceTypeName: res.data.itemVOS[4].itemName,
+            //   accountAmt: this.reconciliationStatement.dealingRebates,
+            //   endAmt: 0,
+            //   uncollectedAmt: this.reconciliationStatement.dealingRebates,
+            //   checkAmt: this.reconciliationStatement.noCharOffAmt,
+            //   unAmt: 0
+            // };
             this.BusinessType = res.data.itemVOS;
             let obj = {
               accountAmt: 0,
@@ -1270,6 +1271,7 @@ export default {
               checkAmt: total.checkAmt,
               unAmt: total.unAmt
             });
+          console.log(this.BusinessType)
           });
           dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
             res.data.itemVOS.map((item, index) => {
