@@ -1978,6 +1978,17 @@ export default [
         component: () => import('@/view/admin/roles/roles.vue')
       },
       {
+        path: '/auth/lessee',
+        name: 'authLessee',
+        // mark: 'tenantUsers',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '租户模板',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/lessee/lessee.vue')
+      },
+      {
         path: '/auth/resource',
         name: 'resource',
         mark: '10004',
@@ -1988,17 +1999,7 @@ export default [
         },
         component: () => import('@/view/admin/resource/resource.vue')
       },
-      // {
-      //   path: '/auth/lessee',
-      //   name: 'authLessee',
-      //   // mark: 'tenantUsers',
-      //   meta: {
-      //     icon: 'arrow-graph-up-right',
-      //     title: '租户员工',
-      //     // access: ['admin', 'auth_staff']
-      //   },
-      //   component: () => import('@/view/admin/lessee/lessee.vue')
-      // },
+
     ]
   },
 

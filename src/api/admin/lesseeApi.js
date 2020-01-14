@@ -1,90 +1,106 @@
 import axios from '@/libs/api.request'
+import api from '_conf/url'
 
-// 分页查询员工信息
-export function allStaff (page, size, params) {
-  params.page = page - 1
-  params.size = size
-  params.tenantId = localStorage.getItem('authUserId')
+// 分页查询角色列表
+export function queryRolesByPage (params) {
   return axios.request({
-    url: '/tenantUsers/queryAll?',
+    url: `${api.authApi}/role/findAllByPageModuleRole`,
+    method: 'get',
+    params
+
+  })
+}
+
+// 查询全部角色
+export function queryAllRoles (params) {
+  return axios.request({
+    url: `${api.authApi}/role/findAll`,
     method: 'get',
     params
   })
 }
 
-// 删除用户
-export function delStaffById (data) {
+//新增角色
+export function  addNewStaffe(data) {
   return axios.request({
-    url: '/tenantUsers/deleteById',
-    method: 'post',
+    url:`${api.authApi}/role/saveModule`,
+    method:'post',
     data
   })
 }
 
-// 添加公司信息
-export function editUser (data) {
-  return axios.request({
-    url: 'tenantUsers/save',
-    method: 'post',
-    data
-  })
-}
-
-// 修改公司信息
-export function changeCompany (data) {
-  return axios.request({
-    url: 'tenantUsers/update',
-    method: 'post',
-    data
-  })
-}
-
-// 重置密码
-export function resetPwd (data) {
-  return axios.request({
-    url: '/staff/resetPwd',
-    method: 'post',
-    data
-  })
-}
-
-// 添加或修改用户信息
-export function findByUsername (username, data) {
-  return axios.request({
-    url: '/staff/findByUsername',
-    method: 'get',
-    params: {
-      username
-    },
-    data
-  })
-}
-
-// 添加用户时，判断username是否重复
+// 检查标识是否可用
 export function isExisted (name) {
   return axios.request({
-    url: '/staff/checkExistByName',
+    url: `${api.authApi}/role/checkExistByName`,
     method: 'get',
     params: {
-      name
+      name,
+
     }
   })
 }
 
-// 分配角色
-export function changeRoles (data) {
+// 删除角色
+export function deleteById (data) {
+  // data.tenantId = localStorage.getItem('authUserId')
   return axios.request({
-    url: '/staff/changeRoles',
+    url: `${api.authApi}/role/deleteById`,
     method: 'post',
     data
   })
 }
 
-// 解冻或冻结
-export function frozenStaff (data) {
+// 添加或修改资源
+export function addOrUpdate (data,) {
   return axios.request({
-    url: '/staff/frozen',
+    url: `${api.authApi}/role/save`,
     method: 'post',
     data
+  })
+}
+
+//获取员工权限
+export function getStaff (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/findAllTenantUsersRole`,
+    method: 'post',
+    data
+  })
+}
+
+//员工改变权限保存
+export function saveStaffJurisdiction (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/changeUserRoles`,
+    method: 'post',
+    data
+  })
+}
+
+//保存功能
+export function saveOrder (data) {
+  return axios.request({
+    url: `${api.authApi}/role/updateRoleTenantModule`,
+    method: 'post',
+    data
+  })
+}
+
+
+//租户模板一级接口
+export function getLesseeOne () {
+  return axios.request({
+    url: `${api.authApi}/role/findDictionaries`,
+    method: 'get',
+  })
+}
+
+//租户模板二级接口
+export function getLesseeTwo (params) {
+  return axios.request({
+    url: `${api.authApi}/role/findDictionariesItem`,
+    method: 'get',
+    params
   })
 }

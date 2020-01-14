@@ -77,6 +77,7 @@
                   :total="Left.page.total"
                   :page-size="Left.page.size"
                   :current="Left.page.num"
+                  :page-size-opts="Left.page.opts"
                   show-sizer
                   show-total
                   class-name="page-con"
@@ -375,8 +376,9 @@ export default {
       Left: {
         page: {
           num: 1,
-          size: 10,
-          total: 0
+          size: 20,
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
         loading: false,
         columns: [
@@ -585,8 +587,8 @@ export default {
       if (this.ArrayValue != []) {
         for (var i = 0; i < this.ArrayValue.length; i++) {
           if (this.ArrayValue[i].hasInQty > this.ArrayValue[i].hasOutQty) {
-            this.$Message.error('入库数量不能大于出库数量')
-            return
+            this.$Message.error("入库数量不能大于出库数量");
+            return;
           }
         }
       }

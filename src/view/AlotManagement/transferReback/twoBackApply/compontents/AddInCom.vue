@@ -269,6 +269,7 @@ export default {
     cancel() {},
     echoDate() {},
     async selectTabelData({ row }) {
+      console.log(row, "row  ==>272");
       this.checkRow = row;
       const params = {
         mainId: row.id
@@ -284,7 +285,7 @@ export default {
         this.$Message.info("请勾选需要选入的行");
         return;
       }
-      this.$emit("ok", this.currentData);
+      this.$emit("ok", this.currentData,this.checkRow);
       this.searchPartLayer = false;
     }
   }

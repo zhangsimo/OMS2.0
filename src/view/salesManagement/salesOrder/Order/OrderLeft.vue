@@ -66,11 +66,10 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
-        _highlight: true
       },
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       tableData: [],

@@ -98,6 +98,7 @@
                   :total="Left.page.total"
                   :page-size="Left.page.size"
                   :current="Left.page.num"
+                  :page-size-opts="Left.page.opts"
                   show-sizer
                   show-total
                   class-name="page-con"
@@ -124,14 +125,14 @@
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
                             filterable
-                            :disabled="buttonShow || this.flagValue !== 0"
+                            :disabled="this.flagValue != 0"
                           >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="buttonShow || this.flagValue !== 0"
+                            :disabled="this.flagValue != 0"
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -165,6 +166,7 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
+                        disabled
                         @on-change="changeDate"
                         :value="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
@@ -281,15 +283,15 @@
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
     <!--编辑收货信息-->
-<!--    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">-->
-<!--      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>-->
-<!--      <div slot="footer">-->
-<!--        &lt;!&ndash; <Button type="primary" @click="getMessage">确定</Button>-->
-<!--        <Button type="default">取消</Button>&ndash;&gt;-->
-<!--      </div>-->
-<!--    </Modal>-->
-     <!--编辑收货信息-->
-          <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
+    <!--    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">-->
+    <!--      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>-->
+    <!--      <div slot="footer">-->
+    <!--        &lt;!&ndash; <Button type="primary" @click="getMessage">确定</Button>-->
+    <!--        <Button type="default">取消</Button>&ndash;&gt;-->
+    <!--      </div>-->
+    <!--    </Modal>-->
+    <!--编辑收货信息-->
+    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
@@ -371,8 +373,8 @@ export default {
       },
       checkboxArr: [], // checkbox选中
       idsId: [],
-      MainID: '',
-      datadata:'',
+      MainID: "",
+      datadata: "",
       getArray: [],
       tuneOut: false,
       flag: 0,
@@ -468,8 +470,9 @@ export default {
       Left: {
         page: {
           num: 1,
-          size: 10,
-          total: 0
+          size: 20,
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
         loading: false,
         columns: [
@@ -603,7 +606,7 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
-      clickdelivery: false,
+      clickdelivery: false
     };
   },
   watch: {
@@ -951,8 +954,8 @@ export default {
         this.$Message.info("请选择编辑项");
         return;
       }
-          this.clickdelivery = true
-          this.$refs.goodsInfo.init()
+      this.clickdelivery = true;
+      this.$refs.goodsInfo.init();
     },
     //打印表格
     printTable() {
@@ -1020,7 +1023,6 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      this.flagValue = 0;
       this.flagValue1 = 0;
       // console.log(row, "row ==>862");
       if (this.flag === 1) {
@@ -1053,17 +1055,18 @@ export default {
       if (row.code != "") {
         this.flagValue = 1;
         // this.Leftcurrentrow.status.value = 1;
-      }
-      if (row.statuName != "草稿") {
-        this.flagValue = 1;
-        this.flagValue1 = 1;
       } else {
         this.flagValue = 0;
+      }
+      console.log();
+      if (row.statuName != "草稿") {
+        this.flagValue1 = 1;
+      } else {
         this.flagValue1 = 0;
       }
       if (row.id) {
-        this.datadata = row
-        this.MainID = row.id
+        this.datadata = row;
+        this.MainID = row.id;
         const params = {
           mainId: row.id
         };

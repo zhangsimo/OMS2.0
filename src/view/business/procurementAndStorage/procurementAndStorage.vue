@@ -59,7 +59,7 @@
               </div>
               <div class="orderCenter">
                 <vxe-table
-                ref="xTab"
+                  ref="xTab"
                   border
                   align="center"
                   size="mini"
@@ -93,6 +93,7 @@
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
                 class="mr10"
+                :page-size-opts="[20, 50, 100, 200]"
               ></Page>
             </div>
           </div>
