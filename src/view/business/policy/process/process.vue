@@ -38,17 +38,33 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1" v-has="'save'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    type="default"
+                    class="mr10"
+                    @click="baocun1"
+                    v-has="'save'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1" v-has="'submit'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    class="mr10"
+                    @click="tijiao1"
+                    v-has="'submit'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1" v-has="'zuofei'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    class="mr10"
+                    @click="zuofei1"
+                    v-has="'zuofei'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -151,7 +167,7 @@
                     <vxe-table
                       v-if="showit"
                       border
-                      resizable
+                      auto-resizable
                       ref="xTable1"
                       size="mini"
                       highlight-current-row
@@ -195,7 +211,7 @@
                       <div style="margin: 5px 10px">所需组装零件</div>
                       <vxe-table
                         border
-                        resizable
+                        auto-resizable
                         size="mini"
                         :height="rightTableHeight"
                         :data="currentData"
@@ -203,23 +219,23 @@
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
                         <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                        <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                        <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                        <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                        <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                        <vxe-table-column field="orderQty" title="需要数量" width="100">
+                        <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
+                        <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+                        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+                        <vxe-table-column field="unit" title="单位"></vxe-table-column>
+                        <vxe-table-column field="orderQty" title="需要数量">
                           <template v-slot="{ row, seq }">
                             <span>{{ currentNum * row.qty}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="storeStockQty" title="库存" width="100"></vxe-table-column>
-                        <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                        <vxe-table-column field="storeStockQty" title="库存"></vxe-table-column>
+                        <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
                         <vxe-table-column title="品牌车型">
                           <template v-slot="{row,rowIndex}">
                             <span>{{row.carBrandName}} {{row.carModelName}}</span>
                           </template>
                         </vxe-table-column>
-                        <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                        <vxe-table-column field="spec" title="规格"></vxe-table-column>
                       </vxe-table>
                     </div>
                   </div>
@@ -264,17 +280,33 @@
                   </Button>
                 </div>
                 <div class="db">
-                  <Button type="default" class="mr10" @click="baocun1" v-has="'save1'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    type="default"
+                    class="mr10"
+                    @click="baocun1"
+                    v-has="'save1'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <i class="iconfont mr5 iconbaocunicon"></i>保存
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="tijiao1" v-has="'submit1'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    class="mr10"
+                    @click="tijiao1"
+                    v-has="'submit1'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <Icon type="md-checkmark" size="14" />提交
                   </Button>
                 </div>
                 <div class="db">
-                  <Button class="mr10" @click="zuofei1" v-has="'zuofei1'" :disabled="Leftcurrentrow.status.value!==0">
+                  <Button
+                    class="mr10"
+                    @click="zuofei1"
+                    v-has="'zuofei1'"
+                    :disabled="Leftcurrentrow.status.value!==0"
+                  >
                     <Icon type="md-close" size="14" />作废
                   </Button>
                 </div>
@@ -751,7 +783,7 @@ export default {
       this.tabKey = key;
       this.Leftcurrentrow.processProductVO = [];
       this.currentData = [];
-      this.Leftcurrentrow={
+      this.Leftcurrentrow = {
         status: {
           value: 0
         },
@@ -761,7 +793,7 @@ export default {
         remark: "",
         serviceId: "",
         processProductVO: []
-      }
+      };
       if (this.tabKey === 0) {
         // console.log(444444)
         this.getListzu(this.form);
@@ -863,7 +895,7 @@ export default {
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
       });
-      this.Leftcurrentrow= item
+      this.Leftcurrentrow = item;
       // this.Left.tbdata[0]['processProductVO'] = []
     },
     //提交
@@ -873,9 +905,8 @@ export default {
         onOk: () => {
           this.editPro();
         },
-        onCancel: () => {
-        }
-      })
+        onCancel: () => {}
+      });
     },
     zuofei1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
@@ -968,7 +999,6 @@ export default {
       // this.getListPro()
     },
     searchPro(params) {
-      console.log(params, "huoqucanshu");
       chengping(params.productCode, params.productName)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
@@ -1193,7 +1223,6 @@ export default {
       if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log("rrr", seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1216,7 +1245,6 @@ export default {
       } else {
         // 拆分删除
         const seleList = this.$refs.xTable2.getSelectRecords();
-        console.log(seleList);
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {
@@ -1239,11 +1267,8 @@ export default {
       }
     },
     getOkList(list) {
-      console.log(list, "获取的条数");
-      console.log(list.detailList);
       list["detailVOList"] = list.detailList;
       delete list.detailList;
-      console.log(list.detailVOList);
       this.showit = false;
       if (!this.Leftcurrentrow.processProductVO) {
         this.Leftcurrentrow.processProductVO = [list];
@@ -1251,8 +1276,6 @@ export default {
         this.Leftcurrentrow.processProductVO.push(list);
       }
       this.currentData = this.Leftcurrentrow.processProductVO[0].detailVOList;
-      console.log(this.currentData);
-      console.log(this.Leftcurrentrow.processProductVO);
       const tata = this;
       setTimeout(() => {
         tata.showit = true;
@@ -1267,9 +1290,10 @@ export default {
       } else {
         delete params.qucikTime;
       }
+      this.Leftcurrentrow.processProductVO = [];
+      this.currentData = [];
       peijianzuzhuang(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
-          console.log("配件组装数量", res);
           if (res.code == 0) {
             if (!res.data.content) {
               this.Left.tbdata = [];
@@ -1300,6 +1324,8 @@ export default {
       } else {
         delete params.qucikTime;
       }
+      this.Leftcurrentrow.processProductVO = [];
+      this.currentData = [];
       peijianchaifen(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {
