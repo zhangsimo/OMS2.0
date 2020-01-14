@@ -11,7 +11,7 @@ export function getOmsAuth() {
 // 查询全部
 export function getAll(params) {
     return axios.request({
-      url: `${api.omsApi}/tenantMenu/findAll`,
+      url: `${api.authApi}/resourceTenant/findRootResTenantList`,
       method: "get",
       params
     });
@@ -35,11 +35,20 @@ export function deltenant(data) {
     });
 }
 
-// 新增租户资源
+// 左侧树形图保存
 export function addresource(data) {
     return axios.request({
-      url: `${api.omsApi}/tenantMenu/save`,
+      url: `${api.authApi}/role/updateModuleRole`,
       method: "post",
       data
     });
+}
+
+//判断租户是否存在
+export function hasLessee(params) {
+  return axios.request({
+    url: `${api.authApi}/role/checkExistTenantModule`,
+    method: "get",
+    params
+  });
 }

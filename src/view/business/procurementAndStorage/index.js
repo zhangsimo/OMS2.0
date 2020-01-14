@@ -427,22 +427,22 @@ export default {
     async getPlanOrder(val) {
       if (val) {
         this.formPlan.pchsOrderId = val.id
+        await this.$refs.xTable.validate()
+        this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+        let res = await saveList(this.formPlan)
+        if (res.code === 0) {
+          this.flag = 0
+          await this.getLeftLists()
+          this.legtTableData.map(item => {
+            if (item.id === this.dataChange.row.id) {
+              this.$set(this.dataChange, 'row', item)
+            }
+          })
+          await this.clickOnesList(this.dataChange)
+          this.allMoney = 0
+          this.$Message.success('保存成功');
+        }
         try {
-          await this.$refs.xTable.validate()
-          this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
-          let res = await saveList(this.formPlan)
-          if (res.code === 0) {
-            this.flag = 0
-            await this.getLeftLists()
-            this.legtTableData.map(item => {
-              if (item.id === this.dataChange.row.id) {
-                this.$set(this.dataChange, 'row', item)
-              }
-            })
-            await this.clickOnesList(this.dataChange)
-            this.allMoney = 0
-            this.$Message.success('保存成功');
-          }
         } catch (errMap) {
           this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
         }

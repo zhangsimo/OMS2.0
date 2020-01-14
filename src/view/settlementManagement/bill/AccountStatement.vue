@@ -1186,6 +1186,7 @@ export default {
           this.tableData = res.data.two;
         } else {
           dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
+            console.log(res)
             res.data.itemVOS[0] = {
               serviceType: {
                 name: res.data.itemVOS[0].itemName,
@@ -1196,8 +1197,8 @@ export default {
               accountAmt: this.reconciliationStatement.accountsReceivable,
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.accountsReceivable,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.accountsReceivable
+              checkAmt: this.reconciliationStatement.accountsReceivable,
+              unAmt: 0
             };
             res.data.itemVOS[1] = {
               serviceType: {
@@ -1210,7 +1211,7 @@ export default {
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
               checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
+              unAmt: 0
             };
 
             res.data.itemVOS[2] = {
@@ -1224,7 +1225,7 @@ export default {
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.receivableRebate,
               checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
+              unAmt: 0
             };
             res.data.itemVOS[3] = {
               serviceType: {
@@ -1237,7 +1238,7 @@ export default {
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.payingBadDebts,
               checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
+              unAmt: 0
             };
             res.data.itemVOS[4] = {
               serviceType: {
@@ -1250,7 +1251,7 @@ export default {
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.dealingRebates,
               checkAmt: this.reconciliationStatement.noCharOffAmt,
-              unAmt: this.reconciliationStatement.noCharOffAmt
+              unAmt: 0
             };
             this.BusinessType = res.data.itemVOS;
             let obj = {
@@ -1270,6 +1271,7 @@ export default {
               checkAmt: total.checkAmt,
               unAmt: total.unAmt
             });
+          console.log(this.BusinessType)
           });
           dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
             res.data.itemVOS.map((item, index) => {

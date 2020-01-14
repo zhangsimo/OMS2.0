@@ -707,7 +707,7 @@ export default {
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
       let guestId = value;
-      let res = await getLimit(guestId);
+      let res = await getLimit({guestId,id:''});
       if (res.code === 0) {
         this.limitList = res.data;
       }
