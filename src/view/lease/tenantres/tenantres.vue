@@ -31,6 +31,7 @@
             <Tree
               :data="treeData"
               children-key="childs"
+              ref="tree"
               @on-select-change="selectedTree"
               @on-check-change="selectedTree"
               show-checkbox

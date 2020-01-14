@@ -3,7 +3,7 @@ import api from "_conf/url";
 
 export function getOmsAuth() {
   return axios.request({
-    url: `${api.authApi}/resource/findRootResByScope?scope=oms`,
+    url: `${api.authApi}/resource/findRootRes?scope=oms`,
     method: "get",
   });
 }

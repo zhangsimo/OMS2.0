@@ -137,7 +137,7 @@ const getTree = tree => {
   if (isArray(tree) && tree.length > 0) {
     tree.forEach(tel => {
       tel.expand = true;
-      getTree(tel.children);
+      getTree(tel.childs);
     });
   } else {
     return;
@@ -278,7 +278,8 @@ const methods = {
   },
   // 选中树形菜单
   selectedTree(tree, data) {
-    this.selectTrees = tree;
+    // this.selectTrees = tree;
+    this.selectTrees = this.$refs.tree.getCheckedAndIndeterminateNodes()
     this.canSave = true
   },
   /**表格 */
