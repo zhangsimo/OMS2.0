@@ -543,6 +543,7 @@ export default {
     async getAllLimit() {
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
+      data.id = this.leftOneOrder?this.leftOneOrder.id:''
       let res = await getLimit(data);
       if (res.code === 0) {
         this.limitList = res.data;
@@ -550,7 +551,6 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      let data = {};
       if (!value) {
         return false;
       }
@@ -563,11 +563,15 @@ export default {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
-      data.guestId = value;
-      let res = await getLimit(data);
-      if (res.code === 0) {
-        this.limitList = res.data;
-      }
+      console.log(this.leftOneOrder)
+      this.leftOneOrder.guestId = value
+      const res = await this.getAllLimit()
+      // data.guestId = value;
+      // data.id = this.leftOneOrder?this.leftOneOrder.id:''
+      // let res = await getLimit(data);
+      // if (res.code === 0) {
+      //   this.limitList = res.data;
+      // }
     },
 
     //获取客户属性
@@ -892,7 +896,7 @@ export default {
           try {
             await this.$refs.xTable.validate();
 
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
 
@@ -942,7 +946,7 @@ export default {
           if (valid) {
             try {
               await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.sumAmt) {
+              if (+this.totalMoney > +this.limitList.outOfAmt) {
                 return this.$message.error("可用余额不足");
               }
 
@@ -1052,6 +1056,7 @@ export default {
             detailList: []
           };
           this.draftShow = 0;
+          this.leftOneOrder =this.formPlan
           return false;
         }
         this.leftOneOrder = old;
