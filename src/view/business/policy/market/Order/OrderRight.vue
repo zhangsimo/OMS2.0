@@ -763,6 +763,7 @@ export default {
     //获取活动内的数据
     async activiyList(val) {
       let data = {};
+      val.isMarkActivity = 1;
       data = this.formPlan;
       data.partIds = [val.id];
       data.type = 2;
@@ -770,7 +771,7 @@ export default {
       //console.log("dianjiafasong");
       let res = await baocun(data);
       if (res.code === 0) {
-        this.getChangeList();
+        this.getList();
       }
     },
     //打开查看模态框
