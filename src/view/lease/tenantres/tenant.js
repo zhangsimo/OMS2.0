@@ -32,48 +32,52 @@ const data = function() {
         minWidth: 120,
         // render: editRow(this, 'tbdata', 'tenantId'),
       },
-      {
-        title: "机构ID",
-        key: "orgid",
-        minWidth: 120,
-        // render: editRow(this, 'tbdata', 'orgid'),
-      },
+      // {
+      //   title: "机构ID",
+      //   key: "orgid",
+      //   minWidth: 120,
+      //   // render: editRow(this, 'tbdata', 'orgid'),
+      // },
       {
         title: "资源字段",
-        key: "resId",
+        key: "name",
         minWidth: 120,
         // render: editRow(this, 'tbdata', 'resId'),
       },
       {
         title: "资源类型",
-        key: "resType",
+        // key: "resType",
         minWidth: 120,
+        render:(h , params) => {
+          let tex = params.row.resType == 0 ? '菜单' : '按钮'
+          return h('span' ,{} ,tex)
+        }
         // render: editRow(this, 'tbdata', 'resType'),
       },
       {
         title: "资源名称",
-        key: "resName",
+        key: "displayName",
         minWidth: 120,
         // render: editRow(this, 'tbdata', 'resName'),
       },
-      {
-        title: "类型",
-        key: "type",
-        minWidth: 120,
-        // render: editRow(this, 'tbdata', 'type'),
-      },
-      {
-        title: "资源参数",
-        key: "resParentId",
-        minWidth: 120,
-        // render: editRow(this, 'tbdata', 'resParentId'),
-      },
-      {
-        title: "是否可用",
-        key: "isDisabled",
-        minWidth: 80,
-        // render: editRow(this, 'tbdata', 'isDisabled'),
-      },
+      // {
+      //   title: "类型",
+      //   key: "type",
+      //   minWidth: 120,
+      //   // render: editRow(this, 'tbdata', 'type'),
+      // },
+      // {
+      //   title: "资源参数",
+      //   key: "resParentId",
+      //   minWidth: 120,
+      //   // render: editRow(this, 'tbdata', 'resParentId'),
+      // },
+      // {
+      //   title: "是否可用",
+      //   key: "isDisabled",
+      //   minWidth: 80,
+      //   // render: editRow(this, 'tbdata', 'isDisabled'),
+      // },
       {
         title: "范围域",
         key: "scope",
@@ -208,7 +212,7 @@ const methods = {
   async initTree() {
     let res = await api.getOmsAuth();
     if (res.code === 0) {
-      let data = res.data.childs;
+      let data = [res.data]
       getTree(data);
       this.treeData = data;
       this.orginTree = JSON.parse(JSON.stringify(this.treeData));
@@ -244,30 +248,24 @@ const methods = {
     if(!this.canSave) return this.$message.error('请修改信息之后再保存')
    let arr = [],
       data = {}
-    this.selectTrees.forEach( item => {
-      arr.push(item.id)
-    })
-    data.resIds = arr
+
     if(sessionStorage.getItem('leaseRight') != null){
       data.tenantNo = sessionStorage.getItem('leaseRight')
     }
-   // this.selectTrees.forEach(el => {
-   //   let o = {
-   //    "scope": "PART",
-   //    "type": "pc",
-   //    "resId": el.id,
-   //    "resName": el.title,
-   //    "resParentId": el.parentId,
-   //    "resType": el.resType,
-   //    "tenant": this.tenantID,
-   //   }
-   //   data.push(o);
-   // });
-   let res = await api.addresource(data);
-   if(res.code === 0) {
-    this.$Message.success('保存成功');
-    this.initList();
-   }
+    let obj = await api.hasLessee(data)
+    if(obj.code === 0){
+      if(!obj.data.id) return this.$message.error('未查询到此租户')
+      this.selectTrees.forEach( item => {
+        arr.push(item.id)
+      })
+      data.resIds = arr
+      let res = await api.addresource(data);
+      if(res.code === 0) {
+        this.$Message.success('保存成功');
+        this.initList();
+      }
+    }
+
   },
   // 展开收起
   treeToggle(bool) {

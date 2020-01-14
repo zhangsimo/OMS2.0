@@ -43,3 +43,12 @@ export function addresource(data) {
       data
     });
 }
+
+//判断租户是否存在
+export function hasLessee(params) {
+  return axios.request({
+    url: `${api.authApi}/role/checkExistTenantModule`,
+    method: "get",
+    params
+  });
+}
