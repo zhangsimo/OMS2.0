@@ -149,7 +149,6 @@ class httpRequest {
       //Message.error('服务内部错误')
 
       if(error.response.config.url.includes('/token')){
-        console.log(231212222)
         globalVue.$Message.error(error.response.data.data.errorMessage)
       }else{
         globalVue.$Message.error(error.message)
