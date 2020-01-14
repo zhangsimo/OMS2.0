@@ -1054,6 +1054,10 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
+      row.unAmt = row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
+      row.endAmt += row.checkAmt * 1;
+      row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
+      this.$set(this.BusinessType, rowIndex, row);
       let obj = {
         serviceTypeName: "合计",
         accountAmt: this.BusinessType[0].accountAmt,
