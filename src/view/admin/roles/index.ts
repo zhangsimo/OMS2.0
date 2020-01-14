@@ -1,8 +1,8 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder , findRootRes} from '_api/admin/roleApi.js';
 // @ts-ignore
-import {findRootRes} from '_api/admin/resourceApi'
+// import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
 // import {allStaff} from '_api/admin/userApi.js'
 import AddRolse from "./AddRolse.vue"
@@ -50,6 +50,9 @@ export default class index extends Vue{
 
   //按钮权限
   private right:number = 1
+
+  //树形
+  // private tree:any = []
   //-------------------mounted-----------------------------------------------
 
   private mounted() {
@@ -73,17 +76,14 @@ export default class index extends Vue{
     //点击左侧表格获取当前数据
   private async setOneTable(val){
       this.oneStaff = JSON.parse(JSON.stringify(val.row))
-    this.findRootRes((res, group) => {
+    // console.log(this.oneStaff , 9999)
       this.role.id = val.row.id
       this.role.name = val.row.name
       this.role.displayName = val.row.displayName
       this.role.resIds = val.row.resourceVOSet.map(item => item.id)
-      let tmp = [res.data]
-      this.ch(tmp)
-      this.treeList = tmp
-      console.log(tmp)
-    })
-  this.getAllStaff()
+       this.findRootRes()
+
+      this.getAllStaff()
     // console.log(val.row)
     }
 
@@ -105,12 +105,12 @@ export default class index extends Vue{
       if(this.right != 0){
         item.disabled = true
       }
-      if (item.resType == 1 || item.childs.length == 0) {
+      if (item.resType == 1 || !item.childs) {
         if (this.role.resIds.indexOf(item.id) != -1) {
           item.checked = true
         }
       }
-      if (item.childs.length > 0) {
+      if (item.childs) {
         this.ch(item.childs)
       }
     })
@@ -176,15 +176,17 @@ export default class index extends Vue{
   }
 
   //树形图方法
-  private findRootRes(callback) {
+  private async findRootRes() {
     // @ts-ignore
     let stop:any = this.$loading()
-    findRootRes().then(res => {
-      stop()
-      callback && callback(res)
-    }).catch(err => {
-      stop()
-    })
+    let res:any = await findRootRes()
+       if(res.code === 0){
+         stop()
+         let tmp = res.data
+         this.ch(tmp)
+         this.treeList = tmp
+       }else{stop()}
+
   }
 
   //树形图复选框

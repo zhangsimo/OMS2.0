@@ -103,6 +103,8 @@
                     this.tableData.map((item,index) => {
                         item.index = index + 1
                     })
+                    this.$refs.xTab.setCurrentRow(item)
+                    this.$store.commit('setOneOrder',item)
             },
             getData(data) {
                 // console.log(data, '该值')
@@ -120,6 +122,7 @@
                   let size = this.page.size
                 let res = await getList1(page, size,data)
                 if(res.code === 0){
+                    this.$parent.$parent.$refs.right.$refs.formPlan.resetFields()
                     // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
                     this.tableData = res.data.content
                     this.page.total = res.data.totalElements

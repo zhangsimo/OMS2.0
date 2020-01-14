@@ -707,7 +707,7 @@ export default {
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
       let guestId = value;
-      let res = await getLimit(guestId);
+      let res = await getLimit({guestId,id:''});
       if (res.code === 0) {
         this.limitList = res.data;
       }
@@ -917,12 +917,17 @@ export default {
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
             return "和值";
-          }
+          };
           if (
-            ["orderQty", "orderPrice", "orderAmt"].includes(column.property)
+            ["orderPrice", "orderAmt"].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property).toFixed(2);
-          }
+          };
+          // if (
+          //   ["orderQty"].includes(column.property)
+          // ) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 8) {
             return ` ${this.countAllAmount(data)} `;
           }

@@ -5,7 +5,7 @@
       <Split v-model="split">
         <div slot="left" class="left-warp left pt10 pb10">
           <div class="db left title-warp pb10">
-            <Button class="mr10" v-has="'save1'" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0) || tbdata.length == 0">
+            <Button class="mr10" v-has="'save1'" @click="save" :disabled="!(selectTrees.length > 0 && tenantID.length > 0)">
               <span class="center">
                 <Icon custom="iconfont iconbaocunicon icons" />保存
               </span>
@@ -31,6 +31,7 @@
             <Tree
               :data="treeData"
               children-key="childs"
+              ref="tree"
               @on-select-change="selectedTree"
               @on-check-change="selectedTree"
               show-checkbox

@@ -341,6 +341,7 @@ export default {
       if (row.partCode) {
         this.formItem = row;
         this.rowStatus = row;
+        this.formItem.stockId = row.stockQty;
         this.getList();
       } else {
         this.$Message.info("没有当前行");

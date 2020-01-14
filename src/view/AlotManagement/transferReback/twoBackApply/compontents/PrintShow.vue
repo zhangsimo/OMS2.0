@@ -72,7 +72,7 @@
           width="990"
           border
           :columns="columns2"
-          :data="onelist.detailList"
+          :data="onelist.detailVOS"
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
@@ -193,7 +193,7 @@ export default {
     },
     async openModal() {
       if (!this.curenrow) {
-        this.$message.error("请选选择列表信息");
+        this.$message.error("请选择列表信息");
         return;
       } else {
         const params = {

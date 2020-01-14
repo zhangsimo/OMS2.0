@@ -146,7 +146,11 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input disabled :value="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input
+                        :disabled="this.remarkStatus"
+                        :value="Leftcurrentrow.remark"
+                        class="w160"
+                      ></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
@@ -284,6 +288,7 @@ export default {
   },
   data() {
     return {
+      remarkStatus: false,
       flagStatus: false,
       flagValue: [],
       flag: 0,
@@ -572,15 +577,19 @@ export default {
           return;
         }
       }
-      if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态才能进行保存操作");
-        return;
-      }
+      // if (this.Leftcurrentrow.status.value !== 0) {
+      //   this.$Message.info("只有草稿状态才能进行保存操作");
+      //   return;
+      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+
+      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>581");
+
       if (params.xinzeng) {
         delete params.status;
       }
-      if (params.status && params.status.name) {
+      // console.log(params.status, "params.status =>583");
+      if (params.status) {
         params.status = params.status.value;
       }
       if (params.orderTypeId && params.orderTypeId.name) {
@@ -637,6 +646,7 @@ export default {
       // this.Leftcurrentrow.remark = "";
       // this.Leftcurrentrow.storeId = "";
       this.flag = 1;
+      this.remarkStatus = false;
       // console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "1212");
       const item = {
         index: 1,
@@ -662,7 +672,9 @@ export default {
       this.Leftcurrentrow.serviceId = "";
       this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.storeId = "";
+      this.Leftcurrentrow.detailVOS = [];
       this.Left.tbdata.unshift(item);
+      this.Leftcurrentrow.status.value = 0;
       // this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]);
       // console.log(this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]));
       this.Left.tbdata.map((item, index) => {
@@ -849,7 +861,11 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      // console.log(row, "row =>837");
+      if (row.status.name != "草稿") {
+        this.remarkStatus = true;
+      } else {
+        this.remarkStatus = false;
+      }
       if (row.status.name != "已受理") {
         this.flagStatus = true;
       } else {
@@ -985,9 +1001,6 @@ export default {
       }
     },
     getOkList(list, rowValue) {
-      // this.Leftcurrentrow = row;
-      // console.log(rowValue, " ==972");
-      // console.log(list, "获取的条数");
       this.showit = false;
       for (var i = 0; i < list.length; i++) {
         list[i].id = "";
@@ -1008,6 +1021,8 @@ export default {
       this.Leftcurrentrow.createUname = rowValue.commitUname;
       this.Leftcurrentrow.remark = rowValue.remark;
       this.Leftcurrentrow.serviceId = rowValue.serviceId;
+      this.Leftcurrentrow.guestId = rowValue.guestId;
+      this.Leftcurrentrow.guestOrgid = rowValue.guestOrgid;
       this.Leftcurrentrow.createTime = moment(new Date()).format(
         "YYYY-MM-DD HH:mm:ss"
       );

@@ -258,6 +258,8 @@
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
+          :checkbox-config="{labelField: 'name', checkMethod}"
+          >
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -543,6 +545,7 @@ export default {
     async getAllLimit() {
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
+      data.id = this.leftOneOrder?this.leftOneOrder.id:''
       let res = await getLimit(data);
       if (res.code === 0) {
         this.limitList = res.data;
@@ -550,7 +553,6 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      let data = {};
       if (!value) {
         return false;
       }
@@ -563,11 +565,15 @@ export default {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
-      data.guestId = value;
-      let res = await getLimit(data);
-      if (res.code === 0) {
-        this.limitList = res.data;
-      }
+      console.log(this.leftOneOrder)
+      this.leftOneOrder.guestId = value
+      const res = await this.getAllLimit()
+      // data.guestId = value;
+      // data.id = this.leftOneOrder?this.leftOneOrder.id:''
+      // let res = await getLimit(data);
+      // if (res.code === 0) {
+      //   this.limitList = res.data;
+      // }
     },
 
     //获取客户属性
@@ -597,6 +603,10 @@ export default {
           item.label = item.userName;
         });
       }
+    },
+    //是否禁用
+    checkMethod(){
+      return this.draftShow == 0
     },
     // 获取仓库
     async getWarehouse() {
@@ -677,9 +687,12 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
-          if (["orderQty", "orderPrice"].includes(column.property)) {
+          if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
+          // if (["orderQty"].includes(column.property)) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 7) {
             return ` ${this.countAllPrice(data)} `;
           }
@@ -892,7 +905,7 @@ export default {
           try {
             await this.$refs.xTable.validate();
 
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
 
@@ -942,7 +955,7 @@ export default {
           if (valid) {
             try {
               await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.sumAmt) {
+              if (+this.totalMoney > +this.limitList.outOfAmt) {
                 return this.$message.error("可用余额不足");
               }
 
@@ -1052,6 +1065,7 @@ export default {
             detailList: []
           };
           this.draftShow = 0;
+          this.leftOneOrder =this.formPlan
           return false;
         }
         this.leftOneOrder = old;

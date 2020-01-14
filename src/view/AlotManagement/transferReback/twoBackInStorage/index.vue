@@ -46,18 +46,17 @@
                 size="small"
                 highlight-row
                 border
-                :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
               ></Table>
               <Page
                 size="small"
-                :total="Left.total"
-                :page-size="params.size"
-                :current="params.page +1"
+                :total="Left.page.total"
+                :page-size="Left.page.size"
+                :current="Left.page.num"
+                :page-size-opts="opts"
                 show-sizer
                 show-total
-                :page-size-opts="[20, 50, 100, 200]"
                 class-name="page-con"
                 @on-change="changePage"
                 @on-page-size-change="changeSize"
@@ -99,7 +98,7 @@
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
-                      disabled
+                      :disabled="this.flag"
                       class="w500"
                       v-model="formPlan.remark"
                       placeholder="选填"
@@ -180,6 +179,7 @@ export default {
   },
   data() {
     return {
+      flag: false,
       Leftcurrentrow: {},
       dayinCureen: {},
       List: [],
@@ -209,17 +209,14 @@ export default {
       params: {
         // selectDayType: '', //完成日期12345
         // settleStatus: '',
-        size: 10,
-        page: 0
       },
+      opts: [20, 50, 100, 200],
       Left: {
         page: {
-          offset: 0,
-          pageNumber: 1,
-          pageSize: 10,
-          paged: true
+          num: 1,
+          size: 20,
+          total: 0
         },
-        total: 0,
         loading: false,
         columns: [
           {
@@ -266,6 +263,11 @@ export default {
             title: "调出回退日期",
             align: "center",
             key: "finishDate",
+            minWidth: 170
+          },
+          {
+            title: "打印次数",
+            key: "printing",
             minWidth: 170
           }
         ],
@@ -357,8 +359,9 @@ export default {
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
+            // console.log(res, "res =>359");
             this.Left.page = res.data.pageable;
-            this.Left.page.total = res.totalElements;
+            this.Left.page.total = res.data.totalElements;
           } else if (res.code === 1) {
             this.$Message.info("未查到数据");
             this.Left.tbdata = [];
@@ -450,6 +453,12 @@ export default {
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
+      // console.log(currentRow, "currentRow =>454");
+      if (currentRow.status.name != "已入库") {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
       this.Leftcurrentrow = currentRow;
       this.dayinCureen = currentRow;
       this.inID.id = currentRow.id;
@@ -474,12 +483,11 @@ export default {
     },
     //分页
     changePage(p) {
-      this.params.page = p;
+      this.Left.page.num = p;
       this.getinfo(this.params);
     },
     changeSize(s) {
-      this.params.page = 1;
-      this.params.size = s;
+      this.Left.page.size = size;
       this.getinfo(this.params);
     }
   },

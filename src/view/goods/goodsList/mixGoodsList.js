@@ -42,7 +42,7 @@ export const mixGoodsData = {
         orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        directGuestId: "", //直发门店
+        directCompanyId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0, //合计总金额
@@ -150,7 +150,7 @@ export const mixGoodsData = {
           orderMan: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
           billType: "", //票据类型
-          directGuestId: "", //直发门店
+          directCompanyId: "", //直发门店
           planOrderNum: "新计划采购", //计划单号
           otherPrice: 0, //其他费用
           totalPrice: 0, //合计总金额
@@ -256,12 +256,6 @@ export const mixGoodsData = {
       });
       if (
         [
-          "totalStockQty",
-          "masterStockQty",
-          "branchStockQty",
-          "onWayQty",
-          "unsalableQty",
-          "orderQty",
           "orderPrice",
           "noTaxPrice",
           "noTaxAmt",
@@ -269,6 +263,16 @@ export const mixGoodsData = {
         ].includes(type)
       ) {
         return total.toFixed(2);
+      }
+      if(
+        ["totalStockQty",
+          "masterStockQty",
+          "branchStockQty",
+          "onWayQty",
+          "unsalableQty",
+          "orderQty",].includes(type)
+      ) {
+        return total
       }
       if (columnIndex === 12) {
         let totals = 0;
@@ -361,7 +365,7 @@ export const mixGoodsData = {
             // this.formPlan.planDateformat = this.tbdata[0].orderDate || "";
             this.formPlan.remark = this.tbdata[0].remark || "";
             this.formPlan.billType = this.tbdata[0].billTypeId || "";
-            this.formPlan.directGuestId = this.tbdata[0].directGuestId || "";
+            this.formPlan.directCompanyId = this.tbdata[0].directCompanyId || "";
             this.formPlan.planOrderNum = this.tbdata[0].serviceId || "";
             this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
             this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
@@ -403,7 +407,7 @@ export const mixGoodsData = {
           this.formPlan.planArriveDate = new Date(v.orderDate) || "";
           this.formPlan.remark = v.remark || "";
           this.formPlan.billType = v.billTypeId || "";
-          this.formPlan.directGuestId = v.directGuestId || "";
+          this.formPlan.directCompanyId = v.directCompanyId || "";
           this.formPlan.planOrderNum = v.serviceId || "";
           this.formPlan.otherPrice = v.otherAmt || 0;
           this.formPlan.totalPrice = v.totalAmt || 0;
@@ -439,7 +443,7 @@ export const mixGoodsData = {
         orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        directGuestId: "", //直发门店
+        directCompanyId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0, //合计总金额
@@ -518,7 +522,7 @@ export const mixGoodsData = {
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directGuestId = this.formPlan.directGuestId;
+          objReq.directCompanyId = this.formPlan.directCompanyId;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
           objReq.processInstanceId = this.formPlan.processInstanceId;
@@ -536,27 +540,59 @@ export const mixGoodsData = {
           objReq.details = this.tableData;
           // console.log(objReq)
           // return
-          if (subType === 1) {
-            saveDraft(objReq).then(res => {
-              if (res.code == 0) {
-                this.newadd = false;
-                this.proModal = false;
-                this.$Message.success("添加成功");
-                this.getList();
+          let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
+          if(zerolength.length > 0) {
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: () => {
+                if (subType === 1) {
+                  saveDraft(objReq).then(res => {
+                    if (res.code == 0) {
+                      this.newadd = false;
+                      this.proModal = false;
+                      this.$Message.success("添加成功");
+                      this.getList();
+                    }
+                  });
+                } else if (subType === 2) {
+                  if (this.tableData.length <= 0) {
+                    return this.$Message.error("请添加配件后再提交");
+                  }
+                  saveCommit(objReq).then(res => {
+                    if (res.code == 0) {
+                      this.newadd = false;
+                      this.proModal = false;
+                      this.$Message.success("提交成功");
+                      this.getList();
+                    }
+                  });
+                }
               }
-            });
-          } else if (subType === 2) {
-            if (this.tableData.length <= 0) {
-              return this.$Message.error("请添加配件后再提交");
+            })
+          } else {
+            if (subType === 1) {
+              saveDraft(objReq).then(res => {
+                if (res.code == 0) {
+                  this.newadd = false;
+                  this.proModal = false;
+                  this.$Message.success("添加成功");
+                  this.getList();
+                }
+              });
+            } else if (subType === 2) {
+              if (this.tableData.length <= 0) {
+                return this.$Message.error("请添加配件后再提交");
+              }
+              saveCommit(objReq).then(res => {
+                if (res.code == 0) {
+                  this.newadd = false;
+                  this.proModal = false;
+                  this.$Message.success("提交成功");
+                  this.getList();
+                }
+              });
             }
-            saveCommit(objReq).then(res => {
-              if (res.code == 0) {
-                this.newadd = false;
-                this.proModal = false;
-                this.$Message.success("提交成功");
-                this.getList();
-              }
-            });
           }
           this.submitloading = false;
         } else {

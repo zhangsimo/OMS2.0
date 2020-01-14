@@ -20,7 +20,7 @@ export function getLotStock (data) {
 // 获取入库明细数据
 export function getEnter (data) {
   return axios.request({
-    url: `${api.omsOrder}/enterDetail/queryByConditions`,
+    url: `${api.omsOrder}/enterDetail/queryByConditions?page=${data.page}&size=${data.size}`,
     method: 'post',
     data
   });
