@@ -112,28 +112,28 @@
             key: "",
             render: (h, params) => {
               let opts = [
-                h('Icon', {
-                  props: {size: 16, type: 'edit'},
-                  attrs: {title: '修改'},
-                  class: 'iconfont iconbianjixiugaiicon  icons pointer ml15',
-                  on: {
-                    click: () => {
-                      this.edit(params.row.username)
-                    }
-                  }
-                }),
-                h('Icon', {
-                  props: {size: 18, type: 'ios-people'},
-                  attrs: {title: '分配角色'},
-                  class: 'pointer ml15',
-                  on: {
-                    click: () => {
-                      this.role.userId = params.row.id
-                      this.role.checkedIds = params.row.roles.map(item => item.id) || []
-                      this.changeRolesClick()
-                    }
-                  }
-                }),
+                // h('Icon', {
+                //   props: {size: 16, type: 'edit'},
+                //   attrs: {title: '修改'},
+                //   class: 'iconfont iconbianjixiugaiicon  icons pointer ml15',
+                //   on: {
+                //     click: () => {
+                //       this.edit(params.row.username)
+                //     }
+                //   }
+                // }),
+                // h('Icon', {
+                //   props: {size: 18, type: 'ios-people'},
+                //   attrs: {title: '分配角色'},
+                //   class: 'pointer ml15',
+                //   on: {
+                //     click: () => {
+                //       this.role.userId = params.row.id
+                //       this.role.checkedIds = params.row.roles.map(item => item.id) || []
+                //       this.changeRolesClick()
+                //     }
+                //   }
+                // }),
                 h('Icon', {
                   props: {size: 18, type: 'key'},
                   attrs: {title: '重置密码'},
@@ -264,11 +264,18 @@
             minWidth: 150
           },
           {
-            title: 'ID',
+            title: '租户ID',
             align: 'center',
             key: 'tenantId',
             minWidth: 150
-          }
+          },
+            {
+                title: '租户名称',
+                align: 'center',
+                key: 'tenantCompanyName',
+                minWidth: 150
+            },
+
         ],
         tbdata: [],
         selection: [],
