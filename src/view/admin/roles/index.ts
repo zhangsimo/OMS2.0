@@ -81,6 +81,7 @@ export default class index extends Vue{
       let tmp = [res.data]
       this.ch(tmp)
       this.treeList = tmp
+
       console.log(tmp)
     })
   this.getAllStaff()

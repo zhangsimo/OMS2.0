@@ -1980,7 +1980,7 @@ export default [
       {
         path: '/auth/lessee',
         name: 'authLessee',
-        // mark: 'tenantUsers',
+        mark: '10005',
         meta: {
           icon: 'arrow-graph-up-right',
           title: '租户模板',
