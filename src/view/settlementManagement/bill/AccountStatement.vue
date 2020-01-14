@@ -303,7 +303,6 @@
             :data="tableData"
             auto-resize
             :edit-config="{trigger: 'click', mode: 'cell'}"
-            @edit-closed="collectPay"
           >
             <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
             <vxe-table-column field="paymentAmtName" title="收款账户"></vxe-table-column>
@@ -1054,8 +1053,8 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt = row.accountAmt * 1 - row.endAmt * 1 - row.checkAmt * 1;
-      row.endAmt += row.checkAmt * 1;
+      row.unAmt = row.accountAmt * 1 - this.reconciliationStatement.amountReceived*1 - row.checkAmt * 1;
+      row.endAmt = this.reconciliationStatement.amountReceived*1  + row.checkAmt * 1 
       row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
       this.$set(this.BusinessType, rowIndex, row);
       let obj = {
@@ -1069,10 +1068,11 @@ export default {
       let total = this.getTotal(obj);
       this.$set(this.BusinessType, 5, obj);
     },
-    // 收付款单元格关闭
-    collectPay({ row }) {
-      this.total += row.checkAmt * 1;
-    },
+    // // 收付款单元格关闭
+    // collectPay({row}) {
+    //   this.total += row.checkAmt * 1;
+    //   // console.log(this.total)
+    // },
     // 导出对账单/单据明细
     report(type) {
       if (type) {
@@ -1268,11 +1268,11 @@ export default {
             };
             this.BusinessType = res.data.itemVOS;
             let obj = {
-              accountAmt: 0,
-              endAmt: 0,
-              uncollectedAmt: 0,
-              checkAmt: 0,
-              unAmt: 0
+              accountAmt: this.BusinessType[0].accountAmt,
+              endAmt: this.BusinessType[0].endAmt,
+              uncollectedAmt: this.BusinessType[0].uncollectedAmt,
+              checkAmt: this.BusinessType[0].checkAmt,
+              unAmt: this.BusinessType[0].unAmt
             };
             let total = this.getTotal(obj);
             this.BusinessType.push({
@@ -1306,7 +1306,10 @@ export default {
       this.BusinessType.map(item => {
         item.endAmt += item.checkAmt * 1;
       });
-      if (this.total === this.BusinessType[5].checkAmt) {
+      this.tableData.map(item=>{
+        this.total += item.checkAmt*1
+      })
+      if (this.total === this.BusinessType[5].checkAmt && this.total===this.reconciliationStatement.receiptPayment) {
         let one = [
           {
             checkId: this.Write,
@@ -1340,7 +1343,7 @@ export default {
         });
       } else {
         this.$message({
-          message: "收款金额与本次核销金额不相等",
+          message: "收款金额与本次核销金额不相等且不能大于实际收付款",
           type: "error",
           customClass: "zZindex"
         });
