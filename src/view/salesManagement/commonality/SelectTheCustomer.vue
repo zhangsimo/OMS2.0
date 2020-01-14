@@ -198,8 +198,10 @@ export default {
       data.id = this.clickCity.id;
       data.page = this.page1.num - 1;
       data.size = this.page1.size;
-      data.lever = this.queryType.lever;
-      data.leverId = this.queryType.id;
+      if(this.queryType !== undefined){
+        data.lever = this.queryType.lever;
+        data.leverId = this.queryType.id;
+      }
       data.code = this.clientCode;
       data.shortName = this.clientName;
       data.contactorTel = this.clientPhone;
@@ -248,6 +250,7 @@ export default {
     //级联选择器
     getType(value, selectedData) {
       this.queryType = selectedData[selectedData.length - 1];
+      // console.log(this.queryType)
     },
     //查询
     query() {
