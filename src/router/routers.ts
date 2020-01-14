@@ -86,7 +86,7 @@ export default [
       {
         path: "interPurchase",
         name: "interPurchase",
-        mark: '1001',
+        mark: '1002',
         meta: {
           icon: "arrow-graph-up-right",
           title: "国际采购订单"
