@@ -106,7 +106,7 @@ export default [
       {
         path: "/goods/outside-purchase",
         name: "outsidePurchase",
-        mark: "10",
+        mark: "1004",
         meta: {
           // hideInMenu: true,
           icon: "arrow-graph-up-right",

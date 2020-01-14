@@ -1054,24 +1054,25 @@
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
             data.code = this.formPlan.serviceId //采购订单
-            data.details = this.Right.tbdata.map(item => {
-              return {
-                id: item.id,
-                partId: item.partId,
-                partCode: item.partCode,
-                partName: item.partName,
-                partBrand: item.partBrand,
-                outUnitId: item.outUnitId,
-                canReQty: item.canReQty,
-                orderQty: item.orderQty,
-                orderPrice: item.orderPrice,
-                orderAmt: item.orderAmt,
-                remark: item.remark,
-                stockOutQty: item.stockOutQty,
-                oemCode: item.oemCode,
-                spec: item.spec
-              }
-            }) //子表格
+            data.details = this.Right.tbdata
+            // data.details = this.Right.tbdata.map(item => {
+            //   // return {
+            //   //   id: item.id,
+            //   //   partId: item.partId,
+            //   //   partCode: item.partCode,
+            //   //   partName: item.partName,
+            //   //   partBrand: item.partBrand,
+            //   //   outUnitId: item.outUnitId,
+            //   //   canReQty: item.canReQty,
+            //   //   orderQty: item.orderQty,
+            //   //   orderPrice: item.orderPrice,
+            //   //   orderAmt: item.orderAmt,
+            //   //   remark: item.remark,
+            //   //   stockOutQty: item.stockOutQty,
+            //   //   oemCode: item.oemCode,
+            //   //   spec: item.spec
+            //   // }
+            // }) //子表格
             let res = await returnPchs(data);
             if (res.code == 0) {
               this.$Message.success('退货成功');

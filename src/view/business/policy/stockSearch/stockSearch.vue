@@ -381,7 +381,7 @@ export default {
       columns2: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           align: "center",
           minWidth: 40
         },
@@ -587,7 +587,6 @@ export default {
       data.noStock = data.noStock ? 1 : 0;
       let res = await getAllStock(data);
       if (res.code == 0) {
-        console.log("汇总库存数据", res);
         this.contentOne.dataOne = res.data.content;
         this.contentOne.page.total = res.data.totalElements;
       }
@@ -621,7 +620,8 @@ export default {
       let res = await getLotStock(data);
       if (res.code == 0) {
         this.contentTwo.dataTwo = res.data.content;
-        this.contentTwo.dataTwo.map(item => {
+        this.contentTwo.dataTwo.map((item,index) => {
+          item.index = index + 1
           item.outableQty = item.sellSign ? 0 : item.outableQty;
         });
         this.contentTwo.page.total = res.data.totalElements;
