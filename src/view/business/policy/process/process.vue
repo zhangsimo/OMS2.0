@@ -869,7 +869,7 @@ export default {
     //提交
     tijiao1() {
       this.$Modal.confirm({
-        title: "是否需要提交",
+        title: "是否确定提交",
         onOk: () => {
           this.editPro();
         },
