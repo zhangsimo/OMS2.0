@@ -475,6 +475,7 @@ export default {
     async getAllLimit() {
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
+      data.id = this.leftOneOrder?this.leftOneOrder.id:'';
       if (data.guestId) {
         let res = await getLimit(data);
         if (res.code === 0) {
@@ -502,11 +503,12 @@ export default {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
-      data.guestId = value;
-      let res = await getLimit(data);
-      if (res.code === 0) {
-        this.limitList = res.data;
-      }
+      this.leftOneOrder.guestId = value
+      // data.guestId = value;
+      // let res = await getLimit(data);
+      // if (res.code === 0) {
+      //   this.limitList = res.data;
+      // }
     },
     //获取客户属性
     async getType() {
@@ -784,7 +786,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             if (this.formPlan.billStatusId.value) {
@@ -854,7 +856,7 @@ export default {
             if (valid) {
               try {
                 await this.$refs.xTable.validate();
-                if (+this.totalMoney > +this.limitList.sumAmt) {
+                if (+this.totalMoney > +this.limitList.outOfAmt) {
                   return this.$message.error("可用余额不足");
                 }
                 //console.log("jinlaile");
@@ -890,7 +892,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
