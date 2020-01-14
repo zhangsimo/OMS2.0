@@ -789,6 +789,7 @@ export default {
     },
     //打印表格
     printTable() {
+      console.log(this.dayinCureen, "this.dayinCureen");
       if (!this.dayinCureen.id) {
         this.$Message.info("请选择打印项");
         return;

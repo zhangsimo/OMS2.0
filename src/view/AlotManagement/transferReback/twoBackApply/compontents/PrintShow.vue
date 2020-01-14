@@ -192,8 +192,9 @@ export default {
       document.body.innerHTML = oldstr;
     },
     async openModal() {
+      console.log(1212);
       if (!this.curenrow) {
-        this.$message.error("请选选择列表信息");
+        this.$message.error("请选择列表信息");
         return;
       } else {
         const params = {
