@@ -330,7 +330,7 @@ export default {
           },
           {
             title: "提交日期",
-            key: "createTime",
+            key: "subDate",
             minWidth: 200
           }
         ],
