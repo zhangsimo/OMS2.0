@@ -562,6 +562,8 @@ export default class Fittings extends Vue {
     }
     let res:any = await api.approval(row);
     if(res.code == 0) {
+      const child:any=this.$refs
+      child.partInfo.saveFlag = false
       this.$Message.success('保存成功');
       const ref:any = this.$refs.partInfo;
       ref.proModal = false;

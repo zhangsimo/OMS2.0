@@ -1054,6 +1054,7 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
+      
       let obj = {
         serviceTypeName: "合计",
         accountAmt: this.BusinessType[0].accountAmt,
