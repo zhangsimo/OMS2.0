@@ -232,7 +232,7 @@
       </div>
       <div class="db p15 settlement mt10 mb10">
         <div class="db_top flex mb15">
-          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>  
+          <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
           <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
           <span style="flex:1">收付类型：{{reconciliationStatement.billingTypeName}}</span>
         </div>
@@ -1186,7 +1186,17 @@ export default {
           this.tableData = res.data.two;
         } else {
           dictionaries({ dictCode: "BUSINESS_TYPE" }).then(res => {
-            console.log(res)
+            // accountsReceivable:应收账款(对账应收字段)
+            // receivableRebate:客户返利(应收返利字段)
+            // badDebtReceivable:客户坏账(应收坏账字段)
+            // reconciliation:应付账款(对账应付字段)
+            // dealingRebates:供应商返利(应付返利字段)
+            // payingBadDebts:供应商坏账(应付坏账字段)
+            // accountAmt:对账金额
+            // endAmt:已收金额
+            // uncollectedAmt:未收金额
+            // checkAmt:本次核销金额
+            // unAmt:剩余未收
             res.data.itemVOS[0] = {
               serviceType: {
                 name: res.data.itemVOS[0].itemName,
@@ -1194,10 +1204,10 @@ export default {
                 value: 0
               },
               serviceTypeName: res.data.itemVOS[0].itemName,
-              accountAmt: this.reconciliationStatement.accountsReceivable,
+              accountAmt: this.reconciliationStatement.reconciliation,
               endAmt: 0,
-              uncollectedAmt: this.reconciliationStatement.accountsReceivable,
-              checkAmt: this.reconciliationStatement.accountsReceivable,
+              uncollectedAmt: this.reconciliationStatement.reconciliation,
+              checkAmt: this.reconciliationStatement.reconciliation,
               unAmt: 0
             };
             res.data.itemVOS[1] = {
@@ -1210,10 +1220,9 @@ export default {
               accountAmt: this.reconciliationStatement.badDebtReceivable,
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.badDebtReceivable,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              checkAmt: this.reconciliationStatement.badDebtReceivable,
               unAmt: 0
             };
-
             res.data.itemVOS[2] = {
               serviceType: {
                 name: res.data.itemVOS[2].itemName,
@@ -1224,7 +1233,7 @@ export default {
               accountAmt: this.reconciliationStatement.receivableRebate,
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.receivableRebate,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              checkAmt: this.reconciliationStatement.receivableRebate,
               unAmt: 0
             };
             res.data.itemVOS[3] = {
@@ -1237,7 +1246,7 @@ export default {
               accountAmt: this.reconciliationStatement.payingBadDebts,
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.payingBadDebts,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              checkAmt: this.reconciliationStatement.payingBadDebts,
               unAmt: 0
             };
             res.data.itemVOS[4] = {
@@ -1250,7 +1259,7 @@ export default {
               accountAmt: this.reconciliationStatement.dealingRebates,
               endAmt: 0,
               uncollectedAmt: this.reconciliationStatement.dealingRebates,
-              checkAmt: this.reconciliationStatement.noCharOffAmt,
+              checkAmt: this.reconciliationStatement.dealingRebates,
               unAmt: 0
             };
             this.BusinessType = res.data.itemVOS;
@@ -1271,7 +1280,6 @@ export default {
               checkAmt: total.checkAmt,
               unAmt: total.unAmt
             });
-          console.log(this.BusinessType)
           });
           dictionaries({ dictCode: "PAYMENT_AMT_TYPE" }).then(res => {
             res.data.itemVOS.map((item, index) => {
