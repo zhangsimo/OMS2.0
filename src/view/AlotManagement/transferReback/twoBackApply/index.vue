@@ -146,7 +146,11 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input disabled :value="Leftcurrentrow.remark" class="w160"></Input>
+                      <Input
+                        :disabled="this.remarkStatus"
+                        :value="Leftcurrentrow.remark"
+                        class="w160"
+                      ></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
@@ -284,6 +288,7 @@ export default {
   },
   data() {
     return {
+      remarkStatus: false,
       flagStatus: false,
       flagValue: [],
       flag: 0,
@@ -641,6 +646,7 @@ export default {
       // this.Leftcurrentrow.remark = "";
       // this.Leftcurrentrow.storeId = "";
       this.flag = 1;
+      this.remarkStatus = false;
       // console.log(moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), "1212");
       const item = {
         index: 1,
@@ -668,6 +674,7 @@ export default {
       this.Leftcurrentrow.storeId = "";
       this.Leftcurrentrow.detailVOS = [];
       this.Left.tbdata.unshift(item);
+      this.Leftcurrentrow.status.value = 0;
       // this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]);
       // console.log(this.$refs.xTable.setCurrentRow(this.Left.tbdata[0]));
       this.Left.tbdata.map((item, index) => {
@@ -789,7 +796,6 @@ export default {
     },
     //打印表格
     printTable() {
-      console.log(this.dayinCureen, "this.dayinCureen");
       if (!this.dayinCureen.id) {
         this.$Message.info("请选择打印项");
         return;
@@ -855,7 +861,11 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      // console.log(row, "row =>837");
+      if (row.status.name != "草稿") {
+        this.remarkStatus = true;
+      } else {
+        this.remarkStatus = false;
+      }
       if (row.status.name != "已受理") {
         this.flagStatus = true;
       } else {
