@@ -10,6 +10,7 @@ export const mixSelectPartCom = {
   inject: ["reload"],
   data() {
     return {
+      Name: '名称',
       loading: false,
       treeLoading: false,
 
@@ -313,6 +314,10 @@ export const mixSelectPartCom = {
     applyPart() {
       this.searchPartLayer = false;
       this.$refs.partInfo.init();
+    },
+    //placeholder动态绑定值
+    ChangeValue(val){
+      this.Name = val.label;
     },
     //提交申请配件
     addPartFun(obj) {
