@@ -189,8 +189,6 @@ export default {
       form: {
         auditStartDate: "",
         auditEndDate: "",
-        startDate: "",
-        endDate: "",
         billStatusId: "",
         serviceId: "",
         guestId: "",

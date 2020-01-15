@@ -317,7 +317,8 @@
       </Row>
       <div slot="footer"></div>
     </Modal>
-    <reconciliation ref="reconciliation" :accountType="accountType"></reconciliation>
+    <reconciliation ref="reconciliation"></reconciliation>
+    <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
   </div>
 </template>
@@ -338,7 +339,7 @@ import {
 } from "@/api/bill/saleOrder";
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
-import Monthlyreconciliation from "./../paymentmanage/Monthlyreconciliation";
+import Monthlyreconciliation from "./components/Monthlyreconciliation";
 export default {
   components: {
     quickDate,
@@ -406,6 +407,10 @@ export default {
         }
       ],
       Reconciliationlist: [
+        {
+          value: "",
+          label: "全部"
+        },
         {
           value: "CG",
           label: "草稿"
@@ -980,18 +985,20 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.falg = true;
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       // console.log(row.id)
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });
-      approvalStatus({ instanceId: row.id }).then(res => {
-        if (res.code == "0") {
-          this.statusData = res.data.operationRecords;
-        }
-      });
+      if(row.processInstance) {
+        approvalStatus({ instanceId: row.processInstance }).then(res => {
+          if (res.code == "0") {
+            this.falg = true;
+            this.statusData = res.data.operationRecords;
+          }
+        });
+      } 
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;
@@ -1026,9 +1033,11 @@ export default {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         this.$refs.reconciliation.modal = true;
         if (this.reconciliationStatement.statementStatusName === "草稿") {
-          this.accountType = false;
+          this.$refs.Monthlyreconciliation.modal = true;
+          this.$refs.reconciliation.modal = false;
         } else {
-          this.accountType = true;
+          this.$refs.reconciliation.modal = true;
+          this.$refs.Monthlyreconciliation.modal = false;
         }
       } else {
         this.$message({
