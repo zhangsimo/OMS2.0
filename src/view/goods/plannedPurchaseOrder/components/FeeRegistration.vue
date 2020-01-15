@@ -132,7 +132,7 @@
             <vxe-table-column
               field="rpAmt"
               title="应付金额"
-              width="100"
+              width="160"
               :edit-render="{ name: 'input' }"
             >
               <template v-slot:edit="{ row }">
@@ -142,7 +142,7 @@
                   :precision="2"
                   v-model="row.rpAmt"
                   :controls="false"
-                  size="small"
+                  size="mini"
                 />
               </template>
             </vxe-table-column>

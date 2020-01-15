@@ -416,6 +416,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.getGeneral();
     },
     // 往来单位
     Dealings() {
@@ -479,7 +480,7 @@ export default {
               res.data.map((item, index) => {
                 item.index = index + 1;
                 item.taxSign = item.taxSign ? "是" : "否";
-                item.auditSign = item. billStatusId ? "已退货" : "草稿";
+                item.auditSign = item. billStatusId ? "已入库" : "草稿";
               });
               this.data = res.data;
             } else {

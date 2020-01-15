@@ -858,6 +858,17 @@ export default {
     // 快速查询日期
     quickDate(data) {
       this.value = data;
+      let obj = {
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        orgId: this.model1,
+        statementStatus: this.Reconciliationtype
+      };
+      this.getAccountStatement(obj);
     },
     // 选择日期
     changedate(daterange) {
@@ -1053,8 +1064,12 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt = row.accountAmt * 1 - this.reconciliationStatement.amountReceived*1 - row.checkAmt * 1;
-      row.endAmt = this.reconciliationStatement.amountReceived*1  + row.checkAmt * 1 
+      row.unAmt =
+        row.accountAmt * 1 -
+        this.reconciliationStatement.amountReceived * 1 -
+        row.checkAmt * 1;
+      row.endAmt =
+        this.reconciliationStatement.amountReceived * 1 + row.checkAmt * 1;
       row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
       this.$set(this.BusinessType, rowIndex, row);
       let obj = {
@@ -1306,10 +1321,13 @@ export default {
       this.BusinessType.map(item => {
         item.endAmt += item.checkAmt * 1;
       });
-      this.tableData.map(item=>{
-        this.total += item.checkAmt*1
-      })
-      if (this.total === this.BusinessType[5].checkAmt && this.total===this.reconciliationStatement.receiptPayment) {
+      this.tableData.map(item => {
+        this.total += item.checkAmt * 1;
+      });
+      if (
+        this.total === this.BusinessType[5].checkAmt &&
+        this.total === this.reconciliationStatement.receiptPayment
+      ) {
         let one = [
           {
             checkId: this.Write,

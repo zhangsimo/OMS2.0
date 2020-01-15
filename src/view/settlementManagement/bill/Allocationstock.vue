@@ -403,6 +403,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.getTransferStock()
     },
     // 主表查询
     getTransferStock() {
