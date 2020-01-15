@@ -9,7 +9,13 @@
           </div>
           <div class="db ml20">
             <span>查询期间：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200" @on-change="dateChange"></Date-picker>
+            <Date-picker
+              :value="value"
+              type="daterange"
+              placeholder="选择日期"
+              class="w200"
+              @on-change="dateChange"
+            ></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -41,9 +47,24 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="examine" v-has="'audit'">审核</button>
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revokecapital" v-has="'revoke'">撤销</button>
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report" v-has="'export'">导出</button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="examine"
+              v-has="'audit'"
+            >审核</button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="revokecapital"
+              v-has="'revoke'"
+            >撤销</button>
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="report"
+              v-has="'export'"
+            >导出</button>
           </div>
         </div>
       </div>
@@ -78,14 +99,20 @@
         </Tabs>
       </div>
     </section>
-    <selectDealings ref="selectDealings" @selectSupplierName="getOne"  />
+    <selectDealings ref="selectDealings" @selectSupplierName="getOne" />
     <Modal v-model="capitalexamine" title="资金审核" @on-ok="confirmExamine">
       <p class="tc">确认审核?</p>
     </Modal>
     <Modal v-model="revoke" title="资金审核撤销" @on-ok="confirmRemove">
       <div class="db flex">
         <span>撤销原因：</span>
-        <Input v-model="revokeReason" type="text" class="w300" @on-change="removeChange" placeholder="只能输入100字以内" />
+        <Input
+          v-model="revokeReason"
+          type="text"
+          class="w300"
+          @on-change="removeChange"
+          placeholder="只能输入100字以内"
+        />
       </div>
     </Modal>
   </div>
@@ -93,7 +120,7 @@
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import selectDealings from "./../bill/components/selectCompany";
-import moment from 'moment'
+import moment from "moment";
 import { creat } from "./../components";
 import { capitalAudit, examineBtn, revokeBtn } from "@/api/bill/saleOrder";
 export default {
@@ -107,8 +134,12 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     let obj = {
-      startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-      endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+      startDate: this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+        : "",
+      endDate: this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        : "",
       orgId: this.model1
     };
     this.getcapitalAudit(obj);
@@ -159,184 +190,184 @@ export default {
           title: "对账应收",
           key: "accountsReceivable",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.accountsReceivable).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.accountsReceivable.toFixed(2));
           }
         },
         {
           title: "应收返利",
           key: "receivableRebate",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.receivableRebate).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.receivableRebate.toFixed(2));
           }
         },
         {
           title: "应收坏账",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.badDebtReceivable).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.badDebtReceivable.toFixed(2));
           }
         },
         {
           title: "对账应付",
           key: "reconciliation",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.reconciliation).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.reconciliation.toFixed(2));
           }
         },
         {
           title: "应付返利",
           key: "dealingRebates",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.dealingRebates).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.dealingRebates.toFixed(2));
           }
         },
         {
           title: "应付坏账",
           key: "badDebtPaying",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.badDebtPaying).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.badDebtPaying.toFixed(2));
           }
         },
         {
           title: "其他应收款",
           key: "otherAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.otherAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.otherAmt.toFixed(2));
           }
         },
         {
           title: "预收账款",
           key: "advanceReceipt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.advanceReceipt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.advanceReceipt.toFixed(2));
           }
         },
         {
           title: "收款合计",
           key: "sumAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.sumAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.sumAmt.toFixed(2));
           }
         },
         {
           title: "现金",
           key: "cashAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.cashAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.cashAmt.toFixed(2));
           }
         },
         {
           title: "A卡",
           key: "acardAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.acardAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.acardAmt.toFixed(2));
           }
         },
         {
           title: "B卡",
           key: "bcardAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.bcardAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.bcardAmt.toFixed(2));
           }
         },
         {
           title: "C卡",
           key: "ccardAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.ccardAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.ccardAmt.toFixed(2));
           }
         },
         {
           title: "D卡",
           key: "dcardAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.dcardAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.dcardAmt.toFixed(2));
           }
         },
         {
           title: "基本开户A",
           key: "abasicAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.abasicAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.abasicAmt.toFixed(2));
           }
         },
         {
           title: "基本开户B",
           key: "bbasicAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.bbasicAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.bbasicAmt.toFixed(2));
           }
         },
         {
           title: "一般户A",
           key: "aordinaryAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.aordinaryAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.aordinaryAmt.toFixed(2));
           }
         },
         {
           title: "一般户B",
           key: "bordinaryAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.bordinaryAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.bordinaryAmt.toFixed(2));
           }
         },
         {
           title: "运费",
           key: "freightAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.freightAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.freightAmt.toFixed(2));
           }
         },
         {
           title: "手续费",
           key: "formalitiesAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.formalitiesAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.formalitiesAmt.toFixed(2));
           }
         },
         {
           title: "利息收入",
           key: "interestIncomeAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.interestIncomeAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.interestIncomeAmt.toFixed(2));
           }
         },
         {
           title: "利息支出",
           key: "interestExpenseAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.interestExpenseAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.interestExpenseAmt.toFixed(2));
           }
         },
         {
           title: "代收代付",
           key: "paymentAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.paymentAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.paymentAmt.toFixed(2));
           }
         },
         {
@@ -538,15 +569,15 @@ export default {
   },
   methods: {
     // 日期选择
-    dateChange(data){
-      this.value = data
+    dateChange(data) {
+      this.value = data;
     },
     // 撤销原因
-    removeChange(event){
-      if(event.target.value.length<100) {
-        this.revokeReason = event.target.value
+    removeChange(event) {
+      if (event.target.value.length < 100) {
+        this.revokeReason = event.target.value;
       } else {
-        this.$message.error('只能输入100字以内')
+        this.$message.error("只能输入100字以内");
       }
     },
     // 往来单位
@@ -559,8 +590,12 @@ export default {
       let obj = {
         fno: this.collectPayId,
         serviceId: this.reconciliationId,
-        startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
         orgId: this.model1,
         guestId: this.companyDealingsId
       };
@@ -594,6 +629,16 @@ export default {
     // 快速查询(日期)
     quickDate(data) {
       this.value = data;
+      let obj = {
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        orgId: this.model1
+      };
+      this.getcapitalAudit(obj);
     },
     // 往来单位
     Dealings() {
@@ -664,9 +709,16 @@ export default {
     },
     // 确认撤销
     confirmRemove() {
-      revokeBtn({id:this.row.id,remark:this.revokeReason,orgId:this.model1,guestId:this.row.guestId,fno:this.row.fno,serviceId:this.row.serviceId}).then(res=>{
-        console.log(res)
-      })
+      revokeBtn({
+        id: this.row.id,
+        remark: this.revokeReason,
+        orgId: this.model1,
+        guestId: this.row.guestId,
+        fno: this.row.fno,
+        serviceId: this.row.serviceId
+      }).then(res => {
+        console.log(res);
+      });
     }
   }
 };

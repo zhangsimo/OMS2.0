@@ -333,9 +333,13 @@ export const mixSelectPartCom  = {
         if(res.code  === 0){
           this.allList = res.data
         }
-
       })
-      console.log(val,789)
+    },
+
+    //关闭弹框事件
+    CancelModal(){
+      this.searchPartLayer = false;
+      this.allList = {}
     }
   }
 }

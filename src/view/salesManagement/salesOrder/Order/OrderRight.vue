@@ -258,6 +258,8 @@
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
+          :checkbox-config="{labelField: 'name', checkMethod}"
+          >
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -602,6 +604,10 @@ export default {
         });
       }
     },
+    //是否禁用
+    checkMethod(){
+      return this.draftShow == 0
+    },
     // 获取仓库
     async getWarehouse() {
       let res = await getWarehouseList({
@@ -681,9 +687,12 @@ export default {
           if (columnIndex === 0) {
             return "和值";
           }
-          if (["orderQty", "orderPrice"].includes(column.property)) {
+          if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
+          // if (["orderQty"].includes(column.property)) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 7) {
             return ` ${this.countAllPrice(data)} `;
           }

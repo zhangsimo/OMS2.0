@@ -257,8 +257,8 @@
           checkboxArr:[],// checkbox选中
           disSave: false, // 保存按钮是否禁用
              PTrow: {//新增当前行
-            new: true,
-            _highlight: true,
+                new: true,
+                _highlight: true,
                status: {"name":"草稿","value":0},
                guestName: '',
                createUname: '',
@@ -267,7 +267,7 @@
                // orderDate: tools.transTime(new Date()),
                printing: '',
                createTime: '',
-                detailVOS: [],
+               detailVOS: [],
           },
           //表单验证
           ruleValidate: {
@@ -400,7 +400,6 @@
       methods: {
         selectOption(date) {
           this.selectvalue = date.value
-          // console.log(this.selectvalue,'this.selectvalue ==>383')
         },
         getArrayParams() {
           var req = {};
@@ -409,7 +408,6 @@
           findForAllot(req).then(res => {
             const { content } = res.data;
             this.getArray = content;
-            // console.log(content,'content ==>390')
             content.forEach(item => {
               this.ArrayValue.push({value:item.id,label:item.fullName});
             });
@@ -418,11 +416,8 @@
         //删除配件
         Delete(){
           var set = this.checkboxArr.map(item=>item.partId)
-          // console.log(set)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
-         // console.log(resArr)
           this.Right.tbdata = resArr
-          // this.$Message.warning('删除成功！')
           let data = {}
            data.id = this.rowId
                     data.orgid = this.rowOrgId
@@ -472,8 +467,6 @@
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
-
-          // console.log(this.Left.tbdata)
         },
         // 调入仓库下拉改变事件
         selectStoreId(val){
@@ -499,7 +492,6 @@
         selectTabelData(){},
         //保存按钮
         SaveMsg(){
-          // console.log(this.datadata,'this.datadata =>482')
               this.$refs.formPlan.validate(async valid => {
                 if (valid) {
                   try {
@@ -526,20 +518,16 @@
 
                     var date = new Date()
                     var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-                    // console.log(dataTime)
                     var orderDateTime = this.formPlan.orderDate
                     var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-                    // console.log(orderTime,'orderDateTime')
                     if (orderTime < dataTime) {
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
                     var date = new Date()
                     var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-                    // console.log(dataTime)
                     var orderDateTime = this.formPlan.orderDate
                     var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-                    // console.log(orderTime,'orderDateTime')
                     if (orderTime < dataTime) {
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
@@ -615,7 +603,6 @@
         },
         // 全选
         selectAll(val){
-          // console.log(val)
           this.checkboxArr = val.selection
         },
         //分页
@@ -640,7 +627,6 @@
         },
         // 查询下拉框
         getDataQuick(v){
-          // console.log(v)
           this.selectArr = v
           this.leftgetList()
         },
@@ -672,17 +658,9 @@
         getMsg(msg){
           this.moreArr = msg
           this.leftgetList()
-          // console.log(msg)
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          // console.log(ChildMessage)
-        // let aaa =   ChildMessage.map(item => {
-        //   return{
-        //     name : item.baseType.firstType.typeName
-        //     }
-        //   })
-        //   console.log(aaa)
           let parts = ChildMessage.map( item => {
 
             return {
@@ -709,9 +687,7 @@
               isTight: !!item.isTightPart == true? 1:0,
             }
           })
-          // console.log(parts)
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          //console.log(this.Right.tbdata)
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
         },
         //编辑收货信息弹框显示
@@ -726,7 +702,6 @@
         },
         // 供应商子组件内容
         getSupplierName(a){
-          // console.log(a)
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
           this.formPlan.guestName = a.fullName
@@ -769,7 +744,6 @@
           }
           queryAll(params).then(res => {
             if(res.code === 0){
-              console.log(res.data.totalElements,'res.data.content =>772')
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
             }else {
@@ -779,14 +753,11 @@
         },
         roleChangeEvent({ row }, evnt) {
           // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-          // console.log(evnt,'evnt')
-          // console.log(evnt.target.value)
           // this.currentrow.storeId = evnt.target.value
         },
 
         // 左边部分的当前行
         selection(row){
-          // console.log(row,'row ==>764')
           if (row == null) return;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
@@ -858,7 +829,6 @@
               this.formPlan.serviceId = this.datadata.serviceId
               // this.guestidId = this
               this.presentrowMsg = row.status.value
-              // console.log(this.presentrowMsg)
               this.rowId = row.id
               this.buttonDisable = false
               this.getRightlist()
@@ -882,7 +852,6 @@
           queryByOrgid().then(res => {
               if(res.code === 0){
                 this.List = res.data
-                // console.log(res,'res==>837')
                  res.data.map(item => {
                    if(item.isDefault == true){
                      this.formPlan.storeId = item.id

@@ -717,8 +717,6 @@ export default {
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
-      // console.log(this.checkboxArr,'this.checkboxArr')
-      // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
       this.getList();
@@ -764,7 +762,6 @@ export default {
       }
       for (var i = 0; i < this.getArray.length; i++) {
         if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          // console.log(this.getArray[i], "this.getArray[i]");
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
@@ -806,11 +803,9 @@ export default {
     xinzeng() {
       this.flag1 = true;
       this.flagState = 1;
-      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
-      // this.Leftcurrentrow = {};
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
       this.Leftcurrentrow.createTime = "";
@@ -1024,7 +1019,6 @@ export default {
     //左边列表选中当前行
     async selectTabelData(row) {
       this.flagValue1 = 0;
-      // console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1058,7 +1052,6 @@ export default {
       } else {
         this.flagValue = 0;
       }
-      console.log();
       if (row.statuName != "草稿") {
         this.flagValue1 = 1;
       } else {
@@ -1078,7 +1071,6 @@ export default {
       }
       if (row.status.value === 1) {
         // this.tuneOut = false
-        // console.log(row.code);
       }
     },
     //打开添加配件模态框
@@ -1106,7 +1098,6 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        // console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
@@ -1125,25 +1116,13 @@ export default {
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
       let arr = [];
-      // console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
-        // this.checkboxArr.forEach(item => {
-        //   console.log(item.oemCode);
-        //   this.Leftcurrentrow.detailVOS.filter(itm => {
-        //     return itm.oemCode == item.oemCode;
-        //   });
-        // });
-
-        // let haveId = this.checkboxArr.filter(item => item.id);
-        // let NoId = this.checkboxArr.filter(item => !item.id);
         let NoIdPartCode = this.checkboxArr.map(item => item.partCode);
-        // let AddNoId = this.Leftcurrentrow.detailVOS.filter(item => !item.id);
         let NoRepeat = this.Leftcurrentrow.detailVOS.filter(
           item => !NoIdPartCode.includes(item.partCode)
         );
         setTimeout(() => {
           this.Leftcurrentrow.detailVOS = NoRepeat;
-          // console.log(this.Leftcurrentrow.detailVOS, "NoRepeat");
         }, 1000);
 
         seleList.map(item => {
@@ -1171,7 +1150,6 @@ export default {
         this.$Message.error("请选择要删除的配件!");
         return;
       }
-      // console.log(this.Leftcurrentrow.detailVOS, "this.checkboxArr");
     },
     //展示方
     showModel() {
@@ -1250,7 +1228,6 @@ export default {
       params = { ...params, ...this.form };
       delete params.status;
       delete params.guestName;
-      // console.log(params, "params");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

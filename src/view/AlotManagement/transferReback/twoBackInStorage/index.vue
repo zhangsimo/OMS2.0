@@ -359,7 +359,6 @@ export default {
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
-            // console.log(res, "res =>359");
             this.Left.page = res.data.pageable;
             this.Left.page.total = res.data.totalElements;
           } else if (res.code === 1) {
@@ -371,13 +370,6 @@ export default {
           this.$Message.info("初始化数据失败");
         });
     },
-    // //快速查询-时间
-    // getDataQuick(v) {
-    //   console.log(v)
-    //   this.params.selectDayType = v
-    //   this.getinfo(this.params)
-    // },
-    //time1
     getDataQuick(val) {
       this.form.createTimeStart = val[0];
       this.form.createTimeEnd = val[1];
@@ -440,20 +432,9 @@ export default {
         return;
       }
       this.$refs.printBox.openModal();
-      // stampDataList()
-      //   .then(res => {
-      //     console.log(res);
-      //     if (res.code === 0) {
-      //       this.$Message.info("打印成功");
-      //     }
-      //   })
-      //   .catch(err => {
-      //     this.$Message.info("打印失败");
-      //   });
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
-      // console.log(currentRow, "currentRow =>454");
       if (currentRow.status.name != "已入库") {
         this.flag = false;
       } else {
