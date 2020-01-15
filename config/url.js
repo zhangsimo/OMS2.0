@@ -71,7 +71,7 @@ const audit = {
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
-    "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileBase64",
+    "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFileNew",
   getFileApi: "https://uatoms2.g-part.cn.cn",
   downApi: "https://uatapi2.g-part.cn/gpart-oss-provider",
   omsTpApi: "https://uatapi2.g-part.cn/oms-thirdparty-provider"
