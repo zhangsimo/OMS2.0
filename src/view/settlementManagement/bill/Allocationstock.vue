@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company" />
+            <input type="text" class="h30" v-model="company" readonly />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -65,6 +65,7 @@
           show-summary
           :summary-method="handleSummary"
           highlight-row
+          max-height=500
           @on-row-click="election"
         ></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
@@ -403,6 +404,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.getTransferStock()
     },
     // 主表查询
     getTransferStock() {

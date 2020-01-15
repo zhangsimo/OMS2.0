@@ -18,10 +18,15 @@
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="form.billStatusId " class="w100 mr10" clearable>
+            <Select
+              @on-change="selectStatus"
+              v-model="form.billStatusId "
+              class="w100 mr10"
+              clearable
+            >
               <Option value="2" label="待入库"></Option>
-              <Option value="3" label="已入库"></Option>
-              <Option value="4" label="部分入库"></Option>
+              <Option value="4" label="已入库"></Option>
+              <Option value="3" label="部分入库"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -34,6 +39,7 @@
               placeholder="选择客户"
               filterable
               clearable
+              @on-change="selectOption"
             >
               <Option
                 v-for="item in customerListOptions"
@@ -109,7 +115,7 @@
             <Page
               :current="pageList.page+1"
               :total="pageList.total"
-              :page-size="pageList.size"
+              :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -183,8 +189,6 @@ export default {
       form: {
         auditStartDate: "",
         auditEndDate: "",
-        startDate: "",
-        endDate: "",
         billStatusId: "",
         serviceId: "",
         guestId: "",
@@ -198,7 +202,7 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        pageSize: 10,
+        pageSize: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
@@ -239,15 +243,27 @@ export default {
           this.$Message.info("拒绝失败");
         });
     },
+    selectOption() {
+      this.search();
+    },
     //time1
     getDataQuick(val) {
       this.form.auditStartDate = val[0];
       this.form.auditEndDate = val[1];
+      this.search()
     },
     //time2
     selectDate(val) {
-      this.form.auditStartDate = val[0] + " " + "00:00:00";
-      this.form.auditEndDate = val[1] + " " + "23:59:59";
+      if (val[0] != "") {
+        this.form.auditStartDate = val[0] + " " + "00:00:00";
+        this.form.auditEndDate = val[1] + " " + "23:59:59";
+      } else {
+        this.form.auditStartDate = "";
+        this.form.auditEndDate = "";
+      }
+    },
+    selectStatus() {
+      this.search();
     },
     //搜索
     search() {

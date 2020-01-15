@@ -795,8 +795,8 @@ export default {
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await baocun(this.formPlan);
-
             if (res.code === 0) {
+              this.$parent.$parent.$refs.leftorder.flag = 0
               this.$Message.success("保存成功");
               const id = this.formPlan.id;
               const ldata = await this.$parent.$parent.$refs.leftorder.getList();
@@ -805,9 +805,12 @@ export default {
                   this.formPlan = item;
                 }
               });
+              this.leftOneOrder = this.formPlan
+              this.getAllLimit()
               this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
                 this.formPlan
               );
+              
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
               // this.formPlan = {};

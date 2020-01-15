@@ -275,7 +275,6 @@ export default {
       findForAllot(params)
         .then(res => {
           if (res.code == 0) {
-            // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.orgid,
@@ -290,10 +289,8 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
-              console.log(this.storeArray, "this.storeArray ==>298");
             });
           }
         })
@@ -316,14 +313,8 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
             this.TopTableData = res.data.content || [];
-            // console.log(this.TopTableData, "this.TopTableData ==>323");
-            // for (var i = 0; i < this.TopTableData.length; i++) {
-            //   this.TopTableData[i]["storeIdValue"] = "受理默认仓库";
-            // }
             this.pageList.total = res.totalElements;
-            // console.log(this.TopTableData, "this.TopTableData");
             for (var i = 0; i < this.TopTableData.length; i++) {
               this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             }
@@ -401,7 +392,6 @@ export default {
       this.$Message.info("点击了取消");
     },
     shouli(row, index) {
-      // console.log(row, "row=>407");
       this.currentrow = row;
       if (index === 2) {
         this.modal1 = true;
@@ -412,7 +402,6 @@ export default {
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       this.currentrow.defaultValue = evnt.target.value;
-      // console.log(evnt.target.value);
     }
   }
 };

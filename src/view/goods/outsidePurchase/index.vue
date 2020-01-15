@@ -410,7 +410,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="carBrand"
+                  field="carModelName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
@@ -420,7 +420,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="oeCode"
+                  field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>

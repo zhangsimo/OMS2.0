@@ -534,7 +534,6 @@ export default {
   methods: {
     getArray(data) {
       this.ArrayValue = data;
-      // console.log(data, "data==>535");
       // this.Leftcurrentrow.detailVOS = data;
     },
     getArrayParams() {
@@ -547,7 +546,6 @@ export default {
         content.forEach(item => {
           this.ArrayValue1.push(item.fullName);
         });
-        // console.log(this.ArrayValue1, "req =>542");
       });
     },
     warehouse() {
@@ -592,7 +590,6 @@ export default {
           }
         }
       }
-      // console.log(this.ArrayValue, "this.ArrayValue ==>585");
       if (
         !this.Leftcurrentrow.storeId ||
         !this.Leftcurrentrow.createTime ||
@@ -616,15 +613,8 @@ export default {
       if (params.xinzeng) {
         delete params.status;
       }
-
-      // console.log(
-      //   this.Leftcurrentrow.guestName,
-      //   "this.Leftcurrentrow.guestName"
-      // );
       for (var i = 0; i < this.getArray.length; i++) {
         if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          // console.log(this.getArray[i].fullName, "this.getArray[i].fullName");
-          // console.log(this.getArray[i], "this.getArray[i]");
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
@@ -633,7 +623,6 @@ export default {
       if (params.status && params.status.name) {
         params.status = params.status.value;
       }
-      //console.log(params.orderTypeId);
       if (params.orderTypeId && params.orderTypeId.name) {
         params.orderTypeId = params.orderTypeId.value;
       }
@@ -738,8 +727,6 @@ export default {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
-            // console.log(this.tableData1, "this.tableData1");
-            // this.$Message.success("获取成品列表成功");
           }
         })
         .catch(e => {
@@ -777,7 +764,6 @@ export default {
     searchPro(params, size, page) {
       chengping({ ...params }, size, page)
         .then(res => {
-          // console.log(res, "res =>754");
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
             this.tableData1 = res.data.content;
@@ -807,7 +793,6 @@ export default {
       });
     },
     getDataQuick(v) {
-      // console.log(v, "v");
       const params = {
         createTimeStart: v[0],
         createTimeEnd: v[1]
@@ -824,7 +809,6 @@ export default {
       this.Leftcurrentrow = row;
       this.Status = row.status.value;
       this.Leftcurrentrow.storeId = row.storeId;
-      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow ==>776");
       if (row.id == undefined) {
         this.ArrayValue = row.detailVOS;
       } else {
@@ -849,7 +833,6 @@ export default {
             });
             // this.cangkuListall = res.data
             this.dcData = res.data;
-            // console.log(this.dcData);
           }
         })
         .catch(e => {
@@ -909,7 +892,6 @@ export default {
       }
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
-      //console.log(seleList);
       const id = seleList[0].id;
       shanqu(id)
         .then(res => {
@@ -937,16 +919,12 @@ export default {
     },
     showModel3(val) {
       this.val = val;
-      //console.log(val);
       this.$refs.selectSupplier.init();
     },
     //选择方
     selectSupplierName(row) {
-      // console.log(row, "row==>891");
       row.fullName;
-      //console.log(row);
       if (this.val === "0") {
-        //console.log(row.fullName);
         this.showit = false;
         this.Leftcurrentrow.guestName = row.fullName;
         this.Leftcurrentrow.guestId = row.id;
@@ -957,13 +935,10 @@ export default {
       } else {
         this.Leftcurrentrow.guestName = row.fullName;
         this.diaochuName = row.fullName;
-        //console.log(row.id);
         this.diaochuID = row.id;
       }
     },
     getOkList(list) {
-      // console.log(list, "list");
-      // console.log(this.ArrayValue, "this.ArrayValue  = 956");
       this.codeValue = list.id;
       const item = {
         index: 1,
@@ -991,7 +966,6 @@ export default {
       for (var i = 0; i < this.ArrayValue.length; i++) {
         this.ArrayValue[i].hasInQty = this.ArrayValue[i].hasOutQty;
       }
-      // console.log(this.ArrayValue, "this.ArrayValue ==>980");
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -1008,7 +982,6 @@ export default {
       } else {
         delete params.qucikTime;
       }
-      //console.log(params);
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

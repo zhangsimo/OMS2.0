@@ -544,7 +544,7 @@ export default {
     },
     //新增
     addNew() {
-      if (!this.legtTableData.hasOwnProperty('guestId') || this.legtTableData[0].guestId) {
+      if (!this.legtTableData[0].hasOwnProperty('guestId') || this.legtTableData[0].guestId) {
         this.formPlan = {
           billStatusValue: 0,
           billStatusName: '草稿',

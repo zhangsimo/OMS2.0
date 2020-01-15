@@ -337,7 +337,6 @@ export default {
       this.modal1 = true;
     },
     currentChangeEvent({ row }) {
-      //console.log(row, "row");
       if (row.partCode) {
         this.formItem = row;
         this.rowStatus = row;
@@ -353,7 +352,6 @@ export default {
       };
       shenqingdanliebiao(params)
         .then(res => {
-          //console.log(this.BottomTableData, "this.BottomTableData =>352");
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
           }
