@@ -168,7 +168,7 @@
                       <DatePicker
                         disabled
                         @on-change="changeDate"
-                        :value="Leftcurrentrow.createTime"
+                        v-model="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
                         class="w160"
@@ -815,6 +815,9 @@ export default {
       this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
       this.buttonShow = false;
       this.tuneOut = false;
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -823,9 +826,6 @@ export default {
         }
       }
       this.flag = 1;
-      this.Leftcurrentrow.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
       this.Leftcurrentrow.statuName = "草稿";
       const item = {
         new: true,
