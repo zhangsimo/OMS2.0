@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <input type="text" class="h30" :value="companyDealings" />
+            <input type="text" class="h30" :value="companyDealings" readonly/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db ml20">

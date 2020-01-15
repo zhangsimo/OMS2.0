@@ -985,18 +985,20 @@ export default {
     },
     // 点击总表查询明细
     morevis(row, index) {
-      this.falg = true;
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       // console.log(row.id)
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });
-      approvalStatus({ instanceId: row.id }).then(res => {
-        if (res.code == "0") {
-          this.statusData = res.data.operationRecords;
-        }
-      });
+      if(row.processInstance) {
+        approvalStatus({ instanceId: row.processInstance }).then(res => {
+          if (res.code == "0") {
+            this.falg = true;
+            this.statusData = res.data.operationRecords;
+          }
+        });
+      } 
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;
