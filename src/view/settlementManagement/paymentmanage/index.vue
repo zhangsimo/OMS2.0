@@ -992,6 +992,8 @@ export default {
     },
     // 更多条件查询
     senior() {
+      this.data1 = [];
+      this.data2 = [];
       let obj = {
         orgId: this.model1,
         startDate: this.value[0]

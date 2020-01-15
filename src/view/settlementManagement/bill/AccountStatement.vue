@@ -407,6 +407,10 @@ export default {
       ],
       Reconciliationlist: [
         {
+          value: "",
+          label: "全部"
+        },
+        {
           value: "CG",
           label: "草稿"
         },
