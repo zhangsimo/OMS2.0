@@ -121,7 +121,21 @@
                     </Select>
                   </FormItem>
                   <FormItem label="盘点员：" prop="orderMan">
-                    <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" />
+                    <Select
+                      :value="formPlan.orderManId"
+                      @on-change="selectOrderMan"
+                      filterable
+                      style="width: 240px"
+                      :disabled="draftShow != 0"
+                      label-in-value
+                    >
+                      <Option
+                        v-for="item in salesList"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.label }}</Option>
+                    </Select>
+                    <!-- <Input v-model="formPlan.orderMan" value="半成品" :disabled="draftShow != 0" /> -->
                   </FormItem>
                   <FormItem label="盘点日期" prop="checkDate">
                     <DatePicker
@@ -175,7 +189,7 @@
                       :action="upurl"
                       :format="['xlsx', 'xls', 'csv']"
                       :before-upload="handleBeforeUpload"
-                        :on-format-error="onFormatError"
+                      :on-format-error="onFormatError"
                       :on-success="handleSuccess"
                       :disabled="draftShow != 0"
                     >
@@ -291,6 +305,7 @@ import {
   stampDataList,
   stampApplyDataList
 } from "../../../../api/inventory/salesList";
+import { getSales } from "@/api/salesManagment/salesOrder";
 import "../../../lease/product/lease.less";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import QuickDate from "../../../../components/getDate/dateget";
@@ -312,6 +327,7 @@ export default {
   },
   data() {
     return {
+      salesList: [], //盘点员列表
       dis: false,
       split1: 0.2,
       tabIndex: 0,
@@ -478,15 +494,24 @@ export default {
   },
   created() {
     this.getList();
-  },
-  watch: {
-    purchaseType: function(val, old) {
-      this.Left.page.num = 1;
-      this.Left.page.size = 10;
-      this.getList();
-    }
+    this.getAllSales();
   },
   methods: {
+    //获取销售员
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.map(item => {
+          item.label = item.userName;
+        });
+      }
+    },
+    //获取销售员
+    selectOrderMan(val) {
+      this.formPlan.orderMan = val ? (val.label ? val.label : "") : "";
+      this.formPlan.orderManId = val ? (val.value ? val.value : "") : "";
+    },
     editActivedEvent({ row }) {
       this.dis = this.formPlan.billStatusId
         ? this.formPlan.billStatusId.value === 0
@@ -516,7 +541,6 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.purchaseType;
-
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size)
@@ -612,7 +636,7 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate: '',
+        checkDate: "",
         orderMan: "",
         serviceId: "",
         print: "",
@@ -624,12 +648,12 @@ export default {
         //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         //createUname: this.$store.state.user.userData.staffName,
         detailVOList: [],
-        _highlight:true
+        _highlight: true
       };
-      this.draftShow = 0
-      this.formPlan = item
-      this.Right.tbdata = []
-     let  newItem = JSON.parse(JSON.stringify(item))
+      this.draftShow = 0;
+      this.formPlan = item;
+      this.Right.tbdata = [];
+      let newItem = JSON.parse(JSON.stringify(item));
       this.Left.tbdata.unshift(newItem);
       this.flag = 1;
       this.Left.tbdata.map((item, index) => {
@@ -712,10 +736,10 @@ export default {
                 this.$Message.success("保存成功");
                 this.getList();
               }
+              this.handleReset();
               // else{
               //   this.formPlan.checkDate = preTime;
               // }
-              this.handleReset();
             });
           } else {
             this.$message.error("带*必填");
@@ -780,7 +804,7 @@ export default {
       this.$refs.SelectPartRef.init();
     },
     //左边列表选中当前行
-    selectTabelData(data,val) {
+    selectTabelData(data, val) {
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -794,12 +818,20 @@ export default {
         });
         return;
       }
+      this.salesList.map(item => {
+        if (item.label === data.createUname) {
+          data.orderManId = item.id;
+        }
+      });
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;
     },
     shanchu() {
-      if (this.formPlan.hasOwnProperty('billStatusId')&&this.formPlan.billStatusId.value !== 0) {
+      if (
+        this.formPlan.hasOwnProperty("billStatusId") &&
+        this.formPlan.billStatusId.value !== 0
+      ) {
         this.$Message.info("只有草稿状态才能进行删除操作");
         return;
       }
@@ -810,8 +842,10 @@ export default {
         ids.push(item.id);
       });
       // console.log(this.formPlan)
-      this.Right.tbdata = this.Right.tbdata.filter(item=>!seleList.includes(item))
-      if(!ids[0]) return
+      this.Right.tbdata = this.Right.tbdata.filter(
+        item => !seleList.includes(item)
+      );
+      if (!ids[0]) return;
       // this.array_diff(this.Right.tbdata, seleList);
       this.Left.tbdata.map((item, index) => {
         if (item.id === this.formPlan.id) {
@@ -842,10 +876,10 @@ export default {
     //     self.$Message.error(res.message);
     //   }
     // },
-    onFormatError(file){
-         this.$Message.error("只支持xls xlsx后缀的文件");
+    onFormatError(file) {
+      this.$Message.error("只支持xls xlsx后缀的文件");
     },
-    handleSuccess(response){
+    handleSuccess(response) {
       if (response.code == 0) {
         let txt = "上传成功";
         if (response.data.length > 0) {
@@ -902,10 +936,10 @@ export default {
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
     //改变时间类型
-    dateType(){
+    dateType() {
       // this.formPlan.checkDate=moment(this.formPlan.checkDate).format(
       //   "YYYY-MM-DD HH:mm:ss")
-    // console.log( this.formPlan.checkDate)
+      // console.log( this.formPlan.checkDate)
     },
     //footer计算
     addFooter() {},
@@ -932,10 +966,12 @@ export default {
       this.getDomHeight();
     };
   },
-  watch:{
-        formPlan: {
-      handler(val, old) {
-        // console.log(val, old)
+  watch: {
+    purchaseType: {
+      handler(newVal) {
+        this.Left.page.num = 1;
+        this.Left.page.size = 10;
+        this.getList();
       },
       deep: true
     }
