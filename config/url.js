@@ -4,11 +4,11 @@ const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
   omsApi: "http://192.168.30.179:9240", //徐林烽
   wmsApi: "http://192.168.30.179:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
-  omsStore: "http://192.168.30.16:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.16:9200",
+  omsOrder: "http://192.168.30.179:9210", // 徐林烽
+  omsStore: "http://192.168.30.179:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.179:9200",
   // omsOrder:'http://192.168.30.221:9210', //陈舒
-  omsSettle: "http://192.168.30.16:9270",
+  omsSettle: "http://192.168.30.179:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -22,7 +22,7 @@ const dev = {
   omsSotck: "http://192.168.30.179:9280", //9280
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
-  upbase64Api: "http://192.168.30.179:5100/file/uploadFileBase64",
+  upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
   getFileApi: "https://devoms2.g-parts.cn",
   downApi: "http://api2.g-parts.cn/gpart-oss-provider",
   passportApi: "http://192.168.2.47:5200", // passport微服务API
@@ -48,7 +48,7 @@ const test = {
   uploadApi:
     "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFile",
   upbase64Api:
-    "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileBase64",
+    "https://tsapi2.g-parts.cn/gpart-essential-provider/file/uploadFileNew",
   getFileApi: "https://tsoms2.g-parts.cn",
   downApi: "https://tsapi2.g-parts.cn/gpart-oss-provider",
   omsTpApi: "https://tsapi2.g-parts.cn/oms-thirdparty-provider"
