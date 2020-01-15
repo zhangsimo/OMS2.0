@@ -61,12 +61,12 @@
           </div>
           <div class="tabs-warp" v-show="tabIndex == 0">
             <div class="btns-warp">
-              <Input
+              <!-- <Input
                 v-model="customer.pinyin"
                 placeholder="请输入拼音"
                 style="width: 140px;"
                 class="mr10"
-              />
+              /> -->
               <Input
                 v-model="customer.fullname"
                 placeholder="请输入全称"
