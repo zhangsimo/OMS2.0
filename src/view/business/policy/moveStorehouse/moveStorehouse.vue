@@ -141,11 +141,25 @@
                     </Select>
                   </FormItem>
                   <FormItem label="业务员：" prop="createUname">
-                    <Input
+                    <Select
+                      :value="Leftcurrentrow.createUnameId"
+                      @on-change="selectOrderMan"
+                      filterable
+                      style="width: 240px"
+                      :disabled="Leftcurrentrow.status.value !== 0"
+                      label-in-value
+                    >
+                      <Option
+                        v-for="item in salesList"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.label }}</Option>
+                    </Select>
+                    <!-- <Input
                       v-model="Leftcurrentrow.createUname"
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
-                    />
+                    />-->
                   </FormItem>
                   <FormItem label="移仓日期" prop="commitDate">
                     <DatePicker
@@ -273,6 +287,7 @@ import PrintShow from "./components/PrintShow";
 import More from "./components/More";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
+import {getSales} from "@/api/salesManagment/salesOrder";
 export default {
   name: "moveStorehouse",
   components: {
@@ -283,6 +298,7 @@ export default {
   },
   data() {
     return {
+      salesList: [], //业务员列表
       flag: 0,
       numberValue: "",
       mainid: "",
@@ -500,11 +516,27 @@ export default {
   },
   created() {
     this.getList();
+    this.getAllSales();
   },
   methods: {
+    //获取销售员
+    selectOrderMan(val) {
+      this.Leftcurrentrow.createUname = val ? val.label ? val.label : '':'';
+      this.Leftcurrentrow.createUnameId = val ? val.value ? val.value : '':'';
+    },
+    //获取销售员
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.map(item => {
+          item.label = item.userName;
+        });
+      }
+    },
     // 禁用选中
     checkMethod({ row }) {
-      return this.Leftcurrentrow.status.value === 0
+      return this.Leftcurrentrow.status.value === 0;
     },
     numChangeEvent({ row }, evnt) {
       this.numberValue = evnt.target.value;
@@ -798,6 +830,11 @@ export default {
         });
         return;
       }
+      this.salesList.map(item=>{
+        if(item.label===row.createUname) {
+          row.createUnameId = item.id
+        }
+      })
       this.Leftcurrentrow = row;
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
