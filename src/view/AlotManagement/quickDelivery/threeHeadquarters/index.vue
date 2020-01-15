@@ -24,7 +24,7 @@
             </Select>
           </div>
           <div class="db mr10">
-            <Input v-model="form.serviceId" placeholder="受理单号" style="width: 160px" class="mr10"></Input>
+            <Input v-model="form.serviceId" placeholder="调拨出库单号" style="width: 160px" class="mr10"></Input>
           </div>
           <div class="db mr10">
             <Input v-model="form.partCode" placeholder="配件编码" style="width: 160px" class="mr10"></Input>

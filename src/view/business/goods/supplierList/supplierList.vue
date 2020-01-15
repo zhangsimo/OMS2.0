@@ -100,7 +100,7 @@
                     <FormItem label="备注：" prop="remark">
                       <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
-                    <FormItem label="退货仓库：" prop="planner">
+                    <FormItem label="退货仓库：" prop="warehouse">
                       <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.warehouse">
                         <Option v-for="item in inStores" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
@@ -252,7 +252,8 @@
           storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'change' }],
           // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
           cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'change' }],
-          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }]
+          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }],
+          warehouse:[{required: true, type: 'string',message: '请选择退货仓库', trigger: 'change'}]
         },
         datadata: null,
         rowId:'', //当前行的id
@@ -571,6 +572,9 @@
       },
       //选择采购入库单
       getPlanOrder(Msg){
+        // console.log(Msg);
+        this.formPlan.warehouse = Msg.storeId
+        console.log(this.formPlan.warehouse)
         let arr = Msg.details || []
         arr.map(item => {
           item.outUnitId = item.unit

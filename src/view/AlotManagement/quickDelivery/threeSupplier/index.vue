@@ -183,8 +183,6 @@ export default {
       form: {
         auditStartDate: "",
         auditEndDate: "",
-        startDate: "",
-        endDate: "",
         billStatusId: "",
         serviceId: "",
         guestId: "",
@@ -241,8 +239,14 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      this.form.auditStartDate = val[0];
-      this.form.auditEndDate = val[1];
+      if(val.length > 0){
+        this.form.auditStartDate = val[0];
+        this.form.auditEndDate = val[1];
+        this.search(this.form)
+      }else{
+        this.form.auditStartDate = '';
+        this.form.auditEndDate = '';
+      }
     },
     //time2
     selectDate(val) {
