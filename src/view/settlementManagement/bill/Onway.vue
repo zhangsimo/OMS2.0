@@ -291,6 +291,7 @@ export default {
     // 快速查询
     quickDate(data){
       this.value = data
+      this.getGeneral()
     },
     Dealings() {
       this.$refs.selectDealings.init()
