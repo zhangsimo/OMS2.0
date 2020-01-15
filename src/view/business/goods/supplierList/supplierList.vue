@@ -562,13 +562,18 @@
       selecQuery(){
         let req = {}
         getSupplierList(req).then(res => {
-          this.ArraySelect = res.data||[];
+          if(res.code === 0){
+            this.ArraySelect = res.data||[];
+            // console.log(this.ArraySelect)
+          }
         })
       },
       //供应商下拉框发生改变
       SelectGuest(val){
-        // console.log(val)
         this.guestidId = val
+        let SameId = this.ArraySelect.filter(item => item.id === val)
+        // console.log(SameId[0].settTypeId)
+        this.formPlan.clearing = SameId[0].settTypeId
       },
       //选择采购入库单
       getPlanOrder(Msg){
