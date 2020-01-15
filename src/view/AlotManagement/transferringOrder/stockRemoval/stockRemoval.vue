@@ -808,7 +808,6 @@ export default {
       this.buttonDisable = 0;
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
