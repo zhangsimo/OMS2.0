@@ -768,11 +768,12 @@ export default {
       data.partIds = [val.id];
       data.type = 2;
       data.details = [val];
+      this.save()
       //console.log("dianjiafasong");
-      let res = await baocun(data);
-      if (res.code === 0) {
-        this.getList();
-      }
+      // let res = await baocun(data);
+      // if (res.code === 0) {
+      //   this.getList();
+      // }
     },
     //打开查看模态框
     openFileModal(row) {
