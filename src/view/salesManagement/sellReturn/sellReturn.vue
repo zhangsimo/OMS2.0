@@ -227,7 +227,7 @@
                       :edit-render="{name: 'input',attrs: {disabled: false}}"
                     />
                   </FormItem>
-                  <FormItem label="交货仓库：" prop="storeId">
+                  <FormItem label="入库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
                       style="width:200px"

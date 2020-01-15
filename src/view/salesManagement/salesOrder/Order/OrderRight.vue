@@ -553,6 +553,7 @@ export default {
     },
     //改变客户
     async changeClient(value) {
+      console.log(value)
       if (!value) {
         return false;
       }
@@ -935,6 +936,8 @@ export default {
       this.$set(this.formPlan, "fullName", val.fullName);
       this.$set(this.formPlan, "billTypeId", val.billTypeId);
       this.$set(this.formPlan, "settleTypeId", val.settTypeId);
+      this.leftOneOrder.guestId = val.id
+      this.getAllLimit()
     },
     //判断表格能不能编辑
     editActivedEvent({ row }) {

@@ -15,7 +15,16 @@
          >
           <vxe-table-column type="index" title="序号" width="50"></vxe-table-column>
           <vxe-table-column field="strategyName" title="级别名称"></vxe-table-column>
-          <vxe-table-column field="sellPrice" title="级别销价" ></vxe-table-column>
+          <vxe-table-column title="级别销价" >
+            <template v-slot="{ row }">
+              <el-input-number
+                v-model="row.sellPrice"
+                :controls="false"
+                size="small"
+                :precision="2"
+              />
+              </template>
+          </vxe-table-column>
           <vxe-table-column field="updateName" title="更新人" ></vxe-table-column>
           <vxe-table-column field="updateTime" title="更新日期" ></vxe-table-column>
         </vxe-table>
