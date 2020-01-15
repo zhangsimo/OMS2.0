@@ -221,12 +221,12 @@
                     {
                         title:'创建单位',
                         align: 'center',
-                        key:'createUname'
+                        key:'orgName'
                     },
                     {
                         title:'创建人',
                         align: 'center',
-                        key:'createUid'
+                        key:'createUname'
                         // key: 'createUname'
                     },
                     {
