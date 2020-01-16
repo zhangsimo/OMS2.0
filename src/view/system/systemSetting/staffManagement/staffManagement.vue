@@ -684,8 +684,6 @@ export default {
   input {
     height: 25px;
   }
-  .mr20 {
-  }
 }
 .companyList2 {
   margin-bottom: 10px;
