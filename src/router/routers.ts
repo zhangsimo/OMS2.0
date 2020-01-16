@@ -1838,16 +1838,16 @@ export default [
         },
         component: () => import("@/view/lease/order/orderlist.vue")
       },
-      // {
-      //   path: "/lease/tenantres",
-      //   name: "tenantRes",
-      //   mark: '8104',
-      //   meta: {
-      //     icon: "gear-b",
-      //     title: "租户资源"
-      //   },
-      //   component: () => import("@/view/lease/tenantres/tenantres.vue")
-      // },
+      {
+        path: "/lease/tenantres",
+        name: "tenantRes",
+        mark: '8104',
+        meta: {
+          icon: "gear-b",
+          title: "租户资源"
+        },
+        component: () => import("@/view/lease/tenantres/tenantres.vue")
+      },
       {
         path: "/lease/FeedbackManagementOne",
         name: "FeedbackManagementOne",
@@ -1966,27 +1966,27 @@ export default [
         },
         component: () => import('@/view/admin/group/group.vue')
       },
-      // {
-      //   path: '/auth/role',
-      //   name: 'role',
-      //   // mark: '10003',
-      //   meta: {
-      //     icon: 'arrow-graph-up-right',
-      //     title: '角色管理',
-      //     // access: ['admin', 'auth_staff']
-      //   },
-      //   component: () => import('@/view/admin/roles/roles.vue')
-      // },
-      // {
-      //   path: '/auth/lessee',
-      //   name: 'authLessee',
-      //   mark: '10005',
-      //   meta: {
-      //     icon: 'arrow-graph-up-right',
-      //     title: '租户模板',
-      //   },
-      //   component: () => import('@/view/admin/lessee/lessee.vue')
-      // },
+      {
+        path: '/auth/role',
+        name: 'role',
+        mark: '10003',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '角色管理',
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import('@/view/admin/roles/roles.vue')
+      },
+      {
+        path: '/auth/lessee',
+        name: 'authLessee',
+        mark: '10005',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '租户模板',
+        },
+        component: () => import('@/view/admin/lessee/lessee.vue')
+      },
       {
         path: '/auth/resource',
         name: 'resource',
