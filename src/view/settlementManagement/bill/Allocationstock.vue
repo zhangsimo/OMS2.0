@@ -292,7 +292,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getTransferStock();
+    const res = await this.getTransferStock();
   },
   methods: {
     // 日期选择
@@ -404,6 +404,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.model1 = this.$store.state.user.userData.shopId
       this.getTransferStock()
     },
     // 主表查询
@@ -457,7 +458,6 @@ export default {
     // 选中数据
     election(row) {
       stockParts({ mainId: row.id }).then(res => {
-        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
