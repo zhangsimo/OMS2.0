@@ -26,7 +26,7 @@
                 <Button @click="changeModelFun" type="default" class="mr10 w90" v-has="'changeLedt'"><i class="iconfont mr5 iconbianjixiugaiicon"></i>修改</Button>
               </div>
               <div class="data-dic-wrap">
-                <Tree @on-check-change="checkChange" :data="treeData"  multiple></Tree>
+                <Tree :data="treeData"></Tree>
               </div>
             </div>
           </div>
