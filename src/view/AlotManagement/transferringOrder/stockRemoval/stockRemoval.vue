@@ -682,7 +682,6 @@ export default {
       this.Leftcurrentrow.detailVOS = allArr;
 
       // var arrSet = this.Leftcurrentrow.detailVOS;
-      // console.log(arrSet, "arrSet==606");
       // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
       //   var flag = true;
       //   for (var j = 0; j < allArr.length; j++) {
@@ -766,6 +765,7 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      params.createTime = moment(this.Leftcurrentrow.createTime).format("YYYY-MM-DD HH:mm:ss")
       if (this.flag1 == true) {
         params.id = "";
       }
