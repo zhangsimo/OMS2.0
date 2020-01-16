@@ -600,7 +600,6 @@ export default {
       this.getLookCompany();
     },
     getOneCliemt(val) {
-      console.log(val);
       this.oneCliemt = val;
     },
     //删除兼职公司
@@ -613,7 +612,6 @@ export default {
       data.id = this.oneStaffChange.id;
       data.companyList = "(" + this.oneCliemt.id + ")";
       let res = await setCliemt(data);
-      console.log(res);
       if (res.code === 0) {
         this.page2.num = 1;
         this.getLookCompany();
