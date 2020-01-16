@@ -29,12 +29,18 @@
               </Button>
             </div>
             <div class="db">
-              <Button type="default" v-has="'save'" class="mr10" @click="baocun1">
+              <Button
+                type="default"
+                :disabled="this.remarkStatus"
+                v-has="'save'"
+                class="mr10"
+                @click="baocun1"
+              >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" v-has="'submit'" @click="tijiao1">
+              <Button class="mr10" :disabled="this.remarkStatus" v-has="'submit'" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -44,7 +50,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
+              <Button
+                :disabled="this.remarkStatus"
+                v-has="'cancellation'"
+                class="mr10"
+                @click="zuofei1"
+              >
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
@@ -121,7 +132,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select v-model="Leftcurrentrow.storeId">
+                          <Select :disabled="this.remarkStatus" v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -203,7 +214,7 @@
                     width="100"
                   ></vxe-table-column>
                   <vxe-table-column
-                    field="orderQty"
+                    field="remark"
                     :edit-render="{name: 'input'}"
                     title="备注"
                     width="100"
