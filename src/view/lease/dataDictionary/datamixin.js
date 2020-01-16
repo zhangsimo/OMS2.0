@@ -106,9 +106,9 @@ export const dataMixin = {
     }
   },
   methods:{
-    checkChange(v){
-      console.log(v)
-    },
+    // checkChange(v){
+    //   // console.log(v)
+    // },
     selectTreeData(v){
       this.selectTreeItem = v
       // if(v.children&&v.children.length>=0){
