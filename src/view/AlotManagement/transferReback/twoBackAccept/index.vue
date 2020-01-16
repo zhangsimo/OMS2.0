@@ -129,13 +129,13 @@
         <p>
           <Icon type="information"></Icon>受理成功, 已生成调出退回单
         </p>
-        <span class="courier">
+        <span style="width:300px" class="courier">
           <input
             type="text"
             readonly
             v-model="danhao"
             id="danhao"
-            style="border:none;background-color: #ffff"
+            style="border:none;background-color: #ffff;width:200px"
           />
         </span>
         <span class="sp1" @click="copy">复制单号</span>
