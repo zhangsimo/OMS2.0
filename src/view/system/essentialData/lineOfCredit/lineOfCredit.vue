@@ -137,16 +137,8 @@ export default {
         }
       ],
       staffList: [],
-      Date: {
-        startTime: "",
-        endTime: ""
-      },
-      queryDate: {
-        startTime: "",
-        endTime: ""
-      },
       thisdata: [],
-      dateVal: null
+      dateVal: []
     };
   },
   created() {
@@ -166,13 +158,12 @@ export default {
     //   }
     // },
     getTable() {
-      // console.log(this.$refs)
       let data = {};
       if (this.thisdata) {
         data.startTime = this.thisdata[0];
         data.endTime = this.thisdata[1];
       }
-      if (this.dateVal !== null) {
+      if (this.dateVal[0]) {
         data.startTime = this.dateVal[0] + " " + "00:00:00";
         data.endTime = this.dateVal[1] + " " + "23:59:59";
       }
@@ -193,10 +184,7 @@ export default {
       // this.getTable(this.Date)
     },
     getDate(val) {
-      // console.log(val)
       this.dateVal = val;
-      this.queryDate.startTime = val[0] + " " + "00:00:00";
-      this.queryDate.endTime = val[1] + " " + "23:59:59";
     },
     query() {
       this.getTable();

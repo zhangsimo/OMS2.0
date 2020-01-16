@@ -40,7 +40,7 @@
         </div>
         <div slot="right" class="right-warp tab-warp">
           <div class="db right ml10 btn-title">
-            <Input v-model="tenantID" placeholder="租户ID" style="width: 140px;" class="mr10" />
+            <Input v-model="tenantID" placeholder="租户ID" style="width: 200px;" class="mr10" />
 <!--            <Input v-model="resID" placeholder="资源ID" style="width: 140px;" class="mr10" />-->
             <Button class="mr10 w90" @click="qureyTable">
               <span class="center">

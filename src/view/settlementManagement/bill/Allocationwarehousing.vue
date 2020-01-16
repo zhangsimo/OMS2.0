@@ -386,6 +386,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.model1 = this.$store.state.user.userData.shopId
       this.getTransferWarehousing();
     },
     // 往来单位
