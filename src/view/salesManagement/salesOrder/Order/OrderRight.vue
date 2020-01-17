@@ -543,6 +543,7 @@ export default {
     },
     //获取客户额度
     async getAllLimit() {
+      // alert(1)
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
       data.id = this.leftOneOrder?this.leftOneOrder.id:''
@@ -686,7 +687,7 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return "和计";
+            return "合计";
           }
           if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);

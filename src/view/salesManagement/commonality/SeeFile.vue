@@ -18,7 +18,7 @@
           <vxe-table-column title="级别销价" >
             <template v-slot="{ row }">
               <el-input-number
-                disabled
+                :disabled="true"
                 v-model="row.sellPrice"
                 :controls="false"
                 size="small"

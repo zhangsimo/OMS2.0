@@ -149,7 +149,8 @@ export default {
     },
     //修改客户分类
     changeClient() {
-      if (Object.keys(this.newOne).length == 0) {
+      // console.log(this.newOne)
+      if (!this.newOne.hasOwnProperty('id')) {
         this.$Message.error("至少选择一种客户分类");
         return false;
       }
