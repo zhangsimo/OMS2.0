@@ -273,6 +273,7 @@ export default {
     getCredit() {
       getCreditApprovalTable({adjustType:0}).then(res => {
         if (res.code === 0) {
+          this.creditData = {}
           this.creditList = res.data;
         }
       });
@@ -289,6 +290,7 @@ export default {
       this.dateList.adjustType = 0
       conditionalQuery(this.dateList).then(res => {
         if (res.code === 0) {
+          this.creditData = {}
           this.creditList = res.data;
         }
       });
