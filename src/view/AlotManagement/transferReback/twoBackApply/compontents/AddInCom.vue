@@ -54,8 +54,8 @@
       <!--上表格-->
       <div class="topTableDate">
         <vxe-table
+          auto-resize
           border
-          stripe
           resizable
           ref="xtale"
           size="mini"
@@ -63,10 +63,11 @@
           align="center"
           :data="tabList"
           highlight-current-row
+          highlight-hover-row
+          @select-change="selectTabelData"
           @current-change="selectTabelData"
-          :radio-config="{ trigger: 'row' }"
         >
-          <vxe-table-column type="checkbox" title="选择" width="100"></vxe-table-column>
+          <vxe-table-column type="radio" title="选择" width="100"></vxe-table-column>
           <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
