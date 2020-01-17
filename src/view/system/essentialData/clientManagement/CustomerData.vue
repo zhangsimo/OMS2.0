@@ -59,6 +59,7 @@
           :stripe="true"
           :columns="columns"
           :data="managementList"
+          max-height=500
         ></Table>
       </div>
       <Page
