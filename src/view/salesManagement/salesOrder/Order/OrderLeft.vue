@@ -66,6 +66,7 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
+        guestId: ''
       },
       page: {
         total: 0,
@@ -99,6 +100,7 @@ export default {
       }
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
+
       this.$parent.$parent.isAdd = false
       this.$parent.$parent.isNew=false
       // this.tableData.unshift({
