@@ -390,19 +390,19 @@ export default {
       ],
       business: [
         {
-          value: "CGRK",
+          value: 0,
           label: "采购入库"
         },
         {
-          value: "CGTH",
+          value: 1,
           label: "采购退货"
         },
         {
-          value: "XSCK",
+          value: 2,
           label: "销售出库"
         },
         {
-          value: "XSTH",
+          value: 3,
           label: "销售退货"
         }
       ],
