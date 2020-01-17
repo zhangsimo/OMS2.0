@@ -254,6 +254,7 @@ export default {
       this.orderlistType.value = 0
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
+      this.$refs.right.getAllLimit();
     }
   }
 };
