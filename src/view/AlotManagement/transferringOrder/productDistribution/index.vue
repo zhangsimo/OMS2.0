@@ -113,7 +113,7 @@
             <Page
               :current="form.pageNumber+1"
               :total="pageList.total"
-              :page-size="form.pageSize"
+              :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -216,7 +216,7 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        pageSize: 10,
+        pageSize: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
