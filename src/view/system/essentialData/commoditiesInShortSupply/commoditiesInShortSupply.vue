@@ -78,6 +78,9 @@ import {
   down
 } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import * as api from "_api/system/partManager";
+import {
+  getPartBrand
+} from "@/api/business/stockSearch";
 import Fittings from "./Fittings/Fittings.vue";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -267,16 +270,30 @@ export default {
     },
     //获取品牌
     async getBand() {
-      let res = await api.getPartBrand();
-      if (res.code == 0) {
-        res.data.forEach(el => {
-          if (el.parentId != "0") {
-            el.label = el.name;
-            el.value = el.id;
-            this.bands.push(el);
-          }
+      let res = await getPartBrand({ pageSize: 10000 });
+      if (res.code === 0) {
+        let arr = [];
+        res.data.content.forEach(item => {
+          arr.push(...item.children);
         });
+        arr.map(item=>{
+          this.bands.push({
+            value:item.id,
+            label:item.name
+          })
+        })
       }
+      // console.log(res)
+      // if (res.code == 0) {
+      //   res.data.forEach(el => {
+      //     if (el.parentId != "0") {
+      //       el.label = el.name;
+      //       el.value = el.id;
+      //       this.bands.push(el);
+      //       console.log(this.bands)
+      //     }
+      //   });
+      // }
     },
     //搜索
     queryTight() {
