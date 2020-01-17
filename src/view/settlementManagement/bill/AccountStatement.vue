@@ -977,7 +977,7 @@ export default {
         orgId: this.model1,
         statementStatus: this.Reconciliationtype,
         guestType: this.model2,
-        tenantName: this.nametext,
+        guestName: this.nametext,
         serviceType: this.model3,
         serviceId: this.text
       };
