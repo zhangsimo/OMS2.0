@@ -154,7 +154,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "单位",
-            key: "unitld",
+            key: "unitId",
             minWidth: 80
         },
         {

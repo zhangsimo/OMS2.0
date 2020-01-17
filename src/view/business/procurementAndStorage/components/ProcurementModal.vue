@@ -109,8 +109,28 @@
         <vxe-table-column field="unit" title="单位"></vxe-table-column>
         <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
         <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
-        <vxe-table-column field="orderPrice" title="采购单价"></vxe-table-column>
-        <vxe-table-column field="orderAmt" title="采购金额"></vxe-table-column>
+        <vxe-table-column title="采购单价">
+          <template v-slot:edit="{ row }">
+            <el-input-number
+              :min="0"
+              v-model="row.orderPrice"
+              :controls="false"
+              size="small"
+              :precision="2"
+            />
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="orderAmt" title="采购金额">
+          <template v-slot:edit="{ row }">
+            <el-input-number
+              :min="0"
+              v-model="row.orderAmt"
+              :controls="false"
+              size="small"
+              :precision="2"
+            />
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
     </div>

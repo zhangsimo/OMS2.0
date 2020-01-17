@@ -138,8 +138,7 @@
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
-              <span>分配完成</span>
-              <Button type="text" @click="baocunfenpei(row)">保存</Button>
+              <Button type="text" @click="baocunfenpei(row)">分配完成</Button>
             </template>
           </vxe-table-column>
 

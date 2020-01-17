@@ -34,9 +34,9 @@
           </div>
           <div class="db mr10">
             <Select
+              style="width:110px"
               v-model="form.guestId"
-              class="w100 mr10"
-              placeholder="选择客户"
+              placeholder="选择供应商"
               filterable
               clearable
               @on-change="selectOption"
@@ -250,7 +250,7 @@ export default {
     getDataQuick(val) {
       this.form.auditStartDate = val[0];
       this.form.auditEndDate = val[1];
-      this.search()
+      this.search();
     },
     //time2
     selectDate(val) {

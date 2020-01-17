@@ -82,30 +82,34 @@ export default {
       formPlan: {
         billStatusValue: 0,
         details: [],
-        code: ''
+        code: '',
+        billTypeId:'',
+        settleTypeId:'',
+        storeId: ''
+
       },//点击获取左侧数据
       settleTypeList: {},//结账类型
       client: [], //客户
       WarehouseList: [],//仓库
       ruleValidate: {
-        // guestId: [
-        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
-        // ],
-        // orderMan: [
-        //   { required: true, message: '  ', trigger: 'blur' }
-        // ],
-        // orderDate: [
-        //   { required: true, type: 'date', message: ' ', trigger: 'change' }
-        // ],
-        // billTypeId: [
-        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
-        // ],
-        // settleTypeId: [
-        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
-        // ],
-        // storeId: [
-        //   { required: true, type: 'string', message: ' ', trigger: 'change' }
-        // ]
+        guestId: [
+          { required: true, type: 'string', message: ' ', trigger: 'change' }
+        ],
+        orderMan: [
+          { required: true, message: '  ', trigger: 'blur' }
+        ],
+        orderDate: [
+          { required: true, type: 'date', message: ' ', trigger: 'change' }
+        ],
+        billTypeId: [
+          { required: true, type: 'string', message: ' ', trigger: 'change' }
+        ],
+        settleTypeId: [
+          { required: true, type: 'string', message: ' ', trigger: 'change' }
+        ],
+        storeId: [
+          { required: true, type: 'string', message: ' ', trigger: 'change' }
+        ]
       },//表单校验
       validRules: {
         orderQty: [
@@ -441,6 +445,7 @@ export default {
           await this.clickOnesList(this.dataChange)
           this.allMoney = 0
           this.$Message.success('保存成功');
+          this.$refs.formPlan.resetFields();
         }
         try {
         } catch (errMap) {
@@ -450,28 +455,35 @@ export default {
     },
 
     //保存
-    async save() {
-      if (this.dataChange.row) {
-        try {
-          await this.$refs.xTable.validate()
-          this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
-          let res = await saveList(this.formPlan)
-          if (res.code === 0) {
-            this.getLeftLists()
-            this.formPlan = {
-              billStatusValue: 0,
-              code: ''
+     save() {
+      this.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          if (this.dataChange.row) {
+            try {
+              await this.$refs.xTable.validate()
+              this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+              let res = await saveList(this.formPlan)
+              if (res.code === 0) {
+                this.getLeftLists()
+                this.formPlan = {
+                  billStatusValue: 0,
+                  code: ''
+                }
+                this.allMoney = 0
+                this.$Message.success('保存成功');
+                this.$refs.formPlan.resetFields();
+                this.flag = 0
+              }
+            } catch (errMap) {
+              this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
             }
-            this.allMoney = 0
-            this.$Message.success('保存成功');
-            this.flag = 0
+          } else {
+            this.$message.error('请先选择要保存的数据')
           }
-        } catch (errMap) {
-          this.$XModal.message({ status: 'error', message: '表格校验不通过！' })
+        } else {
+          this.$Message.error('*为必填!');
         }
-      } else {
-        this.$message.error('请先选择要保存的数据')
-      }
+      })
     },
 
     //入库

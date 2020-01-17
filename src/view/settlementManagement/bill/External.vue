@@ -363,7 +363,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 6 ) {
+        if (index > 6 &&index !== 11) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);

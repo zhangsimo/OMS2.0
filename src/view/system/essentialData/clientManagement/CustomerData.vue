@@ -225,11 +225,11 @@ export default {
           title: "其他信息",
           align: "center",
           children: [
-            {
-              title: "拼音",
-              key: "pyName",
-              align: "center"
-            },
+            // {
+            //   title: "拼音",
+            //   key: "pyName",
+            //   align: "center"
+            // },
             {
               title: "省份",
               key: "provinceName",

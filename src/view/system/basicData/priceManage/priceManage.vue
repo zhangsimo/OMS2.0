@@ -156,7 +156,7 @@
               :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+              <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
               <vxe-table-column field="costPrice" title="成本单价"></vxe-table-column>

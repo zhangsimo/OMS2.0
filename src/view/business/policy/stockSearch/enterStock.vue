@@ -591,7 +591,7 @@
                   data.partId = this.mainData.partId
                   data.page =  this.contentOne.page.num -1
                   data.size =  this.contentOne.page.size
-                  
+
                 let res = await getEnter(data)
                 if (res.code == 0) {
                     this.contentOne.dataOne = res.data.content

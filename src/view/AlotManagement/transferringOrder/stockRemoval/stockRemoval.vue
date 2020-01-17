@@ -765,7 +765,9 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
-      params.createTime = moment(this.Leftcurrentrow.createTime).format("YYYY-MM-DD HH:mm:ss")
+      params.createTime = moment(this.Leftcurrentrow.createTime).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.flag1 == true) {
         params.id = "";
       }

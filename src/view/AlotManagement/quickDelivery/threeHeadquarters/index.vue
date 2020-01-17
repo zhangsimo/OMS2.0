@@ -146,7 +146,7 @@
 </template>
 
 <script>
-import QuickDate from "../../../../components/getDate/dateget";
+import QuickDate from "../../../../components/getDate/dateget1";
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import {
@@ -259,21 +259,18 @@ export default {
     },
     //time1
     getDataQuick(val) {
-      // console.log(val);
-      if(val.length > 1){
-        console.log(val)
+      console.log(val, "val");
+      if (val.length > 1) {
         this.form.startDate = val[0];
         this.form.endDate = val[1];
         this.search(this.form);
-      }else {
-        this.form.startDate = '';
-        this.form.endDate = '';
+      } else {
+        this.form.startDate = "";
+        this.form.endDate = "";
       }
     },
     //time2
     selectDate(val) {
-      //console.log(val, "value");
-
       if (val[0] != "") {
         this.form.startDate = val[0] + " " + "00:00:00";
         this.form.endDate = val[1] + " " + "23:59:59";
