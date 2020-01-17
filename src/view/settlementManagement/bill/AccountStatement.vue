@@ -376,15 +376,15 @@ export default {
       nametext: "",
       typelist: [
         {
-          value: "HS",
+          value: 0,
           label: "华胜"
         },
         {
-          value: "NB",
+          value: 1,
           label: "内部"
         },
         {
-          value: "WB",
+          value: 2,
           label: "外部"
         }
       ],

@@ -543,6 +543,7 @@ export default {
     },
     //获取客户额度
     async getAllLimit() {
+      // alert(1)
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
       data.id = this.leftOneOrder?this.leftOneOrder.id:''

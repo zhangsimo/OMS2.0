@@ -254,6 +254,9 @@ export default {
       this.orderlistType.value = 0
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
+      this.$refs.right.limitList.fixationQuota = '00.00'
+      this.$refs.right.limitList.tempQuota  = '00.00'
+      this.$refs.right.limitList.sumAmt = '00.00'
     }
   }
 };
