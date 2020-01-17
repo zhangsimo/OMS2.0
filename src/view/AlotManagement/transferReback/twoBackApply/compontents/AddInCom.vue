@@ -77,7 +77,7 @@
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
         </vxe-table>
       </div>
-
+      
       <!--     分页-->
       <Row class="mt10 mb10">
         <Col span="12" offset="12" style="text-align:right">
