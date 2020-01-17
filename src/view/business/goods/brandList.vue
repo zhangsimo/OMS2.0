@@ -487,8 +487,8 @@ export default {
       pageList: {
         page: 1,
         total: 0,
-        size: 10,
-        pageSize: 10,
+        size: 20,
+        pageSize: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
