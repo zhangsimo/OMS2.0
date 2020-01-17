@@ -581,7 +581,7 @@ export default {
     },
     //查看公司
     lookCompany() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange||!this.oneStaffChange.hasOwnProperty('id')) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -600,7 +600,6 @@ export default {
       this.getLookCompany();
     },
     getOneCliemt(val) {
-      console.log(val);
       this.oneCliemt = val;
     },
     //删除兼职公司
@@ -613,7 +612,6 @@ export default {
       data.id = this.oneStaffChange.id;
       data.companyList = "(" + this.oneCliemt.id + ")";
       let res = await setCliemt(data);
-      console.log(res);
       if (res.code === 0) {
         this.page2.num = 1;
         this.getLookCompany();
@@ -685,8 +683,6 @@ export default {
   border-bottom: 1px solid #eee;
   input {
     height: 25px;
-  }
-  .mr20 {
   }
 }
 .companyList2 {
