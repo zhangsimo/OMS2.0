@@ -351,7 +351,6 @@ export default {
         const values = data.map(item => Number(item[key]));
         const v = values.reduce((prev, curr) => {
           if (index > 1 && index < 6) {
-            console.log(index);
             return prev + curr;
           }
         }, 0);
