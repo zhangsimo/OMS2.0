@@ -59,6 +59,7 @@
           :stripe="true"
           :columns="columns"
           :data="managementList"
+          max-height=500
         ></Table>
       </div>
       <Page
@@ -347,6 +348,7 @@ export default {
       let res = await getCustomerInformation(data);
       if (res.code == 0) {
         this.loading = false;
+        this.clientList = {}
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
       }
@@ -434,9 +436,8 @@ export default {
     },
     //点击打开修改
     changeClient() {
-      if (Object.keys(this.clientList).length == 0) {
-        this.$Message.error("至少选择一种客户分类");
-        return false;
+      if (!this.clientList.hasOwnProperty('id')) {
+        return this.$Message.error("至少选择一种客户分类");
       }
       let data = {};
       data.id = this.clientList.id;

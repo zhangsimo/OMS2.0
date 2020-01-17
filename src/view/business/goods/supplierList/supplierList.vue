@@ -278,7 +278,7 @@
         Left: {
           page: {
             num: 1,
-            size: 10,
+            size: 20,
             total: 0
           },
           loading: false,
@@ -344,7 +344,7 @@
         Right: {
           page: {
             num: 1,
-            size: 20,
+            size: 10,
             total: 0
           },
           loading: false,

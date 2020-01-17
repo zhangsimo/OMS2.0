@@ -301,6 +301,7 @@
                 getLogisticsList(data).then( res => {
                     if(res.code == 0){
                         this.Loading =false
+                        this.id=''
                     this.page.total = res.data.totalElements
                     this.list = res.data.content
                     }
@@ -350,6 +351,7 @@
                 this.getList()
             },
             change(){
+                console.log(this.id)
               if(!this.id){
                 return this.$Message.info('请先选中需要修改的物流快递信息');
               }
