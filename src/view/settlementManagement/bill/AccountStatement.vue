@@ -991,14 +991,14 @@ export default {
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });
-      if(row.processInstance) {
+      if (row.processInstance) {
         approvalStatus({ instanceId: row.processInstance }).then(res => {
           if (res.code == "0") {
             this.falg = true;
             this.statusData = res.data.operationRecords;
           }
         });
-      } 
+      }
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;
