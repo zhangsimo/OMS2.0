@@ -206,10 +206,10 @@ export default {
           value: "2",
           label: "车型"
         },
-        {
-          value: "3",
-          label: "拼音"
-        }
+        // {
+        //   value: "3",
+        //   label: "拼音"
+        // }
       ],
       List: [
         { name: "zs", value: 18 },
