@@ -581,7 +581,7 @@ export default {
     },
     //查看公司
     lookCompany() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange||!this.oneStaffChange.hasOwnProperty('id')) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }

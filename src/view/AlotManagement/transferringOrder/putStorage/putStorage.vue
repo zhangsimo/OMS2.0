@@ -190,12 +190,7 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column
-                    field="hasInQty"
-                    :edit-render="{name: 'input'}"
-                    title="入库数量"
-                    width="100"
-                  ></vxe-table-column>
+                  <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
                   <vxe-table-column
                     field="storeShelf"
                     :edit-render="{name: 'input'}"

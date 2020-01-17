@@ -71,7 +71,12 @@
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
             <FormItem label="配送方式：" prop="deliveryType">
-              <Select v-model="formDateRight.deliveryType" class="w200" :disabled="disabled" @on-change="distribution">
+              <Select
+                v-model="formDateRight.deliveryType"
+                class="w200"
+                :disabled="disabled"
+                @on-change="distribution"
+              >
                 <Option
                   v-for="item in Delivery"
                   :value="item.value"
@@ -150,7 +155,7 @@ let checkPhone = (rule, value, callback) => {
     callback(new Error("手机号不能为空"));
   } else {
     // const reg = /^1[3|4|5|6|7|8][0-9]\d{8}$/;
-    const reg = /^1[3456789]\d{9}$/
+    const reg = /^1[3456789]\d{9}$/;
     if (!reg.test(value)) {
       callback(new Error("请输入正确的手机号"));
     } else {
@@ -253,12 +258,12 @@ export default class GoodsInfo extends Vue {
 
   //获取物流下拉框
   private async inlogistics() {
-    let params:any ={}
-    if(this.formDateRight.deliveryType == 2){
-      params.logisticsType = '020701'
+    let params: any = {};
+    if (this.formDateRight.deliveryType == 2) {
+      params.logisticsType = "020701";
     }
-    if(this.formDateRight.deliveryType == 3){
-      params.logisticsType = '020702'
+    if (this.formDateRight.deliveryType == 3) {
+      params.logisticsType = "020702";
     }
     let log: any = await fapi.logistics(params);
     if (log.code == 0) {
@@ -308,7 +313,10 @@ export default class GoodsInfo extends Vue {
   ];
   private isRequired: boolean = false;
   private changeDeliveryType() {
-    if (this.formDateRight.deliveryType == 2 || this.formDateRight.deliveryType == 3) {
+    if (
+      this.formDateRight.deliveryType == 2 ||
+      this.formDateRight.deliveryType == 3
+    ) {
       this.isRequired = true;
     } else {
       this.isRequired = false;
@@ -316,7 +324,7 @@ export default class GoodsInfo extends Vue {
   }
 
   private selectLogis(val: any) {
-    this.formDateRight.logisticsComp = val|| "";
+    this.formDateRight.logisticsComp = val || "";
     if (this.formDateRight.deliveryLogistics !== "") {
       this.logisRequired = false;
     } else {
@@ -351,10 +359,10 @@ export default class GoodsInfo extends Vue {
     cityId: "",
     countyId: "",
     //物流中的数据
-    logisticsComp: "", //物流公司名字，
+    logisticsComp: "" //物流公司名字，
   };
-  private  SaveId:any =  '';//保存id,
-  private  logisticsRecordVO: any = '';
+  private SaveId: any = ""; //保存id,
+  private logisticsRecordVO: any = "";
   //表格 数据
   private tableData: Array<any> = new Array();
   private loading: boolean = false;
@@ -382,14 +390,14 @@ export default class GoodsInfo extends Vue {
       this.tableData = res.data;
       this.loading = false;
     }
-  };
+  }
   //快递下拉框
-  private distribution(val){
-    this.formDateRight.deliveryType = val
-    this.inlogistics()
-    if(val == 2 || val == 3){
+  private distribution(val) {
+    this.formDateRight.deliveryType = val;
+    this.inlogistics();
+    if (val == 2 || val == 3) {
       this.isRequired = true;
-    }else {
+    } else {
       this.isRequired = false;
     }
   }
@@ -404,10 +412,13 @@ export default class GoodsInfo extends Vue {
         this.logisRequired = false;
       } else {
         logisc = false;
-        if(!this.formDateRight.deliveryLogistics && !['0', '1'].includes(this.formDateRight.deliveryType)){
+        if (
+          !this.formDateRight.deliveryLogistics &&
+          !["0", "1"].includes(this.formDateRight.deliveryType)
+        ) {
           this.logisRequired = true;
           logisc = false;
-        }else {
+        } else {
           this.logisRequired = false;
           logisc = true;
         }
@@ -418,7 +429,7 @@ export default class GoodsInfo extends Vue {
         let aaa: any = {};
         aaa.logisticsId = this.formDateRight.id;
         delete this.formDateRight.id;
-        let params:any = {};
+        let params: any = {};
         params.receiveComp = this.formDateRight.receiveCompName;
         params.receiveAddress = this.formDateRight.streetAddress;
         params.receiver = this.formDateRight.receiveMan;
@@ -431,8 +442,8 @@ export default class GoodsInfo extends Vue {
         params.businessNum = this.formDateRight.businessNum;
         params.relationNum = this.formDateRight.relationNum;
         params.guestId = this.formDateRight.guestId;
-        if(this.SaveId){
-          console.log(this.SaveId)
+        if (this.SaveId) {
+          console.log(this.SaveId);
           params.id = this.SaveId;
           params = this.logisticsRecordVO;
           params.receiveComp = this.formDateRight.receiveCompName;
@@ -459,20 +470,20 @@ export default class GoodsInfo extends Vue {
           this.searchInfo();
         }
       } else {
-        console.log(logisc)
+        console.log(logisc);
         this.$Message.error("请完善收货信息后再保存!");
       }
     });
   }
   private echoDate({ row }) {
-    this.reset();
-    let ref: any = this.$refs.formTwo;
-    ref.resetFields();
+    // this.reset();
+    // let ref: any = this.$refs.formTwo;
+    // ref.resetFields();
     this.disabled = false;
     this.formDateRight.businessNum = this.row.serviceId;
     if (row.logisticsRecordVO) {
-      this.logisticsRecordVO = row.logisticsRecordVO
-      this.SaveId = row.logisticsRecordVO.id
+      this.logisticsRecordVO = row.logisticsRecordVO;
+      this.SaveId = row.logisticsRecordVO.id;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.id = row.logisticsRecordVO.id;
       // this.formDateRight = { ...row.logisticsRecordVO };
@@ -484,19 +495,19 @@ export default class GoodsInfo extends Vue {
       this.formDateRight.receiveMan = row.logisticsRecordVO.receiver;
       this.formDateRight.receiveManTel = row.logisticsRecordVO.receiverMobile;
       this.formDateRight.deliveryType = row.logisticsRecordVO.deliveryType;
-      this.formDateRight.deliveryLogistics = row.logisticsRecordVO.deliveryLogistics;
+      this.formDateRight.deliveryLogistics =
+        row.logisticsRecordVO.deliveryLogistics;
       this.formDateRight.transportCost = row.logisticsRecordVO.transportCost;
       this.formDateRight.settleType = row.logisticsRecordVO.settleType;
       this.formDateRight.remark = row.logisticsRecordVO.remark;
       this.formDateRight.businessNum = row.logisticsRecordVO.businessNum;
       this.formDateRight.relationNum = row.logisticsRecordVO.relationNum;
       this.formDateRight.guestId = row.logisticsRecordVO.guestId;
-      if(this.formDateRight.deliveryType){
-        console.log(this.formDateRight.deliveryType)
-        this.changeDeliveryType()
+      if (this.formDateRight.deliveryType) {
+        this.changeDeliveryType();
       }
     } else {
-      this.formDateRight = row
+      this.formDateRight = row;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
       this.formDateRight.receiveComp = row.receiveCompName;
@@ -558,7 +569,7 @@ export default class GoodsInfo extends Vue {
       //物流中的数据
       logisticsComp: "" //物流公司名字
     };
-  };
+  }
 }
 </script>
 

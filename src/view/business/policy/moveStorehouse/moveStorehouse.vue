@@ -218,6 +218,7 @@
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
                 :checkbox-config="{checkMethod}"
+                @edit-actived="editActivedEvent"
               >
                 <vxe-table-column type="index" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox"></vxe-table-column>
@@ -227,7 +228,7 @@
                 <vxe-table-column
                   field="orderQty"
                   title="数量"
-                  :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
+                  :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
                 <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
                 <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
@@ -598,6 +599,12 @@ export default {
         //获取右侧表格高度
         this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
       });
+    },
+    //判断表格能不能编辑
+    editActivedEvent({row}){
+      let xTable = this.$refs.xTable1;
+      let orderQtyColumn = xTable.getColumnByField("orderQty");
+      orderQtyColumn.editRender.attrs.disabled = this.Leftcurrentrow.status.value !== 0;
     },
     //切换tab
     setTab(index) {

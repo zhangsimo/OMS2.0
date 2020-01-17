@@ -390,19 +390,19 @@ export default {
       ],
       business: [
         {
-          value: "CGRK",
+          value: 0,
           label: "采购入库"
         },
         {
-          value: "CGTH",
+          value: 1,
           label: "采购退货"
         },
         {
-          value: "XSCK",
+          value: 2,
           label: "销售出库"
         },
         {
-          value: "XSTH",
+          value: 3,
           label: "销售退货"
         }
       ],
@@ -977,7 +977,7 @@ export default {
         orgId: this.model1,
         statementStatus: this.Reconciliationtype,
         guestType: this.model2,
-        tenantName: this.nametext,
+        guestName: this.nametext,
         serviceType: this.model3,
         serviceId: this.text
       };
@@ -991,14 +991,14 @@ export default {
       // account({id:row.id}).then(res => {
       //   console.log(res);
       // });
-      if(row.processInstance) {
+      if (row.processInstance) {
         approvalStatus({ instanceId: row.processInstance }).then(res => {
           if (res.code == "0") {
             this.falg = true;
             this.statusData = res.data.operationRecords;
           }
         });
-      } 
+      }
       getId({ orgId: row.orgId, incomeType: row.paymentType.value }).then(
         res => {
           this.collectPayId = res.data.fno;

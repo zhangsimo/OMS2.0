@@ -157,11 +157,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="this.remarkStatus"
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input :disabled="this.remarkStatus" class="w160"></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
@@ -213,12 +209,7 @@
                     title="申请退回数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
-                    field="remark"
-                    :edit-render="{name: 'input'}"
-                    title="备注"
-                    width="100"
-                  ></vxe-table-column>
+                  <vxe-table-column field :edit-render="{name: 'input'}" title="备注" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>

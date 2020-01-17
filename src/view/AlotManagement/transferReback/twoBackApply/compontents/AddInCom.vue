@@ -54,8 +54,8 @@
       <!--上表格-->
       <div class="topTableDate">
         <vxe-table
-          auto-resize
           border
+          stripe
           resizable
           ref="xtale"
           size="mini"
@@ -63,9 +63,8 @@
           align="center"
           :data="tabList"
           highlight-current-row
-          highlight-hover-row
-          @select-change="selectTabelData"
           @current-change="selectTabelData"
+          :radio-config="{ trigger: 'row' }"
         >
           <vxe-table-column type="checkbox" title="选择" width="100"></vxe-table-column>
           <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
@@ -285,7 +284,7 @@ export default {
         this.$Message.info("请勾选需要选入的行");
         return;
       }
-      this.$emit("ok", this.currentData,this.checkRow);
+      this.$emit("ok", this.currentData, this.checkRow);
       this.searchPartLayer = false;
     }
   }

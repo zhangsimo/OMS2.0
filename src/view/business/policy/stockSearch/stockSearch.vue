@@ -652,7 +652,7 @@ export default {
       let res = await getwarehouse({});
       if (res.code == 0) {
         // this.storeList = res.data;
-        console.log("222", res);
+        // console.log("222", res);
         res.data.forEach(el => {
           el.name = el.name;
           el.id = el.id;

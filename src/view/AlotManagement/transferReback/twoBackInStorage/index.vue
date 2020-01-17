@@ -131,11 +131,11 @@
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                 <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column field="hasCancelQty" title="统计退回数量" width="100"></vxe-table-column>
