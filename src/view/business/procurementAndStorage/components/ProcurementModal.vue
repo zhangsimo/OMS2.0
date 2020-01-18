@@ -8,7 +8,9 @@
     <div class="top-plan">
       <div class="tools-bar mb10">
         <div class="db mr5">快速查询:</div>
-        <div class="db mr5"><span>提交日期:</span></div>
+        <div class="db mr5">
+          <span>提交日期:</span>
+        </div>
         <div class="db mr5">
           <DatePicker
             type="daterange"
@@ -18,10 +20,10 @@
             v-model="auditDate"
           ></DatePicker>
         </div>
-         <div class="db mr5">
-           <Select v-model="client" filterable style="width: 200px" placeholder="请选择客户" >
-             <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
-           </Select>
+        <div class="db mr5">
+          <Select v-model="client" filterable style="width: 200px" placeholder="请选择客户">
+            <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+          </Select>
         </div>
         <div class="db mr5">
           <Input placeholder="采购单号" v-model="serviceId" />
@@ -34,14 +36,14 @@
           </Button>
         </div>
         <div class="db mr5">
-          <Button type="default" @click="ok"
-            ><i class="iconfont iconxuanzetichengchengyuanicon"></i>选择</Button
-          >
+          <Button type="default" @click="ok">
+            <i class="iconfont iconxuanzetichengchengyuanicon"></i>选择
+          </Button>
         </div>
         <div class="db mr5">
-          <Button type="default" @click="cancel"
-            ><Icon type="md-close" />取消</Button
-          >
+          <Button type="default" @click="cancel">
+            <Icon type="md-close" />取消
+          </Button>
         </div>
       </div>
       <vxe-table
@@ -55,16 +57,8 @@
         @radio-change="radioChangeEvent"
         auto-resize
       >
-        <vxe-table-column
-          type="radio"
-          title="选择"
-          width="60"
-        ></vxe-table-column>
-        <vxe-table-column
-          type="index"
-          title="序号"
-          width="60"
-        ></vxe-table-column>
+        <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
+        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
         <vxe-table-column field="orderQty" title="采购总数"></vxe-table-column>
@@ -88,7 +82,7 @@
       </div>
     </div>
     <div class="bottom-plan mt10">
-        <vxe-table
+      <vxe-table
         border
         stripe
         ref="xTable1"
@@ -97,11 +91,7 @@
         :data="tableDataBm"
         auto-resize
       >
-        <vxe-table-column
-          type="index"
-          title="序号"
-          width="60"
-        ></vxe-table-column>
+        <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
         <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
@@ -109,8 +99,8 @@
         <vxe-table-column field="unit" title="单位"></vxe-table-column>
         <vxe-table-column field="carBrandName" title="品牌车型"></vxe-table-column>
         <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
-        <vxe-table-column title="采购单价">
-          <template v-slot:edit="{ row }">
+        <vxe-table-column title="采购单价" field="orderPrice">
+          <!-- <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
               v-model="row.orderPrice"
@@ -118,10 +108,10 @@
               size="small"
               :precision="2"
             />
-          </template>
+          </template>-->
         </vxe-table-column>
         <vxe-table-column field="orderAmt" title="采购金额">
-          <template v-slot:edit="{ row }">
+          <!-- <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
               v-model="row.orderAmt"
@@ -129,19 +119,18 @@
               size="small"
               :precision="2"
             />
-          </template>
+          </template>-->
         </vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
     </div>
-    <div slot="footer">
-    </div>
-     <!-- 供应商资料
+    <div slot="footer"></div>
+    <!-- 供应商资料
     <select-supplier
       @selectSearchName="selectSupplierName"
       ref="selectSupplier"
       headerTit="供应商资料"
-    ></select-supplier> -->
+    ></select-supplier>-->
   </Modal>
 </template>
 
@@ -149,7 +138,7 @@
 import * as tools from "../../../../utils/tools";
 import { Vue, Component, Prop, Emit } from "vue-property-decorator";
 // @ts-ignore
-import {getBuy} from '@/api/business/procurementAndStorage'
+import { getBuy } from "@/api/business/procurementAndStorage";
 // import SelectSupplier from "./selectSupplier.vue";
 
 @Component
@@ -160,10 +149,9 @@ export default class ProcurementModal extends Vue {
   @Prop(String) readonly guestId;
   @Prop(Array) readonly clientList;
 
-
-    private auditDate:Array<Date> = [];
+  private auditDate: Array<Date> = [];
   // private guestname:string = "";
-  private serviceId:string = "";
+  private serviceId: string = "";
 
   private page: Page = {
     num: 1,
@@ -171,7 +159,7 @@ export default class ProcurementModal extends Vue {
     total: 0
   };
 
-  private client: any = ''
+  private client: any = "";
 
   private tableData: Array<any> = new Array();
 
@@ -182,14 +170,17 @@ export default class ProcurementModal extends Vue {
     this.reset();
     this.getPchsPlanList();
   }
-  private showChange(type){
-    if(!type){
-      this.selectRow = null
+  private showChange(type) {
+    if (!type) {
+      this.selectRow = null;
     }
   }
-  @Emit('getPlanOrder')
+  @Emit("getPlanOrder")
   private ok() {
-    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
+    if (!this.selectRow) {
+      this.$Message.error("请选择采购计划");
+      return null;
+    }
     this.shows = false;
     return this.selectRow;
   }
@@ -221,6 +212,10 @@ export default class ProcurementModal extends Vue {
   }
   private radioChangeEvent({ row }) {
     this.selectRow = row;
+    row.details.map(item => {
+      item.orderPrice = item.orderPrice ? parseFloat(item.orderPrice).toFixed(2) : "";
+      item.orderAmt = item.orderAmt ? parseFloat(item.orderAmt).toFixed(2) : "";
+    });
     this.tableDataBm = row.details || [];
   }
 
@@ -231,22 +226,22 @@ export default class ProcurementModal extends Vue {
 
   private async getPchsPlanList() {
     let params: any = {};
-    let data:any = {
+    let data: any = {
       guestId: this.client,
       serviceId: this.serviceId,
       auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+      auditEndDate: tools.transTime(this.auditDate[1])
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;
     let formData = {};
-    for(let k in data) {
-      if(data[k] && data[k].trim().length > 0) {
+    for (let k in data) {
+      if (data[k] && data[k].trim().length > 0) {
         formData[k] = data[k];
       }
     }
-    let res:any = await getBuy(params, formData);
-    if(res.code == 0) {
+    let res: any = await getBuy(params, formData);
+    if (res.code == 0) {
       this.page.total = res.data.totalElements;
       this.tableData = res.data.content;
     }
@@ -261,7 +256,6 @@ export default class ProcurementModal extends Vue {
     this.page.size = size;
     this.getPchsPlanList();
   }
-
 }
 </script>
 
