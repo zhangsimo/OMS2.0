@@ -173,6 +173,7 @@
                   border
                   resizable
                   ref="xTable1"
+                  show-footer
                   size="mini"
                   highlight-current-row
                   highlight-hover-row
@@ -181,7 +182,7 @@
                   :height="rightTableHeight"
                   :data="ArrayValue"
                   :footer-method="addFooter"
-                  :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
+                  :edit-config="{trigger: 'dblclick', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
@@ -190,7 +191,12 @@
                   <vxe-table-column field="applyQty" title="申请数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
                   <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
+                  <vxe-table-column
+                    field="hasInQty"
+                    title="入库数量"
+                    :edit-render="{name: 'input'}"
+                    width="100"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="storeShelf"
                     :edit-render="{name: 'input'}"
