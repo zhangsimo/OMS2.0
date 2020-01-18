@@ -324,8 +324,13 @@ export const mixSelectPartCom = {
       //添加未审核属性
       obj.auditSign = 0;
       savePartInfo(obj).then(res => {
-        this.$Message.success("保存成功！");
-        this.reload();
+        if(res.code===0){
+          this.$Message.success("保存成功！")
+          this.reload();
+        }
+        this.$refs.partInfo.saveFlag = false
+        // this.$Message.success("保存成功！");
+        // this.reload();
       });
     },
 
