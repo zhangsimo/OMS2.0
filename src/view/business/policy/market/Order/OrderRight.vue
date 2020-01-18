@@ -799,22 +799,25 @@ export default {
             if (res.code === 0) {
               this.$parent.$parent.$refs.leftorder.flag = 0
               this.$Message.success("保存成功");
-              const id = this.formPlan.id;
-              const ldata = await this.$parent.$parent.$refs.leftorder.getList();
-              this.$parent.$parent.$refs.leftorder.tableData.map(item => {
-                if (item.id === id) {
-                  this.formPlan = item;
-                }
-              });
-              this.leftOneOrder = this.formPlan
-              this.getAllLimit()
-              this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
-                this.formPlan
-              );
+              // this.formPlan = {};
+              // this.$refs.formPlan.resetFields()
+              // this.$parent.$parent.$refs.leftorder.getList()
+              // const id = this.formPlan.id;
+              // const ldata = await this.$parent.$parent.$refs.leftorder.getList();
+              // this.$parent.$parent.$refs.leftorder.tableData.map(item => {
+              //   if (item.id === id) {
+              //     this.formPlan = item;
+              //   }
+              // });
+              // this.leftOneOrder = this.formPlan
+              // this.getAllLimit()
+              // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
+              //   this.formPlan
+              // );
               
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
-              // this.formPlan = {};
+              
               // this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", this.formPlan);
             }
@@ -945,6 +948,8 @@ export default {
         //     this.getAllLimit()
         //     return false
         // }
+        // this.formPlan = old
+        // console.log(this.formPlan)
         this.leftOneOrder = old;
         this.getList();
         this.getAllLimit();
