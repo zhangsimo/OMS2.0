@@ -865,9 +865,19 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
+        if(params.status.value!=undefined){
+            params.status = params.status.value
+        }
+      if(params.settleStatus && params.settleStatus.value!=undefined){
+          params.settleStatus= params.settleStatus.value
+      }
+        if(params.orderTypeId && params.orderTypeId.value!=undefined){
+            params.orderTypeId= params.orderTypeId.value
+        }
+        this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
+        params.createTime = moment(this.Leftcurrentrow.createTime).format(
+            "YYYY-MM-DD HH:mm:ss"
+        );
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
