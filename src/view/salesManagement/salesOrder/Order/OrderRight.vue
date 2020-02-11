@@ -1063,8 +1063,8 @@ export default {
         if (!old.id) {
           this.formPlan = {
             billStatusId: { name: "草稿", value: 0 },
-            orderMan: this.$store.state.user.userData.username || "",
-            orderManId: this.$store.state.user.userData.id,
+            // orderMan: this.$store.state.user.userData.username || "",
+            // orderManId: this.$store.state.user.userData.id,
             detailList: []
           };
           this.draftShow = 0;
