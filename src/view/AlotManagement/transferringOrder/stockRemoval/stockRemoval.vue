@@ -874,6 +874,10 @@ export default {
         if(params.orderTypeId && params.orderTypeId.value!=undefined){
             params.orderTypeId= params.orderTypeId.value
         }
+        this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
+        params.createTime = moment(this.Leftcurrentrow.createTime).format(
+            "YYYY-MM-DD HH:mm:ss"
+        );
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
