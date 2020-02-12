@@ -8,6 +8,9 @@ import { getDetails } from "@/api/salesManagment/salesOrder";
 
 export const mixSelectPartCom = {
   inject: ["reload"],
+  props:{
+    guestId:''
+  },
   data() {
     return {
       Name: '名称',
@@ -338,6 +341,9 @@ export const mixSelectPartCom = {
     show(val) {
       let data = {};
       data.partId = val.id;
+      if(this.guestId){
+        data.guestId = this.guestId
+      }
       getDetails(data).then(res => {
         if (res.code === 0) {
           this.allList = res.data;

@@ -313,7 +313,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/productDistribution",
             name: "productDistribution",
-            // mark: "3105",
+            mark: "3105",
             meta: {
               // hideInMenu: true,
               title: "紧俏品分配"
@@ -679,6 +679,28 @@ export default [
       //     }
       //   ]
       // }
+    ]
+  },
+  {
+    path:'/financial',
+    name:'financial',
+    // mark:'',
+    meta: {
+      icon: "ios-paper",
+      title: '财务系统'
+    },
+    component: Main,
+    children:[
+      {
+        path: "/accounting",
+        name: "accounting",
+        // mark: "4002",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "会计科目管理"
+        },
+        component: () => import("@/view/financial/accounting/accounting.vue")
+      },
     ]
   },
   // {

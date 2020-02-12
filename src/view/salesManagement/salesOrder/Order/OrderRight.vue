@@ -345,7 +345,7 @@
     <!--      </Modal>-->
 
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
     <barch ref="barch" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
@@ -1063,8 +1063,8 @@ export default {
         if (!old.id) {
           this.formPlan = {
             billStatusId: { name: "草稿", value: 0 },
-            orderMan: this.$store.state.user.userData.username || "",
-            orderManId: this.$store.state.user.userData.id,
+            // orderMan: this.$store.state.user.userData.username || "",
+            // orderManId: this.$store.state.user.userData.id,
             detailList: []
           };
           this.draftShow = 0;
