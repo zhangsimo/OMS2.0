@@ -207,7 +207,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   private options2DisabledDate (date:any) {
     const orderDate = this.formPlanmain.orderDate;
-    return date && orderDate && date.valueOf() < orderDate;
+    return date && orderDate && date.valueOf() < orderDate.valueOf()- 86399999;
   }
 
   private salesList:Array<any> = new Array();
