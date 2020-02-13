@@ -425,7 +425,6 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
-                  field="remark"
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
