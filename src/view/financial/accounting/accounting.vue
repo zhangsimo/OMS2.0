@@ -19,7 +19,13 @@
           highlight-current-row
           show-overflow
         >
-          <vxe-table-column type="index"  title="操作"></vxe-table-column>
+          <vxe-table-column type="index"  title="操作">
+            <template v-slot="{row}">
+              <span>新增子科目</span>
+              <span>修改</span>
+              <span>删除</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column field="fullName" title="科目编码"></vxe-table-column>
           <vxe-table-column field="code" title="科目名称"></vxe-table-column>
           <vxe-table-column title="科目类别">
@@ -36,7 +42,7 @@
 </template>
 
 <script>
-    import {getDataDictionaryType} from '../../../api/system/dataDictionary/dataDictionaryApi'
+    import {getDataDictionaryType} from '@/api/system/dataDictionary/dataDictionaryApi'
 
     export default {
         name: "accounting",
