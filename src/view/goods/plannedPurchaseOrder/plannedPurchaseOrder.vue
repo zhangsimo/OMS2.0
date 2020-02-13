@@ -425,21 +425,26 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
-                  field="remark"
                   title="备注"
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="noTaxPrice"
                   title="不含税单价"
                   width="100"
-                ></vxe-table-column>
+                >
+                  <template v-slot="{ row }">
+                    {{ row.noTaxPrice | priceFilters }}
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
-                  field="noTaxAmt"
                   title="不含税金额"
                   width="100"
-                ></vxe-table-column>
+                >
+                  <template v-slot="{ row }">
+                    {{ row.noTaxAmt | priceFilters }}
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="carBrandName"
                   title="品牌车型"

@@ -430,6 +430,7 @@ export default class GoodsInfo extends Vue {
         });
         if (res.code == 0) {
           this.$Message.success("保存成功");
+          this.showInfo = false;
           this.reset();
           this.searchInfo();
         }
