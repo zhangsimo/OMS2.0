@@ -6,6 +6,9 @@ import {getParnt} from '@/api/salesManagment/salesOrder'
 
 export const mixSelectPartCom  = {
   inject:['reload'],
+  props:{
+    guestId:''
+  },
   data(){
     return {
       loading:false,
@@ -28,12 +31,12 @@ export const mixSelectPartCom  = {
           type: "selection",
           minWidth: 80
         },
-        // {
-        //   title: '详情',
-        //   slot: 'action',
-        //   width: 60,
-        //   align: 'center'
-        // },
+        {
+          title: '详情',
+          slot: 'action',
+          width: 60,
+          align: 'center'
+        },
         {
           title: "配件编码",
           key: "partCode",
@@ -277,7 +280,10 @@ export const mixSelectPartCom  = {
     //点击详情
     show(val){
       let data = {}
-      data.partId = val.id
+      data.partId = val.id;
+      if(this.guestId){
+        data.guestId = this.guestId
+      }
       getDetails(data).then( res => {
         if(res.code  === 0){
           this.allList = res.data

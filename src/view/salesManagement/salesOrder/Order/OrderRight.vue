@@ -347,7 +347,7 @@
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
-    <barch ref="barch" @selectPartName="getBarchList"></barch>
+    <barch ref="barch" :guestId="formPlan.guestId"  @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
