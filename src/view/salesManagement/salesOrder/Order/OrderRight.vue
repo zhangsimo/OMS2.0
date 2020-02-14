@@ -896,7 +896,7 @@ export default {
     openFileModal(row) {
       this.oneRow = row;
       this.$nextTick(function() {
-        this.$refs.fileList.openModal();
+        this.$refs.fileList.openModal(this.leftOneOrder.guestId);
       });
     },
     //保存

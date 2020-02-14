@@ -114,10 +114,13 @@
             }
         },
         methods:{
-            openModal(){
+            openModal(v){
                 this.fileShow = true
-                let data = {}
-                data.partId = this.data.partId
+                let data = {};
+                data.partId = this.data.partId;
+                if(v){
+                    data.guestId=v
+                }
                 getDetails(data).then( res => {
                     if(res.code  === 0){
                        this.allList = res.data
