@@ -280,7 +280,7 @@ export const mixSelectPartCom  = {
     //点击详情
     show(val){
       let data = {}
-      data.partId = val.id;
+      data.partId = val.partId;
       if(this.guestId){
         data.guestId = this.guestId
       }
