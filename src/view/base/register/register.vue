@@ -39,7 +39,7 @@
               </FormItem>
                <FormItem  style="margin-bottom: 20px">
                 <Input style="width: 140px" size="large" v-model="form.username"  placeholder="请输入验证码"></Input>
-                <div class="fr ml10"> <a href="javascript:void(0)" @click="getCo"><span style="color: white!important;cursor: pointer;">获取验证码</span></a> </div>
+                <div class="fr ml10"> <a href="javascript:void(0)" @click="getCo"><span style="color: white!important;cursor: pointer;">{{getCodeBtnText}}</span></a> </div>
               </FormItem>
                <FormItem prop="username" style="margin-bottom: 20px">
                 <Select  clearable style="width:300px" size="large" v-model="modell">
@@ -117,6 +117,9 @@
         province :[],
         //市下拉框
         city:[],
+        getCodeBtnText:'获取验证码',
+          codeDisabled:false,
+          timerBack:60,
         form: {
           companyName: '',
           mobile: '',
@@ -142,11 +145,31 @@
       //获取验证码
       getCo() {
         let tel = {}
-        tel.mobile =this.form.mobile
-        // console.log(this.form.mobile)
-        sendMessage(tel).then(res => {
-          // console.log(res)
-        })
+        tel.mobile =this.form.mobile;
+          this.codeDisabled = true;
+          this.timerBack=60;
+          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
+          if(!this.codeDisabled){
+              sendMessage(tel).then(res => {
+                  if(res.code==0){
+                      let timer = setInterval(()=>{
+                          this.timerBack --
+                          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`
+                          if(this.timerBack==0){
+                              clearInterval(timer)
+                              this.timerBack = 60;
+                              this.codeDisabled = false
+                              this.getCodeBtnText = '获取验证码'
+                          }
+                      },1000)
+                  }else{
+                      this.timerBack = 60;
+                      this.codeDisabled = false
+                      this.getCodeBtnText = '获取验证码'
+                  }
+              })
+          }
+
       },
       //已有账号去登录
       goLogin() {
