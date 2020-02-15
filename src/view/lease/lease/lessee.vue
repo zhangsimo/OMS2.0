@@ -841,7 +841,9 @@ export default {
       tbdata3: [],
       tbdata4: [],
       choose: "",
-      Message: {},
+      Message: {
+          isDisabled:1
+      },
       page: {
         num: 1,
         size: 10,
