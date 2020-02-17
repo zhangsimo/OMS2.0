@@ -257,7 +257,7 @@ export default {
       this.$refs.right.limitList.tempQuota  = '00.00'
       this.$refs.right.limitList.sumAmt = '00.00';
       this.$refs.right.WarehouseList.map(item=>{
-          if(item.name==='默认仓'){
+          if(item.isDefault){
               this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
           }
       })
