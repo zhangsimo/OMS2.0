@@ -76,8 +76,8 @@
                 value: 0,
                 name: '否'
               }],
-            searchType1: 0,
-            searchType2: 0,
+            searchType1: 9999,
+            searchType2: 9999,
             value1: '',
             value2: '',
             abc:'.',
