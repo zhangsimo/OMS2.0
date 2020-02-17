@@ -48,7 +48,7 @@
                   <i-input :value.sync="formItem.occupyQty" disabled placeholder="请输入"></i-input>
                 </Form-item>
                 <Form-item label="锁定数量:">
-                  <i-input :value.sync="formItem.lockQty" placeholder="请输入"></i-input>
+                  <i-input v-model="formItem.lockQty" placeholder="请输入"></i-input>
                 </Form-item>
               </i-form>
               <div slot="footer">
@@ -319,7 +319,9 @@ export default {
     },
     update() {
       // 更新列表信息
-
+        this.formItem.storeId=this.form.storeId;
+        console.log(this.formItem);
+        this.formItem.lockQty=(this.formItem.lockQty*1).toFixed(2)
       genxin(this.formItem)
         .then(res => {
           if (res.code == 0) {

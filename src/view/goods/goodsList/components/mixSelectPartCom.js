@@ -178,8 +178,7 @@ export const mixSelectPartCom = {
             break;
         }
       }
-      console.log(this.formPlanmain.guestId)
-      if(this.formPlanmain.guestId) {
+      if(this.formPlanmain&&this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }
       getCarParts({data:data,params:params}).then(res => {

@@ -991,7 +991,7 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let orderList = [];
             orderList = this.formPlan.detailList.filter(
-              item => item.orderPrice < item.averagePrice
+              item => item.orderPrice*1 < item.averagePrice*1
             );
             if (orderList.length > 0) {
               let text = "";

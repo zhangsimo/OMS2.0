@@ -26,7 +26,7 @@
               />
               </template>
           </vxe-table-column>
-          <vxe-table-column field="updateName" title="更新人" ></vxe-table-column>
+          <vxe-table-column field="updateUname" title="更新人" ></vxe-table-column>
           <vxe-table-column field="updateTime" title="更新日期" ></vxe-table-column>
         </vxe-table>
       </div>
