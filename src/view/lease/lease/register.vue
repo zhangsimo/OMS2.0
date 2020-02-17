@@ -76,8 +76,8 @@
                 value: 0,
                 name: '否'
               }],
-            searchType1: 9999,
-            searchType2: 9999,
+            searchType1: 0,
+            searchType2: 0,
             value1: '',
             value2: '',
             abc:'.',
@@ -376,7 +376,7 @@
           params.page = this.page.num - 1
           params.size = this.page.size
             // console.log(params)
-          this.loading = true
+          this.loading = true;
           getMessagelist({params:params,data:data}).then(res => {
             // console.log(res , 'all')
             this.loading = false
