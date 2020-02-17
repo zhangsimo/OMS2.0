@@ -319,7 +319,7 @@ export default {
     },
     update() {
       // 更新列表信息
-
+        this.formItem.storeId=this.form.storeId;
       genxin(this.formItem)
         .then(res => {
           if (res.code == 0) {
