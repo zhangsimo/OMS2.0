@@ -874,6 +874,12 @@ export default {
         if(params.orderTypeId && params.orderTypeId.value!=undefined){
             params.orderTypeId= params.orderTypeId.value
         }
+        for (var i = 0; i < this.getArray.length; i++) {
+            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+                params.guestOrgid = this.getArray[i].isInternalId;
+                params.guestId = this.getArray[i].id;
+            }
+        }
         this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
         params.createTime = moment(this.Leftcurrentrow.createTime).format(
             "YYYY-MM-DD HH:mm:ss"
