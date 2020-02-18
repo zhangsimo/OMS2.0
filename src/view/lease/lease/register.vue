@@ -376,7 +376,7 @@
           params.page = this.page.num - 1
           params.size = this.page.size
             // console.log(params)
-          this.loading = true
+          this.loading = true;
           getMessagelist({params:params,data:data}).then(res => {
             // console.log(res , 'all')
             this.loading = false
