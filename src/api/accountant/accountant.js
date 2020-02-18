@@ -23,7 +23,7 @@ export function getTableList (params) {
 //删除接口
 export function deletTableList (data) {
   return axios.request({
-    url: `${api.wmsApi}/financeManage/delete`,
+    url: `${api.wmsApi}/financeManage/delete?id=${data.id}`,
     method: 'post',
     data
   })

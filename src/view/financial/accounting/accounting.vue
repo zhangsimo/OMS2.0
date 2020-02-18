@@ -166,7 +166,7 @@
             //获取科目类别
             async getSubjectType(){
               let res = await kmType()
-              if(res.code === 0){
+              if(res.code == 0){
                   this.subjectList = res.data
                   console.log(res)
               }
@@ -179,17 +179,17 @@
               this.formData.parentCode = this.oneTreeList.titleCode
               this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
               this.formData.auxiliaryAccountingCode = 'null'
-              this.formData.titleLevel = this.oneTreeList.titleLevel ? this.oneTreeList.titleLevel : 1
+              this.formData.titleLevel = this.oneTreeList.titleLevel + 1
             },
 
             //保存
             async addSave(){
                let res = await getSave( this.formData )
-                if(res.code === 0){
+                if(res.code == 0){
                     this.getTreeList()
                     let arr = await getTableList(data)
-                    if(arr.code === 0 ){
-                        this.tableData = res.data
+                    if(arr.code == 0 ){
+                        this.tableData = arr.data
                     }
                     this.addNewModal = false
 
@@ -198,13 +198,12 @@
 
             //新增子节点
             addNewChildren(row){
-               console.log(row)
                 this.addNewModal = true
                 this.formData ={}
                 this.formData.parentCode = row.titleCode
                 this.formData.titleTypeCode = row.titleTypeCode
                 this.formData.auxiliaryAccountingCode = 'null'
-                this.formData.titleLevel = row.titleLevel
+                this.formData.titleLevel = row.titleLevel + 1
             },
 
             //修改节点数据
@@ -216,13 +215,13 @@
             //删除
            async deleteOne(row){
                let data = {}
-               data.id = row.id
+               data = row
               let res = await  deletTableList(data)
-               if(res.code === 0){
+               if(res.code == 0){
                    this.getTreeList()
                    let arr = await getTableList(data)
                    if(arr.code === 0 ){
-                       this.tableData = res.data
+                       this.tableData = arr.data
                    }
                }
             }
