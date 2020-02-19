@@ -115,7 +115,7 @@
     </Modal>
     <!--      额度调整-->
     <Modal v-model="adjustment" title="客户信用额度调整表">
-      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today"></QuotaAdjustment>
+      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today" ref="formRule"></QuotaAdjustment>
       <div slot="footer">
         <Button type="primary" @click="adjustmentconfirm">确定</Button>
         <Button type="default" @click="cancelChange">取消</Button>
@@ -578,40 +578,46 @@ export default {
     },
     //调整信用额度的确定
     adjustmentconfirm() {
-      let data = {};
-      data.guestId = this.creaditList.guestId;
-      // data.applyDate = this.today
-      data.payableAmt = this.adjustmentMsg.payableAmt;
-      data.receivableAmt = this.adjustmentMsg.receivableAmt;
-      data.sumAmt = this.adjustmentMsg.sumAmt;
-      data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
-      data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
-      data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
-      data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-      this.creaditList.isForbid
-        ? (this.creaditList.isForbid = 1)
-        : (this.creaditList.isForbid = 0);
-      data.isForbid = this.creaditList.isForbid;
-      data.quotaReason = this.creaditList.quotaReason;
-      data.totalQuota =
-        +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
-      data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
-      data.tempQuotaTotal = this.creaditList.tempCreditLimit;
-      data.tempStart = this.creaditList.tempStart;
-      data.tempEnd = this.creaditList.tempEnd;
-      data.orgId = this.creaditList.orgid;
-      data.adjustType = 1;
-      data.afterAdjustQuota =
-        this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
-      console.log(data, 123);
-      save(data).then(res => {
-        if (res.code === 0) {
-          this.adjustment = false;
-          this.$Message.warning("保存成功");
-          this.getListTop();
-        }
-        // console.log(res);
-      });
+        this.$refs["formRule"].$refs["formRule"].validate(valid=>{
+            if(valid){
+                let data = {};
+                data.guestId = this.creaditList.guestId;
+                // data.applyDate = this.today
+                data.payableAmt = this.adjustmentMsg.payableAmt;
+                data.receivableAmt = this.adjustmentMsg.receivableAmt;
+                data.sumAmt = this.adjustmentMsg.sumAmt;
+                data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
+                data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
+                data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
+                data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
+                this.creaditList.isForbid
+                    ? (this.creaditList.isForbid = 1)
+                    : (this.creaditList.isForbid = 0);
+                data.isForbid = this.creaditList.isForbid;
+                data.quotaReason = this.creaditList.quotaReason;
+                data.totalQuota =
+                    +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
+                data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
+                data.tempQuotaTotal = this.creaditList.tempCreditLimit;
+                data.tempStart = this.creaditList.tempStart;
+                data.tempEnd = this.creaditList.tempEnd;
+                data.orgId = this.creaditList.orgid;
+                data.adjustType = 1;
+                data.afterAdjustQuota =
+                    this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
+                save(data).then(res => {
+                    if (res.code === 0) {
+                        this.adjustment = false;
+                        this.$Message.warning("保存成功");
+                        this.getListTop();
+                    }
+                    // console.log(res);
+                });
+            }else {
+                this.$message.warning("* 为必填！");
+            }
+        })
+
     },
     //调整取消框
     cancelChange() {
