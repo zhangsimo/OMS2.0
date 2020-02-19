@@ -161,6 +161,7 @@ export default class ProcurementModal extends Vue {
     this.shows = false;
     this.selectRow.details.forEach((el:any) => {
       el.maxQty = el.orderQty;
+      el.adjustQty=0
       el.oid = el.id;
       Reflect.deleteProperty(el, 'id');
       Reflect.deleteProperty(el, 'trueEnterQty');
