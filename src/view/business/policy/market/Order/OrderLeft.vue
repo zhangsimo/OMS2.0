@@ -58,6 +58,7 @@ export default {
   data() {
     return {
       flag: 0,
+      rightFlag:0,
       page: {
         total: 0,
         size: 20,
@@ -143,7 +144,20 @@ export default {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
+        //点击保存按钮右侧数据保存成功后执行
+        if(this.rightFlag){
+          this.rightFlag = 0
+          this.$refs.xTab.setCurrentRow(this.tableData[0])
+          this.clickOnesList({row:this.tableData[0]})
+
+        }
       }
+    },
+    //右侧保存成功调用
+    dataSaveSuccess(){
+      this.flag = 0;
+      this.rightFlag = 1;
+      this.getList();
     },
     //切换页面
     selectNum(val) {
@@ -158,6 +172,7 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      console.log(data)
       if (this.flag) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",

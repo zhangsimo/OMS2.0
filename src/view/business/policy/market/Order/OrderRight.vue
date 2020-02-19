@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -610,7 +610,7 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return "和值";
+            return "合计";
           }
           if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
@@ -814,12 +814,13 @@ export default {
               // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
               //   this.formPlan
               // );
-              
+
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
-              
+
               // this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", this.formPlan);
+              this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
             }
           } catch (errMap) {
             this.$XModal.message({
