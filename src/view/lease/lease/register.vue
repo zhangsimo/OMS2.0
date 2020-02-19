@@ -265,7 +265,7 @@
           if (this.statuss == 5){
              this.$Message.warning('请选择审核对象')
           }else if(this.statuss == 1){
-            this.$Message.warning('该对象已审核，请选择未审核对象')
+            this.$Message.warning('至少选中一条记录')
           }else{
             this.tenant_audit = true
             Reviewtenant().then((res) =>{
