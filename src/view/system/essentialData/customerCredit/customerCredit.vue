@@ -429,7 +429,6 @@ export default {
       this.getListTop();
     },
     selectNum(p) {
-      // console.log(p)
       this.page.num = p;
       this.getListTop();
     },
@@ -438,7 +437,6 @@ export default {
       this.rowMessage = row;
       this.state = row.isGuestResearch;
       this.ID = row.guestId;
-      // console.log(this.ID)
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
       // this.creaditList.nature = this.costList.CS00117[0].id;
@@ -448,7 +446,6 @@ export default {
       this.credit();
     },
     selectPage(size) {
-      console.log(size);
       this.page.num = 1;
       this.page.size = size;
       this.getListTop();
@@ -456,7 +453,6 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        // console.log(1112)
         if (this.Limitstate === 1) {
           this.$Message.warning("正在审批中，请等待审批完成!");
         } else if (this.Limitstate === 3) {
@@ -471,7 +467,7 @@ export default {
     },
     //申请信用调查
     opensurveyShow() {
-      this.$refs.SurveyList.handleReset();
+      // this.$refs.SurveyList.handleReset();
       this.surveyShow = true;
     },
     //额度调用
@@ -518,7 +514,6 @@ export default {
       let data = {};
       data = ["CS00106", "CS00118", "CS00117"];
       let res = await getDigitalDictionary(data);
-      // console.log(res.data)
       if (res.code === 0) {
         this.costList = res.data;
       }
@@ -528,7 +523,6 @@ export default {
       let data = {};
       data = ["CS00112"];
       let res = await getDigitalDictionary(data);
-      console.log(res.data.CS00112);
       if (res.code === 0) {
         this.quality = res.data.CS00112;
       }
@@ -545,7 +539,6 @@ export default {
           );
           data.tempStart = tools.transTime(this.creaditList.tempStart);
           data.guestId = this.ID;
-          // console.log(data)
           saveOrUpdate(data).then(res => {
             if (res.code === 0) {
               this.getListTop();
@@ -555,7 +548,6 @@ export default {
           });
         } else {
           this.$message.warning("* 为必填！");
-          console.log(this.creaditList);
         }
       });
     },
@@ -569,10 +561,8 @@ export default {
       params.guestId = this.rowMessage.guestId;
       params.orgId = this.rowMessage.orgid;
       adjustment(params).then(res => {
-        console.log(res.data);
         if (res.code === 0) {
           this.adjustmentMsg = res.data;
-          console.log(this.adjustmentMsg);
         }
       });
     },
@@ -611,7 +601,6 @@ export default {
                         this.$Message.warning("保存成功");
                         this.getListTop();
                     }
-                    // console.log(res);
                 });
             }else {
                 this.$message.warning("* 为必填！");
@@ -625,7 +614,6 @@ export default {
     },
     //子组件的参数
     getMsg(msg) {
-      console.log(msg);
       // this.today = a
     },
     //申请信用额度弹框
@@ -633,7 +621,6 @@ export default {
       let dataa = {};
       dataa.guestId = this.rowMessage.guestId;
       dataa.orgId = this.rowMessage.orgid;
-      // console.log(dataa)
       guestAdjust(dataa).then(res => {
         if (res.code === 0) {
           this.applicationArr = res.data;
@@ -707,7 +694,6 @@ export default {
       return returnStr;
     };
     this.today = ToDayStr();
-    // console.log(this.today)
   }
 };
 </script>
