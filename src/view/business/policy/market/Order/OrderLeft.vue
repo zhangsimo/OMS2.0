@@ -58,7 +58,8 @@ export default {
   data() {
     return {
       flag: 0,
-      rightFlag:0,
+      rightFlag:0,//0为初始化时候，1为保存、修改、作废等操作回调
+      leftClickItemId:"",
       page: {
         total: 0,
         size: 20,
@@ -122,6 +123,7 @@ export default {
       this.$parent.$parent.orderlistType = 0;
       this.$refs.xTab.setCurrentRow(item);
       this.$store.commit("setOneOrder", item);
+      this.leftClickItemId = "";
     },
     getData(data) {
       // console.log(data, '该值')
@@ -147,9 +149,19 @@ export default {
         //点击保存按钮右侧数据保存成功后执行
         if(this.rightFlag){
           this.rightFlag = 0
-          this.$refs.xTab.setCurrentRow(this.tableData[0])
-          this.clickOnesList({row:this.tableData[0]})
-
+          if(this.leftClickItemId){
+            for(let item of this.tableData){
+              if(item.id==this.leftClickItemId){
+                this.$refs.xTab.setCurrentRow(item)
+                this.clickOnesList({row:item})
+                break
+              }
+            }
+            this.leftClickItemId = "";
+          }else{
+            this.$refs.xTab.setCurrentRow(this.tableData[0])
+            this.clickOnesList({row:this.tableData[0]})
+          }
         }
       }
     },
@@ -172,7 +184,6 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      console.log(data)
       if (this.flag) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -186,6 +197,9 @@ export default {
         });
         return;
       }
+      if(data.row.id){
+        this.leftClickItemId = data.row.id;
+      }
       this.$parent.$parent.$refs.right.$refs.formPlan.resetFields();
       let obj = {};
       obj = JSON.parse(JSON.stringify(data.row));
@@ -197,13 +211,13 @@ export default {
     //监听时间
     queryTime: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      this.page.size = 20;
       this.getList();
     },
     //监听状态
     orderType: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      this.page.size = 20;
       this.getList();
     },
     //更多搜索
@@ -211,7 +225,7 @@ export default {
       handler(v, ov) {
         v.showPerson = v.showPerson ? 1 : 0;
         this.page.num = 1;
-        this.page.size = 10;
+        this.page.size = 20;
         let page = this.page.num - 1;
         let size = this.page.size;
         getLeftList(page, size, v).then(res => {
@@ -230,7 +244,11 @@ export default {
     changeLeftList: {
       handler(v, ov) {
         this.page.num = 1;
-        this.page.size = 10;
+        this.page.size = 20;
+        //作废
+        this.flag = 0;
+        this.rightFlag = 1;
+
         this.getList();
       },
       deep: true
@@ -240,7 +258,7 @@ export default {
       handler(v, ov) {
         if (v.code === 0) {
           this.page.num = 1;
-          this.page.size = 10;
+          this.page.size = 20;
           this.getList();
         }
       },
