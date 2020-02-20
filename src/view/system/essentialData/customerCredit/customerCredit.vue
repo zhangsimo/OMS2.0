@@ -648,12 +648,10 @@ export default {
       let data = {};
       data.guestId = this.rowMessage.guestId;
       data.orgId = this.rowMessage.orgid;
-      data.fixationQuotaTotal =
-        +this.creaditList.applyQuota + this.creaditList.creditLimit ||
-        0 + +this.creaditList.applyQuota;
-      data.tempQuotaTotal =
-        +this.creaditList.tempQuota + this.creaditList.tempCreditLimit ||
-        0 + +this.creaditList.tempQuota;
+      this.creaditList.applyQuota=this.creaditList.applyQuota?this.creaditList.applyQuota:0;
+      this.creaditList.tempQuota=this.creaditList.tempQuota?this.creaditList.tempQuota:0;
+      data.fixationQuotaTotal = this.creaditList.applyQuota*1 + this.creaditList.creditLimit*1 || 0 +this.creaditList.applyQuota*1;
+      data.tempQuotaTotal = this.creaditList.tempQuota*1 + this.creaditList.tempCreditLimit*1 || 0 +this.creaditList.tempQuota*1;
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
       data.tempStart = tools.transTime(this.creaditList.tempStart);
@@ -673,7 +671,6 @@ export default {
         +this.creaditList.applyQuota + +this.creaditList.tempQuota;
       data.addTotalQuota = this.creaditList.tototo || 0;
       data.adjustType = 0;
-      console.log(data, "data.applyQuota");
       save(data).then(res => {
         if (res.code === 0) {
           this.CreditLineApplicationShow = false;
