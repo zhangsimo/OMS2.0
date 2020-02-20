@@ -1,6 +1,6 @@
 <template>
   <div style="height: 300px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" :label-width="150">
+    <Form :model="data" :label-width="150" :rules="formRule" ref="formRule">
       <FormItem label='调整日期:' >
         <span>{{ datetoday }}</span>
       </FormItem>
@@ -51,7 +51,20 @@
         },
       data(){
           return {
-
+              formRule:{
+                  quotaReason:{
+                      required: true,
+                      type: "string",
+                      message: "请输入额度调整/清零原因！",
+                      trigger: "blur"
+                  },
+                  fixationQuotaTotal:{
+                      required: true,
+                      type: "number",
+                      message: "请输入调整后额度！",
+                      trigger: "blur"
+                  }
+              }
           }
       }
     }

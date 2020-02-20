@@ -38,8 +38,8 @@
         </vxe-table>
       </div>
     </Split>
-    <Modal v-model="addNewModal" title="编辑会计科目" width="800">
-      <Form ref="proModal" :model="formData"  :label-width="110">
+    <Modal v-model="addNewModal" title="编辑会计科目"   width="800">
+      <Form :model="formData"  :label-width="110"  ref="formValidate" :rules="ruleValidate">
         <Row>
           <Col span="12">
             <FormItem label="上级科目：">
@@ -54,12 +54,12 @@
         </Row>
         <Row>
           <Col span="12">
-            <FormItem label="科目编码：">
+            <FormItem label="科目编码：" prop="titleCode">
               <Input class="w200" v-model="formData.titleCode" ></Input>
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="科目名称：">
+            <FormItem label="科目名称：" prop="titleName">
               <Input class="w200" v-model="formData.titleName" ></Input>
             </FormItem>
           </Col>
@@ -69,7 +69,7 @@
         </FormItem>
         <Row>
           <Col span="12">
-            <FormItem label="余额方向：">
+            <FormItem label="余额方向：" prop="balanceDirection">
               <RadioGroup v-model="formData.balanceDirection">
                 <Radio :label="0">借</Radio>
                 <Radio :label="1">贷</Radio>
@@ -77,7 +77,7 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="科目状态：">
+            <FormItem label="科目状态：" prop="status">
               <RadioGroup v-model="formData.status">
                 <Radio :label="1">启用</Radio>
                 <Radio :label="0">禁用</Radio>
@@ -114,6 +114,20 @@
                 addNewModal:false,//新增模块显示
                 formData:{},//新增数据
                 assistList:[{itemName: '暂无' , itemCode: 'null'}],// 辅助列表
+                ruleValidate:{
+                    titleCode:[
+                        { required: true, message: '必填', trigger: 'blur' }
+                    ],
+                    titleName:[
+                        { required: true, message: '必填', trigger: 'blur' }
+                    ],
+                    balanceDirection:[
+                        { required: true,type: 'number', message: '请选择', trigger: 'change' }
+                    ],
+                    status:[
+                        { required: true, type: 'number' , message: '请选择', trigger: 'change' }
+                    ]
+                }//表单校验
             }
         },
         mounted(){
@@ -176,6 +190,7 @@
             add(){
               this.addNewModal = true
               this.formData ={}
+                this.$refs.formValidate.resetFields();
               this.formData.parentCode = this.oneTreeList.titleCode
               this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
               this.formData.auxiliaryAccountingCode = 'null'
@@ -183,23 +198,31 @@
             },
 
             //保存
-            async addSave(){
-               let res = await getSave( this.formData )
-                if(res.code == 0){
-                    this.getTreeList()
-                    let arr = await getTableList(data)
-                    if(arr.code == 0 ){
-                        this.tableData = arr.data
-                    }
-                    this.addNewModal = false
+             addSave(){
+                this.$refs.formValidate.validate( async (valid) => {
+                    if (valid) {
+                        let res = await getSave( this.formData )
+                        if(res.code == 0){
+                            this.getTreeList()
+                            let arr = await getTableList(data)
+                            if(arr.code == 0 ){
+                                this.tableData = arr.data
+                            }
+                            this.addNewModal = false
 
-                }
+                        }
+                    } else {
+
+                    }
+                })
+
             },
 
             //新增子节点
             addNewChildren(row){
                 this.addNewModal = true
                 this.formData ={}
+                this.$refs.formValidate.resetFields();
                 this.formData.parentCode = row.titleCode
                 this.formData.titleTypeCode = row.titleTypeCode
                 this.formData.auxiliaryAccountingCode = 'null'
@@ -209,6 +232,7 @@
             //修改节点数据
             change(row){
                 this.formData = row
+                this.$refs.formValidate.resetFields();
                 this.addNewModal = true
             },
 

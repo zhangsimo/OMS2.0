@@ -292,7 +292,7 @@ export default {
     };
   },
   created() {
-    // this.getlist()
+    this.getlist()
     this.getAdress();
   },
   computed: {
