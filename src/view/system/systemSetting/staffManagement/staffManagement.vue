@@ -453,7 +453,8 @@ export default {
       this.cancel();
       this.newStaff = {
         single: false,
-        singtwo: false
+        singtwo: false,
+          gender: 0
       };
       this.modalShow = true;
     },
