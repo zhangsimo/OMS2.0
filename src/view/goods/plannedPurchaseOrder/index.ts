@@ -39,6 +39,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private split1: number = 0.2;
 
   private isInput: boolean = true;
+  private isDirectCompanyId:boolean = false
 
   //左侧表格高度
   private leftTableHeight: number = 0;
@@ -754,6 +755,10 @@ export default class PlannedPurchaseOrder extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
+    if(row.directCompanyId){
+      this.isDirectCompanyId = true
+      this.formPlanmain.directCompanyId = row.directCompanyId
+    }
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {

@@ -37,7 +37,7 @@
             </span>
           </Button>
         </div>
-        <div class="db ml15">
+        <div class="db ml15" v-if="$route.name!='outsidePurchase'">
           <Checkbox v-model="showModify" @on-change="query">显示已调整</Checkbox>
         </div>
       </div>
