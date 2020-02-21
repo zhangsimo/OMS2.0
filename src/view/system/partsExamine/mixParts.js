@@ -86,12 +86,12 @@ export const minxParts = {
           key: "venderSkuNo",
           align: "center",
           children: [
-            {
-              title: "所属体系",
-              key: "tenantName",
-              // key:"belongSystem",
-              minWidth: 70
-            },
+            // {
+            //   title: "所属体系",
+            //   key: "tenantName",
+            //   // key:"belongSystem",
+            //   minWidth: 70
+            // },
             {
               title: "申请分店",
               key: "orgname",
