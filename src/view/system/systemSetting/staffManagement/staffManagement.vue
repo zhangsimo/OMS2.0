@@ -1,6 +1,8 @@
 <template>
   <div class="staff-box">
     <div class="staff-header">
+      <span>机构:</span>
+      <Cascader :data="list" v-model="groundIds" placeholder='选择机构' style="width: 250px" class="mr10"></Cascader>
       <span>姓名:</span>
       <input type="text" class="staff-name mr10" v-model="staffName" />
       <span>手机号码:</span>
@@ -161,6 +163,7 @@ import addStaff from "./addStaff";
 import setPassword from "./setpassword";
 import PTCompany from "./PTCompany";
 import { frozenStaff } from "_api/admin/userApi";
+import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
 import moment from "moment";
 
 export default {
@@ -173,6 +176,7 @@ export default {
   data() {
     return {
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
+        list:[],//机构数组
       shopCode: "",
       loading: true,
       compentName: "",
@@ -183,6 +187,7 @@ export default {
       findAllCompany: false,
       staffphoneNumber: "",
       staffName: "",
+        groundIds:[],//机构
       PtCompany: false,
       // changepasswordData:'',
       staffList: [],
@@ -325,8 +330,42 @@ export default {
   },
   mounted() {
     this.getAllStaffList();
+    this.getList();
   },
   methods: {
+      async getList(){
+          let data = {}
+          data.groupId = this.$store.state.user.userData.tenantGroupId
+          let res = await getcompany(data)
+          if(res.code === 0){
+              let list = []
+              res.data.childs.forEach(item => {
+                  if(item.childs.length > 0){
+                      list.push({value: item.id ,label: item.name ,children:item.childs})
+                  }else {
+                      list.push({value: item.id ,label: item.name ,children:[]})
+                  }
+              })
+              list.forEach( item => {
+                  if(item.children.length > 0){
+                      item.children.map( val => {
+                          val.value = val.id
+                          val.label = val.name
+                          if(val.childs.length > 0){
+                              val.children = val.childs
+                              val.children.map( v => {
+                                  v.value = v.id
+                                  v.label = v.name
+                              })
+                          }else{
+                              val.children = []
+                          }
+                      })
+                  }
+              })
+              this.list = list
+          }
+      },
     getAllStaffList() {
       let stop = this.$loading();
       let data = {};
@@ -335,6 +374,7 @@ export default {
       data.userName = this.staffName;
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
+      data.groundIds=this.groundIds[this.groundIds.length-1]||'';
       getStaffList(data)
         .then(res => {
           stop();
@@ -650,6 +690,8 @@ export default {
     line-height: 57px;
     border-bottom: 1px solid #eee;
     padding-left: 20px;
+    display: flex;
+    align-items: center;
   }
   .staff-name {
     height: 30px;
