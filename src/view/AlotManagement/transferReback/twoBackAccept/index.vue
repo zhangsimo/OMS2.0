@@ -354,6 +354,7 @@ export default {
             this.tbdata = res.data || [];
             this.modal3 = true;
             this.danhao = res.data.serviceId;
+            location.reload()
           } else if (res.code == 1) {
             this.$Message.info("请选择受理仓库");
           }
@@ -376,6 +377,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             if (res.code == 0) {
+                location.reload()
             } else if (res.code == 1) {
               this.$Message.info("请选择受理仓库");
             }

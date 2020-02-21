@@ -323,7 +323,7 @@
       </div>
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="View_Money" title="产看费用" width="56%">
+    <Modal v-model="View_Money" title="查看费用" width="56%">
       <div class="audit_nav">
         <Table border :columns="columns4" :loading="loading4" :data="tbdata4"></Table>
       </div>
