@@ -118,8 +118,8 @@
         //市下拉框
         city:[],
         getCodeBtnText:'获取验证码',
-          codeDisabled:false,
           timerBack:60,
+          cansend:true,
         form: {
           companyName: '',
           mobile: '',
@@ -146,10 +146,10 @@
       getCo() {
         let tel = {}
         tel.mobile =this.form.mobile;
-          this.codeDisabled = true;
-          this.timerBack=60;
-          this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
-          if(!this.codeDisabled){
+          if(this.cansend){
+              this.timerBack=60;
+              this.getCodeBtnText = `${this.timerBack}后重新获取验证码`;
+              this.cansend=false;
               sendMessage(tel).then(res => {
                   if(res.code==0){
                       let timer = setInterval(()=>{
@@ -158,14 +158,14 @@
                           if(this.timerBack==0){
                               clearInterval(timer)
                               this.timerBack = 60;
-                              this.codeDisabled = false
-                              this.getCodeBtnText = '获取验证码'
+                              this.getCodeBtnText = '获取验证码';
+                              this.cansend=true;
                           }
                       },1000)
                   }else{
                       this.timerBack = 60;
-                      this.codeDisabled = false
-                      this.getCodeBtnText = '获取验证码'
+                      this.getCodeBtnText = '获取验证码';
+                      this.cansend=true;
                   }
               })
           }
