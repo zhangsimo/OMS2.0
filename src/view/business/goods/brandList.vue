@@ -816,6 +816,8 @@ export default {
   methods: {
     // 新增采购订单保存数据
     savePre() {
+      console.log(this.billTypeId)
+      return
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -845,10 +847,11 @@ export default {
     // 获取票据类型方法
     getPjType() {
       PjType().then(res => {
+        console.log(res)
         if (res.code === 0) {
           this.ticketTypeList = res.data;
-          this.billTypeId = res.data.itemCode;
-          this.billTypeName = res.data.itemName;
+          this.billTypeId = res.data[0].itemCode;
+          this.billTypeName = res.data[0].itemName;
         }
       });
     },

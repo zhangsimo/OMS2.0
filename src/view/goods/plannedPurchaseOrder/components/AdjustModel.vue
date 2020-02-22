@@ -37,7 +37,7 @@
             </span>
           </Button>
         </div>
-        <div class="db ml15" v-if="$route.name!='outsidePurchase'">
+        <div class="db ml15" v-if="$route.name!='outsidePurchase'&&$route.name!='temporaryPurchase'">
           <Checkbox v-model="showModify" @on-change="query">显示已调整</Checkbox>
         </div>
       </div>
@@ -159,10 +159,14 @@ export default class AdjustModel extends Vue {
   }
 
   private async save() {
-    let res: any = await api.saveModifyOrder(this.tableData);
-    if (res.code == 0) {
-      this.$Message.success("保存成功!");
-      this.getList();
+    if(this.tableData&&this.tableData.length>0){
+      let res: any = await api.saveModifyOrder(this.tableData);
+      if (res.code == 0) {
+        this.$Message.success("保存成功!");
+        this.getList();
+      }
+    }else{
+      this.$Message.error("没有需要调整的数据！");
     }
   }
 

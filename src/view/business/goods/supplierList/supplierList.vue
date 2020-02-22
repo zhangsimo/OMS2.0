@@ -376,7 +376,8 @@
         Acode: '', //保存,提交时需给后台传的code
         AcodeId: '', //保存,提交时需给后台传的codeId
         successNOid: '', //没有id
-        successHaveId: '', //有id
+        successHaveId: '', //有id,
+        selectLeftItemId:'',//左侧点击的id
       }
     },
     methods: {
@@ -819,6 +820,14 @@
           if(res.code === 0){
             this.Left.tbdata = res.data.content || []
             this.Left.page.total = res.data.totalElements
+
+            for(let item of this.Left.tbdata){
+              if(item.id==this.selectLeftItemId){
+                item._highlight = true;
+                this.setRightData(item);
+                break;
+              }
+            }
           }
         })
       },
@@ -887,6 +896,7 @@
       // 左边部分的当前行
       selection(row){
         if (row == null) return;
+        this.selectLeftItemId = row.id;
         let currentRowTable = this.$refs["currentRowTable"];
         if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({
@@ -944,6 +954,7 @@
                       this.formPlan.serviceId = '' //采购订单
                       this.Right.tbdata  =  [] //子表格
                       this.$refs.formPlan.resetFields();
+
                     }
                   })
                 } else {
@@ -966,31 +977,21 @@
               this.formPlan.warehouse = ''  //退货仓库
               this.formPlan.serviceId = '' //采购订单
               this.Right.tbdata  =  [] //子表格
+
+              for(let item of this.Left.tbdata){
+                if(item.id==this.selectLeftItemId){
+                  item._highlight = true;
+                  this.setRightData(item);
+                  break;
+                }
+              }
+
             },
           })
         }else{
           if(row.id){
             // this.leftgetList();
-            this.mainId = row.id
-            this.guestidId = row.guestId
-            this.datadata = row
-              this.formPlan.guestName = this.datadata.guestId
-              this.formPlan.storeId = this.datadata.orderManId
-              this.formPlan.orderDate = this.datadata.orderDate
-              this.formPlan.numbers = this.datadata.serviceId
-              this.formPlan.cause = this.datadata.rtnReasonId
-              this.formPlan.clearing = this.datadata.settleTypeId
-              this.formPlan.remark = this.datadata.remark
-              this.formPlan.warehouse = this.datadata.storeId
-              this.formPlan.serviceId = this.datadata.code
-              row.details.map(item => {
-                item.orderPrice = Number(item.orderPrice).toFixed(2)
-              })
-              this.Right.tbdata = this.datadata.details
-              this.presentrowMsg = row.billStatusId.value
-              // console.log(this.presentrowMsg)
-              this.rowId = row.id
-              this.buttonDisable = false
+            this.setRightData(row)
           }else {
             this.formPlan.guestName = ''
             this.formPlan.storeId = ''
@@ -1006,6 +1007,32 @@
           }
         }
       },
+
+      //右侧填充数据
+      setRightData(row){
+        this.selectLeftItemId = "";
+        this.mainId = row.id
+        this.guestidId = row.guestId
+        this.datadata = row
+        this.formPlan.guestName = this.datadata.guestId
+        this.formPlan.storeId = this.datadata.orderManId
+        this.formPlan.orderDate = this.datadata.orderDate
+        this.formPlan.numbers = this.datadata.serviceId
+        this.formPlan.cause = this.datadata.rtnReasonId
+        this.formPlan.clearing = this.datadata.settleTypeId
+        this.formPlan.remark = this.datadata.remark
+        this.formPlan.warehouse = this.datadata.storeId
+        this.formPlan.serviceId = this.datadata.code
+        row.details.map(item => {
+          item.orderPrice = Number(item.orderPrice).toFixed(2)
+        })
+        this.Right.tbdata = this.datadata.details
+        this.presentrowMsg = row.billStatusId.value
+        // console.log(this.presentrowMsg)
+        this.rowId = row.id
+        this.buttonDisable = false
+      },
+
 
       // 仓库下拉框
       warehouse(){},
