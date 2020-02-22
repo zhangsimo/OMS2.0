@@ -351,7 +351,7 @@
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
-    <Godown-entry ref="GodownEntryModal" @godownList="getGodown"></Godown-entry>
+    <Godown-entry ref="GodownEntryModal" @godownList="getGodown" :store-id="formPlan.storeId"></Godown-entry>
     <!--      选择活动-->
     <Activity ref="activity" @getActivity="activiyList"></Activity>
     <!--      查看详情-->
@@ -870,7 +870,11 @@ export default {
     },
     //打开选择入库单
     openGodownEntryModal() {
-      this.$refs.GodownEntryModal.openModal();
+        if(!this.formPlan.storeId){
+            this.$message.error("请选择交货仓库");
+        }else{
+            this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
+        }
     },
     //打开活动
     openActivityModal() {
