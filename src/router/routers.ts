@@ -619,6 +619,80 @@ export default [
          ]
       },
       {
+        path: "/invoiceAdministration",
+        name: "invoiceAdministration",
+        mark: "5",
+        // redirect: "/reportForm",
+        meta: {
+          icon: "ios-paper",
+          title: "发票管理"
+        },
+        component: parentView,
+        children: [
+          {
+            path: "/invoiceAdministration/costOpening",
+            name: "invoiceAdministration-costOpening",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "费用开票申请"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/costOpening.vue")
+          },
+          {
+            path: "/invoiceAdministration/invoiceApply",
+            name: "invoiceAdministration-invoiceApply",
+            redirect: "",
+            mark: "5201",
+            meta: {
+              title: "开票申请查询与核销"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceApply.vue")
+          },
+          {
+            path: "/invoiceAdministration/salesInvoice",
+            name: "invoiceAdministration-salesInvoice",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "销售发票导入"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/salesInvoice.vue")
+          },
+          {
+              path: "/invoiceAdministration/invoiceManagement",
+              name: "invoiceAdministration-invoiceManagement",
+              redirect: "",
+              mark: "5200",
+              meta: {
+                title: "进项发票管理"
+              },
+              component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceManagement.vue")
+            }
+         
+          // {
+          //   path: "/invoiceAdministration/invoiceApply",
+          //   name: "invoiceAdministration-invoiceApply",
+          //   redirect: "",
+          //   mark: "5202",
+          //   meta: {
+          //     title: "开票申请查询与核销"
+          //   },
+          //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceApply.vue")
+          // },
+          // {
+          //   path: "/invoiceAdministration/invoice",
+          //   name: "invoiceAdministration-invoice",
+          //   redirect: "",
+          //   mark: "5203",
+          //   meta: {
+          //     title: "进项发票管理"
+          //   },
+          //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceRceipts.vue")
+          // }
+        ]
+      },
+      {
         path: "/settlementManagement/paymentmanage",
         name: "settlementManagement-paymentmanage",
         // mark: 'oms_orders_approve',
@@ -1710,7 +1784,7 @@ export default [
             // mark: '59',
             meta: {
               hideInMenu: true,
-              title: "初期现金银行"
+              title: "期出现金银行"
             },
             component: () =>
               import(
