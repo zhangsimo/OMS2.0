@@ -246,7 +246,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeName" @on-change="addChange2">
+                <Select v-model="this.billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -257,7 +257,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeName" @on-change="addChange3">
+                <Select v-model="this.settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -816,8 +816,6 @@ export default {
   methods: {
     // 新增采购订单保存数据
     savePre() {
-      console.log(this.billTypeId)
-      return
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -881,8 +879,8 @@ export default {
       JsStyle().then(res => {
         if (res.code === 0) {
           this.settlementMethodList = res.data;
-          this.settleTypeId = res.data.itemCode;
-          this.settleTypeName = res.data.Name;
+          this.settleTypeId = res.data[0].itemCode;
+          this.settleTypeName = res.data[0].Name;
         }
       });
     },

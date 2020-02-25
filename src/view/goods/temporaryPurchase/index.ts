@@ -534,7 +534,6 @@ export default class InterPurchase extends Vue {
 
   //表格单选选中
   private selectTabelData(v: any) {
-    console.log(v)
     if (v == null) return;
     //记录当前点击的id
     this.selectLeftItemId = v.id
@@ -562,6 +561,7 @@ export default class InterPurchase extends Vue {
             this.formPlanmain[k] = row[k];
           }
           for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
             if(b.id==this.selectLeftItemId){
               b._highlight = true;
               this.setFormPlanmain(b);
@@ -577,6 +577,7 @@ export default class InterPurchase extends Vue {
           const ref: any = this.$refs['formplanref']
           ref.resetFields();
           for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
             if(b.id==this.selectLeftItemId){
               b._highlight = true;
               this.setFormPlanmain(b);

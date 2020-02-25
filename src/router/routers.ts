@@ -501,6 +501,16 @@ export default [
             component: () => import("@/view/settlementManagement/bill/AccountStatement.vue")
           },
           {
+            path: "/settlementManagement/reconcilation/AccountStatement",
+            name: "reconcilation-AccountStatement",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "对账单"
+            },
+            component: () => import("@/view/settlementManagement/reconciliation/AccountStatement.vue")
+          },
+          {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "bill-CollectionPayment",
             mark: '5102',

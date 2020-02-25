@@ -517,6 +517,9 @@
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
+        for(let item of this.Left.tbdata){
+          item._highlight = false
+        }
           this.formPlan.cause =  '',  //退货原因
           this.formPlan.clearing =  '', //结算方式
           this.formPlan.guestName = '',//供应商
@@ -822,6 +825,7 @@
             this.Left.page.total = res.data.totalElements
 
             for(let item of this.Left.tbdata){
+              item._highlight = false
               if(item.id==this.selectLeftItemId){
                 item._highlight = true;
                 this.setRightData(item);
@@ -979,6 +983,7 @@
               this.Right.tbdata  =  [] //子表格
 
               for(let item of this.Left.tbdata){
+                item._highlight = false
                 if(item.id==this.selectLeftItemId){
                   item._highlight = true;
                   this.setRightData(item);
