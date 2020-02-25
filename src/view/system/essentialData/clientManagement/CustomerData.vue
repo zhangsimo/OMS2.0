@@ -292,7 +292,7 @@ export default {
     };
   },
   created() {
-    // this.getlist()
+    this.getlist()
     this.getAdress();
   },
   computed: {
@@ -306,7 +306,7 @@ export default {
       location.href =
         baseUrl.downApi +
         "/file/get?fileId=" +
-        1300000000 +
+        1500000000 +
         "&access_token=" +
         Cookies.get(TOKEN_KEY);
     },

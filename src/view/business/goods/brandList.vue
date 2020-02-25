@@ -246,7 +246,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeName" @on-change="addChange2">
+                <Select v-model="this.billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -257,7 +257,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeName" @on-change="addChange3">
+                <Select v-model="this.settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -845,10 +845,11 @@ export default {
     // 获取票据类型方法
     getPjType() {
       PjType().then(res => {
+        console.log(res)
         if (res.code === 0) {
           this.ticketTypeList = res.data;
-          this.billTypeId = res.data.itemCode;
-          this.billTypeName = res.data.itemName;
+          this.billTypeId = res.data[0].itemCode;
+          this.billTypeName = res.data[0].itemName;
         }
       });
     },
@@ -878,8 +879,8 @@ export default {
       JsStyle().then(res => {
         if (res.code === 0) {
           this.settlementMethodList = res.data;
-          this.settleTypeId = res.data.itemCode;
-          this.settleTypeName = res.data.Name;
+          this.settleTypeId = res.data[0].itemCode;
+          this.settleTypeName = res.data[0].Name;
         }
       });
     },

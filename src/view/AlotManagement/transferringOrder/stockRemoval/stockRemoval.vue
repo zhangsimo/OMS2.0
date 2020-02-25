@@ -813,7 +813,11 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      if(this.cangkuListall.length>0){
+          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      }else{
+          this.Leftcurrentrow.storeId = '';
+      }
       this.buttonShow = false;
       this.tuneOut = false;
       this.Leftcurrentrow.createTime = moment(new Date()).format(
@@ -865,9 +869,25 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
+        if(params.status.value!=undefined){
+            params.status = params.status.value
+        }
+      if(params.settleStatus && params.settleStatus.value!=undefined){
+          params.settleStatus= params.settleStatus.value
+      }
+        if(params.orderTypeId && params.orderTypeId.value!=undefined){
+            params.orderTypeId= params.orderTypeId.value
+        }
+        for (var i = 0; i < this.getArray.length; i++) {
+            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+                params.guestOrgid = this.getArray[i].isInternalId;
+                params.guestId = this.getArray[i].id;
+            }
+        }
+        this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
+        params.createTime = moment(this.Leftcurrentrow.createTime).format(
+            "YYYY-MM-DD HH:mm:ss"
+        );
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息

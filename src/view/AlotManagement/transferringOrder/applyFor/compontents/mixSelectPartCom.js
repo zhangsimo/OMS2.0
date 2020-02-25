@@ -231,7 +231,7 @@ export const mixSelectPartCom = {
         req.partCodes = [];
         req.partBrandCodes = [this.selectBrand];
       }
-      
+
       if (this.partName.trim()) {
         if (this.searchType == "adapterCarModels") {
           req[this.searchType] = [this.partName];

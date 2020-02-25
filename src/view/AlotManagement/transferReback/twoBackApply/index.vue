@@ -875,7 +875,10 @@ export default {
       const params = {
         mainId: row.id
       };
-      const res = await getListDetail(params);
+      let res = {};
+        if(this.Leftcurrentrow.xinzeng!=1){
+            res=await getListDetail(params);
+        }
       this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
@@ -883,20 +886,21 @@ export default {
       setTimeout(() => {
         that.showit = true;
       }, 100);
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
+
+        cangkulist2(this.$store.state.user.userData.groupId)
+            .then(res => {
+                if (res.code == 0) {
+                    res.data.map(item => {
+                        item["label"] = item.name;
+                        item["value"] = item.id;
+                    });
+                    // this.cangkuListall = res.data
+                    this.dcData = res.data;
+                }
+            })
+            .catch(e => {
+                this.$Message.info("获取仓库列表失败");
             });
-            // this.cangkuListall = res.data
-            this.dcData = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
     },
     //分页
     changePage(p) {

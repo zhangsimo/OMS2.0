@@ -345,13 +345,13 @@
     <!--      </Modal>-->
 
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
-    <barch ref="barch" @selectPartName="getBarchList"></barch>
+    <barch ref="barch" :guestId="formPlan.guestId"  @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
-    <Godown-entry ref="GodownEntryModal" @godownList="getGodown"></Godown-entry>
+    <Godown-entry ref="GodownEntryModal" @godownList="getGodown" :store-id="formPlan.storeId"></Godown-entry>
     <!--      选择活动-->
     <Activity ref="activity" @getActivity="activiyList"></Activity>
     <!--      查看详情-->
@@ -443,7 +443,8 @@ export default {
         disabledDate: options2DisabledDate
       },
       formPlan: {
-        detailList: []
+        detailList: [],
+        storeId:'',
       }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -554,7 +555,6 @@ export default {
     },
     //改变客户
     async changeClient(value) {
-      console.log(value)
       if (!value) {
         return false;
       }
@@ -562,12 +562,10 @@ export default {
       oneClient = this.client.filter(item => {
         return item.id === value;
       });
-      // console.log(oneClient,5656)
       for (var i in oneClient) {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
-      console.log(this.leftOneOrder)
       this.leftOneOrder.guestId = value
       const res = await this.getAllLimit()
       // data.guestId = value;
@@ -817,16 +815,13 @@ export default {
     //
     //   cleadplanSendDate(data){
     //     this.formPlan.planSendDate=null
-    //     console.log('4444',this.formPlan.planSendDate)
     //   },
     //   clearplanArriveDate(data){
     //     this.formPlan.planArriveDate=null
-    //     console.log('55', this.formPlan.planArriveDate)
     //   },
 
     //配件返回的参数
     getPartNameList(val) {
-      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = [];
@@ -875,7 +870,11 @@ export default {
     },
     //打开选择入库单
     openGodownEntryModal() {
-      this.$refs.GodownEntryModal.openModal();
+        if(!this.formPlan.storeId){
+            this.$message.error("请选择交货仓库");
+        }else{
+            this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
+        }
     },
     //打开活动
     openActivityModal() {
@@ -883,7 +882,6 @@ export default {
     },
     //获取活动内的数据
     async activiyList(val) {
-      // console.log('val',val)
       let data = {};
       val.isMarkActivity = 1;
       data = this.formPlan;
@@ -897,7 +895,7 @@ export default {
     openFileModal(row) {
       this.oneRow = row;
       this.$nextTick(function() {
-        this.$refs.fileList.openModal();
+        this.$refs.fileList.openModal(this.leftOneOrder.guestId);
       });
     },
     //保存
@@ -997,9 +995,8 @@ export default {
             // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let orderList = [];
             orderList = this.formPlan.detailList.filter(
-              item => item.orderPrice < item.averagePrice
+              item => item.orderPrice*1 < item.averagePrice*1
             );
-            console.log(orderList, 9999);
             if (orderList.length > 0) {
               let text = "";
               orderList.forEach(item => {
@@ -1040,7 +1037,6 @@ export default {
     },
     //获取选择入库单的信息
     async getGodown(val) {
-      // console.log('我是val',val)
       let data = {};
       data = this.formPlan;
       val.details.map(item => {
@@ -1054,7 +1050,6 @@ export default {
       }
     },
     getRUl(val) {
-      console.log('11',val)
       this.upurl = getup + "id=" + this.formPlan.id;
     }
   },
@@ -1064,9 +1059,10 @@ export default {
         if (!old.id) {
           this.formPlan = {
             billStatusId: { name: "草稿", value: 0 },
-            orderMan: this.$store.state.user.userData.username || "",
-            orderManId: this.$store.state.user.userData.id,
-            detailList: []
+            // orderMan: this.$store.state.user.userData.username || "",
+            // orderManId: this.$store.state.user.userData.id,
+            detailList: [],
+              storeId:this.formPlan.storeId,
           };
           this.draftShow = 0;
           this.leftOneOrder =this.formPlan

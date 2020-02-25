@@ -1,7 +1,7 @@
 <template>
   <div class="bigbox2">
       <div class="header">
-        <Button type="warning" class="mr10" @click="read"><Icon custom="iconfont iconziyuan2 icons"/>标记为已读</Button>
+        <Button type="warning" class="mr10" @click="read"><Icon custom="iconfont iconziyuan2 icons"/>标记为已解决</Button>
         <Button class="mr10" @click="back"><Icon custom="iconfont iconfanhuiicon icons"/>返回</Button>
       </div>
       <div class="boxnav">
@@ -103,7 +103,21 @@
       },
     mounted(){
       let Msg = localStorage.getItem('Datas');
-      this.Msg = JSON.parse(Msg)
+      this.Msg = JSON.parse(Msg);
+      if(this.Msg.settleDate){
+          let Year=new Date(this.Msg.settleDate).getFullYear();
+          let month=new Date(this.Msg.settleDate).getMonth()+1;
+          let day=new Date(this.Msg.settleDate).getDate();
+          let hour=new Date(this.Msg.settleDate).getHours();
+          let Minutes=new Date(this.Msg.settleDate).getMinutes();
+          let Seconds=new Date(this.Msg.settleDate).getSeconds();
+          month=parseInt(month)<10?'0'+month:month;
+          day=parseInt(day)<10?'0'+day:day;
+          hour=parseInt(hour)<10?'0'+hour:hour;
+          Minutes=parseInt(Minutes)<10?'0'+Minutes:Minutes;
+          Seconds=parseInt(Seconds)<10?'0'+Seconds:Seconds;
+          this.Msg.settleDate=Year+'-'+month+'-'+day+' '+hour+':'+Minutes+':'+Seconds;
+      }
       this.Image = api.getfile + this.Msg.fileUrl || ''
       this.getList()
     },
