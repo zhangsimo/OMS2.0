@@ -139,7 +139,9 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
-      this.proModal = true
+      this.proModal = true;
+      this.formValidate.specVOS=[];
+      this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌
       this.getCarBrand();
       //获取所有品质

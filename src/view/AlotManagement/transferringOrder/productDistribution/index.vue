@@ -48,7 +48,7 @@
                   <i-input :value.sync="formItem.occupyQty" disabled placeholder="请输入"></i-input>
                 </Form-item>
                 <Form-item label="锁定数量:">
-                  <i-input :value.sync="formItem.lockQty" placeholder="请输入"></i-input>
+                  <i-input v-model="formItem.lockQty" placeholder="请输入"></i-input>
                 </Form-item>
               </i-form>
               <div slot="footer">
@@ -138,7 +138,7 @@
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
-              <Button type="text" @click="baocunfenpei(row)">分配完成</Button>
+              <Button type="text" @click="sureBaocunfenpei(row)">分配完成</Button>
             </template>
           </vxe-table-column>
 
@@ -288,7 +288,19 @@ export default {
       this.params.size = s;
       this.search(this.form);
     },
-
+    //确认分配完成
+      sureBaocunfenpei(row){
+          this.$Modal.confirm({
+              title: '提示',
+              content: '<p>是否确定分配完成</p>',
+              onOk: () => {
+                  this.baocunfenpei(row)
+              },
+              // onCancel: () => {
+              //     this.$Message.info('Clicked cancel');
+              // }
+          });
+      },
     baocunfenpei(row) {
       if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
         this.$Message.info("请输入分配数");
@@ -307,7 +319,9 @@ export default {
     },
     update() {
       // 更新列表信息
-
+        this.formItem.storeId=this.form.storeId;
+        console.log(this.formItem);
+        this.formItem.lockQty=(this.formItem.lockQty*1).toFixed(2)
       genxin(this.formItem)
         .then(res => {
           if (res.code == 0) {

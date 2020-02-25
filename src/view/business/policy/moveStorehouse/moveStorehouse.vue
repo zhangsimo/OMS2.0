@@ -44,7 +44,7 @@
           <div class="db">
             <Button
               class="mr10"
-              @click="editPro"
+              @click="sureEditPro"
               v-has="'submit'"
               :disabled="this.Leftcurrentrow.status.value !== 0"
             >
@@ -731,6 +731,16 @@ export default {
         }
       });
     },
+      //确认提交
+      sureEditPro(){
+          this.$Modal.confirm({
+              title: '提示',
+              content: '<p>确认要提交么?</p>',
+              onOk: () => {
+                  this.editPro()
+              },
+          });
+      },
     // 提交
     editPro() {
       //判断是否为草稿状态

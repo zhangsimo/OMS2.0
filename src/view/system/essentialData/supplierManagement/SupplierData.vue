@@ -11,7 +11,7 @@
         <Option
           v-for="item in supplierType.CS00111"
           :key="item.itemCode"
-          :value="item.id"
+          :value="item.itemCode"
         >{{ item.itemName}}</Option>
       </Select>
       <Button type="warning" class="w90 mr10" @click="queryList">

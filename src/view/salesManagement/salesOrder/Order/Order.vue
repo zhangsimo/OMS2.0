@@ -250,13 +250,17 @@ export default {
     addNew() {
       this.$refs.OrderLeft.change();
       this.ispart=false
-      // console.log('22222',this.$refs.right.ispart)
       this.orderlistType.value = 0
       this.$store.commit("setOneOrder", {});
       this.$refs.OrderLeft.getAdd();
       this.$refs.right.limitList.fixationQuota = '00.00'
       this.$refs.right.limitList.tempQuota  = '00.00'
-      this.$refs.right.limitList.sumAmt = '00.00'
+      this.$refs.right.limitList.sumAmt = '00.00';
+      this.$refs.right.WarehouseList.map(item=>{
+          if(item.isDefault){
+              this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
+          }
+      })
     }
   }
 };

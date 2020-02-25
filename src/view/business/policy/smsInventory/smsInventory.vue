@@ -818,11 +818,11 @@ export default {
         });
         return;
       }
-      this.salesList.map(item => {
-        if (item.label === data.createUname) {
-          data.orderManId = item.id;
-        }
-      });
+      // this.salesList.map(item => {
+      //   if (item.label === data.createUname) {
+      //     data.orderManId = item.id;
+      //   }
+      // });
       this.formPlan = data;
       this.Right.tbdata = data.detailVOList;
       this.draftShow = data.billStatusId.value;
