@@ -258,7 +258,7 @@
                     <Select
                       class="w160"
                       v-model="formPlanmain.directCompanyId"
-                      :disabled="isInput"
+                      :disabled="isInput||isDirectCompanyId"
                     >
                       <Option
                         v-for="(item, index) in putStores"
@@ -390,7 +390,7 @@
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
-                      :max="row.maxQty"
+                      :max="row.orderQty"
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"
@@ -425,21 +425,27 @@
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
-                  field="remark"
                   title="备注"
+                  field="remark"
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="noTaxPrice"
                   title="不含税单价"
                   width="100"
-                ></vxe-table-column>
+                >
+                  <template v-slot="{ row }">
+                    {{ row.noTaxPrice | priceFilters }}
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
-                  field="noTaxAmt"
                   title="不含税金额"
                   width="100"
-                ></vxe-table-column>
+                >
+                  <template v-slot="{ row }">
+                    {{ row.noTaxAmt | priceFilters }}
+                  </template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="carBrandName"
                   title="品牌车型"
@@ -461,7 +467,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="notEnterQty"
+                  field="adjustQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>

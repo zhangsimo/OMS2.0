@@ -86,3 +86,13 @@ export function saveOrder (data) {
     data
   })
 }
+
+
+//获取树形
+// 查询整个资源树
+export function findRootRes () {
+  return axios.request({
+    url: `${api.authApi}/resource/findRootResShop`,
+    method: 'get'
+  })
+}

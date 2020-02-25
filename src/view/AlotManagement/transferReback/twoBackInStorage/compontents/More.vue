@@ -124,8 +124,13 @@ export default {
       this.$emit("getMoreStatus", false);
     },
     establish(o) {
-      this.moreData.acceptEnterTimeStart = o[0] + " 00:00:00";
-      this.moreData.acceptEnterTimeEnd = o[1] + " 23:59:59";
+      if (o[0] == "") {
+        this.moreData.acceptEnterTimeStart = "";
+        this.moreData.acceptEnterTimeEnd = "";
+      } else {
+        this.moreData.acceptEnterTimeStart = o[0] + " 00:00:00";
+        this.moreData.acceptEnterTimeEnd = o[1] + " 23:59:59";
+      }
     },
     //更多弹窗-确定
     moreOk() {

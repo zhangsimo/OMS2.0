@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" v-model="company"/>
+            <input type="text" class="h30" v-model="company" readonly/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -44,7 +44,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary"></Table>
+        <Table border :columns="columns" :data="data" class="waytable" ref="summary" show-summary :summary-method="handleSummary" max-height="500"></Table>
       </div>
     </section>
     <selectDealings ref="selectDealings" @selectSearchName="getOne" />
@@ -71,7 +71,7 @@ export default {
       columns: [
         {
           title: '序号',
-          key: 'num',
+          key: 'index',
           width: 40,
           className: 'tc'
         },
@@ -158,14 +158,17 @@ export default {
         {
           title: '税率',
           key: 'taxRate',
-          className: 'tc'
+          className: 'tc',
+          render: (h,params) =>{
+            return h('span',(params.row.taxRate).toFixed(2))
+          }
         },
         {
           title: '调拨单价',
           key: 'orderPrice',
           className: 'tc',
           render: (h,params) =>{
-            return h('span',(params.row.orderPrice).toFixed(2))
+            return h('span',params.row.orderPrice ? (params.row.orderPrice).toFixed(2):'')
           }
         },
         {
@@ -173,7 +176,7 @@ export default {
           key: 'orderAmt',
           className: 'tc',
           render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
+            return h('span',params.row.orderAmt?  (params.row.orderAmt).toFixed(2):'')
           }
         },
         {
@@ -241,7 +244,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index === 11) {
+        if (index > 6 && index<11 || index ===19  ||index===21) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -251,10 +254,17 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
+            if(index===19||index===21){
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            } else {
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
           }
         } else {
           sums[key] = {
@@ -281,6 +291,7 @@ export default {
     // 快速查询
     quickDate(data){
       this.value = data
+      this.getGeneral()
     },
     Dealings() {
       this.$refs.selectDealings.init()
@@ -306,7 +317,8 @@ export default {
       }
       getOnWay(data).then(res => {
         if(res.data.length !==0){
-          res.data.map(item=>{
+          res.data.map((item,index)=>{
+            item.index = index +1
             item.taxSign = item.taxSign ? '是' : '否'
           })
           this.data = res.data

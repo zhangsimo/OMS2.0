@@ -1,18 +1,18 @@
 <template>
   <div>
-    <Modal v-model="searchPartLayer" title="配件选择" width="1000">
+    <Modal v-model="searchPartLayer" title="配件选择" width="1000" @on-cancel="CancelModal">
       <div class="partCheck-hd">
-        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
+        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">
           <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
         </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="名称"/>
+        <Input class="w150 mr10" v-model="partName" :placeholder="Name"/>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
         </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
-        <Button class="mr10" type='default' @click="searchPartLayer=false"><Icon type="md-close" /> 取消</Button>
+        <Button class="mr10" type='default' @click="CancelModal"><Icon type="md-close" /> 取消</Button>
         <Button type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
@@ -177,6 +177,7 @@
       border: 1px solid #e8e8e8;
       padding: 4px 10px;
       border-radius: 2px;
+      display: inline-block;
       &.active{
         background: #fd5c5c;
         border-color: #fd5c5c;

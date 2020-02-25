@@ -451,7 +451,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="carBrand"
+                  field="carModelName"
                   title="品牌车型"
                   width="100"
                 ></vxe-table-column>
@@ -461,7 +461,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="oeCode"
+                  field="oemCode"
                   title="OE码"
                   width="100"
                 ></vxe-table-column>
@@ -525,7 +525,7 @@
     <!--审批状态-->
     <status-model ref="StatusModel" :orderId="selectTableRow" ></status-model>
     <!--添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
+    <select-part-com ref="selectPartCom" :formPlanmain="formPlanmain" @selectPartName="getPartNameList" :is-show-add-part-btn="true"></select-part-com>
   </div>
 </template>
 

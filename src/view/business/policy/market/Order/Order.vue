@@ -165,7 +165,6 @@
                    this.changeLeft = res
                    let data ={}
                    this.$store.commit('setOneOrder',data)
-
                }
 
            },

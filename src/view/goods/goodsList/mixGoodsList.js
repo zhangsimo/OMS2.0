@@ -18,6 +18,13 @@ import { TOKEN_KEY } from "@/libs/util";
 
 export const mixGoodsData = {
   data() {
+    const validateOrderMan = (rule, value, callback) => {
+      if (value === '') {
+          callback(new Error('计划员不能为空'));
+      } else {
+          callback();
+      }
+    };
     return {
       ArrayList: [],
       upurl: "",
@@ -35,7 +42,7 @@ export const mixGoodsData = {
         orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        directGuestId: "", //直发门店
+        directCompanyId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0, //合计总金额
@@ -54,7 +61,7 @@ export const mixGoodsData = {
           }
         ],
         orderManId: [
-          { required: true, message: "计划员不能为空", trigger: "change" }
+          { required: true, validator: validateOrderMan, trigger: "change" }
         ],
         billType: [
           { required: true, message: "票据类型不能为空", trigger: "change" }
@@ -73,7 +80,8 @@ export const mixGoodsData = {
       selectPlanOrderItem: {},
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-      }
+      },
+      selectLeftItemId:""
     };
   },
   mounted() {
@@ -143,13 +151,22 @@ export const mixGoodsData = {
           orderMan: this.$store.state.user.userData.staffName || "", //计划人
           remark: "", //备注
           billType: "", //票据类型
-          directGuestId: "", //直发门店
+          directCompanyId: "", //直发门店
           planOrderNum: "新计划采购", //计划单号
           otherPrice: 0, //其他费用
           totalPrice: 0, //合计总金额
           processInstanceId: "",
         };
         this.page.total = res.data.totalElements;
+
+        for(let b of this.tbdata){
+          b._highlight = false
+          if(b.id==this.selectLeftItemId){
+            b._highlight = true;
+            this.setFormPlanmain(b);
+            break;
+          }
+        }
       }
     },
     //采购计划列表选中数据
@@ -164,6 +181,10 @@ export const mixGoodsData = {
       } else {
         this.delArr = new Array();
       }
+    },
+    filterOrderman() {
+      let val = this.salesList.filter(el => el.value == this.formPlan.orderManId)[0]
+      return val.label
     },
     //删除选中数据
     delTableData() {
@@ -245,12 +266,6 @@ export const mixGoodsData = {
       });
       if (
         [
-          "totalStockQty",
-          "masterStockQty",
-          "branchStockQty",
-          "onWayQty",
-          "unsalableQty",
-          "orderQty",
           "orderPrice",
           "noTaxPrice",
           "noTaxAmt",
@@ -258,6 +273,16 @@ export const mixGoodsData = {
         ].includes(type)
       ) {
         return total.toFixed(2);
+      }
+      if(
+        ["totalStockQty",
+          "masterStockQty",
+          "branchStockQty",
+          "onWayQty",
+          "unsalableQty",
+          "orderQty",].includes(type)
+      ) {
+        return total
       }
       if (columnIndex === 12) {
         let totals = 0;
@@ -330,6 +355,7 @@ export const mixGoodsData = {
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
+      this.selectLeftItemId = v.id
       if (this.newadd && v) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -350,7 +376,7 @@ export const mixGoodsData = {
             // this.formPlan.planDateformat = this.tbdata[0].orderDate || "";
             this.formPlan.remark = this.tbdata[0].remark || "";
             this.formPlan.billType = this.tbdata[0].billTypeId || "";
-            this.formPlan.directGuestId = this.tbdata[0].directGuestId || "";
+            this.formPlan.directCompanyId = this.tbdata[0].directCompanyId || "";
             this.formPlan.planOrderNum = this.tbdata[0].serviceId || "";
             this.formPlan.otherPrice = this.tbdata[0].otherAmt || 0;
             this.formPlan.totalPrice = this.tbdata[0].totalAmt || 0;
@@ -361,6 +387,15 @@ export const mixGoodsData = {
               this.tbdata.splice(0, 1);
               this.newadd = false;
               this.$refs.planOrderTable.clearCurrentRow();
+
+              for(let b of this.tbdata){
+                b._highlight = false
+                if(b.id==this.selectLeftItemId){
+                  b._highlight = true;
+                  this.setFormPlanmain(b)
+                  break;
+                }
+              }
             }
           }
         });
@@ -368,43 +403,47 @@ export const mixGoodsData = {
         if (!this.newadd) {
           this.$refs["formPlan"].resetFields();
         }
-        if (v) {
-          if (this.newadd && this.selectPlanOrderItem.new) {
-            this.tbdata.splice(0, 1);
-            this.newadd = false;
-            this.$refs.planOrderTable.clearCurrentRow();
-          }
-          if (['草稿', '退回'].includes(v.billStatusId.name)) {
-            this.isinput = false;
-          } else {
-            this.isinput = true;
-          }
-          if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
-            this.hideSp = true;
-          } else {
-            this.hideSp = false;
-          }
-          this.selectPlanOrderItem = v || {};
-          this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
-          this.formPlan.supplyName = v.guestName || "";
-          this.formPlan.createUid = v.createUid || "";
-          this.formPlan.guestId = v.guestId || "";
-          this.formPlan.planArriveDate = new Date(v.orderDate) || "";
-          // this.formPlan.planDateformat = v.orderDate || "";
-          this.formPlan.remark = v.remark || "";
-          this.formPlan.billType = v.billTypeId || "";
-          this.formPlan.directGuestId = v.directGuestId || "";
-          this.formPlan.planOrderNum = v.serviceId || "";
-          this.formPlan.otherPrice = v.otherAmt || 0;
-          this.formPlan.totalPrice = v.totalAmt || 0;
-          this.formPlan.processInstanceId = v.processInstanceId || "";
-          this.formPlan.orderManId = v.orderManId || "";
-          this.tableData = v.details || [];
-          this.mainId = v.id;
-          this.upurl = upxlxs + v.id;
-        }
+        this.setFormPlanmain(v);
       }
       this.$refs.selectSupplier.getList();
+    },
+    setFormPlanmain(v){
+      console.log(v)
+      if (v) {
+        if (this.newadd && this.selectPlanOrderItem.new) {
+          this.tbdata.splice(0, 1);
+          this.newadd = false;
+          this.$refs.planOrderTable.clearCurrentRow();
+        }
+        if (['草稿', '退回'].includes(v.billStatusId.name)) {
+          this.isinput = false;
+        } else {
+          this.isinput = true;
+        }
+        if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
+          this.hideSp = true;
+        } else {
+          this.hideSp = false;
+        }
+        this.selectPlanOrderItem = {...v} || {};
+        this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
+        this.formPlan.supplyName = v.guestName || "";
+        this.formPlan.createUid = v.createUid || "";
+        this.formPlan.guestId = v.guestId || "";
+        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
+        this.formPlan.remark = v.remark || "";
+        this.formPlan.billType = v.billTypeId || "";
+        this.formPlan.directCompanyId = v.directCompanyId || "";
+        this.formPlan.planOrderNum = v.serviceId || "";
+        this.formPlan.otherPrice = v.otherAmt || 0;
+        this.formPlan.totalPrice = v.totalAmt || 0;
+        this.formPlan.processInstanceId = v.processInstanceId || "";
+        this.formPlan.orderMan = v.orderMan || "";
+        this.formPlan.orderManId = v.orderManId || "";
+        this.tableData = v.details || [];
+        this.mainId = v.id;
+        this.upurl = upxlxs + v.id;
+      }
     },
     getArray(data) {
       this.ArrayList = data;
@@ -418,6 +457,10 @@ export const mixGoodsData = {
       this.newadd = true;
       this.$refs["planOrderTable"].clearCurrentRow();
       this.$refs["formPlan"].resetFields();
+
+      for(let b of this.tbdata){
+        b._highlight = false
+      }
       this.formPlan = {
         supplyName: "", //供应商
         guestId: "", //供应商id
@@ -428,7 +471,7 @@ export const mixGoodsData = {
         orderManId: this.$store.state.user.userData.id || "", //计划人
         remark: "", //备注
         billType: "", //票据类型
-        directGuestId: "", //直发门店
+        directCompanyId: "", //直发门店
         planOrderNum: "新计划采购", //计划单号
         otherPrice: 0, //其他费用
         totalPrice: 0, //合计总金额
@@ -484,7 +527,9 @@ export const mixGoodsData = {
     //保存采购计划信息
     submit(subType) {
       this.submitloading = true;
+      console.log(this.formPlan)
       this.$refs["formPlan"].validate(valid => {
+        console.log(valid)
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -497,14 +542,15 @@ export const mixGoodsData = {
           //计划日期
           objReq.orderDate = tools.transTime(this.formPlan.planArriveDate);
           //计划员name
-          objReq.orderMan = this.formPlan.orderMan;
+          // objReq.orderMan = this.formPlan.orderMan;
+          objReq.orderMan = this.filterOrderman();
           objReq.orderManId = this.formPlan.orderManId;
           //备注
           objReq.remark = this.formPlan.remark;
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directGuestId = this.formPlan.directGuestId;
+          objReq.directCompanyId = this.formPlan.directCompanyId;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
           objReq.processInstanceId = this.formPlan.processInstanceId;
@@ -522,27 +568,59 @@ export const mixGoodsData = {
           objReq.details = this.tableData;
           // console.log(objReq)
           // return
-          if (subType === 1) {
-            saveDraft(objReq).then(res => {
-              if (res.code == 0) {
-                this.newadd = false;
-                this.proModal = false;
-                this.$Message.success("添加成功");
-                this.getList();
+          let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
+          if(zerolength.length > 0) {
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: () => {
+                if (subType === 1) {
+                  saveDraft(objReq).then(res => {
+                    if (res.code == 0) {
+                      this.newadd = false;
+                      this.proModal = false;
+                      this.$Message.success("添加成功");
+                      this.getList();
+                    }
+                  });
+                } else if (subType === 2) {
+                  if (this.tableData.length <= 0) {
+                    return this.$Message.error("请添加配件后再提交");
+                  }
+                  saveCommit(objReq).then(res => {
+                    if (res.code == 0) {
+                      this.newadd = false;
+                      this.proModal = false;
+                      this.$Message.success("提交成功");
+                      this.getList();
+                    }
+                  });
+                }
               }
-            });
-          } else if (subType === 2) {
-            if (this.tableData.length <= 0) {
-              return this.$Message.error("请添加配件后再提交");
+            })
+          } else {
+            if (subType === 1) {
+              saveDraft(objReq).then(res => {
+                if (res.code == 0) {
+                  this.newadd = false;
+                  this.proModal = false;
+                  this.$Message.success("添加成功");
+                  this.getList();
+                }
+              });
+            } else if (subType === 2) {
+              if (this.tableData.length <= 0) {
+                return this.$Message.error("请添加配件后再提交");
+              }
+              saveCommit(objReq).then(res => {
+                if (res.code == 0) {
+                  this.newadd = false;
+                  this.proModal = false;
+                  this.$Message.success("提交成功");
+                  this.getList();
+                }
+              });
             }
-            saveCommit(objReq).then(res => {
-              if (res.code == 0) {
-                this.newadd = false;
-                this.proModal = false;
-                this.$Message.success("提交成功");
-                this.getList();
-              }
-            });
           }
           this.submitloading = false;
         } else {

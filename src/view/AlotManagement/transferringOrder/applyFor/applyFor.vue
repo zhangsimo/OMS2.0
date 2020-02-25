@@ -51,9 +51,29 @@
                     :columns="Left.columns"
                     :data="Left.tbdata"
                     @on-row-click="selection"></Table>
-                  <Page simple class-name="fl pt10" size="small" :current="Left.page.num" :total="100" :page-size="Left.page.size" @on-change="changePageLeft"
-                        @on-page-size-change="changeSizeLeft" show-sizer show-total>
+                  <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="Left.page.num"
+                    :total="Left.page.total"
+                    :page-size="Left.page.size"
+                    :page-size-opts="Left.page.opts"
+                    @on-change="changePageLeft"
+                    @on-page-size-change="changeSizeLeft"
+                    show-sizer
+                    show-total>
                   </Page>
+                  <!-- <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="page.num"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @on-change="changePage"
+                    @on-page-size-change="changeSize"
+                    show-sizer
+                    show-total
+                  ></Page> -->
                 </div>
                 <div slot="right" class="con-split-pane-right pl5 goods-list-form">
                   <div class="pane-made-hd">
@@ -68,8 +88,8 @@
                       <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
                         <Row >
                           <Col span="22">
-                            <Select placeholder="请选择调出方" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
-                              <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
+                            <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
+                              <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
                           </Select>
                           </Col>
                           <Col span="2">
@@ -213,7 +233,7 @@
           if (!value && value != "0") {
             callback(new Error("请输入大于0的正整数"));
           } else {
-            const reg = /^[0-9]*$/;
+            const reg = /^[1-9]\d*$/;
             if (reg.test(value)) {
               callback();
             } else {
@@ -222,6 +242,7 @@
           }
         };
         return {
+          selectvalue: '',
           //校验输入框的值
           validRules: {
             applyQty:[{ required: true, validator: changeNumber }]
@@ -236,8 +257,8 @@
           checkboxArr:[],// checkbox选中
           disSave: false, // 保存按钮是否禁用
              PTrow: {//新增当前行
-            new: true,
-            _highlight: true,
+                new: true,
+                _highlight: true,
                status: {"name":"草稿","value":0},
                guestName: '',
                createUname: '',
@@ -246,7 +267,7 @@
                // orderDate: tools.transTime(new Date()),
                printing: '',
                createTime: '',
-                detailVOS: [],
+               detailVOS: [],
           },
           //表单验证
           ruleValidate: {
@@ -277,8 +298,9 @@
           Left: {
             page: {
               num: 1,
-              size: 10,
-              total: 0
+              size: 20,
+              total: 0,
+              opts: [20, 50, 100, 200]
             },
             loading: false,
             columns: [
@@ -319,13 +341,13 @@
               },
               {
                 title: '提交人',
-                key: 'createUname',
+                key: 'commitUname',
                 minWidth: 100
               },
               {
                 title: '提交日期',
                 align:'center',
-                key: 'createTime',
+                key: 'commitDate',
                 minWidth: 170
               },
               {
@@ -376,6 +398,9 @@
         this.getArrayParams()
       },
       methods: {
+        selectOption(date) {
+          this.selectvalue = date.value
+        },
         getArrayParams() {
           var req = {};
           req.page = 1;
@@ -384,18 +409,15 @@
             const { content } = res.data;
             this.getArray = content;
             content.forEach(item => {
-              this.ArrayValue.push(item.fullName);
+              this.ArrayValue.push({value:item.id,label:item.fullName});
             });
           });
         },
         //删除配件
         Delete(){
           var set = this.checkboxArr.map(item=>item.partId)
-          // console.log(set)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
-         // console.log(resArr)
           this.Right.tbdata = resArr
-          // this.$Message.warning('删除成功！')
           let data = {}
            data.id = this.rowId
                     data.orgid = this.rowOrgId
@@ -421,7 +443,6 @@
         },
         //调出方下拉框
         selectGuestName(val){
-          // console.log(val)
           this.formPlan.guestName = val.value
         },
         // 新增按钮
@@ -446,8 +467,6 @@
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
-
-          // console.log(this.Left.tbdata)
         },
         // 调入仓库下拉改变事件
         selectStoreId(val){
@@ -477,12 +496,17 @@
                 if (valid) {
                   try {
                     await this.$refs.xTable.validate();
-
                     let data = {}
+                    for (var i = 0; i < this.getArray.length; i++) {
+                      if (this.getArray[i].id == this.formPlan.guestName) {
+                        data.guestOrgid = this.getArray[i].isInternalId;
+                        data.guestId = this.getArray[i].id;
+                      }
+                    }
                     data.id = this.rowId
                     data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.guestidId
+                    // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.selectvalue
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -494,40 +518,30 @@
 
                     var date = new Date()
                     var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-                    // console.log(dataTime)
                     var orderDateTime = this.formPlan.orderDate
                     var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-                    // console.log(orderTime,'orderDateTime')
                     if (orderTime < dataTime) {
                       this.$Message.error('调拨申请日期不小于当前日期')
                       return
                     }
-              var date = new Date()
-              var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-              // console.log(dataTime)
-              var orderDateTime = this.formPlan.orderDate
-              var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
-              // console.log(orderTime,'orderDateTime')
-              if (orderTime < dataTime) {
-                this.$Message.error('调拨申请日期不小于当前日期')
-                return
-              }
-              for (var i = 0; i < this.getArray.length; i++) {
-                if (this.getArray[i].fullName == this.formPlan.guestName) {
-                  data.guestOrgid = this.getArray[i].isInternalId;
-                  data.guestId = this.getArray[i].id;
-                }
-              }
+                    var date = new Date()
+                    var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                    var orderDateTime = this.formPlan.orderDate
+                    var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+                    if (orderTime < dataTime) {
+                      this.$Message.error('调拨申请日期不小于当前日期')
+                      return
+                    }
                     save(data).then(res => {
                       if(res.code === 0){
                         this.$message.success('保存成功！');
                         this.leftgetList()
                         this.formPlan.guestName = '',
-                          this.formPlan.storeId =  '',
-                          this.formPlan.remark =  '',
-                          this.formPlan.createUname =  '',
-                          this.formPlan.serviceId =  '',
-                          this.formPlan.orderDate = ''
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
                         this.Right.tbdata = []
                         this.isAdd = true
                         this.$refs.formPlan.resetFields();
@@ -536,7 +550,7 @@
                   } catch (errMap) {
                     this.$XModal.message({
                       status: "error",
-                      message: "申请数量必须输入大于0的正整数！"
+                      message: "申请数量必须输入大于0的正整数"
                     });
                   }
                 } else {
@@ -589,7 +603,6 @@
         },
         // 全选
         selectAll(val){
-          // console.log(val)
           this.checkboxArr = val.selection
         },
         //分页
@@ -614,7 +627,6 @@
         },
         // 查询下拉框
         getDataQuick(v){
-          // console.log(v)
           this.selectArr = v
           this.leftgetList()
         },
@@ -646,17 +658,9 @@
         getMsg(msg){
           this.moreArr = msg
           this.leftgetList()
-          // console.log(msg)
         },
         //子组件的参数
         getPartNameList(ChildMessage){
-          // console.log(ChildMessage)
-        // let aaa =   ChildMessage.map(item => {
-        //   return{
-        //     name : item.baseType.firstType.typeName
-        //     }
-        //   })
-        //   console.log(aaa)
           let parts = ChildMessage.map( item => {
 
             return {
@@ -683,9 +687,7 @@
               isTight: !!item.isTightPart == true? 1:0,
             }
           })
-          // console.log(parts)
           this.Right.tbdata = [...this.Right.tbdata,...parts]
-          //console.log(this.Right.tbdata)
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
         },
         //编辑收货信息弹框显示
@@ -700,7 +702,6 @@
         },
         // 供应商子组件内容
         getSupplierName(a){
-          // console.log(a)
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
           this.formPlan.guestName = a.fullName
@@ -744,13 +745,14 @@
           queryAll(params).then(res => {
             if(res.code === 0){
               this.Left.tbdata = res.data.content
+              this.Left.page.total = res.data.totalElements;
+            }else {
+              this.Left.page.total = 0
             }
           })
         },
         roleChangeEvent({ row }, evnt) {
           // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
-          console.log(evnt,'evnt')
-          // console.log(evnt.target.value)
           // this.currentrow.storeId = evnt.target.value
         },
 
@@ -765,11 +767,11 @@
                 currentRowTable.clearCurrentRow();
                 this.$refs.formPlan.validate((valid) => {
                   if (valid) {
-                    let data = {}
-                    data.id = this.rowId
-                    data.orgid = this.rowOrgId
-                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
-                    data.guestId = this.guestidId
+                    let data = {};
+                    data.id = this.rowId;
+                    data.orgid = this.rowOrgId;
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
+                    data.guestId = this.selectvalue
                     // data.guestId = this.formPlan.guestName
                     data.storeId = this.formPlan.storeId
                     // data.guestName = this.formPlan.guestName
@@ -780,16 +782,17 @@
                     data.detailVOS = this.Right.tbdata
                     save(data).then(res => {
                       if(res.code === 0){
+                        this.isAdd = true;
                         this.$message.success('保存成功！')
                         this.leftgetList()
                         this.formPlan.guestName = '',
-                          this.formPlan.storeId =  '',
-                          this.formPlan.remark =  '',
-                          this.formPlan.createUname =  '',
-                          this.formPlan.serviceId =  '',
-                          this.formPlan.orderDate = ''
-                          this.Right.tbdata = []
-                          this.$refs.formPlan.resetFields();
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.$refs.formPlan.resetFields();
                       }
                     })
                   } else {
@@ -818,7 +821,7 @@
               this.mainId = row.id
               this.guestidId = row.guestId
               this.datadata = row
-              this.formPlan.guestName = this.datadata.guestName
+              this.formPlan.guestName = this.datadata.guestId
               this.formPlan.storeId = this.datadata.storeId
               this.formPlan.orderDate = this.datadata.orderDate
               this.formPlan.remark = this.datadata.remark
@@ -826,7 +829,6 @@
               this.formPlan.serviceId = this.datadata.serviceId
               // this.guestidId = this
               this.presentrowMsg = row.status.value
-              // console.log(this.presentrowMsg)
               this.rowId = row.id
               this.buttonDisable = false
               this.getRightlist()
@@ -850,7 +852,6 @@
           queryByOrgid().then(res => {
               if(res.code === 0){
                 this.List = res.data
-                // console.log(res,'res==>837')
                  res.data.map(item => {
                    if(item.isDefault == true){
                      this.formPlan.storeId = item.id

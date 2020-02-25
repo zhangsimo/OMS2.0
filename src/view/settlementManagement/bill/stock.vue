@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company" />
+            <input type="text" class="h30" v-model="company" readonly/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -172,10 +172,10 @@ export default {
         },
         {
           title: "金额",
-          key: "outQty",
+          key: "outAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.outQty.toFixed(2));
+            return h("span", params.row.outAmt.toFixed(2));
           }
         },
         {
@@ -303,7 +303,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getGeneral({ enterTypeId: this.typeName });
+    this.getGeneral();
   },
   methods: {
     // 日期选择
@@ -416,6 +416,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.getGeneral();
     },
     // 往来单位
     Dealings() {
@@ -464,7 +465,7 @@ export default {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
                 item.index = index + 1;
-                item.accountSign = item.accountSign ? "已审" : "未审";
+                item.accountSign = item.billStatusId ? "已提交" : "草稿";
                 item.orderType = item.orderType
                   ? item.orderType === 1
                     ? "电商订单"
@@ -487,7 +488,7 @@ export default {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
                 item.index = index + 1;
-                item.accountSign = item.accountSign ? "已审" : "未审";
+                item.accountSign = item.billStatusId ? "已提交" : "草稿";
                 item.orderType = item.orderType
                   ? item.orderType === 1
                     ? "电商订单"

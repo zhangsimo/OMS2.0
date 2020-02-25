@@ -21,11 +21,11 @@ export const minxParts = {
         {
           label: "车型",
           value: "carModelName"
-        },
-        {
-          label: "拼音",
-          value: "pyCode"
         }
+        // {
+        //   label: "拼音",
+        //   value: "pyCode"
+        // }
       ],
       //审核状态查询
       approvalType: 0,
@@ -86,12 +86,12 @@ export const minxParts = {
           key: "venderSkuNo",
           align: "center",
           children: [
-            {
-              title: "所属体系",
-              key: "tenantName",
-              // key:"belongSystem",
-              minWidth: 70
-            },
+            // {
+            //   title: "所属体系",
+            //   key: "tenantName",
+            //   // key:"belongSystem",
+            //   minWidth: 70
+            // },
             {
               title: "申请分店",
               key: "orgname",
@@ -295,7 +295,8 @@ export const minxParts = {
       setApproval(obj).then(res => {
         if (res.code == 0) {
           this.$refs.partInfo.proModal = false;
-          this.$Message.success("添加成功");
+          // obj.auditSign===1? this.$message.success('审核通过')
+          this.$message.success('操作成功')
           this.getList();
           this.selectTable = {};
         }

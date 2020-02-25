@@ -92,12 +92,13 @@
                   :stripe="true"
                   :columns="Left.columns"
                   :data="Left.tbdata"
-                ></Table>
+                />
                 <Page
                   size="small"
                   :total="Left.page.total"
                   :page-size="Left.page.size"
                   :current="Left.page.num"
+                  :page-size-opts="Left.page.opts"
                   show-sizer
                   show-total
                   class-name="page-con"
@@ -124,14 +125,14 @@
                             v-model="Leftcurrentrow.guestName"
                             label-in-value
                             filterable
-                            :disabled="buttonShow || this.flagValue !== 0"
+                            :disabled="this.flagValue != 0"
                           >
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>
                         </Col>
                         <Col span="2">
                           <Button
-                            :disabled="buttonShow || this.flagValue !== 0"
+                            :disabled="this.flagValue != 0"
                             @click="showModel"
                             class="ml5"
                             size="small"
@@ -165,8 +166,9 @@
                     </FormItem>
                     <FormItem label="调拨受理日期：" prop="billType" class="redIT">
                       <DatePicker
+                        disabled
                         @on-change="changeDate"
-                        :value="Leftcurrentrow.createTime"
+                        v-model="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
                         class="w160"
@@ -222,6 +224,7 @@
                   </div>
                 </div>
                 <vxe-table
+                  auto-resize
                   border
                   resizable
                   show-footer
@@ -280,13 +283,15 @@
     <!--      添加配件-->
     <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
     <!--编辑收货信息-->
-    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">
-      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>
-      <div slot="footer">
-        <!-- <Button type="primary" @click="getMessage">确定</Button>
-        <Button type="default">取消</Button>-->
-      </div>
-    </Modal>
+    <!--    <Modal v-model="GainInformation" title="编辑发货信息" width="1200px">-->
+    <!--      <goods-info ref="goodI" @init="GainInformation = false"></goods-info>-->
+    <!--      <div slot="footer">-->
+    <!--        &lt;!&ndash; <Button type="primary" @click="getMessage">确定</Button>-->
+    <!--        <Button type="default">取消</Button>&ndash;&gt;-->
+    <!--      </div>-->
+    <!--    </Modal>-->
+    <!--编辑收货信息-->
+    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
@@ -351,13 +356,13 @@ export default {
   data() {
     let changeNumber = (rule, value, callback) => {
       if (!value && value != "0") {
-        callback(new Error("请输入大于或等于0的正整数"));
+        callback(new Error("请输入大于0的正整数"));
       } else {
         const reg = /^[1-9]\d*$/;
         if (reg.test(value)) {
           callback();
         } else {
-          callback(new Error("请输入大于或等于0的正整数"));
+          callback(new Error("请输入大于0的正整数"));
         }
       }
     };
@@ -368,6 +373,8 @@ export default {
       },
       checkboxArr: [], // checkbox选中
       idsId: [],
+      MainID: "",
+      datadata: "",
       getArray: [],
       tuneOut: false,
       flag: 0,
@@ -463,8 +470,9 @@ export default {
       Left: {
         page: {
           num: 1,
-          size: 10,
-          total: 0
+          size: 20,
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
         loading: false,
         columns: [
@@ -597,7 +605,8 @@ export default {
       currentNum: 1,
       val: "0",
       diaochuName: "",
-      diaochuID: ""
+      diaochuID: "",
+      clickdelivery: false
     };
   },
   watch: {
@@ -673,7 +682,6 @@ export default {
       this.Leftcurrentrow.detailVOS = allArr;
 
       // var arrSet = this.Leftcurrentrow.detailVOS;
-      // console.log(arrSet, "arrSet==606");
       // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
       //   var flag = true;
       //   for (var j = 0; j < allArr.length; j++) {
@@ -708,8 +716,6 @@ export default {
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
-      // console.log(this.checkboxArr,'this.checkboxArr')
-      // console.log(checked ? '勾选事件' : '取消事件')
     },
     getDataType() {
       this.getList();
@@ -755,16 +761,16 @@ export default {
       }
       for (var i = 0; i < this.getArray.length; i++) {
         if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
-          // console.log(this.getArray[i], "this.getArray[i]");
           params.guestOrgid = this.getArray[i].isInternalId;
           params.guestId = this.getArray[i].id;
         }
       }
+      params.createTime = moment(this.Leftcurrentrow.createTime).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.flag1 == true) {
         params.id = "";
       }
-      console.log(params, "params");
-
       try {
         await this.$refs.xTable1.validate();
         //配件组装保存
@@ -792,27 +798,31 @@ export default {
       } catch (errMap) {
         this.$XModal.message({
           status: "error",
-          message: "申请数量必须输入大于0的正整数！"
+          message: "受理数量必须输入大于0的正整数！"
         });
       }
     },
     xinzeng() {
       this.flag1 = true;
       this.flagState = 1;
-      // console.log(this.Leftcurrentrow, "this.Leftcurrentrow");
       this.flagValue = 0;
       this.flagValue1 = 0;
       this.buttonDisable = 0;
-      // this.Leftcurrentrow = {};
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.storeId = this.cangkuListall[0].id
+      if(this.cangkuListall.length>0){
+          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      }else{
+          this.Leftcurrentrow.storeId = '';
+      }
       this.buttonShow = false;
       this.tuneOut = false;
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -821,9 +831,6 @@ export default {
         }
       }
       this.flag = 1;
-      this.Leftcurrentrow.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
       this.Leftcurrentrow.statuName = "草稿";
       const item = {
         new: true,
@@ -862,9 +869,25 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
+        if(params.status.value!=undefined){
+            params.status = params.status.value
+        }
+      if(params.settleStatus && params.settleStatus.value!=undefined){
+          params.settleStatus= params.settleStatus.value
+      }
+        if(params.orderTypeId && params.orderTypeId.value!=undefined){
+            params.orderTypeId= params.orderTypeId.value
+        }
+        for (var i = 0; i < this.getArray.length; i++) {
+            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+                params.guestOrgid = this.getArray[i].isInternalId;
+                params.guestId = this.getArray[i].id;
+            }
+        }
+        this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
+        params.createTime = moment(this.Leftcurrentrow.createTime).format(
+            "YYYY-MM-DD HH:mm:ss"
+        );
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息
@@ -947,7 +970,8 @@ export default {
         this.$Message.info("请选择编辑项");
         return;
       }
-      this.GainInformation = true;
+      this.clickdelivery = true;
+      this.$refs.goodsInfo.init();
     },
     //打印表格
     printTable() {
@@ -1015,9 +1039,7 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
-      this.flagValue = 0;
       this.flagValue1 = 0;
-      console.log(row, "row ==>862");
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -1048,15 +1070,17 @@ export default {
       if (row.code != "") {
         this.flagValue = 1;
         // this.Leftcurrentrow.status.value = 1;
-      }
-      if (row.statuName != "草稿") {
-        this.flagValue = 1;
-        this.flagValue1 = 1;
       } else {
         this.flagValue = 0;
+      }
+      if (row.statuName != "草稿") {
+        this.flagValue1 = 1;
+      } else {
         this.flagValue1 = 0;
       }
       if (row.id) {
+        this.datadata = row;
+        this.MainID = row.id;
         const params = {
           mainId: row.id
         };
@@ -1068,7 +1092,6 @@ export default {
       }
       if (row.status.value === 1) {
         // this.tuneOut = false
-        console.log(row.code);
       }
     },
     //打开添加配件模态框
@@ -1096,7 +1119,6 @@ export default {
         ...this.$refs.naform.getITPWE()
       };
       for (var i = 0; i < this.getArray.length; i++) {
-        console.log(this.form.guestName, "this.form.guestName");
         if (this.getArray[i].fullName == this.form.guestName) {
           this.form.guestId = this.getArray[i].id;
         }
@@ -1115,25 +1137,13 @@ export default {
       // 组装删除
       const seleList = this.$refs.xTable1.getSelectRecords();
       let arr = [];
-      // console.log(this.checkboxArr.length, "this.checkboxArr.length");
       if (this.checkboxArr.length > 0) {
-        // this.checkboxArr.forEach(item => {
-        //   console.log(item.oemCode);
-        //   this.Leftcurrentrow.detailVOS.filter(itm => {
-        //     return itm.oemCode == item.oemCode;
-        //   });
-        // });
-
-        // let haveId = this.checkboxArr.filter(item => item.id);
-        // let NoId = this.checkboxArr.filter(item => !item.id);
         let NoIdPartCode = this.checkboxArr.map(item => item.partCode);
-        // let AddNoId = this.Leftcurrentrow.detailVOS.filter(item => !item.id);
         let NoRepeat = this.Leftcurrentrow.detailVOS.filter(
           item => !NoIdPartCode.includes(item.partCode)
         );
         setTimeout(() => {
           this.Leftcurrentrow.detailVOS = NoRepeat;
-          // console.log(this.Leftcurrentrow.detailVOS, "NoRepeat");
         }, 1000);
 
         seleList.map(item => {
@@ -1161,7 +1171,6 @@ export default {
         this.$Message.error("请选择要删除的配件!");
         return;
       }
-      // console.log(this.Leftcurrentrow.detailVOS, "this.checkboxArr");
     },
     //展示方
     showModel() {
@@ -1240,7 +1249,6 @@ export default {
       params = { ...params, ...this.form };
       delete params.status;
       delete params.guestName;
-      // console.log(params, "params");
       getList1(params, this.Left.page.size, this.Left.page.num)
         .then(res => {
           if (res.code == 0) {

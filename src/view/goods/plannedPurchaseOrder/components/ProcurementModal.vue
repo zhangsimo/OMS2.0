@@ -100,7 +100,7 @@
         ></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="orderQty" title="计划采购数量"></vxe-table-column>
+        <vxe-table-column field="canQty" title="计划采购数量"></vxe-table-column>
         <vxe-table-column field="notEnterQty" title="调整数量"></vxe-table-column>
         <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>
         <vxe-table-column field="canQty" title="未转订单数量"></vxe-table-column>
@@ -161,8 +161,13 @@ export default class ProcurementModal extends Vue {
     this.shows = false;
     this.selectRow.details.forEach((el:any) => {
       el.maxQty = el.orderQty;
+      el.adjustQty=0
       el.oid = el.id;
       Reflect.deleteProperty(el, 'id');
+      Reflect.deleteProperty(el, 'trueEnterQty');
+      Reflect.deleteProperty(el, 'trueEnterAmt');
+      Reflect.deleteProperty(el, 'notEnterQty');
+      Reflect.deleteProperty(el, 'notEnterAmt');
     })
     return this.selectRow;
   }
@@ -214,17 +219,17 @@ export default class ProcurementModal extends Vue {
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;
-    let formData = {};
+    let formData:any = {};
     for(let k in data) {
       if(data[k] && data[k].trim().length > 0) {
         formData[k] = data[k];
       }
     }
-    if(data.auditStartDate) {
-      data.auditStartDate = data.auditStartDate.split(" ")[0] + " 00:00:00"
+    if(formData.auditStartDate) {
+      formData.auditStartDate = formData.auditStartDate.split(" ")[0] + " 00:00:00"
     }
-    if(data.auditStartDate) {
-      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
+    if(formData.auditStartDate) {
+      formData.auditEndDate = formData.auditEndDate.split(" ")[0] + " 23:59:59"
     }
     let res:any = await api.getPchsPlan(params, formData);
     if(res.code == 0) {

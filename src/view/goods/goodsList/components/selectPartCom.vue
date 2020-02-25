@@ -25,7 +25,9 @@
         <div class="fr partCheck-right" style="width: 758px">
           <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
           <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
-                @on-page-size-change="changeSize" show-sizer show-total></Page>
+                @on-page-size-change="changeSize" show-sizer show-total
+                :page-size-opts="[10,20,30]"
+                ></Page>
         </div>
       </div>
       <div slot='footer'>
@@ -82,6 +84,7 @@
       border: 1px solid #e8e8e8;
       padding: 4px 10px;
       border-radius: 2px;
+      display: inline-block;
       &.active{
         background: #fd5c5c;
         border-color: #fd5c5c;

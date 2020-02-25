@@ -46,18 +46,17 @@
                 size="small"
                 highlight-row
                 border
-                :stripe="true"
                 :columns="Left.columns"
                 :data="Left.tbdata"
               ></Table>
               <Page
                 size="small"
-                :total="Left.total"
-                :page-size="params.size"
-                :current="params.page +1"
+                :total="Left.page.total"
+                :page-size="size"
+                :current="Left.page.num"
+                :page-size-opts="opts"
                 show-sizer
                 show-total
-                :page-size-opts="[10, 20, 30, 40]"
                 class-name="page-con"
                 @on-change="changePage"
                 @on-page-size-change="changeSize"
@@ -99,7 +98,7 @@
                   </FormItem>
                   <FormItem label="备注：">
                     <Input
-                      disabled
+                      :disabled="this.flag"
                       class="w500"
                       v-model="formPlan.remark"
                       placeholder="选填"
@@ -107,7 +106,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input disabled readonly class="w160" v-model="formPlan.orderMan" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.auditor" placeholder></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
                     <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>
@@ -132,11 +131,11 @@
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                 <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column field="hasCancelQty" title="统计退回数量" width="100"></vxe-table-column>
@@ -152,6 +151,8 @@
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
       <p>是否定入库</p>
     </Modal>
+    <!-- 打印 -->
+    <PrintShow ref="printBox" :curenrow="Leftcurrentrow"></PrintShow>
   </div>
 </template>
 
@@ -166,16 +167,21 @@ import More from "./compontents/More";
 import QuickDate from "../../../../components/getDate/dateget";
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
+import PrintShow from "./compontents/PrintShow";
 import { queryByOrgid } from "../../../../api/AlotManagement/transferringOrder";
 
 export default {
   name: "twoBackInStorage",
   components: {
     More,
-    QuickDate
+    QuickDate,
+    PrintShow
   },
   data() {
     return {
+      flag: false,
+      Leftcurrentrow: {},
+      dayinCureen: {},
       List: [],
       form: {
         createTimeStart: "",
@@ -203,17 +209,17 @@ export default {
       params: {
         // selectDayType: '', //完成日期12345
         // settleStatus: '',
-        size: 10,
-        page: 0
       },
+      size: 20,
+      total: 0,
+      opts: [20, 50, 100, 200],
       Left: {
         page: {
-          offset: 0,
-          pageNumber: 1,
-          pageSize: 10,
-          paged: true
+          num: 1,
+          size: 20,
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
-        total: 0,
         loading: false,
         columns: [
           {
@@ -261,6 +267,11 @@ export default {
             align: "center",
             key: "finishDate",
             minWidth: 170
+          },
+          {
+            title: "打印次数",
+            key: "printing",
+            minWidth: 170
           }
         ],
         tbdata: []
@@ -271,7 +282,7 @@ export default {
         storeId: "", //入库仓库
         finishDate: "", //调出退回日期
         remark: "", //备注
-        orderMan: "", //入库人
+        auditor: "", //入库人
         code: "", //申请单号
         serviceId: "" //退回单号
       },
@@ -348,12 +359,11 @@ export default {
     getinfo(params) {
       getList(params)
         .then(res => {
-          console.log(res);
           if (res.code === 0) {
             // this.$Message.info('成功')
             this.Left.tbdata = res.data.content || [];
             this.Left.page = res.data.pageable;
-            this.Left.page.total = res.totalElements;
+            this.Left.page.total = res.data.totalElements;
           } else if (res.code === 1) {
             this.$Message.info("未查到数据");
             this.Left.tbdata = [];
@@ -363,15 +373,7 @@ export default {
           this.$Message.info("初始化数据失败");
         });
     },
-    // //快速查询-时间
-    // getDataQuick(v) {
-    //   console.log(v)
-    //   this.params.selectDayType = v
-    //   this.getinfo(this.params)
-    // },
-    //time1
     getDataQuick(val) {
-      console.log(val);
       this.form.createTimeStart = val[0];
       this.form.createTimeEnd = val[1];
       this.getinfo(this.form);
@@ -383,7 +385,6 @@ export default {
     //显示更多弹窗
     more() {
       this.showMore = true;
-      console.log(this.showMore);
     },
     //更多弹窗恢复false
     getMoreStatus(val) {
@@ -391,7 +392,6 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      console.log(val);
       this.params = { ...this.params, ...val };
       this.getinfo(this.params);
     },
@@ -430,26 +430,27 @@ export default {
 
     // 打印
     stamp() {
-      stampDataList()
-        .then(res => {
-          console.log(res);
-          if (res.code === 0) {
-            this.$Message.info("打印成功");
-          }
-        })
-        .catch(err => {
-          this.$Message.info("打印失败");
-        });
+      if (!this.dayinCureen.id) {
+        this.$Message.info("请选择打印项");
+        return;
+      }
+      this.$refs.printBox.openModal();
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
+      if (currentRow.status.name != "已入库") {
+        this.flag = false;
+      } else {
+        this.flag = true;
+      }
+      this.Leftcurrentrow = currentRow;
+      this.dayinCureen = currentRow;
       this.inID.id = currentRow.id;
       this.formPlan = currentRow;
       const params = {
         mainId: currentRow.id
       };
       const res = await getListDetail(params);
-      console.log(res);
       this.tableData = res.data;
       if (currentRow.status === 0) {
         this.inStatus = "未入库";
@@ -466,14 +467,11 @@ export default {
     },
     //分页
     changePage(p) {
-      console.log(p);
-      this.params.page = p;
+      this.Left.page.num = p;
       this.getinfo(this.params);
     },
     changeSize(s) {
-      console.log(s);
-      this.params.page = 1;
-      this.params.size = s;
+      this.Left.page.size = s;
       this.getinfo(this.params);
     }
   },

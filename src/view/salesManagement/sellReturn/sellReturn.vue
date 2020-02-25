@@ -110,6 +110,7 @@
                 class-name="page-con"
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
+                :page-size-opts="[20, 50, 100, 200]"
                 class="mr10"
               ></Page>
             </div>
@@ -226,7 +227,7 @@
                       :edit-render="{name: 'input',attrs: {disabled: false}}"
                     />
                   </FormItem>
-                  <FormItem label="交货仓库：" prop="storeId">
+                  <FormItem label="入库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
                       style="width:200px"
@@ -345,7 +346,7 @@
     <!--更多 搜索-->
     <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!-- 选择销售出库单 -->
-    <Sales-outbound ref="salesOutbound" @salesOutList="getOutList"></Sales-outbound>
+    <Sales-outbound ref="salesOutbound" :guestId = 'formPlan.guestId' @salesOutList="getOutList"></Sales-outbound>
   </div>
 </template>
 
@@ -418,7 +419,7 @@ export default {
       },
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       moreQueryList: {}, //更多查询
@@ -697,6 +698,7 @@ export default {
     },
     //选择销售出库单
     SalesOutboundShowModel() {
+      if(!this.formPlan.guestId) this.$message.error('请选择客户')
       this.$refs.salesOutbound.openModal();
     },
     //选择更多
@@ -935,10 +937,13 @@ export default {
             return "和值";
           }
           if (
-            ["orderQty", "orderPrice", "orderAmt"].includes(column.property)
+            ["orderPrice", "orderAmt"].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
+          // if (["orderQty"].includes(column.property)) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 7) {
             return ` ${this.countAllAmount(data)} `;
           }

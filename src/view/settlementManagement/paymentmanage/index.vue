@@ -162,6 +162,7 @@
         class="mt10"
         max-height="400"
         show-summary
+        :summary-method="summary"
         ref="noWarehousing"
       ></Table>
       <div slot="footer"></div>
@@ -188,6 +189,7 @@
         class="mt10"
         max-height="400"
         show-summary
+        :summary-method="summary1"
         ref="warehousing"
       ></Table>
       <div slot="footer"></div>
@@ -209,7 +211,7 @@ import {
   getNumberList
 } from "@/api/bill/saleOrder";
 import { creat } from "./../components";
-import moment from 'moment';
+import moment from "moment";
 export default {
   components: {
     quickDate,
@@ -834,8 +836,12 @@ export default {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     let obj = {
       orgId: arr[1],
-      startDate: this.value[0] ?  moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
-      endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
+      startDate: this.value[0]
+        ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+        : "",
+      endDate: this.value[1]
+        ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        : ""
     };
     this.getGeneral(obj);
     this.value = arr[0];
@@ -857,7 +863,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 10 && index<18&&index!==14) {
+        if (index > 10 && index < 18 && index !== 14) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -869,7 +875,85 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 出库明细表格合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 9 || index === 12) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 入库出库明细表格合计方式
+    summary1({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 11 || index === 14 || index === 17 || index === 19) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -888,7 +972,19 @@ export default {
     // },
     // 快速查询
     quickDate(data) {
-       this.value = data ? data : ['',''];
+      this.value = data ? data : ["", ""];
+      this.data1 = [];
+      this.data2 = [];
+      let obj = {
+        orgId: this.model1,
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
+      };
+      this.getGeneral(obj);
     },
     // 选择日期
     changedate(daterange) {
@@ -896,10 +992,16 @@ export default {
     },
     // 更多条件查询
     senior() {
+      this.data1 = [];
+      this.data2 = [];
       let obj = {
         orgId: this.model1,
-        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
-        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):'',
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
         guestType: this.model2,
         tenantName: this.nametext,
         serviceType: this.model3,
@@ -909,12 +1011,16 @@ export default {
     },
     // 查询应收/应付总表
     query() {
-      this.data1 = []
-      this.data2 = []
+      this.data1 = [];
+      this.data2 = [];
       let obj = {
         orgId: this.model1,
-        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
-        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
       };
       this.getGeneral(obj);
     },
@@ -936,8 +1042,12 @@ export default {
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
-        startDate: obj.startDate ? moment(obj.startDate).format('YYYY-MM-DD HH:mm:ss') : '',
-        endDate: obj.endDate ? moment(obj.endDate).format('YYYY-MM-DD HH:mm:ss') : '',
+        startDate: obj.startDate
+          ? moment(obj.startDate).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: obj.endDate
+          ? moment(obj.endDate).format("YYYY-MM-DD HH:mm:ss")
+          : "",
         guestId: data.guestId
       }).then(res => {
         if (res.data.one) {
@@ -980,8 +1090,12 @@ export default {
     // 点击总汇表数据查询销售/采购清单
     selete(data) {
       let date = {
-        startDate: this.value[0] ? moment(this.value[0]).format('YYYY-MM-DD HH:mm:ss'):'',
-        endDate: this.value[1] ?  moment(this.value[1]).format('YYYY-MM-DD HH:mm:ss'):''
+        startDate: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : ""
       };
       this.$refs.Monthlyreconciliation.parameter = { ...data, ...date };
       this.getDetailed(data, this.value);

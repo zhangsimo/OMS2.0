@@ -11,7 +11,7 @@
         <Option
           v-for="item in supplierType.CS00111"
           :key="item.itemCode"
-          :value="item.id"
+          :value="item.itemCode"
         >{{ item.itemName}}</Option>
       </Select>
       <Button type="warning" class="w90 mr10" @click="queryList">
@@ -32,16 +32,16 @@
         </span>
       </Button>
       <Upload
-          ref="upload"
-          style="display: inline-block"
-          :show-upload-list="false"
-          :action="upurl"
-          :headers="headers"
-          :format="['xlsx','xls']"
-          :on-format-error="onFormatError"
-          :on-success="onSuccess"
-          :before-upload="beforeUpload"
-        >
+        ref="upload"
+        style="display: inline-block"
+        :show-upload-list="false"
+        :action="upurl"
+        :headers="headers"
+        :format="['xlsx','xls']"
+        :on-format-error="onFormatError"
+        :on-success="onSuccess"
+        :before-upload="beforeUpload"
+      >
         <Button type="default" class="mr10" v-has="'import'">
           <Icon custom="iconfont icondaoruicon icons" />导入
         </Button>
@@ -330,6 +330,7 @@ export default {
       let res = await getSupplierformation(data);
       if (res.code == 0) {
         this.loading = false;
+        this.pitchSupplierOne = {};
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
       }
@@ -360,6 +361,11 @@ export default {
       let res = await getDigitalDictionary(data);
       if (res.code == 0) {
         this.supplierType = res.data;
+        this.supplierType.CS00111.unshift({
+          itemCode: "",
+          id: "",
+          itemName: "全部"
+        });
       }
     },
     //搜索
@@ -387,7 +393,7 @@ export default {
           let data = this.clientList;
           data.isDisabled ? (data.isDisabled = 1) : (data.isDisabled = 0);
           data.isClient ? (data.isClient = 1) : (data.isClient = 0);
-          let res = await getNewSupplier(data)
+          let res = await getNewSupplier(data);
           if (res.code === 0) {
             this.clientDataShow = false;
             this.getlist();
@@ -414,7 +420,9 @@ export default {
       this.pitchSupplierOne.isClient == 1
         ? (this.pitchSupplierOne.isClient = true)
         : (this.pitchSupplierOne.isClient = false);
-      this.pitchSupplierOne.belongSystem = JSON.parse(this.pitchSupplierOne.belongSystem).value
+      this.pitchSupplierOne.belongSystem = JSON.parse(
+        this.pitchSupplierOne.belongSystem
+      ).value;
       this.clientList = this.pitchSupplierOne;
     },
     //批量上传失败

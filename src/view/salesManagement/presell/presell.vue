@@ -102,6 +102,7 @@
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
                 class="mr10"
+                :page-size-opts="[20, 50, 100, 200]"
               ></Page>
             </div>
             <!-- 右边表格-->
@@ -488,7 +489,7 @@ export default {
       //分页
       page: {
         total: 0,
-        size: 10,
+        size: 20,
         num: 1
       },
       split1: 0.2, //左右框
@@ -684,8 +685,9 @@ export default {
 
     //获取客户额度
     getAllLimit() {
-      let guestId = this.formPlan.guestId;
-      getLimit(guestId).then(res => {
+      const guestId = this.formPlan.guestId;
+      const id = this.formPlan.id
+      getLimit({guestId,id}).then(res => {
         if (res.code === 0) {
           this.limitList = res.data;
         }
@@ -700,14 +702,12 @@ export default {
       oneClient = this.client.filter(item => {
         return item.id === value;
       });
-
-      console.log(oneClient, 5656);
       for (var i in oneClient) {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
       let guestId = value;
-      let res = await getLimit(guestId);
+      let res = await getLimit({guestId,id:''});
       if (res.code === 0) {
         this.limitList = res.data;
       }
@@ -812,7 +812,6 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
-      console.log('val',val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           var datas = conversionList(val);
@@ -918,12 +917,17 @@ export default {
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
             return "和值";
-          }
+          };
           if (
-            ["orderQty", "orderPrice", "orderAmt"].includes(column.property)
+            ["orderPrice", "orderAmt"].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property).toFixed(2);
-          }
+          };
+          // if (
+          //   ["orderQty"].includes(column.property)
+          // ) {
+          //   return this.$utils.sum(data, column.property).toFixed(0);
+          // }
           if (columnIndex === 8) {
             return ` ${this.countAllAmount(data)} `;
           }
@@ -993,7 +997,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             let res = await getSave(this.formPlan);
@@ -1024,7 +1028,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             this.$Modal.confirm({

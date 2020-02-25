@@ -151,39 +151,34 @@
               height="330"
             >
               <!--<template slot-scope="{ row, index }" slot="action">-->
-                <!--<Button-->
-                  <!--type="default"-->
-                  <!--@click.stop="showAcceptance($event, index)"-->
-                  <!--v-if="row.status.value == 1"-->
-                <!--&gt;受理</Button>-->
+              <!--<Button-->
+              <!--type="default"-->
+              <!--@click.stop="showAcceptance($event, index)"-->
+              <!--v-if="row.status.value == 1"-->
+              <!--&gt;受理</Button>-->
               <!--</template>-->
             </Table>
+            <Row>
+              <Col id="row">
+                <Page
+                  id="page"
+                  style="flex:right"
+                  size="small"
+                  :current="List.page"
+                  :total="List.total"
+                  :page-size="List.pageSize"
+                  :page-size-opts="List.pageSizeOpts"
+                  show-sizer
+                  show-total
+                  @on-page-size-change="onPurchasePageSizeChange1"
+                  @on-change="onPurchaseChange1"
+                ></Page>
+              </Col>
+            </Row>
           </div>
 
-          <Row>
-            <Col span="12">
-              <div>
-                <Page
-                  size="small"
-                  @on-page-size-change="onPageSizeChange"
-                  @on-change="onChange"
-                  :current="pageList.page"
-                  :total="this.pageList.total"
-                  :page-size="pageList.pageSize"
-                  :page-size-opts="pageList.pageSizeOpts"
-                  show-sizer
-                />
-              </div>
-            </Col>
-            <Col span="12">
-              <div style="text-align: right">
-                每页{{this.pageList.size}}条,
-                共{{this.pageList.total}}条
-              </div>
-            </Col>
-          </Row>
-
           <Table
+            style="margin-top:40px"
             show-summary
             :summary-method="handleSummary"
             :columns="columns2"
@@ -203,10 +198,11 @@
             max-height="570"
             ref="tableBox"
           ></Table>
-          <Row>
-            <Col span="12">
+          <Row id="row">
+            <Col>
               <div>
                 <Page
+                  id="page"
                   size="small"
                   @on-page-size-change="onPurchasePageSizeChange"
                   @on-change="onPurchaseChange"
@@ -215,13 +211,8 @@
                   :page-size="pageList.pageSize"
                   :page-size-opts="pageList.pageSizeOpts"
                   show-sizer
+                  show-total
                 />
-              </div>
-            </Col>
-            <Col span="12">
-              <div style="text-align: right">
-                每页{{this.pageList.size}}条,
-                共{{this.pageList.total}}条
               </div>
             </Col>
           </Row>
@@ -255,7 +246,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeName" @on-change="addChange2">
+                <Select v-model="this.billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -266,7 +257,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeName" @on-change="addChange3">
+                <Select v-model="this.settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -305,7 +296,7 @@
           <Row>
             <Col span="24">
               <FormItem label="往来单位：">
-                <Select v-model="transitUnit"  filterable clearable @on-change="addChange1">
+                <Select v-model="transitUnit" filterable clearable @on-change="addChange1">
                   <Option
                     v-for="(item,index) in transitUnitList"
                     :key="index"
@@ -484,12 +475,19 @@ export default {
       brandList: [],
       brand: "",
       // 分页数据
+      List: {
+        page: 1,
+        total: 0,
+        size: 20,
+        pageSize: 20,
+        pageSizeOpts: [20, 40, 60, 80, 100]
+      },
       pageList: {
         page: 1,
         total: 0,
-        size: 10,
-        pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        size: 20,
+        pageSize: 20,
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
       // tabs切换栏数据
@@ -507,23 +505,27 @@ export default {
           slot: "action",
           align: "center",
           render: (h, params) => {
-            let className = 'white'
-            return h('div', [
-              h('Button', {
-                props: {
-                  type: 'info',
-                  size: 'small',
-                },
-                style: {
-                  color: "white"
-                },
-                class: className,
-                on: {
-                  click: () => {
-                    this.showAcceptance()
+            let className = "white";
+            return h("div", [
+              h(
+                "Button",
+                {
+                  props: {
+                    type: "info",
+                    size: "small"
+                  },
+                  style: {
+                    color: "white"
+                  },
+                  class: className,
+                  on: {
+                    click: () => {
+                      this.showAcceptance();
+                    }
                   }
-                }
-              }, '受理')
+                },
+                "受理"
+              )
             ]);
           }
         },
@@ -843,10 +845,11 @@ export default {
     // 获取票据类型方法
     getPjType() {
       PjType().then(res => {
+        console.log(res)
         if (res.code === 0) {
           this.ticketTypeList = res.data;
-          this.billTypeId = res.data.itemCode;
-          this.billTypeName = res.data.itemName;
+          this.billTypeId = res.data[0].itemCode;
+          this.billTypeName = res.data[0].itemName;
         }
       });
     },
@@ -876,8 +879,8 @@ export default {
       JsStyle().then(res => {
         if (res.code === 0) {
           this.settlementMethodList = res.data;
-          this.settleTypeId = res.data.itemCode;
-          this.settleTypeName = res.data.Name;
+          this.settleTypeId = res.data[0].itemCode;
+          this.settleTypeName = res.data[0].Name;
         }
       });
     },
@@ -885,7 +888,7 @@ export default {
     getBrand() {
       getBrandList(this.conditionData).then(res => {
         // 撒打发
-        // console.log(res)
+        console.log(res, "12");
         if (res.code === 0) {
           this.data = res.data.content;
           this.orgid = res.data.content[0].orgid;
@@ -895,7 +898,7 @@ export default {
           });
           // console.log(this.data)
           // console.log(this.orgid)
-          this.pageList.total = res.data.totalElements;
+          this.List.total = 0;
         }
       });
     },
@@ -972,32 +975,32 @@ export default {
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
       // console.log(value)
-      this.guestId = value
+      this.guestId = value;
       let btype = this.transitUnitList.filter(item => {
-        return  item.id === value
-      })
+        return item.id === value;
+      });
       // let btype = this.transitUnitList.filter(item => item.id = value)
-      this.billTypeName = btype[0].billTypeId
-      this.settleTypeName = btype[0].settTypeId
+      this.billTypeName = btype[0].billTypeId;
+      this.settleTypeName = btype[0].settTypeId;
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
       // console.log(value)
-      this.settleTypeId = value
+      this.settleTypeId = value;
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
       // console.log(value)
-      this.billTypeId = value
+      this.billTypeId = value;
     },
     // 新增备注
-    remarks(event){
-      this.remark = event.target.value
+    remarks(event) {
+      this.remark = event.target.value;
     },
     // 新增直发备注
-    remarks2(event){
+    remarks2(event) {
       // console.log(event)
-      this.straightRemark = event.target.value
+      this.straightRemark = event.target.value;
     },
     deepClone(obj) {
       let ret;
@@ -1024,21 +1027,19 @@ export default {
       //   }
       // });
 
-      selectCompany().then(res=>{
-
-        if(res.code==0){
-          this.companyListOptions=[]
-          Object.keys(res.data).forEach((key)=>{
+      selectCompany().then(res => {
+        if (res.code == 0) {
+          this.companyListOptions = [];
+          Object.keys(res.data).forEach(key => {
             // this.companyListOptions=res.data[key]
             this.companyListOptions.push({
               id: key,
-             name: res.data[key]
-            })
-          })
-           console.log('res',this.companyListOptions)
+              name: res.data[key]
+            });
+          });
+          console.log("res", this.companyListOptions);
         }
-      })
-
+      });
     },
     // 查询
     searchData() {
@@ -1048,7 +1049,7 @@ export default {
           this.data.map(item => {
             item.status = JSON.parse(item.status);
           });
-          this.pageList.total = res.data.totalElements;
+          this.List.total = res.data.totalElements;
         }
       });
     },
@@ -1081,7 +1082,7 @@ export default {
     },
     // 待采购订单单选
     onSelect(row, selection) {
-      console.log(row)
+      console.log(row);
       // console.log(selection)
       this.generateBrand = row;
       this.data4 = row;
@@ -1114,7 +1115,7 @@ export default {
     closedPurchaseOrderDialog() {
       //关闭生成采购按钮
       this.addPurchaseOrderDialog = false;
-      this.$refs.tableBox.selectAll(false)
+      this.$refs.tableBox.selectAll(false);
 
       // this.data4 = []
     },
@@ -1145,7 +1146,7 @@ export default {
     },
     // 直发确定按钮
     saveZhifa() {
-      console.log(this.orgid)
+      console.log(this.orgid);
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -1244,6 +1245,23 @@ export default {
       });
       this.data2 = [];
     },
+    // 代采购页码切换
+    onPurchaseChange1(value) {
+      // console.log(`当前页码${value}`)
+      this.List.page = value;
+      this.getBrand();
+
+      this.data2 = [];
+    },
+    // 代采购每页条数切换
+    onPurchasePageSizeChange1(value) {
+      // console.log(`${value}`)
+      this.List.size = value;
+      // console.log(this.pageList)
+      this.getBrand();
+
+      this.data2 = [];
+    },
     // 表格底部合计
     handleSummary({ columns, data }) {
       // console.log(columns, data);
@@ -1334,7 +1352,15 @@ export default {
 }
 </style>
 <style>
-  .ivu-table .white span{
-    color: white!important;
-  }
+.ivu-table .white span {
+  color: white !important;
+}
+#row {
+  position: relative;
+}
+#page {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
 </style>

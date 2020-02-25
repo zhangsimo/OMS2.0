@@ -48,7 +48,7 @@
                   <i-input :value.sync="formItem.occupyQty" disabled placeholder="请输入"></i-input>
                 </Form-item>
                 <Form-item label="锁定数量:">
-                  <i-input :value.sync="formItem.lockQty" placeholder="请输入"></i-input>
+                  <i-input v-model="formItem.lockQty" placeholder="请输入"></i-input>
                 </Form-item>
               </i-form>
               <div slot="footer">
@@ -91,7 +91,7 @@
           <vxe-table-column field="partBrandName" title="品牌"></vxe-table-column>
 
           <vxe-table-column field="unit" title="单位"></vxe-table-column>
-          <vxe-table-column field="OECode" title="OE码"></vxe-table-column>
+          <vxe-table-column field="partCode" title="OE码"></vxe-table-column>
           <vxe-table-column field="carBrandModel" title="品牌车型"></vxe-table-column>
           <vxe-table-column field="spec" title="规格"></vxe-table-column>
           <vxe-table-column title="方向"></vxe-table-column>
@@ -113,7 +113,7 @@
             <Page
               :current="form.pageNumber+1"
               :total="pageList.total"
-              :page-size="form.pageSize"
+              :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -138,23 +138,21 @@
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
-              <span>分配完成</span>
-              <Button type="text" @click="baocunfenpei(row)">保存</Button>
+              <Button type="text" @click="sureBaocunfenpei(row)">分配完成</Button>
             </template>
           </vxe-table-column>
 
-          <vxe-table-column field="orgid" title="申请方"></vxe-table-column>
-          <vxe-table-column field="code" title="调拨申请单号" width="100"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="调拨申请单号" width="100"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
           <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-          <vxe-table-column field="qualitySourceName" title="提交日期"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="applyQty" title="申请数量"></vxe-table-column>
           <vxe-table-column
             field="hasAcceptQty"
             title="分配数量"
             :edit-render="{name: 'input', attrs: {type: 'number'}}"
           ></vxe-table-column>
-
           <vxe-table-column field="hasCancelQty" title="缺货数量"></vxe-table-column>
         </vxe-table>
       </div>
@@ -218,8 +216,8 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSize: 20,
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
       fenpeiCurrent: {}
@@ -290,7 +288,19 @@ export default {
       this.params.size = s;
       this.search(this.form);
     },
-
+    //确认分配完成
+      sureBaocunfenpei(row){
+          this.$Modal.confirm({
+              title: '提示',
+              content: '<p>是否确定分配完成</p>',
+              onOk: () => {
+                  this.baocunfenpei(row)
+              },
+              // onCancel: () => {
+              //     this.$Message.info('Clicked cancel');
+              // }
+          });
+      },
     baocunfenpei(row) {
       if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
         this.$Message.info("请输入分配数");
@@ -309,7 +319,9 @@ export default {
     },
     update() {
       // 更新列表信息
-
+        this.formItem.storeId=this.form.storeId;
+        console.log(this.formItem);
+        this.formItem.lockQty=(this.formItem.lockQty*1).toFixed(2)
       genxin(this.formItem)
         .then(res => {
           if (res.code == 0) {
@@ -338,10 +350,10 @@ export default {
       this.modal1 = true;
     },
     currentChangeEvent({ row }) {
-      //console.log(row, "row");
       if (row.partCode) {
         this.formItem = row;
         this.rowStatus = row;
+        this.formItem.stockId = row.stockQty;
         this.getList();
       } else {
         this.$Message.info("没有当前行");
@@ -353,7 +365,6 @@ export default {
       };
       shenqingdanliebiao(params)
         .then(res => {
-          //console.log(this.BottomTableData, "this.BottomTableData =>352");
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
           }

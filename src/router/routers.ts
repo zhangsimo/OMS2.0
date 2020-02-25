@@ -86,7 +86,7 @@ export default [
       {
         path: "interPurchase",
         name: "interPurchase",
-        mark: '1001',
+        mark: '1002',
         meta: {
           icon: "arrow-graph-up-right",
           title: "国际采购订单"
@@ -106,7 +106,7 @@ export default [
       {
         path: "/goods/outside-purchase",
         name: "outsidePurchase",
-        mark: "10",
+        mark: "1004",
         meta: {
           // hideInMenu: true,
           icon: "arrow-graph-up-right",
@@ -313,7 +313,7 @@ export default [
           {
             path: "/AlotManagement/transferringOrder/productDistribution",
             name: "productDistribution",
-            // mark: "3105",
+            mark: "3105",
             meta: {
               // hideInMenu: true,
               title: "紧俏品分配"
@@ -496,10 +496,20 @@ export default [
             redirect: "",
             mark: "5101",
             meta: {
-              title: "对账单订单"
+              title: "对账单"
             },
             component: () => import("@/view/settlementManagement/bill/AccountStatement.vue")
           },
+          // {
+          //   path: "/settlementManagement/reconcilation/AccountStatement",
+          //   name: "reconcilation-AccountStatement",
+          //   redirect: "",
+          //   // mark: "5101",
+          //   meta: {
+          //     title: "对账单"
+          //   },
+          //   component: () => import("@/view/settlementManagement/reconciliation/AccountStatement.vue")
+          // },
           {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "bill-CollectionPayment",
@@ -609,6 +619,80 @@ export default [
          ]
       },
       {
+        path: "/invoiceAdministration",
+        name: "invoiceAdministration",
+        mark: "5",
+        // redirect: "/reportForm",
+        meta: {
+          icon: "ios-paper",
+          title: "发票管理"
+        },
+        component: parentView,
+        children: [
+          {
+            path: "/invoiceAdministration/costOpening",
+            name: "invoiceAdministration-costOpening",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "费用开票申请"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/costOpening.vue")
+          },
+          {
+            path: "/invoiceAdministration/invoiceApply",
+            name: "invoiceAdministration-invoiceApply",
+            redirect: "",
+            mark: "5201",
+            meta: {
+              title: "开票申请查询与核销"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceApply.vue")
+          },
+          {
+            path: "/invoiceAdministration/salesInvoice",
+            name: "invoiceAdministration-salesInvoice",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "销售发票导入"
+            },
+            component: () => import("@/view/settlementManagement/invoiceAdministration/salesInvoice.vue")
+          },
+          {
+              path: "/invoiceAdministration/invoiceManagement",
+              name: "invoiceAdministration-invoiceManagement",
+              redirect: "",
+              mark: "5200",
+              meta: {
+                title: "进项发票管理"
+              },
+              component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceManagement.vue")
+            }
+         
+          // {
+          //   path: "/invoiceAdministration/invoiceApply",
+          //   name: "invoiceAdministration-invoiceApply",
+          //   redirect: "",
+          //   mark: "5202",
+          //   meta: {
+          //     title: "开票申请查询与核销"
+          //   },
+          //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceApply.vue")
+          // },
+          // {
+          //   path: "/invoiceAdministration/invoice",
+          //   name: "invoiceAdministration-invoice",
+          //   redirect: "",
+          //   mark: "5203",
+          //   meta: {
+          //     title: "进项发票管理"
+          //   },
+          //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceRceipts.vue")
+          // }
+        ]
+      },
+      {
         path: "/settlementManagement/paymentmanage",
         name: "settlementManagement-paymentmanage",
         // mark: 'oms_orders_approve',
@@ -681,6 +765,28 @@ export default [
       // }
     ]
   },
+  // {
+  //   path:'/financial',
+  //   name:'financial',
+  //   // mark:'',
+  //   meta: {
+  //     icon: "ios-paper",
+  //     title: '财务系统'
+  //   },
+  //   component: Main,
+  //   children:[
+  //     {
+  //       path: "/accounting",
+  //       name: "accounting",
+  //       // mark: "4002",
+  //       meta: {
+  //         icon: "arrow-graph-up-right",
+  //         title: "会计科目管理"
+  //       },
+  //       component: () => import("@/view/financial/accounting/accounting.vue")
+  //     },
+  //   ]
+  // },
   // {
   //   path: "",
   //   name: "reportForm",
@@ -1678,7 +1784,7 @@ export default [
             // mark: '59',
             meta: {
               hideInMenu: true,
-              title: "初期现金银行"
+              title: "期出现金银行"
             },
             component: () =>
               import(
@@ -1697,6 +1803,16 @@ export default [
               import(
                 "@/view/system/systemSetting/staffManagement/staffManagement.vue"
               )
+          },
+          {
+            path: "/accounting",
+            name: "accounting",
+            // mark: "4002",
+            meta: {
+              icon: "arrow-graph-up-right",
+              title: "会计科目管理"
+            },
+            component: () => import("@/view/financial/accounting/accounting.vue")
           },
           // {
           //   path: "/system/partsExamine",
@@ -1775,7 +1891,7 @@ export default [
             component: () => import("@/view/system/systemSetting/accountInformation/ProductsBuy/ProductsBuy.vue")
           },
         ]
-      }
+      },
     ]
   },
   {
@@ -1969,7 +2085,7 @@ export default [
       {
         path: '/auth/role',
         name: 'role',
-        // mark: '10003',
+        mark: '10003',
         meta: {
           icon: 'arrow-graph-up-right',
           title: '角色管理',
@@ -1978,27 +2094,26 @@ export default [
         component: () => import('@/view/admin/roles/roles.vue')
       },
       {
+        path: '/auth/lessee',
+        name: 'authLessee',
+        mark: '10005',
+        meta: {
+          icon: 'arrow-graph-up-right',
+          title: '租户模板',
+        },
+        component: () => import('@/view/admin/lessee/lessee.vue')
+      },
+      {
         path: '/auth/resource',
         name: 'resource',
         mark: '10004',
         meta: {
           icon: 'arrow-graph-up-right',
           title: '资源管理',
-          // access: ['admin', 'auth_staff']
         },
         component: () => import('@/view/admin/resource/resource.vue')
       },
-      // {
-      //   path: '/auth/lessee',
-      //   name: 'authLessee',
-      //   // mark: 'tenantUsers',
-      //   meta: {
-      //     icon: 'arrow-graph-up-right',
-      //     title: '租户员工',
-      //     // access: ['admin', 'auth_staff']
-      //   },
-      //   component: () => import('@/view/admin/lessee/lessee.vue')
-      // },
+
     ]
   },
 

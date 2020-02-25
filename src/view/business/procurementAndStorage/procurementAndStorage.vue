@@ -59,7 +59,7 @@
               </div>
               <div class="orderCenter">
                 <vxe-table
-                ref="xTab"
+                  ref="xTab"
                   border
                   align="center"
                   size="mini"
@@ -93,6 +93,7 @@
                 @on-change="selectNum"
                 @on-page-size-change="selectPage"
                 class="mr10"
+                :page-size-opts="[20, 50, 100, 200]"
               ></Page>
             </div>
           </div>
@@ -151,18 +152,17 @@
                       format="yyyy-MM-dd HH:mm:ss"
                       v-model="formPlan.orderDate"
                       style="width: 200px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
                     <Input class="w160" v-model="formPlan.serviceId" disabled />
                   </FormItem>
-                  <FormItem label="票据类型:" prop="billTypeId" props="billTypeId">
+                  <FormItem label="票据类型:" prop="billTypeId">
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
                       :disabled="formPlan.billStatusValue != 0 "
-                      @on-change="getBillType"
                     >
                       <Option
                         v-for="item in settleTypeList.CS00107"

@@ -6,6 +6,7 @@ export const mixSelectPartCom  = {
   inject:['reload'],
   data(){
     return {
+      Name: '名称',
       loading:false,
       treeLoading:false,
 
@@ -179,10 +180,10 @@ export const mixSelectPartCom  = {
           value: "adapterCarModels",
           label: "车型"
         },
-        {
-          value: "keyWord",
-          label: "拼音"
-        }
+        // {
+        //   value: "keyWord",
+        //   label: "拼音"
+        // }
       ],
       //查询关键字
       searchValue:'',
@@ -202,6 +203,10 @@ export const mixSelectPartCom  = {
 
   },
   methods:{
+    //动态placeholder值
+    ChangeValue(val){
+      this.Name = val.label
+    },
     //初始化数据
     getList(){
       this.loading = true
@@ -223,7 +228,7 @@ export const mixSelectPartCom  = {
       }
       req.page = this.page.num
       req.size = this.page.size
-      getwbParts(req).then(res => {
+      getwbParts({},req).then(res => {
         this.loading = false;
         this.partData = res.data.content||[];
         this.page.total = res.data.totalElements
@@ -315,8 +320,11 @@ export const mixSelectPartCom  = {
       //添加未审核属性
       obj.auditSign = 0
       savePartInfo(obj).then(res => {
-        this.$Message.success("保存成功！")
-        this.reload();
+        if(res.code===0){
+          this.$Message.success("保存成功！")
+          this.reload();
+        }
+        this.$refs.partInfo.saveFlag = false
       })
     },
 
@@ -328,9 +336,13 @@ export const mixSelectPartCom  = {
         if(res.code  === 0){
           this.allList = res.data
         }
-
       })
-      console.log(val,789)
+    },
+
+    //关闭弹框事件
+    CancelModal(){
+      this.searchPartLayer = false;
+      this.allList = {}
     }
   }
 }

@@ -115,7 +115,7 @@
     </Modal>
     <!--      额度调整-->
     <Modal v-model="adjustment" title="客户信用额度调整表">
-      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today"></QuotaAdjustment>
+      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today" ref="formRule"></QuotaAdjustment>
       <div slot="footer">
         <Button type="primary" @click="adjustmentconfirm">确定</Button>
         <Button type="default" @click="cancelChange">取消</Button>
@@ -429,7 +429,6 @@ export default {
       this.getListTop();
     },
     selectNum(p) {
-      // console.log(p)
       this.page.num = p;
       this.getListTop();
     },
@@ -438,7 +437,6 @@ export default {
       this.rowMessage = row;
       this.state = row.isGuestResearch;
       this.ID = row.guestId;
-      // console.log(this.ID)
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
       // this.creaditList.nature = this.costList.CS00117[0].id;
@@ -448,7 +446,6 @@ export default {
       this.credit();
     },
     selectPage(size) {
-      console.log(size);
       this.page.num = 1;
       this.page.size = size;
       this.getListTop();
@@ -456,7 +453,6 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        // console.log(1112)
         if (this.Limitstate === 1) {
           this.$Message.warning("正在审批中，请等待审批完成!");
         } else if (this.Limitstate === 3) {
@@ -471,7 +467,7 @@ export default {
     },
     //申请信用调查
     opensurveyShow() {
-      this.$refs.SurveyList.handleReset();
+      // this.$refs.SurveyList.handleReset();
       this.surveyShow = true;
     },
     //额度调用
@@ -518,7 +514,6 @@ export default {
       let data = {};
       data = ["CS00106", "CS00118", "CS00117"];
       let res = await getDigitalDictionary(data);
-      // console.log(res.data)
       if (res.code === 0) {
         this.costList = res.data;
       }
@@ -528,7 +523,6 @@ export default {
       let data = {};
       data = ["CS00112"];
       let res = await getDigitalDictionary(data);
-      console.log(res.data.CS00112);
       if (res.code === 0) {
         this.quality = res.data.CS00112;
       }
@@ -545,7 +539,6 @@ export default {
           );
           data.tempStart = tools.transTime(this.creaditList.tempStart);
           data.guestId = this.ID;
-          // console.log(data)
           saveOrUpdate(data).then(res => {
             if (res.code === 0) {
               this.getListTop();
@@ -555,7 +548,6 @@ export default {
           });
         } else {
           this.$message.warning("* 为必填！");
-          console.log(this.creaditList);
         }
       });
     },
@@ -569,49 +561,52 @@ export default {
       params.guestId = this.rowMessage.guestId;
       params.orgId = this.rowMessage.orgid;
       adjustment(params).then(res => {
-        console.log(res.data);
         if (res.code === 0) {
           this.adjustmentMsg = res.data;
-          console.log(this.adjustmentMsg);
         }
       });
     },
     //调整信用额度的确定
     adjustmentconfirm() {
-      let data = {};
-      data.guestId = this.creaditList.guestId;
-      // data.applyDate = this.today
-      data.payableAmt = this.adjustmentMsg.payableAmt;
-      data.receivableAmt = this.adjustmentMsg.receivableAmt;
-      data.sumAmt = this.adjustmentMsg.sumAmt;
-      data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
-      data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
-      data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
-      data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-      this.creaditList.isForbid
-        ? (this.creaditList.isForbid = 1)
-        : (this.creaditList.isForbid = 0);
-      data.isForbid = this.creaditList.isForbid;
-      data.quotaReason = this.creaditList.quotaReason;
-      data.totalQuota =
-        +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
-      data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
-      data.tempQuotaTotal = this.creaditList.tempCreditLimit;
-      data.tempStart = this.creaditList.tempStart;
-      data.tempEnd = this.creaditList.tempEnd;
-      data.orgId = this.creaditList.orgid;
-      data.adjustType = 1;
-      data.afterAdjustQuota =
-        this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
-      console.log(data, 123);
-      save(data).then(res => {
-        if (res.code === 0) {
-          this.adjustment = false;
-          this.$Message.warning("保存成功");
-          this.getListTop();
-        }
-        // console.log(res);
-      });
+        this.$refs["formRule"].$refs["formRule"].validate(valid=>{
+            if(valid){
+                let data = {};
+                data.guestId = this.creaditList.guestId;
+                // data.applyDate = this.today
+                data.payableAmt = this.adjustmentMsg.payableAmt;
+                data.receivableAmt = this.adjustmentMsg.receivableAmt;
+                data.sumAmt = this.adjustmentMsg.sumAmt;
+                data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
+                data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
+                data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
+                data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
+                this.creaditList.isForbid
+                    ? (this.creaditList.isForbid = 1)
+                    : (this.creaditList.isForbid = 0);
+                data.isForbid = this.creaditList.isForbid;
+                data.quotaReason = this.creaditList.quotaReason;
+                data.totalQuota =
+                    +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
+                data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
+                data.tempQuotaTotal = this.creaditList.tempCreditLimit;
+                data.tempStart = this.creaditList.tempStart;
+                data.tempEnd = this.creaditList.tempEnd;
+                data.orgId = this.creaditList.orgid;
+                data.adjustType = 1;
+                data.afterAdjustQuota =
+                    this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
+                save(data).then(res => {
+                    if (res.code === 0) {
+                        this.adjustment = false;
+                        this.$Message.warning("保存成功");
+                        this.getListTop();
+                    }
+                });
+            }else {
+                this.$message.warning("* 为必填！");
+            }
+        })
+
     },
     //调整取消框
     cancelChange() {
@@ -619,7 +614,6 @@ export default {
     },
     //子组件的参数
     getMsg(msg) {
-      console.log(msg);
       // this.today = a
     },
     //申请信用额度弹框
@@ -627,7 +621,6 @@ export default {
       let dataa = {};
       dataa.guestId = this.rowMessage.guestId;
       dataa.orgId = this.rowMessage.orgid;
-      // console.log(dataa)
       guestAdjust(dataa).then(res => {
         if (res.code === 0) {
           this.applicationArr = res.data;
@@ -642,12 +635,10 @@ export default {
       let data = {};
       data.guestId = this.rowMessage.guestId;
       data.orgId = this.rowMessage.orgid;
-      data.fixationQuotaTotal =
-        +this.creaditList.applyQuota + this.creaditList.creditLimit ||
-        0 + +this.creaditList.applyQuota;
-      data.tempQuotaTotal =
-        +this.creaditList.tempQuota + this.creaditList.tempCreditLimit ||
-        0 + +this.creaditList.tempQuota;
+      this.creaditList.applyQuota=this.creaditList.applyQuota?this.creaditList.applyQuota:0;
+      this.creaditList.tempQuota=this.creaditList.tempQuota?this.creaditList.tempQuota:0;
+      data.fixationQuotaTotal = this.creaditList.applyQuota*1 + this.creaditList.creditLimit*1 || 0 +this.creaditList.applyQuota*1;
+      data.tempQuotaTotal = this.creaditList.tempQuota*1 + this.creaditList.tempCreditLimit*1 || 0 +this.creaditList.tempQuota*1;
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
       data.tempStart = tools.transTime(this.creaditList.tempStart);
@@ -667,7 +658,6 @@ export default {
         +this.creaditList.applyQuota + +this.creaditList.tempQuota;
       data.addTotalQuota = this.creaditList.tototo || 0;
       data.adjustType = 0;
-      console.log(data, "data.applyQuota");
       save(data).then(res => {
         if (res.code === 0) {
           this.CreditLineApplicationShow = false;
@@ -704,7 +694,6 @@ export default {
       return returnStr;
     };
     this.today = ToDayStr();
-    // console.log(this.today)
   }
 };
 </script>

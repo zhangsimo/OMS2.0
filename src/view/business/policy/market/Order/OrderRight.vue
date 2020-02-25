@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -475,6 +475,7 @@ export default {
     async getAllLimit() {
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
+      data.id = this.leftOneOrder?this.leftOneOrder.id:'';
       if (data.guestId) {
         let res = await getLimit(data);
         if (res.code === 0) {
@@ -502,11 +503,12 @@ export default {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
-      data.guestId = value;
-      let res = await getLimit(data);
-      if (res.code === 0) {
-        this.limitList = res.data;
-      }
+      this.leftOneOrder.guestId = value
+      // data.guestId = value;
+      // let res = await getLimit(data);
+      // if (res.code === 0) {
+      //   this.limitList = res.data;
+      // }
     },
     //获取客户属性
     async getType() {
@@ -608,9 +610,9 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return "和值";
+            return "合计";
           }
-          if (["orderQty", "orderPrice"].includes(column.property)) {
+          if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           if (columnIndex === 8) {
@@ -761,15 +763,17 @@ export default {
     //获取活动内的数据
     async activiyList(val) {
       let data = {};
+      val.isMarkActivity = 1;
       data = this.formPlan;
       data.partIds = [val.id];
       data.type = 2;
       data.details = [val];
+      this.save()
       //console.log("dianjiafasong");
-      let res = await baocun(data);
-      if (res.code === 0) {
-        this.getChangeList();
-      }
+      // let res = await baocun(data);
+      // if (res.code === 0) {
+      //   this.getList();
+      // }
     },
     //打开查看模态框
     openFileModal(row) {
@@ -784,7 +788,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             if (this.formPlan.billStatusId.value) {
@@ -792,24 +796,31 @@ export default {
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await baocun(this.formPlan);
-
             if (res.code === 0) {
+              this.$parent.$parent.$refs.leftorder.flag = 0
               this.$Message.success("保存成功");
-              const id = this.formPlan.id;
-              const ldata = await this.$parent.$parent.$refs.leftorder.getList();
-              this.$parent.$parent.$refs.leftorder.tableData.map(item => {
-                if (item.id === id) {
-                  this.formPlan = item;
-                }
-              });
-              this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
-                this.formPlan
-              );
+              // this.formPlan = {};
+              // this.$refs.formPlan.resetFields()
+              // this.$parent.$parent.$refs.leftorder.getList()
+              // const id = this.formPlan.id;
+              // const ldata = await this.$parent.$parent.$refs.leftorder.getList();
+              // this.$parent.$parent.$refs.leftorder.tableData.map(item => {
+              //   if (item.id === id) {
+              //     this.formPlan = item;
+              //   }
+              // });
+              // this.leftOneOrder = this.formPlan
+              // this.getAllLimit()
+              // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
+              //   this.formPlan
+              // );
+
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
-              // this.formPlan = {};
+
               // this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", this.formPlan);
+              this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
             }
           } catch (errMap) {
             this.$XModal.message({
@@ -854,7 +865,7 @@ export default {
             if (valid) {
               try {
                 await this.$refs.xTable.validate();
-                if (+this.totalMoney > +this.limitList.sumAmt) {
+                if (+this.totalMoney > +this.limitList.outOfAmt) {
                   return this.$message.error("可用余额不足");
                 }
                 //console.log("jinlaile");
@@ -890,7 +901,7 @@ export default {
         if (valid) {
           try {
             await this.$refs.xTable.validate();
-            if (+this.totalMoney > +this.limitList.sumAmt) {
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
@@ -938,6 +949,8 @@ export default {
         //     this.getAllLimit()
         //     return false
         // }
+        // this.formPlan = old
+        // console.log(this.formPlan)
         this.leftOneOrder = old;
         this.getList();
         this.getAllLimit();

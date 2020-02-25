@@ -1,6 +1,6 @@
 <template>
   <div style="height: 300px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" :label-width="150">
+    <Form :model="data" :label-width="150" :rules="formRule" ref="formRule">
       <FormItem label='调整日期:' >
         <span>{{ datetoday }}</span>
       </FormItem>
@@ -28,13 +28,13 @@
       <FormItem label='客户当前额度:' >
         <Input v-model='+data.creditLimit + data.tempCreditLimit' style="width: 180px" disabled></Input>
       </FormItem>
-      <FormItem label='调整后额度:'>
+      <FormItem label='调整后额度:' prop="fixationQuotaTotal">
         <Input v-model='data.fixationQuotaTotal' style="width: 180px" ></Input>
       </FormItem>
       <FormItem label='是否禁止额度调整申请:' >
         <Checkbox v-model="data.isForbid"></Checkbox>是
       </FormItem>
-      <FormItem label='额度调整/清零原因:' >
+      <FormItem label='额度调整/清零原因:' prop="quotaReason">
         <Input v-model='data.quotaReason' style="width: 180px" ></Input>
       </FormItem>
     </Form>
@@ -51,7 +51,20 @@
         },
       data(){
           return {
-
+              formRule:{
+                  quotaReason:[{
+                      required: true,
+                      type: "string",
+                      message: "请输入额度调整/清零原因！",
+                      trigger: "blur"
+                  }],
+                  fixationQuotaTotal:[{
+                      required: true,
+                      type: "number",
+                      message: "请输入调整后额度！",
+                      trigger: "blur"
+                  }]
+              }
           }
       }
     }

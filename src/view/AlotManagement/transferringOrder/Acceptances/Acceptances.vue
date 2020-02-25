@@ -72,8 +72,8 @@
                     <span>{{row.status.name}}</span>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="createTime" title="提交日期"></vxe-table-column>
-                <vxe-table-column field="createTime" title="申请日期"></vxe-table-column>
+                <vxe-table-column field="commitTime" title="提交日期"></vxe-table-column>
+                <vxe-table-column field="orderDate" title="申请日期"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注"></vxe-table-column>
                 <vxe-table-column field="acceptUname" title="受理人"></vxe-table-column>
                 <vxe-table-column field="acceptTime" title="受理日期"></vxe-table-column>

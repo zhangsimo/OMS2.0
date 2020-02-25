@@ -22,7 +22,7 @@ export function getListDetail(params) {
 //入库
 export function inDataList(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotEnterMain/allotEnterStorage`,
+    url: `${api.omsOrder}/allotEnterMain/backEnter`,
     method: "post",
     data
   });
@@ -31,7 +31,7 @@ export function inDataList(data) {
 export function stampDataList(params) {
   return axios.request({
     url: `${api.omsOrder}/allotEnterMain/pointAdd`,
-    method: "get",
+    method: "put",
     params
   });
 }

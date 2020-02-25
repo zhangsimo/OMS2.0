@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company" />
+            <input type="text" class="h30" v-model="company" readonly />
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -65,6 +65,7 @@
           show-summary
           :summary-method="handleSummary"
           highlight-row
+          max-height=500
           @on-row-click="election"
         ></Table>
         <button class="mt10 ivu-btn ivu-btn-default" type="button">配件明细</button>
@@ -291,7 +292,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.getTransferStock();
+    const res = await this.getTransferStock();
   },
   methods: {
     // 日期选择
@@ -403,6 +404,8 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
+      this.model1 = this.$store.state.user.userData.shopId
+      this.getTransferStock()
     },
     // 主表查询
     getTransferStock() {
@@ -410,7 +413,7 @@ export default {
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
         endTime:  this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
         orgid: this.model1,
-        guestid: this.companyId,
+        guestId: this.companyId,
         orderTypeId:this.type
       };
       transferStock(obj).then(res => {
@@ -455,12 +458,11 @@ export default {
     // 选中数据
     election(row) {
       stockParts({ mainId: row.id }).then(res => {
-        console.log(res.data)
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
             // item.taxSign = 1;
-            // item.taxSign = item.taxSign ? "是" : "否  ";
+            item.taxSign = item.taxSign ? "是" : "否  ";
           });
           this.data1 = res.data;
         } else {

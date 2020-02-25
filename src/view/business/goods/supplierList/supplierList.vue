@@ -45,7 +45,7 @@
                 </div>
                 <Table :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection" ref="currentRowTable"></Table>
                 <Page class-name="fl pt10" size="small" :current="Left.page.num" :total="Left.page.total" :page-size="Left.page.size" @on-change="changePageLeft"
-                      @on-page-size-change="changeSizeLeft" show-sizer show-total>
+                      @on-page-size-change="changeSizeLeft" show-sizer show-total :page-size-opts="[20, 50, 100, 200]">
                 </Page>
               </div>
               <div slot="right" class="con-split-pane-right pl5 goods-list-form">
@@ -100,7 +100,7 @@
                     <FormItem label="备注：" prop="remark">
                       <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
-                    <FormItem label="退货仓库：" prop="planner">
+                    <FormItem label="退货仓库：" prop="warehouse">
                       <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.warehouse">
                         <Option v-for="item in inStores" :value="item.value" :key="item.value">{{ item.label }}</Option>
                       </Select>
@@ -189,7 +189,7 @@
   import PrintShow from "./compontents/PrintShow";
   // import ProcurementModal from '../../../goods/plannedPurchaseOrder/components/ProcurementModal.vue';
   import ProcurementModal from './compontents/ProcurementModal'
-  import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete } from '../../../../api/business/supplierListApi';
+  import { optGroup, findPageByDynamicQuery,saveDraft,sellOrderReturn,saveCommit,returnPchs,saveObsolete,queryByConditions } from '../../../../api/business/supplierListApi';
   import { getSupplierList } from "_api/purchasing/purchasePlan";
   import { getSales } from "@/api/salesManagment/salesOrder";
   export default {
@@ -252,7 +252,8 @@
           storeId: [{ required: true, type: 'string',message: '请选择退货员', trigger: 'change' }],
           // orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
           cause: [{ required: true, type: 'string',message: '请选择退货原因', trigger: 'change' }],
-          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }]
+          clearing: [{ required: true, type: 'string',message: '请选择结算方式', trigger: 'change' }],
+          warehouse:[{required: true, type: 'string',message: '请选择退货仓库', trigger: 'change'}]
         },
         datadata: null,
         rowId:'', //当前行的id
@@ -277,7 +278,7 @@
         Left: {
           page: {
             num: 1,
-            size: 10,
+            size: 20,
             total: 0
           },
           loading: false,
@@ -375,7 +376,8 @@
         Acode: '', //保存,提交时需给后台传的code
         AcodeId: '', //保存,提交时需给后台传的codeId
         successNOid: '', //没有id
-        successHaveId: '', //有id
+        successHaveId: '', //有id,
+        selectLeftItemId:'',//左侧点击的id
       }
     },
     methods: {
@@ -515,6 +517,9 @@
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
+        for(let item of this.Left.tbdata){
+          item._highlight = false
+        }
           this.formPlan.cause =  '',  //退货原因
           this.formPlan.clearing =  '', //结算方式
           this.formPlan.guestName = '',//供应商
@@ -561,16 +566,24 @@
       selecQuery(){
         let req = {}
         getSupplierList(req).then(res => {
-          this.ArraySelect = res.data||[];
+          if(res.code === 0){
+            this.ArraySelect = res.data||[];
+            // console.log(this.ArraySelect)
+          }
         })
       },
       //供应商下拉框发生改变
       SelectGuest(val){
-        // console.log(val)
         this.guestidId = val
+        let SameId = this.ArraySelect.filter(item => item.id === val)
+        // console.log(SameId[0].settTypeId)
+        this.formPlan.clearing = SameId[0].settTypeId
       },
       //选择采购入库单
       getPlanOrder(Msg){
+        // console.log(Msg);
+        this.formPlan.warehouse = Msg.storeId
+        console.log(this.formPlan.warehouse)
         let arr = Msg.details || []
         arr.map(item => {
           item.outUnitId = item.unit
@@ -736,7 +749,7 @@
       getMsg(msg){
         this.moreArr = msg
         // console.log(this.moreArr)
-        this.leftgetList()
+        this.LeftgetlistTwo()
         // console.log(msg)
       },
       //供应商弹框
@@ -759,14 +772,80 @@
           data.startTime = this.selectArr[0]
           data.endTime = this.selectArr[1]
         }
-        //创建日期
-        if(this.moreArr.createData != null){
-          data.startTime = this.moreArr.createData[0] + " 00:00:00"
-          data.endTime = this.moreArr.createData[1] + " 23:59:59"
-        }
+        // //创建日期
+        // if(this.moreArr.createData != null){
+        //   data.startTime = this.moreArr.createData[0] + " 00:00:00"
+        //   data.endTime = this.moreArr.createData[1] + " 23:59:59"
+        // }
         //状态
         if(this.purchaseType !== '99'){
           data.billStatusId = this.purchaseType
+        }
+        //提交日期
+        // if(this.moreArr.submitData != null){
+        //   data.auditStartTime = this.moreArr.submitData[0] + " 00:00:00"
+        //   data.auditEndTime  = this.moreArr.submitData[1] + " 23:59:59"
+        // }
+        // 供应商
+        // if(this.moreArr.callout != null){
+        //   data.guestId = this.moreArr.guestId
+        // }
+        // //采退单号
+        // if(this.moreArr.numbers !=null ){
+        //   data.serviceId = this.moreArr.numbers
+        // }
+        // //配件编码
+        // if(this.moreArr.coding != null){
+        //   data.partCode = this.moreArr.coding
+        // }
+        // //配件名称
+        // if(this.moreArr.Name != null ){
+        //   data.partName = this.moreArr.Name
+        // }
+        // //采购订单
+        // if(this.moreArr.purchase != null ){
+        //   data.code = this.moreArr.purchase
+        // }
+        // //退货员
+        // if(this.moreArr.Return != null ){
+        //   data.orderMan = this.moreArr.Return
+        // }
+        // //创建人
+        // if(this.moreArr.Accessories != null ){
+        //   data.createUname = this.moreArr.Accessories
+        // }
+        // //提交人
+        // if(this.moreArr.submitter != null){
+        //   data.auditor = this.moreArr.submitter
+        // }
+
+        findPageByDynamicQuery({params:params,data:data}).then(res => {
+          if(res.code === 0){
+            this.Left.tbdata = res.data.content || []
+            this.Left.page.total = res.data.totalElements
+
+            for(let item of this.Left.tbdata){
+              item._highlight = false
+              if(item.id==this.selectLeftItemId){
+                item._highlight = true;
+                this.setRightData(item);
+                break;
+              }
+            }
+          }
+        })
+      },
+      // 更多查询单独接口
+      LeftgetlistTwo(){
+        let data = {}
+        let params = {}
+        params.page = this.Left.page.num - 1
+        params.size = this.Left.page.size
+        //创建日期
+        if(this.moreArr.createData != null){
+          console.log(this.moreArr.createData)
+          data.startTime = this.moreArr.createData[0] + " 00:00:00"
+          data.endTime = this.moreArr.createData[1] + " 23:59:59"
         }
         //提交日期
         if(this.moreArr.submitData != null){
@@ -805,7 +884,13 @@
         if(this.moreArr.submitter != null){
           data.auditor = this.moreArr.submitter
         }
-        findPageByDynamicQuery({params:params,data:data}).then(res => {
+        //是否显示单据
+        if (this.moreArr.Ischeck){
+          data.showSelf = true
+        }else {
+          data.showSelf = false
+        }
+        queryByConditions({params:params,data:data}).then(res => {
           if(res.code === 0){
             this.Left.tbdata = res.data.content || []
             this.Left.page.total = res.data.totalElements
@@ -815,6 +900,7 @@
       // 左边部分的当前行
       selection(row){
         if (row == null) return;
+        this.selectLeftItemId = row.id;
         let currentRowTable = this.$refs["currentRowTable"];
         if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({
@@ -872,6 +958,7 @@
                       this.formPlan.serviceId = '' //采购订单
                       this.Right.tbdata  =  [] //子表格
                       this.$refs.formPlan.resetFields();
+
                     }
                   })
                 } else {
@@ -894,31 +981,22 @@
               this.formPlan.warehouse = ''  //退货仓库
               this.formPlan.serviceId = '' //采购订单
               this.Right.tbdata  =  [] //子表格
+
+              for(let item of this.Left.tbdata){
+                item._highlight = false
+                if(item.id==this.selectLeftItemId){
+                  item._highlight = true;
+                  this.setRightData(item);
+                  break;
+                }
+              }
+
             },
           })
         }else{
           if(row.id){
             // this.leftgetList();
-            this.mainId = row.id
-            this.guestidId = row.guestId
-            this.datadata = row
-              this.formPlan.guestName = this.datadata.guestId
-              this.formPlan.storeId = this.datadata.orderManId
-              this.formPlan.orderDate = this.datadata.orderDate
-              this.formPlan.numbers = this.datadata.serviceId
-              this.formPlan.cause = this.datadata.rtnReasonId
-              this.formPlan.clearing = this.datadata.settleTypeId
-              this.formPlan.remark = this.datadata.remark
-              this.formPlan.warehouse = this.datadata.storeId
-              this.formPlan.serviceId = this.datadata.code
-              row.details.map(item => {
-                item.orderPrice = Number(item.orderPrice).toFixed(2)
-              })
-              this.Right.tbdata = this.datadata.details
-              this.presentrowMsg = row.billStatusId.value
-              // console.log(this.presentrowMsg)
-              this.rowId = row.id
-              this.buttonDisable = false
+            this.setRightData(row)
           }else {
             this.formPlan.guestName = ''
             this.formPlan.storeId = ''
@@ -934,6 +1012,32 @@
           }
         }
       },
+
+      //右侧填充数据
+      setRightData(row){
+        this.selectLeftItemId = "";
+        this.mainId = row.id
+        this.guestidId = row.guestId
+        this.datadata = row
+        this.formPlan.guestName = this.datadata.guestId
+        this.formPlan.storeId = this.datadata.orderManId
+        this.formPlan.orderDate = this.datadata.orderDate
+        this.formPlan.numbers = this.datadata.serviceId
+        this.formPlan.cause = this.datadata.rtnReasonId
+        this.formPlan.clearing = this.datadata.settleTypeId
+        this.formPlan.remark = this.datadata.remark
+        this.formPlan.warehouse = this.datadata.storeId
+        this.formPlan.serviceId = this.datadata.code
+        row.details.map(item => {
+          item.orderPrice = Number(item.orderPrice).toFixed(2)
+        })
+        this.Right.tbdata = this.datadata.details
+        this.presentrowMsg = row.billStatusId.value
+        // console.log(this.presentrowMsg)
+        this.rowId = row.id
+        this.buttonDisable = false
+      },
+
 
       // 仓库下拉框
       warehouse(){},
@@ -991,23 +1095,25 @@
             data.remark = this.formPlan.remark  //备注
             data.storeId = this.formPlan.warehouse  //退货仓库
             data.code = this.formPlan.serviceId //采购订单
-            data.details = this.Right.tbdata.map(item => {
-              return {
-                partId: item.partId,
-                partCode: item.partCode,
-                partName: item.partName,
-                partBrand: item.partBrand,
-                outUnitId: item.outUnitId,
-                canReQty: item.canReQty,
-                orderQty: item.orderQty,
-                orderPrice: item.orderPrice,
-                orderAmt: item.orderAmt,
-                remark: item.remark,
-                stockOutQty: item.stockOutQty,
-                oemCode: item.oemCode,
-                spec: item.spec
-              }
-            }) //子表格
+            data.details = this.Right.tbdata
+            // data.details = this.Right.tbdata.map(item => {
+            //   // return {
+            //   //   id: item.id,
+            //   //   partId: item.partId,
+            //   //   partCode: item.partCode,
+            //   //   partName: item.partName,
+            //   //   partBrand: item.partBrand,
+            //   //   outUnitId: item.outUnitId,
+            //   //   canReQty: item.canReQty,
+            //   //   orderQty: item.orderQty,
+            //   //   orderPrice: item.orderPrice,
+            //   //   orderAmt: item.orderAmt,
+            //   //   remark: item.remark,
+            //   //   stockOutQty: item.stockOutQty,
+            //   //   oemCode: item.oemCode,
+            //   //   spec: item.spec
+            //   // }
+            // }) //子表格
             let res = await returnPchs(data);
             if (res.code == 0) {
               this.$Message.success('退货成功');

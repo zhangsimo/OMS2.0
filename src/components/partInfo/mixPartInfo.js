@@ -21,6 +21,7 @@ export const mixPartInfo = {
       }
     };
     return {
+      saveFlag:false,
       validRules: {
         companyNum: [{ required: true, message: "单位数量不能为空且只能是数字", trigger: "change", pattern: /^\d{1,}$/ }],
         longNum: [{ required: true, message: "长不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
@@ -138,8 +139,9 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
-      this.proModal = true
-      console.log(this.showSpe)
+      this.proModal = true;
+      this.formValidate.specVOS=[];
+      this.$refs.tabs.activeKey = 'active1'
       //拉取适用车型品牌
       this.getCarBrand();
       //获取所有品质
@@ -152,6 +154,9 @@ export const mixPartInfo = {
           this.dictCodeAll = res.data
         }
       })
+      this.formValidate.carBrandName = ''
+      this.formValidate.carModelName = ''
+      this.formValidate.fullName = ''
       if (setData) {
         this.formValidate = setData;
       }
@@ -348,6 +353,7 @@ export const mixPartInfo = {
                 this.$message.error('包装规格计量单位必填')
                 return
               }
+              if(this.saveFlag) return this.$message.error('正在保存数据')
               let objReq = {}
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
@@ -409,6 +415,7 @@ export const mixPartInfo = {
               //禁用禁售
               objReq.disabled = this.prohibit ? 1 : 0
               objReq.isStopSell = this.forbidsale ? 1 : 0
+              this.saveFlag = true
               this.$emit('throwData', objReq)
             } else {
               this.$message.error('带*必填')

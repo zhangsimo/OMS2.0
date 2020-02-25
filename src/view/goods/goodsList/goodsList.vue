@@ -164,12 +164,9 @@
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="计划员：" prop="orderManId">
-                    <!-- <Input class="w160" v-model="formPlan.planner" /> -->
                     <Select v-model="formPlan.orderManId"
                       class="w160"
                       :disabled="isinput"
-                      label-in-value
-                      @on-change="selectOrderMan"
                       filterable
                     >
                       <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -201,7 +198,7 @@
                     <Select
                       class="w160"
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
-                      v-model="formPlan.directGuestId"
+                      v-model="formPlan.directCompanyId"
                     >
                       <Option
                         v-for="item in companyMap"
@@ -430,6 +427,7 @@
     <!--添加配件-->
     <select-part-com
       ref="selectPartCom"
+      :formPlanmain="formPlan"
       @selectPartName="getPartNameList"
       :is-show-add-part-btn="true"
     ></select-part-com>

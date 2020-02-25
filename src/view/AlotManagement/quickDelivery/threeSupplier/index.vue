@@ -18,10 +18,15 @@
             ></DatePicker>
           </div>
           <div class="db mr10">
-            <Select v-model="form.billStatusId " class="w100 mr10" clearable>
+            <Select
+              @on-change="selectStatus"
+              v-model="form.billStatusId "
+              class="w100 mr10"
+              clearable
+            >
               <Option value="2" label="待入库"></Option>
-              <Option value="3" label="已入库"></Option>
-              <Option value="4" label="部分入库"></Option>
+              <Option value="4" label="已入库"></Option>
+              <Option value="3" label="部分入库"></Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -29,11 +34,12 @@
           </div>
           <div class="db mr10">
             <Select
+              style="width:110px"
               v-model="form.guestId"
-              class="w100 mr10"
-              placeholder="选择客户"
+              placeholder="选择供应商"
               filterable
               clearable
+              @on-change="selectOption"
             >
               <Option
                 v-for="item in customerListOptions"
@@ -69,7 +75,7 @@
           size="mini"
           height="auto"
           :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column title="操作">
@@ -109,7 +115,7 @@
             <Page
               :current="pageList.page+1"
               :total="pageList.total"
-              :page-size="pageList.size"
+              :page-size="pageList.pageSize"
               :page-size-opts="pageList.pageSizeOpts"
               show-sizer
               @on-change="changePage"
@@ -145,9 +151,11 @@
           <vxe-table-column field="orderQty" title="订单数量"></vxe-table-column>
 
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
+          <vxe-table-column field="trueEnterQty" title="已入库数量"></vxe-table-column>
+          <vxe-table-column field="adjustQty" title="已取消数量"></vxe-table-column>
           <vxe-table-column
-            field="trueEnterQty"
-            title="入库数量"
+            field="thisQty"
+            title="本次入库数量"
             :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
           ></vxe-table-column>
 
@@ -181,8 +189,6 @@ export default {
       form: {
         auditStartDate: "",
         auditEndDate: "",
-        startDate: "",
-        endDate: "",
         billStatusId: "",
         serviceId: "",
         guestId: "",
@@ -196,8 +202,8 @@ export default {
       pageList: {
         page: 0,
         total: 0,
-        pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSize: 20,
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
       pageTotal: 10,
       selectOne: "",
@@ -237,15 +243,27 @@ export default {
           this.$Message.info("拒绝失败");
         });
     },
+    selectOption() {
+      this.search();
+    },
     //time1
     getDataQuick(val) {
       this.form.auditStartDate = val[0];
       this.form.auditEndDate = val[1];
+      this.search();
     },
     //time2
     selectDate(val) {
-      this.form.auditStartDate = val[0] + " " + "00:00:00";
-      this.form.auditEndDate = val[1] + " " + "23:59:59";
+      if (val[0] != "") {
+        this.form.auditStartDate = val[0] + " " + "00:00:00";
+        this.form.auditEndDate = val[1] + " " + "23:59:59";
+      } else {
+        this.form.auditStartDate = "";
+        this.form.auditEndDate = "";
+      }
+    },
+    selectStatus() {
+      this.search();
     },
     //搜索
     search() {
@@ -256,6 +274,9 @@ export default {
         if (res.code === 0) {
           this.TopTableData = res.data.content || [];
           this.pageList.total = res.totalElements;
+          for (var i = 0; i < this.TopTableData.length; i++) {
+            this.TopTableData[i].enterStoreId = this.storeArray[0].value;
+          }
           //console.log(this.TopTableData, "this.TopTableData ==>257");
         }
       });
@@ -301,7 +322,7 @@ export default {
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       //console.log(evnt.target.value);
-      this.currentrow.details.storeId = evnt.target.value;
+      this.currentrow.enterStoreId = evnt.target.value;
     }
   }
 };

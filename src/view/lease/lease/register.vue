@@ -32,7 +32,7 @@
             <div class="audit_nav">
               <Tabs type="card" @on-click="showRadio" class="navgation">
                 <Tab-pane v-for="(item,index) in arrAudit"  :label="item.dictName" :key="index">
-                  <Radio-group v-model="radioSelect" vertical>
+                  <Radio-group v-model="radioSelect" vertical @on-change="xuanzhong">
                     <Radio v-for="(v,i) in item.itemVOS" :label="v.itemCode" :key="i">{{v.itemName}}</Radio>
                   </Radio-group>
                 </Tab-pane>
@@ -196,6 +196,8 @@
             },
             radioSelect:'QXS01',
             // buttonsShow:{},//权限按钮展示
+            tenantTypeId: '9223372036854775807',
+            tenantTypeName:'洗美店'
           }
         },
       mounted(){
@@ -217,7 +219,7 @@
         },
           //查找状态
         selection(a){
-          console.log(a)
+          // console.log(a)
           this.at_present = a.id
           // console.log(a.isDisabled)
           let statusss = JSON.parse(a.status || [])
@@ -239,13 +241,31 @@
           console.log(this.dateTime)
           // this.search()
         },
+        // 审核radio值
+        xuanzhong(val){
+          // console.log(val)
+          // console.log(this.arrAudit)
+         let a =  this.arrAudit.map(item => {
+            return item.itemVOS
+          })
+          // console.log(a)
+          let b = a.map(item => {
+            return item.filter(item => item.itemCode == val)
+          })
+          let c = b.filter(item => item.length > 0)
+          // console.log(c)
+          this.tenantTypeId = c[0][0].id
+          this.tenantTypeName = c[0][0].itemName
+          console.log(this.tenantTypeId)
+          console.log(this.tenantTypeName)
+        },
         //审核弹窗
         Audit(){
           // console.log(this.statuss)
           if (this.statuss == 5){
              this.$Message.warning('请选择审核对象')
           }else if(this.statuss == 1){
-            this.$Message.warning('该对象已审核，请选择未审核对象')
+            this.$Message.warning('至少选中一条记录')
           }else{
             this.tenant_audit = true
             Reviewtenant().then((res) =>{
@@ -271,7 +291,9 @@
           let data = {
             type:this.radioSelect,
             status: 1,
-            ids:this.at_present
+            ids:this.at_present,
+            tenantTypeId: this.tenantTypeId,
+            tenantTypeName: this.tenantTypeName
           }
           trialRegister(data).then((res) => {
             if(res.code === 0){
@@ -354,7 +376,7 @@
           params.page = this.page.num - 1
           params.size = this.page.size
             // console.log(params)
-          this.loading = true
+          this.loading = true;
           getMessagelist({params:params,data:data}).then(res => {
             // console.log(res , 'all')
             this.loading = false

@@ -2,10 +2,10 @@
   <div>
     <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
-        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
+        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">
           <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
         </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+        <Input class="w150 mr10" v-model="partName" :placeholder="Name"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -174,6 +174,7 @@
       border: 1px solid #e8e8e8;
       padding: 4px 10px;
       border-radius: 2px;
+      display: inline-block;
       &.active{
         background: #fd5c5c;
         border-color: #fd5c5c;

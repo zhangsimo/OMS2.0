@@ -87,7 +87,7 @@
               <Button v-show="row.status.name == '待受理'" type="text" @click="shouli(row, 7)">拒绝</Button>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="orgName" title="申请方"></vxe-table-column>
+          <vxe-table-column field="guestName" title="申请方"></vxe-table-column>
           <vxe-table-column field="serviceId" title="调入退回申请单号"></vxe-table-column>
           <vxe-table-column field="status.name" title="状态"></vxe-table-column>
 
@@ -116,8 +116,8 @@
               </select>
             </template>
           </vxe-table-column>-->
-          <vxe-table-column field="acceptTime" title="受理日期" width="100"></vxe-table-column>
-          <vxe-table-column field="acceptUname" title="受理人" width="100"></vxe-table-column>
+          <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
+          <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
       </div>
       <Modal v-model="modal1" title="提示" @on-ok="ok" @on-cancel="cancel">
@@ -129,13 +129,13 @@
         <p>
           <Icon type="information"></Icon>受理成功, 已生成调出退回单
         </p>
-        <span class="courier">
+        <span style="width:300px" class="courier">
           <input
             type="text"
             readonly
             v-model="danhao"
             id="danhao"
-            style="border:none;background-color: #ffff"
+            style="border:none;background-color: #ffff;width:200px"
           />
         </span>
         <span class="sp1" @click="copy">复制单号</span>
@@ -258,7 +258,7 @@ export default {
         page: 1,
         total: 0,
         pageSize: 10,
-        pageSizeOpts: [10, 20, 30, 40, 50]
+        pageSizeOpts: [20, 40, 60, 80, 100]
       },
 
       storeArray: [],
@@ -275,7 +275,6 @@ export default {
       findForAllot(params)
         .then(res => {
           if (res.code == 0) {
-            // console.log(res)
             res.data.content.forEach(element => {
               this.customerListOptions.push({
                 value: element.orgid,
@@ -290,10 +289,8 @@ export default {
       getcangku()
         .then(res => {
           if (res.code == 0) {
-            console.log(res, "res==286");
             res.data.forEach(element => {
               this.storeArray.push({ value: element.id, label: element.name });
-              console.log(this.storeArray, "this.storeArray ==>298");
             });
           }
         })
@@ -316,14 +313,8 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            console.log(res);
             this.TopTableData = res.data.content || [];
-            // console.log(this.TopTableData, "this.TopTableData ==>323");
-            // for (var i = 0; i < this.TopTableData.length; i++) {
-            //   this.TopTableData[i]["storeIdValue"] = "受理默认仓库";
-            // }
             this.pageList.total = res.totalElements;
-            // console.log(this.TopTableData, "this.TopTableData");
             for (var i = 0; i < this.TopTableData.length; i++) {
               this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             }
@@ -363,6 +354,7 @@ export default {
             this.tbdata = res.data || [];
             this.modal3 = true;
             this.danhao = res.data.serviceId;
+            location.reload()
           } else if (res.code == 1) {
             this.$Message.info("请选择受理仓库");
           }
@@ -385,6 +377,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             if (res.code == 0) {
+                location.reload()
             } else if (res.code == 1) {
               this.$Message.info("请选择受理仓库");
             }
@@ -401,7 +394,6 @@ export default {
       this.$Message.info("点击了取消");
     },
     shouli(row, index) {
-      // console.log(row, "row=>407");
       this.currentrow = row;
       if (index === 2) {
         this.modal1 = true;
@@ -412,7 +404,6 @@ export default {
     roleChangeEvent({ row }, evnt) {
       // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
       this.currentrow.defaultValue = evnt.target.value;
-      // console.log(evnt.target.value);
     }
   }
 };

@@ -12,11 +12,11 @@ export function getLeftList (num,page,data) {
 
 
 //获取右侧额度
-export function getLimit  (guestId) {
+export function getLimit  (params) {
   return axios.request({
-    url: `${api.omsOrder}/sellOrderMain/findGuestAmt?guestId=${guestId}`,
+    url: `${api.omsOrder}/sellOrderMain/findGuestAmt`,
     method: 'get',
-
+    params
   })
 }
 //获取客户
