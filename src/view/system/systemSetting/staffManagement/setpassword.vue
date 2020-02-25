@@ -21,13 +21,13 @@
         data(){
           let account = (rule, value, callback) => {
             if (!value) {
-              callback(new Error("登录账号只能输入字母+数字"));
+              callback(new Error("登录账号只能输入长度大于2位的字母或数字"));
             } else {
-              const reg = /^(?=.*?[a-zA-Z])(?=.*?[0-9])[a-zA-Z0-9]{2,}$/
+              const reg = /^[a-zA-Z0-9]{2,}$/
               if (reg.test(value)) {
                 callback();
               } else {
-                callback(new Error("登录账号只能输入字母+数字"));
+                callback(new Error("登录账号只能输入长度大于2位的字母或数字"));
 
               }
             }
