@@ -52,10 +52,10 @@
                 <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
               </div>
             </Poptip>
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
+            <!-- <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
-            </button>
+            </button>-->
           </div>
         </div>
       </div>
@@ -67,7 +67,25 @@
           type="button"
           @click="statementSettlement"
           v-has="'examine'"
-        >对账单结算</button>
+        >对账单对冲</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >冲减预收</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >冲减预付</button>
+        <!-- <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >对账单结算</button> -->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -77,10 +95,54 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >认领款核销</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >打印流程</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="saleApplication"
+          v-has="'examine'"
+        >销售开票申请</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >查询开票申请</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >开票对冲</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >进项登记及修改</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
+          @click="statementSettlement"
+          v-has="'examine'"
+        >查询进项核销</button>
+        <button
+          class="ivu-btn ivu-btn-default mr10"
+          type="button"
           @click="Revoke"
           v-has="'revoke'"
         >撤销</button>
+        <div class="hide1">
         <Table
+          width="2000"
           border
           :columns="columns1"
           :data="data1"
@@ -90,6 +152,7 @@
           highlight-row
           ref="accountStatement"
         ></Table>
+        </div>
         <Page
           :total="pagetotal"
           show-elevator
@@ -186,7 +249,7 @@
         </div>
       </div>
     </section>
-    <Modal v-model="modal1" title="高级查询" @on-ok="senior">
+    <!-- <Modal v-model="modal1" title="高级查询" @on-ok="senior">
       <div class="db pro mt20">
         <span>转单日期：</span>
         <Date-picker
@@ -224,7 +287,7 @@
         <span>业务单号：</span>
         <input type="text" class="w200" v-model="text" />
       </div>
-    </Modal>
+    </Modal>-->
     <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
       <div class="db">
         <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
@@ -320,10 +383,14 @@
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
+    <salepopup ref="salepopup"/>
+    <sale />
   </div>
 </template>
 <script>
+import sale from './Popup/saleAccount'
 import quickDate from "@/components/getDate/dateget_bill.vue";
+import salepopup from './Popup/salepopup'
 import { creat } from "./../components";
 import moment from "moment";
 import {
@@ -344,7 +411,9 @@ export default {
   components: {
     quickDate,
     reconciliation,
-    Monthlyreconciliation
+    Monthlyreconciliation,
+    salepopup,
+    sale
   },
   data() {
     return {
@@ -433,6 +502,7 @@ export default {
         }
       ],
       columns1: [
+        
         {
           title: "序号",
           key: "index",
@@ -440,7 +510,7 @@ export default {
           className: "tc"
         },
         {
-          title: "门店名称",
+          title: "公司名称",
           key: "orgName",
           className: "tc"
         },
@@ -574,6 +644,76 @@ export default {
         },
         {
           title: "流程是否通过",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "最近一次开票申请人",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "最近一次开票申请时间",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税配件金额",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税油品",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税配件已开",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税油品已开",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "收到配件进项发票",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "收到含税油品金额",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "对冲配件发票",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "对冲油品发票",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税配件欠票",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "含税油品欠票",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "最近一次开票公司",
+          key: "passName",
+          className: "tc"
+        },
+        {
+          title: "最近一次开票名称",
           key: "passName",
           className: "tc"
         }
@@ -821,6 +961,10 @@ export default {
     }
   },
   methods: {
+    // 销售开票申请
+    saleApplication(){
+      this.$refs.salepopup.modal1 = true
+    },
     // 总表格合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)
@@ -966,23 +1110,23 @@ export default {
       this.getAccountStatement(obj);
     },
     // 更多查询
-    senior() {
-      let obj = {
-        startDate: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-          : "",
-        orgId: this.model1,
-        statementStatus: this.Reconciliationtype,
-        guestType: this.model2,
-        guestName: this.nametext,
-        serviceType: this.model3,
-        serviceId: this.text
-      };
-      this.getAccountStatement(obj);
-    },
+    // senior() {
+    //   let obj = {
+    //     startDate: this.value[0]
+    //       ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+    //       : "",
+    //     endDate: this.value[1]
+    //       ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+    //       : "",
+    //     orgId: this.model1,
+    //     statementStatus: this.Reconciliationtype,
+    //     guestType: this.model2,
+    //     guestName: this.nametext,
+    //     serviceType: this.model3,
+    //     serviceId: this.text
+    //   };
+    //   this.getAccountStatement(obj);
+    // },
     // 点击总表查询明细
     morevis(row, index) {
       this.reconciliationStatement = row;
@@ -1528,5 +1672,8 @@ export default {
 }
 .res {
   color: #ff3600 !important;
+}
+.hide1 {
+  overflow-x: auto;
 }
 </style>
