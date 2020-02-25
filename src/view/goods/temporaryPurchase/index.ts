@@ -41,6 +41,8 @@ export default class InterPurchase extends Vue {
 
   private split1: number = 0.2;
 
+  private selectLeftItemId = ''
+
   private isInput: boolean = true;
 
   private hideSp: boolean = true;
@@ -366,11 +368,28 @@ export default class InterPurchase extends Vue {
     if (!data) return;
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
-    let res = await api.temporarySaveDraft(data);
-    if (res.code == 0) {
-      this.$Message.success('保存成功');
-      this.getListData();
-      this.isAdd = true;
+
+    let zerolength = data.details.filter(el => el.orderPrice <= 0)
+    if(zerolength.length > 0){
+      this.$Modal.confirm({
+        title: '',
+        content: '<p>存在配件价格为0，是否提交</p>',
+        onOk: async () => {
+          let res = await api.temporarySaveDraft(data);
+          if (res.code == 0) {
+            this.$Message.success('保存成功');
+            this.getListData();
+            this.isAdd = true;
+          }
+        }
+      })
+    }else{
+      let res = await api.temporarySaveDraft(data);
+      if (res.code == 0) {
+        this.$Message.success('保存成功');
+        this.getListData();
+        this.isAdd = true;
+      }
     }
   }
 
@@ -516,6 +535,9 @@ export default class InterPurchase extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    //记录当前点击的id
+    this.selectLeftItemId = v.id
+
     this.deletePartArr = new Array();
     this.tmpDeletePartArr = new Array();
     const currentRowTable: any = this.$refs["currentRowTable"];
@@ -538,6 +560,15 @@ export default class InterPurchase extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
+          for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
+            if(b.id==this.selectLeftItemId){
+              b._highlight = true;
+              this.setFormPlanmain(b);
+              break;
+            }
+          }
+
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -545,6 +576,14 @@ export default class InterPurchase extends Vue {
           currentRowTable.clearCurrentRow();
           const ref: any = this.$refs['formplanref']
           ref.resetFields();
+          for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
+            if(b.id==this.selectLeftItemId){
+              b._highlight = true;
+              this.setFormPlanmain(b);
+              break;
+            }
+          }
         },
       })
     } else {
@@ -552,34 +591,38 @@ export default class InterPurchase extends Vue {
         const ref: any = this.$refs['formplanref']
         ref.resetFields();
       }
-      if (v) {
-        this.selectTableRow = v;
-        this.mainId = v.id;
-        this.tableData = v.details || [];
-        this.selectRowState = v.billStatusId.name;
-        this.serviceId = v.serviceId;
-        this.formPlanmain.createUid = v.createUid;
-        this.formPlanmain.processInstanceId = v.processInstanceId;
-        this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-        this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
-        if (['草稿', '退回'].includes(v.billStatusId.name)) {
-          this.isInput = false;
-        } else {
-          this.isInput = true;
-        }
-        if (['草稿', '已作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
-          this.hideSp = true;
-        } else {
-          this.hideSp = false;
-        }
-        if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
-          this.adjustButtonDisable = false;
-        } else {
-          this.adjustButtonDisable = true;
-        }
-        for (let k in this.formPlanmain) {
-          this.formPlanmain[k] = v[k];
-        }
+      this.setFormPlanmain(v);
+    }
+  }
+
+  private setFormPlanmain(v:any){
+    if (v) {
+      this.selectTableRow = v;
+      this.mainId = v.id;
+      this.tableData = v.details || [];
+      this.selectRowState = v.billStatusId.name;
+      this.serviceId = v.serviceId;
+      this.formPlanmain.createUid = v.createUid;
+      this.formPlanmain.processInstanceId = v.processInstanceId;
+      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
+      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+        this.isInput = false;
+      } else {
+        this.isInput = true;
+      }
+      if (['草稿', '已作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
+        this.hideSp = true;
+      } else {
+        this.hideSp = false;
+      }
+      if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
+        this.adjustButtonDisable = false;
+      } else {
+        this.adjustButtonDisable = true;
+      }
+      for (let k in this.formPlanmain) {
+        this.formPlanmain[k] = v[k];
       }
     }
   }

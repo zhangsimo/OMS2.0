@@ -38,7 +38,10 @@ export default class PlannedPurchaseOrder extends Vue {
 
   private split1: number = 0.2;
 
+  private selectLeftItemId = ''
+
   private isInput: boolean = true;
+  private isDirectCompanyId:boolean = false
 
   //左侧表格高度
   private leftTableHeight: number = 0;
@@ -265,14 +268,17 @@ export default class PlannedPurchaseOrder extends Vue {
   }
   //---- 新增方法
   private addPro() {
+    if (!this.isAdd) {
+      return this.$Message.error('请先保存数据');
+    }
     const ref: any = this.$refs['formplanref'];
     ref.resetFields();
     const currentRowTable: any = this.$refs["currentRowTable"];
     currentRowTable.clearCurrentRow();
-    this.selectTableRow = null;
-    if (!this.isAdd) {
-      return this.$Message.error('请先保存数据');
+    for(let b of this.purchaseOrderTable.tbdata){
+      b._highlight = false
     }
+    this.selectTableRow = null;
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -499,6 +505,8 @@ export default class PlannedPurchaseOrder extends Vue {
   //表格单选选中
   private selectTabelData(v: any) {
     if (v == null) return;
+    //记录当前点击的id
+    this.selectLeftItemId = v.id
     const currentRowTable: any = this.$refs["currentRowTable"];
     if (!v.new && !this.isAdd) {
       this.$Modal.confirm({
@@ -519,6 +527,16 @@ export default class PlannedPurchaseOrder extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
+
+          for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
+            if(b.id==this.selectLeftItemId){
+              b._highlight = true;
+              this.setFormPlanmain(b);
+              break;
+            }
+          }
+
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -526,6 +544,15 @@ export default class PlannedPurchaseOrder extends Vue {
           currentRowTable.clearCurrentRow();
           const ref: any = this.$refs['formplanref']
           ref.resetFields();
+
+          for(let b of this.purchaseOrderTable.tbdata){
+            b._highlight = false
+            if(b.id==this.selectLeftItemId){
+              b._highlight = true;
+              this.setFormPlanmain(b);
+              break;
+            }
+          }
         },
       })
     } else {
@@ -533,29 +560,33 @@ export default class PlannedPurchaseOrder extends Vue {
         const ref: any = this.$refs['formplanref']
         ref.resetFields();
       }
-      if(v) {
-        this.selectTableRow = v;
-        this.mainId = v.id;
-        this.tableData = v.details || [];
-        this.selectRowState = v.billStatusId.name;
-        this.serviceId = v.serviceId;
-        this.formPlanmain.createUid = v.createUid;
-        this.formPlanmain.processInstanceId = v.processInstanceId;
-        this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-        this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
-        if (['草稿', '退回'].includes(v.billStatusId.name)) {
-          this.isInput = false;
-        } else {
-          this.isInput = true;
-        }
-        if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
-          this.adjustButtonDisable = false;
-        } else {
-          this.adjustButtonDisable = true;
-        }
-        for (let k in this.formPlanmain) {
-          this.formPlanmain[k] = v[k];
-        }
+      this.setFormPlanmain(v);
+    }
+  }
+
+  private setFormPlanmain(v:any){
+    if(v) {
+      this.selectTableRow = v;
+      this.mainId = v.id;
+      this.tableData = v.details || [];
+      this.selectRowState = v.billStatusId.name;
+      this.serviceId = v.serviceId;
+      this.formPlanmain.createUid = v.createUid;
+      this.formPlanmain.processInstanceId = v.processInstanceId;
+      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
+      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+        this.isInput = false;
+      } else {
+        this.isInput = true;
+      }
+      if (['待收货', '部分入库'].includes(v.billStatusId.name)) {
+        this.adjustButtonDisable = false;
+      } else {
+        this.adjustButtonDisable = true;
+      }
+      for (let k in this.formPlanmain) {
+        this.formPlanmain[k] = v[k];
       }
     }
   }
@@ -754,6 +785,10 @@ export default class PlannedPurchaseOrder extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
+    if(row.directCompanyId){
+      this.isDirectCompanyId = true
+      this.formPlanmain.directCompanyId = row.directCompanyId
+    }
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {

@@ -258,7 +258,7 @@
                     <Select
                       class="w160"
                       v-model="formPlanmain.directCompanyId"
-                      :disabled="isInput"
+                      :disabled="isInput||isDirectCompanyId"
                     >
                       <Option
                         v-for="(item, index) in putStores"
@@ -390,7 +390,7 @@
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
-                      :max="row.maxQty"
+                      :max="row.orderQty"
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"
@@ -426,6 +426,7 @@
                 </vxe-table-column>
                 <vxe-table-column
                   title="备注"
+                  field="remark"
                   :edit-render="{ name: 'input' }"
                   width="100"
                 ></vxe-table-column>
