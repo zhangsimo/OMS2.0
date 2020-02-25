@@ -813,7 +813,11 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      if(this.cangkuListall.length>0){
+          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      }else{
+          this.Leftcurrentrow.storeId = '';
+      }
       this.buttonShow = false;
       this.tuneOut = false;
       this.Leftcurrentrow.createTime = moment(new Date()).format(

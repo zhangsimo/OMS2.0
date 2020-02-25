@@ -361,7 +361,9 @@ export default {
         ],
         cityId: [{ required: true, message: " ", trigger: "change" }],
         guestType: [{ required: true, message: " ", trigger: "change" }],
-        guestTypeFloor: [{ required: true, message: " ", trigger: "change" }]
+        guestTypeFloor: [{ required: true, message: " ", trigger: "change" }],
+        supplierTypeFirst: [{required: true, message: " ", trigger: "change"}],
+        supplierTypeSecond: [{required: true, message: " ", trigger: "change"}]
       },
       dataList: ""
     };
