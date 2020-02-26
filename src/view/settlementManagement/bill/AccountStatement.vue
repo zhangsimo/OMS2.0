@@ -85,7 +85,7 @@
           type="button"
           @click="statementSettlement"
           v-has="'examine'"
-        >对账单结算</button> -->
+        >对账单结算</button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -113,7 +113,7 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="queryApplication"
           v-has="'examine'"
         >查询开票申请</button>
         <button
@@ -125,13 +125,13 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="registrationEntry"
           v-has="'examine'"
         >进项登记及修改</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="queryEntry"
           v-has="'examine'"
         >查询进项核销</button>
         <button
@@ -141,17 +141,17 @@
           v-has="'revoke'"
         >撤销</button>
         <div class="hide1">
-        <Table
-          width="2000"
-          border
-          :columns="columns1"
-          :data="data1"
-          class="mt10"
-          max-height="400"
-          @on-row-click="morevis"
-          highlight-row
-          ref="accountStatement"
-        ></Table>
+          <Table
+            width="2000"
+            border
+            :columns="columns1"
+            :data="data1"
+            class="mt10"
+            max-height="400"
+            @on-row-click="morevis"
+            highlight-row
+            ref="accountStatement"
+          ></Table>
         </div>
         <Page
           :total="pagetotal"
@@ -383,16 +383,16 @@
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
-    <salepopup ref="salepopup"/>
+    <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
-    <!-- <isDetailed /> -->
+    <registrationEntry ref="registrationEntry" />
   </div>
 </template>
 <script>
-import hedgingInvoice from './Popup/hedgingInvoice'
-// import isDetailed from './components/idDetailed'
+import hedgingInvoice from "./Popup/hedgingInvoice";
+import registrationEntry from './Popup/registrationEntry'
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import salepopup from './Popup/salepopup'
+import salepopup from "./Popup/salepopup";
 import { creat } from "./../components";
 import moment from "moment";
 import {
@@ -411,7 +411,7 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 export default {
   components: {
-    // isDetailed,
+    registrationEntry,
     quickDate,
     reconciliation,
     Monthlyreconciliation,
@@ -506,7 +506,6 @@ export default {
         }
       ],
       columns1: [
-        
         {
           title: "序号",
           key: "index",
@@ -965,13 +964,25 @@ export default {
     }
   },
   methods: {
+    // 进项发票登记及修改
+    registrationEntry() {
+      this.$refs.registrationEntry.modal1 = true
+    },
+    // 查询进项核销
+    queryEntry() {
+      this.$router.push({name:'invoiceAdministration-invoiceManagement'})
+    },
+    // 查询发票申请
+    queryApplication(){
+      this.$router.push({name:'invoiceAdministration-invoiceApply'})
+    },
     // 发票对冲
-    hedgingInvoice(){
-      this.$refs.hedgingInvoice.modal1 = true
+    hedgingInvoice() {
+      this.$refs.hedgingInvoice.modal1 = true;
     },
     // 销售开票申请
-    saleApplication(){
-      this.$refs.salepopup.modal1 = true
+    saleApplication() {
+      this.$refs.salepopup.modal1 = true;
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {

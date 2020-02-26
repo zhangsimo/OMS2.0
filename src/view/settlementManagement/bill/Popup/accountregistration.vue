@@ -1,0 +1,113 @@
+<template>
+  <Modal v-model="modal1" title="选择不含税对账单单">
+    <span class="mr5">对账期间：</span>
+    <DatePicker type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
+    <Button @click="query" class="ml10">查询</Button>
+    <Table
+      class="mt10"
+      :columns="noTax"
+      :data="noTaxData"
+      @on-selection-change="seleteDate"
+    ></Table>
+    <div slot="footer">
+      <Button type="primary" @click="determine">确定</Button>
+      <Button @click="modal1=false">取消</Button>
+    </div>
+    <idDetailed ref="idDetailed" />
+  </Modal>
+</template>
+<script>
+import idDetailed from "../components/idDetailed";
+export default {
+  components: {
+    idDetailed
+  },
+  data() {
+    return {
+      modal1: false, //弹窗展示
+      noTax: [
+        {
+          type: "selection",
+          width: 40,
+          align: "center"
+        },
+        {
+          title: "序号",
+          key: "index",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "日期",
+          key: "orgName",
+          className: "tc"
+        },
+        {
+          title: "对账单号",
+          key: "guestName",
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.$refs.idDetailed.modal1 = true;
+                  }
+                }
+              },
+              params.row.serviceId
+            );
+          }
+        },
+        {
+          title: "往来单位",
+          key: "guestName",
+          className: "tc"
+        },
+        {
+          title: "对账应付",
+          key: "accountNo",
+          className: "tc"
+        },
+        {
+          title: "应付返利",
+          key: "accountNo",
+          className: "tc"
+        },
+        {
+          title: "应付坏账",
+          key: "accountNo",
+          className: "tc"
+        },
+        {
+          title: "应付合计",
+          key: "accountNo",
+          className: "tc"
+        }
+      ], //选择不含税对账单单
+      noTaxData: [{ index: 1, serviceId: "aa" }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
+      seleteData: [] //单选数据
+    };
+  },
+  methods: {
+    // 日期查询
+    query() {},
+    // 确认按钮
+    determine() {
+      if (this.seleteData.length !== 0) {
+      } else {
+        this.$message.error("请选择一条对账单");
+      }
+    },
+    // 单选数据
+    seleteDate(selection) {
+      this.seleteData = selection;
+    }
+  }
+};
+</script>
