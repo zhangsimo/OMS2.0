@@ -19,10 +19,15 @@
       <Button type="primary" @click="determine">确定</Button>
       <Button @click="modal1=false">取消</Button>
     </div>
+    <idDetailed ref="idDetailed" />
   </Modal>
 </template>
 <script>
+import idDetailed from './../components/idDetailed'
 export default {
+  components:{
+    idDetailed
+  },
   data() {
     return {
       company: "", //往来单位
@@ -47,7 +52,22 @@ export default {
         {
           title: "对账单号",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          render:(h,params)=>{
+            return h("span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.$refs.idDetailed.modal1=true
+                  }
+                }
+              },
+              params.row.serviceId)
+          }
         },
         {
           title: "往来单位",
@@ -65,7 +85,7 @@ export default {
           className: "tc"
         }
       ], //选择不含税对账单单
-      accountData: [{ index: 1 }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
+      accountData: [{ index: 1,serviceId:'sss' }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
       seleteData: {} //单选数据
     };
   },

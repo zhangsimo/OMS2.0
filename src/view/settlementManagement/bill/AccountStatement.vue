@@ -385,12 +385,12 @@
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
     <salepopup ref="salepopup"/>
     <hedgingInvoice ref="hedgingInvoice" />
-    <!-- <noTax /> -->
+    <!-- <isDetailed /> -->
   </div>
 </template>
 <script>
 import hedgingInvoice from './Popup/hedgingInvoice'
-// import noTax from './Popup/noTax'
+// import isDetailed from './components/idDetailed'
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import salepopup from './Popup/salepopup'
 import { creat } from "./../components";
@@ -411,7 +411,7 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 export default {
   components: {
-    // noTax,
+    // isDetailed,
     quickDate,
     reconciliation,
     Monthlyreconciliation,

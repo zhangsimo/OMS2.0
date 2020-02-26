@@ -8,10 +8,15 @@
       <Button type="primary" @click="determine">确定</Button>
       <Button @click="modal1=false">取消</Button>
     </div>
+    <idDetailed ref="idDetailed" />
   </Modal>
 </template>
 <script>
+import idDetailed from '../components/idDetailed'
 export default {
+  components:{
+    idDetailed
+  },
   data(){
     return {
       modal1:false,//弹窗展示
@@ -35,7 +40,22 @@ export default {
         {
           title: "对账单号",
           key: "guestName",
-          className: "tc"
+          className: "tc",
+          render:(h,params)=>{
+            return h("span",
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.$refs.idDetailed.modal1=true
+                  }
+                }
+              },
+              params.row.serviceId)
+          }
         },
         {
           title: "对账金额",
@@ -44,7 +64,7 @@ export default {
         }
       ],//选择不含税对账单单
       noTaxData:[
-        {index:1},
+        {index:1,serviceId:'aa'},
         {index:1},
         {index:1}
       ],//选择不含税对账单单表格数据
