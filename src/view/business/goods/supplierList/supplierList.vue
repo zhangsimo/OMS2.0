@@ -98,7 +98,7 @@
                       </Select>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
+                      <Input class="w160 remark-input" maxlength="100" show-word-limit :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark"></Input>
                     </FormItem>
                     <FormItem label="退货仓库：" prop="warehouse">
                       <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.warehouse">
@@ -1182,4 +1182,16 @@
   .w550{
     width: 580px;
   }
+</style>
+<style lang="less">
+  .remark-input{
+    .ivu-input{
+      padding-right: 45px!important;
+    }
+    .ivu-input-word-count{
+      right: 4px;
+      background: none;
+    }
+  }
+
 </style>

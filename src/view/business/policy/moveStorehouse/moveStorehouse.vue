@@ -505,7 +505,7 @@ export default {
     purchaseType: function(val, old) {
       // console.log(val, old);
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
+      this.Left.page.size = 20;
       this.getList();
     },
     Leftcurrentrow: {
@@ -617,7 +617,7 @@ export default {
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
+      this.Left.page.size = 20;
       this.getList();
     },
     //改变移仓时间

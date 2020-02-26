@@ -41,6 +41,32 @@ let price2 = (rule, value, callback) => {
   }
 }
 
+let nameCode = (rule, value, callback) => {
+  if (!value&&value!==0) {
+    callback(new Error('字典项编码不能为空'));
+  } else {
+    let reg = /^[0-9a-zA-Z]*$/g;
+    if(!reg.test(value)){
+      callback('只能输入数字、字母')
+    }else{
+      callback()
+    }
+  }
+}
+
+let typeCode = (rule, value, callback) => {
+  if (!value&&value!==0) {
+    callback(new Error('类型编码不能为空'));
+  } else {
+    let reg = /^[0-9a-zA-Z]*$/g;
+    if(!reg.test(value)){
+      callback('只能输入数字、字母')
+    }else{
+      callback()
+    }
+  }
+}
+
 export const dataMixin = {
   data(){
     return {
@@ -79,7 +105,7 @@ export const dataMixin = {
       },
       ruleValidate: {
         dicCode: [
-          { required: true, message: '字典项代码不能为空', trigger:'blur' }
+          { required: true, validator: nameCode, trigger: 'blur' }
         ],
         dicName: [
           { required: true,message:'字典项名称不能为空', trigger: 'blur'}
@@ -93,7 +119,7 @@ export const dataMixin = {
       },
       ruleModelData: {
         dictCode: [
-          { required: true, message: '类型编码不能为空', trigger:'blur' }
+          { required: true, validator:typeCode,  trigger:'blur' }
         ],
         dictName: [
           { required: true, message: '类型名称不能为空', trigger:'blur' }
@@ -271,6 +297,7 @@ export const dataMixin = {
       this.changeTreeItemTitle='修改字典类型'
       if(this.selectTreeItem){
         this.addNewModal = true
+        this.$refs.proModal.resetFields();
         this.formModelData.dictCode = this.selectTreeItem.dictCode
         this.formModelData.dictName = this.selectTreeItem.dictName
         this.formModelData.dictDescribe = this.selectTreeItem.dictDescribe
@@ -301,6 +328,7 @@ export const dataMixin = {
             if(res.code==0){
               this.addNewModal = false
               this.$Message.success("保存成功")
+              this.selectTreeItem = "";
               this.getList()
             }
           })

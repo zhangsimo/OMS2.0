@@ -433,6 +433,7 @@ export default {
         this.formPlan.pchsOrderId = val.id
         await this.$refs.xTable.validate()
         this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+        this.formPlan.remark = val.remark||""
         let res = await saveList(this.formPlan)
         if (res.code === 0) {
           this.flag = 0

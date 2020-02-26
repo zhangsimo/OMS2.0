@@ -8,7 +8,7 @@
         </Select>
         <Button type="default"  class="mr10" @click="openQueryModal"><Icon type="ios-more" />更多</Button>
         <Button type="default" @click="addNew" class="mr10 w90"><Icon type="md-add" size="14" v-has="'add'" /> 新增</Button>
-        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType != 0" v-has="'save'"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
+        <Button class="mr10 w90" @click="setSave" :disabled="orderlistType != 0||isSaveClick" v-has="'save'"><span class="center"><Icon custom="iconfont iconbaocunicon icons"/>保存</span></Button>
         <!-- <Button class="mr10" @click="sumbit" :disabled="orderlistType != 0"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>提交</Button> -->
         <Button class="mr10" @click="setStockOut" :disabled="orderlistType != 0" v-has="'StockOut'"><i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库</Button>
         <Button class="mr10" @click="printTable"  v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
@@ -76,6 +76,7 @@
                   value:0
               },//默认状态
               changeLeft:'',//发生改变数据调动左侧list
+            isSaveClick:false
           }
         },
         methods:{
@@ -114,6 +115,7 @@
             },
             //保存
             setSave(){
+            this.isSaveClick = true;//点击保存后禁用该按钮
                 this.$refs.right.save()
             },
             //出库
@@ -158,15 +160,22 @@
                  this.$message.error('请先保存')
                    return false
                }
-               let data = {}
-               data.id =list.id
-               let res = await zuofei(data)
-               if(res.code === 0){
+
+             this.$Modal.confirm({
+               title: '',
+               content: '<p>是否要作废？</p>',
+               onOk: async () => {
+                 let data = {}
+                 data.id =list.id
+                 let res = await zuofei(data)
+                 if(res.code === 0){
                    this.changeLeft = res
                    let data ={}
                    this.$store.commit('setOneOrder',data)
+                   this.$message.success('已作废')
+                 }
                }
-
+             })
            },
             //导出
             async setDerive(){
