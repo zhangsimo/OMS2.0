@@ -458,7 +458,7 @@ export default {
         {
           title: "库存单价",
           align: "center",
-          // key: 'enterPrice',
+          key: 'enterPrice',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.enterPrice.toFixed(2);
@@ -468,7 +468,7 @@ export default {
         {
           title: "库存金额",
           align: "center",
-          // key: 'enterAmt',
+          key: 'enterAmt',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.enterAmt.toFixed(2);
@@ -484,7 +484,7 @@ export default {
         {
           title: "不含税单价",
           align: "center",
-          // key: 'noTaxPrice',
+          key: 'noTaxPrice',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.noTaxPrice.toFixed(2);
@@ -494,7 +494,7 @@ export default {
         {
           title: "不含税金额",
           align: "center",
-          // key: 'noTaxAmt',
+          key: 'noTaxAmt',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.noTaxAmt.toFixed(2);
@@ -516,7 +516,7 @@ export default {
         {
           title: "滞销",
           align: "center",
-          // key: 'isUnsalable ',
+          key: "isUnsalable",
           render: (h, params) => {
             let tex = params.row.isUnsalable == 0 ? "否" : "是";
             return h("span", {}, tex);
@@ -702,8 +702,21 @@ export default {
     //导出批次
     exportBatch() {
       if (this.contentTwo.dataTwo.length > 0) {
+        let arrData = this.contentTwo.dataTwo.map(item => {
+          let objData = {...item}
+          objData.enterPrice = objData.enterPrice.toFixed(2);
+          objData.enterAmt = objData.enterAmt.toFixed(2);
+          objData.noTaxPrice = objData.noTaxPrice.toFixed(2);
+          objData.noTaxAmt = objData.noTaxAmt.toFixed(2);
+          objData.isUnsalable = objData.isUnsalable === 0 ? "否" : "是";
+          return objData
+        })
+        console.log(arrData)
         this.$refs.table2.exportCsv({
-          filename: "批次库存"
+          filename: "批次库存",
+          original:false,
+          columns:this.columns2,
+          data:arrData
         });
       }
     }
