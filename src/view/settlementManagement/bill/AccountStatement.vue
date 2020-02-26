@@ -119,9 +119,9 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="hedgingInvoice"
           v-has="'examine'"
-        >开票对冲</button>
+        >发票对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -384,11 +384,13 @@
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
     <salepopup ref="salepopup"/>
-    <sale />
+    <hedgingInvoice ref="hedgingInvoice" />
+    <!-- <isDetailed /> -->
   </div>
 </template>
 <script>
-import sale from './Popup/saleAccount'
+import hedgingInvoice from './Popup/hedgingInvoice'
+// import isDetailed from './components/idDetailed'
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import salepopup from './Popup/salepopup'
 import { creat } from "./../components";
@@ -409,11 +411,13 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 export default {
   components: {
+    // isDetailed,
     quickDate,
     reconciliation,
     Monthlyreconciliation,
     salepopup,
-    sale
+    hedgingInvoice
+    // sale
   },
   data() {
     return {
@@ -961,6 +965,10 @@ export default {
     }
   },
   methods: {
+    // 发票对冲
+    hedgingInvoice(){
+      this.$refs.hedgingInvoice.modal1 = true
+    },
     // 销售开票申请
     saleApplication(){
       this.$refs.salepopup.modal1 = true

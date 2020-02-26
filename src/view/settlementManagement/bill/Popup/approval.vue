@@ -1,7 +1,7 @@
 <template>
   <section class="data-container">
     <div class="modal-data">
-      <span class="data-name">开票审请流程:</span>
+      <span class="data-name">{{approvalTit}}:</span>
       <div class="data-value flex-center">
         <template v-for="(item,i) in statusData">
           <div class="status-box flex-center" :key="i">
@@ -58,6 +58,7 @@
 </template>
 <script>
 export default {
+  props:['approvalTit'],
   data(){
     return {
       statusData: [
