@@ -14,7 +14,7 @@
 export default {
   data(){
     return {
-      modal1:true,//弹窗展示
+      modal1:false,//弹窗展示
       noTax:[
         {
           title: "序号",
