@@ -624,7 +624,7 @@ export default [
         mark: "5",
         // redirect: "/reportForm",
         meta: {
-          icon: "ios-paper",
+          // icon: "ios-paper",
           title: "发票管理"
         },
         component: parentView,

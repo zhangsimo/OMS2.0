@@ -175,16 +175,19 @@
       <approval :approvalTit='approvalTit'/>
     </div>
     <SeleteSale ref="SeleteSale" :popupTit='popupTit'/>
+    <noTax ref="noTax"/>
     <div slot="footer"></div>
   </Modal>
 </template>
 <script>
 import approval from './approval'
 import SeleteSale from './seleteSale'
+import noTax from './noTax'
 export default {
   components:{
     approval,
     SeleteSale,
+    noTax
   },
   data() {
     return {
@@ -287,6 +290,14 @@ export default {
           className: "tc"
         },
         {
+          title: "销售单价",
+          key: "badDebtReceivable",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.badDebtReceivable.toFixed(2));
+          }
+        },
+        {
           title: "申请开票金额",
           key: "badDebtReceivable",
           className: "tc",
@@ -308,7 +319,9 @@ export default {
   },
   methods: {
     // 增加不含税销售开票申请
-    add() {},
+    add() {
+      this.$refs.noTax.modal1=true
+    },
     // 提交申请
     preservation() {},
     // 保存草稿
@@ -330,7 +343,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index === 11) {
+        if (index >= 11) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
