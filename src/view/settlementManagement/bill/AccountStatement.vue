@@ -925,7 +925,9 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.$refs.registrationEntry.purchaserList = arr[2];
+    this.$nextTick(()=>{
+      this.$refs.registrationEntry.purchaserList = arr[2];
+    })
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
