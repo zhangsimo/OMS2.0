@@ -968,6 +968,7 @@ export default {
     // 进项发票登记及修改
     registrationEntry() {
       if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='付款'){
+        this.$refs.registrationEntry.accountData = []
         this.$refs.registrationEntry.accountData.push(this.reconciliationStatement)
         this.$refs.registrationEntry.modal1 = true
       }else{
