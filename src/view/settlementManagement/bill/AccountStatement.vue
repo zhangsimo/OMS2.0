@@ -652,72 +652,72 @@ export default {
         },
         {
           title: "最近一次开票申请人",
-          key: "passName",
+          key: "recentApplier",
           className: "tc"
         },
         {
           title: "最近一次开票申请时间",
-          key: "passName",
+          key: "recentTime",
           className: "tc"
         },
         {
           title: "含税配件金额",
-          key: "passName",
+          key: "taxAmountOfPart",
           className: "tc"
         },
         {
           title: "含税油品",
-          key: "passName",
+          key: "taxAmountOfOil",
           className: "tc"
         },
         {
           title: "含税配件已开",
-          key: "passName",
+          key: "taxAmountOfPartOpened",
           className: "tc"
         },
         {
           title: "含税油品已开",
-          key: "passName",
+          key: "taxAmountOfOilOpened",
           className: "tc"
         },
         {
           title: "收到配件进项发票",
-          key: "passName",
+          key: "receiveInputInvoiceAmount",
           className: "tc"
         },
         {
           title: "收到含税油品金额",
-          key: "passName",
+          key: "receiveTaxOfOilAmount",
           className: "tc"
         },
         {
           title: "对冲配件发票",
-          key: "passName",
+          key: "hedgingInvoiceOfPart",
           className: "tc"
         },
         {
           title: "对冲油品发票",
-          key: "passName",
+          key: "hedgingInvoiceOfOil",
           className: "tc"
         },
         {
           title: "含税配件欠票",
-          key: "passName",
+          key: "taxArrearsOfPart",
           className: "tc"
         },
         {
           title: "含税油品欠票",
-          key: "passName",
+          key: "taxArrearsOfOil",
           className: "tc"
         },
         {
           title: "最近一次开票公司",
-          key: "passName",
+          key: "recentInvoiceCompany",
           className: "tc"
         },
         {
           title: "最近一次开票名称",
-          key: "passName",
+          key: "recentInvoiceName",
           className: "tc"
         }
       ],
@@ -925,6 +925,7 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    this.$refs.registrationEntry.purchaserList = arr[2];
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -966,7 +967,12 @@ export default {
   methods: {
     // 进项发票登记及修改
     registrationEntry() {
-      this.$refs.registrationEntry.modal1 = true
+      if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='付款'){
+        this.$refs.registrationEntry.accountData.push(this.reconciliationStatement)
+        this.$refs.registrationEntry.modal1 = true
+      }else{
+        this.$message.error('只能勾选计划对账类型为付款的对账单只能勾选计划对账类型为付款的对账单')
+      }
     },
     // 查询进项核销
     queryEntry() {
