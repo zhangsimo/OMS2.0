@@ -75,7 +75,7 @@
             title="已调整数量"
           ></vxe-table-column>
           <vxe-table-column
-            field="adjustQty"
+            field="changeNum"
             title="本次调整数量"
             :edit-render="{ name: 'input' }"
             width="120"
@@ -83,8 +83,8 @@
             <template v-slot:edit="{ row }">
               <el-input-number
                 :min="0"
-                :max="row.orderQty"
-                v-model="row.adjustQty"
+                :max="row.orderQty-row.trueEnterQty-row.notEnterQty"
+                v-model="row.changeNum"
                 :controls="false"
                 size="small"
                 :precision="0"
@@ -148,11 +148,22 @@ export default class AdjustModel extends Vue {
     let res: any = await api.queryModifyOrderPlan(data);
     if (res.code == 0) {
       this.loading = false;
+      //加入零时本次调整字段
+      res.data.map(item => {
+        item.changeNum = 0
+      })
       this.tableData = res.data;
     }
   }
+  //本次调整数量复制个调整字段
+  private setAdjustQty(){
+    this.tableData.map(item => {
+      item.adjustQty = item.changeNum
+    })
+  }
 
   private async save() {
+    this.setAdjustQty()
     let res: any = await api.saveModifyOrderPlan(this.tableData);
     if (res.code == 0) {
       this.$Message.success("保存成功!");
