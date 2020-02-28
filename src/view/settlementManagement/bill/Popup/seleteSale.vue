@@ -63,9 +63,9 @@ export default {
           title: "单据金额",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         }
       ], //选择单据表格
       saleSingleData: [

@@ -12,7 +12,7 @@
       @click="submission"
       v-has="'examine'"
     >保存并提交</button>
-    <h4 class="mt10 mb10">分店名称：</h4>
+    <h4 class="mt10 mb10">分店名称：{{orgName}}</h4>
     <Table
       class="mt10 mb10"
       border
@@ -36,6 +36,7 @@
     <vxe-table
       class="mt10"
       height="300"
+      ref="xTable"
       border
       resizable
       auto-resize
@@ -48,8 +49,8 @@
       <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
       <vxe-table-column title="登记日期" field="registrationDate"></vxe-table-column>
       <vxe-table-column field="invoicePurchaserId" title="发票采购方名称">
-        <template>
-          <Select>
+        <template v-slot="{row}">
+          <Select v-model="row.invoicePurchaserId">
             <Option
               v-for="item in purchaserList"
               :value="item.value"
@@ -94,15 +95,15 @@
         :edit-render="{name: 'input', attrs: {type: 'number'}}"
       ></vxe-table-column>
       <vxe-table-column field="taxRate" title="税率">
-        <template>
-          <Select>
+        <template v-slot="{row}">
+          <Select v-model="row.taxRate">
             <Option v-for="item in taxRate" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </template>
       </vxe-table-column>
       <vxe-table-column field="payType" title="付款方式">
-        <template>
-          <Select>
+        <template v-slot="{row}">
+          <Select v-model="row.payType">
             <Option
               v-for="item in paymentMethod"
               :value="item.value"
@@ -113,8 +114,8 @@
       </vxe-table-column>
       <vxe-table-column field="invoiceSort" title="发票分类"></vxe-table-column>
       <vxe-table-column field="billingType" title="开票清单类型">
-        <template>
-          <Select>
+        <template v-slot="{row}">
+          <Select v-model="row.billingType">
             <Option v-for="item in listType" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </template>
@@ -127,25 +128,31 @@
 </template>
 <script>
 import account from "./accountregistration";
-// import { creat } from "../../components";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import { submit, deleteRows } from "@/api/bill/popup";
 export default {
   components: {
     account
   },
   data() {
     return {
+      orgName: "", //分店名称
       validRules: {
-        invoiceCode: [{required: true, message: '必须是10位数字',min: 10, max: 10}],
-        invoiceNo: [{required: true, message: '必须是8位数字',min: 8, max: 8}],
-        invoicePurchaserId: [{required: true, message: '必须是10位数字'}],
-        invoiceSellerName: [{required: true, message: '必须是8位数字'}],
-        billingDate: [{required: true, message: '必须是10位数字'}],
-        totalAmt: [{required: true, message: '必须是8位数字'}],
-        invoiceAmt: [{required: true, message: '必须是10位数字'}],
-        taxAmt: [{required: true, message: '必须是8位数字'}],
-        taxRate: [{required: true, message: '必须是10位数字'}],
-        payType: [{required: true, message: '必须是10位数字'}],
-        billingType: [{required: true, message: '必须是10位数字'}]
+        invoiceCode: [
+          { required: true, message: "必须是10位数字", min: 10, max: 10 }
+        ],
+        invoiceNo: [
+          { required: true, message: "必须是8位数字", min: 8, max: 8 }
+        ],
+        invoicePurchaserId: [{ required: true, message: "发票采购方名称必填" }],
+        invoiceSellerName: [{ required: true, message: "发票销售方名称必填" }],
+        billingDate: [{ required: true, message: "开票日期必填" }],
+        totalAmt: [{ required: true, message: "价税合计金额必填" }],
+        invoiceAmt: [{ required: true, message: "不含税金额必填" }],
+        taxAmt: [{ required: true, message: "税额必填" }],
+        taxRate: [{ required: true, message: "税率必填" }],
+        payType: [{ required: true, message: "付款方式必填" }],
+        billingType: [{ required: true, message: "开票清单类型必填" }]
       }, //表格校验
       modal1: false, //弹窗显示
       account: [
@@ -173,24 +180,33 @@ export default {
         {
           title: "对账应付",
           key: "reconciliation",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.reconciliation.toFixed(2));
+          }
         },
         {
           title: "应付返利",
           key: "dealingRebates",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.dealingRebates.toFixed(2));
+          }
         },
         {
           title: "应付坏账",
           key: "payingBadDebts",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.payingBadDebts.toFixed(2));
+          }
         },
         {
           title: "应付合计",
           key: "actualPayment",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.actualPayment);
+            return h("span", params.row.actualPayment.toFixed(2));
           }
         },
         {
@@ -198,7 +214,7 @@ export default {
           key: "receiptsAmount",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.receiptsAmount);
+            return h("span", params.row.receiptsAmount.toFixed(2));
           }
         },
         {
@@ -206,37 +222,73 @@ export default {
           key: "remainingInputAmount",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.remainingInputAmount);
+            return h("span", params.row.remainingInputAmount.toFixed(2));
           }
         }
       ], //对账单
       accountData: [], //对账单
       purchaserList: [], //发票采购方名称
       paymentMethod: [], //付款方式
-      listType: [
-        {
-          value: 0,
-          label: "油品"
-        },
-        {
-          value: 1,
-          label: "配件"
-        }
-      ], //开票清单类型
+      listType: [], //开票清单类型
       taxRate: [], //税率
       tableData: [], //登记表格
       currentRow: {} //选中行数据
     };
   },
-  async mounted() {},
+  async mounted() {
+    this.getDictionary("PAYMENT_TYPE");
+    this.getDictionary("CS00107");
+    this.getDictionary("BILL_LIST_TYPE");
+  },
   methods: {
+    // 数据字典
+    getDictionary(dictCode) {
+      getDataDictionaryTable({ dictCode }).then(res => {
+        if (res.data[0].dictCode === "PAYMENT_TYPE") {
+          res.data.map(item => {
+            this.paymentMethod.push({
+              value: item.itemCode,
+              label: item.itemName
+            });
+          });
+        } else if (res.data[0].dictCode === "CS00107") {
+          res.data.map(item => {
+            if (item.itemValueOne !== "0") {
+              this.taxRate.push({
+                value: item.itemCode,
+                label: (item.itemValueOne * 100).toFixed(0) + "%"
+              });
+            }
+          });
+        } else {
+          res.data.map(item => {
+            this.listType.push({
+              value: item.itemCode,
+              label: item.itemName
+            });
+          });
+        }
+      });
+    },
     // 保存并提交
-    submission() {},
+    async submission() {
+      const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+      if (!errMap) {
+        let data = {
+          details: this.tableData,
+          masterList: this.accountData
+        };
+        submit(data).then(res => {
+          // console.log(res);
+          if (res.code === 0) this.$message.success("保存成功");
+        });
+      }
+    },
     //增加核销对账单
     addAccount() {
       this.$refs.account.modal1 = true;
     },
-    // 表格合计
+    // 表格合计
     billSum({ columns, data }) {
       const sums = {};
       columns.forEach((column, index) => {
@@ -249,27 +301,42 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 2) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
+        if (index > 3) {
+          const v = values.reduce((prev, curr) => {
+            return prev * 1 + curr * 1;
+          }, 0);
+          sums[key] = {
+            key,
+            value: v.toFixed(2)
+          };
         } else {
           sums[key] = {
             key,
-            value: " "
+            value: ' '
           };
         }
+        // if (index > 2) {
+        // if (!values.every(value => isNaN(value))) {
+        // console.log(value)
+        //   const v = values.reduce((prev, curr) => {
+        //     // const value = Number(curr);
+        //       return prev*1 + curr*1;
+        //     // if (!isNaN(value)) {
+        //     // } else {
+        //     //   return prev;
+        //     // }
+        //   }, 0);
+        //   sums[key] = {
+        //     key,
+        //     value: v.toFixed(2)
+        //   };
+        // }
+        // } else {
+        // sums[key] = {
+        //   key,
+        //   value: " x"
+        // };
+        // }
       });
       return sums;
     },
@@ -282,16 +349,32 @@ export default {
           : date.getMonth() + 1;
       let d = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
       date = date.getFullYear().toString() + m + d;
+      this.purchaserList = this.$parent.Branchstore;
       this.tableData.push({
         registrationDate: date,
         registrationTypeName: "人工登记",
         invoiceSort: "采购"
       });
-      console.log(this.purchaserList);
     },
     // 删除行
     deleteRows() {
       if (Object.keys(this.currentRow).length !== 0) {
+        if (this.currentRow.id) {
+          if (this.currentRow.canceled) {
+            this.$Modal.confirm({
+              title: "删除发票将还原已核销的金额，是否确认删除",
+              onOk: () => {
+                deleteIncome(this.currentRow.id);
+              },
+              onCancel: () => {}
+            });
+          } else {
+            deleteIncome(this.currentRow.id);
+            this.$refs.xTable.remove(this.currentRow);
+          }
+        } else {
+          this.$refs.xTable.remove(this.currentRow);
+        }
       } else {
         this.$message.error("请先选择一条数据");
       }
@@ -299,12 +382,13 @@ export default {
     // 选中行
     currentChangeEvent({ row }) {
       this.currentRow = row;
+    },
+    //进项登记删除行接口
+    deleteIncome(id) {
+      deleteRows({ id }).then(res => {
+        console.log(res);
+      });
     }
   }
 };
 </script>
-<style lang="less" scoped>
-// .hierarchy{
-//   z-index: 222
-// }
-</style>
