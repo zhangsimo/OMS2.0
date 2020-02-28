@@ -267,17 +267,17 @@ export default {
           title: "商品含税单价",
           key: "accountsReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "receivableRebate",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -293,25 +293,25 @@ export default {
           title: "销售单价",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "申请开票金额",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         }
       ], //开票配件
       accessoriesBillingData: [] //开票配件数据
@@ -355,7 +355,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v.toFixed(2)
+              value: v
             };
           }
         } else {

@@ -925,8 +925,8 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.$nextTick(()=>{
-      this.$refs.registrationEntry.purchaserList = arr[2];
+    this.Branchstore.map(itm=>{
+      if(itm.value===this.model1) this.$refs.registrationEntry.orgName = itm.label
     })
     let obj = {
       startDate: this.value[0]
