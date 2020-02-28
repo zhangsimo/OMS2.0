@@ -364,16 +364,17 @@ export default {
             this.$Modal.confirm({
               title: "删除发票将还原已核销的金额，是否确认删除",
               onOk: () => {
-                deleteIncome(this.currentRow.id);
+                this.deleteIncome(this.currentRow.id);
               },
               onCancel: () => {}
             });
           } else {
-            deleteIncome(this.currentRow.id);
+            this.deleteIncome(this.currentRow.id);
             this.$refs.xTable.remove(this.currentRow);
           }
         } else {
           this.$refs.xTable.remove(this.currentRow);
+          this.tableData = this.tableData.filter(itm=> !this.currentRow._XID.includes(itm._XID))
         }
       } else {
         this.$message.error("请先选择一条数据");
