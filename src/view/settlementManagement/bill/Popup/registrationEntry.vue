@@ -112,7 +112,13 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="invoiceSort" title="发票分类"></vxe-table-column>
+      <vxe-table-column field="invoiceSort" title="发票分类">
+        <template v-slot="{row}">
+          <Select v-model="row.invoiceSort">
+            <Option v-for="item in invoiceSortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          </Select>
+        </template>
+      </vxe-table-column>
       <vxe-table-column field="billingType" title="开票清单类型">
         <template v-slot="{row}">
           <Select v-model="row.billingType">
@@ -138,6 +144,7 @@ export default {
     return {
       orgName: "", //分店名称
       validRules: {
+        invoiceSort:[{ required: true, message: "发票分类必填" }],
         invoiceCode: [
           { required: true, message: "必须是10位数字", min: 10, max: 10 }
         ],
@@ -231,14 +238,16 @@ export default {
       paymentMethod: [], //付款方式
       listType: [], //开票清单类型
       taxRate: [], //税率
+      invoiceSortList:[],//发票分类
       tableData: [], //登记表格
       currentRow: {} //选中行数据
     };
   },
   async mounted() {
-    this.getDictionary("PAYMENT_TYPE");
-    this.getDictionary("CS00107");
-    this.getDictionary("BILL_LIST_TYPE");
+    this.getDictionary("PAYMENT_TYPE");//付款方式
+    this.getDictionary("CS00107");//税率
+    this.getDictionary("BILL_LIST_TYPE");//开票清单
+    this.getDictionary("INVOICE_TYPE")//发票分类
   },
   methods: {
     // 数据字典
@@ -260,9 +269,16 @@ export default {
               });
             }
           });
-        } else {
+        } else if (res.data[0].dictCode === "BILL_LIST_TYPE"){
           res.data.map(item => {
             this.listType.push({
+              value: item.itemCode,
+              label: item.itemName
+            });
+          });
+        } else if (res.data[0].dictCode === "INVOICE_TYPE") {
+          res.data.map(item => {
+            this.invoiceSortList.push({
               value: item.itemCode,
               label: item.itemName
             });
@@ -273,6 +289,7 @@ export default {
     // 保存并提交
     async submission() {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
+      console.log(this.tableData)
       if (!errMap) {
         let data = {
           details: this.tableData,
