@@ -94,7 +94,7 @@ export default class SettlementAccount extends Vue {
     private formData:Kv = {
         name: '',
         type: '',
-        mark: '',
+        remark: '',
         mode: [{}],
         deleteItems: [],
     }
@@ -118,6 +118,8 @@ export default class SettlementAccount extends Vue {
     }
 
     private async getAccounts() {
+        this.SelectRow = null;
+        this.buttonDisable = true;
         this.loading = true;
         const res:any = await api.getAccounts(this.userData.userData.shopId);
         if(res.code == 0) {
@@ -182,6 +184,7 @@ export default class SettlementAccount extends Vue {
     private add() {
         this.isNew = true;
         this.modal = true;
+        this.formData.remark = ""
         this.reset();
     }
 
@@ -191,6 +194,7 @@ export default class SettlementAccount extends Vue {
         this.reset();
         this.setFormDataMode();
         this.formData.name = this.SelectRow.name;
+        this.formData.remark = this.SelectRow.remark;
         this.formData.type = this.SelectRow.accountTypeId.toString();
     }
 
@@ -239,7 +243,7 @@ export default class SettlementAccount extends Vue {
         }
         data.settleAccount.name = this.formData.name;
         data.settleAccount.accountTypeId = this.formData.type;
-        data.settleAccount.remark = this.formData.mark;
+        data.settleAccount.remark = this.formData.remark;
         if(!this.isNew) {
             data.settleAccount.id = this.SelectRow.id;
         }
