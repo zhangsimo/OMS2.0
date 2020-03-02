@@ -85,7 +85,7 @@
           type="button"
           @click="statementSettlement"
           v-has="'examine'"
-        >对账单结算</button> -->
+        >对账单结算</button>-->
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
@@ -113,25 +113,25 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="queryApplication"
           v-has="'examine'"
         >查询开票申请</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="hedgingInvoice"
           v-has="'examine'"
-        >开票对冲</button>
+        >发票对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="registrationEntry"
           v-has="'examine'"
         >进项登记及修改</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="queryEntry"
           v-has="'examine'"
         >查询进项核销</button>
         <button
@@ -141,17 +141,17 @@
           v-has="'revoke'"
         >撤销</button>
         <div class="hide1">
-        <Table
-          width="2000"
-          border
-          :columns="columns1"
-          :data="data1"
-          class="mt10"
-          max-height="400"
-          @on-row-click="morevis"
-          highlight-row
-          ref="accountStatement"
-        ></Table>
+          <Table
+            width="2000"
+            border
+            :columns="columns1"
+            :data="data1"
+            class="mt10"
+            max-height="400"
+            @on-row-click="morevis"
+            highlight-row
+            ref="accountStatement"
+          ></Table>
         </div>
         <Page
           :total="pagetotal"
@@ -383,14 +383,16 @@
     <reconciliation ref="reconciliation"></reconciliation>
     <Monthlyreconciliation ref="Monthlyreconciliation"></Monthlyreconciliation>
     <Modal v-model="revoke" title="对账单撤销" @on-ok="confirmRevocation">撤销后该对账单将变为草稿状态！</Modal>
-    <salepopup ref="salepopup"/>
-    <sale />
+    <salepopup ref="salepopup" />
+    <hedgingInvoice ref="hedgingInvoice" />
+    <registrationEntry ref="registrationEntry" />
   </div>
 </template>
 <script>
-import sale from './Popup/saleAccount'
+import hedgingInvoice from "./Popup/hedgingInvoice";
+import registrationEntry from './Popup/registrationEntry'
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import salepopup from './Popup/salepopup'
+import salepopup from "./Popup/salepopup";
 import { creat } from "./../components";
 import moment from "moment";
 import {
@@ -409,11 +411,13 @@ import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
 export default {
   components: {
+    registrationEntry,
     quickDate,
     reconciliation,
     Monthlyreconciliation,
     salepopup,
-    sale
+    hedgingInvoice
+    // sale
   },
   data() {
     return {
@@ -502,7 +506,6 @@ export default {
         }
       ],
       columns1: [
-        
         {
           title: "序号",
           key: "index",
@@ -649,72 +652,72 @@ export default {
         },
         {
           title: "最近一次开票申请人",
-          key: "passName",
+          key: "recentApplier",
           className: "tc"
         },
         {
           title: "最近一次开票申请时间",
-          key: "passName",
+          key: "recentTime",
           className: "tc"
         },
         {
           title: "含税配件金额",
-          key: "passName",
+          key: "taxAmountOfPart",
           className: "tc"
         },
         {
           title: "含税油品",
-          key: "passName",
+          key: "taxAmountOfOil",
           className: "tc"
         },
         {
           title: "含税配件已开",
-          key: "passName",
+          key: "taxAmountOfPartOpened",
           className: "tc"
         },
         {
           title: "含税油品已开",
-          key: "passName",
+          key: "taxAmountOfOilOpened",
           className: "tc"
         },
         {
           title: "收到配件进项发票",
-          key: "passName",
+          key: "receiveInputInvoiceAmount",
           className: "tc"
         },
         {
           title: "收到含税油品金额",
-          key: "passName",
+          key: "receiveTaxOfOilAmount",
           className: "tc"
         },
         {
           title: "对冲配件发票",
-          key: "passName",
+          key: "hedgingInvoiceOfPart",
           className: "tc"
         },
         {
           title: "对冲油品发票",
-          key: "passName",
+          key: "hedgingInvoiceOfOil",
           className: "tc"
         },
         {
           title: "含税配件欠票",
-          key: "passName",
+          key: "taxArrearsOfPart",
           className: "tc"
         },
         {
           title: "含税油品欠票",
-          key: "passName",
+          key: "taxArrearsOfOil",
           className: "tc"
         },
         {
           title: "最近一次开票公司",
-          key: "passName",
+          key: "recentInvoiceCompany",
           className: "tc"
         },
         {
           title: "最近一次开票名称",
-          key: "passName",
+          key: "recentInvoiceName",
           className: "tc"
         }
       ],
@@ -922,6 +925,9 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
+    this.Branchstore.map(itm=>{
+      if(itm.value===this.model1) this.$refs.registrationEntry.orgName = itm.label
+    })
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -961,9 +967,31 @@ export default {
     }
   },
   methods: {
+    // 进项发票登记及修改
+    registrationEntry() {
+      if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='付款'){
+        this.$refs.registrationEntry.accountData = []
+        this.$refs.registrationEntry.accountData.push(this.reconciliationStatement)
+        this.$refs.registrationEntry.modal1 = true
+      }else{
+        this.$message.error('只能勾选计划对账类型为付款的对账单只能勾选计划对账类型为付款的对账单')
+      }
+    },
+    // 查询进项核销
+    queryEntry() {
+      this.$router.push({name:'invoiceAdministration-invoiceManagement'})
+    },
+    // 查询发票申请
+    queryApplication(){
+      this.$router.push({name:'invoiceAdministration-invoiceApply'})
+    },
+    // 发票对冲
+    hedgingInvoice() {
+      this.$refs.hedgingInvoice.modal1 = true;
+    },
     // 销售开票申请
-    saleApplication(){
-      this.$refs.salepopup.modal1 = true
+    saleApplication() {
+      this.$refs.salepopup.modal1 = true;
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {

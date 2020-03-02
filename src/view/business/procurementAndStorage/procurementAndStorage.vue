@@ -142,7 +142,7 @@
                     <Input
                       class="w160"
                       v-model="formPlan.orderMan"
-                      :disabled="formPlan.billStatusValue != 0"
+                      disabled
                     />
                   </FormItem>
                   <FormItem label="订货日期：" prop="orderDate">
@@ -162,7 +162,7 @@
                     <Select
                       v-model="formPlan.billTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0 "
+                      disabled
                     >
                       <Option
                         v-for="item in settleTypeList.CS00107"
@@ -175,7 +175,7 @@
                     <Select
                       v-model="formPlan.settleTypeId"
                       style="width:100px"
-                      :disabled="formPlan.billStatusValue != 0"
+                      disabled
                     >
                       <Option
                         v-for="item in settleTypeList.CS00106"

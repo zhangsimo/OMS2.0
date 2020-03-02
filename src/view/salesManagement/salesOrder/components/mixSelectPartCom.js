@@ -187,10 +187,10 @@ export const mixSelectPartCom = {
           value: "adapterCarModels",
           label: "车型"
         },
-        {
-          value: "keyWord",
-          label: "拼音"
-        }
+        // {
+        //   value: "keyWord",
+        //   label: "拼音"
+        // }
       ],
       //查询关键字
       searchValue: "",

@@ -149,6 +149,8 @@ export default {
         //点击保存按钮右侧数据保存成功后执行
         if(this.rightFlag){
           this.rightFlag = 0
+          //解除禁用保存按钮
+          this.$parent.$parent.isSaveClick = false
           if(this.leftClickItemId){
             for(let item of this.tableData){
               if(item.id==this.leftClickItemId){

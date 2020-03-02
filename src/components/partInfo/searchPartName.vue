@@ -141,7 +141,7 @@ export default {
         req.name = this.partName.trim();
       }
       req.page = this.page.num;
-      req.size = this.page.size;
+      req.pageSize = this.page.size;
       getCarPartName(req).then(res => {
         this.objectValue = res.data.content[0];
         this.selectTableItem = this.objectValue;

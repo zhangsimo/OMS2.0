@@ -355,7 +355,9 @@ export const mixGoodsData = {
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
-      this.selectLeftItemId = v.id
+      if(v){
+        this.selectLeftItemId = v.id
+      }
       if (this.newadd && v) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -408,7 +410,6 @@ export const mixGoodsData = {
       this.$refs.selectSupplier.getList();
     },
     setFormPlanmain(v){
-      console.log(v)
       if (v) {
         if (this.newadd && this.selectPlanOrderItem.new) {
           this.tbdata.splice(0, 1);
