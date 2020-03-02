@@ -41,6 +41,11 @@ const data = function() {
                   },
                   blur() {
                     params.row.isEdit = false;
+                  },
+                  keyup(event) {
+                    if (event.keyCode == 13) {
+                      params.row.isEdit = false;
+                    }
                   }
                 }
               });
@@ -347,8 +352,8 @@ const methods = {
       this.customer.loading = false;
       if (res.code === 0) {
         // this.customer.tbdata = res.data.content || [];
-        console.log(this.customer.tbdata, "this.customer.tbdata");
-        console.log(res.data.content, "res.data.content");
+        // console.log(this.customer.tbdata, "this.customer.tbdata");
+        // console.log(res.data.content, "res.data.content");
         if (this.customer.tbdata.length == res.data.content.length) {
           this.count1 = this.customer.tbdata.length;
           this.count2 = res.data.content.length;
@@ -358,8 +363,8 @@ const methods = {
           this.count2 = res.data.content.length;
           this.customer.tbdata = res.data.content;
         }
-        console.log(this.count1, "this.count1  =>361");
-        console.log(this.count2, "this.count2   =>362");
+        // console.log(this.count1, "this.count1  =>361");
+        // console.log(this.count2, "this.count2   =>362");
         // console.log(res.data, "res.data=>345");
         // console.log(this.customer.tbdata)
         this.customer.page.total = res.data.totalElements;
@@ -378,7 +383,7 @@ const methods = {
   //多选框
   selection(a) {
     this.checkboxArr = a;
-    console.log(this.checkboxArr);
+    // console.log(this.checkboxArr);
   },
   //子组件的参数
   // getMsg2(a){
@@ -397,7 +402,7 @@ const methods = {
   //左边内容单某行
   selction(a) {
     this.rowId = a.id;
-    console.log(a);
+    // console.log(a);
     let arrr = [];
     arrr.push(a);
     let arrrr = arrr.map(item => {
