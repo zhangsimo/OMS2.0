@@ -35,3 +35,5 @@ export function invoiceRedHedgedList(data) {
 }
 //批量导入地址
 export const getup = `${api.omsApi}/entryRegistration/import?`;
+//导入勾选认证时间
+export const authenticationGetup = `${api.omsApi}/entryRegistration/importCheck?`;

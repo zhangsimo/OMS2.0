@@ -19,7 +19,20 @@
       <Button class="mr10" v-has="'export'" @click="operation(4)">智能核销</Button>
       <Button class="mr10" v-has="'export'" @click="operation(5)">发票退回</Button>
       <Button class="mr10" v-has="'export'" @click="operation(6)">红字进项转出</Button>
-      <Button class="mr10" v-has="'export'" @click="operation(7)">导入勾选认证时间</Button>
+      <!-- <Button class="mr10" v-has="'export'" @click="exportCertification">导入勾选认证时间</Button> -->
+      <Upload
+        ref="upload"
+        :show-upload-list="false"
+        :headers="headers"
+        :action="authenticationUpurl"
+        :format="['xlsx', 'xls', 'csv']"
+        :before-upload="handleBeforeUpload"
+        :on-format-error="onFormatError"
+        :on-success="handleSuccess"
+      >
+        <Button @click="importCertification" class="mr10">导入勾选认证时间</Button>
+      </Upload>
+      <!-- <Button class="mr10" v-has="'export'" @click="exportCertification">导入勾选认证时间</Button> -->
       <Button class="mr10" v-has="'export'" @click="exportDown">导出模板</Button>
     </section>
     <div class="mt20">
@@ -179,7 +192,8 @@ import {
   deletetManageList,
   invoiceReturnList,
   invoiceRedHedgedList,
-  getup
+  getup,
+  authenticationGetup
 } from "_api/salesManagment/invoiceAdministration";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -354,7 +368,8 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
-      upurl: getup // 导入地址
+      upurl: getup, // 导入地址
+      authenticationUpurl: authenticationGetup // 导入地址
     };
   },
   methods: {
@@ -521,9 +536,20 @@ export default {
         "/entryRegistration/template?access_token=" +
         Cookies.get(TOKEN_KEY);
     },
-    //  导入
+    //  导出勾选认证时间模板
+    // exportCertification() {
+    //   location.href =
+    //     baseUrl.omsApi +
+    //     "/entryRegistration/checkTemplate?access_token=" +
+    //     Cookies.get(TOKEN_KEY);
+    // },
+    //  导入进项管理
     uploading() {
-      this.upurl = getup
+      this.upurl = getup;
+    },
+    //  导入勾选认证时间
+    importCertification() {
+      this.authenticationUpurl = authenticationGetup;
     }
   },
   mounted() {
