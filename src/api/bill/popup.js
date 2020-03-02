@@ -16,3 +16,19 @@ export function deleteRows(params){
     params
 })
 }
+//增加核销对账单(弹窗查询)
+export function verificationIncrease(params){
+  return axios.request({
+    url: `${api.omsSettle}/entryRegistration/findStatementAndRegistration`,
+    method: 'get',
+    params
+})
+}
+//进入进项登记页面查询对账单对应发票明细信息
+export function detailedIncrease(params){
+  return axios.request({
+    url: `${api.omsSettle}/entryRegistration/findDetail`,
+    method: 'get',
+    params
+})
+}

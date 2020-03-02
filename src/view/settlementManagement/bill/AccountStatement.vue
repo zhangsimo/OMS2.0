@@ -972,6 +972,7 @@ export default {
       if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='付款'){
         this.$refs.registrationEntry.accountData = []
         this.$refs.registrationEntry.accountData.push(this.reconciliationStatement)
+        this.$refs.registrationEntry.arrId.push(this.reconciliationStatement.orgId,this.reconciliationStatement.guestId,this.reconciliationStatement.id)
         this.$refs.registrationEntry.modal1 = true
       }else{
         this.$message.error('只能勾选计划对账类型为付款的对账单只能勾选计划对账类型为付款的对账单')

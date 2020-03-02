@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="进项登记及修改" width="1200">
+  <Modal v-model="modal1" title="进项登记及修改" width="1200" @on-visible-change="visChange">
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
@@ -115,7 +115,11 @@
       <vxe-table-column field="invoiceSort" title="发票分类">
         <template v-slot="{row}">
           <Select v-model="row.invoiceSort">
-            <Option v-for="item in invoiceSortList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+            <Option
+              v-for="item in invoiceSortList"
+              :value="item.value"
+              :key="item.value"
+            >{{ item.label }}</Option>
           </Select>
         </template>
       </vxe-table-column>
@@ -129,22 +133,29 @@
       <vxe-table-column field="registrationTypeName" title="登记类型"></vxe-table-column>
     </vxe-table>
     <div slot="footer"></div>
-    <account ref="account" />
+    <account ref="account" :arrId="arrId" />
   </Modal>
 </template>
 <script>
 import account from "./accountregistration";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
-import { submit, deleteRows } from "@/api/bill/popup";
+import {
+  submit,
+  deleteRows,
+  detailedIncrease,
+  deleteIncrease
+} from "@/api/bill/popup";
+import Bus from "./Bus";
 export default {
   components: {
     account
   },
   data() {
     return {
+      arrId: [], //选中数据的id，guestId，orgId
       orgName: "", //分店名称
       validRules: {
-        invoiceSort:[{ required: true, message: "发票分类必填" }],
+        invoiceSort: [{ required: true, message: "发票分类必填" }],
         invoiceCode: [
           { required: true, message: "必须是10位数字", min: 10, max: 10 }
         ],
@@ -165,7 +176,7 @@ export default {
       account: [
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -238,18 +249,45 @@ export default {
       paymentMethod: [], //付款方式
       listType: [], //开票清单类型
       taxRate: [], //税率
-      invoiceSortList:[],//发票分类
+      invoiceSortList: [], //发票分类
       tableData: [], //登记表格
       currentRow: {} //选中行数据
     };
   },
   async mounted() {
-    this.getDictionary("PAYMENT_TYPE");//付款方式
-    this.getDictionary("CS00107");//税率
-    this.getDictionary("BILL_LIST_TYPE");//开票清单
-    this.getDictionary("INVOICE_TYPE")//发票分类
+    this.getDictionary("PAYMENT_TYPE"); //付款方式
+    this.getDictionary("CS00107"); //税率
+    this.getDictionary("BILL_LIST_TYPE"); //开票清单
+    this.getDictionary("INVOICE_TYPE"); //发票分类
+    Bus.$on("accountOrder", val => {
+      //监听first组件的txt事件
+      val.map(item => {
+        this.accountData.push(item);
+        if(item.details.length!==0){
+          item.details.map(itm=>{
+            this.tableData.push(itm);
+          })
+        }
+      });
+    });
   },
   methods: {
+    // 对话框是否显示
+    visChange(flag) {
+      if (flag) {
+        this.purchaserList = this.$parent.Branchstore;
+        this.detailed();
+      }
+    },
+    // 明细查询
+    detailed() {
+      detailedIncrease({ id: this.arrId[2] }).then(res => {
+        // console.log(res.data)
+        if (res.code === 0) {
+          this.tableData = res.data;
+        }
+      });
+    },
     // 数据字典
     getDictionary(dictCode) {
       getDataDictionaryTable({ dictCode }).then(res => {
@@ -264,12 +302,12 @@ export default {
           res.data.map(item => {
             if (item.itemValueOne !== "0") {
               this.taxRate.push({
-                value: item.itemCode,
+                value: parseFloat(item.itemValueOne),
                 label: (item.itemValueOne * 100).toFixed(0) + "%"
               });
             }
           });
-        } else if (res.data[0].dictCode === "BILL_LIST_TYPE"){
+        } else if (res.data[0].dictCode === "BILL_LIST_TYPE") {
           res.data.map(item => {
             this.listType.push({
               value: item.itemCode,
@@ -289,7 +327,6 @@ export default {
     // 保存并提交
     async submission() {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
-      console.log(this.tableData)
       if (!errMap) {
         let data = {
           details: this.tableData,
@@ -297,7 +334,10 @@ export default {
         };
         submit(data).then(res => {
           // console.log(res);
-          if (res.code === 0) this.$message.success("保存成功");
+          if (res.code === 0) {
+            this.$message.success("保存成功");
+            this.modal1 = false;
+          }
         });
       }
     },
@@ -329,7 +369,7 @@ export default {
         } else {
           sums[key] = {
             key,
-            value: ' '
+            value: " "
           };
         }
         // if (index > 2) {
@@ -369,8 +409,7 @@ export default {
       this.purchaserList = this.$parent.Branchstore;
       this.tableData.push({
         registrationDate: date,
-        registrationTypeName: "人工登记",
-        invoiceSort: "采购"
+        registrationTypeName: "人工登记"
       });
     },
     // 删除行
@@ -381,17 +420,26 @@ export default {
             this.$Modal.confirm({
               title: "删除发票将还原已核销的金额，是否确认删除",
               onOk: () => {
-                this.deleteIncome(this.currentRow.id);
+                this.deleteIncome();
+                this.$refs.xTable.remove(this.currentRow);
+                this.tableData = this.tableData.filter(
+                  itm => !this.currentRow._XID.includes(itm._XID)
+                );
               },
               onCancel: () => {}
             });
           } else {
-            this.deleteIncome(this.currentRow.id);
+            this.deleteIncome();
             this.$refs.xTable.remove(this.currentRow);
+            this.tableData = this.tableData.filter(
+              itm => !this.currentRow._XID.includes(itm._XID)
+            );
           }
         } else {
           this.$refs.xTable.remove(this.currentRow);
-          this.tableData = this.tableData.filter(itm=> !this.currentRow._XID.includes(itm._XID))
+          this.tableData = this.tableData.filter(
+            itm => !this.currentRow._XID.includes(itm._XID)
+          );
         }
       } else {
         this.$message.error("请先选择一条数据");
@@ -402,11 +450,19 @@ export default {
       this.currentRow = row;
     },
     //进项登记删除行接口
-    deleteIncome(id) {
-      deleteRows({ id }).then(res => {
+    deleteIncome() {
+      deleteRows({ id: this.currentRow.id }).then(res => {
         console.log(res);
       });
     }
   }
+  // watch:{
+  //   accountData:{
+  //     handler(v,ov){
+  //       console.log(v,ov)
+  //     },
+  //     deep:true
+  //   }
+  // }
 };
 </script>
