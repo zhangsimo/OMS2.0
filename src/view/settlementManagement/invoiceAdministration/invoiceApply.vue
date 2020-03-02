@@ -28,23 +28,13 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
-              <Option
-                v-for="item in Branchstore"
-                :value="item"
-                :key="item"
-              >{{ item}}</Option>
-            </Select>
+            <input type="text" class="h30" v-model="model1" readonly />
+            <i class="iconfont iconcaidan input" @click="Dealings(1)"></i>
           </div>
           <div class="db ml20">
             <span>客户：</span>
-            <Select v-model="Reconciliationtype" class="w150" placeholder="全部">
-              <Option
-                v-for="item in Reconciliationlist"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <input type="text" class="h30" v-model="model1" readonly />
+            <i class="iconfont iconcaidan input" @click="Dealings(2)"></i>
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
@@ -53,13 +43,6 @@
             </button>
           </div>
           <div class="db ml10">
-            <!-- <Poptip placement="bottom">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" v-has="'export'">导出</button>
-              <div slot="content">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(0)">导出对账单</button>
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="report(1)">导出单据明细</button>
-              </div>
-            </Poptip> -->
             <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
@@ -68,16 +51,16 @@
         </div>
       </div>
        <div>
-            <Button class="mr10"  v-has="'export'" @click="operation(1)">导出汇总</Button> 
-            <Button class="mr10"  v-has="'export'" @click="operation(2)">导出明细</Button> 
-            <Button class="mr10"  v-has="'export'" @click="operation(3)">智能核销</Button> 
-            <Button class="mr10"  v-has="'export'" @click="operation(4)">人工核销</Button> 
-            <Button class="mr10"  v-has="'export'" @click="operation(5)">撤销核销</Button> 
+            <button class="ivu-btn ivu-btn-default mr10" type="button" @click="operation(1)" v-has="'export'">导出汇总</button>
+            <button class="ivu-btn ivu-btn-default mr10" type="button" @click="operation(2)" v-has="'export'">导出明细</button>
+            <button class="ivu-btn ivu-btn-default mr10" type="button" @click="operation(3)" v-has="'export'">智能核销</button>
+            <button class="ivu-btn ivu-btn-default mr10" type="button" @click="operation(4)" v-has="'export'">人工核销</button>
+            <button class="ivu-btn ivu-btn-default" type="button" @click="operation(5)" v-has="'export'">撤销核销</button>
         </div>
         <div class="mt20">
-            <Button class="mr10" :type="isActive==1?'info':''" @click="chooseTable(1)">全部显示</Button> 
-            <Button class="mr10" :type="isActive==2?'info':''" @click="chooseTable(2)">已核销</Button> 
-            <Button :type="isActive==3?'info':''" @click="chooseTable(3)">未核销</Button>
+            <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">全部显示</Button>
+            <Button class="mr10" :type="isActive==2?'info':'default'" @click="chooseTable(2)">已核销</Button>
+            <Button :type="isActive==3?'info':'default'" @click="chooseTable(3)">未核销</Button>
         </div>
     </section>
     <section class="con-box">
@@ -401,6 +384,12 @@ export default {
         query(){
 
         },
+        operation(){
+
+        },
+        Dealings(num){
+
+        },
         election(){
 
         },
@@ -413,10 +402,17 @@ export default {
         },
         handleSummary(){
 
+        },
+        summary(){
+          
         }
     }
 }
 </script>
 <style lang="less" scoped>
-    
+.input {
+  position: relative;
+  left: -26px;
+  bottom: -2px;
+}
 </style>
