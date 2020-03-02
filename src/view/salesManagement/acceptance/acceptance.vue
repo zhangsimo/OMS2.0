@@ -359,7 +359,8 @@
         this.getTopList()
       },
       showNewOrder(row) { //弹出生成采购订单模态框
-        this.clickRow = JSON.parse(JSON.stringify(row))
+        this.clickRow = JSON.parse(JSON.stringify(row));
+        console.log(this.clickRow)
         this.$refs.newOrder.openModal()
       },
       //分页查询预售单受理信息上
