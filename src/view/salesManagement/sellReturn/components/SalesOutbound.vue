@@ -191,9 +191,9 @@
         },
         page: {
           num: 1,
-          size: 10,
+          size: 20,
           total: 0,
-          placement:[10,20,30,40,50]
+          placement:[20,40,60,80,100]
         },
         selectTableList:[], //下侧table表格选中的数据
         time:''
