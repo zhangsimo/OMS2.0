@@ -206,7 +206,8 @@ export const mixSelectPartCom = {
       allList: {}
     };
   },
-  mounted() {},
+  mounted() {
+  },
   methods: {
     //初始化数据
     getList() {
@@ -239,7 +240,8 @@ export const mixSelectPartCom = {
     //获取配件品牌
     getPartBrandAll() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
-        let filterData = res.data.content.filter(
+        let arrData = res.data.content || []
+        let filterData = arrData.filter(
           item => item.quality == "品牌件"
         );
         if (filterData.length > 0) {

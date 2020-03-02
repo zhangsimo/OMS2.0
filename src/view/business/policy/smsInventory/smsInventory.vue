@@ -165,7 +165,7 @@
                       class="mr10"
                       @click="addPro"
                       v-has="'addPro'"
-                      :disabled="draftShow != 0"
+                      :disabled="draftShow != 0||!formPlan.storeId"
                     >
                       <Icon type="md-add" />添加配件
                     </Button>
@@ -614,8 +614,14 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      this.Left.tbdata = val.data.content || [];
-      this.Left.page.total = val.totalElements;
+      console.log(val)
+      let arrData = val.data.content||[]
+      arrData.map((item, index) => {
+        item["index"] = index + 1;
+        item["statuName"] = item.billStatusId.name;
+      });
+      this.Left.tbdata = arrData;
+      this.Left.page.total = val.data.totalElements;
     },
     //新增
     addProoo() {
@@ -636,8 +642,9 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate: "",
-        orderMan: "",
+        checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        orderMan: this.$store.state.user.userData.staffName || "", //盘点人
+        orderManId: this.$store.state.user.userData.id || "", //盘点人id
         serviceId: "",
         print: "",
         createUname: "",
@@ -796,7 +803,7 @@ export default {
     },
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.formPlan.id);
+      this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
     },
 
     //添加配件
