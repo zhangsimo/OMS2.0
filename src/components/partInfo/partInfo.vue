@@ -5,7 +5,7 @@
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
-      <Tabs type="card" @on-click="changeTab" :animated="false" name="partInfoTab" ref="tabs">
+      <Tabs type="card" @on-click="changeTab" v-model="tabsActive" :animated="false" name="partInfoTab" ref="tabs">
         <TabPane label="基本信息" tab="partInfoTab" name="active1">
           <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
             <Row>

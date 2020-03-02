@@ -159,7 +159,7 @@ export default {
                 break
               }
             }
-            this.leftClickItemId = "";
+            // this.leftClickItemId = "";
           }else{
             this.$refs.xTab.setCurrentRow(this.tableData[0])
             this.clickOnesList({row:this.tableData[0]})
