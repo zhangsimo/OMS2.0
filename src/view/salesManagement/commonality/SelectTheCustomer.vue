@@ -214,10 +214,8 @@ export default {
       if(this.clientPhone){
         data.contactorTel = this.clientPhone;
       }
-      console.log(data)
       let res = await getTreeClient(data);
       if (res.code === 0) {
-        // console.log('客户',res)
         this.tableData = res.data.content;
         this.page1.total = res.data.totalElements;
       }
@@ -237,7 +235,7 @@ export default {
           if (item.children) {
             item.children.map(val => {
               val.value = val.id;
-              val.label = item.title;
+              val.label = val.title;
             });
           } else {
             delete item.children;
@@ -260,7 +258,6 @@ export default {
     //级联选择器
     getType(value, selectedData) {
       this.queryType = selectedData[selectedData.length - 1];
-      // console.log(this.queryType)
     },
     //查询
     query() {
