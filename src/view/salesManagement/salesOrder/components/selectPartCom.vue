@@ -13,7 +13,7 @@
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
         <Button class="mr10" type='default' @click="searchPartLayer = false"><Icon type="md-close" /> 取消</Button>
-        <Button type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
+        <Button v-if="$route.name!='takeStock'" type='default'  @click="applyPart"><Icon type="md-add" /> 配件申请</Button>
       </div>
       <div class="partCheck-main clearfix">
         <div class="partCheck-left fl">

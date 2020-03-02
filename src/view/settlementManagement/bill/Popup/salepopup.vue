@@ -21,16 +21,16 @@
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="6">
-        <span>分店名称：</span>
+        <span>分店名称：{{information.orgName}}</span>
       </Col>
       <Col span="6">
-        <span>分店店号：</span>
+        <span>分店店号：{{information.orgId}}</span>
       </Col>
       <Col span="6">
-        <span>往来单位：</span>
+        <span>往来单位：{{information.guestName}}</span>
       </Col>
       <Col span="6">
-        <span>对账单号：</span>
+        <span>对账单号：{{information.accountNo}}</span>
       </Col>
     </Row>
     <Row class="mt10 ml10">
@@ -38,7 +38,7 @@
         <span>开票申请单号：</span>
       </Col>
       <Col span="6">
-        <span>申请时间：</span>
+        <span>申请时间：{{information.applicationDate}}</span>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
@@ -172,22 +172,27 @@
     <Table border :columns="accessoriesBilling" :data="accessoriesBillingData" show-summary :summary-method="billSum"></Table>
     <div class="mt10">
       <h4>开票申请进度</h4>
-      <approval />
+      <approval :approvalTit='approvalTit'/>
     </div>
     <SeleteSale ref="SeleteSale" :popupTit='popupTit'/>
+    <noTax ref="noTax"/>
     <div slot="footer"></div>
   </Modal>
 </template>
 <script>
 import approval from './approval'
 import SeleteSale from './seleteSale'
+import noTax from './noTax'
 export default {
   components:{
     approval,
     SeleteSale,
+    noTax
   },
   data() {
     return {
+      information:{},//基本信息数据
+      approvalTit:'开票申请流程',//审批流程
       popupTit:'选择必开销售单',//选择必开销售单弹框标题
       modal1: false, // 弹框开关
       invoice: {
@@ -263,17 +268,17 @@ export default {
           title: "商品含税单价",
           key: "accountsReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "商品含税金额",
           key: "receivableRebate",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "开票税率",
@@ -286,28 +291,41 @@ export default {
           className: "tc"
         },
         {
+          title: "销售单价",
+          key: "badDebtReceivable",
+          className: "tc",
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
+        },
+        {
           title: "申请开票金额",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         },
         {
           title: "外加税点",
           key: "badDebtReceivable",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.badDebtReceivable.toFixed(2));
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.badDebtReceivable.toFixed(2));
+          // }
         }
       ], //开票配件
       accessoriesBillingData: [] //开票配件数据
     };
   },
+  // mounted(){
+    
+  // },
   methods: {
     // 增加不含税销售开票申请
-    add() {},
+    add() {
+      this.$refs.noTax.modal1=true
+    },
     // 提交申请
     preservation() {},
     // 保存草稿
@@ -317,7 +335,42 @@ export default {
       this.$refs.SeleteSale.modal1 = true
     },
     // 开票配件合计
-    billSum(){}
+    billSum({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index >= 11) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+    }
   }
 };
 </script>

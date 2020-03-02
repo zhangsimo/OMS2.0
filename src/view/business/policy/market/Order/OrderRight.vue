@@ -436,7 +436,8 @@ export default {
   },
   methods: {
     getChangeList() {
-      this.$emit("getChangeList");
+      // this.$emit("getChangeList");
+      this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
     },
     //获取右侧数据
     async getList() {
@@ -754,7 +755,7 @@ export default {
     },
     //打开选择入库单
     openGodownEntryModal() {
-      this.$refs.GodownEntryModal.openModal();
+      this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
     },
     //打开活动
     openActivityModal() {
@@ -790,6 +791,8 @@ export default {
             await this.$refs.xTable.validate();
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
+              //解除禁用保存按钮
+              this.$parent.$parent.isSaveClick = false
             }
             if (this.formPlan.billStatusId.value) {
               this.formPlan.billStatusId = this.formPlan.billStatusId.value;
@@ -823,12 +826,16 @@ export default {
               this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
             }
           } catch (errMap) {
+            //解除禁用保存按钮
+            this.$parent.$parent.isSaveClick = false
             this.$XModal.message({
               status: "error",
               message: "表格校验不通过！"
             });
           }
         } else {
+          //解除禁用保存按钮
+          this.$parent.$parent.isSaveClick = false
           this.$Message.error("*为必填项");
         }
       });

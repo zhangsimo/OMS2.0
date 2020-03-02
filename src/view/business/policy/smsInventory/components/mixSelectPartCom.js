@@ -273,6 +273,7 @@ export const mixSelectPartCom  = {
     },
     //显示层
     init(){
+      alert(11)
       this.searchPartLayer = true;
       this.getList();
       this.getPartBrandAll();

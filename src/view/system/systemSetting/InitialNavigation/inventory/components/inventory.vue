@@ -428,14 +428,7 @@ export default {
 
     //全选框
     selectAllEvent({ checked, row }) {
-      // console.log(checked ? "所有勾选事件" : "所有取消事件");
-      console.log(row, "row");
-      console.log(checked, "checked");
-      if (checked) {
-        this.ids = row;
-      } else {
-        this.ids = [];
-      }
+      this.ids = this.$refs.xTable2.getSelectRecords();
     },
 
     //单选框

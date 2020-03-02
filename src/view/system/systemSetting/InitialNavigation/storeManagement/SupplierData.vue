@@ -209,6 +209,11 @@ export default {
       data.id = this.pitchSupplierOne.id;
       let res = await setDisabled(this.pitchSupplierOne);
       if (res.code == 0) {
+        if(this.pitchSupplierOne.isDisabled==1){
+          this.$message.success("启用成功");
+        }else{
+          this.$message.success("禁用成功");
+        }
         this.getlist();
       }
     },

@@ -74,7 +74,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="备　　注：" >
-          <Input v-model="formData.mark"/>
+          <Input v-model="formData.remark"/>
         </FormItem>
         <vxe-table border :data="formData.mode">
           <vxe-table-column title=" " min-width="186">

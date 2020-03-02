@@ -297,7 +297,7 @@
                           class="mr10"
                           @click="getRUl"
                           v-has="'getRUl'"
-                          :disabled="draftShow != 0||isNew"
+                          :disabled="draftShow != 0||isNew||!isAdd"
                         >
                           <span class="center">
                             <Icon custom="iconfont icondaoruicon icons" />导入配件

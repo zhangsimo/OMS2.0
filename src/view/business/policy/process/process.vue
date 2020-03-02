@@ -1223,6 +1223,7 @@ export default {
       if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
+        console.log(seleList)
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {

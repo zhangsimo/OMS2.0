@@ -128,6 +128,9 @@ export const mixPartInfo = {
         checkboxsing: false
       },
       showSpe: true,//是否显示包装规格
+
+      //tab页控制
+      tabsActive:'active1',
     }
   },
   methods: {
@@ -418,11 +421,13 @@ export const mixPartInfo = {
               this.saveFlag = true
               this.$emit('throwData', objReq)
             } else {
-              this.$message.error('带*必填')
+              //this.$message.error('带*必填')
+              this.tabsActive = 'active2'
             }
           })
         } else {
-          this.$Message.error('带*必填')
+         // this.$Message.error('带*必填')
+          this.tabsActive = 'active1'
           return
         }
       })

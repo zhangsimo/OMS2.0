@@ -29,7 +29,9 @@
           <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
           <vxe-table-column field="fullName" title="科目名称"></vxe-table-column>
           <vxe-table-column field="titleTypeName" title="科目类别"></vxe-table-column>
-          <vxe-table-column field="balanceDirection" title="余额方向"></vxe-table-column>
+          <vxe-table-column  title="余额方向">
+            <template v-slot="{row}">{{row.balanceDirection == 0 ? '借' : '贷'}}</template>
+          </vxe-table-column>
           <vxe-table-column field="auxiliaryAccountingName" title="辅助核算"></vxe-table-column>
           <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           <vxe-table-column title="状态">
@@ -193,6 +195,8 @@
                 this.$refs.formValidate.resetFields();
               this.formData.parentCode = this.oneTreeList.titleCode
               this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
+                this.formData.balanceDirection = 0
+                this.formData.status = 0
               this.formData.auxiliaryAccountingCode = 'null'
               this.formData.titleLevel = this.oneTreeList.titleLevel + 1
             },
@@ -204,12 +208,7 @@
                         let res = await getSave( this.formData )
                         if(res.code == 0){
                             this.getTreeList()
-                            let arr = await getTableList(data)
-                            if(arr.code == 0 ){
-                                this.tableData = arr.data
-                            }
                             this.addNewModal = false
-
                         }
                     } else {
 
@@ -224,6 +223,8 @@
                 this.formData ={}
                 this.$refs.formValidate.resetFields();
                 this.formData.parentCode = row.titleCode
+                this.formData.balanceDirection = 0
+                this.formData.status = 0
                 this.formData.titleTypeCode = row.titleTypeCode
                 this.formData.auxiliaryAccountingCode = 'null'
                 this.formData.titleLevel = row.titleLevel + 1
@@ -243,10 +244,6 @@
               let res = await  deletTableList(data)
                if(res.code == 0){
                    this.getTreeList()
-                   let arr = await getTableList(data)
-                   if(arr.code === 0 ){
-                       this.tableData = arr.data
-                   }
                }
             }
         },
@@ -254,7 +251,7 @@
             oneTreeList:{
        async  handler(newVal ,oldVal) {
            let data = {}
-              data.parentCode = newVal.titleCode
+              data.parentCode = newVal.titleCode || ''
            let res = await getTableList(data)
            if(res.code === 0 ){
                this.tableData = res.data
