@@ -1,12 +1,8 @@
 // 开发
-export default "dev";
+// export default "dev";
 
 // 测试
-<<<<<<< HEAD
-// export default 'test'
-=======
-// export default "test";
->>>>>>> dev
+export default 'test'
 
 // audit
 // export default 'audit'

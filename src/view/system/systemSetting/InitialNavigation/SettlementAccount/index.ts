@@ -51,9 +51,9 @@ export default class SettlementAccount extends Vue {
             render: (h:any, params:any) => {
                 let value:string = '';
                 if(params.row.isDisabled == 0) {
-                    value = '启用'
+                    value = '否'
                 } else {
-                    value = '禁用'
+                    value = '是'
                 }
                 return h('span', value);
             }
@@ -178,10 +178,12 @@ export default class SettlementAccount extends Vue {
     }
 
     private refresh() {
+        this.SelectRow = null;
         this.getAccounts();
     }
 
     private add() {
+        this.title = "新增账户"
         this.isNew = true;
         this.modal = true;
         this.formData.remark = ""
@@ -189,6 +191,7 @@ export default class SettlementAccount extends Vue {
     }
 
     private update() {
+        this.title = "修改账户"
         this.isNew = false;
         this.modal = true;
         this.reset();
