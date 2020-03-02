@@ -59,6 +59,7 @@
           :stripe="true"
           :columns="columns"
           :data="managementList"
+          max-height=500
         ></Table>
       </div>
       <Page
@@ -225,11 +226,11 @@ export default {
           title: "其他信息",
           align: "center",
           children: [
-            {
-              title: "拼音",
-              key: "pyName",
-              align: "center"
-            },
+            // {
+            //   title: "拼音",
+            //   key: "pyName",
+            //   align: "center"
+            // },
             {
               title: "省份",
               key: "provinceName",
@@ -291,7 +292,7 @@ export default {
     };
   },
   created() {
-    // this.getlist()
+    this.getlist()
     this.getAdress();
   },
   computed: {
@@ -305,7 +306,7 @@ export default {
       location.href =
         baseUrl.downApi +
         "/file/get?fileId=" +
-        1300000000 +
+        1500000000 +
         "&access_token=" +
         Cookies.get(TOKEN_KEY);
     },
@@ -347,6 +348,7 @@ export default {
       let res = await getCustomerInformation(data);
       if (res.code == 0) {
         this.loading = false;
+        this.clientList = {}
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
       }
@@ -434,9 +436,8 @@ export default {
     },
     //点击打开修改
     changeClient() {
-      if (Object.keys(this.clientList).length == 0) {
-        this.$Message.error("至少选择一种客户分类");
-        return false;
+      if (!this.clientList.hasOwnProperty('id')) {
+        return this.$Message.error("至少选择一种客户分类");
       }
       let data = {};
       data.id = this.clientList.id;

@@ -64,10 +64,10 @@
           :data="tabList"
           highlight-current-row
           highlight-hover-row
-          @select-change="selectTabelData"
           @current-change="selectTabelData"
+          :radio-config="{ trigger: 'row' }"
         >
-          <vxe-table-column type="checkbox" title="选择" width="100"></vxe-table-column>
+          <vxe-table-column type="radio" title="选择" width="100"></vxe-table-column>
           <vxe-table-column type="index" width="100" title="序号"></vxe-table-column>
           <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
           <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
@@ -278,15 +278,19 @@ export default {
       this.currentData = res.data;
       this.currentData[0].remark = this.checkRow.remark;
     },
+    selectTabelData1() {
+      console.log(122);
+    },
     ok() {
       // 将选好的成品传父组件
       const sendList = this.$refs.xtale.getSelectRecords();
-      if (sendList.length === 0) {
+      if (this.checkRow == {}) {
         this.$Message.info("请勾选需要选入的行");
         return;
+      } else {
+        this.$emit("ok", this.currentData, this.checkRow);
+        this.searchPartLayer = false;
       }
-      this.$emit("ok", this.currentData,this.checkRow);
-      this.searchPartLayer = false;
     }
   }
 };

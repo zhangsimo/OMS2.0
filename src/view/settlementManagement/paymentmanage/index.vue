@@ -875,7 +875,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -914,7 +914,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -953,7 +953,7 @@ export default {
             }, 0);
             sums[key] = {
               key,
-              value: v
+              value: v.toFixed(2)
             };
           }
         } else {
@@ -992,6 +992,8 @@ export default {
     },
     // 更多条件查询
     senior() {
+      this.data1 = [];
+      this.data2 = [];
       let obj = {
         orgId: this.model1,
         startDate: this.value[0]

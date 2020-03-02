@@ -168,7 +168,7 @@
                       <DatePicker
                         disabled
                         @on-change="changeDate"
-                        :value="Leftcurrentrow.createTime"
+                        v-model="Leftcurrentrow.createTime"
                         format="yyyy-MM-dd HH:mm:ss"
                         type="date"
                         class="w160"
@@ -682,7 +682,6 @@ export default {
       this.Leftcurrentrow.detailVOS = allArr;
 
       // var arrSet = this.Leftcurrentrow.detailVOS;
-      // console.log(arrSet, "arrSet==606");
       // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
       //   var flag = true;
       //   for (var j = 0; j < allArr.length; j++) {
@@ -766,6 +765,9 @@ export default {
           params.guestId = this.getArray[i].id;
         }
       }
+      params.createTime = moment(this.Leftcurrentrow.createTime).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.flag1 == true) {
         params.id = "";
       }
@@ -808,13 +810,19 @@ export default {
       this.buttonDisable = 0;
       this.Leftcurrentrow.detailVOS = [];
       this.Leftcurrentrow.guestName = "";
-      this.Leftcurrentrow.createTime = "";
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
-      this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      if(this.cangkuListall.length>0){
+          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+      }else{
+          this.Leftcurrentrow.storeId = '';
+      }
       this.buttonShow = false;
       this.tuneOut = false;
+      this.Leftcurrentrow.createTime = moment(new Date()).format(
+        "YYYY-MM-DD HH:mm:ss"
+      );
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
@@ -823,9 +831,6 @@ export default {
         }
       }
       this.flag = 1;
-      this.Leftcurrentrow.createTime = moment(new Date()).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
       this.Leftcurrentrow.statuName = "草稿";
       const item = {
         new: true,
@@ -864,9 +869,25 @@ export default {
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params.orderTypeId = params.orderTypeId.value;
+        if(params.status.value!=undefined){
+            params.status = params.status.value
+        }
+      if(params.settleStatus && params.settleStatus.value!=undefined){
+          params.settleStatus= params.settleStatus.value
+      }
+        if(params.orderTypeId && params.orderTypeId.value!=undefined){
+            params.orderTypeId= params.orderTypeId.value
+        }
+        for (var i = 0; i < this.getArray.length; i++) {
+            if (this.getArray[i].fullName == this.Leftcurrentrow.guestName) {
+                params.guestOrgid = this.getArray[i].isInternalId;
+                params.guestId = this.getArray[i].id;
+            }
+        }
+        this.Leftcurrentrow.createTime=this.Leftcurrentrow.createTime?this.Leftcurrentrow.createTime:new Date();
+        params.createTime = moment(this.Leftcurrentrow.createTime).format(
+            "YYYY-MM-DD HH:mm:ss"
+        );
       tijiao(params)
         .then(res => {
           // 点击列表行==>配件组装信息

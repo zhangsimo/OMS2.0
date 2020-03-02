@@ -29,7 +29,7 @@
           </div>
           <div class="db ml20">
             <span>供应商：</span>
-            <input type="text" class="h30" v-model="company" />
+            <input type="text" class="h30" v-model="company" readonly/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -363,7 +363,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 6 && index !== 11) {
+        if (index > 6 &&index !== 11) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);

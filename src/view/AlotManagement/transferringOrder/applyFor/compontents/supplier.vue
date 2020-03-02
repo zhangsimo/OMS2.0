@@ -116,6 +116,7 @@ export default {
     border: 1px solid #e8e8e8;
     padding: 4px 10px;
     border-radius: 2px;
+    display: inline-block;
     &.active {
       background: #fd5c5c;
       border-color: #fd5c5c;

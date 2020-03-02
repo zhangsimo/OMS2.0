@@ -29,12 +29,18 @@
               </Button>
             </div>
             <div class="db">
-              <Button type="default" v-has="'save'" class="mr10" @click="baocun1">
+              <Button
+                type="default"
+                :disabled="this.remarkStatus"
+                v-has="'save'"
+                class="mr10"
+                @click="baocun1"
+              >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" v-has="'submit'" @click="tijiao1">
+              <Button class="mr10" :disabled="this.remarkStatus" v-has="'submit'" @click="tijiao1">
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
@@ -44,7 +50,12 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
+              <Button
+                :disabled="this.remarkStatus"
+                v-has="'cancellation'"
+                class="mr10"
+                @click="zuofei1"
+              >
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
@@ -121,7 +132,7 @@
                     <FormItem label="调出仓库：" prop="supplyName" class="redIT">
                       <Row class="w160">
                         <Col span="24">
-                          <Select v-model="Leftcurrentrow.storeId">
+                          <Select :disabled="this.remarkStatus" v-model="Leftcurrentrow.storeId">
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -146,11 +157,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input
-                        :disabled="this.remarkStatus"
-                        :value="Leftcurrentrow.remark"
-                        class="w160"
-                      ></Input>
+                      <Input :disabled="this.remarkStatus" class="w160"></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
@@ -202,12 +209,7 @@
                     title="申请退回数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column
-                    field="orderQty"
-                    :edit-render="{name: 'input'}"
-                    title="备注"
-                    width="100"
-                  ></vxe-table-column>
+                  <vxe-table-column field :edit-render="{name: 'input'}" title="备注" width="100"></vxe-table-column>
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -873,7 +875,10 @@ export default {
       const params = {
         mainId: row.id
       };
-      const res = await getListDetail(params);
+      let res = {};
+        if(this.Leftcurrentrow.xinzeng!=1){
+            res=await getListDetail(params);
+        }
       this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
@@ -881,20 +886,21 @@ export default {
       setTimeout(() => {
         that.showit = true;
       }, 100);
-      cangkulist2(this.$store.state.user.userData.groupId)
-        .then(res => {
-          if (res.code == 0) {
-            res.data.map(item => {
-              item["label"] = item.name;
-              item["value"] = item.id;
+
+        cangkulist2(this.$store.state.user.userData.groupId)
+            .then(res => {
+                if (res.code == 0) {
+                    res.data.map(item => {
+                        item["label"] = item.name;
+                        item["value"] = item.id;
+                    });
+                    // this.cangkuListall = res.data
+                    this.dcData = res.data;
+                }
+            })
+            .catch(e => {
+                this.$Message.info("获取仓库列表失败");
             });
-            // this.cangkuListall = res.data
-            this.dcData = res.data;
-          }
-        })
-        .catch(e => {
-          this.$Message.info("获取仓库列表失败");
-        });
     },
     //分页
     changePage(p) {

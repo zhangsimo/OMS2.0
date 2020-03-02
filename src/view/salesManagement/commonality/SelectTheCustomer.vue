@@ -134,6 +134,7 @@ export default {
     };
   },
   mounted() {
+    this.getList()
     this.getAdress();
     this.getClientTypeList();
   },
@@ -194,20 +195,29 @@ export default {
     // 获取客户
     async getList() {
       let data = {};
-      data.grade = this.clickCity.grade;
-      data.id = this.clickCity.id;
+      if(this.clickCity.grade){
+        data.grade = this.clickCity.grade;
+        data.id = this.clickCity.id;
+      }
       data.page = this.page1.num - 1;
       data.size = this.page1.size;
       if(this.queryType !== undefined){
         data.lever = this.queryType.lever;
         data.leverId = this.queryType.id;
       }
-      data.code = this.clientCode;
-      data.shortName = this.clientName;
-      data.contactorTel = this.clientPhone;
+      if(this.clientCode){
+        data.code = this.clientCode;
+      }
+      if(this.clientName){
+        data.shortName = this.clientName;
+      }
+      if(this.clientPhone){
+        data.contactorTel = this.clientPhone;
+      }
+      console.log(data)
       let res = await getTreeClient(data);
       if (res.code === 0) {
-        console.log('客户',res)
+        // console.log('客户',res)
         this.tableData = res.data.content;
         this.page1.total = res.data.totalElements;
       }

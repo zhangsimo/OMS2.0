@@ -178,8 +178,7 @@ export const mixSelectPartCom = {
             break;
         }
       }
-      console.log(this.formPlanmain.guestId)
-      if(this.formPlanmain.guestId) {
+      if(this.formPlanmain&&this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
       }
       getCarParts({data:data,params:params}).then(res => {
@@ -253,7 +252,7 @@ export const mixSelectPartCom = {
       // console.log(this.selectTableItem);
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
-        // this.searchPartLayer = false;
+        this.searchPartLayer = false;
       } else {
         this.$Message.error("请选择数据");
       }

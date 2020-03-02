@@ -181,18 +181,24 @@
         mounted(){
             this.getClientList()
         },
+        props:{
+           storeId:{
+               type:String
+           }
+        },
         methods:{
             //打开模态框
-            openModal() {
+            openModal(v) {
                 this.showInfo = true;
-                this.getList()
+                this.getList(v)
             },
             //获取入库数据
-           async getList(){
+           async getList(v){
                 let data = {}
                     data = this.Outform
                     data.page = this.page.num -1
-                    data.size = this.page.size
+                    data.size = this.page.size;
+                    data.storeId=v;
                this.Loading = true
                let res = await getGodown(data)
                if(res.code === 0){
@@ -217,8 +223,7 @@
             },
             //查询
             query(){
-                this.getList()
-
+                this.getList(this.storeId)
             },
             //切换页面
             selectNum(val){

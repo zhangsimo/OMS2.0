@@ -61,12 +61,12 @@
           </div>
           <div class="tabs-warp" v-show="tabIndex == 0">
             <div class="btns-warp">
-              <Input
+              <!-- <Input
                 v-model="customer.pinyin"
                 placeholder="请输入拼音"
                 style="width: 140px;"
                 class="mr10"
-              />
+              /> -->
               <Input
                 v-model="customer.fullname"
                 placeholder="请输入全称"
@@ -156,7 +156,7 @@
               :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-              <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+              <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->
               <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
               <vxe-table-column field="fullName" title="配件全称"></vxe-table-column>
               <vxe-table-column field="costPrice" title="成本单价"></vxe-table-column>

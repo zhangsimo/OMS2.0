@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'click', mode: 'cell'}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell'}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -610,7 +610,7 @@ export default {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return "和值";
+            return "合计";
           }
           if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
@@ -768,11 +768,12 @@ export default {
       data.partIds = [val.id];
       data.type = 2;
       data.details = [val];
+      this.save()
       //console.log("dianjiafasong");
-      let res = await baocun(data);
-      if (res.code === 0) {
-        this.getList();
-      }
+      // let res = await baocun(data);
+      // if (res.code === 0) {
+      //   this.getList();
+      // }
     },
     //打开查看模态框
     openFileModal(row) {
@@ -789,38 +790,51 @@ export default {
             await this.$refs.xTable.validate();
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
+              //解除禁用保存按钮
+              this.$parent.$parent.isSaveClick = false
             }
             if (this.formPlan.billStatusId.value) {
               this.formPlan.billStatusId = this.formPlan.billStatusId.value;
             }
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await baocun(this.formPlan);
-
             if (res.code === 0) {
+              this.$parent.$parent.$refs.leftorder.flag = 0
               this.$Message.success("保存成功");
-              const id = this.formPlan.id;
-              const ldata = await this.$parent.$parent.$refs.leftorder.getList();
-              this.$parent.$parent.$refs.leftorder.tableData.map(item => {
-                if (item.id === id) {
-                  this.formPlan = item;
-                }
-              });
-              this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
-                this.formPlan
-              );
+              // this.formPlan = {};
+              // this.$refs.formPlan.resetFields()
+              // this.$parent.$parent.$refs.leftorder.getList()
+              // const id = this.formPlan.id;
+              // const ldata = await this.$parent.$parent.$refs.leftorder.getList();
+              // this.$parent.$parent.$refs.leftorder.tableData.map(item => {
+              //   if (item.id === id) {
+              //     this.formPlan = item;
+              //   }
+              // });
+              // this.leftOneOrder = this.formPlan
+              // this.getAllLimit()
+              // this.$parent.$parent.$refs.leftorder.$refs.xTab.setCurrentRow(
+              //   this.formPlan
+              // );
+
               // console.log(this.$parent.$parent.$refs)
               // this.formPlan=this.formPlan.filter(item=>this.$parent.$parent.$refs.tableData.includes(item))
-              // this.formPlan = {};
+
               // this.$refs.formPlan.resetFields();
               this.$store.commit("setleftList", this.formPlan);
+              this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
             }
           } catch (errMap) {
+            //解除禁用保存按钮
+            this.$parent.$parent.isSaveClick = false
             this.$XModal.message({
               status: "error",
               message: "表格校验不通过！"
             });
           }
         } else {
+          //解除禁用保存按钮
+          this.$parent.$parent.isSaveClick = false
           this.$Message.error("*为必填项");
         }
       });
@@ -941,6 +955,8 @@ export default {
         //     this.getAllLimit()
         //     return false
         // }
+        // this.formPlan = old
+        // console.log(this.formPlan)
         this.leftOneOrder = old;
         this.getList();
         this.getAllLimit();

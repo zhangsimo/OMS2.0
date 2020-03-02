@@ -180,10 +180,10 @@ export const mixSelectPartCom  = {
           value: "adapterCarModels",
           label: "车型"
         },
-        {
-          value: "keyWord",
-          label: "拼音"
-        }
+        // {
+        //   value: "keyWord",
+        //   label: "拼音"
+        // }
       ],
       //查询关键字
       searchValue:'',
@@ -320,8 +320,11 @@ export const mixSelectPartCom  = {
       //添加未审核属性
       obj.auditSign = 0
       savePartInfo(obj).then(res => {
-        this.$Message.success("保存成功！")
-        this.reload();
+        if(res.code===0){
+          this.$Message.success("保存成功！")
+          this.reload();
+        }
+        this.$refs.partInfo.saveFlag = false
       })
     },
 

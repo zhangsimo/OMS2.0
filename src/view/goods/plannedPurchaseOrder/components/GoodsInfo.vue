@@ -100,6 +100,7 @@
             :model="formDateRight"
             ref="formTwo"
             :label-width="100"
+            :rules="ruleValidate"
           >
             <FormItem label="收货单位：" prop="receiveComp">
               <Input
@@ -301,7 +302,12 @@ export default class GoodsInfo extends Vue {
   private distribution(val){
     this.formDateRight.deliveryType = val
     // console.log(this.formDateRight.deliveryType)
-    this.inlogistics()
+    this.inlogistics();
+    if(val == 2 || val == 3){
+      this.isRequired = true;
+    }else {
+      this.isRequired = false;
+    }
   }
   //获取物流下拉框
   private async inlogistics() {
@@ -335,11 +341,13 @@ export default class GoodsInfo extends Vue {
   }
 
   private selectLogis(val:any) {
-    this.formDateRight.logisticsComp = val.label || "";
-    if(this.formDateRight.deliveryLogistics != "") {
-      this.logisRequired = false;
-    } else {
-      this.logisRequired = true;
+    if(val){
+      this.formDateRight.logisticsComp = val.label || "";
+      if(this.formDateRight.deliveryLogistics != "") {
+        this.logisRequired = false;
+      } else {
+        this.logisRequired = true;
+      }
     }
   }
 
@@ -424,6 +432,7 @@ export default class GoodsInfo extends Vue {
         });
         if (res.code == 0) {
           this.$Message.success("保存成功");
+          this.showInfo = false;
           this.reset();
           this.searchInfo();
         }
@@ -437,8 +446,8 @@ export default class GoodsInfo extends Vue {
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = row.logisticsRecord
-    this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
+    this.formDateRight = {...row.logisticsRecord}
+    this.formDateRight.businessNum = this.formDateRight.businessNum || this.row.serviceId;
     this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     this.formDateRight.settleType = this.formDateRight.settleType + "";
     // if (row.logisticsRecord) {

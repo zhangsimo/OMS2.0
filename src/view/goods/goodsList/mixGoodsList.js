@@ -80,7 +80,8 @@ export const mixGoodsData = {
       selectPlanOrderItem: {},
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-      }
+      },
+      selectLeftItemId:""
     };
   },
   mounted() {
@@ -157,6 +158,15 @@ export const mixGoodsData = {
           processInstanceId: "",
         };
         this.page.total = res.data.totalElements;
+
+        for(let b of this.tbdata){
+          b._highlight = false
+          if(b.id==this.selectLeftItemId){
+            b._highlight = true;
+            this.setFormPlanmain(b);
+            break;
+          }
+        }
       }
     },
     //采购计划列表选中数据
@@ -345,6 +355,9 @@ export const mixGoodsData = {
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
+      if(v){
+        this.selectLeftItemId = v.id
+      }
       if (this.newadd && v) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -376,6 +389,15 @@ export const mixGoodsData = {
               this.tbdata.splice(0, 1);
               this.newadd = false;
               this.$refs.planOrderTable.clearCurrentRow();
+
+              for(let b of this.tbdata){
+                b._highlight = false
+                if(b.id==this.selectLeftItemId){
+                  b._highlight = true;
+                  this.setFormPlanmain(b)
+                  break;
+                }
+              }
             }
           }
         });
@@ -383,43 +405,46 @@ export const mixGoodsData = {
         if (!this.newadd) {
           this.$refs["formPlan"].resetFields();
         }
-        if (v) {
-          if (this.newadd && this.selectPlanOrderItem.new) {
-            this.tbdata.splice(0, 1);
-            this.newadd = false;
-            this.$refs.planOrderTable.clearCurrentRow();
-          }
-          if (['草稿', '退回'].includes(v.billStatusId.name)) {
-            this.isinput = false;
-          } else {
-            this.isinput = true;
-          }
-          if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
-            this.hideSp = true;
-          } else {
-            this.hideSp = false;
-          }
-          this.selectPlanOrderItem = v || {};
-          this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
-          this.formPlan.supplyName = v.guestName || "";
-          this.formPlan.createUid = v.createUid || "";
-          this.formPlan.guestId = v.guestId || "";
-          this.formPlan.planArriveDate = new Date(v.orderDate) || "";
-          this.formPlan.remark = v.remark || "";
-          this.formPlan.billType = v.billTypeId || "";
-          this.formPlan.directCompanyId = v.directCompanyId || "";
-          this.formPlan.planOrderNum = v.serviceId || "";
-          this.formPlan.otherPrice = v.otherAmt || 0;
-          this.formPlan.totalPrice = v.totalAmt || 0;
-          this.formPlan.processInstanceId = v.processInstanceId || "";
-          this.formPlan.orderMan = v.orderMan || "";
-          this.formPlan.orderManId = v.orderManId || "";
-          this.tableData = v.details || [];
-          this.mainId = v.id;
-          this.upurl = upxlxs + v.id;
-        }
+        this.setFormPlanmain(v);
       }
       this.$refs.selectSupplier.getList();
+    },
+    setFormPlanmain(v){
+      if (v) {
+        if (this.newadd && this.selectPlanOrderItem.new) {
+          this.tbdata.splice(0, 1);
+          this.newadd = false;
+          this.$refs.planOrderTable.clearCurrentRow();
+        }
+        if (['草稿', '退回'].includes(v.billStatusId.name)) {
+          this.isinput = false;
+        } else {
+          this.isinput = true;
+        }
+        if (['草稿', '作废'].includes(v.billStatusId.name) || !v.processInstanceId ) {
+          this.hideSp = true;
+        } else {
+          this.hideSp = false;
+        }
+        this.selectPlanOrderItem = {...v} || {};
+        this.selectPlanOrderItem.billStatusId = v.billStatusId.value;
+        this.formPlan.supplyName = v.guestName || "";
+        this.formPlan.createUid = v.createUid || "";
+        this.formPlan.guestId = v.guestId || "";
+        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
+        this.formPlan.remark = v.remark || "";
+        this.formPlan.billType = v.billTypeId || "";
+        this.formPlan.directCompanyId = v.directCompanyId || "";
+        this.formPlan.planOrderNum = v.serviceId || "";
+        this.formPlan.otherPrice = v.otherAmt || 0;
+        this.formPlan.totalPrice = v.totalAmt || 0;
+        this.formPlan.processInstanceId = v.processInstanceId || "";
+        this.formPlan.orderMan = v.orderMan || "";
+        this.formPlan.orderManId = v.orderManId || "";
+        this.tableData = v.details || [];
+        this.mainId = v.id;
+        this.upurl = upxlxs + v.id;
+      }
     },
     getArray(data) {
       this.ArrayList = data;
@@ -433,6 +458,10 @@ export const mixGoodsData = {
       this.newadd = true;
       this.$refs["planOrderTable"].clearCurrentRow();
       this.$refs["formPlan"].resetFields();
+
+      for(let b of this.tbdata){
+        b._highlight = false
+      }
       this.formPlan = {
         supplyName: "", //供应商
         guestId: "", //供应商id

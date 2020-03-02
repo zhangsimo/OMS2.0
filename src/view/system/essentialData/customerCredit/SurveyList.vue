@@ -466,7 +466,7 @@ export default {
     //   }
     //   this.data.operationEnd = endTime
     // }
-  }
+  },
 };
 </script>
 

@@ -44,7 +44,7 @@
           <div class="db">
             <Button
               class="mr10"
-              @click="editPro"
+              @click="sureEditPro"
               v-has="'submit'"
               :disabled="this.Leftcurrentrow.status.value !== 0"
             >
@@ -141,11 +141,25 @@
                     </Select>
                   </FormItem>
                   <FormItem label="业务员：" prop="createUname">
-                    <Input
+                    <Select
+                      :value="Leftcurrentrow.createUnameId"
+                      @on-change="selectOrderMan"
+                      filterable
+                      style="width: 240px"
+                      :disabled="Leftcurrentrow.status.value !== 0"
+                      label-in-value
+                    >
+                      <Option
+                        v-for="item in salesList"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{ item.label }}</Option>
+                    </Select>
+                    <!-- <Input
                       v-model="Leftcurrentrow.createUname"
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
-                    />
+                    />-->
                   </FormItem>
                   <FormItem label="移仓日期" prop="commitDate">
                     <DatePicker
@@ -203,6 +217,8 @@
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
+                :checkbox-config="{checkMethod}"
+                @edit-actived="editActivedEvent"
               >
                 <vxe-table-column type="index" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox"></vxe-table-column>
@@ -212,11 +228,11 @@
                 <vxe-table-column
                   field="orderQty"
                   title="数量"
-                  :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: numChangeEvent}}"
+                  :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: numChangeEvent}}"
                 ></vxe-table-column>
                 <vxe-table-column field="stockOutQty" title="缺货数量"></vxe-table-column>
                 <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
-                <vxe-table-column field="systemUnitId" title="单位"></vxe-table-column>
+                <vxe-table-column field="unit" title="单位"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格"></vxe-table-column>
                 <vxe-table-column field="date12" title="方向"></vxe-table-column>
@@ -272,6 +288,7 @@ import PrintShow from "./components/PrintShow";
 import More from "./components/More";
 import { conversionList } from "@/components/changeWbList/changewblist";
 import { transferWarehousing } from "../../../../api/bill/saleOrder";
+import {getSales} from "@/api/salesManagment/salesOrder";
 export default {
   name: "moveStorehouse",
   components: {
@@ -282,7 +299,8 @@ export default {
   },
   data() {
     return {
-      flag:0,
+      salesList: [], //业务员列表
+      flag: 0,
       numberValue: "",
       mainid: "",
       split1: 0.2,
@@ -487,7 +505,7 @@ export default {
     purchaseType: function(val, old) {
       // console.log(val, old);
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
+      this.Left.page.size = 20;
       this.getList();
     },
     Leftcurrentrow: {
@@ -499,8 +517,28 @@ export default {
   },
   created() {
     this.getList();
+    this.getAllSales();
   },
   methods: {
+    //获取销售员
+    selectOrderMan(val) {
+      this.Leftcurrentrow.createUname = val ? val.label ? val.label : '':'';
+      this.Leftcurrentrow.createUnameId = val ? val.value ? val.value : '':'';
+    },
+    //获取销售员
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.map(item => {
+          item.label = item.userName;
+        });
+      }
+    },
+    // 禁用选中
+    checkMethod({ row }) {
+      return this.Leftcurrentrow.status.value === 0;
+    },
     numChangeEvent({ row }, evnt) {
       this.numberValue = evnt.target.value;
     },
@@ -562,6 +600,12 @@ export default {
         this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
       });
     },
+    //判断表格能不能编辑
+    editActivedEvent({row}){
+      let xTable = this.$refs.xTable1;
+      let orderQtyColumn = xTable.getColumnByField("orderQty");
+      orderQtyColumn.editRender.attrs.disabled = this.Leftcurrentrow.status.value !== 0;
+    },
     //切换tab
     setTab(index) {
       this.tabIndex = index;
@@ -573,7 +617,7 @@ export default {
     getDataQuick(v) {
       this.queryTime = v;
       this.Left.page.num = 1;
-      this.Left.page.size = 10;
+      this.Left.page.size = 20;
       this.getList();
     },
     //改变移仓时间
@@ -626,11 +670,11 @@ export default {
         detailVOList: [],
         _highlight: true
       };
-      this.flag = 1
-      this.Leftcurrentrow= item;
+      this.flag = 1;
+      this.Leftcurrentrow = item;
       // this.Leftcurrentrow.createUname = item.createUname;
       // this.Leftcurrentrow.xinzeng = "1";
-      this.Right.tbdata = []
+      this.Right.tbdata = [];
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -670,7 +714,7 @@ export default {
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功
-          this.flag = 0
+          this.flag = 0;
           updata(params)
             .then(res => {
               if (res.code == 0) {
@@ -687,6 +731,16 @@ export default {
         }
       });
     },
+      //确认提交
+      sureEditPro(){
+          this.$Modal.confirm({
+              title: '提示',
+              content: '<p>确认要提交么?</p>',
+              onOk: () => {
+                  this.editPro()
+              },
+          });
+      },
     // 提交
     editPro() {
       //判断是否为草稿状态
@@ -793,6 +847,11 @@ export default {
         });
         return;
       }
+      this.salesList.map(item=>{
+        if(item.label===row.createUname) {
+          row.createUnameId = item.id
+        }
+      })
       this.Leftcurrentrow = row;
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
@@ -828,8 +887,8 @@ export default {
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]
-        this.Right.tbdata.push(item);
-        this.Leftcurrentrow.detailVOList.push(item);
+        this.Right.tbdata.unshift(item);
+        // this.Leftcurrentrow.detailVOList.push(item);
       });
       // console.log(this.Right.tbdata);
       // console.log(this.Leftcurrentrow);
@@ -861,9 +920,16 @@ export default {
         ids: ids,
         mainId: this.mainid
       };
-
-      // console.log(arrParams, "arrParams =>774");
+      // this.array_diff(this.Right.tbdata, seleList);
+      this.Right.tbdata = this.Right.tbdata.filter(
+        item => !seleList.includes(item)
+      );
       this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
+      const flag = ids.some(item => !item);
+      if (flag) return this.$message.success("删除成功");
+
+      // this.array_diff(this.Leftcurrentrow.detailVOList, seleList);
+
       // console.log(arrParams, "arrParams781");
 
       delectTable(arrParams)

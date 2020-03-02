@@ -52,7 +52,7 @@
               <Page
                 size="small"
                 :total="Left.page.total"
-                :page-size="Left.page.size"
+                :page-size="size"
                 :current="Left.page.num"
                 :page-size-opts="opts"
                 show-sizer
@@ -131,11 +131,11 @@
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
                 <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
                 <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
                 <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                 <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                 <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 <vxe-table-column field="hasCancelQty" title="统计退回数量" width="100"></vxe-table-column>
@@ -210,12 +210,15 @@ export default {
         // selectDayType: '', //完成日期12345
         // settleStatus: '',
       },
+      size: 20,
+      total: 0,
       opts: [20, 50, 100, 200],
       Left: {
         page: {
           num: 1,
           size: 20,
-          total: 0
+          total: 0,
+          opts: [20, 50, 100, 200]
         },
         loading: false,
         columns: [
@@ -468,7 +471,7 @@ export default {
       this.getinfo(this.params);
     },
     changeSize(s) {
-      this.Left.page.size = size;
+      this.Left.page.size = s;
       this.getinfo(this.params);
     }
   },

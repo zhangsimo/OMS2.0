@@ -35,7 +35,7 @@
     </section>
     <!--上部-->
     <section class="part-main con-box flex">
-      <Split v-model="split" min="200" max="570">
+      <Split v-model="split" value=0.3>
         <div slot="left" class="tree-warp">
           <div class="title">配件分类</div>
           <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
@@ -77,8 +77,9 @@
               @on-selection-change="selectRow"
             ></Table>
           </div>
-          <div class="page-warp">
+          <div class="p10">
               <Page
+              size="small"
               v-if="tabIndex == 0"
               class-name="page-con"
               :current="local.page.num"

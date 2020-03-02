@@ -7,22 +7,26 @@
           <div class="db mr10">
             <span>申请状态：</span>
             <Select class="w100 mr10" v-model="getDataObj.state" clearable>
-              <Option v-for="item in applyStatusOption" :value="item.value" :key="item.value">{{item.label}}</Option>
+              <Option
+                v-for="item in applyStatusOption"
+                :value="item.value"
+                :key="item.value"
+              >{{item.label}}</Option>
             </Select>
           </div>
           <div class="db mr10">
             <span>创建时间：</span>
             <Date-picker
-             @on-change="getBeginDate"
-             :value="startTime"
+              @on-change="getBeginDate"
+              :value="startTime"
               class="w200 mr20"
               type="date"
               placeholder="选择开始日期"
-              :options='startTimeOption'
+              :options="startTimeOption"
             ></Date-picker>
             <Date-picker
               @on-change="getEndDate"
-               :value="endTime"
+              :value="endTime"
               class="w200 mr20"
               type="date"
               placeholder="选择结束日期"
@@ -33,7 +37,12 @@
             <Button type="warning" class="mr10 w90" @click="selectActApply">
               <Icon custom="iconfont iconchaxunicon icons" />查询
             </Button>
-            <Button type="warning" class="mr10 w90" @click="showApplication('apply')" v-has="'apply'">申请活动</Button>
+            <Button
+              type="warning"
+              class="mr10 w90"
+              @click="showApplication('apply')"
+              v-has="'apply'"
+            >申请活动</Button>
             <Button @click="cancelApply" type="warning" class="mr10 w90" v-has="'noApply'">取消申请</Button>
             <Button
               type="warning"
@@ -42,9 +51,13 @@
               v-show="this.checkedData.length > 0 && this.checkedData[0].state === '草稿'"
               v-has="'audit'"
             >编辑/重新提交</Button>
-            <Button type="warning" class="mr10 w90" @click="showReview"
-                    v-has="'audit'"
-                    v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'">审核</Button>
+            <Button
+              type="warning"
+              class="mr10 w90"
+              @click="showReview"
+              v-has="'audit'"
+              v-show="this.checkedData.length > 0 && this.checkedData[0].state === '待审核'"
+            >审核</Button>
           </div>
         </div>
       </div>
@@ -57,7 +70,11 @@
           <div class="db mr">
             <span>指定公司：</span>
             <Select class="w100 mr10" v-model="getDataObj.orgname" clearable>
-              <Option v-for="item in companyListOptions" :value="item.name? item.name: '未知'" :key="item.id">{{item.name}}</Option>
+              <Option
+                v-for="item in companyListOptions"
+                :value="item.name? item.name: '未知'"
+                :key="item.id"
+              >{{item.name}}</Option>
             </Select>
           </div>
           <div class="db mr10">
@@ -65,7 +82,7 @@
             <Date-picker
               :value="startTime"
               @on-change="getBeginDate"
-              :options='startTimeOption'
+              :options="startTimeOption"
               class="w200 mr10"
               type="date"
               placeholder="选择开始日期"
@@ -73,7 +90,7 @@
             <Date-picker
               @on-change="getEndDate"
               :value="endTime"
-              :options='endTimeOption'
+              :options="endTimeOption"
               class="w200"
               type="date"
               placeholder="选择结束日期"
@@ -81,7 +98,7 @@
           </div>
           <div class="db mr10">
             <span>活动配件：</span>
-            <Input ref="getDataObj" style="width:200px" class="mr20" v-model="getDataObj.partName"/>
+            <Input ref="getDataObj" style="width:200px" class="mr20" v-model="getDataObj.partName" />
           </div>
           <div class="db">
             <Button @click="getActivity" type="warning" class="mr20">
@@ -101,7 +118,7 @@
             <span>活动时间：</span>
             <Date-picker
               :value="startTime"
-              :options='startTimeOption'
+              :options="startTimeOption"
               @on-change="getBeginDate"
               class="w200 mr20"
               type="date"
@@ -109,7 +126,7 @@
             ></Date-picker>
             <Date-picker
               @on-change="getEndDate"
-              :options='endTimeOption'
+              :options="endTimeOption"
               :value="endTime"
               class="w200 mr20"
               type="date"
@@ -139,13 +156,36 @@
             :data="data1"
             max-height="290"
           ></Table>
-          <Table show-summary :summary-method="handleSummary" :columns="columns4" :data="data4" border max-height="290"></Table>
+          <Table
+            show-summary
+            :summary-method="handleSummary"
+            :columns="columns4"
+            :data="data4"
+            border
+            max-height="290"
+          ></Table>
         </TabPane>
         <TabPane label="活动信息" name="name2">
-          <Table max-height="600" show-summary :summary-method="handleSummary" @on-row-click="onRowClick2" highlight-row :data="data2" :columns="columns2" border></Table>
+          <Table
+            max-height="600"
+            show-summary
+            :summary-method="handleSummary"
+            @on-row-click="onRowClick2"
+            highlight-row
+            :data="data2"
+            :columns="columns2"
+            border
+          ></Table>
         </TabPane>
         <TabPane label="过期活动" name="name3">
-          <Table max-height="630" show-summary :summary-method="handleSummary" :columns="columns3" :data="data3" border></Table>
+          <Table
+            max-height="630"
+            show-summary
+            :summary-method="handleSummary"
+            :columns="columns3"
+            :data="data3"
+            border
+          ></Table>
         </TabPane>
       </Tabs>
     </section>
@@ -156,35 +196,36 @@
       v-model="applicationDialog"
       title="申请活动"
       :mask-closable="false"
-      @on-cancel="closeDialog">
+      @on-cancel="closeDialog"
+    >
       <div>
         <div style="height:150px; padding-top: 30px">
           <div class="header-box clearfix mb20">
-          <span>
-            是否厂家提供
-            <Checkbox v-model="single"></Checkbox>
-          </span>
-          <span>
-            是否低于成本
-            <Checkbox v-model="single2"></Checkbox>
-          </span>
+            <span>
+              是否厂家提供
+              <Checkbox v-model="single"></Checkbox>
+            </span>
+            <span>
+              是否低于成本
+              <Checkbox v-model="single2"></Checkbox>
+            </span>
+          </div>
+          <div class="mb20" style="width: 300px">
+            <Form ref="formValidate" :rules="textRules" :label-width="50" :model="formValidate">
+              <FormItem label="备注" prop="remark">
+                <Input
+                  v-model="formValidate.remark"
+                  type="textarea"
+                  :autosize="{minRows: 2,maxRows: 5}"
+                />
+              </FormItem>
+            </Form>
+          </div>
         </div>
-        <div class="mb20" style="width: 300px">
-          <Form ref="formValidate" :rules="textRules" :label-width="50" :model="formValidate">
-            <FormItem label="备注" prop="remark">
-              <Input
-                v-model="formValidate.remark"
-                type="textarea"
-                :autosize="{minRows: 2,maxRows: 5}"
-              />
-            </FormItem>
-          </Form>
-        </div>
-      </div>
         <hr />
         <div class="place mt10">
           <Upload
-            ref='upload'
+            ref="upload"
             :action="upurl"
             :show-upload-list="false"
             :format="['xlsx','xls']"
@@ -192,7 +233,8 @@
             :headers="headers"
             :before-upload="handleBeforeUpload"
             :on-success="onSuccess"
-            style="display: inline-block">
+            style="display: inline-block"
+          >
             <Button type="primary" class="w90 mr10">活动导入</Button>
           </Upload>
           <Button type="default" class="w90 mr10" @click="deleteDate5">删除</Button>
@@ -200,7 +242,14 @@
         </div>
         <div>
           <!-- 弹窗表格部分 -->
-          <Table highlight-row border :columns="columns5" :data="data5" height="300" @on-row-click="onRowClick3"></Table>
+          <Table
+            highlight-row
+            border
+            :columns="columns5"
+            :data="data5"
+            height="300"
+            @on-row-click="onRowClick3"
+          ></Table>
         </div>
       </div>
       <div slot="footer">
@@ -214,8 +263,8 @@
     <Modal v-model="reViewDialog" title="审核" :mask-closable="false">
       <div style="text-align: center; height: 200px">
         <RadioGroup style="margin-top: 20%" v-model="radioCheck">
-            <Radio label="审核通过" class="mr30"></Radio>
-            <Radio label="审核不通过"></Radio>
+          <Radio label="审核通过" class="mr30"></Radio>
+          <Radio label="审核不通过"></Radio>
         </RadioGroup>
       </div>
       <div slot="footer">
@@ -223,7 +272,6 @@
         <Button type="default" @click="closeReview">取消</Button>
       </div>
     </Modal>
-
   </div>
 </template>
 <script>
@@ -246,51 +294,51 @@ import {
   selectCompany,
   auditActivity
 } from "../../../../api/system/activityManage.js";
-import Cookies from 'js-cookie'
-import { TOKEN_KEY } from '@/libs/util'
-import baseUrl from '_conf/url'
-const  headers =  {
-  Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
-}
+import Cookies from "js-cookie";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
+const headers = {
+  Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+};
 export default {
   name: "activityManage",
   data() {
     return {
       applyStatusOption: [
         {
-          value: '草稿',
+          value: "草稿",
           label: "草稿"
         },
         {
-          value: '待审核',
+          value: "待审核",
           label: "待审核"
         },
         {
-          value: '已通过',
+          value: "已通过",
           label: "已通过"
         },
         {
-          value: '不通过',
+          value: "不通过",
           label: "不通过"
         },
         {
-          value: '已取消',
+          value: "已取消",
           label: "已取消"
         }
       ],
-      radioCheck: '',
-      startTime: '',
-      endTime: '',
-      startTimeOption:{},
-      endTimeOption:{},
+      radioCheck: "",
+      startTime: "",
+      endTime: "",
+      startTimeOption: {},
+      endTimeOption: {},
       tabValue: "name1",
       reViewDialog: false,
       editDialog: false,
       // 详细活动信息/编辑并提交数据回显需要的参数
-      tableFormDate:{
-        id: '',
-        applyId: '',
-        state: ''
+      tableFormDate: {
+        id: "",
+        applyId: "",
+        state: ""
       }, //单击表格返回的数据
       columns1: [
         {
@@ -319,8 +367,8 @@ export default {
               key: "isVender",
               render: (h, params) => {
                 // console.log(params)
-                let text = params.row.isCancelFlow ? '是' : '否'
-                return h('span', {}, text)
+                let text = params.row.isCancelFlow ? "是" : "否";
+                return h("span", {}, text);
               }
             },
             {
@@ -336,7 +384,7 @@ export default {
             {
               title: "审批状态",
               align: "center",
-              key: "state",
+              key: "state"
             },
             {
               title: "是否为取消申请",
@@ -344,8 +392,8 @@ export default {
               key: "isCancelFlow",
               render: (h, params) => {
                 // console.log(params)
-                let text = params.row.isCancelFlow ? '是' : '否'
-                return h('span', {}, text)
+                let text = params.row.isCancelFlow ? "是" : "否";
+                return h("span", {}, text);
               }
             },
             {
@@ -357,15 +405,15 @@ export default {
         }
       ],
       data1: [],
-      checkedData:[],
+      checkedData: [],
       // 活动信息数据
       getDataObj: {
         beginDate: "",
         endDate: "",
         orgname: "",
         partName: "",
-        state: '',
-        id: ''
+        state: "",
+        id: ""
       },
       columns2: [
         {
@@ -419,17 +467,17 @@ export default {
           key: "isGift",
           align: "center",
           render: (h, params) => {
-            return h('Checkbox', {
-              props: {
-                value:params.row.isGift == 0 ? false : true,
+            return h("Checkbox", {
+              props: {
+                value: params.row.isGift == 0 ? false : true,
                 disabled: true
-                }, 
-              on: {
-                'on-change': (e) => {
-                  console.log(e)
-                  }
-                  }
-               });
+              },
+              on: {
+                "on-change": e => {
+                  console.log(e);
+                }
+              }
+            });
           }
         },
         {
@@ -463,14 +511,14 @@ export default {
           key: "remark"
         }
       ],
-      data2:[],
+      data2: [],
       // 公司列表信息
-      companyListOptions:[],
-      checkedData2:[],
-      actIfoTableData:{
-        id: ''
+      companyListOptions: [],
+      checkedData2: [],
+      actIfoTableData: {
+        id: ""
       },
-      actIfoTableData3:[],
+      actIfoTableData3: [],
       // 过期活动数据
       columns3: [
         {
@@ -519,17 +567,17 @@ export default {
           key: "isGift",
           align: "center",
           render: (h, params) => {
-            return h('Checkbox', {
-              props: {
-                value:params.row.isGift == 0 ? false : true,
+            return h("Checkbox", {
+              props: {
+                value: params.row.isGift == 0 ? false : true,
                 disabled: true
-                }, 
-              on: {
-                'on-change': (e) => {
-                  console.log(e)
-                  }
-                  }
-               });
+              },
+              on: {
+                "on-change": e => {
+                  console.log(e);
+                }
+              }
+            });
           }
         },
         {
@@ -622,17 +670,17 @@ export default {
           key: "isGift",
           align: "center",
           render: (h, params) => {
-            return h('Checkbox', {
-              props: {
-                value:params.row.isGift == 0 ? false : true,
+            return h("Checkbox", {
+              props: {
+                value: params.row.isGift == 0 ? false : true,
                 disabled: true
-                }, 
-              on: {
-                'on-change': (e) => {
-                  console.log(e)
-                  }
-                  }
-               });
+              },
+              on: {
+                "on-change": e => {
+                  console.log(e);
+                }
+              }
+            });
           }
         },
         {
@@ -680,13 +728,11 @@ export default {
       // 申请活动窗口数据
       single: false,
       single2: false,
-      formValidate:{
-        remark: "",
+      formValidate: {
+        remark: ""
       },
       textRules: {
-        remark: [
-          { required: true, message: '不能为空', trigger: 'blur' },
-        ]
+        remark: [{ required: true, message: "不能为空", trigger: "blur" }]
       },
       upurl: upxlxs,
       headers: headers,
@@ -743,91 +789,105 @@ export default {
         }
       ],
       data5: [],
-      data6:[]
+      data6: []
     };
   },
-  mounted () {
-    this.companyIfo()
-    this.getActApplicationForm()
+  mounted() {
+    this.companyIfo();
+    this.getActApplicationForm();
   },
   methods: {
     // 活动申请页面
-    getActApplicationForm () {
+    getActApplicationForm() {
       getActApplicationTable().then(res => {
         // console.log(res)
         if (res.code === 0) {
-          this.data1 = res.data
+          this.data1 = res.data;
         }
-      })
+      });
     },
     // 根据条件查询活动申请
-    selectActApply () {
+    selectActApply() {
       getSelectActApply(this.getDataObj).then(res => {
-        this.data1 = res.data
-        this.data4 = []
-      })
+        this.data1 = res.data;
+        this.data4 = [];
+      });
     },
     // 活动信息页面
-    getActTable () {
+    getActTable() {
       getActivityIfo().then(res => {
         // console.log(res)
         if (res.code === 0) {
-          this.data2 = res.data
+          this.data2 = res.data;
         }
-      })
+      });
     },
-    newArr (arr) {
-      // console.log(arr)
-      return arr.reduce((pre,cur) => {
-        // console.log(pre, cur)
-        let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
-        return pre.concat( flag? this.newArr(cur.childs): cur)
-      },[])
-    },
-    toList (arr) {
-        // console.log(arr)v
-        return arr.reduce((ret, v) => {
-            // console.log(ret, v)
-            let item = this.deepClone(v)
-            delete item.childs
-            this.companyListOptions.push(item)
-            let flag = Array.isArray(v.childs) && v.childs.length > 0
-            return ret.concat(flag ? this.toList(v.childs) : v)
-        }, [])
-    },
-    deepClone (obj) {
-      let ret
-      ret = JSON.stringify(obj)
-      ret = JSON.parse(ret)
-      return ret
-    },
+    // newArr (arr) {
+    //   console.log(arr)
+    //   return arr.reduce((pre,cur) => {
+    //     // console.log(pre, cur)
+    //     let flag = Array.isArray(cur.childs) && Array.isArray(cur.childs)
+    //     return pre.concat( flag? this.newArr(cur.childs): cur)
+    //   },[])
+    // },
+    // toList (arr) {
+    //     console.log(arr)
+    //     return arr.reduce((ret, v) => {
+    //         // console.log(ret, v)
+    //         let item = this.deepClone(v)
+    //         console.log(item)
+    //         this.companyListOptions.push(item)
+    //         let flag = Array.isArray(v.childs) && v.childs.length > 0
+    //         return ret.concat(flag ? this.toList(v.childs) : v)
+    //     }, [])
+    // },
+    // deepClone (obj) {
+    //   let ret
+    //   ret = JSON.stringify(obj)
+    //   ret = JSON.parse(ret)
+    //   return ret
+    // },
     // 公司店面信息查询
-    companyIfo () {
-      let user = this.$store.state.user.userData
+    companyIfo() {
+      let user = this.$store.state.user.userData;
       // console.log(user.tenantId)
-      selectCompany({pId: user.tenantId}).then(res=> {
+      selectCompany({ pId: user.tenantId }).then(res => {
         // console.log(res)
         if (res.code === 0) {
-          let data = res.data
-          let item = this.deepClone(data)
-          delete item.childs
+          let data = res.data;
+          Object.keys(data).forEach(key=> {
+           this.companyListOptions.push({
+             id:key,
+             name:data[key]
+           })
+          });
+          // let item = this.deepClone(data)
           // console.log(item)
-          this.companyListOptions.push(item)
-          this.toList(data.childs)
+          // delete item.childs
+          // for(let i in data) {
+          //   console.log(i)
+          // }
+          // this.toList([data])
+          // 
           // console.log(this.companyListOptions)
         }
-      })
+      });
     },
     // 过期活动页面
-    getExpiredTable () {
+    getExpiredTable() {
       getExpiredActTable().then(res => {
         // console.log(res)
-        this.data3 = res.data
-      })
+        this.data3 = res.data;
+      });
     },
     //下载模板
-    down(){
-      // location.href = baseUrl.downApi + "/file/get?fileId=" + 1300000000 + "&access_token=" + Cookies.get(TOKEN_KEY);
+    down() {
+      location.href =
+        baseUrl.downApi +
+        "/file/get?fileId=" +
+        1400000000 +
+        "&access_token=" +
+        Cookies.get(TOKEN_KEY);
     },
     // 根据条件查询活动信息
     getActivity() {
@@ -841,195 +901,197 @@ export default {
       // console.log(startTime);
       this.endTimeOption = {
         disabledDate(endTime) {
-          return endTime < new Date(startTime)
+          return endTime < new Date(startTime);
         }
-      }
+      };
       this.getDataObj.beginDate = startTime;
     },
     // 获取活动信息结束日期
     getEndDate(endTime) {
       // console.log(endTime);
       this.startTimeOption = {
-          disabledDate(startTime) {
-              return startTime > new Date(endTime) || startTime > Date.now()
-          }
-      }
+        disabledDate(startTime) {
+          return startTime > new Date(endTime) || startTime > Date.now();
+        }
+      };
       this.getDataObj.endDate = endTime;
     },
     // 过期活动查询
-    getExpiredActivityIfo () {
+    getExpiredActivityIfo() {
       getExpiredActivityList(this.getDataObj).then(res => {
-        this.data3 = res.data
-      })
+        this.data3 = res.data;
+      });
     },
     // 过期活动日期
-    getExpiredDate (item1) {
+    getExpiredDate(item1) {
       // console.log(item1)
       this.expiredDateForm.beginDate = item1[0];
       this.expiredDateForm.endDate = item1[1];
     },
     // 单击活动申请信息表格数据
-    onRowClick (rowValue1) {
+    onRowClick(rowValue1) {
       // console.log(rowValue1)
-      this.checkedData = [rowValue1]
-      let item = this.checkedData[0]
-      this.tableFormDate.id = item.id
-      this.tableFormDate.applyId = item.applyId
+      this.checkedData = [rowValue1];
+      let item = this.checkedData[0];
+      this.tableFormDate.id = item.id;
+      this.tableFormDate.applyId = item.applyId;
       if (item.state == "已取消") {
-        this.data4 = []
-        return
-      } else{
-        getActApplyTable({applyId: this.tableFormDate.applyId}).then(res => {
-        // console.log(res)
-        this.data4 = res.data
-        })
+        this.data4 = [];
+        return;
+      } else {
+        getActApplyTable({ applyId: this.tableFormDate.applyId }).then(res => {
+          // console.log(res)
+          this.data4 = res.data;
+        });
       }
-
     },
     // 取消申请
     cancelApply() {
-      let len = this.checkedData.length
+      let len = this.checkedData.length;
       if (len <= 0) {
-        this.$Message.info('请选择一条申请')
-        return
+        this.$Message.info("请选择一条申请");
+        return;
       }
-      let item = this.checkedData[0]
-      this.actIfoTableData.id = item.id
+      let item = this.checkedData[0];
+      this.actIfoTableData.id = item.id;
       cancelActApply(this.actIfoTableData).then(res => {
-      // console.log(res)
+        // console.log(res)
         if (res.code === 0) {
-          this.$Message.success('操作成功')
-          this.data4 = []
-          this.getActApplicationForm()
+          this.$Message.success("操作成功");
+          this.data4 = [];
+          this.getActApplicationForm();
         }
-      })
+      });
     },
     // 取消活动
-    cancelActivity () {
-      let len = this.checkedData2.length
+    cancelActivity() {
+      let len = this.checkedData2.length;
       if (len <= 0) {
-        this.$Message.info('请选择一条活动')
-        return
+        this.$Message.info("请选择一条活动");
+        return;
       }
       cancelAct(this.actIfoTableData).then(res => {
         // console.log(res)
         if (res.code === 0) {
-          this.$Message.success('操作成功')
-          this.getActTable()
+          this.$Message.success("操作成功");
+          this.getActTable();
         }
-      })
+      });
     },
     // 单击活动信息表格获取行数据
-    onRowClick2 (rowValue2) {
+    onRowClick2(rowValue2) {
       // console.log(rowValue2)
-      this.actIfoTableData.id = rowValue2.id
-      this.checkedData2 = [rowValue2]
+      this.actIfoTableData.id = rowValue2.id;
+      this.checkedData2 = [rowValue2];
     },
     // 弹出申请活动窗口
     showApplication(status) {
-      if(status == 'edit'){
+      if (status == "edit") {
         this.applicationDialog = true;
-        let item = this.checkedData[0]
-        this.single = item.isBelowCost === 0 ? false: true
-        this.single2 = item.isVender === 0 ? false: true
-        this.formValidate.remark = item.remark
-        editAndSubmit({applyId: this.tableFormDate.applyId}).then(res => {
+        let item = this.checkedData[0];
+        this.single = item.isBelowCost === 0 ? false : true;
+        this.single2 = item.isVender === 0 ? false : true;
+        this.formValidate.remark = item.remark;
+        editAndSubmit({ applyId: this.tableFormDate.applyId }).then(res => {
           // console.log(res)
           if (res.code === 0) {
-            this.data5 = res.data
+            this.data5 = res.data;
           }
-        })
+        });
       } else {
         this.applicationDialog = true;
-        this.tableFormDate = []
+        this.tableFormDate = [];
       }
     },
     // 关闭活动窗口
-    closeDialog () {
-      this.applicationDialog = false
-      this.formValidate.remark = ""
-      this.single = false
-      this.single2 = false
-      this.data5 = []
+    closeDialog() {
+      this.applicationDialog = false;
+      this.formValidate.remark = "";
+      this.single = false;
+      this.single2 = false;
+      this.data5 = [];
     },
     // 活动导入
-    handleBeforeUpload (file) { //上传之前判断
+    handleBeforeUpload(file) {
+      //上传之前判断
     },
     // 成功函数
-    onSuccess (response) {
+    onSuccess(response) {
       if (response.code === 0) {
-        console.log(response)
-       this.data5 = response.data
+        console.log(response);
+        this.data5 = response.data;
       } else {
-       this.$Message.error(response.message)
+        this.$Message.error(response.message);
       }
     },
     onFormatError(file) {
-      this.$Message.error('只支持xls xlsx后缀的文件')
+      this.$Message.error("只支持xls xlsx后缀的文件");
     },
     // 删除活动配件的一项
-    deleteDate5 () {
-      let idx = this.data5.findIndex(item => item.id === this.actIfoTableData.id)
-      this.data5.splice(idx, 1)
+    deleteDate5() {
+      let idx = this.data5.findIndex(
+        item => item.id === this.actIfoTableData.id
+      );
+      this.data5.splice(idx, 1);
     },
     // 点击活动配件某一项
     onRowClick3(rowValue3) {
-      this.actIfoTableData = rowValue3
+      this.actIfoTableData = rowValue3;
     },
     // 活动申请保存按钮
-    saveActApplly () {
+    saveActApplly() {
       if (this.formValidate.remark.trim() === "") {
-        this.$Message.error('备注不能为空')
+        this.$Message.error("备注不能为空");
       } else if (this.data5.length === 0) {
-        this.$Message.error('至少导入一条活动配件')
-        return
+        this.$Message.error("至少导入一条活动配件");
+        return;
       } else {
         saveDraft({
           id: this.tableFormDate.id,
           remark: this.formValidate.remark,
-          isBelowCost: this.single === false ? 0 : 1 ,
-          isVender: this.single2 === false ? 0 : 1 ,
+          isBelowCost: this.single === false ? 0 : 1,
+          isVender: this.single2 === false ? 0 : 1,
           details: this.data5
         }).then(res => {
-          if(res.code === 0) {
-            this.applicationDialog = false
-            this.getActApplicationForm()
-            this.$Message.success(res.message)
-            this.formValidate.remark = ""
-            this.single = false
-            this.single2 = false
-            this.data5 = []
-            this.data4 = []
+          if (res.code === 0) {
+            this.applicationDialog = false;
+            this.getActApplicationForm();
+            this.$Message.success(res.message);
+            this.formValidate.remark = "";
+            this.single = false;
+            this.single2 = false;
+            this.data5 = [];
+            this.data4 = [];
           }
-        })
+        });
       }
     },
     // 活动申请保存并提交按钮
-    saveAndSubmit(){
+    saveAndSubmit() {
       if (this.formValidate.remark === "") {
-        this.$Message.error('备注不能为空')
+        this.$Message.error("备注不能为空");
       } else if (this.data5.length === 0) {
-        this.$Message.error('至少导入一条活动配件')
-        return
+        this.$Message.error("至少导入一条活动配件");
+        return;
       } else {
         saveSubmit({
           id: this.tableFormDate.id,
           remark: this.formValidate.remark,
-          isBelowCost: this.single == false ? 0 : 1 ,
-          isVender: this.single2 == false ? 0 : 1 ,
+          isBelowCost: this.single == false ? 0 : 1,
+          isVender: this.single2 == false ? 0 : 1,
           details: this.data5
         }).then(res => {
           if (res.code === 0) {
-            this.applicationDialog = false
-            this.getActApplicationForm()
-            this.$Message.success(res.message)
-            this.formValidate.remark = ""
-            this.single = false
-            this.single2 = false
-            this.data5 = []
-            this.data4 = []
+            this.applicationDialog = false;
+            this.getActApplicationForm();
+            this.$Message.success(res.message);
+            this.formValidate.remark = "";
+            this.single = false;
+            this.single2 = false;
+            this.data5 = [];
+            this.data4 = [];
           }
-        })
+        });
       }
     },
     // 审核窗口
@@ -1037,46 +1099,46 @@ export default {
       this.reViewDialog = true;
     },
     // 审核窗口确定按钮
-    reViewAct () {
-      if (this.radioCheck == ""){
-        this.$Message.warning('请选择通过或者不通过')
-        return
+    reViewAct() {
+      if (this.radioCheck == "") {
+        this.$Message.warning("请选择通过或者不通过");
+        return;
       }
-      this.reViewDialog = false
-      let item = this.checkedData[0]
-      this.tableFormDate.id = item.id
+      this.reViewDialog = false;
+      let item = this.checkedData[0];
+      this.tableFormDate.id = item.id;
       auditActivity({
         id: this.tableFormDate.id,
-        auditState: this.radioCheck == '审核通过' ? 1 : 0
+        auditState: this.radioCheck == "审核通过" ? 1 : 0
       }).then(res => {
-        if(res.code === 0) {
-          this.$Message.success(res.data)
-          this.getActApplicationForm()
-          this.data4 = []
+        if (res.code === 0) {
+          this.$Message.success(res.data);
+          this.getActApplicationForm();
+          this.data4 = [];
         }
-      })
+      });
     },
     // 关闭审核窗口
-    closeReview(){
+    closeReview() {
       this.reViewDialog = false;
-      this.radioCheck = ''
+      this.radioCheck = "";
     },
     //点击tabs切换时
     handleClickTab(item) {
-      this.tabValue = item
+      this.tabValue = item;
       switch (item) {
-        case 'name1':
-          this.getActApplicationForm()
-          this.checkedData = []
-          this.data4 = []
-          this.resetFiles()
-        case 'name2':
-          this.getActApplicationForm()
-          this.getActTable()
-          this.resetFiles()
-        case 'name3':
-          this.getExpiredTable()
-          this.resetFiles()
+        case "name1":
+          this.getActApplicationForm();
+          this.checkedData = [];
+          this.data4 = [];
+          this.resetFiles();
+        case "name2":
+          this.getActApplicationForm();
+          this.getActTable();
+          this.resetFiles();
+        case "name3":
+          this.getExpiredTable();
+          this.resetFiles();
       }
     },
     handleSummary({ columns, data }) {
@@ -1108,13 +1170,13 @@ export default {
     },
     // 重置信息
     resetFiles() {
-        this.getDataObj.beginDate = ""
-        this.getDataObj.endDate = ""
-        this.getDataObj.state = ""
-        this.getDataObj.partName = ""
-        this.getDataObj.orgname = ""
+      this.getDataObj.beginDate = "";
+      this.getDataObj.endDate = "";
+      this.getDataObj.state = "";
+      this.getDataObj.partName = "";
+      this.getDataObj.orgname = "";
     }
-  },
+  }
 };
 </script>
 

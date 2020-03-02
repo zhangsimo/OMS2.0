@@ -5,8 +5,8 @@
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
       </div>
-      <Tabs type="card" @on-click="changeTab" :animated="false" name="partInfoTab">
-        <TabPane label="基本信息" tab="partInfoTab">
+      <Tabs type="card" @on-click="changeTab" :animated="false" name="partInfoTab" ref="tabs">
+        <TabPane label="基本信息" tab="partInfoTab" name="active1">
           <Form ref="proModalForm" :model="formValidate" :rules="ruleValidate" :label-width="110">
             <Row>
               <Col span="11">
@@ -144,7 +144,7 @@
             <!--<Button type='default' @click='proModal = false'>取消</Button>-->
           <!--</div>-->
         </TabPane>
-        <TabPane label="包装规格" tab="partInfoTab" v-if="showSpe">
+        <TabPane label="包装规格" tab="partInfoTab" v-if="showSpe" name="active2">
           <div class="pb10">
             <Button type="default" @click="addSpec" class="mr10 w90">新增规格</Button>
             <Button @click="delSpec" type="default" class="mr10 w90">删除</Button>
@@ -258,6 +258,7 @@
       border: 1px solid #e8e8e8;
       padding: 4px 10px;
       border-radius: 2px;
+      display: inline-block;
       &.active{
         background: #fd5c5c;
         border-color: #fd5c5c;

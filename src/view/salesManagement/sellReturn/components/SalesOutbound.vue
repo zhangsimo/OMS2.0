@@ -177,6 +177,9 @@
   import {getoutList} from "_api/salesManagment/sellReturn.js";
   export default {
     name: 'SalesOutBound',
+    props:{
+        guestId:''
+      },
     data() {
       return {
         showInfo: false, // 销售出库订单信息——表单
@@ -270,6 +273,7 @@
         let page = this.page.num -1
         let size = this.page.size
          data=this.Outform
+         data.guestId = this.guestId
         getoutList(page,size,data).then(res=>{
           if(res.code==0){
             this.tableDataTop= res.data.content || []
