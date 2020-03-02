@@ -42,6 +42,9 @@
 .main .theme-color {
   color: #e82f2f!important;
 }
+.main .paddinSize {
+  padding: 15px;
+}
 .main .left-search:before,
 .main .left-search:after {
   content: '';
@@ -131,6 +134,7 @@
 }
 .main .content-oper {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  height: 100%;
 }
 .ivu-menu-item > i {
   margin-right: 12px !important;
@@ -283,6 +287,11 @@
 }
 .ivu-tree .ivu-checkbox-focus {
   box-shadow: 0 0 0 2px rgba(64, 166, 255, 0.2);
+}
+.ivu-tree .ivu-tree-title:hover,
+.ivu-tree .ivu-tree-title-selected,
+.ivu-tree .ivu-tree-title-selected:hover {
+  background-color: #e3f2ff;
 }
 .ivu-page .ivu-page-item:hover {
   border-color: #40a6ff;

@@ -191,8 +191,7 @@
 
     },
     mounted() {
-      // console.log('李敏反反复复',this.$parent)
-      this.getType()
+      this.getType();
       // console.log(this.$refs)
     },
     methods: {
@@ -205,15 +204,21 @@
         // console.log('父组件数据',this.$parent.TopTableData)
         this.showNew = true;
         this.tableDataBottom=this.$parent.BottomTableData
-         let company=''
-        let guestId=''
+         let company='';
+        let guestId='';
+        let billTypeId='';
+        let settleTypeId='';
           for(let i in this.$parent.TopTableData){
             company=this.$parent.TopTableData[i].company
-            guestId=this.$parent.TopTableData[i].guestId
+            guestId=this.$parent.TopTableData[i].guestId;
+              settleTypeId=this.$parent.TopTableData[i].settleTypeId;
+              billTypeId=this.$parent.TopTableData[i].billTypeId;
 
           }
         this.formPlan.supplyName=company
-        this.formPlan.guestId=guestId
+        this.formPlan.guestId=guestId;
+          this.formPlan.billTypeId=billTypeId;
+          this.formPlan.settleTypeId=settleTypeId;
         // console.log('哈哈哈哈哈',this.$parent)
       },
       getSupplierName(v){
