@@ -154,7 +154,10 @@ export default class AdjustModel extends Vue {
     let res: any = await api.queryModifyOrder(data);
     if (res.code == 0) {
       this.loading = false;
-      this.tableData = res.data;
+      this.tableData = res.data.map(el => {
+        el.adjustQty = 0;
+        return el;
+      });
     }
   }
 

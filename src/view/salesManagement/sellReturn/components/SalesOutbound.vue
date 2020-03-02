@@ -191,7 +191,7 @@
         },
         page: {
           num: 1,
-          size: 5,
+          size: 20,
           total: 0,
           placement:[20,40,60,80,100]
         },

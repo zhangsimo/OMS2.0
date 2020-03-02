@@ -325,7 +325,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "subMan",
             minWidth: 200
           },
           {
