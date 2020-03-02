@@ -975,7 +975,7 @@ export default {
         this.$refs.registrationEntry.arrId.push(this.reconciliationStatement.orgId,this.reconciliationStatement.guestId,this.reconciliationStatement.id)
         this.$refs.registrationEntry.modal1 = true
       }else{
-        this.$message.error('只能勾选计划对账类型为付款的对账单只能勾选计划对账类型为付款的对账单')
+        this.$message.error('只能勾选计划对账类型为付款的对账单')
       }
     },
     // 查询进项核销
@@ -992,7 +992,13 @@ export default {
     },
     // 销售开票申请
     saleApplication() {
-      this.$refs.salepopup.modal1 = true;
+      if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='收款'){
+        this.$refs.salepopup.modal1 = true;
+        this.$refs.salepopup.information = this.reconciliationStatement;
+        this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+      }else{
+        this.$message.error('只能勾选计划对账类型为收款的对账单')
+      }
     },
     // 总表格合计方式
     handleSummary({ columns, data }) {

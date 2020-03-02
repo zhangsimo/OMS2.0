@@ -21,16 +21,16 @@
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="6">
-        <span>分店名称：</span>
+        <span>分店名称：{{information.orgName}}</span>
       </Col>
       <Col span="6">
-        <span>分店店号：</span>
+        <span>分店店号：{{information.orgId}}</span>
       </Col>
       <Col span="6">
-        <span>往来单位：</span>
+        <span>往来单位：{{information.guestName}}</span>
       </Col>
       <Col span="6">
-        <span>对账单号：</span>
+        <span>对账单号：{{information.accountNo}}</span>
       </Col>
     </Row>
     <Row class="mt10 ml10">
@@ -38,7 +38,7 @@
         <span>开票申请单号：</span>
       </Col>
       <Col span="6">
-        <span>申请时间：</span>
+        <span>申请时间：{{information.applicationDate}}</span>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
@@ -191,6 +191,7 @@ export default {
   },
   data() {
     return {
+      information:{},//基本信息数据
       approvalTit:'开票申请流程',//审批流程
       popupTit:'选择必开销售单',//选择必开销售单弹框标题
       modal1: false, // 弹框开关
@@ -317,6 +318,9 @@ export default {
       accessoriesBillingData: [] //开票配件数据
     };
   },
+  // mounted(){
+    
+  // },
   methods: {
     // 增加不含税销售开票申请
     add() {
