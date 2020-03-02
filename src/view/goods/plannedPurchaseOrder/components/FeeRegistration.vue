@@ -244,6 +244,7 @@ export default class FeeRegistration extends Vue {
       total: 0
     };
     this.getList();
+    this.getInfo();
   }
 
   private query() {
@@ -284,10 +285,10 @@ export default class FeeRegistration extends Vue {
     this.getList();
   }
 
-  private async getInfo(data) {
+  private async getInfo() {
     this.tableInfoData = new Array();
     this.loading2 = true;
-    let res: any = await api.getFee({}, data);
+    let res: any = await api.getFee({}, { serviceId: this.serviceId });
     if (res.code == 0) {
       this.loading2 = false;
       let resData = res.data || [];
@@ -308,13 +309,8 @@ export default class FeeRegistration extends Vue {
 
   // 选中行
   private currentChangeEvent({ row }) {
-    let data = {
-      guestId: row.id,
-      serviceId: this.serviceId
-    };
     row.revenueTypes = this._.cloneDeep(this.revenueTypes);
     this.selectrow = row;
-    this.getInfo(data);
   }
 
   private async save() {
@@ -378,9 +374,9 @@ export default class FeeRegistration extends Vue {
 
   // 添加
   private add() {
-    if(!this.selectrow) {
-      return this.$Message.error("请先选择往来单位");
-    }
+    // if(!this.selectrow) {
+    //   return this.$Message.error("请先选择往来单位");
+    // }
     if (this.tableInfoData.length >= this.selectrow.revenueTypes.length) {
       return this.$Message.error("总条数不能超过收支项目条数");
     }
