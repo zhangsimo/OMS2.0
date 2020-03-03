@@ -179,6 +179,7 @@ export default {
     },
     getvalue(date) {
       this.thisdata = date;
+      this.getTable();
       // this.Date.startTime = date[0]
       // this.Date.endTime = date[1]
       // this.getTable(this.Date)
