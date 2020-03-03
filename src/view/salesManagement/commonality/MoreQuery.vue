@@ -31,10 +31,10 @@
           </Select>
         </FormItem>
         <FormItem label="销售人员:">
-          <Input v-model="data.orderMan"    placeholder="请输入配件名称" style="width: 350px" />
+          <Input v-model="data.orderMan"    placeholder="请输入销售人员名称" style="width: 350px" />
         </FormItem>
         <FormItem label="提交人:">
-          <Input v-model="data.auditor"    placeholder="请输入配件名称" style="width: 350px" />
+          <Input v-model="data.auditor"    placeholder="请输入提交人名称" style="width: 350px" />
         </FormItem>
         <Checkbox v-model="data.showPerson" class="ml100 ">显示个人单据</Checkbox>
       </Form>

@@ -264,7 +264,6 @@
             //点击树形数据
             clickTree(data){
                    this.oneTreeList = data[0]
-                console.log(data)
             },
 
             //获取辅助列表
@@ -280,7 +279,6 @@
               let res = await kmType()
               if(res.code == 0){
                   this.subjectList = res.data
-                console.log(res.data)
               }
             },
 
@@ -348,7 +346,6 @@
 
             //新增子节点
             addNewChildren(row){
-             console.log(row)
                 this.changeModal = true
                 this.ChangeData ={}
                 this.$refs.ModelValidate.resetFields();

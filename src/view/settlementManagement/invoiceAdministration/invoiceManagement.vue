@@ -1,39 +1,13 @@
 <template>
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize flexd">
-      <Upload
-        ref="upload"
-        :show-upload-list="false"
-        :headers="headers"
-        :action="upurl"
-        :format="['xlsx', 'xls', 'csv']"
-        :before-upload="handleBeforeUpload"
-        :on-format-error="onFormatError"
-        :on-success="handleSuccess"
-      >
-        <Button @click="uploading" class="mr10">导入</Button>
-      </Upload>
-      <!-- <Button class="mr10"  v-has="'export'" @click="operation(1)">导入</Button>  -->
+      <Button class="mr10" v-has="'export'" @click="operation(1)">导入</Button>
       <Button class="mr10" v-has="'export'" @click="operation(2)">修改</Button>
       <Button class="mr10" v-has="'export'" @click="operation(3)">删除</Button>
       <Button class="mr10" v-has="'export'" @click="operation(4)">智能核销</Button>
       <Button class="mr10" v-has="'export'" @click="operation(5)">发票退回</Button>
       <Button class="mr10" v-has="'export'" @click="operation(6)">红字进项转出</Button>
-      <!-- <Button class="mr10" v-has="'export'" @click="exportCertification">导入勾选认证时间</Button> -->
-      <Upload
-        ref="upload"
-        :show-upload-list="false"
-        :headers="headers"
-        :action="authenticationUpurl"
-        :format="['xlsx', 'xls', 'csv']"
-        :before-upload="handleBeforeUpload"
-        :on-format-error="onFormatError"
-        :on-success="handleSuccess"
-      >
-        <Button @click="importCertification" class="mr10">导入勾选认证时间</Button>
-      </Upload>
-      <!-- <Button class="mr10" v-has="'export'" @click="exportCertification">导入勾选认证时间</Button> -->
-      <Button class="mr10" v-has="'export'" @click="exportDown">导出模板</Button>
+      <Button class="mr10" v-has="'export'" @click="operation(7)">导入勾选认证时间</Button>
     </section>
     <div class="mt20">
       <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
@@ -51,8 +25,7 @@
           highlight-row
           :summary-method="handleSummary"
           @on-selection-change="requires"
-          @on-row-click="election"
-          max-height="400"
+          max-height="600"
         ></Table>
         <Page
           :total="pagetotal"
@@ -66,104 +39,141 @@
         />
       </div>
     </section>
+    <!-- 导入 -->
+    <Modal v-model="exportData" title="发票导入" width="400">
+      <p class="mt20 mb20">导入前请先下载模板</p>
+      <div slot="footer" class="exportBtn">
+        <Button type="info" v-has="'export'" @click="exportDown">模板下载</Button>
+        <Upload
+          ref="upload"
+          :show-upload-list="false"
+          :headers="headers"
+          :action="upurl"
+          :format="['xlsx', 'xls', 'csv']"
+          :before-upload="handleBeforeUpload"
+          :on-format-error="onFormatError"
+          :on-success="handleSuccess"
+        >
+          <Button type="success" @click="uploading" class="mr10">导入</Button>
+        </Upload>
+        <!-- <Button type="primary" @click="submit">保存</Button> -->
+      </div>
+    </Modal>
+    <Modal v-model="exportTime" title="勾选认证时间导入" width="400">
+      <p class="mt20 mb20">导入前请先下载模板</p>
+      <div slot="footer" class="exportBtn">
+        <Button type="info" @click="exportCertification">模板下载</Button>
+        <Upload
+          ref="upload"
+          :show-upload-list="false"
+          :headers="headers"
+          :action="authenticationUpurl"
+          :format="['xlsx', 'xls', 'csv']"
+          :before-upload="handleBeforeUpload"
+          :on-format-error="onFormatError"
+          :on-success="handleSuccess"
+        >
+          <Button type="success" @click="importCertification" class="mr10">导入</Button>
+        </Upload>
+      </div>
+    </Modal>
     <!-- 弹出框 -->
     <Modal v-model="proModal" title="进项发票修改" width="650">
       <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="130">
         <Row>
           <Col span="11">
-            <FormItem label="发票采购方名称：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="发票采购方名称：" prop="invoicePurchaserId">
+              <Select v-model="formValidate.invoicePurchaserId">
+                <Option v-for="item in purchaserOptionList" :value="item.id" :key="item.value">{{item.name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="税额：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="税额：" prop="taxAmt">
+              <Input v-model="formValidate.taxAmt" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="店号：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="店号：" prop="shopNo">
+              <Input v-model="formValidate.shopNo" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="税率：" prop="type">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="发票代码：" prop="name">
-              <Input v-model="formValidate.name" />
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="往来单位：" prop="type">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="税率：" prop="taxRate">
+              <Select v-model="formValidate.taxRate">
+                <Option v-for="item in taxOptionList" :value="item.itemCode" :key="item.value">{{item.itemValueOne}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="发票号：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="发票代码：" prop="invoiceCode">
+              <Input v-model="formValidate.invoiceCode" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="付款方式：" prop="type">
-              <Select v-model="formValidate.name">
+            <FormItem label="往来单位：" prop="guestId">
+              <!-- <Select v-model="formValidate.name">
                 <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+              </Select> -->
+              <Input v-model="formValidate.guestId" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="发票号：" prop="invoiceNo">
+              <Input v-model="formValidate.invoiceNo" />
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="付款方式：" prop="payType">
+              <Select v-model="formValidate.payType">
+                <Option v-for="item in payOptionList" :value="item.itemCode" :key="item.value">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="发票销售方名称：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="发票销售方名称：" prop="invoiceSellerName">
+              <Input v-model="formValidate.invoiceSellerName" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="开票清单类型：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="开票清单类型：" prop="billingType">
+              <Select v-model="formValidate.billingType">
+                <Option v-for="item in billingOptionList" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票日期：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="开票日期：" prop="billingDate">
+              <Input v-model="formValidate.billingDate" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票分类：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="发票分类：" prop="invoiceSort">
+              <Select v-model="formValidate.invoiceSort">
+                <Option v-for="item in invoiceOptionList" :value="item.itemCode" :key="item.value">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="价税合计金额：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="价税合计金额：" prop="totalAmt">
+              <Input v-model="formValidate.totalAmt" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="金额：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
+            <FormItem label="金额：" prop="invoiceAmt">
+                <Input v-model="formValidate.invoiceAmt" />
             </FormItem>
           </Col>
         </Row>
@@ -184,6 +194,18 @@
         <Button type="default" @click="proModal = false">返回</Button>
       </div>
     </Modal>
+    <!-- 核销弹框 -->
+    <Modal v-model="modal2" width="360">
+        <p slot="header" style="color:#f60;text-align:center">
+            <span>核销成功</span>
+        </p>
+        <div style="text-align:center">
+            <p>已成功核销{{total}}条数据</p>
+        </div>
+        <div slot="footer">
+            <Button type="success" @click="modal2=false">确定</Button>
+        </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -193,7 +215,14 @@ import {
   invoiceReturnList,
   invoiceRedHedgedList,
   getup,
-  authenticationGetup
+  authenticationGetup,
+  getOptions1,
+  getOptions2,
+  getOptions3,
+  getOptions4,
+  getOptions5,
+  savDetailInfor,
+  invoiceWriteoff
 } from "_api/salesManagment/invoiceAdministration";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -345,16 +374,32 @@ export default {
           className: "tc"
         }
       ],
+      flag:true,
+      modal2:false,
       data: [],
       pagetotal: 0,
       isActive: "",
       proModal: false,
       formValidate: {
-        name: "",
+        id:"",
+        guestId:"",
+        shopNo:"",
+        payType:"",
+        billingType:"",
+        invoicePurchaserId:"",
+        billingDate:"",
+        invoiceSort:"",
+        invoiceNo:"",
+        invoiceCode:"",
+        taxAmt:"",
+        taxRate:"",
+        invoiceAmt:"",
+        invoiceSellerName:"",
+        totalAmt:"",
         remark: ""
       },
       ruleValidate: {
-        name: [
+        shopNo: [
           // { required: true, message: "产品名称不能为空", trigger: "blur" }
         ]
       },
@@ -369,7 +414,15 @@ export default {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
       upurl: getup, // 导入地址
-      authenticationUpurl: authenticationGetup // 导入地址
+      authenticationUpurl: authenticationGetup, // 导入地址
+      exportData: false,
+      exportTime: false,
+      billingOptionList:[],//开票清单类型
+      payOptionList:[], //付款方式
+      taxOptionList:[], //税率
+      invoiceOptionList:[],//发票分类
+      purchaserOptionList:[],//发票采购方
+      total:0,//核销数量
     };
   },
   methods: {
@@ -377,15 +430,16 @@ export default {
     operation(num) {
       switch (num) {
         case 1:
+          this.exportData = true;
           break;
         case 2:
-          this.proModal = true;
+          this.modifyData()
           break;
         case 3:
           this.deleteTabList("delete");
           break;
         case 4:
-          this.proModal = true;
+          this.deleteTabList("writeoff")
           break;
         case 5:
           this.deleteTabList("return");
@@ -393,9 +447,12 @@ export default {
         case 6:
           this.deleteTabList("rewors");
           break;
+        case 7:
+          this.exportTime = true;
+          break;
       }
     },
-    //删除
+    //操作项
     deleteTabList(type) {
       if (!this.allTablist.length) {
         let content = "";
@@ -405,6 +462,8 @@ export default {
           this.$Message.warning("请选择要退回的数据！");
         } else if (type == "rewors") {
           this.$Message.warning("请选择要进项转出的数据！");
+        }else{
+          this.$Message.warning("请选择要核销的数据！");
         }
         return;
       } else {
@@ -415,57 +474,96 @@ export default {
           tittle = "<p>确认要退回选中的数据？</p>";
         } else if (type == "rewors") {
           tittle = "<p>确认要进项转出选中的数据？</p>";
+        }else{
+          tittle = "<p>确认要核销选中的数据？</p>";
         }
-        this.$Modal.confirm({
-          title: "警告",
-          content: tittle,
-          onOk: () => {
-            let message = "";
-            let deleteList = [];
-            this.allTablist.forEach((item, index) => {
-              deleteList.push({
-                id: item.id
+        this.allTablist.forEach((item,index)=>{
+          if(item.canceled==1){
+            return this.flag=false
+          }
+        })
+        if(this.flag){
+          this.$Modal.confirm({
+            title: "警告",
+            content: tittle,
+            onOk: () => {
+              let message = "";
+              let deleteList = [];
+              this.allTablist.forEach((item, index) => {
+                deleteList.push({
+                  id: item.id
+                });
               });
-            });
-            if (type == "delete") {
-              deletetManageList(deleteList)
-                .then(res => {
-                  if (res.code === 0) {
-                    this.$Message.success("删除成功！");
-                    this.getTabList(this.form);
-                  }
-                })
-                .catch(err => {
-                  this.$Message.error(res.message);
-                });
-            }
-            if (type == "return") {
-              invoiceReturnList(deleteList)
-                .then(res => {
-                  if (res.code === 0) {
-                    this.$Message.success("退回成功！");
-                    this.getTabList(this.form);
-                  }
-                })
-                .catch(err => {
-                  this.$Message.error(res.message);
-                });
-            }
-            if (type == "rewors") {
-              invoiceRedHedgedList(deleteList)
-                .then(res => {
-                  if (res.code === 0) {
-                    this.$Message.success("进项转出成功！");
-                    this.getTabList(this.form);
-                  }
-                })
-                .catch(err => {
-                  this.$Message.error(res.message);
-                });
-            }
-          },
-          onCancel: () => {}
-        });
+              if (type == "delete") {
+                deletetManageList(deleteList)
+                  .then(res => {
+                    if (res.code === 0) {
+                      this.$Message.success("删除成功！");
+                      this.allTablist=[]
+                      this.getTabList(this.form);
+                    }
+                  })
+                  .catch(err => {
+                    this.$Message.error(res.message);
+                  });
+              }
+              if (type == "return") {
+                invoiceReturnList(deleteList)
+                  .then(res => {
+                    if (res.code === 0) {
+                      this.$Message.success("退回成功！");
+                      this.allTablist=[]
+                      this.getTabList(this.form);
+                    }
+                  })
+                  .catch(err => {
+                    this.$Message.error(res.message);
+                  });
+              }
+              if (type == "rewors") {
+                invoiceRedHedgedList(deleteList)
+                  .then(res => {
+                    if (res.code === 0) {
+                      this.$Message.success("进项转出成功！");
+                      this.allTablist=[]
+                      this.getTabList(this.form);
+                    }
+                  })
+                  .catch(err => {
+                    this.$Message.error(res.message);
+                  });
+              }
+              if(type == "writeoff"){
+                invoiceWriteoff(deleteList)
+                  .then(res=>{
+                    if(res.code===0){
+                      // this.total=res.num
+                      this.allTablist=[]
+                      this.getTabList(this.form)
+                      this.modal2=true
+                    }
+                  }).catch(err=>{
+                    this.$Message.error(res.message);
+                  })
+              }
+            },
+            onCancel: () => {}
+          });
+        }else{
+            this.$Message.warning("该数据中存在已核销数据，请重新未核销数据");
+        }
+      }
+    },
+    //修改
+    modifyData(){
+      if(!this.allTablist.length){
+        this.$Message.warning("请选择要修改数据！");
+        return
+      }else if(this.allTablist.length>=2){
+        this.$Message.warning("请选择一条要修改数据！");
+      }else{
+        this.getDetailInfor()
+        this.proModal = true;
       }
     },
     //选择操作项目
@@ -476,7 +574,8 @@ export default {
       this.getTabList(this.form);
     },
     //单选
-    election() {},
+    // election(val) {
+    // },
     handleBeforeUpload() {},
     onFormatError(file) {
       this.$Message.error("只支持xls xlsx后缀的文件");
@@ -495,6 +594,56 @@ export default {
         // this.getList()
       } else {
         this.$Message.error(response.message);
+      }
+    },
+    //获取下拉菜单
+    getSelectOptions(){
+      //清单类型
+      getOptions1({dictCode:"BILL_LIST_TYPE"}).then(res=>{
+        if(res.code===0){
+          this.billingOptionList=res.data
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+      //发票分类
+      getOptions2({dictCode:"INVOICE_TYPE"}).then(res=>{
+        if(res.code===0){
+          this.invoiceOptionList =res.data
+        }
+      }).catch(err=>{
+          console.log(err)
+      })
+      //付款方式
+      getOptions3({dictCode:"PAYMENT_TYPE"}).then(res=>{
+        if(res.code===0){
+          this.payOptionList=res.data
+        }
+      }).catch(err=>{
+        console.log(err)
+      })
+      //税率
+      getOptions4({dictCode:"CS00107"}).then(res=>{
+        if(res.code===0){
+          this.taxOptionList=res.data
+        }
+      }).catch(err=>{
+          console.log(err)
+      })
+      //发票采购方
+      getOptions5({tenantId:0}).then(res=>{
+        if(res.code===0){
+          this.purchaserOptionList = res.data
+        }
+      }).catch(err=>{
+          console.log(err)
+      })
+    },
+    //查看详情
+    async getDetailInfor(){
+      await this.getSelectOptions()
+      for( let key in this.formValidate){
+        this.formValidate[key] = this.allTablist[0][key];
       }
     },
     //表格全选
@@ -525,8 +674,17 @@ export default {
     },
     submit(name) {
       this.$refs[name].validate(valid => {
-        // if (valid) {
-        // } else {}
+        if (valid) {
+          savDetailInfor(this.formValidate).then(res=>{
+            if(res.code===0){
+              this.$Message.success("修改成功")
+              this.proModal = false;
+              this.getTabList(this.form);
+            }
+          }).catch(err=>{
+              this.$Message.success(res.message)
+          })
+        } 
       });
     },
     // 导出模板
@@ -537,12 +695,12 @@ export default {
         Cookies.get(TOKEN_KEY);
     },
     //  导出勾选认证时间模板
-    // exportCertification() {
-    //   location.href =
-    //     baseUrl.omsApi +
-    //     "/entryRegistration/checkTemplate?access_token=" +
-    //     Cookies.get(TOKEN_KEY);
-    // },
+    exportCertification() {
+      location.href =
+        baseUrl.omsApi +
+        "/entryRegistration/checkTemplate?access_token=" +
+        Cookies.get(TOKEN_KEY);
+    },
     //  导入进项管理
     uploading() {
       this.upurl = getup;
@@ -560,5 +718,10 @@ export default {
 <style lang="less" scoped>
 .flexd {
   display: flex;
+}
+.exportBtn {
+  display: flex;
+  justify-content: space-around;
+  margin: 20px;
 }
 </style>
