@@ -9,19 +9,19 @@
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
       <Col span="4">
-        <span>分店名称：</span>
+        <span>分店名称：{{information.orgName}}</span>
       </Col>
       <Col span="4">
-        <span>分店店号：</span>
+        <span>分店店号：{{information.orgId}}</span>
       </Col>
       <Col span="4">
-        <span>往来单位：</span>
+        <span>往来单位：{{information.guestName}}</span>
       </Col>
-      <Col span="4">
+      <Col span="5">
         <span>不含税开票申请单号：</span>
       </Col>
-      <Col span="4">
-        <span>申请时间：</span>
+      <Col span="5">
+        <span>申请时间：{{information.applicationDate}}</span>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
@@ -100,6 +100,7 @@ export default {
     approval,
     saleAccount
   },
+  props:['information'],
   data() {
     return {
       modal1: false, //弹窗显示

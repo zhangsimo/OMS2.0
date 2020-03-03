@@ -35,7 +35,7 @@
     </Row>
     <Row class="mt10 ml10">
       <Col span="6">
-        <span>开票申请单号：</span>
+        <span>开票申请单号：{{information.applyNo}}</span>
       </Col>
       <Col span="6">
         <span>申请时间：{{information.applicationDate}}</span>
@@ -46,13 +46,8 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="发票单位">
-            <Select v-model="invoice.unitInvoice" class="ml5 w200">
-              <Option
-                v-for="item in invoice.unitInvoiceList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
+            <Input v-model="invoice.unitInvoice" class="ml5 w200" />
+            <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </FormItem>
           <FormItem label="开票单位">
             <Select v-model="invoice.issuingOffice" class="ml5 w200">
@@ -169,35 +164,46 @@
       v-has="'examine'"
     >选择必开销售单</button>
     <h4 class="mt10">开票配件</h4>
-    <Table border :columns="accessoriesBilling" :data="accessoriesBillingData" show-summary :summary-method="billSum"></Table>
+    <Table
+      border
+      :columns="accessoriesBilling"
+      :data="accessoriesBillingData"
+      show-summary
+      :summary-method="billSum"
+    ></Table>
     <div class="mt10">
       <h4>开票申请进度</h4>
-      <approval :approvalTit='approvalTit'/>
+      <approval :approvalTit="approvalTit" />
     </div>
-    <SeleteSale ref="SeleteSale" :popupTit='popupTit'/>
-    <noTax ref="noTax"/>
+    <SeleteSale ref="SeleteSale" :popupTit="popupTit" />
+    <noTax ref="noTax" :information='information'/>
     <div slot="footer"></div>
+    <!-- 选择发票单位 -->
+    <selectDealings ref="selectDealings" @getOne="getOne"  />
   </Modal>
 </template>
 <script>
-import approval from './approval'
-import SeleteSale from './seleteSale'
-import noTax from './noTax'
+import approval from "./approval";
+import SeleteSale from "./seleteSale";
+import selectDealings from "../components/SelectTheCustomer";
+import noTax from "./noTax";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import {applyNo} from "@/api/bill/popup";
 export default {
-  components:{
+  components: {
     approval,
     SeleteSale,
-    noTax
+    noTax,
+    selectDealings
   },
   data() {
     return {
-      information:{},//基本信息数据
-      approvalTit:'开票申请流程',//审批流程
-      popupTit:'选择必开销售单',//选择必开销售单弹框标题
+      information: {}, //基本信息数据
+      approvalTit: "开票申请流程", //审批流程
+      popupTit: "选择必开销售单", //选择必开销售单弹框标题
       modal1: false, // 弹框开关
       invoice: {
         unitInvoice: "", // 发票单位
-        unitInvoiceList: [], //发票单位列表
         paragraphDuty: "", //税号
         addressTel: "", //地址电话
         bankOpening: "", //开户行及账号
@@ -267,7 +273,7 @@ export default {
         {
           title: "商品含税单价",
           key: "accountsReceivable",
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h("span", params.row.badDebtReceivable.toFixed(2));
           // }
@@ -275,7 +281,7 @@ export default {
         {
           title: "商品含税金额",
           key: "receivableRebate",
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h("span", params.row.badDebtReceivable.toFixed(2));
           // }
@@ -293,7 +299,7 @@ export default {
         {
           title: "销售单价",
           key: "badDebtReceivable",
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h("span", params.row.badDebtReceivable.toFixed(2));
           // }
@@ -301,7 +307,7 @@ export default {
         {
           title: "申请开票金额",
           key: "badDebtReceivable",
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h("span", params.row.badDebtReceivable.toFixed(2));
           // }
@@ -309,7 +315,7 @@ export default {
         {
           title: "外加税点",
           key: "badDebtReceivable",
-          className: "tc",
+          className: "tc"
           // render: (h, params) => {
           //   return h("span", params.row.badDebtReceivable.toFixed(2));
           // }
@@ -318,21 +324,45 @@ export default {
       accessoriesBillingData: [] //开票配件数据
     };
   },
-  // mounted(){
-    
-  // },
+  mounted() {
+    getDataDictionaryTable({ dictCode: "CS00107" }).then(res => {
+      res.data.map(item => {
+        this.invoice.typeBillingList.push({
+          value:item.itemCode,
+          label:item.itemName
+        })
+        this.invoice.rateBillingList.push({
+          value:item.itemCode,
+          label:(item.itemValueOne * 100).toFixed(0) + "%"
+        })
+      });
+    });
+    applyNo().then(res=>{
+      if(res.code===0){
+        this.information.applyNo = res.data
+      }
+    })
+  },
   methods: {
+    // 发票单位选择
+    getOne(data) {
+      console.log(data)
+    },
+    // 发票单位
+    Dealings() {
+      this.$refs.selectDealings.addressShow = true
+    },
     // 增加不含税销售开票申请
     add() {
-      this.$refs.noTax.modal1=true
+      this.$refs.noTax.modal1 = true;
     },
     // 提交申请
     preservation() {},
     // 保存草稿
     submission() {},
     // 选择必开销售单
-    seleteSale(){
-      this.$refs.SeleteSale.modal1 = true
+    seleteSale() {
+      this.$refs.SeleteSale.modal1 = true;
     },
     // 开票配件合计
     billSum({ columns, data }) {
@@ -374,3 +404,10 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+ .input {
+  position: relative;
+  left: 170px;
+  bottom: 26px;
+}
+</style>

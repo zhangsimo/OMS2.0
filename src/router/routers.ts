@@ -543,102 +543,6 @@ export default [
             component: () =>
               import("@/view/settlementManagement/bill/AccountStatement.vue")
           },
-          // {
-          //   path: "/settlementManagement/reconcilation/AccountStatement",
-          //   name: "reconcilation-AccountStatement",
-          //   redirect: "",
-          //   // mark: "5101",
-          //   meta: {
-          //     title: "对账单"
-          //   },
-          //   component: () => import("@/view/settlementManagement/reconciliation/AccountStatement.vue")
-          // },
-          {
-            path: "/invoiceAdministration",
-            name: "invoiceAdministration",
-            mark: "5",
-            // redirect: "/reportForm",
-            meta: {
-              icon: "ios-paper",
-              title: "发票管理"
-            },
-            component: parentView,
-            children: [
-              {
-                path: "/invoiceAdministration/costOpening",
-                name: "invoiceAdministration-costOpening",
-                redirect: "",
-                mark: "5200",
-                meta: {
-                  title: "费用开票申请"
-                },
-                component: () =>
-                  import(
-                    "@/view/settlementManagement/invoiceAdministration/costOpening.vue"
-                  )
-              },
-              {
-                path: "/invoiceAdministration/invoiceApply",
-                name: "invoiceAdministration-invoiceApply",
-                redirect: "",
-                mark: "5201",
-                meta: {
-                  title: "开票申请查询与核销"
-                },
-                component: () =>
-                  import(
-                    "@/view/settlementManagement/invoiceAdministration/invoiceApply.vue"
-                  )
-              },
-              {
-                path: "/invoiceAdministration/salesInvoice",
-                name: "invoiceAdministration-salesInvoice",
-                redirect: "",
-                mark: "5200",
-                meta: {
-                  title: "销售发票导入"
-                },
-                component: () =>
-                  import(
-                    "@/view/settlementManagement/invoiceAdministration/salesInvoice.vue"
-                  )
-              },
-              {
-                path: "/invoiceAdministration/invoiceManagement",
-                name: "invoiceAdministration-invoiceManagement",
-                redirect: "",
-                mark: "5200",
-                meta: {
-                  title: "进项发票管理"
-                },
-                component: () =>
-                  import(
-                    "@/view/settlementManagement/invoiceAdministration/invoiceManagement.vue"
-                  )
-              }
-
-              // {
-              //   path: "/invoiceAdministration/invoiceApply",
-              //   name: "invoiceAdministration-invoiceApply",
-              //   redirect: "",
-              //   mark: "5202",
-              //   meta: {
-              //     title: "开票申请查询与核销"
-              //   },
-              //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceApply.vue")
-              // },
-              // {
-              //   path: "/invoiceAdministration/invoice",
-              //   name: "invoiceAdministration-invoice",
-              //   redirect: "",
-              //   mark: "5203",
-              //   meta: {
-              //     title: "进项发票管理"
-              //   },
-              //   component: () => import("@/view/settlementManagement/invoiceAdministration/invoiceRceipts.vue")
-              // }
-            ]
-          },
           {
             path: "/settlementManagement/bill/CollectionPayment",
             name: "bill-CollectionPayment",
@@ -754,10 +658,124 @@ export default [
           //     title: "付款分析"
           //   },
           //   component: () => import("@/view/settlementManagement/bill/paymentAnalysis.vue")
-          // },
+          // }
         ]
       },
-
+      {
+        path: "/invoiceAdministration",
+        name: "invoiceAdministration",
+        // mark: "5",
+        // redirect: "/reportForm",
+        meta: {
+          // icon: "ios-paper",
+          title: "发票管理"
+        },
+        component: parentView,
+        children: [
+          {
+            path: "/invoiceAdministration/costOpening",
+            name: "invoiceAdministration-costOpening",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "费用开票申请"
+            },
+            component: () =>
+              import(
+                "@/view/settlementManagement/invoiceAdministration/costOpening.vue"
+              )
+          },
+          {
+            path: "/invoiceAdministration/invoiceApply",
+            name: "invoiceAdministration-invoiceApply",
+            redirect: "",
+            mark: "5201",
+            meta: {
+              title: "开票申请查询与核销"
+            },
+            component: () =>
+              import(
+                "@/view/settlementManagement/invoiceAdministration/invoiceApply.vue"
+              )
+          },
+          {
+            path: "/invoiceAdministration/salesInvoice",
+            name: "invoiceAdministration-salesInvoice",
+            redirect: "",
+            mark: "5200",
+            meta: {
+              title: "销售发票导入"
+            },
+            component: () =>
+              import(
+                "@/view/settlementManagement/invoiceAdministration/salesInvoice.vue"
+              )
+          },
+          {
+            path: "/invoiceAdministration/invoiceManagement",
+            name: "invoiceAdministration-invoiceManagement",
+            redirect: "",
+            // mark: "5200",
+            meta: {
+              title: "进项发票管理"
+            },
+            component: () =>
+              import(
+                "@/view/settlementManagement/invoiceAdministration/invoiceManagement.vue"
+              )
+          }
+          // {
+          //   path: "",
+          //   name: "allotThree",
+          //   meta: {
+          //     title: "设置"
+          //   },
+          //   component: parentView,
+          //   children: [
+          //     {
+          //       path: "",
+          //       name: "",
+          //       // mark: 'oms_orders_approve',
+          //       meta: {
+          //         // hideInMenu: true,
+          //         title: "结算账户"
+          //       },
+          //       component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
+          //     },
+          //     {
+          //       path: "/",
+          //       name: "",
+          //       // mark: 'oms_orders_approve',
+          //       meta: {
+          //         // hideInMenu: true,
+          //         title: "收支项目"
+          //       }
+          //       // component: () => import()
+          //     },
+          //     {
+          //       path: "/",
+          //       name: "",
+          //       // mark: 'oms_orders_approve',
+          //       meta: {
+          //         // hideInMenu: true,
+          //         title: "期初现金银行"
+          //       }
+          //       // component: () => import()
+          //     },
+          //     {
+          //       path: "/",
+          //       name: "",
+          //       // mark: 'oms_orders_approve',
+          //       meta: {
+          //         // hideInMenu: true,
+          //         title: "期初应收应付"
+          //       }
+          //       // component: () => import()
+          //     }
+          //   ]
+          // }
+        ]
+      },
       {
         path: "/settlementManagement/paymentmanage",
         name: "settlementManagement-paymentmanage",
@@ -781,58 +799,9 @@ export default [
         component: () =>
           import("@/view/settlementManagement/DailyFundReview/index.vue")
       }
-      // {
-      //   path: "",
-      //   name: "allotThree",
-      //   meta: {
-      //     title: "设置"
-      //   },
-      //   component: parentView,
-      //   children: [
-      //     {
-      //       path: "",
-      //       name: "",
-      //       // mark: 'oms_orders_approve',
-      //       meta: {
-      //         // hideInMenu: true,
-      //         title: "结算账户"
-      //       },
-      //       component: () => import("@/view/system/systemSetting/InitialNavigation/SettlementAccount/SettlementAccount.vue")
-      //     },
-      //     {
-      //       path: "/",
-      //       name: "",
-      //       // mark: 'oms_orders_approve',
-      //       meta: {
-      //         // hideInMenu: true,
-      //         title: "收支项目"
-      //       }
-      //       // component: () => import()
-      //     },
-      //     {
-      //       path: "/",
-      //       name: "",
-      //       // mark: 'oms_orders_approve',
-      //       meta: {
-      //         // hideInMenu: true,
-      //         title: "期初现金银行"
-      //       }
-      //       // component: () => import()
-      //     },
-      //     {
-      //       path: "/",
-      //       name: "",
-      //       // mark: 'oms_orders_approve',
-      //       meta: {
-      //         // hideInMenu: true,
-      //         title: "期初应收应付"
-      //       }
-      //       // component: () => import()
-      //     }
-      //   ]
-      // }
     ]
   },
+
   // {
   //   path:'/financial',
   //   name:'financial',
