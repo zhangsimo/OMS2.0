@@ -134,10 +134,6 @@ export const mixSelectPartCom  = {
           value: "applyCarModel",
           label: "车型"
         },
-        {
-          value: "keyWord",
-          label: "拼音"
-        }
       ],
       //查询关键字
       searchValue:'',

@@ -1508,7 +1508,7 @@ export default [
               )
           },
           {
-            path: "/essentialData/ lineOfCredit",
+            path: "/essentialData/lineOfCredit",
             name: "LineOfCredit",
             // mark: '9114',
             meta: {
