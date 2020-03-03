@@ -254,7 +254,7 @@ export default {
       currentRow: {} //选中行数据
     };
   },
-  async mounted() {
+  mounted() {
     this.getDictionary("PAYMENT_TYPE"); //付款方式
     this.getDictionary("CS00107"); //税率
     this.getDictionary("BILL_LIST_TYPE"); //开票清单

@@ -994,6 +994,7 @@ export default {
     saleApplication() {
       if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='收款'){
         this.$refs.salepopup.modal1 = true;
+        this.reconciliationStatement.parameter = this.reconciliationStatement;
         this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo
         this.$refs.salepopup.information = this.reconciliationStatement;
         this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")

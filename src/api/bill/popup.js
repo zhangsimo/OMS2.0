@@ -39,3 +39,12 @@ export function applyNo(){
     method: 'get',
 })
 }
+//选择销售单
+export function saleSlip(data){
+  return axios.request({
+    url: `${api.omsOrder}/sellOutMain/queryConditions  
+    taxSign`,
+    method: 'post',
+    data
+})
+}
