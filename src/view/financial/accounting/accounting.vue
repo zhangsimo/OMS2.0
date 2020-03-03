@@ -27,7 +27,7 @@
             </template>
           </vxe-table-column>
           <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
-          <vxe-table-column field="fullName" title="科目名称"></vxe-table-column>
+          <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
           <vxe-table-column field="titleTypeName" title="科目类别"></vxe-table-column>
           <vxe-table-column  title="余额方向">
             <template v-slot="{row}">{{row.balanceDirection == 0 ? '借' : '贷'}}</template>
@@ -41,7 +41,7 @@
       </div>
     </Split>
     <Modal v-model="addNewModal" title="编辑会计科目"   width="800">
-      <Form :model="formData"  :label-width="110"  ref="formValidate" :rules="ruleValidate">
+      <Form :model="formData"  :label-width="90"  ref="formValidate" :rules="ruleValidate">
         <Row>
           <Col span="12">
             <FormItem label="上级科目：">
@@ -50,7 +50,9 @@
           </Col>
           <Col span="12">
             <FormItem label="科目类别：">
-              <Input class="w200" v-model="formData.titleTypeCode" disabled></Input>
+              <Select v-model="formData.titleTypeCode" style="width:200px" disabled>
+                <Option v-for="item in subjectList" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
+              </Select>
             </FormItem>
           </Col>
         </Row>
@@ -87,10 +89,24 @@
             </FormItem>
           </Col>
         </Row>
-        <FormItem label="辅助核算：">
-          <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
-            <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
-          </Select>
+        <Row>
+          <Col span="12">
+            <FormItem label="辅助核算：">
+              <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="关联仓库：">
+              <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="是否必选款项分类:" >
+          <Checkbox v-model="formData.single" :true-value="1" :false-value="0">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -98,6 +114,84 @@
         <Button type='default' @click="addNewModal = false">取消</Button>
       </div>
     </Modal>
+
+
+<!--    修改模态框-->
+    <Modal v-model="changeModal" title="编辑会计科目"   width="800">
+      <Form :model="ChangeData"  :label-width="90"  ref="ModelValidate" :rules="ruleValidate">
+        <Row>
+          <Col span="12">
+            <FormItem label="上级科目：">
+              <Input class="w200" v-model="ChangeData.parentCode" disabled></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="科目类别：">
+              <Select v-model="ChangeData.titleTypeCode" style="width:200px" disabled>
+                <Option v-for="item in subjectList" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label="科目编码：" prop="titleCode">
+              <Input class="w200" v-model="ChangeData.titleCode" ></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="科目名称：" prop="titleName">
+              <Input class="w200" v-model="ChangeData.titleName" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="科目全称：">
+          <Input style="width: 585px" v-model="ChangeData.fullName" ></Input>
+        </FormItem>
+        <Row>
+          <Col span="12">
+            <FormItem label="余额方向：" prop="balanceDirection">
+              <RadioGroup v-model="ChangeData.balanceDirection">
+                <Radio :label="0">借</Radio>
+                <Radio :label="1">贷</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="科目状态：" prop="status">
+              <RadioGroup v-model="ChangeData.status">
+                <Radio :label="1">启用</Radio>
+                <Radio :label="0">禁用</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="12">
+            <FormItem label="辅助核算：">
+              <Select v-model="ChangeData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="关联仓库：">
+              <Select v-model="ChangeData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="是否必选款项分类:" >
+          <Checkbox v-model="ChangeData.single" :true-value="1" :false-value="0">是</Checkbox>
+        </FormItem>
+      </Form>
+      <div slot='footer'>
+        <Button type='primary' @click="changeSave">保存</Button>
+        <Button type='default' @click="changeModal = false">取消</Button>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
@@ -114,7 +208,9 @@
                 tableData:[],//表格数据
                 subjectList:[], //科目类别
                 addNewModal:false,//新增模块显示
+                changeModal:false,//修改增加子项目模态
                 formData:{},//新增数据
+                ChangeData:{},//改变增加子项目数据
                 assistList:[{itemName: '暂无' , itemCode: 'null'}],// 辅助列表
                 ruleValidate:{
                     titleCode:[
@@ -168,7 +264,6 @@
             //点击树形数据
             clickTree(data){
                    this.oneTreeList = data[0]
-                console.log(data)
             },
 
             //获取辅助列表
@@ -193,14 +288,15 @@
               this.formData ={}
                 this.$refs.formValidate.resetFields();
               this.formData.parentCode = this.oneTreeList.titleCode
-              this.formData.titleTypeCode = this.oneTreeList.titleName
+              // this.formData.titleName = this.oneTreeList.titleName
+              this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
                 this.formData.balanceDirection = 0
                 this.formData.status = 0
               this.formData.auxiliaryAccountingCode = 'null'
               this.formData.titleLevel = this.oneTreeList.titleLevel + 1
             },
 
-            //保存
+            //新增保存
              addSave(){
                 this.$refs.formValidate.validate( async (valid) => {
                     if (valid) {
@@ -208,6 +304,13 @@
                         if(res.code == 0){
                             this.getTreeList()
                             this.addNewModal = false
+                          let arr = await getTreeList()
+                          if ( arr.code === 0){
+                            this.treeList = arr.data
+                            this.changeTree( this.treeList )
+
+
+                          }
                         }
                     } else {
 
@@ -216,34 +319,76 @@
 
             },
 
+          //修改保存
+          changeSave(){
+            this.$refs.ModelValidate.validate( async (valid) => {
+              if (valid) {
+                let res = await getSave( this.ChangeData )
+                if(res.code == 0){
+                  let data = {}
+                  data.parentCode = this.oneTreeList.titleCode || ''
+                  let res = await getTableList(data)
+                  if(res.code === 0 ){
+                    this.tableData = res.data
+                    let arr = await getTreeList()
+                    if ( arr.code === 0){
+                      this.treeList = arr.data
+                      this.changeTree( this.treeList )
+                    }
+                  }
+                  this.changeModal = false
+                }
+              } else {
+
+              }
+            })
+          },
+
             //新增子节点
             addNewChildren(row){
-                this.addNewModal = true
-                this.formData ={}
-                this.$refs.formValidate.resetFields();
-                this.formData.parentCode = row.titleCode
-                this.formData.balanceDirection = 0
-                this.formData.status = 0
-                this.formData.titleTypeCode = row.fullName
-                this.formData.auxiliaryAccountingCode = 'null'
-                this.formData.titleLevel = row.titleLevel + 1
+                this.changeModal = true
+                this.ChangeData ={}
+                this.$refs.ModelValidate.resetFields();
+                this.ChangeData.parentCode = row.titleCode
+                this.ChangeData.balanceDirection = 0
+                this.ChangeData.status = 0
+                // this.ChangeData.parentCode = row.titleCode
+                this.ChangeData.titleTypeCode = row.titleTypeCode
+                this.ChangeData.parentNanme = row.fullName
+                this.ChangeData.auxiliaryAccountingCode = 'null'
+                this.ChangeData.titleLevel = row.titleLevel + 1
             },
 
             //修改节点数据
             change(row){
-                this.formData = row
-                this.$refs.formValidate.resetFields();
-                this.addNewModal = true
+                this.ChangeData = row
+                this.$refs.ModelValidate.resetFields();
+                this.changeModal = true
             },
 
             //删除
-           async deleteOne(row){
-               let data = {}
-               data = row
-              let res = await  deletTableList(data)
-               if(res.code == 0){
-                   this.getTreeList()
+            deleteOne(row){
+             this.$Modal.confirm({
+               title: '警告',
+               content: '<p>确认要删除当前信息么?</p>',
+               onOk: async () => {
+                 let data = {}
+                 data = row
+                 let res = await  deletTableList(data)
+                 if(res.code == 0){
+                   let data = {}
+                   data.parentCode = this.oneTreeList.titleCode || ''
+                   let res = await getTableList(data)
+                   if(res.code === 0 ){
+                     this.tableData = res.data
+                   }
+                 }
+               },
+               onCancel: () => {
+
                }
+             });
+
             }
         },
         watch:{

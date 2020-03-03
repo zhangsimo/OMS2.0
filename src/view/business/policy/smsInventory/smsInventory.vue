@@ -191,14 +191,14 @@
                       :before-upload="handleBeforeUpload"
                       :on-format-error="onFormatError"
                       :on-success="handleSuccess"
-                      :disabled="draftShow != 0"
+                      :disabled="draftShow != 0||!formPlan.serviceId"
                     >
                       <Button
                         @click="importAss"
                         size="small"
                         class="mr10"
                         v-has="'import'"
-                        :disabled="draftShow != 0"
+                        :disabled="draftShow != 0||!formPlan.storeId"
                       >导入</Button>
                     </Upload>
                     <!-- <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">
@@ -333,6 +333,7 @@ export default {
       tabIndex: 0,
       curronly: false,
       purchaseType: 99, //查询选项
+      flag:0,
       purchaseTypeArr: [
         {
           label: "所有",
@@ -669,6 +670,10 @@ export default {
     },
     // 提交
     editPro() {
+      //判断是否是新增状态
+      if(this.flag){
+        return this.$Message.error("请先完善当前新增信息");
+      }
       //判断是否为草稿状态
       if (this.Right.tbdata.length < 1) {
         this.$Message.error("请选择数据");
@@ -871,6 +876,9 @@ export default {
     },
     //导入
     importAss() {
+      if(!this.formPlan.serviceId){
+        return this.$Message.warning("请先保存信息生成盘点单号才能导入配件");
+      }
       this.upurl = `${importAccessories}?id=${this.formPlan.id}`;
     },
     // handleSuccess(res, file) {

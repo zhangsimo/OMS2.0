@@ -767,13 +767,13 @@ export default {
   },
   methods: {
     keydownEvent({ column }, event) {
-      if (parseInt(event.target.value) < 0) {
+      if (parseInt(event.target.value) < 1) {
         this.$Message.info("输入数字不能小于0");
         event.target.value = 1;
         return;
       }
       // if (currentNum)
-      this.currentNum = parseInt(event.target.value);
+      this.currentNum = parseInt(event.target.value)||1;
     },
     selectAllEvent({ checked }) {},
     selectChangeEvent({ checked, row }) {
@@ -822,6 +822,10 @@ export default {
       params.processProductVO = params.processProductVO.length
         ? params.processProductVO[0]
         : {};
+      if( !params.processProductVO.orderQty||params.processProductVO.orderQty*1<1){
+          this.$Message.info("组装数量必须大于0");
+          return;
+      }
       if (this.tabKey === 0) {
         //配件组装保存
         baocun(params)
@@ -1223,7 +1227,6 @@ export default {
       if (this.tabKey === 0) {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
-        console.log(seleList)
         const id = seleList[0].id;
         shanqu(id)
           .then(res => {

@@ -192,6 +192,9 @@ export const mixSelectPartCom = {
     //获取配件品牌
     getPartBrandAll() {
       getAllBrand({ page: 1, pageSize: 1000 }).then(res => {
+        if(!res.data){
+          return
+        }
         let filterData = res.data.content.filter(
           item => item.quality == "品牌件"
         );
@@ -212,7 +215,9 @@ export const mixSelectPartCom = {
       this.treeLoading = true;
       getCarPartClass({}).then(res => {
         this.treeLoading = false;
-        this.treeData = this.resetData(res.data.content || []);
+        if(res.code==0){
+          this.treeData = this.resetData(res.data.content || []);
+        }
       });
     },
     //树形数组递归加入新属性
