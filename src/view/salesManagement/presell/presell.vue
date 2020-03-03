@@ -835,8 +835,8 @@ export default {
     //分页查询预售单信息左侧
     getLeftList() {
       let data = {};
-      data.commitTimeStart = this.queryTime[0] || "";
-      data.commitTimeEnd = this.queryTime[1] || "";
+      data.createTimeStart = this.queryTime[0] || "";
+      data.createTimeEnd = this.queryTime[1] || "";
       data.status = this.orderType;
       let page = this.page.num - 1;
       let size = this.page.size;

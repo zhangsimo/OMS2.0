@@ -1837,7 +1837,7 @@ export default [
             // mark: '59',
             meta: {
               hideInMenu: true,
-              title: "期出现金银行"
+              title: "期初现金银行"
             },
             component: () =>
               import(
