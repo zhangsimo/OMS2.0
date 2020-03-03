@@ -818,7 +818,6 @@ export default {
             this.formPlan.detailVOList.push(item);
           });
         } else {
-         this.preSellOrderTable.tbData[0]._highlight=true;
           this.$Message.error("*为必填项");
 
         }
@@ -1036,6 +1035,7 @@ export default {
             });
           }
         } else {
+            this.$set(this.preSellOrderTable.tbData,0,this.PTrow);
           this.$Message.error("*为必填项");
         }
       });

@@ -55,6 +55,7 @@
         :stripe="true"
         :columns="columns"
         :data="staffList"
+        ref="currentRowTable"
         @on-current-change="selection"
       ></Table>
       <Page
@@ -73,8 +74,9 @@
     <Modal v-model="modalShow" :title="title" width="700px" :closable="false">
       <addStaff ref="child" :data="newStaff"></addStaff>
       <div slot="footer">
-        <Button type="primary" @click="submit">确定</Button>
-        <Button type="default" @click="modalShow = false">取消</Button>
+        <Button type="primary" @click="submit('next')" v-if="isNextAdd">保存并继续</Button>
+        <Button type="primary" @click="submit">保存退出</Button>
+        <Button type="default" @click="modalShow = false">退出</Button>
       </div>
     </Modal>
 
@@ -175,6 +177,7 @@ export default {
   },
   data() {
     return {
+      isNextAdd: true,
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
         list:[],//机构数组
       shopCode: "",
@@ -457,9 +460,12 @@ export default {
           gender: 0
       };
       this.modalShow = true;
+      this.isNextAdd = true;
+      this.$refs.currentRowTable.clearCurrentRow();
+      this.oneStaffChange = {};
     },
     // 确认
-    submit() {
+    submit(type = "add") {
       this.$refs.child.handleSubmit(() => {
         let stop = this.$loading();
         this.modalShow = false;
@@ -478,6 +484,9 @@ export default {
                 this.$refs.child.resetFields();
                 this.cancel();
                 this.getAllStaffList();
+                if(type == "next") {
+                  this.findRootGroup();
+                }
               }
             })
             .catch(err => {
@@ -496,7 +505,7 @@ export default {
               stop();
               if (res.code == 0) {
                 this.$Message.success("修改成功");
-                this.oneStaffChange = {};
+                // this.oneStaffChange = {};
                 this.getAllStaffList();
               }
             })
@@ -512,6 +521,7 @@ export default {
     },
     //修改信息
     changStaffList() {
+      this.isNextAdd = false;
       if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;

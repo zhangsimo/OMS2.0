@@ -620,6 +620,13 @@ export default {
             this.draftShow = v.billStatusId.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
+              for(let b of this.sellOrderTable.tbdata){
+                  b._highlight = false
+                  if(b.id==this.id){
+                      b._highlight = true;
+                      break;
+                  }
+              }
           }
         });
 
@@ -653,6 +660,9 @@ export default {
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
+        for(let b of this.sellOrderTable.tbdata){
+            b._highlight = false
+        }
       this.sellOrderTable.tbdata.unshift(this.PTrow);
       this.isAdd = false;
     },
@@ -773,6 +783,13 @@ export default {
         if (res.code === 0) {
           this.sellOrderTable.tbdata = res.data.content || [];
           this.page.total = res.data.totalElements;
+            for(let b of this.sellOrderTable.tbdata){
+                b._highlight = false
+                if(b.id==this.id){
+                    b._highlight = true;
+                    break;
+                }
+            }
         }
       });
     },
@@ -845,6 +862,7 @@ export default {
             });
           }
         } else {
+           this.$set(this.sellOrderTable.tbdata,0,this.PTrow);
           this.$Message.error("*为必填项");
         }
       });
@@ -868,7 +886,6 @@ export default {
                 let res = await getSubmit(data);
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
-                  this.getLeftList();
                   this.isNew = true;
                   this.formPlan = {};
                   this.id = null;
