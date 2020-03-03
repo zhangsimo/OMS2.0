@@ -120,14 +120,14 @@ export const mixSelectPartCom  = {
         total: 0
       },
       //配件查询分类
-      searchType:'fullName',
+      searchType:'partName',
       searchTypeArr:[
         {
           value: "partCode",
           label: "编码"
         },
         {
-          value: "fullName",
+          value: "partName",
           label: "名称"
         },
         {
