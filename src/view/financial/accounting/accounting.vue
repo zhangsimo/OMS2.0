@@ -184,7 +184,6 @@
               let res = await kmType()
               if(res.code == 0){
                   this.subjectList = res.data
-                  console.log(res)
               }
             },
 
@@ -219,7 +218,6 @@
 
             //新增子节点
             addNewChildren(row){
-             console.log(row , 999)
                 this.addNewModal = true
                 this.formData ={}
                 this.$refs.formValidate.resetFields();
