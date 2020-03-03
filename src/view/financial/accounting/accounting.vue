@@ -184,7 +184,6 @@
               let res = await kmType()
               if(res.code == 0){
                   this.subjectList = res.data
-                  console.log(res)
               }
             },
 
@@ -194,7 +193,7 @@
               this.formData ={}
                 this.$refs.formValidate.resetFields();
               this.formData.parentCode = this.oneTreeList.titleCode
-              this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
+              this.formData.titleTypeCode = this.oneTreeList.titleName
                 this.formData.balanceDirection = 0
                 this.formData.status = 0
               this.formData.auxiliaryAccountingCode = 'null'
@@ -225,7 +224,7 @@
                 this.formData.parentCode = row.titleCode
                 this.formData.balanceDirection = 0
                 this.formData.status = 0
-                this.formData.titleTypeCode = row.titleTypeCode
+                this.formData.titleTypeCode = row.fullName
                 this.formData.auxiliaryAccountingCode = 'null'
                 this.formData.titleLevel = row.titleLevel + 1
             },
