@@ -196,6 +196,15 @@ export function getActivity (params) {
   })
 }
 
+//活动数据-弹层
+export function getActivityLayer (params) {
+  return axios.request({
+    url: `${api.wmsApi}/activityDetail/queryAll?`,
+    method: 'get',
+    params
+  })
+}
+
 
 //选择入库单数据
 export function getGodown (params) {
