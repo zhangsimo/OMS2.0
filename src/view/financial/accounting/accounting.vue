@@ -41,7 +41,7 @@
       </div>
     </Split>
     <Modal v-model="addNewModal" title="编辑会计科目"   width="800">
-      <Form :model="formData"  :label-width="110"  ref="formValidate" :rules="ruleValidate">
+      <Form :model="formData"  :label-width="90"  ref="formValidate" :rules="ruleValidate">
         <Row>
           <Col span="12">
             <FormItem label="上级科目：">
@@ -87,10 +87,24 @@
             </FormItem>
           </Col>
         </Row>
-        <FormItem label="辅助核算：">
-          <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
-            <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
-          </Select>
+        <Row>
+          <Col span="12">
+            <FormItem label="辅助核算：">
+              <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="关联仓库：">
+              <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
+                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <FormItem label="是否必选款项分类:" >
+          <Checkbox v-model="formData.single" :true-value="1" :false-value="0">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -237,13 +251,28 @@
             },
 
             //删除
-           async deleteOne(row){
-               let data = {}
-               data = row
-              let res = await  deletTableList(data)
-               if(res.code == 0){
-                   this.getTreeList()
+            deleteOne(row){
+             this.$Modal.confirm({
+               title: '警告',
+               content: '<p>确认要删除当前信息么?</p>',
+               onOk: async () => {
+                 let data = {}
+                 data = row
+                 let res = await  deletTableList(data)
+                 if(res.code == 0){
+                   let data = {}
+                   data.parentCode = this.oneTreeList.titleCode || ''
+                   let res = await getTableList(data)
+                   if(res.code === 0 ){
+                     this.tableData = res.data
+                   }
+                 }
+               },
+               onCancel: () => {
+
                }
+             });
+
             }
         },
         watch:{
