@@ -246,7 +246,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="this.billTypeId" @on-change="addChange2">
+                <Select v-model="billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -257,7 +257,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="this.settleTypeId" @on-change="addChange3">
+                <Select v-model="settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -986,12 +986,14 @@ export default {
     // 新增采购结算方式改变时触发
     addChange2(value) {
       // console.log(value)
-      this.settleTypeId = value;
+      // this.settleTypeId = value;
+      this.billTypeId = value;
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
       // console.log(value)
-      this.billTypeId = value;
+      // this.billTypeId = value;
+      this.settleTypeId = value;
     },
     // 新增备注
     remarks(event) {
