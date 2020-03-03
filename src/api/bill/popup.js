@@ -32,3 +32,10 @@ export function detailedIncrease(params){
     params
 })
 }
+//申请单号
+export function applyNo(){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/applyNo`,
+    method: 'get',
+})
+}
