@@ -2,7 +2,7 @@ import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine
 // import {getwbParts} from "_api/system/partManager";
 import {getDetails} from '@/api/salesManagment/salesOrder'
 import {getParnt} from '@/api/salesManagment/salesOrder'
-import {getwbParts} from "_api/system/partManager";
+
 
 export const mixSelectPartCom  = {
   inject:['reload'],
@@ -131,9 +131,13 @@ export const mixSelectPartCom  = {
           label: "名称"
         },
         {
-          value: "applyCarModel",
+          value: "carModelName",
           label: "车型"
         },
+        {
+          value: "keyWord",
+          label: "拼音"
+        }
       ],
       //查询关键字
       searchValue:'',
@@ -157,28 +161,19 @@ export const mixSelectPartCom  = {
     getList(){
       this.loading = true
       let req = {}
-
       if(this.selectTreeItem.id){
         req.typeId = this.selectTreeItem.id
       }
       if(this.selectBrand&&this.selectBrand!='9999'){
-        req.partCodes =[]
-        req.partBrandCodes = [this.selectBrand]
+        req.partBrandCode = this.selectBrand
       }
-
 
       if(this.partName.trim()){
-        if (this.searchType == 'adapterCarModels'){
-          req[this.searchType] = [this.partName]
-        } else {
           req[this.searchType] = this.partName.trim()
-        }
       }
-
-
       req.page = this.page.num -1
       req.size = this.page.size
-      getwbParts({},req).then(res => {
+      getParnt(req).then(res => {
         this.loading = false;
         this.partData = res.data.content||[];
         this.page.total = res.data.totalElements
