@@ -9,6 +9,8 @@ const dev = {
   omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.221:9210', //陈舒
   omsSettle: "http://192.168.30.221:9270",
+  omgApi:"http://192.168.30.21:9200",
+  omtApi:"http://192.168.30.21:9250",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
