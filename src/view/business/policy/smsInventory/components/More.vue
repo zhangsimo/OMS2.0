@@ -7,7 +7,7 @@
           <DatePicker
             v-model="moreData.createTime"
             type="daterange"
-            placeholder="请选择创建日期！"
+            placeholder="请选择创建日期"
             @on-change="establish"
             style="width: 450px"
           ></DatePicker>
@@ -19,7 +19,7 @@
           <DatePicker
             v-model="moreData.enterTime"
             type="daterange"
-            placeholder="请选择提交日期！"
+            placeholder="请选择提交日期"
             @on-change="submit"
             style="width: 450px"
           ></DatePicker>
@@ -27,11 +27,11 @@
       </Row>
       <row class="mt15">
         <span>盘点单号：</span>
-        <Input v-model="moreData.serviceId" icon="ios-clock-outline" style="width: 450px" />
+        <Input placeholder="请输入盘点单号" v-model="moreData.serviceId" icon="ios-clock-outline" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件编码：</span>
-        <Input v-model="moreData.partCode" placeholder="请输入受理单号！" style="width: 450px" />
+        <Input v-model="moreData.partCode" placeholder="请输入配件编码" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件名称：</span>
