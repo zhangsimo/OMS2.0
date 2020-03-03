@@ -565,7 +565,6 @@ export default {
         orderManId: "",
         detailVOList: [],
         guestId: "",
-        orderManId: "",
         billTypeId: "",
         settleTypeId: "",
         storeId: ""
@@ -819,7 +818,9 @@ export default {
             this.formPlan.detailVOList.push(item);
           });
         } else {
+         this.preSellOrderTable.tbData[0]._highlight=true;
           this.$Message.error("*为必填项");
+
         }
       });
     },
@@ -844,6 +845,13 @@ export default {
           // this.draftShow = value
           this.preSellOrderTable.tbData = res.data.content || [];
           this.page.total = res.data.totalElements;
+            for(let b of this.preSellOrderTable.tbData){
+                b._highlight = false
+                if(b.id==this.id){
+                    b._highlight = true;
+                    break;
+                }
+            }
         }
       });
     },
@@ -869,6 +877,13 @@ export default {
             this.draftShow = v.status.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
+              for(let b of this.preSellOrderTable.tbData){
+                  b._highlight = false
+                  if(b.id==this.id){
+                      b._highlight = true;
+                      break;
+                  }
+              }
           }
         });
         {
@@ -953,6 +968,7 @@ export default {
       this.$refs.formPlan.resetFields();
       this.isNew = false;
       this.tableData = [];
+      this.formPlan.detailVOList=[];
       this.formPlan = {
         detailVOList: [],
         orderMan: this.PTrow.orderMan,
@@ -963,7 +979,10 @@ export default {
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
-      this.preSellOrderTable.tbData.unshift(this.PTrow);
+        for(let b of this.preSellOrderTable.tbData){
+            b._highlight = false
+        }
+        this.preSellOrderTable.tbData.unshift(this.PTrow);
       this.isAdd = false;
     },
     //作废按钮
@@ -1011,7 +1030,6 @@ export default {
               this.$refs.formPlan.resetFields();
             }
           } catch (errMap) {
-            // console.log("保存异常信息:"+errMap.message())
             this.$XModal.message({
               status: "error",
               message: "表格校验不通过！"
@@ -1039,7 +1057,6 @@ export default {
                 let res = await getSubmit(data);
                 if (res.code == 0) {
                   this.$Message.success("提交成功");
-                  this.getLeftList();
                   this.isNew = true;
                   this.isAdd = true;
                   this.formPlan = {};
@@ -1097,9 +1114,7 @@ export default {
           data.push({ id: item.id });
         });
         const arr = this.formPlan.detailVOList.filter(v => !checkedData.includes(v));
-        // console.log(arr,this.tableData)
         this.$set(this.formPlan, "detailVOList", arr);
-        // console.log(this.formPlan)
         if(!data[0].id) return
         this.preSellOrderTable.tbData.map((item, index) => {
           if (item.id === this.formPlan.id) {
