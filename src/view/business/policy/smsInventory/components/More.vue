@@ -70,7 +70,7 @@ export default {
       // console.log(date);
       this.moreData.createTime= date
       this.moreData.startTime = moment(date[0]).format("YYYY-MM-DD HH:mm:ss");
-      this.moreData.endTime = moment(date[1]).format("YYYY-MM-DD HH:mm:ss");
+      this.moreData.endTime = date[1]+" 23:59:59";
     },
     //选择提交日期
     submit(date) {
@@ -78,9 +78,7 @@ export default {
       this.moreData.auditStartTime = moment(date[0]).format(
         "YYYY-MM-DD HH:mm:ss"
       );
-      this.moreData.auditEndTime = moment(date[1]).format(
-        "YYYY-MM-DD HH:mm:ss"
-      );
+      this.moreData.auditEndTime = date[1]+" 23:59:59"
     },
     // getITPWE() {
     //   this.moreData.createTime = moment(this.moreData.createTime).format('YYYY-MM-DD HH:mm:ss')
@@ -91,10 +89,10 @@ export default {
       let obj = {
         startTime: this.moreData.startTime,
         endTime: this.moreData.endTime,
-        auditStartTime: this.moreData.auditStartTime, 
-        auditEndTime: this.moreData.auditEndTime, 
-        serviceId: this.moreData.serviceId, 
-        partCode: this.moreData.partCode, 
+        auditStartTime: this.moreData.auditStartTime,
+        auditEndTime: this.moreData.auditEndTime,
+        serviceId: this.moreData.serviceId,
+        partCode: this.moreData.partCode,
         partName: this.moreData.partName
       }
       getLeftList(obj, 0, 10)

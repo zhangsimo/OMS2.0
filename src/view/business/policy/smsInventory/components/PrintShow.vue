@@ -30,22 +30,22 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>盘点仓库:</span> <span>{{onelist.storeName}}</span></p>
-            <p><span>盘点日期:</span> <span>{{onelist.auditDate}}</span></p>
+            <p><span>盘点日期:</span> <span>{{onelist.checkDate}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailList" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
-            <span>{{ onelist.orderAmt}}</span>
+            <span>{{ onelist.trueAmt}}</span>
           </Col>
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{onelist.trueQty}}</span>
           </Col>
           <Col class="pl10" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{onelist.trueAmt}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
@@ -67,7 +67,7 @@
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
-        
+
       </div>
 
       <div>
@@ -124,19 +124,23 @@
                     },
                     {
                         title: '单价',
-                        key: 'orderPrice',
+                        key: 'truePrice',
                         align: 'center'
 
                     },                    {
                         title: '金额',
-                        key: 'orderAmt',
+                        key: 'trueAmt',
                         align: 'center'
 
                     },
                     {
                         title: '仓库',
                         key: 'storeName',
-                        align: 'center'
+                        align: 'center',
+                        render:(h,params) => {
+                          let storeName = this.onelist.storeName
+                          return h('span',storeName)
+                        }
 
                     },
                     {
@@ -149,7 +153,8 @@
                 ],
                 onelist:{}, //打印数据
                 num: '12323.09',
-                num2: 78723
+                num2: 78723,
+                warehouseList:[]
             }
         },
         methods:{
@@ -166,16 +171,24 @@
                     window.location.reload()
                     document.body.innerHTML = oldstr
             },
-            openModal(id){
+            openModal(id,warehouseList){
                 //let order = this.$store.state.dataList.oneOrder
+                this.warehouseList = warehouseList||[]
                 if(id){
                     let data ={}
                         data.id = id
                      getprintList(data)
                      .then(res => {
                        if(res.code === 0){
-                         console.log(res)
-                         this.onelist = res.data
+                         let repData = res.data||{}
+                         for(let item of this.warehouseList){
+                           if(item.id==repData.storeId){
+                             repData.storeName = item.name;
+                             break;
+                           }
+                         }
+
+                         this.onelist = repData
                         this.printShow = true
                         //this.onelist = res.data
                       }

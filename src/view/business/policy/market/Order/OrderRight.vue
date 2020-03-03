@@ -436,7 +436,8 @@ export default {
   },
   methods: {
     getChangeList() {
-      this.$emit("getChangeList");
+      // this.$emit("getChangeList");
+      this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
     },
     //获取右侧数据
     async getList() {
@@ -754,7 +755,7 @@ export default {
     },
     //打开选择入库单
     openGodownEntryModal() {
-      this.$refs.GodownEntryModal.openModal();
+      this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
     },
     //打开活动
     openActivityModal() {

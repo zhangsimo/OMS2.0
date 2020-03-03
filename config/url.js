@@ -2,13 +2,13 @@ import env from "./env";
 
 const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  omsApi: "http://10.8.0.14:9240", //徐林烽
-  wmsApi: "http://10.8.0.14:9250", // 徐林烽
-  omsOrder: "http://10.8.0.14:9210", // 徐林烽
-  omsStore: "http://10.8.0.14:9280", // 库存查询 周伟健
-  omsProduct: "http://10.8.0.14:9200",
-  // omsOrder:'http://10.8.0.14:9210', //陈舒
-  omsSettle: "http://10.8.0.14:9270",
+  omsApi: "http://192.168.30.21:9270", //徐林烽
+  wmsApi: "http://192.168.30.221:9250", // 徐林烽
+  omsOrder: "http://192.168.30.221:9210", // 徐林烽
+  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.221:9200",
+  // omsOrder:'http://192.168.30.221:9210', //陈舒
+  omsSettle: "http://192.168.30.221:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200

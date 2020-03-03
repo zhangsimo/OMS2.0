@@ -175,6 +175,8 @@
                     placement:[20,40,60,80,100]
                 },
                 Loading: true,//状态
+
+                deliveryStoreId:'',
             }
 
         },
@@ -183,8 +185,9 @@
         },
         methods:{
             //打开模态框
-            openModal() {
+            openModal(storeId) {
                 this.showInfo = true;
+                this.deliveryStoreId = storeId
                 this.getList()
             },
             //获取入库数据
@@ -193,6 +196,7 @@
                     data = this.Outform
                     data.page = this.page.num -1
                     data.size = this.page.size
+                    data.storeId = this.deliveryStoreId
                this.Loading = true
                console.log(this.Outform)
                let res = await getGodown(data)
