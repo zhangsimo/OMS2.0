@@ -30,24 +30,24 @@
     <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="160">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单号">
+          <FormItem label="对账单号" prop='reconciliationId'>
             <Input v-model="invoice.reconciliationId" class="ml5 w100" readonly />
             <i class="iconfont iconcaidan input" @click="seleteAccount"></i>
           </FormItem>
-          <FormItem label="产生税费">
+          <FormItem label="产生税费" prop='taxation'>
             <Input v-model="invoice.taxation" class="ml5 w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="不含税对账单未开金额">
+          <FormItem label="不含税对账单未开金额" prop='noTaxAmount'>
             <Input v-model="invoice.noTaxAmount" class="ml5 w100" readonly />
           </FormItem>
-          <FormItem label="实际增加开票金额">
+          <FormItem label="实际增加开票金额" prop='actualAmount'>
             <Input v-model="invoice.actualAmount" class="ml5 w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="本次含税开票金额">
+          <FormItem label="本次含税开票金额" prop='thisTaxAmount'>
             <Input v-model="invoice.thisTaxAmount" class="ml5 w100" />
           </FormItem>
           <FormItem label="申请说明">
@@ -55,7 +55,7 @@
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="申请税点">
+          <FormItem label="申请税点" prop='taxApplication'>
             <Select v-model="invoice.taxApplication" class="ml5 w100">
               <Option
                 v-for="item in invoice.taxApplicationList"
@@ -97,6 +97,7 @@ import SeleteSale from "./seleteSale";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
 import { noTaxApplyNo } from "@/api/bill/popup";
+import bus from './Bus'
 export default {
   components: {
     SeleteSale,
@@ -193,23 +194,11 @@ export default {
         taxApplicationList: [
           {
             value: 0,
-            label: "7%"
+            label: "6%"
           },
           {
             value: 1,
-            label: "10%"
-          },
-          {
-            value: 2,
-            label: "11%"
-          },
-          {
-            value: 3,
-            label: "13%"
-          },
-          {
-            value: 4,
-            label: "16%"
+            label: "7%"
           }
         ], //申请税点列表
         reconciliationId: "", //对账单号
@@ -219,7 +208,44 @@ export default {
         thisTaxAmount: "", //本次含税开票金额
         remarks: "" //申请说明
       }, //发票数据表单
-      invoiceRule: {} //发票数据表单验证规则
+      invoiceRule: {
+        taxApplication: [
+          {
+            required: true,
+            message: "申请税点不能为空"
+          }
+        ],
+        reconciliationId: [
+          {
+            required: true,
+            message: "对账单号不能为空"
+          }
+        ],
+        taxation: [
+          {
+            required: true,
+            message: "产生税费不能为空"
+          }
+        ],
+        noTaxAmount: [
+          {
+            required: true,
+            message: "不含税对账单未开金额不能为空"
+          }
+        ],
+        actualAmount: [
+          {
+            required: true,
+            message: "实际增加开票金额不能为空"
+          }
+        ],
+        thisTaxAmount: [
+          {
+            required: true,
+            message: "本次含税开票金额不能为空"
+          }
+        ]
+      } //发票数据表单验证规则
     };
   },
   mounted() {
@@ -229,6 +255,12 @@ export default {
         this.information.noTaxApply = res.data;
       }
     });
+    bus.$on('accountNo',val=>{
+      console.log(val)
+    })
+    bus.$on('partsData',val=>{
+      console.log(val)
+    })
   },
   methods: {
     // 对话框是否显示

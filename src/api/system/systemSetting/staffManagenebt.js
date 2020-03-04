@@ -53,12 +53,12 @@ export function findCompanyList (params) {
     method: 'get',
     params
   })
-}
+}         
 
 //开通账号
 export function putNewCompany (data ,id) {
   return axios.request({
-    url: `${api.authApi}/staff/TenantUsersSave?groupId=${id}`,
+    url: `${api.authApi}/staff/TenantUsersSaveClose?groupId=${id}`,
     method: 'post',
     data
   })

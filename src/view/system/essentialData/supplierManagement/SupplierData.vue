@@ -298,6 +298,7 @@ export default {
   },
 
   created() {
+    this.getlist();
     this.getAdress();
     this.getsupplierTypeList();
   },
