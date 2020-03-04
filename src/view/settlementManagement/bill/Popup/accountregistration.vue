@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="选择不含税对账单单" @on-visible-change="visChange">
+  <Modal v-model="modal1" title="选择不含税对账单" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker type="daterange" placement="bottom-start" style="width: 200px" v-model="accountDate"></DatePicker>
     <Button @click="query" class="ml10">查询</Button>
@@ -101,8 +101,8 @@ export default {
             return h("span", params.row.actualPayment.toFixed(2));
           }
         }
-      ], //选择不含税对账单单
-      noTaxData: [], //选择不含税对账单单表格数据
+      ], //选择不含税对账单
+      noTaxData: [], //选择不含税对账单表格数据
       seleteData: [] //单选数据
     };
   },

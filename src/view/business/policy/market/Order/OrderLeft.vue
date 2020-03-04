@@ -110,9 +110,10 @@ export default {
         billStatusId: 0,
         createTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         orderMan: this.$store.state.user.userData.staffName,
+        orderManId: this.$store.state.user.userData.id,
         remark: "",
         guestId: "",
-        storeId: "",
+        storeId: this.$store.state.user.userData.shopId||"",
         serviceId: "",
         details: []
       };

@@ -32,3 +32,19 @@ export function detailedIncrease(params){
     params
 })
 }
+//申请单号
+export function applyNo(){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/applyNo`,
+    method: 'get',
+})
+}
+//选择销售单
+export function saleSlip(data){
+  return axios.request({
+    url: `${api.omsOrder}/sellOutMain/queryConditions  
+    taxSign`,
+    method: 'post',
+    data
+})
+}

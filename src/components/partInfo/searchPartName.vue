@@ -143,11 +143,13 @@ export default {
       req.page = this.page.num;
       req.pageSize = this.page.size;
       getCarPartName(req).then(res => {
-        this.objectValue = res.data.content[0];
-        this.selectTableItem = this.objectValue;
-        this.loading = false;
-        this.partData = res.data.content || [];
-        this.page.total = res.data.total;
+        if(res.data){
+          this.objectValue = res.data.content[0];
+          this.selectTableItem = this.objectValue;
+          this.loading = false;
+          this.partData = res.data.content || [];
+          this.page.total = res.data.total;
+        }
       });
     },
     search() {

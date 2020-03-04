@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="选择不含税对账单单">
+  <Modal v-model="modal1" title="选择不含税对账单">
     <span class="mr5">对账期间：</span>
     <DatePicker type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
     <Button @click="query" class="ml10">查询</Button>
@@ -34,7 +34,7 @@ export default {
         },
         {
           title: "日期",
-          key: "accountNo",
+          key: "createTime",
           className: "tc"
         },
         {
