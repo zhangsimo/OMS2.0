@@ -57,6 +57,7 @@ export default {
                 on: {
                   click: () => {
                     this.$refs.idDetailed.modal1 = true;
+                    this.$refs.idDetailed.guestId = this.arrId[1];
                   }
                 }
               },

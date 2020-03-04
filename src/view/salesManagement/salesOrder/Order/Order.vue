@@ -160,19 +160,26 @@ export default {
       // }
       // let res = this.$refs.right.submitList();
       let list = this.$store.state.dataList.oneOrder;
-      if (list.id) {
-        this.$Modal.confirm({
-          title: '是否确定提交',
-          onOk: async () => {
-            let res = this.$refs.right.submitList();
-          },
-          onCancel: () => {
-            this.$Message.info('取消提交');
-          },
+        this.$refs.right.$refs.formPlan.validate(async valid => {
+            if(valid){
+                if (list.id) {
+                    this.$Modal.confirm({
+                        title: '是否确定提交',
+                        onOk: async () => {
+                            let res = this.$refs.right.submitList();
+                        },
+                        onCancel: () => {
+                            this.$Message.info('取消提交');
+                        },
+                    })
+                }else{
+                    this.$Message.warning('请选择一条有效数据')
+                }
+            }else{
+                this.$Message.error("*为必填项");
+            }
         })
-      } else {
-        this.$Message.warning('请选择一条有效数据')
-      }
+
 
 
     },

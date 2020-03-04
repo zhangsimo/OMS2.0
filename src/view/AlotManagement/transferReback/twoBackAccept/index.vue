@@ -354,7 +354,7 @@ export default {
             this.tbdata = res.data || [];
             this.modal3 = true;
             this.danhao = res.data.serviceId;
-            location.reload()
+            this.search();
           } else if (res.code == 1) {
             this.$Message.info("请选择受理仓库");
           }
