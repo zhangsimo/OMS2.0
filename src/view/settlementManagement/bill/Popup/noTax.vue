@@ -27,35 +27,35 @@
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
-    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="160">
+    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="80">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="对账单号" prop='reconciliationId'>
-            <Input v-model="invoice.reconciliationId" class="ml5 w100" readonly />
+          <FormItem label="对账单号" prop="accountNo">
+            <Input v-model="invoice.accountNo" class="ml5 w100" readonly />
             <i class="iconfont iconcaidan input" @click="seleteAccount"></i>
           </FormItem>
-          <FormItem label="产生税费" prop='taxation'>
+          <FormItem label="产生税费" prop="taxation">
             <Input v-model="invoice.taxation" class="ml5 w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="不含税对账单未开金额" prop='noTaxAmount'>
+          <FormItem label="不含税对账单未开金额" prop="noTaxAmount" :label-width="160">
             <Input v-model="invoice.noTaxAmount" class="ml5 w100" readonly />
           </FormItem>
-          <FormItem label="实际增加开票金额" prop='actualAmount'>
+          <FormItem label="实际增加开票金额" prop="actualAmount" :label-width="160">
             <Input v-model="invoice.actualAmount" class="ml5 w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="本次含税开票金额" prop='thisTaxAmount'>
+          <FormItem label="本次含税开票金额" prop="thisTaxAmount" :label-width="130">
             <Input v-model="invoice.thisTaxAmount" class="ml5 w100" />
           </FormItem>
-          <FormItem label="申请说明">
+          <FormItem label="申请说明" :label-width="130">
             <Input v-model="invoice.remarks" class="ml5 w400" />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="申请税点" prop='taxApplication'>
+          <FormItem label="申请税点" prop="taxApplication">
             <Select v-model="invoice.taxApplication" class="ml5 w100">
               <Option
                 v-for="item in invoice.taxApplicationList"
@@ -97,7 +97,7 @@ import SeleteSale from "./seleteSale";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
 import { noTaxApplyNo } from "@/api/bill/popup";
-import bus from './Bus'
+import bus from "./Bus";
 export default {
   components: {
     SeleteSale,
@@ -106,6 +106,17 @@ export default {
   },
   props: ["information", "parameter"],
   data() {
+    const thisTaxChange = (rule, value, callback) => {
+      if (value&&parseFloat(value)>=0) {
+        if(value<=this.invoice.noTaxAmount) {
+          callback()
+        } else {
+          callback(new Error('不能大于不含税对账单未开票金额'))
+        }
+      } else {
+        callback(new Error('只能输入数字'))
+      }
+    };
     return {
       modal1: false, //弹窗显示
       approvalTit: "开票申请流程", //审批流程
@@ -190,18 +201,18 @@ export default {
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
       invoice: {
-        taxApplication: "", //申请税点
+        taxApplication: 0.07, //申请税点
         taxApplicationList: [
           {
-            value: 0,
+            value: 0.06,
             label: "6%"
           },
           {
-            value: 1,
+            value: 0.07,
             label: "7%"
           }
         ], //申请税点列表
-        reconciliationId: "", //对账单号
+        accountNo: "", //对账单号
         taxation: "", //产生税费
         noTaxAmount: "", //不含税对账单未开金额
         actualAmount: "", //实际增加开票金额
@@ -215,7 +226,7 @@ export default {
             message: "申请税点不能为空"
           }
         ],
-        reconciliationId: [
+        accountNo: [
           {
             required: true,
             message: "对账单号不能为空"
@@ -242,7 +253,8 @@ export default {
         thisTaxAmount: [
           {
             required: true,
-            message: "本次含税开票金额不能为空"
+            // message: "本次含税开票金额不能为空",
+            validator: thisTaxChange
           }
         ]
       } //发票数据表单验证规则
@@ -255,21 +267,31 @@ export default {
         this.information.noTaxApply = res.data;
       }
     });
-    bus.$on('accountNo',val=>{
-      console.log(val)
-    })
-    bus.$on('partsData',val=>{
-      console.log(val)
-    })
+    // 对账单
+    bus.$on("accountNo", val => {
+      val.noTaxAmount = val.accountAmt - val.invoiceAmt;
+      this.invoice = { ...this.invoice, ...val };
+    });
+    // 销售单
+    bus.$on("partsData", val => {
+      console.log(val);
+    });
   },
   methods: {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
+        this.$refs.formCustom.resetFields()
       }
     },
     // 提交申请
-    submission() {},
+    submission() {
+      this.$refs.formCustom.validate(val=>{
+        if(val){
+
+        }
+      })
+    },
     // 选择必开不含税销售单
     seleteSale() {
       this.$refs.SeleteSale.modal1 = true;
@@ -313,6 +335,24 @@ export default {
     },
     seleteAccount() {
       this.$refs.saleAccount.modal1 = true;
+    }
+  },
+  watch: {
+    invoice: {
+      immediate: true,
+      deep: true,
+      handler(val) {
+        if (val.thisTaxAmount) {
+          val.taxation = (
+            val.thisTaxAmount / (1 - val.taxApplication) -
+            val.thisTaxAmount
+          ).toFixed(2);
+          val.actualAmount = (val.thisTaxAmount * 1 + val.taxation * 1).toFixed(
+            2
+          );
+          return val;
+        }
+      }
     }
   }
 };

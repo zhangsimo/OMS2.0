@@ -70,3 +70,19 @@ export function noTaxAccount(data){
     data
 })
 }
+//引用上次申请信息
+export function informationCitation(params){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/queryPre`,
+    method: 'get',
+    params
+})
+}
+//开票配件
+export function partsInvoice(params){
+  return axios.request({
+    url: `${api.omsOrder}/sellOutDetail/findByMainId`,
+    method: 'get',
+    params
+})
+}
