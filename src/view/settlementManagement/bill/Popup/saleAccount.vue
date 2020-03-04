@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="选择不含税对账单">
+  <Modal v-model="modal1" title="选择不含税对账单" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
     <DatePicker type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
     <Button @click="query" class="ml10">查询</Button>
@@ -13,7 +13,9 @@
 </template>
 <script>
 import idDetailed from '../components/idDetailed'
+import { noTaxAccount} from "@/api/bill/popup";
 export default {
+  props:['parameter'],
   components:{
     idDetailed
   },
@@ -63,15 +65,20 @@ export default {
           className: "tc"
         }
       ],//选择不含税对账单单
-      noTaxData:[
-        {index:1,serviceId:'aa'},
-        {index:1},
-        {index:1}
-      ],//选择不含税对账单单表格数据
+      noTaxData:[],//选择不含税对账单单表格数据
       seleteData:{}//单选数据
     }
   },
   methods:{
+        // 对话框是否显示
+    visChange(flag) {
+      if (flag) {
+        console.log(this.parameter)
+        noTaxAccount({accountNo:this.parameter.accountNo,taxSign:this.parameter.taxSign}).then(res=>{
+          console.log(res)
+        })
+      }
+    },
     // 日期查询
     query(){},
     // 确认按钮

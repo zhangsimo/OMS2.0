@@ -46,11 +46,11 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="发票单位" prop="receiptUnit">
-            <Select v-model="invoice.receiptUnit" class="ml5 w200">
+            <Select v-model="invoice.receiptUnit" class="ml5 w200" @on-change="invoiceChange">
               <Option
                 v-for="item in invoice.receiptUnitList"
-                :value="item.value"
-                :key="item.value"
+                :value="item.label"
+                :key="item.label"
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -180,8 +180,8 @@
       <h4>开票申请进度</h4>
       <approval :approvalTit="approvalTit" />
     </div>
-    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter='parameter' />
-    <noTax ref="noTax" :information="information" />
+    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
+    <noTax ref="noTax" :information="information" :parameter="parameter" />
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -190,7 +190,7 @@ import approval from "./approval";
 import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
-import { applyNo } from "@/api/bill/popup";
+import { applyNo, ditInvoice } from "@/api/bill/popup";
 export default {
   components: {
     approval,
@@ -199,7 +199,7 @@ export default {
   },
   data() {
     return {
-      parameter:{},//销售单参数
+      parameter: {}, //销售单参数
       information: {}, //基本信息数据
       approvalTit: "开票申请流程", //审批流程
       popupTit: "选择必开销售单", //选择必开销售单弹框标题
@@ -207,7 +207,7 @@ export default {
       invoice: {
         consignee: "", //快递收件人
         receiptUnit: "", // 发票单位
-        receiptUnitList:[],//发票单位列表
+        receiptUnitList: [], //发票单位列表
         taxNo: "", //税号
         tel: "", //地址电话
         bankOpening: "", //开户行及账号
@@ -469,6 +469,15 @@ export default {
         });
       });
     });
+    // 开票单位数据字典
+    getDataDictionaryTable({ dictCode: "KPDW" }).then(res => {
+      res.data.map(item => {
+        this.invoice.issuingOfficeList.push({
+          value: item.itemCode,
+          label: item.itemName
+        });
+      });
+    });
     applyNo().then(res => {
       if (res.code === 0) {
         this.information.applyNo = res.data;
@@ -476,6 +485,16 @@ export default {
     });
   },
   methods: {
+    // 发票单位带出税号等信息
+    invoiceChange(val) {
+      this.invoice.receiptUnitList.map(item => {
+        if (item.label === val) {
+          this.invoice.taxNo = item.taxpayerCode
+          this.invoice.tel = item.taxpayerTel
+          this.invoice.bankOpening = item.accountBankNo
+        }
+      });
+    },
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
@@ -484,6 +503,14 @@ export default {
         this.invoice.applyMoneyTax = this.invoice.statementAmountOwed;
         this.invoice.applyMoney =
           this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
+        ditInvoice({ guestId: "1211932763040690176" }).then(res => {
+          if (res.code === 0) {
+            res.data.map(item => {
+              item.label = item.taxpayerName;
+            });
+            this.invoice.receiptUnitList = res.data;
+          }
+        });
       }
     },
     // 增加不含税销售开票申请
@@ -492,15 +519,17 @@ export default {
     },
     // 保存草稿
     preservation() {
-      this.$refs.formCustom.validate(vald=>{
-        if(vald){}
-      })
+      this.$refs.formCustom.validate(vald => {
+        if (vald) {
+        }
+      });
     },
     // 提交申请
     submission() {
-      this.$refs.formCustom.validate(vald=>{
-        if(vald){}
-      })
+      this.$refs.formCustom.validate(vald => {
+        if (vald) {
+        }
+      });
     },
     // 选择必开销售单
     seleteSale() {
