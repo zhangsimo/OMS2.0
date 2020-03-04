@@ -49,8 +49,8 @@
             <Select v-model="invoice.receiptUnit" class="ml5 w200" @on-change="invoiceChange">
               <Option
                 v-for="item in invoice.receiptUnitList"
-                :value="item.label"
-                :key="item.label"
+                :value="item.value"
+                :key="item.value"
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -191,6 +191,7 @@ import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import { applyNo, ditInvoice } from "@/api/bill/popup";
+import bus from './Bus'
 export default {
   components: {
     approval,
@@ -478,17 +479,22 @@ export default {
         });
       });
     });
+    // 申请单号
     applyNo().then(res => {
       if (res.code === 0) {
         this.information.applyNo = res.data;
       }
     });
+    // 选择销售单
+    bus.$on('partsData',val=>{
+      console.log(val)
+    })
   },
   methods: {
     // 发票单位带出税号等信息
     invoiceChange(val) {
       this.invoice.receiptUnitList.map(item => {
-        if (item.label === val) {
+        if (item.value === val) {
           this.invoice.taxNo = item.taxpayerCode
           this.invoice.tel = item.taxpayerTel
           this.invoice.bankOpening = item.accountBankNo
@@ -507,6 +513,7 @@ export default {
           if (res.code === 0) {
             res.data.map(item => {
               item.label = item.taxpayerName;
+              item.value = item.id;
             });
             this.invoice.receiptUnitList = res.data;
           }

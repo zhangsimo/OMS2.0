@@ -13,6 +13,7 @@
 </template>
 <script>
 import {saleSlip} from '@/api/bill/popup'
+import bus from './Bus'
 export default {
   props: ["popupTit",'parameter'],
   data() {
@@ -92,6 +93,7 @@ export default {
     //选择一条数据
     determine() {
       if (this.seleteData.length!==0) {
+        bus.$emit('partsData',this.seleteData)
       } else {
         this.$message.error("请先选择一条销售单");
       }

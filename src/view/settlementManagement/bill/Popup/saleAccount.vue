@@ -14,6 +14,7 @@
 <script>
 import idDetailed from '../components/idDetailed'
 import { noTaxAccount} from "@/api/bill/popup";
+import bus from './Bus'
 export default {
   props:['parameter'],
   components:{
@@ -73,8 +74,7 @@ export default {
         // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        console.log(this.parameter)
-        noTaxAccount({accountNo:this.parameter.accountNo,taxSign:this.parameter.taxSign}).then(res=>{
+        noTaxAccount({guestId:this.parameter.guestId,taxSign:0}).then(res=>{
           console.log(res)
         })
       }
@@ -84,7 +84,7 @@ export default {
     // 确认按钮
     determine(){
       if(Object.keys(this.seleteData).length!==0){
-
+        bus.$emit('accountNo',this.seleteData)
       } else {
         this.$message.error('请选择一条对账单')
       }
