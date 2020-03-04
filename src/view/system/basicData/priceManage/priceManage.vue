@@ -164,10 +164,10 @@
                 field="sellPrice"
                 title="销售单价"
                 :edit-render="{ name: 'input' }"
-                width="120"
+                width="160"
               >
                 <template v-slot:edit="{ row }">
-                  <el-input-number :min="0" :precision="2"  v-model="row.sellPrice" :controls="false" size="small" />
+                  <el-input-number :min="0" :precision="2"  v-model="row.sellPrice" :controls="false" size="mini" />
                 </template>
               </vxe-table-column>
               <vxe-table-column field="operationName" title="操作人"></vxe-table-column>

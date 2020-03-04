@@ -35,6 +35,13 @@
       >
         <Icon custom="iconfont iconziyuan1 icons" />开通账号
       </a>
+      <a
+        class="mr10"
+        @click="giveUser('close')"
+        v-if="!oneStaffChange.office && oneStaffChange.openSystem != 1"
+      >
+        <Icon custom="iconfont iconziyuan1 icons" />关闭账号
+      </a>
       <a class="mr10" @click="restPassword" v-has="'reset'">
         <Icon custom="iconfont iconziyuan1 icons" />重置密码
       </a>
@@ -178,6 +185,7 @@ export default {
   data() {
     return {
       isNextAdd: true,
+      closeAcc: false,
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
         list:[],//机构数组
       shopCode: "",
@@ -304,7 +312,7 @@ export default {
       ],
       companyList: [],
       title: "新增员工",
-      setpasswordName: "设置密码",
+      setpasswordName: "账号设置",
       modalShow: false,
       oneStaffChange: "",
       newStaff: {
@@ -370,6 +378,7 @@ export default {
           }
       },
     getAllStaffList() {
+      this.oneStaffChange = {};
       let stop = this.$loading();
       let data = {};
       data.size = this.page.size;
@@ -535,7 +544,7 @@ export default {
     },
     //员工离职
     changeDimission() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -561,7 +570,7 @@ export default {
     },
     //重置密码
     restPassword() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -586,10 +595,15 @@ export default {
       });
     },
     //开通账号
-    giveUser() {
+    giveUser(type) {
       if (!this.oneStaffChange) {
         this.$Message.error("请至选择一条员工信息");
         return false;
+      }
+      if(type == 'close') {
+        this.closeAcc = true;
+      } else {
+        this.closeAcc = false;
       }
       this.setPasswordShow = true;
     },
@@ -603,13 +617,22 @@ export default {
         data.passwd = "000000";
         data.groupId = this.oneStaffChange.groupId;
         data.tenantUid = this.oneStaffChange.id;
+        if(this.closeAcc) {
+          data.openSystem = 1
+        } else {
+          data.openSystem = 0
+        }
         putNewCompany(data, this.$store.state.user.userData.groupId).then(
           res => {
             stop();
             if (res.code == 0) {
               this.getAllStaffList();
               this.oneStaffChange = {};
-              this.$Message.success("开通成功");
+              if(this.closeAcc) {
+                this.$Message.success("关闭成功");
+              } else {
+                this.$Message.success("开通成功");
+              }
             }
           }
         );

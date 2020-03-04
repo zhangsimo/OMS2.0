@@ -224,6 +224,8 @@ export default {
       this.fullname = "";
       this.code = "";
       this.mobile = "";
+      this.currentrow = null;
+      this.custarr = new Array();
       this.page = { num: 1, size: 10, total: 0 };
       if(!this.loadArea) {
         this.getArea();
