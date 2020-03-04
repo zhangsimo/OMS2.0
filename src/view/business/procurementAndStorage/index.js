@@ -446,7 +446,7 @@ export default {
           await this.clickOnesList(this.dataChange)
           this.allMoney = 0
           this.$Message.success('保存成功');
-          this.$refs.formPlan.resetFields();
+          // this.$refs.formPlan.resetFields();
         }
         try {
         } catch (errMap) {

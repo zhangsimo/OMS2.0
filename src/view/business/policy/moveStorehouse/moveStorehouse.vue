@@ -142,7 +142,7 @@
                   </FormItem>
                   <FormItem label="业务员：" prop="createUname">
                     <Select
-                      :value="Leftcurrentrow.createUnameId"
+                      :value="Leftcurrentrow.createdUid"
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 240px"
@@ -165,6 +165,7 @@
                     <DatePicker
                       :value="Leftcurrentrow.commitDate"
                       format="yyyy-MM-dd HH:mm:ss"
+                      @on-change="commitDate"
                       type="date"
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
@@ -471,7 +472,7 @@ export default {
       warehouseList: [],
       Leftcurrentrow: {
         status: {
-          value: 0
+          value: 1
         },
         storeId: "", //移入
         receiveStoreId: "", //移出
@@ -498,7 +499,10 @@ export default {
       showRemove: false, //作废提示
       isAddRight: true, //判断右侧是有数据
       showBayer: false, //出库方弹窗
-      rightTableStatus: "" //右侧表格状态
+      rightTableStatus: "", //右侧表格状态
+
+      saveButClick:false,//点击保存临时屏蔽保存按钮功能
+
     };
   },
   watch: {
@@ -523,7 +527,7 @@ export default {
     //获取销售员
     selectOrderMan(val) {
       this.Leftcurrentrow.createUname = val ? val.label ? val.label : '':'';
-      this.Leftcurrentrow.createUnameId = val ? val.value ? val.value : '':'';
+      this.Leftcurrentrow.createdUid = val ? val.value ? val.value : '':'';
     },
     //获取销售员
     async getAllSales() {
@@ -622,7 +626,7 @@ export default {
     },
     //改变移仓时间
     commitDate(data) {
-      this.Leftcurrentrow.commitDate = data + " " + "00:00:00";
+      this.Leftcurrentrow.commitDate = data;
     },
     //更多按钮
     More() {
@@ -647,6 +651,7 @@ export default {
           return;
         }
       }
+      this.$refs.Leftcurrentrow.resetFields();
       const item = {
         index: 1,
         xinzeng: "1",
@@ -657,11 +662,11 @@ export default {
         },
 
         statuName: "草稿",
-        commitDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        createUname: "",
+        commitDate: "",
         serviceId: "",
         printing: "",
         createUname: this.$store.state.user.userData.staffName,
+        createdUid:this.$store.state.user.userData.id,
         createTime: "",
         commitUname: "",
         //commitDate:"",
@@ -685,8 +690,14 @@ export default {
     },
     //保存
     baocun() {
+      if(this.saveButClick){
+        return
+      }
+      this.saveButClick = true;
+
       if (!this.Leftcurrentrow.serviceId) {
         if (this.Leftcurrentrow.xinzeng !== "1") {
+          this.saveButClick = false;
           return this.$Message.info("请先选择加工单");
         }
       }
@@ -704,12 +715,16 @@ export default {
         this.this.Leftcurrentrow.status.value !== 0
       ) {
         this.$Message.error("只有草稿状态才能保存");
+        this.saveButClick = false;
         return;
       }
       if (this.numberValue < 0) {
         this.$Message.error("数量不可小于0");
+        this.saveButClick = false;
         return;
       }
+      this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
+      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata]
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
@@ -717,16 +732,22 @@ export default {
           this.flag = 0;
           updata(params)
             .then(res => {
+              this.saveButClick = false
               if (res.code == 0) {
                 // console.log(res, "res=>616");
                 this.$Message.success("保存成功");
                 this.getList();
+                this.Leftcurrentrow.serviceId = "";
+                this.Leftcurrentrow.xinzeng = 2;
+                this.$refs.Leftcurrentrow.resetFields();
               }
             })
             .catch(e => {
+              this.saveButClick = false;
               this.$Message.info("保存失败");
             });
         } else {
+          this.saveButClick = false;
           this.$Message.error("*都是必填项");
         }
       });
@@ -849,10 +870,10 @@ export default {
       }
       this.salesList.map(item=>{
         if(item.label===row.createUname) {
-          row.createUnameId = item.id
+          row.createdUid = item.id
         }
       })
-      this.Leftcurrentrow = row;
+      this.Leftcurrentrow = {...row};
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
@@ -887,8 +908,8 @@ export default {
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]
+        item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
-        // this.Leftcurrentrow.detailVOList.push(item);
       });
       // console.log(this.Right.tbdata);
       // console.log(this.Leftcurrentrow);

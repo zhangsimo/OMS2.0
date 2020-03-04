@@ -910,7 +910,7 @@ export default {
             let res = await outDataList(this.formPlan);
             //console.log("fasong");
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               this.getChangeList();
               return res;
             }
@@ -939,7 +939,7 @@ export default {
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
