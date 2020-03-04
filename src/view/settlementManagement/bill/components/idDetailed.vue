@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="对账单号明细" width="1200">
+  <Modal v-model="modal1" title="对账单号明细" width="1200" @on-visible-change="visChange">
     <Tabs class="mt10">
       <Tab-pane label="销售清单" name="key1">
         <Table
@@ -30,10 +30,12 @@
   </Modal>
 </template>
 <script>
+import { getSalelist } from "@/api/bill/saleOrder";
 export default {
   data() {
     return {
-      modal1:false,
+      guestId: "",
+      modal1: false,
       columns1: [
         {
           title: "序号",
@@ -274,7 +276,19 @@ export default {
       data2: []
     };
   },
-  methods:{
+  methods: {
+    // 对话框是否显示
+    visChange(flag) {
+      if (flag) {
+        getSalelist({guestId:this.guestId}).then(res => {
+          console.log(res)
+          if(res.code===0){
+            this.data1 = res.data.one
+            this.data2 = res.data.two
+          }
+        });
+      }
+    },
     // 表格合计方式
     handleSummary({ columns, data }) {
       const sums = {};
@@ -312,7 +326,7 @@ export default {
       });
       return sums;
       //
-    },
+    }
   }
 };
 </script>

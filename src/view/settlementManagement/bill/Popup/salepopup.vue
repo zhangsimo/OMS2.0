@@ -125,7 +125,7 @@
             <Input v-model="invoice.phone" class="ml5 w200" />
           </FormItem>
           <FormItem>
-            <span style="color:#0099FF">引用上次申请信息</span>
+            <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -190,7 +190,7 @@ import approval from "./approval";
 import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
-import { applyNo, ditInvoice } from "@/api/bill/popup";
+import { applyNo, ditInvoice,informationCitation,partsInvoice } from "@/api/bill/popup";
 import bus from './Bus'
 export default {
   components: {
@@ -491,6 +491,16 @@ export default {
     })
   },
   methods: {
+    // 引用上次申请信息
+    quote(){
+      informationCitation({guestId:this.information.guestId}).then(res=>{
+        if(res.code===0){
+          this.invoice.consignee = res.data.consignee
+          this.invoice.address = res.data.address
+          this.invoice.phone = res.data.phone
+        }
+      })
+    },
     // 发票单位带出税号等信息
     invoiceChange(val) {
       this.invoice.receiptUnitList.map(item => {
@@ -504,11 +514,13 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
+        this.$refs.formCustom.resetFields()
         this.invoice.statementAmountOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
         this.invoice.applyMoneyTax = this.invoice.statementAmountOwed;
         this.invoice.applyMoney =
           this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
+          // 发票单位
         ditInvoice({ guestId: "1211932763040690176" }).then(res => {
           if (res.code === 0) {
             res.data.map(item => {
@@ -518,6 +530,11 @@ export default {
             this.invoice.receiptUnitList = res.data;
           }
         });
+        // 开票配件
+        console.log(this.information)
+        partsInvoice({mainId,id}).then(res=>{
+
+        })
       }
     },
     // 增加不含税销售开票申请
