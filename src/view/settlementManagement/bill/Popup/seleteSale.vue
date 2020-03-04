@@ -12,6 +12,7 @@
   </Modal>
 </template>
 <script>
+import {saleSlip} from '@/api/bill/popup'
 export default {
   props: ["popupTit",'parameter'],
   data() {
@@ -25,7 +26,7 @@ export default {
         },
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
@@ -36,17 +37,17 @@ export default {
         },
         {
           title: "日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
           title: "业务单据号",
-          key: "orderNo",
+          key: "serviceId",
           className: "tc"
         },
         {
           title: "出库单号",
-          key: "serviceId",
+          key: "orderNo",
           className: "tc"
         },
         {
@@ -68,17 +69,7 @@ export default {
           }
         }
       ], //选择单据表格
-      saleSingleData: [
-        {
-          index: 1
-        },
-        {
-          index: 1
-        },
-        {
-          index: 1
-        }
-      ], //选择单据表格数据
+      saleSingleData: [], //选择单据表格数据
       seleteData: [] //选中的数据
     };
   },
@@ -86,10 +77,16 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        console.log(this.parameter)
-        // saleSlip().then(res=>{
-
-        // })
+        let taxSign = 0
+        if(this.popupTit === '选择必开销售单') taxSign = 1
+        saleSlip({accountNo:this.parameter.accountNo,taxSign}).then(res=>{
+          if(res.code===0){
+            res.data.map(item=>{
+              item.speciesName = item.species.name
+            })
+          }
+          this.saleSingleData = res.data
+        })
       }
     },
     //选择一条数据

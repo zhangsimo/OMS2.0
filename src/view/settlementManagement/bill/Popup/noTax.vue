@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200">
+  <Modal v-model="modal1" title="增加不含税销售开票申请" width="1200" @on-visible-change="visChange">
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
@@ -8,19 +8,21 @@
     >提交申请</button>
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
-      <Col span="4">
+      <Col span="8">
         <span>分店名称：{{information.orgName}}</span>
       </Col>
-      <Col span="4">
+      <Col span="8">
         <span>分店店号：{{information.orgId}}</span>
       </Col>
-      <Col span="4">
+      <Col span="8">
         <span>往来单位：{{information.guestName}}</span>
       </Col>
-      <Col span="5">
-        <span>不含税开票申请单号：</span>
+    </Row>
+    <Row class="mt10">
+      <Col span="8">
+        <span>不含税开票申请单号：{{information.noTaxApply}}</span>
       </Col>
-      <Col span="5">
+      <Col span="8">
         <span>申请时间：{{information.applicationDate}}</span>
       </Col>
     </Row>
@@ -84,23 +86,24 @@
       <approval :approvalTit="approvalTit" />
     </div>
     <!-- 选择销售单据 -->
-    <SeleteSale ref="SeleteSale" :popupTit="popupTit" />
+    <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
     <!-- 选择对账单 -->
-    <saleAccount ref="saleAccount"/>
+    <saleAccount ref="saleAccount" :parameter="parameter" />
     <div slot="footer"></div>
   </Modal>
 </template>
 <script>
 import SeleteSale from "./seleteSale";
 import approval from "./approval";
-import saleAccount from './saleAccount'
+import saleAccount from "./saleAccount";
+import { noTaxApplyNo } from "@/api/bill/popup";
 export default {
   components: {
     SeleteSale,
     approval,
     saleAccount
   },
-  props:['information'],
+  props: ["information", "parameter"],
   data() {
     return {
       modal1: false, //弹窗显示
@@ -219,7 +222,20 @@ export default {
       invoiceRule: {} //发票数据表单验证规则
     };
   },
+  mounted() {
+    // 不含税申请单号
+    noTaxApplyNo().then(res => {
+      if (res.code === 0) {
+        this.information.noTaxApply = res.data;
+      }
+    });
+  },
   methods: {
+    // 对话框是否显示
+    visChange(flag) {
+      if (flag) {
+      }
+    },
     // 提交申请
     submission() {},
     // 选择必开不含税销售单
@@ -263,9 +279,9 @@ export default {
       });
       return sums;
     },
-    seleteAccount(){
-      this.$refs.saleAccount.modal1=true
-    },
+    seleteAccount() {
+      this.$refs.saleAccount.modal1 = true;
+    }
   }
 };
 </script>
