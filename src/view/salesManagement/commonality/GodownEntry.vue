@@ -154,7 +154,13 @@
         data(){
             return {
                 showInfo: false, // 销售出库订单信息——表单
-                Outform :{},
+                Outform :{
+                    enterTypeId:'',
+                    serviceId:'',
+                    guestId:'',
+                    enterDateStart:'',
+                    enterDateEnd:'',
+                },
                 clientList:[],//客户列表
                 enterTypeList:[
                     {label:'全部' ,value:'12345'},
@@ -187,6 +193,15 @@
            }
         },
         methods:{
+            reset(){
+                this.Outform={
+                    enterTypeId:'',
+                    serviceId:'',
+                    guestId:'',
+                    enterDateStart:'',
+                    enterDateEnd:'',
+                }
+            },
             //打开模态框
             openModal(v) {
                 this.showInfo = true;

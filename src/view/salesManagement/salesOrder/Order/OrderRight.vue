@@ -873,6 +873,7 @@ export default {
         if(!this.formPlan.storeId){
             this.$message.error("请选择交货仓库");
         }else{
+            this.$refs.GodownEntryModal.reset();
             this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
         }
     },
