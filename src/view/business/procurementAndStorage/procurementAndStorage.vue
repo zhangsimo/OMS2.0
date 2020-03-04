@@ -194,7 +194,7 @@
                   <FormItem label="往来单号：">
                     <Input class="w210" v-model="formPlan.code" disabled />
                   </FormItem>
-                  <FormItem label="交货仓库：" prop="storeId">
+                  <FormItem label="入库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
                       style="width:200px"
