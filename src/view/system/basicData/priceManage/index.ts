@@ -245,12 +245,16 @@ export default class PriceManage extends Vue {
   }
   // 删除
   private remove() {
+    if(!this.currRow) {
+      return this.$Message.error("请先选中一个级别名称");
+    }
     this.level.tbdata.forEach((el: any, index: number, arr: Array<any>) => {
       if (this.currRow.oid === el.oid && !el.readonly) {
         arr.splice(index, 1);
         el.id && this.leveldelarr.push(el);
       }
     });
+    this.currRow = null;
   }
   // tab切换
   private setTab(index: number) {
