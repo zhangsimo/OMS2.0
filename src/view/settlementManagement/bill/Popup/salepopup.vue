@@ -521,7 +521,7 @@ export default {
         this.invoice.applyMoney =
           this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
           // 发票单位
-        ditInvoice({ guestId: "1211932763040690176" }).then(res => {
+        ditInvoice({ guestId: this.information.guestId}).then(res => {
           if (res.code === 0) {
             res.data.map(item => {
               item.label = item.taxpayerName;

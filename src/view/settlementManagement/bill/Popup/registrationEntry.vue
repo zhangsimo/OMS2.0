@@ -134,10 +134,12 @@
     </vxe-table>
     <div slot="footer"></div>
     <account ref="account" :arrId="arrId" />
+    <idDetailed ref="idDetailed"/>
   </Modal>
 </template>
 <script>
 import account from "./accountregistration";
+import idDetailed from '../components/idDetailed'
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import {
   submit,
@@ -148,7 +150,8 @@ import {
 import Bus from "./Bus";
 export default {
   components: {
-    account
+    account,
+    idDetailed
   },
   data() {
     return {
@@ -188,7 +191,23 @@ export default {
         {
           title: "对账单号",
           key: "accountNo",
-          className: "tc"
+          className: "tc",
+          render:(h,params)=>{
+            return h('span',
+              {
+                style: {
+                  cursor: "pointer",
+                  color: "#87CEFA"
+                },
+                on: {
+                  click: () => {
+                    this.$refs.idDetailed.modal1=true
+                    this.$refs.idDetailed.guestId=this.arrId[1]
+                  }
+                }
+              },
+              params.row.serviceId)
+          }
         },
         {
           title: "往来单位",
