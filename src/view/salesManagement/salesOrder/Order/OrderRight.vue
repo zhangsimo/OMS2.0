@@ -445,6 +445,7 @@ export default {
       formPlan: {
         detailList: [],
         storeId:'',
+        // orderTypeValue:'0'
       }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -1058,13 +1059,12 @@ export default {
     getOneOrder: {
       handler(old, ov) {
         if (!old.id) {
-          this.formPlan = {
-            billStatusId: { name: "草稿", value: 0 },
-            // orderMan: this.$store.state.user.userData.username || "",
-            // orderManId: this.$store.state.user.userData.id,
-            detailList: [],
-              storeId:this.formPlan.storeId,
-          };
+             this.formPlan =Object.assign({},{
+                 billStatusId: { name: "草稿", value: 0 },
+                 detailList: [],
+                 storeId:this.formPlan.storeId,
+                 orderTypeValue:0}
+                 ) ;
           this.draftShow = 0;
           this.leftOneOrder =this.formPlan
           return false;

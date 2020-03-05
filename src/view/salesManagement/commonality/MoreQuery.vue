@@ -4,39 +4,39 @@
     title="高级查询"
    >
     <div class="box">
-      <Form ref="formInline" :model="data" :label-width="100">
+      <Form ref="formInline" :model="formData" :label-width="100">
         <FormItem label="创建日期:">
-          <DatePicker type="daterange" v-model="data.start" @on-change="getCreatDate" placement="bottom":editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="formData.start" @on-change="getCreatDate" placement="bottom":editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="提交日期:">
-          <DatePicker type="daterange" v-model="data.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
+          <DatePicker type="daterange" v-model="formData.end" @on-change="submitDate" placement="bottom"  :editable=false  placeholder="选择日期" style="width: 350px"></DatePicker>
         </FormItem>
         <FormItem label="客户:">
-        <Select v-model="data.guestId" filterable style="width: 350px">
+        <Select v-model="formData.guestId" filterable style="width: 350px">
           <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
         </Select>
         </FormItem>
         <FormItem label="订单号:">
-          <Input v-model="data.serviceId" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
+          <Input v-model="formData.serviceId" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
         </FormItem>
         <FormItem label="配件编码:">
-          <Input v-model="data.partCode" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
+          <Input v-model="formData.partCode" maxlength="100" :rows="4" show-word-limit type="textarea" placeholder="请输入单号" style="width: 350px" />
         </FormItem>
         <FormItem label="配件名称:">
-          <Input v-model="data.partName"    placeholder="请输入配件名称" style="width: 350px" />
+          <Input v-model="formData.partName"    placeholder="请输入配件名称" style="width: 350px" />
         </FormItem>
         <FormItem label="品牌:">
-          <Select v-model="data.partBrandCode" filterable style="width: 350px">
+          <Select v-model="formData.partBrandCode" filterable style="width: 350px">
             <Option v-for="item in brandList" :value="item.code" :key="item.code">{{ item.name }}</Option>
           </Select>
         </FormItem>
         <FormItem label="销售人员:">
-          <Input v-model="data.orderMan"    placeholder="请输入销售人员名称" style="width: 350px" />
+          <Input v-model="formData.orderMan"    placeholder="请输入销售人员名称" style="width: 350px" />
         </FormItem>
         <FormItem label="提交人:">
-          <Input v-model="data.auditor"    placeholder="请输入提交人名称" style="width: 350px" />
+          <Input v-model="formData.auditor"    placeholder="请输入提交人名称" style="width: 350px" />
         </FormItem>
-        <Checkbox v-model="data.showPerson" class="ml100 ">显示个人单据</Checkbox>
+        <Checkbox v-model="formData.showPerson" class="ml100 ">显示个人单据</Checkbox>
       </Form>
     </div>
     <div slot='footer'>
@@ -57,7 +57,8 @@
             return {
                 moreQueryShow: false,//模态框是否展示
                 clientList:[],//客户下拉框
-                brandList:[],//品牌下拉框
+                brandList:[],//品牌下拉框,
+                formData:this.data,
             }
         },
         mounted(){
@@ -71,13 +72,13 @@
             },
             //获取创建时间
             getCreatDate(date){
-                this.data.startTime = date[0] +  " " + "00:00:00"
-                this.data.endTime = date[1] +' '+ '23:59:59'
+                this.formData.startTime = date[0] +  " " + "00:00:00"
+                this.formData.endTime = date[1] +' '+ '23:59:59'
             },
             //提交日期
             submitDate(date){
-                this.data.auditStartTime = date[0] +  " " + "00:00:00"
-                this.data.auditEndTime = date[1] +' '+ '23:59:59'
+                this.formData.auditStartTime = date[0] +  " " + "00:00:00"
+                this.formData.auditEndTime = date[1] +' '+ '23:59:59'
             },
             //获取公司
            async getAllClient(){
@@ -99,7 +100,8 @@
             },
             //确定
             emit(){
-              this.$store.commit('setOrederQuery' , this.data)
+                this.$emit('resetData');
+              this.$store.commit('setOrederQuery' , this.formData)
                 this.moreQueryShow = false
             }
         }

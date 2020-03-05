@@ -60,7 +60,7 @@
         </Split>
       </div>
       <!--        更多搜索-->
-      <More-query :data="queryList" ref="morequeryModal"></More-query>
+      <More-query :data="queryList" ref="morequeryModal" @resetData="reset"></More-query>
       <!--        打印-->
       <Print-show ref="printBox"></Print-show>
     </div>
@@ -268,7 +268,15 @@ export default {
               this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
           }
       })
-    }
+    },
+    //重置额度
+      reset(){
+        this.$refs.right.limitList={
+            fixationQuota:'',
+            tempQuota:'',
+            sumAmt:'',
+        }
+      }
   }
 };
 </script>
