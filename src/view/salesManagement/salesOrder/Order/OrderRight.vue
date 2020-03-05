@@ -1063,7 +1063,8 @@ export default {
                  billStatusId: { name: "草稿", value: 0 },
                  detailList: [],
                  storeId:this.formPlan.storeId,
-                 orderTypeValue:0}
+                 orderTypeValue:0,
+                 orderManId:''}
                  ) ;
           this.draftShow = 0;
           this.leftOneOrder =this.formPlan

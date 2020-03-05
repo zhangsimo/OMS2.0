@@ -178,6 +178,7 @@ export default {
           onCancel: () => {
             this.$parent.$parent.isAdd = true
             this.$parent.$parent.isNew=true
+              this.$parent.right.isAdd=false;
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
           },
