@@ -168,7 +168,11 @@ export default {
     },
     ok() {
       // 将选好的成品传父组件
-      this.$emit('ok', this.checkRow)
+      if(this.checkRow.id){
+        this.$emit('ok', this.checkRow)
+      }else{
+        this.$Message.error("请先选择配件");
+      }
     }
   }
 }
