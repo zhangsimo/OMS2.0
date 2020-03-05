@@ -41,6 +41,8 @@
       resizable
       auto-resize
       highlight-current-row
+      show-footer
+      :footer-method="footerMethod"
       @current-change="currentChangeEvent"
       :data="tableData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -134,12 +136,12 @@
     </vxe-table>
     <div slot="footer"></div>
     <account ref="account" :arrId="arrId" />
-    <idDetailed ref="idDetailed"/>
+    <idDetailed ref="idDetailed" />
   </Modal>
 </template>
 <script>
 import account from "./accountregistration";
-import idDetailed from '../components/idDetailed'
+import idDetailed from "../components/idDetailed";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import {
   submit,
@@ -192,8 +194,9 @@ export default {
           title: "对账单号",
           key: "accountNo",
           className: "tc",
-          render:(h,params)=>{
-            return h('span',
+          render: (h, params) => {
+            return h(
+              "span",
               {
                 style: {
                   cursor: "pointer",
@@ -201,12 +204,13 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$refs.idDetailed.modal1=true
-                    this.$refs.idDetailed.guestId=this.arrId[1]
+                    this.$refs.idDetailed.modal1 = true;
+                    this.$refs.idDetailed.guestId = this.arrId[1];
                   }
                 }
               },
-              params.row.serviceId)
+              params.row.serviceId
+            );
           }
         },
         {
@@ -282,15 +286,29 @@ export default {
       //监听first组件的txt事件
       val.map(item => {
         this.accountData.push(item);
-        if(item.details.length!==0){
-          item.details.map(itm=>{
+        if (item.details.length !== 0) {
+          item.details.map(itm => {
             this.tableData.push(itm);
-          })
+          });
         }
       });
     });
   },
   methods: {
+    //获取尾部总数
+    footerMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
+          }
+          if (["totalAmt", "invoiceAmt", "taxAmt"].includes(column.property)) {
+            return this.$utils.sum(data, column.property).toFixed(2);
+          }
+          return null;
+        })
+      ];
+    },
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
@@ -347,6 +365,15 @@ export default {
     async submission() {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
       if (!errMap) {
+        let pay = 0
+        let pei = 0
+        this.tableData.map(item=>{
+          pei += item.totalAmt
+        })
+        this.accountData.map(item=>{
+          pay += item.actualPayment
+        })
+        if(pei>pay) return this.$message.error('价税合计金额不能大于应付合计')
         let data = {
           details: this.tableData,
           masterList: this.accountData
