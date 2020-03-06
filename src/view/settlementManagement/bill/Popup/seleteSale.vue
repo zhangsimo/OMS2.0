@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" :title="popupTit" width="800">
+  <Modal v-model="modal1" :title="popupTit" width="800" @on-visible-change="visChange">
     <Table
       :columns="saleSingle"
       :data="saleSingleData"
@@ -12,8 +12,10 @@
   </Modal>
 </template>
 <script>
+import {saleSlip} from '@/api/bill/popup'
+import bus from './Bus'
 export default {
-  props: ["popupTit"],
+  props: ["popupTit",'parameter'],
   data() {
     return {
       modal1: false, //弹框展示
@@ -25,68 +27,73 @@ export default {
         },
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
         {
           title: "客户名称",
-          key: "orgName",
-          className: "tc"
-        },
-        {
-          title: "日期",
-          key: "accountNo",
-          className: "tc"
-        },
-        {
-          title: "业务单据号",
           key: "guestName",
           className: "tc"
         },
         {
+          title: "日期",
+          key: "transferDate",
+          className: "tc"
+        },
+        {
+          title: "业务单据号",
+          key: "serviceId",
+          className: "tc"
+        },
+        {
           title: "出库单号",
-          key: "paymentTypeName",
+          key: "orderNo",
           className: "tc"
         },
         {
           title: "含税标志",
-          key: "accountsReceivable",
+          key: "taxSignName",
           className: "tc"
         },
         {
           title: "油品/配件",
-          key: "receivableRebate",
+          key: "speciesName",
           className: "tc"
         },
         {
           title: "单据金额",
-          key: "badDebtReceivable",
+          key: "rpAmt",
           className: "tc",
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          render: (h, params) => {
+            return h("span", params.row.rpAmt.toFixed(2));
+          }
         }
       ], //选择单据表格
-      saleSingleData: [
-        {
-          index: 1
-        },
-        {
-          index: 1
-        },
-        {
-          index: 1
-        }
-      ], //选择单据表格数据
+      saleSingleData: [], //选择单据表格数据
       seleteData: [] //选中的数据
     };
   },
   methods: {
+    // 对话框是否显示
+    visChange(flag) {
+      if (flag) {
+        let taxSign = 0
+        if(this.popupTit === '选择必开销售单') taxSign = 1
+        saleSlip({accountNo:this.parameter.accountNo,taxSign}).then(res=>{
+          if(res.code===0){
+            res.data.map(item=>{
+              item.speciesName = item.species.name
+            })
+          }
+          this.saleSingleData = res.data
+        })
+      }
+    },
     //选择一条数据
     determine() {
       if (this.seleteData.length!==0) {
-        this.$message.error("请先选择一条ghhghg销售单");
+        bus.$emit('partsData',this.seleteData)
       } else {
         this.$message.error("请先选择一条销售单");
       }

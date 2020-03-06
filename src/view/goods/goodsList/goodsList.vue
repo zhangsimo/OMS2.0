@@ -399,7 +399,7 @@
                   <template v-slot="{ row }">{{ row.noTaxPrice | priceFilters }}</template>
                 </vxe-table-column>
                 <vxe-table-column title="不含税金额" width="100">
-                  <template v-slot="{ row }">{{ (row.noTaxPrice||0).toFixed(2)*row.orderQty |priceFilters}}</template>
+                  <template v-slot="{ row }">{{ row.noTaxPrice * row.orderQty |priceFilters}}</template>
                 </vxe-table-column>
                 <vxe-table-column title="最近采购单价" width="100">
                   <template v-slot="{ row }">{{ row.recentPrice | priceFilters }}</template>

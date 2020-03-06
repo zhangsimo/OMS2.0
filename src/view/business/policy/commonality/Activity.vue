@@ -109,7 +109,7 @@
 </template>
 
 <script>
-    import {getActivity,getActivityLayer} from '@/api/salesManagment/salesOrder'
+    import {getActivity} from '@/api/salesManagment/salesOrder'
 
     export default {
         name:'SalesOutBound',
@@ -135,7 +135,7 @@
            async getList(){
                 let data ={}
                 data = this.Outform
-               let res = await getActivityLayer(data)
+               let res = await getActivity(data)
                   if(res.code === 0){
                       console.log(res)
                       this.tableDataBottom = res.data

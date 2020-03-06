@@ -140,9 +140,9 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="业务员：" prop="createUname">
+                  <FormItem label="业务员：" prop="orderManId">
                     <Select
-                      :value="Leftcurrentrow.createUnameId"
+                      :value="Leftcurrentrow.orderManId"
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 240px"
@@ -161,11 +161,12 @@
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />-->
                   </FormItem>
-                  <FormItem label="移仓日期" prop="commitDate">
+                  <FormItem label="移仓日期" prop="auditDate">
                     <DatePicker
-                      :value="Leftcurrentrow.commitDate"
+                      :value="Leftcurrentrow.auditDate"
                       format="yyyy-MM-dd HH:mm:ss"
-                      type="date"
+                      @on-change="commitDate"
+                      type="datetime"
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     ></DatePicker>
@@ -350,12 +351,12 @@ export default {
           },
           {
             title: "移仓日期",
-            key: "commitDate",
+            key: "auditDate",
             minWidth: 170
           },
           {
             title: "业务员",
-            key: "createUname",
+            key: "orderMan",
             minWidth: 120
           },
           {
@@ -375,13 +376,12 @@ export default {
           },
           {
             title: "创建日期",
-            align: "createTime",
-            key: "left8",
+            key: "createTime",
             minWidth: 170
           },
           {
             title: "提交人",
-            key: "commitUname",
+            key: "createUname",
             minWidth: 170
           },
           {
@@ -471,12 +471,13 @@ export default {
       warehouseList: [],
       Leftcurrentrow: {
         status: {
-          value: 0
+          value: 1
         },
         storeId: "", //移入
         receiveStoreId: "", //移出
-        createUname: "", //业务员
-        commitDate: "", //移仓日期
+        orderMan: "", //业务员
+        orderManId:"",
+        auditDate: "", //移仓日期
         serviceId: "", //移仓单号
         detailVOList: []
       }, //右边所有数据（含提交）
@@ -487,10 +488,10 @@ export default {
         receiveStoreId: [
           { required: true, message: "请选择移入仓库", trigger: "change" }
         ],
-        createUname: [
+        orderManId: [
           { required: true, message: "业务员不能为空", trigger: "blur" }
         ],
-        commitDate: [
+        auditDate: [
           { required: true, message: "移仓时间不为空", trigger: "change" }
         ]
       },
@@ -498,7 +499,10 @@ export default {
       showRemove: false, //作废提示
       isAddRight: true, //判断右侧是有数据
       showBayer: false, //出库方弹窗
-      rightTableStatus: "" //右侧表格状态
+      rightTableStatus: "", //右侧表格状态
+
+      saveButClick:false,//点击保存临时屏蔽保存按钮功能
+
     };
   },
   watch: {
@@ -522,8 +526,8 @@ export default {
   methods: {
     //获取销售员
     selectOrderMan(val) {
-      this.Leftcurrentrow.createUname = val ? val.label ? val.label : '':'';
-      this.Leftcurrentrow.createUnameId = val ? val.value ? val.value : '':'';
+      this.Leftcurrentrow.orderMan = val ? val.label ? val.label : '':'';
+      this.Leftcurrentrow.orderManId = val ? val.value ? val.value : '':'';
     },
     //获取销售员
     async getAllSales() {
@@ -622,7 +626,7 @@ export default {
     },
     //改变移仓时间
     commitDate(data) {
-      this.Leftcurrentrow.commitDate = data + " " + "00:00:00";
+      this.Leftcurrentrow.auditDate = data;
     },
     //更多按钮
     More() {
@@ -647,6 +651,7 @@ export default {
           return;
         }
       }
+      this.$refs.Leftcurrentrow.resetFields();
       const item = {
         index: 1,
         xinzeng: "1",
@@ -657,17 +662,18 @@ export default {
         },
 
         statuName: "草稿",
-        commitDate: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        createUname: "",
         serviceId: "",
         printing: "",
         createUname: this.$store.state.user.userData.staffName,
-        createTime: "",
+        createdUid:this.$store.state.user.userData.id,
         commitUname: "",
-        //commitDate:"",
-        //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-        //createUname: this.$store.state.user.userData.staffName,
         detailVOList: [],
+        //业务员-业务员id
+        orderMan:"",
+        orderManId:"",
+        //移仓时间
+        auditDate:"",
+
         _highlight: true
       };
       this.flag = 1;
@@ -685,9 +691,15 @@ export default {
     },
     //保存
     baocun() {
+      if(this.saveButClick){
+        return
+      }
+      this.saveButClick = true;
+
       if (!this.Leftcurrentrow.serviceId) {
         if (this.Leftcurrentrow.xinzeng !== "1") {
-          return this.$Message.info("请先选择加工单");
+          this.saveButClick = false;
+          return this.$Message.info("请先选择移仓单");
         }
       }
       // if (
@@ -704,12 +716,16 @@ export default {
         this.this.Leftcurrentrow.status.value !== 0
       ) {
         this.$Message.error("只有草稿状态才能保存");
+        this.saveButClick = false;
         return;
       }
       if (this.numberValue < 0) {
         this.$Message.error("数量不可小于0");
+        this.saveButClick = false;
         return;
       }
+      // this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
+      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
@@ -717,16 +733,22 @@ export default {
           this.flag = 0;
           updata(params)
             .then(res => {
+              this.saveButClick = false
               if (res.code == 0) {
                 // console.log(res, "res=>616");
                 this.$Message.success("保存成功");
                 this.getList();
+                this.Leftcurrentrow.serviceId = "";
+                this.Leftcurrentrow.xinzeng = 2;
+                this.$refs.Leftcurrentrow.resetFields();
               }
             })
             .catch(e => {
+              this.saveButClick = false;
               this.$Message.info("保存失败");
             });
         } else {
+          this.saveButClick = false;
           this.$Message.error("*都是必填项");
         }
       });
@@ -847,12 +869,12 @@ export default {
         });
         return;
       }
-      this.salesList.map(item=>{
-        if(item.label===row.createUname) {
-          row.createUnameId = item.id
-        }
-      })
-      this.Leftcurrentrow = row;
+      // this.salesList.map(item=>{
+      //   if(item.label===row.createUname) {
+      //     row.createdUid = item.id
+      //   }
+      // })
+      this.Leftcurrentrow = {...row};
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {
         row["detailVOList"] = [];
@@ -887,8 +909,8 @@ export default {
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]
+        item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
-        // this.Leftcurrentrow.detailVOList.push(item);
       });
       // console.log(this.Right.tbdata);
       // console.log(this.Leftcurrentrow);

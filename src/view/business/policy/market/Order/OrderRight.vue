@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell',activeMethod: activeRowMethod}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -454,6 +454,7 @@ export default {
       } else {
         this.draftShow = 0;
         this.formPlan = res;
+        console.log(this.formPlan)
       }
       // this.draftShow = this.draftShow.value
     },
@@ -853,10 +854,15 @@ export default {
       let xTable = this.$refs.xTable;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       let orderPriceColumn = xTable.getColumnByField("orderPrice");
-      let sexColumn = xTable.getColumnByField("sex");
-      let isDisabled = this.draftShow != 0;
+      let isDisabled = false;
+      if(row.isMarkActivity==1){
+        isDisabled = true
+      }
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+    },
+    activeRowMethod({row,rowIndex}){
+        return this.draftShow == 0
     },
     //出库
     stockOut() {
@@ -865,43 +871,62 @@ export default {
         this.$message.error("请先保存");
         return false;
       }
-      this.$Modal.confirm({
-        title: "是否确定出库",
-        onOk: async () => {
-          this.$refs.formPlan.validate(async valid => {
-            if (valid) {
-              try {
-                await this.$refs.xTable.validate();
-                if (+this.totalMoney > +this.limitList.outOfAmt) {
-                  return this.$message.error("可用余额不足");
-                }
-                //console.log("jinlaile");
-                this.formPlan.orderType = JSON.stringify(
-                  this.formPlan.orderType
-                );
-                let res = await outDataList(this.formPlan);
-                //console.log("fasong");
-                if (res.code === 0) {
-                  this.$Message.success("出库成功成功");
-                  this.getChangeList();
-                  return res;
-                }
-              } catch (errMap) {
-                this.$XModal.message({
-                  status: "error",
-                  message: "表格校验不通过！"
-                });
-              }
-            } else {
-              this.$Message.error("*为必填项");
+      let priceArr0 = this.formPlan.details.filter(item => item.orderPrice==0)
+      console.log(priceArr0)
+      if(priceArr0.length>0){
+        this.$Modal.confirm({
+          title: "存在配件单价为0，是否确定出库！",
+          onOk: () => {
+            this.stockOutSubmit();
+          },
+          onCancel: () => {
+          }
+        });
+      }else{
+        this.$Modal.confirm({
+          title: "是否确定出库",
+          onOk: () => {
+            this.stockOutSubmit();
+          },
+          onCancel: () => {
+          }
+        });
+      }
+    },
+
+
+    async stockOutSubmit(){
+      this.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          try {
+            await this.$refs.xTable.validate();
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
+              return this.$message.error("可用余额不足");
             }
-          });
-        },
-        onCancel: () => {
-          this.$Message.info("取消成功");
+            //console.log("jinlaile");
+            this.formPlan.orderType = JSON.stringify(
+              this.formPlan.orderType
+            );
+            let res = await outDataList(this.formPlan);
+            //console.log("fasong");
+            if (res.code === 0) {
+              this.$Message.success("出库成功");
+              this.getChangeList();
+              return res;
+            }
+          } catch (errMap) {
+            this.$XModal.message({
+              status: "error",
+              message: "表格校验不通过！"
+            });
+          }
+        } else {
+          this.$Message.error("*为必填项");
         }
       });
     },
+
+
     //提交
     submitList() {
       this.$refs.formPlan.validate(async valid => {
@@ -914,7 +939,7 @@ export default {
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
@@ -941,6 +966,7 @@ export default {
         this.getChangeList();
       }
     },
+
     getRUl() {
       this.upurl = getup + "id=" + this.formPlan.id;
     }

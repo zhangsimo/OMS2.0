@@ -186,7 +186,13 @@ export default class SettlementAccount extends Vue {
         this.title = "新增账户"
         this.isNew = true;
         this.modal = true;
-        this.formData.remark = ""
+        this.formData = {
+            name: '',
+            type: '',
+            remark: '',
+            mode: [{}],
+            deleteItems: [],
+        }
         this.reset();
     }
 

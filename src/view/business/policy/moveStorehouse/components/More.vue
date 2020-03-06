@@ -25,11 +25,12 @@
           v-model="moreData.serviceId"
           icon="ios-clock-outline"
           style="width: 450px"
+          placeholder="请输入移仓单号"
         />
       </row>
       <row class="mt15">
         <span>配件编码：</span>
-        <Input v-model="moreData.partCode" placeholder="请输入受理单号！" style="width: 450px" />
+        <Input v-model="moreData.partCode" placeholder="请输入配件编码" style="width: 450px" />
       </row>
       <row class="mt15">
         <span>配件名称：</span>

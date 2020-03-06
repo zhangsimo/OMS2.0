@@ -84,11 +84,11 @@
             //获取入库时间
             getEnterDate(date){
                 if (date[0]){
-                    this.data.startTime = date[0] + ' ' + '00:00:00'
-                    this.data.endTime = date[1] + ' ' + '23:59:59'
+                    this.data.startEnterDate = date[0] + ' ' + '00:00:00'
+                    this.data.endEnterDate = date[1] + ' ' + '23:59:59'
                 }else {
-                    this.data.starEntertime = ''
-                    this.data.endEnterTime = ''
+                    this.data.startEnterDate = ''
+                    this.data.endEnterDate = ''
                 }
             },
           //确认
