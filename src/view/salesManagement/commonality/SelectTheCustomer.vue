@@ -27,7 +27,7 @@
       <div class="clientBody">
         <div class="demo-split">
           <Split v-model="split1">
-            <div slot="left" class="demo-split-pane">
+            <div slot="left" class="demo-split-pane" style="width: 100px;">
               <div class="tableBox">
                 <Tree :data="treeData" @on-select-change="clickTree"></Tree>
               </div>

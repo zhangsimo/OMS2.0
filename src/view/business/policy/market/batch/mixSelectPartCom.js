@@ -50,7 +50,7 @@ export const mixSelectPartCom  = {
           render: (h, params) => {
             let text = '';
             try {
-              text = params.row.carBrandName+params.row.carModelName
+              text = params.row.carModelName
             } catch(e) {}
             return h('span', text);
           }

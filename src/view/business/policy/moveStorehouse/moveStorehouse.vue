@@ -140,9 +140,9 @@
                       >{{ item.name }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="业务员：" prop="createUname">
+                  <FormItem label="业务员：" prop="orderManId">
                     <Select
-                      :value="Leftcurrentrow.createdUid"
+                      :value="Leftcurrentrow.orderManId"
                       @on-change="selectOrderMan"
                       filterable
                       style="width: 240px"
@@ -161,12 +161,12 @@
                       :disabled="Leftcurrentrow.status.value !== 0"
                     />-->
                   </FormItem>
-                  <FormItem label="移仓日期" prop="commitDate">
+                  <FormItem label="移仓日期" prop="auditDate">
                     <DatePicker
-                      :value="Leftcurrentrow.commitDate"
+                      :value="Leftcurrentrow.auditDate"
                       format="yyyy-MM-dd HH:mm:ss"
                       @on-change="commitDate"
-                      type="date"
+                      type="datetime"
                       class="w160"
                       :disabled="Leftcurrentrow.status.value !== 0"
                     ></DatePicker>
@@ -351,12 +351,12 @@ export default {
           },
           {
             title: "移仓日期",
-            key: "commitDate",
+            key: "auditDate",
             minWidth: 170
           },
           {
             title: "业务员",
-            key: "createUname",
+            key: "orderMan",
             minWidth: 120
           },
           {
@@ -376,13 +376,12 @@ export default {
           },
           {
             title: "创建日期",
-            align: "createTime",
-            key: "left8",
+            key: "createTime",
             minWidth: 170
           },
           {
             title: "提交人",
-            key: "commitUname",
+            key: "createUname",
             minWidth: 170
           },
           {
@@ -476,8 +475,9 @@ export default {
         },
         storeId: "", //移入
         receiveStoreId: "", //移出
-        createUname: "", //业务员
-        commitDate: "", //移仓日期
+        orderMan: "", //业务员
+        orderManId:"",
+        auditDate: "", //移仓日期
         serviceId: "", //移仓单号
         detailVOList: []
       }, //右边所有数据（含提交）
@@ -488,10 +488,10 @@ export default {
         receiveStoreId: [
           { required: true, message: "请选择移入仓库", trigger: "change" }
         ],
-        createUname: [
+        orderManId: [
           { required: true, message: "业务员不能为空", trigger: "blur" }
         ],
-        commitDate: [
+        auditDate: [
           { required: true, message: "移仓时间不为空", trigger: "change" }
         ]
       },
@@ -526,8 +526,8 @@ export default {
   methods: {
     //获取销售员
     selectOrderMan(val) {
-      this.Leftcurrentrow.createUname = val ? val.label ? val.label : '':'';
-      this.Leftcurrentrow.createdUid = val ? val.value ? val.value : '':'';
+      this.Leftcurrentrow.orderMan = val ? val.label ? val.label : '':'';
+      this.Leftcurrentrow.orderManId = val ? val.value ? val.value : '':'';
     },
     //获取销售员
     async getAllSales() {
@@ -626,7 +626,7 @@ export default {
     },
     //改变移仓时间
     commitDate(data) {
-      this.Leftcurrentrow.commitDate = data;
+      this.Leftcurrentrow.auditDate = data;
     },
     //更多按钮
     More() {
@@ -662,17 +662,18 @@ export default {
         },
 
         statuName: "草稿",
-        commitDate: "",
         serviceId: "",
         printing: "",
         createUname: this.$store.state.user.userData.staffName,
         createdUid:this.$store.state.user.userData.id,
-        createTime: "",
         commitUname: "",
-        //commitDate:"",
-        //createTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-        //createUname: this.$store.state.user.userData.staffName,
         detailVOList: [],
+        //业务员-业务员id
+        orderMan:"",
+        orderManId:"",
+        //移仓时间
+        auditDate:"",
+
         _highlight: true
       };
       this.flag = 1;
@@ -698,7 +699,7 @@ export default {
       if (!this.Leftcurrentrow.serviceId) {
         if (this.Leftcurrentrow.xinzeng !== "1") {
           this.saveButClick = false;
-          return this.$Message.info("请先选择加工单");
+          return this.$Message.info("请先选择移仓单");
         }
       }
       // if (
@@ -723,8 +724,8 @@ export default {
         this.saveButClick = false;
         return;
       }
-      this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
-      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata]
+      // this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
+      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
@@ -868,11 +869,11 @@ export default {
         });
         return;
       }
-      this.salesList.map(item=>{
-        if(item.label===row.createUname) {
-          row.createdUid = item.id
-        }
-      })
+      // this.salesList.map(item=>{
+      //   if(item.label===row.createUname) {
+      //     row.createdUid = item.id
+      //   }
+      // })
       this.Leftcurrentrow = {...row};
       // console.log(this.Leftcurrentrow, "this.Leftcurrentrow =>713");
       if (!row.detailVOList) {

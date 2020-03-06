@@ -42,7 +42,7 @@
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
-    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="100">
+    <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="160">
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="发票单位" prop="receiptUnit">
@@ -54,6 +54,15 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
+          <FormItem label="税号" prop="taxNo">
+            <Input v-model="invoice.taxNo" class="ml5 w200" />
+          </FormItem>
+          <FormItem label="地址电话" prop="tel">
+            <Input v-model="invoice.tel" class="ml5 w200" />
+          </FormItem>
+          <FormItem label="开户行及账号" prop="bankOpening">
+            <Input v-model="invoice.bankOpening" class="ml5 w200" />
+          </FormItem>
           <FormItem label="开票单位" prop="invoiceUnit">
             <Select v-model="invoice.invoiceUnit" class="ml5 w200">
               <Option
@@ -62,55 +71,6 @@
                 :key="item.value"
               >{{ item.label }}</Option>
             </Select>
-          </FormItem>
-          <FormItem label="快递收件人" prop="consignee">
-            <Input v-model="invoice.consignee" class="ml5 w200" />
-          </FormItem>
-          <FormItem label="费用承担" prop="costBear">
-            <Select v-model="invoice.costBear" class="ml5 w200">
-              <Option
-                v-for="item in invoice.bearingCostList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="对账单欠票金额" prop="statementAmountOwed">
-            <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
-          </FormItem>
-          <FormItem label="申请开票金额" prop="applyMoney">
-            <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="税号" prop="taxNo">
-            <Input v-model="invoice.taxNo" class="ml5 w200" />
-          </FormItem>
-          <FormItem label="开票类型" prop="invoiceType">
-            <Select v-model="invoice.invoiceType" class="ml5 w200">
-              <Option
-                v-for="item in invoice.typeBillingList"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>
-          </FormItem>
-          <FormItem label="收件地址" prop="address">
-            <Input v-model="invoice.address" class="ml5 w200" />
-          </FormItem>
-          <FormItem label="备注">
-            <Input v-model="invoice.remark" class="ml5 w200" />
-          </FormItem>
-          <FormItem label="本次申请开票含税金额" prop="applyMoneyTax">
-            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" />
-          </FormItem>
-          <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
-            <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="地址电话" prop="tel">
-            <Input v-model="invoice.tel" class="ml5 w200" />
           </FormItem>
           <FormItem label="开票税率" prop="invoiceTax">
             <Select v-model="invoice.invoiceTax" class="ml5 w200">
@@ -121,19 +81,14 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="电话" prop="phone">
-            <Input v-model="invoice.phone" class="ml5 w200" />
-          </FormItem>
-          <FormItem>
-            <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
-          </FormItem>
-          <FormItem label="不含税金额" prop="amountExcludingTax">
-            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
-          </FormItem>
-        </div>
-        <div style="flex-flow: row nowrap;width: 100%">
-          <FormItem label="开户行及账号" prop="bankOpening">
-            <Input v-model="invoice.bankOpening" class="ml5 w200" />
+          <FormItem label="开票类型" prop="invoiceType">
+            <Select v-model="invoice.invoiceType" class="ml5 w200">
+              <Option
+                v-for="item in invoice.typeBillingList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
           </FormItem>
           <FormItem label="收款方式" prop="collectionType">
             <Select v-model="invoice.collectionType" class="ml5 w200">
@@ -144,6 +99,17 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="快递收件人" prop="consignee">
+            <Input v-model="invoice.consignee" class="ml5 w200" />
+          </FormItem>
+          <FormItem label="收件地址" prop="address">
+            <Input v-model="invoice.address" class="ml5 w200" />
+          </FormItem>
+          <FormItem label="电话" prop="phone">
+            <Input v-model="invoice.phone" class="ml5 w200" />
+          </FormItem>
           <FormItem label="寄件方式" prop="sendingWay">
             <Select v-model="invoice.sendingWay" class="ml5 w200">
               <Option
@@ -153,11 +119,40 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
+          <FormItem label="费用承担" prop="costBear">
+            <Select v-model="invoice.costBear" class="ml5 w200">
+              <Option
+                v-for="item in invoice.bearingCostList"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+          </FormItem>
+          <FormItem label="备注">
+            <Input v-model="invoice.remark" class="ml5 w200" />
+          </FormItem>
           <FormItem>
-            <Input class="ml5 w200" style="opacity:0" />
+            <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
+          </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%">
+          <FormItem label="对账单欠票金额" prop="statementAmountOwed">
+            <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
+          </FormItem>
+          <FormItem label="本次申请开票含税金额" prop="applyMoneyTax">
+            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" />
+          </FormItem>
+          <FormItem label="不含税金额" prop="amountExcludingTax">
+            <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="外加税点" prop="additionalTaxPoint">
             <Input v-model="invoice.additionalTaxPoint" class="ml5 w200" disabled />
+          </FormItem>
+          <FormItem label="申请开票金额" prop="applyMoney">
+            <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
+          </FormItem>
+          <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
+            <Input v-model="invoice.underTicketExplain" class="ml5 w200" />
           </FormItem>
         </div>
       </div>
@@ -190,8 +185,13 @@ import approval from "./approval";
 import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
-import { applyNo, ditInvoice,informationCitation,partsInvoice } from "@/api/bill/popup";
-import bus from './Bus'
+import {
+  applyNo,
+  ditInvoice,
+  informationCitation,
+  partsInvoice
+} from "@/api/bill/popup";
+import bus from "./Bus";
 export default {
   components: {
     approval,
@@ -199,6 +199,27 @@ export default {
     noTax
   },
   data() {
+    const validateTax = (rule, value, callback) => {
+      if (value) {
+        if (parseFloat(value) > parseFloat(this.invoice.statementAmountOwed)) {
+          callback(new Error("不得大于欠票金额"));
+        } else {
+          callback();
+        }
+      } else {
+        callback(new Error("本次申请开票含税金额不能为空"));
+      }
+    };
+    const validateTicket = (rule, value, callback) => {
+      if (
+        parseFloat(this.invoice.applyMoneyTax) !==
+        parseFloat(this.invoice.statementAmountOwed)
+      ) {
+        callback(new Error("欠票金额不等于本次申请开票含税金额"));
+      } else {
+        callback();
+      }
+    };
     return {
       parameter: {}, //销售单参数
       information: {}, //基本信息数据
@@ -214,9 +235,9 @@ export default {
         bankOpening: "", //开户行及账号
         invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "", //开票类型
+        invoiceType: "010103", //开票类型
         typeBillingList: [], //开票类型列表
-        invoiceTax: "", //开票税率
+        invoiceTax: "010103", //开票税率
         rateBillingList: [], //开票税率列表
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
@@ -334,13 +355,13 @@ export default {
         applyMoneyTax: [
           {
             required: true,
-            message: "本次申请开票含税金额不能为空"
+            message: "",
+            validator: validateTax
           }
         ],
         underTicketExplain: [
           {
-            required: true,
-            message: "欠票未全金额开具说明不能为空"
+            validator: validateTicket
           }
         ],
         phone: [
@@ -360,79 +381,100 @@ export default {
       accessoriesBilling: [
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
         {
           title: "配件名称",
-          key: "orgName",
+          key: "partName",
           className: "tc"
         },
         {
           title: "配件编码",
-          key: "accountNo",
+          key: "partCode",
           className: "tc"
         },
         {
           title: "单位",
-          key: "guestName",
+          key: "unit",
           className: "tc"
         },
         {
           title: "数量",
-          key: "paymentTypeName",
+          key: "orderQty",
           className: "tc"
         },
         {
           title: "商品含税单价",
-          key: "accountsReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "taxPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxPrice.toFixed(2));
+          }
         },
         {
           title: "商品含税金额",
-          key: "receivableRebate",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "taxAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxAmt.toFixed(2));
+          }
         },
         {
           title: "开票税率",
-          key: "badDebtReceivable",
+          key: "invoiceTax",
           className: "tc"
         },
         {
           title: "出库单号",
-          key: "badDebtReceivable",
+          key: "orderNo",
           className: "tc"
         },
         {
           title: "销售单价",
-          key: "badDebtReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "salePrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.salePrice.toFixed(2));
+          }
+        },
+        {
+          title: "销售金额",
+          key: "saleAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.saleAmt.toFixed(2));
+          }
+        },
+        {
+          title: "已开票金额",
+          key: "invoiceAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceAmt.toFixed(2));
+          }
+        },
+        {
+          title: "未开票金额",
+          key: "invoiceNotAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceNotAmt.toFixed(2));
+          }
         },
         {
           title: "申请开票金额",
-          key: "badDebtReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "applyAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.applyAmt.toFixed(2));
+          }
         },
         {
           title: "外加税点",
-          key: "badDebtReceivable",
+          key: "additionalTaxPoint",
           className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
         }
       ], //开票配件
       accessoriesBillingData: [] //开票配件数据
@@ -486,42 +528,59 @@ export default {
       }
     });
     // 选择销售单
-    bus.$on('partsData',val=>{
-      console.log(val)
-    })
+    bus.$on("partsData", val => {
+      val.map(item => {
+        let sum = 0;
+        item.details.map((itm, index) => {
+          sum += itm.applyAmt * 1;
+          if (sum > this.invoice.applyMoneyTax) {
+            itm.applyAmt -= sum - this.invoice.applyMoneyTax;
+            item.details = item.details.slice(0, index + 1);
+          }
+        });
+        if (sum < this.invoice.applyMoneyTax) {
+          this.accessoriesBillingData = [
+            ...item.details,
+            ...this.accessoriesBillingData
+          ];
+        } else {
+          this.accessoriesBillingData = item.details;
+        }
+      });
+    });
   },
   methods: {
     // 引用上次申请信息
-    quote(){
-      informationCitation({guestId:this.information.guestId}).then(res=>{
-        if(res.code===0){
-          this.invoice.consignee = res.data.consignee
-          this.invoice.address = res.data.address
-          this.invoice.phone = res.data.phone
+    quote() {
+      informationCitation({ guestId: this.information.guestId }).then(res => {
+        if (res.code === 0) {
+          this.invoice.consignee = res.data.consignee;
+          this.invoice.address = res.data.address;
+          this.invoice.phone = res.data.phone;
         }
-      })
+      });
     },
     // 发票单位带出税号等信息
     invoiceChange(val) {
       this.invoice.receiptUnitList.map(item => {
         if (item.value === val) {
-          this.invoice.taxNo = item.taxpayerCode
-          this.invoice.tel = item.taxpayerTel
-          this.invoice.bankOpening = item.accountBankNo
+          this.invoice.taxNo = item.taxpayerCode;
+          this.invoice.tel = item.taxpayerTel;
+          this.invoice.bankOpening = item.accountBankNo;
         }
       });
     },
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        this.$refs.formCustom.resetFields()
+        this.$refs.formCustom.resetFields();
         this.invoice.statementAmountOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
         this.invoice.applyMoneyTax = this.invoice.statementAmountOwed;
-        this.invoice.applyMoney =
+        this.invoice.applyAmt =
           this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
-          // 发票单位
-        ditInvoice({ guestId: "1211932763040690176" }).then(res => {
+        // 发票单位
+        ditInvoice({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
             res.data.map(item => {
               item.label = item.taxpayerName;
@@ -531,10 +590,18 @@ export default {
           }
         });
         // 开票配件
-        console.log(this.information)
-        partsInvoice({mainId,id}).then(res=>{
-
-        })
+        partsInvoice({
+          accountNo: this.information.accountNo,
+          taxSign: 1
+        }).then(res => {
+          if (res.code === 0) {
+            res.data.map(item => {
+              item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+              item.taxPrice = item.taxAmt / item.orderQty;
+            });
+            this.accessoriesBillingData = res.data;
+          }
+        });
       }
     },
     // 增加不含税销售开票申请
@@ -572,7 +639,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index >= 11) {
+        if ((index > 3 && index < 7) || index > 12) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -582,10 +649,17 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[key] = {
-              key,
-              value: v
-            };
+            if (index !== 4 && index !== 14) {
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            } else {
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
           }
         } else {
           sums[key] = {
@@ -595,6 +669,30 @@ export default {
         }
       });
       return sums;
+    }
+  },
+  watch: {
+    invoice: {
+      handler(val) {
+        this.invoice.rateBillingList.map(item => {
+          if (val.invoiceTax === item.value) {
+            this.accessoriesBillingData.map(itm => {
+              this.$set(itm, "invoiceTax", item.label);
+            });
+          }
+          let sum = 0;
+          let accData = this.accessoriesBillingData;
+          this.accessoriesBillingData.map((item, index) => {
+            sum += item.applyAmt * 1;
+            if (sum > val.applyMoneyTax) {
+              item.applyAmt -= sum - val.applyMoneyTax;
+              this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
+            }
+          });
+        });
+      },
+      deep: true,
+      immediate: true
     }
   }
 };

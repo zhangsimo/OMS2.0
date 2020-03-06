@@ -153,11 +153,11 @@
               :current="pageList.page"
               :total="pageList.total"
               :page-size="pageList.pageSize"
-              :page-size-opts="pageList.pageSizeOpts"
               show-sizer
+              :page-size-opts="[20,40,60,80,100]"
               @on-change="changePage"
               @on-page-size-change="changeSize"
-            />
+            ></Page>
           </div>
         </Col>
       </Row>
@@ -257,7 +257,7 @@ export default {
       pageList: {
         page: 1,
         total: 0,
-        pageSize: 10,
+        pageSize: 20,
         pageSizeOpts: [20, 40, 60, 80, 100]
       },
 
@@ -302,11 +302,21 @@ export default {
     getDataQuick(val) {
       this.form.startTime = val[0];
       this.form.endTime = val[1];
+      this.search();
     },
     //time2
     selectDate(val) {
       this.form.commitDateStart = val[0] + " " + "00:00:00";
       this.form.commitDateEnd = val[1] + " " + "23:59:59";
+    },
+    changePage(p) {
+      this.pageList.page = p
+      this.search();
+    },
+    changeSize(size) {
+      this.pageList.page = 1
+      this.pageList.pageSize = size
+      this.search();
     },
     //搜索
     search() {
