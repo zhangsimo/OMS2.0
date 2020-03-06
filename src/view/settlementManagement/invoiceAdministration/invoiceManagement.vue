@@ -111,7 +111,7 @@
                   v-for="item in taxOptionList"
                   :value="Number(item.itemValueOne)"
                   :key="item.value"
-                >{{item.itemValueOne}}</Option>
+                >{{Math.floor(item.itemValueOne * 100)}} %</Option>
               </Select>
             </FormItem>
           </Col>

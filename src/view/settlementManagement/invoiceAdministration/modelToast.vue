@@ -69,14 +69,12 @@
         width="100"
         :edit-render="{name: 'input', attrs: {type: 'number',placeholder:'输入8位数字'}}"
       ></vxe-table-column>
-      <div class="widthOption">
-        <vxe-table-column
-          field="invoiceSellerName"
-          title="发票销售方名称"
-          width="150"
-          :edit-render="{name: 'input', attrs: {type: 'text'}}"
-        ></vxe-table-column>
-      </div>
+      <vxe-table-column
+        field="invoiceSellerName"
+        title="发票销售方名称"
+        width="150"
+        :edit-render="{name: 'input', attrs: {type: 'text'}}"
+      ></vxe-table-column>
       <vxe-table-column
         field="billingDate"
         title="开票日期"
@@ -101,18 +99,18 @@
         width="80"
         :edit-render="{name: 'input', attrs: {type: 'number'}}"
       ></vxe-table-column>
-      <vxe-table-column field="taxRate" title="税率" width="70">
+      <vxe-table-column field="taxRate" title="税率" width="120">
         <template v-slot="{row}">
           <Select v-model="row.taxRate">
             <Option
               v-for="item in taxRate"
               :value="Number(item.itemValueOne)"
               :key="item.itemCode"
-            >{{ item.itemValueOne }}</Option>
+            >{{Math.floor(item.itemValueOne * 100)}} %</Option>
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="payType" title="付款方式" width="100">
+      <vxe-table-column field="payType" title="付款方式" width="120">
         <template v-slot="{row}">
           <Select v-model="row.payType">
             <Option
@@ -123,7 +121,7 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="invoiceSort" width="100" title="发票分类">
+      <vxe-table-column field="invoiceSort" width="120" title="发票分类">
         <template v-slot="{row}">
           <Select v-model="row.invoiceSort">
             <Option
@@ -445,7 +443,7 @@ export default {
 };
 </script>
 <style lang="less" >
-.widthOption .ivu-select .ivu-select-dropdown {
+.ivu-select .ivu-select-dropdown {
   width: 100px !important;
 }
 </style>
