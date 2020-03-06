@@ -230,8 +230,10 @@ export default class SelectSupplier extends Vue {
   }
   //系统分类树形节点点击数据
   private selectTree(v) {
-    this.selectTreeItem = v[0];
-    this.getList();
+    if(v.length > 0) {
+      this.selectTreeItem = v[0];
+      this.getList();
+    }
   }
   //显示层
   private init() {
