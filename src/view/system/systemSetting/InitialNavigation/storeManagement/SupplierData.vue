@@ -250,7 +250,7 @@ export default {
     //修改客户资料
     changeClient() {
       if (Object.keys(this.pitchSupplierOne).length == 0) {
-        this.$Message.error("至少选项一条地址");
+        this.$Message.error("请至少选择一条数据");
         return false;
       }
       this.clientDataShow = true;

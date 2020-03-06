@@ -78,7 +78,7 @@
             field="changeNum"
             title="本次调整数量"
             :edit-render="{ name: 'input' }"
-            width="120"
+            width="160"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -86,7 +86,7 @@
                 :max="row.orderQty-row.trueEnterQty-row.notEnterQty"
                 v-model="row.changeNum"
                 :controls="false"
-                size="small"
+                size="mini"
                 :precision="0"
               />
             </template>

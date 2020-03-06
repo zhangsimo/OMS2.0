@@ -162,7 +162,7 @@ export default {
       let list = this.$store.state.dataList.oneOrder;
         this.$refs.right.$refs.formPlan.validate(async valid => {
             if(valid){
-                if (list.id) {
+                if (list.id||this.isAdd) {
                     this.$Modal.confirm({
                         title: '是否确定提交',
                         onOk: async () => {
@@ -263,6 +263,7 @@ export default {
       this.$refs.right.limitList.fixationQuota = '00.00'
       this.$refs.right.limitList.tempQuota  = '00.00'
       this.$refs.right.limitList.sumAmt = '00.00';
+      this.isAdd=true;
       this.$refs.right.WarehouseList.map(item=>{
           if(item.isDefault){
               this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});

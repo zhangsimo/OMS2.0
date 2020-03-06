@@ -35,7 +35,7 @@
             </button>
           </div>
           <div class="db ml10">
-            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="modal1 = true">
+            <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="open">
               <i class="iconfont iconcaidan"></i>
               <span>更多</span>
             </button>
@@ -989,6 +989,15 @@ export default {
     // 选择日期
     changedate(daterange) {
       this.value = daterange;
+    },
+    open() {
+      this.value = []
+      this.model2 = ''
+      this.nametext = ''
+      this.model1 = ''
+      this.model3 = ''
+      this.text = ''
+      this.modal1 = true
     },
     // 更多条件查询
     senior() {

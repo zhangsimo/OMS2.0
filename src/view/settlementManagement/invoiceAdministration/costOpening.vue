@@ -315,146 +315,141 @@ export default {
         }
       ],
       columns1: [
-          {
-              title: '开票申请流程',
-              key: 'process',
+        {
+          title: "开票申请流程",
+          key: "process"
+        },
+        {
+          title: "提交人",
+          key: "submitter"
+        },
+        {
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "店长"),
+              // h('img', {
+              //     attrs: {
+              //       src:require('../../../assets/images/jiantou.png')
+              //     },
+              //     style: {
+              //         width: '30px',
+              //         height: '12px'
+              //     }
+              // })
+              h("Icon", {
+                props: {
+                  type: "md-arrow-forward"
+                },
+                style: {
+                  fontSize: "18px"
+                }
+              })
+            ]);
           },
-          {
-              title: '提交人',
-              key: 'submitter'
-          },
-          {
-           renderHeader: (h, params) => {
-                return h('div', [
-                     h('span',
-                    '店长'),
-                    // h('img', {
-                    //     attrs: {
-                    //       src:require('../../../assets/images/jiantou.png')
-                    //     },
-                    //     style: {
-                    //         width: '30px',
-                    //         height: '12px'
-                    //     }
-                    // })
-                    h('Icon',{
-                      props:{
-                        type:'md-arrow-forward'
-                      },
-                      style:{
-                        fontSize:'18px'
-                      }
-                    })
-                ]);
-            },
-            key: 'shopowner',
-          },
-          {
-            title: '区总',
-            key: 'district',
-            renderHeader: (h, params) => {
-              return h('div', [
-                    h('span',
-                  '区总'),
-                  // h('img', {
-                  //     attrs: {
-                  //       src:require('../../../assets/images/jiantou.png')
-                  //     },
-                  //     style: {
-                  //         width: '30px',
-                  //         height: '12px'
-                  //     }
-                  // })
-                  h('Icon',{
-                    props:{
-                      type:'md-arrow-forward'
-                    },
-                    style:{
-                      fontSize:'18px'
-                    }
-                  })
-              ]);
-            },
-          },
-          {
-            title: '营销总监',
-            key: 'marketing',
-            renderHeader: (h, params) => {
-              return h('div', [
-                    h('span',
-                  '营销总监'),
-                  // h('img', {
-                  //     attrs: {
-                  //       src:require('../../../assets/images/jiantou.png')
-                  //     },
-                  //     style: {
-                  //         width: '30px',
-                  //         height: '12px'
-                  //     }
-                  // })
-                  h('Icon',{
-                    props:{
-                      type:'md-arrow-forward'
-                    },
-                    style:{
-                      fontSize:'18px'
-                    }
-                  })
-              ]);
-            }
-          },
-          {
-            title: '财务总监',
-            key: 'financial',
-            renderHeader: (h, params) => {
-            return h('div', [
-              h('span',
-                '财务总监'),
-                // h('img', {
-                //     attrs: {
-                //       src:require('../../../assets/images/jiantou.png')
-                //     },
-                //     style: {
-                //         width: '30px',
-                //         height: '12px'
-                //     }
-                // })
-                h('Icon',{
-                  props:{
-                    type:'md-arrow-forward'
-                  },
-                  style:{
-                    fontSize:'18px'
-                  }
-                })
-              ]);
-            }
-          },
-          {
-              title: '会计',
-              key: 'accounting',
+          key: "shopowner"
+        },
+        {
+          title: "区总",
+          key: "district",
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "区总"),
+              // h('img', {
+              //     attrs: {
+              //       src:require('../../../assets/images/jiantou.png')
+              //     },
+              //     style: {
+              //         width: '30px',
+              //         height: '12px'
+              //     }
+              // })
+              h("Icon", {
+                props: {
+                  type: "md-arrow-forward"
+                },
+                style: {
+                  fontSize: "18px"
+                }
+              })
+            ]);
           }
-          
+        },
+        {
+          title: "营销总监",
+          key: "marketing",
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "营销总监"),
+              // h('img', {
+              //     attrs: {
+              //       src:require('../../../assets/images/jiantou.png')
+              //     },
+              //     style: {
+              //         width: '30px',
+              //         height: '12px'
+              //     }
+              // })
+              h("Icon", {
+                props: {
+                  type: "md-arrow-forward"
+                },
+                style: {
+                  fontSize: "18px"
+                }
+              })
+            ]);
+          }
+        },
+        {
+          title: "财务总监",
+          key: "financial",
+          renderHeader: (h, params) => {
+            return h("div", [
+              h("span", "财务总监"),
+              // h('img', {
+              //     attrs: {
+              //       src:require('../../../assets/images/jiantou.png')
+              //     },
+              //     style: {
+              //         width: '30px',
+              //         height: '12px'
+              //     }
+              // })
+              h("Icon", {
+                props: {
+                  type: "md-arrow-forward"
+                },
+                style: {
+                  fontSize: "18px"
+                }
+              })
+            ]);
+          }
+        },
+        {
+          title: "会计",
+          key: "accounting"
+        }
       ],
-      data1:[
+      data1: [
         {
-          process: '审批人',
+          process: "审批人",
           submitter: 18,
-          shopowner: '某某',
-          district:'某某',
-          marketing:'某某',
-          financial:'某某',
-          accounting:'某某'
+          shopowner: "某某",
+          district: "某某",
+          marketing: "某某",
+          financial: "某某",
+          accounting: "某某"
         },
         {
-          process: '审批时间',
-          submitter: '2020-02-27',
-          shopowner: '2020-02-27',
-          district:'2020-02-27',
-          marketing:'2020-02-27',
-          financial:'2020-02-27',
-          accounting:'2020-02-27'
-        },
+          process: "审批时间",
+          submitter: "2020-02-27",
+          shopowner: "2020-02-27",
+          district: "2020-02-27",
+          marketing: "2020-02-27",
+          financial: "2020-02-27",
+          accounting: "2020-02-27"
+        }
       ],
       data: [],
       value: "",

@@ -4,11 +4,11 @@ const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
   omsApi: "http://192.168.30.21:9240", //徐林烽
   wmsApi: "http://192.168.30.21:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsOrder: "http://10.8.0.26:9210", // 徐林烽
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",
   // omsOrder:'http://192.168.30.21:9210', //陈舒
-  omsSettle: "http://10.8.0.10:9270",
+  omsSettle: "http://192.168.30.21:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -20,6 +20,7 @@ const dev = {
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
   omsSotck: "http://192.168.30.179:9280", //9280
+
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",

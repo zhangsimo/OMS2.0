@@ -898,7 +898,7 @@ export default {
           });
           // console.log(this.data)
           // console.log(this.orgid)
-          this.List.total = 0;
+          this.List.total = res.data.totalElements;
         }
       });
     },

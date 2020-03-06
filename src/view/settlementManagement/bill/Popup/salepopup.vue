@@ -214,9 +214,9 @@ export default {
         bankOpening: "", //开户行及账号
         invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "", //开票类型
+        invoiceType: "010103", //开票类型
         typeBillingList: [], //开票类型列表
-        invoiceTax: "", //开票税率
+        invoiceTax: "010103", //开票税率
         rateBillingList: [], //开票税率列表
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
@@ -360,79 +360,100 @@ export default {
       accessoriesBilling: [
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
         {
           title: "配件名称",
-          key: "orgName",
+          key: "partName",
           className: "tc"
         },
         {
           title: "配件编码",
-          key: "accountNo",
+          key: "partCode",
           className: "tc"
         },
         {
           title: "单位",
-          key: "guestName",
+          key: "unit",
           className: "tc"
         },
         {
           title: "数量",
-          key: "paymentTypeName",
+          key: "orderQty",
           className: "tc"
         },
         {
           title: "商品含税单价",
-          key: "accountsReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "taxPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxPrice.toFixed(2));
+          }
         },
         {
           title: "商品含税金额",
-          key: "receivableRebate",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "taxAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxAmt.toFixed(2));
+          }
         },
         {
           title: "开票税率",
-          key: "badDebtReceivable",
+          key: "invoiceTax",
           className: "tc"
         },
         {
           title: "出库单号",
-          key: "badDebtReceivable",
+          key: "orderNo",
           className: "tc"
         },
         {
           title: "销售单价",
-          key: "badDebtReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "orderPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.orderPrice.toFixed(2));
+          }
+        },
+        {
+          title: "销售金额",
+          key: "orderAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.orderAmt.toFixed(2));
+          }
+        },
+        {
+          title: "已开票金额",
+          key: "orderPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.orderPrice.toFixed(2));
+          }
+        },
+        {
+          title: "未开票金额",
+          key: "orderPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.orderPrice.toFixed(2));
+          }
         },
         {
           title: "申请开票金额",
-          key: "badDebtReceivable",
-          className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
+          key: "applyMoney",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.applyMoney.toFixed(2));
+          }
         },
         {
           title: "外加税点",
-          key: "badDebtReceivable",
+          key: "additionalTaxPoint",
           className: "tc"
-          // render: (h, params) => {
-          //   return h("span", params.row.badDebtReceivable.toFixed(2));
-          // }
         }
       ], //开票配件
       accessoriesBillingData: [] //开票配件数据
@@ -531,9 +552,17 @@ export default {
           }
         });
         // 开票配件
-        console.log(this.information);
-        partsInvoice({ accountNo: this.information.accountNo,taxSign:1}).then(res => {
-          console.log(res)
+        partsInvoice({
+          accountNo: this.information.accountNo,
+          taxSign: 1
+        }).then(res => {
+          if(res.code===0){
+            res.data.map(item=>{
+              item.taxAmt = item.applyMoney+item.additionalTaxPoint
+              item.taxPrice = item.taxAmt/item.orderQty
+            })
+            this.accessoriesBillingData = res.data
+          }
         });
       }
     },
@@ -572,7 +601,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index >= 11) {
+        if (index > 3&&index<7||index>12) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -582,10 +611,17 @@ export default {
                 return prev;
               }
             }, 0);
-            sums[key] = {
-              key,
-              value: v
-            };
+            if(index!==4||index!==14){
+              sums[key] = {
+                key,
+                value: v.toFixed(2)
+              };
+            } else {
+              sums[key] = {
+                key,
+                value: v
+              };
+            }
           }
         } else {
           sums[key] = {
@@ -595,6 +631,30 @@ export default {
         }
       });
       return sums;
+    }
+  },
+  watch: {
+    invoice: {
+      handler(val) {
+        this.invoice.rateBillingList.map(item => {
+          if (val.invoiceTax === item.value) {
+            this.accessoriesBillingData.map(itm=>{
+              this.$set(itm,'invoiceTax',item.label)
+            })
+            console.log(this.accessoriesBillingData)
+            // this.accessoriesBillingData.push({
+            //   orderQty:1,
+            //   taxPrice:1,
+            //   taxAmt:1,
+            //   invoiceTax:1,
+            //   applyMoney:1,
+            //   additionalTaxPoint:1
+            // });
+          }
+        });
+      },
+      deep: true,
+      immediate: true
     }
   }
 };
