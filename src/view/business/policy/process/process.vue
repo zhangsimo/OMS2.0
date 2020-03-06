@@ -1228,6 +1228,7 @@ export default {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
         const id = seleList[0].id;
+
         shanqu(id)
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list

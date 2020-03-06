@@ -199,6 +199,27 @@ export default {
     noTax
   },
   data() {
+    const validateTax = (rule, value, callback) => {
+      if (value) {
+        if (parseFloat(value) > parseFloat(this.invoice.statementAmountOwed)) {
+          callback(new Error("不得大于欠票金额"));
+        } else {
+          callback();
+        }
+      } else {
+        callback(new Error("本次申请开票含税金额不能为空"));
+      }
+    };
+    const validateTicket = (rule, value, callback) => {
+      if (
+        parseFloat(this.invoice.applyMoneyTax) !==
+        parseFloat(this.invoice.statementAmountOwed)
+      ) {
+        callback(new Error("欠票金额不等于本次申请开票含税金额"));
+      } else {
+        callback();
+      }
+    };
     return {
       parameter: {}, //销售单参数
       information: {}, //基本信息数据
@@ -334,13 +355,13 @@ export default {
         applyMoneyTax: [
           {
             required: true,
-            message: "本次申请开票含税金额不能为空"
+            message: "",
+            validator: validateTax
           }
         ],
         underTicketExplain: [
           {
-            required: true,
-            message: "欠票未全金额开具说明不能为空"
+            validator: validateTicket
           }
         ],
         phone: [
@@ -412,42 +433,42 @@ export default {
         },
         {
           title: "销售单价",
-          key: "orderPrice",
+          key: "salePrice",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.orderPrice.toFixed(2));
+            return h("span", params.row.salePrice.toFixed(2));
           }
         },
         {
           title: "销售金额",
-          key: "orderAmt",
+          key: "saleAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.orderAmt.toFixed(2));
+            return h("span", params.row.saleAmt.toFixed(2));
           }
         },
         {
           title: "已开票金额",
-          key: "orderPrice",
+          key: "invoiceAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.orderPrice.toFixed(2));
+            return h("span", params.row.invoiceAmt.toFixed(2));
           }
         },
         {
           title: "未开票金额",
-          key: "orderPrice",
+          key: "invoiceNotAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.orderPrice.toFixed(2));
+            return h("span", params.row.invoiceNotAmt.toFixed(2));
           }
         },
         {
           title: "申请开票金额",
-          key: "applyMoney",
+          key: "applyAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.applyMoney.toFixed(2));
+            return h("span", params.row.applyAmt.toFixed(2));
           }
         },
         {
@@ -508,7 +529,24 @@ export default {
     });
     // 选择销售单
     bus.$on("partsData", val => {
-      console.log(val);
+      val.map(item => {
+        let sum = 0;
+        item.details.map((itm, index) => {
+          sum += itm.applyAmt * 1;
+          if (sum > this.invoice.applyMoneyTax) {
+            itm.applyAmt -= sum - this.invoice.applyMoneyTax;
+            item.details = item.details.slice(0, index + 1);
+          }
+        });
+        if (sum < this.invoice.applyMoneyTax) {
+          this.accessoriesBillingData = [
+            ...item.details,
+            ...this.accessoriesBillingData
+          ];
+        } else {
+          this.accessoriesBillingData = item.details;
+        }
+      });
     });
   },
   methods: {
@@ -539,7 +577,7 @@ export default {
         this.invoice.statementAmountOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
         this.invoice.applyMoneyTax = this.invoice.statementAmountOwed;
-        this.invoice.applyMoney =
+        this.invoice.applyAmt =
           this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
         // 发票单位
         ditInvoice({ guestId: this.information.guestId }).then(res => {
@@ -556,12 +594,12 @@ export default {
           accountNo: this.information.accountNo,
           taxSign: 1
         }).then(res => {
-          if(res.code===0){
-            res.data.map(item=>{
-              item.taxAmt = item.applyMoney+item.additionalTaxPoint
-              item.taxPrice = item.taxAmt/item.orderQty
-            })
-            this.accessoriesBillingData = res.data
+          if (res.code === 0) {
+            res.data.map(item => {
+              item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+              item.taxPrice = item.taxAmt / item.orderQty;
+            });
+            this.accessoriesBillingData = res.data;
           }
         });
       }
@@ -601,7 +639,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 3&&index<7||index>12) {
+        if ((index > 3 && index < 7) || index > 12) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -611,7 +649,7 @@ export default {
                 return prev;
               }
             }, 0);
-            if(index!==4||index!==14){
+            if (index !== 4 && index !== 14) {
               sums[key] = {
                 key,
                 value: v.toFixed(2)
@@ -638,19 +676,19 @@ export default {
       handler(val) {
         this.invoice.rateBillingList.map(item => {
           if (val.invoiceTax === item.value) {
-            this.accessoriesBillingData.map(itm=>{
-              this.$set(itm,'invoiceTax',item.label)
-            })
-            console.log(this.accessoriesBillingData)
-            // this.accessoriesBillingData.push({
-            //   orderQty:1,
-            //   taxPrice:1,
-            //   taxAmt:1,
-            //   invoiceTax:1,
-            //   applyMoney:1,
-            //   additionalTaxPoint:1
-            // });
+            this.accessoriesBillingData.map(itm => {
+              this.$set(itm, "invoiceTax", item.label);
+            });
           }
+          let sum = 0;
+          let accData = this.accessoriesBillingData;
+          this.accessoriesBillingData.map((item, index) => {
+            sum += item.applyAmt * 1;
+            if (sum > val.applyMoneyTax) {
+              item.applyAmt -= sum - val.applyMoneyTax;
+              this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
+            }
+          });
         });
       },
       deep: true,

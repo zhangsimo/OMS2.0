@@ -96,7 +96,7 @@
 import SeleteSale from "./seleteSale";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
-import { noTaxApplyNo } from "@/api/bill/popup";
+import { noTaxApplyNo,partsInvoice } from "@/api/bill/popup";
 import bus from "./Bus";
 export default {
   components: {
@@ -282,6 +282,19 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields()
+        // 开票配件
+        partsInvoice({
+          accountNo: this.information.accountNo,
+          taxSign: 0
+        }).then(res => {
+          if(res.code===0){
+            res.data.map(item=>{
+              item.taxAmt = item.applyAmt+item.additionalTaxPoint
+              item.taxPrice = item.taxAmt/item.orderQty
+            })
+            this.accessoriesBillingData = res.data
+          }
+        });
       }
     },
     // 提交申请

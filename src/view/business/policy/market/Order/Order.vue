@@ -83,7 +83,7 @@
           async searchMore(data) {
             const res = await getListmore(data, 10, 0)
             if (res) {
-              this.$refs.leftorder.getData(res.data.content)
+              this.$refs.leftorder.getData(res.data)
             } else {
               this.$message.error('查询失败')
             }
