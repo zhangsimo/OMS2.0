@@ -14,7 +14,8 @@
             placement="bottom-end"
             placeholder="请选择日期"
             style="width: 120px"
-            v-model="auditDate"
+            :value="auditDate"
+            @on-change="getDate"
           ></DatePicker>
         </div>
         <!-- <div class="db mr5">
@@ -65,7 +66,7 @@
         <vxe-table-column field="serviceId" title="入库单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="供应商名称"></vxe-table-column>
         <vxe-table-column field="orderAmt" title="入库金额"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="入库日期"></vxe-table-column>
+        <vxe-table-column field="finishDate" title="入库日期"></vxe-table-column>
         <vxe-table-column field="code" title="采购单号"></vxe-table-column>
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table>
@@ -207,13 +208,18 @@ export default class ProcurementModal extends Vue {
     this.getPchsPlanList();
   }
 
+  //获取日期
+  private getDate(v){
+    this.auditDate = v
+  }
+
   private async getPchsPlanList() {
     let params: any = {};
     let data:any = {
       guestId: this.guestId,
       serviceId: this.serviceId,
-      auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+      startTime: this.auditDate[0]?this.auditDate[0]+" 00:00:00":"",
+      endTime: this.auditDate[1]?this.auditDate[1]+" 23:59:59":"",
     };
     params.size = this.page.size;
     params.page = this.page.num - 1;

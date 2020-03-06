@@ -432,7 +432,7 @@ export default {
           minWidth: 120
         },
         {
-          title: "库存数量",
+          title: "入库数量",
           align: "center",
           key: "enterQty",
           minWidth: 120
