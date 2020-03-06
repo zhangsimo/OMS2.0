@@ -63,10 +63,10 @@ export default {
         },
         {
           title: "单据金额",
-          key: "rpAmt",
+          key: "accountAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.rpAmt.toFixed(2));
+            return h("span", params.row.accountAmt.toFixed(2));
           }
         }
       ], //选择单据表格
@@ -94,6 +94,7 @@ export default {
     determine() {
       if (this.seleteData.length!==0) {
         bus.$emit('partsData',this.seleteData)
+        this.modal1 = false
       } else {
         this.$message.error("请先选择一条销售单");
       }
