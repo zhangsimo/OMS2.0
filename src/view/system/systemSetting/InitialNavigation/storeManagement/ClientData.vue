@@ -122,7 +122,7 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="银行账号:">
+            <FormItem label="银行账号:" prop="bankAccountNumber">
               <Input v-model="data.bankAccountNumber" style="width: 280px" />
             </FormItem>
           </Col>
@@ -219,6 +219,14 @@ export default {
         callback();
       }
     };
+    const valiiBank = (rule, value, callback) => {
+      const regExp = /^([1-9]{1})(\d{15}|\d{18})$/; 
+      if (value && !regExp.test(value)) {
+        callback(new Error("银行账户填写错误"));
+      } else {
+        callback();
+      }
+    };
     return {
       wxImgUrl: api.wxImgUrl, //图片地址
       headers: {
@@ -227,6 +235,7 @@ export default {
       visible: false,
       clientDisable: true,
       rules: {
+        bankAccountNumber: [{validator: valiiBank, trigger: "blur" }],
         firm: [{ required: true, message: "不能为空", trigger: "blur" }],
         name: [{ required: true, message: "不能为空", trigger: "blur" }],
         shortName: [{ required: true, message: "不能为空", trigger: "change" }],
