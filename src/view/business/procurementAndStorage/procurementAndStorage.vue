@@ -119,7 +119,7 @@
                         filterable
                         style="width: 240px"
                         @on-change="changeClient"
-                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                        disabled
                       >
                         <Option
                           v-for="item in client"
@@ -131,7 +131,7 @@
                         class="ml5"
                         size="small"
                         type="default"
-                        :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                        disabled
                         @click="addSuppler"
                       >
                         <Icon type="md-checkmark" />
@@ -152,7 +152,7 @@
                       format="yyyy-MM-dd HH:mm:ss"
                       v-model="formPlan.orderDate"
                       style="width: 200px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != ''"
+                      disabled
                     ></DatePicker>
                   </FormItem>
                   <FormItem label="入库单号：">
@@ -188,7 +188,7 @@
                     <Input
                       style="width: 370px"
                       v-model="formPlan.remark"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      disabled
                     />
                   </FormItem>
                   <FormItem label="往来单号：">
@@ -198,7 +198,7 @@
                     <Select
                       v-model="formPlan.storeId"
                       style="width:200px"
-                      :disabled="formPlan.billStatusValue != 0 || formPlan.code != '' || legtTableData.length!==0 ? legtTableData[0].guestId !== '':true"
+                      disabled
                     >
                       <Option
                         v-for="item in WarehouseList"
@@ -276,7 +276,6 @@
                     <vxe-table-column
                       field="orderPrice"
                       title="单价"
-                      :edit-render="{name: 'input',immediate: true,attrs: {disabled: formPlan.billStatusValue === 4}, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
                     <vxe-table-column title="金额">
                       <template v-slot="{ row }">

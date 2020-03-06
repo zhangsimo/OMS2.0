@@ -404,7 +404,7 @@ export default {
           { required: true, type: "string", message: "  ", trigger: "change" }
         ],
         billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, message: " ", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
@@ -673,14 +673,21 @@ export default {
     deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
-        this.selectTableList.forEach(item => {
+        this.selectTableList.forEach((item,i) => {
           this.formPlan.details.map((itm, index) => {
-            if (item.id === itm.id) {
-              this.formPlan.details.splice(index, 1);
+            if(item.id){
+              if (item.id === itm.id) {
+                data.push(item.id);
+                this.formPlan.details.splice(index, 1);
+              }
+            }else{
+              if(JSON.stringify(item)==JSON.stringify(itm)){
+                this.formPlan.details.splice(index, 1);
+              }
             }
           });
-          data.push(item.id);
         });
+        this.selectTableList = []
         const form = this.$parent.$parent.$refs.leftorder.tableData;
         form.map((item, index) => {
           if (item.id === this.formPlan.id) {
@@ -691,6 +698,9 @@ export default {
             );
           }
         });
+        if(data.length==0){
+          return
+        }
         shanqu(data).then(res => {
           if (res.code === 0) {
             this.$message.success(res.data);

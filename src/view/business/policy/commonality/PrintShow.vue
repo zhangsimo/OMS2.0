@@ -190,6 +190,16 @@
                     data['id'] = order.id
                     let res = await getprintList(data)
                     if(res.code == 0){
+                      let WarehouseList = this.$parent.$refs.right.WarehouseList||[]
+                        if(WarehouseList.length>0){
+                          res.data.details.map(v1 => {
+                            for(let b of WarehouseList){
+                              if(b.id==v1.storeId){
+                                v1.storeName = b.name
+                              }
+                            }
+                          })
+                        }
                         this.printShow = true
                         this.onelist = res.data
                     }
