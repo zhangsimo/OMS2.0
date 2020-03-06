@@ -140,7 +140,7 @@
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyMoneyTax">
-            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" />
+            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" @on-change="moneyChange" />
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -192,6 +192,7 @@ import {
   partsInvoice
 } from "@/api/bill/popup";
 import bus from "./Bus";
+import index from "../../../admin/roles";
 export default {
   components: {
     approval,
@@ -477,7 +478,8 @@ export default {
           className: "tc"
         }
       ], //开票配件
-      accessoriesBillingData: [] //开票配件数据
+      accessoriesBillingData: [], //开票配件数据
+      copyData: [] //开票配件复制数据
     };
   },
   mounted() {
@@ -550,6 +552,21 @@ export default {
     });
   },
   methods: {
+    // 本次申请含税金额
+    moneyChange(event) {
+      // let sum = 0;
+      // let accData = this.copyData;
+      // this.accessoriesBillingData = accData.map((item, index) => {
+      //   if (sum > event.target.value) {
+      //     item.applyAmt -= sum - event.target.value;
+      //     console.log(22)
+      //     return accData.slice(0, index + 1);
+      //   } else {
+      //     sum += item.applyAmt * 1;
+      //   }
+      //   console.log(111)
+      // });
+    },
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
@@ -600,6 +617,7 @@ export default {
               item.taxPrice = item.taxAmt / item.orderQty;
             });
             this.accessoriesBillingData = res.data;
+            this.copyData = res.data;
           }
         });
       }
@@ -673,26 +691,35 @@ export default {
   },
   watch: {
     invoice: {
-      handler(val) {
+      handler(val, olval) {
         this.invoice.rateBillingList.map(item => {
           if (val.invoiceTax === item.value) {
             this.accessoriesBillingData.map(itm => {
               this.$set(itm, "invoiceTax", item.label);
             });
           }
-          let sum = 0;
-          let accData = this.accessoriesBillingData;
-          this.accessoriesBillingData.map((item, index) => {
-            sum += item.applyAmt * 1;
-            if (sum > val.applyMoneyTax) {
-              item.applyAmt -= sum - val.applyMoneyTax;
-              this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
-            }
-          });
+          
         });
+        console.log(val,'11')
+          console.log(olval,'22')
+          // console.log(val.applyMoneyTax,val.applyMoneyTax!==old.applyMoneyTax,old.applyMoneyTax)
+          if(this.copyData.length!==0&&val.applyMoneyTax!==olval.applyMoneyTax){
+            let sum = 0;
+            let accData = this.copyData;
+            accData = accData.filter((itm, index) => {
+              sum += itm.applyAmt * 1;
+              return sum <= val.applyMoneyTax;
+            });
+            console.log(accData,sum)
+            const len = accData.length
+            accData.push(this.copyData[len])
+            accData[len].applyAmt -= sum-val.applyMoneyTax
+          this.accessoriesBillingData =accData
+          }
+          
       },
       deep: true,
-      immediate: true
+      // immediate: true
     }
   }
 };

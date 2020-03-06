@@ -86,3 +86,34 @@ export function partsInvoice(data){
     data
 })
 }
+//发票对冲页面选择对账单
+export function seleteAccount(params){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceHedgingMain/findStatementPage`,
+    method: 'get',
+    params
+})
+}
+//发票对冲页面申请单号
+export function hedgingApplyNo(){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceHedgingMain/generateServiceId`,
+    method: 'get'
+})
+}
+//发票对冲保存
+export function hedPreservation(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceHedgingMain/saveOrUpdate`,
+    method: 'post',
+    data
+})
+}
+//发票对冲提交
+export function hedSubmit(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceHedgingMain/commit`,
+    method: 'post',
+    data
+})
+}
