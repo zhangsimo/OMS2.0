@@ -79,10 +79,10 @@ export function informationCitation(params){
 })
 }
 //开票配件
-export function partsInvoice(params){
+export function partsInvoice(data){
   return axios.request({
-    url: `${api.omsOrder}/sellOutDetail/findByMainId`,
-    method: 'get',
-    params
+    url: `${api.omsSettle}/statement/master/findDeatilByAccountNo`,
+    method: 'post',
+    data
 })
 }
