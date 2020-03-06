@@ -84,26 +84,34 @@
           <Col span="11">
             <FormItem label="发票采购方名称：" prop="invoicePurchaserId">
               <Select v-model="formValidate.invoicePurchaserId" clearable>
-                <Option v-for="item in purchaserOptionList" :value="item.id" :key="item.value">{{item.name}}</Option>
+                <Option
+                  v-for="item in purchaserOptionList"
+                  :value="item.id"
+                  :key="item.value"
+                >{{item.name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="税额：" prop="taxAmt">
-              <Input v-model="formValidate.taxAmt" clearable/>
+              <Input v-model="formValidate.taxAmt" clearable />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
             <FormItem label="店号：" prop="shopNo">
-              <Input v-model="formValidate.shopNo" clearable/>
+              <Input v-model="formValidate.shopNo" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="税率：" prop="taxRate">
               <Select v-model="formValidate.taxRate" clearable>
-                <Option v-for="item in taxOptionList" :value="Number(item.itemValueOne)" :key="item.value">{{item.itemValueOne}}</Option>
+                <Option
+                  v-for="item in taxOptionList"
+                  :value="Number(item.itemValueOne)"
+                  :key="item.value"
+                >{{item.itemValueOne}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -111,28 +119,32 @@
         <Row>
           <Col span="11">
             <FormItem label="发票代码：" prop="invoiceCode">
-              <Input v-model="formValidate.invoiceCode" clearable/>
+              <Input v-model="formValidate.invoiceCode" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="往来单位：" prop="guestName">
               <!-- <Select v-model="formValidate.name">
                 <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select> -->
-              <Input v-model="formValidate.guestName" clearable/>
+              </Select>-->
+              <Input v-model="formValidate.guestName" clearable />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
             <FormItem label="发票号：" prop="invoiceNo">
-              <Input v-model="formValidate.invoiceNo" clearable/>
+              <Input v-model="formValidate.invoiceNo" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="付款方式：" prop="payType">
               <Select v-model="formValidate.payType" clearable>
-                <Option v-for="item in payOptionList" :value="item.itemCode" :key="item.value">{{item.itemName}}</Option>
+                <Option
+                  v-for="item in payOptionList"
+                  :value="item.itemCode"
+                  :key="item.value"
+                >{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -140,13 +152,17 @@
         <Row>
           <Col span="11">
             <FormItem label="发票销售方名称：" prop="invoiceSellerName">
-              <Input v-model="formValidate.invoiceSellerName" clearable/>
+              <Input v-model="formValidate.invoiceSellerName" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="开票清单类型：" prop="billingType">
               <Select v-model="formValidate.billingType" clearable>
-                <Option v-for="item in billingOptionList" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
+                <Option
+                  v-for="item in billingOptionList"
+                  :value="item.itemCode"
+                  :key="item.itemCode"
+                >{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -154,13 +170,17 @@
         <Row>
           <Col span="11">
             <FormItem label="开票日期：" prop="billingDate">
-              <Input v-model="formValidate.billingDate" clearable/>
+              <Input v-model="formValidate.billingDate" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="发票分类：" prop="invoiceSort">
               <Select v-model="formValidate.invoiceSort" clearable>
-                <Option v-for="item in invoiceOptionList" :value="item.itemCode" :key="item.value">{{item.itemName}}</Option>
+                <Option
+                  v-for="item in invoiceOptionList"
+                  :value="item.itemCode"
+                  :key="item.value"
+                >{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -168,12 +188,12 @@
         <Row>
           <Col span="11">
             <FormItem label="价税合计金额：" prop="totalAmt">
-              <Input v-model="formValidate.totalAmt" clearable/>
+              <Input v-model="formValidate.totalAmt" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="金额：" prop="invoiceAmt">
-                <Input v-model="formValidate.invoiceAmt" clearable/>
+              <Input v-model="formValidate.invoiceAmt" clearable />
             </FormItem>
           </Col>
         </Row>
@@ -197,15 +217,15 @@
     </Modal>
     <!-- 核销弹框 -->
     <Modal v-model="modal2" width="360">
-        <p slot="header" style="color:#f60;text-align:center">
-            <span>核销成功</span>
-        </p>
-        <div style="text-align:center">
-            <p>已成功核销{{total}}条数据</p>
-        </div>
-        <div slot="footer">
-            <Button type="success" @click="modal2=false">确定</Button>
-        </div>
+      <p slot="header" style="color:#f60;text-align:center">
+        <span>核销成功</span>
+      </p>
+      <div style="text-align:center">
+        <p>已成功核销{{total}}条数据</p>
+      </div>
+      <div slot="footer">
+        <Button type="success" @click="modal2=false">确定</Button>
+      </div>
     </Modal>
     <modelToast ref="Toast"></modelToast>
   </div>
@@ -229,9 +249,9 @@ import {
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
-import modelToast from './modelToast.vue'
+import modelToast from "./modelToast.vue";
 export default {
-  components:{
+  components: {
     modelToast
   },
   data() {
@@ -239,94 +259,115 @@ export default {
       columns: [
         {
           title: "选择",
-          width: 40,
-          type: "selection",
+          width: 50,
+          type: "selection"
         },
         {
           type: "index",
           title: "序号",
+          width: 50
         },
         {
           title: "登记日期",
           key: "registrationDate",
+          width: 70
         },
         {
           title: "发票采购方名称",
           key: "invoicePurchaserName",
+          width: 100
         },
         {
           title: "店号",
           key: "shopNo",
+          width: 60
         },
         {
           title: "发票代码",
           key: "invoiceCode",
+          width: 70
         },
         {
           title: "发票号",
           key: "invoiceNo",
+          width: 65
         },
         {
           title: "发票销售方名称",
           key: "invoiceSellerName",
+          width: 110
         },
         {
           title: "开票日期",
           key: "billingDate",
+          width: 70
         },
         {
           title: "价税合计金额",
           key: "totalAmt",
+          width: 90
         },
         {
           title: "金额",
           key: "invoiceAmt",
+          width: 70
         },
         {
           title: "税额",
           key: "taxAmt",
+          width: 70
         },
         {
           title: "税率",
           key: "taxRate",
+          width: 70
         },
         {
           title: "往来单位",
           key: "guestName",
+          width: 70
         },
         {
           title: "付款方式",
           key: "payTypeName",
+          width: 70
         },
         {
           title: "发票分类",
           key: "invoiceSortName",
+          width: 70
         },
         {
           title: "开票清单类型",
           key: "billingTypeName",
+          width: 90
         },
         {
           title: "增加类型",
           key: "addTypeName",
+          width: 70
         },
         {
           title: "导入经办人",
           key: "importUname",
+          width: 80
         },
         {
           title: "登记时间",
           key: "registrationTime",
+          width: 70,
           className: "tc"
         },
         {
           title: "勾选认证时间",
           key: "checkCertificationTime",
+          width: 90
         },
         {
           title: "是否退回",
           key: "returned",
           className: "tc",
+          width: 70,
           render: (h, params) => {
             return h("span", params.row.returned ? "是" : "否");
           }
@@ -334,14 +375,17 @@ export default {
         {
           title: "退回经办人",
           key: "returnUname",
+          width: 80
         },
         {
           title: "退回时间",
           key: "returnTime",
+          width: 70
         },
         {
           title: "是否红字转出",
           key: "redHedged",
+          width: 90,
           render: (h, params) => {
             return h("span", params.row.redHedged ? "是" : "否");
           }
@@ -349,67 +393,75 @@ export default {
         {
           title: "红冲经办人",
           key: "hedgeUname",
-          minWinth:180
+          width: 80
         },
         {
           title: "红冲时间",
           key: "hedgeTime",
+          width: 70
         },
         {
           title: "对号账单",
           key: "accountNo",
+          width: 70,
           render: (h, params) => {
-            let arr = []
-            params.row.accountNo.forEach((item,i)=>{
+            let arr = [];
+            params.row.accountNo.forEach((item, i) => {
               arr.push(
-                h("span",{
-                  style:{
-                    color:'red',
-                  },
-                  on: {
-                    click: () => {
-                      this.$refs.Toast.modal6=true
-                      this.$refs.Toast.accountNo=item
-                      this.$refs.Toast.getToastData()
+                h(
+                  "span",
+                  {
+                    style: {
+                      color: "red"
+                    },
+                    on: {
+                      click: () => {
+                        this.$refs.Toast.modal6 = true;
+                        this.$refs.Toast.accountNo = item;
+                        this.$refs.Toast.getToastData();
+                      }
                     }
-                  }
-                },item)
-              )
-            })
-            return h('div',arr)
+                  },
+                  item
+                )
+              );
+            });
+            return h("div", arr);
           }
         },
         {
           title: "核销人",
           key: "cancelUname",
+          width: 70
         },
         {
           title: "核销时间",
           key: "cancelTime",
+          width: 70
         }
       ],
-      flag:true,
-      modal2:false,
+      flag: true,
+      modal2: false,
       data: [],
       pagetotal: 0,
       isActive: "",
       proModal: false,
       formValidate: {
-        id:"",
-        guestName:"",
-        shopNo:"",
-        payType:"",
-        billingType:"",
-        invoicePurchaserId:"",
-        billingDate:"",
-        invoiceSort:"",
-        invoiceNo:"",
-        invoiceCode:"",
-        taxAmt:"",
-        taxRate:"",
-        invoiceAmt:"",
-        invoiceSellerName:"",
-        totalAmt:"",
+        id: "",
+        guestName: "",
+        shopNo: "",
+        payType: "",
+        billingType: "",
+        invoicePurchaserId: "",
+        billingDate: "",
+        invoiceSort: "",
+        invoiceNo: "",
+        invoiceCode: "",
+        taxAmt: "",
+        taxRate: "",
+        invoiceAmt: "",
+        invoiceSellerName: "",
+        totalAmt: "",
         remark: ""
       },
       ruleValidate: {
@@ -434,12 +486,12 @@ export default {
       authenticationUpurl: authenticationGetup, // 导入地址
       exportData: false,
       exportTime: false,
-      billingOptionList:[],//开票清单类型
-      payOptionList:[], //付款方式
-      taxOptionList:[], //税率
-      invoiceOptionList:[],//发票分类
-      purchaserOptionList:[],//发票采购方
-      total:0,//核销数量
+      billingOptionList: [], //开票清单类型
+      payOptionList: [], //付款方式
+      taxOptionList: [], //税率
+      invoiceOptionList: [], //发票分类
+      purchaserOptionList: [], //发票采购方
+      total: 0 //核销数量
     };
   },
   methods: {
@@ -450,13 +502,13 @@ export default {
           this.exportData = true;
           break;
         case 2:
-          this.modifyData()
+          this.modifyData();
           break;
         case 3:
           this.deleteTabList("delete");
           break;
         case 4:
-          this.deleteTabList("writeoff")
+          this.deleteTabList("writeoff");
           break;
         case 5:
           this.deleteTabList("return");
@@ -479,7 +531,7 @@ export default {
           this.$Message.warning("请选择要退回的数据！");
         } else if (type == "rewors") {
           this.$Message.warning("请选择要进项转出的数据！");
-        }else{
+        } else {
           this.$Message.warning("请选择要核销的数据！");
         }
         return;
@@ -491,17 +543,17 @@ export default {
           tittle = "<p>确认要退回选中的数据？</p>";
         } else if (type == "rewors") {
           tittle = "<p>确认要进项转出选中的数据？</p>";
-        }else{
+        } else {
           tittle = "<p>确认要核销选中的数据？</p>";
         }
-        this.allTablist.forEach((item,index)=>{
-          if(item.canceled==1){
-            return this.flag=false
+        this.allTablist.forEach((item, index) => {
+          if (item.canceled == 1) {
+            return (this.flag = false);
           }
-        })
-        if(this.flag==false&&type=='writeoff'){
+        });
+        if (this.flag == false && type == "writeoff") {
           this.$Message.warning("该数据中存在已核销数据，请重新未核销数据");
-        }else{
+        } else {
           this.$Modal.confirm({
             title: "警告",
             content: tittle,
@@ -518,7 +570,7 @@ export default {
                   .then(res => {
                     if (res.code === 0) {
                       this.$Message.success("删除成功！");
-                      this.allTablist=[]
+                      this.allTablist = [];
                       this.getTabList(this.form);
                     }
                   })
@@ -531,7 +583,7 @@ export default {
                   .then(res => {
                     if (res.code === 0) {
                       this.$Message.success("退回成功！");
-                      this.allTablist=[]
+                      this.allTablist = [];
                       this.getTabList(this.form);
                     }
                   })
@@ -544,7 +596,7 @@ export default {
                   .then(res => {
                     if (res.code === 0) {
                       this.$Message.success("进项转出成功！");
-                      this.allTablist=[]
+                      this.allTablist = [];
                       this.getTabList(this.form);
                     }
                   })
@@ -552,18 +604,19 @@ export default {
                     this.$Message.error(res.message);
                   });
               }
-              if(type == "writeoff"){
+              if (type == "writeoff") {
                 invoiceWriteoff(deleteList)
-                  .then(res=>{
-                    if(res.code===0){
+                  .then(res => {
+                    if (res.code === 0) {
                       // this.total=res.num
-                      this.allTablist=[]
-                      this.getTabList(this.form)
-                      this.modal2=true
+                      this.allTablist = [];
+                      this.getTabList(this.form);
+                      this.modal2 = true;
                     }
-                  }).catch(err=>{
-                    this.$Message.error(res.message);
                   })
+                  .catch(err => {
+                    this.$Message.error(res.message);
+                  });
               }
             },
             onCancel: () => {}
@@ -572,14 +625,14 @@ export default {
       }
     },
     //修改
-    modifyData(){
-      if(!this.allTablist.length){
+    modifyData() {
+      if (!this.allTablist.length) {
         this.$Message.warning("请选择要修改数据！");
-        return
-      }else if(this.allTablist.length>=2){
+        return;
+      } else if (this.allTablist.length >= 2) {
         this.$Message.warning("请选择一条要修改数据！");
-      }else{
-        this.getDetailInfor()
+      } else {
+        this.getDetailInfor();
         this.proModal = true;
       }
     },
@@ -614,52 +667,62 @@ export default {
       }
     },
     //获取下拉菜单
-    getSelectOptions(){
+    getSelectOptions() {
       //清单类型
-      getOptions1({dictCode:"BILL_LIST_TYPE"}).then(res=>{
-        if(res.code===0){
-          this.billingOptionList=res.data
-        }
-      }).catch(err=>{
-        console.log(err)
-      })
+      getOptions1({ dictCode: "BILL_LIST_TYPE" })
+        .then(res => {
+          if (res.code === 0) {
+            this.billingOptionList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       //发票分类
-      getOptions2({dictCode:"INVOICE_TYPE"}).then(res=>{
-        if(res.code===0){
-          this.invoiceOptionList =res.data
-        }
-      }).catch(err=>{
-          console.log(err)
-      })
+      getOptions2({ dictCode: "INVOICE_TYPE" })
+        .then(res => {
+          if (res.code === 0) {
+            this.invoiceOptionList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       //付款方式
-      getOptions3({dictCode:"PAYMENT_TYPE"}).then(res=>{
-        if(res.code===0){
-          this.payOptionList=res.data
-        }
-      }).catch(err=>{
-        console.log(err)
-      })
+      getOptions3({ dictCode: "PAYMENT_TYPE" })
+        .then(res => {
+          if (res.code === 0) {
+            this.payOptionList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       //税率
-      getOptions4({dictCode:"CS00107"}).then(res=>{
-        if(res.code===0){
-          this.taxOptionList=res.data
-        }
-      }).catch(err=>{
-          console.log(err)
-      })
+      getOptions4({ dictCode: "CS00107" })
+        .then(res => {
+          if (res.code === 0) {
+            this.taxOptionList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
       //发票采购方
-      getOptions5({tenantId:0}).then(res=>{
-        if(res.code===0){
-          this.purchaserOptionList = res.data
-        }
-      }).catch(err=>{
-          console.log(err)
-      })
+      getOptions5({ tenantId: 0 })
+        .then(res => {
+          if (res.code === 0) {
+            this.purchaserOptionList = res.data;
+          }
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     //查看详情
-    getDetailInfor(){
+    getDetailInfor() {
       // await this.getSelectOptions()
-      for( let key in this.formValidate){
+      for (let key in this.formValidate) {
         this.formValidate[key] = this.allTablist[0][key];
       }
     },
@@ -692,29 +755,31 @@ export default {
     submit(name) {
       this.$refs[name].validate(valid => {
         if (valid) {
-          savDetailInfor(this.formValidate).then(res=>{
-            if(res.code===0){
-              this.$Message.success("修改成功")
-              this.proModal = false;
-              this.getTabList(this.form);
-            }
-          }).catch(err=>{
-              this.$Message.success(res.message)
-          })
+          savDetailInfor(this.formValidate)
+            .then(res => {
+              if (res.code === 0) {
+                this.$Message.success("修改成功");
+                this.proModal = false;
+                this.getTabList(this.form);
+              }
+            })
+            .catch(err => {
+              this.$Message.success(res.message);
+            });
         }
       });
     },
     // 导出模板
     exportDown() {
       location.href =
-        baseUrl.omsApi +
+        baseUrl.omsSettle +
         "/entryRegistration/template?access_token=" +
         Cookies.get(TOKEN_KEY);
     },
     //  导出勾选认证时间模板
     exportCertification() {
       location.href =
-        baseUrl.omsApi +
+        baseUrl.omsSettle +
         "/entryRegistration/checkTemplate?access_token=" +
         Cookies.get(TOKEN_KEY);
     },
@@ -729,7 +794,7 @@ export default {
   },
   mounted() {
     this.getTabList(this.form);
-    this.getSelectOptions()
+    this.getSelectOptions();
   }
 };
 </script>

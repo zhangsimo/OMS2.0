@@ -49,8 +49,8 @@
       :edit-rules="validRules"
     >
       <vxe-table-column title="序号" type="seq" width="60"></vxe-table-column>
-      <vxe-table-column title="登记日期" field="registrationDate"></vxe-table-column>
-      <vxe-table-column field="invoicePurchaserId" title="发票采购方名称">
+      <vxe-table-column title="登记日期" width="100" field="registrationDate"></vxe-table-column>
+      <vxe-table-column field="invoicePurchaserId" width="120" title="发票采购方名称">
         <template v-slot="{row}">
           <Select v-model="row.invoicePurchaserId">
             <Option v-for="item in purchaserList" :value="item.id" :key="item.id">{{ item.name }}</Option>
@@ -60,39 +60,48 @@
       <vxe-table-column
         field="invoiceCode"
         title="发票代码"
+        width="110"
         :edit-render="{name: 'input', attrs: {type: 'number',placeholder:'输入10位数字'}}"
       ></vxe-table-column>
       <vxe-table-column
         field="invoiceNo"
         title="发票号"
+        width="100"
         :edit-render="{name: 'input', attrs: {type: 'number',placeholder:'输入8位数字'}}"
       ></vxe-table-column>
-      <vxe-table-column
-        field="invoiceSellerName"
-        title="发票销售方名称"
-        :edit-render="{name: 'input', attrs: {type: 'text'}}"
-      ></vxe-table-column>
+      <div class="widthOption">
+        <vxe-table-column
+          field="invoiceSellerName"
+          title="发票销售方名称"
+          width="150"
+          :edit-render="{name: 'input', attrs: {type: 'text'}}"
+        ></vxe-table-column>
+      </div>
       <vxe-table-column
         field="billingDate"
         title="开票日期"
+        width="110"
         :edit-render="{name: 'input', attrs: {type: 'date'}}"
       ></vxe-table-column>
       <vxe-table-column
         field="totalAmt"
         title="价税合计金额"
+        width="140"
         :edit-render="{name: 'input', attrs: {type: 'number'}}"
       ></vxe-table-column>
       <vxe-table-column
         field="invoiceAmt"
         title="不含税金额"
+        width="120"
         :edit-render="{name: 'input', attrs: {type: 'number'}}"
       ></vxe-table-column>
       <vxe-table-column
         field="taxAmt"
         title="税额"
+        width="80"
         :edit-render="{name: 'input', attrs: {type: 'number'}}"
       ></vxe-table-column>
-      <vxe-table-column field="taxRate" title="税率">
+      <vxe-table-column field="taxRate" title="税率" width="70">
         <template v-slot="{row}">
           <Select v-model="row.taxRate">
             <Option
@@ -103,7 +112,7 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="payType" title="付款方式">
+      <vxe-table-column field="payType" title="付款方式" width="100">
         <template v-slot="{row}">
           <Select v-model="row.payType">
             <Option
@@ -114,7 +123,7 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="invoiceSort" title="发票分类">
+      <vxe-table-column field="invoiceSort" width="100" title="发票分类">
         <template v-slot="{row}">
           <Select v-model="row.invoiceSort">
             <Option
@@ -125,7 +134,7 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="billingType" title="开票清单类型">
+      <vxe-table-column field="billingType" width="120" title="开票清单类型">
         <template v-slot="{row}">
           <Select v-model="row.billingType">
             <Option
@@ -136,7 +145,7 @@
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="registrationTypeName" title="登记类型"></vxe-table-column>
+      <vxe-table-column field="registrationTypeName" width="100" title="登记类型"></vxe-table-column>
     </vxe-table>
     <div slot="footer"></div>
     <account ref="account" @accountOrder="seleteData" />
@@ -435,5 +444,8 @@ export default {
   }
 };
 </script>
-<style lang="less" scoped>
+<style lang="less" >
+.widthOption .ivu-select .ivu-select-dropdown {
+  width: 100px !important;
+}
 </style>
