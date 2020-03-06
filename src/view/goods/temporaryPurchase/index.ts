@@ -285,6 +285,11 @@ export default class InterPurchase extends Vue {
       return this.$Message.error('请先保存数据');
     }
     ref.resetFields();
+    const currentRowTable: any = this.$refs["currentRowTable"];
+    currentRowTable.clearCurrentRow();
+    for(let b of this.purchaseOrderTable.tbdata){
+      b._highlight = false
+    }
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -560,14 +565,14 @@ export default class InterPurchase extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
-          for(let b of this.purchaseOrderTable.tbdata){
-            b._highlight = false
-            if(b.id==this.selectLeftItemId){
-              b._highlight = true;
-              this.setFormPlanmain(b);
-              break;
-            }
-          }
+          // for(let b of this.purchaseOrderTable.tbdata){
+          //   b._highlight = false
+          //   if(b.id==this.selectLeftItemId){
+          //     b._highlight = true;
+          //     this.setFormPlanmain(b);
+          //     break;
+          //   }
+          // }
 
         },
         onCancel: () => {
