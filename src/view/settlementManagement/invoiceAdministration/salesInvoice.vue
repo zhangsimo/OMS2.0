@@ -1,14 +1,14 @@
 <template>
   <div class="content-oper content-oper-flex">
     <section class="oper-box paddinSize">
-         <Button class="mr10"  v-has="'export'" @click="operation(1)">导入发票</Button> 
-         <Button class="mr10"  v-has="'export'" @click="operation(2)">修改</Button> 
-         <Button class="mr10"  v-has="'export'" @click="operation(3)">删除导入</Button> 
-         <Button class="mr10"  v-has="'export'" @click="operation(4)">发票作废</Button> 
-         <Button class="mr10"  v-has="'export'" @click="operation(5)">红字核销</Button> 
+         <Button class="mr10"  v-has="'export'" @click="operation(1)">导入发票</Button>
+         <Button class="mr10"  v-has="'export'" @click="operation(2)">修改</Button>
+         <Button class="mr10"  v-has="'export'" @click="operation(3)">删除导入</Button>
+         <Button class="mr10"  v-has="'export'" @click="operation(4)">发票作废</Button>
+         <Button class="mr10"  v-has="'export'" @click="operation(5)">红字核销</Button>
          <div class="mt20">
-            <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">全部显示</Button> 
-            <Button class="mr10" :type="isActive==2?'info':'default'" @click="chooseTable(2)">已核销</Button> 
+            <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">全部显示</Button>
+            <Button class="mr10" :type="isActive==2?'info':'default'" @click="chooseTable(2)">已核销</Button>
             <Button :type="isActive==3?'info':'default'" @click="chooseTable(3)">未核销</Button>
         </div>
     </section>
@@ -344,5 +344,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    
+
 </style>
