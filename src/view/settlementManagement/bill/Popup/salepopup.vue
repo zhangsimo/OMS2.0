@@ -189,7 +189,9 @@ import {
   applyNo,
   ditInvoice,
   informationCitation,
-  partsInvoice
+  partsInvoice,
+  saveDraft,
+  submitDraft
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
@@ -236,9 +238,9 @@ export default {
         bankOpening: "", //开户行及账号
         invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "010103", //开票类型
+        invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
-        invoiceTax: "010103", //开票税率
+        invoiceTax: "", //开票税率
         rateBillingList: [], //开票税率列表
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
@@ -331,8 +333,7 @@ export default {
         costBear: [
           {
             required: true,
-            message: "费用承担不能为空",
-            trigger: "change"
+            message: "费用承担不能为空"
           }
         ],
         statementAmountOwed: [
@@ -341,12 +342,12 @@ export default {
             message: "对账单欠票金额不能为空"
           }
         ],
-        applyMoney: [
-          {
-            required: true,
-            message: "申请开票金额不能为空"
-          }
-        ],
+        // applyMoney: [
+        //   {
+        //     required: true,
+        //     message: "申请开票金额不能为空"
+        //   }
+        // ],
         address: [
           {
             required: true,
@@ -616,6 +617,8 @@ export default {
               item.taxAmt = item.applyAmt + item.additionalTaxPoint;
               item.taxPrice = item.taxAmt / item.orderQty;
             });
+            this.invoice.invoiceType = "010103";
+            this.invoice.invoiceTax = "010103";
             this.accessoriesBillingData = res.data;
             this.copyData = res.data;
           }
@@ -630,6 +633,10 @@ export default {
     preservation() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
+          let obj = {...{partList:this.accessoriesBillingData},...this.information}
+          saveDraft(obj).then(res => {
+            console.log(res);
+          });
         }
       });
     },
@@ -637,6 +644,9 @@ export default {
     submission() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
+          submitDraft().then(res => {
+            console.log(res);
+          });
         }
       });
     },
@@ -689,37 +699,41 @@ export default {
       return sums;
     }
   },
+  computed: {
+    invoiceTax() {
+      return this.invoice.invoiceTax;
+    },
+    applyMoneyTax() {
+      return this.invoice.applyMoneyTax;
+    }
+  },
   watch: {
-    invoice: {
-      handler(val, olval) {
-        this.invoice.rateBillingList.map(item => {
-          if (val.invoiceTax === item.value) {
-            this.accessoriesBillingData.map(itm => {
-              this.$set(itm, "invoiceTax", item.label);
-            });
+    // 开票税率
+    invoiceTax(val) {
+      this.invoice.rateBillingList.map(item => {
+        if (val === item.value) {
+          this.accessoriesBillingData.map(itm => {
+            this.$set(itm, "invoiceTax", item.label);
+          });
+        }
+      });
+    },
+    applyMoneyTax(val, ov) {
+      if (this.copyData.length !== 0 && val !== ov) {
+        let sum = 0;
+        let accData = JSON.parse(JSON.stringify(this.copyData));
+        this.accessoriesBillingData = [];
+        for (let i of accData) {
+          sum += i.applyAmt * 1;
+          if (sum <= val) {
+            this.accessoriesBillingData.push(i);
+          } else {
+            i.applyAmt -= sum - val;
+            return this.accessoriesBillingData.push(i);
           }
-          
-        });
-        console.log(val,'11')
-          console.log(olval,'22')
-          // console.log(val.applyMoneyTax,val.applyMoneyTax!==old.applyMoneyTax,old.applyMoneyTax)
-          if(this.copyData.length!==0&&val.applyMoneyTax!==olval.applyMoneyTax){
-            let sum = 0;
-            let accData = this.copyData;
-            accData = accData.filter((itm, index) => {
-              sum += itm.applyAmt * 1;
-              return sum <= val.applyMoneyTax;
-            });
-            console.log(accData,sum)
-            const len = accData.length
-            accData.push(this.copyData[len])
-            accData[len].applyAmt -= sum-val.applyMoneyTax
-          this.accessoriesBillingData =accData
-          }
-          
-      },
-      deep: true,
-      // immediate: true
+        }
+        // console.log(accData, sum);
+      }
     }
   }
 };

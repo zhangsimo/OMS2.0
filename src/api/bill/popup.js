@@ -117,3 +117,19 @@ export function hedSubmit(data){
     data
 })
 }
+//销售开票保存
+export function saveDraft(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/saveDraft`,
+    method: 'post',
+    data
+})
+}
+//销售开票提交申请
+export function submitDraft(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/save`,
+    method: 'post',
+    data
+})
+}
