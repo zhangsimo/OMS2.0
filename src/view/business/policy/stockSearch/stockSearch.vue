@@ -105,7 +105,7 @@
             <Button class="mr10 w90" @click="exportBatch">
               <i class="iconfont mr5 icondaochuicon" v-has="'exportBatch'"></i> 导出
             </Button>
-            <Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>
+            <!--<Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>-->
           </div>
         </div>
         <!--        表-->
@@ -209,6 +209,7 @@ export default {
         {
           title: "序号",
           type: "index",
+          key:"index",
           align: "center",
           minWidth: 40,
           render: (h, params) => {
@@ -289,7 +290,7 @@ export default {
         {
           title: "可售数量",
           align: "center",
-          // key: 'outableQty',
+          key: 'outableQty',
           minWidth: 80,
           render: (h, params) => {
             let tex = params.row.sellSign ? 0 : params.row.outableQty;
@@ -311,7 +312,7 @@ export default {
         {
           title: "库存单价",
           align: "center",
-          // key: 'costPrice',
+          key: 'costPrice',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.costPrice.toFixed(2);
@@ -321,7 +322,7 @@ export default {
         {
           title: "库存金额",
           align: "center",
-          // key: 'stockAmt',
+          key: 'stockAmt',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.stockAmt.toFixed(2);
@@ -693,9 +694,18 @@ export default {
     },
     //汇总导出
     exportTheSummary() {
+      this.contentOne.dataOne.map((item,index) => {
+        item.index = index+1
+        item.outableQty = item.sellSign ? 0 : item.outableQty
+        item.costPrice = item.costPrice.toFixed(2);
+        item.stockAmt = item.stockAmt.toFixed(2);
+      })
       if (this.contentOne.dataOne.length > 0) {
         this.$refs.table1.exportCsv({
-          filename: "汇总库存"
+          filename: "汇总库存",
+          original:false,
+          columns:this.columns1,
+          data:this.contentOne.dataOne
         });
       }
     },
