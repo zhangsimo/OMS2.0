@@ -62,7 +62,7 @@
       auto-resize
       highlight-current-row
       show-footer
-      @edit-closed='editClosed'
+      @edit-closed="editClosed"
       :footer-method="footerMethod"
       :data="accessoriesBillingData"
       :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -96,7 +96,7 @@
 <script>
 import approval from "./approval";
 import saleSelete from "./saleSelete";
-import { hedPreservation,hedSubmit } from "@/api/bill/popup";
+import { hedPreservation, hedSubmit } from "@/api/bill/popup";
 import bus from "./Bus";
 export default {
   components: {
@@ -116,18 +116,28 @@ export default {
   },
   mounted() {
     bus.$on("accountHedNo", val => {
-      val.statementMasterId = val.id
+      val.statementMasterId = val.id;
       this.accessoriesBillingData.push(val);
-      this.accessoriesBillingData.map(item=>{
-        delete item.id
-      })
+      val.taxArrearsOfPart = -val.taxArrearsOfPart;
+      val.taxArrearsOfOil = -val.taxArrearsOfOil;
+      this.accessoriesBillingData.map(item => {
+        delete item.id;
+      });
     });
   },
   methods: {
     // 单元格关闭出发事件
-    editClosed({row,rowIndex,$rowIndex,column,columnIndex,$columnIndex,cell}){
-      row.taxParts = row.taxArrearsOfPart - Math.abs(row.hedgingInvoiceOfPart)
-      row.taxOil = row.taxArrearsOfOil - Math.abs(row.hedgingInvoiceOfOil)
+    editClosed({
+      row,
+      rowIndex,
+      $rowIndex,
+      column,
+      columnIndex,
+      $columnIndex,
+      cell
+    }) {
+      row.taxParts = row.taxArrearsOfPart - row.hedgingInvoiceOfPart;
+      row.taxOil = row.taxArrearsOfOil - row.hedgingInvoiceOfOil;
     },
     //获取尾部总数
     footerMethod({ columns, data }) {
@@ -136,7 +146,11 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["hedgingInvoiceOfPart", "hedgingInvoiceOfOil"].includes(column.property)) {
+          if (
+            ["hedgingInvoiceOfPart", "hedgingInvoiceOfOil"].includes(
+              column.property
+            )
+          ) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
@@ -152,52 +166,58 @@ export default {
     },
     // 保存草稿
     preservation() {
-      this.accessoriesBillingData.map(item=>{
-          item.billingType = item.billingType.value!==undefined ? item.billingType.value :item.billingType
-      })
-      let obj ={
-        applicant:this.information.applicant,
-        applyTime:this.information.applyTime,
-        guestId:this.information.guestId,
-        orgid:this.information.orgId,
-        serviceId:this.information.serviceId,
-        details:this.accessoriesBillingData
-      }
+      this.accessoriesBillingData.map(item => {
+        item.billingType =
+          item.billingType.value !== undefined
+            ? item.billingType.value
+            : item.billingType;
+      });
+      let obj = {
+        applicant: this.information.applicant,
+        applyTime: this.information.applyTime,
+        guestId: this.information.guestId,
+        orgId: this.information.orgId,
+        serviceId: this.information.serviceId,
+        details: this.accessoriesBillingData
+      };
       // console.log(this.accessoriesBillingData)
-      hedPreservation(obj).then(res=>{
-        if(res.code===0){
-          this.$message.success('保存成功')
-          this.modal1 = false
+      hedPreservation(obj).then(res => {
+        if (res.code === 0) {
+          this.$message.success("保存成功");
+          this.modal1 = false;
         }
-      })
+      });
     },
     // 提交申请
     submission() {
-      let sum1 =0
-      let sum2 =0
-      if(!this.remarks) return this.$message.error('对冲申请原因说明不能为空')
-      this.accessoriesBillingData.map(item=>{
-          sum1 +=item.hedgingInvoiceOfPart*1
-          sum2 +=item.hedgingInvoiceOfOil*1
-          item.billingType = item.billingType.value!==undefined ? item.billingType.value :item.billingType
-      })
-      if(sum1) return this.$message.error('对冲配件发票合计必须为0')
-      if(sum2) return this.$message.error('对冲油品发票合计必须为0')
-      let obj ={
-        applicant:this.information.applicant,
-        applyTime:this.information.applyTime,
-        guestId:this.information.guestId,
-        orgid:this.information.orgId,
-        serviceId:this.information.serviceId,
-        applyReason:this.remarks,
-        details:this.accessoriesBillingData
-      }
-      hedSubmit(obj).then(res=>{
-        if(res.code===0){
-          this.$message.success('提交成功')
-          this.modal1=false
+      let sum1 = 0;
+      let sum2 = 0;
+      if (!this.remarks) return this.$message.error("对冲申请原因说明不能为空");
+      this.accessoriesBillingData.map(item => {
+        sum1 += item.hedgingInvoiceOfPart * 1;
+        sum2 += item.hedgingInvoiceOfOil * 1;
+        item.billingType =
+          item.billingType.value !== undefined
+            ? item.billingType.value
+            : item.billingType;
+      });
+      if (sum1) return this.$message.error("对冲配件发票合计必须为0");
+      if (sum2) return this.$message.error("对冲油品发票合计必须为0");
+      let obj = {
+        applicant: this.information.applicant,
+        applyTime: this.information.applyTime,
+        guestId: this.information.guestId,
+        orgId: this.information.orgId,
+        serviceId: this.information.serviceId,
+        applyReason: this.remarks,
+        details: this.accessoriesBillingData
+      };
+      hedSubmit(obj).then(res => {
+        if (res.code === 0) {
+          this.$message.success("提交成功");
+          this.modal1 = false;
         }
-      })
+      });
     },
     // 选择对账单
     seleteAccount() {

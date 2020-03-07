@@ -60,8 +60,8 @@
           <FormItem label="地址电话" prop="tel">
             <Input v-model="invoice.tel" class="ml5 w200" />
           </FormItem>
-          <FormItem label="开户行及账号" prop="bankOpening">
-            <Input v-model="invoice.bankOpening" class="ml5 w200" />
+          <FormItem label="开户行及账号" prop="bankName">
+            <Input v-model="invoice.bankName" class="ml5 w200" />
           </FormItem>
           <FormItem label="开票单位" prop="invoiceUnit">
             <Select v-model="invoice.invoiceUnit" class="ml5 w200">
@@ -235,7 +235,7 @@ export default {
         receiptUnitList: [], //发票单位列表
         taxNo: "", //税号
         tel: "", //地址电话
-        bankOpening: "", //开户行及账号
+        bankName: "", //开户行及账号
         invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
         invoiceType: "", //开票类型
@@ -296,7 +296,7 @@ export default {
             message: "地址电话不能为空"
           }
         ],
-        bankOpening: [
+        bankName: [
           {
             required: true,
             message: "开户行及账号不能为空"
@@ -584,7 +584,7 @@ export default {
         if (item.value === val) {
           this.invoice.taxNo = item.taxpayerCode;
           this.invoice.tel = item.taxpayerTel;
-          this.invoice.bankOpening = item.accountBankNo;
+          this.invoice.bankName = item.accountBankNo;
         }
       });
     },
@@ -633,7 +633,17 @@ export default {
     preservation() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
-          let obj = {...{partList:this.accessoriesBillingData},...this.information}
+          let info = {
+            orgid:this.information.orgId,
+            orgName:this.information.orgName,
+            guestId:this.information.guestId,
+            accountNo:this.information.accountNo,
+            applyNo:this.information.applyNo,
+            applyDate:this.information.applicationDate,
+            guestName:this.information.guestName
+          }
+          let obj = Object.assign({partList:this.accessoriesBillingData},info,this.invoice)
+          console.log(obj)
           saveDraft(obj).then(res => {
             console.log(res);
           });
@@ -644,7 +654,17 @@ export default {
     submission() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
-          submitDraft().then(res => {
+          let info = {
+            orgid:this.information.orgId,
+            orgName:this.information.orgName,
+            guestId:this.information.guestId,
+            accountNo:this.information.accountNo,
+            applyNo:this.information.applyNo,
+            applyDate:this.information.applicationDate,
+            guestName:this.information.guestName
+          }
+          let obj = Object.assign({partList:this.accessoriesBillingData},info,this.invoice)
+          submitDraft(obj).then(res => {
             console.log(res);
           });
         }

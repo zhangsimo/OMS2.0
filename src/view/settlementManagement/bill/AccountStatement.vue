@@ -979,6 +979,7 @@ export default {
         this.$refs.registrationEntry.accountData.push(
           this.reconciliationStatement
         );
+        this.$refs.registrationEntry.arrId = []
         this.$refs.registrationEntry.arrId.push(
           this.reconciliationStatement.orgId,
           this.reconciliationStatement.guestId,
