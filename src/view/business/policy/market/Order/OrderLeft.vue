@@ -113,7 +113,7 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         remark: "",
         guestId: "",
-        storeId: this.$store.state.user.userData.shopId||"",
+        storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
         serviceId: "",
         details: []
       };
@@ -128,7 +128,8 @@ export default {
     },
     getData(data) {
       // console.log(data, '该值')
-      this.tableData = data;
+      this.tableData = data.content;
+      this.page.total = data.totalElements;
     },
     //获取表格数据
     async getList() {
