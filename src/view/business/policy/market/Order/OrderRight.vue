@@ -388,7 +388,7 @@ export default {
       clientDataShow: false, //新增客户模态框关闭
       addressShow: false, //收货地址显示
       leftOneOrder: {}, //获取到的左侧数据
-      draftShow: "", //判定是不是草稿
+      draftShow: 5, //判定是不是草稿
       settleTypeList: {}, //结账类型
       WarehouseList: [], //仓库
       oneRow: {}, //点击详情的数据
@@ -444,7 +444,9 @@ export default {
       const res = this.$store.state.dataList.oneOrder;
       if (res.xinzeng !== "1") {
         res.orderType = res.orderType;
-        this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
+        if(res.id){
+          this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
+        }
         res.orderTypeValue = res.orderType
           ? res.orderType.value
             ? res.orderType.value
