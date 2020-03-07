@@ -532,24 +532,44 @@ export default {
     });
     // 选择销售单
     bus.$on("partsData", val => {
+      let data = [];
       val.map(item => {
-        let sum = 0;
-        item.details.map((itm, index) => {
-          sum += itm.applyAmt * 1;
-          if (sum > this.invoice.applyMoneyTax) {
-            itm.applyAmt -= sum - this.invoice.applyMoneyTax;
-            item.details = item.details.slice(0, index + 1);
-          }
+        item.details.map(itm => {
+          // itm.invoiceTax = this.$refs.noTax.tax;
+          data.push(itm);
         });
-        if (sum < this.invoice.applyMoneyTax) {
-          this.accessoriesBillingData = [
-            ...item.details,
-            ...this.accessoriesBillingData
-          ];
-        } else {
-          this.accessoriesBillingData = item.details;
+      });
+      let sum = 0;
+      data.map((itm, index) => {
+        itm.taxAmt = parseFloat(
+          (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
+        );
+        itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
+        sum += itm.applyAmt * 1;
+        if (sum > this.invoice.applyMoneyTax) {
+          itm.applyAmt -= sum - this.invoice.applyMoneyTax;
+          data = data.slice(0, index + 1);
         }
       });
+      if (sum < this.invoice.applyMoneyTax) {
+        this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
+      } else {
+        if(this.invoice.additionalTaxPoint){
+          this.accessoriesBillingData = [...data,...this.accessoriesBillingData];
+        } else {
+          this.accessoriesBillingData = data;
+        }
+      }
+      this.copyData = this.accessoriesBillingData;
+    });
+    // 不含税表格数据
+    bus.$on("noTaxSaleList", val => {
+      this.accessoriesBillingData = [...val, ...this.accessoriesBillingData];
+    });
+    // 不含税信息
+    bus.$on("noTaxInfo", val => {
+      this.invoice.amountExcludingTax = val.taxation;
+      this.invoice.additionalTaxPoint = val.invoiceTaxAmt;
     });
   },
   methods: {
@@ -634,16 +654,20 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgid:this.information.orgId,
-            orgName:this.information.orgName,
-            guestId:this.information.guestId,
-            accountNo:this.information.accountNo,
-            applyNo:this.information.applyNo,
-            applyDate:this.information.applicationDate,
-            guestName:this.information.guestName
-          }
-          let obj = Object.assign({partList:this.accessoriesBillingData},info,this.invoice)
-          console.log(obj)
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
+          console.log(obj);
           saveDraft(obj).then(res => {
             console.log(res);
           });
@@ -655,15 +679,20 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgid:this.information.orgId,
-            orgName:this.information.orgName,
-            guestId:this.information.guestId,
-            accountNo:this.information.accountNo,
-            applyNo:this.information.applyNo,
-            applyDate:this.information.applicationDate,
-            guestName:this.information.guestName
-          }
-          let obj = Object.assign({partList:this.accessoriesBillingData},info,this.invoice)
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName
+            // orgCode:this.information
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
           submitDraft(obj).then(res => {
             console.log(res);
           });
@@ -735,6 +764,7 @@ export default {
           this.accessoriesBillingData.map(itm => {
             this.$set(itm, "invoiceTax", item.label);
           });
+          this.$refs.noTax.tax = item.label;
         }
       });
     },
@@ -752,7 +782,6 @@ export default {
             return this.accessoriesBillingData.push(i);
           }
         }
-        // console.log(accData, sum);
       }
     }
   }

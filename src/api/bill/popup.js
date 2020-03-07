@@ -133,3 +133,11 @@ export function submitDraft(data){
     data
 })
 }
+//销售开票不含税提交申请
+export function submitNoTax(data){
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/saveNotTax`,
+    method: 'post',
+    data
+})
+}
