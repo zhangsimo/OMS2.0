@@ -390,7 +390,7 @@
 </template>
 <script>
 import hedgingInvoice from "./Popup/hedgingInvoice";
-import registrationEntry from './Popup/registrationEntry'
+import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import salepopup from "./Popup/salepopup";
 import { creat } from "./../components";
@@ -406,6 +406,7 @@ import {
   accountRevoke,
   account
 } from "@/api/bill/saleOrder";
+import { hedgingApplyNo } from "@/api/bill/popup";
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
@@ -925,9 +926,10 @@ export default {
     this.value = arr[0];
     this.model1 = arr[1];
     this.Branchstore = arr[2];
-    this.Branchstore.map(itm=>{
-      if(itm.value===this.model1) this.$refs.registrationEntry.orgName = itm.label
-    })
+    this.Branchstore.map(itm => {
+      if (itm.value === this.model1)
+        this.$refs.registrationEntry.orgName = itm.label;
+    });
     let obj = {
       startDate: this.value[0]
         ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -969,38 +971,67 @@ export default {
   methods: {
     // 进项发票登记及修改
     registrationEntry() {
-      if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='付款'){
-        this.$refs.registrationEntry.accountData = []
-        this.$refs.registrationEntry.accountData.push(this.reconciliationStatement)
-        this.$refs.registrationEntry.arrId.push(this.reconciliationStatement.orgId,this.reconciliationStatement.guestId,this.reconciliationStatement.id)
-        this.$refs.registrationEntry.modal1 = true
-      }else{
-        this.$message.error('只能勾选计划对账类型为付款的对账单')
+      if (
+        Object.keys(this.reconciliationStatement).length !== 0 &&
+        this.reconciliationStatement.billingTypeName === "付款"
+      ) {
+        this.$refs.registrationEntry.accountData = [];
+        this.$refs.registrationEntry.accountData.push(
+          this.reconciliationStatement
+        );
+        this.$refs.registrationEntry.arrId = []
+        this.$refs.registrationEntry.arrId.push(
+          this.reconciliationStatement.orgId,
+          this.reconciliationStatement.guestId,
+          this.reconciliationStatement.id
+        );
+        this.$refs.registrationEntry.modal1 = true;
+      } else {
+        this.$message.error("只能勾选计划对账类型为付款的对账单");
       }
     },
     // 查询进项核销
     queryEntry() {
-      this.$router.push({name:'invoiceAdministration-invoiceManagement'})
+      this.$router.push({ name: "invoiceAdministration-invoiceManagement" });
     },
     // 查询发票申请
-    queryApplication(){
-      this.$router.push({name:'invoiceAdministration-invoiceApply'})
+    queryApplication() {
+      this.$router.push({ name: "invoiceAdministration-invoiceApply" });
     },
     // 发票对冲
     hedgingInvoice() {
-      this.$refs.hedgingInvoice.modal1 = true;
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        this.$refs.hedgingInvoice.modal1 = true;
+        this.reconciliationStatement.applyTime = moment(new Date()).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+        this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id
+        this.reconciliationStatement.applicant = this.$store.state.user.username;
+        this.$refs.hedgingInvoice.information = this.reconciliationStatement;
+        delete this.$refs.hedgingInvoice.information.id
+        hedgingApplyNo().then(res => {
+          this.$refs.hedgingInvoice.information.serviceId = res.data;
+        });
+      } else {
+        this.$message.error("请先选择一条数据");
+      }
     },
     // 销售开票申请
     saleApplication() {
-      if(Object.keys(this.reconciliationStatement).length!==0&&this.reconciliationStatement.billingTypeName==='收款'){
+      if (
+        Object.keys(this.reconciliationStatement).length !== 0 &&
+        this.reconciliationStatement.billingTypeName === "收款"
+      ) {
         this.$refs.salepopup.modal1 = true;
         this.$refs.salepopup.parameter = this.reconciliationStatement;
-        this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo
-        this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply
+        this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
+        this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
         this.$refs.salepopup.information = this.reconciliationStatement;
-        this.$refs.salepopup.information.applicationDate = moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
-      }else{
-        this.$message.error('只能勾选计划对账类型为收款的对账单')
+        this.$refs.salepopup.information.applicationDate = moment(
+          new Date()
+        ).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
     },
     // 总表格合计方式

@@ -60,8 +60,8 @@
           <FormItem label="地址电话" prop="tel">
             <Input v-model="invoice.tel" class="ml5 w200" />
           </FormItem>
-          <FormItem label="开户行及账号" prop="bankOpening">
-            <Input v-model="invoice.bankOpening" class="ml5 w200" />
+          <FormItem label="开户行及账号" prop="bankName">
+            <Input v-model="invoice.bankName" class="ml5 w200" />
           </FormItem>
           <FormItem label="开票单位" prop="invoiceUnit">
             <Select v-model="invoice.invoiceUnit" class="ml5 w200">
@@ -140,7 +140,7 @@
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyMoneyTax">
-            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" />
+            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" @on-change="moneyChange" />
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -189,9 +189,12 @@ import {
   applyNo,
   ditInvoice,
   informationCitation,
-  partsInvoice
+  partsInvoice,
+  saveDraft,
+  submitDraft
 } from "@/api/bill/popup";
 import bus from "./Bus";
+import index from "../../../admin/roles";
 export default {
   components: {
     approval,
@@ -232,12 +235,12 @@ export default {
         receiptUnitList: [], //发票单位列表
         taxNo: "", //税号
         tel: "", //地址电话
-        bankOpening: "", //开户行及账号
+        bankName: "", //开户行及账号
         invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "010103", //开票类型
+        invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
-        invoiceTax: "010103", //开票税率
+        invoiceTax: "", //开票税率
         rateBillingList: [], //开票税率列表
         collectionType: "", //收款方式
         paymentMethodList: [], //收款方式列表
@@ -293,7 +296,7 @@ export default {
             message: "地址电话不能为空"
           }
         ],
-        bankOpening: [
+        bankName: [
           {
             required: true,
             message: "开户行及账号不能为空"
@@ -330,8 +333,7 @@ export default {
         costBear: [
           {
             required: true,
-            message: "费用承担不能为空",
-            trigger: "change"
+            message: "费用承担不能为空"
           }
         ],
         statementAmountOwed: [
@@ -340,12 +342,12 @@ export default {
             message: "对账单欠票金额不能为空"
           }
         ],
-        applyMoney: [
-          {
-            required: true,
-            message: "申请开票金额不能为空"
-          }
-        ],
+        // applyMoney: [
+        //   {
+        //     required: true,
+        //     message: "申请开票金额不能为空"
+        //   }
+        // ],
         address: [
           {
             required: true,
@@ -477,7 +479,8 @@ export default {
           className: "tc"
         }
       ], //开票配件
-      accessoriesBillingData: [] //开票配件数据
+      accessoriesBillingData: [], //开票配件数据
+      copyData: [] //开票配件复制数据
     };
   },
   mounted() {
@@ -529,27 +532,62 @@ export default {
     });
     // 选择销售单
     bus.$on("partsData", val => {
+      let data = [];
       val.map(item => {
-        let sum = 0;
-        item.details.map((itm, index) => {
-          sum += itm.applyAmt * 1;
-          if (sum > this.invoice.applyMoneyTax) {
-            itm.applyAmt -= sum - this.invoice.applyMoneyTax;
-            item.details = item.details.slice(0, index + 1);
-          }
+        item.details.map(itm => {
+          // itm.invoiceTax = this.$refs.noTax.tax;
+          data.push(itm);
         });
-        if (sum < this.invoice.applyMoneyTax) {
-          this.accessoriesBillingData = [
-            ...item.details,
-            ...this.accessoriesBillingData
-          ];
-        } else {
-          this.accessoriesBillingData = item.details;
+      });
+      let sum = 0;
+      data.map((itm, index) => {
+        itm.taxAmt = parseFloat(
+          (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
+        );
+        itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
+        sum += itm.applyAmt * 1;
+        if (sum > this.invoice.applyMoneyTax) {
+          itm.applyAmt -= sum - this.invoice.applyMoneyTax;
+          data = data.slice(0, index + 1);
         }
       });
+      if (sum < this.invoice.applyMoneyTax) {
+        this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
+      } else {
+        if(this.invoice.additionalTaxPoint){
+          this.accessoriesBillingData = [...data,...this.accessoriesBillingData];
+        } else {
+          this.accessoriesBillingData = data;
+        }
+      }
+      this.copyData = this.accessoriesBillingData;
+    });
+    // 不含税表格数据
+    bus.$on("noTaxSaleList", val => {
+      this.accessoriesBillingData = [...val, ...this.accessoriesBillingData];
+    });
+    // 不含税信息
+    bus.$on("noTaxInfo", val => {
+      this.invoice.amountExcludingTax = val.taxation;
+      this.invoice.additionalTaxPoint = val.invoiceTaxAmt;
     });
   },
   methods: {
+    // 本次申请含税金额
+    moneyChange(event) {
+      // let sum = 0;
+      // let accData = this.copyData;
+      // this.accessoriesBillingData = accData.map((item, index) => {
+      //   if (sum > event.target.value) {
+      //     item.applyAmt -= sum - event.target.value;
+      //     console.log(22)
+      //     return accData.slice(0, index + 1);
+      //   } else {
+      //     sum += item.applyAmt * 1;
+      //   }
+      //   console.log(111)
+      // });
+    },
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
@@ -566,7 +604,7 @@ export default {
         if (item.value === val) {
           this.invoice.taxNo = item.taxpayerCode;
           this.invoice.tel = item.taxpayerTel;
-          this.invoice.bankOpening = item.accountBankNo;
+          this.invoice.bankName = item.accountBankNo;
         }
       });
     },
@@ -599,7 +637,10 @@ export default {
               item.taxAmt = item.applyAmt + item.additionalTaxPoint;
               item.taxPrice = item.taxAmt / item.orderQty;
             });
+            this.invoice.invoiceType = "010103";
+            this.invoice.invoiceTax = "010103";
             this.accessoriesBillingData = res.data;
+            this.copyData = res.data;
           }
         });
       }
@@ -612,6 +653,24 @@ export default {
     preservation() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
+          let info = {
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
+          console.log(obj);
+          saveDraft(obj).then(res => {
+            console.log(res);
+          });
         }
       });
     },
@@ -619,6 +678,24 @@ export default {
     submission() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
+          let info = {
+            orgid: this.information.orgId,
+            orgName: this.information.orgName,
+            guestId: this.information.guestId,
+            accountNo: this.information.accountNo,
+            applyNo: this.information.applyNo,
+            applyDate: this.information.applicationDate,
+            guestName: this.information.guestName
+            // orgCode:this.information
+          };
+          let obj = Object.assign(
+            { partList: this.accessoriesBillingData },
+            info,
+            this.invoice
+          );
+          submitDraft(obj).then(res => {
+            console.log(res);
+          });
         }
       });
     },
@@ -671,28 +748,41 @@ export default {
       return sums;
     }
   },
+  computed: {
+    invoiceTax() {
+      return this.invoice.invoiceTax;
+    },
+    applyMoneyTax() {
+      return this.invoice.applyMoneyTax;
+    }
+  },
   watch: {
-    invoice: {
-      handler(val) {
-        this.invoice.rateBillingList.map(item => {
-          if (val.invoiceTax === item.value) {
-            this.accessoriesBillingData.map(itm => {
-              this.$set(itm, "invoiceTax", item.label);
-            });
-          }
-          let sum = 0;
-          let accData = this.accessoriesBillingData;
-          this.accessoriesBillingData.map((item, index) => {
-            sum += item.applyAmt * 1;
-            if (sum > val.applyMoneyTax) {
-              item.applyAmt -= sum - val.applyMoneyTax;
-              this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
-            }
+    // 开票税率
+    invoiceTax(val) {
+      this.invoice.rateBillingList.map(item => {
+        if (val === item.value) {
+          this.accessoriesBillingData.map(itm => {
+            this.$set(itm, "invoiceTax", item.label);
           });
-        });
-      },
-      deep: true,
-      immediate: true
+          this.$refs.noTax.tax = item.label;
+        }
+      });
+    },
+    applyMoneyTax(val, ov) {
+      if (this.copyData.length !== 0 && val !== ov) {
+        let sum = 0;
+        let accData = JSON.parse(JSON.stringify(this.copyData));
+        this.accessoriesBillingData = [];
+        for (let i of accData) {
+          sum += i.applyAmt * 1;
+          if (sum <= val) {
+            this.accessoriesBillingData.push(i);
+          } else {
+            i.applyAmt -= sum - val;
+            return this.accessoriesBillingData.push(i);
+          }
+        }
+      }
     }
   }
 };

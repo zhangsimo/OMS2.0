@@ -7,7 +7,7 @@
     <div class="top-plan">
       <div class="tools-bar mb10">
         <div class="db mr5">快速查询:</div>
-        <div class="db mr5"><span>提交日期:</span></div>
+        <div class="db mr5"><span>入库日期:</span></div>
         <div class="db mr5">
           <DatePicker
             type="daterange"
