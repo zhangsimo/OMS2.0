@@ -4,7 +4,7 @@ const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
   omsApi: "http://192.168.30.21:9240", //徐林烽
   wmsApi: "http://192.168.30.21:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsOrder: "http://10.8.0.26:9210", // 徐林烽
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",
   // omsOrder:'http://192.168.30.21:9210', //陈舒
@@ -20,7 +20,8 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.21:9280", //9280
+  omsSotck: "http://192.168.30.179:9280", //9280
+
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
@@ -67,7 +68,7 @@ const audit = {
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   omsBatch: "https://uatapi2.g-part.cn/oms-batch-provider",
-  omsSettle: "https://uatapi2.g-part.cn/oms-settlement-provider",
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",
