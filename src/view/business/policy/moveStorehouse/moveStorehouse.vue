@@ -324,8 +324,12 @@ export default {
           value: 1
         },
         {
+          label: "已审核",
+          value: 2
+        },
+        {
           label: "已作废",
-          value: 5
+          value: 3
         }
       ],
       showMore: false, //更多模块的弹框
@@ -567,7 +571,7 @@ export default {
         data.createStartDate = this.queryTime[0] || "";
         data.createEndDate = this.queryTime[1] || "";
       }
-      data.status = this.purchaseType;
+      data.status = "";
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size).then(res => {
