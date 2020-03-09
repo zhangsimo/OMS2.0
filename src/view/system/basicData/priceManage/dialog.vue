@@ -45,7 +45,7 @@
     <!--主要-->
     <section class="con-box dia-main">
       <Split v-model="split" min="200" max="608">
-        <div slot="left" class="left pt10 pb10 pl10">
+        <div slot="left" class="left pt10 pb10 pl10" style="min-width: 200px;">
           <Tree :data="treeData" @on-select-change="treeSelect"></Tree>
         </div>
         <div slot="right" class="right tab-warp">
