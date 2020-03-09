@@ -136,6 +136,7 @@ export default {
           this.$emit("on-commit", {
             username,
             password,
+            scope,
             errCallback: this.errCallback
           });
         } else {
