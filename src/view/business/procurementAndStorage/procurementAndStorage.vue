@@ -43,8 +43,9 @@
         class="mr10"
         @click="showFee"
         v-has="'showFee'"
-        :disabled="formPlan.serviceId && formPlan.billStatusValue != 0"
+        :disabled="!formPlan.serviceId"
       >
+      <!--formPlan.serviceId && formPlan.billStatusValue != 0-->
         <i class="iconfont mr5 iconshenheicon" /> 登记费用
       </Button>
     </div>

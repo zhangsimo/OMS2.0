@@ -23,7 +23,7 @@
             <Button type="warning" class="mr10 w90" @click="search"><Icon custom="iconfont iconchaxunicon icons"/>查询</Button>
           </div>
           <div class="db">
-            <Button class="mr10 w90" v-has="'audit'"  @click="Audit"><span class="center"><Icon custom="iconfont iconshenheicon icons" />审核</span></Button>
+            <Button class="mr10 w90" :disabled="auditBtnDis" v-has="'audit'"  @click="Audit"><span class="center"><Icon custom="iconfont iconshenheicon icons" />审核</span></Button>
             <Button class="mr10 w90" v-has="'start'" v-show="jin" @click="warning"><span class="center"><Icon custom="iconfont iconjinzhijinyongicon icons" />禁用</span></Button>
             <Button class="mr10 w90" v-has="'start'" v-show="qi" @click="JinOrQi2"><span class="center"><Icon custom="iconfont iconqiyongicon icons" />启用</span></Button>
           </div>
@@ -63,6 +63,7 @@
         name: "register",
         data(){
           return {
+            auditBtnDis: false,
             List: [],
             ListTwo: [{
               value: 9999,
@@ -214,12 +215,20 @@
         })
       },
       methods: {
-        showRadio(){
+        showRadio(row){
+          console.log(row)
           // console.log(this.radioSelect)
         },
           //查找状态
         selection(a){
-          // console.log(a)
+          if(a.status) {
+            var status = JSON.parse(a.status)
+            if(status.value == 1) {
+              this.auditBtnDis = true;
+            } else {
+              this.auditBtnDis = false;
+            }
+          }
           this.at_present = a.id
           // console.log(a.isDisabled)
           let statusss = JSON.parse(a.status || [])
@@ -263,7 +272,7 @@
         Audit(){
           // console.log(this.statuss)
           if (this.statuss == 5){
-             this.$Message.warning('请选择审核对象')
+            //  this.auditBtnDis = true;
           }else if(this.statuss == 1){
             this.$Message.warning('至少选中一条记录')
           }else{
@@ -321,7 +330,7 @@
             })
 
           } else {
-            this.$Message.warning('请选择对象！')
+            this.$Message.warning('至少选中一条记录!')
             return false
           }
 
@@ -329,7 +338,7 @@
         //启用
         JinOrQi2(){
           if(!this.zhuanagtai){
-            this.$Message.warning('请选择对象！')
+            this.$Message.warning('至少选中一条记录!')
             return false
           }else {
             let name = {

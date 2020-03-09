@@ -13,7 +13,7 @@
       </div>
       <div class="thisRow">
         <div class="label"><label>充值天数:</label></div>
-        <div><span class="skyblueClass">{{ getMsg.cycle }} </span>天</div>
+        <div><span class="skyblueClass">{{ getMsg.cycle | day }} </span>天</div>
       </div>
       <div class="thisRow">
         <div class="label"><label>产品描述:</label></div>
@@ -57,6 +57,14 @@
             timer: null,
             status: '',
           }
+      },
+      filters: {
+        day(val) {
+          if(val < 0) {
+            val = 0
+          }
+          return val
+        }
       },
       methods: {
         record(){
