@@ -38,7 +38,7 @@ export default {
         },
         {
           title: "日期",
-          key: "transferDate",
+          key: "createTime",
           className: "tc"
         },
         {
