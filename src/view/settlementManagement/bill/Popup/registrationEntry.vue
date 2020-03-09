@@ -209,7 +209,7 @@ export default {
                   }
                 }
               },
-              params.row.serviceId
+              params.row.accountNo
             );
           }
         },
@@ -337,12 +337,14 @@ export default {
           });
         } else if (res.data[0].dictCode === "CS00107") {
           res.data.map(item => {
-            if (item.itemValueOne !== "0") {
-              this.taxRate.push({
-                value: parseFloat(item.itemValueOne),
-                label: (item.itemValueOne * 100).toFixed(0) + "%"
-              });
-            }
+            this.taxRate.push({
+              value: parseFloat(item.itemValueOne),
+              label: (item.itemValueOne * 100).toFixed(0) + "%"
+            });
+            const obj = {};
+            this.taxRate = this.taxRate.filter(item =>
+              obj[item.value] ? "" : (obj[item.value] = true)
+            );
           });
         } else if (res.data[0].dictCode === "BILL_LIST_TYPE") {
           res.data.map(item => {
@@ -365,15 +367,22 @@ export default {
     async submission() {
       const errMap = await this.$refs.xTable.validate().catch(errMap => errMap);
       if (!errMap) {
-        let pay = 0
-        let pei = 0
-        this.tableData.map(item=>{
-          pei += item.totalAmt
-        })
-        this.accountData.map(item=>{
-          pay += item.actualPayment
-        })
-        if(pei>pay) return this.$message.error('价税合计金额不能大于应付合计')
+        let pay = 0;
+        let pei = 0;
+        this.tableData.map(item => {
+          pei += item.totalAmt * 1;
+          const data = item.billingDate.split("-");
+          if (data.length > 1) {
+            item.billingDate = data[0] + data[1] + data[2];
+          } else {
+            item.billingDate = data;
+          }
+        });
+        this.accountData.map(item => {
+          pay += item.actualPayment * 1;
+        });
+        if (pei > pay)
+          return this.$message.error("价税合计金额不能大于应付合计");
         let data = {
           details: this.tableData,
           masterList: this.accountData

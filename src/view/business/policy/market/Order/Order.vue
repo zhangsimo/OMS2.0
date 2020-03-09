@@ -83,7 +83,7 @@
           async searchMore(data) {
             const res = await getListmore(data, 10, 0)
             if (res) {
-              this.$refs.leftorder.getData(res.data.content)
+              this.$refs.leftorder.getData(res.data)
             } else {
               this.$message.error('查询失败')
             }
@@ -96,13 +96,13 @@
                 this.queryTime = date
             },
             //打印表格
-            printTable(){
+             printTable(){
                let list = this.$store.state.dataList.oneOrder
                 if(list.xinzeng === '1') {
                  this.$message.error('请先保存')
                    return false
                }
-                this.$refs.printBox.openModal()
+              this.$refs.printBox.openModal()
             },
             //打开更多搜索
             openQueryModal(){

@@ -1142,7 +1142,9 @@
             }
             // 状态
             for (let el in sellOrderStatusMap) {
-              this.statusArr.push({value: sellOrderStatusMap[el], label: el})
+              if(["草稿","已提交","已作废","已退货","所有"].includes(el)){
+                this.statusArr.push({value: sellOrderStatusMap[el], label: el})
+              }
             }
             //退货原因
             for (let el in rtnReasonMap) {
