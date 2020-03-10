@@ -91,7 +91,7 @@
               <!--                  :key="item.partBrandValue"-->
               <!--                >{{ item.partBrandName}}-->
               <!--                </Option>-->
-              <Option v-for="item in partBrandList" :value="item.code" :key="item.id">{{ item.name}}</Option>
+              <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
               <Option v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
