@@ -288,6 +288,13 @@ export const dataMixin = {
       this.addNewModal = true
       this.changeTreeItemTitle='添加字典类型'
       this.$refs.proModal.resetFields()
+      if(this.selectTreeItem.__value){
+        let arr = this.selectTreeItem.__value.split(',')
+        arr.pop()
+        this.formModelData.parentMenu = arr
+      }else if(this.selectTreeItem.parentId==0){
+        this.formModelData.parentMenu = []
+      }
       if(this.formModelData.id){
         delete this.formModelData.id
       }
