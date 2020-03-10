@@ -186,7 +186,7 @@ import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import {
-  applyNo,
+  noTaxApplyNo,
   ditInvoice,
   informationCitation,
   partsInvoice,
@@ -641,25 +641,27 @@ export default {
             this.copyData = res.data;
           }
         });
-        // 申请单号
-        applyNo({ orgid: this.information.orgId }).then(res => {
-          if (res.code === 0) {
-            this.information.applyNo = res.data.applyNo;
-            this.information.code = res.data.orgCode;
-          }
-        });
       }
     },
     // 增加不含税销售开票申请
     add() {
-      this.$refs.noTax.modal1 = true;
+      // 不含税申请单号
+      noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
+        if (res.code === 0) {
+          this.$refs.noTax.information.noTaxApply = res.data.applyNo;
+          this.$refs.noTax.information.code = res.data.orgCode;
+        }
+      });
+      setTimeout(() => {
+        this.$refs.noTax.modal1 = true;
+      }, 500);
     },
     // 保存草稿
     preservation() {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgCode:this.information.code,
+            orgCode: this.information.code,
             orgid: this.information.orgId,
             orgName: this.information.orgName,
             guestId: this.information.guestId,
@@ -674,8 +676,8 @@ export default {
             this.invoice
           );
           saveDraft(obj).then(res => {
-            if(res.code===0){
-              this.$message.success('保存成功')
+            if (res.code === 0) {
+              this.$message.success("保存成功");
             }
           });
         }
@@ -686,7 +688,7 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
-            orgCode:this.information.code,
+            orgCode: this.information.code,
             orgid: this.information.orgId,
             orgName: this.information.orgName,
             guestId: this.information.guestId,
@@ -702,10 +704,10 @@ export default {
             this.invoice
           );
           submitDraft(obj).then(res => {
-           if(res.code===0){
-             this.$message.success('提交成功')
-             this.modal1 = false
-           }
+            if (res.code === 0) {
+              this.$message.success("提交成功");
+              this.modal1 = false;
+            }
           });
         }
       });

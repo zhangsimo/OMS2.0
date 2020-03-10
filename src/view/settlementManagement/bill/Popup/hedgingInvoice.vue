@@ -98,6 +98,7 @@ import approval from "./approval";
 import saleSelete from "./saleSelete";
 import { hedPreservation, hedSubmit } from "@/api/bill/popup";
 import bus from "./Bus";
+import { approvalStatus } from "_api/base/user";
 export default {
   components: {
     approval,
@@ -162,6 +163,11 @@ export default {
       if (flag) {
         this.accessoriesBillingData = [];
         this.accessoriesBillingData.push(this.information);
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
+          }
+        });
       }
     },
     // 保存草稿

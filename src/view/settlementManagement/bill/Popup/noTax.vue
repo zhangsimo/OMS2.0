@@ -333,13 +333,6 @@ export default {
     visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
-        // 不含税申请单号
-        noTaxApplyNo({ orgid: this.information.orgId }).then(res => {
-          if (res.code === 0) {
-            this.information.noTaxApply = res.data.applyNo;
-            this.information.code = res.data.orgCode;
-          }
-        });
         // 开票配件
         partsInvoice({
           accountNo: this.information.accountNo,
