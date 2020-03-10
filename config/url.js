@@ -8,7 +8,8 @@ const dev = {
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",
   // omsOrder:'http://192.168.30.21:9210', //陈舒
-  omsSettle: "http://192.168.30.21:9270",
+  // omsSettle: "http://192.168.30.21:9270",
+  omsSettle: "http://10.8.0.22:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -67,7 +68,7 @@ const audit = {
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   omsBatch: "https://uatapi2.g-part.cn/oms-batch-provider",
-  omsSettle: "https://uatapi2.g-part.cn/oms-settlement-provider",
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",

@@ -1025,6 +1025,7 @@ export default {
         this.$refs.salepopup.modal1 = true;
         this.$refs.salepopup.parameter = this.reconciliationStatement;
         this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
+        this.reconciliationStatement.code = this.$refs.salepopup.information.code;
         this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
         this.$refs.salepopup.information = this.reconciliationStatement;
         this.$refs.salepopup.information.applicationDate = moment(

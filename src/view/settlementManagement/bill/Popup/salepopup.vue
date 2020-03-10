@@ -24,7 +24,7 @@
         <span>分店名称：{{information.orgName}}</span>
       </Col>
       <Col span="6">
-        <span>分店店号：{{information.orgId}}</span>
+        <span>分店店号：{{information.code}}</span>
       </Col>
       <Col span="6">
         <span>往来单位：{{information.guestName}}</span>
@@ -139,8 +139,8 @@
           <FormItem label="对账单欠票金额" prop="statementAmountOwed">
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
-          <FormItem label="本次申请开票含税金额" prop="applyMoneyTax">
-            <Input v-model="invoice.applyMoneyTax" class="ml5 w200" @on-change="moneyChange" />
+          <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" @on-change="moneyChange" />
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -215,7 +215,7 @@ export default {
     };
     const validateTicket = (rule, value, callback) => {
       if (
-        parseFloat(this.invoice.applyMoneyTax) !==
+        parseFloat(this.invoice.applyTaxAmt) !==
         parseFloat(this.invoice.statementAmountOwed)
       ) {
         callback(new Error("欠票金额不等于本次申请开票含税金额"));
@@ -263,7 +263,7 @@ export default {
         applyMoney: "", //申请开票金额
         address: "", //收件地址
         remark: "", //备注
-        applyMoneyTax: "", //本次申请开票含税金额
+        applyTaxAmt: "", //本次申请开票含税金额
         underTicketExplain: "", //欠票未全金额开具说明
         phone: "", //电话
         amountExcludingTax: "", //不含税金额
@@ -354,7 +354,7 @@ export default {
             message: "收件地址不能为空"
           }
         ],
-        applyMoneyTax: [
+        applyTaxAmt: [
           {
             required: true,
             message: "",
@@ -524,12 +524,7 @@ export default {
         });
       });
     });
-    // 申请单号
-    applyNo().then(res => {
-      if (res.code === 0) {
-        this.information.applyNo = res.data;
-      }
-    });
+
     // 选择销售单
     bus.$on("partsData", val => {
       let data = [];
@@ -546,16 +541,19 @@ export default {
         );
         itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
         sum += itm.applyAmt * 1;
-        if (sum > this.invoice.applyMoneyTax) {
-          itm.applyAmt -= sum - this.invoice.applyMoneyTax;
+        if (sum > this.invoice.applyTaxAmt) {
+          itm.applyAmt -= sum - this.invoice.applyTaxAmt;
           data = data.slice(0, index + 1);
         }
       });
-      if (sum < this.invoice.applyMoneyTax) {
+      if (sum < this.invoice.applyTaxAmt) {
         this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
       } else {
-        if(this.invoice.additionalTaxPoint){
-          this.accessoriesBillingData = [...data,...this.accessoriesBillingData];
+        if (this.invoice.additionalTaxPoint) {
+          this.accessoriesBillingData = [
+            ...data,
+            ...this.accessoriesBillingData
+          ];
         } else {
           this.accessoriesBillingData = data;
         }
@@ -614,9 +612,9 @@ export default {
         this.$refs.formCustom.resetFields();
         this.invoice.statementAmountOwed =
           this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
-        this.invoice.applyMoneyTax = this.invoice.statementAmountOwed;
+        this.invoice.applyTaxAmt = this.invoice.statementAmountOwed;
         this.invoice.applyAmt =
-          this.invoice.applyMoneyTax + this.invoice.amountExcludingTax;
+          this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
         // 发票单位
         ditInvoice({ guestId: this.information.guestId }).then(res => {
           if (res.code === 0) {
@@ -643,6 +641,13 @@ export default {
             this.copyData = res.data;
           }
         });
+        // 申请单号
+        applyNo({ orgid: this.information.orgId }).then(res => {
+          if (res.code === 0) {
+            this.information.applyNo = res.data.applyNo;
+            this.information.code = res.data.orgCode;
+          }
+        });
       }
     },
     // 增加不含税销售开票申请
@@ -654,6 +659,7 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
+            orgCode:this.information.code,
             orgid: this.information.orgId,
             orgName: this.information.orgName,
             guestId: this.information.guestId,
@@ -667,9 +673,10 @@ export default {
             info,
             this.invoice
           );
-          console.log(obj);
           saveDraft(obj).then(res => {
-            console.log(res);
+            if(res.code===0){
+              this.$message.success('保存成功')
+            }
           });
         }
       });
@@ -679,6 +686,7 @@ export default {
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
+            orgCode:this.information.code,
             orgid: this.information.orgId,
             orgName: this.information.orgName,
             guestId: this.information.guestId,
@@ -694,7 +702,10 @@ export default {
             this.invoice
           );
           submitDraft(obj).then(res => {
-            console.log(res);
+           if(res.code===0){
+             this.$message.success('提交成功')
+             this.modal1 = false
+           }
           });
         }
       });
@@ -752,8 +763,8 @@ export default {
     invoiceTax() {
       return this.invoice.invoiceTax;
     },
-    applyMoneyTax() {
-      return this.invoice.applyMoneyTax;
+    applyTaxAmt() {
+      return this.invoice.applyTaxAmt;
     }
   },
   watch: {
@@ -768,7 +779,7 @@ export default {
         }
       });
     },
-    applyMoneyTax(val, ov) {
+    applyTaxAmt(val, ov) {
       if (this.copyData.length !== 0 && val !== ov) {
         let sum = 0;
         let accData = JSON.parse(JSON.stringify(this.copyData));

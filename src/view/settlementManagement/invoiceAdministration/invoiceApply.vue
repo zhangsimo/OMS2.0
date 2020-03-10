@@ -93,6 +93,7 @@
   </div>
 </template>
 <script>
+// import { getInvoiceList } from '_api/salesManagment/invoiceApply'
 export default {
     data(){
         return{
@@ -106,16 +107,19 @@ export default {
                 {
                 title: "序号",
                 key: "guestOrgName",
-                className: "tc"
+                className: "tc",
+                render: (h,params) => {
+                  return h('span',params.index + (this.form.page)*this.form.size + 1 )
+                }
                 },
                 {
                 title: "分店名称",
-                key: "guestOrgName",
+                key: "orgName",
                 className: "tc"
                 },
                 {
                 title: "店号",
-                key: "serviceId",
+                key: "orgId",
                 className: "tc"
                 },
                 {
@@ -125,90 +129,90 @@ export default {
                 },
                 {
                 title: "申请日期",
-                key: "guestName",
+                key: " applyDate",
                 className: "tc"
                 },
                 {
                 title: "对账单号",
-                key: "guestId",
+                key: "accountNo",
                 className: "tc"
                 },
                 {
                 title: "开票单位",
-                key: "belongSystem",
+                key: "receiptUnit",
                 className: "tc"
                 },
                 {
                 title: "申请开票金额",
-                key: "storeName",
+                key: "applyAmt",
                 className: "tc"
                 },
                 {
                 title: "开票公司",
-                key: "createUname",
+                key: "tenantName",
                 className: "tc"
                 },
                 {
                 title: "开票清单类型",
-                key: "createTime",
+                key: "species",
                 className: "tc"
                 },
                 {
                 title: "寄件方式",
-                key: "orderAmt",
+                key: "sendingWay",
                 className: "tc",
-                render: (h,params) =>{
-                    return h('span',(params.row.orderAmt).toFixed(2))
-                }
+                // render: (h,params) =>{
+                //     return h('span',(params.row.orderAmt).toFixed(2))
+                // }
                 },
                 {
                 title: "快递单号",
-                key: "remark",
+                key: "sendingNumber",
                 className: "tc"
                 },
                 {
                 title: "发票代码",
-                key: "billstate",
+                key: "invoiceCode",
                 className: "tc"
                 },
                 {
                 title: "发票号码",
-                key: "billstate",
+                key: "invoiceNo",
                 className: "tc"
                 },
                 {
                 title: "导入开票单位",
-                key: "billstate",
+                key: "importInvoiceUnit",
                 className: "tc"
                 },
                 {
                 title: "验证开票单位",
-                key: "billstate",
+                key: "verifyInvoiceUnit",
                 className: "tc"
                 },
                 {
                 title: "增发票价税合计加类型",
-                key: "billstate",
+                key: "priceTaxTotal",
                 className: "tc"
                 },
                 {
                 title: "发票不含税金额",
-                key: "billstate",
+                key: "notTaxAmt",
                 className: "tc"
                 },
                 {
                 title: "发票税额",
-                key: "billstate",
+                key: "invoiceTax",
                 className: "tc"
                 },
                 {
                 title: "已核销金额",
-                key: "billstate",
+                key: "canceledTax",
                 className: "tc"
                 },
                 {
                 title: "剩余未核销开票",
-                key: "billstate",
+                key: "remainCancelTax",
                 className: "tc"
                 }
             ],
@@ -373,7 +377,12 @@ export default {
             Reconciliationlist:[],
             pagetotal: 0,
             Reconciliationtype:'',
-            isActive:1
+            isActive:1,
+            form:{
+              page:1,
+              size:10,
+              writeOffStatus:0
+            }
         }
     },
     methods:{
@@ -405,7 +414,18 @@ export default {
         },
         summary(){
 
-        }
+        },
+        // getDataList(){
+        //   this.form.page -= 1;
+        //   getInvoiceList(this.form).then(res=>{
+        //     if(res.code===0){
+        //       this.data=res.data.content
+        //     }
+        //   })
+        // }
+    },
+    mounted(){
+      this.getDataList()
     }
 }
 </script>
