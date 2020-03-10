@@ -63,7 +63,7 @@
           <FormItem label="开户行及账号" prop="bankName">
             <Input v-model="invoice.bankName" class="ml5 w200" />
           </FormItem>
-          <FormItem label="开票单位" prop="invoiceUnit">
+          <FormItem label="开票公司" prop="invoiceUnit">
             <Select v-model="invoice.invoiceUnit" class="ml5 w200">
               <Option
                 v-for="item in invoice.issuingOfficeList"
@@ -195,6 +195,7 @@ import {
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
+import { approvalStatus } from "_api/base/user";
 export default {
   components: {
     approval,
@@ -236,7 +237,7 @@ export default {
         taxNo: "", //税号
         tel: "", //地址电话
         bankName: "", //开户行及账号
-        invoiceUnit: "", //开票单位
+        invoiceUnit: "", //开票公司
         issuingOfficeList: [], //开票单位列表
         invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
@@ -639,6 +640,12 @@ export default {
             this.invoice.invoiceTax = "010103";
             this.accessoriesBillingData = res.data;
             this.copyData = res.data;
+          }
+        });
+        // 申请进度
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
           }
         });
       }

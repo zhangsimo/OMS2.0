@@ -94,6 +94,7 @@
 </template>
 <script>
 import SeleteSale from "./seleteSale";
+import { approvalStatus } from "_api/base/user";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
 import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
@@ -350,6 +351,12 @@ export default {
             });
             this.accessoriesBillingData = res.data;
             this.copyData = res.data;
+          }
+        });
+        // 申请进度
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
           }
         });
       }
