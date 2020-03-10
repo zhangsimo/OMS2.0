@@ -170,6 +170,7 @@ export const dataMixin = {
         params.dictName = dictName
       }
       this.loading = true
+      this.selectTreeItem = "";
       getDataDictionaryType(params).then(res => {
         this.loading = false
         if (res.code == 0) {
