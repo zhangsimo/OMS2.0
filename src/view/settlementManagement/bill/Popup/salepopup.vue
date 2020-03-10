@@ -81,7 +81,7 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="开票类型" prop="invoiceType">
+          <FormItem label="发票类型" prop="invoiceType">
             <Select v-model="invoice.invoiceType" class="ml5 w200">
               <Option
                 v-for="item in invoice.typeBillingList"
@@ -239,7 +239,7 @@ export default {
         bankName: "", //开户行及账号
         invoiceUnit: "", //开票公司
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "", //开票类型
+        invoiceType: "", //发票类型
         typeBillingList: [], //开票类型列表
         invoiceTax: "", //开票税率
         rateBillingList: [], //开票税率列表
