@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal1" title="对账单选择" width=600 @on-visible-change="visChange">
+  <Modal v-model="modal1" title="对账单选择" width=600>
     <span class="mr5">对账期间：</span>
     <DatePicker type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
     <!-- <div class="db ml20"> -->
@@ -24,10 +24,7 @@
 </template>
 <script>
 import idDetailed from './../components/idDetailed'
-import {seleteAccount} from '@/api/bill/popup'
-import bus from './Bus'
 export default {
-  props:['information'],
   components:{
     idDetailed
   },
@@ -38,7 +35,7 @@ export default {
       account: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           width: 40,
           className: "tc"
         },
@@ -54,7 +51,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "serviceId",
+          key: "guestName",
           className: "tc",
           render:(h,params)=>{
             return h("span",
@@ -80,40 +77,25 @@ export default {
         },
         {
           title: "收付类型",
-          key: "billingTypeName",
+          key: "guestName",
           className: "tc"
         },
         {
           title: "实际收付款金额",
-          key: "receiptPayment",
+          key: "guestName",
           className: "tc"
         }
       ], //选择不含税对账单单
-      accountData: [], //选择不含税对账单单表格数据
+      accountData: [{ index: 1,serviceId:'sss' }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
       seleteData: {} //单选数据
     };
   },
   methods: {
-    // 对话框是否显示
-    visChange(flag) {
-      if (flag) {
-        seleteAccount({orgId:this.information.orgId}).then(res=>{
-          if(res.code===0){
-            res.data.content.map(item=>{
-              item.billingTypeName = item.billingType.name
-            })
-            this.accountData = res.data.content
-          }
-        })
-      }
-    },
     // 日期查询
     query() {},
     // 确认按钮
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
-        bus.$emit('accountHedNo',this.seleteData)
-        this.modal1 = false
       } else {
         this.$message.error("请选择一条对账单");
       }

@@ -16,12 +16,28 @@ export function getDetailsList(params) {
     params
   });
 }
-//人工核销页面
+//智能核销
+export function IntelligenceList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApplyCheckChargeOff/invoiceSmartCancel`,
+    method: "post",
+    data
+  });
+}
 
+//人工核销页面
 export function getManualList(params) {
   return axios.request({
     url: `${api.omsSettle}/salesInvoice/findByQuery`,
     method: "get",
     params
+  });
+}
+//确认核销
+export function subManualList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/manualCancellation`,
+    method: "post",
+    data
   });
 }

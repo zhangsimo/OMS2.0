@@ -168,7 +168,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "可售数量",
-      key: "outableQty",
+      key: "outQty",
       minWidth: 80
     }
   ];

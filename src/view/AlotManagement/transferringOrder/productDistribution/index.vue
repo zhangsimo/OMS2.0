@@ -45,7 +45,7 @@
                   <i-input :value.sync="formItem.stockId" disabled placeholder="请输入"></i-input>
                 </Form-item>
                 <Form-item label="可售数量:">
-                  <i-input :value.sync="formItem.outableQty" disabled placeholder="请输入"></i-input>
+                  <i-input :value.sync="formItem.occupyQty" disabled placeholder="请输入"></i-input>
                 </Form-item>
                 <Form-item label="锁定数量:">
                   <i-input v-model="formItem.lockQty" placeholder="请输入"></i-input>

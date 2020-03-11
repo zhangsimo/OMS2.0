@@ -95,7 +95,7 @@ export default {
         },
         {
           title: "转单日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
@@ -213,7 +213,7 @@ export default {
         },
         {
           title: "转单日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
@@ -281,6 +281,7 @@ export default {
     visChange(flag) {
       if (flag) {
         getSalelist({guestId:this.guestId}).then(res => {
+          console.log(res)
           if(res.code===0){
             this.data1 = res.data.one
             this.data2 = res.data.two

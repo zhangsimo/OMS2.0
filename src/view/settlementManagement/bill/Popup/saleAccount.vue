@@ -38,7 +38,7 @@ export default {
         },
         {
           title: "日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
@@ -64,10 +64,10 @@ export default {
         },
         {
           title: "对账金额",
-          key: "serviceAmt",
+          key: "accountAmt",
           className: "tc",
           render:(h,params)=>{
-            return h('span',params.row.serviceAmt.toFixed(2))
+            return h('span',params.row.accountAmt.toFixed(2))
           }
         }
       ],//选择不含税对账单单

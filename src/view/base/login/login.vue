@@ -6,8 +6,7 @@
 <script>
   import {mapActions} from 'vuex'
   import GpartLoginPage from '_c/login'
-  import systemUri from "_conf/systemUri"
-  import { loginSystem } from "_api/base/user"
+
   export default {
     data () {
       return {
@@ -20,37 +19,22 @@
         'handleLogin',
         'getUserInfo'
       ]),
-      commit({username, password, scope, errCallback}) {
-        switch(scope) {
-            case "wms":
-              // systemUri
-              loginSystem({ uri: systemUri.wmsTokenApi, username, password }).then(res => {
-                if(res.code == 0) {
-                  // systemUri.wms = 'http://192.168.30.129:8088'
-                  const uri = encodeURI(`${systemUri.wms}?username=${username}&password=${password}`);
-                  location.href = uri
-                }
-              })
-              break;
-            case "oms":
-            default:
-              this.handleLogin({username, password}).then(res => {
-                localStorage.setItem('username', username)
-                this.getUserInfo(username).then(res => {
-                    let data = {}
-                        data.tenantId = res.tenantId
-                        data.shopId = res.shopId
-                        data.shopkeeper = res.shopkeeper
-                        localStorage.setItem('oms2-userList' , JSON.stringify(data))
-                    this.$router.push({
-                    name: 'home'
-                  })
-                })
-              }).catch(err => {
-                errCallback && errCallback()
-              })
-              break;
-          }
+      commit({username, password, errCallback}) {
+        this.handleLogin({username, password}).then(res => {
+          localStorage.setItem('username', username)
+          this.getUserInfo(username).then(res => {
+              let data = {}
+                  data.tenantId = res.tenantId
+                  data.shopId = res.shopId
+                  data.shopkeeper = res.shopkeeper
+          localStorage.setItem('oms2-userList' , JSON.stringify(data))
+              this.$router.push({
+              name: 'home'
+            })
+          })
+        }).catch(err => {
+          errCallback && errCallback()
+        })
       }
     }
   }

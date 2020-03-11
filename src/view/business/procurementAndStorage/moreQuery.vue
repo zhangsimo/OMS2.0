@@ -28,9 +28,7 @@
           <Input v-model="data.partName" placeholder="请输入配件名称" style="width: 350px"/>
         </FormItem>
         <FormItem label="创建人:">
-          <Select style="width: 350px" v-model="data.createUname" label-in-value filterable>
-            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
-          </Select>
+          <Input v-model="data.createUname" placeholder="请输入创建人" style="width: 350px"/>
         </FormItem>
       </Form>
     </div>
@@ -44,7 +42,6 @@
 <script>
     // import {getClient} from '@/api/salesManagment/salesOrder'
     import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
-    import { getSales } from "@/api/salesManagment/salesOrder";
     export default {
         name: "MoreQuery",
         props:{
@@ -55,13 +52,11 @@
                 moreQueryShow: false,//模态框是否展示
                 client: [],//客户下拉框
                 dateOne:'',
-                dateTwo:'',
-                salesList:[]
+                dateTwo:''
             }
         },
         mounted() {
             this.getAllClient()
-            this.getAllSales()
         },
         methods: {
             openModal() {
@@ -100,17 +95,7 @@
             suerQuery(){
                 this.$emit('getSureQuery' , {})
                 this.moreQueryShow = false
-            },
-            async getAllSales() {
-            let res = await getSales();
-            if (res.code === 0) {
-              this.salesList = res.data.content;
-              this.salesList.forEach((item) => {
-                item.label = item.userName;
-                item.value = item.id;
-              });
             }
-          }
         }
     }
 </script>

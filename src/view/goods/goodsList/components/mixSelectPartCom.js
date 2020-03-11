@@ -217,20 +217,13 @@ export const mixSelectPartCom = {
         this.treeLoading = false;
         if(res.code==0){
           this.treeData = this.resetData(res.data.content || []);
-          //默认选中第一个
-          if(this.treeData.length>0){
-            this.treeData[0].selected = true
-            this.selectTreeItem = this.treeData[0];
-          }
-          this.getList();
         }
       });
     },
     //树形数组递归加入新属性
     resetData(treeData) {
-      treeData.map((item,index) => {
+      treeData.map(item => {
         item.title = item.typeName;
-        item.selected = false
         if (item.children && item.children.length > 0) {
           item.children = this.resetData(item.children);
         }
@@ -252,7 +245,7 @@ export const mixSelectPartCom = {
     //显示层
     init() {
       this.searchPartLayer = true;
-      // this.getList();
+      this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
     },
