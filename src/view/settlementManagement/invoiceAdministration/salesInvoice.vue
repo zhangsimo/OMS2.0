@@ -14,7 +14,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row :summary-method="handleSummary"
+        <Table border :columns="columns" :data="data" ref="summary" highlight-row
           @on-selection-change="requires" max-height="400"></Table>
          <Page
           :total="pagetotal"
@@ -33,106 +33,114 @@
       <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="130">
         <Row>
           <Col span="11">
-            <FormItem label="发票类型：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="发票类型：" prop="invoiceType">
+              <Select v-model="formValidate.invoiceType">
+                <Option v-for="item in invoiceTypeOption" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="价税合计：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="价税合计：" prop="priceTaxTotal">
+              <Input v-model="formValidate.priceTaxTotal" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票公司：" prop="type">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="开票公司：" prop="invoiceUnit">
+              <Select v-model="formValidate.invoiceUnit">
+                <Option v-for="item in invoiceUnitOption" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票金额：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="发票金额：" prop="invoiceAmount">
+              <Input v-model="formValidate.invoiceAmount" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="分店：" prop="type">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="分店：" prop="orgName">
+              <Select v-model="formValidate.orgName">
+                <Option v-for="item in proTypeList" :value="item.value" :key="item.value">{{item.name}}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票税额：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="发票税额：" prop="invoiceTaxAmount">
+              <Input v-model="formValidate.invoiceTaxAmount" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="店号：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="店号：" prop="orgCode">
+              <Input v-model="formValidate.orgCode" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="往来单位：" prop="name">
-              <Input v-model="formValidate.name" />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="开票清单类型：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="收款方式：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
+            <FormItem label="往来单位：" prop="guestName">
+              <Input v-model="formValidate.guestName" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="发票号码：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="开票清单类型：" prop="species">
+              <Select v-model="formValidate.species" clearable>
+                <Option
+                  v-for="item in speciesOptionList"
+                  :value="item.itemCode"
+                  :key="item.itemCode"
+                >{{item.itemName}}</Option>
+              </Select>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="开票业务：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="收款方式：" prop="collectionType">
+              <Select v-model="formValidate.collectionType">
+                <Option v-for="item in collectionTypeOption" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票单位：" prop="name">
-              <Input v-model="formValidate.name" />
+            <FormItem label="发票号码：" prop="invoiceNo">
+              <Input v-model="formValidate.invoiceNo" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="税率(%)：" prop="name">
-              <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
+            <FormItem label="开票业务：" prop="invoiceService">
+              <Select v-model="formValidate.invoiceService">
+                <Option v-for="item in invoiceServiceOption" :value="item.itemCode" :key="item.itemCode">{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票日期：" prop="remark">
-              <Input v-model="formValidate.name" />
+            <FormItem label="开票单位：" prop="invoiceUnit">
+              <Input v-model="formValidate.invoiceUnit" />
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="税率：" prop="invoiceTax">
+              <Select v-model="formValidate.invoiceTax" clearable>
+                <Option
+                  v-for="item in taxOptionList"
+                  :value="item.itemValueOne"
+                  :key="item.value"
+                >{{Math.floor(item.itemValueOne * 100)}} %</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+             <FormItem label="开票日期：" prop="invoiceDate">
+              <DatePicker type="date" :value="formValidate.invoiceDate" @on-change="beginTimeChange" placeholder="开始时间"></DatePicker>
             </FormItem>
           </Col>
           <Col span="11">
@@ -154,14 +162,30 @@
   </div>
 </template>
 <script>
-import { getSalesList } from '_api/salesManagment/salesInvoice'
+import { getSalesList,saveSalesList ,getOptionSalesList,getOptionFdList,getOptionCpList} from '_api/salesManagment/salesInvoice'
 export default {
     data(){
       return{
         form:{
-          page:1,
+          page:0,
           size:10,
-          writeOffStatus:""
+          writeOffStatus:''
+        },
+        formValidate: {
+          invoiceType: "",
+          priceTaxTotal:"",
+          invoiceUnit:'',
+          invoiceAmount:'',
+          orgName:'',
+          invoiceTaxAmount:'',
+          orgCode:'',
+          guestName:'',
+          species:'',
+          collectionType:'',
+          invoiceNo:'',
+          invoiceService:'',
+          invoiceTax:'',
+          remark:''
         },
         columns:[
             {
@@ -173,7 +197,10 @@ export default {
             key:'index',
             title: "序号",
             width: 40,
-            className: "tc"
+            className: "tc",
+            render: (h,params) => {
+              return h('span',params.index + (this.form.page)*this.form.size + 1 )
+            }
             },
             {
             title: "发票类型",
@@ -182,17 +209,17 @@ export default {
             },
             {
             title: "开票公司",
-            key: "tenantName",
+            key: "invoiceUnit",
             className: "tc"
             },
             {
             title: "分店",
-            key: "branchStore",
+            key: "orgName",
             className: "tc"
             },
             {
             title: "店号",
-            key: "branchStoreId",
+            key: "orgCode",
             className: "tc"
             },
             {
@@ -230,12 +257,12 @@ export default {
             },
             {
             title: "发票税额",
-            key: "invoiceTax",
+            key: "invoiceTaxAmount",
             className: "tc"
             },
             {
             title: "往来单位",
-            key: "",
+            key: "guestName",
             className: "tc"
             },
             {
@@ -250,7 +277,7 @@ export default {
             },
             {
             title: "税率",
-            key: "tax",
+            key: "invoiceTax",
             className: "tc"
             },
             {
@@ -260,18 +287,21 @@ export default {
             },
             {
             title: "导入人",
-            key: "",
+            key: "createUname",
             className: "tc"
             },
             {
             title: "导入时间",
-            key: "",
+            key: "createTime",
             className: "tc"
             },
             {
             title: "是否作废",
             key: "status",
-            className: "tc"
+            className: "tc",
+            render: (h,params) =>{
+                return h('span',params.row.status===0?'否':'是')
+            }
             },
             {
             title: "作废经办人",
@@ -286,7 +316,10 @@ export default {
             {
             title: "是否红冲核销",
             key: "redRushStatus",
-            className: "tc"
+            className: "tc",
+            render: (h,params) =>{
+                return h('span',params.row.redRushStatus===0?'否':'是')
+            }
             },
             {
             title: "红冲经办人",
@@ -308,26 +341,33 @@ export default {
         pagetotal: 0,
         isActive:'',
         proModal:false,
-        formValidate: {
-          name: "",
-          remark:""
-        },
+        flag:true,
         ruleValidate: {
           name: [
             // { required: true, message: "产品名称不能为空", trigger: "blur" }
           ]
         },
         proType:[],
-        allTablist:[]
+        allTablist:[],
+        invoiceTypeOption:[],//发票类型
+        taxOptionList:[], //税率
+        collectionTypeOption:[],//收款方式
+        speciesOptionList:[],//开票清单类型
+        proTypeList:[],//分店
+        invoiceServiceOption:[], //开票业务
+        invoiceUnitOption:[],//开票公司
       }
     },
     methods:{
         //选择查询条件
         chooseTable(num) {
           this.isActive = num;
-          this.form.page = 1;
+          this.form.page = 0;
           this.form.writeOffStatus = num;
-          this.getTabList(this.form);
+          this.getTabList();
+        },
+        beginTimeChange(dataTime){
+          this.formValidate.invoiceDate=dataTime
         },
         //操作
         operation(num){
@@ -337,9 +377,17 @@ export default {
               case 2:
                this.modifyData()
                 break;
+              case 3:
+               this.deleteList('delete')
+                break;
+              case 4:
+               this.deleteList('void')
+                break;
+              case 5:
+               this.deleteList('write')
+                break;
           }
         },
-        //发票修改
         //修改
         modifyData() {
           if (!this.allTablist.length) {
@@ -348,13 +396,119 @@ export default {
           } else if (this.allTablist.length >= 2) {
             this.$Message.warning("请选择一条要修改数据！");
           } else {
-            this.getDetailInfor();
-            this.proModal = true;
+            this.allTablist.forEach((item, index) => {
+              if (item.writeOffStatus == 1) {
+                return (this.flag = false);
+              }else{
+                return (this.flag = true);
+              }
+            });
+            if (this.flag == false) {
+              this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
+            }else{
+              this.getDetailInfor();
+              this.proModal = true;
+            }
+          }
+        },
+        //操作项内容
+        deleteList(type){
+          if (!this.allTablist.length) {
+            let content = "";
+            if (type == "delete") {
+              this.$Message.warning("请选择要删除的数据！");
+            } else if (type == "void") {
+              this.$Message.warning("请选择要作废的数据！");
+            }else {
+              this.$Message.warning("请选择要核销的数据！");
+            }
+            return;
+          }else{
+            let tittle = "";
+            if (type == "delete") {
+              tittle = "<p>确认要删除选中的数据？</p>";
+            } else if (type == "void") {
+              tittle = "<p>确认要作废选中的数据？</p>";
+            } else {
+              tittle = "<p>确认要核销选中的数据？</p>";
+            }
+            // this.allTablist.forEach((item, index) => {
+            //   if (item.canceled == 1) {
+            //     return (this.flag = false);
+            //   }else{
+            //     this.flag = true
+            //   }
+            //   if(item.canceled == 0 && type == "writeoff"){
+            //     return (this.flags = false);
+            //   }else{
+            //     return (this.flags = true);
+            //   }
+            // });
+            // if(this.flags == false && type == "writeoff"){
+            //   this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
+            // }else if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
+            //   this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
+            // } else {
+              this.$Modal.confirm({
+                title: "警告",
+                content: tittle,
+                onOk: () => {
+                  let message = "";
+                  let deleteList = [];
+                  this.allTablist.forEach((item, index) => {
+                    deleteList.push({
+                      id: item.id
+                    });
+                  });
+                  if (type == "delete") {
+                    deletetManageList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("删除成功！");
+                          this.allTablist = [];
+                          this.getTabList();
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                  if (type == "void") {
+                    invoiceReturnList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("退回成功！");
+                          this.allTablist = [];
+                          this.getTabList();
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                  if (type == "write") {
+                    invoiceRedHedgedList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("进项转出成功！");
+                          this.allTablist = [];
+                          this.getTabList(this.form);
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                },
+                onCancel: () => {}
+              });
+            // }
           }
         },
         //查看详情
         getDetailInfor() {
           // await this.getSelectOptions()
+          console.log(this.allTablist)
           for (let key in this.formValidate) {
             this.formValidate[key] = this.allTablist[0][key];
           }
@@ -365,7 +519,6 @@ export default {
         },
         //获取列表数据
         getTabList(){
-          this.form.page -= 1;
           getSalesList(this.form).then(res=>{
             if(res.code===0){
               this.data = res.data.content
@@ -373,29 +526,73 @@ export default {
             }
           })
         },
-        handleSummary(){
-
+        //字典匹配
+        async getOption(){
+          await getOptionSalesList('CS00107').then(res=>{
+            if(res.code===0){
+              this.taxOptionList = res.data
+            }
+          })
+          await getOptionSalesList('INVOICE_TYPES').then(res=>{
+            if(res.code===0){
+              this.invoiceTypeOption = res.data
+            }
+          })
+          await getOptionSalesList('RECEIVABLE_TYPE').then(res=>{
+            if(res.code===0){
+              this.collectionTypeOption = res.data
+            }
+          })
+          await getOptionSalesList('BILL_LIST_TYPE').then(res=>{
+            if(res.code===0){
+              this.speciesOptionList = res.data
+            }
+          })
+          await getOptionSalesList('BILL_SERVICE').then(res=>{
+            if(res.code===0){
+              this.invoiceServiceOption = res.data
+            }
+          })
+          await getOptionFdList().then(res=>{
+            if(res.code===0){
+              this.proTypeList=res.data
+            }
+          })
+          await getOptionSalesList('KPDW').then(res=>{
+            if(res.code===0){
+              this.invoiceUnitOption=res.data
+            }
+          })
         },
         //分页
         pageNumChange(pageNum) {
           this.form.page = pageNum;
-          this.getTabList(this.form);
+          this.getTabList();
         },
         pageSizeChange(pageSize) {
           this.form.page = 1;
           this.form.size = pageSize;
-          this.getTabList(this.form);
+          this.getTabList();
         },
         submit(name) {
           this.$refs[name].validate(valid => {
             if (valid) {
+              saveSalesList(this.formValidate).then(res=>{
+                if(res.code===0){
+                  this.$Message.success("修改成功！")
+                  this.proModal=false
+                  this.getTabList()
+                }
+              }).catch(err=>{
 
+              })
             }
           });
         },
     },
     mounted(){
       this.getTabList()
+      this.getOption()
     }
 }
 </script>

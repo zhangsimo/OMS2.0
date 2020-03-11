@@ -23,7 +23,6 @@
           ref="summary"
           show-summary
           highlight-row
-          :summary-method="handleSummary"
           @on-selection-change="requires"
           max-height="600"
         ></Table>
@@ -94,7 +93,7 @@
           </Col>
           <Col span="11">
             <FormItem label="税额：" prop="taxAmt">
-              <Input v-model="formValidate.taxAmt" clearable />
+              <Input v-model="formValidate.taxAmt" clearable/>
             </FormItem>
           </Col>
         </Row>
@@ -170,7 +169,9 @@
         <Row>
           <Col span="11">
             <FormItem label="开票日期：" prop="billingDate">
-              <Input v-model="formValidate.billingDate" clearable />
+              <!-- <Input v-model="formValidate.billingDate" clearable /> -->
+              <DatePicker type="date" :options="options3" :value="formValidate.billingDate" @on-change="beginTimeChange" placeholder="开始时间"
+                        ></DatePicker>
             </FormItem>
           </Col>
           <Col span="11">
@@ -188,12 +189,12 @@
         <Row>
           <Col span="11">
             <FormItem label="价税合计金额：" prop="totalAmt">
-              <Input v-model="formValidate.totalAmt" clearable />
+              <Input v-model="formValidate.totalAmt" clearable/>
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="金额：" prop="invoiceAmt">
-              <Input v-model="formValidate.invoiceAmt" clearable />
+              <Input v-model="formValidate.invoiceAmt" clearable/>
             </FormItem>
           </Col>
         </Row>
@@ -256,6 +257,11 @@ export default {
   },
   data() {
     return {
+      options3: {
+          disabledDate(date) {
+            return date && date.valueOf() > Date.now();
+          }
+      },
       columns: [
         {
           title: "选择",
@@ -263,9 +269,11 @@ export default {
           type: "selection"
         },
         {
-          type: "index",
           title: "序号",
-          width: 50
+          width: 50,
+          render: (h,params) => {
+            return h('span',params.index + (this.form.page)*this.form.size + 1 )
+          }
         },
         {
           title: "登记日期",
@@ -406,7 +414,8 @@ export default {
           width: 70,
           render: (h, params) => {
             let arr = [];
-            params.row.accountNo.forEach((item, i) => {
+            if(params.row.accountNo!=null){
+              params.row.accountNo.forEach((item, i) => {
               arr.push(
                 h(
                   "span",
@@ -426,6 +435,7 @@ export default {
                 )
               );
             });
+            }
             return h("div", arr);
           }
         },
@@ -441,6 +451,7 @@ export default {
         }
       ],
       flag: true,
+      flags:true,
       modal2: false,
       data: [],
       pagetotal: 0,
@@ -465,12 +476,30 @@ export default {
         remark: ""
       },
       ruleValidate: {
-        // invoicePurchaserId:[
-        //   { required: true, message: "请选择发票采购方名称", trigger: "change" }
-        // ],
-        // taxRate:[
-        //   { required: true, message: "请选择发票税率", trigger: "change" }
-        // ]
+        invoiceCode:[
+           { message: "必须是10位数字", min: 10, max: 10}
+        ],
+        invoiceNo:[
+         { message: "必须是8位数字", min: 8, max: 8}
+        ],
+        taxAmt:[
+          { type:'number', message: '请输入正确格式', transform(value) {
+                return Number(value);
+              }
+            }
+        ],
+        totalAmt:[
+          { type:'number', message: '请输入正确格式', transform(value) {
+                return Number(value);
+              }
+            }
+        ],
+        invoiceAmt:[
+          {type:'number', message: '请输入正确格式', transform(value) {
+                return Number(value);
+              }
+            }
+        ]
       },
       proType: [],
       form: {
@@ -495,6 +524,10 @@ export default {
     };
   },
   methods: {
+
+    beginTimeChange(dataTime){
+      this.formValidate.billingDate=dataTime
+    },
     //操作
     operation(num) {
       switch (num) {
@@ -549,10 +582,19 @@ export default {
         this.allTablist.forEach((item, index) => {
           if (item.canceled == 1) {
             return (this.flag = false);
+          }else{
+            this.flag = true
+          }
+          if(item.canceled == 0 && type == "writeoff"){
+            return (this.flags = false);
+          }else{
+            return (this.flags = true);
           }
         });
-        if (this.flag == false && type == "writeoff") {
-          this.$Message.warning("该数据中存在已核销数据，请重新未核销数据");
+        if(this.flags == false && type == "writeoff"){
+          this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
+        }else if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
+          this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
         } else {
           this.$Modal.confirm({
             title: "警告",
@@ -632,8 +674,19 @@ export default {
       } else if (this.allTablist.length >= 2) {
         this.$Message.warning("请选择一条要修改数据！");
       } else {
-        this.getDetailInfor();
-        this.proModal = true;
+        this.allTablist.forEach((item, index) => {
+          if (item.canceled == 1) {
+            return (this.flag = false);
+          }else{
+             return (this.flag = true);
+          }
+        });
+        if (this.flag == false) {
+          this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
+        }else{
+          this.getDetailInfor();
+          this.proModal = true;
+        }
       }
     },
     //选择操作项目
@@ -656,12 +709,13 @@ export default {
         if (response.data.length > 0) {
           txt = response.data.join(",");
         }
-        this.$Notice.warning({
+        this.$Notice.success({
           title: "导入成功",
           desc: txt,
           duration: 0
         });
-        // this.getList()
+        this.exportData=false
+        this.getTabList(this.form)
       } else {
         this.$Message.error(response.message);
       }
@@ -721,7 +775,6 @@ export default {
     },
     //查看详情
     getDetailInfor() {
-      // await this.getSelectOptions()
       for (let key in this.formValidate) {
         this.formValidate[key] = this.allTablist[0][key];
       }
@@ -730,7 +783,6 @@ export default {
     requires(val) {
       this.allTablist = val;
     },
-    handleSummary() {},
     //获取列表
     getTabList(data) {
       data.page -= 1;
