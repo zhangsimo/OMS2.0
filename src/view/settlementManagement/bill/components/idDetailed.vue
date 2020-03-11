@@ -95,7 +95,7 @@ export default {
         },
         {
           title: "转单日期",
-          key: "transferDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -213,7 +213,7 @@ export default {
         },
         {
           title: "转单日期",
-          key: "transferDate",
+          key: "createTime",
           className: "tc"
         },
         {

@@ -33,17 +33,19 @@ export function detailedIncrease(params){
 })
 }
 //申请单号
-export function applyNo(){
+export function applyNo(params){
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/applyNo`,
     method: 'get',
+    params
 })
 }
 //不含税申请单号
-export function noTaxApplyNo(){
+export function noTaxApplyNo(params){
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/applyNotTaxNo`,
     method: 'get',
+    params
 })
 }
 //选择销售单

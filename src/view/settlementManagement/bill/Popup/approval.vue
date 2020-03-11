@@ -33,7 +33,7 @@
           </div>
         </template>
       </div>
-    </div> -->
+    </div>-->
     <div class="modal-data">
       <span class="data-name">审批时间:</span>
       <div class="data-value flex-center">
@@ -52,22 +52,29 @@
             <span class="remark">{{item.remark}}</span>
           </div>
         </template>
-      </div> -->
+    </div>-->
     <!-- </div> -->
   </section>
 </template>
 <script>
+import bus from "./Bus";
 export default {
-  props:['approvalTit'],
-  data(){
+  props: ["approvalTit"],
+  data() {
     return {
       statusData: [
         { name: "提交", status: "已提交" },
         { name: "产品总监审批", status: "已审批" }
-      ],
-    }
+      ]
+    };
   },
-   filters: {
+  mounted(){
+    bus.$on('approval',val=>{
+      console.log(val)
+      this.statusData = val
+    })
+  },
+  filters: {
     date(value = 0) {
       let date = new Date(value).toLocaleDateString();
       let time = new Date(value).toLocaleTimeString();
@@ -93,7 +100,7 @@ export default {
       return value;
     }
   }
-}
+};
 </script>
 <style lang="less" scoped>
 .flex-center {

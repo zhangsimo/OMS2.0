@@ -406,7 +406,7 @@ import {
   accountRevoke,
   account
 } from "@/api/bill/saleOrder";
-import { hedgingApplyNo } from "@/api/bill/popup";
+import { hedgingApplyNo,applyNo } from "@/api/bill/popup";
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
@@ -1022,14 +1022,24 @@ export default {
         Object.keys(this.reconciliationStatement).length !== 0 &&
         this.reconciliationStatement.billingTypeName === "收款"
       ) {
-        this.$refs.salepopup.modal1 = true;
         this.$refs.salepopup.parameter = this.reconciliationStatement;
         this.reconciliationStatement.applyNo = this.$refs.salepopup.information.applyNo;
+        this.reconciliationStatement.code = this.$refs.salepopup.information.code;
         this.reconciliationStatement.noTaxApply = this.$refs.salepopup.information.noTaxApply;
         this.$refs.salepopup.information = this.reconciliationStatement;
         this.$refs.salepopup.information.applicationDate = moment(
           new Date()
         ).format("YYYY-MM-DD HH:mm:ss");
+        // 申请单号
+        applyNo({ orgid: this.reconciliationStatement.orgId }).then(res => {
+          if (res.code === 0) {
+            this.$refs.salepopup.information.applyNo = res.data.applyNo;
+            this.$refs.salepopup.information.code = res.data.orgCode;
+          }
+        });
+        setTimeout(()=>{
+          this.$refs.salepopup.modal1 = true;
+        },500)
       } else {
         this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
@@ -1206,7 +1216,7 @@ export default {
       // });
       if (row.processInstance) {
         approvalStatus({ instanceId: row.processInstance }).then(res => {
-          if (res.code == "0") {
+          if (res.code == 0) {
             this.falg = true;
             this.statusData = res.data.operationRecords;
           }

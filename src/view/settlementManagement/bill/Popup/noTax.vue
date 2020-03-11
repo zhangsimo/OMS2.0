@@ -12,7 +12,7 @@
         <span>分店名称：{{information.orgName}}</span>
       </Col>
       <Col span="8">
-        <span>分店店号：{{information.orgId}}</span>
+        <span>分店店号：{{information.code}}</span>
       </Col>
       <Col span="8">
         <span>往来单位：{{information.guestName}}</span>
@@ -94,6 +94,7 @@
 </template>
 <script>
 import SeleteSale from "./seleteSale";
+import { approvalStatus } from "_api/base/user";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
 import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
@@ -285,12 +286,6 @@ export default {
     };
   },
   mounted() {
-    // 不含税申请单号
-    noTaxApplyNo().then(res => {
-      if (res.code === 0) {
-        this.information.noTaxApply = res.data;
-      }
-    });
     // 对账单
     bus.$on("accountNo", val => {
       this.invoice.taxPoint = 0.07;
@@ -311,10 +306,13 @@ export default {
       });
       let sum = 0;
       data.map((itm, index) => {
-        if(this.invoice.taxation) {
-          itm.additionalTaxPoint =
-            parseFloat((itm.orderQty / num * this.invoice.taxation).toFixed1(2));
-          itm.taxAmt = parseFloat((itm.applyAmt*1 + itm.additionalTaxPoint*1).toFixed(2));
+        if (this.invoice.taxation) {
+          itm.additionalTaxPoint = parseFloat(
+            ((itm.orderQty / num) * this.invoice.taxation).toFixed1(2)
+          );
+          itm.taxAmt = parseFloat(
+            (itm.applyAmt * 1 + itm.additionalTaxPoint * 1).toFixed(2)
+          );
           itm.taxPrice = parseFloat((itm.taxAmt / itm.orderQty).toFixed(2));
           sum += itm.applyAmt * 1;
           if (sum > this.invoice.invoiceTaxAmt) {
@@ -355,6 +353,12 @@ export default {
             this.copyData = res.data;
           }
         });
+        // 申请进度
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
+          }
+        });
       }
     },
     // 提交申请
@@ -363,6 +367,7 @@ export default {
         if (val) {
           let obj = {
             ...{
+              orgCode: this.information.code,
               orgid: this.information.orgId,
               orgName: this.information.orgName,
               guestId: this.information.guestId,
@@ -376,10 +381,13 @@ export default {
           if (this.invoice.taxPoint > 0.06) {
             bus.$emit("noTaxSaleList", this.accessoriesBillingData);
             bus.$emit("noTaxInfo", this.invoice);
-            this.modal1 = false
+            this.modal1 = false;
           } else {
             submitNoTax(obj).then(res => {
-              console.log(res);
+              if(res.code===0){
+                this.$message.success('提交成功')
+                this.modal1 = false
+              }
             });
           }
         }
