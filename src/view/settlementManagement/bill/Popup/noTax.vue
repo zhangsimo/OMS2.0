@@ -340,11 +340,11 @@ export default {
           taxSign: 0
         }).then(res => {
           if (res.code === 0) {
-            this.invoice = { ...this.invoice, ...this.information };
-            this.invoice.notAmt =
-              this.invoice.accountsReceivable -
-              this.invoice.taxAmountOfPartOpened;
-            this.invoice.invoiceTaxAmt = this.invoice.notAmt;
+            // this.invoice = { ...this.invoice, ...this.information };
+            // this.invoice.notAmt =
+            //   this.invoice.accountsReceivable -
+            //   this.invoice.taxAmountOfPartOpened;
+            // this.invoice.invoiceTaxAmt = this.invoice.notAmt;
             this.invoice.taxPoint = 0.07;
             res.data.map(item => {
               item.invoiceTax = this.tax;
