@@ -65,7 +65,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" highlight-row 
+        <Table border :columns="columns" :data="data" ref="summary" highlight-row
         @on-selection-change="requires" max-height="400"></Table>
          <Page
           :total="pagetotal"
