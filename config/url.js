@@ -2,8 +2,8 @@ import env from "./env";
 
 const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  omsApi: "http://192.168.30.21:9240", //徐林烽
-  wmsApi: "http://192.168.30.21:9250", // 徐林烽
+  omsApi: "http://192.168.2.47:9240", //徐林烽
+  wmsApi: "http://10.8.0.26:9250", // 徐林烽
   omsOrder: "http://10.8.0.26:9210", // 徐林烽
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",

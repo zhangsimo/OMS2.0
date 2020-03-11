@@ -915,7 +915,7 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd = true;
+              this.$parent.$parent.isAdd = false;
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields();
               this.limitList = {};
@@ -1014,8 +1014,10 @@ export default {
                     let res = await getSubmitList(this.formPlan);
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
+                        this.$parent.$parent.isAdd = false;
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
+                        this.$refs.formPlan.resetFields();
                     }
                   },
                   onCancel: () => {}
@@ -1025,8 +1027,10 @@ export default {
               let res = await getSubmitList(this.formPlan);
               if (res.code === 0) {
                 this.$Message.success("提交成功");
+                  this.$parent.$parent.isAdd = false;
                 this.limitList = {};
                 this.$store.commit("setleftList", res);
+                  this.$refs.formPlan.resetFields();
               }
             }
           } catch (errMap) {
