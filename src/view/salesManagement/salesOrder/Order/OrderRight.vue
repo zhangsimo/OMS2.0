@@ -949,6 +949,10 @@ export default {
       let isDisabled = this.draftShow != 0;
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+        if(row.isMarkActivity==1){
+            orderQtyColumn.editRender.attrs.disabled=true;
+            orderPriceColumn.editRender.attrs.disabled=true;
+        }
       remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     //出库
