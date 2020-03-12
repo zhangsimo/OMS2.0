@@ -25,7 +25,7 @@ export function getRoles() {
 // 获取员工列表
 export function getStaffList (params) {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/findAllTenantUsers`,
+    url: `${api.authApi}/tenantUsers/findAllTenantUsersRole`,
     method: 'get',
     params
   })

@@ -78,43 +78,52 @@
             <TabPane label="员工" name="name2">
               <div>
                 <div class="treeHeader">
-                  <Button class="ml10 w90" @click="saveStaff">
-                    <span class="center">
-                      <Icon custom="iconfont iconbaocunicon icons" />保存
-                    </span>
-                  </Button>
-                  <div class="fr">
+                  <div class="">
+                    <Button class="ml10 w90" @click="saveStaff">
+                      <span class="center">
+                        <Icon custom="iconfont iconbaocunicon icons" />保存
+                      </span>
+                    </Button>
+                    <Button class="ml10 mr10" @click="delwms">
+                      <span class="center">
+                        <Icon custom="iconfont iconbaocunicon icons" />删除WMS权限
+                      </span>
+                    </Button>
                     <span class="mr10">机构名称:</span>
                     <Input
                       class="mr10"
                       v-model="organization"
                       placeholder="请输入机构名称"
-                      style="width: 180px"
+                      style="width: 120px"
                     />
                     <span class="mr10">员工姓名:</span>
                     <Input
                       class="mr10"
                       v-model="staffName"
                       placeholder="请输入员工姓名"
-                      style="width: 180px"
+                      style="width: 100px"
                     />
                     <Button @click="search" class="mr10" type="warning">
                       <Icon type="ios-search" size="14" />查询
                     </Button>
                   </div>
-                  <vxe-table border align="center" resizable :data="rightTableData">
+                  <vxe-table border align="center" resizable :data="rightTableData"
+                    highlight-hover-row
+                    highlight-current-row
+                    @current-change="setRowTable"
+                  >
                     <vxe-table-column field="loginName" title="登录账号"></vxe-table-column>
                     <vxe-table-column field="userName" title="员工姓名"></vxe-table-column>
                     <vxe-table-column field="shopName" title="所属机构"></vxe-table-column>
                     <vxe-table-column title="oms权限">
                       <template v-slot="{ row }">
-                        <span v-if="row.roleOms == 1">拥有权限</span>
+                        <span v-if="row.roleOms == 0">拥有权限</span>
                         <span v-else>暂无权限</span>
                       </template>
                     </vxe-table-column>
                     <vxe-table-column title="wms权限">
                       <template v-slot="{ row }">
-                        <span v-if="row.roleWms == 1">拥有权限</span>
+                        <span v-if="row.roleWms == 0">拥有权限</span>
                         <span v-else>暂无权限</span>
                       </template>
                     </vxe-table-column>

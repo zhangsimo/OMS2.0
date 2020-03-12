@@ -1,6 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , getStaffWms , saveStaffJurisdictionWms , saveOrder , findRootResWms} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteWMSChangeUserRoles, deleteById , getStaffWms , saveStaffJurisdictionWms , saveOrder , findRootResWms} from '_api/admin/roleApi.js';
 // @ts-ignore
 // import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -38,6 +38,8 @@ export default class index extends Vue{
   }
 //点击获取的员工
    private oneStaff:any = {}
+   //点击获取的wms员工
+   private oneWms:any = {}
    //右侧权限树形图
   private treeList:any = []
   //权限变量
@@ -88,8 +90,8 @@ export default class index extends Vue{
       this.role.name = val.row.name
       this.role.displayName = val.row.displayName
       this.role.resIds = val.row.resourceVOSet.map(item => item.id)
-       this.findRootRes()
-
+      this.findRootRes()
+      // console.log("resIds:", this.role.resIds)
       this.getAllStaff()
     // console.log(val.row)
     }
@@ -116,7 +118,7 @@ export default class index extends Vue{
       if(this.right != 0){
         item.disabled = true
       }
-      if (item.resType == 1 || !item.childs) {
+      if (item.resType == 1 ||((Array.isArray(item.childs) && item.childs.length <=0) || !item.childs)) {
         if (this.role.resIds.indexOf(item.id) != -1) {
           item.checked = true
         }
@@ -257,24 +259,53 @@ export default class index extends Vue{
 
  //员工权限保存
   private async saveStaff(){
-    if (this.rightTableData.length <= 0) {
-      return this.$message.error('员工数量为0,无法保存')
+    if (!this.oneWms) {
+      return this.$Message.error("请先选择员工")
     }
-    let data:any = []
-        data.id = this.rightTableData[0].id
-        data.roleIds = []
-        this.rightTableData.forEach( item => {
-          if(item.allocation ==0){
-            data.push({id: item.id , roleIds:this.oneStaff.id , allocation:0})
-          }else {
-            data.push({id: item.id , roleIds:[] , allocation:1})
-          }
-        })
+    // if (this.rightTableData.length <= 0) {
+    //   return this.$message.error('员工数量为0,无法保存')
+    // }
+    let data:Array<any>  = new Array()
+        // data.id = this.rightTableData[0].id
+        // data.roleIds = []
+        // this.rightTableData.forEach( item => {
+        //   if(item.allocation ==0){
+        //     data.push({id: item.id , roleIds:this.oneStaff.id , allocation:0})
+        //   }else {
+        //     data.push({id: item.id , roleIds:[] , allocation:1})
+        //   }
+        // })
+    data = [{id: this.oneWms.id , roleIds:this.oneStaff.id , allocation:0}]
     let res = await saveStaffJurisdictionWms(data)
     if(res.code === 0){
       this.$message.success('保存成功')
       this.getAllStaff()
     }
   }
+
+  // 选择员工
+  private setRowTable(row) {
+    this.oneWms = JSON.parse(JSON.stringify(row.row))
   }
 
+  // 删除wms权限
+  private async delwms() {
+    if (!this.oneWms) {
+      return this.$Message.error("请先选择员工")
+    }
+    let data: Array<any>  = new Array()
+    // console.log(this.oneWms, this.oneStaff)
+    // if(this.oneWms.allocation ==0){
+    //   data = [{id: this.oneWms.id , roleIds:this.oneStaff.id , allocation:0}]
+    // }else {
+    //   data = [{id: this.oneWms.id , roleIds:[] , allocation:1}]
+    // }
+    data = [{id: this.oneWms.id , roleIds:this.oneStaff.id , allocation:0}]
+    let res = await deleteWMSChangeUserRoles(data)
+    if(res.code == 0) {
+      this.oneWms = null;
+      this.$Message.success("删除wms权限成功")
+      this.search()
+    }
+  }
+}
