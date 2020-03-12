@@ -90,7 +90,7 @@ export default {
   data() {
     return {
       isNew:true,//页面开始禁用
-      isAdd:false,//判断是否新增
+      isAdd:true,//判断是否新增
       orderType: 6,
       typeList: [
         { value: 6, name: "全部" },
@@ -255,9 +255,6 @@ export default {
     },
     //新增
     addNew() {
-        if(this.isAdd){
-            return this.$Message.error("请先保存数据");
-        }
       this.$refs.OrderLeft.change();
       this.ispart=false
       this.orderlistType.value = 0

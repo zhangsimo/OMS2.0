@@ -6,8 +6,7 @@
 <script>
   import {mapActions} from 'vuex'
   import GpartLoginPage from '_c/login'
-  import systemUri from "_conf/systemUri"
-  import { loginSystem } from "_api/base/user"
+
   export default {
     data () {
       return {

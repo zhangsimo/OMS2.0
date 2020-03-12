@@ -49,13 +49,3 @@ export function getPartBrand(data = {}) {
     data
   });
 }
-
-//获取配件品牌--不是维保的接口
-export function getPartBrandNoWB(data = {}) {
-  return axios.request({
-    url: `${api.omsOrder}/optGroup/optPartBrand`,
-    method: "post",
-    data
-  });
-}
-

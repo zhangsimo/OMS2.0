@@ -146,7 +146,7 @@
       </div>
     </section>
     <!--更多弹框-->
-    <More ref="more" :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
+    <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 入库提示 -->
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
       <p>是否定入库</p>
@@ -384,7 +384,6 @@ export default {
     },
     //显示更多弹窗
     more() {
-      // this.$refs.more.init();
       this.showMore = true;
     },
     //更多弹窗恢复false

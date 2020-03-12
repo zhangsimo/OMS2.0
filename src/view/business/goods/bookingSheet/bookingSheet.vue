@@ -733,7 +733,7 @@ export default {
         data.partName = this.moreArr.Name
       }
       if(this.moreArr.brand){
-        data.partBrand = this.moreArr.brand
+        data.partBrandCode = this.moreArr.brand
       }
       if(this.moreArr.Accessories){
         data.commitUname = this.moreArr.Accessories

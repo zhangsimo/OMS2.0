@@ -46,8 +46,6 @@
               type="textarea"
               placeholder="请输入销售单、销售出库单打印内容"
               style="width: 240px;"
-              maxlength="100"
-              show-word-limit
               class="mr10"
             />
           </Col>

@@ -36,7 +36,7 @@
             <span style="margin-left: 23px">品 &nbsp;牌：</span>
             <!--<Input v-model="brand" placeholder="请输入品牌" style="width: 450px" />-->
             <Select v-model="brand" filterable clearable placeholder="选择品牌" style="width:450px" @on-change="changeBrand">
-              <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
             </Select>
           </Row>
           <Row class="mt15">
@@ -55,9 +55,6 @@
 <script>
   import { queryAll } from '../../../../../api/business/advanceOrder';
   import { allBrand } from "@/api/business/brandListApi";
-  import {
-    getPartBrandNoWB
-  } from "@/api/business/stockSearch";
   export default {
         name: "More",
       data(){
@@ -134,17 +131,12 @@
         },
         //获取品牌
         async getAllBrand() {
-
-          let res = await getPartBrandNoWB({ pageSize: 10000 });
+          let res = await allBrand({ pageSize: 10000 });
           if (res.code === 0) {
             let arr = [];
-            for(let v in res.data){
-              let obj = {}
-              obj.code = v;
-              obj.id = v;
-              obj.name = res.data[v]
-              arr.push(obj)
-            }
+            res.data.content.forEach(item => {
+              arr.push(...item.children);
+            });
             this.brandList = arr;
           }
         },

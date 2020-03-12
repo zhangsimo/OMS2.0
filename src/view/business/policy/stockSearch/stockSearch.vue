@@ -33,7 +33,7 @@
               filterable
               clearable
               class="w120 mr10"
-              v-model="searchForm.partBrand"
+              v-model="searchForm.brandCode"
               placeholder="品牌"
             >
               <!--                <Option-->
@@ -42,7 +42,7 @@
               <!--                  :key="item.partBrandValue"-->
               <!--                >{{ item.partBrandName}}-->
               <!--                </Option>-->
-              <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
+              <Option v-for="item in partBrandList" :value="item.code" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
               <Option v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
@@ -82,7 +82,7 @@
               filterable
               clearable
               class="w120 mr10"
-              v-model="searchForm1.partBrand"
+              v-model="searchForm1.brandCode"
               placeholder="品牌"
             >
               <!--                <Option-->
@@ -91,7 +91,7 @@
               <!--                  :key="item.partBrandValue"-->
               <!--                >{{ item.partBrandName}}-->
               <!--                </Option>-->
-              <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
+              <Option v-for="item in partBrandList" :value="item.code" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
               <Option v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
@@ -105,7 +105,7 @@
             <Button class="mr10 w90" @click="exportBatch">
               <i class="iconfont mr5 icondaochuicon" v-has="'exportBatch'"></i> 导出
             </Button>
-            <!--<Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>-->
+            <Button class="mr10 w120" @click="sfy" v-has="'safe'">安全库存设置</Button>
           </div>
         </div>
         <!--        表-->
@@ -164,8 +164,7 @@
 import {
   getAllStock,
   getLotStock,
-  getPartBrand,
-  getPartBrandNoWB
+  getPartBrand
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -182,7 +181,7 @@ export default {
       storeList: [{ name: "全部", id: 1 }],
       //汇总库存查询条件表单
       searchForm: {
-        partBrand: "", //品牌id
+        brandCode: "", //品牌id
         partCode: "", //配件编码
         storeId: "", //仓库id
         partName: "", //配件名称
@@ -191,7 +190,7 @@ export default {
       },
       //批次库存查询条件表单
       searchForm1: {
-        partBrand: "", //品牌id
+        brandCode: "", //品牌id
         partCode: "", //配件编码
         storeId: "", //仓库id
         partName: "", //配件名称
@@ -210,7 +209,6 @@ export default {
         {
           title: "序号",
           type: "index",
-          key:"index",
           align: "center",
           minWidth: 40,
           render: (h, params) => {
@@ -291,7 +289,7 @@ export default {
         {
           title: "可售数量",
           align: "center",
-          key: 'outableQty',
+          // key: 'outableQty',
           minWidth: 80,
           render: (h, params) => {
             let tex = params.row.sellSign ? 0 : params.row.outableQty;
@@ -313,7 +311,7 @@ export default {
         {
           title: "库存单价",
           align: "center",
-          key: 'costPrice',
+          // key: 'costPrice',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.costPrice.toFixed(2);
@@ -323,7 +321,7 @@ export default {
         {
           title: "库存金额",
           align: "center",
-          key: 'stockAmt',
+          // key: 'stockAmt',
           minWidth: 120,
           render: (h, params) => {
             let tex = params.row.stockAmt.toFixed(2);
@@ -679,19 +677,12 @@ export default {
     //     }
     // },
     async getBand() {
-      let res = await getPartBrandNoWB({ pageSize: 10000 });
+      let res = await getPartBrand({ pageSize: 10000 });
       if (res.code === 0) {
         let arr = [];
-        for(let v in res.data){
-          let obj = {}
-          obj.code = v;
-          obj.id = v;
-          obj.name = res.data[v]
-          arr.push(obj)
-        }
-        // res.data.forEach(item => {
-        //   arr.push(...item.children);
-        // });
+        res.data.content.forEach(item => {
+          arr.push(...item.children);
+        });
         this.partBrandList = arr;
       }
     },
@@ -702,18 +693,9 @@ export default {
     },
     //汇总导出
     exportTheSummary() {
-      this.contentOne.dataOne.map((item,index) => {
-        item.index = index+1
-        item.outableQty = item.sellSign ? 0 : item.outableQty
-        item.costPrice = item.costPrice.toFixed(2);
-        item.stockAmt = item.stockAmt.toFixed(2);
-      })
       if (this.contentOne.dataOne.length > 0) {
         this.$refs.table1.exportCsv({
-          filename: "汇总库存",
-          original:false,
-          columns:this.columns1,
-          data:this.contentOne.dataOne
+          filename: "汇总库存"
         });
       }
     },

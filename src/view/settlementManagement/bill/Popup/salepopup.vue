@@ -63,7 +63,7 @@
           <FormItem label="开户行及账号" prop="bankName">
             <Input v-model="invoice.bankName" class="ml5 w200" />
           </FormItem>
-          <FormItem label="开票公司" prop="invoiceUnit">
+          <FormItem label="开票单位" prop="invoiceUnit">
             <Select v-model="invoice.invoiceUnit" class="ml5 w200">
               <Option
                 v-for="item in invoice.issuingOfficeList"
@@ -81,7 +81,7 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="发票类型" prop="invoiceType">
+          <FormItem label="开票类型" prop="invoiceType">
             <Select v-model="invoice.invoiceType" class="ml5 w200">
               <Option
                 v-for="item in invoice.typeBillingList"
@@ -185,6 +185,7 @@ import approval from "./approval";
 import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import { approvalStatus } from "_api/base/user";
 import {
   noTaxApplyNo,
   ditInvoice,
@@ -195,7 +196,6 @@ import {
 } from "@/api/bill/popup";
 import bus from "./Bus";
 import index from "../../../admin/roles";
-import { approvalStatus } from "_api/base/user";
 export default {
   components: {
     approval,
@@ -237,9 +237,9 @@ export default {
         taxNo: "", //税号
         tel: "", //地址电话
         bankName: "", //开户行及账号
-        invoiceUnit: "", //开票公司
+        invoiceUnit: "", //开票单位
         issuingOfficeList: [], //开票单位列表
-        invoiceType: "", //发票类型
+        invoiceType: "", //开票类型
         typeBillingList: [], //开票类型列表
         invoiceTax: "", //开票税率
         rateBillingList: [], //开票税率列表
@@ -642,7 +642,6 @@ export default {
             this.copyData = res.data;
           }
         });
-        // 申请进度
         approvalStatus({ instanceId: this.information.processInstance }).then(res => {
           if (res.code == 0) {
             bus.$emit('approval',res.data.operationRecords)

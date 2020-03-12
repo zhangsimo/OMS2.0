@@ -44,7 +44,7 @@ export default {
       account: [
         {
           title: "序号",
-          type: "index",
+          key: "index",
           width: 40,
           className: "tc"
         },
@@ -60,7 +60,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "serviceId",
+          key: "guestName",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -88,7 +88,7 @@ export default {
         },
         {
           title: "收付类型",
-          key: "billingTypeName",
+          key: "guestName",
           className: "tc"
         },
         {
@@ -97,7 +97,7 @@ export default {
           className: "tc"
         }
       ], //选择不含税对账单单
-      accountData: [], //选择不含税对账单单表格数据
+      accountData: [{ index: 1,serviceId:'sss' }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
       seleteData: {} //单选数据
     };
   },
