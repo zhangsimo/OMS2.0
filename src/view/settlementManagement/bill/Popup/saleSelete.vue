@@ -44,7 +44,7 @@ export default {
       account: [
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },

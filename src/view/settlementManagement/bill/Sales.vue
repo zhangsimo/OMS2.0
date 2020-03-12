@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>客户名称：</span>
-            <input type="text" class="h30" v-model="company" readonly/>
+            <input type="text" class="h30" v-model="company"/>
             <i class="iconfont iconcaidan input" @click="Dealings"></i>
           </div>
           <div class="db">
@@ -364,8 +364,15 @@ export default {
         }
       } else {
         if (this.data.length !== 0) {
+          let arrData = [...this.data]
+          arrData.map(item => {
+            item.guestId = "\t"+item.guestId
+          })
           this.$refs.summary.exportCsv({
-            filename: "销售订单汇总"
+            filename: "销售订单汇总",
+            original:false,
+            columns:this.columns,
+            data:arrData
           });
         } else {
           this.$message.error("销售订单汇总暂无数据");

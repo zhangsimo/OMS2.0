@@ -172,7 +172,6 @@ export default {
           writeOffStatus:''
         },
         formValidate: {
-          id:'',
           invoiceType: "",
           priceTaxTotal:"",
           invoiceUnit:'',

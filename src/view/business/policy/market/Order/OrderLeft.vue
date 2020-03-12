@@ -113,7 +113,7 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         remark: "",
         guestId: "",
-        storeId: this.$store.state.user.userData.shopId||"",
+        storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
         serviceId: "",
         details: []
       };
