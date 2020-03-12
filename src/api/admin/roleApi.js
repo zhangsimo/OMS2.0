@@ -106,6 +106,15 @@ export function saveOrder (data) {
   })
 }
 
+//删除wms权限
+export function deleteWMSChangeUserRoles (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/deleteWMSChangeUserRoles`,
+    method: 'post',
+    data
+  })
+}
+
 
 //获取树形
 // 查询整个资源树
