@@ -915,7 +915,7 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd = true;
+              this.$parent.$parent.isAdd = false;
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields();
               this.limitList = {};
@@ -949,6 +949,10 @@ export default {
       let isDisabled = this.draftShow != 0;
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+        if(row.isMarkActivity==1){
+            orderQtyColumn.editRender.attrs.disabled=true;
+            orderPriceColumn.editRender.attrs.disabled=true;
+        }
       remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     //出库
@@ -1014,8 +1018,10 @@ export default {
                     let res = await getSubmitList(this.formPlan);
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
+                        this.$parent.$parent.isAdd = false;
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
+                        this.$refs.formPlan.resetFields();
                     }
                   },
                   onCancel: () => {}
@@ -1025,8 +1031,10 @@ export default {
               let res = await getSubmitList(this.formPlan);
               if (res.code === 0) {
                 this.$Message.success("提交成功");
+                  this.$parent.$parent.isAdd = false;
                 this.limitList = {};
                 this.$store.commit("setleftList", res);
+                  this.$refs.formPlan.resetFields();
               }
             }
           } catch (errMap) {

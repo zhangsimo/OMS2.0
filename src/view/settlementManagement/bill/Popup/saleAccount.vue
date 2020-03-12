@@ -46,7 +46,7 @@ export default {
         },
         {
           title: "日期",
-          key: "transferDate",
+          key: "createTime",
           className: "tc"
         },
         {
@@ -74,7 +74,7 @@ export default {
         },
         {
           title: "对账金额",
-          key: "accountAmt",
+          key: "serviceAmt",
           className: "tc",
           render: (h, params) => {
             return h("span", params.row.serviceAmt.toFixed(2));

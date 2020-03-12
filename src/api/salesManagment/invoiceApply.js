@@ -3,7 +3,7 @@ import api from "_conf/url";
 //列表
 export function getInvoiceList(data) {
   return axios.request({
-    url: `${api.omsSettle}/invoiceApplyCheckChargeOff/queryPageByStatus`,
+    url: `${api.omsSettle}/invoiceApply/queryPageByStatus`,
     method: "post",
     data
   });
@@ -11,7 +11,7 @@ export function getInvoiceList(data) {
 // 明细列表
 export function getDetailsList(params) {
   return axios.request({
-    url: `${api.omsSettle}/invoiceApplyCheckChargeOff/queryPageByAccountNo`,
+    url: `${api.omsSettle}/invoiceApply/queryPageByAccountNo`,
     method: "get",
     params
   });
@@ -26,6 +26,7 @@ export function IntelligenceList(data) {
 }
 
 //人工核销页面
+
 export function getManualList(params) {
   return axios.request({
     url: `${api.omsSettle}/salesInvoice/findByQuery`,
