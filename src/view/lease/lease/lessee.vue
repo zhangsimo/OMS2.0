@@ -689,7 +689,7 @@ export default {
           title: "开通时间",
           align: "center",
           minWidth: 168,
-          key: "paymentDate"
+          key: "createTime"
         },
         {
           title: "结束时间",
@@ -736,7 +736,7 @@ export default {
         {
           title: "开通时间",
           align: "center",
-          key: "createTime",
+          key: "paymentDate",
           minWidth: 170
         },
         {

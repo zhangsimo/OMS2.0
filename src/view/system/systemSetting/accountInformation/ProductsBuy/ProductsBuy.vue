@@ -3,7 +3,7 @@
     <div class="headerRecharge">
       <p class="mr10">到期日期:
         <span style="font-weight: bold;padding: 0 5px;color: #40a6ff">{{ getMsg.expiryDate }}</span>
-          (剩余: <span style="font-weight: bold;padding: 0 3px 0 5px;color:#ff6700">{{ getMsg.remainDay || 0}}</span>天)</p>
+          (剩余: <span style="font-weight: bold;padding: 0 3px 0 5px;color:#ff6700">{{ getMsg.remainDay | day }}</span>天)</p>
       <Button class="mr10" @click="record"><span class="center"><Icon custom="iconfont iconziyuan10 icons" />充值消费记录</span></Button>
     </div>
     <div class="boxContent">
@@ -50,7 +50,7 @@
       // components: {QRCode},
       data(){
           return {
-            getMsg: '',
+            getMsg: {},
             modal: false,
             orderNum: '',
             erweima:'',

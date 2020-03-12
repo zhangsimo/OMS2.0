@@ -79,11 +79,13 @@ class httpRequest {
               config.params.shopId = res.shopId || 0
               config.params.shopkeeper = res.shopkeeper || 0
             }
-            if(localStorage.getItem('userScope') != null){
-              let  scope = localStorage.getItem('userScope')
-              config.params.scope = scope || 'oms'
-            }else{
-              config.params.scope = 'oms'
+            if(config.params.scope == null) {
+              if(localStorage.getItem('userScope') != null){
+                let  scope = localStorage.getItem('userScope')
+                config.params.scope = scope || 'oms'
+              }else{
+                config.params.scope = 'oms'
+              }
             }
       }else{
         if(config.url.includes('/token')){

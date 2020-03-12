@@ -2159,6 +2159,17 @@ export default [
         component: () => import("@/view/admin/roles/roles.vue")
       },
       {
+        path: "/auth/roleswms",
+        name: "roleswms",
+        mark: "10006",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "wms角色管理"
+          // access: ['admin', 'auth_staff']
+        },
+        component: () => import("@/view/admin/roles/roleswms.vue")
+      },
+      {
         path: "/auth/lessee",
         name: "authLessee",
         mark: "10005",
