@@ -39,7 +39,7 @@ export default class index extends Vue{
 //点击获取的员工
    private oneStaff:any = {}
    //点击获取的wms员工
-   private oneWms:any = {}
+   private oneWms:any = null
    //右侧权限树形图
   private treeList:any = []
   //权限变量
@@ -278,6 +278,7 @@ export default class index extends Vue{
     data = [{id: this.oneWms.id , roleIds:this.oneStaff.id , allocation:0}]
     let res = await saveStaffJurisdictionWms(data)
     if(res.code === 0){
+      this.oneWms = null;
       this.$message.success('保存成功')
       this.getAllStaff()
     }
