@@ -736,7 +736,7 @@ export default {
         {
           title: "开通时间",
           align: "center",
-          key: "createTime",
+          key: "paymentDate",
           minWidth: 170
         },
         {
@@ -758,6 +758,9 @@ export default {
             if (params.row.isPayment === 2) {
               zi = "已关闭";
             }
+            if (params.row.isPayment === 1) {
+              zi = "已付款";
+            }
             return h("span", zi);
           }
         },
@@ -765,6 +768,10 @@ export default {
           title: "付款时间",
           align: "center",
           key: "orderDate",
+          render:(h, params) => {
+            let t = params.row.isPayment === 1 ? params.row.orderDate : ''
+            return h('span' ,t)
+          },
           minWidth: 170
         },
         {
@@ -790,10 +797,10 @@ export default {
           minWidth: 100,
           render: (h, params) => {
             let zi = "";
-            if (params.row.isPayment === 0) {
+            if (params.row.isPayment === 1) {
               zi = "成功";
             }
-            if (params.row.isPayment === 1) {
+            if (params.row.isPayment === 0) {
               zi = "失败";
             }
             return h("span", zi);

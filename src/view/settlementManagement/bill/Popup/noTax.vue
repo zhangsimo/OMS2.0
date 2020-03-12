@@ -96,7 +96,7 @@
 import SeleteSale from "./seleteSale";
 import approval from "./approval";
 import saleAccount from "./saleAccount";
-import { noTaxApplyNo,partsInvoice } from "@/api/bill/popup";
+import { noTaxApplyNo, partsInvoice } from "@/api/bill/popup";
 import bus from "./Bus";
 export default {
   components: {
@@ -107,14 +107,14 @@ export default {
   props: ["information", "parameter"],
   data() {
     const thisTaxChange = (rule, value, callback) => {
-      if (value&&parseFloat(value)>=0) {
-        if(value<=this.invoice.noTaxAmount) {
-          callback()
+      if (value && parseFloat(value) >= 0) {
+        if (value <= this.invoice.noTaxAmount) {
+          callback();
         } else {
-          callback(new Error('不能大于不含税对账单未开票金额'))
+          callback(new Error("不能大于不含税对账单未开票金额"));
         }
       } else {
-        callback(new Error('只能输入数字'))
+        callback(new Error("只能输入数字"));
       }
     };
     return {
@@ -281,29 +281,42 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        this.$refs.formCustom.resetFields()
+        this.$refs.formCustom.resetFields();
         // 开票配件
         partsInvoice({
           accountNo: this.information.accountNo,
           taxSign: 0
         }).then(res => {
-          if(res.code===0){
-            res.data.map(item=>{
-              item.taxAmt = item.applyAmt+item.additionalTaxPoint
-              item.taxPrice = item.taxAmt/item.orderQty
-            })
-            this.accessoriesBillingData = res.data
+          if (res.code === 0) {
+            // this.invoice = { ...this.invoice, ...this.information };
+            // this.invoice.notAmt =
+            //   this.invoice.accountsReceivable -
+            //   this.invoice.taxAmountOfPartOpened;
+            // this.invoice.invoiceTaxAmt = this.invoice.notAmt;
+            this.invoice.taxPoint = 0.07;
+            res.data.map(item => {
+              item.invoiceTax = this.tax;
+            });
+            this.accessoriesBillingData = res.data;
+            this.copyData = res.data;
           }
         });
+        // 申请进度
+        approvalStatus({ instanceId: this.information.processInstance }).then(
+          res => {
+            if (res.code == 0) {
+              bus.$emit("approval", res.data.operationRecords);
+            }
+          }
+        );
       }
     },
     // 提交申请
     submission() {
-      this.$refs.formCustom.validate(val=>{
-        if(val){
-
-        }
-      })
+      this.$refs.formCustom.validate(val => {
+        // if (val) {
+        // }
+      });
     },
     // 选择必开不含税销售单
     seleteSale() {
