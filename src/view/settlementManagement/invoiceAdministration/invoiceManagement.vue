@@ -503,7 +503,7 @@ export default {
       },
       proType: [],
       form: {
-        page: 1,
+        page: 0,
         size: 10,
         canceled: ""
       },
@@ -579,9 +579,10 @@ export default {
         } else {
           tittle = "<p>确认要核销选中的数据？</p>";
         }
+        this.flags=true
         this.allTablist.forEach((item, index) => {
           if (item.canceled == 1) {
-            return (this.flag = false);
+            return this.flag = false;
           }else{
             this.flag = true
           }
@@ -592,10 +593,11 @@ export default {
           }
         });
         if(this.flags == false && type == "writeoff"){
-          this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
-        }else if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
-          this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
-        } else {
+          return this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
+        }
+        if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
+          return this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
+        } 
           this.$Modal.confirm({
             title: "警告",
             content: tittle,
@@ -663,7 +665,6 @@ export default {
             },
             onCancel: () => {}
           });
-        }
       }
     },
     //修改
@@ -692,7 +693,7 @@ export default {
     //选择操作项目
     chooseTable(num) {
       this.isActive = num;
-      this.form.page = 1;
+      this.form.page = 0;
       this.form.canceled = num;
       this.getTabList(this.form);
     },
@@ -785,7 +786,6 @@ export default {
     },
     //获取列表
     getTabList(data) {
-      data.page -= 1;
       getManageList(data)
         .then(res => {
           if (res.code === 0) {
@@ -800,7 +800,7 @@ export default {
       this.getTabList(this.form);
     },
     pageSizeChange(pageSize) {
-      this.form.page = 1;
+      this.form.page = 0;
       this.form.size = pageSize;
       this.getTabList(this.form);
     },

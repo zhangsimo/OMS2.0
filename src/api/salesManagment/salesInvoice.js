@@ -1,6 +1,6 @@
 import axios from "@/libs/api.request";
 import api from "_conf/url";
-//进度项列表
+//列表
 export function getSalesList(params) {
   return axios.request({
     url: `${api.omsSettle}/salesInvoice/queryInfo`,
@@ -8,7 +8,7 @@ export function getSalesList(params) {
     params
   });
 }
-//进度项批量删除
+//批量删除
 export function deletetSalesList(data) {
   return axios.request({
     url: `${api.omsSettle}/salesInvoice/deleteAll`,
@@ -16,7 +16,24 @@ export function deletetSalesList(data) {
     data
   });
 }
-//
+
+//作废
+export function voidSalesList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/salesInvoice/invoiceNullify`,
+    method: "post",
+    data
+  });
+}
+//核销
+
+export function writeSalesList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/salesInvoice/invoicRredRush`,
+    method: "post",
+    data
+  });
+}
 //保存修改
 export function saveSalesList(data) {
   return axios.request({
@@ -47,3 +64,4 @@ export function getOptionCpList(params) {
     params
   });
 }
+export const getup = `${api.omsSettle}/salesInvoice/import?`;
