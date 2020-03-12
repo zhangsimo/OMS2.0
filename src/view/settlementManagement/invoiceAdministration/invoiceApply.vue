@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-import { getInvoiceList,getDetailsList,IntelligenceList } from '_api/salesManagment/invoiceApply'
+import { getInvoiceList,getDetailsList,IntelligenceList,updateNumber,writeData } from '_api/salesManagment/invoiceApply'
 import invoiceApplyModelTost from './invoiceApplyModelTost.vue'
 export default {
   components:{
@@ -182,7 +182,34 @@ export default {
                 {
                 title: "快递单号",
                 key: "sendingNumber",
-                className: "tc"
+                className: "tc",
+                  render:(h,params)=>{
+                    return h('Input', {
+                      style:{
+                        width:'60px',
+                      },
+                      props:{
+                        type:'text',
+                        // value:this.data1[params.index].sort
+                        value:params.row.sendingNumber
+                      },
+                      on: {
+                          'on-blur': (event) => {
+                            // this.data1[params.index].sort =event.target.value
+                            let form ={
+                              id:params.row.id,
+                              sendingNumber:event.target.value
+                            }
+                            updateNumber(form).then(res=>{
+                              if(res.code===0){
+                                this.$Message.success(res.data)
+                                this.getDataList()
+                              }
+                            })
+                          }
+                        }
+                    })
+                  }
                 },
                 {
                 title: "发票代码",
@@ -403,7 +430,8 @@ export default {
               size:10,
               accountNo:'',
             },
-            allTablist:[]
+            allTablist:[],
+            flag:true
         }
     },
     methods:{
@@ -427,19 +455,53 @@ export default {
               this.modifyData()
               break;
             case 3:
-              // this.deleteList('delete')
               this.Intelligence()
               break;
             case 4:
               this.cancellation()
               break;
             case 5:
-              this.deleteList('write')
+              this.writeDataList()
               break;
           }
         },
         Dealings(num){
 
+        },
+        //撤销核销
+        writeDataList(){
+          if(!this.allTablist.length){
+            return this.$Message.warning('请选择要撤销核销的数据');
+          }else{
+            let writeList=[]
+            this.allTablist.forEach((item, index) => {
+              writeList.push({
+                id:item.id
+              })
+              if (item.canceledTax ==0||item.canceledTax==null) {
+                return this.flag=false
+              }else{
+                this.flag=true
+              }
+            });
+            if(this.flag){
+              this.$Modal.confirm({
+                title: "警告",
+                content: "<p>确认撤回核销？</p>",
+                onOk: () => {
+                  writeData(writeList).then(res=>{
+                    if(res.code===0){
+                      this.$Message.success(res.data);
+                      this.getDataList()
+                    }
+                  })
+                },
+                onCancel: () => {}
+              });
+            }else{
+              return this.$Message.warning('请选择已核销金额不为0的数据');
+            }
+          }
         },
         //表格全选的时候
         requires(val){

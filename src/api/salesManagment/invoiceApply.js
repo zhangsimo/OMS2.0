@@ -19,7 +19,7 @@ export function getDetailsList(params) {
 //智能核销
 export function IntelligenceList(data) {
   return axios.request({
-    url: `${api.omsSettle}/invoiceApplyCheckChargeOff/invoiceSmartCancel`,
+    url: `${api.omsSettle}/invoiceApply/invoiceSmartCancel`,
     method: "post",
     data
   });
@@ -37,6 +37,22 @@ export function getManualList(params) {
 export function subManualList(data) {
   return axios.request({
     url: `${api.omsSettle}/invoiceApply/manualCancellation`,
+    method: "post",
+    data
+  });
+}
+//更新快运单号
+export function updateNumber(params) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/updateExpressBillNo`,
+    method: "get",
+    params
+  });
+}
+//撤回核销
+export function writeData(data) {
+  return axios.request({
+    url: `${api.omsSettle}/invoiceApply/revocationInvoiceCancel`,
     method: "post",
     data
   });
