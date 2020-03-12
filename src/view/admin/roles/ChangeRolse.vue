@@ -37,9 +37,10 @@ export default class ChangeRolse extends Vue {
   private ruleValidate: Object = {
     displayName: [{ required: true, message: "角色名称必填", trigger: "blur" }]
   };
-
+  private systemType: string|number;
   //-----------------------methods-----------------------------------
-  private openModal() {
+  private openModal(systemType) {
+    this.systemType = systemType
     this.staffShow = true;
     // this.handleReset ()
   }
@@ -55,6 +56,7 @@ export default class ChangeRolse extends Vue {
       if (valid) {
         let data: any = {};
         data = this.list;
+        data.systemType = this.systemType;
         let res = await addNewStaffe(data);
         if (res.code === 0) {
           // @ts-ignore

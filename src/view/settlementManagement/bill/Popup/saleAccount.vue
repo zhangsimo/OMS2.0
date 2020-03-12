@@ -1,9 +1,15 @@
 <template>
   <Modal v-model="modal1" title="选择不含税对账单" @on-visible-change="visChange">
     <span class="mr5">对账期间：</span>
-    <DatePicker type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
+    <DatePicker type="daterange" v-model="dateQuery" placement="bottom-start" style="width: 200px"></DatePicker>
     <Button @click="query" class="ml10">查询</Button>
-    <Table class="mt10" :columns="noTax" :data="noTaxData" highlight-row @on-current-change="seleteDate"></Table>
+    <Table
+      class="mt10"
+      :columns="noTax"
+      :data="noTaxData"
+      highlight-row
+      @on-current-change="seleteDate"
+    ></Table>
     <div slot="footer">
       <Button type="primary" @click="determine">确定</Button>
       <Button @click="modal1=false">取消</Button>
@@ -12,19 +18,21 @@
   </Modal>
 </template>
 <script>
-import idDetailed from '../components/idDetailed'
-import { noTaxAccount} from "@/api/bill/popup";
-import bus from './Bus'
-import render from '../../../../components/message/base/render';
+import idDetailed from "../components/idDetailed";
+import { noTaxAccount } from "@/api/bill/popup";
+import bus from "./Bus";
+import render from "../../../../components/message/base/render";
+import moment from 'moment'
 export default {
-  props:['parameter'],
-  components:{
+  props: ["parameter"],
+  components: {
     idDetailed
   },
-  data(){
+  data() {
     return {
-      modal1:false,//弹窗展示
-      noTax:[
+      dateQuery: [], //日期
+      modal1: false, //弹窗展示
+      noTax: [
         {
           title: "序号",
           type: "index",
@@ -38,15 +46,16 @@ export default {
         },
         {
           title: "日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
           title: "对账单号",
           key: "accountNo",
           className: "tc",
-          render:(h,params)=>{
-            return h("span",
+          render: (h, params) => {
+            return h(
+              "span",
               {
                 style: {
                   cursor: "pointer",
@@ -54,53 +63,70 @@ export default {
                 },
                 on: {
                   click: () => {
-                    this.$refs.idDetailed.modal1=true
-                    this.$refs.idDetailed.guestId=this.parameter.guestId
+                    this.$refs.idDetailed.modal1 = true;
+                    this.$refs.idDetailed.guestId = this.parameter.guestId;
                   }
                 }
               },
-              params.row.accountNo)
+              params.row.accountNo
+            );
           }
         },
         {
           title: "对账金额",
-          key: "serviceAmt",
+          key: "accountAmt",
           className: "tc",
-          render:(h,params)=>{
-            return h('span',params.row.serviceAmt.toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.serviceAmt.toFixed(2));
           }
         }
-      ],//选择不含税对账单单
-      noTaxData:[],//选择不含税对账单单表格数据
-      seleteData:{}//单选数据
-    }
+      ], //选择不含税对账单单
+      noTaxData: [], //选择不含税对账单单表格数据
+      seleteData: {} //单选数据
+    };
   },
-  methods:{
+  methods: {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        noTaxAccount({guestId:this.parameter.guestId,taxSign:0}).then(res=>{
-          if(res.code === 0){
-            this.noTaxData = res.data
-          }
-        })
+        this.accountSelete()
       }
     },
+    //对账单查询接口
+    accountSelete() {
+      let obj = {
+        startDate: this.dateQuery[0]
+          ? moment(this.dateQuery[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endDate: this.dateQuery[1]
+          ? moment(this.dateQuery[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        guestId: this.parameter.guestId,
+        taxSign: 0
+      };
+      noTaxAccount(obj).then(res => {
+        if (res.code === 0) {
+          this.noTaxData = res.data;
+        }
+      });
+    },
     // 日期查询
-    query(){},
+    query() {
+      this.accountSelete()
+    },
     // 确认按钮
-    determine(){
-      if(Object.keys(this.seleteData).length!==0){
-        bus.$emit('accountNo',this.seleteData)
-        this.modal1 = false
+    determine() {
+      if (Object.keys(this.seleteData).length !== 0) {
+        bus.$emit("accountNo", this.seleteData);
+        this.modal1 = false;
       } else {
-        this.$message.error('请选择一条对账单')
+        this.$message.error("请选择一条对账单");
       }
     },
     // 单选数据
-    seleteDate(currentRow){
-      this.seleteData = currentRow
+    seleteDate(currentRow) {
+      this.seleteData = currentRow;
     }
   }
-}
+};
 </script>

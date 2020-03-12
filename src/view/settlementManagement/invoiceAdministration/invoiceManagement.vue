@@ -585,12 +585,9 @@ export default {
           }else{
             this.flag = true
           }
-          console.log("nneww")
           if(item.canceled == 0 && type == "writeoff"){
-            console.log(this.flags,222)
             return (this.flags = false);
           }else{
-            console.log(111)
             return (this.flags = true);
           }
         });

@@ -181,6 +181,7 @@
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="ArrayValue"
+                  :footer-method="addFooter"
                   :edit-config="{trigger: 'dblclick', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -205,7 +206,7 @@
                   <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
                   <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格" ></vxe-table-column>
+                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>
@@ -238,7 +239,7 @@
     ></select-supplier>
 
     <add-in-com
-      @getArray="getArrayFun"
+      @getArray="getArray"
       :tbdata="tableData1"
       @getName="showModel3"
       :dcName="diaochuName"
@@ -532,7 +533,7 @@ export default {
     this.getArrayParams();
   },
   methods: {
-    getArrayFun(data) {
+    getArray(data) {
       this.ArrayValue = data;
       // this.Leftcurrentrow.detailVOS = data;
     },

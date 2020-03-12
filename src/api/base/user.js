@@ -17,22 +17,6 @@ export const login = ({username, password}) => {
   })
 }
 
-// 登录其它系统
-export const loginSystem = ({uri, username, password}) => {
-  let data = {
-    username,
-    password,
-    grant_type: 'password',
-    client_id: 'oos',
-    client_secret: 'oosecret'
-  }
-  return axios.request({
-    url: uri + '/uaa/token',
-    method: 'post',
-    data
-  })
-}
-
 //注销
 export const logout = () => {
   return axios.request({

@@ -58,15 +58,15 @@
             <button class="ivu-btn ivu-btn-default" type="button" @click="operation(5)" v-has="'export'">撤销核销</button>
         </div>
         <div class="mt20">
-            <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">全部显示</Button>
-            <Button class="mr10" :type="isActive==2?'info':'default'" @click="chooseTable(2)">已核销</Button>
-            <Button :type="isActive==3?'info':'default'" @click="chooseTable(3)">未核销</Button>
+            <Button class="mr10" :type="isActive===''?'info':'default'" @click="chooseTable('')">全部显示</Button>
+            <Button class="mr10" :type="isActive==1?'info':'default'" @click="chooseTable(1)">已核销</Button>
+            <Button :type="isActive===0?'info':'default'" @click="chooseTable(0)">未核销</Button>
         </div>
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" show-summary highlight-row :summary-method="handleSummary"
-          @on-row-click="election" max-height="400"></Table>
+        <Table border :columns="columns" :data="data" ref="summary" highlight-row 
+        @on-selection-change="requires" max-height="400"></Table>
          <Page
           :total="pagetotal"
           show-elevator
@@ -83,30 +83,30 @@
           :data="data1"
           class="mt10"
           max-hight="400"
-          :summary-method="summary"
           ref="parts"
-          show-summary
         ></Table>
       </div>
     </section>
-
+    <invoiceApplyModelTost ref="Toast"></invoiceApplyModelTost>
   </div>
 </template>
 <script>
-// import { getInvoiceList } from '_api/salesManagment/invoiceApply'
+import { getInvoiceList,getDetailsList,IntelligenceList } from '_api/salesManagment/invoiceApply'
+import invoiceApplyModelTost from './invoiceApplyModelTost.vue'
 export default {
+  components:{
+    invoiceApplyModelTost
+  },
     data(){
         return{
             columns:[
                 {
-                key:'index',
                 title: "选择",
                 width: 40,
-                className: "tc"
+                type: "selection",
                 },
                 {
                 title: "序号",
-                key: "guestOrgName",
                 className: "tc",
                 render: (h,params) => {
                   return h('span',params.index + (this.form.page)*this.form.size + 1 )
@@ -135,7 +135,24 @@ export default {
                 {
                 title: "对账单号",
                 key: "accountNo",
-                className: "tc"
+                className: "tc",
+                render:(h,params)=>{
+                  return h(
+                    "span",
+                    {
+                      style: {
+                        color: "red"
+                      },
+                      on: {
+                        click: () => {
+                          this.details.accountNo=params.row.accountNo
+                          this.getDetails()
+                        }
+                      }
+                    },
+                    params.row.accountNo
+                  )
+                }
                 },
                 {
                 title: "开票单位",
@@ -161,9 +178,6 @@ export default {
                 title: "寄件方式",
                 key: "sendingWay",
                 className: "tc",
-                // render: (h,params) =>{
-                //     return h('span',(params.row.orderAmt).toFixed(2))
-                // }
                 },
                 {
                 title: "快递单号",
@@ -219,117 +233,116 @@ export default {
             data:[],
             columns1:[
                 {
-                key:'index',
                 title: "序号",
                 width: 40,
-                className: "tc"
+                className: "tc",
+                render: (h,params) => {
+                  return h('span',params.index+1 )
+                }
                 },
                 {
                 title: "分店名称",
-                key: "guestOrgName",
+                key: "orgName",
                 className: "tc"
                 },
                 {
                 title: "店号",
-                key: "serviceId",
+                key: "orgId",
                 className: "tc"
                 },
                 {
                 title: "往来单位",
-                key: "sourceType",
-                className: "tc"
-                },
-                {
-                title: "申请日期",
                 key: "guestName",
                 className: "tc"
                 },
                 {
+                title: "申请日期",
+                key: "applyDate",
+                className: "tc"
+                },
+                {
                 title: "对账单号",
-                key: "guestId",
+                key: "accountNo",
                 className: "tc"
                 },
                  {
                 title: "开票申请单号",
-                key: "belongSystem",
+                key: "applyNo",
                 className: "tc"
                 },
                 {
                 title: "开票单位",
-                key: "belongSystem",
+                key: "invoiceUnit",
                 className: "tc"
                 },
                 {
                 title: "客户税号",
-                key: "storeName",
+                key: "taxNo",
                 className: "tc"
                 },
                 {
                 title: "地址电话",
-                key: "createUname",
+                key: "tel",
                 className: "tc"
                 },
                 {
                 title: "银行账号",
-                key: "createTime",
+                key: "bankAccountNumber",
                 className: "tc"
                 },
                 {
                 title: "配件名称",
-                key: "orderAmt",
+                key: "partName",
                 className: "tc",
-                render: (h,params) =>{
-                    return h('span',(params.row.orderAmt).toFixed(2))
-                }
                 },
                 {
                 title: "配件编码",
-                key: "remark",
+                key: "partCode",
                 className: "tc"
                 },
                 {
                 title: "单位",
-                key: "billstate",
+                key: "company",
                 className: "tc"
                 },
                 {
                 title: "数量",
-                key: "billstate",
+                key: "qty",
                 className: "tc"
                 },
                 {
                 title: "商品含税单价",
-                key: "billstate",
+                key: "taxPrice",
                 className: "tc"
                 },
                 {
                 title: "商品含税金额",
-                key: "billstate",
+                key: "taxAmt",
                 className: "tc"
                 },
                 {
                 title: "开票税率",
-                key: "billstate",
+                key: "taxRate",
                 className: "tc"
                 },
                 {
                 title: "出库单号",
-                key: "billstate",
+                key: "outNo",
                 className: "tc"
                 },
                 {
                 title: "销售单价",
-                key: "billstate",
+                key: "salePrice",
                 className: "tc"
                 },
                 {
                 title: "销售金额",
-                key: "billstate",
+                key: "saleAmt",
                 className: "tc"
                 },
                 {
                 title: "外加税点",
-                key: "billstate",
+                key: "additionalTaxPoint",
                 className: "tc"
                 },
                 {
@@ -339,32 +352,32 @@ export default {
                 },
                 {
                 title: "开票公司",
-                key: "billstate",
+                key: "receiptUnit",
                 className: "tc"
                 },
                 {
                 title: "收款方式",
-                key: "billstate",
+                key: "collection_type",
                 className: "tc"
                 },
                 {
                 title: "发票类型",
-                key: "billstate",
+                key: "invoiceType",
                 className: "tc"
                 },
                 {
                 title: "开票清单类型",
-                key: "billstate",
+                key: "species",
                 className: "tc"
                 },
                 {
                 title: "备注",
-                key: "billstate",
+                key: "remark",
                 className: "tc"
                 },
                 {
                 title: "快递方式",
-                key: "billstate",
+                key: "sendingWay",
                 className: "tc"
                 }
             ],
@@ -377,30 +390,86 @@ export default {
             Reconciliationlist:[],
             pagetotal: 0,
             Reconciliationtype:'',
-            isActive:1,
+            isActive:'',
             form:{
-              page:1,
+              page:0,
               size:10,
-              writeOffStatus:0
-            }
+              startDate:'',
+              endDate:'',
+              cancalStatus:''
+            },
+            details:{
+              page:0,
+              size:10,
+              accountNo:'',
+            },
+            allTablist:[]
         }
     },
     methods:{
         //选择查询条件
         chooseTable(num){
             this.isActive=num
+            this.form.page = 0;
+            this.form.cancalStatus = num;
+            this.getDataList();
         },
         query(){
-
+          this.form.startDate=this.value.length?this.value[0]:''
+          this.form.endDate=this.value.length?this.value[1]:''
+          this.getDataList()
         },
-        operation(){
-
+        operation(num){
+          switch (num){
+            case 1:
+              break;
+            case 2:
+              this.modifyData()
+              break;
+            case 3:
+              // this.deleteList('delete')
+              this.Intelligence()
+              break;
+            case 4:
+              this.cancellation()
+              break;
+            case 5:
+              this.deleteList('write')
+              break;
+          }
         },
         Dealings(num){
 
         },
-        election(){
-
+        //表格全选的时候
+        requires(val){
+          this.allTablist = val;
+        },
+        Intelligence(){
+          this.$Modal.confirm({
+            title: "警告",
+            content: "<p>确认要智能核销？</p>",
+            onOk: () => {
+              IntelligenceList().then(res=>{
+                if(res.code===0){
+                  this.$Message.success(res.data);
+                  this.getDataList()
+                }
+              })
+            },
+            onCancel: () => {}
+          });
+        },
+        cancellation(){
+          if(!this.allTablist.length){
+            return this.$Message.warning("请选择要核销的数据！");
+          }else if(this.allTablist.length>=2){
+            return this.$Message.warning("请选择一条要核销的数据！");
+          }else{
+            this.$refs.Toast.data = this.allTablist;
+            this.$refs.Toast.hxOjb.invoiceApplyId=this.allTablist[0]['id']
+            this.$refs.Toast.modals = true;
+          }
         },
         // 选择日期
         changedate(daterange) {
@@ -409,20 +478,21 @@ export default {
         pageCode(){
 
         },
-        handleSummary(){
-
+        getDetails(){
+          getDetailsList(this.details).then(res=>{
+            if(res.code===0){
+              this.data1=res.data.content
+            }
+          })
         },
-        summary(){
-
-        },
-        // getDataList(){
-        //   this.form.page -= 1;
-        //   getInvoiceList(this.form).then(res=>{
-        //     if(res.code===0){
-        //       this.data=res.data.content
-        //     }
-        //   })
-        // }
+        getDataList(){
+          getInvoiceList(this.form).then(res=>{
+            if(res.code===0){
+              this.data=res.data.content
+              this.pagetotal=res.data.totalElements
+            }
+          })
+        }
     },
     mounted(){
       this.getDataList()

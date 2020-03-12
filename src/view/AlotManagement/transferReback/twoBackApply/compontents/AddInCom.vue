@@ -229,11 +229,6 @@ export default {
     },
     init() {
       this.searchPartLayer = true;
-      this.penSalesData.allotEnterTimeEnd = "";
-      this.penSalesData.allotEnterTimeStart = "";
-      this.penSalesData.guestName = "";
-      this.penSalesData.guestId = "";
-      this.penSalesData.serviceId = "";
       this.getArrayParams();
     },
     init1() {

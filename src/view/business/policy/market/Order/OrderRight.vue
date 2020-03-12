@@ -388,7 +388,7 @@ export default {
       clientDataShow: false, //新增客户模态框关闭
       addressShow: false, //收货地址显示
       leftOneOrder: {}, //获取到的左侧数据
-      draftShow: 5, //判定是不是草稿
+      draftShow: "", //判定是不是草稿
       settleTypeList: {}, //结账类型
       WarehouseList: [], //仓库
       oneRow: {}, //点击详情的数据
@@ -404,7 +404,7 @@ export default {
           { required: true, type: "string", message: "  ", trigger: "change" }
         ],
         billTypeId: [
-          { required: true, message: " ", trigger: "change" }
+          { required: true, type: "string", message: " ", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
@@ -444,9 +444,7 @@ export default {
       const res = this.$store.state.dataList.oneOrder;
       if (res.xinzeng !== "1") {
         res.orderType = res.orderType;
-        if(res.id){
-          this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
-        }
+        this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
         res.orderTypeValue = res.orderType
           ? res.orderType.value
             ? res.orderType.value
@@ -675,21 +673,14 @@ export default {
     deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
-        this.selectTableList.forEach((item,i) => {
+        this.selectTableList.forEach(item => {
           this.formPlan.details.map((itm, index) => {
-            if(item.id){
-              if (item.id === itm.id) {
-                data.push(item.id);
-                this.formPlan.details.splice(index, 1);
-              }
-            }else{
-              if(JSON.stringify(item)==JSON.stringify(itm)){
-                this.formPlan.details.splice(index, 1);
-              }
+            if (item.id === itm.id) {
+              this.formPlan.details.splice(index, 1);
             }
           });
+          data.push(item.id);
         });
-        this.selectTableList = []
         const form = this.$parent.$parent.$refs.leftorder.tableData;
         form.map((item, index) => {
           if (item.id === this.formPlan.id) {
@@ -700,9 +691,6 @@ export default {
             );
           }
         });
-        if(data.length==0){
-          return
-        }
         shanqu(data).then(res => {
           if (res.code === 0) {
             this.$message.success(res.data);

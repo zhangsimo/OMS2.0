@@ -148,7 +148,7 @@ export default {
   data() {
     return {
       rightTableHeight: 0,
-      purchaseNameArr: [{ fullName: "全部", id: "9999", orgid: "9999" }], //申请公司名称
+      purchaseNameArr: [{ fullName: "全部", id: "9999" }], //申请公司名称
       selectOne: "", //定义变量赋值日期子组件的数据
       searchType2: "9999", //绑定的下拉框
       ListTwo: [

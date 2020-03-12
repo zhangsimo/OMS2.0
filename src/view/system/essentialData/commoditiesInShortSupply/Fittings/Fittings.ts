@@ -384,7 +384,7 @@ export default class Fittings extends Vue {
         data.fullName = this.query;
         break;
       case "2":
-        data.adapterCarModel = this.query;
+        data.adapterCarModels = this.query;
         break;
       case "3":
         data.keyWord = this.query;

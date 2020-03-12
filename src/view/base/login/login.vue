@@ -6,8 +6,7 @@
 <script>
   import {mapActions} from 'vuex'
   import GpartLoginPage from '_c/login'
-  import systemUri from "_conf/systemUri"
-  import { loginSystem } from "_api/base/user"
+
   export default {
     data () {
       return {
@@ -27,7 +26,7 @@
               loginSystem({ uri: systemUri.wmsTokenApi, username, password }).then(res => {
                 if(res.code == 0) {
                   // systemUri.wms = 'http://192.168.30.129:8088'
-                  const uri = encodeURI(`${systemUri.wms}?username=${username}&password=${password}`);
+                  const uri = systemUri.wms + encodeURI(`?username=${username}&password=${password}`);
                   location.href = uri
                 }
               })

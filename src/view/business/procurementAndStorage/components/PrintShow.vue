@@ -19,11 +19,11 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
-              <span>{{onelist.orgAddr || ' '}}</span>
+              <span>{{onelist.address || ' '}}</span>
             </p>
             <p>
               <span>电话:</span>
-              <span>{{onelist.orgTel || ' '}}</span>
+              <span>{{onelist.tel || ' '}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10" >
@@ -38,15 +38,15 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>供应商:</span> <span>{{onelist.guestName}}</span></p>
-            <p><span>地址:</span> <span>{{onelist.streetAddress}}</span></p>
+            <p><span>地址:</span> <span>{{onelist.addr}}</span></p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>联系人:</span> <span>{{onelist.contactor}}</span></p>
+            <p><span>联系人:</span> <span>{{onelist.orderMan}}</span></p>
             <p><span>票据类型:</span><span>{{onelist.billTypeName}}</span></p>
 
           </Col>
           <Col span="8" class="pl10">
-            <p><span>联系电话:</span><span>{{onelist.contactorTel}}</span></p>
+            <p><span>联系电话:</span><span>{{onelist.tel}}</span></p>
             <p><span>结算方式:</span><span>{{onelist.settleTypeName}}</span></p>
           </Col>
         </Row>
@@ -181,21 +181,15 @@
                     window.location.reload()
                     document.body.innerHTML = oldstr
             },
-          async  openModal(storeData){
+          async  openModal(){
                       this.printShow = true
               let data ={}
+              console.log(this.$store.state.user.userData , 888)
               data.id = this.data.id
                     let res = await getPrintShow(data)
                     if(res.code === 0){
-                        res.data.details.map(v1 => {
-                          for(let b of storeData){
-                            if(b.id==v1.storeId){
-                              v1.storeName = b.name
-                            }
-                          }
-                        })
-
                         this.onelist = res.data
+                        console.log(res)
                     }
             },
             close(){

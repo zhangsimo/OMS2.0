@@ -5,7 +5,6 @@
         <Col span="12">
           <span class="w40">受理日期：</span>
           <DatePicker
-            v-model="Time1"
             type="daterange"
             placeholder="请选择创建日期！"
             @on-change="establish"
@@ -15,7 +14,6 @@
         <Col span="12">
           <span class="w40">入库日期：</span>
           <DatePicker
-            v-model="Time2"
             type="daterange"
             placeholder="请选择入库日期！"
             @on-change="submit"
@@ -141,10 +139,6 @@ export default {
       this.$emit("getMoreStatus", false); //弹框false传出
       this.Time1 = [];
       this.Time2 = [];
-      this.moreData.acceptEnterTimeStart = "";
-      this.moreData.acceptEnterTimeEnd = "";
-      this.moreData.allotEnterTimeStart = "";
-      this.moreData.allotEnterTimeEnd = "";
       this.moreData = {
         acceptEnterTimeStart: "", //创建日期
         acceptEnterTimeEnd: "", //创建日期

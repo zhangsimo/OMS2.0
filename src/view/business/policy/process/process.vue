@@ -141,7 +141,7 @@
                         <FormItem label="备注：" prop="remark">
                           <Input
                             :disabled="Leftcurrentrow.status.value !== 0"
-                            v-model="Leftcurrentrow.remark"
+                            :value="Leftcurrentrow.remark"
                             class="w160"
                           ></Input>
                         </FormItem>
@@ -168,7 +168,6 @@
                       v-if="showit"
                       border
                       auto-resizable
-                      show-footer
                       ref="xTable1"
                       size="mini"
                       highlight-current-row
@@ -213,12 +212,10 @@
                       <vxe-table
                         border
                         auto-resizable
-                        show-footer
                         size="mini"
-                        ref="aatable"
                         :height="rightTableHeight"
                         :data="currentData"
-                        :footer-method="addFooter2"
+                        :footer-method="addFooter"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
                         <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -226,7 +223,7 @@
                         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
                         <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
                         <vxe-table-column field="unit" title="单位"></vxe-table-column>
-                        <vxe-table-column field="qty" title="需要数量">
+                        <vxe-table-column field="orderQty" title="需要数量">
                           <template v-slot="{ row, seq }">
                             <span>{{ currentNum * row.qty}}</span>
                           </template>
@@ -424,6 +421,7 @@
                       @select-change="selectChangeEvent"
                       :height="rightTableHeight"
                       :data="Leftcurrentrow.processProductVO"
+                      :footer-method="addFooter"
                       :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
                     >
                       <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -464,6 +462,7 @@
                         size="mini"
                         :height="rightTableHeight"
                         :data="currentData"
+                        :footer-method="addFooter"
                         :edit-config="{trigger: 'click', mode: 'cell'}"
                       >
                         <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
@@ -519,7 +518,6 @@ import More from "./compontents/More";
 import "../../../lease/product/lease.less";
 import moment from "moment";
 import QuickDate from "../../../../components/getDate/dateget";
-import xeUtils from 'xe-utils'
 import {
   tijiao,
   zuofei,
@@ -658,12 +656,12 @@ export default {
             minWidth: 160
           },
           {
-            title: "提交人",
+            title: "审核人",
             key: "auditor",
             minWidth: 120
           },
           {
-            title: "提交时间",
+            title: "审核日期",
             key: "auditDate",
             minWidth: 200
           }
@@ -747,8 +745,7 @@ export default {
       currentDataP: [],
       cangkuListall: [],
       tableData1: [],
-      currentNum: 1,
-      saveBtnClik:false
+      currentNum: 1
     };
   },
   watch: {
@@ -806,10 +803,6 @@ export default {
     },
     baocun1() {
       this.flag = 0;
-      //如果点击保存，本次请求屏蔽保存按钮
-      if(this.saveBtnClik){
-        return
-      }
       if (!this.Leftcurrentrow.storeId || !this.Leftcurrentrow.orderMan) {
         this.$Message.info("仓库和创建时间为必输项");
         return;
@@ -833,7 +826,6 @@ export default {
           this.$Message.info("组装数量必须大于0");
           return;
       }
-      this.saveBtnClik = true
       if (this.tabKey === 0) {
         //配件组装保存
         baocun(params)
@@ -849,13 +841,10 @@ export default {
               this.Leftcurrentrow.orderMan = "";
               this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
-
-              this.saveBtnClik = false
             }
           })
           .catch(e => {
             this.$Message.info("保存配件组装信息失败");
-            this.saveBtnClik = false
           });
       } else {
         // 配件拆分保存
@@ -872,13 +861,10 @@ export default {
               this.Leftcurrentrow.orderMan = "";
               this.Leftcurrentrow.remark = "";
               this.$Message.success("保存成功");
-
-              this.saveBtnClik = false
             }
           })
           .catch(e => {
             this.$Message.info("保存配件拆分信息失败");
-            this.saveBtnClik = false
           });
       }
     },
@@ -915,7 +901,6 @@ export default {
       });
       this.Leftcurrentrow = item;
       // this.Left.tbdata[0]['processProductVO'] = []
-      this.currentData = []
     },
     //提交
     tijiao1() {
@@ -980,7 +965,6 @@ export default {
     },
     //选择单据
     selectAddlierName(row) {
-      console.log(row)
       this.Left.tbdata = [...row];
       this.Right = row;
     },
@@ -994,7 +978,7 @@ export default {
         }
       }
       if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态加工单能进行选择成品操作");
+        this.$Message.info("只有草稿状态加工单能进行作废操作");
         return;
       }
       if (this.Leftcurrentrow.processProductVO.length === 1) {
@@ -1049,7 +1033,7 @@ export default {
         //获取左侧侧表格高度
         this.leftTableHeight = wrapH - 144;
         //获取右侧表格高度
-        this.rightTableHeight = (wrapH - planFormH - planBtnH - 80) / 2;
+        this.rightTableHeight = (wrapH - planFormH - planBtnH - 38) / 2;
       });
     },
     //切换tab
@@ -1213,32 +1197,7 @@ export default {
     //表格编辑状态下被关闭的事件
     editClosedEvent() {},
     //footer计算
-    addFooter({ columns, data }) {
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          }
-          if (['orderQty'].includes(column.property)) {
-            return xeUtils.sum(data, column.property)
-          }
-          return null
-        }),
-      ]
-    },
-    addFooter2({ columns, data }){
-      return [
-        columns.map((column, columnIndex) => {
-          if (columnIndex === 0) {
-            return '和值'
-          }
-          if (['orderQty','storeStockQty','stockOutQty','qty'].includes(column.property)) {
-            return xeUtils.sum(data, column.property)
-          }
-          return null
-        }),
-      ]
-    },
+    addFooter() {},
     // 确定
     Determined() {
       const params = { ...this.form, ...this.$refs.naform.getITPWE() };
