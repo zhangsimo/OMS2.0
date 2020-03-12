@@ -25,7 +25,6 @@
 </template>
 <script>
 import idDetailed from "./../components/idDetailed";
-import { seleteAccount } from "@/api/bill/popup";
 import selectDealings from "../components/selectCompany"
 import bus from "./Bus";
 import moment from "moment";
@@ -44,7 +43,7 @@ export default {
       account: [
         {
           title: "序号",
-          key: "index",
+          type: "index",
           width: 40,
           className: "tc"
         },
