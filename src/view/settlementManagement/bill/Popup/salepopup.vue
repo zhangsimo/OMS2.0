@@ -185,6 +185,7 @@ import approval from "./approval";
 import SeleteSale from "./seleteSale";
 import noTax from "./noTax";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import { approvalStatus } from "_api/base/user";
 import {
   noTaxApplyNo,
   ditInvoice,
@@ -639,6 +640,11 @@ export default {
             this.invoice.invoiceTax = "010103";
             this.accessoriesBillingData = res.data;
             this.copyData = res.data;
+          }
+        });
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
           }
         });
       }

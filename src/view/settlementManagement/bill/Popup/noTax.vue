@@ -98,6 +98,7 @@ import approval from "./approval";
 import saleAccount from "./saleAccount";
 import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
 import bus from "./Bus";
+import { approvalStatus } from "_api/base/user";
 export default {
   components: {
     SeleteSale,
@@ -350,6 +351,11 @@ export default {
             });
             this.accessoriesBillingData = res.data;
             this.copyData = res.data;
+          }
+        });
+        approvalStatus({ instanceId: this.information.processInstance }).then(res => {
+          if (res.code == 0) {
+            bus.$emit('approval',res.data.operationRecords)
           }
         });
       }
