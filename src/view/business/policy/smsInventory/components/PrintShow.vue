@@ -11,6 +11,7 @@
             <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist.orgName}}</h5>
           </Col>
           <Col span="12" class="pl10" >
+            <p>盘点单</p>
             <p>No: {{onelist.serviceId}}</p>
           </Col>
         </Row>
@@ -28,42 +29,36 @@
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
-          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>盘点仓库:</span> <span>{{onelist.storeName}}</span></p>
+          </Col>
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p><span>盘点日期:</span> <span>{{onelist.checkDate}}</span></p>
           </Col>
         </Row>
          <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>
+        <!--<Row style="border: 1px #000000 solid">-->
+          <!--<Col class="pl10" span="8" style="border-right: 1px #000000 solid">-->
+            <!--<span>合计:</span>-->
+            <!--<span>{{ onelist.trueAmt}}</span>-->
+          <!--</Col>-->
+          <!--<Col class="pl10" span="8" style="border-right: 1px #000000 solid">-->
+            <!--<span>总数:</span>-->
+            <!--<span>{{onelist.trueQty}}</span>-->
+          <!--</Col>-->
+          <!--<Col class="pl10" span="8">-->
+            <!--<span>合计:</span>-->
+            <!--<span>{{onelist.trueAmt}}</span>-->
+          <!--</Col>-->
+        <!--</Row>-->
         <Row style="border: 1px #000000 solid">
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
-            <span>合计:</span>
-            <span>{{ onelist.trueAmt}}</span>
-          </Col>
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
-            <span>总数:</span>
-            <span>{{onelist.trueQty}}</span>
-          </Col>
-          <Col class="pl10" span="8">
-            <span>合计:</span>
-            <span>{{onelist.trueAmt}}</span>
-          </Col>
-        </Row>
-        <Row style="border: 1px #000000 solid;border-top: none">
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
+            <span>{{onelist.createUname}}</span>
+          </Col>
+          <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
+            <span>盘点人:</span>
             <span>{{onelist.orderMan}}</span>
-          </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
-            <span>提交人:</span>
-            <span>{{onelist.auditor}}</span>
-          </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
-            <span>送货人:</span>
-            <span>{{onelist.deliverer}}</span>
-          </Col>
-          <Col span="6" class="pl10">
-            <span>收货人:</span>
-            <span>{{onelist.receiver}}</span>
           </Col>
         </Row>
         <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
@@ -111,9 +106,19 @@
 
                     },
                     {
-                        title: '规格',
+                        title: '品牌车型',
                         key: 'spec',
-                        align: 'center'
+                        align: 'center',
+                        render:(h,params) => {
+                          let text = params.row.carBrandName+params.row.carModelName
+                          return h('span',text||"")
+                        }
+
+                    },
+                    {
+                      title: '规格',
+                      key: 'spec',
+                      align: 'center'
 
                     },
                     {
@@ -123,32 +128,32 @@
 
                     },
                     {
-                        title: '单价',
-                        key: 'truePrice',
+                        title: '盘点数量',
+                        key: 'trueQty',
                         align: 'center'
 
                     },                    {
-                        title: '金额',
-                        key: 'trueAmt',
+                        title: 'OE码',
+                        key: 'oemCode',
                         align: 'center'
 
                     },
-                    {
-                        title: '仓库',
-                        key: 'storeName',
-                        align: 'center',
-                        render:(h,params) => {
-                          let storeName = this.onelist.storeName
-                          return h('span',storeName)
-                        }
-
-                    },
-                    {
-                        title: '仓位',
-                        key: 'storeShelf',
-                        align: 'center'
-
-                    },
+                    // {
+                    //     title: '仓库',
+                    //     key: 'storeName',
+                    //     align: 'center',
+                    //     render:(h,params) => {
+                    //       let storeName = this.onelist.storeName
+                    //       return h('span',storeName)
+                    //     }
+                    //
+                    // },
+                    // {
+                    //     title: '仓位',
+                    //     key: 'storeShelf',
+                    //     align: 'center'
+                    //
+                    // },
 
                 ],
                 onelist:{}, //打印数据

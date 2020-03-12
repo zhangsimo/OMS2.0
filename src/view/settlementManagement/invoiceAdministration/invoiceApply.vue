@@ -65,7 +65,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
-        <Table border :columns="columns" :data="data" ref="summary" highlight-row 
+        <Table border :columns="columns" :data="data" ref="summary" highlight-row
         @on-selection-change="requires" max-height="400"></Table>
          <Page
           :total="pagetotal"
@@ -91,7 +91,7 @@
   </div>
 </template>
 <script>
-import { getInvoiceList,getDetailsList,IntelligenceList } from '_api/salesManagment/invoiceApply'
+import { getInvoiceList,getDetailsList } from '_api/salesManagment/invoiceApply'
 import invoiceApplyModelTost from './invoiceApplyModelTost.vue'
 export default {
   components:{
@@ -427,8 +427,7 @@ export default {
               this.modifyData()
               break;
             case 3:
-              // this.deleteList('delete')
-              this.Intelligence()
+              this.deleteList('delete')
               break;
             case 4:
               this.cancellation()
@@ -445,21 +444,6 @@ export default {
         requires(val){
           this.allTablist = val;
         },
-        Intelligence(){
-          this.$Modal.confirm({
-            title: "警告",
-            content: "<p>确认要智能核销？</p>",
-            onOk: () => {
-              IntelligenceList().then(res=>{
-                if(res.code===0){
-                  this.$Message.success(res.data);
-                  this.getDataList()
-                }
-              })
-            },
-            onCancel: () => {}
-          });
-        },
         cancellation(){
           if(!this.allTablist.length){
             return this.$Message.warning("请选择要核销的数据！");
@@ -467,7 +451,6 @@ export default {
             return this.$Message.warning("请选择一条要核销的数据！");
           }else{
             this.$refs.Toast.data = this.allTablist;
-            this.$refs.Toast.hxOjb.invoiceApplyId=this.allTablist[0]['id']
             this.$refs.Toast.modals = true;
           }
         },
