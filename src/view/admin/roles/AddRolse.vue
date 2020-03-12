@@ -37,9 +37,11 @@ export default class AddRolse extends Vue {
   private ruleValidate: Object = {
     displayName: [{ required: true, message: "角色名称必填", trigger: "blur" }]
   };
+  private systemType: string|number;
   //------------methods----------------
   //打开模态框
-  private openModal() {
+  private openModal(systemType) {
+    this.systemType = systemType
     this.staffShow = true;
     this.list = {};
     this.handleReset();
@@ -57,6 +59,7 @@ export default class AddRolse extends Vue {
         let data: any = {};
         var arr: any = []
         data = this.list;
+        data.systemType = this.systemType;
         data.resIds = [];
         // for(var i = 0 ; i<arr.length; i++) {}
         let res = await addNewStaffe(data);

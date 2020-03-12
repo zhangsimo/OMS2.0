@@ -1,6 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import {queryRolesByPage , deleteById , getStaff , saveStaffJurisdiction , saveOrder , findRootRes} from '_api/admin/roleApi.js';
+import {queryRolesByPage , deleteById , getStaffWms , saveStaffJurisdictionWms , saveOrder , findRootResWms} from '_api/admin/roleApi.js';
 // @ts-ignore
 // import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -24,12 +24,18 @@ export default class index extends Vue{
 
   //右侧表格数据
   private rightTableData:SelectTypes[] = []
-  //分页数据
+  //左侧分页数据
   private page:any = {
         size:20,
         num: 1,
         total:0
       }
+  //员工分页数据
+  private pageR:any = {
+    size:20,
+    num: 1,
+    total:0
+  }
 //点击获取的员工
    private oneStaff:any = {}
    //右侧权限树形图
@@ -65,7 +71,7 @@ export default class index extends Vue{
       let data:any ={}
       data.size = this.page.size
       data.page = this.page.num -1
-      data.systemType = 0
+      data.systemType = 1
       let res:any = await queryRolesByPage(data)
       if(res.code == 0){
         this.tableData = res.data.content
@@ -94,9 +100,13 @@ export default class index extends Vue{
     data.userName = this.staffName
     data.shopName = this.organization
     data.roleId = this.oneStaff.id
-    let res = await getStaff(data)
+    let params:any = {}
+    params.size = this.pageR.size
+    params.page = this.pageR.num -1
+    let res = await getStaffWms(params, data)
     if(res.code === 0) {
       this.rightTableData = res.data.content
+      this.pageR.total = res.data.totalElements
     }
   }
     //方法
@@ -117,7 +127,8 @@ export default class index extends Vue{
     })
   }
 
-  private  //切换当前页
+  //切换当前页
+  private 
     selectNum(val){
       this.page.num = val
       this.getLeftList()
@@ -128,10 +139,20 @@ export default class index extends Vue{
       this.page.size = val
       this.getLeftList()
     }
+    private  selectNumR(val){
+      this.pageR.num = val
+      this.search()
+    }
+    //切换当前条数
+  private selectPageR(val){
+      this.pageR.num = 1
+      this.pageR.size = val
+      this.search()
+    }
     //新增员工模态框
   private openAdd(){
      let modal:any =  this.$refs.add
-         modal.openModal(0)
+         modal.openModal(1)
     }
     //确定新增员工
   private addList(){
@@ -145,7 +166,7 @@ export default class index extends Vue{
         return
       }
     let modal:any =  this.$refs.change
-    modal.openModal(0)
+    modal.openModal(1)
     }
 
   //确定修改员工
@@ -180,7 +201,7 @@ export default class index extends Vue{
   private async findRootRes() {
     // @ts-ignore
     let stop:any = this.$loading()
-    let res:any = await findRootRes()
+    let res:any = await findRootResWms()
        if(res.code === 0){
          stop()
          let tmp = res.data
@@ -236,6 +257,9 @@ export default class index extends Vue{
 
  //员工权限保存
   private async saveStaff(){
+    if (this.rightTableData.length <= 0) {
+      return this.$message.error('员工数量为0,无法保存')
+    }
     let data:any = []
         data.id = this.rightTableData[0].id
         data.roleIds = []
@@ -246,7 +270,7 @@ export default class index extends Vue{
             data.push({id: item.id , roleIds:[] , allocation:1})
           }
         })
-    let res = await saveStaffJurisdiction(data)
+    let res = await saveStaffJurisdictionWms(data)
     if(res.code === 0){
       this.$message.success('保存成功')
       this.getAllStaff()
