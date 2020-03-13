@@ -5,11 +5,7 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <!-- <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
-            -->
-            <Select v-model="model1" class="w150">
-              <Option v-for="item in Branchstore" :value="item" :key="item">{{ item}}</Option>
-            </Select>
+            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
             <span>申请时间：</span>
@@ -22,15 +18,18 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="db ml20">
-            <span>分店名称：</span>
-            <input type="text" class="h30" v-model="model1" readonly />
-            <i class="iconfont iconcaidan input" @click="Dealings(1)"></i>
+          <div class="ml20 flexd" >
+             <span>分店名称：</span>
+              <Select v-model="form.orgName" style="width:180px">
+                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+              </Select>
+            <!-- <i class="iconfont iconcaidan input" @click="Dealings(1)"></i> -->
           </div>
           <div class="db ml20">
             <span>客户：</span>
-            <input type="text" class="h30" v-model="model1" readonly />
-            <i class="iconfont iconcaidan input" @click="Dealings(2)"></i>
+              <Select v-model="form.guestId" style="width:180px">
+                <Option v-for="item in guestNameList" :value="item.id" :key="item.id">{{item.fullName}}</Option>
+              </Select>
           </div>
           <div class="db ml10">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
@@ -117,15 +116,21 @@ import {
   getDetailsList,
   IntelligenceList,
   updateNumber,
-  writeData
+  writeData,
+  getOptionFdList,
+  getOptionGuesList
 } from "_api/salesManagment/invoiceApply";
 import invoiceApplyModelTost from "./invoiceApplyModelTost.vue";
+import quickDate from "@/components/getDate/dateget_bill.vue";
+import moment from "moment";
 export default {
   components: {
-    invoiceApplyModelTost
+    invoiceApplyModelTost,
+    quickDate
   },
   data() {
     return {
+      proTypeList:[],//分店
       columns: [
         {
           title: "选择",
@@ -446,7 +451,10 @@ export default {
       pagetotal: 0,
       Reconciliationtype: "",
       isActive: "",
+      guestNameList:[],
       form: {
+        orgName:'',
+        guestId:'',
         page: 0,
         size: 10,
         startDate: "",
@@ -468,6 +476,12 @@ export default {
       this.isActive = num;
       this.form.page = 0;
       this.form.cancalStatus = num;
+      this.getDataList();
+    },
+    quickDate(data){
+      this.value = data;
+      this.form.startDate=this.value[0]?moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss"): ""
+      this.form.endDate=this.value[1]? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss"): "",
       this.getDataList();
     },
     query() {
@@ -505,7 +519,6 @@ export default {
             id: item.id
           });
           if (item.canceledTax == 0 || item.canceledTax == null) {
-            console.log(1212);
             return (this.flag = false);
           } else {
             this.flag = true;
@@ -567,6 +580,17 @@ export default {
   },
   mounted() {
     this.getDataList();
+    getOptionFdList().then(res=>{
+      if(res.code===0){
+        this.proTypeList=res.data
+      }
+    })
+    getOptionGuesList().then(res=>{
+      if(res.code===0){
+        console.log(res.data)
+        this.guestNameList = res.data
+      }
+    })
   }
 };
 </script>
@@ -575,5 +599,9 @@ export default {
   position: relative;
   left: -26px;
   bottom: -2px;
+}
+.flexd{
+  display: flex;
+  align-items: center;
 }
 </style>

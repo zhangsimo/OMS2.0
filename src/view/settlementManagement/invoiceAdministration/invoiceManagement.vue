@@ -22,6 +22,7 @@
           :data="data"
           ref="summary"
           show-summary
+          :summary-method="handleSummary"
           highlight-row
           @on-selection-change="requires"
           max-height="600"
@@ -93,7 +94,7 @@
           </Col>
           <Col span="11">
             <FormItem label="税额：" prop="taxAmt">
-              <Input v-model="formValidate.taxAmt" clearable/>
+              <Input v-model="formValidate.taxAmt" clearable />
             </FormItem>
           </Col>
         </Row>
@@ -123,9 +124,6 @@
           </Col>
           <Col span="11">
             <FormItem label="往来单位：" prop="guestName">
-              <!-- <Select v-model="formValidate.name">
-                <Option v-for="item in proType" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>-->
               <Input v-model="formValidate.guestName" clearable />
             </FormItem>
           </Col>
@@ -169,9 +167,13 @@
         <Row>
           <Col span="11">
             <FormItem label="开票日期：" prop="billingDate">
-              <!-- <Input v-model="formValidate.billingDate" clearable /> -->
-              <DatePicker type="date" :options="options3" :value="formValidate.billingDate" @on-change="beginTimeChange" placeholder="开始时间"
-                        ></DatePicker>
+              <DatePicker
+                type="date"
+                :options="options3"
+                :value="formValidate.billingDate"
+                @on-change="beginTimeChange"
+                placeholder="开始时间"
+              ></DatePicker>
             </FormItem>
           </Col>
           <Col span="11">
@@ -189,12 +191,12 @@
         <Row>
           <Col span="11">
             <FormItem label="价税合计金额：" prop="totalAmt">
-              <Input v-model="formValidate.totalAmt" clearable/>
+              <Input v-model="formValidate.totalAmt" clearable />
             </FormItem>
           </Col>
           <Col span="11">
             <FormItem label="金额：" prop="invoiceAmt">
-              <Input v-model="formValidate.invoiceAmt" clearable/>
+              <Input v-model="formValidate.invoiceAmt" clearable />
             </FormItem>
           </Col>
         </Row>
@@ -217,8 +219,8 @@
       </div>
     </Modal>
     <!-- 核销弹框 -->
-    <Modal v-model="modal2" width="360">
-      <p slot="header" style="color:#f60;text-align:center">
+    <Modal v-model="modal2" title="智能核销" width="360">
+      <p slot="header" style="color:#fff;text-align:center">
         <span>核销成功</span>
       </p>
       <div style="text-align:center">
@@ -258,9 +260,9 @@ export default {
   data() {
     return {
       options3: {
-          disabledDate(date) {
-            return date && date.valueOf() > Date.now();
-          }
+        disabledDate(date) {
+          return date && date.valueOf() > Date.now();
+        }
       },
       columns: [
         {
@@ -271,8 +273,11 @@ export default {
         {
           title: "序号",
           width: 50,
-          render: (h,params) => {
-            return h('span',params.index + (this.form.page)*this.form.size + 1 )
+          render: (h, params) => {
+            return h(
+              "span",
+              params.index + this.form.page * this.form.size + 1
+            );
           }
         },
         {
@@ -414,27 +419,27 @@ export default {
           width: 70,
           render: (h, params) => {
             let arr = [];
-            if(params.row.accountNo!=null){
+            if (params.row.accountNo != null) {
               params.row.accountNo.forEach((item, i) => {
-              arr.push(
-                h(
-                  "span",
-                  {
-                    style: {
-                      color: "red"
-                    },
-                    on: {
-                      click: () => {
-                        this.$refs.Toast.modal6 = true;
-                        this.$refs.Toast.accountNo = item;
-                        this.$refs.Toast.getToastData();
+                arr.push(
+                  h(
+                    "span",
+                    {
+                      style: {
+                        color: "red"
+                      },
+                      on: {
+                        click: () => {
+                          this.$refs.Toast.modal6 = true;
+                          this.$refs.Toast.accountNo = item;
+                          this.$refs.Toast.getToastData();
+                        }
                       }
-                    }
-                  },
-                  item
-                )
-              );
-            });
+                    },
+                    item
+                  )
+                );
+              });
             }
             return h("div", arr);
           }
@@ -451,7 +456,7 @@ export default {
         }
       ],
       flag: true,
-      flags:true,
+      flags: true,
       modal2: false,
       data: [],
       pagetotal: 0,
@@ -476,29 +481,34 @@ export default {
         remark: ""
       },
       ruleValidate: {
-        invoiceCode:[
-           { message: "必须是10位数字", min: 10, max: 10}
-        ],
-        invoiceNo:[
-         { message: "必须是8位数字", min: 8, max: 8}
-        ],
-        taxAmt:[
-          { type:'number', message: '请输入正确格式', transform(value) {
-                return Number(value);
-              }
+        invoiceCode: [{ message: "必须是10位数字", min: 10, max: 10 }],
+        invoiceNo: [{ message: "必须是8位数字", min: 8, max: 8 }],
+        taxAmt: [
+          {
+            type: "number",
+            message: "请输入正确格式",
+            transform(value) {
+              return Number(value);
             }
+          }
         ],
-        totalAmt:[
-          { type:'number', message: '请输入正确格式', transform(value) {
-                return Number(value);
-              }
+        totalAmt: [
+          {
+            type: "number",
+            message: "请输入正确格式",
+            transform(value) {
+              return Number(value);
             }
+          }
         ],
-        invoiceAmt:[
-          {type:'number', message: '请输入正确格式', transform(value) {
-                return Number(value);
-              }
+        invoiceAmt: [
+          {
+            type: "number",
+            message: "请输入正确格式",
+            transform(value) {
+              return Number(value);
             }
+          }
         ]
       },
       proType: [],
@@ -524,7 +534,45 @@ export default {
     };
   },
   methods: {
-
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          const type = column.type
+          sums[type] = {
+            title: "合计",
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index > 8&&index<12) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
     beginTimeChange(dataTime){
       this.formValidate.billingDate=dataTime
     },
@@ -579,92 +627,97 @@ export default {
         } else {
           tittle = "<p>确认要核销选中的数据？</p>";
         }
-        this.flags=true
+        this.flags = true;
         this.allTablist.forEach((item, index) => {
           if (item.canceled == 1) {
-            return this.flag = false;
-          }else{
-            this.flag = true
+            return (this.flag = false);
+          } else {
+            this.flag = true;
           }
-          if(item.canceled == 0 && type == "writeoff"){
+          if (item.canceled == 0 && type == "writeoff") {
             return (this.flags = false);
-          }else{
-            return (this.flags = true);
           }
         });
-        if(this.flags == false && type == "writeoff"){
-          return this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
+        if (this.flags  && type == "writeoff") {
+          return this.$Message.warning(
+            "该数据中存在已核销数据，请选择未核销数据"
+          );
         }
-        if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
-          return this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
-        } 
-          this.$Modal.confirm({
-            title: "警告",
-            content: tittle,
-            onOk: () => {
-              let message = "";
-              let deleteList = [];
-              this.allTablist.forEach((item, index) => {
-                deleteList.push({
-                  id: item.id
-                });
+        if (
+          (this.flag == false && type == "return") ||
+          (this.flag == false && type == "rewors")
+        ) {
+          return this.$Message.warning(
+            "该数据中存在已核销数据，请选择未核销数据"
+          );
+        }
+        this.$Modal.confirm({
+          title: "警告",
+          content: tittle,
+          onOk: () => {
+            let message = "";
+            let deleteList = [];
+            this.allTablist.forEach((item, index) => {
+              deleteList.push({
+                id: item.id
               });
-              if (type == "delete") {
-                deletetManageList(deleteList)
-                  .then(res => {
-                    if (res.code === 0) {
-                      this.$Message.success("删除成功！");
-                      this.allTablist = [];
-                      this.getTabList(this.form);
-                    }
-                  })
-                  .catch(err => {
-                    this.$Message.error(res.message);
-                  });
-              }
-              if (type == "return") {
-                invoiceReturnList(deleteList)
-                  .then(res => {
-                    if (res.code === 0) {
-                      this.$Message.success("退回成功！");
-                      this.allTablist = [];
-                      this.getTabList(this.form);
-                    }
-                  })
-                  .catch(err => {
-                    this.$Message.error(res.message);
-                  });
-              }
-              if (type == "rewors") {
-                invoiceRedHedgedList(deleteList)
-                  .then(res => {
-                    if (res.code === 0) {
-                      this.$Message.success("进项转出成功！");
-                      this.allTablist = [];
-                      this.getTabList(this.form);
-                    }
-                  })
-                  .catch(err => {
-                    this.$Message.error(res.message);
-                  });
-              }
-              if (type == "writeoff") {
-                invoiceWriteoff(deleteList)
-                  .then(res => {
-                    if (res.code === 0) {
-                      // this.total=res.num
-                      this.allTablist = [];
-                      this.getTabList(this.form);
-                      this.modal2 = true;
-                    }
-                  })
-                  .catch(err => {
-                    this.$Message.error(res.message);
-                  });
-              }
-            },
-            onCancel: () => {}
-          });
+            });
+            if (type == "delete") {
+              deletetManageList(deleteList)
+                .then(res => {
+                  if (res.code === 0) {
+                    this.$Message.success("删除成功！");
+                    this.allTablist = [];
+                    this.getTabList(this.form);
+                  }
+                })
+                .catch(err => {
+                  this.$Message.error(res.message);
+                });
+            }
+            if (type == "return") {
+              invoiceReturnList(deleteList)
+                .then(res => {
+                  if (res.code === 0) {
+                    this.$Message.success("退回成功！");
+                    this.allTablist = [];
+                    this.getTabList(this.form);
+                  }
+                })
+                .catch(err => {
+                  this.$Message.error(res.message);
+                });
+            }
+            if (type == "rewors") {
+              invoiceRedHedgedList(deleteList)
+                .then(res => {
+                  if (res.code === 0) {
+                    this.$Message.success("进项转出成功！");
+                    this.allTablist = [];
+                    this.getTabList(this.form);
+                  }
+                })
+                .catch(err => {
+                  this.$Message.error(res.message);
+                });
+            }
+            if (type == "writeoff") {
+              invoiceWriteoff(deleteList)
+                .then(res => {
+                  if (res.code === 0) {
+                    this.total=res.data
+                    this.allTablist = [];
+                    this.getTabList(this.form);
+                    this.modal2 = true;
+                  }
+                })
+                .catch(err => {
+                  this.$Message.error(res.message);
+                });
+            }
+          },
+          onCancel: () => {}
+        });
       }
     },
     //修改
@@ -678,13 +731,13 @@ export default {
         this.allTablist.forEach((item, index) => {
           if (item.canceled == 1) {
             return (this.flag = false);
-          }else{
-             return (this.flag = true);
+          } else {
+            return (this.flag = true);
           }
         });
         if (this.flag == false) {
           this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
-        }else{
+        } else {
           this.getDetailInfor();
           this.proModal = true;
         }
@@ -692,6 +745,7 @@ export default {
     },
     //选择操作项目
     chooseTable(num) {
+      this.allTablist = [];
       this.isActive = num;
       this.form.page = 0;
       this.form.canceled = num;
@@ -715,8 +769,8 @@ export default {
           desc: txt,
           duration: 0
         });
-        this.exportData=false
-        this.getTabList(this.form)
+        this.exportData = false;
+        this.getTabList(this.form);
       } else {
         this.$Message.error(response.message);
       }

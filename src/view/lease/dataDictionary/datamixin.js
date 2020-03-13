@@ -193,7 +193,7 @@ export const dataMixin = {
           if(item.isSelect){
             className = 'data-dic-select'
           }
-          return h('div',{
+          return h('span',{
             style:{
               display:'inline-block',
               cursor:'pointer'
@@ -289,9 +289,9 @@ export const dataMixin = {
       this.addNewModal = true
       this.changeTreeItemTitle='添加字典类型'
       this.$refs.proModal.resetFields()
-      if(this.selectTreeItem.__value){
-        let arr = this.selectTreeItem.__value.split(',')
-        arr.pop()
+      if(this.selectTreeItem.value){
+        let arr = this.selectTreeItem.value.split(',')
+        // arr.pop()
         this.formModelData.parentMenu = arr
       }else if(this.selectTreeItem.parentId==0){
         this.formModelData.parentMenu = []
@@ -309,9 +309,9 @@ export const dataMixin = {
         this.formModelData.dictCode = this.selectTreeItem.dictCode
         this.formModelData.dictName = this.selectTreeItem.dictName
         this.formModelData.dictDescribe = this.selectTreeItem.dictDescribe
-        if(this.selectTreeItem.__value){
-          let arr = this.selectTreeItem.__value.split(',')
-          arr.pop()
+        if(this.selectTreeItem.value){
+          let arr = this.selectTreeItem.value.split(',')
+          // arr.pop()
           this.formModelData.parentMenu = arr
         }else if(this.selectTreeItem.parentId==0){
           this.formModelData.parentMenu = []

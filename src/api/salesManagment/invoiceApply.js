@@ -58,3 +58,20 @@ export function writeData(data) {
     data
   });
 }
+//分店
+export function getOptionFdList(params) {
+  return axios.request({
+    url: `${api.wmsApi}/company/findByTenantId`,
+    method: "get",
+    params
+  });
+}
+//客户
+export function getOptionGuesList(params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByQuery`,
+    method: "get",
+    params
+  });
+}
+
