@@ -29,6 +29,7 @@
             <Input
               clearable
               @on-focus="getName"
+              @on-clear="clearNameId"
               v-model="penSalesData.guestName"
               style="width: 128px"
             />
@@ -45,7 +46,7 @@
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search(pageList.size, pageList.page)" type class="mr20">查询</Button>
+            <Button @click="search(pageList.size, pageList.page)" type="primary" class="mr20">查询</Button>
           </div>
           <div class="db mr10 btn">
             <Button @click="ok" type="warning" class="mr20">选入</Button>
@@ -247,13 +248,14 @@ export default {
           "YYYY-MM-DD HH:mm:ss"
         );
       }
-      for (var k in this.penSalesData) {
-        if (!this.penSalesData[k]) {
-          delete this.penSalesData[k];
+      let reqData = {...this.penSalesData}
+      for (let k in reqData) {
+        if (!reqData[k]) {
+          delete reqData[k];
         }
       }
-      this.penSalesData.enterSelect = 123;
-      this.$emit("search21", this.penSalesData, size, num);
+      reqData.enterSelect = 123;
+      this.$emit("search21", reqData, size, num);
       // setTimeout(() => {
       //   this.$parent.addProoo();
       // }, 2000);
@@ -284,6 +286,10 @@ export default {
       // 将选好的成品传父组件
       this.checkRow.detailVOS = this.currentData;
       this.$emit("ok", this.checkRow);
+    },
+    //清除guestid
+    clearNameId(){
+      this.penSalesData.guestId = ""
     }
   }
 };

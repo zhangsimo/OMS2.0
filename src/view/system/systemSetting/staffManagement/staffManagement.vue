@@ -387,8 +387,7 @@ export default {
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
       data.groundIds=this.groundIds[this.groundIds.length-1]||'';
-      getStaffList(data)
-        .then(res => {
+      getStaffList(data).then(res => {
           stop();
           this.loading = false;
           if (res.code == 0) {

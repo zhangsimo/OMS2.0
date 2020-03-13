@@ -49,13 +49,13 @@
           <div class="db mr10">
             <span>品牌：</span>
             <Select
-              v-model="conditionData.brand"
+              v-model="conditionData.partBrand"
               filterable
               clearable
               class="w100 mr10"
               placeholder="选择品牌"
             >
-              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -109,13 +109,13 @@
           <div class="db mr10">
             <span>品牌：</span>
             <Select
-              v-model="penPurchaseData.brand"
+              v-model="penPurchaseData.partBrand"
               class="w100 mr10"
               placeholder="选择品牌"
               filterable
               clearable
             >
-              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -375,6 +375,9 @@ import {
   pendingPurchaseSearch,
   getPurchasePageList
 } from "@/api/business/brandListApi";
+import {
+  getPartBrandNoWB
+} from "@/api/business/stockSearch";
 import { parse } from "qs";
 export default {
   name: "brandList",
@@ -401,13 +404,13 @@ export default {
         character: "", // 快速查询
         status: "1", //受理状态
         company: "", //公司选择
-        partBrandCode: "" //品牌
+        partBrand: "" //品牌
       },
       // 代采购条件查询
       penPurchaseData: {
         character: "", // 快速查询
         company: "", //公司选择
-        partBrandCode: "" //品牌
+        partBrand: "" //品牌
       },
       // 快速查询数据1
       quickArray: [
@@ -856,12 +859,16 @@ export default {
     },
     //获取品牌
     async getAllBrand() {
-      let res = await allBrand({ pageSize: 10000 });
+      let res = await getPartBrandNoWB({ pageSize: 10000 });
       if (res.code === 0) {
         let arr = [];
-        res.data.content.forEach(item => {
-          arr.push(...item.children);
-        });
+        for(let v in res.data){
+          let obj = {}
+          obj.code = v;
+          obj.id = v;
+          obj.name = res.data[v]
+          arr.push(obj)
+        }
         this.brandList = arr;
       }
     },

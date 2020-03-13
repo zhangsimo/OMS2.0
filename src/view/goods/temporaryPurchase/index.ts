@@ -122,7 +122,7 @@ export default class InterPurchase extends Vue {
       },
       {
         title: '提交人',
-        key: 'updateUname',
+        key: 'auditor',
         minWidth: 100
       },
       {
@@ -611,7 +611,7 @@ export default class InterPurchase extends Vue {
       this.formPlanmain.processInstanceId = v.processInstanceId;
       this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
       this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
-      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+      if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
         this.isInput = true;

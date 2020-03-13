@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -386,7 +386,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
-      this.model1 = this.$store.state.user.userData.shopId
+      // this.model1 = this.$store.state.user.userData.shopId
       this.getTransferWarehousing();
     },
     // 往来单位

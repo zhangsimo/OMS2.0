@@ -3,8 +3,8 @@
     <section class="con-box">
       <div class="con-split con-datadictionary-split" ref="paneLeft">
         <Split v-model="split" min="200" max="500">
-          <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
-            <div ref="dataLeft" :style="dataWidth">
+          <div slot="left" ref="dataLeft" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+            <div :style="dataWidth">
               <div class="pane-made-hd">
                 数据字典类型
               </div>
@@ -167,7 +167,7 @@
     },
     mounted(){
       setTimeout(()=>{
-        this.dataWidth.minWidth = this.$refs.dataLeft.offsetWidth+'px'
+        this.dataWidth.minWidth = '900px'
       },0)
       this.getList()
     },
