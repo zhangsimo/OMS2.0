@@ -61,9 +61,9 @@
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="分店：" prop="orgName">
-              <Select v-model="formValidate.orgName">
-                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+            <FormItem label="分店：" prop="orgBranchId">
+              <Select v-model="formValidate.orgBranchId">
+                <Option v-for="item in proTypeList" :value="Number(item.id)" :key="item.id">{{item.name}}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -159,51 +159,25 @@
         <Button type="default" @click="proModal = false">返回</Button>
       </div>
     </Modal>
-    <Modal v-model="exportData" title="发票导入" width="400">
-      <p class="mt20 mb20">导入前请先下载模板</p>
-      <div slot="footer" class="exportBtn">
-        <Button type="info" v-has="'export'" @click="exportDown">模板下载</Button>
-        <Upload
-          ref="upload"
-          :show-upload-list="false"
-          :headers="headers"
-          :action="upurl"
-          :format="['xlsx', 'xls', 'csv']"
-          :before-upload="handleBeforeUpload"
-          :on-format-error="onFormatError"
-          :on-success="handleSuccess"
-        >
-          <Button type="success" @click="uploading" class="mr10">导入</Button>
-        </Upload>
-        <!-- <Button type="primary" @click="submit">保存</Button> -->
-      </div>
-    </Modal>
   </div>
 </template>
 <script>
-import { getSalesList,saveSalesList ,getOptionSalesList,getOptionFdList,getOptionCpList,getup,deletetSalesList,voidSalesList,writeSalesList} from '_api/salesManagment/salesInvoice'
-import Cookies from "js-cookie";
-import { TOKEN_KEY } from "@/libs/util";
-import baseUrl from "_conf/url";
+import { getSalesList,saveSalesList ,getOptionSalesList,getOptionFdList,getOptionCpList} from '_api/salesManagment/salesInvoice'
 export default {
     data(){
       return{
-        exportData:false,
-        upurl:getup,
-        headers: {
-          Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
-        },
         form:{
           page:0,
           size:10,
-          writeOffStatus:0
+          writeOffStatus:''
         },
         formValidate: {
+          id:'',
           invoiceType: "",
           priceTaxTotal:"",
           invoiceUnit:'',
           invoiceAmount:'',
-          orgName:'',
+          orgBranchId:'',
           invoiceTaxAmount:'',
           orgCode:'',
           guestName:'',
@@ -212,7 +186,8 @@ export default {
           invoiceNo:'',
           invoiceService:'',
           invoiceTax:'',
-          remark:''
+          remark:'',
+          invoiceDate:''
         },
         columns:[
             {
@@ -231,12 +206,12 @@ export default {
             },
             {
             title: "发票类型",
-            key: "invoiceType",
+            key: "invoiceTypeName",
             className: "tc"
             },
             {
             title: "开票公司",
-            key: "invoiceUnit",
+            key: "invoiceUnitName",
             className: "tc"
             },
             {
@@ -251,7 +226,7 @@ export default {
             },
             {
             title: "收款方式",
-            key: "collectionType",
+            key: "collectionTypeName",
             className: "tc"
             },
             {
@@ -261,7 +236,7 @@ export default {
             },
             {
             title: "开票单位",
-            key: "storeName",
+            key: "receiptUnit",
             className: "tc"
             },
             {
@@ -294,12 +269,12 @@ export default {
             },
             {
             title: "开票清单类型",
-            key: "species",
+            key: "speciesName",
             className: "tc"
             },
             {
             title: "开票业务",
-            key: "invoiceService",
+            key: "invoiceServiceName",
             className: "tc"
             },
             {
@@ -386,37 +361,6 @@ export default {
       }
     },
     methods:{
-      //模板下载
-        exportDown(){
-          location.href =
-          baseUrl.omsSettle +
-          "/salesInvoice/downloadTemplate?access_token=" +
-          Cookies.get(TOKEN_KEY);
-        },
-        handleBeforeUpload(){},
-        onFormatError(file) {
-          this.$Message.error("只支持xls xlsx后缀的文件");
-        },
-        handleSuccess(response) {
-          if (response.code == 0) {
-            let txt = "上传成功";
-            if (response.data) {
-              txt = response.data
-            }
-            this.$Notice.success({
-              title: "导入成功",
-              desc: txt,
-              duration: 0
-            });
-            this.exportData=false
-            this.getTabList()
-          } else {
-            this.$Message.error(response.message);
-          }
-        },
-        uploading() {
-          this.upurl = getup;
-        },
         //选择查询条件
         chooseTable(num) {
           this.isActive = num;
@@ -431,7 +375,6 @@ export default {
         operation(num){
           switch (num){
               case 1:
-                this.exportData = true
                 break;
               case 2:
                this.modifyData()
@@ -461,16 +404,9 @@ export default {
               }else{
                 return (this.flag = true);
               }
-              if(item.status === 1 ||item.redRushStatus ===1){
-                return this.flags = false
-              }else{
-                return this.flags = true
-              }
             });
             if (this.flag == false) {
               this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
-            }else if(this.flags = false){
-              this.$Message.warning("该数据中存在已作废或红字核销数据，请选择重新选择");
             }else{
               this.getDetailInfor();
               this.proModal = true;
@@ -498,89 +434,81 @@ export default {
             } else {
               tittle = "<p>确认要核销选中的数据？</p>";
             }
-            this.allTablist.forEach((item, index) => {
-              if (item.writeOffNo == 1) {
-                return this.flag = false
-              }else{
-                this.flag = true
-              }
-              if(item.status === 1 ||item.redRushStatus ===1){
-                return this.flags = false
-              }else{
-                return this.flags = true
-              }
-            });
-            if(this.flag == false ){
-              this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
-              return 
-            }
-            if(type=='delete'&&this.flags == false) {
-              return this.$Message.warning("该数据中存在已作废或红字核销数据，请重新选择");
-            }
-            if(type=='void'&&this.flags == false){
-              return this.$Message.warning("该数据中存在红字核销数据，请重新选择");
-            }
-            if(type=='write'&&this.flags == false){
-              return this.$Message.warning("该数据中存在已作废数据，请重新选择");
-            }
-            this.$Modal.confirm({
-              title: "警告",
-              content: tittle,
-              onOk: () => {
-                let message = "";
-                let deleteList = [];
-                this.allTablist.forEach((item, index) => {
-                  deleteList.push(
-                    item.id
-                  );
-                });
-                if (type == "delete") {
-                  deletetSalesList(deleteList)
-                    .then(res => {
-                      if (res.code === 0) {
-                        this.$Message.success("删除成功！");
-                        this.allTablist = [];
-                        this.getTabList();
-                      }
-                    })
-                    .catch(err => {
-                      this.$Message.error(res.message);
+            // this.allTablist.forEach((item, index) => {
+            //   if (item.canceled == 1) {
+            //     return (this.flag = false);
+            //   }else{
+            //     this.flag = true
+            //   }
+            //   if(item.canceled == 0 && type == "writeoff"){
+            //     return (this.flags = false);
+            //   }else{
+            //     return (this.flags = true);
+            //   }
+            // });
+            // if(this.flags == false && type == "writeoff"){
+            //   this.$Message.warning("该数据中存在未核销数据，请选择已核销数据");
+            // }else if (this.flag == false&&type == "return"||this.flag == false&&type == "rewors") {
+            //   this.$Message.warning("该数据中存在已核销数据，请选择未核销数据");
+            // } else {
+              this.$Modal.confirm({
+                title: "警告",
+                content: tittle,
+                onOk: () => {
+                  let message = "";
+                  let deleteList = [];
+                  this.allTablist.forEach((item, index) => {
+                    deleteList.push({
+                      id: item.id
                     });
-                }
-                if (type == "void") {
-                  voidSalesList(deleteList)
-                    .then(res => {
-                      if (res.code === 0) {
-                        this.$Message.success("发票作废成功！");
-                        this.allTablist = [];
-                        this.getTabList();
-                      }
-                    })
-                    .catch(err => {
-                      this.$Message.error(res.message);
-                    });
-                }
-                if (type == "write") {
-                  writeSalesList(deleteList)
-                    .then(res => {
-                      if (res.code === 0) {
-                        this.$Message.success("红字核销成功！");
-                        this.allTablist = [];
-                        this.getTabList();
-                      }
-                    })
-                    .catch(err => {
-                      this.$Message.error(res.message);
-                    });
-                }
-              },
-              onCancel: () => {}
-            });
+                  });
+                  if (type == "delete") {
+                    deletetManageList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("删除成功！");
+                          this.allTablist = [];
+                          this.getTabList();
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                  if (type == "void") {
+                    invoiceReturnList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("退回成功！");
+                          this.allTablist = [];
+                          this.getTabList();
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                  if (type == "write") {
+                    invoiceRedHedgedList(deleteList)
+                      .then(res => {
+                        if (res.code === 0) {
+                          this.$Message.success("进项转出成功！");
+                          this.allTablist = [];
+                          this.getTabList(this.form);
+                        }
+                      })
+                      .catch(err => {
+                        this.$Message.error(res.message);
+                      });
+                  }
+                },
+                onCancel: () => {}
+              });
+            // }
           }
         },
         //查看详情
         getDetailInfor() {
-          // await this.getSelectOptions()
           for (let key in this.formValidate) {
             this.formValidate[key] = this.allTablist[0][key];
           }
@@ -628,6 +556,7 @@ export default {
           await getOptionFdList().then(res=>{
             if(res.code===0){
               this.proTypeList=res.data
+              console.log(res.data)
             }
           })
           await getOptionSalesList('KPDW').then(res=>{
@@ -669,9 +598,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.exportBtn {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px;
-}
+
 </style>
