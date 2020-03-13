@@ -527,7 +527,6 @@ export default {
   methods: {
     // 表格合计方式
     handleSummary({ columns, data }) {
-      //   console.log(columns,data)
       const sums = {};
       columns.forEach((column, index) => {
         const key = column.key;
