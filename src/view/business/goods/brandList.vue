@@ -523,6 +523,7 @@ export default {
                   class: className,
                   on: {
                     click: () => {
+                      event.stopPropagation();
                       this.showAcceptance();
                     }
                   }
@@ -911,6 +912,7 @@ export default {
     },
     // 预订单受理按钮
     showAcceptance(e, index) {
+      console.log(this.data2)
       // console.log(e, index)
       this.$Modal.confirm({
         title: "提示",
@@ -981,14 +983,14 @@ export default {
     },
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
-      // console.log(value)
       this.guestId = value;
       let btype = this.transitUnitList.filter(item => {
         return item.id === value;
       });
+      console.log(btype)
       // let btype = this.transitUnitList.filter(item => item.id = value)
-      this.billTypeName = btype[0].billTypeId;
-      this.settleTypeName = btype[0].settTypeId;
+      this.billTypeId = btype[0].billTypeId;
+      this.settleTypeId = btype[0].settTypeId;
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {

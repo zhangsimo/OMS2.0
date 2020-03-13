@@ -213,6 +213,7 @@ export const mixSelectPartCom = {
     getList() {
       this.loading = true;
       let req = {};
+      let params = {};
       if (this.selectTreeItem.id) {
         req.typeId = this.selectTreeItem.id;
       }
@@ -228,9 +229,9 @@ export const mixSelectPartCom = {
           req[this.searchType] = this.partName.trim();
         }
       }
-      req.page = this.page.num;
-      req.size = this.page.size;
-      getwbParts({}, req).then(res => {
+      params.page = this.page.num;
+      params.size = this.page.size;
+      getwbParts(params, req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;

@@ -22,6 +22,7 @@
           :data="data"
           ref="summary"
           show-summary
+          :summary-method="handleSummary"
           highlight-row
           @on-selection-change="requires"
           max-height="600"
@@ -533,8 +534,47 @@ export default {
     };
   },
   methods: {
-    beginTimeChange(dataTime) {
-      this.formValidate.billingDate = dataTime;
+    // 表格合计方式
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          const type = column.type
+          sums[type] = {
+            title: "合计",
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index > 8&&index<12) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    beginTimeChange(dataTime){
+      this.formValidate.billingDate=dataTime
     },
     //操作
     operation(num) {

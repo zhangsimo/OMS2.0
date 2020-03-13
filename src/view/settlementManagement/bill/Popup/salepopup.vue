@@ -684,6 +684,7 @@ export default {
           saveDraft(obj).then(res => {
             if (res.code === 0) {
               this.$message.success("保存成功");
+              this.modal1 = false;
             }
           });
         }
