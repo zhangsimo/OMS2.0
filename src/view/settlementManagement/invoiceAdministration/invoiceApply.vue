@@ -154,17 +154,17 @@ export default {
         },
         {
           title: "店号",
-          key: "orgId",
+          key: "orgCode",
           className: "tc"
         },
         {
           title: "往来单位",
-          key: "sourceType",
+          key: "guestId",
           className: "tc"
         },
         {
           title: "申请日期",
-          key: " applyDate",
+          key: "applyDate",
           className: "tc"
         },
         {
@@ -196,12 +196,12 @@ export default {
         },
         {
           title: "申请开票金额",
-          key: "applyAmt",
+          key: "apply_amt",
           className: "tc"
         },
         {
           title: "开票公司",
-          key: "tenantName",
+          key: "invoiceUnit",
           className: "tc"
         },
         {
@@ -211,12 +211,12 @@ export default {
         },
         {
           title: "寄件方式",
-          key: "sendingWay",
+          key: "sending_way",
           className: "tc"
         },
         {
           title: "快递单号",
-          key: "sendingNumber",
+          key: "sending_number",
           className: "tc",
           render: (h, params) => {
             return h("Input", {
@@ -258,12 +258,12 @@ export default {
         },
         {
           title: "导入开票单位",
-          key: "importInvoiceUnit",
+          key: "import_invoice_unit",
           className: "tc"
         },
         {
           title: "验证开票单位",
-          key: "verifyInvoiceUnit",
+          key: "verify_invoice_unit",
           className: "tc"
         },
         {
