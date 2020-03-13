@@ -1007,7 +1007,7 @@ export default {
         );
         this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id
         this.reconciliationStatement.applicant = this.$store.state.user.username;
-        this.$refs.hedgingInvoice.information = this.reconciliationStatement;
+        this.$refs.hedgingInvoice.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
         delete this.$refs.hedgingInvoice.information.id
         hedgingApplyNo().then(res => {
           this.$refs.hedgingInvoice.information.serviceId = res.data;

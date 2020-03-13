@@ -70,7 +70,6 @@ export default {
   },
   mounted(){
     bus.$on('approval',val=>{
-      console.log(val)
       this.statusData = val
     })
   },
