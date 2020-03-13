@@ -38,14 +38,17 @@
     </Modal>
 </template>
 <script>
-import { getManualList } from '_api/salesManagment/invoiceApply'
+import { getManualList,subManualList } from '_api/salesManagment/invoiceApply'
 export default {
     data(){
         return{
             model1:'',
             modals:false,
+            hxOjb:{
+                invoiceApplyId:'',
+                salesInvoiceId:''
+            },
             columns:[
-
                 {
                 title: "序号",
                 className: "tc",
@@ -175,12 +178,12 @@ export default {
                 },
                 {
                 title: "发票类型",
-                key: "invoiceType",
+                key: "invoiceTypeName",
                 className: "tc"
                 },
                 {
                 title: "开票公司",
-                key: "invoiceUnit",
+                key: "invoiceUnitName",
                 className: "tc"
                 },
                 {
@@ -195,7 +198,7 @@ export default {
                 },
                 {
                 title: "收款方式",
-                key: "collectionType",
+                key: "collectionTypeName",
                 className: "tc"
                 },
                 {
@@ -205,7 +208,7 @@ export default {
                 },
                 {
                 title: "发票单位",
-                key: "",
+                key: "receiptUnit",
                 className: "tc"
                 },
                 {
@@ -238,12 +241,12 @@ export default {
                 },
                 {
                 title: "开票清单类型",
-                key: "species",
+                key: "speciesName",
                 className: "tc"
                 },
                 {
                 title: "开票业务",
-                key: "invoiceService",
+                key: "invoiceServiceName",
                 className: "tc"
                 },
                 {
@@ -291,8 +294,21 @@ export default {
         submitConfig(){
             if(!this.allSelectList.length){
                 this.$Message.warning("请选择要核销的数据");
+            }else if(this.allSelectList.length>=2){
+                this.$Message.warning("请选择一条数据");
             }else{
-                this.model1=false
+                this.hxOjb.salesInvoiceId=this.allSelectList[0]['id']
+                subManualList(this.hxOjb).then(res=>{
+                    if(res.code===0){
+                        this.$Message.warning("核销成功");
+                        this.model1=false
+                        this.hxOjb={
+                            invoiceApplyId:'',
+                            salesInvoiceId:''
+                        }
+                        this.$parent.getDataList()
+                    }
+                })
             }
         },
         queryDataList(){
