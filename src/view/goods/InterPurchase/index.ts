@@ -790,6 +790,9 @@ export default class InterPurchase extends Vue {
       })
     })
     this.tableData = row.details;
+    this.tableData.map(item => {
+      item.orderQty = item.canQty
+    })
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {

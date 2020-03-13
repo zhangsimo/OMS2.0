@@ -540,7 +540,7 @@ export default {
       columns.forEach((column, index) => {
         const key = column.key;
         if (index === 0) {
-          const type = column.type
+          const type = column.type;
           sums[type] = {
             title: "合计",
             value: "合计"
@@ -548,7 +548,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 8&&index<12) {
+        if (index > 8 && index < 12) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -573,8 +573,8 @@ export default {
       return sums;
       //
     },
-    beginTimeChange(dataTime){
-      this.formValidate.billingDate=dataTime
+    beginTimeChange(dataTime) {
+      this.formValidate.billingDate = dataTime;
     },
     //操作
     operation(num) {
@@ -638,7 +638,7 @@ export default {
             return (this.flags = false);
           }
         });
-        if (this.flags  && type == "writeoff") {
+        if (this.flags && type == "writeoff") {
           return this.$Message.warning(
             "该数据中存在已核销数据，请选择未核销数据"
           );
@@ -705,7 +705,7 @@ export default {
               invoiceWriteoff(deleteList)
                 .then(res => {
                   if (res.code === 0) {
-                    this.total=res.data
+                    this.total = res.data;
                     this.allTablist = [];
                     this.getTabList(this.form);
                     this.modal2 = true;
