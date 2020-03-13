@@ -140,7 +140,7 @@
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" @on-change="moneyChange" />
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" />
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -549,6 +549,14 @@ export default {
       });
       if (sum < this.invoice.applyTaxAmt) {
         this.accessoriesBillingData = [...data, ...this.accessoriesBillingData];
+        let s = 0
+        this.accessoriesBillingData.map((item,index)=>{
+          s+=item.applyAmt * 1
+          if (s > this.invoice.applyTaxAmt) {
+          item.applyAmt -= s - this.invoice.applyTaxAmt;
+          this.accessoriesBillingData = this.accessoriesBillingData.slice(0, index + 1);
+        }
+        })
       } else {
         if (this.invoice.additionalTaxPoint) {
           this.accessoriesBillingData = [
@@ -572,21 +580,6 @@ export default {
     });
   },
   methods: {
-    // 本次申请含税金额
-    moneyChange(event) {
-      // let sum = 0;
-      // let accData = this.copyData;
-      // this.accessoriesBillingData = accData.map((item, index) => {
-      //   if (sum > event.target.value) {
-      //     item.applyAmt -= sum - event.target.value;
-      //     console.log(22)
-      //     return accData.slice(0, index + 1);
-      //   } else {
-      //     sum += item.applyAmt * 1;
-      //   }
-      //   console.log(111)
-      // });
-    },
     // 引用上次申请信息
     quote() {
       informationCitation({ guestId: this.information.guestId }).then(res => {
