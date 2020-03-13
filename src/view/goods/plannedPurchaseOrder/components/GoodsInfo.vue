@@ -292,7 +292,7 @@ export default class GoodsInfo extends Vue {
   private async getLists() {
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
-    let res:any = await fapi.getGoodsInfos({ mainId: this.mainId, directCompanyId });
+    let res:any = await fapi.getGoodsInfos({ mainId: this.mainId,guestId:this.$parent.formPlanmain.guestId, directCompanyId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
@@ -311,7 +311,7 @@ export default class GoodsInfo extends Vue {
   }
   //获取物流下拉框
   private async inlogistics() {
-    let params:any = {}
+    let params:any = {guestId:this.$parent.formPlanmain.guestId}
     if(this.formDateRight.deliveryType == 2){
       params.logisticsType = '020701'
     }
