@@ -7,7 +7,7 @@
       </Select>
       <Input class="mr10" v-model="query" style="width: 150px" />
       <span class="mr10">品牌:</span>
-      <Select v-model="band" style="width:140px" class="mr20">
+      <Select v-model="band" filterable style="width:140px" class="mr20">
         <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <Button type="warning" class="mr20" @click="queryTight">

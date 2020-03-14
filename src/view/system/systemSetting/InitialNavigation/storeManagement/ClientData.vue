@@ -220,8 +220,8 @@ export default {
       }
     };
     const valiiBank = (rule, value, callback) => {
-      const regExp = /^([1-9]{1})(\d{15}|\d{18})$/; 
-      if (value && !regExp.test(value)) {
+      const regExp = /^\d{1,}$/; 
+      if (!value || !regExp.test(value)) {
         callback(new Error("银行账户填写错误"));
       } else {
         callback();
