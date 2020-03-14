@@ -361,7 +361,7 @@
 
 <script>
 import ClientData from "../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "../../../goods/plannedPurchaseOrder/components/GoodsInfo";
+import goodsInfo from "../../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
