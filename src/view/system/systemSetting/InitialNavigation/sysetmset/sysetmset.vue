@@ -33,7 +33,7 @@
             <p class="end">打印抬头显示:</p>
           </Col>
           <Col :span="12">
-            <Input v-model="printHeader" placeholder="请输入打印抬头" style="width: 140px;" class="mr10" />
+            <Input v-model="printHeader" maxlength="50" placeholder="请输入打印抬头" style="width: 140px;" class="mr10" />
           </Col>
         </Row>
         <Row class="row" type="flex" align="middle">
