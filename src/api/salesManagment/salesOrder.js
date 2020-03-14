@@ -28,6 +28,15 @@ export function getSales () {
   })
 }
 
+// 获取退货员和创建人
+export function getCRman () {
+  return axios.request({
+    url: `${api.authApi}/tenantUsers/queryAll?&size=10000&page=0&userName=&phone=&office=0`,
+    method: 'get',
+
+  })
+}
+
 //获取品牌
 export function getBrandList (data) {
   return axios.request({

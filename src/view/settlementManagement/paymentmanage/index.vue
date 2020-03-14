@@ -140,7 +140,7 @@
         <input type="text" class="w200" v-model="text" />
       </div>
     </Modal>
-    <Modal v-model="outStock" title="出库明细" width="1200">
+    <Modal v-model="outStock" :title="title" width="1200">
       <div class="db">
         <button
           class="mr10 ivu-btn ivu-btn-default"
@@ -221,6 +221,7 @@ export default {
   },
   data() {
     return {
+      title: "出库明细",
       tit: "",
       detailedList: "key1",
       value: [],
@@ -367,6 +368,11 @@ export default {
                 },
                 on: {
                   click: async () => {
+                    if (params.row.serviceTypeName == "销售出库") {
+                      this.title = "出库明细";
+                    } else {
+                      this.title = "退货明细";
+                    }
                     this.outStock = true;
                     let obj = {
                       orderCode: params.row.serviceId,

@@ -538,6 +538,7 @@ export default {
             this.creaditList.operationStart
           );
           data.tempStart = tools.transTime(this.creaditList.tempStart);
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
           data.guestId = this.ID;
           saveOrUpdate(data).then(res => {
             if (res.code === 0) {
