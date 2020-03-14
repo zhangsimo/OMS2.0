@@ -28,7 +28,9 @@
           <Input v-model="data.partName" placeholder="请输入配件名称" style="width: 350px"/>
         </FormItem>
         <FormItem label="创建人:">
-          <Input v-model="data.createUname" placeholder="请输入创建人" style="width: 350px"/>
+          <Select style="width: 350px" v-model="data.createUname" label-in-value filterable>
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
       </Form>
     </div>
@@ -42,6 +44,7 @@
 <script>
     // import {getClient} from '@/api/salesManagment/salesOrder'
     import { getfindTypeList, getSupplierList } from "_api/purchasing/purchasePlan";
+    import { getSales } from "@/api/salesManagment/salesOrder";
     export default {
         name: "MoreQuery",
         props:{
@@ -52,11 +55,13 @@
                 moreQueryShow: false,//模态框是否展示
                 client: [],//客户下拉框
                 dateOne:'',
-                dateTwo:''
+                dateTwo:'',
+                salesList:[]
             }
         },
         mounted() {
             this.getAllClient()
+            this.getAllSales()
         },
         methods: {
             openModal() {
@@ -84,18 +89,28 @@
             //获取入库时间
             getEnterDate(date){
                 if (date[0]){
-                    this.data.startTime = date[0] + ' ' + '00:00:00'
-                    this.data.endTime = date[1] + ' ' + '23:59:59'
+                    this.data.startEnterDate = date[0] + ' ' + '00:00:00'
+                    this.data.endEnterDate = date[1] + ' ' + '23:59:59'
                 }else {
-                    this.data.starEntertime = ''
-                    this.data.endEnterTime = ''
+                    this.data.startEnterDate = ''
+                    this.data.endEnterDate = ''
                 }
             },
           //确认
             suerQuery(){
                 this.$emit('getSureQuery' , {})
                 this.moreQueryShow = false
+            },
+            async getAllSales() {
+            let res = await getSales();
+            if (res.code === 0) {
+              this.salesList = res.data.content;
+              this.salesList.forEach((item) => {
+                item.label = item.userName;
+                item.value = item.id;
+              });
             }
+          }
         }
     }
 </script>

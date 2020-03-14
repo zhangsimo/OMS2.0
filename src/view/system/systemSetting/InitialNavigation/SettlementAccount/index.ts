@@ -51,9 +51,9 @@ export default class SettlementAccount extends Vue {
             render: (h:any, params:any) => {
                 let value:string = '';
                 if(params.row.isDisabled == 0) {
-                    value = '启用'
+                    value = '否'
                 } else {
-                    value = '禁用'
+                    value = '是'
                 }
                 return h('span', value);
             }
@@ -94,7 +94,7 @@ export default class SettlementAccount extends Vue {
     private formData:Kv = {
         name: '',
         type: '',
-        mark: '',
+        remark: '',
         mode: [{}],
         deleteItems: [],
     }
@@ -118,6 +118,8 @@ export default class SettlementAccount extends Vue {
     }
 
     private async getAccounts() {
+        this.SelectRow = null;
+        this.buttonDisable = true;
         this.loading = true;
         const res:any = await api.getAccounts(this.userData.userData.shopId);
         if(res.code == 0) {
@@ -176,21 +178,32 @@ export default class SettlementAccount extends Vue {
     }
 
     private refresh() {
+        this.SelectRow = null;
         this.getAccounts();
     }
 
     private add() {
+        this.title = "新增账户"
         this.isNew = true;
         this.modal = true;
+        this.formData = {
+            name: '',
+            type: '',
+            remark: '',
+            mode: [{}],
+            deleteItems: [],
+        }
         this.reset();
     }
 
     private update() {
+        this.title = "修改账户"
         this.isNew = false;
         this.modal = true;
         this.reset();
         this.setFormDataMode();
         this.formData.name = this.SelectRow.name;
+        this.formData.remark = this.SelectRow.remark;
         this.formData.type = this.SelectRow.accountTypeId.toString();
     }
 
@@ -239,7 +252,7 @@ export default class SettlementAccount extends Vue {
         }
         data.settleAccount.name = this.formData.name;
         data.settleAccount.accountTypeId = this.formData.type;
-        data.settleAccount.remark = this.formData.mark;
+        data.settleAccount.remark = this.formData.remark;
         if(!this.isNew) {
             data.settleAccount.id = this.SelectRow.id;
         }

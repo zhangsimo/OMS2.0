@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+          :edit-config="{trigger: 'dblclick', mode: 'cell',activeMethod: activeRowMethod}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>
@@ -388,7 +388,7 @@ export default {
       clientDataShow: false, //新增客户模态框关闭
       addressShow: false, //收货地址显示
       leftOneOrder: {}, //获取到的左侧数据
-      draftShow: "", //判定是不是草稿
+      draftShow: 5, //判定是不是草稿
       settleTypeList: {}, //结账类型
       WarehouseList: [], //仓库
       oneRow: {}, //点击详情的数据
@@ -404,7 +404,7 @@ export default {
           { required: true, type: "string", message: "  ", trigger: "change" }
         ],
         billTypeId: [
-          { required: true, type: "string", message: " ", trigger: "change" }
+          { required: true, message: " ", trigger: "change" }
         ],
         settleTypeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
@@ -436,14 +436,17 @@ export default {
   },
   methods: {
     getChangeList() {
-      this.$emit("getChangeList");
+      // this.$emit("getChangeList");
+      this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
     },
     //获取右侧数据
     async getList() {
       const res = this.$store.state.dataList.oneOrder;
       if (res.xinzeng !== "1") {
         res.orderType = res.orderType;
-        this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
+        if(res.id){
+          this.draftShow = !res.billStatusId||res.billStatusId === 0? false : true;
+        }
         res.orderTypeValue = res.orderType
           ? res.orderType.value
             ? res.orderType.value
@@ -453,6 +456,7 @@ export default {
       } else {
         this.draftShow = 0;
         this.formPlan = res;
+        console.log(this.formPlan)
       }
       // this.draftShow = this.draftShow.value
     },
@@ -671,14 +675,21 @@ export default {
     deletePart() {
       if (this.selectTableList.length > 0) {
         let data = [];
-        this.selectTableList.forEach(item => {
+        this.selectTableList.forEach((item,i) => {
           this.formPlan.details.map((itm, index) => {
-            if (item.id === itm.id) {
-              this.formPlan.details.splice(index, 1);
+            if(item.id){
+              if (item.id === itm.id) {
+                data.push(item.id);
+                this.formPlan.details.splice(index, 1);
+              }
+            }else{
+              if(JSON.stringify(item)==JSON.stringify(itm)){
+                this.formPlan.details.splice(index, 1);
+              }
             }
           });
-          data.push(item.id);
         });
+        this.selectTableList = []
         const form = this.$parent.$parent.$refs.leftorder.tableData;
         form.map((item, index) => {
           if (item.id === this.formPlan.id) {
@@ -689,6 +700,9 @@ export default {
             );
           }
         });
+        if(data.length==0){
+          return
+        }
         shanqu(data).then(res => {
           if (res.code === 0) {
             this.$message.success(res.data);
@@ -754,7 +768,7 @@ export default {
     },
     //打开选择入库单
     openGodownEntryModal() {
-      this.$refs.GodownEntryModal.openModal();
+      this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
     },
     //打开活动
     openActivityModal() {
@@ -790,6 +804,8 @@ export default {
             await this.$refs.xTable.validate();
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
+              //解除禁用保存按钮
+              this.$parent.$parent.isSaveClick = false
             }
             if (this.formPlan.billStatusId.value) {
               this.formPlan.billStatusId = this.formPlan.billStatusId.value;
@@ -823,12 +839,16 @@ export default {
               this.$parent.$parent.$refs.leftorder.dataSaveSuccess();
             }
           } catch (errMap) {
+            //解除禁用保存按钮
+            this.$parent.$parent.isSaveClick = false
             this.$XModal.message({
               status: "error",
               message: "表格校验不通过！"
             });
           }
         } else {
+          //解除禁用保存按钮
+          this.$parent.$parent.isSaveClick = false
           this.$Message.error("*为必填项");
         }
       });
@@ -846,10 +866,15 @@ export default {
       let xTable = this.$refs.xTable;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       let orderPriceColumn = xTable.getColumnByField("orderPrice");
-      let sexColumn = xTable.getColumnByField("sex");
-      let isDisabled = this.draftShow != 0;
+      let isDisabled = false;
+      if(row.isMarkActivity==1){
+        isDisabled = true
+      }
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+    },
+    activeRowMethod({row,rowIndex}){
+        return this.draftShow == 0
     },
     //出库
     stockOut() {
@@ -858,43 +883,62 @@ export default {
         this.$message.error("请先保存");
         return false;
       }
-      this.$Modal.confirm({
-        title: "是否确定出库",
-        onOk: async () => {
-          this.$refs.formPlan.validate(async valid => {
-            if (valid) {
-              try {
-                await this.$refs.xTable.validate();
-                if (+this.totalMoney > +this.limitList.outOfAmt) {
-                  return this.$message.error("可用余额不足");
-                }
-                //console.log("jinlaile");
-                this.formPlan.orderType = JSON.stringify(
-                  this.formPlan.orderType
-                );
-                let res = await outDataList(this.formPlan);
-                //console.log("fasong");
-                if (res.code === 0) {
-                  this.$Message.success("出库成功成功");
-                  this.getChangeList();
-                  return res;
-                }
-              } catch (errMap) {
-                this.$XModal.message({
-                  status: "error",
-                  message: "表格校验不通过！"
-                });
-              }
-            } else {
-              this.$Message.error("*为必填项");
+      let priceArr0 = this.formPlan.details.filter(item => item.orderPrice==0)
+      console.log(priceArr0)
+      if(priceArr0.length>0){
+        this.$Modal.confirm({
+          title: "存在配件单价为0，是否确定出库！",
+          onOk: () => {
+            this.stockOutSubmit();
+          },
+          onCancel: () => {
+          }
+        });
+      }else{
+        this.$Modal.confirm({
+          title: "是否确定出库",
+          onOk: () => {
+            this.stockOutSubmit();
+          },
+          onCancel: () => {
+          }
+        });
+      }
+    },
+
+
+    async stockOutSubmit(){
+      this.$refs.formPlan.validate(async valid => {
+        if (valid) {
+          try {
+            await this.$refs.xTable.validate();
+            if (+this.totalMoney > +this.limitList.outOfAmt) {
+              return this.$message.error("可用余额不足");
             }
-          });
-        },
-        onCancel: () => {
-          this.$Message.info("取消成功");
+            //console.log("jinlaile");
+            this.formPlan.orderType = JSON.stringify(
+              this.formPlan.orderType
+            );
+            let res = await outDataList(this.formPlan);
+            //console.log("fasong");
+            if (res.code === 0) {
+              this.$Message.success("出库成功");
+              this.getChangeList();
+              return res;
+            }
+          } catch (errMap) {
+            this.$XModal.message({
+              status: "error",
+              message: "表格校验不通过！"
+            });
+          }
+        } else {
+          this.$Message.error("*为必填项");
         }
       });
     },
+
+
     //提交
     submitList() {
       this.$refs.formPlan.validate(async valid => {
@@ -907,7 +951,7 @@ export default {
             this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let res = await getSubmitList(this.formPlan);
             if (res.code === 0) {
-              this.$Message.success("出库成功成功");
+              this.$Message.success("出库成功");
               this.$store.commit("setleftList", res);
             }
           } catch (errMap) {
@@ -934,6 +978,7 @@ export default {
         this.getChangeList();
       }
     },
+
     getRUl() {
       this.upurl = getup + "id=" + this.formPlan.id;
     }

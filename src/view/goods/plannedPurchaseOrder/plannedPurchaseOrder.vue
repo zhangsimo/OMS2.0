@@ -390,7 +390,7 @@
                 >
                   <template v-slot:edit="{ row }">
                     <el-input-number
-                      :max="row.orderQty"
+                      :max="row.canQty"
                       :min="0"
                       v-model="row.orderQty"
                       :controls="false"

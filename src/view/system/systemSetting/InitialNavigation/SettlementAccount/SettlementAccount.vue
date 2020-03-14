@@ -62,7 +62,7 @@
     <Modal v-model="modal" :title="title" width="600">
       <Form ref="formData" :model="formData" :rules="ruleValidate" :label-width="120">
         <FormItem label="账户名称：" prop="name">
-          <Input v-model="formData.name" placeholder="请输入账户名称" />
+          <Input v-model="formData.name" maxlength="30" placeholder="请输入账户名称" />
         </FormItem>
         <FormItem label="账户类型：" prop="type">
           <RadioGroup v-model="formData.type">
@@ -74,7 +74,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem label="备　　注：" >
-          <Input v-model="formData.mark"/>
+          <Input v-model="formData.remark"/>
         </FormItem>
         <vxe-table border :data="formData.mode">
           <vxe-table-column title=" " min-width="186">

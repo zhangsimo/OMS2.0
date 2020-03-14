@@ -99,7 +99,6 @@
         </Tabs>
       </div>
     </section>
-    <!-- <selectDealings ref="selectDealings" @selectSupplierName="getOne"  /> -->
     <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
       <Form label-width="120">
         <FormItem label="对账单号：">
@@ -380,7 +379,7 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     this.getGeneral();
-    this.getOne();
+    this.getOne()
   },
   methods: {
     // 日期选择

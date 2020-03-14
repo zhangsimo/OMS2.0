@@ -122,7 +122,7 @@ export default class InterPurchase extends Vue {
       },
       {
         title: '提交人',
-        key: 'updateUname',
+        key: 'auditor',
         minWidth: 100
       },
       {
@@ -285,6 +285,11 @@ export default class InterPurchase extends Vue {
       return this.$Message.error('请先保存数据');
     }
     ref.resetFields();
+    const currentRowTable: any = this.$refs["currentRowTable"];
+    currentRowTable.clearCurrentRow();
+    for(let b of this.purchaseOrderTable.tbdata){
+      b._highlight = false
+    }
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -560,14 +565,14 @@ export default class InterPurchase extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
-          for(let b of this.purchaseOrderTable.tbdata){
-            b._highlight = false
-            if(b.id==this.selectLeftItemId){
-              b._highlight = true;
-              this.setFormPlanmain(b);
-              break;
-            }
-          }
+          // for(let b of this.purchaseOrderTable.tbdata){
+          //   b._highlight = false
+          //   if(b.id==this.selectLeftItemId){
+          //     b._highlight = true;
+          //     this.setFormPlanmain(b);
+          //     break;
+          //   }
+          // }
 
         },
         onCancel: () => {
@@ -606,7 +611,7 @@ export default class InterPurchase extends Vue {
       this.formPlanmain.processInstanceId = v.processInstanceId;
       this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
       this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
-      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+      if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
         this.isInput = true;

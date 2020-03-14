@@ -361,7 +361,7 @@
 
 <script>
 import ClientData from "../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "../../../goods/plannedPurchaseOrder/components/GoodsInfo";
+import goodsInfo from "../../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
@@ -445,6 +445,7 @@ export default {
       formPlan: {
         detailList: [],
         storeId:'',
+        // orderTypeValue:'0'
       }, //获取到数据
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
@@ -873,6 +874,7 @@ export default {
         if(!this.formPlan.storeId){
             this.$message.error("请选择交货仓库");
         }else{
+            this.$refs.GodownEntryModal.reset();
             this.$refs.GodownEntryModal.openModal(this.formPlan.storeId);
         }
     },
@@ -913,7 +915,7 @@ export default {
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
-              this.$parent.$parent.isAdd = true;
+              this.$parent.$parent.isAdd = false;
               this.$store.commit("setleftList", res);
               this.$refs.formPlan.resetFields();
               this.limitList = {};
@@ -947,6 +949,10 @@ export default {
       let isDisabled = this.draftShow != 0;
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
+        if(row.isMarkActivity==1){
+            orderQtyColumn.editRender.attrs.disabled=true;
+            orderPriceColumn.editRender.attrs.disabled=true;
+        }
       remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     //出库
@@ -1012,8 +1018,10 @@ export default {
                     let res = await getSubmitList(this.formPlan);
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
+                        this.$parent.$parent.isAdd = false;
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
+                        this.$refs.formPlan.resetFields();
                     }
                   },
                   onCancel: () => {}
@@ -1023,8 +1031,10 @@ export default {
               let res = await getSubmitList(this.formPlan);
               if (res.code === 0) {
                 this.$Message.success("提交成功");
+                  this.$parent.$parent.isAdd = false;
                 this.limitList = {};
                 this.$store.commit("setleftList", res);
+                  this.$refs.formPlan.resetFields();
               }
             }
           } catch (errMap) {
@@ -1057,13 +1067,13 @@ export default {
     getOneOrder: {
       handler(old, ov) {
         if (!old.id) {
-          this.formPlan = {
-            billStatusId: { name: "草稿", value: 0 },
-            // orderMan: this.$store.state.user.userData.username || "",
-            // orderManId: this.$store.state.user.userData.id,
-            detailList: [],
-              storeId:this.formPlan.storeId,
-          };
+             this.formPlan =Object.assign({},{
+                 billStatusId: { name: "草稿", value: 0 },
+                 detailList: [],
+                 storeId:this.formPlan.storeId,
+                 orderTypeValue:0,
+                 orderManId:''}
+                 ) ;
           this.draftShow = 0;
           this.leftOneOrder =this.formPlan
           return false;

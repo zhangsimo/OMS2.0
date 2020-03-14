@@ -528,14 +528,14 @@ export default class PlannedPurchaseOrder extends Vue {
             this.formPlanmain[k] = row[k];
           }
 
-          for(let b of this.purchaseOrderTable.tbdata){
-            b._highlight = false
-            if(b.id==this.selectLeftItemId){
-              b._highlight = true;
-              this.setFormPlanmain(b);
-              break;
-            }
-          }
+          // for(let b of this.purchaseOrderTable.tbdata){
+          //   b._highlight = false
+          //   if(b.id==this.selectLeftItemId){
+          //     b._highlight = true;
+          //     this.setFormPlanmain(b);
+          //     break;
+          //   }
+          // }
 
         },
         onCancel: () => {
@@ -548,6 +548,7 @@ export default class PlannedPurchaseOrder extends Vue {
           for(let b of this.purchaseOrderTable.tbdata){
             b._highlight = false
             if(b.id==this.selectLeftItemId){
+              console.log(123)
               b._highlight = true;
               this.setFormPlanmain(b);
               break;
@@ -703,7 +704,9 @@ export default class PlannedPurchaseOrder extends Vue {
         this.putStores.push({ value: companyMap[el], label: el })
       }
       for (let el in billStatusMap) {
-        this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+        if(!["审批中","不通过"].includes(el)){
+          this.purchaseTypeArr.push({ value: billStatusMap[el], label: el })
+        }
       }
       if(defaultStore) {
         this.defaultStore = defaultStore;
@@ -783,6 +786,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 采购计划单据
   private getPlanOrder(row: any) {
+    console.log(row)
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
     if(row.directCompanyId){
@@ -797,6 +801,9 @@ export default class PlannedPurchaseOrder extends Vue {
       })
     })
     this.tableData = row.details;
+    this.tableData.map(item => {
+      item.orderQty = item.canQty
+    })
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {

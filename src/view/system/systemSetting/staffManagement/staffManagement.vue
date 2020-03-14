@@ -35,6 +35,13 @@
       >
         <Icon custom="iconfont iconziyuan1 icons" />开通账号
       </a>
+      <a
+        class="mr10"
+        @click="giveUser('close')"
+        v-if="!oneStaffChange.office && oneStaffChange.openSystem != 1"
+      >
+        <Icon custom="iconfont iconziyuan1 icons" />关闭账号
+      </a>
       <a class="mr10" @click="restPassword" v-has="'reset'">
         <Icon custom="iconfont iconziyuan1 icons" />重置密码
       </a>
@@ -55,6 +62,7 @@
         :stripe="true"
         :columns="columns"
         :data="staffList"
+        ref="currentRowTable"
         @on-current-change="selection"
       ></Table>
       <Page
@@ -73,8 +81,9 @@
     <Modal v-model="modalShow" :title="title" width="700px" :closable="false">
       <addStaff ref="child" :data="newStaff"></addStaff>
       <div slot="footer">
-        <Button type="primary" @click="submit">确定</Button>
-        <Button type="default" @click="modalShow = false">取消</Button>
+        <Button type="primary" @click="submit('next')" v-if="isNextAdd">保存并继续</Button>
+        <Button type="primary" @click="submit">保存退出</Button>
+        <Button type="default" @click="modalShow = false">退出</Button>
       </div>
     </Modal>
 
@@ -175,6 +184,8 @@ export default {
   },
   data() {
     return {
+      isNextAdd: true,
+      closeAcc: false,
       isDimission: [{ name: "是", value: 1 }, { name: "否", value: 0 }],
         list:[],//机构数组
       shopCode: "",
@@ -301,7 +312,7 @@ export default {
       ],
       companyList: [],
       title: "新增员工",
-      setpasswordName: "设置密码",
+      setpasswordName: "账号设置",
       modalShow: false,
       oneStaffChange: "",
       newStaff: {
@@ -367,6 +378,7 @@ export default {
           }
       },
     getAllStaffList() {
+      this.oneStaffChange = {};
       let stop = this.$loading();
       let data = {};
       data.size = this.page.size;
@@ -375,8 +387,7 @@ export default {
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
       data.groundIds=this.groundIds[this.groundIds.length-1]||'';
-      getStaffList(data)
-        .then(res => {
+      getStaffList(data).then(res => {
           stop();
           this.loading = false;
           if (res.code == 0) {
@@ -457,9 +468,12 @@ export default {
           gender: 0
       };
       this.modalShow = true;
+      this.isNextAdd = true;
+      this.$refs.currentRowTable.clearCurrentRow();
+      this.oneStaffChange = {};
     },
     // 确认
-    submit() {
+    submit(type = "add") {
       this.$refs.child.handleSubmit(() => {
         let stop = this.$loading();
         this.modalShow = false;
@@ -478,6 +492,9 @@ export default {
                 this.$refs.child.resetFields();
                 this.cancel();
                 this.getAllStaffList();
+                if(type == "next") {
+                  this.findRootGroup();
+                }
               }
             })
             .catch(err => {
@@ -496,7 +513,7 @@ export default {
               stop();
               if (res.code == 0) {
                 this.$Message.success("修改成功");
-                this.oneStaffChange = {};
+                // this.oneStaffChange = {};
                 this.getAllStaffList();
               }
             })
@@ -512,6 +529,7 @@ export default {
     },
     //修改信息
     changStaffList() {
+      this.isNextAdd = false;
       if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
@@ -525,7 +543,7 @@ export default {
     },
     //员工离职
     changeDimission() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -551,7 +569,7 @@ export default {
     },
     //重置密码
     restPassword() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -576,10 +594,15 @@ export default {
       });
     },
     //开通账号
-    giveUser() {
+    giveUser(type) {
       if (!this.oneStaffChange) {
         this.$Message.error("请至选择一条员工信息");
         return false;
+      }
+      if(type == 'close') {
+        this.closeAcc = true;
+      } else {
+        this.closeAcc = false;
       }
       this.setPasswordShow = true;
     },
@@ -593,13 +616,22 @@ export default {
         data.passwd = "000000";
         data.groupId = this.oneStaffChange.groupId;
         data.tenantUid = this.oneStaffChange.id;
+        if(this.closeAcc) {
+          data.openSystem = 1
+        } else {
+          data.openSystem = 0
+        }
         putNewCompany(data, this.$store.state.user.userData.groupId).then(
           res => {
             stop();
             if (res.code == 0) {
               this.getAllStaffList();
               this.oneStaffChange = {};
-              this.$Message.success("开通成功");
+              if(this.closeAcc) {
+                this.$Message.success("关闭成功");
+              } else {
+                this.$Message.success("开通成功");
+              }
             }
           }
         );

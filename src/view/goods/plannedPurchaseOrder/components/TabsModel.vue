@@ -135,12 +135,12 @@ export default class TabsModel extends Vue {
     },
     {
       title: "订单占用",
-      key: "occupyQty",
+      key: "orderQty",
       minWidth: 80
     },
     {
       title: "可开单数量",
-      key: "outQty",
+      key: "outableQty",
       minWidth: 80
     }
   ];
@@ -168,7 +168,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "可售数量",
-      key: "outQty",
+      key: "outableQty",
       minWidth: 80
     }
   ];
@@ -196,12 +196,12 @@ export default class TabsModel extends Vue {
     },
     {
       title: "单位",
-      key: "unit",
+      key: "enterUnitId",
       minWidth: 120
     },
     {
       title: "采购数量",
-      key: "orderQty",
+      key: "enterQty",
       minWidth: 120
     },
     {
@@ -231,12 +231,12 @@ export default class TabsModel extends Vue {
     },
     {
       title: "入库单号",
-      key: "serviceId",
+      key: "code",
       minWidth: 120
     },
     {
       title: "入库日期",
-      key: "orderDate",
+      key: "enterDate",
       minWidth: 120
     },
   ]

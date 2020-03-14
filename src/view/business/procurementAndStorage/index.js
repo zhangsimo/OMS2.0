@@ -170,7 +170,7 @@ export default {
     //打印
     setPrint() {
       if (!this.formPlan.id) return this.$message.error('请至少选择一条数据')
-      this.$refs.printBox.openModal()
+      this.$refs.printBox.openModal(this.WarehouseList)
     },
     // 打开更多搜索
     openQueryModal() {
@@ -254,6 +254,7 @@ export default {
         return;
       }
       this.dataChange = data
+      this.$refs.xTab.setCurrentRow(this.dataChange.row)
       this.taxRate = this.settleTypeList.CS00107.filter(item => { return item.itemCode == data.row.billTypeId })[0]
       this.formPlan = data.row
       if (this.taxRate) {
@@ -429,23 +430,31 @@ export default {
     },
     //获取采购订单数据
     async getPlanOrder(val) {
+      console.log(val)
       if (val) {
         this.formPlan.pchsOrderId = val.id
         await this.$refs.xTable.validate()
         this.formPlan.orderDate = this.formPlan.orderDate ? moment(this.formPlan.orderDate).format('YYYY-MM-DD HH:mm:ss') : ''
+        this.formPlan.remark = val.remark||""
         let res = await saveList(this.formPlan)
         if (res.code === 0) {
           this.flag = 0
-          await this.getLeftLists()
+          await this.getLeftLists("addDetails")
+          //判断左侧列表有没有点击已生成单子的数据
+          let isActiveNum = 0;
           this.legtTableData.map(item => {
             if (item.id === this.dataChange.row.id) {
+              isActiveNum++
               this.$set(this.dataChange, 'row', item)
             }
           })
+          if(!isActiveNum){
+            this.dataChange = {"row":this.legtTableData[0]}
+          }
           await this.clickOnesList(this.dataChange)
           this.allMoney = 0
           this.$Message.success('保存成功');
-          this.$refs.formPlan.resetFields();
+          // this.$refs.formPlan.resetFields();
         }
         try {
         } catch (errMap) {
@@ -557,6 +566,7 @@ export default {
     //新增
     addNew() {
       if (!this.legtTableData[0]||!this.legtTableData[0].hasOwnProperty('guestId') || this.legtTableData[0].guestId) {
+        this.$refs["formPlan"].resetFields()
         this.formPlan = {
           billStatusValue: 0,
           billStatusName: '草稿',

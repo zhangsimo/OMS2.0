@@ -510,14 +510,14 @@ export default class InterPurchase extends Vue {
             this.formPlanmain[k] = row[k];
           }
 
-          for(let b of this.purchaseOrderTable.tbdata){
-            b._highlight = false;
-            if(b.id==this.selectLeftItemId){
-              b._highlight = true;
-              this.setFormPlanmain(b);
-              break;
-            }
-          }
+          // for(let b of this.purchaseOrderTable.tbdata){
+          //   b._highlight = false;
+          //   if(b.id==this.selectLeftItemId){
+          //     b._highlight = true;
+          //     this.setFormPlanmain(b);
+          //     break;
+          //   }
+          // }
 
         },
         onCancel: () => {
@@ -790,6 +790,9 @@ export default class InterPurchase extends Vue {
       })
     })
     this.tableData = row.details;
+    this.tableData.map(item => {
+      item.orderQty = item.canQty
+    })
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       if (el.id == this.selectTableRow.id) {

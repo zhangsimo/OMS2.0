@@ -209,6 +209,11 @@ export default {
       data.id = this.pitchSupplierOne.id;
       let res = await setDisabled(this.pitchSupplierOne);
       if (res.code == 0) {
+        if(this.pitchSupplierOne.isDisabled==1){
+          this.$message.success("启用成功");
+        }else{
+          this.$message.success("禁用成功");
+        }
         this.getlist();
       }
     },
@@ -245,7 +250,7 @@ export default {
     //修改客户资料
     changeClient() {
       if (Object.keys(this.pitchSupplierOne).length == 0) {
-        this.$Message.error("至少选项一条地址");
+        this.$Message.error("请至少选择一条数据");
         return false;
       }
       this.clientDataShow = true;

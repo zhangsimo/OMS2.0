@@ -65,6 +65,7 @@ export default class index extends Vue{
       let data:any ={}
       data.size = this.page.size
       data.page = this.page.num -1
+      data.systemType = 0
       let res:any = await queryRolesByPage(data)
       if(res.code == 0){
         this.tableData = res.data.content
@@ -130,7 +131,7 @@ export default class index extends Vue{
     //新增员工模态框
   private openAdd(){
      let modal:any =  this.$refs.add
-         modal.openModal()
+         modal.openModal(0)
     }
     //确定新增员工
   private addList(){
@@ -144,7 +145,7 @@ export default class index extends Vue{
         return
       }
     let modal:any =  this.$refs.change
-    modal.openModal()
+    modal.openModal(0)
     }
 
   //确定修改员工

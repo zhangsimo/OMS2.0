@@ -50,7 +50,7 @@ export const mixSelectPartCom  = {
           render: (h, params) => {
             let text = '';
             try {
-              text = params.row.carBrandName+params.row.carModelName
+              text = params.row.carModelName
             } catch(e) {}
             return h('span', text);
           }
@@ -120,24 +120,20 @@ export const mixSelectPartCom  = {
         total: 0
       },
       //配件查询分类
-      searchType:'fullName',
+      searchType:'partName',
       searchTypeArr:[
         {
           value: "partCode",
           label: "编码"
         },
         {
-          value: "fullName",
+          value: "partName",
           label: "名称"
         },
         {
-          value: "applyCarModel",
+          value: "carModelName",
           label: "车型"
         },
-        {
-          value: "keyWord",
-          label: "拼音"
-        }
       ],
       //查询关键字
       searchValue:'',
@@ -169,7 +165,7 @@ export const mixSelectPartCom  = {
       }
 
       if(this.partName.trim()){
-        req[this.searchType] = this.partName.trim()
+          req[this.searchType] = this.partName.trim()
       }
       req.page = this.page.num -1
       req.size = this.page.size

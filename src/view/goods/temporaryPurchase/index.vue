@@ -456,7 +456,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="enterUnitId"
+                  field="unit"
                   title="单位"
                   width="100"
                 ></vxe-table-column>

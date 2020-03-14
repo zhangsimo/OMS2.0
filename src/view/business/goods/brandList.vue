@@ -49,13 +49,13 @@
           <div class="db mr10">
             <span>品牌：</span>
             <Select
-              v-model="conditionData.brand"
+              v-model="conditionData.partBrand"
               filterable
               clearable
               class="w100 mr10"
               placeholder="选择品牌"
             >
-              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -109,13 +109,13 @@
           <div class="db mr10">
             <span>品牌：</span>
             <Select
-              v-model="penPurchaseData.brand"
+              v-model="penPurchaseData.partBrand"
               class="w100 mr10"
               placeholder="选择品牌"
               filterable
               clearable
             >
-              <Option v-for="item in brandList" :value="item.code" :key="item.id">{{ item.name }}</Option>
+              <Option v-for="item in brandList" :value="item.name" :key="item.id">{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db">
@@ -246,7 +246,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="this.billTypeId" @on-change="addChange2">
+                <Select v-model="billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -257,7 +257,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="this.settleTypeId" @on-change="addChange3">
+                <Select v-model="settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -375,6 +375,9 @@ import {
   pendingPurchaseSearch,
   getPurchasePageList
 } from "@/api/business/brandListApi";
+import {
+  getPartBrandNoWB
+} from "@/api/business/stockSearch";
 import { parse } from "qs";
 export default {
   name: "brandList",
@@ -401,13 +404,13 @@ export default {
         character: "", // 快速查询
         status: "1", //受理状态
         company: "", //公司选择
-        partBrandCode: "" //品牌
+        partBrand: "" //品牌
       },
       // 代采购条件查询
       penPurchaseData: {
         character: "", // 快速查询
         company: "", //公司选择
-        partBrandCode: "" //品牌
+        partBrand: "" //品牌
       },
       // 快速查询数据1
       quickArray: [
@@ -520,6 +523,7 @@ export default {
                   class: className,
                   on: {
                     click: () => {
+                      event.stopPropagation();
                       this.showAcceptance();
                     }
                   }
@@ -855,12 +859,16 @@ export default {
     },
     //获取品牌
     async getAllBrand() {
-      let res = await allBrand({ pageSize: 10000 });
+      let res = await getPartBrandNoWB({ pageSize: 10000 });
       if (res.code === 0) {
         let arr = [];
-        res.data.content.forEach(item => {
-          arr.push(...item.children);
-        });
+        for(let v in res.data){
+          let obj = {}
+          obj.code = v;
+          obj.id = v;
+          obj.name = res.data[v]
+          arr.push(obj)
+        }
         this.brandList = arr;
       }
     },
@@ -898,12 +906,13 @@ export default {
           });
           // console.log(this.data)
           // console.log(this.orgid)
-          this.List.total = 0;
+          this.List.total = res.data.totalElements;
         }
       });
     },
     // 预订单受理按钮
     showAcceptance(e, index) {
+      console.log(this.data2)
       // console.log(e, index)
       this.$Modal.confirm({
         title: "提示",
@@ -974,24 +983,26 @@ export default {
     },
     // 新增采购往来单位/结算方式/票据类型改变时触发
     addChange1(value) {
-      // console.log(value)
       this.guestId = value;
       let btype = this.transitUnitList.filter(item => {
         return item.id === value;
       });
+      console.log(btype)
       // let btype = this.transitUnitList.filter(item => item.id = value)
-      this.billTypeName = btype[0].billTypeId;
-      this.settleTypeName = btype[0].settTypeId;
+      this.billTypeId = btype[0].billTypeId;
+      this.settleTypeId = btype[0].settTypeId;
     },
     // 新增采购结算方式改变时触发
     addChange2(value) {
       // console.log(value)
-      this.settleTypeId = value;
+      // this.settleTypeId = value;
+      this.billTypeId = value;
     },
     // 新增采购票据类型改变时触发
     addChange3(value) {
       // console.log(value)
-      this.billTypeId = value;
+      // this.billTypeId = value;
+      this.settleTypeId = value;
     },
     // 新增备注
     remarks(event) {

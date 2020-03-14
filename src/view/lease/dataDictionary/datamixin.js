@@ -41,6 +41,32 @@ let price2 = (rule, value, callback) => {
   }
 }
 
+let nameCode = (rule, value, callback) => {
+  if (!value&&value!==0) {
+    callback(new Error('字典项编码不能为空'));
+  } else {
+    let reg = /^[0-9a-zA-Z]*$/g;
+    if(!reg.test(value)){
+      callback('只能输入数字、字母')
+    }else{
+      callback()
+    }
+  }
+}
+
+let typeCode = (rule, value, callback) => {
+  if (!value&&value!==0) {
+    callback(new Error('类型编码不能为空'));
+  } else {
+    let reg = /^[0-9a-zA-Z]*$/g;
+    if(!reg.test(value)){
+      callback('只能输入数字、字母')
+    }else{
+      callback()
+    }
+  }
+}
+
 export const dataMixin = {
   data(){
     return {
@@ -79,7 +105,7 @@ export const dataMixin = {
       },
       ruleValidate: {
         dicCode: [
-          { required: true, message: '字典项代码不能为空', trigger:'blur' }
+          { required: true, validator: nameCode, trigger: 'blur' }
         ],
         dicName: [
           { required: true,message:'字典项名称不能为空', trigger: 'blur'}
@@ -93,7 +119,7 @@ export const dataMixin = {
       },
       ruleModelData: {
         dictCode: [
-          { required: true, message: '类型编码不能为空', trigger:'blur' }
+          { required: true, validator:typeCode,  trigger:'blur' }
         ],
         dictName: [
           { required: true, message: '类型名称不能为空', trigger:'blur' }
@@ -144,6 +170,7 @@ export const dataMixin = {
         params.dictName = dictName
       }
       this.loading = true
+      this.selectTreeItem = "";
       getDataDictionaryType(params).then(res => {
         this.loading = false
         if (res.code == 0) {
@@ -166,7 +193,7 @@ export const dataMixin = {
           if(item.isSelect){
             className = 'data-dic-select'
           }
-          return h('div',{
+          return h('span',{
             style:{
               display:'inline-block',
               cursor:'pointer'
@@ -262,6 +289,13 @@ export const dataMixin = {
       this.addNewModal = true
       this.changeTreeItemTitle='添加字典类型'
       this.$refs.proModal.resetFields()
+      if(this.selectTreeItem.value){
+        let arr = this.selectTreeItem.value.split(',')
+        // arr.pop()
+        this.formModelData.parentMenu = arr
+      }else if(this.selectTreeItem.parentId==0){
+        this.formModelData.parentMenu = []
+      }
       if(this.formModelData.id){
         delete this.formModelData.id
       }
@@ -271,12 +305,13 @@ export const dataMixin = {
       this.changeTreeItemTitle='修改字典类型'
       if(this.selectTreeItem){
         this.addNewModal = true
+        this.$refs.proModal.resetFields();
         this.formModelData.dictCode = this.selectTreeItem.dictCode
         this.formModelData.dictName = this.selectTreeItem.dictName
         this.formModelData.dictDescribe = this.selectTreeItem.dictDescribe
-        if(this.selectTreeItem.__value){
-          let arr = this.selectTreeItem.__value.split(',')
-          arr.pop()
+        if(this.selectTreeItem.value){
+          let arr = this.selectTreeItem.value.split(',')
+          // arr.pop()
           this.formModelData.parentMenu = arr
         }else if(this.selectTreeItem.parentId==0){
           this.formModelData.parentMenu = []
@@ -301,6 +336,7 @@ export const dataMixin = {
             if(res.code==0){
               this.addNewModal = false
               this.$Message.success("保存成功")
+              this.selectTreeItem = "";
               this.getList()
             }
           })

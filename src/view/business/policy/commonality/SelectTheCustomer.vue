@@ -209,13 +209,13 @@
                         if(item.children){
                             item.children.map(val => {
                                 val.value = val.id
-                                val.label = item.title
+                                val.label = val.title
                             })
                         }else {
                             delete item.children
                         }
                     })
-                    this.clientType = res.data
+                    this.clientType = data
                 }
 
             },

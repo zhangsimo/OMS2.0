@@ -94,7 +94,12 @@
       },
       //更多搜索
       getMoreSearch() {
-        // console.log('我是打印出来的moressearch',this.data)
+          if(this.data.createTimeStart){
+              this.data.createTimeStart=this.data.createTimeStart.substr(0,10)+' 00:00:00';
+          }
+          if(this.data.createTimeEnd){
+              this.data.createTimeEnd=this.data.createTimeEnd.substr(0,10)+' 23:59:59';
+          }
         this.$emit('moreQuery' , this.data)
         this.moreQueryShow=false
       }

@@ -81,7 +81,7 @@
             field="adjustQty"
             title="本次调整数量"
             :edit-render="{ name: 'input' }"
-            width="120"
+            width="160"
           >
             <template v-slot:edit="{ row }">
               <el-input-number
@@ -89,7 +89,7 @@
                 :max="row.orderQty"
                 v-model="row.adjustQty"
                 :controls="false"
-                size="small"
+                size="mini"
                 :precision="0"
               />
             </template>
@@ -154,7 +154,10 @@ export default class AdjustModel extends Vue {
     let res: any = await api.queryModifyOrder(data);
     if (res.code == 0) {
       this.loading = false;
-      this.tableData = res.data;
+      this.tableData = res.data.map(el => {
+        el.adjustQty = 0;
+        return el;
+      });
     }
   }
 

@@ -35,7 +35,7 @@
             ></vxe-table-column>
             <vxe-table-column field="name" title="操作" width="100">
               <template v-slot="{ row }">
-                <a href="javascript:;" @click="add">添加</a>
+                <a href="javascript:;" @click="add(row)">添加</a>
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -101,7 +101,7 @@
               width="120"
             ></vxe-table-column>
             <!-- <vxe-table-column field="serviceType" title="收支项目" width="120" 
-            :edit-render="{name: 'Select', options: selectrow.revenueTypes}"
+            :edit-render="{name: 'Select', options: revenueTypes}"
             ></vxe-table-column> -->
             <vxe-table-column
               title="收支项目"
@@ -117,7 +117,7 @@
                   @on-change="changeSelect(scope)"
                 >
                   <Option
-                    v-for="item in selectrow.revenueTypes"
+                    v-for="item in revenueTypes"
                     :value="item.value"
                     :key="item.value"
                     :disabled="item.disabled"
@@ -126,7 +126,7 @@
                 </Select>
               </template>
               <template v-slot="{ row }">{{
-                getSelectLabel(row.serviceType, selectrow.revenueTypes)
+                getSelectLabel(row.serviceType, revenueTypes)
               }}</template>
             </vxe-table-column>
             <vxe-table-column
@@ -244,6 +244,7 @@ export default class FeeRegistration extends Vue {
       total: 0
     };
     this.getList();
+    this.getInfo();
   }
 
   private query() {
@@ -284,18 +285,18 @@ export default class FeeRegistration extends Vue {
     this.getList();
   }
 
-  private async getInfo(data) {
+  private async getInfo() {
     this.tableInfoData = new Array();
     this.loading2 = true;
-    let res: any = await api.getFee({}, data);
+    let res: any = await api.getFee({}, { serviceId: this.serviceId });
     if (res.code == 0) {
       this.loading2 = false;
       let resData = res.data || [];
       this.tableInfoData = resData.map((el: any) => {
         el.serviceType = el.serviceType.value;
         el.fullName = el.guestName;
-        for (let index in this.selectrow.revenueTypes) {
-          let o = this.selectrow.revenueTypes[index]
+        for (let index in this.revenueTypes) {
+          let o = this.revenueTypes[index]
           if (o.value == el.serviceType) {
             o.disabled = true;
             break;
@@ -308,13 +309,8 @@ export default class FeeRegistration extends Vue {
 
   // 选中行
   private currentChangeEvent({ row }) {
-    let data = {
-      guestId: row.id,
-      serviceId: this.serviceId
-    };
     row.revenueTypes = this._.cloneDeep(this.revenueTypes);
     this.selectrow = row;
-    this.getInfo(data);
   }
 
   private async save() {
@@ -358,7 +354,7 @@ export default class FeeRegistration extends Vue {
   private changeSelect(scope) {
     const row = scope.row;
     const val = row.serviceType;
-    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el: any) => {
+    this.revenueTypes = this.revenueTypes.map((el: any) => {
       el.disabled = false;
       if (el.value == val) {
         el.disabled = true;
@@ -366,7 +362,7 @@ export default class FeeRegistration extends Vue {
       return el;
     });
     this.tableInfoData.forEach((el: any) => {
-      this.selectrow.revenueTypes.forEach((els: any) => {
+      this.revenueTypes.forEach((els: any) => {
         if (el.serviceType == els.value) {
           els.disabled = true;
         }
@@ -377,11 +373,12 @@ export default class FeeRegistration extends Vue {
   }
 
   // 添加
-  private add() {
-    if(!this.selectrow) {
-      return this.$Message.error("请先选择往来单位");
-    }
-    if (this.tableInfoData.length >= this.selectrow.revenueTypes.length) {
+  private add(selectRow: any) {
+    // if(!this.selectrow) {
+    //   return this.$Message.error("请先选择往来单位");
+    // }
+
+    if (this.tableInfoData.length >= this.revenueTypes.length) {
       return this.$Message.error("总条数不能超过收支项目条数");
     }
     let row = {
@@ -389,10 +386,10 @@ export default class FeeRegistration extends Vue {
       duePayableAmt: 0,
       remark: "",
       serviceType: "",
-      fullName: this.selectrow.fullName,
+      fullName: selectRow.fullName,
       createUname: this.user.userData.staffName,
       createTime: tools.transTime(new Date()),
-      guestId: this.selectrow.id,
+      guestId: selectRow.id,
     };
     this.tableInfoData.push(row);
   }
@@ -402,7 +399,7 @@ export default class FeeRegistration extends Vue {
     const row = this.tableInfoData[index];
     const val = row.serviceType;
     // console.log(row)
-    this.selectrow.revenueTypes = this.selectrow.revenueTypes.map((el: any) => {
+    this.revenueTypes = this.revenueTypes.map((el: any) => {
       if (el.value == val) {
         el.disabled = false;
       }

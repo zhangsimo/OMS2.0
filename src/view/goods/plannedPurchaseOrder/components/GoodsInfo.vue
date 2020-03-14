@@ -341,11 +341,13 @@ export default class GoodsInfo extends Vue {
   }
 
   private selectLogis(val:any) {
-    this.formDateRight.logisticsComp = val.label || "";
-    if(this.formDateRight.deliveryLogistics != "") {
-      this.logisRequired = false;
-    } else {
-      this.logisRequired = true;
+    if(val){
+      this.formDateRight.logisticsComp = val.label || "";
+      if(this.formDateRight.deliveryLogistics != "") {
+        this.logisRequired = false;
+      } else {
+        this.logisRequired = true;
+      }
     }
   }
 
@@ -444,8 +446,8 @@ export default class GoodsInfo extends Vue {
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = row.logisticsRecord
-    this.formDateRight.businessNum = row.logisticsRecord.businessNum || this.row.serviceId;
+    this.formDateRight = {...row.logisticsRecord}
+    this.formDateRight.businessNum = this.formDateRight.businessNum || this.row.serviceId;
     this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
     this.formDateRight.settleType = this.formDateRight.settleType + "";
     // if (row.logisticsRecord) {

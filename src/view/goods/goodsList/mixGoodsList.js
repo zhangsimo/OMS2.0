@@ -307,10 +307,11 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      this.tableData = this.tableData.concat(v);
+      // this.tableData = this.tableData.concat(v);
+      let oldArr = [...v,...this.tableData]
       // console.log(this.tableData, "this.tableData  ==>267");
       // console.log(this.tableData, "this.tableData.concat(v) =>267");
-      var oldArr = this.tableData;
+      // var oldArr = this.tableData;
       // console.log(oldArr, "oldArr =>269");
       var allArr = [];
       for (var i = 0; i < oldArr.length; i++) {
@@ -324,6 +325,7 @@ export const mixGoodsData = {
           allArr.push(oldArr[i]);
         }
       }
+      console.log(allArr)
       this.tableData = allArr;
     },
 
@@ -355,7 +357,9 @@ export const mixGoodsData = {
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
-      this.selectLeftItemId = v.id
+      if(v){
+        this.selectLeftItemId = v.id
+      }
       if (this.newadd && v) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -408,7 +412,6 @@ export const mixGoodsData = {
       this.$refs.selectSupplier.getList();
     },
     setFormPlanmain(v){
-      console.log(v)
       if (v) {
         if (this.newadd && this.selectPlanOrderItem.new) {
           this.tbdata.splice(0, 1);

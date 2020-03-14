@@ -346,7 +346,8 @@ export default {
       clickdelivery: false,
       Flaga: false,
       successNOid: false,
-      successHaveId: false
+      successHaveId: false,
+      selectLeftItemId:"",
     }
   },
   methods: {
@@ -458,6 +459,9 @@ export default {
       this.buttonDisable = false
       this.presentrowMsg = 0
       this.rowId = ''
+      for(let b of this.Left.tbdata){
+        b._highlight = false
+      }
       if (!this.isAdd) {
         return this.$Message.error('请先保存数据');
       }
@@ -733,7 +737,7 @@ export default {
         data.partName = this.moreArr.Name
       }
       if(this.moreArr.brand){
-        data.partBrandCode = this.moreArr.brand
+        data.partBrand = this.moreArr.brand
       }
       if(this.moreArr.Accessories){
         data.commitUname = this.moreArr.Accessories
@@ -741,13 +745,23 @@ export default {
       optGroup({params:params,data:data}).then(res => {
         if(res.code === 0){
           this.Left.tbdata = res.data.content
-          this.Left.page.total = res.data.totalElements
+          this.Left.page.total = res.data.totalElements;
+
+          for(let b of this.Left.tbdata){
+            b._highlight = false
+            if(b.id==this.selectLeftItemId){
+              b._highlight = true;
+              this.setRightData(b);
+              break;
+            }
+          }
         }
       })
     },
     // 左边部分的当前行
     selection(row){
       if (row == null) return;
+      this.selectLeftItemId = row.id
       let currentRowTable = this.$refs["currentRowTable"];
       // console.log(currentRowTable.clearCurrentRow)
       if(!this.Flaga && !this.isAdd && row.id){
@@ -789,38 +803,51 @@ export default {
             this.formPlan.salesman =  '', //业务员
               this.formPlan.Reservation =  '',
               this.formPlan.remark =  '',
-              this.Right.tbdata = []
+              this.Right.tbdata = [];
+
+            for(let b of this.Left.tbdata){
+              b._highlight = false
+              if(b.id==this.selectLeftItemId){
+                b._highlight = true;
+                this.setRightData(b)
+                break;
+              }
+            }
           },
         })
       }else{
-        this.mainId = row.id
-        this.guestidId = row.guestId
-        this.datadata = row
-        if(row.id){
-          // this.leftgetList();
-          this.LeadIn = false
-            this.formPlan.salesman = this.datadata.salesman
-            this.formPlan.Reservation = this.datadata.orderNo
-            this.formPlan.orderDate = this.datadata.expectedArrivalDate
-            this.formPlan.remark = this.datadata.remark
-            this.Right.tbdata = this.datadata.detailVOList
-            console.log(this.datadata.detailVOList,"13456")
-            this.presentrowMsg = row.status.value
-            // console.log(this.presentrowMsg)
-            this.rowId = row.id
-            this.buttonDisable = false
-        }else {
-          this.formPlan.salesman = this.$store.state.user.userData.staffName
-          this.formPlan.Reservation = ''
-          this.formPlan.orderDate = ''
-          this.formPlan.remark = ''
-          this.rowId = ''
-          this.Right.tbdata = []
-        }
+        this.setRightData(row);
       }
     },
     Determined(){
 
+    },
+    //填充右侧数据
+    setRightData(row){
+      this.mainId = row.id
+      this.guestidId = row.guestId
+      this.datadata = row
+      if(row.id){
+        // this.leftgetList();
+        this.LeadIn = false
+        this.formPlan.salesman = this.datadata.salesman
+        this.formPlan.Reservation = this.datadata.orderNo
+        this.formPlan.orderDate = this.datadata.expectedArrivalDate
+        this.formPlan.remark = this.datadata.remark
+        this.Right.tbdata = this.datadata.detailVOList
+        console.log(this.datadata.detailVOList,"13456")
+        this.presentrowMsg = row.status.value
+        // console.log(this.presentrowMsg)
+        this.rowId = row.id
+        this.buttonDisable = false
+      }else {
+        this.formPlan.salesman = this.$store.state.user.userData.staffName
+        this.formPlan.Reservation = ''
+        this.formPlan.orderDate = ''
+        this.formPlan.remark = ''
+        this.rowId = ''
+        this.Right.tbdata = []
+      }
     },
     // 提交按钮
     instance () {

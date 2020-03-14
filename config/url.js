@@ -2,13 +2,14 @@ import env from "./env";
 
 const dev = {
   tokenApi: "http://192.168.2.47:5600", // 登录接口API
-  omsApi: "http://192.168.30.221:9240", //徐林烽
-  wmsApi: "http://192.168.30.221:9250", // 徐林烽
-  omsOrder: "http://192.168.30.221:9210", // 徐林烽
-  omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.221:9200",
-  // omsOrder:'http://192.168.30.221:9210', //陈舒
-  omsSettle: "http://192.168.30.221:9270",
+  omsApi: "http://192.168.2.47:9240", //徐林烽
+  wmsApi: "http://192.168.30.21:9250", // 徐林烽
+  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.21:9200",
+  // omsOrder:'http://192.168.30.21:9210', //陈舒
+  omsSettle: "http://192.168.30.21:9270",
+  // omsSettle: "http://10.8.0.26:9270",
   /**oms系统接口设定 */
   authApi: "http://192.168.2.47:5200", // 系统资源 5200
   // omsProduct: '', // 9200
@@ -20,6 +21,7 @@ const dev = {
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
   omsSotck: "http://192.168.30.179:9280", //9280
+
   //passportApi: 'https://api.g-parts.cn/gpart-passport-provider',
   uploadApi: "http://192.168.2.47:5100/file/uploadFile",
   upbase64Api: "http://192.168.30.179:5100/file/uploadFileNew",
@@ -36,11 +38,14 @@ const test = {
   omsEdit: "https://tsapi2.g-parts.cn/oms-edi-provider",
   omsApi: "https://tsapi2.g-parts.cn/oms-lease-provider",
   tokenApi: "https://tsapi2.g-parts.cn",
+  // tokenApi: "http://192.168.30.226:5600",
   wmsApi: "https://tsapi2.g-parts.cn/oms-system-provider",
   omsProduct: "https://tsapi2.g-parts.cn/oms-product-provider",
   omsOrder: "https://tsapi2.g-parts.cn/oms-order-provider",
   passportApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
+  // passportApi: "http://192.168.30.226:5200",
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
+  // authApi: "http://192.168.30.226:5200",
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
   omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
@@ -66,7 +71,7 @@ const audit = {
   essentialApi: "https://uatapi2.g-part.cn/oms-essential-provider",
   authApi: "https://uatapi2.g-part.cn/gpart-passport-provider",
   omsBatch: "https://uatapi2.g-part.cn/oms-batch-provider",
-  omsSettle: "https://uatapi2.g-part.cn/oms-settlement-provider",
+  omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://uatapi2.g-part.cn/oms-stock-provider",
   uploadApi:
     "https://uatapi2.g-part.cn/gpart-essential-provider/file/uploadFile",

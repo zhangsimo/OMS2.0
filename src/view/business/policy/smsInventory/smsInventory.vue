@@ -165,7 +165,7 @@
                       class="mr10"
                       @click="addPro"
                       v-has="'addPro'"
-                      :disabled="draftShow != 0"
+                      :disabled="draftShow != 0||!formPlan.storeId"
                     >
                       <Icon type="md-add" />添加配件
                     </Button>
@@ -191,14 +191,14 @@
                       :before-upload="handleBeforeUpload"
                       :on-format-error="onFormatError"
                       :on-success="handleSuccess"
-                      :disabled="draftShow != 0"
+                      :disabled="draftShow != 0||!formPlan.serviceId"
                     >
                       <Button
                         @click="importAss"
                         size="small"
                         class="mr10"
                         v-has="'import'"
-                        :disabled="draftShow != 0"
+                        :disabled="draftShow != 0||!formPlan.storeId"
                       >导入</Button>
                     </Upload>
                     <!-- <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">
@@ -333,6 +333,7 @@ export default {
       tabIndex: 0,
       curronly: false,
       purchaseType: 99, //查询选项
+      flag:0,
       purchaseTypeArr: [
         {
           label: "所有",
@@ -350,7 +351,7 @@ export default {
 
         {
           label: "已完成",
-          value: 4
+          value: 8
         },
         {
           label: "已作废",
@@ -411,7 +412,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "subMan",
             minWidth: 200
           },
           {
@@ -614,8 +615,14 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      this.Left.tbdata = val.data.content || [];
-      this.Left.page.total = val.totalElements;
+      console.log(val)
+      let arrData = val.data.content||[]
+      arrData.map((item, index) => {
+        item["index"] = index + 1;
+        item["statuName"] = item.billStatusId.name;
+      });
+      this.Left.tbdata = arrData;
+      this.Left.page.total = val.data.totalElements;
     },
     //新增
     addProoo() {
@@ -636,8 +643,9 @@ export default {
           value: 0
         },
         statuName: "草稿",
-        checkDate: "",
-        orderMan: "",
+        checkDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        orderMan: this.$store.state.user.userData.staffName || "", //盘点人
+        orderManId: this.$store.state.user.userData.id || "", //盘点人id
         serviceId: "",
         print: "",
         createUname: "",
@@ -662,6 +670,10 @@ export default {
     },
     // 提交
     editPro() {
+      //判断是否是新增状态
+      if(this.flag){
+        return this.$Message.error("请先完善当前新增信息");
+      }
       //判断是否为草稿状态
       if (this.Right.tbdata.length < 1) {
         this.$Message.error("请选择数据");
@@ -796,7 +808,7 @@ export default {
     },
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.formPlan.id);
+      this.$refs.printBox.openModal(this.formPlan.id,this.warehouseList);
     },
 
     //添加配件
@@ -864,6 +876,9 @@ export default {
     },
     //导入
     importAss() {
+      if(!this.formPlan.serviceId){
+        return this.$Message.warning("请先保存信息生成盘点单号才能导入配件");
+      }
       this.upurl = `${importAccessories}?id=${this.formPlan.id}`;
     },
     // handleSuccess(res, file) {

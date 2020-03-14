@@ -21,7 +21,7 @@ export function queryAllRoles (params) {
 }
 
 //新增角色
-export function  addNewStaffe(data) {
+export function addNewStaffe(data) {
   return axios.request({
     url:`${api.authApi}/role/save`,
     method:'post',
@@ -69,10 +69,29 @@ export function getStaff (data) {
   })
 }
 
+// 获取员工wms
+export function getStaffWms (params, data) {
+  return axios.request({
+    url: `${api.authApi}/staff/findAllTenantUsersRoleWms`,
+    method: 'post',
+    data,
+    params,
+  })
+}
+
 //员工改变权限保存
 export function saveStaffJurisdiction (data) {
   return axios.request({
     url: `${api.authApi}/staff/changeUserRoles`,
+    method: 'post',
+    data
+  })
+}
+
+//员工改变权限保存wms
+export function saveStaffJurisdictionWms (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/addWMSChangeUserRoles`,
     method: 'post',
     data
   })
@@ -87,12 +106,29 @@ export function saveOrder (data) {
   })
 }
 
+//删除wms权限
+export function deleteWMSChangeUserRoles (data) {
+  return axios.request({
+    url: `${api.authApi}/staff/deleteWMSChangeUserRoles`,
+    method: 'post',
+    data
+  })
+}
+
 
 //获取树形
 // 查询整个资源树
 export function findRootRes () {
   return axios.request({
     url: `${api.authApi}/resource/findRootResShop`,
+    method: 'get'
+  })
+}
+
+// 查询整个wms资源树
+export function findRootResWms () {
+  return axios.request({
+    url: `${api.authApi}/resource/findRootResShopWms`,
     method: 'get'
   })
 }

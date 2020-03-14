@@ -55,7 +55,7 @@ export const getup = `${api.omsOrder}/preOrderMain/import?`;
 // tenantUsers/queryAll?size=10&page=0&userName=&
 export function queryAll (params) {
   return axios.request({
-    url: `${api.authApi}/tenantUsers/queryAll?size=1000&page=0&userName=&phone=`,
+    url: `${api.authApi}/tenantUsers/queryAllSalesman?size=1000&page=0&userName=&phone=`,
     method: 'get',
     params
   })
