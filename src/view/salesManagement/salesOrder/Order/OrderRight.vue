@@ -856,10 +856,10 @@ export default {
           });
           data = this.formPlan;
           data.detailList = val;
-          let res = await getAccessories(data);
-          if (res.code === 0) {
-            this.getList();
-          }
+          // let res = await getAccessories(data);
+          // if (res.code === 0) {
+          //   this.getList();
+          // }
         } else {
           this.$Message.error("*为必填项");
         }
