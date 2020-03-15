@@ -99,14 +99,14 @@
           </Col>
           <Col span="12">
             <FormItem label="关联仓库：">
-              <Select v-model="formData.auxiliaryAccountingCode" style="width:200px">
-                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              <Select v-model="formData.warehouseCode" style="width:200px">
+                <Option v-for="item in WareHouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <FormItem label="是否必选款项分类:" >
-          <Checkbox v-model="formData.single" :true-value="1" :false-value="0">是</Checkbox>
+          <Checkbox v-model="formData.isAuxiliaryAccounting" :true-value="1" :false-value="0">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -176,14 +176,14 @@
           </Col>
           <Col span="12">
             <FormItem label="关联仓库：">
-              <Select v-model="ChangeData.auxiliaryAccountingCode" style="width:200px">
-                <Option v-for="item in assistList" :value="item.itemCode" :key="item.id">{{ item.itemName }}</Option>
+              <Select v-model="ChangeData.warehouseCode" style="width:200px">
+                <Option v-for="item in WareHouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
               </Select>
             </FormItem>
           </Col>
         </Row>
         <FormItem label="是否必选款项分类:" >
-          <Checkbox v-model="ChangeData.single" :true-value="1" :false-value="0">是</Checkbox>
+          <Checkbox v-model="ChangeData.isAuxiliaryAccounting" :true-value="1" :false-value="0">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -197,6 +197,9 @@
 
 <script>
     import {getTreeList ,getTableList , fzType , getSave , kmType ,deletTableList}from '@/api/accountant/accountant'
+    import {
+      getWarehouseList,
+    } from "_api/salesManagment/sellReturn.js";
 
     export default {
         name: "accounting",
@@ -212,6 +215,7 @@
                 formData:{},//新增数据
                 ChangeData:{},//改变增加子项目数据
                 assistList:[{itemName: '暂无' , itemCode: 'null'}],// 辅助列表
+               WareHouseList:[],//仓库
                 ruleValidate:{
                     titleCode:[
                         { required: true, message: '必填', trigger: 'blur' }
@@ -232,6 +236,7 @@
            this.getTreeList()
            this.getAssistList()
             this.getSubjectType()
+          this.getWarehouse()
         },
         methods: {
             //获取左侧树形图数据
@@ -281,6 +286,17 @@
                   this.subjectList = res.data
               }
             },
+
+          // 获取仓库
+          async getWarehouse() {
+            let res = await getWarehouseList({
+              groupId: this.$store.state.user.userData.groupId
+            });
+            if (res.code === 0) {
+              this.WareHouseList = res.data;
+              console.log(res)
+            }
+          },
 
             //新增
             add(){

@@ -665,7 +665,7 @@ export default {
           title: "产品名称",
           align: "center",
           width: 168,
-          key: "name"
+          key: "productName"
         },
         {
           title: "产品类型",
@@ -673,7 +673,6 @@ export default {
           minWidth: 168,
           key: "type",
           render: (h, params) => {
-            console.log(params.row);
             let zi = "";
             if (params.row.type === 0) {
               zi = "功能模块";
@@ -681,7 +680,6 @@ export default {
             if (params.row.type === 1) {
               zi = "接口调用";
             }
-            // console.log(paymentType.name)
             return h("span", zi);
           }
         },
@@ -689,7 +687,7 @@ export default {
           title: "开通时间",
           align: "center",
           minWidth: 168,
-          key: "createTime"
+          key: "paymentDate"
         },
         {
           title: "结束时间",

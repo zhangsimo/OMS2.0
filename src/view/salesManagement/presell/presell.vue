@@ -426,7 +426,7 @@ import {
   getup
 } from "_api/salesManagment/presell.js";
 import getDate from "@/components/getDate/dateget";
-import goodsInfo from "../../goods/plannedPurchaseOrder/components/GoodsInfo";
+import goodsInfo from "../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
 import selectTheCustomer from "../commonality/SelectTheCustomer.vue";
 import selectPartCom from "../salesOrder/components/selectPartCom";
 import MoreSearch from "./components/MoreSearch";

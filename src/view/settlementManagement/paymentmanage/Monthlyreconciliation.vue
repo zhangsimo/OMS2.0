@@ -7,7 +7,7 @@
             <div class="wlf">
               <div class="db ml20">
                 <span>对账门店：</span>
-                <Select v-model="model1" class="w150" @on-change="storeAccount">
+                <Select filterable v-model="model1" class="w150" @on-change="storeAccount">
                   <Option
                     v-for="item in Branchstore"
                     :value="item.value"
@@ -17,7 +17,7 @@
               </div>
               <div class="db ml20">
                 <span>往来单位：</span>
-                <Select v-model="companyInfo" style="width:200px" @on-change="companySelect">
+                <Select filterable v-model="companyInfo" style="width:200px" @on-change="companySelect">
                   <Option
                     v-for="item in companyList"
                     :value="item.value"

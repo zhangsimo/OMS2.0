@@ -26,10 +26,14 @@
           <Input v-model="data.partName"  style="width: 350px" />
         </FormItem>
         <FormItem label="退货员:">
-          <Input v-model="data.orderMan"  style="width: 350px" />
+          <Select v-model="data.orderMan" class="w300 ml5" label-in-value filterable>
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="创建人:">
-          <Input v-model="data.createUname"  style="width: 350px" />
+          <Select v-model="data.createUname" class="w300 ml5" label-in-value filterable>
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
 
       </Form>
@@ -42,7 +46,7 @@
 </template>
 
 <script>
-  import {getClient} from '@/api/salesManagment/salesOrder'
+  import {getClient, getCRman} from '@/api/salesManagment/salesOrder'
   import {getMoreList} from "_api/salesManagment/presell.js";
   import * as tools from "../../../../utils/tools";
   export default {
@@ -54,6 +58,7 @@
       return {
         moreQueryShow: false,//模态框是否展示
         clientList:[],//客户下拉框
+        salesList: [],
         // data:{},  //表单数据 prop已经赋值过了你再赋值干嘛???
         page: {
           total: 0,
@@ -64,11 +69,27 @@
     },
     mounted(){
       this.getAllClient()
+      this.getAllSales()
     },
     methods: {
+      setDate(date) {
+        let s = date[0] + " 00:00:00"
+        let e = date[1] + " 23:59:59"
+        return [s, e]
+      },
       openModal() {
         this.moreQueryShow = true
       },
+      async getAllSales() {
+      let res = await getCRman();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.forEach(item => {
+          item.label = item.userName;
+          item.value = item.id;
+        });
+      }
+    },
       //获取公司
       async getAllClient() {
         let res = await getClient()
@@ -79,21 +100,11 @@
       },
       //获取创建时间
       getCreatDate(date) {
-        // console.log(date)
-        // this.data.startTime = date[0] + " " + "00:00:00"
-        // this.data.endTime = date[1] + ' ' + '23:59:59'
-        this.data.startTime=tools.transTime(date[0])
-        this.data.endTime =tools.transTime(date[1])
-        // console.log('666',this.data.startTime,  this.data.endTime)
+        [this.data.startTime, this.data.endTime] = this.setDate(date)
       },
       //提交日期
       submitDate(date) {
-        // console.log('444',date)
-        // this.data.auditStartDate = date[0] + " " + "00:00:00"
-        // this.data.auditEndDate= date[1] + ' ' + '23:59:59'
-        this.data.auditStartDate =tools.transTime(date[0])
-          this.data.auditEndDate=tools.transTime(date[1])
-        // console.log('777',this.data.auditStartDate, this.data.auditEndDate)
+        [this.data.auditStartDate,this.data.auditEndDate] = this.setDate(date)
       },
       //更多搜索
       getMoreSearch() {

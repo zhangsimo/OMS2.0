@@ -39,6 +39,7 @@
           :columns="columns"
           :data="managementList"
           @on-current-change="pitchSupplier"
+          ref="currtable"
         ></Table>
       </div>
       <Page
@@ -168,6 +169,7 @@ export default {
       }
       let res = await getSupplierformation(data);
       if (res.code == 0) {
+        this.pitchSupplierOne = {}
         this.loading = false;
         this.managementList = res.data.content;
         this.page.total = res.data.totalElements;
@@ -218,6 +220,8 @@ export default {
       }
     },
     addClient() {
+      this.$refs.currtable.clearCurrentRow()
+      this.pitchSupplierOne = {}
       this.$refs.child.resetFields();
       this.clientList = {};
       this.$refs.child.addPicture();
@@ -232,7 +236,7 @@ export default {
         if (res.code == 0) {
           this.$message.success("保存成功");
           this.clientDataShow = false;
-          this.pitchSupplierOne = [];
+          this.pitchSupplierOne = {};
           this.clientList = {}
           this.$refs.child.resetFields();
           this.getlist();
@@ -243,7 +247,7 @@ export default {
       return moment(val).format("YYYY-MM-DD HH:mm:ss");
     },
     cancel() {
-      this.pitchSupplierOne = [];
+      this.pitchSupplierOne = {};
       this.getlist();
       this.clientDataShow = false;
     },

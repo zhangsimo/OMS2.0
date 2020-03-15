@@ -361,7 +361,7 @@
 
 <script>
 import ClientData from "../../../system/essentialData/clientManagement/ClientData";
-import goodsInfo from "../../../goods/plannedPurchaseOrder/components/GoodsInfo";
+import goodsInfo from "../../../AlotManagement/transferringOrder/applyFor/compontents/goodsInfo/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
@@ -856,10 +856,10 @@ export default {
           });
           data = this.formPlan;
           data.detailList = val;
-          let res = await getAccessories(data);
-          if (res.code === 0) {
-            this.getList();
-          }
+          // let res = await getAccessories(data);
+          // if (res.code === 0) {
+          //   this.getList();
+          // }
         } else {
           this.$Message.error("*为必填项");
         }

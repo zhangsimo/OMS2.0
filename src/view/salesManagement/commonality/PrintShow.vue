@@ -17,9 +17,11 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
+              <span>{{onelist.addr}}</span>
             </p>
             <p>
               <span>电话:</span>
+              <span>{{onelist.tel}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
@@ -41,13 +43,13 @@
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.addr}}</span>
+              <span>{{onelist.guestAddr}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>联系人:</span>
-              <span>{{onelist.orderMan}}</span>
+              <span>{{onelist.contactor}}</span>
             </p>
             <p>
               <span>票据类型:</span>
@@ -57,7 +59,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.tel}}</span>
+              <span>{{onelist.contactorTel}}</span>
             </p>
             <p>
               <span>结算方式:</span>
