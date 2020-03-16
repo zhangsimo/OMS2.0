@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -404,7 +404,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
-      this.model1 = this.$store.state.user.userData.shopId
+      // this.model1 = this.$store.state.user.userData.shopId
       this.getTransferStock()
     },
     // 主表查询
@@ -416,6 +416,9 @@ export default {
         guestId: this.companyId,
         orderTypeId:this.type
       };
+      if (obj.endTime) {
+        obj.endTime = obj.endTime.split(' ')[0] + " 23:59:59"
+      }
       transferStock(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {

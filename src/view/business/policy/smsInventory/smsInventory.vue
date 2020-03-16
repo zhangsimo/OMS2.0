@@ -272,6 +272,7 @@
       :getShowMore="showMore"
       @getMoreStatus="getMoreStatus"
       @getMoreData="getMoreData"
+      :billStatusId="purchaseType"
       ref="More"
     ></More>
     <!-- 作废提示 -->
@@ -615,7 +616,6 @@ export default {
     },
     //更多搜索接收调拨申请列表
     getMoreData(val) {
-      console.log(val)
       let arrData = val.data.content||[]
       arrData.map((item, index) => {
         item["index"] = index + 1;

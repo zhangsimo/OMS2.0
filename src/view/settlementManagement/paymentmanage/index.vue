@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -1041,6 +1041,9 @@ export default {
     },
     // 应收应付接口
     getGeneral(obj) {
+      if (obj.endDate) {
+        obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
+      }
       getreceivable(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {

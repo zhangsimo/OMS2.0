@@ -961,6 +961,13 @@ export default {
     },
     // 保存接口
     getPreservation(num) {
+      // if (this.paymentlist.length == 0 || this.collectlist.length == 0) {
+      //   return this.$message({
+      //     message: "请勾选数据",
+      //     type: "error",
+      //     customClass: "zZindex"
+      //   });
+      // }
       if (this.totalvalue === "0") {
         if (!this.collectionAccountName)
           return this.$message.error("收款户名不能为空");
@@ -992,16 +999,16 @@ export default {
           return "";
         }
       }
-      if (!this.remark) {
-        // this.$message.error("请填写备注");
-        this.$message({
-          message: "请填写备注",
-          type: "error",
-          customClass: "zZindex"
-        });
-        return "";
-      }
       if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
+        if (!this.remark) {
+          // this.$message.error("请填写备注");
+          this.$message({
+            message: "请填写备注",
+            type: "error",
+            customClass: "zZindex"
+          });
+          return "";
+        }
         let one = [
           {
             number: "3",
@@ -1066,7 +1073,7 @@ export default {
         });
       } else {
         // this.$message.error("请选择要对账的数据");
-        this.$message({
+        return this.$message({
           message: "请选择要对账的数据",
           type: "error",
           customClass: "zZindex"

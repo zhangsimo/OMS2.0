@@ -777,19 +777,19 @@ export default {
       //     return;
       //   }
       // });
-      if (!this.Leftcurrentrow.id) {
-        this.$Message.error("请选择数据");
-        return;
-      }
-      if (
-        !this.Leftcurrentrow.receiveStoreId ||
-        !this.Leftcurrentrow.storeId ||
-        !this.Leftcurrentrow.createUname ||
-        !this.Leftcurrentrow.serviceId
-      ) {
-        this.$Message.error("请填写移仓信息");
-        return;
-      }
+      // if (!this.Leftcurrentrow.id) {
+      //   this.$Message.error("请选择数据");
+      //   return;
+      // }
+      // if (
+      //   !this.Leftcurrentrow.receiveStoreId ||
+      //   !this.Leftcurrentrow.storeId ||
+      //   !this.Leftcurrentrow.createUname ||
+      //   !this.Leftcurrentrow.serviceId
+      // ) {
+      //   this.$Message.error("请填写移仓信息");
+      //   return;
+      // }
       if (
         this.Leftcurrentrow.status.value &&
         this.this.Leftcurrentrow.status.value !== 0
@@ -798,6 +798,7 @@ export default {
         return;
       }
       this.Leftcurrentrow.billStatusId = 1;
+      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       getSubmitList(params)
         .then(res => {

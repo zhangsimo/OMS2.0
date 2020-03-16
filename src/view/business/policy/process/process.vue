@@ -778,9 +778,19 @@ export default {
       // if (currentNum)
       this.currentNum = parseInt(event.target.value)||1;
     },
-    selectAllEvent({ checked }) {},
+    selectAllEvent({ checked }) {
+      if (checked) {
+        this.rowId = this.Leftcurrentrow.processProductVO[0].id;
+      } else {
+        this.rowId = '';
+      }
+    },
     selectChangeEvent({ checked, row }) {
-      this.rowId = row.id;
+      if (checked) {
+        this.rowId = row.id;
+      } else {
+        this.rowId = '';
+      }
     },
     tabChange(key) {
       this.tabKey = key;
