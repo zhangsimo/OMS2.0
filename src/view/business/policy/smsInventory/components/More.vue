@@ -62,7 +62,8 @@ export default {
     };
   },
   props: {
-    getShowMore: Boolean
+    getShowMore: Boolean,
+    billStatusId: '',
   },
   methods: {
     //选择创建日期
@@ -94,6 +95,9 @@ export default {
         serviceId: this.moreData.serviceId,
         partCode: this.moreData.partCode,
         partName: this.moreData.partName
+      }
+      if (this.billStatusId != '') {
+        obj.billStatusId = this.billStatusId
       }
       getLeftList(obj, 0, 10)
         .then(res => {

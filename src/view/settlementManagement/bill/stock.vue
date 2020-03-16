@@ -455,12 +455,15 @@ export default {
         enterTypeId: this.typeName
       };
       if (this.typeName === "050202") {
-        (obj.outDateStart = this.value[0]
+        obj.outDateStart = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : ""),
-          (obj.outDateEnd = this.value[1]
+          : ""
+        obj.outDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
+            : ""
+        if (obj.outDateEnd) {
+          obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
+        }
           getOutStockList(obj).then(res => {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {

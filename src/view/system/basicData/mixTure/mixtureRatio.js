@@ -62,7 +62,7 @@ const data = function() {
               "Select",
               {
                 props: {
-                  value: 0
+                  value: params.row.isDisabled
                 },
                 style: {
                   width: "100%"

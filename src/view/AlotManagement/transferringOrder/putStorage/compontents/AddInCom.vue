@@ -227,9 +227,19 @@ export default {
     },
     init() {
       this.searchPartLayer = true;
+      this.reset()
     },
     init1() {
       this.searchPartLayer = false;
+    },
+    reset() {
+      this.penSalesData = {
+        endTime: "", //申请单号
+        startTime: "",
+        guestName: "",
+        guestId: "",
+        serviceId: ""
+      }
     },
     //选中的日期
     selectDate(date) {
