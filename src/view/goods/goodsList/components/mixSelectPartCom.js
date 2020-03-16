@@ -213,15 +213,19 @@ export const mixSelectPartCom = {
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      getCarPartClass({}).then(res => {
+      let req = {
+        page:1,
+        pageSize:500
+      }
+      getCarPartClass(req).then(res => {
         this.treeLoading = false;
         if(res.code==0){
           this.treeData = this.resetData(res.data.content || []);
-          //默认选中第一个
-          if(this.treeData.length>0){
-            this.treeData[0].selected = true
-            this.selectTreeItem = this.treeData[0];
-          }
+          // //默认选中第一个
+          // if(this.treeData.length>0){
+          //   this.treeData[0].selected = true
+          //   this.selectTreeItem = this.treeData[0];
+          // }
           this.getList();
         }
       });
