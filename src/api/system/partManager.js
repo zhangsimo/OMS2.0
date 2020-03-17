@@ -182,6 +182,15 @@ export function getLocalParts(params) {
     params
   });
 }
+//销售订单添加配件
+export function getAccessList(params,data) {
+  return axios.request({
+    url:`${api.omsOrder}/sellOrderDetail/getParts`,
+    method:'post',
+    params,
+    data
+  })
+}
 
 // 导入地址
 export const upxlxs = `${api.wmsApi}/attribute/import`;
