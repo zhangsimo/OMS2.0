@@ -315,28 +315,37 @@ export default {
         },
         {
           label: "草稿",
-          value: "DRAFT"
+          value: 0
         },
         {
-          label: "待受理",
-          value: "UNACCEPTED"
-        },
-        {
-          label: "已受理",
-          value: "ACCEPTED"
+          label: "待出库",
+          value: "1"
         },
         {
           label: "已出库",
-          value: "STOCKING"
-        },
-        {
-          label: "已拒绝",
-          value: "REJECTED"
+          value: "2"
         },
         {
           label: "已作废",
-          value: "INVALID"
-        }
+          value: "3"
+        },
+        {
+          label: "已受理",
+          value: "4"
+        },
+        {
+          label: "待受理",
+          value: "5"
+        },
+        {
+          label: "已入库",
+          value: "6"
+        },
+        {
+          label: "已拒绝",
+          value: "7"
+        },
+        
       ],
       advanced: false, //更多模块的弹框
       //左侧表格高度
@@ -567,18 +576,18 @@ export default {
         !this.Leftcurrentrow.createTime ||
         !this.Leftcurrentrow.guestName
       ) {
-        this.$Message.info("仓库和创建时间以及调出方为必输项");
+        this.$Message.error("调出仓库为必填项");
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
         if (this.Leftcurrentrow.xinzeng === "1") {
         } else {
-          this.$Message.info("请先选择加工单");
+          this.$Message.error("请先选择加工单");
           return;
         }
       }
       // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态才能进行保存操作");
+      //   this.$Message.error("只有草稿状态才能进行保存操作");
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -625,7 +634,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("保存配件组装信息失败");
+          this.$Message.error("保存配件组装信息失败");
         });
     },
     xinzeng() {
@@ -633,7 +642,7 @@ export default {
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info("请先保存数据");
+          this.$Message.error("请先保存数据");
           return;
         }
       }
@@ -680,15 +689,15 @@ export default {
     },
     tijiao1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
+        this.$Message.error("请先保存新增加工单");
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择保存申请单");
+        this.$Message.error("请先选择保存申请单");
         return;
       }
       if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前申请单已提交审核!无需重复操作");
+        this.$Message.error("当前申请单已提交审核!无需重复操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -704,7 +713,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("提交失败");
+          this.$Message.error("提交失败");
         });
     },
     zuofei1() {
@@ -712,15 +721,15 @@ export default {
         title: "是否确定作废订单!",
         onOk: () => {
           if (this.Leftcurrentrow.xinzeng === "1") {
-            this.$Message.info("请先保存新增加工单");
+            this.$Message.error("请先保存新增加工单");
             return;
           }
           if (!this.Leftcurrentrow.serviceId) {
-            this.$Message.info("请先选择加工单");
+            this.$Message.error("请先选择加工单");
             return;
           }
           if (this.Leftcurrentrow.status.value !== 0) {
-            this.$Message.info("只有草稿状态加工单能进行作废操作");
+            this.$Message.error("只有草稿状态加工单能进行作废操作");
             return;
           }
           const params = {
@@ -736,7 +745,7 @@ export default {
               }
             })
             .catch(e => {
-              this.$Message.info("作废失败");
+              this.$Message.error("作废失败");
             });
         },
         onCancel: () => {
@@ -754,12 +763,12 @@ export default {
       // if (!this.Leftcurrentrow.serviceId) {
       //   if (this.Leftcurrentrow.xinzeng) {
       //   } else {
-      //     this.$Message.info("请先选择申请单");
+      //     this.$Message.error("请先选择申请单");
       //     return;
       //   }
       // }
       // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态申请单能进行添加操作");
+      //   this.$Message.error("只有草稿状态申请单能进行添加操作");
       //   return;
       // }
       const params = {
@@ -775,7 +784,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("数据加载失败");
+          this.$Message.error("数据加载失败");
         });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
@@ -783,7 +792,7 @@ export default {
     //打印表格
     printTable() {
       if (!this.dayinCureen.id) {
-        this.$Message.info("请选择打印项");
+        this.$Message.error("请选择打印项");
         return;
       }
       this.$refs.printBox.openModal();
@@ -802,7 +811,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("出库失败");
+          this.$Message.error("出库失败");
         });
     },
     searchPro(params, size, page) {
@@ -833,8 +842,8 @@ export default {
     //快速查询日期
     getDataQuick(v) {
       const params = {
-        startTime: v[0],
-        endTime: v[1]
+        createTimeStart: v[0],
+        createTimeEnd: v[1]
       };
       this.getList(params);
     },
@@ -899,7 +908,7 @@ export default {
                 }
             })
             .catch(e => {
-                this.$Message.info("获取仓库列表失败");
+                this.$Message.error("获取仓库列表失败");
             });
     },
     //分页
@@ -928,7 +937,7 @@ export default {
       var idArr = [];
 
       if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态才能进行删除操作");
+        this.$Message.error("只有草稿状态才能进行删除操作");
         return;
       }
       // 组装删除
@@ -951,7 +960,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("删除成品失败");
+          this.$Message.error("删除成品失败");
         });
     },
     //展示方
@@ -1052,7 +1061,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
+          this.$Message.error("获取配件组装列表失败");
         });
     },
     getListPro() {
@@ -1064,7 +1073,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取成品列表失败");
+          this.$Message.error("获取成品列表失败");
         });
     },
     array_diff(a, b) {
