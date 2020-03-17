@@ -957,8 +957,12 @@ export default {
     },
     //出库
     stockOut() {
+        let str = '是否确定出库';
+        if(this.formPlan.orderAmt*1==0){
+            str='存在配件单价为0，是否确定出库';
+        }
       this.$Modal.confirm({
-            title: '是否确定出库',
+            title: str,
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
@@ -993,7 +997,7 @@ export default {
                 }
             },
             onCancel: () => {
-                this.$Message.info('取消出库');
+                this.$Message.info('已取消出库');
             },
         })
 
