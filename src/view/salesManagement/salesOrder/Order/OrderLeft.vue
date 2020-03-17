@@ -135,7 +135,6 @@ export default {
     },
     //切换页数
     selectPage(val) {
-     console.log(val)
       this.page.num = 1;
       this.page.size = val;
       this.gitlistValue();

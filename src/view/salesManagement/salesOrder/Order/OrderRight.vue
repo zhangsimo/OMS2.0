@@ -957,37 +957,46 @@ export default {
     },
     //出库
     stockOut() {
-      if (this.door.outStockDoor) {
-        this.door.outStockDoor = false;
-        this.$refs.formPlan.validate(async valid => {
-          if (valid) {
-            try {
-              await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.outOfAmt) {
-                return this.$message.error("可用余额不足");
-              }
+      this.$Modal.confirm({
+            title: '是否确定出库',
+            onOk: async () => {
+                if (this.door.outStockDoor) {
+                    this.door.outStockDoor = false;
+                    this.$refs.formPlan.validate(async valid => {
+                        if (valid) {
+                            try {
+                                await this.$refs.xTable.validate();
+                                if (+this.totalMoney > +this.limitList.outOfAmt) {
+                                    return this.$message.error("可用余额不足");
+                                }
 
-              // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-              let res = await getStockOut(this.formPlan);
-              if (res.code === 0) {
-                this.$Message.success("出库成功");
-                this.$store.commit("setleftList", res);
-                this.door.outStockDoor = true;
-                return res;
-              } else {
-                this.door.outStockDoor = true;
-              }
-            } catch (errMap) {
-              this.$XModal.message({
-                status: "error",
-                message: "表格校验不通过！"
-              });
-            }
-          } else {
-            this.$Message.error("*为必填项");
-          }
-        });
-      }
+                                // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
+                                let res = await getStockOut(this.formPlan);
+                                if (res.code === 0) {
+                                    this.$Message.success("出库成功");
+                                    this.$store.commit("setleftList", res);
+                                    this.door.outStockDoor = true;
+                                    return res;
+                                } else {
+                                    this.door.outStockDoor = true;
+                                }
+                            } catch (errMap) {
+                                this.$XModal.message({
+                                    status: "error",
+                                    message: "表格校验不通过！"
+                                });
+                            }
+                        } else {
+                            this.$Message.error("*为必填项");
+                        }
+                    });
+                }
+            },
+            onCancel: () => {
+                this.$Message.info('取消出库');
+            },
+        })
+
     },
     //提交
     submitList() {
