@@ -185,7 +185,7 @@ export function getLocalParts(params) {
 //销售订单添加配件
 export function getAccessList(params,data) {
   return axios.request({
-    url:`sellOrderDetail/getParts`,
+    url:`${api.omsOrder}/sellOrderDetail/getParts`,
     method:'post',
     params,
     data
