@@ -170,8 +170,10 @@ export const mixSelectPartCom  = {
       if(this.partName.trim()){
         req[this.searchType] = this.partName.trim()
       }
-      req.page = this.page.num -1
-      req.size = this.page.size
+      req.page = this.page.num -1;
+      req.size = this.page.size;
+      req.storeId=this.storeId;
+      req.guestId=this.guestId;
       getParnt(req).then(res => {
         this.loading = false;
         this.partData = res.data.content||[];

@@ -138,6 +138,8 @@
     mixins:[mixSelectPartCom],
     components: {PartInfo},
     props:{
+        guestId:'',
+        storeId:'',
     },
 
   }

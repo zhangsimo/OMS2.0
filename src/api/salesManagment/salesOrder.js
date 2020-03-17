@@ -173,7 +173,6 @@ export function getAccessories (data) {
     data
   })
 }
-
 //删除配件
 export function getDeleteList (data) {
   return axios.request({

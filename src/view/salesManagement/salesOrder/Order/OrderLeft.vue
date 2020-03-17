@@ -77,7 +77,8 @@ export default {
       query: {
         showPerson: 1
       }, //更多搜索信息
-      Flaga: true
+      Flaga: true,
+      selectItemId:'',
     };
   },
   mounted() {
@@ -126,6 +127,14 @@ export default {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
+          for(let b of this.tableData){
+              b._highlight = false
+              if(b.id==this.selectItemId){
+                  console.log(123)
+                  b._highlight = true;
+                  break;
+              }
+          }
       }
     },
     //切换页面
@@ -141,31 +150,12 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      // if(!this.isEdit){
-      //   return false
-      // }
-      // let list = this.$store.state.dataList.oneOrder;
-      // if(!list.id){
-      //   this.$Modal.confirm({
-      //     title: '当前有数据未保存,请确定是否离开',
-      //     onOk: async () => {
-      //       this.$emit("getOneOrder", data.row);
-      //       this.$store.commit("setOneOrder", data.row);
-      //       this.tableData={}
-      //       this.isEdit=false
-      //     },
-      //     onCancel: () => {
-      //       // this.$Message.info('');
-      //     },
-      //   })
-      // }
-      // else{
-      //
-      // }
+      if(data){
+          this.selectItemId=data.row.id;
+      }
       this.$parent.$parent.ispart=false
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
-      console.log(this.$parent)
       if(!this.Flaga && this.$parent.$parent.isAdd){
         this.$Modal.confirm({
           title: '您正在编辑单据，是否需要保存',
@@ -177,10 +167,17 @@ export default {
 
           },
           onCancel: () => {
-            this.$parent.$parent.isAdd = false
-            this.$parent.$parent.isNew=true
+            this.$parent.$parent.isAdd = false;
+            this.$parent.$parent.isNew=true;
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
+              for(let b of this.tableData){
+                  b._highlight = false
+                  if(b.id==this.selectItemId){
+                      b._highlight = true;
+                      break;
+                  }
+              }
           },
         })
       }else {
