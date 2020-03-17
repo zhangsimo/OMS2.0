@@ -824,6 +824,7 @@ export default {
 
     //配件返回的参数
     getPartNameList(val) {
+        console.log(val)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = [];

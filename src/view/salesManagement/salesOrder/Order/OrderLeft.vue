@@ -127,10 +127,10 @@ export default {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
+        console.log(this.selectItemId)
           for(let b of this.tableData){
               b._highlight = false
               if(b.id==this.selectItemId){
-                  console.log(123)
                   b._highlight = true;
                   break;
               }
@@ -153,6 +153,7 @@ export default {
       if(data){
           this.selectItemId=data.row.id;
       }
+      console.log(this.selectItemId)
       this.$parent.$parent.ispart=false
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
