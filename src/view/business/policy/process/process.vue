@@ -1279,17 +1279,17 @@ export default {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
         const id = seleList[0].id;
-
         shanqu(id)
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
-              this.Leftcurrentrow.processProductVO = this.array_diff(
-                this.Leftcurrentrow.processProductVO,
-                seleList
-              );
+              // this.Leftcurrentrow.processProductVO = this.array_diff(
+              //   this.Leftcurrentrow.processProductVO,
+              //   seleList
+              // );
+              this.Leftcurrentrow.processProductVO = []
               this.currentData = [];
-              this.getListzu(this.form);
+              // this.getListzu(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
@@ -1306,12 +1306,13 @@ export default {
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
-              this.Leftcurrentrow.processProductVO = this.array_diff(
-                this.Leftcurrentrow.processProductVO,
-                seleList
-              );
+              // this.Leftcurrentrow.processProductVO = this.array_diff(
+              //   this.Leftcurrentrow.processProductVO,
+              //   seleList
+              // );
+              this.Leftcurrentrow.processProductVO = []
               this.currentData = [];
-              this.getListchai(this.form);
+              // this.getListchai(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
