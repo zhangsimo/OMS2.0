@@ -165,6 +165,7 @@ export default {
       this.$parent.$parent.ispart=false
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
+      console.log(this.$parent)
       if(!this.Flaga && this.$parent.$parent.isAdd){
         this.$Modal.confirm({
           title: '您正在编辑单据，是否需要保存',
@@ -178,7 +179,6 @@ export default {
           onCancel: () => {
             this.$parent.$parent.isAdd = false
             this.$parent.$parent.isNew=true
-              this.$parent.right.isAdd=false;
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
           },
