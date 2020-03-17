@@ -724,8 +724,8 @@
             params.status = this.purchaseType
           }
           if(this.moreArr.submitData){
-            params.startDate = this.moreArr.submitData[0] + " 00:00:00"
-            params.endDate = this.moreArr.submitData[1] + " 23:59:59"
+            params.commitDateStart = this.moreArr.submitData[0] + " 00:00:00"
+            params.commitDateEnd = this.moreArr.submitData[1] + " 23:59:59"
           }
           if(this.moreArr.callout){
             params.guestId = this.moreArr.guestId
