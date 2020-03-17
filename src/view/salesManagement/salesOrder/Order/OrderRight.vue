@@ -197,7 +197,7 @@
                 size="small"
                 class="mr10"
                 @click="getRUl"
-                :disabled="draftShow != 0 || this.$parent.$parent.ispart"
+                :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
                 v-has="'getBarch'"
               >
                 <span class="center">
