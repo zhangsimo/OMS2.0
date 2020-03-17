@@ -103,11 +103,6 @@ export default {
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
       this.$parent.$parent.isNew=false
-      // this.tableData.unshift({
-      //   billStatusId: { enum: "", value: "0", name: "草稿" },
-      //   orderMan: this.$store.state.user.userData.staffName,
-      //   orderManId:  this.$store.state.user.userData.id
-      // });
     },
     change(){
       this.Flaga = false
@@ -127,7 +122,6 @@ export default {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
-        console.log(this.selectItemId)
           for(let b of this.tableData){
               b._highlight = false
               if(b.id==this.selectItemId){
