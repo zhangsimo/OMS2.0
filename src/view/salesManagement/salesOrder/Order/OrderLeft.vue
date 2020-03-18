@@ -66,7 +66,8 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
-        guestId: ''
+        guestId: '',
+          _highlight: true,
       },
       page: {
         total: 0,
@@ -99,6 +100,9 @@ export default {
       if (this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
+        for(let b of this.tableData){
+            b._highlight = false
+        }
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
@@ -113,19 +117,16 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
-      // data = this.query
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);
       if (res.code === 0) {
-        // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
-          for(let b of this.tableData){
-              b._highlight = false
-              if(b.id==this.selectItemId){
-                  b._highlight = true;
+        for(let i in this.tableData){
+              if(this.tableData[i].id==this.selectItemId){
+                  this.$refs.currentRowTable.setCurrentRow(this.tableData[i])
                   break;
               }
           }
@@ -147,8 +148,7 @@ export default {
       if(data){
           this.selectItemId=data.row.id;
       }
-      console.log(this.selectItemId)
-      this.$parent.$parent.ispart=false
+      this.$parent.$parent.ispart=false;
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       if(!this.Flaga && this.$parent.$parent.isAdd){
@@ -157,25 +157,26 @@ export default {
           onOk: () => {
             currentRowTable.clearCurrentRow();
             this.$emit('refresh','你好！');
-            this.Flaga = false
+            this.Flaga = false;
             this.$parent.$parent.isAdd = false
-
           },
           onCancel: () => {
             this.$parent.$parent.isAdd = false;
             this.$parent.$parent.isNew=true;
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
-              for(let b of this.tableData){
-                  b._highlight = false
-                  if(b.id==this.selectItemId){
-                      b._highlight = true;
+              for(let i in this.tableData){
+                  if(this.tableData[i].id==this.selectItemId){
+                      this.$refs.currentRowTable.setCurrentRow(this.tableData[i])
                       break;
                   }
               }
           },
         })
       }else {
+          if(data.row.id){
+              this.selectItemId=data.row.id;
+          }
         this.$emit("getOneOrder", data.row);
         this.$store.commit("setOneOrder", data.row);
       }
