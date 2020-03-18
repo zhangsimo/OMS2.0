@@ -17,7 +17,12 @@
               </div>
               <div class="db ml20">
                 <span>往来单位：</span>
-                <Select filterable v-model="companyInfo" style="width:200px" @on-change="companySelect">
+                <Select
+                  filterable
+                  v-model="companyInfo"
+                  style="width:200px"
+                  @on-change="companySelect"
+                >
                   <Option
                     v-for="item in companyList"
                     :value="item.value"
@@ -65,19 +70,11 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <!-- <Select v-model="collectionAccountName" style="width:200px" class="mr10">
-                  <Option
-                    v-for="item in collectionAccountList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>-->
-                <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
-                <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
+                <Input type="text" class="w140 mr10" v-model="collectionAccountName" readonly />
                 <span>开户行：</span>
-                <Input v-model="openingBank" class="w140 mr10" disabled />
+                <Input v-model="openingBank" class="w140 mr10" readonly />
                 <span>收款账号：</span>
-                <Input v-model="collectionAccount" class="w140 mr10" disabled />
+                <Input v-model="collectionAccount" class="w140 mr10" readonly />
                 <span>本次申请付款账户：</span>
                 <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
@@ -112,45 +109,55 @@
                 ref="payable"
               ></Table>
             </div>
-            <div class="flex mt20">
-              <div class="totalcollect p10">
-                <span class="mr5">应收合计</span>
-                <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
-                <span class="mr5">应收坏账</span>
-                <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
-                <span class="mr5">应收返利</span>
-                <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
-                <span class="mr5" style="color:#f66">实际应收合计</span>
-                <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
+            <div class="totalcollect p10 mt20">
+              <div class="db">
+                <span class="mr5">对账应收</span>
+                <Input type="text" v-model="totalcollect" readonly class="w60 tc" />
+                <span class="mr5 ml10">应收坏账</span>
+                <InputNumber :min="0" v-model="collectBaddebt" class="w60 tc" />
+                <span class="mr5 ml10">应收返利</span>
+                <InputNumber :min="0" v-model="collectRebate" class="w60 tc" />
+                <span class="mr5 ml10">运费</span>
+                <InputNumber :min="0" v-model="transportExpenses" class="w60 tc" />
+                <span class="mr5 ml10">保险费</span>
+                <InputNumber :min="0" v-model="insuranceExpenses" class="w60 tc" />
+                <span class="mr5 ml10">手续费</span>
+                <InputNumber :min="0" v-model="serviceCharge" class="w60 tc" />
+                <span class="mr5 ml10">配件管理费</span>
+                <InputNumber :min="0" v-model="partsManagementFee" class="w60 tc" />
+                <span class="mr5 ml10">其他费用</span>
+                <InputNumber :min="0" v-model="otherFees" class="w60 tc" />
               </div>
-              <div class="totalpayment p10 ml10">
+              <div class="db mt10 mb10">
                 <span class="mr5">应付合计</span>
-                <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
-                <span class="mr5">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
-                <span class="mr5">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
-                <span class="mr5" style="color:#f66">实际应付合计</span>
-                <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
+                <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
+                <span class="mr5 ml10">应付坏账</span>
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc" :min="0" />
+                <span class="mr5 ml10">应付返利</span>
+                <InputNumber v-model="paymentRebate" class="w60 tc" :min="0" />
+                <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
+                <Input v-model="Actualtotalcollect" type="text" class="w60 tc" readonly />
+                <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
+                <Input :value="Actualtotalpayment" class="w60 tc" readonly />
+                <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
+                <Input type="text" v-model="Reconciliationtotal" readonly class="w60 tc" />
               </div>
-            </div>
-            <div class="db total mt20 p10">
-              <span class="mr5">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
-              <span class="mr5">计划结算类型</span>
-              <Select class="w100 mr10" v-model="totalvalue">
-                <Option
-                  v-for="item in SettlementType"
-                  :value="item.value"
-                  :key="item.value"
-                >{{ item.label }}</Option>
-              </Select>
-              <span class="mr5">应收返利请示单号</span>
-              <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
-              <span class="mr5">应收坏账请示单号</span>
-              <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
-              <span class="mr5">备注</span>
-              <Input type="text" v-model="remark" class="w60 mr10 tc" />
+              <div class="db">
+                <span class="mr5">计划结算类型</span>
+                <Select class="w100" v-model="totalvalue">
+                  <Option
+                    v-for="item in SettlementType"
+                    :value="item.value"
+                    :key="item.value"
+                  >{{ item.label }}</Option>
+                </Select>
+                <span class="mr5 ml10">应收返利请示单号</span>
+                <Input type="text" v-model="Rebateid" class="w60 tc" />
+                <span class="mr5 ml10">应收坏账请示单号</span>
+                <Input type="text" v-model="BadDebtid" class="w60 tc" />
+                <span class="mr5 ml10">备注</span>
+                <Input type="text" v-model="remark" class="w260 tc" />
+              </div>
             </div>
           </div>
         </section>
@@ -160,15 +167,15 @@
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="store" />
+        <input type="text" readonly class="w140 mr15 tc" :value="store" />
         <span class="mr5">单据编号</span>
-        <input type="text" disabled class="w180 mr15 tc" :value="bill" />
+        <input type="text" readonly class="w180 mr15 tc" :value="bill" />
         <span class="mr5">业务类型</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="business" />
+        <input type="text" readonly class="w140 mr15 tc" :value="business" />
         <span class="mr5">往来单位信息</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="thiscompanyInfo" />
+        <input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo" />
         <span class="mr5">单据日期</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="billDate" />
+        <input type="text" readonly class="w140 mr15 tc" :value="billDate" />
       </div>
       <vxe-table
         border
@@ -210,14 +217,6 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
-      <!-- <Table
-        :columns="Reconciliationlist"
-        :data="Reconciliationcontent"
-        border
-        max-height="400"
-        show-summary
-        :summary-method="handleSummary"
-      ></Table>-->
       <div slot="footer">
         <Button class="mr10" type="primary" @click="noReconciliation">确认</Button>
         <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
@@ -297,6 +296,11 @@ export default {
       totalcollect: 0, //应收合计
       collectBaddebt: 0, //应收坏账
       collectRebate: 0, //应收返利
+      transportExpenses: 0, //运费
+      insuranceExpenses: 0, //保险费
+      serviceCharge: 0, //手续费
+      partsManagementFee: 0, //配件管理费
+      otherFees: 0, //其他费用
       Reconciliation: false,
       modifyAccountAmt: 0,
       modal: false,
@@ -575,19 +579,44 @@ export default {
     this.Branchstore = arr[2];
   },
   computed: {
+    //实际应付合计
     Actualtotalpayment() {
       this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
       this.totalpayment = this.totalpayment ? this.totalpayment : 0;
-      return this.totalpayment - this.paymentBaddebt - this.paymentRebate;
+      return this.totalpayment*1 + this.paymentBaddebt*1 + this.paymentRebate*1;
     },
+    //实际应收合计
     Actualtotalcollect() {
-      this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
-      this.totalpayment = this.totalpayment ? this.totalpayment : 0;
-      return this.totalcollect - this.collectBaddebt - this.collectRebate;
+      this.totalcollect = this.totalcollect ? this.totalcollect : 0;
+      this.collectBaddebt = this.collectBaddebt ? this.collectBaddebt : 0;
+      this.collectRebate = this.collectRebate ? this.collectRebate : 0;
+      this.transportExpenses = this.transportExpenses
+        ? this.transportExpenses
+        : 0;
+      this.insuranceExpenses = this.insuranceExpenses
+        ? this.insuranceExpenses
+        : 0;
+      this.serviceCharge = this.serviceCharge ? this.serviceCharge : 0;
+      this.partsManagementFee = this.partsManagementFee
+        ? this.partsManagementFee
+        : 0;
+      this.otherFees = this.otherFees ? this.otherFees : 0;
+      return (
+        this.totalcollect*1 +
+        this.collectBaddebt*1 +
+        this.collectRebate*1 +
+        this.transportExpenses*1 +
+        this.insuranceExpenses*1 +
+        this.serviceCharge*1 +
+        this.partsManagementFee*1 +
+        this.otherFees*1
+      );
     },
+    //本次对账结算合计
     Reconciliationtotal() {
       return this.Actualtotalcollect - this.Actualtotalpayment;
     },
+    //计划结算类型
     totalvalue() {
       if (this.paymentlist.length !== 0 || this.collectlist.length !== 0) {
         if (this.Reconciliationtotal > 0) {
@@ -652,41 +681,6 @@ export default {
           return null;
         })
       ];
-      // const sums = {};
-      // columns.forEach((column, index) => {
-      //   const key = column.key;
-      //   if (index === 0) {
-      //     sums[key] = {
-      //       key,
-      //       value: "合计"
-      //     };
-      //     return;
-      //   }
-      //   const values = data.map(item => Number(item[key]));
-      //   if (index > 4 && index !== 12) {
-      //     if (!values.every(value => isNaN(value))) {
-      //       const v = values.reduce((prev, curr) => {
-      //         const value = Number(curr);
-      //         if (!isNaN(value)) {
-      //           return prev + curr;
-      //         } else {
-      //           return prev;
-      //         }
-      //       }, 0);
-      //       sums[key] = {
-      //         key,
-      //         value: v
-      //       };
-      //     }
-      //   } else {
-      //     sums[key] = {
-      //       key,
-      //       value: " "
-      //     };
-      //   }
-      // });
-      // return sums;
-      //
     },
     query() {
       this.Initialization();
@@ -709,6 +703,11 @@ export default {
         this.totalcollect = 0;
         this.collectBaddebt = 0;
         this.collectRebate = 0;
+        this.transportExpenses = 0;
+        this.insuranceExpenses = 0;
+        this.serviceCharge = 0;
+        this.partsManagementFee = 0;
+        this.otherFees = 0;
         this.collectlist = [];
         this.paymentlist = [];
         this.storeAccount(this.parameter.orgId);
@@ -961,13 +960,6 @@ export default {
     },
     // 保存接口
     getPreservation(num) {
-      // if (this.paymentlist.length == 0 || this.collectlist.length == 0) {
-      //   return this.$message({
-      //     message: "请勾选数据",
-      //     type: "error",
-      //     customClass: "zZindex"
-      //   });
-      // }
       if (this.totalvalue === "0") {
         if (!this.collectionAccountName)
           return this.$message.error("收款户名不能为空");
@@ -1051,7 +1043,12 @@ export default {
             collectionName: this.collectionAccountName,
             bankName: this.openingBank,
             collectionAccount: this.collectionAccount,
-            thisPaymentAccount: this.thisApplyAccount
+            thisPaymentAccount: this.thisApplyAccount,
+            transportExpenses: this.transportExpenses,
+            insuranceExpenses: this.insuranceExpenses,
+            serviceCharge: this.serviceCharge,
+            partsManagementFee: this.partsManagementFee,
+            otherFees: this.otherFees
           }
         ];
         let obj = {
@@ -1120,10 +1117,10 @@ export default {
         let str1 = "";
         let str2 = "";
         this.paymentlist.map(item => {
-          str1 += `${item.serviceId}*${1*item.serviceType.value +1},`;
+          str1 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
         });
         this.collectlist.map(item => {
-          str2 += `${item.serviceId}*${1*item.serviceType.value +1},`;
+          str2 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
         });
         str1 = str1.substring(0, str1.length - 1);
         str2 = str2.substring(0, str2.length - 1);
