@@ -2,7 +2,7 @@ import env from "./env";
 
 const dev = {
   omsApi: "http://192.168.30.21:9240", //徐林烽
-  wmsApi: "http://192.168.30.191:9250", // 徐林烽
+  wmsApi: "http://192.168.30.21:9250", // 徐林烽
   omsOrder: "http://192.168.30.21:9210", // 徐林烽
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",
