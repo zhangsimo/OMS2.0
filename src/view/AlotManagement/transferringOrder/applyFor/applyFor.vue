@@ -415,6 +415,9 @@
         },
         //删除配件
         Delete(){
+          if (this.checkboxArr.length <= 0) {
+            return this.$Message.error("请先选择配件!")
+          }
           var set = this.checkboxArr.map(item=>item.partId)
           var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
           this.Right.tbdata = resArr
@@ -447,6 +450,11 @@
         },
         // 新增按钮
         addProoo(){
+          let currentRowTable = this.$refs["currentRowTable"];
+          currentRowTable.clearCurrentRow();
+          this.Left.tbdata.forEach(el => {
+            el._highlight = false;
+          })
           var date = new Date()
           // date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
           var dataTime = tools.transTime(date)
@@ -764,7 +772,6 @@
             this.$Modal.confirm({
               title: '您正在编辑单据，是否需要保存',
               onOk: () => {
-                currentRowTable.clearCurrentRow();
                 this.$refs.formPlan.validate((valid) => {
                   if (valid) {
                     let data = {};
@@ -782,6 +789,7 @@
                     data.detailVOS = this.Right.tbdata
                     save(data).then(res => {
                       if(res.code === 0){
+                        currentRowTable.clearCurrentRow();
                         this.isAdd = true;
                         this.$message.success('保存成功！')
                         this.leftgetList()
@@ -796,6 +804,12 @@
                       }
                     })
                   } else {
+                    let currentRowTable = this.$refs["currentRowTable"];
+                    currentRowTable.clearCurrentRow();
+                    this.Left.tbdata.forEach(el => {
+                      el._highlight = false;
+                    })
+                    this.Left.tbdata[0]._highlight = true;
                     this.$Message.error('*为必填！');
                   }
                 })
@@ -803,38 +817,49 @@
               onCancel: () => {
                 this.Left.tbdata.splice(0, 1);
                 currentRowTable.clearCurrentRow();
-                this.isAdd = true;
-                this.formPlan.guestName = '',
-                this.formPlan.storeId =  '',
-                this.formPlan.remark =  '',
-                this.formPlan.createUname =  '',
-                this.formPlan.serviceId =  '',
-                this.formPlan.orderDate = ''
-                this.Right.tbdata = []
-                this.$refs.formPlan.resetFields();
+                this.Left.tbdata.forEach(el => {
+                  if (el.id == row.id) {
+                    el._highlight = true;
+                    this.isAdd = true;
+                    this.$refs.formPlan.resetFields();
+                    this.setRow(row)
+                  }
+                })
+                // this.isAdd = true;
+                // this.formPlan.guestName = '',
+                // this.formPlan.storeId =  '',
+                // this.formPlan.remark =  '',
+                // this.formPlan.createUname =  '',
+                // this.formPlan.serviceId =  '',
+                // this.formPlan.orderDate = ''
+                // this.Right.tbdata = []
+                // this.$refs.formPlan.resetFields();
               },
             })
           }else{
             if(row.id){
-              // this.leftgetList()
-              this.rowOrgId = row.orgid
-              this.mainId = row.id
-              this.guestidId = row.guestId
-              this.datadata = row
-              this.formPlan.guestName = this.datadata.guestId
-              this.formPlan.storeId = this.datadata.storeId
-              this.formPlan.orderDate = this.datadata.orderDate
-              this.formPlan.remark = this.datadata.remark
-              this.formPlan.createUname = this.datadata.createUname
-              this.formPlan.serviceId = this.datadata.serviceId
-              // this.guestidId = this
-              this.presentrowMsg = row.status.value
-              this.rowId = row.id
-              this.buttonDisable = false
-              this.getRightlist()
+              this.setRow(row)
             }
           }
 
+        },
+        setRow(row) {
+          // this.leftgetList()
+          this.rowOrgId = row.orgid
+          this.mainId = row.id
+          this.guestidId = row.guestId
+          this.datadata = row
+          this.formPlan.guestName = this.datadata.guestId
+          this.formPlan.storeId = this.datadata.storeId
+          this.formPlan.orderDate = this.datadata.orderDate
+          this.formPlan.remark = this.datadata.remark
+          this.formPlan.createUname = this.datadata.createUname
+          this.formPlan.serviceId = this.datadata.serviceId
+          // this.guestidId = this
+          this.presentrowMsg = row.status.value
+          this.rowId = row.id
+          this.buttonDisable = false
+          this.getRightlist()
         },
         //右部分接口
         getRightlist(){

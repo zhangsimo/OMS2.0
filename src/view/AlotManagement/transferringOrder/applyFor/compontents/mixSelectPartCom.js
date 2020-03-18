@@ -177,7 +177,7 @@ export const mixSelectPartCom = {
           label: "名称"
         },
         {
-          value: "adapterCarModels",
+          value: "adapterCarModel",
           label: "车型"
         },
         // {

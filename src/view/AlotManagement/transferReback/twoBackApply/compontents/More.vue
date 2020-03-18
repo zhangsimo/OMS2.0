@@ -13,7 +13,7 @@
     </Row>
     <row class="mt15">
       <Col>
-        <span class="w40">提交日期从：</span>
+        <span class="w40">提交日期：</span>
         <DatePicker
           type="daterange"
           placement="bottom-end"
