@@ -625,9 +625,7 @@ export default {
   methods: {
     // 高级查询弹框
     moreChange(type) {
-      if (!type) {
-        this.$refs.naform.reset();
-      }
+      this.$refs.naform.reset();
     },
     getArrayParams() {
       var req = {};
@@ -860,14 +858,6 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
-      // if (this.Leftcurrentrow.status.value === 1) {
-      //   this.$Message.info("当前加工单号已提交审核!无需重复操作");
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
         if(params.status.value!=undefined){
             params.status = params.status.value
@@ -1035,6 +1025,7 @@ export default {
     },
     //更多按钮
     more() {
+      this.$refs.naform.reset();
       this.advanced = true;
     },
     //左边列表选中当前行
@@ -1044,13 +1035,13 @@ export default {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
-            this.baocun1();
             this.flagState = 0;
+            this.baocun1();
           },
           onCancel: () => {
-            this.getList();
             this.flag = 0;
             this.flagState = 0;
+            this.getList();
           }
         });
         return;
@@ -1125,6 +1116,7 @@ export default {
       }
       this.advanced = false;
       this.getList();
+      this.form = {};
       this.$refs.naform.reset();
     },
     ok() {},
