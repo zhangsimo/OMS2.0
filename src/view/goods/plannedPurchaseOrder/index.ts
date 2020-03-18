@@ -528,15 +528,6 @@ export default class PlannedPurchaseOrder extends Vue {
             this.formPlanmain[k] = row[k];
           }
 
-          // for(let b of this.purchaseOrderTable.tbdata){
-          //   b._highlight = false
-          //   if(b.id==this.selectLeftItemId){
-          //     b._highlight = true;
-          //     this.setFormPlanmain(b);
-          //     break;
-          //   }
-          // }
-
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -574,8 +565,8 @@ export default class PlannedPurchaseOrder extends Vue {
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      this.formPlanmain.orderDate = v.orderDate;
+      this.formPlanmain.planArriveDate = v.planArriveDate;
       if (['草稿', '退回'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -769,6 +760,14 @@ export default class PlannedPurchaseOrder extends Vue {
           d.isOldFlag = true;
         })
       })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
     }
   }
 

@@ -1,15 +1,6 @@
 import { Vue, Component } from "vue-property-decorator";
 // @ts-ignore
-import { 
-  queryRolesByPage, 
-  deleteWMSChangeUserRoles, 
-  deleteById, 
-  getStaffWms, 
-  saveStaffJurisdictionWms, 
-  saveOrder, 
-  findRootResWms,
-  getWarehouse,
-} from '_api/admin/roleApi.js';
+import {queryRolesByPage,deleteWMSChangeUserRoles,deleteById,getStaffWms,saveStaffJurisdictionWms,saveOrder,findRootResWms,getWarehouse,} from '_api/admin/roleApi.js';
 // @ts-ignore
 // import {findRootRes} from '_api/admin/resourceApi'
 // @ts-ignore
@@ -286,7 +277,7 @@ export default class index extends Vue {
     if (!this.oneWms) {
       return this.$Message.error("请先选择员工")
     }
-    if(this.selectHouse.length <= 0) {
+    if (this.selectHouse.length <= 0) {
       return this.$Message.error("请选择仓库")
     }
     // if (this.rightTableData.length <= 0) {

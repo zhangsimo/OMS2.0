@@ -380,10 +380,36 @@
 
                     },
                     {
+                      title: '含税标记',
+                      align: 'center',
+                      key: 'taxRate',
+                      minWidth: 120,
+                      render:(h,params) => {
+                       return h("Checkbox",{
+                         props:{
+                           value:true,
+                           disabled:true
+                         }
+                       })
+                      }
+                    },
+                    {
                         title: '税率',
                         align: 'center',
                         key: 'taxRate',
                         minWidth: 120
+                    },
+                    {
+                      title: '含税单价',
+                      align: 'center',
+                      key: 'taxRate',
+                      minWidth: 120
+                    },
+                    {
+                      title: '含税金额',
+                      align: 'center',
+                      key: 'taxRate',
+                      minWidth: 120
                     },
                     {
                         title: '不含税单价',

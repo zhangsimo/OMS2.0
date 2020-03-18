@@ -5,7 +5,7 @@ const dev = {
   wmsTokenApi:"http://192.168.2.47:5600", // 登录接口API
 };
 const test = {
-  wms: "https://tswms.g-parts.cn/",
+  wms: "https://wmsfoms.g-parts.cn",
  wmsTokenApi: 'https://tsapi2.g-parts.cn',
 };
 const audit = {

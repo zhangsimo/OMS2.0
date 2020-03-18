@@ -13,7 +13,7 @@
             ></DatePicker>
           </FormItem>
           <FormItem>
-            <Select v-model="Outform.enterTypeId" filterable style="width:200px">
+            <Select v-model="Outform.guestId" filterable style="width:200px">
               <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
           </FormItem>
@@ -26,7 +26,7 @@
             />
           </FormItem>
           <FormItem>
-            <Select v-model="Outform.guestId" style="width:100px" placeholder="请选择供应商">
+            <Select v-model="Outform.enterTypeId" style="width:100px" placeholder="请选择供应商">
               <Option v-for="item in enterTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
