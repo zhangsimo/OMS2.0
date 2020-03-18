@@ -26,7 +26,15 @@
           <Input v-model="data.partName"    placeholder="请输入配件名称" style="width: 350px" />
         </FormItem>
         <FormItem label="创建人:">
-          <Input v-model="data.createUname"    placeholder="请输入创建人" style="width: 350px" />
+          <Select
+            :value="data.createUnameId"
+            @on-change="selectOrderMan"
+            filterable
+            style="width: 350px"
+            label-in-value
+          >
+            <Option v-for="item in salesList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+          </Select>
         </FormItem>
       </Form>
     </div>
@@ -38,7 +46,7 @@
 </template>
 
 <script>
-  import {getClient , getBrandList} from '@/api/salesManagment/salesOrder'
+  import {getClient , getBrandList, getSales} from '@/api/salesManagment/salesOrder'
     export default {
         name: "MoreQuery",
         props:{
@@ -49,16 +57,33 @@
                 moreQueryShow: false,//模态框是否展示
                 clientList:[],//客户下拉框
                 brandList:[],//品牌下拉框
+                salesList: [], //销售员列表
             }
         },
         mounted(){
             this.getAllClient()
             this.getAllBrand()
+            this.getAllSales()
         },
         methods:{
             //打开模态框框
             openModal(){
                 this.moreQueryShow = true
+            },
+            //获取销售员
+            selectOrderMan(val) {
+              this.data.createUname = val ? val.label ? val.label : '':'';
+              this.data.createUnameId = val ? val.value ? val.value : '':'';
+            },
+            //获取销售员
+            async getAllSales() {
+              let res = await getSales();
+              if (res.code === 0) {
+                this.salesList = res.data.content;
+                this.salesList.map(item => {
+                  item.label = item.userName;
+                });
+              }
             },
             //获取创建时间
             getCreatDate(date){
@@ -90,6 +115,7 @@
             },
             //确定
             emit(){
+              Reflect.deleteProperty(this.data, "createUnameId")
               this.$emit('getparamsList', this.data)
               this.$store.commit('setOrederQuery' , this.data)
                 this.moreQueryShow = false

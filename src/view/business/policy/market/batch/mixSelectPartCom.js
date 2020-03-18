@@ -28,12 +28,12 @@ export const mixSelectPartCom  = {
           type: "selection",
           minWidth: 80
         },
-        // {
-        //   title: '详情',
-        //   slot: 'action',
-        //   width: 60,
-        //   align: 'center'
-        // },
+        {
+          title: '详情',
+          slot: 'action',
+          width: 60,
+          align: 'center'
+        },
         {
           title: "配件编码",
           key: "partCode",

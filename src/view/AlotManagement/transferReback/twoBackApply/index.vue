@@ -170,12 +170,12 @@
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button v-has="'addProoo'" size="small" class="mr10" @click="addProoo">
+                      <Button :disabled="this.remarkStatus" v-has="'addProoo'" size="small" class="mr10" @click="addProoo">
                         <Icon type="md-add" />选择调拨入库单
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
+                      <Button :disabled="this.remarkStatus" v-has="'delete'" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -290,7 +290,7 @@ export default {
   },
   data() {
     return {
-      remarkStatus: false,
+      remarkStatus: true,
       flagStatus: false,
       flagValue: [],
       flag: 0,
@@ -307,7 +307,7 @@ export default {
       split1: 0.2,
       tabIndex: 0,
       curronly: false,
-      purchaseType: 1, //查询选项
+      purchaseType: "0", //查询选项
       purchaseTypeArr: [
         {
           label: "所有",
@@ -315,35 +315,35 @@ export default {
         },
         {
           label: "草稿",
-          value: 0
+          value: "ALLOT_DRAFT"
         },
         {
           label: "待出库",
-          value: "1"
+          value: "ALLOT_WAIT_OUT"
         },
         {
           label: "已出库",
-          value: "2"
+          value: "ALLOT_OUT_ALL"
         },
         {
           label: "已作废",
-          value: "3"
+          value: "ALLOT_INVALID"
         },
         {
           label: "已受理",
-          value: "4"
+          value: "ACCEPTED"
         },
         {
           label: "待受理",
-          value: "5"
+          value: "UNACCEPTED"
         },
         {
           label: "已入库",
-          value: "6"
+          value: "WAREHOUSING"
         },
         {
           label: "已拒绝",
-          value: "7"
+          value: "REJECTED"
         },
         
       ],

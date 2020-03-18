@@ -81,7 +81,7 @@
         },
         methods:{
           async searchMore(data) {
-            const res = await getListmore(data, 10, 0)
+            const res = await getListmore(data, 20, 0)
             if (res) {
               this.$refs.leftorder.getData(res.data)
             } else {
