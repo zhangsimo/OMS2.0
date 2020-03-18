@@ -131,7 +131,7 @@
         </Col>
       </Row>
       <FormItem label="申请额度说明:" prop="fullName">
-        <Input v-model="customerDetails.adjustReason" style="width: 650px" disabled></Input>
+        <Input v-model="customerDetails.quotaReason" style="width: 650px" disabled></Input>
       </FormItem>
     </Form>
     <div>

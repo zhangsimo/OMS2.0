@@ -476,6 +476,8 @@ export default {
       let self = this;
       if (res.code == 0) {
         this.$message.success(res.message);
+        this.clOnewList();
+
       } else {
         this.$message.error(res.message);
       }

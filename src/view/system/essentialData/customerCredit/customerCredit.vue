@@ -67,13 +67,29 @@
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信用额度记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns1" border highlight-row stripe size="small" height="200" :data="creditArr"></Table>
+              <Table
+                :columns="columns1"
+                border
+                highlight-row
+                stripe
+                size="small"
+                height="200"
+                :data="creditArr"
+              ></Table>
             </div>
           </Col>
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信息变更记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns2" highlight-row border stripe size="small" height="200" :data="alterArr"></Table>
+              <Table
+                :columns="columns2"
+                highlight-row
+                border
+                stripe
+                size="small"
+                height="200"
+                :data="alterArr"
+              ></Table>
             </div>
           </Col>
         </Row>
@@ -107,7 +123,7 @@
 
     <!--      修改信用调查-->
     <Modal v-model="surveyShow" title="信用调查表" width="1000">
-      <SurveyList :data="creaditList" :dataMsg="costList" ref="SurveyList"></SurveyList>
+      <SurveyList :data="creaditList" :dataMsg="costList" :dataJudge="creditArr" ref="SurveyList"></SurveyList>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button type="default" @click="cancel">取消</Button>
@@ -115,7 +131,12 @@
     </Modal>
     <!--      额度调整-->
     <Modal v-model="adjustment" title="客户信用额度调整表">
-      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today" ref="formRule"></QuotaAdjustment>
+      <QuotaAdjustment
+        :data="creaditList"
+        :dataMsg="adjustmentMsg"
+        :datetoday="today"
+        ref="formRule"
+      ></QuotaAdjustment>
       <div slot="footer">
         <Button type="primary" @click="adjustmentconfirm">确定</Button>
         <Button type="default" @click="cancelChange">取消</Button>
@@ -569,45 +590,45 @@ export default {
     },
     //调整信用额度的确定
     adjustmentconfirm() {
-        this.$refs["formRule"].$refs["formRule"].validate(valid=>{
-            if(valid){
-                let data = {};
-                data.guestId = this.creaditList.guestId;
-                // data.applyDate = this.today
-                data.payableAmt = this.adjustmentMsg.payableAmt;
-                data.receivableAmt = this.adjustmentMsg.receivableAmt;
-                data.sumAmt = this.adjustmentMsg.sumAmt;
-                data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
-                data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
-                data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
-                data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-                this.creaditList.isForbid
-                    ? (this.creaditList.isForbid = 1)
-                    : (this.creaditList.isForbid = 0);
-                data.isForbid = this.creaditList.isForbid;
-                data.quotaReason = this.creaditList.quotaReason;
-                data.totalQuota =
-                    +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
-                data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
-                data.tempQuotaTotal = this.creaditList.tempCreditLimit;
-                data.tempStart = this.creaditList.tempStart;
-                data.tempEnd = this.creaditList.tempEnd;
-                data.orgId = this.creaditList.orgid;
-                data.adjustType = 1;
-                data.afterAdjustQuota =
-                    this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
-                save(data).then(res => {
-                    if (res.code === 0) {
-                        this.adjustment = false;
-                        this.$Message.warning("保存成功");
-                        this.getListTop();
-                    }
-                });
-            }else {
-                this.$message.warning("* 为必填！");
+      this.$refs["formRule"].$refs["formRule"].validate(valid => {
+        if (valid) {
+          let data = {};
+          data.guestId = this.creaditList.guestId;
+          // data.applyDate = this.today
+          data.payableAmt = this.adjustmentMsg.payableAmt;
+          data.receivableAmt = this.adjustmentMsg.receivableAmt;
+          data.sumAmt = this.adjustmentMsg.sumAmt;
+          data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
+          data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
+          data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
+          data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
+          this.creaditList.isForbid
+            ? (this.creaditList.isForbid = 1)
+            : (this.creaditList.isForbid = 0);
+          data.isForbid = this.creaditList.isForbid;
+          data.quotaReason = this.creaditList.quotaReason;
+          data.totalQuota =
+            +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
+          data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
+          data.tempQuotaTotal = this.creaditList.tempCreditLimit;
+          data.tempStart = this.creaditList.tempStart;
+          data.tempEnd = this.creaditList.tempEnd;
+          data.orgId = this.creaditList.orgid;
+          data.adjustType = 1;
+          data.afterAdjustQuota =
+            this.adjustmentMsg.payableAmt -
+            this.adjustmentMsg.fixationQuotaTotal;
+          save(data).then(res => {
+            if (res.code === 0) {
+              this.adjustment = false;
+              this.$Message.warning("保存成功");
+              this.getListTop();
             }
-        })
-
+          });
+        } else {
+          this.$message.warning("* 为必填！");
+        }
+      });
     },
     //调整取消框
     cancelChange() {
@@ -631,45 +652,56 @@ export default {
     },
     //确定申请
     Determined() {
-      this.$refs.child.$refs.form.validate((valid) => {
-              if (valid) {
-      let data = {};
-      data.guestId = this.rowMessage.guestId;
-      data.orgId = this.rowMessage.orgid;
-      this.creaditList.applyQuota=this.creaditList.applyQuota?this.creaditList.applyQuota:0;
-      this.creaditList.tempQuota=this.creaditList.tempQuota?this.creaditList.tempQuota:0;
-      data.fixationQuotaTotal = this.creaditList.applyQuota*1 + this.creaditList.creditLimit*1 || 0 +this.creaditList.applyQuota*1;
-      data.tempQuotaTotal = this.creaditList.tempQuota*1 + this.creaditList.tempCreditLimit*1 || 0 +this.creaditList.tempQuota*1;
-      data.applyQuota = this.creaditList.applyQuota || 0;
-      data.tempQuota = this.creaditList.tempQuota || 0;
-      data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
-      data.payableAmt = +this.payable.payableAmt || 0;
-      data.tgrade = this.creaditList.tgrade || "";
-      data.thirtyAmt = +this.payable.thirtyAmt || 0;
-      data.sixtyAmt = +this.payable.sixtyAmt || 0;
-      data.moreSixtyAmt = this.payable.moreSixtyAmt || 0;
-      data.afterAdjustQuota = this.creaditList.totalSum;
-      data.quotaReason = this.creaditList.quotaReason || "";
-      data.receivableAmt = this.payable.receivableAmt || 0;
-      data.totalQuota =
-        +this.creaditList.applyQuota +
-          this.creaditList.creditLimit +
-          (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit) ||
-        +this.creaditList.applyQuota + +this.creaditList.tempQuota;
-      data.addTotalQuota = this.creaditList.tototo || 0;
-      data.adjustType = 0;
-      save(data).then(res => {
-        if (res.code === 0) {
-          this.CreditLineApplicationShow = false;
-          this.$Message.warning("保存成功");
-          this.getListTop();
+      this.$refs.child.$refs.form.validate(valid => {
+        if (valid) {
+          let data = {};
+          data.guestId = this.rowMessage.guestId;
+          data.orgId = this.rowMessage.orgid;
+          this.creaditList.applyQuota = this.creaditList.applyQuota
+            ? this.creaditList.applyQuota
+            : 0;
+          this.creaditList.tempQuota = this.creaditList.tempQuota
+            ? this.creaditList.tempQuota
+            : 0;
+          data.fixationQuotaTotal =
+            this.creaditList.applyQuota * 1 +
+              this.creaditList.creditLimit * 1 ||
+            0 + this.creaditList.applyQuota * 1;
+          data.tempQuotaTotal =
+            this.creaditList.tempQuota * 1 +
+              this.creaditList.tempCreditLimit * 1 ||
+            0 + this.creaditList.tempQuota * 1;
+          data.applyQuota = this.creaditList.applyQuota || 0;
+          data.tempQuota = this.creaditList.tempQuota || 0;
+          data.tempStart = tools.transTime(this.creaditList.tempStart);
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          data.payableAmt = +this.payable.payableAmt || 0;
+          data.tgrade = this.creaditList.tgrade || "";
+          data.thirtyAmt = +this.payable.thirtyAmt || 0;
+          data.sixtyAmt = +this.payable.sixtyAmt || 0;
+          data.moreSixtyAmt = this.payable.moreSixtyAmt || 0;
+          data.afterAdjustQuota = this.creaditList.totalSum;
+          data.quotaReason = this.creaditList.quotaReason || "";
+          data.receivableAmt = this.payable.receivableAmt || 0;
+          data.totalQuota =
+            +this.creaditList.applyQuota +
+              this.creaditList.creditLimit +
+              (+this.creaditList.tempQuota +
+                this.creaditList.tempCreditLimit) ||
+            +this.creaditList.applyQuota + +this.creaditList.tempQuota;
+          data.addTotalQuota = this.creaditList.tototo || 0;
+          data.adjustType = 0;
+          save(data).then(res => {
+            if (res.code === 0) {
+              this.CreditLineApplicationShow = false;
+              this.$Message.warning("保存成功");
+              this.getListTop();
+            }
+          });
+        } else {
+          this.$Message.error("必填项必须填!");
         }
       });
-          } else {
-              this.$Message.error('必填项必须填!');
-          }
-      })
     },
     //确定取消
     cancel2() {
