@@ -25,11 +25,22 @@
         <FormItem label="配件名称:">
           <Input v-model="data.partName"    placeholder="请输入配件名称" style="width: 350px" />
         </FormItem>
-        <FormItem label="创建人:">
-          <Input v-model="data.createUname"    placeholder="请输入创建人" style="width: 350px" />
+        <!--<FormItem label="创建人:">-->
+          <!--<Input v-model="data.createUname"    placeholder="请输入创建人" style="width: 350px" />-->
+        <!--</FormItem>-->
+        <!--<FormItem label="提交人:">-->
+          <!--<Input v-model="data.commitUname"    placeholder="请输入提交人" style="width: 350px" />-->
+        <!--</FormItem>-->
+
+        <FormItem label="提交人: ">
+          <Select v-model="data.commitUname" class="w350" label-in-value filterable>
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
-        <FormItem label="提交人:">
-          <Input v-model="data.commitUname"    placeholder="请输入提交人" style="width: 350px" />
+        <FormItem label="创建人: ">
+          <Select v-model="data.createUname" class="w350" label-in-value filterable>
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
 
       </Form>
@@ -43,6 +54,7 @@
 
 <script>
   import {getClient} from "_api/salesManagment/presell.js"
+  import { getSales } from "@/api/salesManagment/salesOrder";
   import * as tools from "../../../../utils/tools";
   export default {
     name: "MoreSearh",
@@ -59,13 +71,27 @@
           size: 10,
           num: 1
         },
+        salesList:[],//创建人提交人数据
       }
     },
     mounted(){
       this.getAllClient()
     },
     methods: {
+
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.forEach((item) => {
+          item.label = item.userName;
+          item.value = item.id;
+        });
+      }
+    },
+
       openModal() {
+      this.getAllSales()
         this.moreQueryShow = true
       },
       //获取公司

@@ -1,44 +1,24 @@
 <template>
   <div class="navbox">
     <Row>
-      <Col span="12">
-        <span class="w40">创建日期从：</span>
+      <Col>
+        <span class="w40">创建日期：</span>
         <DatePicker
-          v-model="form.createTimeStart"
-          type="datetime"
-          format="yyyy-MM-dd"
-          style="width: 180px"
-        ></DatePicker>
-      </Col>
-      <Col span="12">
-        <span class="w40 ml10">至：</span>
-        <DatePicker
-          v-model="form.createTimeEnd"
-          type="datetime"
-          format="yyyy-MM-dd"
-          style="width: 180px"
+          type="daterange"
+          placement="bottom-end"
+          style="width: 300px"
+          v-model="createDate"
         ></DatePicker>
       </Col>
     </Row>
     <row class="mt15">
-      <Col span="12">
-        <span class="w40">提交日期从：</span>
+      <Col>
+        <span class="w40">提交日期：</span>
         <DatePicker
-          v-model="form.commitDateStart"
-          @on-change="commitstart"
-          type="date"
-          format="yyyy-MM-dd"
-          style="width: 180px"
-        ></DatePicker>
-      </Col>
-      <Col span="12">
-        <span class="w40 ml10">至：</span>
-        <DatePicker
-          v-model="form.commitDateEnd"
-          type="date"
-          @on-change="commitend"
-          format="yyyy-MM-dd"
-          style="width: 180px"
+          type="daterange"
+          placement="bottom-end"
+          style="width: 300px"
+          v-model="commitDate"
         ></DatePicker>
       </Col>
     </row>
@@ -87,6 +67,8 @@ export default {
     return {
       ArrayValue: [],
       moment: moment,
+      createDate: [],
+      commitDate: [],
       form: {
         partCode: "", //申请单号
         partName: "", //申请单号
@@ -169,29 +151,33 @@ export default {
       this.form.shenEndTime = data;
     },
     getITPWE() {
-      if (this.form.commitDateStart) {
-        this.form.commitDateStart = moment(this.form.commitDateStart).format(
+      if (this.createDate[0] instanceof Date) {
+        this.form.createTimeStart = moment(this.createDate[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-      }
-      if (this.form.commitDateEnd) {
-        this.form.commitDateEnd = moment(this.form.commitDateEnd).format(
+        this.form.createTimeEnd = moment(this.createDate[0]).format(
           "YYYY-MM-DD 23:59:59"
         );
+      } else {
+        Reflect.deleteProperty(this.form, "createTimeStart")
+        Reflect.deleteProperty(this.form, "createTimeEnd")
       }
-      if (this.form.createTimeStart) {
-        this.form.createTimeStart = moment(this.form.createTimeStart).format(
+      if (this.commitDate[0] instanceof Date) {
+        this.form.commitDateStart = moment(this.commitDate[0]).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-      }
-      if (this.form.createTimeEnd) {
-        this.form.createTimeEnd = moment(this.form.createTimeEnd).format(
+        this.form.commitDateEnd = moment(this.commitDate[0]).format(
           "YYYY-MM-DD 23:59:59"
         );
+      } else {
+        Reflect.deleteProperty(this.form, "commitDateStart")
+        Reflect.deleteProperty(this.form, "commitDateEnd")
       }
       return this.form;
     },
     reset() {
+      this.createDate = [];
+      this.commitDate = [];
       this.form = {
         partCode: "", //申请单号
         partName: "", //申请单号

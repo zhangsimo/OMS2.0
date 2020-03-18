@@ -670,7 +670,11 @@ export default class InterPurchase extends Vue {
   }
   //添加配件数据
   private getPartNameList(v){
-    this.tableData = this.tableData.concat(v);
+    let arrData = v||[]
+    arrData.map(item => {
+      item.orderPrice = item.recentPrice
+    })
+    this.tableData = this.tableData.concat(arrData);
     this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)

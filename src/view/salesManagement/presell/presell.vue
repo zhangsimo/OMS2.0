@@ -844,13 +844,15 @@ export default {
           // this.draftShow = value
           this.preSellOrderTable.tbData = res.data.content || [];
           this.page.total = res.data.totalElements;
-            for(let b of this.preSellOrderTable.tbData){
-                b._highlight = false
-                if(b.id==this.id){
-                    b._highlight = true;
-                    break;
-                }
+          for(let b of this.preSellOrderTable.tbData){
+            b._highlight = false
+            if(b.id==this.id){
+              b._highlight = true;
+              this.setRightData(b);
+              break;
             }
+          }
+
         }
       });
     },
@@ -876,13 +878,13 @@ export default {
             this.draftShow = v.status.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
-              for(let b of this.preSellOrderTable.tbData){
-                  b._highlight = false
-                  if(b.id==this.id){
-                      b._highlight = true;
-                      break;
-                  }
-              }
+            for(let b of this.preSellOrderTable.tbData){
+                b._highlight = false
+                if(b.id==this.id){
+                    b._highlight = true;
+                    break;
+                }
+            }
           }
         });
         {
@@ -1155,6 +1157,20 @@ export default {
       }
       this.getLeftList();
     },
+
+    setRightData(v){
+      if (v.id) {
+        this.isNew = false;
+        this.currentRow = v;
+        this.id = v.id;
+        this.tableData = v.detailVOList;
+        this.formPlan = v;
+        this.draftShow = v.status.value;
+        this.selectTableList = [];
+        this.limitList = {};
+      }
+    },
+
     //上传之前清空
     beforeUpload() {
       this.$refs.upload.clearFiles();

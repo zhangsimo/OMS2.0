@@ -318,15 +318,15 @@ export default {
         },
         {
           label: "草稿",
-          value: 0
+          value: "DRAFT"
         },
         {
           label: "已入库",
-          value: 1
+          value: "HAS_ENTER"
         },
         {
           label: "已作废",
-          value: 2
+          value: "INVALID"
         }
       ],
       advanced: false, //更多模块的弹框

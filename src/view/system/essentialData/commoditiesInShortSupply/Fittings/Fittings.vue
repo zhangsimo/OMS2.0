@@ -35,7 +35,7 @@
     </section>
     <!--上部-->
     <section class="part-main con-box flex">
-      <Split v-model="split" value=0.3>
+      <Split v-model="split" min="200" max="500">
         <div slot="left" class="tree-warp">
           <div class="title">配件分类</div>
           <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
