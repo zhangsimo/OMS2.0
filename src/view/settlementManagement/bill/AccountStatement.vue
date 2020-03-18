@@ -386,9 +386,11 @@
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
+    <sett />
   </div>
 </template>
 <script>
+import sett from './components/settlement'
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
@@ -417,8 +419,8 @@ export default {
     reconciliation,
     Monthlyreconciliation,
     salepopup,
-    hedgingInvoice
-    // sale
+    hedgingInvoice,
+    sett
   },
   data() {
     return {

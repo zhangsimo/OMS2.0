@@ -581,20 +581,19 @@
       },
       //选择采购入库单
       getPlanOrder(Msg){
-        // console.log(Msg);
         this.formPlan.warehouse = Msg.storeId
-        console.log(this.formPlan.warehouse)
         let arr = Msg.details || []
         arr.map(item => {
           item.outUnitId = item.unit
           item.stockOutQty = item.totalStockQty
         })
-        if(this.Right.tbdata){
-          this.Right.tbdata = [...this.Right.tbdata,...arr];
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
-        } else {
-          this.Right.tbdata = arr
-        }
+        this.Right.tbdata = arr
+        // if(this.Right.tbdata){
+        //   this.Right.tbdata = [...this.Right.tbdata,...arr];
+        //   this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+        // } else {
+        //   this.Right.tbdata = arr
+        // }
       },
       //选择采购入库单的主表code
       selectRow(val){
