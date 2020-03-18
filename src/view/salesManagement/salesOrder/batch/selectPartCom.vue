@@ -141,6 +141,8 @@
     mixins:[mixSelectPartCom],
     components: {PartInfo},
     props:{
+        guestId:'',//客户id
+        storeId:'',//仓库id
     },
 
   }

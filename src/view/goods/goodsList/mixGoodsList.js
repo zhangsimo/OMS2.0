@@ -81,7 +81,8 @@ export const mixGoodsData = {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
-      selectLeftItemId:""
+      selectLeftItemId:"",//左侧选中的id
+      saveAndSubmitClik:false,//保存或提交按钮是否点击
     };
   },
   mounted() {
@@ -433,7 +434,7 @@ export const mixGoodsData = {
         this.formPlan.supplyName = v.guestName || "";
         this.formPlan.createUid = v.createUid || "";
         this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
+        this.formPlan.planArriveDate = v.orderDate || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
         this.formPlan.directCompanyId = v.directCompanyId || "";
@@ -529,10 +530,12 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
+      //保存或提交按钮点击后临时禁用
+      if(this.submitloading){
+        return
+      }
       this.submitloading = true;
-      console.log(this.formPlan)
       this.$refs["formPlan"].validate(valid => {
-        console.log(valid)
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -569,8 +572,6 @@ export const mixGoodsData = {
           objReq.totalAmt = parseFloat(this.formPlan.totalPrice);
           //配件详情
           objReq.details = this.tableData;
-          // console.log(objReq)
-          // return
           let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
           if(zerolength.length > 0) {
             this.$Modal.confirm({
@@ -579,6 +580,7 @@ export const mixGoodsData = {
               onOk: () => {
                 if (subType === 1) {
                   saveDraft(objReq).then(res => {
+                    this.submitloading = false
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
@@ -588,9 +590,11 @@ export const mixGoodsData = {
                   });
                 } else if (subType === 2) {
                   if (this.tableData.length <= 0) {
+                    this.submitloading = false
                     return this.$Message.error("请添加配件后再提交");
                   }
                   saveCommit(objReq).then(res => {
+                    this.submitloading = false
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
@@ -604,6 +608,7 @@ export const mixGoodsData = {
           } else {
             if (subType === 1) {
               saveDraft(objReq).then(res => {
+                this.submitloading = false
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
@@ -613,9 +618,11 @@ export const mixGoodsData = {
               });
             } else if (subType === 2) {
               if (this.tableData.length <= 0) {
+                this.submitloading = false
                 return this.$Message.error("请添加配件后再提交");
               }
               saveCommit(objReq).then(res => {
+                this.submitloading = false
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
@@ -625,7 +632,6 @@ export const mixGoodsData = {
               });
             }
           }
-          this.submitloading = false;
         } else {
           this.submitloading = false;
           this.$Message.error("必填数据未填写");

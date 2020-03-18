@@ -33,7 +33,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>客户:</span> <span>{{ onelist.guestName }}</span>
+              <span>供应商:</span> <span>{{ onelist.guestName }}</span>
             </p>
             <p>
               <span>地址:</span> <span>{{ onelist.guestAddress }}</span>

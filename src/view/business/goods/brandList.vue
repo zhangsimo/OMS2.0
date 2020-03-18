@@ -309,7 +309,7 @@
           <Row>
             <Col span="12">
               <FormItem label="票据类型：">
-                <Select v-model="billTypeName" @on-change="addChange2">
+                <Select v-model="billTypeId" @on-change="addChange2">
                   <Option
                     v-for="item in ticketTypeList"
                     :key="item.itemCode"
@@ -320,7 +320,7 @@
             </Col>
             <Col span="12">
               <FormItem label="结算方式：">
-                <Select v-model="settleTypeName" @on-change="addChange3">
+                <Select v-model="settleTypeId" @on-change="addChange3">
                   <Option
                     v-for="item in settlementMethodList"
                     :key="item.itemCode"
@@ -618,12 +618,15 @@ export default {
           align: "center",
           render: (h, params) => {
             let _this = this;
+            let statusObj = JSON.parse(params.row.status)||{}
             return h("InputNumber", {
               props: {
                 min: 0,
-                value: params.row.acceptQty,
-                disabled:
-                  JSON.parse(params.row.status).value === 3 ? true : false
+                value: params.row.acceptQty||0,
+                disabled:statusObj.value === 3 ? true : false
+              },
+              style:{
+                width:"70px"
               },
               on: {
                 "on-change": e => {
@@ -849,7 +852,6 @@ export default {
     // 获取票据类型方法
     getPjType() {
       PjType().then(res => {
-        console.log(res)
         if (res.code === 0) {
           this.ticketTypeList = res.data;
           this.billTypeId = res.data[0].itemCode;
@@ -875,7 +877,7 @@ export default {
     // 往来单位
     getActiveCompany() {
       activeCompany().then(res => {
-        // console.log(res)
+        console.log(res)
         if (res.code === 0) {
           this.guestId = res.data[0].id;
           this.transitUnitList = res.data;
@@ -896,7 +898,6 @@ export default {
     getBrand() {
       getBrandList(this.conditionData).then(res => {
         // 撒打发
-        console.log(res, "12");
         if (res.code === 0) {
           this.data = res.data.content;
           this.orgid = res.data.content[0].orgid;
@@ -912,7 +913,6 @@ export default {
     },
     // 预订单受理按钮
     showAcceptance(e, index) {
-      console.log(this.data2)
       // console.log(e, index)
       this.$Modal.confirm({
         title: "提示",
@@ -987,7 +987,6 @@ export default {
       let btype = this.transitUnitList.filter(item => {
         return item.id === value;
       });
-      console.log(btype)
       // let btype = this.transitUnitList.filter(item => item.id = value)
       this.billTypeId = btype[0].billTypeId;
       this.settleTypeId = btype[0].settTypeId;
@@ -1048,7 +1047,6 @@ export default {
               name: res.data[key]
             });
           });
-          console.log("res", this.companyListOptions);
         }
       });
     },
@@ -1093,7 +1091,6 @@ export default {
     },
     // 待采购订单单选
     onSelect(row, selection) {
-      console.log(row);
       // console.log(selection)
       this.generateBrand = row;
       this.data4 = row;
@@ -1157,7 +1154,6 @@ export default {
     },
     // 直发确定按钮
     saveZhifa() {
-      console.log(this.orgid);
       if (
         this.transitUnit === "" ||
         this.billTypeName === "" ||
@@ -1230,7 +1226,6 @@ export default {
       // console.log(`当前页码${value}`)
       this.pageList.page = value;
       getPurchasePageList(this.pageList).then(res => {
-        console.log(res);
         if (res.code === 0) {
           this.data3 = res.data.content;
           this.data3.map(item => {

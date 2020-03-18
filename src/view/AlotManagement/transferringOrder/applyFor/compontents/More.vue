@@ -102,6 +102,18 @@ export default {
       this.guestId = a;
     },
     init() {
+      this.ArrayValue = []; //调出方下拉框
+      this.callout = ""; //调出方
+      this.numbers = ""; //申请单号
+      this.coding = ""; //编码
+      this.Accessories = ""; //配件人
+      this.Name = ""; //配件名称
+      this.createData = ""; //创建日期
+      this.submitData = ""; //提交日期
+      this.moreAndMore = false,
+      this.submita = "";
+      this.create = "";
+      this.guestId = "";      
       this.moreAndMore = true;
     },
     sendMsg() {

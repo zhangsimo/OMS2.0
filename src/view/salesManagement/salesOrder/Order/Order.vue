@@ -116,7 +116,7 @@ export default {
   methods: {
     //用于父子组件之间的方法通信
     getDutyInfo(){
-      this.setSave()
+      this.setSave();
     },
     //  调用left方法
     parentGetleft() {
@@ -153,12 +153,6 @@ export default {
     },
     //提交
     sumbit() {
-      // let list = this.$store.state.dataList.oneOrder;
-      // if (!list.id) {
-      //   this.$message.error("请选择一条有效数据");
-      //   return false;
-      // }
-      // let res = this.$refs.right.submitList();
       let list = this.$store.state.dataList.oneOrder;
         this.$refs.right.$refs.formPlan.validate(async valid => {
             if(valid){
@@ -179,9 +173,6 @@ export default {
                 this.$Message.error("*为必填项");
             }
         })
-
-
-
     },
     //返单
     async setBackOrder() {
@@ -201,19 +192,6 @@ export default {
     },
     //作废
     async setCancellation() {
-      // let list = this.$store.state.dataList.oneOrder;
-      // if (!list.id) {
-      //   this.$message.error("请选择一条有效数据");
-      //   return false;
-      // }
-      // let data = {};
-      // data.id = list.id;
-      // let res = await getCancellation(data);
-      // if (res.code === 0) {
-      //   this.changeLeft = res;
-      //   let data = {};
-      //   this.$store.commit("setOneOrder", data);
-      // }
       let list = this.$store.state.dataList.oneOrder;
       if (list.id) {
         this.$Modal.confirm({
@@ -235,8 +213,6 @@ export default {
       } else {
         this.$Message.warning('请选择一条有效数据')
       }
-
-
     },
     //导出
     async setDerive() {

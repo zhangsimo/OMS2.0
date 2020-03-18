@@ -788,6 +788,41 @@ export default [
         component: () =>
           import("@/view/settlementManagement/paymentmanage/index.vue")
       },
+
+
+      {
+        path: "/fundsManagement",
+        name: "fundsManagement",
+        // mark: "5100",
+        meta: {
+          title: "资金管理"
+        },
+        component: parentView,
+        children: [
+          {
+            path: "/fundsManagement/capitalChain",
+            name: "capitalChain",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "连锁资金日记账"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/capitalChain/capitalChain.vue")
+          },
+          {
+            path: "/fundsManagement/cashJournal",
+            name: "cashJournal",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "现金日记账"
+            },
+            component: () =>
+              import("@/view/settlementManagement/bill/AccountStatement.vue")
+          },
+        ]
+      },
       {
         path: "/settlementManagement/DailyFundReview",
         name: "settlementManagement-DailyFundReview",

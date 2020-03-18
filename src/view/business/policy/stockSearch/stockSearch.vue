@@ -679,19 +679,20 @@ export default {
     //     }
     // },
     async getBand() {
-      let res = await getPartBrandNoWB({ pageSize: 10000 });
+      let res = await getPartBrand({ pageSize: 10000 });
       if (res.code === 0) {
         let arr = [];
-        for(let v in res.data){
-          let obj = {}
-          obj.code = v;
-          obj.id = v;
-          obj.name = res.data[v]
-          arr.push(obj)
-        }
-        // res.data.forEach(item => {
-        //   arr.push(...item.children);
-        // });
+        let arrData = res.data.content || []
+        // for(let v in res.data){
+        //   let obj = {}
+        //   obj.code = v;
+        //   obj.id = v;
+        //   obj.name = res.data[v]
+        //   arr.push(obj)
+        // }
+        arrData.forEach(item => {
+          arr.push(...item.children);
+        });
         this.partBrandList = arr;
       }
     },

@@ -43,8 +43,8 @@
       </div>
     </section>
     <!--主要-->
-    <section class="con-box dia-main">
-      <Split v-model="split" min="200" max="608">
+    <section class="con-box dia-main" style="width: 984px; position: relative">
+      <Split v-model="split5" min="200" max="608">
         <div slot="left" class="left pt10 pb10 pl10" style="min-width: 200px;">
           <Tree :data="treeData" @on-select-change="treeSelect"></Tree>
         </div>
@@ -87,7 +87,7 @@ export default {
   name: "dia-log",
   data() {
     return {
-      split: 0.24,
+      split5: 0.2,
       // 名称
       fullname: "",
       // 编码

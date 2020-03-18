@@ -31,10 +31,14 @@
           </Select>
         </FormItem>
         <FormItem label="销售人员:">
-          <Input v-model="formData.orderMan"    placeholder="请输入销售人员名称" style="width: 350px" />
+          <Select v-model="formData.orderMan" label-in-value filterable style="width: 350px">
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <FormItem label="提交人:">
-          <Input v-model="formData.auditor"    placeholder="请输入提交人名称" style="width: 350px" />
+          <Select v-model="formData.auditor"  label-in-value filterable style="width: 350px">
+            <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+          </Select>
         </FormItem>
         <Checkbox v-model="formData.showPerson" class="ml100 ">显示个人单据</Checkbox>
       </Form>
@@ -47,7 +51,7 @@
 </template>
 
 <script>
-  import {getClient , getBrandList} from '@/api/salesManagment/salesOrder'
+  import {getClient , getBrandList,getSales} from '@/api/salesManagment/salesOrder'
     export default {
         name: "MoreQuery",
         props:{
@@ -59,11 +63,13 @@
                 clientList:[],//客户下拉框
                 brandList:[],//品牌下拉框,
                 formData:this.data,
+                salesList:[],
             }
         },
         mounted(){
             this.getAllClient()
-            this.getAllBrand()
+            this.getAllBrand();
+            this.getAllSales();
         },
         methods:{
             //打开模态框框
@@ -96,6 +102,17 @@
                         arr.push(...item.children)
                     })
                     this.brandList = arr
+                }
+            },
+            //获取销售员
+            async getAllSales() {
+                let res = await getSales();
+                if (res.code === 0) {
+                    this.salesList = res.data.content;
+                    console.log(res.data)
+                    this.salesList.map(item => {
+                        item.label = item.userName;
+                    });
                 }
             },
             //确定

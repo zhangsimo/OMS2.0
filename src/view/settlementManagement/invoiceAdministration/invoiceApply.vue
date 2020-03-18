@@ -159,7 +159,7 @@ export default {
         },
         {
           title: "往来单位",
-          key: "guestId",
+          key: "guestName",
           className: "tc"
         },
         {

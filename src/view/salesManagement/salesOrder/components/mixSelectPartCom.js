@@ -3,7 +3,7 @@ import {
   getCarClassifys,
   savePartInfo
 } from "_api/system/partsExamine/partsExamineApi";
-import { getwbParts } from "_api/system/partManager";
+import { getwbParts,getAccessList } from "_api/system/partManager";
 import { getDetails } from "@/api/salesManagment/salesOrder";
 
 export const mixSelectPartCom = {
@@ -231,7 +231,9 @@ export const mixSelectPartCom = {
       }
       params.page = this.page.num;
       params.size = this.page.size;
-      getwbParts(params, req).then(res => {
+      req.guestId=this.guestId;
+      req.storeId=this.storeId;
+      getAccessList(params, req).then(res => {
         this.loading = false;
         this.partData = res.data.content || [];
         this.page.total = res.data.totalElements;

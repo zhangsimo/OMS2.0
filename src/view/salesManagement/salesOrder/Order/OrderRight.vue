@@ -197,7 +197,7 @@
                 size="small"
                 class="mr10"
                 @click="getRUl"
-                :disabled="draftShow != 0 || this.$parent.$parent.ispart"
+                :disabled="draftShow != 0 || this.$parent.$parent.ispart||this.$parent.$parent.isAdd"
                 v-has="'getBarch'"
               >
                 <span class="center">
@@ -345,9 +345,9 @@
     <!--      </Modal>-->
 
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" :guestId="formPlan.guestId" :storeId="formPlan.storeId"  @selectPartName="getPartNameList"></select-part-com>
     <!--      批次配件-->
-    <barch ref="barch" :guestId="formPlan.guestId"  @selectPartName="getBarchList"></barch>
+    <barch ref="barch" :guestId="formPlan.guestId" :storeId="formPlan.storeId" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
     <Select-the-customer ref="AddCustomerModel" @getOne="setOneClient"></Select-the-customer>
     <!--      选择入库单-->
@@ -380,7 +380,8 @@ import {
   getSubmitList,
   getAccessories,
   getDeleteList,
-  getup
+  getup,
+  getAccessList
 } from "@/api/salesManagment/salesOrder";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import { getNewClient } from "@/api/system/essentialData/clientManagement";
@@ -445,6 +446,7 @@ export default {
       formPlan: {
         detailList: [],
         storeId:'',
+        orderManId: '',
         // orderTypeValue:'0'
       }, //获取到数据
       headers: {
@@ -526,8 +528,6 @@ export default {
       let res = await getRightList(data);
       if (res.code === 0) {
         stop();
-        // this.draftShow = JSON.parse(res.data.billStatusId)
-        // res.data.orderType =  JSON.parse(res.data.orderType)
         this.draftShow = res.data.billStatusId;
         res.data.orderTypeValue = res.data.orderType.value;
         this.formPlan = res.data;
@@ -545,7 +545,6 @@ export default {
     },
     //获取客户额度
     async getAllLimit() {
-      // alert(1)
       let data = {};
       data.guestId = this.leftOneOrder.guestId;
       data.id = this.leftOneOrder?this.leftOneOrder.id:''
@@ -569,12 +568,6 @@ export default {
       }
       this.leftOneOrder.guestId = value
       const res = await this.getAllLimit()
-      // data.guestId = value;
-      // data.id = this.leftOneOrder?this.leftOneOrder.id:''
-      // let res = await getLimit(data);
-      // if (res.code === 0) {
-      //   this.limitList = res.data;
-      // }
     },
 
     //获取客户属性
@@ -691,9 +684,6 @@ export default {
           if (["orderPrice"].includes(column.property)) {
             return this.$utils.sum(data, column.property).toFixed(2);
           }
-          // if (["orderQty"].includes(column.property)) {
-          //   return this.$utils.sum(data, column.property).toFixed(0);
-          // }
           if (columnIndex === 7) {
             return ` ${this.countAllPrice(data)} `;
           }
@@ -798,7 +788,6 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      // this.formPlan.planSendDate = data + " " + "00:00:00";
       this.formPlan.planSendDate = tools.transTime(data);
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
@@ -809,38 +798,16 @@ export default {
     },
     //计划到货日期
     getplanArriveDate(data) {
-      // this.formPlan.planArriveDate = data + " " + "00:00:00";
       this.formPlan.planArriveDate = tools.transTime(data);
     },
-    // //清空日期
-    //
-    //   cleadplanSendDate(data){
-    //     this.formPlan.planSendDate=null
-    //   },
-    //   clearplanArriveDate(data){
-    //     this.formPlan.planArriveDate=null
-    //   },
-
     //配件返回的参数
     getPartNameList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          // let data = [];
-          // data = this.formPlan;
-          // data = conversionList(val);
           this.formPlan.detailList = [
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
-         // this.formPlan.detailList.map(item => item.orderQty = item.orderQty > 0 ? item.orderQty : 1);
-         //  this.formPlan.detailList.map(item => item.salePrice = item.salePrice > 0 ? item.salePrice : 0);
-          // let res = await getAccessories(data);
-          // if (res.code === 0) {
-          //   this.$emit("parentGetleft");
-          //   this.$Message.success('添加配件成功')
-          //   this.$refs.formPlan.resetFields()
-          //   this.$parent.$parent.ispart=true
-          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -856,10 +823,6 @@ export default {
           });
           data = this.formPlan;
           data.detailList = val;
-          // let res = await getAccessories(data);
-          // if (res.code === 0) {
-          //   this.getList();
-          // }
         } else {
           this.$Message.error("*为必填项");
         }
@@ -910,8 +873,6 @@ export default {
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
-
-            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType)
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
@@ -957,37 +918,48 @@ export default {
     },
     //出库
     stockOut() {
-      if (this.door.outStockDoor) {
-        this.door.outStockDoor = false;
-        this.$refs.formPlan.validate(async valid => {
-          if (valid) {
-            try {
-              await this.$refs.xTable.validate();
-              if (+this.totalMoney > +this.limitList.outOfAmt) {
-                return this.$message.error("可用余额不足");
-              }
+        let str = '是否确定出库';
+        if(this.formPlan.orderAmt*1==0){
+            str='存在配件单价为0，是否确定出库';
+        }
+      this.$Modal.confirm({
+            title: str,
+            onOk: async () => {
+                if (this.door.outStockDoor) {
+                    this.door.outStockDoor = false;
+                    this.$refs.formPlan.validate(async valid => {
+                        if (valid) {
+                            try {
+                                await this.$refs.xTable.validate();
+                                if (+this.totalMoney > +this.limitList.outOfAmt) {
+                                    return this.$message.error("可用余额不足");
+                                }
+                                let res = await getStockOut(this.formPlan);
+                                if (res.code === 0) {
+                                    this.$Message.success("出库成功");
+                                    this.$store.commit("setleftList", res);
+                                    this.door.outStockDoor = true;
+                                    return res;
+                                } else {
+                                    this.door.outStockDoor = true;
+                                }
+                            } catch (errMap) {
+                                this.$XModal.message({
+                                    status: "error",
+                                    message: "表格校验不通过！"
+                                });
+                            }
+                        } else {
+                            this.$Message.error("*为必填项");
+                        }
+                    });
+                }
+            },
+            onCancel: () => {
+                this.$Message.info('已取消出库');
+            },
+        })
 
-              // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
-              let res = await getStockOut(this.formPlan);
-              if (res.code === 0) {
-                this.$Message.success("出库成功");
-                this.$store.commit("setleftList", res);
-                this.door.outStockDoor = true;
-                return res;
-              } else {
-                this.door.outStockDoor = true;
-              }
-            } catch (errMap) {
-              this.$XModal.message({
-                status: "error",
-                message: "表格校验不通过！"
-              });
-            }
-          } else {
-            this.$Message.error("*为必填项");
-          }
-        });
-      }
     },
     //提交
     submitList() {
@@ -998,7 +970,6 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
-            // this.formPlan.orderType = JSON.stringify(this.formPlan.orderType);
             let orderList = [];
             orderList = this.formPlan.detailList.filter(
               item => item.orderPrice*1 < item.averagePrice*1
@@ -1072,7 +1043,7 @@ export default {
                  detailList: [],
                  storeId:this.formPlan.storeId,
                  orderTypeValue:0,
-                 orderManId:''}
+                 orderManId:this.$store.state.user.userData.id}
                  ) ;
           this.draftShow = 0;
           this.leftOneOrder =this.formPlan

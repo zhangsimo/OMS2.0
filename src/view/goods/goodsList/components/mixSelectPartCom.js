@@ -134,8 +134,8 @@ export const mixSelectPartCom = {
       selectBrand: "9999",
       partBrandData: [
         {
-          label: "全部",
-          value: "9999"
+          name: "全部",
+          code: "9999"
         }
       ]
     };
@@ -195,33 +195,41 @@ export const mixSelectPartCom = {
         if(!res.data){
           return
         }
-        let filterData = res.data.content.filter(
-          item => item.quality == "品牌件"
-        );
-        if (filterData.length > 0) {
-          if (filterData[0].children && filterData[0].children.length > 0) {
-            filterData[0].children.map(item => {
-              let objData = {};
-              objData.label = item.name;
-              objData.value = item.code;
-              this.partBrandData.push(objData);
-            });
-          }
-        }
+        let arrData = res.data.content||[]
+        arrData.map(item => {
+          this.partBrandData.push(...item.children);
+        })
+        // let filterData = res.data.content.filter(
+        //   item => item.quality == "品牌件"
+        // );
+        // if (filterData.length > 0) {
+        //   if (filterData[0].children && filterData[0].children.length > 0) {
+        //     filterData[0].children.map(item => {
+        //       let objData = {};
+        //       objData.label = item.name;
+        //       objData.value = item.code;
+        //       this.partBrandData.push(objData);
+        //     });
+        //   }
+        // }
       });
     },
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      getCarPartClass({}).then(res => {
+      let req = {
+        page:1,
+        pageSize:500
+      }
+      getCarPartClass(req).then(res => {
         this.treeLoading = false;
         if(res.code==0){
           this.treeData = this.resetData(res.data.content || []);
-          //默认选中第一个
-          if(this.treeData.length>0){
-            this.treeData[0].selected = true
-            this.selectTreeItem = this.treeData[0];
-          }
+          // //默认选中第一个
+          // if(this.treeData.length>0){
+          //   this.treeData[0].selected = true
+          //   this.selectTreeItem = this.treeData[0];
+          // }
           this.getList();
         }
       });
