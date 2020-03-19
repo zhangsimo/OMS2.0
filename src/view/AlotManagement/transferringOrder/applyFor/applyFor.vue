@@ -891,6 +891,9 @@
         },
         // 提交按钮
         instance (name) {
+          if (this.rowId.length <= 3) {
+            return this.$message.error("请先保存数据，再提交！")
+          }
           this.$refs[name].validate((valid) => {
             if (valid) {
               this.$Modal.confirm({
