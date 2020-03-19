@@ -378,6 +378,7 @@
         successNOid: '', //没有id
         successHaveId: '', //有id,
         selectLeftItemId:'',//左侧点击的id
+        leftCurrentItem:null,//记录左侧点击的数据
       }
     },
     methods: {
@@ -517,6 +518,8 @@
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
+        //置空左侧选中数据
+        this.leftCurrentItem = null;
         for(let item of this.Left.tbdata){
           item._highlight = false
         }
@@ -577,7 +580,9 @@
         this.guestidId = val
         let SameId = this.ArraySelect.filter(item => item.id === val)
         // console.log(SameId[0].settTypeId)
-        this.formPlan.clearing = SameId[0].settTypeId
+        if(SameId&&SameId.length>0){
+          this.formPlan.clearing = SameId[0].settTypeId
+        }
       },
       //选择采购入库单
       getPlanOrder(Msg){
@@ -587,7 +592,25 @@
           item.outUnitId = item.unit
           item.stockOutQty = item.totalStockQty
         })
-        this.Right.tbdata = arr
+
+        if(this.leftCurrentItem){
+          if(Msg.code != this.leftCurrentItem.code){
+            this.leftCurrentItem = Msg;
+            this.Right.tbdata = arr
+          }else{
+            if(Msg.details[0].sourceMainId != this.leftCurrentItem.details[0].sourceMainId){
+              this.Right.tbdata = [...this.Right.tbdata,...arr];
+              this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+            }else{
+              return
+            }
+          }
+        }else{
+          this.leftCurrentItem = Msg;
+          this.Right.tbdata = arr;
+        }
+
+        //this.Right.tbdata = arr
         // if(this.Right.tbdata){
         //   this.Right.tbdata = [...this.Right.tbdata,...arr];
         //   this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
@@ -898,8 +921,9 @@
       },
       // 左边部分的当前行
       selection(row){
-        if (row == null) return;
+        if (row == null||!row.id) return;
         this.selectLeftItemId = row.id;
+        this.leftCurrentItem = row;
         let currentRowTable = this.$refs["currentRowTable"];
         if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({

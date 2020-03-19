@@ -636,9 +636,7 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+
 
     getPurchaseInit({}).then(res => {
       //票据类型
