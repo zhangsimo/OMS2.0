@@ -821,6 +821,17 @@ export default [
             component: () =>
               import("@/view/settlementManagement/fundsManagement/cashJournal/cashJournal.vue")
           },
+          {
+            path: "/fundsManagement/claimWrite",
+            name: "claimWrite",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "资金认领款核销"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/claimWrite/claimWrite.vue")
+          },
         ]
       },
       {

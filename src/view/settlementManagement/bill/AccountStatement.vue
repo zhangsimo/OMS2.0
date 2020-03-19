@@ -95,7 +95,7 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="capitalWrite"
           v-has="'examine'"
         >认领款核销</button>
         <button
@@ -1011,6 +1011,10 @@ export default {
     }
   },
   methods: {
+    //资金认领核销
+    capitalWrite(){
+      this.$router.push({name:'claimWrite'})
+    },
     // 进项发票登记及修改
     registrationEntry() {
       if (
