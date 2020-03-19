@@ -244,7 +244,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1"></Select-part-com>
     <!--更多弹框-->
     <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 作废提示 -->
@@ -385,7 +385,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "commitUname",
             minWidth: 170
           },
           {
@@ -581,6 +581,7 @@ export default {
             this.Left.tbdata = [];
             this.Left.page.total = 0;
           } else {
+              console.log(res.data)
             res.data.content.map((item, index) => {
               item["index"] = index + 1;
               item["statuName"] = item.status.name;
@@ -731,6 +732,9 @@ export default {
       // this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      if(params.xinzeng==1){
+          params.commitUname='';
+      }
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功

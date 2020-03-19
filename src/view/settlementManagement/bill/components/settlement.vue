@@ -1,22 +1,37 @@
 <template>
-  <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
+  <Modal v-model="Settlement" title=" 对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
-      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="close">关闭</button>
+      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
-    <div class="db p15 settlement mt10 mb10">
-      <div class="db_top flex mb15">
-        <span style="flex:1">门店：{{reconciliationStatement.orgName}}</span>
-        <span style="flex:1">往来单位：{{reconciliationStatement.guestName}}</span>
-        <span style="flex:1">收付类型：{{reconciliationStatement.billingTypeName}}</span>
-      </div>
-      <div class="db_bottom flex mt15">
-        <span style="flex:1">对账单号：{{reconciliationStatement.accountNo}}</span>
-        <span style="flex:1">实际收款/付款：{{reconciliationStatement.receiptPayment}}</span>
-        <span style="flex:1">收付款单号：{{collectPayId}}</span>
-      </div>
+    <div class="db p15 mt10 mb10">
+      <Row>
+        <Col span="8">
+        <span>门店：</span>
+        <Input class="w200" v-model="reconciliationStatement.orgName" /></Col>
+        <Col span="8">
+        <span>往来单位：</span>
+        <Input class="w200" v-model="reconciliationStatement.guestName" /></Col>
+        <Col span="8">
+        <span>收付类型：</span>
+        <Input class="w200" v-model="reconciliationStatement.billingTypeName" /></Col>
+      </Row>
+      <Row class="mt10">
+        <Col span="8">
+        <span>对账单号：</span>
+        <Input class="w200" v-model="reconciliationStatement.accountNo" />
+        <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
+        </Col>
+        <Col span="8">
+        <span>实际收款/付款：</span>
+        <Input class="w200" v-model="reconciliationStatement.receiptPayment" /></Col>
+        <Col span="8">
+        <span>收付款单号：</span>
+        <Input class="w200" v-model="collectPayId" /></Col>
+      </Row>
     </div>
-    <Row>
+    <Button @click="subject">选择添加科目</Button>
+    <Row class="mt10">
       <Col span="16">
         <vxe-table
           style="flex:6"
@@ -53,14 +68,6 @@
                 style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
               >核对</p>
               <span class="w700" style="display:inline-block;border:1px solid #ddd;border-top:none;">{{check}}</span>
-              <!-- <input
-                type="text"
-                size="large"
-                
-                style="text-indent:5px"
-                v-model=""
-                readonly
-              /> -->
             </section>
             <section class="flex">
               <p
@@ -102,13 +109,22 @@
       </Col>
     </Row>
     <div slot="footer"></div>
+    <accountSelette ref="accountSelette" />
+    <subjexts ref="subjexts" />
   </Modal>
 </template>
 <script>
+import accountSelette from './accountSelette'
+import subjexts from './subjects'
+import bus from '../Popup/Bus'
 export default {
+  components:{
+    accountSelette,
+    subjexts
+  },
   data() {
     return {
-      Settlement: true, //弹框显示
+      Settlement: false, //弹框显示
       check: "",
       remark: "",
       reconciliationStatement: "",
@@ -126,10 +142,37 @@ export default {
       collectPayId: ""
     };
   },
+  mounted(){
+    // 对账单号
+    bus.$on("accountHedNo", val=>{
+      console.log(val)
+    });
+    bus.$on('sub',val=>{
+      console.log(val)
+    })
+  },
   methods: {
-    hander() {},
+    // 选择科目弹框
+    subject(){
+      this.$refs.subjexts.modal = true
+    },
+    // 对账单号选择
+    accountNoClick(){
+      this.$refs.accountSelette.modal1 = true
+    },
+    //弹框打开
+    hander(type) {
+      if(type){
+        this.check= "",
+        this.remark= "",
+        this.reconciliationStatement= "",
+        this.BusinessType= [],
+        this.tableData= [],
+        this.collectPayId= ""
+      }
+    },
+    //保存
     conserve() {},
-    close() {},
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
       row.unAmt =
@@ -188,3 +231,10 @@ export default {
   }
 };
 </script>
+<style lang="less" scoped>
+.input {
+  position: relative;
+  left: -26px;
+  bottom: -5px;
+}
+</style>

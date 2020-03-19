@@ -115,7 +115,7 @@
                       <FormItem class="formItem" label="备注：" prop="remark">
                         <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                       </FormItem>
-                      <FormItem label="创建人：" prop="planner">
+                      <FormItem label="申请人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
                       </FormItem>
                       <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
@@ -330,7 +330,7 @@
                 minWidth: 120
               },
               {
-                title: '创建人',
+                title: '申请人',
                 key: 'createUname',
                 minWidth: 100
               },
@@ -385,7 +385,7 @@
             storeId: this.$store.state.user.userId, //调入仓库
             orderDate: '', //申请调拨日期
             remark: '', //备注
-            createUname: '', //创建人
+            createUname: '', //申请人
             serviceId: '', //申请单号
           },
           mainId: null, //选中行的id
@@ -471,7 +471,7 @@
             this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  dataTime, //申请调拨日期
             this.formPlan.remark =  '', //备注
-            this.formPlan.createUname =  '', //创建人
+            this.formPlan.createUname =  '', //申请人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''

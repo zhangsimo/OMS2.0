@@ -135,7 +135,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "订单占用",
-      key: "orderQty",
+      key: "occupyQty",
       minWidth: 80
     },
     {

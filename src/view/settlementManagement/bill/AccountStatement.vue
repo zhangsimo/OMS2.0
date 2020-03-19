@@ -65,19 +65,19 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(0)"
           v-has="'examine'"
         >对账单对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(1)"
           v-has="'examine'"
         >冲减预收</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(2)"
           v-has="'examine'"
         >冲减预付</button>
         <!-- <button
@@ -386,11 +386,11 @@
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
-    <sett />
+    <settlementMoadl ref="settlementMoadl" />
   </div>
 </template>
 <script>
-import sett from './components/settlement'
+import settlementMoadl from './components/settlement'
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
@@ -420,7 +420,7 @@ export default {
     Monthlyreconciliation,
     salepopup,
     hedgingInvoice,
-    sett
+    settlementMoadl
   },
   data() {
     return {
@@ -581,6 +581,46 @@ export default {
           className: "tc",
           render: (h, params) => {
             return h("span", params.row.payingBadDebts.toFixed(2));
+          }
+        },
+        {
+          title: "运费",
+          key: "transportExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.transportExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "保险费",
+          key: "insuranceExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.insuranceExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "手续费",
+          key: "serviceCharge",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.serviceCharge.toFixed(2));
+          }
+        },
+        {
+          title: "配件管理费",
+          key: "partsManagementFee",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.partsManagementFee.toFixed(2));
+          }
+        },
+        {
+          title: "其他费用",
+          key: "otherFees",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.otherFees.toFixed(2));
           }
         },
         {
@@ -1272,15 +1312,21 @@ export default {
         });
       }
     },
-    // 对账单结算
-    statementSettlement() {
+    // 对账单收付款结算
+    statementSettlement(type) {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         if (
           this.reconciliationStatement.pass &&
           (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
-          this.Settlement = true;
+          this.$refs.settlementMoadl.Settlement = true
+          if(type===0){
+          } else if(type===1){
+
+          } else if(type === 2){
+
+          }
         } else {
           this.$message({
             message: "请勾选流程通过且对账单状态为审核通过或结算中的数据",

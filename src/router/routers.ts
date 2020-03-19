@@ -819,7 +819,7 @@ export default [
               title: "现金日记账"
             },
             component: () =>
-              import("@/view/settlementManagement/bill/AccountStatement.vue")
+              import("@/view/settlementManagement/fundsManagement/cashJournal/cashJournal.vue")
           },
         ]
       },

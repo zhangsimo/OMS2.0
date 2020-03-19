@@ -3,13 +3,14 @@ import {
   getCarClassifys,
   savePartInfo
 } from "_api/system/partsExamine/partsExamineApi";
-import { getwbParts,getAccessList } from "_api/system/partManager";
+import { getwbParts,getAccessList,getWbList } from "_api/system/partManager";
 import { getDetails } from "@/api/salesManagment/salesOrder";
 
 export const mixSelectPartCom = {
   inject: ["reload"],
   props:{
-    guestId:''
+    guestId:'',
+    keyType:'',//当key==1时表示是从移仓单来的
   },
   data() {
     return {
@@ -231,13 +232,23 @@ export const mixSelectPartCom = {
       }
       params.page = this.page.num;
       params.size = this.page.size;
-      req.guestId=this.guestId;
-      req.storeId=this.storeId;
-      getAccessList(params, req).then(res => {
-        this.loading = false;
-        this.partData = res.data.content || [];
-        this.page.total = res.data.totalElements;
-      });
+      if(this.keyType!=1){
+        req.guestId=this.guestId;
+        req.storeId=this.storeId;
+        getAccessList(params, req).then(res => {
+          this.loading = false;
+          this.partData = res.data.content || [];
+          this.page.total = res.data.totalElements;
+        });
+      }else if(this.keyType==1){
+        getWbList(params,req).then(res=>{
+          this.loading = false;
+          this.partData = res.data|| [];
+          this.page.total = this.partData.length;
+        })
+      }
+
+
     },
 
     //获取配件品牌
