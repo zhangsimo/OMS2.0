@@ -60,7 +60,7 @@ export default class index extends Vue {
   private right: number = 1
 
   // 选择的仓库
-  private selectHouse: Array<any> = new Array()
+  private selectHouse: Array<any> = ["0"]
   // 仓库列表
   private wareHouse: Array<any> = new Array()
 

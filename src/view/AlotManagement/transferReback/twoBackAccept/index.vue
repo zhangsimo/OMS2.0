@@ -138,7 +138,7 @@
             style="border:none;background-color: #ffff;width:200px"
           />
         </span>
-        <span class="sp1" @click="copy">复制单号</span>
+        <span class="sp1" @click="copy(danhao)">复制单号</span>
       </Modal>
       <Modal v-model="modal2" title="提示" @on-ok="ok1" @on-cancel="cancel">
         <span>
@@ -342,10 +342,15 @@ export default {
       const res = await tuihuishouliliebiaomingxi(params);
       this.BottomTableData = res.data;
     },
-    copy() {
-      var number = document.getElementById("danhao").value; //获取需要复制的值(innerHTML)
-      document.getElementById("danhao").select(); // 选择对象
-      document.execCommand("Copy"); // 执行浏览器复制命令
+    copy(str) {
+      var save = function(e) {
+        e.clipboardData.setData('text/plain', str);
+        e.preventDefault();
+      };
+      document.querySelector(".sp1").addEventListener('copy', save);
+      document.execCommand('copy');
+      document.removeEventListener('copy', save);
+      console.log(str)
     },
     ok() {
       const params = {
@@ -420,6 +425,9 @@ export default {
 </script>
 
 <style scoped>
+.sp1 {
+  cursor: pointer;
+}
 </style>
 
 

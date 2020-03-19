@@ -47,8 +47,8 @@
           <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
         </Row>
         <Row class="mt15">
-          <span class="ml5">创 建 人：</span>
-          <Input v-model="Accessories" placeholder="请输入创建人" style="width: 450px" />
+          <span class="ml5">申 请 人：</span>
+          <Input v-model="Accessories" placeholder="请输入申请人" style="width: 450px" />
         </Row>
         <Row class="mt15">
           <span>配件名称：</span>

@@ -281,7 +281,6 @@ export default {
       };
       const res = await chengpingDetail(params);
       this.currentData = res.data;
-      this.currentData[0].remark = this.checkRow.remark;
     },
     selectTabelData1() {
       console.log(122);
