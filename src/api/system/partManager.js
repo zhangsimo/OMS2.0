@@ -191,6 +191,15 @@ export function getAccessList(params,data) {
     data
   })
 }
+//移仓单添加配件
+export function getWbList(params,data) {
+  return axios.request({
+    url:`${api.omsSotck}/partStoreStock/queryByConditions`,
+    method:'post',
+    params,
+    data
+  })
+}
 
 // 导入地址
 export const upxlxs = `${api.wmsApi}/attribute/import`;
