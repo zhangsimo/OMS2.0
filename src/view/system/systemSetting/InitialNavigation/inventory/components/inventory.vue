@@ -198,7 +198,7 @@ export default {
   },
   data() {
     return {
-      flag: false,//审核按钮是否展示
+      flag: false, //审核按钮是否展示
       //模态框默认隐藏
       modal: false,
       //加载图标显示
@@ -308,13 +308,13 @@ export default {
     //获取当前点击的信息
     clOnewList(data) {
       // let el = data
-      this.flag = data.row.auditSign ? false : true
+      this.flag = data.row.auditSign ? false : true;
       this.oneWarehouse = data.row;
       this.mid = data.row.id;
       // console.log(this.mid,77777)
       // console.log(this.oneWarehouse, "选择表一的数据");
-
       this.twoList = data.row.details;
+      console.log(1212);
       // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
     },
     //获取仓库下拉选择信息
@@ -476,8 +476,9 @@ export default {
       let self = this;
       if (res.code == 0) {
         this.$message.success(res.message);
-        this.clOnewList();
-
+        this.getList();
+        res.data.forEach(item => this.twoList.push(item));
+        console.log(this.twoList.length);
       } else {
         this.$message.error(res.message);
       }

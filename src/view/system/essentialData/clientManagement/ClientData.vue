@@ -100,7 +100,7 @@
               <FormItem label="业务员:">
                 <Input v-model="data.salesman" style="width: 180px" />
               </FormItem>
-              <FormItem label="信用等级:">
+              <FormItem v-show="sessionKey == 0" label="信用等级:">
                 <Select v-model="data.tgrade" style="width:180px" class="mr10">
                   <Option
                     v-for="item in dataList.CS00112"
@@ -130,7 +130,7 @@
               <FormItem label="业务员手机:" prop="salesmanTel">
                 <Input v-model="data.salesmanTel" style="width: 180px" />
               </FormItem>
-              <FormItem label="信誉额度:" prop="creditLimit">
+              <FormItem v-show="sessionKey == 0" label="信誉额度:" prop="creditLimit">
                 <Input v-model="data.creditLimit" style="width: 180px" />
               </FormItem>
               <FormItem label="QQ/微信:">
@@ -140,7 +140,12 @@
                 <Input v-model="data.defaultLogistics" style="width: 180px" />
               </FormItem>
               <FormItem label="二级分类:" prop="guestTypeFloor">
-                <Select v-model="data.guestTypeFloor" style="width:180px" class="mr10" placement="top">
+                <Select
+                  v-model="data.guestTypeFloor"
+                  style="width:180px"
+                  class="mr10"
+                  placement="top"
+                >
                   <Option
                     v-for="item in treelist "
                     v-if="data.guestType == item.parentId"
@@ -428,6 +433,7 @@ export default {
       }
     };
     return {
+      sessionKey: "0",
       Subordinate: [
         {
           label: "华胜连锁",
@@ -625,7 +631,7 @@ export default {
           {
             required: true,
             // validator: creditLimit,
-            message:'不能为空',
+            message: "不能为空",
             trigger: "change"
           }
         ],
@@ -671,6 +677,7 @@ export default {
     this.invoice = this.data.guestTaxpayerVOList || [];
     this.getList();
     this.getClienlist();
+    this.sessionKey = sessionStorage.getItem("key");
   },
   methods: {
     //获取关联客户
@@ -832,7 +839,7 @@ export default {
           // ...this.pitchOnClientList
         ];
         this.data.guestVOList = this.relevanceClientShow;
-        console.log("......"+this.data.guestVOList);
+        console.log("......" + this.data.guestVOList);
       } else {
         this.$Message.error("选择重复");
       }
