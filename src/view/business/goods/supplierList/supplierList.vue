@@ -598,12 +598,20 @@
             this.leftCurrentItem = Msg;
             this.Right.tbdata = arr
           }else{
-            if(Msg.details[0].sourceMainId != this.leftCurrentItem.details[0].sourceMainId){
+            let filterIdArr = this.leftCurrentItem.details.filter(item => item.sourceMainId==Msg.details[0].sourceMainId)
+            if(filterIdArr.length==0){
+              this.leftCurrentItem = Msg;
               this.Right.tbdata = [...this.Right.tbdata,...arr];
-              this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
-            }else{
-              return
+              this.leftCurrentItem.details = this.Right.tbdata;
             }
+            //console.log(Msg.details,this.leftCurrentItem.details)
+            // if(Msg.details[0].sourceMainId != this.leftCurrentItem.details[0].sourceMainId){
+            //   this.leftCurrentItem = Msg;
+            //   this.Right.tbdata = [...this.Right.tbdata,...arr];
+            //   // this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+            // }else{
+            //   return
+            // }
           }
         }else{
           this.leftCurrentItem = Msg;
