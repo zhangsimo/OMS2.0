@@ -584,6 +584,46 @@ export default {
           }
         },
         {
+          title: "运费",
+          key: "transportExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.transportExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "保险费",
+          key: "insuranceExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.insuranceExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "手续费",
+          key: "serviceCharge",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.serviceCharge.toFixed(2));
+          }
+        },
+        {
+          title: "配件管理费",
+          key: "partsManagementFee",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.partsManagementFee.toFixed(2));
+          }
+        },
+        {
+          title: "其他费用",
+          key: "otherFees",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.otherFees.toFixed(2));
+          }
+        },
+        {
           title: "实际收款/付款",
           key: "receiptPayment",
           className: "tc",
