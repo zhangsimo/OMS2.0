@@ -181,6 +181,7 @@
                     placement:[20,40,60,80,100]
                 },
                 Loading: true,//状态
+                storeId:''//参考id
             }
 
         },
@@ -205,6 +206,7 @@
             //打开模态框
             openModal(v) {
                 this.showInfo = true;
+                this.storeId = v;
                 this.getList(v)
             },
             //获取入库数据
@@ -213,7 +215,7 @@
                     data = this.Outform
                     data.page = this.page.num -1
                     data.size = this.page.size;
-                    data.storeId=v;
+                    data.storeId=v||this.storeId;
                this.Loading = true
                let res = await getGodown(data)
                if(res.code === 0){

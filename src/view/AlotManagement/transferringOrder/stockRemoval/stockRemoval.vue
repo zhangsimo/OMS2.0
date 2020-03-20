@@ -731,17 +731,6 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   if (this.Leftcurrentrow.xinzeng === "1") {
-      //   } else {
-      //     this.$Message.info("请先选择加工单");
-      //     return;
-      //   }
-      // }
-      // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态才能进行保存操作");
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -853,7 +842,7 @@ export default {
         item.index = index + 1;
       });
     },
-    tijiao1() {
+    tijiao1() {      
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
         return;
@@ -882,6 +871,7 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
+            this.flag = 0;
             this.getList();
             this.$Message.success("提交成功");
           }
@@ -1035,6 +1025,7 @@ export default {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
+            this.flag = 0;
             this.flagState = 0;
             this.baocun1();
           },

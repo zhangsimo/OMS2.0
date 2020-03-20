@@ -321,7 +321,7 @@
       <fee-registration
         ref="feeRegistration"
         :state="selectRowState"
-        :serviceId="formPlan.serviceId"
+        :serviceId="formPlan.code"
       ></fee-registration>
       <!-- 选择采购计划单 -->
       <procurement-modal

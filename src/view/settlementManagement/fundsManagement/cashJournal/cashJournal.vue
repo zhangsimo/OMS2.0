@@ -277,7 +277,7 @@ export default {
     },
     //资金认领核销
     capitalWrite(){
-      this.$router
+      this.$router.push({name:'claimWrite'})
     },
     //撤销分配
     distributionDelete(){

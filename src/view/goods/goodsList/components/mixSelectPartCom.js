@@ -44,6 +44,11 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
+          title: "配件全称",
+          key: "fullName",
+          minWidth: 180
+        },
+        {
           title: "品牌",
           key: "partBrand",
           minWidth: 120

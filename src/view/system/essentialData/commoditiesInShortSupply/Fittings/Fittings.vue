@@ -35,77 +35,76 @@
     </section>
     <!--上部-->
     <section class="part-main con-box flex">
-      <Split v-model="split" min="200" max="500">
-        <div slot="left" class="tree-warp">
-          <div class="title">配件分类</div>
-          <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
+      <div class="tree-warp" style="width: 25%; border-right: 1px solid #ddd">
+        <div class="title">配件分类</div>
+        <Tree class="tree" :data="treeData" @on-select-change="selectedTree"></Tree>
+      </div>
+      <div class="right table-warp" style="width: 74%">
+        <div class="btn-title">
+          <span class="mr10">过期时间:</span>
+          <DatePicker type="date"   @on-change="changTime" :options="options3" placeholder="选择时间" style="width: 180px" class="mr10"></DatePicker>
+          <Button @click="changeDisable" class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
+          <Button  type='default' @click="closeShow"><Icon type="md-close"/> 取消</Button>
         </div>
-        <div slot="right" class="right table-warp">
-          <div class="btn-title">
-            <span class="mr10">过期时间:</span>
-            <DatePicker type="date"   @on-change="changTime" :options="options3" placeholder="选择时间" style="width: 180px" class="mr10"></DatePicker>
-            <Button @click="changeDisable" class="mr10" type='default'><Icon type="md-checkmark" /> 选择</Button>
-            <Button  type='default' @click="closeShow"><Icon type="md-close"/> 取消</Button>
-          </div>
-          <div class="db pl10 tabs-ulwarp">
-            <ul class="tabs">
-              <li v-if="!isSys" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
-              <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件资料</li>
-            </ul>
-          </div>
-          <div class="tabs-warp" v-if="tabIndex == 0">
-            <Table
-              border
-              size="small"
-              height="500"
-              :loading="local.loading"
-              :stripe="true"
-              :columns="local.columns"
-              :data="local.tbdata"
-              @on-selection-change="selectRow"
-            ></Table>
-          </div>
-          <div class="tabs-warp" v-else>
-            <Table
-              border
-              height="500"
-              size="small"
-              :loading="cloud.loading"
-              :stripe="true"
-              :columns="cloud.columns"
-              :data="cloud.tbdata"
-              @on-selection-change="selectRow"
-            ></Table>
-          </div>
-          <div class="p10">
-              <Page
-              size="small"
-              v-if="tabIndex == 0"
-              class-name="page-con"
-              :current="local.page.num"
-              :total="local.page.total"
-              :page-size="local.page.size"
-              @on-change="changePagelocal"
-              @on-page-size-change="changeSizelocal"
-              show-sizer
-              show-total
-              show-elevator
-            ></Page>
-            <Page
-              v-else
-              class-name="page-con"
-              :current="cloud.page.num"
-              :total="cloud.page.total"
-              :page-size="cloud.page.size"
-              @on-change="changePageCloud"
-              @on-page-size-change="changeSizeCloud"
-              show-sizer
-              show-total
-              show-elevator
-            ></Page>
-          </div>
+        <div class="db pl10 tabs-ulwarp">
+          <ul class="tabs">
+            <li v-if="!isSys" class="center" :class="{'tab-active': tabIndex == 0}" @click="setTab(0)">本地配件资料</li>
+            <li class="center" :class="{'tab-active': tabIndex == 1}" @click="setTab(1)">配件资料</li>
+          </ul>
         </div>
-      </Split>
+        <div class="tabs-warp" v-if="tabIndex == 0">
+          <Table
+            border
+            size="small"
+            height="500"
+            :loading="local.loading"
+            :stripe="true"
+            :columns="local.columns"
+            :data="local.tbdata"
+            @on-selection-change="selectRow"
+          ></Table>
+        </div>
+        <div class="tabs-warp" v-else>
+          <Table
+            border
+            height="500"
+            size="small"
+            :loading="cloud.loading"
+            :stripe="true"
+            :columns="cloud.columns"
+            :data="cloud.tbdata"
+            @on-selection-change="selectRow"
+          ></Table>
+        </div>
+        <div class="p10">
+          <Page
+            size="small"
+            v-if="tabIndex == 0"
+            class-name="page-con"
+            :current="local.page.num"
+            :total="local.page.total"
+            :page-size="local.page.size"
+            @on-change="changePagelocal"
+            @on-page-size-change="changeSizelocal"
+            show-sizer
+            show-total
+            show-elevator
+          ></Page>
+          <Page
+            v-else
+            class-name="page-con"
+            :current="cloud.page.num"
+            :total="cloud.page.total"
+            :page-size="cloud.page.size"
+            @on-change="changePageCloud"
+            @on-page-size-change="changeSizeCloud"
+            show-sizer
+            show-total
+            show-elevator
+          ></Page>
+        </div>
+      </div>
+
     </section>
     <accessories ref="accessories"></accessories>
   </main>

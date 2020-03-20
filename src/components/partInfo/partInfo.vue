@@ -201,8 +201,10 @@
             :data="formValidate.specVOS"
             :edit-rules="validRules"
             :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            @radio-change="selectChange"
           >
             <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+            <vxe-table-column type="radio" width="60"></vxe-table-column>
             <vxe-table-column field="meterCompany" title="计量单位" width="102">
               <template v-slot="{ row,rowIndex }">
                 <span v-if="rowIndex==0">{{row.meterCompany}}</span>
@@ -260,12 +262,12 @@
         </TabPane>
       </Tabs>
       <div slot="footer" v-if="isAddPart">
-        <Button class="mr10" type="warning" @click="submit("proModalForm",1)">保存</Button>
+        <Button :loading="this.btnIsLoadding" class="mr10" type="warning" @click="submit('proModalForm',1)">保存</Button>
         <Button type="default" @click="proModal = false">取消</Button>
       </div>
       <div slot="footer" v-else>
-        <Button class="mr10" type="warning" @click="submit("proModalForm",1)">审核通过</Button>
-        <Button class="mr10" type="primary" @click="submit("proModalForm",2)">审核不通过</Button>
+        <Button class="mr10" type="warning" @click="submit('proModalForm',1)">审核通过</Button>
+        <Button class="mr10" type="primary" @click="submit('proModalForm',2)">审核不通过</Button>
         <Button type="default" @click="proModal = false">取消</Button>
       </div>
     </Modal>
