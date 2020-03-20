@@ -241,6 +241,8 @@ export default class GoodsInfo extends Vue {
     this.reset();
     this.getLists();
     this.inlogistics();
+    const ref: any = this.$refs["formTwo"];
+    ref.resetFields();
   }
 
   private async getLists() {
@@ -465,6 +467,7 @@ export default class GoodsInfo extends Vue {
           mainId: this.mainId
         });
         if (res.code == 0) {
+          ref.resetFields();
           this.$Message.success("保存成功");
           this.reset();
           this.searchInfo();
@@ -480,6 +483,7 @@ export default class GoodsInfo extends Vue {
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
     this.disabled = false;
+    this.formDateRight = {};
     this.formDateRight.businessNum = this.row.serviceId;
     if (row.logisticsRecordVO) {
       this.logisticsRecordVO = row.logisticsRecordVO;
@@ -577,7 +581,5 @@ export default class GoodsInfo extends Vue {
 .bgc {
   color: #000;
   background-color: #e8e8e8;
-}
-.c {
 }
 </style>

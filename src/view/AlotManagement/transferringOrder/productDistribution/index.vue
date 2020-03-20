@@ -164,8 +164,10 @@
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import {
+  getPartBrand
+} from "@/api/business/stockSearch";
+import {
   getcangku,
-  getPartBrand,
   genxin,
   jinqiaopinliebiao,
   baocun,
@@ -237,10 +239,15 @@ export default {
       getPartBrand(data)
         .then(res => {
           if (res.code == 0) {
-            res.data.content.forEach(element => {
+            let arr = [];
+            let arrData = res.data.content || [];
+            arrData.forEach(item => {
+              arr.push(...item.children);
+            });
+            arr.forEach(element => {
               this.quickArray.push({
-                value: element.qualityCode,
-                label: element.quality
+                value: element.id,
+                label: element.name
               });
             });
           }

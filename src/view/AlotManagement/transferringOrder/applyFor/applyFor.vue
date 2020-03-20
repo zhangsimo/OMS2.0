@@ -242,6 +242,7 @@
           }
         };
         return {
+          selectRowId: '',
           selectvalue: '',
           //校验输入框的值
           validRules: {
@@ -754,6 +755,13 @@
             if(res.code === 0){
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
+              this.Left.tbdata.forEach(el => {
+                if (el.id == this.selectRowId) {
+                  el._highlight = true;
+                  this.isAdd = true;
+                  this.setRow(el)
+                }
+              })
             }else {
               this.Left.page.total = 0
             }
@@ -767,6 +775,7 @@
         // 左边部分的当前行
         selection(row){
           if (row == null) return;
+          this.selectRowId = row.id;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
             this.$Modal.confirm({
@@ -792,7 +801,6 @@
                         currentRowTable.clearCurrentRow();
                         this.isAdd = true;
                         this.$message.success('保存成功！')
-                        this.leftgetList()
                         this.formPlan.guestName = '',
                         this.formPlan.storeId =  '',
                         this.formPlan.remark =  '',
@@ -801,10 +809,10 @@
                         this.formPlan.orderDate = ''
                         this.Right.tbdata = []
                         this.$refs.formPlan.resetFields();
+                        this.leftgetList()
                       }
                     })
                   } else {
-                    let currentRowTable = this.$refs["currentRowTable"];
                     currentRowTable.clearCurrentRow();
                     this.Left.tbdata.forEach(el => {
                       el._highlight = false;
