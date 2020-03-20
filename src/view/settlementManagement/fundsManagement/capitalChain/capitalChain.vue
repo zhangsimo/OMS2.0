@@ -60,22 +60,22 @@
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="importXSL">
             <span>导入日记账</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele">
             <span>删除导入</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="intellect">
             <span>智能匹配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="artificialChange">
             <span>人工分配</span>
           </button>
         </div>
@@ -91,6 +91,13 @@
         </div>
       </div>
     </section>
+
+<!-- 导入模板弹窗组件-->
+    <importXLS :URL="impirtUrl" ref="imp"></importXLS>
+
+<!--    人工智能分配-->
+    <artificial ref="art"></artificial>
+
     <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">
       <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>
       <Form ref="formInline" :model="formInline"  :label-width="100" label-position="right">
@@ -203,10 +210,14 @@
 <script>
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import {creat} from '../../components'
+  import importXLS from '../../components/importXLS'
+  import artificial from '../../components/artificial'
   import moment from 'moment'
   export default {
     components: {
       quickDate,
+      importXLS,
+      artificial
     },
     data() {
       return {
@@ -218,10 +229,12 @@
         company: "", //往来单位
         companyId: "", //往来单位id
         formInline:{},//统计数据
-        tableData:[
-          {address:1,name:123},
-          {address:2,name:456},
-        ],//全部数据
+        tableData:[],//全部数据
+        impirtUrl:{
+          downId: '1200000000',
+          upUrl:'123'
+        },//下载上传路径
+        oneList:{},//点击获取到的信息
       };
     },
     async mounted () {
@@ -240,7 +253,42 @@
       },
       //点击获取表格数据
       getOneList(val){
+        this.oneList = val.row
         console.log(val ,789)
+      },
+
+      //打开导入模板下载
+      importXSL(){
+        this.$refs.imp.openModal()
+      },
+
+      //删除导入
+      dele(){
+        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>是否删除该条数据</p>',
+          onOk: () => {
+
+          },
+          onCancel: () => {
+          }
+        });
+      },
+
+      //智能匹配
+      intellect(){
+        this.$Modal.success({
+          title: '提示',
+          content: '删除X条成功'
+        });
+      },
+
+      //人工匹配
+      artificialChange(){
+        // if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        this.$refs.art.openModal()
+
       }
 
     }
