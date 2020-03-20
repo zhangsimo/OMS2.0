@@ -118,6 +118,7 @@
         mounted(){
             this.getAdress()
             this.getClientTypeList()
+            this.getList()
         },
         methods:{
             openModel(){
