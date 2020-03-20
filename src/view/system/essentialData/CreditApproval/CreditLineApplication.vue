@@ -58,7 +58,7 @@
           </FormItem>
           <FormItem label="临时额度结束时间:">
             <DatePicker
-              :value="value2"
+              :value="customerDetails.tempEnd"
               format="yyyy/MM/dd"
               :options="dateOptions"
               style="width: 150px"
@@ -203,7 +203,6 @@ export default {
         }
       },
       value1: new Date(),
-      value2: new Date(),
       ruls: {
         fullName: [
           { required: true, message: "申请额度说明必填", trigger: "change" }
