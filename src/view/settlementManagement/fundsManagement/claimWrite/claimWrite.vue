@@ -5,7 +5,7 @@
         <div class="db mt20">
           <span>门店：</span>
           <Input v-model="orgName" readonly class="w100" />
-          <Button class="ml10">核销对账单</Button>
+          <Button class="ml10" @click="write">核销对账单</Button>
         </div>
       </div>
       <div class="ml20 mb10">
@@ -14,19 +14,19 @@
             <span>对账单勾选金额</span>
           </Col>
           <Col span="3">
-            <span>11</span>
+            <span>{{currentAccount.receiptPayment}}</span>
           </Col>
           <Col span="6">
             <span>认领款勾选金额</span>
           </Col>
           <Col span="3">
-            <span>11</span>
+            <span>{{claimedAmt}}</span>
           </Col>
           <Col span="2">
             <span>差异</span>
           </Col>
           <Col span="2">
-            <span>11</span>
+            <span>{{difference}}</span>
           </Col>
         </Row>
       </div>
@@ -60,6 +60,8 @@
               :columns="accountNoWrite"
               :data="accountNoWriteData"
               max-height="400"
+              highlight-row
+              @on-current-change="accountNoWriteChange"
             ></Table>
             <Page
               show-sizer
@@ -95,24 +97,12 @@
                   <span>查询</span>
                 </button>
                 <br />
-                <Button class="mt10 ml10">撤销分配</Button>
-                <Button class="mt10 ml10">预收款认领</Button>
-                <Button class="mt10 ml10">预收款支出认领</Button>
-                <Button class="mt10 ml10">预付款认领</Button>
-                <Button class="mt10 ml10">预付款收回认领</Button>
-                <Table border class="mt10" :columns="claimed" :data="claimedData" max-height="400"></Table>
-                <Page
-                  show-sizer
-                  show-total
-                  show-elevator
-                  class="mt10 tr"
-                  size="small"
-                  :total="claimedPage.total"
-                  :current="claimedPage.page"
-                  :page-size="claimedPage.size"
-                  @on-change="pageChangeAmt"
-                  @on-page-size-change="sizeChangeAmt"
-                />
+                <Button class="mt10 ml10" @click="distributionDelete">撤销分配</Button>
+                <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
+                <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
+                <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
+                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button>
+                <claim ref="claim" />
               </div>
               <div slot="bottom">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">连锁待分配款项</h4>
@@ -144,13 +134,18 @@
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
                 </button>
-                <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryClaimed">分配至本店</button>
+                <button
+                  class="ivu-btn ivu-btn-default ml10 mt10"
+                  type="button"
+                  @click="distributionShop"
+                >分配至本店</button>
                 <Table
                   border
                   class="mt10"
                   :columns="distribution"
                   :data="distributionData"
                   max-height="400"
+                  @on-selection-change="distributionSelection"
                 ></Table>
                 <Page
                   show-sizer
@@ -170,14 +165,23 @@
         </Split>
       </div>
     </section>
+    <advance ref="advance" />
+    <expenditure ref="expenditure" :title="title" />
+    <settlement ref="settlement" />
   </div>
 </template>
 <script>
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
+import advance from "./components/Advance";
+import expenditure from "./components/expenditure";
+import settlement from "../../bill/components/settlement";
+import claim from '../../components/claimed'
 export default {
+  components: { advance, expenditure, settlement,claim },
   data() {
     return {
+      title: "预付款认领", //弹框标题
       split1: 0.4, //左右面板分割
       split2: 0.52, //上下面板分割
       orgName: "", //门店
@@ -191,6 +195,7 @@ export default {
         total: 12,
         size: 10
       }, //未核销分页
+      currentAccount: {}, //未核销选中的数据
       accountNoWrite: [
         {
           title: "序号",
@@ -234,92 +239,7 @@ export default {
           align: "center"
         }
       ], //未核销对账单表格数据
-      accountNoWriteData: [], //未核销对账单表格数据
-      claimedPage: {
-        page: 1,
-        total: 12,
-        size: 10
-      }, //本店待认领款分页
-      claimed: [
-        {
-          title: "选择",
-          type: "selection",
-          align: "center",
-          width: 40
-        },
-        {
-          title: "序号",
-          type: "index",
-          align: "center",
-          width: 40
-        },
-        {
-          title: "所属区域",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "所属门店",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "所属店号",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "账户",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "账号",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "开户行",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "对应科目",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "发生日期",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "收入金额",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "支出金额",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "对方户名",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "交易备注",
-          key: "index",
-          align: "center"
-        },
-        {
-          title: "智能匹配往来单位",
-          key: "index",
-          align: "center"
-        }
-      ], //本店待认领款
-      claimedData: [], //本店待认领款
+      accountNoWriteData: [{ receiptPayment: 25 }, { receiptPayment: 28 }], //未核销对账单表格数据
       distribution: [
         {
           title: "选择",
@@ -394,12 +314,15 @@ export default {
           align: "center"
         }
       ], //连锁待分配款项
-      distributionData: [], //连锁待分配款项列表
+      distributionData: [{ guestName: 1 }], //连锁待分配款项列表
       distributionPage: {
         page: 1,
         total: 12,
         size: 10
-      } //连锁待分配款项分页
+      }, //连锁待分配款项分页
+      currentDistribution: [], //本店待认领款选中的数据
+      claimedAmt: 0, //认领款勾选金额
+      difference: 0 //差异
     };
   },
   mounted() {
@@ -435,6 +358,14 @@ export default {
         });
       });
     },
+    //核销对账单
+    write() {
+      if (Object.keys(this.currentAccount).length === 0)
+        return this.$message.error("请选择一条未核销对账单");
+      if (this.currentClaimed.length === 0)
+        return this.$message.error("至少选择一条本店待认领款");
+      this.$refs.settlement.Settlement = true;
+    },
     //未核销对账单查询
     queryNoWrite() {
       this.noWrite();
@@ -446,6 +377,51 @@ export default {
     //连锁待分配款项
     queryDistribution() {
       this.distribution();
+    },
+    //撤销分配
+    distributionDelete() {
+      if (this.currentClaimed.length !== 0) {
+        this.$Modal.confirm({
+          title: "是否撤回分配",
+          onOk: () => {},
+          onCancel: () => {}
+        });
+      } else {
+        this.$message.error("请先选择数据");
+      }
+    },
+    //预收款认领/预收款支出认领
+    clim(type) {
+      if (type) {
+        this.$refs.expenditure.modal = true;
+      } else {
+        this.$refs.advance.modal = true;
+      }
+    },
+    //预付款认领/预付款收回认领
+    expenditureClim(type) {
+      if (type) {
+        this.title = "预付款收回认领";
+      } else {
+        this.title = "预付款认领";
+      }
+      this.$refs.expenditure.modal = true;
+    },
+    //分配至本店
+    distributionShop() {
+      if (this.currentDistribution.length !== 0) {
+      } else {
+        this.$message.error("请先选择数据");
+      }
+    },
+    //未核销选中的数据
+    accountNoWriteChange(currentRow) {
+      this.currentAccount = currentRow;
+      this.difference = currentRow.receiptPayment - this.claimedAmt;
+    },
+    //连锁待分配款项选中的数据
+    distributionSelection(selection) {
+      this.currentDistribution = selection;
     },
     //未核销对账单查询接口
     noWrite() {
@@ -463,8 +439,8 @@ export default {
         amt: this.amt,
         guestId: this.companyId,
         type: this.paymentId,
-        page: this.accountPage.page,
-        size: this.accountPage.size
+        page: this.$refs.claimed.claimedPage.page,
+        size: this.$refs.claimed.claimedPage.size
       };
     },
     //连锁待分配款项查询接口
@@ -473,10 +449,11 @@ export default {
         amt: this.amt,
         guestId: this.companyId,
         type: this.paymentId,
-        page: this.accountPage.page,
-        size: this.accountPage.size
+        page: this.distributionPage.page,
+        size: this.distributionPage.size
       };
     },
+
     //未核销对账单页码改变
     pageChangeNo(val) {
       this.accountPage.page = val;
@@ -484,14 +461,6 @@ export default {
     //未核销对账单每页条数改变
     sizeChangeNo(val) {
       this.accountPage.size = val;
-    },
-    //本店待认领款页码
-    pageChangeAmt(val) {
-      this.claimedPage.page = val;
-    },
-    //本店待认领款每页条数
-    sizeChangeAmt(val) {
-      this.claimedPage.size = val;
     },
     // 连锁待分配款项页码
     pageChange(val) {
@@ -501,11 +470,28 @@ export default {
     sizeChange(val) {
       this.distributionPage.size = val;
     }
+  },
+  watch: {
+    currentClaimed: {
+      handler(val, od) {
+        if (val !== od) {
+          this.claimedAmt = 0;
+          val.map(item => {
+            this.claimedAmt += item.index * 1;
+          });
+          this.difference = this.currentAccount.receiptPayment
+            ? this.currentAccount.receiptPayment - this.claimedAmt
+            : 0 - this.claimedAmt;
+        }
+      },
+      deep: true
+    }
   }
 };
 </script>
 <style>
-.top-pane, .bottom-pane{
+.top-pane,
+.bottom-pane {
   overflow: auto;
 }
 </style>
