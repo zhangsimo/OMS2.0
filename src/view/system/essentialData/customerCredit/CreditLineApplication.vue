@@ -7,7 +7,7 @@
         <span>申请人:</span>
         <span class="mr20">{{ sendMsg.currentUser }}</span>
         <span>申请时间:</span>
-        <span class="mr20">{{ data.applyDate }}</span>
+        <span class="mr20">{{ localTime }}</span>
         <span>最高受信固定额度:</span>
         <span>100W</span>
       </div>
@@ -28,9 +28,10 @@
             <!--tempQuota-->
             <Input v-model="data.tempQuota" style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
-          <FormItem label="临时额度开始时间:">
+          <FormItem label="临时额度开始时间:" prop="tempStart">
             <DatePicker
               v-model="data.tempStart"
+              @on-change="dataChange"
               type="date"
               :options="startTimeOptions"
               style="width: 150px"
@@ -52,9 +53,10 @@
               disabled
             ></Input>
           </FormItem>
-          <FormItem label="临时额度结束时间:">
+          <FormItem label="临时额度结束时间:" prop="tempEnd">
             <DatePicker
               v-model="data.tempEnd"
+              @on-change="dataChange1"
               type="date"
               format="yyyy-MM-dd"
               :options="endTimeOptions"
@@ -186,6 +188,7 @@
 // guestAdjustadjustInfo
 import { guestAdjustadjustInfo } from "../../../../api/system/CustomerManagement/CustomerManagement";
 import * as tools from "../../../../utils/tools";
+import moment from "moment";
 
 export default {
   name: "CreditLineApplication",
@@ -194,6 +197,7 @@ export default {
     sendMsg: "",
     payable: "",
     quality: "",
+    localTime: "",
     nowDate: tools.transTime(new Date())
   },
   data() {
@@ -222,9 +226,15 @@ export default {
       value1: new Date(),
       value2: new Date(),
       ruls: {
-        quotaReason:[
-          { required: true, message: '申请额度说明必填！', trigger: 'blur' }
+        quotaReason: [
+          { required: true, message: "申请额度说明必填！", trigger: "blur" }
         ],
+        tempStart: [
+          { required: true, message: "临时额度开始时间", trigger: "blur" }
+        ],
+        tempEnd: [
+          { required: true, message: "临时额度结束时间", trigger: "blur" }
+        ]
         // applyQuota: [
         //   {
         //     message: "请输入大于0的正整数",
@@ -357,10 +367,34 @@ export default {
           align: "center",
           key: "orderAmt"
         }
-      ]
+      ],
+      applyDate: ""
     };
   },
+  mounted() {
+    let date = new Date();
+    this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
+    console.log(this.applyDate, "1111");
+  },
   methods: {
+    dataChange() {
+      if (this.data.tempStart) {
+        this.data.tempStart = moment(this.data.tempStart).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      } else {
+        this.data.tempStart = "";
+      }
+    },
+    dataChange1() {
+      if (this.data.tempEnd) {
+        this.data.tempEnd = moment(this.data.tempEnd).format(
+          "YYYY-MM-DD HH:mm:ss"
+        );
+      } else {
+        this.data.tempEnd = "";
+      }
+    },
     resetFields() {
       this.$refs.form.resetFields();
     },
