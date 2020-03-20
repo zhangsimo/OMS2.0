@@ -102,6 +102,7 @@
         ref="child"
         :data="creaditList"
         :sendMsg="applicationArr"
+        :localTime="date12"
         :payable="payable"
         :quality="quality"
       ></CreditLineApplication>
@@ -159,6 +160,8 @@ import {
 } from "../../../../api/system/CustomerManagement/CustomerManagement";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import * as tools from "../../../../utils/tools";
+import moment from "moment";
+
 export default {
   name: "customerCredit",
   components: {
@@ -168,6 +171,7 @@ export default {
   },
   data() {
     return {
+      date12: "",
       creditArr: [],
       alterArr: [],
       Name: "", //客户名称
@@ -211,7 +215,11 @@ export default {
             {
               title: "信用额度",
               align: "center",
-              key: "creditLimit"
+              key: "creditLimit",
+              render: (h, params) => {
+                let state = params.row.creditLimit + params.row.tempCreditLimit;
+                return h("span", state);
+              }
             },
             {
               title: "客户分类",
@@ -431,7 +439,8 @@ export default {
       payable: "", //传给子组件的应收应付
       quality: "", //某个值
       total: "", //调整后剩余额度
-      totalSuma: ""
+      totalSuma: "",
+      flag: ""
     };
   },
   methods: {
@@ -460,6 +469,7 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
+      this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
         ? JSON.parse(row.researchStatus).value
@@ -474,14 +484,16 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        if (this.Limitstate === 1) {
-          this.$Message.warning("正在审批中，请等待审批完成!");
-        } else if (this.Limitstate === 3) {
-          this.$Message.warning("禁止额度申请中，请联系管理员!");
-        } else {
-          this.CreditLineApplicationShow = true;
-          this.alertBox();
-        }
+        // if (this.Limitstate === 1) {
+        //   this.$Message.warning("正在审批中，请等待审批完成!");
+        // } else if (this.Limitstate === 3) {
+        //   this.$Message.warning("禁止额度申请中，请联系管理员!");
+        // } else {
+        this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+        console.log(this.date12, "1111");
+        this.CreditLineApplicationShow = true;
+        this.alertBox();
+        // }
       } else {
         this.$Message.warning("请选择要申请的客户！");
       }
@@ -652,52 +664,22 @@ export default {
     },
     //确定申请
     Determined() {
+      console.log(this.$refs.child.data.applyQuota);
       this.$refs.child.$refs.form.validate(valid => {
         if (valid) {
-          let data = {};
-          data.guestId = this.rowMessage.guestId;
-          data.orgId = this.rowMessage.orgid;
-          this.creaditList.applyQuota = this.creaditList.applyQuota
-            ? this.creaditList.applyQuota
-            : 0;
-          this.creaditList.tempQuota = this.creaditList.tempQuota
-            ? this.creaditList.tempQuota
-            : 0;
-          data.fixationQuotaTotal =
-            this.creaditList.applyQuota * 1 +
-              this.creaditList.creditLimit * 1 ||
-            0 + this.creaditList.applyQuota * 1;
-          data.tempQuotaTotal =
-            this.creaditList.tempQuota * 1 +
-              this.creaditList.tempCreditLimit * 1 ||
-            0 + this.creaditList.tempQuota * 1;
-          data.applyQuota = this.creaditList.applyQuota || 0;
-          data.tempQuota = this.creaditList.tempQuota || 0;
-          data.tempStart = tools.transTime(this.creaditList.tempStart);
-          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
-          data.payableAmt = +this.payable.payableAmt || 0;
-          data.tgrade = this.creaditList.tgrade || "";
-          data.thirtyAmt = +this.payable.thirtyAmt || 0;
-          data.sixtyAmt = +this.payable.sixtyAmt || 0;
-          data.moreSixtyAmt = this.payable.moreSixtyAmt || 0;
-          data.afterAdjustQuota = this.creaditList.totalSum;
-          data.quotaReason = this.creaditList.quotaReason || "";
-          data.receivableAmt = this.payable.receivableAmt || 0;
-          data.totalQuota =
-            +this.creaditList.applyQuota +
-              this.creaditList.creditLimit +
-              (+this.creaditList.tempQuota +
-                this.creaditList.tempCreditLimit) ||
-            +this.creaditList.applyQuota + +this.creaditList.tempQuota;
-          data.addTotalQuota = this.creaditList.tototo || 0;
-          data.adjustType = 0;
-          save(data).then(res => {
-            if (res.code === 0) {
-              this.CreditLineApplicationShow = false;
-              this.$Message.warning("保存成功");
-              this.getListTop();
+          if (this.$refs.child.data.applyQuota && this.flag == 0) {
+            this.$Message.error("请先完成信用调查");
+            return;
+          }
+          if (Number(this.$refs.child.data.tempQuota) > 5000) {
+            if (this.flag == 0) {
+              this.$Message.error("请先完成信用调查");
+            } else {
+              this.confirmFn();
             }
-          });
+          } else {
+            this.confirmFn();
+          }
         } else {
           this.$Message.error("必填项必须填!");
         }
@@ -706,6 +688,49 @@ export default {
     //确定取消
     cancel2() {
       this.CreditLineApplicationShow = false;
+    },
+    confirmFn() {
+      let data = {};
+      data.guestId = this.rowMessage.guestId;
+      data.orgId = this.rowMessage.orgid;
+      this.creaditList.applyQuota = this.creaditList.applyQuota
+        ? this.creaditList.applyQuota
+        : 0;
+      this.creaditList.tempQuota = this.creaditList.tempQuota
+        ? this.creaditList.tempQuota
+        : 0;
+      data.fixationQuotaTotal =
+        this.creaditList.applyQuota * 1 + this.creaditList.creditLimit * 1 ||
+        0 + this.creaditList.applyQuota * 1;
+      data.tempQuotaTotal =
+        this.creaditList.tempQuota * 1 + this.creaditList.tempCreditLimit * 1 ||
+        0 + this.creaditList.tempQuota * 1;
+      data.applyQuota = this.creaditList.applyQuota || 0;
+      data.tempQuota = this.creaditList.tempQuota || 0;
+      data.tempStart = tools.transTime(this.creaditList.tempStart);
+      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+      data.payableAmt = +this.payable.payableAmt || 0;
+      data.tgrade = this.creaditList.tgrade || "";
+      data.thirtyAmt = +this.payable.thirtyAmt || 0;
+      data.sixtyAmt = +this.payable.sixtyAmt || 0;
+      data.moreSixtyAmt = this.payable.moreSixtyAmt || 0;
+      data.afterAdjustQuota = this.creaditList.totalSum;
+      data.quotaReason = this.creaditList.quotaReason || "";
+      data.receivableAmt = this.payable.receivableAmt || 0;
+      data.totalQuota =
+        +this.creaditList.applyQuota +
+          this.creaditList.creditLimit +
+          (+this.creaditList.tempQuota + this.creaditList.tempCreditLimit) ||
+        +this.creaditList.applyQuota + +this.creaditList.tempQuota;
+      data.addTotalQuota = this.creaditList.tototo || 0;
+      data.adjustType = 0;
+      save(data).then(res => {
+        if (res.code === 0) {
+          this.CreditLineApplicationShow = false;
+          this.$Message.warning("保存成功");
+          this.getListTop();
+        }
+      });
     }
   },
   mounted() {
