@@ -172,6 +172,10 @@ export const mixSelectSupplier = {
     selectTabelData(v) {
       this.selectTableItem = v;
     },
+    dblclick(v){
+      this.selectTableItem = v;
+      this.throwData();
+    },
     throwData() {
       if (!this.selectTableItem) {
         return this.$Message.error("请选择供应商");
