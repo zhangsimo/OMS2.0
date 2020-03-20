@@ -157,7 +157,7 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input :disabled="this.remarkStatus" class="w160"></Input>
+                      <Input :disabled="this.remarkStatus" v-model="Leftcurrentrow.remark" class="w160"></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
