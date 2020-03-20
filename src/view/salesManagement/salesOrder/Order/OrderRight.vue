@@ -562,7 +562,7 @@ export default {
       oneClient = this.client.filter(item => {
         return item.id === value;
       });
-      for (var i in oneClient) {
+      for (let i in oneClient) {
         this.formPlan.billTypeId = oneClient[i].billTypeId;
         this.formPlan.settleTypeId = oneClient[i].settTypeId;
       }
@@ -822,7 +822,10 @@ export default {
             item.isMarkBatch = 1;
           });
           data = this.formPlan;
-          data.detailList = val;
+          val.map(item=>{
+              data.detailList.unshift(val);
+          })
+
         } else {
           this.$Message.error("*为必填项");
         }
@@ -1043,17 +1046,18 @@ export default {
                  detailList: [],
                  storeId:this.formPlan.storeId,
                  orderTypeValue:0,
-                 orderManId:this.$store.state.user.userData.id}
+                 orderManId:this.$store.state.user.userData.id,
+                 guestId:this.formPlan.guestId}
                  ) ;
           this.draftShow = 0;
-          this.leftOneOrder =this.formPlan
+          this.leftOneOrder = this.formPlan
           return false;
         }
         this.leftOneOrder = old;
         this.getList();
         this.getAllLimit();
       },
-      deep: true
+      // deep: true
     }
   }
 };
