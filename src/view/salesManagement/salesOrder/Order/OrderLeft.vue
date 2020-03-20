@@ -186,12 +186,12 @@ export default {
     //监听时间
     queryTime: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      // this.page.size = 10;
       this.gitlistValue();
     },
     //监听状态
     orderType: function(val, old) {
-      // this.page.num = 1;
+      this.page.num = 1;
       // this.page.size = 10;
       this.gitlistValue();
     },
@@ -227,7 +227,7 @@ export default {
       handler(v, ov) {
         if (v.code === 0) {
           this.page.num = 1;
-          this.page.size = 10;
+          // this.page.size = 10;
           this.gitlistValue();
         }
       },
