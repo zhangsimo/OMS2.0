@@ -180,7 +180,7 @@
         </TabPane>
       </Tabs>
     </div>
-    <distribution ref="distribution" />
+    <artificial ref="art" />
   </div>
 </template>
 
@@ -188,13 +188,13 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { creat } from "../../components";
 import amtData from '../../components/amtData'
-import distribution from '../../components/distribution'
+import artificial from '../../components/artificial'
 import moment from "moment";
 export default {
   components: {
     quickDate,
     amtData,
-    distribution
+    artificial
   },
   data() {
     return {
@@ -270,7 +270,7 @@ export default {
     //人工分配
     distribution() {
       if (this.currentChange) {
-        this.$refs.distribution.modal1 = true
+        this.$refs.art.openModal()
       } else {
         this.$message.error("请选择未核销的数据");
       }
