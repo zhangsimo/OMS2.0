@@ -451,25 +451,25 @@ export default {
       if (res.code == 0) {
         this.data.purchaseName = api.getfile + res.data.url;
       }
+    },
+    onStartTimeChange(startTime,type) {
+      this.endTimeOptions = {
+        // 设置结束时间不能选的范围
+        disabledDate(endTime) {
+          return endTime < startTime
+        }
+      }
+      this.data.operationStart = startTime
+    },
+    onEndTimeChange(endTime,type) {
+      this.startTimeOptions = {
+        // 设置开始时间不能选的范围
+        disabledDate(startTime) {
+          return startTime > endTime
+        }
+      }
+      this.data.operationEnd = endTime
     }
-    // onStartTimeChange(startTime,type) {
-    //   this.endTimeOptions = {
-    //     // 设置结束时间不能选的范围
-    //     disabledDate(endTime) {
-    //       return endTime < startTime
-    //     }
-    //   }
-    //   this.data.operationStart = startTime
-    // },
-    // onEndTimeChange(endTime,type) {
-    //   this.startTimeOptions = {
-    //     // 设置开始时间不能选的范围
-    //     disabledDate(startTime) {
-    //       return startTime > endTime
-    //     }
-    //   }
-    //   this.data.operationEnd = endTime
-    // }
   }
 };
 </script>
