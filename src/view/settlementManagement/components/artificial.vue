@@ -91,7 +91,6 @@
                 return '分配合计'
               }
               if (['role', 'num6'].includes(column.property)) {
-                console.log(column , 999)
                 return this.$utils.sum(data, column.property)
               }
               return null

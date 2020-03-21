@@ -854,7 +854,7 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/fundsManagement/capitalChain",
+            path: "capitalChain",
             name: "capitalChain",
             redirect: "",
             // mark: "5101",
