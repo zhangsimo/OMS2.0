@@ -6,30 +6,30 @@
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >{{onelist.orgName}}</h5>
+            >{{onelist.guest.fullName}}</h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>调入退回申请:</p>
-            <p>No: {{onelist.serviceId}}</p>
+            <p>调入退回申请</p>
+            <p>No: {{onelist.apply.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p>
-              <span>地址:</span>
+           <p>
+              <span>地址:{{onelist.guest.addr}}</span>
             </p>
             <p>
-              <span>电话:</span>
+              <span>电话:{{onelist.guest.tel}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
             <p>
               <span>订单日期:</span>
-              <span>{{onelist.orderDate}}</span>
+              <span>{{onelist.apply.orderDate}}</span>
             </p>
             <p>
               <span>打印日期:</span>
-              <span>{{onelist.printDate}}</span>
+              <span>{{printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -37,31 +37,31 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调出方:</span>
-              <span>{{onelist.guestName}}</span>
+              <span>{{onelist.applyGuest.fullName}}</span>
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.addr}}</span>
+              <span>{{onelist.applyGuest.addr}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>收货单位:</span>
-              <span>{{onelist.guestName}}</span>
+              <span>{{onelist.guest.fullName}}</span>
             </p>
             <p>
               <span>收货人:</span>
-              <span>{{onelist.orderMan}}</span>
+              <span>{{onelist.guest.contactor}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.tel}}</span>
+              <span>{{onelist.storeVO.contactorTe}}</span>
             </p>
             <p>
               <span>出库仓库:</span>
-              <span>{{onelist.storeName}}</span>
+              <span>{{onelist.storeVO.name}}</span>
             </p>
           </Col>
         </Row>
@@ -72,27 +72,27 @@
           width="990"
           border
           :columns="columns2"
-          :data="onelist.detailVOS"
+          :data="onelist.apply.detailVOS"
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10 marginLeft" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{totalQty}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{onelist.orderMan}}</span>
+            <span>{{username}}</span>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
-            <span>{{onelist.deliverer}}</span>
+            <span></span>
           </Col>
           <Col span="8" class="pl10">
             <span>收货人:</span>
-            <span>{{onelist.receiver}}</span>
+            <span></span>
           </Col>
         </Row>
       </div>
@@ -106,11 +106,15 @@
 </template>
 
 <script>
+import * as tools from "_utils/tools";
 import { getprintList } from "@/api/AlotManagement/twoBackApply.js";
 export default {
   name: "PrintShow",
   data() {
     return {
+      username: JSON.parse(sessionStorage.getItem("vuex")).user.userData.staffName,
+      totalQty: 0,
+      printDate: tools.transTime(new Date()),
       printShow: false, //模态框隐藏
       columns2: [
         {
@@ -134,6 +138,11 @@ export default {
           align: "center"
         },
         {
+          title: "品牌车型",
+          key: "carBrandName",
+          align: "center"
+        },
+        {
           title: "规格",
           key: "spec",
           align: "center"
@@ -144,23 +153,13 @@ export default {
           align: "center"
         },
         {
-          title: "单价",
-          key: "orderPrice",
+          title: "数量",
+          key: "applyQty",
           align: "center"
         },
         {
-          title: "金额",
-          key: "orderAmt",
-          align: "center"
-        },
-        {
-          title: "仓库",
-          key: "storeName",
-          align: "center"
-        },
-        {
-          title: "仓位",
-          key: "storeShelf",
+          title: "备注",
+          key: "remark",
           align: "center"
         }
       ],
@@ -198,7 +197,6 @@ export default {
       } else {
         const params = {
           id: this.curenrow.id
-          // ...this.curenrow
         };
         // 配件组装作废
         getprintList(params)
@@ -208,10 +206,8 @@ export default {
             if (res.code == 0) {
               this.printShow = true;
               this.onelist = res.data;
+              this.totalQty = this.onelist.apply.detailVOS.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
             }
-          })
-          .catch(e => {
-            this.$Message.info("至少选择一条信息");
           });
       }
     }

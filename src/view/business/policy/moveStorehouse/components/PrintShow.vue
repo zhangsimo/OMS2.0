@@ -24,7 +24,7 @@
             <p><span>订单日期:</span><span>{{onelist.createTime}}</span></p>
             <p>
               <span>打印日期:</span>
-              <span>{{onelist.printDate}}</span>
+              <span>{{printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -77,12 +77,16 @@
 </template>
 
 <script>
+    import * as tools from "_utils/tools";
     import { getPrint } from '@/api/business/moveStorehouse'
 
     export default {
         name: "PrintShow",
         data(){
             return{
+                username: JSON.parse(sessionStorage.getItem("vuex")).user.userData.staffName,
+                totalQty: 0,
+                printDate: tools.transTime(new Date()),
                 printShow: false, //模态框隐藏
                 columns2: [
                     {
