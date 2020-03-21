@@ -20,7 +20,7 @@
     props: {
       data: Object,
       parentName: String,
-      company:[],
+      company:'',
     },
     data () {
       const checkName = (rule, value, callback) => {
@@ -28,20 +28,11 @@
           callback([])
           return
         }
-        value = value.trim()
-        isExisted(value).then(res => {
-          if (res.code) {
-            callback(new Error('组织名称已存在'))
-          } else {
-            callback([])
-          }
-        }).catch(err => {})
       }
       return {
         rules: {
           name: [
             {required:true, message:'组织名称不能为空', trigger:'blur'},
-            {validator: checkName, trigger: 'blur'}
           ]
         }
       }

@@ -286,7 +286,7 @@
 
       //人工匹配
       artificialChange(){
-        // if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
         this.$refs.art.openModal()
 
       }

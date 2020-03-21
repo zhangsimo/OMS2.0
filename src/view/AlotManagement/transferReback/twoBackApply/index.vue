@@ -638,6 +638,18 @@ export default {
         });
     },
     xinzeng() {
+      this.Leftcurrentrow = {
+        status: {
+          value: 1
+        },
+        storeName: "",
+        createTime: "",
+        orderMan: "",
+        createUname: "",
+        remark: "",
+        serviceId: "",
+        detailVOS: []
+      };
       // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {
       } else {

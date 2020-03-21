@@ -61,7 +61,7 @@ export function outDataList(data) {
 //作废
 export function zuofei(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/invalid`,
+    url: `${api.omsOrder}/allotOutMain/invalid`,
     method: "post",
     data
   });
