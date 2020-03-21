@@ -36,12 +36,6 @@
               v-model="searchForm.partBrand"
               placeholder="品牌"
             >
-              <!--                <Option-->
-              <!--                  v-for="item in partBrandList"-->
-              <!--                  :value="item.partBrandValue"-->
-              <!--                  :key="item.partBrandValue"-->
-              <!--                >{{ item.partBrandName}}-->
-              <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
@@ -176,6 +170,7 @@ export default {
   components: { EnterStock },
   data() {
     return {
+      shopkeeper: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopkeeper,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
@@ -573,6 +568,13 @@ export default {
     this.getStoreHoure();
     this.getBand(); //获取品牌
     this.getLotStocks(); //获取批次
+    if (this.shopkeeper != 0) {
+      this.columns2.forEach((el, index, arr) => {
+        if(el.key === "originGuestName") {
+          arr.splice(index, 1)
+        }
+      })
+    }
   },
   methods: {
     //搜索

@@ -7,7 +7,7 @@
       </Select>
       <Input class="mr10" v-model="query" style="width: 150px" />
       <span class="mr10">品牌:</span>
-      <Select v-model="band" filterable style="width:140px" class="mr20">
+      <Select @on-change="brandSelect" v-model="band" filterable style="width:140px" class="mr20">
         <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <Button type="warning" class="mr20" @click="queryTight">
@@ -78,9 +78,7 @@ import {
   down
 } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import * as api from "_api/system/partManager";
-import {
-  getPartBrand
-} from "@/api/business/stockSearch";
+import { getPartBrand } from "@/api/business/stockSearch";
 import Fittings from "./Fittings/Fittings.vue";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -205,7 +203,7 @@ export default {
         {
           value: "2",
           label: "车型"
-        },
+        }
         // {
         //   value: "3",
         //   label: "拼音"
@@ -231,6 +229,10 @@ export default {
     this.getBand();
   },
   methods: {
+    brandSelect() {
+      // console.log(this.band);
+      this.getList();
+    },
     //获取全部紧俏品
     async getList() {
       let data = {};
@@ -238,7 +240,7 @@ export default {
       data.size = this.page.page;
       data.page = this.page.num - 1;
       if (this.band != "0") {
-        data.partBrandId = this.band;
+        data.partBandCode = this.band;
       }
       switch (this.searchType) {
         case "0":
@@ -276,12 +278,13 @@ export default {
         res.data.content.forEach(item => {
           arr.push(...item.children);
         });
-        arr.map(item=>{
+        // console.log(arr, "arr1212");
+        arr.map(item => {
           this.bands.push({
-            value:item.id,
-            label:item.name
-          })
-        })
+            value: item.code,
+            label: item.name
+          });
+        });
       }
       // console.log(res)
       // if (res.code == 0) {

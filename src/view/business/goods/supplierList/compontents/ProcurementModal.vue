@@ -162,7 +162,7 @@ export default class ProcurementModal extends Vue {
   @Emit('getPlanOrder')
   @Emit('selectRow')
   private ok() {
-    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
+    if(!this.selectRow) {this.$Message.error('请选择采购入库单'); return};
     this.shows = false;
     this.selectRow.details.forEach((el:any) => {
       Reflect.deleteProperty(el, 'id');

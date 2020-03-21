@@ -14,11 +14,11 @@
       <Row>
         <Col span="8">
           <FormItem label="调整前固定额度:">
-            <Input :value="customerDetails.creditLimit ||0" style="width: 150px" disabled></Input>
+            <Input :value="customerDetails.tempQuotaTotal ||0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整前临时额度:">
             <Input
-              :value="customerDetails.beforeAdjustTempQuota || 0"
+              :value="customerDetails.fixationQuotaTotal || 0"
               style="width: 150px"
               disabled
             ></Input>
@@ -58,7 +58,7 @@
           </FormItem>
           <FormItem label="临时额度结束时间:">
             <DatePicker
-              :value="value2"
+              :value="customerDetails.tempEnd"
               format="yyyy/MM/dd"
               :options="dateOptions"
               style="width: 150px"
@@ -71,7 +71,7 @@
         <Col span="8">
           <FormItem label="调整前额度合计:">
             <Input
-              :value="customerDetails.creditLimit + customerDetails.beforeAdjustTempQuota || 0"
+              :value="customerDetails.tempQuotaTotal + customerDetails.fixationQuotaTotal || 0"
               style="width: 150px"
               disabled
             ></Input>
@@ -131,7 +131,7 @@
         </Col>
       </Row>
       <FormItem label="申请额度说明:" prop="fullName">
-        <Input v-model="customerDetails.adjustReason" style="width: 650px" disabled></Input>
+        <Input v-model="customerDetails.quotaReason" style="width: 650px" disabled></Input>
       </FormItem>
     </Form>
     <div>
@@ -203,7 +203,6 @@ export default {
         }
       },
       value1: new Date(),
-      value2: new Date(),
       ruls: {
         fullName: [
           { required: true, message: "申请额度说明必填", trigger: "change" }

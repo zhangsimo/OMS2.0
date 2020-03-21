@@ -192,8 +192,11 @@
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem label="申请受用额度:" prop="applyTrustMoney">
+        <FormItem v-if="dataJudge[0].adjustType == 0" label="申请受用额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
+        </FormItem>
+        <FormItem v-else label="调整原因:" prop="applyTrustMoney1">
+          <Input v-model="data.applyTrustMoney1" style="width: 380px"></Input>
         </FormItem>
       </Col>
     </Row>
@@ -210,7 +213,8 @@ export default {
   name: "SurveyList",
   props: {
     data: "", //父组件中当前行的数据
-    dataMsg: "" //父组件中数据字典的数据
+    dataMsg: "", //父组件中数据字典的数据
+    dataJudge: ""
   },
   data() {
     //手机号
@@ -249,7 +253,7 @@ export default {
       }
     };
     const NumberDate = (rule, value, callback) => {
-      if (value>=1&&value<=31) {
+      if (value >= 1 && value <= 31) {
         callback();
       } else {
         return callback(new Error("只能输入1-31之间的数字"));
@@ -447,26 +451,26 @@ export default {
       if (res.code == 0) {
         this.data.purchaseName = api.getfile + res.data.url;
       }
+    },
+    onStartTimeChange(startTime,type) {
+      this.endTimeOptions = {
+        // 设置结束时间不能选的范围
+        disabledDate(endTime) {
+          return endTime < startTime
+        }
+      }
+      this.data.operationStart = startTime
+    },
+    onEndTimeChange(endTime,type) {
+      this.startTimeOptions = {
+        // 设置开始时间不能选的范围
+        disabledDate(startTime) {
+          return startTime > endTime
+        }
+      }
+      this.data.operationEnd = endTime
     }
-    // onStartTimeChange(startTime,type) {
-    //   this.endTimeOptions = {
-    //     // 设置结束时间不能选的范围
-    //     disabledDate(endTime) {
-    //       return endTime < startTime
-    //     }
-    //   }
-    //   this.data.operationStart = startTime
-    // },
-    // onEndTimeChange(endTime,type) {
-    //   this.startTimeOptions = {
-    //     // 设置开始时间不能选的范围
-    //     disabledDate(startTime) {
-    //       return startTime > endTime
-    //     }
-    //   }
-    //   this.data.operationEnd = endTime
-    // }
-  },
+  }
 };
 </script>
 

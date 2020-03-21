@@ -510,7 +510,7 @@
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
-                  field="notEnterQty"
+                  field="adjustQty"
                   title="订单取消数量"
                   width="100"
                 ></vxe-table-column>

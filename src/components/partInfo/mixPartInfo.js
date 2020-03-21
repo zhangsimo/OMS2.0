@@ -31,6 +31,10 @@ export const mixPartInfo = {
         weight: [{ required: true, message: "重量不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
         volumeRong: [{ required: true, message: "容积不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
       },
+      // 按钮状态
+      btnIsLoadding: false,
+      // 选中包装规格行
+      currRow: null,
       //是否禁用
       prohibit: false,
       //是否禁售
@@ -142,6 +146,8 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
+      this.currRow = null
+      this.btnIsLoadding = false;
       this.proModal = true;
       this.formValidate.specVOS=[];
       this.$refs.tabs.activeKey = 'active1'
@@ -287,11 +293,26 @@ export const mixPartInfo = {
       let objData = { ...this.newSpecObj }
       this.formValidate.specVOS.push(objData)
     },
+    selectChange(table) {
+      this.currRow = table.row
+    },
     //删除包装规格数据
     delSpec() {
-      if (this.formValidate.specVOS.length > 1) {
-        this.formValidate.specVOS.pop()
+      if (this.currRow == null) {
+        return this.$message.error("请先选择一条数据")
       }
+      if (this.currRow.checkboxsing == true) {
+        return this.$message.error("不能删除最小计量单位")
+      }
+      if (this.formValidate.specVOS.length <= 1) {
+        return this.$message.error("至少保留一条数据")
+      }
+      this.formValidate.specVOS.forEach((el, index, arr) => {
+        if(el._XID == this.currRow._XID) {
+          arr.splice(index, 1)
+          this.currRow = null
+        }
+      });
     },
     //包装规格复选框切换
     changeCheckbox(i) {
@@ -341,6 +362,7 @@ export const mixPartInfo = {
 
     //提交审批
     submit(name, auditSign) {
+      this.btnIsLoadding = true
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$refs.vxeTable.validate(val => {
@@ -354,9 +376,13 @@ export const mixPartInfo = {
               })
               if (errorT > 0) {
                 this.$message.error('包装规格计量单位必填')
+                this.btnIsLoadding = false
                 return
               }
-              if(this.saveFlag) return this.$message.error('正在保存数据')
+              if(this.saveFlag) {
+                this.btnIsLoadding = false
+                return this.$message.error('正在保存数据')
+              }
               let objReq = {}
               //品质
               objReq.qualityTypeId = this.formValidate.qualityTypeId
@@ -420,18 +446,20 @@ export const mixPartInfo = {
               objReq.isStopSell = this.forbidsale ? 1 : 0
               this.saveFlag = true
               this.$emit('throwData', objReq)
+              this.btnIsLoadding = false
             } else {
               //this.$message.error('带*必填')
               this.tabsActive = 'active2'
+              this.btnIsLoadding = false
             }
           })
         } else {
          // this.$Message.error('带*必填')
           this.tabsActive = 'active1'
+          this.btnIsLoadding = false;
           return
         }
       })
-
     },
   }
 }

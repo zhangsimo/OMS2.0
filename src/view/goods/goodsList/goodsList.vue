@@ -338,7 +338,7 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -636,9 +636,7 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+
 
     getPurchaseInit({}).then(res => {
       //票据类型
@@ -670,9 +668,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 70;
+        this.leftTableHeight = wrapH - 100;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 20;
       });
     },
     initStart() {

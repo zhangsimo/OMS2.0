@@ -788,8 +788,30 @@ export default [
         component: () =>
           import("@/view/settlementManagement/paymentmanage/index.vue")
       },
-
-
+      {
+        path: "/settlementManagement/advanceCollection",
+        name: "settlementManagement-advanceCollection",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "预收款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/advanceCollection/advanceCollection.vue")
+      },
+      {
+        path: "/settlementManagement/advanceCharge",
+        name: "settlementManagement-advanceCharge",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "预付款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/advanceCharge/advanceCharge.vue")
+      },
       {
         path: "/fundsManagement",
         name: "fundsManagement",
@@ -819,7 +841,18 @@ export default [
               title: "现金日记账"
             },
             component: () =>
-              import("@/view/settlementManagement/bill/AccountStatement.vue")
+              import("@/view/settlementManagement/fundsManagement/cashJournal/cashJournal.vue")
+          },
+          {
+            path: "/fundsManagement/claimWrite",
+            name: "claimWrite",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "资金认领款核销"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/claimWrite/claimWrite.vue")
           },
         ]
       },

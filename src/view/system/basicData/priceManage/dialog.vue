@@ -44,37 +44,35 @@
     </section>
     <!--主要-->
     <section class="con-box dia-main" style="width: 984px; position: relative">
-      <Split v-model="split5" min="200" max="608">
-        <div slot="left" class="left pt10 pb10 pl10" style="min-width: 200px;">
-          <Tree :data="treeData" @on-select-change="treeSelect"></Tree>
+      <div class="left pt10 pb10 pl10" style="width: 22%">
+        <Tree :data="treeData" @on-select-change="treeSelect"></Tree>
+      </div>
+      <div class="right tab-warp" style="width: 78%">
+        <Table
+          border
+          highlight-row
+          size="small"
+          :loading="loading"
+          :stripe="true"
+          :columns="columns"
+          :data="tbdata"
+          @on-current-change="selectRow"
+          height="460"
+        ></Table>
+        <div class="page-warp">
+          <Page
+            class-name="page-con"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+            show-elevator
+          ></Page>
         </div>
-        <div slot="right" class="right tab-warp">
-          <Table
-            border
-            highlight-row
-            size="small"
-            :loading="loading"
-            :stripe="true"
-            :columns="columns"
-            :data="tbdata"
-            @on-current-change="selectRow"
-            height="460"
-          ></Table>
-          <div class="page-warp">
-            <Page
-              class-name="page-con"
-              :current="page.num"
-              :total="page.total"
-              :page-size="page.size"
-              @on-change="changePage"
-              @on-page-size-change="changeSize"
-              show-sizer
-              show-total
-              show-elevator
-            ></Page>
-          </div>
-        </div>
-      </Split>
+      </div>
     </section>
   </main>
 </template>

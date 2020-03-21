@@ -115,7 +115,7 @@
                       <FormItem class="formItem" label="备注：" prop="remark">
                         <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
                       </FormItem>
-                      <FormItem label="创建人：" prop="planner">
+                      <FormItem label="申请人：" prop="planner">
                         <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
                       </FormItem>
                       <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
@@ -242,6 +242,7 @@
           }
         };
         return {
+          selectRowId: '',
           selectvalue: '',
           //校验输入框的值
           validRules: {
@@ -330,7 +331,7 @@
                 minWidth: 120
               },
               {
-                title: '创建人',
+                title: '申请人',
                 key: 'createUname',
                 minWidth: 100
               },
@@ -385,7 +386,7 @@
             storeId: this.$store.state.user.userId, //调入仓库
             orderDate: '', //申请调拨日期
             remark: '', //备注
-            createUname: '', //创建人
+            createUname: '', //申请人
             serviceId: '', //申请单号
           },
           mainId: null, //选中行的id
@@ -471,7 +472,7 @@
             this.formPlan.storeId =  this.StoreId, //调入仓库
             this.formPlan.orderDate =  dataTime, //申请调拨日期
             this.formPlan.remark =  '', //备注
-            this.formPlan.createUname =  '', //创建人
+            this.formPlan.createUname =  '', //申请人
             this.formPlan.serviceId =  '' //申请单号
             this.Right.tbdata = []
             this.rowId = ''
@@ -754,6 +755,13 @@
             if(res.code === 0){
               this.Left.tbdata = res.data.content
               this.Left.page.total = res.data.totalElements;
+              this.Left.tbdata.forEach(el => {
+                if (el.id == this.selectRowId) {
+                  el._highlight = true;
+                  this.isAdd = true;
+                  this.setRow(el)
+                }
+              })
             }else {
               this.Left.page.total = 0
             }
@@ -767,6 +775,7 @@
         // 左边部分的当前行
         selection(row){
           if (row == null) return;
+          this.selectRowId = row.id;
           let currentRowTable = this.$refs["currentRowTable"];
           if(!this.Flaga && !this.isAdd && row.id){
             this.$Modal.confirm({
@@ -792,7 +801,6 @@
                         currentRowTable.clearCurrentRow();
                         this.isAdd = true;
                         this.$message.success('保存成功！')
-                        this.leftgetList()
                         this.formPlan.guestName = '',
                         this.formPlan.storeId =  '',
                         this.formPlan.remark =  '',
@@ -801,10 +809,10 @@
                         this.formPlan.orderDate = ''
                         this.Right.tbdata = []
                         this.$refs.formPlan.resetFields();
+                        this.leftgetList()
                       }
                     })
                   } else {
-                    let currentRowTable = this.$refs["currentRowTable"];
                     currentRowTable.clearCurrentRow();
                     this.Left.tbdata.forEach(el => {
                       el._highlight = false;
@@ -891,6 +899,9 @@
         },
         // 提交按钮
         instance (name) {
+          if (this.rowId.length <= 3) {
+            return this.$message.error("请先保存数据，再提交！")
+          }
           this.$refs[name].validate((valid) => {
             if (valid) {
               this.$Modal.confirm({

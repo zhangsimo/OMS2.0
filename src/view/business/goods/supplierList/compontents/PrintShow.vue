@@ -81,7 +81,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{ onelist.creator }}</span>
+            <span>{{ onelist.orderMan }}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>

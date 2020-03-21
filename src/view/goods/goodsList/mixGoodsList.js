@@ -105,11 +105,13 @@ export const mixGoodsData = {
       let companyMap = res.data.companyMap || {};
       if (companyMap) {
         for (let v in companyMap) {
-          let objData = {
-            label: v,
-            value: companyMap[v]
-          };
-          this.companyMap.push(objData);
+          if(companyMap[v]!=this.$store.state.user.userData.shopId){
+            let objData = {
+              label: v,
+              value: companyMap[v]
+            };
+            this.companyMap.push(objData);
+          }
         }
       }
     });
@@ -326,7 +328,9 @@ export const mixGoodsData = {
           allArr.push(oldArr[i]);
         }
       }
-      console.log(allArr)
+      allArr.map(item => {
+        item.orderPrice = item.recentPrice||0
+      })
       this.tableData = allArr;
     },
 
@@ -348,7 +352,7 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v) {
-      // console.log(v);
+      console.log(v);
       this.formPlan.planArriveDate = v;
     },
     //获取订单状态
@@ -434,7 +438,7 @@ export const mixGoodsData = {
         this.formPlan.supplyName = v.guestName || "";
         this.formPlan.createUid = v.createUid || "";
         this.formPlan.guestId = v.guestId || "";
-        this.formPlan.planArriveDate = v.orderDate || "";
+        this.formPlan.planArriveDate = new Date(v.orderDate) || "";
         this.formPlan.remark = v.remark || "";
         this.formPlan.billType = v.billTypeId || "";
         this.formPlan.directCompanyId = v.directCompanyId || "";

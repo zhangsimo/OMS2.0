@@ -33,7 +33,13 @@
             <p class="end">打印抬头显示:</p>
           </Col>
           <Col :span="12">
-            <Input v-model="printHeader" maxlength="50" placeholder="请输入打印抬头" style="width: 140px;" class="mr10" />
+            <Input
+              v-model="printHeader"
+              maxlength="50"
+              placeholder="请输入打印抬头"
+              style="width: 140px;"
+              class="mr10"
+            />
           </Col>
         </Row>
         <Row class="row" type="flex" align="middle">
@@ -68,7 +74,7 @@
             <p class="end">启用额度审批流程:</p>
           </Col>
           <Col :span="12">
-            <RadioGroup v-model="isQuota">
+            <RadioGroup @on-change="fnFalse" v-model="isQuota">
               <Radio label="1">开启</Radio>
               <Radio label="0">关闭</Radio>
             </RadioGroup>
@@ -174,6 +180,7 @@ const data = () => {
     isTPA: "", // 是否开启临时采购审批
     isEAOM: "", // 是否开启门店外采审批
     isAuto: "", // 是否开启调拨自动受理流程
+    flag: true
   };
 };
 
@@ -182,9 +189,13 @@ const mounted = function() {
 };
 
 const methods = {
+  fnFalse() {
+    this.flag = !this.flag;
+    sessionStorage.setItem("key", this.isQuota);
+  },
   // 获取
   async getset() {
-    let res = await api.getSys({orgid: 1});
+    let res = await api.getSys({ orgid: 1 });
     if (res.code === 0) {
       this.setarr = res.data;
       this.setarr.forEach(el => {
@@ -228,6 +239,12 @@ const methods = {
           default:
             return;
         }
+        if (this.isQuota == "1") {
+          this.flag = true;
+        } else {
+          this.flag = false;
+        }
+        sessionStorage.setItem("key", this.isQuota);
       });
     }
   },
@@ -276,9 +293,9 @@ const methods = {
       }
       return el;
     });
-    let res = await api.saveSys(this.setarr)
-    if(res.code === 0) {
-      this.$Message.success('保存成功');
+    let res = await api.saveSys(this.setarr);
+    if (res.code === 0) {
+      this.$Message.success("保存成功");
       this.getset();
     }
   }
