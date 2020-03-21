@@ -16,8 +16,8 @@
       </strong>
     </div>
     <div class="login-right">
-      <p class="login-right-top"><a href="javascript:void(0)" @click="register">点击注册</a><a href="javascript:void(0)">设为首页</a><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>
-      </p>
+<!--      <p class="login-right-top"><a href="javascript:void(0)" @click="addFavorite">加入收藏</a>-->
+<!--      </p>-->
       <div class="login-con">
         <h3 class="login-con-header">极配正品</h3>
         <div class="form-con">
