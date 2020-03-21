@@ -468,7 +468,7 @@ export default {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
                 item.index = index + 1;
-                item.accountSign = item.billStatusId ? "已提交" : "草稿";
+                item.accountSign = item.billStatusId ? "已出库" : "草稿";
                 item.orderType = item.orderType
                   ? item.orderType === 1
                     ? "电商订单"
