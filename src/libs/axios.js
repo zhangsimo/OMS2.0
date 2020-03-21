@@ -96,6 +96,9 @@ class httpRequest {
           } else {
             if (data.message && this.showErrorQueue[url]) {
               delete this.showErrorQueue[url]
+              if(typeof data.message=='object'){
+                data.message=data.message[0]
+              }
               globalVue.$Message.error(data.message)
             }
           }

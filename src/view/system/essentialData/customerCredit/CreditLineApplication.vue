@@ -8,7 +8,7 @@
         <span class="mr20">{{ sendMsg.currentUser }}</span>
         <span>申请时间:</span>
         <span class="mr20">{{ localTime }}</span>
-        <span>最高受信固定额度:</span>
+        <span>最高授信固定额度:</span>
         <span>100W</span>
       </div>
       <Row>
