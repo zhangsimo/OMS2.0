@@ -121,7 +121,9 @@
       </div>
       <div class="db pro mt20">
         <span>客户名称：</span>
-        <input type="text" class="w200" v-model="nametext" />
+        <Select v-model="guestId" filterable class="w200">
+          <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+        </Select>
       </div>
       <div class="db pro mt20">
         <span>分店名称：</span>
@@ -201,6 +203,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
+import {getClient} from '@/api/salesManagment/salesOrder'
 // import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
 import PrintShow from "./component/PrintShow";
@@ -234,6 +237,8 @@ export default {
       outStock: false,
       onStock: false,
       flag: false,
+      clientList:[],//客户下拉数据
+      guestId:"",//客户选中id
       columns: [
         {
           title: "序号",
@@ -1003,6 +1008,7 @@ export default {
       this.model1 = ''
       this.model3 = ''
       this.text = ''
+      this.getAllClient();
       this.modal1 = true
     },
     // 更多条件查询
@@ -1020,7 +1026,8 @@ export default {
         guestType: this.model2,
         tenantName: this.nametext,
         serviceType: this.model3,
-        serviceId: this.text
+        serviceId: this.text,
+        guestId:this.guestId
       };
       this.getGeneral(obj);
     },
@@ -1057,14 +1064,15 @@ export default {
     },
     // 销售/采购接口
     getDetailed(data, obj) {
+      console.log(obj)
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
-        startDate: obj.startDate
-          ? moment(obj.startDate).format("YYYY-MM-DD HH:mm:ss")
+        startDate: obj[0]
+          ? moment(obj[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endDate: obj.endDate
-          ? moment(obj.endDate).format("YYYY-MM-DD HH:mm:ss")
+        endDate: obj[1]
+          ? obj[1]+" 23:59:59"
           : "",
         guestId: data.guestId
       }).then(res => {
@@ -1132,8 +1140,15 @@ export default {
     // 导出汇总
     exportSummary() {
       if (this.data.length !== 0) {
+        let arrData = [...this.data]
+        arrData.map(item=>{
+          item.orgId = "\t"+item.orgId
+        })
         this.$refs.summary.exportCsv({
-          filename: "应收应付汇总表"
+          filename: "应收应付汇总表",
+          original:false,
+          columns:this.columns,
+          data:arrData
         });
       } else {
         this.$message.error("应收应付汇总表暂无数据");
@@ -1147,16 +1162,30 @@ export default {
     exportBill() {
       if (this.detailedList === "key1") {
         if (this.data1.length !== 0) {
+          let arrData = [...this.data1]
+          arrData.map(item=>{
+            item.orgId = "\t"+item.orgId
+          })
           this.$refs.sale.exportCsv({
-            filename: "销售清单"
+            filename: "销售清单",
+            original:false,
+            columns:this.columns,
+            data:arrData
           });
         } else {
           this.$message.error("销售清单暂无数据");
         }
       } else if (this.detailedList === "key2") {
         if (this.data2.length !== 0) {
+          let arrData = [...this.data2]
+          arrData.map(item=>{
+            item.orgId = "\t"+item.orgId
+          })
           this.$refs.purchase.exportCsv({
-            filename: "采购清单"
+            filename: "采购清单",
+            original:false,
+            columns:this.columns,
+            data:arrData
           });
         } else {
           this.$message.error("销售清单暂无数据");
@@ -1179,7 +1208,14 @@ export default {
     print(type) {
       type ? (this.tit = "采购入库") : (this.tit = "销售出库");
       this.$refs.PrintShow.openModal();
-    }
+    },
+    //获取公司
+    async getAllClient(){
+      let res = await getClient()
+      if(res.code === 0 ){
+        this.clientList = res.data
+      }
+    },
   }
 };
 </script>
