@@ -1064,7 +1064,6 @@ export default {
     },
     // 销售/采购接口
     getDetailed(data, obj) {
-      console.log(obj)
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
@@ -1072,7 +1071,7 @@ export default {
           ? moment(obj[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: obj[1]
-          ? obj[1]+" 23:59:59"
+          ? moment(obj[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59"
           : "",
         guestId: data.guestId
       }).then(res => {
