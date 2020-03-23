@@ -265,6 +265,7 @@ export const mixSelectPartCom = {
     //显示层
     init() {
       this.searchPartLayer = true;
+      this.partName = "";
       // this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();

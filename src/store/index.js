@@ -6,6 +6,7 @@ import app from './module/app'
 import common from './module/common'
 import getters from './getters.js'
 import dataList from './module/dataList'
+import advance from './module/advance'
 import createPersistedState from "vuex-persistedstate"
 
 Vue.use(Vuex)
@@ -27,6 +28,7 @@ export default new Vuex.Store({
     app,
     common,
     dataList,
+    advance,
     ...moduleStores,
   },
   getters,

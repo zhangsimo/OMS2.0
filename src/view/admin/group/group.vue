@@ -147,46 +147,46 @@ export default {
           key: "username",
           minWidth: 160
         },
-        {
-          title: "操作",
-          align: "center",
-          key: "",
-          render: (h, params) => {
-            return h("Icon", {
-              props: {
-                size: 16,
-                type: "android-delete"
-              },
-              attrs: {
-                title: `从【${this.curName}】移出`
-              },
-              class: "delete",
-              on: {
-                click: () => {
-                  this.$Modal.confirm({
-                    title: "提示",
-                    content: `确定要将【${params.row.staffName}】从【${this.curName}】移出吗？`,
-                    onOk: () => {
-                      let stop = this.$loading();
-                      removeStaff(this.curId, params.row.id)
-                        .then(res => {
-                          stop();
-                          if (res.code == 0) {
-                            this.$Message.success(res.message);
-                            this.findStaffByGroupId();
-                          }
-                        })
-                        .catch(err => {
-                          stop();
-                        });
-                    }
-                  });
-                }
-              }
-            });
-          },
-          width: 80
-        }
+        // {
+        //   title: "操作",
+        //   align: "center",
+        //   key: "",
+        //   render: (h, params) => {
+        //     return h("Icon", {
+        //       props: {
+        //         size: 16,
+        //         type: "android-delete"
+        //       },
+        //       attrs: {
+        //         title: `从【${this.curName}】移出`
+        //       },
+        //       class: "delete",
+        //       on: {
+        //         click: () => {
+        //           this.$Modal.confirm({
+        //             title: "提示",
+        //             content: `确定要将【${params.row.staffName}】从【${this.curName}】移出吗？`,
+        //             onOk: () => {
+        //               let stop = this.$loading();
+        //               removeStaff(this.curId, params.row.id)
+        //                 .then(res => {
+        //                   stop();
+        //                   if (res.code == 0) {
+        //                     this.$Message.success(res.message);
+        //                     this.findStaffByGroupId();
+        //                   }
+        //                 })
+        //                 .catch(err => {
+        //                   stop();
+        //                 });
+        //             }
+        //           });
+        //         }
+        //       }
+        //     });
+        //   },
+        //   width: 80
+        // }
       ],
       tbdata: []
     };

@@ -28,7 +28,7 @@ export default {
     return {
       claimedPage: {
         page: 1,
-        total: 12,
+        total: 0,
         size: 10
       }, //本店待认领款分页
       currentClaimed: [], //本店待认领款选中的数据
@@ -47,62 +47,62 @@ export default {
         },
         {
           title: "所属区域",
-          key: "index",
+          key: "area",
           align: "center"
         },
         {
           title: "所属门店",
-          key: "index",
+          key: "shopName",
           align: "center"
         },
         {
           title: "所属店号",
-          key: "index",
+          key: "shopCode",
           align: "center"
         },
         {
           title: "账户",
-          key: "index",
+          key: "accountName",
           align: "center"
         },
         {
           title: "账号",
-          key: "index",
+          key: "accountCode",
           align: "center"
         },
         {
           title: "开户行",
-          key: "index",
+          key: "bankName",
           align: "center"
         },
         {
           title: "对应科目",
-          key: "index",
+          key: "mateAccountName",
           align: "center"
         },
         {
           title: "发生日期",
-          key: "index",
+          key: "createTime",
           align: "center"
         },
         {
           title: "收入金额",
-          key: "index",
+          key: "incomeMoney",
           align: "center"
         },
         {
           title: "支出金额",
-          key: "index",
+          key: "paidMoney",
           align: "center"
         },
         {
           title: "对方户名",
-          key: "index",
+          key: "reciprocalAccountName",
           align: "center"
         },
         {
           title: "交易备注",
-          key: "index",
+          key: "tradingNote",
           align: "center"
         },
         {

@@ -64,7 +64,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "guestName",
+          key: "serviceId",
           className: "tc",
           render: (h, params) => {
             return h(

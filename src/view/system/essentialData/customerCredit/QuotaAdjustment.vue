@@ -60,7 +60,7 @@
                   }],
                   fixationQuotaTotal:[{
                       required: true,
-                      type: "number",
+                      type: "string",
                       message: "请输入调整后额度！",
                       trigger: "blur"
                   }]
