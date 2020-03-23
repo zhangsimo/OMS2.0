@@ -257,7 +257,7 @@ export default {
               key: "registMoney"
             },
             {
-              title: "授权采购",
+              title: "授权采购员",
               align: "center",
               key: "salesman"
             },
