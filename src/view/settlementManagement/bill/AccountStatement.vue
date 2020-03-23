@@ -390,7 +390,7 @@
   </div>
 </template>
 <script>
-import settlementMoadl from './components/settlement'
+import settlementMoadl from "./components/settlement";
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
@@ -408,10 +408,11 @@ import {
   accountRevoke,
   account
 } from "@/api/bill/saleOrder";
-import { hedgingApplyNo,applyNo } from "@/api/bill/popup";
+import { hedgingApplyNo, applyNo } from "@/api/bill/popup";
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
+import bus from './Popup/Bus'
 export default {
   components: {
     registrationEntry,
@@ -1012,8 +1013,14 @@ export default {
   },
   methods: {
     //资金认领核销
-    capitalWrite(){
-      this.$router.push({name:'claimWrite'})
+    capitalWrite() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        // bus.$emit('account',this.reconciliationStatement)
+        this.$router.push({ name: "claimWrite",params: {data:this.reconciliationStatement} });
+        // console.log(this.$cookies)
+      } else {
+        this.$message.error("请选择一条对账单");
+      }
     },
     // 进项发票登记及修改
     registrationEntry() {
@@ -1025,7 +1032,7 @@ export default {
         this.$refs.registrationEntry.accountData.push(
           this.reconciliationStatement
         );
-        this.$refs.registrationEntry.arrId = []
+        this.$refs.registrationEntry.arrId = [];
         this.$refs.registrationEntry.arrId.push(
           this.reconciliationStatement.orgId,
           this.reconciliationStatement.guestId,
@@ -1051,10 +1058,12 @@ export default {
         this.reconciliationStatement.applyTime = moment(new Date()).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id
+        this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id;
         this.reconciliationStatement.applicant = this.$store.state.user.username;
-        this.$refs.hedgingInvoice.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
-        delete this.$refs.hedgingInvoice.information.id
+        this.$refs.hedgingInvoice.information = JSON.parse(
+          JSON.stringify(this.reconciliationStatement)
+        );
+        delete this.$refs.hedgingInvoice.information.id;
         hedgingApplyNo().then(res => {
           this.$refs.hedgingInvoice.information.serviceId = res.data;
         });
@@ -1083,9 +1092,9 @@ export default {
             this.$refs.salepopup.information.code = res.data.orgCode;
           }
         });
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$refs.salepopup.modal1 = true;
-        },500)
+        }, 500);
       } else {
         this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
@@ -1324,12 +1333,10 @@ export default {
           (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
-          this.$refs.settlementMoadl.Settlement = true
-          if(type===0){
-          } else if(type===1){
-
-          } else if(type === 2){
-
+          this.$refs.settlementMoadl.Settlement = true;
+          if (type === 0) {
+          } else if (type === 1) {
+          } else if (type === 2) {
           }
         } else {
           this.$message({

@@ -13,22 +13,22 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150">
+            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea'>
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                :value="item.id"
+                :key="item.id"
+              >{{ item.companyName }}</Option>
             </Select>
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="model1" filterable class="w150">
+            <Select  v-model="shopCode" filterable class="w150">
               <Option
-                v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
+                v-for="item in shopList"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -45,12 +45,12 @@
       <div class="oper-top flex">
         <div class="db">
           <span>对应科目：</span>
-          <Select  v-model="model1" filterable class="w150">
+          <Select  v-model="shopCode" filterable class="w150">
             <Option
-              v-for="item in Branchstore"
-              :value="item.value"
-              :key="item.value"
-            >{{ item.label }}</Option>
+              v-for="item in subJectList"
+              :value="item.id"
+              :key="item.id"
+            >{{ item.titleName }}</Option>
           </Select>
         </div>
         <div class="db ml15">
@@ -93,7 +93,7 @@
     </section>
 
 <!-- 导入模板弹窗组件-->
-    <importXLS :URL="impirtUrl" ref="imp"></importXLS>
+    <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
 
 <!--    人工智能分配-->
     <artificial ref="art"></artificial>
@@ -149,7 +149,7 @@
     </section>
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
-        <TabPane label="标签一" name="capitalChain1">
+        <TabPane label="全部数据" name="capitalChain1">
           <div style="overflow: hidden ;overflow-x: scroll">
             <vxe-table
               border
@@ -212,6 +212,8 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
+  import {are , goshop , goSubject , impUrl} from '@/api/settlementManagement/fundsManagement/capitalChain'
+
   import moment from 'moment'
   export default {
     components: {
@@ -223,16 +225,25 @@
       return {
         fno:'',//调拨单号
         value: [],
-        Branchstore: [],
-        model1: "",
-        data: [],
+        Branchstore: [
+          {id:0 ,companyName:'全部'}
+        ],
+        model1: 0, //获取到地址id
+        shopCode:0,//获取到门店id
+        shopList: [
+          {id:0 , name:'全部'}
+        ], //门店列表
+        subjectCode:0,//科目id
+        subJectList:[
+          {id:0 ,titleName:'全部'}
+        ],//科目列表
         company: "", //往来单位
         companyId: "", //往来单位id
         formInline:{},//统计数据
         tableData:[],//全部数据
         impirtUrl:{
           downId: '1200000000',
-          upUrl:'123'
+          upUrl:impUrl
         },//下载上传路径
         oneList:{},//点击获取到的信息
       };
@@ -240,9 +251,39 @@
     async mounted () {
       let arr = await creat (this.$refs.quickDate.val,this.$store)
       this.value = arr[0];
-      this.model1 = arr[1];
+      this.getAllAre() //获取区域
+      this.getShop()  //获取门店
+      this.getSubject()//获取科目
     },
     methods: {
+
+      //获取全部地址
+      async getAllAre(){
+        let res = await are()
+        if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
+      },
+
+      //切换地址重新调取门店接口
+      changeArea(){
+        this.shopCode = 0
+        this.getShop()
+
+      },
+
+      //获取门店
+     async getShop(){
+        let data ={}
+        data.supplierTypeSecond = this.model1
+       let res = await goshop(data)
+       if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
+      },
+
+      //获取科目
+      async getSubject(){
+        let res = await goSubject()
+        if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
+      },
+
       // 日期选择
       dateChange(data){
         this.value = data
@@ -261,6 +302,10 @@
       importXSL(){
         this.$refs.imp.openModal()
       },
+
+      //导入成功后刷新页
+      getNew(data){},
+
 
       //删除导入
       dele(){
