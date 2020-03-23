@@ -15,7 +15,7 @@
             <span>门店：</span>
             <Select v-model="shopCode" filterable class="w150 mr10">
               <Option
-                v-for="item in Branchstore"
+                v-for="item in shopList"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
@@ -194,7 +194,7 @@ export default {
   data() {
     return {
       value: [], //日期
-      Branchstore: [], //门店
+      shopList: [], //门店
       shopCode: "", //门店
       formInline: {}, //统计数据
       tableData: [
@@ -211,9 +211,11 @@ export default {
 
     //获取门店列表
     async getShop(){
-      let res = await shop()
+      let data = {}
+      data.supplierTypeSecond = 0
+      let res = await shop(data)
       console.log(res)
-      if (res.code === 0) return this.Branchstore = res.data
+      if (res.code === 0) return this.shopList = res.data
     },
     // 快速查询
     quickDate(data) {

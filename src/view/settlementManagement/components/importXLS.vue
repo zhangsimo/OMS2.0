@@ -61,17 +61,21 @@
 
         // 上传成功函数
         onSuccess(response) {
-          this.getList();
           if (response.code != 0) {
             this.$Notice.warning({
               title: "导入失败",
-              desc: response.message
-            });
+              desc: response.message,
+              duration:60
+            })
+            this.importShow = false
+
           } else {
             this.$Notice.success({
               title: "导入成功",
-              desc: response.message
-            });
+              desc: response.message,
+            })
+            this.importShow = false
+            this.$emit('getNewList' ,response)
           }
         },
 
