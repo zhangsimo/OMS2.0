@@ -240,7 +240,7 @@ export default {
       data.size = this.page.page;
       data.page = this.page.num - 1;
       if (this.band != "0") {
-        data.partBandCode = this.band;
+        data.partBrandCode = this.band;
       }
       switch (this.searchType) {
         case "0":

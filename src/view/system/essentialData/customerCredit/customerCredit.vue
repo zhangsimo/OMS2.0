@@ -257,7 +257,7 @@ export default {
               key: "registMoney"
             },
             {
-              title: "授权采购",
+              title: "授权采购员",
               align: "center",
               key: "salesman"
             },
@@ -484,23 +484,15 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        // if (this.Limitstate === 1) {
-        //   this.$Message.warning("正在审批中，请等待审批完成!");
-        // } else if (this.Limitstate === 3) {
-        //   this.$Message.warning("禁止额度申请中，请联系管理员!");
-        // } else {
         this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-        console.log(this.date12, "1111");
         this.CreditLineApplicationShow = true;
         this.alertBox();
-        // }
       } else {
         this.$Message.warning("请选择要申请的客户！");
       }
     },
     //申请信用调查
     opensurveyShow() {
-      // this.$refs.SurveyList.handleReset();
       this.surveyShow = true;
     },
     //额度调用
@@ -664,7 +656,6 @@ export default {
     },
     //确定申请
     Determined() {
-      console.log(this.$refs.child.data.applyQuota);
       this.$refs.child.$refs.form.validate(valid => {
         if (valid) {
           if (this.$refs.child.data.applyQuota && this.flag == 0) {
@@ -708,7 +699,7 @@ export default {
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
       data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+      data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
       data.payableAmt = +this.payable.payableAmt || 0;
       data.tgrade = this.creaditList.tgrade || "";
       data.thirtyAmt = +this.payable.thirtyAmt || 0;

@@ -36,7 +36,7 @@ const methods = {
       if(res.code === 0 && res.data != null) {
         this.ueContent = res.data.content == null ? '' : res.data.content;
         this.id = res.data.id == null ? '' : res.data.id;
-      } 
+      }
     },
     // 保存草稿
     async save() {
@@ -64,6 +64,7 @@ const methods = {
       if(res.code === 0) {
         this.$Message.success('发布日志成功!');
         this.$router.push({name: 'historylog'});
+        
       }
     },
 };

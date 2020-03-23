@@ -1,6 +1,6 @@
 <template>
   <div style="height: 475px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" ref="form" :label-width="130" :rules="ruls">
+    <Form :model="data" ref="form" :label-width="140" :rules="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
         <span class="mr20">{{ data.fullName }}</span>
@@ -8,7 +8,7 @@
         <span class="mr20">{{ sendMsg.currentUser }}</span>
         <span>申请时间:</span>
         <span class="mr20">{{ localTime }}</span>
-        <span>最高受信固定额度:</span>
+        <span>最高授信固定额度:</span>
         <span>100W</span>
       </div>
       <Row>

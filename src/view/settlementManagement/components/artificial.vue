@@ -60,18 +60,7 @@
       data(){
           return {
             artificialShow : false,//模态框状态
-            tableData:[
-              {name:1},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-              {},
-            ],//表格数据
+            tableData:[],//表格数据
             shopList:[
               {label:'1号店',value:1},
               {label:'2号店',value:2},
@@ -84,6 +73,7 @@
         openModal(){
           this.artificialShow = true
           this.oneList = []
+          this.tableData=[{},{},{},{},{},{},{},{},{},{},{}]
 
         },
 
@@ -101,7 +91,6 @@
                 return '分配合计'
               }
               if (['role', 'num6'].includes(column.property)) {
-                console.log(column , 999)
                 return this.$utils.sum(data, column.property)
               }
               return null

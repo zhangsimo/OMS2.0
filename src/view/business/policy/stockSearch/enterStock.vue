@@ -402,13 +402,13 @@
                     {
                       title: '含税单价',
                       align: 'center',
-                      key: 'taxRate',
+                      key: 'taxPrice',
                       minWidth: 120
                     },
                     {
                       title: '含税金额',
                       align: 'center',
-                      key: 'taxRate',
+                      key: 'taxAmt',
                       minWidth: 120
                     },
                     {

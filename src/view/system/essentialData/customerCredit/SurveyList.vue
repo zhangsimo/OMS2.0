@@ -192,7 +192,7 @@
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem v-if="dataJudge[0].adjustType == 0" label="申请受用额度:" prop="applyTrustMoney">
+        <FormItem v-if="dataJudge[0].adjustType == 0" label="申请授用额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
         </FormItem>
         <FormItem v-else label="调整原因:" prop="applyTrustMoney1">
@@ -246,7 +246,7 @@ export default {
     };
     //注册号
     const Number = (rule, value, callback) => {
-      if (/^[0-9]+$/.test(value)) {
+      if (/^[0-9a-zA-Z]*$/.test(value)) {
         callback();
       } else {
         return callback(new Error("请输入正确注册号!"));
@@ -398,7 +398,7 @@ export default {
           { required: true, validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
-          { required: true, validator: bigNumber, trigger: "blur" }
+          { required: true, validator: bigNumber, trigger: "blur"},
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址

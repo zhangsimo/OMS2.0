@@ -524,6 +524,38 @@ export default [
     component: Main,
     children: [
       {
+        path:'/documentsToQuery',
+        name:'DocumentsToQuery',
+        redirect: "/multilevel/level_2_1",
+        mark:'',
+        meta: {
+          title:'单据查询'
+        },
+        component: parentView,
+        children:[
+          {
+            path: 'undoFlowQuery',
+            name: 'UndoFlowQuery',
+            mark:'',
+            meta:{
+              title:'撤销流水帐查询',
+            },
+            component:() =>
+              import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
+          },
+          {
+            path: 'checkTheOrder',
+            name: 'checkTheOrder',
+            mark:'',
+            meta:{
+              title:'对账订单',
+            },
+            component:() =>
+              import("@/view/settlementManagement/documentsToQuery/undoFlowQuery/undoFlowQuery.vue")
+          }
+        ]
+      },
+      {
         path: "/settlementManagement/bill",
         name: "settlementManagement-bill",
         mark: "5100",
@@ -822,7 +854,7 @@ export default [
         component: parentView,
         children: [
           {
-            path: "/fundsManagement/capitalChain",
+            path: "capitalChain",
             name: "capitalChain",
             redirect: "",
             // mark: "5101",

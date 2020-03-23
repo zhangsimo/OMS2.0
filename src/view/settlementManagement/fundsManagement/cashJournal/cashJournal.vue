@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="model1" filterable class="w150 mr10">
+            <Select v-model="shopCode" filterable class="w150 mr10">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -26,13 +26,6 @@
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
             </button>
-            <!-- <Select v-model="model1" filterable class="w150">
-              <Option
-                v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-              >{{ item.label }}</Option>
-            </Select>-->
           </div>
         </div>
       </div>
@@ -189,6 +182,8 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import { creat } from "../../components";
 import amtData from '../../components/amtData'
 import artificial from '../../components/artificial'
+import {shop} from '@/api/settlementManagement/fundsManagement/cashJournal'
+
 import moment from "moment";
 export default {
   components: {
@@ -200,11 +195,9 @@ export default {
     return {
       value: [], //日期
       Branchstore: [], //门店
-      model1: "", //门店
+      shopCode: "", //门店
       formInline: {}, //统计数据
       tableData: [
-        { address: 1, name: 123 },
-        { address: 2, name: 456 }
       ], //全部数据
       currentChange: {} //当前选中数据
     };
@@ -212,10 +205,16 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.model1 = arr[1];
-    this.Branchstore = arr[2];
+    this.getShop()
   },
   methods: {
+
+    //获取门店列表
+    async getShop(){
+      let res = await shop()
+      console.log(res)
+      if (res.code === 0) return this.Branchstore = res.data
+    },
     // 快速查询
     quickDate(data) {
       this.value = data;
