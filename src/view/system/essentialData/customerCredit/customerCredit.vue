@@ -656,7 +656,6 @@ export default {
     },
     //确定申请
     Determined() {
-      console.log(this.$refs.child.data.applyQuota);
       this.$refs.child.$refs.form.validate(valid => {
         if (valid) {
           if (this.$refs.child.data.applyQuota && this.flag == 0) {
@@ -700,7 +699,7 @@ export default {
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
       data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+      data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
       data.payableAmt = +this.payable.payableAmt || 0;
       data.tgrade = this.creaditList.tgrade || "";
       data.thirtyAmt = +this.payable.thirtyAmt || 0;
