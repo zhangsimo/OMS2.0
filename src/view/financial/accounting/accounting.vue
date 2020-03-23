@@ -122,14 +122,15 @@
         <Row>
           <Col span="12">
             <FormItem label="上级科目：">
-              <Input class="w200" v-model="ChangeData.parentCode" disabled></Input>
+              <Input class="w200" v-model="ChangeData.titleCode + ' - ' + ChangeData.titleName" disabled></Input>
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem label="科目类别：">
-              <Select v-model="ChangeData.titleTypeCode" style="width:200px" disabled>
-                <Option v-for="item in subjectList" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>
-              </Select>
+              <Input class="w200" v-model="ChangeData.titleTypeCode + ' - ' + ChangeData.titleTypeName" disabled></Input>
+              <!--<Select v-model="ChangeData.titleTypeCode" style="width:200px" disabled>-->
+                <!--<Option v-for="item in subjectList" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>-->
+              <!--</Select>-->
             </FormItem>
           </Col>
         </Row>
@@ -188,7 +189,7 @@
       </Form>
       <div slot='footer'>
         <Button type='primary' @click="changeSave">保存</Button>
-        <Button type='default' @click="changeModal = false">取消</Button>
+        <Button type='default' @click="changeModalFalse">取消</Button>
       </div>
     </Modal>
 
@@ -365,11 +366,14 @@
                 this.changeModal = true
                 this.ChangeData ={}
                 this.$refs.ModelValidate.resetFields();
-                this.ChangeData.parentCode = row.titleCode
-                this.ChangeData.balanceDirection = 0
-                this.ChangeData.status = 0
                 // this.ChangeData.parentCode = row.titleCode
+                this.ChangeData.titleCode  = row.titleCode;
+                this.ChangeData.titleName = row.titleName;
+                this.ChangeData.titleTypeName  = row.titleTypeName;
                 this.ChangeData.titleTypeCode = row.titleTypeCode
+                this.ChangeData.balanceDirection = 0
+                this.ChangeData.status = 1;
+                // this.ChangeData.parentCode = row.titleCode
                 this.ChangeData.parentNanme = row.fullName
                 this.ChangeData.auxiliaryAccountingCode = 'null'
                 this.ChangeData.titleLevel = row.titleLevel + 1
@@ -377,10 +381,29 @@
 
             //修改节点数据
             change(row){
-                this.ChangeData = row
+                this.ChangeData = row;
+                // console.log(row)
+                this.ChangeData.parentCode = row.parentCode;
+                // this.ChangeData.titleTypeCode = this.ChangeData.titleTypeName + this.ChangeData.titleTypeCode;
                 this.$refs.ModelValidate.resetFields();
                 this.changeModal = true
             },
+
+          //修改取消
+          async changeModalFalse(){
+             this.changeModal = false;
+            let data = {}
+            data.parentCode = this.oneTreeList.titleCode || ''
+            let res = await getTableList(data)
+            if(res.code === 0 ) {
+              this.tableData = res.data
+              let arr = await getTreeList()
+              if (arr.code === 0) {
+                this.treeList = arr.data
+                this.changeTree(this.treeList)
+              }
+            }
+          },
 
             //删除
             deleteOne(row){

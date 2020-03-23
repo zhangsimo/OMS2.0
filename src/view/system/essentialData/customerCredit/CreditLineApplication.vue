@@ -1,6 +1,6 @@
 <template>
   <div style="height: 475px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" ref="form" :label-width="130" :rules="ruls">
+    <Form :model="data" ref="form" :label-width="140" :rules="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
         <span class="mr20">{{ data.fullName }}</span>
@@ -209,13 +209,6 @@ export default {
       return date && end && date.valueOf() < new Date(end);
     };
     return {
-      // increase: 0, //申请增加额度
-      // temporary:0, //申请临时额度
-      //   dateOptions: {
-      //       disabledDate (date) {
-      //           return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
-      //       }
-      //   },
       startTimeOptions: {
         disabledDate: disabledDateS
       },
@@ -230,25 +223,11 @@ export default {
           { required: true, message: "申请额度说明必填！", trigger: "blur" }
         ],
         tempStart: [
-          { required: true, message: "临时额度开始时间", trigger: "blur" }
+          { required: true, message: "临时额度开始时间必填！", trigger: "blur" }
         ],
         tempEnd: [
-          { required: true, message: "临时额度结束时间", trigger: "blur" }
+          { required: true, message: "临时额度结束时间必填！", trigger: "blur" }
         ]
-        // applyQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ],
-        // tempQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ]
       },
       columnsEarnings: [
         {
@@ -374,7 +353,6 @@ export default {
   mounted() {
     let date = new Date();
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
-    console.log(this.applyDate, "1111");
   },
   methods: {
     dataChange() {

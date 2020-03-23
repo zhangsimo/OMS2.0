@@ -257,7 +257,7 @@ export default {
               key: "registMoney"
             },
             {
-              title: "授权采购",
+              title: "授权采购员",
               align: "center",
               key: "salesman"
             },
@@ -484,23 +484,17 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        // if (this.Limitstate === 1) {
-        //   this.$Message.warning("正在审批中，请等待审批完成!");
-        // } else if (this.Limitstate === 3) {
-        //   this.$Message.warning("禁止额度申请中，请联系管理员!");
-        // } else {
         this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-        console.log(this.date12, "1111");
         this.CreditLineApplicationShow = true;
+        this.creaditList.tempStart='';
+        this.creaditList.tempEnd='';
         this.alertBox();
-        // }
       } else {
         this.$Message.warning("请选择要申请的客户！");
       }
     },
     //申请信用调查
     opensurveyShow() {
-      // this.$refs.SurveyList.handleReset();
       this.surveyShow = true;
     },
     //额度调用
@@ -623,8 +617,8 @@ export default {
             +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
           data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
           data.tempQuotaTotal = this.creaditList.tempCreditLimit;
-          data.tempStart = this.creaditList.tempStart;
-          data.tempEnd = this.creaditList.tempEnd;
+          data.tempStart = tools.transTime(this.creaditList.tempStart);
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
           data.orgId = this.creaditList.orgid;
           data.adjustType = 1;
           data.afterAdjustQuota =
@@ -664,7 +658,27 @@ export default {
     },
     //确定申请
     Determined() {
-      console.log(this.$refs.child.data.applyQuota);
+        if(this.$refs.child.data.tempQuota){
+            this.$refs.child.ruls.quotaReason=[
+                { required: true, message: "申请额度说明必填！", trigger: "blur" }
+            ];
+            this.$refs.child.ruls.tempStart=[
+                { required: true, message: "临时额度开始时间", trigger: "blur" }
+            ];
+            this.$refs.child.ruls.tempEnd=[
+                { required: true, message: "临时额度结束时间", trigger: "blur" }
+            ];
+        } else {
+            this.$refs.child.ruls.quotaReason = [
+                {required: true, message: "申请额度说明必填！", trigger: "blur"}
+            ];
+            this.$refs.child.ruls.tempStart=[
+                { required: false}
+            ];
+            this.$refs.child.ruls.tempEnd=[
+                { required: false}
+            ];
+        }
       this.$refs.child.$refs.form.validate(valid => {
         if (valid) {
           if (this.$refs.child.data.applyQuota && this.flag == 0) {
@@ -708,7 +722,7 @@ export default {
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
       data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+      data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
       data.payableAmt = +this.payable.payableAmt || 0;
       data.tgrade = this.creaditList.tgrade || "";
       data.thirtyAmt = +this.payable.thirtyAmt || 0;

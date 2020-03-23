@@ -607,6 +607,9 @@ export const mixGoodsData = {
                     }
                   });
                 }
+              },
+              onCancel:() => {
+                this.submitloading = false
               }
             })
           } else {
