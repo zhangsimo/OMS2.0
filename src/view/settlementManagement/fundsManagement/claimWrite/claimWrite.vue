@@ -364,13 +364,6 @@ export default {
       this.accountNoWriteData.push(this.$route.params.data)
     }
   },
-  // updated(){
-  //   bus.$on('account',val=>{
-  //     console.log(val)
-  //     this.accountNoWriteData.push({accountNo:val.accountNo})
-  //     console.log(this.accountNoWriteData)
-  //   })
-  // },
   methods: {
     // 往来单位选择
     async getOne() {
