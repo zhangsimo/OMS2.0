@@ -12,16 +12,16 @@
           </Col>
           <Col span="12" class="pl10" >
             <p>移仓单</p>
-            <p>No: {{onelist.serviceId}}</p>
+            <p>No: {{onelist['stockShift'].serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
-            <p><span>地址:</span> <span>{{onelist.orgAddr}}</span></p>
-            <p><span>电话:</span><span>{{onelist.orgTel}}</span></p>
+            <p><span>地址:</span> <span>{{onelist['applyGuest'].streetAddress}}</span></p>
+            <p><span>电话:</span><span>{{onelist['applyGuest'].contactorTel}}</span></p>
           </Col>
           <Col span="12" class="pl10" >
-            <p><span>订单日期:</span><span>{{onelist.createTime}}</span></p>
+            <p><span>订单日期:</span><span>{{onelist['stockShift'].createTime}}</span></p>
             <p>
               <span>打印日期:</span>
               <span>{{printDate}}</span>
@@ -30,38 +30,38 @@
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="24" class="pl10" style="border-right: 1px #000000 solid;display:flex;">
-            <p style="width:33%"><span>移出仓库:</span> <span>{{onelist.storeName}}</span></p>
-            <p style="width:33%"><span>移入仓库:</span> <span>{{onelist.auditDate}}</span></p>
-            <p style="width:33%"><span>移仓日期:</span> <span>{{onelist.auditDate}}</span></p>
+            <p style="width:33%"><span>移出仓库:</span> <span>{{onelist['store'].name}}</span></p>
+            <p style="width:33%"><span>移入仓库:</span> <span>{{onelist['receiveStore'].name}}</span></p>
+            <p style="width:33%"><span>移仓日期:</span> <span>{{onelist['stockShift'].auditDate}}</span></p>
           </Col>
         </Row>
-         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist.detailVOList" class="ml10"></Table>
+         <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist['stockShift'].detailVOList" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>合计:</span>
-            <span>{{ onelist.orderAmt}}</span>
+            <span>{{ orderAmt}}</span>
           </Col>
           <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
             <span>总数:</span>
-            <span>{{onelist.orderQty}}</span>
+            <span>{{orderQty}}</span>
           </Col>
           <Col class="pl10" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{orderAmt}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{onelist.orderMan}}</span>
+            <span>{{onelist['stockShift'].orderMan}}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>提交人:</span>
-            <span>{{onelist.auditor}}</span>
+            <span>{{onelist['stockShift'].createUname}}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>审核人:</span>
-            <span>{{onelist.deliverer}}</span>
+            <span>{{onelist['stockShift'].createUname}}</span>
           </Col>
         </Row>
       </div>
@@ -154,7 +154,9 @@
                 ],
                 onelist:{}, //打印数据
                 num: '12323.09',
-                num2: 78723
+                num2: 78723,
+                orderAmt:0,
+                orderQty:0,
             }
         },
         methods:{
@@ -183,6 +185,11 @@
                         this.printShow = true
                          this.onelist = res.data
                         //this.onelist = res.data
+                         let arr = this.onelist['stockShift'].detailVOList||[]
+                         arr.map(item => {
+                           this.orderQty += item.orderQty
+                           this.orderAmt += item.orderAmt||0
+                         })
                       }
                     })
                 }else {

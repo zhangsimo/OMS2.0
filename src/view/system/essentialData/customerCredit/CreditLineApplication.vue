@@ -1,6 +1,6 @@
 <template>
   <div style="height: 475px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" ref="form" :label-width="130" :rules="ruls">
+    <Form :model="data" ref="form" :label-width="140" :rules="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
         <span class="mr20">{{ data.fullName }}</span>
@@ -162,7 +162,7 @@
           style="width: 100%;height: 40px;border: 1px solid lightgray;border-top: none!important;display: flex;align-items: center;padding-left: 50px"
         >
           合计：
-          <span>{{ sendMsg.applyTotalAmt }} 元</span>
+          <span>{{ applyTotalAmt }} 元</span>
         </div>
       </div>
     </div>
@@ -209,13 +209,6 @@ export default {
       return date && end && date.valueOf() < new Date(end);
     };
     return {
-      // increase: 0, //申请增加额度
-      // temporary:0, //申请临时额度
-      //   dateOptions: {
-      //       disabledDate (date) {
-      //           return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
-      //       }
-      //   },
       startTimeOptions: {
         disabledDate: disabledDateS
       },
@@ -230,25 +223,11 @@ export default {
           { required: true, message: "申请额度说明必填！", trigger: "blur" }
         ],
         tempStart: [
-          { required: true, message: "临时额度开始时间", trigger: "blur" }
+          { required: true, message: "临时额度开始时间必填！", trigger: "blur" }
         ],
         tempEnd: [
-          { required: true, message: "临时额度结束时间", trigger: "blur" }
+          { required: true, message: "临时额度结束时间必填！", trigger: "blur" }
         ]
-        // applyQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ],
-        // tempQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ]
       },
       columnsEarnings: [
         {
@@ -260,22 +239,22 @@ export default {
         {
           title: "销售金额",
           align: "center",
-          key: "salesAmt"
+          key: "purchaseAmt"
         },
         {
           title: "已回款金额",
           align: "center",
-          key: "paidAmt"
+          key: "alreadyPaidAmt"
         },
         {
           title: "未回款金额",
           align: "center",
-          key: "uncollectedAmt"
+          key: "paidAmt"
         },
         {
           title: "采购金额",
           align: "center",
-          key: "purchaseAmt"
+          key: "salesAmt"
         },
         {
           title: "已付款金额",
@@ -285,7 +264,7 @@ export default {
         {
           title: "未付款金额",
           align: "center",
-          key: "unpaidAmt"
+          key: "uncollectedAmt"
         },
         {
           title: "往来净额",
@@ -368,13 +347,14 @@ export default {
           key: "orderAmt"
         }
       ],
-      applyDate: ""
+      applyDate: "",
+        applyTotalAmt:0,
     };
   },
   mounted() {
     let date = new Date();
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
-    console.log(this.applyDate, "1111");
+
   },
   methods: {
     dataChange() {
@@ -525,11 +505,19 @@ export default {
         this.$Message.error("不能超过最高授信额度100万!");
         this.data.tempQuota = 0;
       }
-    }
-  },
-  mounted() {
-    // this.data.applyQuota = ''
-    // this.data.tempQuota = ''
+    },
+    init(){
+        this.applyTotalAmt=0;
+        this.$nextTick(()=>{
+            if(this.sendMsg.guestAdjustVOList){
+                this.sendMsg.guestAdjustVOList.map(item=>{
+                    console.log(item);
+                    this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
+                })
+            }
+        })
+
+      }
   },
   computed: {
     sum() {

@@ -192,7 +192,7 @@
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem v-if="dataJudge[0].adjustType == 0" label="申请受用额度:" prop="applyTrustMoney">
+        <FormItem v-if="dataJudge[0]&&dataJudge[0].adjustType == 0" label="申请授用额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
         </FormItem>
         <FormItem v-else label="调整原因:" prop="applyTrustMoney1">
@@ -238,7 +238,7 @@ export default {
       }
     };
     const smallNumber = (rule, value, callback) => {
-      if (value < 0) {
+      if (value < 0||!value) {
         return callback(new Error("请输入大于0的正整数"));
       } else {
         callback();
@@ -246,12 +246,25 @@ export default {
     };
     //注册号
     const Number = (rule, value, callback) => {
-      if (/^[0-9]+$/.test(value)) {
+        if(!value){
+            return callback(new Error("请输入正确注册号!"));
+        }
+      if (/^[0-9a-zA-Z]*$/.test(value)) {
         callback();
       } else {
         return callback(new Error("请输入正确注册号!"));
       }
     };
+      const OnlyNumber = (rule, value, callback) => {
+          if(!value){
+              return callback(new Error("请输入正确注册资本！"));
+          }
+          if (/^[0-9]*$/.test(value)) {
+              callback();
+          } else {
+              return callback(new Error("请输入正确注册资本！"));
+          }
+      };
     const NumberDate = (rule, value, callback) => {
       if (value >= 1 && value <= 31) {
         callback();
@@ -267,7 +280,7 @@ export default {
     };
     return {
       formInline: {
-        bizLicenseNo: [{ required: true, validator: Number, trigger: "blur" }],
+        bizLicenseNo: [{ required: true, validator: Number,  trigger: "blur"}],
         nature: [
           {
             required: true,
@@ -296,7 +309,7 @@ export default {
           {
             required: true,
             type: "number",
-            validator: Number,
+            validator: OnlyNumber,
             message: "请输入正确注册资本！",
             trigger: "change"
           }
@@ -380,25 +393,23 @@ export default {
           {
             required: true,
             type: "number",
-            message: "请输入约定对账日期！",
             validator: NumberDate,
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         cashDate: [
           {
             required: true,
             type: "number",
-            message: "请输入回款日期！",
             validator: NumberDate,
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         rollingDate: [
           { required: true, validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
-          { required: true, validator: bigNumber, trigger: "blur" }
+          { required: true, validator: bigNumber, trigger: "blur"},
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址
