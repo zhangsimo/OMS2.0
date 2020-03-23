@@ -1,8 +1,17 @@
 <template>
-  <Table class="mt10" border :columns="columns1" :data="data1"></Table>
+  <Table
+    class="mt10"
+    border
+    show-summary
+    :summary-method="handleSummary"
+    :columns="columns1"
+    :data="recordLists"
+  ></Table>
 </template>
 <script>
+import * as api from "_api/settlementManagement/advanceCharge";
 export default {
+  props: ["serviceId"],
   data() {
     return {
       columns1: [
@@ -35,7 +44,11 @@ export default {
         {
           title: "收付款业务类型",
           key: "furpose",
-          align: "center"
+          align: "center",
+          render: (h, p) => {
+            let val = p.row.furpose.name;
+            return h("span", val);
+          }
         },
         {
           title: "往来单位",
@@ -44,8 +57,12 @@ export default {
         },
         {
           title: "收付款方式",
-          key: "sortName",
-          align: "center"
+          key: "sort",
+          align: "center",
+          render: (h, p) => {
+            let val = p.row.sort.name;
+            return h("span", val);
+          }
         },
         {
           title: "账户所属门店",
@@ -84,13 +101,17 @@ export default {
         },
         {
           title: "收付款金额",
-          key: "index",
+          key: "checkAmt",
           align: "center"
         },
         {
           title: "审核状态",
-          key: "startStatusName",
-          align: "center"
+          key: "startStatus",
+          align: "center",
+          render: (h, p) => {
+            let val = p.row.startStatus.name;
+            return h("span", val);
+          }
         },
         {
           title: "审核人",
@@ -104,12 +125,60 @@ export default {
         },
         {
           title: "备注",
-          key: "index",
+          key: "remark",
           align: "center"
         }
       ],
-      data1: []
+      recordLists: [],
     };
+  },
+  methods: {
+    async init() {
+      if(!this.serviceId) {
+        this.recordLists = []
+      } else {
+        let res = await api.findByAccountNo({ accountNo: this.serviceId });
+        if(res.code == 0) {
+          this.recordLists = res.data;
+        }
+      }
+    },
+    handleSummary({ columns, data }) {
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "总价"
+          };
+          return;
+        }
+        if (key == "checkAmt") {
+          const values = data.map(item => Number(item[key]));
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: ""
+          };
+        }
+      });
+      return sums;
+    }
   }
 };
 </script>
