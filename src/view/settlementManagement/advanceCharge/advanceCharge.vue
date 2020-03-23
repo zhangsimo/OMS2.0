@@ -84,9 +84,9 @@
           >
             <vxe-table-column title="基本信息">
               <vxe-table-column
+                title="序号"
                 type="seq"
                 width="60"
-                title="序号"
               ></vxe-table-column>
               <vxe-table-column
                 field="serviceId"
@@ -332,7 +332,7 @@ export default {
       },
       loading: false,
       currRow: null,
-      serviceId: "",
+      serviceId: ""
     };
   },
   async mounted() {
@@ -396,7 +396,7 @@ export default {
         page: this.page.num - 1
       };
       for (let key in obj) {
-        if(!obj[key]) {
+        if (!obj[key]) {
           Reflect.deleteProperty(obj, key);
         }
       }
@@ -415,25 +415,28 @@ export default {
     // 表尾
     footerMethod({ columns, data }) {
       const sum = (arr, filed) => {
-        return arr.reduce((total, next) => total + next[filed] , 0);
-      }
-      return [columns.map((column, columnIndex) => {
-        if (columnIndex == 0) {
-          return '合计'
-        }
-        switch(column.property) {
-          case "payAmt":
-            return sum(data, "payAmt")
-          case "writeOffAmt":
-            return sum(data, "writeOffAmt")
-          case "returnClaimAmt":
-            return sum(data, "returnClaimAmt")
-          case "remainingAmt":
-            return sum(data, "remainingAmt")
-          default:
-            return ""
-        }
-      })]
+        return arr.reduce((total, next) => total + next[filed], 0);
+      };
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex == 0) {
+            return "合计";
+          }
+          switch (column.property) {
+            case "payAmt":
+              return sum(data, "payAmt");
+            case "writeOffAmt":
+              return sum(data, "writeOffAmt");
+            case "returnClaimAmt":
+              return sum(data, "returnClaimAmt");
+            case "remainingAmt":
+              return sum(data, "remainingAmt");
+            default:
+              return null;
+          }
+          return null;
+        })
+      ];
     },
     //分页
     changePage(p) {
