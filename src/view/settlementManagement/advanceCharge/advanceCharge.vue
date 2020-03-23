@@ -73,6 +73,9 @@
             auto-resize
             resizable
             border
+            highlight-hover-row
+            highlight-current-row
+            @current-change="currentChangeEvent"
             max-height="400"
             :data="tableData"
             align="center"
@@ -273,7 +276,7 @@
           ></Page>
         </div>
         <Button>收付款单记录</Button>
-        <Record ref="Record" />
+        <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
     <Modal v-model="modal" title="预收款认领" width="800">
@@ -304,6 +307,7 @@ import { creat } from "../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
 import moment from "moment";
+import { mapActions } from "vuex";
 export default {
   components: {
     quickDate,
@@ -326,7 +330,9 @@ export default {
         total: 0,
         opts: [20, 50, 100, 200]
       },
-      loading: false
+      loading: false,
+      currRow: null,
+      serviceId: "",
     };
   },
   async mounted() {
@@ -400,13 +406,34 @@ export default {
         this.page.total = res.data.totalElements;
       }
     },
+    // 选中行
+    currentChangeEvent({ row }) {
+      this.currRow = row;
+      this.serviceId = row.serviceId;
+      this.$refs.Record.init();
+    },
+    // 表尾
     footerMethod({ columns, data }) {
       const sum = (arr, filed) => {
-        return arr.reduce((prev, next) => prev[filed] + next[filed], 0);
+        return arr.reduce((total, next) => total + next[filed] , 0);
       }
-      return columns.map((column, columnIndex) => {
-        
-      })
+      return [columns.map((column, columnIndex) => {
+        if (columnIndex == 0) {
+          return '合计'
+        }
+        switch(column.property) {
+          case "payAmt":
+            return sum(data, "payAmt")
+          case "writeOffAmt":
+            return sum(data, "writeOffAmt")
+          case "returnClaimAmt":
+            return sum(data, "returnClaimAmt")
+          case "remainingAmt":
+            return sum(data, "remainingAmt")
+          default:
+            return ""
+        }
+      })]
     },
     //分页
     changePage(p) {
