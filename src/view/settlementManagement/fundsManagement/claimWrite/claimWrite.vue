@@ -168,17 +168,28 @@
     <advance ref="advance" />
     <expenditure ref="expenditure" :title="title" />
     <settlement ref="settlement" />
+    <chargeAdvance ref="chargeAdvance" />
   </div>
 </template>
 <script>
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import advance from "./components/Advance";
+import chargeAdvance from "./components/chargeAdvance";
 import expenditure from "./components/expenditure";
 import settlement from "../../bill/components/settlement";
-import claim from '../../components/claimed'
+import claim from "../../components/claimed";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
+import {
+  accountNoSelete,
+  distributionSelete,
+  claimedFund,
+  distributionShop
+} from "_api/settlementManagement/fundsManagement/claimWrite.js";
+import { creat } from "../../components";
+import bus from "../../bill/Popup/Bus";
 export default {
-  components: { advance, expenditure, settlement,claim },
+  components: { advance, expenditure, settlement, claim, chargeAdvance },
   data() {
     return {
       title: "预付款认领", //弹框标题
@@ -192,7 +203,7 @@ export default {
       amt: 0, //金额
       accountPage: {
         page: 1,
-        total: 12,
+        total: 0,
         size: 10
       }, //未核销分页
       currentAccount: {}, //未核销选中的数据
@@ -220,26 +231,26 @@ export default {
         },
         {
           title: "收付类型",
-          key: "paymentTypeName",
+          key: "receivePaymentTypeName",
           align: "center"
         },
         {
           title: "实际收款/付款",
-          key: "receiptPayment",
+          key: "actualCollectionOrPayment",
           align: "center"
         },
         {
           title: "已收/已付金额",
-          key: "name",
+          key: "amountReceivedOrPaid",
           align: "center"
         },
         {
           title: "未收/未付金额",
-          key: "name",
+          key: "amountNoCharOffOrUnpaid",
           align: "center"
         }
       ], //未核销对账单表格数据
-      accountNoWriteData: [{ receiptPayment: 25 }, { receiptPayment: 28 }], //未核销对账单表格数据
+      accountNoWriteData: [], //未核销对账单表格数据
       distribution: [
         {
           title: "选择",
@@ -255,69 +266,69 @@ export default {
         },
         {
           title: "所属区域",
-          key: "index",
+          key: "area",
           align: "center"
         },
         {
           title: "所属门店",
-          key: "index",
+          key: "shopName",
           align: "center"
         },
         {
           title: "所属店号",
-          key: "index",
+          key: "shopCode",
           align: "center"
         },
         {
           title: "账户",
-          key: "index",
+          key: "accountName",
           align: "center"
         },
         {
           title: "账号",
-          key: "index",
+          key: "accountCode",
           align: "center"
         },
         {
           title: "开户行",
-          key: "index",
+          key: "bankName",
           align: "center"
         },
         {
           title: "对应科目",
-          key: "index",
+          key: "mateAccountName",
           align: "center"
         },
         {
           title: "发生日期",
-          key: "index",
+          key: "createTime",
           align: "center"
         },
         {
           title: "收入金额",
-          key: "index",
+          key: "incomeMoney",
           align: "center"
         },
         {
           title: "支出金额",
-          key: "index",
+          key: "paidMoney",
           align: "center"
         },
         {
           title: "对方户名",
-          key: "index",
+          key: "reciprocalAccountName",
           align: "center"
         },
         {
           title: "交易备注",
-          key: "index",
+          key: "tradingNote",
           align: "center"
         }
       ], //连锁待分配款项
-      distributionData: [{ guestName: 1 }], //连锁待分配款项列表
+      distributionData: [], //连锁待分配款项列表
       distributionPage: {
         page: 1,
-        total: 12,
+        total: 0,
         size: 10
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
@@ -325,9 +336,41 @@ export default {
       difference: 0 //差异
     };
   },
-  mounted() {
+  async mounted() {
     this.getOne();
+    //收付类型数据字典
+    getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(res => {
+      res.data.map(item => {
+        this.paymentList.push({
+          value: item.itemCode,
+          label: item.itemName
+        });
+      });
+    });
+    let arr = await creat([], this.$store);
+    this.orgName = arr[3];
+    this.claimedList();
+    this.distributionList();
+    if(Object.keys(this.$route.params).length!==0){
+      this.$route.params.data.receivePaymentTypeName = this.$route.params.data.paymentTypeName
+      this.$route.params.data.actualCollectionOrPayment = this.$route.params.data.receiptPayment
+      if(this.$route.params.data.billingTypeName === "付款") {
+        this.$route.params.data.amountReceivedOrPaid = this.$route.params.data.amountPaid
+        this.$route.params.data.amountNoCharOffOrUnpaid = this.$route.params.data.unpaidAmount
+      } else {
+        this.$route.params.data.amountReceivedOrPaid = this.$route.params.data.amountReceived
+        this.$route.params.data.amountNoCharOffOrUnpaid = this.$route.params.data.noCharOffAmt
+      }
+      this.accountNoWriteData.push(this.$route.params.data)
+    }
   },
+  // updated(){
+  //   bus.$on('account',val=>{
+  //     console.log(val)
+  //     this.accountNoWriteData.push({accountNo:val.accountNo})
+  //     console.log(this.accountNoWriteData)
+  //   })
+  // },
   methods: {
     // 往来单位选择
     async getOne() {
@@ -372,7 +415,7 @@ export default {
     },
     // 本店待认领款查询
     queryClaimed() {
-      this.claimed();
+      this.claimedList();
     },
     //连锁待分配款项
     queryDistribution() {
@@ -392,24 +435,41 @@ export default {
     },
     //预收款认领/预收款支出认领
     clim(type) {
-      if (type) {
-        this.$refs.expenditure.modal = true;
+      if (
+        this.$refs.claim.currentClaimed.length !== 0 &&
+        this.$refs.claim.currentClaimed[0].incomeMoney
+      ) {
+        if (type) {
+          this.$refs.chargeAdvance.modal = true;
+        } else {
+          this.$refs.advance.modal = true;
+        }
       } else {
-        this.$refs.advance.modal = true;
+        this.$message.error("至少选择一条数据且是收款数据");
       }
     },
     //预付款认领/预付款收回认领
     expenditureClim(type) {
-      if (type) {
-        this.title = "预付款收回认领";
+      if (
+        this.$refs.claim.currentClaimed.length !== 0 &&
+        this.$refs.claim.currentClaimed[0].paidMoney
+      ) {
+        if (type) {
+          this.title = "预付款收回认领";
+        } else {
+          this.title = "预付款认领";
+        }
+        this.$refs.expenditure.modal = true;
       } else {
-        this.title = "预付款认领";
+        this.$message.error("至少选择一条数据且是付款数据");
       }
-      this.$refs.expenditure.modal = true;
     },
     //分配至本店
     distributionShop() {
       if (this.currentDistribution.length !== 0) {
+        distributionShop({ id: this.currentDistribution }).then(res => {
+          console.log(res);
+        });
       } else {
         this.$message.error("请先选择数据");
       }
@@ -422,36 +482,49 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
+      bus.$emit("paymentInfo", selection);
     },
     //未核销对账单查询接口
     noWrite() {
       let obj = {
-        amt: this.amt,
+        amount: this.amt,
         guestId: this.companyId,
-        type: this.paymentId,
-        page: this.accountPage.page,
+        receivePaymentType: this.paymentId,
+        page: this.accountPage.page - 1,
         size: this.accountPage.size
       };
+      accountNoSelete(obj).then(res => {
+        console.log(res);
+      });
     },
     //本店待认领款查询接口
     claimedList() {
       let obj = {
-        amt: this.amt,
-        guestId: this.companyId,
-        type: this.paymentId,
-        page: this.$refs.claimed.claimedPage.page,
-        size: this.$refs.claimed.claimedPage.size
+        amount: this.amt,
+        suppliers: this.companyId,
+        reciprocalAccountName: this.paymentId,
+        page: this.$refs.claim.claimedPage.page - 1,
+        size: this.$refs.claim.claimedPage.size
       };
+      claimedFund(obj).then(res => {
+        if (res.code === 0) {
+          this.$refs.claim.claimedData = res.data.content;
+        }
+      });
     },
     //连锁待分配款项查询接口
     distributionList() {
       let obj = {
-        amt: this.amt,
-        guestId: this.companyId,
-        type: this.paymentId,
-        page: this.distributionPage.page,
+        area: 1,
+        orgId: "",
+        amount: this.amt,
+        reciprocalAccountName: this.paymentId,
+        page: this.distributionPage.page - 1,
         size: this.distributionPage.size
       };
+      distributionSelete(obj).then(res => {
+        console.log(res);
+      });
     },
 
     //未核销对账单页码改变

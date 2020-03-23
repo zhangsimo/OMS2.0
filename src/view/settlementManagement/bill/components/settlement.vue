@@ -7,27 +7,32 @@
     <div class="db p15 mt10 mb10">
       <Row>
         <Col span="8">
-        <span>门店：</span>
-        <Input class="w200" v-model="reconciliationStatement.orgName" /></Col>
+          <span>门店：</span>
+          <Input class="w200" v-model="reconciliationStatement.orgName" />
+        </Col>
         <Col span="8">
-        <span>往来单位：</span>
-        <Input class="w200" v-model="reconciliationStatement.guestName" /></Col>
+          <span>往来单位：</span>
+          <Input class="w200" v-model="reconciliationStatement.guestName" />
+        </Col>
         <Col span="8">
-        <span>收付类型：</span>
-        <Input class="w200" v-model="reconciliationStatement.billingTypeName" /></Col>
+          <span>收付类型：</span>
+          <Input class="w200" v-model="reconciliationStatement.billingTypeName" />
+        </Col>
       </Row>
       <Row class="mt10">
         <Col span="8">
-        <span>对账单号：</span>
-        <Input class="w200" v-model="reconciliationStatement.accountNo" />
-        <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
+          <span>对账单号：</span>
+          <Input class="w200" v-model="reconciliationStatement.accountNo" />
+          <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
-        <span>实际收款/付款：</span>
-        <Input class="w200" v-model="reconciliationStatement.receiptPayment" /></Col>
+          <span>实际收款/付款：</span>
+          <Input class="w200" v-model="reconciliationStatement.receiptPayment" />
+        </Col>
         <Col span="8">
-        <span>收付款单号：</span>
-        <Input class="w200" v-model="collectPayId" /></Col>
+          <span>收付款单号：</span>
+          <Input class="w200" v-model="collectPayId" />
+        </Col>
       </Row>
     </div>
     <Button @click="subject">选择添加科目</Button>
@@ -62,27 +67,30 @@
           </vxe-table-column>
         </vxe-table>
         <div>
-            <section class="flex">
-              <p
-                class="w80 pl5 pr10"
-                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-              >核对</p>
-              <span class="w700" style="display:inline-block;border:1px solid #ddd;border-top:none;">{{check}}</span>
-            </section>
-            <section class="flex">
-              <p
-                class="w80 pl5 pr10"
-                style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-              >备注</p>
-              <input
-                type="text"
-                size="large"
-                class="w700"
-                style="border:1px solid #ddd;border-top:none;text-indent:5px"
-                v-model="remark"
-              />
-            </section>
-          </div>
+          <section class="flex">
+            <p
+              class="w80 pl5 pr10"
+              style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+            >核对</p>
+            <span
+              class="w700 tc"
+              style="display:inline-block;border:1px solid #ddd;border-top:none;line-height:40px"
+            >{{check}}</span>
+          </section>
+          <section class="flex">
+            <p
+              class="w80 pl5 pr10"
+              style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
+            >备注</p>
+            <input
+              type="text"
+              size="large"
+              class="w700"
+              style="border:1px solid #ddd;border-top:none;text-indent:5px"
+              v-model="remark"
+            />
+          </section>
+        </div>
       </Col>
       <Col span="8">
         <vxe-table
@@ -114,20 +122,20 @@
   </Modal>
 </template>
 <script>
-import accountSelette from './accountSelette'
-import subjexts from './subjects'
-import bus from '../Popup/Bus'
+import accountSelette from "./accountSelette";
+import subjexts from "./subjects";
+import bus from "../Popup/Bus";
 export default {
-  components:{
+  components: {
     accountSelette,
     subjexts
   },
   data() {
     return {
       Settlement: false, //弹框显示
-      check: "",
+      check: 0,
       remark: "",
-      reconciliationStatement: "",
+      reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
       BusinessType: [
         {
           orgName: "1",
@@ -138,59 +146,92 @@ export default {
           unAmt: 1
         }
       ],
-      tableData: [{ payAmt: 1 }],
-      collectPayId: ""
+      tableData: [],
+      collectPayId: "",
+      obj: {}
     };
   },
-  mounted(){
+  mounted() {
     // 对账单号
-    bus.$on("accountHedNo", val=>{
-      console.log(val)
+    bus.$on("accountHedNo", val => {
+      this.reconciliationStatement.accountNo = val.serviceId;
     });
-    bus.$on('sub',val=>{
+    bus.$on("hedInfo", val => {
+      this.BusinessType.push({
+        serviceTypeName: val.fullName,
+        accountAmt: 1,
+        endAmt: 1,
+        uncollectedAmt: 1,
+        checkAmt: 1,
+        unAmt: 1
+      });
+    });
+    bus.$on("content", val => {
+      this.obj = val;
+    });
+    bus.$on("ChildContent", value => {
+      if (value.fullName) {
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.fullName,
+          accountAmt: 1,
+          endAmt: 1,
+          uncollectedAmt: 1,
+          checkAmt: 1,
+          unAmt: 1
+        });
+      } else if (value.loginName) {
+        this.BusinessType.push({
+          serviceTypeName: this.obj.fullName + "-" + value.loginName,
+          accountAmt: 1,
+          endAmt: 1,
+          uncollectedAmt: 1,
+          checkAmt: 1,
+          unAmt: 1
+        });
+      }
+    });
+    //收付款信息
+    bus.$on('paymentInfo',val=>{
       console.log(val)
+      this.tableData = val
     })
   },
   methods: {
     // 选择科目弹框
-    subject(){
-      this.$refs.subjexts.modal = true
+    subject() {
+      this.$refs.subjexts.subjectModelShow = true;
     },
     // 对账单号选择
-    accountNoClick(){
-      this.$refs.accountSelette.modal1 = true
+    accountNoClick() {
+      this.$refs.accountSelette.modal1 = true;
     },
     //弹框打开
     hander(type) {
-      if(type){
-        this.check= "",
-        this.remark= "",
-        this.reconciliationStatement= "",
-        this.BusinessType= [],
-        this.tableData= [],
-        this.collectPayId= ""
+      if (!type) {
+        this.check = 0;
+        this.remark = "";
+        this.reconciliationStatement = {};
+        this.BusinessType = [];
+        this.tableData = [];
+        this.collectPayId = "";
+      } else {
+        this.checkComputed()
       }
     },
     //保存
-    conserve() {},
+    conserve() {
+      if (!this.check) {
+      } else {
+        this.$message.error("核对金额为0才能保存");
+      }
+    },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt =
-        row.accountAmt * 1  -
-        row.checkAmt * 1;
-      row.endAmt = + row.checkAmt * 1;
+      row.unAmt = row.accountAmt * 1 - row.checkAmt * 1;
+      row.endAmt = +row.checkAmt * 1;
       row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
       this.$set(this.BusinessType, rowIndex, row);
-      // let obj = {
-      //   serviceTypeName: "合计",
-      //   accountAmt: this.BusinessType[0].accountAmt,
-      //   endAmt: this.BusinessType[0].endAmt,
-      //   uncollectedAmt: this.BusinessType[0].uncollectedAmt,
-      //   checkAmt: this.BusinessType[0].checkAmt,
-      //   unAmt: this.BusinessType[0].unAmt
-      // };
-      // let total = this.getTotal(obj);
-      // this.$set(this.BusinessType, 5, obj);
+      this.checkComputed()
     },
     // 核销信息合计
     offWrite({ columns, data }) {
@@ -227,6 +268,20 @@ export default {
           return null;
         })
       ];
+    },
+    // 核对计算
+    checkComputed(){
+      let sum1 = 0;
+      let sum2 = 0;
+      let sum3 = 0;
+      this.BusinessType.map(item => {
+        sum1 += item.checkAmt * 1;
+      });
+      this.tableData.map(item => {
+        sum2 += item.collection ? item.collection * 1 : 0;
+        sum3 += item.payAmt ? item.payAmt * 1 : 0;
+      });
+      this.check = sum1 - sum2 - sum3;
     }
   }
 };

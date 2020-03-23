@@ -84,7 +84,7 @@ export default {
         },
         {
           title: "收付款金额",
-          key: "index",
+          key: "checkAmt",
           align: "center"
         },
         {
@@ -104,7 +104,7 @@ export default {
         },
         {
           title: "备注",
-          key: "index",
+          key: "remark",
           align: "center"
         }
       ],
