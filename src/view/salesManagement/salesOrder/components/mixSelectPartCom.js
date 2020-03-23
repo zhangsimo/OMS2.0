@@ -233,7 +233,7 @@ export const mixSelectPartCom = {
       }
       params.page = this.page.num;
       params.size = this.page.size;
-      if(this.keyType != 1){
+      if(this.keyType!=1){
         req.guestId=this.guestId;
         req.storeId=this.storeId;
         getAccessList(params, req).then(res => {
@@ -241,8 +241,8 @@ export const mixSelectPartCom = {
           this.partData = res.data.content || [];
           this.page.total = res.data.totalElements;
         });
-      }else if(this.keyType == 1){
-        req.storeId = this.storeId;
+      }else if(this.keyType==1){
+        req.storeId=this.storeId;
         getWbList(params,req).then(res=>{
           this.loading = false;
           this.partData = res.data|| [];

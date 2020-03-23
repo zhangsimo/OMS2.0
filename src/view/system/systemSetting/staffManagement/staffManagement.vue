@@ -386,7 +386,7 @@ export default {
       data.userName = this.staffName;
       data.phone = this.staffphoneNumber;
       data.office = this.dimission;
-      data.groundIds=this.groundIds[this.groundIds.length-1]||'';
+      data.groundIds=this.groundIds[this.groundIds.length-1] || '';
       getStaffList(data).then(res => {
           stop();
           this.loading = false;

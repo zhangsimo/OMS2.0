@@ -74,7 +74,7 @@ export function getdeleSaffect (data) {
 
 //获取全部员工
 export function getAllseffactList (params) {
-  console.log(params, 999)
+  // console.log(params, 999)
   return axios.request({
     url: `${api.authApi}/tenantUsers/queryAll?`,
     method: 'get',
