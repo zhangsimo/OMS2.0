@@ -484,23 +484,15 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        // if (this.Limitstate === 1) {
-        //   this.$Message.warning("正在审批中，请等待审批完成!");
-        // } else if (this.Limitstate === 3) {
-        //   this.$Message.warning("禁止额度申请中，请联系管理员!");
-        // } else {
         this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
-        console.log(this.date12, "1111");
         this.CreditLineApplicationShow = true;
         this.alertBox();
-        // }
       } else {
         this.$Message.warning("请选择要申请的客户！");
       }
     },
     //申请信用调查
     opensurveyShow() {
-      // this.$refs.SurveyList.handleReset();
       this.surveyShow = true;
     },
     //额度调用
