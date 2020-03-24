@@ -21,7 +21,7 @@
               >{{ item.label }}</Option>
             </Select>
             <span>对应科目：</span>
-            <Input value="库存现金" class="w100" />
+            <Input v-model="subjectType" class="w100" />
             <button class="ml10 ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -182,7 +182,8 @@ import quickDate from "@/components/getDate/dateget_bill.vue";
 import { creat } from "../../components";
 import amtData from '../../components/amtData'
 import artificial from '../../components/artificial'
-import {shop} from '@/api/settlementManagement/fundsManagement/cashJournal'
+import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+
 
 import moment from "moment";
 export default {
@@ -197,6 +198,7 @@ export default {
       shopList: [], //门店
       shopCode: "", //门店
       formInline: {}, //统计数据
+      subjectType:'',//对应科目
       tableData: [
       ], //全部数据
       currentChange: {} //当前选中数据
@@ -213,8 +215,7 @@ export default {
     async getShop(){
       let data = {}
       data.supplierTypeSecond = 0
-      let res = await shop(data)
-      console.log(res)
+      let res = await goshop(data)
       if (res.code === 0) return this.shopList = res.data
     },
     // 快速查询
