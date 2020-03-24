@@ -107,16 +107,11 @@ export default {
         },
         {
           title: "智能匹配往来单位",
-          key: "index",
+          key: "guestName",
           align: "center"
         }
       ], //本店待认领款
-      claimedData: [
-        { index: 1 },
-        { index: 1 },
-        { guestName: "123" },
-        { guestName: "123" }
-      ] //本店待认领款
+      claimedData: [] //本店待认领款
     };
   },
   methods: {
