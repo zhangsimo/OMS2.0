@@ -289,12 +289,18 @@ export const dataMixin = {
       this.addNewModal = true
       this.changeTreeItemTitle='添加字典类型'
       this.$refs.proModal.resetFields()
-      if(this.selectTreeItem.value){
-        let arr = this.selectTreeItem.value.split(',')
-        // arr.pop()
-        this.formModelData.parentMenu = arr
-      }else if(this.selectTreeItem.parentId==0){
-        this.formModelData.parentMenu = []
+      if(this.selectTreeItem.parentId==0){
+        if(this.selectTreeItem.value){
+          this.formModelData.parentMenu=[this.selectTreeItem.value]
+        }else{
+          this.formModelData.parentMenu=[]
+        }
+      }else{
+        if(this.selectTreeItem.value){
+          this.formModelData.parentMenu=[this.selectTreeItem.parentId,this.selectTreeItem.value]
+        }else{
+          this.formModelData.parentMenu=[this.selectTreeItem.parentId]
+        }
       }
       if(this.formModelData.id){
         delete this.formModelData.id
@@ -302,19 +308,26 @@ export const dataMixin = {
     },
     //修改数据字典类型
     changeModelFun(){
-      this.changeTreeItemTitle='修改字典类型'
+      this.changeTreeItemTitle='修改字典类型';
+      console.log(this.selectTreeItem)
       if(this.selectTreeItem){
         this.addNewModal = true
         this.$refs.proModal.resetFields();
         this.formModelData.dictCode = this.selectTreeItem.dictCode
         this.formModelData.dictName = this.selectTreeItem.dictName
         this.formModelData.dictDescribe = this.selectTreeItem.dictDescribe
-        if(this.selectTreeItem.value){
-          let arr = this.selectTreeItem.value.split(',')
-          // arr.pop()
-          this.formModelData.parentMenu = arr
-        }else if(this.selectTreeItem.parentId==0){
-          this.formModelData.parentMenu = []
+        if(this.selectTreeItem.parentId==0){
+          if(this.selectTreeItem.value){
+            this.formModelData.parentMenu=[this.selectTreeItem.value]
+          }else{
+            this.formModelData.parentMenu=[]
+          }
+        }else{
+          if(this.selectTreeItem.value){
+            this.formModelData.parentMenu=[this.selectTreeItem.parentId,this.selectTreeItem.value]
+          }else{
+            this.formModelData.parentMenu=[this.selectTreeItem.parentId]
+          }
         }
         this.formModelData.id = this.selectTreeItem.id
       }

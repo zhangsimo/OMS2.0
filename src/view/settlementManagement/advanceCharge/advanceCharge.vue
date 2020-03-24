@@ -55,10 +55,10 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button class="ml10" @click="modal = true">预付款认领</Button>
+        <Button class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
         <Button class="ml10">预付款核销</Button>
         <Button class="ml10">预付款支出</Button>
-        <Button class="ml10">预付款支出认领</Button>
+        <Button class="ml10" @click="openModal('预付款支出认领')">预付款支出认领</Button>
         <Button class="ml10">预付款撤回</Button>
         <Button class="ml10">预付款核销撤回</Button>
         <Button class="ml10">预付款支出撤回</Button>
@@ -280,10 +280,19 @@
       </div>
     </section>
     <Modal v-model="modal" title="预收款认领" width="800">
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
+      <span>往来单位：</span>
+      <Select v-model="suppliers" class="w150" filterable>
+        <Option
+          v-for="item in company"
+          :value="item.value"
+          :key="item.value"
+          >{{ item.label }}</Option
+        >
+      </Select>
       <span class="ml10">对方户名：</span>
-      <Input v-model="amt" class="w100" />
+      <Input v-model="reciprocalAccountName" class="w100" />
+      <span class="ml10">金额：</span>
+      <InputNumber v-model="amount" class="w50" />
       <button
         class="ivu-btn ivu-btn-default ml10"
         type="button"
@@ -292,8 +301,8 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10">预收款认领</Button>
-      <claim ref="claim" />
+      <Button class="ml10" @click="claimOk">预收款认领</Button>
+      <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
     </Modal>
   </div>
@@ -307,7 +316,7 @@ import { creat } from "../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
 import moment from "moment";
-import { mapActions } from "vuex";
+import { mapMutations } from "vuex";
 export default {
   components: {
     quickDate,
@@ -316,8 +325,12 @@ export default {
   },
   data() {
     return {
-      amt: 0, //
+      amount: 0, //认领-金额
+      reciprocalAccountName: "", // 认领-对方户名
+      suppliers: "", // 认领-往来单位
       modal: false, //预收款弹框
+      claimedButtonType: "预付款认领", // claimed 用以判断弹窗按钮坐用
+      claimedSelectData: [], // 认领弹窗选择的数据
       value: [], //日期
       company: [], //往来单位
       companyId: "", //往来单位
@@ -343,6 +356,7 @@ export default {
     this.getOne();
   },
   methods: {
+    ...mapMutations(["setClaimedSearch"]),
     // 往来单位选择
     async getOne() {
       const res = await getSupplierList({});
@@ -448,10 +462,80 @@ export default {
       this.page.size = size;
       this.getQuery();
     },
+    openModal(name) {
+      this.claimedButtonType = name;
+      this.amount = 0
+      this.reciprocalAccountName = "";
+      this.suppliers = "";
+      this.queryClaimed();
+      this.modal = true;
+    },
     // 预收款认领查询
     queryClaimed() {
-      // this.claimed();
-    }
+      if(this.claimedButtonType == "预付款认领") {
+        this.setClaimedSearch({
+          amount: this.amount,
+          reciprocalAccountName: this.reciprocalAccountName,
+          suppliers: this.suppliers,
+          amountType: 2
+        });
+      } else {
+        this.setClaimedSearch({
+          amount: this.amount,
+          reciprocalAccountName: this.reciprocalAccountName,
+          suppliers: this.suppliers,
+          amountType: 1
+        });
+      }
+      this.$refs.claim.init();
+    },
+    selection(arr) {
+      this.claimedSelectData = arr;
+    },
+    // 认领
+    async claimOk() {
+      if (this.claimedSelectData.length <= 0) {
+        return this.$message.error("请先选择要认领的数据!");
+      }
+      const userData = this.$store.state.user.userData;
+      let obj = {
+        tenantId: userData.tenantId,
+        orgid: userData.shopId,
+        paymentTypeList: [],
+        paymentRemark: "",
+      }
+      for (let key in obj) {
+        if(!obj[key]) {
+          delete obj[key];
+        }
+      }
+      obj.payAmt = 0;
+      if(this.claimedButtonType == "预付款认领") {
+        this.claimedSelectData.forEach(el => {
+          let item = {
+            account: el.accountCode,
+            amt: el.incomeMoney,
+            ownStoreId: el.shopId,
+            ownStoreName: el.shopName,
+            accountBank: el.bankName,
+            accountBankNo: el.accountCode,
+            accountName: el.accountName,
+          }
+          obj.payAmt += el.paidMoney;
+          obj.paymentTypeList.push(item);
+          if(!obj.guestId) {
+            obj.guestId = el.guestId;
+          }
+        })
+        let res = await api.addClaim(obj);
+        if(res.code == 0) {
+          this.modal = false;
+          return this.$message.success("认领成功");
+        }
+      }else if(this.claimedButtonType == "预付款支出认领") {
+
+      }
+    },
   }
 };
 </script>

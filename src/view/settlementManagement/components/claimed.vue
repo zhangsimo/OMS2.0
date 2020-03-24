@@ -23,6 +23,8 @@
   </div>
 </template>
 <script>
+import * as api from "_api/settlementManagement/advanceCharge";
+import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -107,27 +109,33 @@ export default {
         },
         {
           title: "智能匹配往来单位",
-          key: "index",
+          key: "guestName",
           align: "center"
         }
       ], //本店待认领款
-      claimedData: [
-        { index: 1 },
-        { index: 1 },
-        { guestName: "123" },
-        { guestName: "123" }
-      ] //本店待认领款
+      claimedData: [] //本店待认领款
     };
   },
+  computed: {
+    ...mapGetters(["getClaimedSearch"]),
+  },
   methods: {
+    init() {
+      this.claimedPage = {
+        page: 1,
+        total: 0,
+        size: 10
+      }
+      this.getList();
+    },
     //本店待认领款选中的数据
     claimedSelection(selection) {
       if (selection.length !== 1 && selection.length) {
         let s = 0;
         let n = 0;
         selection.map(item => {
-          if (item.index) s++;
-          if (item.guestName) n++;
+          if (item.incomeMoney) s++;
+          if (item.paidMoney) n++;
         });
         if (!s && n||s&&!n) {
           this.currentClaimed = selection;
@@ -137,14 +145,52 @@ export default {
       } else {
         this.currentClaimed = selection;
       }
+      this.$emit("selection", this.currentClaimed);
+    },
+    // 获取数据
+    async getList() {
+      let body = {
+        size: this.claimedPage.size,
+        page: this.claimedPage.page - 1,
+        ...this.getClaimedSearch,
+      }
+      let res = await api.findPageToBeClaimedFund(body);
+      if (res.code == 0) {
+        this.claimedData = res.data.content;
+        this.claimedPage.total = res.data.totalElements;
+      }
     },
     //本店待认领款页码
     pageChangeAmt(val) {
       this.claimedPage.page = val;
+      this.getList();
     },
     //本店待认领款每页条数
     sizeChangeAmt(val) {
+      this.claimedPage.page = 1;
       this.claimedPage.size = val;
+      this.getList();
+    }
+  },
+  watch: {
+    currentClaimed: {
+      handler(val, od) {
+        if (val !== od) {
+          const that = this.$parent.$parent.$parent
+          that.claimedAmt = 0;
+          val.map(item => {
+            if(item.paidMoney) {
+              that.claimedAmt += item.paidMoney * 1;
+            } else{
+              that.claimedAmt += item.incomeMoney * 1;
+            }
+          });
+          that.difference = that.currentAccount.actualCollectionOrPayment
+            ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+            : 0 - that.claimedAmt;
+        }
+      },
+      deep: true
     }
   }
 };

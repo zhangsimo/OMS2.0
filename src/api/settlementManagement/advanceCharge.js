@@ -18,3 +18,21 @@ export function findByAccountNo(params) {
     params,
   });
 }
+
+// 领款分页查询
+export function findPageToBeClaimedFund(data) {
+  return axios.request({
+    url: `${api.omsSettle}/capital/claim/verification/findPageToBeClaimedFund`,
+    method: "post",
+    data,
+  });
+}
+
+// 预付款认领
+export function addClaim(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advancePayment/addClaim`,
+    method: "post",
+    data,
+  });
+}
