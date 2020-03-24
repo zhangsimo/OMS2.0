@@ -40,6 +40,9 @@
         </vxe-table>
       </div>
     </Split>
+
+
+    <!--新增模态框-->
     <Modal v-model="addNewModal" title="编辑会计科目"   width="800">
       <Form :model="formData"  :label-width="90"  ref="formValidate" :rules="ruleValidate">
         <Row>
@@ -106,7 +109,7 @@
           </Col>
         </Row>
         <FormItem label="是否必选款项分类:" >
-          <Checkbox v-model="formData.isAuxiliaryAccounting" :true-value="1" :false-value="0">是</Checkbox>
+          <Checkbox v-model="formData.isAuxiliaryAccounting" :true-value="0" :false-value="1">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -117,17 +120,17 @@
 
 
 <!--    修改模态框-->
-    <Modal v-model="changeModal" title="编辑会计科目"   width="800">
+    <Modal v-model="changeModal" title="编辑会计科目" width="800">
       <Form :model="ChangeData"  :label-width="90"  ref="ModelValidate" :rules="ruleValidate">
         <Row>
           <Col span="12">
             <FormItem label="上级科目：">
-              <Input class="w200" v-model="ChangeData.titleCode + ' - ' + ChangeData.titleName" disabled></Input>
+              <Input class="w200" v-model="ChangeData.parentCodeTwo" disabled></Input>
             </FormItem>
           </Col>
           <Col span="12">
             <FormItem label="科目类别：">
-              <Input class="w200" v-model="ChangeData.titleTypeCode + ' - ' + ChangeData.titleTypeName" disabled></Input>
+              <Input class="w200" v-model="ChangeData.titleTypeCode" disabled></Input>
               <!--<Select v-model="ChangeData.titleTypeCode" style="width:200px" disabled>-->
                 <!--<Option v-for="item in subjectList" :value="item.itemCode" :key="item.itemCode">{{ item.itemName }}</Option>-->
               <!--</Select>-->
@@ -184,7 +187,7 @@
           </Col>
         </Row>
         <FormItem label="是否必选款项分类:" >
-          <Checkbox v-model="ChangeData.isAuxiliaryAccounting" :true-value="1" :false-value="0">是</Checkbox>
+          <Checkbox v-model="ChangeData.isAuxiliaryAccounting" :true-value="0" :false-value="1">是</Checkbox>
         </FormItem>
       </Form>
       <div slot='footer'>
@@ -308,7 +311,7 @@
               // this.formData.titleName = this.oneTreeList.titleName
               this.formData.titleTypeCode = this.oneTreeList.titleTypeCode
                 this.formData.balanceDirection = 0
-                this.formData.status = 0
+                this.formData.status = 1
               this.formData.auxiliaryAccountingCode = 'null'
               this.formData.titleLevel = this.oneTreeList.titleLevel + 1
             },
@@ -340,6 +343,7 @@
           changeSave(){
             this.$refs.ModelValidate.validate( async (valid) => {
               if (valid) {
+                this.ChangeData.titleTypeCode = this.ChangeData.titleTypeCode.split(' - ')[0];
                 let res = await getSave( this.ChangeData )
                 if(res.code == 0){
                   let data = {}
@@ -363,17 +367,20 @@
 
             //新增子节点
             addNewChildren(row){
+             console.log(row)
                 this.changeModal = true
                 this.ChangeData ={}
                 this.$refs.ModelValidate.resetFields();
-                // this.ChangeData.parentCode = row.titleCode
+                this.ChangeData.parentCode = row.titleCode;
+                this.ChangeData.parentCodeTwo = row.titleCode + ' - ' + row.titleName
+                this.ChangeData.titleTypeCode = row.titleTypeCode + ' - ' + row.titleTypeName
                 this.ChangeData.titleCode  = row.titleCode;
-                this.ChangeData.titleName = row.titleName;
+                // this.ChangeData.titleName = row.titleName;
                 this.ChangeData.titleTypeName  = row.titleTypeName;
-                this.ChangeData.titleTypeCode = row.titleTypeCode
+                // this.ChangeData.titleTypeCode = row.titleTypeCode
                 this.ChangeData.balanceDirection = 0
                 this.ChangeData.status = 1;
-                // this.ChangeData.parentCode = row.titleCode
+                this.ChangeData.parentCode = row.titleCode
                 this.ChangeData.parentNanme = row.fullName
                 this.ChangeData.auxiliaryAccountingCode = 'null'
                 this.ChangeData.titleLevel = row.titleLevel + 1
