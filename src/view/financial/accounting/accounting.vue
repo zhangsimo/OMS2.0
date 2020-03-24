@@ -35,7 +35,7 @@
           <vxe-table-column field="auxiliaryAccountingName" title="辅助核算"></vxe-table-column>
           <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
           <vxe-table-column title="状态">
-            <template v-slot="{ row }">{{ row.status == 1 ? '无效' : '有效' }}</template>
+            <template v-slot="{ row }">{{ row.status == 1 ? '有效' : '无效' }}</template>
           </vxe-table-column>
         </vxe-table>
       </div>
