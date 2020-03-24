@@ -595,7 +595,7 @@ export default {
     },
     //开通账号
     giveUser(type) {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
@@ -639,7 +639,7 @@ export default {
       });
     },
     openCompany() {
-      if (!this.oneStaffChange) {
+      if (!this.oneStaffChange.id) {
         this.$Message.error("请至选择一条员工信息");
         return false;
       }
