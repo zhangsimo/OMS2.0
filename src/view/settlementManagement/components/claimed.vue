@@ -121,8 +121,8 @@ export default {
         let s = 0;
         let n = 0;
         selection.map(item => {
-          if (item.index) s++;
-          if (item.guestName) n++;
+          if (item.incomeMoney) s++;
+          if (item.paidMoney) n++;
         });
         if (!s && n||s&&!n) {
           this.currentClaimed = selection;
@@ -140,6 +140,27 @@ export default {
     //本店待认领款每页条数
     sizeChangeAmt(val) {
       this.claimedPage.size = val;
+    }
+  },
+  watch: {
+    currentClaimed: {
+      handler(val, od) {
+        if (val !== od) {
+          const that = this.$parent.$parent.$parent
+          that.claimedAmt = 0;
+          val.map(item => {
+            if(item.paidMoney) {
+              that.claimedAmt += item.paidMoney * 1;
+            } else{
+              that.claimedAmt += item.incomeMoney * 1;
+            }
+          });
+          that.difference = that.currentAccount.actualCollectionOrPayment
+            ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+            : 0 - that.claimedAmt;
+        }
+      },
+      deep: true
     }
   }
 };

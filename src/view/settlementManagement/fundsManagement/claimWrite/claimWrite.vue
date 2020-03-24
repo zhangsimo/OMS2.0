@@ -14,7 +14,7 @@
             <span>对账单勾选金额</span>
           </Col>
           <Col span="3">
-            <span>{{currentAccount.receiptPayment}}</span>
+            <span>{{currentAccount.actualCollectionOrPayment}}</span>
           </Col>
           <Col span="6">
             <span>认领款勾选金额</span>
@@ -98,10 +98,10 @@
                 </button>
                 <br />
                 <Button class="mt10 ml10" @click="distributionDelete">撤销分配</Button>
-                <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
+                <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
                 <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
                 <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button>
+                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button> -->
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
@@ -339,7 +339,7 @@ export default {
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
       claimedAmt: 0, //认领款勾选金额
-      difference: 0 //差异
+      difference: 0, //差异
     };
   },
   async mounted() {
@@ -475,7 +475,7 @@ export default {
         })
         distributionShop(obj).then(res => {
           if(res.code===0){
-            this.distributionSelection()
+            this.distributionList()
             this.claimedList()
           }
         });
@@ -571,22 +571,22 @@ export default {
       this.distributionPage.size = val;
     }
   },
-  watch: {
-    currentClaimed: {
-      handler(val, od) {
-        if (val !== od) {
-          this.claimedAmt = 0;
-          val.map(item => {
-            this.claimedAmt += item.index * 1;
-          });
-          this.difference = this.currentAccount.actualCollectionOrPayment
-            ? this.currentAccount.actualCollectionOrPayment - this.claimedAmt
-            : 0 - this.claimedAmt;
-        }
-      },
-      deep: true
-    }
-  }
+  // watch: {
+  //   currentClaimed: {
+  //     handler(val, od) {
+  //       if (val !== od) {
+  //         this.claimedAmt = 0;
+  //         val.map(item => {
+  //           this.claimedAmt += item.index * 1;
+  //         });
+  //         this.difference = this.currentAccount.actualCollectionOrPayment
+  //           ? this.currentAccount.actualCollectionOrPayment - this.claimedAmt
+  //           : 0 - this.claimedAmt;
+  //       }
+  //     },
+  //     deep: true
+  //   }
+  // }
 };
 </script>
 <style>
