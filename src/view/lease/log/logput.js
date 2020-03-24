@@ -46,11 +46,16 @@ const methods = {
       if(this.id) {
         data.id = this.id;
       }
-      let res = await api.sysUpdateLog(data);
-      if(res.code === 0) {
-        this.id = res.data.id;
-        this.$Message.success('保存草稿成功!');
+      if(this.ueContent.replace(/[<p>|</p>|<br>]/g,'')){
+        let res = await api.sysUpdateLog(data);
+        if(res.code === 0) {
+          this.id = res.data.id;
+          this.$Message.success('保存草稿成功!');
+        }
+      }else{
+        this.$Message.error('系统更新内容不能为空！')
       }
+
     },
     // 发布
     async add() {
@@ -60,12 +65,17 @@ const methods = {
       if(this.id) {
         data.id = this.id;
       }
-      let res = await api.saveLog(data);
-      if(res.code === 0) {
-        this.$Message.success('发布日志成功!');
-        this.$router.push({name: 'historylog'});
-        
+      if(this.ueContent.replace(/[<p>|</p>|<br>]/g,'')){
+        let res = await api.saveLog(data);
+        if(res.code === 0) {
+          this.$Message.success('发布日志成功!');
+          this.$router.push({name: 'historylog'});
+
+        }
+      }else{
+        this.$Message.error('系统更新内容不能为空！')
       }
+
     },
 };
 
