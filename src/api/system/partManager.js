@@ -194,7 +194,7 @@ export function getAccessList(params,data) {
 //移仓单添加配件
 export function getWbList(params,data) {
   return axios.request({
-    url:`${api.omsSotck}/partStoreStock/queryByConditions`,
+    url:`${api.omsSotck}/partStoreStock/findPartListByParms`,
     method:'post',
     params,
     data

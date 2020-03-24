@@ -21,15 +21,18 @@
       @on-current-change="advanceChange"
     ></Table>
     <div slot="footer"></div>
+    <settlement ref="settlement" />
   </Modal>
 </template>
 <script>
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
+import settlement from "../../../bill/components/settlement";
 export default {
+  components:{settlement},
   data() {
     return {
-      modal: true, //弹框
+      modal: false, //弹框
       amt: 0, //金额
       company: [], //往来单位
       companyId: "", //往来单位
@@ -127,6 +130,7 @@ export default {
     //认领
     claim() {
       if (Object.keys(this.currentData).length !== 0) {
+        this.$refs.settlement.Settlement = true;
       } else {
         this.$message.error("请选择一条数据");
       }

@@ -11,6 +11,7 @@ export const mixSelectPartCom = {
   props:{
     guestId:'',
     keyType:'',//当key==1时表示是从移仓单来的
+    storeId: ''
   },
   data() {
     return {
@@ -241,6 +242,7 @@ export const mixSelectPartCom = {
           this.page.total = res.data.totalElements;
         });
       }else if(this.keyType==1){
+        req.storeId=this.storeId;
         getWbList(params,req).then(res=>{
           this.loading = false;
           this.partData = res.data|| [];
