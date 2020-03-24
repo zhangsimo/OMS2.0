@@ -220,7 +220,7 @@ export default {
       }
     };
     const valiiBank = (rule, value, callback) => {
-      const regExp = /^\d{1,}$/; 
+      const regExp = /^\d{1,}$/;
       if (!value || !regExp.test(value)) {
         callback(new Error("银行账户填写错误"));
       } else {
@@ -299,6 +299,11 @@ export default {
     resetFields() {
       this.$refs.form.resetFields();
       this.uploadSrc = "";
+      this.province='';
+      this.city='';
+      this.county='';
+      this.address='';
+      
     },
     //校验表单
     handleSubmit(callback) {

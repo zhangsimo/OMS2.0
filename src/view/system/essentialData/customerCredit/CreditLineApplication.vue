@@ -162,7 +162,7 @@
           style="width: 100%;height: 40px;border: 1px solid lightgray;border-top: none!important;display: flex;align-items: center;padding-left: 50px"
         >
           合计：
-          <span>{{ sendMsg.applyTotalAmt }} 元</span>
+          <span>{{ applyTotalAmt }} 元</span>
         </div>
       </div>
     </div>
@@ -239,22 +239,22 @@ export default {
         {
           title: "销售金额",
           align: "center",
-          key: "salesAmt"
+          key: "purchaseAmt"
         },
         {
           title: "已回款金额",
           align: "center",
-          key: "paidAmt"
+          key: "alreadyPaidAmt"
         },
         {
           title: "未回款金额",
           align: "center",
-          key: "uncollectedAmt"
+          key: "paidAmt"
         },
         {
           title: "采购金额",
           align: "center",
-          key: "purchaseAmt"
+          key: "salesAmt"
         },
         {
           title: "已付款金额",
@@ -264,7 +264,7 @@ export default {
         {
           title: "未付款金额",
           align: "center",
-          key: "unpaidAmt"
+          key: "uncollectedAmt"
         },
         {
           title: "往来净额",
@@ -347,12 +347,14 @@ export default {
           key: "orderAmt"
         }
       ],
-      applyDate: ""
+      applyDate: "",
+        applyTotalAmt:0,
     };
   },
   mounted() {
     let date = new Date();
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
+
   },
   methods: {
     dataChange() {
@@ -503,11 +505,19 @@ export default {
         this.$Message.error("不能超过最高授信额度100万!");
         this.data.tempQuota = 0;
       }
-    }
-  },
-  mounted() {
-    // this.data.applyQuota = ''
-    // this.data.tempQuota = ''
+    },
+    init(){
+        this.applyTotalAmt=0;
+        this.$nextTick(()=>{
+            if(this.sendMsg.guestAdjustVOList){
+                this.sendMsg.guestAdjustVOList.map(item=>{
+                    console.log(item);
+                    this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
+                })
+            }
+        })
+
+      }
   },
   computed: {
     sum() {

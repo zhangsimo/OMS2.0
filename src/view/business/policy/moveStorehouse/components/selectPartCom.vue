@@ -47,7 +47,7 @@
     mixins:[mixSelectPartCom],
     components: {PartInfo},
     props:{
-      isShowAddPartBtn:false
+      isShowAddPartBtn:false,
     }
   }
 </script>

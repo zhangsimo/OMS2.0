@@ -653,6 +653,7 @@ export default {
         if (res.code === 0) {
           this.applicationArr = res.data;
           this.payable = res.data.payable || {};
+            this.$refs.child.init();
         }
       });
     },

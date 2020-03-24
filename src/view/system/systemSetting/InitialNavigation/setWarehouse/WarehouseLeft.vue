@@ -94,7 +94,11 @@
             add (name) {
                 this.$refs[name].validate((valid) => {
                     if (valid) {
-                        let data = this.warehouseData
+                        let data = this.warehouseData;
+                        data.isWms=this.warehouseData.isWms?this.warehouseData.isWms:false;
+                        data.isDisabled=this.warehouseData.isDisabled?this.warehouseData.isDisabled:false;
+                        data.sellSign=this.warehouseData.sellSign?this.warehouseData.sellSign:false;
+                        data.isDefault=this.warehouseData.isDefault?this.warehouseData.isDefault:false;
                         getNewWarehouse(data).then( res => {
                             this.getList()
                             this.showNewWareHouse =false
