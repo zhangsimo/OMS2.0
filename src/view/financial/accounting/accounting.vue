@@ -389,7 +389,9 @@
             //修改节点数据
             change(row){
                 this.ChangeData = row;
-                // console.log(row)
+                this.ChangeData.parentCodeTwo = row.titleCode + ' - ' + row.titleName;
+                this.ChangeData.titleTypeCode = row.titleTypeCode + ' - ' + row.titleTypeName
+              // console.log(row)
                 this.ChangeData.parentCode = row.parentCode;
                 // this.ChangeData.titleTypeCode = this.ChangeData.titleTypeName + this.ChangeData.titleTypeCode;
                 this.$refs.ModelValidate.resetFields();
