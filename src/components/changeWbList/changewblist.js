@@ -23,7 +23,7 @@ export function conversionList(val){
         carTypet : data.baseType ? data.baseType.thirdType ?data.baseType.thirdType.typeName ? data.baseType.thirdType.typeName : '' :'':'',
         orderPrice:data.orderPrice,
         averagePrice:data.averagePrice,
-        partName:data.partName
+        partName:data.partStandardName
       })
     })
     return arr
