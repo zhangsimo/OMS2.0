@@ -7,7 +7,7 @@ const dev = {
   omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.21:9200",
   // omsOrder:'http://192.168.30.21:9210', //陈舒
-  // omsSettle: "http://192.168.30.21:9270",
+  // omsSettle: "http://192.168.30.11:9270",
   omsSettle: "http://192.168.30.21:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210

@@ -303,7 +303,6 @@ export default {
       this.city='';
       this.county='';
       this.address='';
-      
     },
     //校验表单
     handleSubmit(callback) {

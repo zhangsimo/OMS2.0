@@ -9,7 +9,7 @@
     <div style="min-width: 600px">
       <section
         class="con-box w400 fl mr15"
-        style="overflow-x: hidden;overflow-y: auto;height: 670px"
+        style=" overflow-x: hidden;overflow-y: auto;height: 670px"
       >
         <!--<span style="font-size: 16px">组织信息</span>-->
         <Tree
@@ -264,7 +264,10 @@ export default {
         h("Icon", {
           props: {
             size: 16,
-            type: "person"
+            type: "person",
+          },
+          style:{
+            marginLeft:'10px'
           },
           attrs: {
             title: "查看人员"
@@ -385,14 +388,14 @@ export default {
     submit() {
       if (!this.issave) return;
       this.$refs.child.handleSubmit(() => {
-        let stop = this.$loading();
+        // let stop = this.$loading();
         isExisted(this.newGroup.name).then(res => {
           if (res.code == 0) {
             addOrUpdate(this.newGroup)
               .then(res => {
-                stop();
+                // stop();
                 if (res.code == 0) {
-                  stop();
+                  // stop();
                   if (this.newGroup.id) {this.success("修改成功");}
                   else {this.success("新增成功");}
                 }

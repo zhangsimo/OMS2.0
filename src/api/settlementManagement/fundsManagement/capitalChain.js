@@ -34,3 +34,23 @@ export function goSubject(data) {
 
 //导入文件地址
 export const impUrl = `${api.omsSettle}/cashAccountServer/import`
+
+
+//获取门店接口
+export function goList(data) {
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/findCashAccount?page=${data.page}&size=${data.size}`,
+    method: 'post',
+    data
+  });
+}
+
+
+//删除导入
+export function deleList(data){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/deleteById?id=${data.id}`,
+    method: 'post',
+    data
+  });
+}

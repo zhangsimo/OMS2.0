@@ -817,15 +817,18 @@ export default {
     async getBarchList(val) {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
-          let data = {};
+          // let data = {};
           val.map(item => {
             item.isMarkBatch = 1;
           });
-          data = this.formPlan;
-          val.map(item=>{
-              data.detailList.unshift(val);
-          })
-
+          // data = this.formPlan;
+          // val.map(item=>{
+          //     data.detailList.unshift(val);
+          // })
+            this.formPlan.detailList = [
+                ...this.formPlan.detailList,
+                ...conversionList(val)
+            ]
         } else {
           this.$Message.error("*为必填项");
         }
