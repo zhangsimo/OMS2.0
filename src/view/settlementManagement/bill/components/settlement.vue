@@ -124,7 +124,7 @@
   </Modal>
 </template>
 <script>
-import accountSelette from "./accountSelette";
+import accountSelette from "./accountWirte";
 import { wirteAccount } from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
@@ -150,7 +150,10 @@ export default {
     bus.$on("accountHedNo", val => {
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + "," + val.accountNo;
-      this.BusinessType.push(val.two);
+        val.two.map(item=>{
+          item.businessTypeName = item.businessType.name;
+        })
+      this.BusinessType = [...this.BusinessType,...val.two]
     });
     //选择科目
     bus.$on("hedInfo", val => {
@@ -191,6 +194,8 @@ export default {
     bus.$on("paymentInfo", val => {
       val.map(item=>{
         item.orgName = item.shopName
+        item.paidMoney = item.paidMoney ? -item.paidMoney :0
+        console.log(item.paidMoney)
       })
       this.tableData = val;
     });
