@@ -19,10 +19,6 @@
       }}</Option>
     </Select>
     <span class="ml10">收付款类型：</span>
-<<<<<<< HEAD
-    <Select v-model="paymentId" class="w150" filterable>
-      <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-=======
     <Select v-model="receivePaymentType" class="w150" filterable>
       <Option
         v-for="item in receivePayments"
@@ -30,7 +26,6 @@
         :key="item.value"
         >{{ item.label }}</Option
       >
->>>>>>> Branch_dev
     </Select>
     <Button @click="query" class="ml10">查询</Button>
     <Table
@@ -63,11 +58,8 @@
 import idDetailed from "./idDetailed";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
-<<<<<<< HEAD
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
-=======
 import * as api from "_api/settlementManagement/advanceCharge";
->>>>>>> Branch_dev
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../Popup/Bus";
 import moment from "moment";
@@ -135,16 +127,11 @@ export default {
         },
         {
           title: "收付类型",
-<<<<<<< HEAD
           key: "receivePaymentTypeName",
-          className: "tc"
-=======
-          key: "receivePaymentType",
           className: "tc",
           render: (h, p) => {
             return h("span", p.row.receivePaymentType.name);
           }
->>>>>>> Branch_dev
         },
         {
           title: "实际收付款金额",
@@ -154,13 +141,10 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
-<<<<<<< HEAD
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框
-=======
       receivePaymentType: "", // 收付款类型
       receivePayments: [] // 收付款类型
->>>>>>> Branch_dev
     };
   },
   mounted() {
@@ -206,21 +190,6 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-<<<<<<< HEAD
-        //收付类型数据字典
-        getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
-          res => {
-            res.data.map(item => {
-              this.paymentList.push({
-                value: item.itemCode,
-                label: item.itemName
-              });
-            });
-          }
-        );
-        this.getOne();
-        this.seleteQuery();
-=======
         this.getOne();
       }
       this.page = {
@@ -228,7 +197,6 @@ export default {
         size: 10,
         total: 0,
         opts: [20, 50, 100, 200]
->>>>>>> Branch_dev
       }
       this.accountData = [];
     },
@@ -241,16 +209,6 @@ export default {
         endDate: this.dateQuery[1]
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
-<<<<<<< HEAD
-        receivePaymentType: this.paymentId,
-        guestId: this.companyId
-      };
-      findAccount(obj).then(res => {
-        if (res.code === 0) {
-          this.accountData = res.data.content;
-        }
-      });
-=======
         guestId: this.companyId,
         tenantId: userData.tenantId,
         orgid: "", // userData.shopId
@@ -268,7 +226,6 @@ export default {
         this.page.total = res.data.totalElements;
       }
       this.seleteData = {};
->>>>>>> Branch_dev
     },
     // 日期查询
     query() {
