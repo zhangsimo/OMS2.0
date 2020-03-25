@@ -16,7 +16,7 @@
         </Col>
         <Col span="8">
           <span>收付类型：</span>
-          <Input class="w200" v-model="reconciliationStatement.billingTypeName" />
+          <Input class="w200" v-model="reconciliationStatement.sortName" />
         </Col>
       </Row>
       <Row class="mt10">
@@ -26,12 +26,12 @@
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
-          <span>实际收款/付款：</span>
-          <Input class="w200" v-model="reconciliationStatement.receiptPayment" />
+          <span>收付款单号：</span>
+          <Input class="w200" v-model="reconciliationStatement.serviceId" />
         </Col>
         <Col span="8">
-          <span>收付款单号：</span>
-          <Input class="w200" v-model="collectPayId" />
+          <span>核销方式：</span>
+          <Input class="w200" v-model="reconciliationStatement.furposeName" />
         </Col>
       </Row>
     </div>
@@ -44,6 +44,7 @@
           resizable
           auto-resize
           show-footer
+          max-height=400
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -53,17 +54,17 @@
             <vxe-table-column field="orgName" title="门店"></vxe-table-column>
             <vxe-table-column field="accountNo" title="对账单号"></vxe-table-column>
             <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-            <vxe-table-column field="serviceTypeName" title="业务类型"></vxe-table-column>
-            <vxe-table-column field="accountAmt" title="对账金额"></vxe-table-column>
-            <vxe-table-column field="endAmt" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="uncollectedAmt" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column field="businessTypeName" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
+            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
-              field="checkAmt"
+              field="rpAnt"
               title="本次核销金额"
               width="140"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
             ></vxe-table-column>
-            <vxe-table-column field="unAmt" title="剩余未收/未付"></vxe-table-column>
+            <vxe-table-column field="unAmtLeft" title="剩余未收/未付"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -100,17 +101,18 @@
           resizable
           auto-resize
           show-footer
+          max-height=400
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="paymentAmtName" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="paymentAmtName" title="科目代码"></vxe-table-column>
+            <vxe-table-column field="account" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="mateAccountCode" title="科目代码"></vxe-table-column>
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
-            <vxe-table-column field="collection" title="收入金额"></vxe-table-column>
-            <vxe-table-column field="payAmt" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
+            <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
             <vxe-table-column field="orgName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
@@ -123,6 +125,7 @@
 </template>
 <script>
 import accountSelette from "./accountSelette";
+import { wirteAccount } from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
 export default {
@@ -136,16 +139,7 @@ export default {
       check: 0,
       remark: "",
       reconciliationStatement: { accountNo: 123, receiptPayment: 456 },
-      BusinessType: [
-        {
-          orgName: "1",
-          accountAmt: 1,
-          endAmt: 1,
-          uncollectedAmt: 1,
-          checkAmt: 1,
-          unAmt: 1
-        }
-      ],
+      BusinessType: [],
       tableData: [],
       collectPayId: "",
       obj: {}
@@ -154,16 +148,19 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo = val.serviceId;
+      this.reconciliationStatement.accountNo =
+        this.reconciliationStatement.accountNo + "," + val.accountNo;
+      this.BusinessType.push(val.two);
     });
+    //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
-        serviceTypeName: val.fullName,
-        accountAmt: 1,
-        endAmt: 1,
-        uncollectedAmt: 1,
-        checkAmt: 1,
-        unAmt: 1
+        businessTypeName: val.fullName,
+        reconciliationAmt: 0,
+        hasAmt: 0,
+        unAmt: 0,
+        rpAnt: 0,
+        unAmtLeft: 0
       });
     });
     bus.$on("content", val => {
@@ -172,29 +169,29 @@ export default {
     bus.$on("ChildContent", value => {
       if (value.fullName) {
         this.BusinessType.push({
-          serviceTypeName: this.obj.fullName + "-" + value.fullName,
-          accountAmt: 1,
-          endAmt: 1,
-          uncollectedAmt: 1,
-          checkAmt: 1,
-          unAmt: 1
+          businessTypeName: this.obj.fullName + "-" + value.fullName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       } else if (value.loginName) {
         this.BusinessType.push({
-          serviceTypeName: this.obj.fullName + "-" + value.loginName,
-          accountAmt: 1,
-          endAmt: 1,
-          uncollectedAmt: 1,
-          checkAmt: 1,
-          unAmt: 1
+          businessTypeName: this.obj.fullName + "-" + value.loginName,
+          reconciliationAmt: 0,
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       }
     });
     //收付款信息
-    bus.$on('paymentInfo',val=>{
+    bus.$on("paymentInfo", val => {
       console.log(val)
-      this.tableData = val
-    })
+      this.tableData = val;
+    });
   },
   methods: {
     // 选择科目弹框
@@ -215,7 +212,27 @@ export default {
         this.tableData = [];
         this.collectPayId = "";
       } else {
-        this.checkComputed()
+        this.checkComputed();
+        let sign =
+          this.$parent.paymentId === "YJDZ"
+            ? 1
+            : this.$parent.paymentId === "YSK"
+            ? 2
+            : 4;
+        wirteAccount({
+          accountNo: this.$parent.currentAccount.accountNo,
+          sign
+        }).then(res => {
+          if (res.code === 0) {
+            res.data.one.furposeName = res.data.one.furpose.name;
+            res.data.one.sortName = res.data.one.sort.name;
+            this.reconciliationStatement = res.data.one;
+            res.data.two.map(item => {
+              item.businessTypeName = item.businessType.name
+            });
+            this.BusinessType = res.data.two;
+          }
+        });
       }
     },
     //保存
@@ -231,7 +248,7 @@ export default {
       row.endAmt = +row.checkAmt * 1;
       row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
       this.$set(this.BusinessType, rowIndex, row);
-      this.checkComputed()
+      this.checkComputed();
     },
     // 核销信息合计
     offWrite({ columns, data }) {
@@ -242,11 +259,11 @@ export default {
           }
           if (
             [
-              "accountAmt",
-              "endAmt",
-              "uncollectedAmt",
-              "checkAmt",
-              "unAmt"
+              "reconciliationAmt",
+              "hasAmt",
+              "unAmt",
+              "rpAnt",
+              "unAmtLeft"
             ].includes(column.property)
           ) {
             return this.$utils.sum(data, column.property);
@@ -262,7 +279,7 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["collection", "payAmt"].includes(column.property)) {
+          if (["incomeMoney", "paidMoney"].includes(column.property)) {
             return this.$utils.sum(data, column.property);
           }
           return null;
@@ -270,7 +287,7 @@ export default {
       ];
     },
     // 核对计算
-    checkComputed(){
+    checkComputed() {
       let sum1 = 0;
       let sum2 = 0;
       let sum3 = 0;

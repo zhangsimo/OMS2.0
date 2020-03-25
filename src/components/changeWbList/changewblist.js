@@ -11,7 +11,6 @@ export function conversionList(val){
         partId: data.id || '',
         partInnerId: data.code || '',
         partCode : data.partCode || '',
-        partName : data.partStandardName || '',
         fullName : data.fullName || '',
         oemCode : data.oeCode || '',
         partBrand : data.partBrand || '',
@@ -23,7 +22,8 @@ export function conversionList(val){
         carTypes : data.baseType ? data.baseType.secondType ?data.baseType.secondType.typeName ? data.baseType.secondType.typeName : '':'':'',
         carTypet : data.baseType ? data.baseType.thirdType ?data.baseType.thirdType.typeName ? data.baseType.thirdType.typeName : '' :'':'',
         orderPrice:data.orderPrice,
-        averagePrice:data.averagePrice
+        averagePrice:data.averagePrice,
+        partName:data.partStandardName
       })
     })
     return arr
