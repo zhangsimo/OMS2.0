@@ -24,8 +24,7 @@
 </template>
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
-import { mapGetters,mapMutations } from "vuex";
-import bus from '../bill/Popup/Bus'
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -136,8 +135,8 @@ export default {
         let s = 0;
         let n = 0;
         selection.map(item => {
-          if (item.incomeMoney) s++;
-          if (item.paidMoney) n++;
+          if (item.index) s++;
+          if (item.guestName) n++;
         });
         if (!s && n||s&&!n) {
           this.currentClaimed = selection;
@@ -149,7 +148,6 @@ export default {
       }
       this.setClaimedSelectionList(this.currentClaimed);
       this.$emit("selection", this.currentClaimed);
-      bus.$emit("paymentInfo", selection);
     },
     // 获取数据
     async getList() {
@@ -175,27 +173,6 @@ export default {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
       this.getList();
-    }
-  },
-  watch: {
-    currentClaimed: {
-      handler(val, od) {
-        if (val !== od) {
-          const that = this.$parent.$parent.$parent
-          that.claimedAmt = 0;
-          val.map(item => {
-            if(item.paidMoney) {
-              that.claimedAmt += item.paidMoney * 1;
-            } else{
-              that.claimedAmt += item.incomeMoney * 1;
-            }
-          });
-          that.difference = that.currentAccount.actualCollectionOrPayment
-            ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
-            : 0 - that.claimedAmt;
-        }
-      },
-      deep: true
     }
   }
 };

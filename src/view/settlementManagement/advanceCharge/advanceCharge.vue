@@ -325,9 +325,9 @@ import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import * as api from "_api/settlementManagement/advanceCharge";
 import { creat } from "../components";
-import claim from "../components/claimed";
-import Record from "../components/Record";
-import settlementadv from "../bill/components/settlementadv" 
+import claim from "./components/claimed";
+import Record from "./components/Record";
+import settlementadv from "./components/settlementadv" 
 import moment from "moment";
 import { mapMutations } from "vuex";
 export default {
