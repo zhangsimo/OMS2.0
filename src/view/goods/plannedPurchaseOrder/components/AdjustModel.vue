@@ -119,7 +119,6 @@ export default class AdjustModel extends Vue {
 
   private partCode: string = "";
   private partName: string = "";
-
   private init(): void {
     this.show = true;
     this.showModify = false;
@@ -167,6 +166,8 @@ export default class AdjustModel extends Vue {
       if (res.code == 0) {
         this.$Message.success("保存成功!");
         this.getList();
+        let parentData:any = this.$parent
+        parentData.getListData();
       }
     }else{
       this.$Message.error("没有需要调整的数据！");
@@ -178,6 +179,8 @@ export default class AdjustModel extends Vue {
     if (res.code == 0) {
       this.$Message.success("保存成功!");
       this.getList();
+      let parentData:any = this.$parent
+      parentData.getListData();
     }
   }
 }

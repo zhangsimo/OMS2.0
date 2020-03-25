@@ -80,12 +80,12 @@
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation">
             <span>撤销分配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney">
             <span>资金认领核销</span>
           </button>
         </div>
@@ -96,7 +96,7 @@
     <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
 
 <!--    人工智能分配-->
-    <artificial ref="art"></artificial>
+    <artificial ref="art" :list="oneList" @getNew = 'getNewList'></artificial>
 
     <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">
       <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>
@@ -324,7 +324,7 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , goSubject , impUrl , goList , deleList} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are , goshop , goSubject , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
 
   import moment from 'moment'
   export default {
@@ -443,7 +443,6 @@
       //点击获取表格数据
       getOneList(val){
         this.oneList = val.row
-        console.log(val ,789)
       },
 
       //打开导入模板下载
@@ -454,11 +453,16 @@
       //导入成功后刷新页
       getNew(data){},
 
+      //人工分配成功后刷新
+      getNewList(){
+        this.getList()
+      },
+
 
       //删除导入
       dele(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(this.oneList.collateState) return this.$Message.error('已审核数据不能删除')
+        if(this.oneList.collateState) return this.$Message.error('已核销数据不能删除')
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否删除该条数据</p>',
@@ -477,18 +481,43 @@
       },
 
       //智能匹配
-      intellect(){
-        this.$Modal.success({
-          title: '提示',
-          content: '删除X条成功'
-        });
+      async intellect(){
+       let res = await ait()
+        if (res.code ===0) {
+          this.$Modal.success({
+            title: '提示',
+            content: res.data
+          })
+          this.getList()
+        }
       },
+
+      //只能匹配
 
       //人工匹配
       artificialChange(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(this.oneList.collateState) return this.$Message.error('数据已核销')
         this.$refs.art.openModal()
+      },
 
+      //撤销分配
+      async revocation(){
+        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(!this.oneList.collateState) return this.$Message.error('数据未核销')
+        let data = {}
+        data.id = this.oneList.id
+        let res = await revocation([this.oneList.id])
+        if (res.code === 0){
+          this.$Message.success('撤销分配成功')
+          this.getList()
+        }
+
+      },
+
+      //资金认领核销
+      goMoney(){
+        this.$router.push({ name: "claimWrite"})
       }
 
     }

@@ -404,6 +404,8 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
+    const parentD:any = this.$parent
+    data.guestId = parentD.formPlanmain.guestId;
     let res = await fapi.getGoodsInfos(data);
     if (res.code == 0) {
       this.tableData = res.data;

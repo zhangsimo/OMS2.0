@@ -311,6 +311,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 保存/修改/提交用数据
   private formdata(refname: string) {
+    this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate)
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {
@@ -561,6 +562,9 @@ export default class PlannedPurchaseOrder extends Vue {
       this.selectTableRow = v;
       this.mainId = v.id;
       this.tableData = v.details || [];
+      this.tableData.map(item => {
+        item.orderPrice = parseFloat((item.orderPrice||0)).toFixed(2);
+      })
       this.selectRowState = v.billStatusId.name;
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
@@ -801,7 +805,7 @@ export default class PlannedPurchaseOrder extends Vue {
     })
     this.tableData = row.details;
     this.tableData.map(item => {
-      item.orderQty = item.canQty
+      item.orderQty = item.canQty;
     })
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
