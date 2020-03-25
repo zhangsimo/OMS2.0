@@ -25,6 +25,7 @@
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
 import { mapGetters } from "vuex";
+import bus from '../bill/Popup/Bus'
 export default {
   data() {
     return {
@@ -146,6 +147,7 @@ export default {
         this.currentClaimed = selection;
       }
       this.$emit("selection", this.currentClaimed);
+      bus.$emit("paymentInfo", selection);
     },
     // 获取数据
     async getList() {

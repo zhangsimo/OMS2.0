@@ -7,8 +7,8 @@
       <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <span class="ml10">收付款类型：</span>
-    <Select v-model="companyId" class="w150" filterable>
-      <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <Select v-model="paymentId" class="w150" filterable>
+      <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
     </Select>
     <Button @click="query" class="ml10">查询</Button>
     <Table
@@ -30,13 +30,14 @@
 import idDetailed from "./idDetailed";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
-// import selectDealings from "../components/selectCompany"
+import { findAccount } from "_api/settlementManagement/seleteAccount.js";
+import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../Popup/Bus";
 import moment from "moment";
 export default {
   props: ["information"],
   components: {
-    idDetailed,
+    idDetailed
     // selectDealings
   },
   data() {
@@ -64,7 +65,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "serviceId",
+          key: "accountNo",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -80,7 +81,7 @@ export default {
                   }
                 }
               },
-              params.row.serviceId
+              params.row.accountNo
             );
           }
         },
@@ -91,17 +92,19 @@ export default {
         },
         {
           title: "收付类型",
-          key: "guestName",
+          key: "receivePaymentTypeName",
           className: "tc"
         },
         {
           title: "实际收付款金额",
-          key: "settlementTotal",
+          key: "actualCollectionOrPayment",
           className: "tc"
         }
       ], //选择不含税对账单单
-      accountData: [{ index: 1, serviceId: "sss" }, { index: 1 }, { index: 1 }], //选择不含税对账单单表格数据
-      seleteData: {} //单选数据
+      accountData: [], //选择不含税对账单单表格数据
+      seleteData: {}, //单选数据
+      paymentId: "YJDZ", //收付类型
+      paymentList: [], //收付类型下拉框
     };
   },
   methods: {
@@ -110,35 +113,46 @@ export default {
       const res = await getSupplierList({});
       const res1 = await getbayer({});
       this.company = [];
-      let data = []
-      let result = []
-      let obj = {}
-      if(res.data.length!==0&&res1.data.content.length!==0){
+      let data = [];
+      let result = [];
+      let obj = {};
+      if (res.data.length !== 0 && res1.data.content.length !== 0) {
         data = [...res.data, ...res1.data.content];
-      } else if(res.data.length!==0){
-        data = res.data
-      } else if(res1.data.content.length!==0){
-        data = res.data.content
+      } else if (res.data.length !== 0) {
+        data = res.data;
+      } else if (res1.data.content.length !== 0) {
+        data = res.data.content;
       }
-      for(let i in data) {
-        if(!obj[data[i].id]) {
-          result.push(data[i])
-          obj[data[i].id] = 1
+      for (let i in data) {
+        if (!obj[data[i].id]) {
+          result.push(data[i]);
+          obj[data[i].id] = 1;
         }
       }
-      data = result
-      data.map(item=>{
+      data = result;
+      data.map(item => {
         this.company.push({
-          label:item.fullName,
-          value:item.id
-        })
-      })
+          label: item.fullName,
+          value: item.id
+        });
+      });
     },
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        // this.seleteQuery();
-        this.getOne()
+        //收付类型数据字典
+        getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
+          res => {
+            res.data.map(item => {
+              this.paymentList.push({
+                value: item.itemCode,
+                label: item.itemName
+              });
+            });
+          }
+        );
+        this.getOne();
+        this.seleteQuery();
       }
     },
     seleteQuery() {
@@ -149,17 +163,14 @@ export default {
         endDate: this.dateQuery[1]
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        // orgId: this.information.orgId,
+        receivePaymentType: this.paymentId,
         guestId: this.companyId
       };
-      // seleteAccount(obj).then(res => {
-      //   if (res.code === 0) {
-      //     res.data.content.map(item => {
-      //       item.billingTypeName = item.billingType.name;
-      //     });
-      //     this.accountData = res.data.content;
-      //   }
-      // });
+      findAccount(obj).then(res => {
+        if (res.code === 0) {
+          this.accountData = res.data.content;
+        }
+      });
     },
     // 日期查询
     query() {
