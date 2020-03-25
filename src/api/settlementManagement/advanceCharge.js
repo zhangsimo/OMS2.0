@@ -20,11 +20,11 @@ export function findByAccountNo(params) {
 }
 
 // 领款分页查询
-export function findPageToBeClaimedFund(data) {
+export function findPageToBeClaimedFund(params) {
   return axios.request({
     url: `${api.omsSettle}/capital/claim/verification/findPageToBeClaimedFund`,
-    method: "post",
-    data,
+    method: "get",
+    params,
   });
 }
 
@@ -32,6 +32,33 @@ export function findPageToBeClaimedFund(data) {
 export function addClaim(data) {
   return axios.request({
     url: `${api.omsSettle}/advancePayment/addClaim`,
+    method: "post",
+    data,
+  });
+}
+
+// 资金认领款核销，核销对账单，进页面基本信息，核销信息查询
+export function settlementInit(params) {
+  return axios.request({
+    url: `${api.omsSettle}/capital/claim/verification/settlementInit`,
+    method: "get",
+    params,
+  });
+}
+
+// 未核销对账单查询
+export function findPageByCapitalQuery(params) {
+  return axios.request({
+    url: `${api.omsSettle}/capital/claim/verification/findPageByDynamicQuery`,
+    method: "get",
+    params,
+  });
+}
+
+// 撤回
+export function addWithdraw(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advancePayment/addWithdraw`,
     method: "post",
     data,
   });

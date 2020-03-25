@@ -55,13 +55,12 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button class="ml10">预付款核销</Button>
-        <Button class="ml10">预付款支出</Button>
-        <Button class="ml10" @click="openModal('预付款支出认领')">预付款支出认领</Button>
-        <Button class="ml10">预付款撤回</Button>
-        <Button class="ml10">预付款核销撤回</Button>
-        <Button class="ml10">预付款支出撤回</Button>
+        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
+        <Button :disabled="currRow == null" class="ml10">预付款核销</Button>
+        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
+        <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
+        <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
+        <Button :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
         <Button class="ml10">导出</Button>
       </div>
     </section>
@@ -90,7 +89,7 @@
               ></vxe-table-column>
               <vxe-table-column
                 field="serviceId"
-                title="预付款单号"
+                title="预付款对账单号"
               ></vxe-table-column>
               <vxe-table-column
                 field="orderNo"
@@ -279,7 +278,19 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <Modal v-model="modal" title="预收款认领" width="800">
+    <Modal 
+      v-model="modalShow" 
+      :title="reTitle" @on-ok="reClose"
+      @on-cancel="cancel"
+    >
+      <Row>
+        <Col span="4"><span>撤回原因：</span></Col>
+        <Col span="20">
+          <Input v-model="revokeReason" />
+        </Col>
+      </Row>
+    </Modal>
+    <Modal v-model="modal" :title="claimedButtonType" width="800">
       <span>往来单位：</span>
       <Select v-model="suppliers" class="w150" filterable>
         <Option
@@ -301,10 +312,11 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimOk">预收款认领</Button>
+      <Button class="ml10" @click="claimOk">预收款回收认领</Button>
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
     </Modal>
+    <settlementadv ref="settlementadv" />
   </div>
 </template>
 <script>
@@ -315,16 +327,21 @@ import * as api from "_api/settlementManagement/advanceCharge";
 import { creat } from "../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
+import settlementadv from "../bill/components/settlementadv" 
 import moment from "moment";
 import { mapMutations } from "vuex";
 export default {
   components: {
     quickDate,
     claim,
-    Record
+    Record,
+    settlementadv,
   },
   data() {
     return {
+      modalShow: false,
+      reTitle: "",
+      revokeReason: "",
       amount: 0, //认领-金额
       reciprocalAccountName: "", // 认领-对方户名
       suppliers: "", // 认领-往来单位
@@ -345,7 +362,12 @@ export default {
       },
       loading: false,
       currRow: null,
-      serviceId: ""
+      serviceId: "",
+      btnIsdisable: {
+        one: true,
+        two: true,
+        three: true,
+      },
     };
   },
   async mounted() {
@@ -356,7 +378,7 @@ export default {
     this.getOne();
   },
   methods: {
-    ...mapMutations(["setClaimedSearch"]),
+    ...mapMutations(["setClaimedSearch", "setSign"]),
     // 往来单位选择
     async getOne() {
       const res = await getSupplierList({});
@@ -419,12 +441,86 @@ export default {
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
       }
+      this.serviceId = "";
+      this.$refs.Record.init();
+      this.currRow = null;
     },
     // 选中行
     currentChangeEvent({ row }) {
       this.currRow = row;
+      // one 1 !2 !3
+      // two 1 2 !3
+      // three 1 3
+      this.btnIsdisable = {
+        one: true,
+        two: true,
+        three: true,
+      }
+      const { 
+        paymentNo,
+        writeOffReceiptNo,
+        returnNo,
+      } = row;
+      let [one, two, three] = [true, true, true]; 
+      if(row.paymentNo) {
+        one = true;
+      } else {
+        one = false;
+      }
+      if(row.writeOffReceiptNo) {
+        two = true;
+      } else {
+        two = false;
+      }
+      if(row.returnNo) {
+        three = true;
+      } else {
+        three = false;
+      }
+      if (one && !two && !three) {
+        this.btnIsdisable.one = false;
+      }
+      if (one && two && !three) {
+        this.btnIsdisable.two = false;
+      }
+      if (one && three) {
+        this.btnIsdisable.three = false;
+      }
       this.serviceId = row.serviceId;
       this.$refs.Record.init();
+    },
+    // 撤回
+    async reClose() {
+      if(this.revokeReason.trim().length <= 0) {
+        return this.$message.error("请输入撤回原因");
+      }
+      let data = {
+        revokeReason: this.revokeReason,
+        id: this.currRow.id,
+      }
+      switch(this.reTitle) {
+        case "预付款撤回":
+          data.sign = 1;
+          break;
+        case "预付款核销撤回":
+          data.sign = 2;
+          break;
+        case "预付款回收撤回":
+          data.sign = 3;
+          break;
+        default:
+          break;
+      }
+      let res = await api.addWithdraw(data);
+      if(res.code == 0) {
+        this.$message.success("撤回成功");
+        this.modalShow = false;
+        this.getQuery();
+      }
+    },
+    cancel() {
+      this.modalShow = false;
+      this.$message.info("取消撤回");
     },
     // 表尾
     footerMethod({ columns, data }) {
@@ -487,6 +583,7 @@ export default {
           amountType: 1
         });
       }
+      this.claimedSelectData = [];
       this.$refs.claim.init();
     },
     selection(arr) {
@@ -502,14 +599,15 @@ export default {
         tenantId: userData.tenantId,
         orgid: userData.shopId,
         paymentTypeList: [],
-        paymentRemark: "",
+        guestId: this.currRow.guestId,
+        id: this.currRow.id,
       }
       for (let key in obj) {
         if(!obj[key]) {
           delete obj[key];
         }
       }
-      obj.payAmt = 0;
+      obj.claimAmt = 0;
       if(this.claimedButtonType == "预付款认领") {
         this.claimedSelectData.forEach(el => {
           let item = {
@@ -520,22 +618,29 @@ export default {
             accountBank: el.bankName,
             accountBankNo: el.accountCode,
             accountName: el.accountName,
+            subjectName: el.mateAccountName,
+            transRemarkL: el.tradingNote,
           }
-          obj.payAmt += el.paidMoney;
+          obj.claimAmt += el.paidMoney;
           obj.paymentTypeList.push(item);
-          if(!obj.guestId) {
-            obj.guestId = el.guestId;
-          }
         })
         let res = await api.addClaim(obj);
         if(res.code == 0) {
           this.modal = false;
           return this.$message.success("认领成功");
         }
-      }else if(this.claimedButtonType == "预付款支出认领") {
-
+      }else if(this.claimedButtonType == "预付款收回认领") {
+        this.setSign({type: "5", accountNo: this.currRow.serviceId});
+        this.modal = false;
+        this.$refs.settlementadv.Settlement = true;
+        console.log(this.$refs.settlementadv.Settlement)
       }
     },
+    // 撤回弹窗
+    openShow(name) {
+      this.reTitle = name;
+      this.modalShow = true;
+    }
   }
 };
 </script>

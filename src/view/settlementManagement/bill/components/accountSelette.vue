@@ -1,14 +1,31 @@
 <template>
-  <Modal v-model="modal1" title="对账单查询" width="860" @on-visible-change="visChange">
+  <Modal
+    v-model="modal1"
+    title="对账单查询"
+    width="860"
+    @on-visible-change="visChange"
+  >
     <span class="mr5">对账期间：</span>
-    <DatePicker v-model="dateQuery" type="daterange" placement="bottom-start" style="width: 200px"></DatePicker>
+    <DatePicker
+      v-model="dateQuery"
+      type="daterange"
+      placement="bottom-start"
+      style="width: 200px"
+    ></DatePicker>
     <span class="ml10">往来单位：</span>
     <Select v-model="companyId" class="w150" filterable>
-      <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      <Option v-for="item in company" :value="item.value" :key="item.value">{{
+        item.label
+      }}</Option>
     </Select>
     <span class="ml10">收付款类型：</span>
-    <Select v-model="paymentId" class="w150" filterable>
-      <Option v-for="item in paymentList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+    <Select v-model="receivePaymentType" class="w150" filterable>
+      <Option
+        v-for="item in receivePayments"
+        :value="item.value"
+        :key="item.value"
+        >{{ item.label }}</Option
+      >
     </Select>
     <Button @click="query" class="ml10">查询</Button>
     <Table
@@ -18,9 +35,20 @@
       highlight-row
       @on-current-change="seleteDate"
     ></Table>
+    <Page
+      class-name="fr mb10"
+      size="small"
+      :current="page.num"
+      :total="page.total"
+      :page-size="page.size"
+      @on-change="changePage"
+      @on-page-size-change="changeSize"
+      show-sizer
+      show-total
+    ></Page>
     <div slot="footer">
       <Button type="primary" @click="determine">确定</Button>
-      <Button @click="modal1=false">取消</Button>
+      <Button @click="modal1 = false">取消</Button>
     </div>
     <idDetailed ref="idDetailed" />
     <!-- <selectDealings ref="selectDealings" @selectSearchName="getOne"  /> -->
@@ -31,6 +59,7 @@ import idDetailed from "./idDetailed";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
+import * as api from "_api/settlementManagement/advanceCharge";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../Popup/Bus";
 import moment from "moment";
@@ -46,6 +75,12 @@ export default {
       company: [], //往来单位
       companyId: "", //往来单位id
       modal1: false, //弹窗展示
+      page: {
+        num: 1,
+        size: 10,
+        total: 0,
+        opts: [20, 50, 100, 200]
+      },
       account: [
         {
           title: "序号",
@@ -93,7 +128,10 @@ export default {
         {
           title: "收付类型",
           key: "receivePaymentTypeName",
-          className: "tc"
+          className: "tc",
+          render: (h, p) => {
+            return h("span", p.row.receivePaymentType.name);
+          }
         },
         {
           title: "实际收付款金额",
@@ -105,7 +143,19 @@ export default {
       seleteData: {}, //单选数据
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框
+      receivePaymentType: "", // 收付款类型
+      receivePayments: [] // 收付款类型
     };
+  },
+  mounted() {
+    getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(res => {
+      res.data.map(item => {
+        this.receivePayments.push({
+          value: item.itemCode,
+          label: item.itemName
+        });
+      });
+    });
   },
   methods: {
     // 往来单位下拉框
@@ -140,45 +190,61 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        //收付类型数据字典
-        getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
-          res => {
-            res.data.map(item => {
-              this.paymentList.push({
-                value: item.itemCode,
-                label: item.itemName
-              });
-            });
-          }
-        );
         this.getOne();
-        this.seleteQuery();
       }
+      this.page = {
+        num: 1,
+        size: 10,
+        total: 0,
+        opts: [20, 50, 100, 200]
+      }
+      this.accountData = [];
     },
-    seleteQuery() {
+    async seleteQuery() {
+      const userData = this.$store.state.user.userData;
       let obj = {
         startDate: this.dateQuery[0]
           ? moment(this.dateQuery[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.dateQuery[1]
-          ? moment(this.dateQuery[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
-        receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        tenantId: userData.tenantId,
+        orgid: "", // userData.shopId
+        receivePaymentType: this.receivePaymentType
       };
-      findAccount(obj).then(res => {
-        if (res.code === 0) {
-          this.accountData = res.data.content;
+      for (let key in obj) {
+        if (!obj[key]) {
+          delete obj[key];
         }
-      });
+      }
+      obj = { ...obj, size: this.page.size, page: this.page.num - 1 };
+      let res = await api.findPageByCapitalQuery(obj);
+      if (res.code == 0) {
+        this.accountData = res.data.content;
+        this.page.total = res.data.totalElements;
+      }
+      this.seleteData = {};
     },
     // 日期查询
     query() {
       this.seleteQuery();
     },
+    //分页
+    changePage(p) {
+      this.page.num = p;
+      this.seleteQuery();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.seleteQuery();
+    },
     // 确认按钮
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
+        this.$emit("accountHedNo", this.seleteData);
         bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {
