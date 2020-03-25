@@ -331,6 +331,7 @@ export default {
         {
           title: "序号",
           type: "index",
+          key:"index",
           width: 40,
           className: "tc"
         },
@@ -483,6 +484,7 @@ export default {
         {
           title: "序号",
           type: "index",
+          key:"index",
           width: 40,
           className: "tc"
         },
@@ -784,22 +786,38 @@ export default {
         {
           title: "不含税价格",
           key: "noTaxPrice",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.noTaxPrice||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "不含税金额",
           key: "noTaxAmt",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.noTaxAmt||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "含税单价",
           key: "taxPrice",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.taxPrice||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "含税金额",
           key: "taxAmt",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.taxAmt||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         }
       ],
       data: [],
@@ -1162,13 +1180,14 @@ export default {
       if (this.detailedList === "key1") {
         if (this.data1.length !== 0) {
           let arrData = [...this.data1]
-          arrData.map(item=>{
+          arrData.map((item,index) => {
             item.orgId = "\t"+item.orgId
+            item.index = index+1
           })
           this.$refs.sale.exportCsv({
             filename: "销售清单",
             original:false,
-            columns:this.columns,
+            columns:this.columns1,
             data:arrData
           });
         } else {
@@ -1177,13 +1196,14 @@ export default {
       } else if (this.detailedList === "key2") {
         if (this.data2.length !== 0) {
           let arrData = [...this.data2]
-          arrData.map(item=>{
+          arrData.map((item,index) => {
             item.orgId = "\t"+item.orgId
+            item.index = index+1
           })
           this.$refs.purchase.exportCsv({
             filename: "采购清单",
             original:false,
-            columns:this.columns,
+            columns:this.columns2,
             data:arrData
           });
         } else {
