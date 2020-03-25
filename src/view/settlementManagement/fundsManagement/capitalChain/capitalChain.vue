@@ -324,7 +324,8 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , goSubject , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {getTableList}from '@/api/accountant/accountant'
 
   import moment from 'moment'
   export default {
@@ -395,7 +396,10 @@
 
       //获取科目
       async getSubject(){
-        let res = await goSubject()
+        let data = {}
+        data.parentCode = 101
+        let res = await getTableList(data)
+        console.log(res)
         if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
       },
 
