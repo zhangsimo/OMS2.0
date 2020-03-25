@@ -157,7 +157,7 @@
             </div>
           </div>
           <span style="margin-left: 100px">
-            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
+            <Checkbox v-if="data.isNeedPack" v-model="data.isNeedPack"></Checkbox>需求打包发货
           </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">
@@ -375,9 +375,18 @@ export default {
     AddInoice
   },
   props: {
-    data: "",
-    provincearr: "",
-    treelist: ""
+    data: {
+      type:Object,
+      default:{}
+    },
+    provincearr: {
+      type:Array,
+      default:[]
+    },
+    treelist: {
+      type:Array,
+      default:[]
+    }
   },
   data() {
     const contactorTel = (rule, value, callback) => {
