@@ -58,6 +58,7 @@
 import idDetailed from "./idDetailed";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
+import { findAccount } from "_api/settlementManagement/seleteAccount.js";
 import * as api from "_api/settlementManagement/advanceCharge";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../Popup/Bus";
@@ -99,7 +100,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "serviceId",
+          key: "accountNo",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -115,7 +116,7 @@ export default {
                   }
                 }
               },
-              params.row.serviceId
+              params.row.accountNo
             );
           }
         },
@@ -126,7 +127,7 @@ export default {
         },
         {
           title: "收付类型",
-          key: "receivePaymentType",
+          key: "receivePaymentTypeName",
           className: "tc",
           render: (h, p) => {
             return h("span", p.row.receivePaymentType.name);
@@ -140,6 +141,8 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
+      paymentId: "YJDZ", //收付类型
+      paymentList: [], //收付类型下拉框
       receivePaymentType: "", // 收付款类型
       receivePayments: [] // 收付款类型
     };

@@ -3,10 +3,10 @@ import api from "_conf/url";
 
 
 //撤销流水查询
-export function runningWater(data) {
+export function runningWater(params) {
   return axios.request({
     url: `${api.omsSettle}/revoke/record/findPageByDynamicQuery`,
-    method: "post",
-    data
+    method: "get",
+    params
   });
 }

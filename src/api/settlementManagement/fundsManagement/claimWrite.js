@@ -3,19 +3,19 @@ import api from "_conf/url";
 
 
 //未核销对账单查询
-export function accountNoSelete(data) {
+export function accountNoSelete(params) {
   return axios.request({
     url: `${api.omsSettle}/capital/claim/verification/findPageByDynamicQuery`,
-    method: "post",
-    data
+    method: "get",
+    params
   });
 }
 //本店待认领款分页查询
-export function claimedFund(data) {
+export function claimedFund(params) {
   return axios.request({
     url: `${api.omsSettle}/capital/claim/verification/findPageToBeClaimedFund`,
-    method: "post",
-    data
+    method: "get",
+    params
   });
 }
 //连锁待分配款项分页查询
@@ -30,6 +30,14 @@ export function distributionSelete(params) {
 export function distributionShop(data) {
   return axios.request({
     url: `${api.omsSettle}/capital/claim/verification/assignedToOur`,
+    method: "post",
+    data
+  });
+}
+//撤销分配
+export function distributionRevoke(data) {
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/cancelArtificialMatching`,
     method: "post",
     data
   });

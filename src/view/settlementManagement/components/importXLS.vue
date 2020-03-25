@@ -72,7 +72,7 @@
           } else {
             this.$Notice.success({
               title: "导入成功",
-              desc: response.message,
+              desc: response.data,
             })
             this.importShow = false
             this.$emit('getNewList' ,response)

@@ -510,7 +510,6 @@ export default {
   line-height: 1;
   padding-top: 2px !important;
   color: #ed4014;
-  font-size: 1px !important;
 }
 </style>
 

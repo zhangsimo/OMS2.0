@@ -14,7 +14,7 @@
             <span>对账单勾选金额</span>
           </Col>
           <Col span="3">
-            <span>{{currentAccount.receiptPayment}}</span>
+            <span>{{currentAccount.actualCollectionOrPayment}}</span>
           </Col>
           <Col span="6">
             <span>认领款勾选金额</span>
@@ -98,10 +98,10 @@
                 </button>
                 <br />
                 <Button class="mt10 ml10" @click="distributionDelete">撤销分配</Button>
-                <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
+                <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
                 <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
                 <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
-                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button>
+                <Button class="mt10 ml10" @click="expenditureClim(1)">预付款收回认领</Button> -->
                 <claim ref="claim" />
               </div>
               <div slot="bottom">
@@ -184,7 +184,8 @@ import {
   accountNoSelete,
   distributionSelete,
   claimedFund,
-  distributionShop
+  distributionShop,
+  distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
 import { creat } from "../../components";
@@ -339,7 +340,7 @@ export default {
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
       claimedAmt: 0, //认领款勾选金额
-      difference: 0 //差异
+      difference: 0, //差异
     };
   },
   async mounted() {
@@ -407,7 +408,7 @@ export default {
     write() {
       if (Object.keys(this.currentAccount).length === 0)
         return this.$message.error("请选择一条未核销对账单");
-      if (this.currentClaimed.length === 0)
+      if (this.$refs.claim.currentClaimed.length === 0)
         return this.$message.error("至少选择一条本店待认领款");
       this.$refs.settlement.Settlement = true;
     },
@@ -425,10 +426,22 @@ export default {
     },
     //撤销分配
     distributionDelete() {
-      if (this.currentClaimed.length !== 0) {
+      if (this.$refs.claim.currentClaimed.length !== 0) {
         this.$Modal.confirm({
           title: "是否撤回分配",
-          onOk: () => {},
+          onOk: () => {
+            let arr = []
+            this.$refs.claim.currentClaimed.map(item=>{
+              arr.push(item.id)
+            })
+            distributionRevoke(arr).then(res=>{
+              if(res.code===0){
+                this.$message.success('撤销成功')
+                this.claimedList()
+                this.distributionList()
+              }
+            })
+          },
           onCancel: () => {}
         });
       } else {
@@ -475,7 +488,8 @@ export default {
         })
         distributionShop(obj).then(res => {
           if(res.code===0){
-            this.distributionSelection()
+            this.$message.success('分配成功')
+            this.distributionList()
             this.claimedList()
           }
         });
@@ -491,7 +505,6 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
-      bus.$emit("paymentInfo", selection);
     },
     //未核销对账单查询接口
     noWrite() {
@@ -571,22 +584,22 @@ export default {
       this.distributionPage.size = val;
     }
   },
-  watch: {
-    currentClaimed: {
-      handler(val, od) {
-        if (val !== od) {
-          this.claimedAmt = 0;
-          val.map(item => {
-            this.claimedAmt += item.index * 1;
-          });
-          this.difference = this.currentAccount.actualCollectionOrPayment
-            ? this.currentAccount.actualCollectionOrPayment - this.claimedAmt
-            : 0 - this.claimedAmt;
-        }
-      },
-      deep: true
-    }
-  }
+  // watch: {
+  //   currentClaimed: {
+  //     handler(val, od) {
+  //       if (val !== od) {
+  //         this.claimedAmt = 0;
+  //         val.map(item => {
+  //           this.claimedAmt += item.index * 1;
+  //         });
+  //         this.difference = this.currentAccount.actualCollectionOrPayment
+  //           ? this.currentAccount.actualCollectionOrPayment - this.claimedAmt
+  //           : 0 - this.claimedAmt;
+  //       }
+  //     },
+  //     deep: true
+  //   }
+  // }
 };
 </script>
 <style>

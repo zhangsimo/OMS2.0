@@ -231,8 +231,8 @@ export const mixSelectPartCom = {
           req[this.searchType] = this.partName.trim();
         }
       }
-      params.page = this.page.num;
-      params.size = this.page.size;
+      req.page = this.page.num;
+      req.size = this.page.size;
       if(this.keyType!=1){
         req.guestId=this.guestId;
         req.storeId=this.storeId;

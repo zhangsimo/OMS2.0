@@ -486,8 +486,8 @@ export default {
       if (this.ID) {
         this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
         this.CreditLineApplicationShow = true;
-        this.creaditList.tempStart='';
-        this.creaditList.tempEnd='';
+        // this.creaditList.tempStart='';
+        // this.creaditList.tempEnd='';
         this.alertBox();
       } else {
         this.$Message.warning("请选择要申请的客户！");

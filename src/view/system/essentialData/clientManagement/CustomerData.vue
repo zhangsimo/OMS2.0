@@ -60,6 +60,7 @@
           :columns="columns"
           :data="managementList"
           max-height=500
+          ref="pitchOneCoustomer"
         ></Table>
       </div>
       <Page
@@ -121,7 +122,10 @@ export default {
     ClientData
   },
   props: {
-    treeDiagramList: ""
+    treeDiagramList: {
+      type:Array,
+      default:[]
+    }
   },
   data() {
     return {
@@ -130,7 +134,7 @@ export default {
       tel: "",
       moreQueryOne: {},
       loading: true,
-      provinceArr: "",
+      provinceArr: [],
       page: {
         size: 10,
         num: 1,
@@ -399,6 +403,7 @@ export default {
     //打开新增客户
     addClient() {
       this.$refs.child.$refs.form.resetFields()
+      this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
@@ -427,12 +432,13 @@ export default {
         if (res.code == 0) {
           this.clientDataShow = false;
           this.getlist();
+          this.$refs.child.invoice=[]
         }
       });
     },
     //获取点中的数据
     pitchOneCoustomer(currentRow) {
-      this.clientList = currentRow;
+      this.clientList = currentRow||{};
     },
     //点击打开修改
     changeClient() {
