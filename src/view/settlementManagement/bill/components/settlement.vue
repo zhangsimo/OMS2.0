@@ -44,7 +44,7 @@
           resizable
           auto-resize
           show-footer
-          max-height=400
+          max-height="400"
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -101,15 +101,15 @@
           resizable
           auto-resize
           show-footer
-          max-height=400
+          max-height="400"
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
         >
           <vxe-table-column title="收/付款信息">
             <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
-            <vxe-table-column field="account" title="收/付款账户"></vxe-table-column>
-            <vxe-table-column field="mateAccountCode" title="科目代码"></vxe-table-column>
+            <vxe-table-column field="accountName" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="mateAccountName" title="科目代码"></vxe-table-column>
             <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
             <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
             <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
@@ -189,7 +189,9 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      console.log(val)
+      val.map(item=>{
+        item.orgName = item.shopName
+      })
       this.tableData = val;
     });
   },
@@ -212,7 +214,6 @@ export default {
         this.tableData = [];
         this.collectPayId = "";
       } else {
-        this.checkComputed();
         let sign =
           this.$parent.paymentId === "YJDZ"
             ? 1
@@ -228,9 +229,10 @@ export default {
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
             res.data.two.map(item => {
-              item.businessTypeName = item.businessType.name
+              item.businessTypeName = item.businessType.name;
             });
             this.BusinessType = res.data.two;
+            this.checkComputed();
           }
         });
       }
@@ -244,9 +246,7 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmt = row.accountAmt * 1 - row.checkAmt * 1;
-      row.endAmt = +row.checkAmt * 1;
-      row.uncollectedAmt = row.accountAmt * 1 - row.checkAmt;
+      row.unAmtLeft = row.unAmt * 1 - row.rpAnt * 1;
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -292,11 +292,11 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.checkAmt * 1;
+        sum1 += item.rpAnt * 1;
       });
       this.tableData.map(item => {
-        sum2 += item.collection ? item.collection * 1 : 0;
-        sum3 += item.payAmt ? item.payAmt * 1 : 0;
+        sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
+        sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
       this.check = sum1 - sum2 - sum3;
     }
