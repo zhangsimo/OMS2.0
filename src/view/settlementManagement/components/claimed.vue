@@ -24,8 +24,12 @@
 </template>
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
+<<<<<<< HEAD
 import { mapGetters } from "vuex";
 import bus from '../bill/Popup/Bus'
+=======
+import { mapGetters, mapMutations } from "vuex";
+>>>>>>> Branch_dev
 export default {
   data() {
     return {
@@ -121,6 +125,7 @@ export default {
     ...mapGetters(["getClaimedSearch"]),
   },
   methods: {
+    ...mapMutations(["setClaimedSelectionList"]),
     init() {
       this.claimedPage = {
         page: 1,
@@ -146,6 +151,7 @@ export default {
       } else {
         this.currentClaimed = selection;
       }
+      this.setClaimedSelectionList(this.currentClaimed);
       this.$emit("selection", this.currentClaimed);
       bus.$emit("paymentInfo", selection);
     },
@@ -158,6 +164,7 @@ export default {
       }
       let res = await api.findPageToBeClaimedFund(body);
       if (res.code == 0) {
+        this.currentClaimed = [];
         this.claimedData = res.data.content;
         this.claimedPage.total = res.data.totalElements;
       }
