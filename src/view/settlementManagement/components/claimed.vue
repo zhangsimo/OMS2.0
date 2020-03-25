@@ -24,7 +24,7 @@
 </template>
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   data() {
     return {
@@ -120,6 +120,7 @@ export default {
     ...mapGetters(["getClaimedSearch"]),
   },
   methods: {
+    ...mapMutations(["setClaimedSelectionList"]),
     init() {
       this.claimedPage = {
         page: 1,
@@ -145,6 +146,7 @@ export default {
       } else {
         this.currentClaimed = selection;
       }
+      this.setClaimedSelectionList(this.currentClaimed);
       this.$emit("selection", this.currentClaimed);
     },
     // 获取数据
@@ -156,6 +158,7 @@ export default {
       }
       let res = await api.findPageToBeClaimedFund(body);
       if (res.code == 0) {
+        this.currentClaimed = [];
         this.claimedData = res.data.content;
         this.claimedPage.total = res.data.totalElements;
       }
