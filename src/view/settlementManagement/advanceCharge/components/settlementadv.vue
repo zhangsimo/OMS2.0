@@ -246,7 +246,7 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAnt: 0,
-        unAmtLeft: 0
+        unAmtLeft: 0,
       });
     });
     bus.$on("content", val => {
@@ -257,19 +257,19 @@ export default {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.fullName,
           reconciliationAmt: 0,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAnt: 0,
-        unAmtLeft: 0
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       } else if (value.loginName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.loginName,
           reconciliationAmt: 0,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAnt: 0,
-        unAmtLeft: 0
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       }
     });
@@ -370,10 +370,11 @@ export default {
             orgId: this.reconciliationStatement.orgId,
             guestId: this.reconciliationStatement.guestId,
             sort: this.reconciliationStatement.sort.enum,
-            accountNo: this.reconciliationStatement.accountNo,
+            accountNo: this.accountNo,
             serviceId:this.reconciliationStatement.serviceId,
             furpose:this.reconciliationStatement.furpose.enum,
             receivePaymentType:this.reconciliationStatement.receivePaymentType,
+            remark: this.remark,
           },
           two: [],
         }
@@ -382,7 +383,7 @@ export default {
             orgId: el.orgId,
             accountNo: el.accountNo,
             guestId: el.guestId,
-            businessType: el.businessType.enum,
+            businessType: (!el.businessType ? "" : el.businessType.enum),
             reconciliationAmt: el.reconciliationAmt,
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
@@ -424,6 +425,21 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
+      if(isNaN(row.reconciliationAmt)) {
+        row.reconciliationAmt = 0;
+      }
+      if(isNaN(row.unAmtLeft)) {
+        row.unAmtLeft = 0;
+      }
+      if(isNaN(row.endAmt)) {
+        row.endAmt = 0;
+      }
+      if(isNaN(row.rpAnt)) {
+        row.rpAnt = 0;
+      }
+      if(isNaN(row.uncollectedAmt)) {
+        row.uncollectedAmt = 0;
+      }
       row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAnt * 1;
       row.endAmt = +row.rpAnt * 1;
       row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAnt;
