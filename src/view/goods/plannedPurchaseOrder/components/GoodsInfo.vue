@@ -491,10 +491,13 @@ export default class GoodsInfo extends Vue {
     ref.resetFields();
     this.disabled = false;
     this.addressId = row.id
-    this.formDateRight = {...row.logisticsRecord}
+    if(row.logisticsRecord){
+      this.formDateRight = {...row.logisticsRecord}
+    }
+
     this.formDateRight.businessNum = this.formDateRight.businessNum || this.row.serviceId;
-    this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-    this.formDateRight.settleType = this.formDateRight.settleType + "";
+    this.formDateRight.deliveryType = this.formDateRight.deliveryType+"";
+    this.formDateRight.settleType = this.formDateRight.settleType+"";
     //收货单位
     this.formDateRight.receiveComp = this.formDateRight.receiveComp || row.receiveCompName
     //收货地址
