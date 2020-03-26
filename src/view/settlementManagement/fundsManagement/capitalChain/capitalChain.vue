@@ -98,55 +98,58 @@
 <!--    人工智能分配-->
     <artificial ref="art" :list="oneList" @getNew = 'getNewList'></artificial>
 
-    <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">
-      <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>
-      <Form ref="formInline" :model="formInline"  :label-width="100" label-position="right">
-        <Row>
-          <Col span="6">
-            <FormItem label="昨日余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日收款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日付款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="6">
-            <FormItem label="本期期初余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期累计收款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期累计付款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期期末余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </section>
+<!--    余额展示-->
+    <amtData :moneyList='allMoneyList'></amtData>
+
+<!--    <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">-->
+<!--      <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>-->
+<!--      <Form ref="formInline" :model="formInline"  :label-width="100" label-position="right">-->
+<!--        <Row>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="昨日余额:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本日收款:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本日付款:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本日余额:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--        <Row>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本期期初余额:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本期累计收款:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本期累计付款:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--          <Col span="6">-->
+<!--            <FormItem label="本期期末余额:">-->
+<!--              <Input style="width: 50%" type="text" disabled />-->
+<!--            </FormItem>-->
+<!--          </Col>-->
+<!--        </Row>-->
+<!--      </Form>-->
+<!--    </section>-->
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
         <TabPane label="全部数据" name="capitalChain1">
@@ -326,13 +329,16 @@
   import artificial from '../../components/artificial'
   import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'
+  import amtData from '../../components/amtData'
+
 
   import moment from 'moment'
   export default {
     components: {
       quickDate,
       importXLS,
-      artificial
+      artificial,
+      amtData
     },
     data() {
       return {
@@ -362,6 +368,7 @@
           upUrl:impUrl
         },//下载上传路径
         oneList:{},//点击获取到的信息
+        allMoneyList:{},//获取到所有余额信息
       };
     },
     async mounted () {
@@ -426,6 +433,9 @@
         data.bankName = this.bankName
         let res = await goList(data)
         if(res.code === 0){
+          if(res.data.content.length > 0){
+            this.allMoneyList = res.data.content[0].moneyList
+          }
           this.tableData = res.data.content
           this.tableData1 = []
           this.tableData2 = []

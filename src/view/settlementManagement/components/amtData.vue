@@ -6,48 +6,48 @@
       <div
         style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"
       ></div>
-      <Form ref="formInline" :model="formInline" :label-width="100" label-position="right">
+      <Form ref="formInline" :model="moneyList" :label-width="100" label-position="right">
         <Row>
           <Col span="6">
             <FormItem label="昨日余额:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%"  v-model="moneyList.yesterdayMoney" placeholder="0" type="text" disabled />
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本日收款:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.incomeMoney" placeholder="0" disabled />
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本日付款:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.paidMoney" disabled placeholder="0" />
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本日余额:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.balanceMoney" disabled placeholder="0" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="6">
             <FormItem label="本期期初余额:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.startMoney" disabled placeholder="0" />
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本期累计收款:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.totalIncomeMoney" disabled placeholder="0" />
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本期累计付款:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.totalPaidMoney" disabled placeholder="0"/>
             </FormItem>
           </Col>
           <Col span="6">
             <FormItem label="本期期末余额:">
-              <Input style="width: 50%" type="text" disabled />
+              <Input style="width: 50%" type="text" v-model="moneyList.totalBalanceMoney" disabled placeholder="0"/>
             </FormItem>
           </Col>
         </Row>
@@ -56,6 +56,10 @@
 </template>
 <script>
 export default {
+  name: "amtData",
+  props:{
+    moneyList:''
+  },
   data(){
     return {
       formInline:{}
