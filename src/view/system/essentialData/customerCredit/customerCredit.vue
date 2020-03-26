@@ -490,6 +490,15 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
+        if(this.Limitstate&&this.Limitstate===1){
+          this.$Message.warning("正在审批中，请等待审批完成！");
+          return
+        }
+        if(this.Limitstate&&this.Limitstate===3){
+          this.$Message.warning("禁止额度申请中，请联系管理员!");
+          return
+        }
+
         this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
         this.CreditLineApplicationShow = true;
         // this.creaditList.tempStart='';

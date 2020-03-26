@@ -158,9 +158,13 @@
           stripe
           size="small"
           height="200"
-          show-summary
-          :summary-method="handleSummary"
         ></Table>
+        <div
+          style="width: 100%;height: 40px;border: 1px solid lightgray;border-top: none!important;display: flex;align-items: center;padding-left: 50px"
+        >
+          合计：
+          <span>{{ applyTotalAmt }} 元</span>
+        </div>
       </div>
     </div>
     <div>
@@ -319,8 +323,12 @@ export default {
           align: "center",
           key: "orderAmt"
         }
-      ]
+      ],
+      applyTotalAmt:0,
     };
+  },
+  mounted(){
+
   },
   methods: {
     resetFields() {
@@ -359,6 +367,17 @@ export default {
         };
       });
       return sums;
+    },
+    init(){
+      this.applyTotalAmt=0;
+      this.$nextTick(()=>{
+        if(this.customerIfo){
+          this.customerIfo.map(item=>{
+            this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
+          })
+        }
+      })
+
     }
   }
 };
