@@ -63,3 +63,21 @@ export function addWithdraw(data) {
     data,
   });
 }
+
+// 预付款核销
+export function addWriteOff(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advancePayment/addWriteOff`,
+    method: "post",
+    data,
+  });
+}
+
+// 预付款收回认领
+export function addReturnClaim(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advancePayment/addReturnClaim`,
+    method: "post",
+    data,
+  });
+}
