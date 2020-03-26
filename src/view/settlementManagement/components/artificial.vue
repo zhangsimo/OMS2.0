@@ -5,8 +5,8 @@
       <Row class="box mb10">
         <Col span="12" class="title rigt">收入金额</Col>
         <Col span="12" class="title">支出金额</Col>
-        <Col span="12" class="rigt">col-12</Col>
-        <Col span="12">col-12</Col>
+        <Col span="12" class="rigt">{{list.incomeMoney}}</Col>
+        <Col span="12">{{list.paidMoney}}</Col>
       </Row>
      <div class="mb10">
       <Button class="mr10 w90" @click="add">
@@ -29,19 +29,20 @@
       :footer-method="footerMethod"
       @checkbox-change="getOneList"
       @checkbox-all ='getAllList'
-      :edit-config="{trigger: 'click', mode: 'cell'}"
+      @edit-actived="editActivedEvent"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       >
       <vxe-table-column type="seq" title="序号" width="50"></vxe-table-column>
         <vxe-table-column type="checkbox" width="50"></vxe-table-column>
         <vxe-table-column  title="分配店号" >
         <template v-slot="{row}">
-          <Select v-model="row.name">
-            <Option v-for="item in shopList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+          <Select v-model="row.claimShopCode">
+            <Option v-for="item in shopList" :value="item.shopCode" :key="item.shopId">{{ item.shopCode }}</Option>
           </Select>
         </template>
       </vxe-table-column>
-      <vxe-table-column field="role" title="收入金额" :edit-render="{name: 'input', attrs: {type: 'number'} , events: {input: updateFooterEvent}}"></vxe-table-column>
-      <vxe-table-column field="num6" title="支出金额" :edit-render="{name: 'input', attrs: {type: 'number'} , events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="incomeMoney" title="收入金额" :edit-render="{name: 'input', attrs: {type: 'number' , disabled: false} , events: {input: updateFooterEvent}}"></vxe-table-column>
+      <vxe-table-column field="paidMoney" title="支出金额" :edit-render="{name: 'input', attrs: {type: 'number' , disabled: false} , events: {input: updateFooterEvent}}"></vxe-table-column>
     </vxe-table>
     <div></div>
     </div>
@@ -55,17 +56,22 @@
 </template>
 
 <script>
-    export default {
+  import {assignShop , manpowerChange} from '@/api/settlementManagement/fundsManagement/capitalChain'
+
+
+  export default {
         name: "artificial",
+      props:{
+          list:''
+      },
       data(){
           return {
             artificialShow : false,//模态框状态
             tableData:[],//表格数据
-            shopList:[
-              {label:'1号店',value:1},
-              {label:'2号店',value:2},
-            ],
+            shopList:[],
             oneList:{},//当前行数据
+            checkTheSpending:0,//核对支出
+            checkTheIncome: 0 ,//核对收入
           }
       },
       methods:{
@@ -74,6 +80,23 @@
           this.artificialShow = true
           this.oneList = []
           this.tableData=[{},{},{},{},{},{},{},{},{},{},{}]
+          this.getshopList()
+        },
+
+        //获取分配店号
+       async getshopList(){
+          let res = await  assignShop()
+         if (res.code === 0) return  this.shopList = res.data
+        },
+
+        //表格校验必选门店
+        editActivedEvent({row}){
+          let xTable = this.$refs.xTable
+          let incomeMoneyColumn = xTable.getColumnByField('incomeMoney'),
+              paidMoneyColumn = xTable.getColumnByField('paidMoney'),
+              isNameDisabled = row. claimShopCode ? false : true
+              incomeMoneyColumn.editRender.attrs.disabled = isNameDisabled
+              paidMoneyColumn.editRender.attrs.disabled = isNameDisabled
 
         },
 
@@ -90,7 +113,7 @@
               if (columnIndex === 0) {
                 return '分配合计'
               }
-              if (['role', 'num6'].includes(column.property)) {
+              if (['incomeMoney', 'paidMoney'].includes(column.property)) {
                 return this.$utils.sum(data, column.property)
               }
               return null
@@ -99,11 +122,13 @@
               if (columnIndex === 0) {
                 return '核对'
               }
-              if (['role'].includes(column.property)) {
-                return 1000 - this.$utils.sum(data, column.property)
+              if (['incomeMoney'].includes(column.property)) {
+                 this.checkTheIncome =  this.list.incomeMoney - this.$utils.sum(data, column.property)
+                return this.checkTheIncome
               }
-              if (['num6'].includes(column.property)) {
-                return 2000 - this.$utils.sum(data, column.property)
+              if (['paidMoney'].includes(column.property)) {
+                 this.checkTheSpending = this.list.paidMoney - this.$utils.sum(data, column.property)
+                return this.checkTheSpending
               }
               return null
             })
@@ -154,8 +179,23 @@
         },
 
         //确定
-        sure(){
-          this.artificialShow = false
+       async sure(){
+          if(this.checkTheSpending  !== 0 || this.checkTheIncome !== 0 ) return this.$Message.error('核对金额必须为0')
+          let data = []
+          this.tableData.forEach( item => {
+            if (item.claimShopCode){
+              item.id = this.list.id
+              item.incomeMoney = item.incomeMoney ? item.incomeMoney : 0
+              item.paidMoney = item.paidMoney ? item.paidMoney : 0
+              data.push(item)
+            }
+          })
+          let res = await manpowerChange(data)
+         if(res.code === 0 ) {
+           this.artificialShow = false
+           this.$Message.success('人工分配完成')
+           this.$emit('getNew' ,{})
+         }
         }
       }
     }

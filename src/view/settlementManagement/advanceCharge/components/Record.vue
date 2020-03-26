@@ -134,10 +134,10 @@ export default {
   },
   methods: {
     async init() {
-      if(!this.$parent.serviceId) {
+      if(!this.serviceId) {
         this.recordLists = []
       } else {
-        let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
+        let res = await api.findByAccountNo({ accountNo: this.serviceId });
         if(res.code == 0) {
           this.recordLists = res.data;
         }

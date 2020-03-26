@@ -288,6 +288,7 @@ export default class InterPurchase extends Vue {
 
   // 保存/修改/提交用数据
   private formdata(refname: string) {
+    this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {

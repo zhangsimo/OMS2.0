@@ -45,7 +45,7 @@
       <div class="oper-top flex">
         <div class="db">
           <span>对应科目：</span>
-          <Select  v-model="shopCode" filterable class="w150">
+          <Select  v-model="subjectCode" filterable class="w150">
             <Option
               v-for="item in subJectList"
               :value="item.id"
@@ -80,12 +80,12 @@
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation">
             <span>撤销分配</span>
           </button>
         </div>
         <div class="db ml5">
-          <button class="mr10 ivu-btn ivu-btn-default" type="button">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney">
             <span>资金认领核销</span>
           </button>
         </div>
@@ -96,57 +96,11 @@
     <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
 
 <!--    人工智能分配-->
-    <artificial ref="art"></artificial>
+    <artificial ref="art" :list="oneList" @getNew = 'getNewList'></artificial>
 
-    <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">
-      <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>
-      <Form ref="formInline" :model="formInline"  :label-width="100" label-position="right">
-        <Row>
-          <Col span="6">
-            <FormItem label="昨日余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日收款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日付款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本日余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="6">
-            <FormItem label="本期期初余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期累计收款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期累计付款:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="本期期末余额:">
-              <Input style="width: 50%" type="text" disabled />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </section>
+<!--    余额展示-->
+    <amtData :moneyList='allMoneyList'></amtData>
+
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
         <TabPane label="全部数据" name="capitalChain1">
@@ -324,14 +278,18 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , goSubject , impUrl , goList , deleList} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import {getTableList}from '@/api/accountant/accountant'
+  import amtData from '../../components/amtData'
+
 
   import moment from 'moment'
   export default {
     components: {
       quickDate,
       importXLS,
-      artificial
+      artificial,
+      amtData
     },
     data() {
       return {
@@ -361,6 +319,7 @@
           upUrl:impUrl
         },//下载上传路径
         oneList:{},//点击获取到的信息
+        allMoneyList:{},//获取到所有余额信息
       };
     },
     async mounted () {
@@ -389,13 +348,17 @@
      async getShop(){
         let data ={}
         data.supplierTypeSecond = this.model1
+        this.shopList = [{id:0 , name:'全部'}]
        let res = await goshop(data)
        if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
       },
 
       //获取科目
       async getSubject(){
-        let res = await goSubject()
+        let data = {}
+        data.parentCode = 101
+        let res = await getTableList(data)
+        console.log(res)
         if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
       },
 
@@ -422,6 +385,9 @@
         data.bankName = this.bankName
         let res = await goList(data)
         if(res.code === 0){
+          if(res.data.content.length > 0){
+            this.allMoneyList = res.data.content[0].moneyList
+          }
           this.tableData = res.data.content
           this.tableData1 = []
           this.tableData2 = []
@@ -443,7 +409,6 @@
       //点击获取表格数据
       getOneList(val){
         this.oneList = val.row
-        console.log(val ,789)
       },
 
       //打开导入模板下载
@@ -454,11 +419,16 @@
       //导入成功后刷新页
       getNew(data){},
 
+      //人工分配成功后刷新
+      getNewList(){
+        this.getList()
+      },
+
 
       //删除导入
       dele(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(this.oneList.collateState) return this.$Message.error('已审核数据不能删除')
+        if(this.oneList.collateState) return this.$Message.error('已核销数据不能删除')
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否删除该条数据</p>',
@@ -477,18 +447,43 @@
       },
 
       //智能匹配
-      intellect(){
-        this.$Modal.success({
-          title: '提示',
-          content: '删除X条成功'
-        });
+      async intellect(){
+       let res = await ait()
+        if (res.code ===0) {
+          this.$Modal.success({
+            title: '提示',
+            content: res.data
+          })
+          this.getList()
+        }
       },
+
+      //只能匹配
 
       //人工匹配
       artificialChange(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(this.oneList.allocation) return this.$Message.error('数据已分配')
         this.$refs.art.openModal()
+      },
 
+      //撤销分配
+      async revocation(){
+        if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
+        if(!this.oneList.allocation) return this.$Message.error('数据已分配')
+        let data = {}
+        data.id = this.oneList.id
+        let res = await revocation([this.oneList.id])
+        if (res.code === 0){
+          this.$Message.success('撤销分配成功')
+          this.getList()
+        }
+
+      },
+
+      //资金认领核销
+      goMoney(){
+        this.$router.push({ name: "claimWrite"})
       }
 
     }

@@ -531,7 +531,7 @@ export default {
     changStaffList() {
       this.isNextAdd = false;
       if (!this.oneStaffChange.id) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       this.title = "修改员工信息";
@@ -544,7 +544,7 @@ export default {
     //员工离职
     changeDimission() {
       if (!this.oneStaffChange.id) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       let stop = this.$loading();
@@ -570,7 +570,7 @@ export default {
     //重置密码
     restPassword() {
       if (!this.oneStaffChange.id) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       if (this.oneStaffChange.openSystem == 1) {
@@ -596,7 +596,7 @@ export default {
     //开通账号
     giveUser(type) {
       if (!this.oneStaffChange.id) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       if(type == 'close') {
@@ -640,7 +640,7 @@ export default {
     },
     openCompany() {
       if (!this.oneStaffChange.id) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       this.$refs.addNew.getlist();
@@ -655,7 +655,7 @@ export default {
     //查看公司
     lookCompany() {
       if (!this.oneStaffChange||!this.oneStaffChange.hasOwnProperty('id')) {
-        this.$Message.error("请至选择一条员工信息");
+        this.$Message.error("请选择一条员工信息");
         return false;
       }
       this.findAllCompany = true;

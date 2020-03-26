@@ -354,7 +354,6 @@ export default {
   mounted() {
     let date = new Date();
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
-
   },
   methods: {
     dataChange() {
@@ -511,7 +510,6 @@ export default {
         this.$nextTick(()=>{
             if(this.sendMsg.guestAdjustVOList){
                 this.sendMsg.guestAdjustVOList.map(item=>{
-                    console.log(item);
                     this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
                 })
             }
@@ -521,10 +519,10 @@ export default {
   },
   computed: {
     sum() {
-      this.data.tototo = +this.data.applyQuota + +this.data.tempQuota;
-      return isNaN(+this.data.applyQuota + +this.data.tempQuota)
+      this.data.tototo = +(this.data.applyQuota||0) + +(this.data.tempQuota||0);
+      return isNaN(+(this.data.applyQuota||0) + +(this.data.tempQuota||0))
         ? 0
-        : +this.data.applyQuota + +this.data.tempQuota;
+        : +(this.data.applyQuota||0) + +(this.data.tempQuota||0);
     },
     //调整前剩余额度
     sum2() {

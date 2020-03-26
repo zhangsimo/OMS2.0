@@ -184,7 +184,8 @@ import {
   accountNoSelete,
   distributionSelete,
   claimedFund,
-  distributionShop
+  distributionShop,
+  distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
 import { creat } from "../../components";
@@ -206,7 +207,7 @@ export default {
       bankNameO: "", //对方户名
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框
-      amt: 0, //金额
+      amt: '', //金额
       accountPage: {
         page: 1,
         total: 0,
@@ -407,7 +408,7 @@ export default {
     write() {
       if (Object.keys(this.currentAccount).length === 0)
         return this.$message.error("请选择一条未核销对账单");
-      if (this.currentClaimed.length === 0)
+      if (this.$refs.claim.currentClaimed.length === 0)
         return this.$message.error("至少选择一条本店待认领款");
       this.$refs.settlement.Settlement = true;
     },
@@ -425,10 +426,22 @@ export default {
     },
     //撤销分配
     distributionDelete() {
-      if (this.currentClaimed.length !== 0) {
+      if (this.$refs.claim.currentClaimed.length !== 0) {
         this.$Modal.confirm({
           title: "是否撤回分配",
-          onOk: () => {},
+          onOk: () => {
+            let arr = []
+            this.$refs.claim.currentClaimed.map(item=>{
+              arr.push(item.id)
+            })
+            distributionRevoke(arr).then(res=>{
+              if(res.code===0){
+                this.$message.success('撤销成功')
+                this.claimedList()
+                this.distributionList()
+              }
+            })
+          },
           onCancel: () => {}
         });
       } else {
@@ -475,6 +488,7 @@ export default {
         })
         distributionShop(obj).then(res => {
           if(res.code===0){
+            this.$message.success('分配成功')
             this.distributionList()
             this.claimedList()
           }
@@ -491,7 +505,6 @@ export default {
     //连锁待分配款项选中的数据
     distributionSelection(selection) {
       this.currentDistribution = selection;
-      bus.$emit("paymentInfo", selection);
     },
     //未核销对账单查询接口
     noWrite() {

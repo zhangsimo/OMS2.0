@@ -54,3 +54,40 @@ export function deleList(data){
     data
   });
 }
+
+
+//分配店号
+export function assignShop(data){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/storeNumber`,
+    method: 'post',
+    data
+  });
+}
+
+//人工分配
+export function manpowerChange(data){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/artificialMatching`,
+    method: 'post',
+    data
+  });
+}
+
+//撤销分配
+export function revocation(data){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/cancelArtificialMatching`,
+    method: 'post',
+    data
+  });
+}
+
+//只能分配
+export function ait(data){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/intelligentMatch`,
+    method: 'post',
+    data
+  });
+}

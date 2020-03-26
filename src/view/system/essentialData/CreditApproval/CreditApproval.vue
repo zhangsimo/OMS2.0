@@ -83,6 +83,7 @@
     <!--信用额度查看-->
     <Modal v-model="CreditLineApplicationShow" title="客户信用额度表" width="900" :mask-closable="false">
       <CreditLineApplication
+        ref="creditLineApplication"
         :data="creaditList"
         :customerIfo="customerIfo"
         :customerDetails="customerDetails"
@@ -336,11 +337,13 @@ export default {
         this.CreditLineApplicationShow = true;
         viewDetails({id:this.creditData.id}).then(res => {
           if (res.code === 0) {
+            console.log(res)
             this.creaditList = this.creditData
             this.customerIfo = res.data.guestAdjustVOList
             this.customerDetails = res.data.guestAdjustVO;
             this.sixMonthPerformance = res.data.sixMonthPerformance;
             this.sellOrderList = res.data.sellOrderList;
+            this.$refs.creditLineApplication.init();
           }
         });
       }
