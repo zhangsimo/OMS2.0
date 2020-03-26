@@ -99,7 +99,7 @@ export default {
         },
         {
           title: "对账单号",
-          key: "serviceId",
+          key: "accountNo",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -115,7 +115,7 @@ export default {
                   }
                 }
               },
-              params.row.serviceId
+              params.row.accountNo
             );
           }
         },
@@ -126,11 +126,8 @@ export default {
         },
         {
           title: "收付类型",
-          key: "receivePaymentType",
-          className: "tc",
-          render: (h, p) => {
-            return h("span", p.row.receivePaymentType.name);
-          }
+          key: "receivePaymentTypeName",
+          className: "tc"
         },
         {
           title: "实际收付款金额",
@@ -140,7 +137,7 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
-      receivePaymentType: "", // 收付款类型
+      receivePaymentType: "YJDZ", // 收付款类型
       receivePayments: [] // 收付款类型
     };
   },
@@ -195,6 +192,7 @@ export default {
         total: 0,
         opts: [20, 50, 100, 200]
       }
+      this.seleteQuery();
       this.accountData = [];
     },
     async seleteQuery() {
