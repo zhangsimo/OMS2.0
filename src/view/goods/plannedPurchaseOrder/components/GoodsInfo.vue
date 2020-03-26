@@ -302,6 +302,14 @@ export default class GoodsInfo extends Vue {
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
+      for(let b of this.tableData){
+        if(b.defaultShow){
+          this.echoDate({row:b});
+          const xtable:any = this.$refs["xTable1"];
+          xtable.setRadioRow(b);
+          break;
+        }
+      }
     }
   }
   //快递下拉框
