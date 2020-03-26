@@ -302,14 +302,27 @@ export default class GoodsInfo extends Vue {
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
-      for(let b of this.tableData){
-        if(b.defaultShow){
-          this.echoDate({row:b});
-          const xtable:any = this.$refs["xTable1"];
-          xtable.setRadioRow(b);
-          break;
+
+      const xtable:any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.defaultShow);
+      if(arrData.length>0){
+        this.echoDate({row:arrData[0]});
+        xtable.setRadioRow(arrData[0]);
+      }else{
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if(arrDefault.length>0){
+          this.echoDate({row:arrDefault[0]});
+          xtable.setRadioRow(arrDefault[0]);
         }
       }
+      // for(let b of this.tableData){
+      //   if(b.defaultShow){
+      //     this.echoDate({row:b});
+      //     const xtable:any = this.$refs["xTable1"];
+      //     xtable.setRadioRow(b);
+      //     break;
+      //   }
+      // }
     }
   }
   //快递下拉框
@@ -421,12 +434,17 @@ export default class GoodsInfo extends Vue {
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
-      for(let b of this.tableData){
-        if(b.defaultShow){
-          this.echoDate({row:b});
-          const xtable:any = this.$refs["xTable1"];
-          xtable.setRadioRow(b);
-          break;
+
+      const xtable:any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.defaultShow);
+      if(arrData.length>0){
+        this.echoDate({row:arrData[0]});
+        xtable.setRadioRow(arrData[0]);
+      }else{
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if(arrDefault.length>0){
+          this.echoDate({row:arrDefault[0]});
+          xtable.setRadioRow(arrDefault[0]);
         }
       }
     }
