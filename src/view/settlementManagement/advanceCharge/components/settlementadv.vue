@@ -428,6 +428,18 @@ export default {
       if(isNaN(row.reconciliationAmt)) {
         row.reconciliationAmt = 0;
       }
+      if(isNaN(row.unAmtLeft)) {
+        row.unAmtLeft = 0;
+      }
+      if(isNaN(row.endAmt)) {
+        row.endAmt = 0;
+      }
+      if(isNaN(row.rpAnt)) {
+        row.rpAnt = 0;
+      }
+      if(isNaN(row.uncollectedAmt)) {
+        row.uncollectedAmt = 0;
+      }
       row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAnt * 1;
       row.endAmt = +row.rpAnt * 1;
       row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAnt;
