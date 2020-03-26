@@ -115,6 +115,7 @@
              let data = {}
                   data.shopId = this.companyOneList.id
                   data.userId = this.$store.state.user.userData.id
+                  data.shopCode = this.companyOneList.orgid
              //切换公司跟换token(权限设置)
              let res = await setCompany(data)
                   if(res.code === 0){
