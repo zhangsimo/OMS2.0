@@ -45,7 +45,7 @@
       <div class="oper-top flex">
         <div class="db">
           <span>对应科目：</span>
-          <Select  v-model="shopCode" filterable class="w150">
+          <Select  v-model="subjectCode" filterable class="w150">
             <Option
               v-for="item in subJectList"
               :value="item.id"
@@ -101,55 +101,6 @@
 <!--    余额展示-->
     <amtData :moneyList='allMoneyList'></amtData>
 
-<!--    <section class="title-box" style="border-bottom: 1px rgba(204, 204, 204, 1) solid ;border-top: 1px rgba(204, 204, 204, 1) solid">-->
-<!--      <div style="width: 100%;height: 30px;background-color: rgba(215, 235, 249, 1);border-bottom: 1px rgba(204, 204, 204, 1) solid ;margin-bottom: 15px"></div>-->
-<!--      <Form ref="formInline" :model="formInline"  :label-width="100" label-position="right">-->
-<!--        <Row>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="昨日余额:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本日收款:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本日付款:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本日余额:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--        </Row>-->
-<!--        <Row>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本期期初余额:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本期累计收款:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本期累计付款:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--          <Col span="6">-->
-<!--            <FormItem label="本期期末余额:">-->
-<!--              <Input style="width: 50%" type="text" disabled />-->
-<!--            </FormItem>-->
-<!--          </Col>-->
-<!--        </Row>-->
-<!--      </Form>-->
-<!--    </section>-->
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
         <TabPane label="全部数据" name="capitalChain1">
@@ -397,6 +348,7 @@
      async getShop(){
         let data ={}
         data.supplierTypeSecond = this.model1
+        this.shopList = [{id:0 , name:'全部'}]
        let res = await goshop(data)
        if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
       },
@@ -511,14 +463,14 @@
       //人工匹配
       artificialChange(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(this.oneList.collateState) return this.$Message.error('数据已核销')
+        if(this.oneList.allocation) return this.$Message.error('数据已分配')
         this.$refs.art.openModal()
       },
 
       //撤销分配
       async revocation(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(!this.oneList.collateState) return this.$Message.error('数据未核销')
+        if(!this.oneList.allocation) return this.$Message.error('数据已分配')
         let data = {}
         data.id = this.oneList.id
         let res = await revocation([this.oneList.id])
