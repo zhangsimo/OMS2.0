@@ -1,14 +1,14 @@
 import env from "./env";
 
 const dev = {
-  omsApi: "http://192.168.30.21:9240", //徐林烽
-  wmsApi: "http://192.168.30.21:9250", // 徐林烽
-  omsOrder: "http://192.168.30.21:9210", // 徐林烽
-  omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.21:9200",
-  // omsOrder:'http://192.168.30.21:9210', //陈舒
+  omsApi: "http://192.168.30.11:9240", //徐林烽
+  wmsApi: "http://192.168.30.11:9250", // 徐林烽
+  omsOrder: "http://192.168.30.11:9210", // 徐林烽
+  omsStore: "http://192.168.30.11:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.11:9200",
+  // omsOrder:'http://192.168.30.11:9210', //陈舒
   // omsSettle: "http://192.168.30.11:9270",
-  omsSettle: "http://192.168.30.21:9270",
+  omsSettle: "http://192.168.30.11:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -17,7 +17,7 @@ const dev = {
   // wmsApi: '', // 9250
   // omsBatch: '', // 9260
   // omsSettle: '', // 9270
-  omsSotck: "http://192.168.30.21:9280", //9280
+  omsSotck: "http://192.168.30.11:9280", //9280
 
   /**oms系统接口设定 */
   tokenApi: "http://192.168.2.47:5600", // 登录接口API

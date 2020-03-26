@@ -207,7 +207,7 @@ export default {
       bankNameO: "", //对方户名
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框
-      amt: 0, //金额
+      amt: '', //金额
       accountPage: {
         page: 1,
         total: 0,

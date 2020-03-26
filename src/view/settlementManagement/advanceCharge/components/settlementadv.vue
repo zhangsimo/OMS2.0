@@ -51,7 +51,7 @@
       <Row class="mt10">
         <Col span="8">
           <span>对账单号：</span>
-          <Input class="w200" v-model="reconciliationStatement.accountNo" />
+          <Input class="w200" v-model="accountNo" />
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
@@ -165,7 +165,7 @@
           auto-resize
           show-footer
           :footer-method="payCollection"
-          :data="settlementData.list"
+          :data="gettlementData.list"
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column title="收/付款信息">
@@ -229,13 +229,16 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["settlementData"])
+    ...mapGetters(["gettlementData"]),
+    accountNo() {
+      return this.reconciliationStatement.accountNo + ";" + (this.reconciliationStatement.accountNo2 == undefined ? " " : this.reconciliationStatement.accountNo2);
+    },
   },
   mounted() {
     // 对账单号
-    bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo = val.serviceId;
-    });
+    // bus.$on("accountHedNo", val => {
+    //   this.reconciliationStatement.accountNo = val.serviceId;
+    // });
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
         serviceTypeName: val.fullName,
@@ -243,7 +246,7 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAnt: 0,
-        unAmtLeft: 0
+        unAmtLeft: 0,
       });
     });
     bus.$on("content", val => {
@@ -254,19 +257,19 @@ export default {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.fullName,
           reconciliationAmt: 0,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAnt: 0,
-        unAmtLeft: 0
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       } else if (value.loginName) {
         this.BusinessType.push({
           serviceTypeName: this.obj.fullName + "-" + value.loginName,
           reconciliationAmt: 0,
-        hasAmt: 0,
-        unAmt: 0,
-        rpAnt: 0,
-        unAmtLeft: 0
+          hasAmt: 0,
+          unAmt: 0,
+          rpAnt: 0,
+          unAmtLeft: 0
         });
       }
     });
@@ -276,6 +279,9 @@ export default {
     });
   },
   methods: {
+    init() {
+      this.Settlement = true;
+    },
     // 选择科目弹框
     subject() {
       this.$refs.subjexts.subjectModelShow = true;
@@ -306,8 +312,8 @@ export default {
     },
     async getList() {
       let params = {
-        sign: this.settlementData.sign,
-        accountNo: this.settlementData.accountNo
+        sign: this.gettlementData.sign,
+        accountNo: this.gettlementData.accountNo
       };
       let res = await api.settlementInit(params);
       if (res.code == 0 && res.data != null) {
@@ -324,6 +330,11 @@ export default {
       }
     },
     selectAccountNo(row) {
+      this.reconciliationStatement = {...this.reconciliationStatement};
+      // 选择的对账类型
+      this.reconciliationStatement.receivePaymentType = row.receivePaymentType;
+      // 选择的对账单号
+      this.reconciliationStatement.accountNo2 = row.accountNo;
       let two = [];
       if (row.two !== undefined) {
         two = row.two;
@@ -349,14 +360,86 @@ export default {
       console.log("2", row);
     },
     //保存
-    conserve() {
+    async conserve() {
       if (!this.check) {
+        if (this.reconciliationStatement.receivePaymentType == "") {
+          return this.$message.error("请先选择对账单");
+        }
+        let data = {
+          one: {
+            orgId: this.reconciliationStatement.orgId,
+            guestId: this.reconciliationStatement.guestId,
+            sort: this.reconciliationStatement.sort.enum,
+            accountNo: this.accountNo,
+            serviceId:this.reconciliationStatement.serviceId,
+            furpose:this.reconciliationStatement.furpose.enum,
+            receivePaymentType:this.reconciliationStatement.receivePaymentType,
+            remark: this.remark,
+          },
+          two: [],
+        }
+        this.BusinessType.forEach(el => {
+          let item = {
+            orgId: el.orgId,
+            accountNo: el.accountNo,
+            guestId: el.guestId,
+            businessType: (!el.businessType ? "" : el.businessType.enum),
+            reconciliationAmt: el.reconciliationAmt,
+            hasAmt: el.hasAmt,
+            unAmt: el.unAmt,
+            rpAnt: el.rpAnt,
+            unAmtLeft: el.unAmtLeft,
+          }
+          data.two.push(item);
+        })
+        if (this.gettlementData.sign == 4) {
+          // 预付款核销
+          let res = await api.addWriteOff(data);
+          if(res.code == 0) {
+            return this.$message.success("核销成功");
+          }
+        }
+        if (this.gettlementData.sign == 5) {
+          // 预付款收回认领
+          data.three = [];
+          this.gettlementData.list.forEach(el => {
+            let item = {
+              accountName: el.accountName,
+              mateAccountCode: el.mateAccountCode,
+              mateAccountName: el.subjectName,
+              incomeMoney: el.incomeMoney,
+              paidMoney: el.paidMoney,
+              orgId: el.ownStoreId,
+              orgName: el.ownStoreName,
+            }
+            data.three.push(item);
+          })
+          let res = await api.addReturnClaim(data);
+          if(res.code == 0) {
+            return this.$message.success("收回认领成功");
+          }
+        }
       } else {
         this.$message.error("核对金额为0才能保存");
       }
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
+      if(isNaN(row.reconciliationAmt)) {
+        row.reconciliationAmt = 0;
+      }
+      if(isNaN(row.unAmtLeft)) {
+        row.unAmtLeft = 0;
+      }
+      if(isNaN(row.endAmt)) {
+        row.endAmt = 0;
+      }
+      if(isNaN(row.rpAnt)) {
+        row.rpAnt = 0;
+      }
+      if(isNaN(row.uncollectedAmt)) {
+        row.uncollectedAmt = 0;
+      }
       row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAnt * 1;
       row.endAmt = +row.rpAnt * 1;
       row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAnt;
@@ -407,7 +490,7 @@ export default {
       this.BusinessType.map(item => {
         sum1 += parseFloat(item.rpAnt);
       });
-      this.settlementData.list.map(item => {
+      this.gettlementData.list.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });

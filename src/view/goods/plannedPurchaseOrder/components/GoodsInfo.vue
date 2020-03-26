@@ -245,6 +245,10 @@ export default class GoodsInfo extends Vue {
 
   private disabled: boolean = true;
 
+  private guestId:string = "";
+
+  private addressId:string = "";
+
   @Prop(String) readonly mainId;
   @Prop(Object) readonly row;
 
@@ -293,10 +297,32 @@ export default class GoodsInfo extends Vue {
     const parentD:any = this.$parent
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
-    let res:any = await fapi.getGoodsInfos({ mainId: this.mainId,guestId:parentD.formPlanmain.guestId, directCompanyId });
+    this.guestId = parentD.formPlanmain.guestId;
+    let res:any = await fapi.getGoodsInfos({ mainId: this.mainId,guestId:this.guestId, directCompanyId });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
+
+      const xtable:any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.defaultShow);
+      if(arrData.length>0){
+        this.echoDate({row:arrData[0]});
+        xtable.setRadioRow(arrData[0]);
+      }else{
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if(arrDefault.length>0){
+          this.echoDate({row:arrDefault[0]});
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
+      // for(let b of this.tableData){
+      //   if(b.defaultShow){
+      //     this.echoDate({row:b});
+      //     const xtable:any = this.$refs["xTable1"];
+      //     xtable.setRadioRow(b);
+      //     break;
+      //   }
+      // }
     }
   }
   //快递下拉框
@@ -312,8 +338,7 @@ export default class GoodsInfo extends Vue {
   }
   //获取物流下拉框
   private async inlogistics() {
-    const parentD:any = this.$parent
-    let params:any = {guestId:parentD.formPlanmain.guestId}
+    let params:any = {guestId:this.guestId}
     if(this.formDateRight.deliveryType == 2){
       params.logisticsType = '020701'
     }
@@ -404,12 +429,24 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
-    const parentD:any = this.$parent
-    data.guestId = parentD.formPlanmain.guestId;
+    data.guestId = this.guestId;
     let res = await fapi.getGoodsInfos(data);
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
+
+      const xtable:any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.defaultShow);
+      if(arrData.length>0){
+        this.echoDate({row:arrData[0]});
+        xtable.setRadioRow(arrData[0]);
+      }else{
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if(arrDefault.length>0){
+          this.echoDate({row:arrDefault[0]});
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
     }
   }
   //保存
@@ -430,10 +467,13 @@ export default class GoodsInfo extends Vue {
       }
       if (valid && logisc) {
         // this.saveId(this.tableData);
-        let res = await fapi.saveGoodsInfos({
+        let reqObj = {
           ...this.formDateRight,
-          mainId: this.mainId
-        });
+          mainId: this.mainId,
+          guestId:this.guestId,
+          logisticsId:this.addressId
+        }
+        let res = await fapi.saveGoodsInfos(reqObj);
         if (res.code == 0) {
           this.$Message.success("保存成功");
           this.showInfo = false;
@@ -450,10 +490,23 @@ export default class GoodsInfo extends Vue {
     let ref:any = this.$refs.formTwo;
     ref.resetFields();
     this.disabled = false;
-    this.formDateRight = {...row.logisticsRecord}
+    this.addressId = row.id
+    if(row.logisticsRecord){
+      this.formDateRight = {...row.logisticsRecord}
+    }
+
     this.formDateRight.businessNum = this.formDateRight.businessNum || this.row.serviceId;
-    this.formDateRight.deliveryType = this.formDateRight.deliveryType + "";
-    this.formDateRight.settleType = this.formDateRight.settleType + "";
+    this.formDateRight.deliveryType = this.formDateRight.deliveryType+"";
+    this.formDateRight.settleType = this.formDateRight.settleType+"";
+    //收货单位
+    this.formDateRight.receiveComp = this.formDateRight.receiveComp || row.receiveCompName
+    //收货地址
+    this.formDateRight.streetAddress = this.formDateRight.streetAddress || row.address
+    //收货人
+    this.formDateRight.receiver = this.formDateRight.receiver || row.receiveMan
+    //联系电话
+    this.formDateRight.receiverMobile = this.formDateRight.receiverMobile || row.receiveManTel
+
     // if (row.logisticsRecord) {
     //   this.formDateRight.id = row.logisticsRecord.id;
     //   this.formDateRight = { ...row.logisticsRecord };

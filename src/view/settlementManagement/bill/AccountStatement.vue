@@ -425,6 +425,7 @@ export default {
   },
   data() {
     return {
+      type:0,//对冲，冲减标识
       accountType: false,
       statusData: [
         { name: "提交", status: "已提交" },
@@ -1334,10 +1335,7 @@ export default {
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
           this.$refs.settlementMoadl.Settlement = true;
-          if (type === 0) {
-          } else if (type === 1) {
-          } else if (type === 2) {
-          }
+          this.type = !type ? 0: type === 1 ? 1:2
         } else {
           this.$message({
             message: "请勾选流程通过且对账单状态为审核通过或结算中的数据",
