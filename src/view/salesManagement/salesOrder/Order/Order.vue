@@ -161,6 +161,10 @@ export default {
                         title: '是否确定提交',
                         onOk: async () => {
                             let res = this.$refs.right.submitList();
+                            if(res.code==0){
+                                this.orderlistType.value=1;
+                            }
+
                         },
                         onCancel: () => {
                             this.$Message.info('取消提交');
