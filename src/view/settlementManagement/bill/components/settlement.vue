@@ -150,10 +150,10 @@ export default {
     bus.$on("accountHedNo", val => {
       this.reconciliationStatement.accountNo =
         this.reconciliationStatement.accountNo + "," + val.accountNo;
-        val.two.map(item=>{
-          item.businessTypeName = item.businessType.name;
-        })
-      this.BusinessType = [...this.BusinessType,...val.two]
+      val.two.map(item => {
+        item.businessTypeName = item.businessType.name;
+      });
+      this.BusinessType = [...this.BusinessType, ...val.two];
     });
     //选择科目
     bus.$on("hedInfo", val => {
@@ -192,11 +192,15 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      val.map(item=>{
-        item.orgName = item.shopName
-        item.paidMoney = item.paidMoney ? -item.paidMoney :0
-        console.log(item.paidMoney)
-      })
+      val.map(item => {
+        console.log(item);
+        item.orgName = item.shopName;
+        item.paidMoney = !item.paidMoney
+          ? 0
+          : item.paidMoney < 0
+          ? item.paidMoney
+          : -item.paidMoney;
+      });
       this.tableData = val;
     });
   },
@@ -219,14 +223,25 @@ export default {
         this.tableData = [];
         this.collectPayId = "";
       } else {
-        let sign =
-          this.$parent.paymentId === "YJDZ"
-            ? 1
-            : this.$parent.paymentId === "YSK"
-            ? 2
-            : 4;
+        let sign = 0;
+        if (this.$parent.paymentId === "YSK") {
+          sign = 2;
+        } else if (this.$parent.paymentId === "YFK") {
+          sign = 4;
+        } else if (this.$parent.paymentId === "YJDZ") {
+          sign = 1;
+        } else if (this.$parent.type === 0) {
+          sign = 6;
+        } else if (this.$parent.type === 1) {
+          sign = 7;
+        } else if (this.$parent.type === 2) {
+          sign = 8;
+        }
+        let accountNo = this.$parent.reconciliationStatement
+          ? this.$parent.reconciliationStatement.accountNo
+          : this.$parent.currentAccount.accountNo;
         wirteAccount({
-          accountNo: this.$parent.currentAccount.accountNo,
+          accountNo,
           sign
         }).then(res => {
           if (res.code === 0) {
@@ -244,14 +259,16 @@ export default {
     },
     //保存
     conserve() {
-      if (!this.check) {
+      if (!Number(this.check)) {
+        console.log(this.BusinessType);
+        console.log(this.tableData);
       } else {
         this.$message.error("核对金额为0才能保存");
       }
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = row.unAmt * 1 - row.rpAnt * 1;
+      row.unAmtLeft = (row.unAmt * 1 - row.rpAnt * 1).toFixed(2);
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -271,7 +288,7 @@ export default {
               "unAmtLeft"
             ].includes(column.property)
           ) {
-            return this.$utils.sum(data, column.property);
+            return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
         })
@@ -285,7 +302,7 @@ export default {
             return "合计";
           }
           if (["incomeMoney", "paidMoney"].includes(column.property)) {
-            return this.$utils.sum(data, column.property);
+            return this.$utils.sum(data, column.property).toFixed(2);
           }
           return null;
         })
@@ -303,7 +320,7 @@ export default {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
-      this.check = sum1 - sum2 - sum3;
+      this.check = (sum1 - sum2 - sum3).toFixed(2);
     }
   }
 };

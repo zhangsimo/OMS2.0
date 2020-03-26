@@ -57,6 +57,8 @@
             max-height="400"
             :data="tableData"
             align="center"
+            highlight-current-row
+            @current-change="currentChangeEvent"
           >
             <vxe-table-column title="基本信息">
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
@@ -143,22 +145,36 @@
               <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
+          <div class="clearfix">
+            <Page
+              class-name="fr mb10 mt10"
+              size="small"
+              :current="page.num"
+              :total="page.total"
+              :page-size="page.size"
+              @on-change="changePage"
+              @on-page-size-change="changeSize"
+              show-sizer
+              show-total
+            ></Page>
+          </div>
         </div>
         <Button>收付款单记录</Button>
-        <Record ref="Record" />
+        <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
     <Modal v-model="modal" title="预收款认领" width="800">
       <span class="ml10">金额：</span>
       <InputNumber v-model="amt" class="w50" />
       <span class="ml10">对方户名：</span>
-      <Input v-model="amt" class="w100" />
+      <Input v-model="bankNameO" class="w100" />
       <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10">预收款认领</Button>
+      <Button class="ml10" @click="claimCollection">预收款认领</Button>
       <claim ref="claim" />
+      <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
   </div>
@@ -167,26 +183,39 @@
 import quickDate from "@/components/getDate/dateget_bill.vue";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
+import { findAdvance } from "_api/settlementManagement/advanceCollection.js";
+import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import { creat } from "./../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
+import claimGuest from './components/claimGuest'
 import moment from "moment";
 export default {
   components: {
     quickDate,
     claim,
-    Record
+    Record,
+    claimGuest
   },
   data() {
     return {
-      amt: 0, //
+      amt: 0, //金额
+      bankNameO: "", //对方户名
       modal: false, //预收款弹框
       value: [], //日期
       company: [], //往来单位
       companyId: "", //往来单位
       Branchstore: [], //分店名称
       BranchstoreId: "", //分店名称
-      tableData: [] //总表数据
+      tableData: [], //总表数据
+      page: {
+        num: 1,
+        size: 10,
+        total: 0,
+        opts: [20, 50, 100, 200]
+      },
+      currRow: {}, //选中行
+      serviceId: ""
     };
   },
   async mounted() {
@@ -195,6 +224,8 @@ export default {
     this.BranchstoreId = arr[1];
     this.Branchstore = arr[2];
     this.getOne();
+    this.getQuery();
+    this.claimedList();
   },
   methods: {
     // 往来单位选择
@@ -235,22 +266,68 @@ export default {
     query() {
       this.getQuery();
     },
+    // 选中行
+    currentChangeEvent({ row }) {
+      this.currRow = row;
+      this.serviceId = row.serviceId;
+      console.log(789, this.serviceId);
+      this.$refs.Record.init();
+    },
     //查询接口
     getQuery() {
       let obj = {
-        startTime: this.value[0]
+        startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endTime: this.value[1]
+        endDate: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        orgId: this.BranchstoreId,
-        guestId: this.companyId
+        orgid: this.BranchstoreId,
+        guestId: this.companyId,
+        size: this.page.size,
+        page: this.page.num - 1
       };
+      findAdvance(obj).then(res => {
+        if (res.code === 0) {
+          this.tableData = res.data.content;
+          this.page.total = res.data.totalElements;
+        }
+      });
+      this.serviceId = "";
+      this.$refs.Record.init();
+      this.currRow = null;
     },
     // 预收款认领查询
     queryClaimed() {
-      // this.claimed();
+      this.claimedList();
+    },
+    //预收款认领
+    claimCollection() {},
+
+    //预收款认领弹窗查询
+    claimedList() {
+      let obj = {
+        amount: this.amt,
+        reciprocalAccountName: this.bankNameO,
+        page: this.$refs.claim.claimedPage.page - 1,
+        size: this.$refs.claim.claimedPage.size
+      };
+      claimedFund(obj).then(res => {
+        if (res.code === 0) {
+          this.$refs.claim.claimedData = res.data.content;
+          this.$refs.claim.claimedPage.total = res.data.totalElements;
+        }
+      });
+    },
+    //分页
+    changePage(p) {
+      this.page.num = p;
+      this.getQuery();
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getQuery();
     }
   }
 };

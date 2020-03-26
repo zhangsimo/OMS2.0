@@ -440,7 +440,9 @@ export default {
       quality: "", //某个值
       total: "", //调整后剩余额度
       totalSuma: "",
-      flag: ""
+      flag: "",
+
+      editTopItemId:""//记录操作的是第几条数据
     };
   },
   methods: {
@@ -464,6 +466,10 @@ export default {
     },
     //当前行
     selection(row) {
+      if(!row){
+        return
+      }
+      this.editTopItemId = row.id
       this.rowMessage = row;
       this.state = row.isGuestResearch;
       this.ID = row.guestId;
@@ -522,6 +528,14 @@ export default {
         if (res.code === 0) {
           this.creditList = res.data.content || [];
           this.page.total = res.data.totalElements;
+          for(let b of this.creditList){
+            b._highlight = false;
+            if(b.id == this.editTopItemId){
+              b._highlight = true;
+              this.selection(b);
+              break;
+            }
+          }
         }
       });
     },
@@ -722,8 +736,11 @@ export default {
         0 + this.creaditList.tempQuota * 1;
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
-      data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
+      //如果临时额度大于零，添加开始结束时间参数
+      if(data.tempQuota>0){
+        data.tempStart = tools.transTime(this.creaditList.tempStart);
+        data.tempEnd = tools.transTime(this.creaditList.tempEnd)?tools.transTime(this.creaditList.tempEnd).split(" ")[0]+' 23:59:59':"";
+      }
       data.payableAmt = +this.payable.payableAmt || 0;
       data.tgrade = this.creaditList.tgrade || "";
       data.thirtyAmt = +this.payable.thirtyAmt || 0;
