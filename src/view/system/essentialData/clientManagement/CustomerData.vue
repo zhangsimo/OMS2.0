@@ -443,7 +443,7 @@ export default {
     //点击打开修改
     changeClient() {
       if (!this.clientList.hasOwnProperty('id')) {
-        return this.$Message.error("至少选择一种客户分类");
+        return this.$Message.error("请选择一条客户信息");
       }
       let data = {};
       data.id = this.clientList.id;
