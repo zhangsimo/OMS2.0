@@ -28,7 +28,7 @@ export default {
         return obj;
       },
       // 核销结算数据
-      settlementData(state) {
+      gettlementData(state) {
         let list = state.claimedSelectionList.map(el => {
           let item = {
             amt: el.incomeMoney == 0 ? el.paidMoney : el.incomeMoney,
@@ -41,6 +41,7 @@ export default {
             accountBankNo: el.accountName,
             accountName: el.accountName,
             subjectName: el.mateAccountName,
+            mateAccountCode: el.mateAccountCode,
             transRemark: el.tradingNote,
           };
           return item;

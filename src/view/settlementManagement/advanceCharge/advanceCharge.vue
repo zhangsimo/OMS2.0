@@ -56,7 +56,7 @@
       </div>
       <div class="mt10 mb10">
         <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button :disabled="currRow == null" class="ml10">预付款核销</Button>
+        <Button :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
         <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
         <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
         <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
@@ -378,7 +378,7 @@ export default {
     this.getOne();
   },
   methods: {
-    ...mapMutations(["setClaimedSearch", "setSign"]),
+    ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
     // 往来单位选择
     async getOne() {
       const res = await getSupplierList({});
@@ -419,13 +419,19 @@ export default {
     },
     //查询接口
     async getQuery() {
-      let obj = {
-        startTime: this.value[0]
+      let obj = {}
+      if (this.value[0] instanceof Date) {
+        obj = {
+           startTime: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endTime: this.value[1]
           ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
           : "",
+        }
+      }
+      obj = {
+        ...obj,
         orgId: this.BranchstoreId,
         guestId: this.companyId,
         size: this.page.size,
@@ -608,6 +614,7 @@ export default {
         }
       }
       obj.claimAmt = 0;
+      obj.financeAccountCashList = [];
       if(this.claimedButtonType == "预付款认领") {
         this.claimedSelectData.forEach(el => {
           let item = {
@@ -615,14 +622,11 @@ export default {
             amt: el.incomeMoney,
             ownStoreId: el.shopId,
             ownStoreName: el.shopName,
-            accountBank: el.bankName,
-            accountBankNo: el.accountCode,
             accountName: el.accountName,
-            subjectName: el.mateAccountName,
-            transRemarkL: el.tradingNote,
           }
           obj.claimAmt += el.paidMoney;
           obj.paymentTypeList.push(item);
+          obj.financeAccountCashList.push({id: el.id});
         })
         let res = await api.addClaim(obj);
         if(res.code == 0) {
@@ -632,9 +636,14 @@ export default {
       }else if(this.claimedButtonType == "预付款收回认领") {
         this.setSign({type: "5", accountNo: this.currRow.serviceId});
         this.modal = false;
-        this.$refs.settlementadv.Settlement = true;
-        console.log(this.$refs.settlementadv.Settlement)
+        this.$refs.settlementadv.init();
       }
+    },
+    // 核销
+    openSettlement() {
+      this.setClaimedSelectionList([]);
+      this.setSign({type: "4", accountNo: this.currRow.serviceId});
+      this.$refs.settlementadv.init();
     },
     // 撤回弹窗
     openShow(name) {
