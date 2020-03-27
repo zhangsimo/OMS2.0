@@ -305,8 +305,6 @@
     },
     methods: {
 
-
-
       //获取门店
       async getShop(){
         let data ={}
@@ -331,10 +329,10 @@
         let data = {}
         data.page = 0
         data.size = 9999
-        data.startTime = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-        data.endTime = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
-        data.areaId = this.model1
-        data.shopId = this.shopCode
+        data.startTime = moment(this.value[0]).format("YYYY-MM-DD")
+        data.endTime = moment(this.value[1]).format("YYYY-MM-DD")
+        data.areaId = 0
+        data.shopNumber = this.shopCode
         data.subjectId = this.subjectCode
         let res = await goList(data)
         if(res.code === 0){

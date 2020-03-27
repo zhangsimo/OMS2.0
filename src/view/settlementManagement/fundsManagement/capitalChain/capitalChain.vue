@@ -376,10 +376,10 @@
         let data = {}
         data.page = 0
         data.size = 9999
-        data.startTime = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-        data.endTime = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+        data.startTime = moment(this.value[0]).format("YYYY-MM-DD")
+        data.endTime = moment(this.value[1]).format("YYYY-MM-DD")
         data.areaId = this.model1
-        data.shopId = this.shopCode
+        data.shopNumber = this.shopCode
         data.subjectId = this.subjectCode
         data.accountName = this.accountName
         data.bankName = this.bankName
