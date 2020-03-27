@@ -71,7 +71,7 @@
             </div>
             <div class="db">
               <Button v-has="'print'" class="mr10" @click="printTable">
-                <Icon type="md-close" size="14" />打印
+                <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
           </div>

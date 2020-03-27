@@ -171,6 +171,7 @@ export const dataMixin = {
       }
       this.loading = true
       this.selectTreeItem = "";
+      this.formModelData.parentMenu=[]
       getDataDictionaryType(params).then(res => {
         this.loading = false
         if (res.code == 0) {

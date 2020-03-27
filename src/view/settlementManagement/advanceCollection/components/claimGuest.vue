@@ -1,85 +1,137 @@
 <template>
-  <Modal v-model="modal" title="预收款认领" width="800">
+  <Modal v-model="modal" title="预收款认领" width="800" @on-visible-change='visChange'>
     <div class="db ml20">
       <span>往来单位：</span>
-      <Select v-model="companyId" class="w150" filterable>
-        <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
+      <Input v-model="company" class="w100" />
       <Button @click="query" class="ml10">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </Button>
     </div>
-    <Table border class="mt10" :columns="columns1" :data="data1"></Table>
+    <Table
+      border
+      class="mt10"
+      :columns="columns1"
+      ref="table"
+      :data="data1"
+      max-height="400"
+      highlight-row
+      @on-current-change="currentChange"
+    ></Table>
+    <Page
+      show-sizer
+      show-total
+      class-name="fr mb10 mt10"
+      size="small"
+      :current="page.page"
+      :total="page.total"
+      :page-size="page.size"
+      @on-change="changePage"
+      @on-page-size-change="changeSize"
+    ></Page>
+    <div slot="footer">
+      <Button type="primary" @click="detaim">确认</Button>
+      <Button @click="modal=false">取消</Button>
+    </div>
   </Modal>
 </template>
 <script>
-import { getbayer } from "@/api/AlotManagement/threeSupplier";
-import { getSupplierList } from "_api/purchasing/purchasePlan";
+import { findGuest,addClaim } from "_api/settlementManagement/advanceCollection.js";
 export default {
   data() {
     return {
-      modal: true,
-      company: [], //往来单位
-      companyId: "", //往来单位
-      columns1:[
+      modal: false,
+      company: "", //往来单位
+      columns1: [
         {
-          title:'序号',
-          type:'index',
-          width:40
+          title: "序号",
+          type: "index",
+          width: 40
         },
         {
-          title:'往来单位',
-          key:'fullName'
+          title: "往来单位",
+          key: "fullName"
         },
         {
-          title:'编号',
-          key:'code'
+          title: "编号",
+          key: "code"
         },
         {
-          title:'简称',
-          key:'shortName'
-        },
+          title: "简称",
+          key: "shortName"
+        }
       ],
-      data1:[]
+      data1: [],
+      page: {
+        total: 0,
+        page: 1,
+        size: 10
+      },
+      guestId:'',//选中往来单位的id
     };
   },
   mounted() {
     this.getOne();
   },
   methods: {
+    //弹框是否打开
+    visChange(type){
+      if(!type){
+        this.guestId = ''
+        this.company = ''
+        this.$refs.table.clearCurrentRow()
+      }
+    },
     // 往来单位选择
     async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      this.company = [];
-      let data = [];
-      let result = [];
-      let obj = {};
-      if (res.data.length !== 0 && res1.data.content.length !== 0) {
-        data = [...res.data, ...res1.data.content];
-      } else if (res.data.length !== 0) {
-        data = res.data;
-      } else if (res1.data.content.length !== 0) {
-        data = res.data.content;
-      }
-      for (let i in data) {
-        if (!obj[data[i].id]) {
-          result.push(data[i]);
-          obj[data[i].id] = 1;
+      let obj = {
+        page: this.page.page - 1,
+        size: this.page.size,
+        fullName: this.company
+      };
+      findGuest(obj).then(res => {
+        if (res.code === 0) {
+          this.data1 = res.data.content;
+          this.page.total = res.data.totalElements;
         }
-      }
-      data = result;
-      data.map(item => {
-        this.company.push({
-          label: item.fullName,
-          value: item.id
-        });
       });
-      this.data1 = data
     },
     //查询
-    query() {}
+    query() {
+      this.getOne();
+    },
+    //确定
+    detaim(){
+      if(this.guestId){
+        let obj ={
+          guestId:this.guestId,
+          financeAccountCashList:this.$parent.$parent.claimSelection
+        }
+        addClaim(obj).then(res=>{
+          if(res.code===0){
+            this.$message.success('认领成功')
+            this.modal = false
+            this.$parent.$parent.getQuery()
+          }
+        })
+      } else {
+        this.$message.error('请选择一个往来单位');
+      }
+    },
+    // 选中行
+    currentChange(row){
+      this.guestId = row.id
+    },
+    //分页
+    changePage(p) {
+      this.page.page = p;
+      this.getOne();
+    },
+    changeSize(size) {
+      this.page.page = 1;
+      this.page.size = size;
+      this.getOne();
+    }
   }
 };
 </script>

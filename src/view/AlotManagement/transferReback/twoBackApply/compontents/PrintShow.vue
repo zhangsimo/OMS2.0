@@ -6,7 +6,7 @@
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >{{onelist.guest.fullName}}</h5>
+            >{{onelist.apply.orgName}}</h5>
           </Col>
           <Col span="12" class="pl10">
             <p>调入退回申请</p>
@@ -16,10 +16,10 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
            <p>
-              <span>地址:{{onelist.guest.addr}}</span>
+              <span>地址:{{onelist.applyGuest.addr}}</span>
             </p>
             <p>
-              <span>电话:{{onelist.guest.tel}}</span>
+              <span>电话:{{onelist.applyGuest.tel}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
@@ -57,7 +57,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.storeVO.contactorTe}}</span>
+              <span>{{onelist.guest.contactorTel}}</span>
             </p>
             <p>
               <span>出库仓库:</span>

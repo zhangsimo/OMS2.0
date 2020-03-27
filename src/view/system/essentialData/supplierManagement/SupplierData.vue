@@ -371,7 +371,7 @@ export default {
     },
     //搜索
     queryList() {
-      this.supplier = "";
+      // this.supplier = "";
       this.getlist();
     },
     //选中一条信息

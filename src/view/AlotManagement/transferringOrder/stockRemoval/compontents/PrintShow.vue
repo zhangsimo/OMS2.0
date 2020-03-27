@@ -57,7 +57,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.storeVO.contactorTe}}</span>
+              <span>{{onelist.storeVO.contactorTel}}</span>
             </p>
             <p>
               <span>出库仓库:</span>
@@ -139,6 +139,11 @@ export default {
           align: "center"
         },
         {
+          title: "品牌车型",
+          key: "carBrandName",
+          align: "center"
+        },
+        {
           title: "规格",
           key: "spec",
           align: "center"
@@ -154,18 +159,13 @@ export default {
           align: "center"
         },
         {
-          title: "金额",
-          key: "orderAmt",
+          title: "数量",
+          key: "applyQty",
           align: "center"
         },
         {
-          title: "仓库",
-          key: "storeName",
-          align: "center"
-        },
-        {
-          title: "仓位",
-          key: "storeShelf",
+          title: "备注",
+          key: "remark",
           align: "center"
         }
       ],

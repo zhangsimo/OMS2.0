@@ -352,7 +352,7 @@ export default {
     onRowClick(value) {
       this.flag = true;
       this.creditData = value;
-      approvalStatus({ instanceId: value.id }).then(res => {
+      approvalStatus({ instanceId: value.processInstanceId }).then(res => {
         if (res.code == "0") {
           this.statusData = res.data.operationRecords;
         }
