@@ -257,10 +257,6 @@ const methods = {
   // 添加配件
   addCustomer() {
     if (this.levelId) {
-      // this.modal = true;
-      // this.num += this.num
-      // this.$store.commit('setDialog',this.num )
-      // console.log(this.$refs.MsgThree)
       this.$refs.MsgThree.init();
       // this.getArr = []
     } else {
@@ -290,8 +286,6 @@ const methods = {
       item.levelId = this.levelId;
       delete item.id;
     });
-    // let repeatArr = this.unique(this.getArr)
-    // console.log(repeatArr)
     stockLevelPartSave(this.getArr).then(res => {
       this.getArr = [];
       this.rightgetList();
@@ -334,7 +328,6 @@ const methods = {
     this.count1 = "";
     this.count2 = "";
     let params = {};
-    // let data = {}
     if (this.Type === 0 && this.customer.fullname !== "") {
       params.partCode = this.customer.fullname;
     }
@@ -351,25 +344,10 @@ const methods = {
     RightqueryAll(params).then(res => {
       this.customer.loading = false;
       if (res.code === 0) {
-        // this.customer.tbdata = res.data.content || [];
-        // console.log(this.customer.tbdata, "this.customer.tbdata");
-        // console.log(res.data.content, "res.data.content");
-        if (this.customer.tbdata.length == res.data.content.length) {
           this.count1 = this.customer.tbdata.length;
-          this.count2 = res.data.content.length;
+          this.count2 = res.data.totalElements;
           this.customer.tbdata = res.data.content;
-        } else {
-          this.count1 = this.customer.tbdata.length;
-          this.count2 = res.data.content.length;
-          this.customer.tbdata = res.data.content;
-        }
-        // console.log(this.count1, "this.count1  =>361");
-        // console.log(this.count2, "this.count2   =>362");
-        // console.log(res.data, "res.data=>345");
-        // console.log(this.customer.tbdata)
-        this.customer.page.total = res.data.totalElements;
-        // this.backReturn = res.data.content;
-        // console.log(this.backReturn, "res.data=>351");
+         this.customer.page.total = res.data.totalElements;
       }
     });
   },
@@ -383,7 +361,6 @@ const methods = {
   //多选框
   selection(a) {
     this.checkboxArr = a;
-    // console.log(this.checkboxArr);
   },
   //子组件的参数
   // getMsg2(a){
