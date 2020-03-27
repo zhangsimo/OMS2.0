@@ -475,6 +475,7 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
+      console.log(this.creaditList)
       this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus

@@ -195,8 +195,8 @@
         <FormItem v-if="data.isGuestResearch == 0" label="申请授用额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
         </FormItem>
-        <FormItem v-else label="调整原因:" prop="applyTrustMoney1">
-          <Input v-model="data.applyTrustMoney1" style="width: 380px"></Input>
+        <FormItem v-else label="调整原因:" prop="adjustReason">
+          <Input v-model="data.adjustReason" style="width: 380px"></Input>
         </FormItem>
       </Col>
     </Row>
