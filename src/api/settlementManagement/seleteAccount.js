@@ -17,3 +17,11 @@ export function wirteAccount(params) {
     params,
   });
 }
+//资金认领款核销，核销对账单保存
+export function saveAccount(data) {
+  return axios.request({
+    url: `${api.omsSettle}/capital/claim/verification/saveOrUpdate`,
+    method: "post",
+    data,
+  });
+}

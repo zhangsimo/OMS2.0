@@ -181,18 +181,20 @@ export default {
     currentClaimed: {
       handler(val, od) {
         if (val !== od) {
-          const that = this.$parent.$parent.$parent
-          that.claimedAmt = 0;
-          val.map(item => {
-            if(item.paidMoney) {
-              that.claimedAmt += item.paidMoney * 1;
-            } else{
-              that.claimedAmt += item.incomeMoney * 1;
-            }
-          });
-          that.difference = that.currentAccount.actualCollectionOrPayment
-            ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
-            : 0 - that.claimedAmt;
+          if(this.$parent.$parent.$parent.difference!==undefined){
+            const that = this.$parent.$parent.$parent
+            that.claimedAmt = 0;
+            val.map(item => {
+              if(item.paidMoney) {
+                that.claimedAmt += item.paidMoney * 1;
+              } else{
+                that.claimedAmt += item.incomeMoney * 1;
+              }
+            });
+            that.difference = that.currentAccount.actualCollectionOrPayment
+              ? that.currentAccount.actualCollectionOrPayment - that.claimedAmt
+              : 0 - that.claimedAmt;
+          }
         }
       },
       deep: true
