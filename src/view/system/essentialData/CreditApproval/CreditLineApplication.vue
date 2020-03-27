@@ -14,11 +14,11 @@
       <Row>
         <Col span="8">
           <FormItem label="调整前固定额度:">
-            <Input :value="customerDetails.tempQuotaTotal ||0" style="width: 150px" disabled></Input>
+            <Input :value="customerDetails.creditLimit ||0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整前临时额度:">
             <Input
-              :value="customerDetails.fixationQuotaTotal || 0"
+              :value="customerDetails.beforeAdjustTempQuota || 0"
               style="width: 150px"
               disabled
             ></Input>
@@ -71,7 +71,7 @@
         <Col span="8">
           <FormItem label="调整前额度合计:">
             <Input
-              :value="customerDetails.tempQuotaTotal + customerDetails.fixationQuotaTotal || 0"
+              :value="customerDetails.creditLimit + customerDetails.beforeAdjustTempQuota || 0"
               style="width: 150px"
               disabled
             ></Input>
