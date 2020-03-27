@@ -511,6 +511,9 @@ export default {
     },
     //申请信用调查
     opensurveyShow() {
+      if(this.researchStatus === 1){
+        return this.$Message.warning("信用调查正在审批中，请通过后再试！");
+      }
       this.surveyShow = true;
     },
     //额度调用
