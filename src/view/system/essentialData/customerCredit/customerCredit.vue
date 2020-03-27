@@ -514,6 +514,9 @@ export default {
       if(this.researchStatus === 1){
         return this.$Message.warning("信用调查正在审批中，请通过后再试！");
       }
+      if(this.creaditList.isGuestResearch === 0){
+        this.$refs.SurveyList.$refs.formInline.resetFields();
+      }
       this.surveyShow = true;
     },
     //额度调用
