@@ -37,7 +37,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>申请方:</span>
-              <span>{{onelist.applyGuest.guestOrgName}}</span>
+              <span>{{onelist.applyGuest.fullName}}</span>
             </p>
             <p>
               <span>申请单号:</span>
@@ -57,7 +57,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>备注:</span>
-              <span>{{onelist.enterOrder.remark}}</span>
+              <span>{{onelist.applyGuest.remark}}</span>
             </p>
             <p>
               <span>入库仓库:</span>

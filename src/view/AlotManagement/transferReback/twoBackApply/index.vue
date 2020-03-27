@@ -45,13 +45,13 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'delivery'" :disabled="this.flagStatus" class="mr10" @click="chuku">
+              <Button v-has="'delivery'" :disabled="newFlag" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
             <div class="db">
               <Button
-                :disabled="this.remarkStatus"
+                :disabled="newFlag"
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
@@ -60,8 +60,8 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'print'" class="mr10" @click="printTable">
-                <Icon type="md-close" size="14" />打印
+              <Button v-has="'print'" :disabled="newFlag" class="mr10" @click="printTable">
+                <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
           </div>
@@ -290,6 +290,7 @@ export default {
   },
   data() {
     return {
+      newFlag: true,
       remarkStatus: true,
       flagStatus: false,
       flagValue: [],
@@ -638,9 +639,11 @@ export default {
         });
     },
     xinzeng() {
+      this.newFlag = true;
       this.Leftcurrentrow = {
         status: {
-          value: 1
+          value: 1,
+          name: "",
         },
         storeName: "",
         createTime: "",
@@ -865,6 +868,9 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      if(row.id) {
+        this.newFlag = false;
+      }
       if (row.status.name != "草稿") {
         this.remarkStatus = true;
       } else {
