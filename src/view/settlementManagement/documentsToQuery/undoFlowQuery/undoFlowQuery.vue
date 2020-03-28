@@ -97,7 +97,7 @@
         data.page = 0
         data.size = 9999
         data.orgId = this.shopCode
-        data.startDate =moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+        data.startDate = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.endDate = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         let res = await runningWater(data)
         if (res.code === 0) return  this.tableData = res.data.content

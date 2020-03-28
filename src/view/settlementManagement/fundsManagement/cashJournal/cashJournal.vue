@@ -103,26 +103,16 @@
               :data="tableData"
             >
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" ></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
               <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
               <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
               <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
               <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
@@ -158,26 +148,16 @@
               :data="tableData1"
             >
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" ></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
               <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
               <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
               <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
               <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
@@ -213,26 +193,16 @@
               :data="tableData2"
             >
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-              <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
-              <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
               <vxe-table-column field="shopName" title="所属门店" ></vxe-table-column>
-              <vxe-table-column field="shopCode" title="所属店号"></vxe-table-column>
-              <vxe-table-column field="accountName" title="账户"></vxe-table-column>
-              <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
-              <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
-              <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-              <vxe-table-column field="createTime" title="发生日期"></vxe-table-column>
+              <vxe-table-column field="createTime" title="日期"></vxe-table-column>
+              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
               <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
               <vxe-table-column field="balanceMoney" title="余额"></vxe-table-column>
-              <vxe-table-column field="reciprocalAccountName" title="对方户名"></vxe-table-column>
-              <vxe-table-column field="checkAccount" title="对账账号"></vxe-table-column>
-              <vxe-table-column field="reciprocalBankName" title="对方开户行"></vxe-table-column>
-              <vxe-table-column field="tradingNote" title="交易备注"></vxe-table-column>
               <vxe-table-column field="businessType" title="业务类别"></vxe-table-column>
               <vxe-table-column field="leadHandler" title="导入经办人"></vxe-table-column>
-              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="claimShopName" title="认领门店"></vxe-table-column>
+              <vxe-table-column field="claimShopCode" title="认领店号"></vxe-table-column>
               <vxe-table-column field="certificate" title="凭证摘要"></vxe-table-column>
               <vxe-table-column field="cancelPerson" title="认领核销人"></vxe-table-column>
               <vxe-table-column field="statementNumber" title="核销对账单号"></vxe-table-column>
@@ -282,7 +252,7 @@
         ], //门店列表
         subjectCode:1001,//科目id
         subJectList:[
-          {id:1001 ,titleName:'会计科目'}
+          {id:1001 ,titleName:'库存现金'}
         ],//科目列表
         company: "", //往来单位
         companyId: "", //往来单位id
