@@ -57,7 +57,7 @@
           <Col span="8" class="pl10">
             <p>
               <span>备注:</span>
-              <span>{{onelist.applyGuest.remark}}</span>
+              <span>{{onelist.enterOrder.remark}}</span>
             </p>
             <p>
               <span>入库仓库:</span>
