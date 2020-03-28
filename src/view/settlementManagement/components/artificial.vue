@@ -79,7 +79,7 @@
         openModal(){
           this.artificialShow = true
           this.oneList = []
-          this.tableData=[{},{},{},{},{},{},{},{},{},{},{}]
+          this.tableData=[{},{},{},{},{},{},{},{},{},{}]
           this.getshopList()
         },
 
@@ -162,7 +162,7 @@
 
         //添加行
         add(){
-          this.tableData.unshift({})
+          this.tableData.push({})
         },
 
       //删除选中行

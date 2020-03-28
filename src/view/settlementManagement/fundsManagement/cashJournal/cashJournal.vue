@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150 mr15">
+            <Select  v-model="shopCode" filterable class="w150 mr15" :disabled="$store.state.user.userData.shopkeeper != 0">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -260,7 +260,7 @@
   import {creat} from '../../components'
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
-  import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'
   import amtData from '../../components/amtData'
 
@@ -302,6 +302,8 @@
       let arr = await creat (this.$refs.quickDate.val,this.$store)
       this.value = arr[0];
       this.getShop()  //获取门店
+
+
     },
     methods: {
 
@@ -311,7 +313,16 @@
         data.supplierTypeSecond = 0
         this.shopList = [{id:0 , name:'全部'}]
         let res = await goshop(data)
-        if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
+        if (res.code === 0) {
+          this.shopList = [...this.shopList , ...res.data]
+          if (this.$store.state.user.userData.shopkeeper != 0){
+            this.$nextTick( () => {
+              let a = this.$store.state.user.userData.shopId
+              this.shopCode = a.toString()
+            })
+          }
+
+        }
       },
 
 

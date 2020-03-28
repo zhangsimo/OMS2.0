@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea'>
+            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea' :disabled="$store.state.user.userData.shopkeeper != 0">
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150">
+            <Select  v-model="shopCode" filterable class="w150" :disabled="$store.state.user.userData.shopkeeper != 0">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -324,10 +324,14 @@
     },
     async mounted () {
       let arr = await creat (this.$refs.quickDate.val,this.$store)
-      this.value = arr[0];
+
+
+      this.value = arr[0]
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
       this.getSubject()//获取科目
+
+
     },
     methods: {
 
@@ -337,11 +341,27 @@
         if (res.code === 0) return this.Branchstore = [...this.Branchstore ,...res.data]
       },
 
-      //切换地址重新调取门店接口
-      changeArea(){
-        this.shopCode = 0
-        this.getShop()
+      //当前非管理员状态情况下获取门店地址
+      async getThisArea(){
+        let data = {}
+        data.shopkeeper = 1
+        data.shopNumber = this.$store.state.user.userData.shopId
+        data.tenantId = this.$store.state.user.userData.tenantId
+        let res = await are(data)
+        this.$nextTick( () => {
+          this.shopCode = this.$store.state.user.userData.shopId
+        })
+        if (res.code === 0){
+        this.model1 = res.data[0].id
+        }
+      },
 
+      // //切换地址重新调取门店接口
+      changeArea(){
+        if (this.$store.state.user.userData.shopkeeper == 0) {
+          this.shopCode = 0
+          this.getShop()
+        }
       },
 
       //获取门店
@@ -350,7 +370,12 @@
         data.supplierTypeSecond = this.model1
         this.shopList = [{id:0 , name:'全部'}]
        let res = await goshop(data)
-       if (res.code === 0) return this.shopList = [...this.shopList , ...res.data]
+       if (res.code === 0) {
+         this.shopList = [...this.shopList , ...res.data]
+         if (this.$store.state.user.userData.shopkeeper != 0){
+           this.getThisArea()//获取当前门店地址
+         }
+       }
       },
 
       //获取科目
@@ -358,7 +383,6 @@
         let data = {}
         data.parentCode = 101
         let res = await getTableList(data)
-        console.log(res)
         if(res.code === 0) return this.subJectList = [...this.subJectList , ...res.data]
       },
 

@@ -23,7 +23,7 @@
         </div>
         <vxe-table
           border
-          ref="xTable1"
+          ref="xTable"
           resizable
           size="mini"
           align="center"
@@ -121,9 +121,7 @@
       //导出数据
       exportSelectEvent () {
         if(this.tableData.length === 0) return this.$Message.error('暂无数据导出')
-        this.$refs.xTable1.exportData({
-          data: this.$refs.xTable1.getCheckboxRecords()
-        })
+        this.$refs.xTable.exportData({ types: ['csv'],filename:'撤销流水帐表格' })
       },
     }
   };
