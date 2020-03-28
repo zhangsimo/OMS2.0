@@ -45,6 +45,7 @@
           auto-resize
           show-footer
           max-height="400"
+          align='center'
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -102,6 +103,7 @@
           auto-resize
           show-footer
           max-height="400"
+          align='center'
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -125,7 +127,7 @@
 </template>
 <script>
 import accountSelette from "./accountWirte";
-import { wirteAccount } from "_api/settlementManagement/seleteAccount.js";
+import { wirteAccount,saveAccount } from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
 export default {
@@ -260,8 +262,17 @@ export default {
     //保存
     conserve() {
       if (!Number(this.check)) {
-        console.log(this.BusinessType);
-        console.log(this.tableData);
+        let obj = {
+          one:this.reconciliationStatement,
+          two:this.BusinessType,
+          three:this.tableData
+        }
+        saveAccount(obj).then(res=>{
+          if(res.code===0){
+            this.Settlement = false
+            this.$message.success('保存成功')
+          }
+        })
       } else {
         this.$message.error("核对金额为0才能保存");
       }
