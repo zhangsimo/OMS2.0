@@ -61,7 +61,7 @@
             </p>
             <p>
               <span>备注:</span>
-              <span>{{onelist.applyGuest.remark}}</span>
+              <span>{{onelist.enterOrder.remark}}</span>
             </p>
           </Col>
         </Row>
