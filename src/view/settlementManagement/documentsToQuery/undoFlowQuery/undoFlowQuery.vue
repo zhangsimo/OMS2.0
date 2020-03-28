@@ -36,7 +36,7 @@
           <vxe-table-column field="revokeNum" title="撤销单号"></vxe-table-column>
           <vxe-table-column field="revokeType" title="撤单类型">
             <template v-slot="{row}">
-              {{row.revokeType.name}}
+              {{row.revokeType ? row.revokeType.name : ''}}
             </template>
           </vxe-table-column>
           <vxe-table-column field="source" title="撤销来源" ></vxe-table-column>
