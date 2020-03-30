@@ -266,6 +266,7 @@
         },//下载上传路径
         oneList:{},//点击获取到的信息
         allMoneyList:{},//获取到所有余额信息
+        canQuickDateList: false,//判断是否可以查询
       };
     },
     async mounted () {
@@ -285,12 +286,9 @@
         let res = await goshop(data)
         if (res.code === 0) {
           this.shopList = [...this.shopList , ...res.data]
-          if (this.$store.state.user.userData.shopkeeper != 0){
             this.$nextTick( () => {
-              let a = this.$store.state.user.userData.shopId
-              this.shopCode = a.toString()
+              this.shopCode = this.$store.state.user.userData.shopId
             })
-          }
 
         }
       },
@@ -303,6 +301,11 @@
       // 快速查询
       quickDate(data){
         this.value = data
+        if( this.canQuickDateList){
+          this.getList()
+        }else {
+          this.canQuickDateList = !this.canQuickDateList
+        }
       },
 
       //获取表格信息
@@ -310,8 +313,8 @@
         let data = {}
         data.page = 0
         data.size = 9999
-        data.startTime = moment(this.value[0]).format("YYYY-MM-DD")
-        data.endTime = moment(this.value[1]).format("YYYY-MM-DD")
+        data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ''
+        data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
         data.areaId = 0
         data.shopNumber = this.shopCode
         data.subjectId = this.subjectCode
