@@ -221,7 +221,9 @@ export default {
     };
     const valiiBank = (rule, value, callback) => {
       const regExp = /^\d{1,}$/;
-      if (!value || !regExp.test(value)) {
+      if(!value) {
+        callback();
+      } else if (!regExp.test(value)) {
         callback(new Error("银行账户填写错误"));
       } else {
         callback();
@@ -235,7 +237,7 @@ export default {
       visible: false,
       clientDisable: true,
       rules: {
-        bankAccountNumber: [{validator: valiiBank, trigger: "blur" }],
+        bankAccountNumber: [{required: false, validator: valiiBank, trigger: "blur" }],
         firm: [{ required: true, message: "不能为空", trigger: "blur" }],
         name: [{ required: true, message: "不能为空", trigger: "blur" }],
         shortName: [{ required: true, message: "不能为空", trigger: "change" }],

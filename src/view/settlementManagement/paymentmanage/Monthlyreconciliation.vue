@@ -935,7 +935,8 @@ export default {
           if (this.business === "销售退货" || this.business === "销售出库") {
             const sum1 =
               this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
-            if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
+            console.log(sum,this.data1[index].rpAmt,this.data1[index].accountAmt)
+            if (sum > this.data1[index].accountAmt-this.data1[index].rpAmt)
               return this.$message.error(
                 "本次不对账合计不能大于总金额减去前期已对账"
               );
@@ -944,7 +945,7 @@ export default {
           } else {
             const sum1 =
               this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
-            if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
+            if (sum > this.data2[index].accountAmt- this.data2[index].rpAmt)
               return this.$message.error(
                 "本次不对账合计不能大于总金额减去前期已对账"
               );
