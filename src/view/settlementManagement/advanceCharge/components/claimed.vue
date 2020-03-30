@@ -135,8 +135,8 @@ export default {
         let s = 0;
         let n = 0;
         selection.map(item => {
-          if (item.index) s++;
-          if (item.guestName) n++;
+          if (item.incomeMoney) s++;
+          if (item.paidMoney) n++;
         });
         if (!s && n||s&&!n) {
           this.currentClaimed = selection;

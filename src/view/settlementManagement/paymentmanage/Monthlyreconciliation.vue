@@ -75,6 +75,7 @@
                 <Input v-model="openingBank" class="w140 mr10" readonly />
                 <span>收款账号：</span>
                 <Input v-model="collectionAccount" class="w140 mr10" readonly />
+                <span style="color:red">*</span>
                 <span>本次申请付款账户：</span>
                 <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
@@ -129,7 +130,7 @@
                 <InputNumber :min="0" v-model="otherFees" class="w60 tc" />
               </div>
               <div class="db mt10 mb10">
-                <span class="mr5">应付合计</span>
+                <span class="mr5">对账应付</span>
                 <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
                 <span class="mr5 ml10">应付坏账</span>
                 <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc" :min="0" />
@@ -155,7 +156,8 @@
                 <Input type="text" v-model="Rebateid" class="w60 tc" />
                 <span class="mr5 ml10">应收坏账请示单号</span>
                 <Input type="text" v-model="BadDebtid" class="w60 tc" />
-                <span class="mr5 ml10">备注</span>
+                <span class="ml10" style="color:red">*</span>
+                <span class="mr5">备注</span>
                 <Input type="text" v-model="remark" class="w260 tc" />
               </div>
             </div>

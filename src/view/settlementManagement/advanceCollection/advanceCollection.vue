@@ -38,7 +38,7 @@
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">预收款认领</Button>
         <Button class="ml10" @click="collectWirte">预收款核销</Button>
-        <Button class="ml10">预收款支出</Button>
+        <Button class="ml10" @click="collectWPay">预收款支出</Button>
         <Button class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
         <Button class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
         <Button
@@ -212,6 +212,7 @@
       </div>
     </Modal>
     <settlement ref="settlement" />
+    <payApply ref="payApply" />
   </div>
 </template>
 <script>
@@ -228,6 +229,7 @@ import { creat } from "./../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
 import claimGuest from "./components/claimGuest";
+import payApply from "./components/payApply";
 import moment from "moment";
 export default {
   components: {
@@ -235,7 +237,8 @@ export default {
     claim,
     Record,
     claimGuest,
-    settlement
+    settlement,
+    payApply
   },
   data() {
     return {
@@ -377,7 +380,7 @@ export default {
       } else {
         if (
           Object.keys(this.currRow).length !== 0 &&
-          this.currRow.expenditureNo
+          this.currRow.expenditureNo&&this.currRow.expenditureClaimAmt
         ) {
           this.modal1 = true;
           this.claimedList(2);
@@ -390,11 +393,12 @@ export default {
     claimPay() {
       if (this.$refs.claim.currentClaimed.length === 1) {
         if (
-          Math.abs(this.$refs.claim.currentClaimed[0].paidMoney) <
+          Math.abs(this.$refs.claim.currentClaimed[0].paidMoney) <=
           this.currRow.remainingAmt
         ) {
           this.$refs.settlement.Settlement = true;
           this.paymentId = "YSK";
+          this.modal1=false
         } else {
           this.$message.error("金额大于预收款余额，无法认领");
         }
@@ -432,6 +436,14 @@ export default {
         this.claimedList(1);
       } else {
         this.claimedList(2);
+      }
+    },
+    //预收款支出
+    collectWPay(){
+      if(Object.keys(this.currRow).length!==0){
+        this.$refs.payApply.modal = true
+      } else {
+        this.$message.error('请先选择数据')
       }
     },
     //预收款认领
