@@ -98,7 +98,7 @@
     <Upload
       ref="upload"
       :show-upload-list="false"
-      :action="wxImgUrl"
+      :action="getfile"
       :format="['jpg','jpeg','png']"
       :headers="headers"
       :before-upload="handleBeforeUpload"
@@ -227,7 +227,7 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //获取token
-      wxImgUrl: api.wxImgUrl,
+      getfile: api.getfile,
       uploadList:[]
     };
   },

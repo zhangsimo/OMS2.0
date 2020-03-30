@@ -161,7 +161,7 @@ export default {
     //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
-        businessTypeName: val.fullName,
+        businessTypeName: val.titleName,
         reconciliationAmt: 0,
         hasAmt: 0,
         unAmt: 0,
@@ -204,6 +204,7 @@ export default {
           : item.paidMoney < 0
           ? item.paidMoney
           : -item.paidMoney;
+          delete item.businessType
       });
       console.log(val)
       this.tableData = val;
