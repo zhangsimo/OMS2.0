@@ -33,3 +33,27 @@ export function revoke(data) {
     data,
   });
 }
+//查询预收款支出申请基础信息和支付信息
+export function findApplyInfo(params) {
+  return axios.request({
+    url: `${api.omsSettle}/advanceCollection/queryExpenditureApplyInfo`,
+    method: "get",
+    params,
+  });
+}
+//查询预收款单据和往来单位信息
+export function findCollectionInfo(params) {
+  return axios.request({
+    url: `${api.omsSettle}/advanceCollection/queryAdvanceCollectionInfo`,
+    method: "get",
+    params,
+  });
+}
+//预收款支出申请
+export function savePay(data) {
+  return axios.request({
+    url: `${api.omsSettle}/advanceCollection/addExpand`,
+    method: "post",
+    data,
+  });
+}

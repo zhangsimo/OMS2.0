@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea' :disabled="$store.state.user.userData.shopkeeper != 0">
+            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea'>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150" :disabled="$store.state.user.userData.shopkeeper != 0">
+            <Select  v-model="shopCode" filterable class="w150">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -320,12 +320,11 @@
         },//下载上传路径
         oneList:{},//点击获取到的信息
         allMoneyList:{},//获取到所有余额信息
+        canQuickDateList: false,//判断是否可以查询
       };
     },
     async mounted () {
       let arr = await creat (this.$refs.quickDate.val,this.$store)
-
-
       this.value = arr[0]
       this.getAllAre() //获取区域
       this.getShop()  //获取门店
@@ -348,9 +347,7 @@
         data.shopNumber = this.$store.state.user.userData.shopId
         data.tenantId = this.$store.state.user.userData.tenantId
         let res = await are(data)
-        this.$nextTick( () => {
-          this.shopCode = this.$store.state.user.userData.shopId
-        })
+
         if (res.code === 0){
         this.model1 = res.data[0].id
         }
@@ -372,6 +369,9 @@
        let res = await goshop(data)
        if (res.code === 0) {
          this.shopList = [...this.shopList , ...res.data]
+         this.$nextTick( () => {
+           this.shopCode = this.$store.state.user.userData.shopId
+         })
          if (this.$store.state.user.userData.shopkeeper != 0){
            this.getThisArea()//获取当前门店地址
          }
@@ -393,6 +393,11 @@
       // 快速查询
       quickDate(data){
         this.value = data
+        if( this.canQuickDateList){
+          this.getList()
+        }else {
+          this.canQuickDateList = !this.canQuickDateList
+        }
       },
 
       //获取表格信息
@@ -400,8 +405,8 @@
         let data = {}
         data.page = 0
         data.size = 9999
-        data.startTime = moment(this.value[0]).format("YYYY-MM-DD")
-        data.endTime = moment(this.value[1]).format("YYYY-MM-DD")
+        data.startTime = this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") : ''
+        data.endTime = this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") : ''
         data.areaId = this.model1
         data.shopNumber = this.shopCode
         data.subjectId = this.subjectCode
