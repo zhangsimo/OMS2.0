@@ -37,7 +37,7 @@ export function distributionShop(data) {
 //撤销分配
 export function distributionRevoke(data) {
   return axios.request({
-    url: `${api.omsSettle}/cashAccountServer/cancelArtificialMatching`,
+    url: `${api.omsSettle}/capital/claim/verification/cancelArtificialMatching`,
     method: "post",
     data
   });

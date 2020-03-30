@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea' :disabled="$store.state.user.userData.shopkeeper != 0">
+            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea'>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150" :disabled="$store.state.user.userData.shopkeeper != 0">
+            <Select  v-model="shopCode" filterable class="w150">
               <Option
                 v-for="item in shopList"
                 :value="item.id"

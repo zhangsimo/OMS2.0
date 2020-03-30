@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
+        <Button :disabled="currRow == null && !currRow.paymentNo" class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
         <Button :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
         <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
         <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
@@ -278,8 +278,8 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <Modal 
-      v-model="modalShow" 
+    <Modal
+      v-model="modalShow"
       :title="reTitle" @on-ok="reClose"
       @on-cancel="cancel"
     >
@@ -312,7 +312,7 @@
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimOk">预收款回收认领</Button>
+      <Button class="ml10" @click="claimOk">认领</Button>
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
     </Modal>
@@ -327,7 +327,7 @@ import * as api from "_api/settlementManagement/advanceCharge";
 import { creat } from "../components";
 import claim from "./components/claimed";
 import Record from "./components/Record";
-import settlementadv from "./components/settlementadv" 
+import settlementadv from "./components/settlementadv"
 import moment from "moment";
 import { mapMutations } from "vuex";
 export default {
@@ -462,12 +462,12 @@ export default {
         two: true,
         three: true,
       }
-      const { 
+      const {
         paymentNo,
         writeOffReceiptNo,
         returnNo,
       } = row;
-      let [one, two, three] = [true, true, true]; 
+      let [one, two, three] = [true, true, true];
       if(row.paymentNo) {
         one = true;
       } else {
@@ -565,6 +565,9 @@ export default {
       this.getQuery();
     },
     openModal(name) {
+      if (name == '预付款认领' && !this.currRow.paymentNo){
+        return this.$Message.error('预付款付款已认领')
+      }
       this.claimedButtonType = name;
       this.amount = 0
       this.reciprocalAccountName = "";
@@ -616,23 +619,26 @@ export default {
       obj.claimAmt = 0;
       obj.financeAccountCashList = [];
       if(this.claimedButtonType == "预付款认领") {
-        this.claimedSelectData.forEach(el => {
-          let item = {
-            account: el.accountCode,
-            amt: el.incomeMoney,
-            ownStoreId: el.shopId,
-            ownStoreName: el.shopName,
-            accountName: el.accountName,
-          }
-          obj.claimAmt += el.paidMoney;
-          obj.paymentTypeList.push(item);
-          obj.financeAccountCashList.push({id: el.id});
-        })
-        let res = await api.addClaim(obj);
-        if(res.code == 0) {
-          this.modal = false;
-          return this.$message.success("认领成功");
-        }
+        this.setSign({type: "9", accountNo: this.currRow.serviceId});
+        this.modal = false;
+        this.$refs.settlementadv.init();
+        // this.claimedSelectData.forEach(el => {
+        //   let item = {
+        //     account: el.accountCode,
+        //     amt: el.incomeMoney,
+        //     ownStoreId: el.shopId,
+        //     ownStoreName: el.shopName,
+        //     accountName: el.accountName,
+        //   }
+        //   obj.claimAmt += el.paidMoney;
+        //   obj.paymentTypeList.push(item);
+        //   obj.financeAccountCashList.push({id: el.id});
+        // })
+        // let res = await api.addClaim(obj);
+        // if(res.code == 0) {
+        //   this.modal = false;
+        //   return this.$message.success("认领成功");
+        // }
       }else if(this.claimedButtonType == "预付款收回认领") {
         this.setSign({type: "5", accountNo: this.currRow.serviceId});
         this.modal = false;

@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150 mr15" :disabled="$store.state.user.userData.shopkeeper != 0">
+            <Select  v-model="shopCode" filterable class="w150 mr15">
               <Option
                 v-for="item in shopList"
                 :value="item.id"
