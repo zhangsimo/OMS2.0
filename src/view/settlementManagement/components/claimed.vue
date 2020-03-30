@@ -110,7 +110,7 @@ export default {
         },
         {
           title: "智能匹配往来单位",
-          key: "guestName",
+          key: "suppliers",
           align: "center"
         }
       ], //本店待认领款
@@ -135,20 +135,16 @@ export default {
       } else {
         this.currentClaimed = selection;
       }
-      this.setClaimedSelectionList(this.currentClaimed);
-      this.$emit("selection", this.currentClaimed);
       bus.$emit("paymentInfo", selection);
     },
     //本店待认领款页码
     pageChangeAmt(val) {
       this.claimedPage.page = val;
-      this.getList();
     },
     //本店待认领款每页条数
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
-      this.getList();
     }
   },
   watch: {

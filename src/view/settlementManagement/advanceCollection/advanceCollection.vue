@@ -200,7 +200,7 @@
       </button>
       <Button class="ml10" @click="claimPay">认领</Button>
       <claim ref="claim" @selection="selection" />
-      <claimGuest ref="claimGuest" />
+      <!-- <claimGuest ref="claimGuest" /> -->
       <div slot="footer"></div>
     </Modal>
     <Modal v-model="revoke" :title="tit">
@@ -372,7 +372,7 @@ export default {
         this.$message.error("请选择数据");
       }
     },
-    //预收款支出认领弹框
+    //认领弹框
     claimCollect(type) {
       if (type === 1) {
         this.modal = true;
@@ -380,12 +380,12 @@ export default {
       } else {
         if (
           Object.keys(this.currRow).length !== 0 &&
-          this.currRow.expenditureNo&&this.currRow.expenditureClaimAmt
+          this.currRow.expenditureNo&&!this.currRow.expenditureClaimAmt
         ) {
           this.modal1 = true;
           this.claimedList(2);
         } else {
-          this.$message.error("请选择有预收款支出单号的数据");
+          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
         }
       }
     },
@@ -476,6 +476,7 @@ export default {
         if (res.code === 0) {
           this.$refs.claim.claimedData = res.data.content;
           this.$refs.claim.claimedPage.total = res.data.totalElements;
+          console.log(this.$refs.claim.claimedData)
         }
       });
     },
