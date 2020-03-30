@@ -136,6 +136,7 @@ export default {
         this.currentClaimed = selection;
       }
       bus.$emit("paymentInfo", selection);
+      this.$emit('selection',selection)
     },
     //本店待认领款页码
     pageChangeAmt(val) {

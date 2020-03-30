@@ -187,10 +187,10 @@
       <Button class="ml10" v-if="claimTit=='预收款支出认领'" @click="claimPay">认领</Button>
       <Button class="ml10" v-else @click="claimCollection">预收款认领</Button>
       <claim ref="claim" @selection="selection" />
-      <!-- <claimGuest ref="claimGuest" /> -->
+      <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="revoke" :title="revokeTit">
+    <Modal v-model="revoke" :title="revokeTit" @on-visible-change='visChange'>
       <span>撤销原因</span>
       <Input class="w200 ml10" v-model="reason" />
       <div slot="footer">
@@ -265,6 +265,12 @@ export default {
     this.getQuery();
   },
   methods: {
+    //撤回弹框是否打开
+    visChange(type){
+      if(!type){
+        this.reason = ''
+      }
+    },
     // 往来单位选择
     async getOne() {
       findGuest({}).then(res => {
@@ -298,13 +304,13 @@ export default {
     revokeCollection(type) {
       switch (type) {
         case 0:
-          this.tit = "预收款撤回";
+          this.revokeTit = "预收款撤回";
           break;
         case 1:
-          this.tit = "预收款核销撤回";
+          this.revokeTit = "预收款核销撤回";
           break;
         case 2:
-          this.tit = "预收款支出撤回";
+          this.revokeTit = "预收款支出撤回";
           break;
       }
       if (Object.keys(this.currRow).length !== 0) {
@@ -317,9 +323,9 @@ export default {
     revokeDetaim() {
       if (!this.reason) return this.$message.error("撤销原因必填");
       let sign =
-        this.tit.indexOf("核销") != -1
+        this.revokeTit.indexOf("核销") != -1
           ? 2
-          : this.tit.indexOf("支出") != -1
+          : this.revokeTit.indexOf("支出") != -1
           ? 3
           : 1;
       let obj = {
@@ -373,7 +379,7 @@ export default {
         ) {
           this.$refs.settlement.Settlement = true;
           this.paymentId = "YSK";
-          this.modal1 = false;
+          this.claimModal = false;
         } else {
           this.$message.error("金额大于预收款余额，无法认领");
         }
@@ -425,7 +431,7 @@ export default {
     claimCollection() {
       if (this.$refs.claim.currentClaimed.length !== 0) {
         this.$refs.claimGuest.modal = true;
-        this.modal = false;
+        this.claimModal = false;
       } else {
         this.$message.error("请先选择数据");
       }
@@ -438,7 +444,6 @@ export default {
     },
     //预收款认领弹窗查询
     claimedList(type) {
-      // this.$refs.claim.init()
       let obj = {
         amount: this.amt,
         reciprocalAccountName: this.bankNameO,
