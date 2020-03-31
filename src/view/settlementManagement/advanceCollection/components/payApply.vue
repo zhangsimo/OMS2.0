@@ -109,7 +109,7 @@
       </div>
     </Upload>
     <div slot="footer"></div>
-    <seleteNo ref="seleteNo" :orgId='info.orgId'/>
+    <seleteNo ref="seleteNo" :orgId='info.orgId' @bill='bill'/>
   </Modal>
 </template>
 <script>
@@ -263,6 +263,10 @@ export default {
         this.$refs.paymentInfo.resetFields();
       }
     },
+    //传参
+    bill(obj){
+      this.payData.push(obj)
+    },
     //保存/提交
     save(type) {
       let f1 = null;
@@ -287,6 +291,7 @@ export default {
           if(res.code===0){
             this.$message.success('申请成功')
             this.modal=false
+            this.$parent.getQuery()
           }
         });
       }

@@ -16,7 +16,15 @@
       <i class="iconfont iconchaxunicon"></i>
       <span>查询</span>
     </button>
-    <Table class="mt10" border :columns="billColumns" :data="billData" max-height="400"></Table>
+    <Table
+      class="mt10"
+      border
+      :columns="billColumns"
+      :data="billData"
+      max-height="400"
+      highlight-row
+      @on-current-change="currentChange"
+    ></Table>
     <div class="h40">
       <Page
         class-name="fr mb10 mt10"
@@ -30,7 +38,10 @@
         show-total
       ></Page>
     </div>
-    <div slot="footer"></div>
+    <div slot="footer">
+      <Button type="primary" @click="detamin">确认</Button>
+      <Button @click="modal=false">取消</Button>
+    </div>
   </Modal>
 </template>
 <script>
@@ -91,10 +102,24 @@ export default {
         page: 1,
         size: 10,
         total: 0
-      }
+      },
+      currentRow:{},
     };
   },
   methods: {
+    //选中行
+    currentChange(cur){
+      this.currentRow = cur
+    },
+    // 确认
+    detamin() {
+      if(Object.keys(this.currentRow).length!==0){
+        this.$emit('bill',this.currentRow)
+        this.modal=false
+      } else {
+        this.$message.error('请选择数据')
+      }
+    },
     //弹框是否打开
     visChange(type) {
       if (type) {
