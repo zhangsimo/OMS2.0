@@ -100,7 +100,7 @@
       </div>
     </section>
     <Modal v-model="modal1" title="高级查询" @on-ok="ok" @on-cancel="cancel">
-      <Form label-width="120">
+      <Form :label-width="120">
         <FormItem label="对账单号：">
           <Input type="text" class="w200" v-model="accountNo" />
         </FormItem>
@@ -122,6 +122,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
+import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 // import selectDealings from "./components/selectCompany";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -400,7 +401,7 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index === 11) {
+        if (index > 5&&index<9) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -472,32 +473,16 @@ export default {
     },
     // 往来单位选择
     async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      this.company = [];
-      let data = []
-      let result = []
-      let obj = {}
-      if(res.data.length!==0&&res1.data.content.length!==0){
-        data = [...res.data, ...res1.data.content];
-      } else if(res.data.length!==0){
-        data = res.data
-      } else if(res1.data.content.length!==0){
-        data = res.data.content
-      }
-      for(let i in data) {
-        if(!obj[data[i].id]) {
-          result.push(data[i])
-          obj[data[i].id] = 1
+      findGuest({size:2000}).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item=>{
+            this.company.push({
+              value:item.id,
+              label:item.fullName
+            })
+          })
         }
-      }
-      data = result
-      data.map(item=>{
-        this.company.push({
-          label:item.fullName,
-          value:item.id
-        })
-      })
+      });
     },
     // 分店切换
     fendian(val) {

@@ -25,9 +25,8 @@
   </Modal>
 </template>
 <script>
-import { getbayer } from "@/api/AlotManagement/threeSupplier";
-import { getSupplierList } from "_api/purchasing/purchasePlan";
 import settlement from "../../../bill/components/settlement";
+import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 export default {
   components:{settlement},
   data() {
@@ -94,31 +93,15 @@ export default {
   methods: {
     // 往来单位选择
     async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      this.company = [];
-      let data = [];
-      let result = [];
-      let obj = {};
-      if (res.data.length !== 0 && res1.data.content.length !== 0) {
-        data = [...res.data, ...res1.data.content];
-      } else if (res.data.length !== 0) {
-        data = res.data;
-      } else if (res1.data.content.length !== 0) {
-        data = res.data.content;
-      }
-      for (let i in data) {
-        if (!obj[data[i].id]) {
-          result.push(data[i]);
-          obj[data[i].id] = 1;
+      findGuest({size:2000}).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item=>{
+            this.company.push({
+              value:item.id,
+              label:item.fullName
+            })
+          })
         }
-      }
-      data = result;
-      data.map(item => {
-        this.company.push({
-          label: item.fullName,
-          value: item.id
-        });
       });
     },
     //查询
