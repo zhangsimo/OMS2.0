@@ -130,6 +130,7 @@ import accountSelette from "./accountWirte";
 import { wirteAccount,saveAccount } from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
+import moment from 'moment'
 export default {
   components: {
     accountSelette,
@@ -160,7 +161,7 @@ export default {
     //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
-        businessTypeName: val.fullName,
+        businessTypeName: val.titleName,
         reconciliationAmt: 0,
         hasAmt: 0,
         unAmt: 0,
@@ -195,14 +196,17 @@ export default {
     //收付款信息
     bus.$on("paymentInfo", val => {
       val.map(item => {
-        console.log(item);
+        item.createTime = moment(item.createTime).format(
+          "YYYY-MM-DD HH:mm:ss")
         item.orgName = item.shopName;
         item.paidMoney = !item.paidMoney
           ? 0
           : item.paidMoney < 0
           ? item.paidMoney
           : -item.paidMoney;
+          delete item.businessType
       });
+      console.log(val)
       this.tableData = val;
     });
   },

@@ -38,7 +38,7 @@
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">预收款认领</Button>
         <Button class="ml10" @click="collectWirte">预收款核销</Button>
-        <Button class="ml10">预收款支出</Button>
+        <Button class="ml10" @click="collectWPay">预收款支出</Button>
         <Button class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
         <Button class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
         <Button
@@ -167,21 +167,7 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <Modal v-model="modal" title="预收款认领" width="800">
-      <span class="ml10">金额：</span>
-      <InputNumber v-model="amt" class="w50" />
-      <span class="ml10">对方户名：</span>
-      <Input v-model="bankNameO" class="w100" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed(1)">
-        <i class="iconfont iconchaxunicon"></i>
-        <span>查询</span>
-      </button>
-      <Button class="ml10" @click="claimCollection">预收款认领</Button>
-      <claim ref="claim" @selection="selection" />
-      <claimGuest ref="claimGuest" />
-      <div slot="footer"></div>
-    </Modal>
-    <Modal v-model="modal1" title="预收款支出认领" width="800">
+    <Modal v-model="claimModal" :title="claimTit" width="800">
       <span>往来单位：</span>
       <Select v-model="companyId" class="w150" filterable>
         <Option v-for="item in company" :value="item.value" :key="item.value">
@@ -194,16 +180,17 @@
       <InputNumber v-model="amt" class="w50" />
       <span class="ml10">对方户名：</span>
       <Input v-model="bankNameO" class="w100" />
-      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed(2)">
+      <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
         <i class="iconfont iconchaxunicon"></i>
         <span>查询</span>
       </button>
-      <Button class="ml10" @click="claimPay">认领</Button>
+      <Button class="ml10" v-if="claimTit=='预收款支出认领'" @click="claimPay">认领</Button>
+      <Button class="ml10" v-else @click="claimCollection">预收款认领</Button>
       <claim ref="claim" @selection="selection" />
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="revoke" :title="tit">
+    <Modal v-model="revoke" :title="revokeTit" @on-visible-change='visChange'>
       <span>撤销原因</span>
       <Input class="w200 ml10" v-model="reason" />
       <div slot="footer">
@@ -212,6 +199,7 @@
       </div>
     </Modal>
     <settlement ref="settlement" />
+    <payApply ref="payApply" />
   </div>
 </template>
 <script>
@@ -220,7 +208,8 @@ import { getbayer } from "@/api/AlotManagement/threeSupplier";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
 import {
   findAdvance,
-  revoke
+  revoke,
+  findGuest
 } from "_api/settlementManagement/advanceCollection.js";
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import settlement from "../bill/components/settlement";
@@ -228,6 +217,7 @@ import { creat } from "./../components";
 import claim from "../components/claimed";
 import Record from "../components/Record";
 import claimGuest from "./components/claimGuest";
+import payApply from "./components/payApply";
 import moment from "moment";
 export default {
   components: {
@@ -235,17 +225,18 @@ export default {
     claim,
     Record,
     claimGuest,
-    settlement
+    settlement,
+    payApply
   },
   data() {
     return {
-      amt: 0, //金额
+      amt: null, //金额
       bankNameO: "", //对方户名
       revoke: false, //撤销弹框
       reason: "", //撤销原因
-      tit: "", //撤销弹框标题
-      modal: false, //预收款弹框
-      modal1: false, //预收款支出弹框
+      revokeTit: "", //撤销弹框标题
+      claimTit:'',//预收款弹框标题
+      claimModal: false, //预收款弹框
       value: [], //日期
       company: [], //往来单位
       companyId: "", //往来单位
@@ -274,33 +265,23 @@ export default {
     this.getQuery();
   },
   methods: {
+    //撤回弹框是否打开
+    visChange(type){
+      if(!type){
+        this.reason = ''
+      }
+    },
     // 往来单位选择
     async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      this.company = [];
-      let data = [];
-      let result = [];
-      let obj = {};
-      if (res.data.length !== 0 && res1.data.content.length !== 0) {
-        data = [...res.data, ...res1.data.content];
-      } else if (res.data.length !== 0) {
-        data = res.data;
-      } else if (res1.data.content.length !== 0) {
-        data = res.data.content;
-      }
-      for (let i in data) {
-        if (!obj[data[i].id]) {
-          result.push(data[i]);
-          obj[data[i].id] = 1;
+      findGuest({}).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
+            });
+          });
         }
-      }
-      data = result;
-      data.map(item => {
-        this.company.push({
-          label: item.fullName,
-          value: item.id
-        });
       });
     },
     // 快速查询
@@ -323,13 +304,13 @@ export default {
     revokeCollection(type) {
       switch (type) {
         case 0:
-          this.tit = "预收款撤回";
+          this.revokeTit = "预收款撤回";
           break;
         case 1:
-          this.tit = "预收款核销撤回";
+          this.revokeTit = "预收款核销撤回";
           break;
         case 2:
-          this.tit = "预收款支出撤回";
+          this.revokeTit = "预收款支出撤回";
           break;
       }
       if (Object.keys(this.currRow).length !== 0) {
@@ -342,9 +323,9 @@ export default {
     revokeDetaim() {
       if (!this.reason) return this.$message.error("撤销原因必填");
       let sign =
-        this.tit.indexOf("核销") != -1
+        this.revokeTit.indexOf("核销") != -1
           ? 2
-          : this.tit.indexOf("支出") != -1
+          : this.revokeTit.indexOf("支出") != -1
           ? 3
           : 1;
       let obj = {
@@ -356,7 +337,7 @@ export default {
         if (res.code === 0) {
           this.$message.success("撤回成功");
           this.revoke = false;
-          this.getQuery()
+          this.getQuery();
         }
       });
     },
@@ -369,20 +350,23 @@ export default {
         this.$message.error("请选择数据");
       }
     },
-    //预收款支出认领弹框
+    //认领弹框
     claimCollect(type) {
       if (type === 1) {
-        this.modal = true;
+        this.claimModal=true
+        this.claimTit='预收款认领'
         this.claimedList(1);
       } else {
+        this.claimTit='预收款支出认领'
         if (
           Object.keys(this.currRow).length !== 0 &&
-          this.currRow.expenditureNo
+          this.currRow.expenditureNo &&
+          !this.currRow.expenditureClaimAmt
         ) {
-          this.modal1 = true;
+          this.claimModal=true
           this.claimedList(2);
         } else {
-          this.$message.error("请选择有预收款支出单号的数据");
+          this.$message.error("请选择有预收款支出单号且未支出认领的数据");
         }
       }
     },
@@ -390,11 +374,12 @@ export default {
     claimPay() {
       if (this.$refs.claim.currentClaimed.length === 1) {
         if (
-          Math.abs(this.$refs.claim.currentClaimed[0].paidMoney) <
+          Math.abs(this.$refs.claim.currentClaimed[0].paidMoney) <=
           this.currRow.remainingAmt
         ) {
           this.$refs.settlement.Settlement = true;
           this.paymentId = "YSK";
+          this.claimModal = false;
         } else {
           this.$message.error("金额大于预收款余额，无法认领");
         }
@@ -427,18 +412,26 @@ export default {
       this.currRow = {};
     },
     // 预收款认领查询
-    queryClaimed(type) {
-      if (type === 1) {
+    queryClaimed() {
+      if(this.claimTit==='预收款认领'){
         this.claimedList(1);
       } else {
         this.claimedList(2);
+      }
+    },
+    //预收款支出
+    collectWPay() {
+      if (Object.keys(this.currRow).length !== 0) {
+        this.$refs.payApply.modal = true;
+      } else {
+        this.$message.error("请先选择数据");
       }
     },
     //预收款认领
     claimCollection() {
       if (this.$refs.claim.currentClaimed.length !== 0) {
         this.$refs.claimGuest.modal = true;
-        this.modal = false;
+        this.claimModal = false;
       } else {
         this.$message.error("请先选择数据");
       }
@@ -451,7 +444,6 @@ export default {
     },
     //预收款认领弹窗查询
     claimedList(type) {
-      // this.$refs.claim.init()
       let obj = {
         amount: this.amt,
         reciprocalAccountName: this.bankNameO,
