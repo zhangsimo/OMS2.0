@@ -249,45 +249,6 @@
         </div>
       </div>
     </section>
-    <!-- <Modal v-model="modal1" title="高级查询" @on-ok="senior">
-      <div class="db pro mt20">
-        <span>转单日期：</span>
-        <Date-picker
-          :value="value"
-          format="yyyy-MM-dd"
-          type="daterange"
-          placeholder="选择日期"
-          class="w200"
-          @on-change="changedate"
-        ></Date-picker>
-      </div>
-      <div class="db pro mt20">
-        <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px">
-          <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>客户名称：</span>
-        <input type="text" class="w200" v-model="nametext" />
-      </div>
-      <div class="db pro mt20">
-        <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px">
-          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px">
-          <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>业务单号：</span>
-        <input type="text" class="w200" v-model="text" />
-      </div>
-    </Modal>-->
     <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
       <div class="db">
         <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
@@ -488,14 +449,6 @@ export default {
         {
           value: "",
           label: "全部"
-        },
-        {
-          value: "CG",
-          label: "草稿"
-        },
-        {
-          value: "SHZ",
-          label: "审核中"
         },
         {
           value: "SHTG",
@@ -1244,24 +1197,7 @@ export default {
       this.falg = false;
       this.getAccountStatement(obj);
     },
-    // 更多查询
-    // senior() {
-    //   let obj = {
-    //     startDate: this.value[0]
-    //       ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-    //       : "",
-    //     endDate: this.value[1]
-    //       ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-    //       : "",
-    //     orgId: this.model1,
-    //     statementStatus: this.Reconciliationtype,
-    //     guestType: this.model2,
-    //     guestName: this.nametext,
-    //     serviceType: this.model3,
-    //     serviceId: this.text
-    //   };
-    //   this.getAccountStatement(obj);
-    // },
+   
     // 点击总表查询明细
     morevis(row, index) {
       this.reconciliationStatement = row;

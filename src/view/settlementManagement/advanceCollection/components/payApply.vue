@@ -39,7 +39,7 @@
       </FormItem>
     </Form>
     <h5 class="mt10 mb10">预付款单据</h5>
-    <Button>选择单据</Button>
+    <Button @click="seleteBill">选择单据</Button>
     <Table class="mt10" border :columns="payColumns" :data="payData">
       <template slot-scope="{ row, index }" slot="action">
         <Button size="small" @click="remove(index)">删除</Button>
@@ -109,6 +109,7 @@
       </div>
     </Upload>
     <div slot="footer"></div>
+    <seleteNo ref="seleteNo" :orgId='info.orgId'/>
   </Modal>
 </template>
 <script>
@@ -117,10 +118,12 @@ import {
   findCollectionInfo,
   savePay
 } from "_api/settlementManagement/advanceCollection.js";
+import seleteNo from './seleteNo'
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import * as api from "_api/lease/customerSM";
 export default {
+  components:{seleteNo},
   data() {
     return {
       modal: false,
@@ -254,6 +257,7 @@ export default {
           }
         );
       } else {
+        this.payData=[]
         this.$refs.baseInfo.resetFields();
         this.$refs.collectInfo.resetFields();
         this.$refs.paymentInfo.resetFields();
@@ -285,6 +289,14 @@ export default {
             this.modal=false
           }
         });
+      }
+    },
+    //选择单据
+    seleteBill(){
+      if(this.payData.length===0){
+        this.$refs.seleteNo.modal=true
+      } else {
+        this.$message.error('请先删除表格数据')
       }
     },
     //删除数据
