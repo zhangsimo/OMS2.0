@@ -206,7 +206,6 @@ export default {
           : -item.paidMoney;
           delete item.businessType
       });
-      console.log(val)
       this.tableData = val;
     });
   },

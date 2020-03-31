@@ -6,7 +6,8 @@
       :columns="claimed"
       :data="claimedData"
       max-height="400"
-      @on-selection-change="claimedSelection"
+      highlight-row
+      @on-current-change="claimedSelection"
     ></Table>
     <Page
       show-sizer
@@ -25,7 +26,7 @@
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
 import { mapGetters,mapMutations } from "vuex";
-import bus from '../bill/Popup/Bus'
+import bus from '../../bill/Popup/Bus'
 export default {
   data() {
     return {
@@ -34,14 +35,7 @@ export default {
         total: 0,
         size: 10
       }, //本店待认领款分页
-      currentClaimed: [], //本店待认领款选中的数据
       claimed: [
-        {
-          title: "选择",
-          type: "selection",
-          align: "center",
-          width: 40
-        },
         {
           title: "序号",
           type: "index",
@@ -114,28 +108,15 @@ export default {
           align: "center"
         }
       ], //本店待认领款
-      claimedData: [] //本店待认领款
+      claimedData: [] ,//本店待认领款
+      currentClaimed:{}
     };
   },
   methods: {
     //本店待认领款选中的数据
     claimedSelection(selection) {
-      if (selection.length !== 1 && selection.length) {
-        let s = 0;
-        let n = 0;
-        selection.map(item => {
-          if (item.incomeMoney) s++;
-          if (item.paidMoney) n++;
-        });
-        if (!s && n||s&&!n) {
-          this.currentClaimed = selection;
-        } else {
-          this.$message.error("不能同时选中收入和支出");
-        }
-      } else {
-        this.currentClaimed = selection;
-      }
-      bus.$emit("paymentInfo", selection);
+      this.currentClaimed = selection
+      bus.$emit("paymentInfo", [selection]);
       this.$emit('selection',selection)
     },
     //本店待认领款页码

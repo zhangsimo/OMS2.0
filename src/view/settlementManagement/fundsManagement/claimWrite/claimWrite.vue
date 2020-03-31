@@ -37,7 +37,7 @@
           <div slot="left">
             <h4 class="mb10 p5 pl10" style="background:#F2F2F2">未核销对账单</h4>
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w100" filterable>
+            <Select v-model="companyIdNo" class="w100" filterable>
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
             <span class="ml10">收付类型：</span>
@@ -81,7 +81,7 @@
               <div slot="top">
                 <h4 class="mb10 p5 pl10" style="background:#F2F2F2">本店待认领款</h4>
                 <span class="ml10">往来单位：</span>
-                <Select v-model="companyId" class="w150" filterable>
+                <Select v-model="companyIdClaim" class="w150" filterable>
                   <Option
                     v-for="item in company"
                     :value="item.value"
@@ -199,7 +199,8 @@ export default {
       split1: 0.4, //左右面板分割
       split2: 0.52, //上下面板分割
       orgName: "", //门店
-      companyId: "", //往来单位
+      companyIdNo: "", //未核销往来单位
+      companyIdClaim: "", //待认领往来单位
       company: [], //往来单位下拉框
       orgId: "", //门店
       orgList: [], //门店
@@ -498,7 +499,7 @@ export default {
     noWrite() {
       let obj = {
         amount: this.amtNo,
-        guestId: this.companyId,
+        guestId: this.companyIdNo,
         receivePaymentType: this.paymentId,
         page: this.accountPage.page - 1,
         size: this.accountPage.size
@@ -514,7 +515,7 @@ export default {
     claimedList() {
       let obj = {
         amount: this.amtClaim,
-        suppliers: this.companyId,
+        suppliers: this.companyIdClaim,
         reciprocalAccountName: this.bankNameOClaim,
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size
@@ -558,36 +559,26 @@ export default {
     //未核销对账单页码改变
     pageChangeNo(val) {
       this.accountPage.page = val;
+      this.noWrite()
     },
     //未核销对账单每页条数改变
     sizeChangeNo(val) {
+      this.accountPage.page =1
       this.accountPage.size = val;
+      this.noWrite()
     },
     // 连锁待分配款项页码
     pageChange(val) {
       this.distributionPage.page = val;
+      this.distributionList()
     },
     // 连锁待分配款项每页条数
     sizeChange(val) {
+      this.distributionPage.page =1
       this.distributionPage.size = val;
+      this.distributionList()
     }
-  },
-  // watch: {
-  //   currentClaimed: {
-  //     handler(val, od) {
-  //       if (val !== od) {
-  //         this.claimedAmt = 0;
-  //         val.map(item => {
-  //           this.claimedAmt += item.index * 1;
-  //         });
-  //         this.difference = this.currentAccount.actualCollectionOrPayment
-  //           ? this.currentAccount.actualCollectionOrPayment - this.claimedAmt
-  //           : 0 - this.claimedAmt;
-  //       }
-  //     },
-  //     deep: true
-  //   }
-  // }
+  }
 };
 </script>
 <style>
