@@ -155,7 +155,7 @@ export default {
   methods: {
     // 往来单位下拉框
     async getOne() {
-      findGuest({}).then(res => {
+      findGuest({size:2000}).then(res => {
         if (res.code === 0) {
           res.data.content.map(item=>{
             this.company.push({

@@ -328,19 +328,6 @@ export default [
                 "@/view/AlotManagement/transferringOrder/putStorage/putStorage.vue"
               )
           },
-          {
-            path: "/AlotManagement/transferringOrder/productDistribution",
-            name: "productDistribution",
-            mark: "3105",
-            meta: {
-              // hideInMenu: true,
-              title: "紧俏品分配"
-            },
-            component: () =>
-              import(
-                "@/view/AlotManagement/transferringOrder/productDistribution/index.vue"
-              )
-          }
         ]
       },
       {
@@ -1575,6 +1562,19 @@ export default [
               import(
                 "@/view/system/essentialData/commoditiesInShortSupply/commoditiesInShortSupply.vue"
               )
+          },
+          {
+            path: "/AlotManagement/transferringOrder/productDistribution",
+            name: "productDistribution",
+            mark: "3105",
+            meta: {
+              // hideInMenu: true,
+              title: "紧俏品分配"
+            },
+            component: () =>
+              import(
+                "@/view/AlotManagement/transferringOrder/productDistribution/index.vue"
+                )
           },
           {
             path: "priceManage",
