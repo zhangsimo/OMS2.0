@@ -5,6 +5,7 @@
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
+      <h4 class="mb10">基本信息</h4>
       <Row>
         <Col span="8">
           <span>门店：</span>

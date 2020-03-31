@@ -8,12 +8,12 @@
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
-            <span>对账期间：</span>
+            <span>查询日期：</span>
             <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150">
+            <Select v-model="BranchstoreId" class="w150" filterable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"

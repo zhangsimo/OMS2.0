@@ -636,6 +636,7 @@ export default {
     getTabList() {
       getSalesList(this.form).then(res => {
         if (res.code === 0) {
+          console.log(res.data)
           this.data = res.data.content;
           this.pagetotal = res.data.totalElements;
         }
