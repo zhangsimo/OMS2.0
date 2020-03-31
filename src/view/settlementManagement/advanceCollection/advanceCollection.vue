@@ -171,7 +171,7 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <Modal v-model="claimModal" :title="claimTit" width="800">
+    <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select v-model="companyId" class="w150" filterable>
         <Option v-for="item in company" :value="item.value" :key="item.value">
@@ -273,6 +273,15 @@ export default {
     visChange(type) {
       if (!type) {
         this.reason = "";
+      }
+    },
+    //预收款弹框是否打开
+    visChangeClaim(type) {
+      if (!type) {
+        this.companyId = "";
+        this.amt =null;
+        this.bankNameOthis = "";
+        this.claimSelection=[]
       }
     },
     // 往来单位选择
@@ -429,7 +438,7 @@ export default {
     },
     //预收款认领
     claimCollection() {
-      if (this.$refs.claim.currentClaimed.length !== 0) {
+      if (this.claimSelection.length !== 0) {
         this.$refs.claimGuest.modal = true;
         this.claimModal = false;
       } else {
@@ -438,6 +447,7 @@ export default {
     },
     //传参数据
     selection(arr) {
+      this.claimSelection=[]
       this.claimSelection.push({ id: arr.id });
     },
     //预收款认领弹窗查询
