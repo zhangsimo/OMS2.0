@@ -111,6 +111,7 @@ export default {
     async getOne() {
       findGuest({size:2000}).then(res => {
         if (res.code === 0) {
+          this.company=[]
           res.data.content.map(item=>{
             this.company.push({
               value:item.id,
