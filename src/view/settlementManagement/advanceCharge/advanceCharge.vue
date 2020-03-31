@@ -565,7 +565,7 @@ export default {
       this.getQuery();
     },
     openModal(name) {
-      if (name == '预付款认领' && this.currRow.paymentNo != ''){
+      if (name == '预付款认领' && this.currRow.paymentNo == ''){
         return this.$Message.error('预付款付款已认领')
       }
       this.claimedButtonType = name;
