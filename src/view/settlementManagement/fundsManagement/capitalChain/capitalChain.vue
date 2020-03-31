@@ -476,18 +476,28 @@
       },
 
       //智能匹配
-      async intellect(){
-       let res = await ait()
-        if (res.code ===0) {
-          this.$Modal.success({
-            title: '提示',
-            content: res.data
-          })
-          this.getList()
-        }
-      },
+       intellect(){
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>是否执行智能匹配</p>',
+          onOk: async () => {
+            let res = await ait()
+            if (res.code ===0) {
+                this.$XModal.alert({
+                  title: '提示',
+                  message: res.data,
+                  status: 'success',
+                })
+                this.getList()
+            }
+          },
+          onCancel: () => {
+          }
+        })
 
-      //只能匹配
+
+
+      },
 
       //人工匹配
       artificialChange(){
@@ -497,16 +507,23 @@
       },
 
       //撤销分配
-      async revocation(){
+       revocation(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
         if(!this.oneList.allocation) return this.$Message.error('数据已分配')
-        let data = {}
-        data.id = this.oneList.id
-        let res = await revocation([this.oneList.id])
-        if (res.code === 0){
-          this.$Message.success('撤销分配成功')
-          this.getList()
-        }
+        this.$Modal.confirm({
+          title: '提示',
+          content: '<p>是否撤回分配</p>',
+          onOk:async () =>{
+            let data = {}
+            data.id = this.oneList.id
+            let res = await revocation([this.oneList.id])
+            if (res.code === 0){
+              this.$Message.success('撤销分配成功')
+              this.getList()
+            }
+          }
+        })
+
 
       },
 
