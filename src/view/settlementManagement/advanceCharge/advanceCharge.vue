@@ -422,11 +422,11 @@ export default {
       let obj = {}
       if (this.value[0] instanceof Date) {
         obj = {
-           startTime: this.value[0]
+           startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endTime: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        endDate: this.value[1]
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         }
       }
