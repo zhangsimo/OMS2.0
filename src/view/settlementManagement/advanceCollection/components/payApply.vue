@@ -92,7 +92,12 @@
       </div>
     </Form>
     <h5 class="mt10 mb10">凭证图片</h5>
-    <div class="tc" style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 " v-for="(item,index) in uploadList" :key="index">
+    <div
+      class="tc"
+      style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
+      v-for="(item,index) in uploadList"
+      :key="index"
+    >
       <img :src="item.url" />
     </div>
     <Upload
@@ -109,7 +114,7 @@
       </div>
     </Upload>
     <div slot="footer"></div>
-    <seleteNo ref="seleteNo" :orgId='info.orgId' @bill='bill'/>
+    <seleteNo ref="seleteNo" :orgId="info.orgId" @bill="bill" />
   </Modal>
 </template>
 <script>
@@ -118,12 +123,12 @@ import {
   findCollectionInfo,
   savePay
 } from "_api/settlementManagement/advanceCollection.js";
-import seleteNo from './seleteNo'
+import seleteNo from "./seleteNo";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import * as api from "_api/lease/customerSM";
 export default {
-  components:{seleteNo},
+  components: { seleteNo },
   data() {
     return {
       modal: false,
@@ -231,10 +236,10 @@ export default {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //获取token
       getfile: api.getfile,
-      uploadList:[]
+      uploadList: []
     };
   },
-  mounted(){
+  mounted() {
     this.uploadList = this.$refs.upload.fileList;
   },
   methods: {
@@ -247,25 +252,17 @@ export default {
             this.info = res.data;
           }
         });
-        //预收款单据和往来单位信息
-        findCollectionInfo({ serviceId: this.$parent.currRow.serviceId }).then(
-          res => {
-            if (res.code === 0) {
-              this.payData.push(res.data.one);
-              this.payInfo = res.data.two;
-            }
-          }
-        );
+        this.find(this.$parent.currRow.serviceId)
       } else {
-        this.payData=[]
+        this.payData = [];
         this.$refs.baseInfo.resetFields();
         this.$refs.collectInfo.resetFields();
         this.$refs.paymentInfo.resetFields();
       }
     },
     //传参
-    bill(obj){
-      this.payData.push(obj)
+    bill(obj) {
+      this.find(obj.serviceId)
     },
     //保存/提交
     save(type) {
@@ -283,30 +280,42 @@ export default {
           applyAmt: this.baseInfo.amt,
           imageList: this.uploadList,
           status: type,
-          receiveAccountName:this.payInfo.accountName,
-          serviceId:this.payData[0].serviceId,
-          paymentAccountName:this.info.paymentAccountNo
+          receiveAccountName: this.payInfo.accountName,
+          serviceId: this.payData[0].serviceId,
+          paymentAccountName: this.info.paymentAccountNo
         };
         savePay(obj).then(res => {
-          if(res.code===0){
-            this.$message.success('申请成功')
-            this.modal=false
-            this.$parent.getQuery()
+          if (res.code === 0) {
+            this.$message.success("申请成功");
+            this.modal = false;
+            this.$parent.getQuery();
           }
         });
       }
     },
     //选择单据
-    seleteBill(){
-      if(this.payData.length===0){
-        this.$refs.seleteNo.modal=true
+    seleteBill() {
+      if (this.payData.length === 0) {
+        this.$refs.seleteNo.modal = true;
       } else {
-        this.$message.error('请先删除表格数据')
+        this.$message.error("请先删除表格数据");
       }
     },
     //删除数据
     remove(ind) {
       this.payData.splice(ind, 1);
+      this.payInfo = {};
+    },
+    find(serviceId) {
+      //预收款单据和往来单位信息
+      findCollectionInfo({ serviceId }).then(
+        res => {
+          if (res.code === 0) {
+            this.payData.push(res.data.one);
+            this.payInfo = res.data.two;
+          }
+        }
+      );
     },
     //上传前
     handleBeforeUpload() {
