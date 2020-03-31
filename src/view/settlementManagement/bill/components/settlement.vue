@@ -7,33 +7,33 @@
     <div class="db p15 mt10 mb10">
       <h4 class="mb10">基本信息</h4>
       <Row>
-        <Col span="8">
-          <span>门店：</span>
-          <Input class="w200" v-model="reconciliationStatement.orgName" />
-        </Col>
-        <Col span="8">
-          <span>往来单位：</span>
-          <Input class="w200" v-model="reconciliationStatement.guestName" />
-        </Col>
-        <Col span="8">
-          <span>收付类型：</span>
-          <Input class="w200" v-model="reconciliationStatement.sortName" />
-        </Col>
+        <Col span='2' class='tr'><span>门店：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.orgName" readonly/></Col>
+        <Col span='2' class='tr'><span>往来单位：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.guestName" readonly/></Col>
+        <Col span='2' class='tr'><span>收付类型：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.sortName" readonly/></Col>
       </Row>
       <Row class="mt10">
-        <Col span="8">
-          <span>对账单号：</span>
-          <Input class="w200" v-model="reconciliationStatement.accountNo" />
+        <Col span='2' class='tr'><span>对账单号：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.accountNo" readonly/></Col>
+        <Col span='2' class='tr'><span>收付款单号：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.serviceId" readonly/></Col>
+        <Col span='2' class='tr'><span>核销方式：</span></Col>
+        <Col span='6'><Input class="w200" v-model="reconciliationStatement.furposeName" readonly/></Col>
+        <!-- <Col span="8">
+          <span></span>
+          <Input class="w200" v-model="reconciliationStatement.accountNo" readonly/>
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
-          <span>收付款单号：</span>
-          <Input class="w200" v-model="reconciliationStatement.serviceId" />
+          <span></span>
+          <Input class="w200" v-model="reconciliationStatement.serviceId" readonly/>
         </Col>
         <Col span="8">
-          <span>核销方式：</span>
-          <Input class="w200" v-model="reconciliationStatement.furposeName" />
-        </Col>
+          <span></span>
+          <Input class="w200" v-model="reconciliationStatement.furposeName" readonly />
+        </Col> -->
       </Row>
     </div>
     <Button @click="subject">选择添加科目</Button>
