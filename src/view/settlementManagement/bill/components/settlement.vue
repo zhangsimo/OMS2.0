@@ -11,19 +11,19 @@
           <span>门店：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.orgName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.orgName" readonly />
         </Col>
         <Col span="2" class="tr">
           <span>往来单位：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.guestName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.guestName" readonly />
         </Col>
         <Col span="2" class="tr">
           <span>收付类型：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.sortName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.sortName" readonly />
         </Col>
       </Row>
       <Row class="mt10">
@@ -31,20 +31,20 @@
           <span>对账单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.accountNo" readonly />
+          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.serviceId" readonly />
+          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly />
         </Col>
         <Col span="2" class="tr">
           <span>核销方式：</span>
         </Col>
         <Col span="6">
-          <Input class="w200" v-model="reconciliationStatement.furposeName" readonly />
+          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly />
         </Col>
       </Row>
     </div>
