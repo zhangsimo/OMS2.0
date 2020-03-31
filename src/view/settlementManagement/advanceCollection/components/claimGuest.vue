@@ -37,6 +37,7 @@
 </template>
 <script>
 import { findGuest,addClaim } from "_api/settlementManagement/advanceCollection.js";
+import bus from '../../bill/Popup/Bus'
 export default {
   data() {
     return {
@@ -68,10 +69,17 @@ export default {
         size: 10
       },
       guestId:'',//选中往来单位的id
+      financeAccountCashList:[]
     };
   },
   mounted() {
     this.getOne();
+    bus.$on("paymentInfo",val=>{
+      this.financeAccountCashList=[]
+      val.map(item=>{
+        this.financeAccountCashList.push({id:item.id})
+      })
+    })
   },
   methods: {
     //弹框是否打开
@@ -79,7 +87,7 @@ export default {
       if(!type){
         this.guestId = ''
         this.company = ''
-        this.$refs.table.clearCurrentRow()
+        // this.$refs.table.clearCurrentRow()
       }
     },
     // 往来单位选择
@@ -105,7 +113,7 @@ export default {
       if(this.guestId){
         let obj ={
           guestId:this.guestId,
-          financeAccountCashList:this.$parent.$parent.claimSelection
+          financeAccountCashList:this.financeAccountCashList
         }
         addClaim(obj).then(res=>{
           if(res.code===0){
