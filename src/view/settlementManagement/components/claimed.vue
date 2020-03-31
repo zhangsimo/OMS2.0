@@ -110,26 +110,14 @@ export default {
         },
         {
           title: "智能匹配往来单位",
-          key: "guestName",
+          key: "suppliers",
           align: "center"
         }
       ], //本店待认领款
       claimedData: [] //本店待认领款
     };
   },
-  computed: {
-    ...mapGetters(["getClaimedSearch"]),
-  },
   methods: {
-    ...mapMutations(["setClaimedSelectionList"]),
-    init() {
-      this.claimedPage = {
-        page: 1,
-        total: 0,
-        size: 10
-      }
-      this.getList();
-    },
     //本店待认领款选中的数据
     claimedSelection(selection) {
       if (selection.length !== 1 && selection.length) {
@@ -147,34 +135,17 @@ export default {
       } else {
         this.currentClaimed = selection;
       }
-      this.setClaimedSelectionList(this.currentClaimed);
-      this.$emit("selection", this.currentClaimed);
       bus.$emit("paymentInfo", selection);
-    },
-    // 获取数据
-    async getList() {
-      let body = {
-        size: this.claimedPage.size,
-        page: this.claimedPage.page - 1,
-        ...this.getClaimedSearch,
-      }
-      let res = await api.findPageToBeClaimedFund(body);
-      if (res.code == 0) {
-        this.currentClaimed = [];
-        this.claimedData = res.data.content;
-        this.claimedPage.total = res.data.totalElements;
-      }
+      this.$emit('selection',selection)
     },
     //本店待认领款页码
     pageChangeAmt(val) {
       this.claimedPage.page = val;
-      this.getList();
     },
     //本店待认领款每页条数
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
-      this.getList();
     }
   },
   watch: {

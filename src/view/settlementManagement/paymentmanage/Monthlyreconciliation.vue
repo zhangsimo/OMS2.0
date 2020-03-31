@@ -75,6 +75,7 @@
                 <Input v-model="openingBank" class="w140 mr10" readonly />
                 <span>收款账号：</span>
                 <Input v-model="collectionAccount" class="w140 mr10" readonly />
+                <span style="color:red">*</span>
                 <span>本次申请付款账户：</span>
                 <Input v-model="thisApplyAccount" class="w140 mr10" />
               </div>
@@ -129,7 +130,7 @@
                 <InputNumber :min="0" v-model="otherFees" class="w60 tc" />
               </div>
               <div class="db mt10 mb10">
-                <span class="mr5">应付合计</span>
+                <span class="mr5">对账应付</span>
                 <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
                 <span class="mr5 ml10">应付坏账</span>
                 <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc" :min="0" />
@@ -155,7 +156,8 @@
                 <Input type="text" v-model="Rebateid" class="w60 tc" />
                 <span class="mr5 ml10">应收坏账请示单号</span>
                 <Input type="text" v-model="BadDebtid" class="w60 tc" />
-                <span class="mr5 ml10">备注</span>
+                <span class="ml10" style="color:red">*</span>
+                <span class="mr5">备注</span>
                 <Input type="text" v-model="remark" class="w260 tc" />
               </div>
             </div>
@@ -245,13 +247,27 @@ export default {
   data() {
     const roleValid = (rule, value, callback, { row }) => {
       if (value >= 0) {
-        if (value > row.amount - row.accountAmt) {
-          callback(
-            new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
-          );
-        } else {
-          callback();
+        //如果金额是负数，说明是退货活
+        if(row.amount<0){
+          console.log(parseFloat(value) + parseFloat((row.amount + row.accountAmt)))
+          if(parseFloat(value) + parseFloat((row.amount + row.accountAmt))>0){
+            callback(
+              new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+            );
+            return
+          }else{
+            callback();
+          }
+        }else{
+          if (value > row.amount - row.accountAmt) {
+            callback(
+              new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
+            );
+          } else {
+            callback();
+          }
         }
+
       } else {
         callback(new Error("不能小于0"));
       }
@@ -411,6 +427,7 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
+                    console.log(params.row)
                     const store = this.Branchstore.filter(
                       item => item.value === this.model1
                     );
@@ -514,6 +531,7 @@ export default {
               },
               on: {
                 "on-change": event => {
+                  console.log(1)
                   if (event > params.row.amount - params.row.accountAmt)
                     return this.$message.error(
                       "配件的本次不对账金额不能大于金额减前期已对账金额"
@@ -641,11 +659,19 @@ export default {
       xTable.updateFooter();
     },
     countAmount(row) {
-      return (
-        this.$utils.toNumber(row.amount) -
-        this.$utils.toNumber(row.accountAmt) -
-        this.$utils.toNumber(row.thisNoAccountAmt)
-      );
+      if(row.amount>0){
+        return (
+          this.$utils.toNumber(row.amount) -
+          this.$utils.toNumber(row.accountAmt) -
+          this.$utils.toNumber(row.thisNoAccountAmt)
+        );
+      }else{
+        return (
+          this.$utils.toNumber(row.amount) +
+          this.$utils.toNumber(row.accountAmt) +
+          this.$utils.toNumber(row.thisNoAccountAmt)
+        );
+      }
     },
     // 计算尾部总和
     countAllAmount(data) {
@@ -933,22 +959,43 @@ export default {
           });
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
-            const sum1 =
-              this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
-            console.log(sum,this.data1[index].rpAmt,this.data1[index].accountAmt)
-            if (sum > this.data1[index].accountAmt-this.data1[index].rpAmt)
-              return this.$message.error(
-                "本次不对账合计不能大于总金额减去前期已对账"
-              );
+            //金额为负数是退货
+            let sum1 = 0
+            if(this.data1[index].rpAmt>=0){
+
+              sum1 = this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
+
+              if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }else{
+
+              sum1 = this.data1[index].rpAmt + this.data1[index].accountAmt + sum;
+
+              if ((sum + (this.data1[index].rpAmt + this.data1[index].accountAmt))>0)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }
             this.$set(this.data1[index], "thisNoAccountAmt", sum);
             this.$set(this.data1[index], "thisAccountAmt", sum1);
           } else {
             const sum1 =
               this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
-            if (sum > this.data2[index].accountAmt- this.data2[index].rpAmt)
-              return this.$message.error(
-                "本次不对账合计不能大于总金额减去前期已对账"
-              );
+
+
+            if(this.data2[index].rpAmt>=0){
+              if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }else{
+              if ((sum + (this.data2[index].rpAmt + this.data2[index].accountAmt))>0)
+                return this.$message.error(
+                  "本次不对账合计不能大于总金额减去前期已对账"
+                );
+            }
             this.$set(this.data2[index], "thisNoAccountAmt", sum);
             this.$set(this.data2[index], "thisAccountAmt", sum1);
           }

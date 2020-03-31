@@ -91,3 +91,13 @@ export function ait(data){
     data
   });
 }
+
+
+//判断是否是管理员
+export function isAdmin(data){
+  return axios.request({
+    url: `${api.authApi}/staff/findUserShopKeeper`,
+    method: 'post',
+    data
+  });
+}

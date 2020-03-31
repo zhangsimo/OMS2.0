@@ -49,7 +49,7 @@
               >{{ item.label }}</Option>
             </Select>
             <span class="ml10">金额：</span>
-            <InputNumber v-model="amt" class="w50" />
+            <InputNumber v-model="amtNo" class="w50" />
             <button class="ivu-btn ivu-btn-default ml10 mt10" type="button" @click="queryNoWrite">
               <i class="iconfont iconchaxunicon"></i>
               <span>查询</span>
@@ -89,9 +89,9 @@
                   >{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
-                <InputNumber v-model="amt" class="w50" />
+                <InputNumber v-model="amtClaim" class="w50" />
                 <span class="ml10">对方户名：</span>
-                <Input v-model="bankNameO" class="w100" />
+                <Input v-model="bankNameOClaim" class="w100" />
                 <button class="ivu-btn ivu-btn-default ml10" type="button" @click="queryClaimed">
                   <i class="iconfont iconchaxunicon"></i>
                   <span>查询</span>
@@ -123,9 +123,9 @@
                   >{{ item.label }}</Option>
                 </Select>
                 <span class="ml10">金额：</span>
-                <InputNumber v-model="amt" class="w50" />
+                <InputNumber v-model="amtDis" class="w50" />
                 <span class="ml10">对方户名：</span>
-                <Input v-model="bankNameO" class="w100" />
+                <Input v-model="bankNameODis" class="w100" />
                 <button
                   class="ivu-btn ivu-btn-default ml10"
                   type="button"
@@ -188,6 +188,7 @@ import {
   distributionRevoke
 } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
+import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
 export default {
@@ -204,10 +205,13 @@ export default {
       orgList: [], //门店
       areaId:0,//区域
       areaList:[{value:0 ,label:'全部'}],//区域
-      bankNameO: "", //对方户名
+      bankNameOClaim: "", //对方户名
+      bankNameODis: "", //对方户名
       paymentId: "YJDZ", //收付类型
       paymentList: [], //收付类型下拉框
-      amt: 0, //金额
+      amtNo: null, //金额
+      amtClaim: null, //金额
+      amtDis: null, //金额
       accountPage: {
         page: 1,
         total: 0,
@@ -339,8 +343,8 @@ export default {
         size: 10
       }, //连锁待分配款项分页
       currentDistribution: [], //本店待认领款选中的数据
-      claimedAmt: 0, //认领款勾选金额
-      difference: 0, //差异
+      claimedAmt: null, //认领款勾选金额
+      difference: null, //差异
     };
   },
   async mounted() {
@@ -377,31 +381,15 @@ export default {
   methods: {
     // 往来单位选择
     async getOne() {
-      const res = await getSupplierList({});
-      const res1 = await getbayer({});
-      this.company = [];
-      let data = [];
-      let result = [];
-      let obj = {};
-      if (res.data.length !== 0 && res1.data.content.length !== 0) {
-        data = [...res.data, ...res1.data.content];
-      } else if (res.data.length !== 0) {
-        data = res.data;
-      } else if (res1.data.content.length !== 0) {
-        data = res.data.content;
-      }
-      for (let i in data) {
-        if (!obj[data[i].id]) {
-          result.push(data[i]);
-          obj[data[i].id] = 1;
+      findGuest({}).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item=>{
+            this.company.push({
+              value:item.id,
+              label:item.fullName
+            })
+          })
         }
-      }
-      data = result;
-      data.map(item => {
-        this.company.push({
-          label: item.fullName,
-          value: item.id
-        });
       });
     },
     //核销对账单
@@ -509,7 +497,7 @@ export default {
     //未核销对账单查询接口
     noWrite() {
       let obj = {
-        amount: this.amt,
+        amount: this.amtNo,
         guestId: this.companyId,
         receivePaymentType: this.paymentId,
         page: this.accountPage.page - 1,
@@ -525,9 +513,9 @@ export default {
     //本店待认领款查询接口
     claimedList() {
       let obj = {
-        amount: this.amt,
+        amount: this.amtClaim,
         suppliers: this.companyId,
-        reciprocalAccountName: this.bankNameO,
+        reciprocalAccountName: this.bankNameOClaim,
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size
       };
@@ -543,8 +531,8 @@ export default {
       let obj = {
         area: this.areaId,
         orgId: this.orgId,
-        amount: this.amt,
-        reciprocalAccountName: this.bankNameO,
+        amount: this.amtDis,
+        reciprocalAccountName: this.bankNameODis,
         page: this.distributionPage.page - 1,
         size: this.distributionPage.size
       };
