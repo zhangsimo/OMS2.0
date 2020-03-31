@@ -10,7 +10,7 @@
                   库存总成本
                 </div>
                 <h5 class="staticBottom">
-                  ￥123123
+                  ￥{{dataObj.totalAmt}}
                 </h5>
               </div>
             </Col>
@@ -20,7 +20,7 @@
                   库存SKU种类
                 </div>
                 <h5 class="staticBottom">
-                  3123
+                  {{dataObj.skuQty}}
                 </h5>
               </div>
             </Col>
@@ -34,56 +34,56 @@
             <a @click="go(1000)">
             <img src="../../../assets/images/home/rukuguanli.png" alt="">
               待提交采购计划
-            <span class="munber">15</span>
+            <span class="munber">{{dataObj.pchsplanQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/chukuguanli.png" alt="">
               待提交销售订单
-            <span class="munber2">15</span>
+            <span class="munber2">{{dataObj.sellOrderQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/fukuan.png" alt="">
               待收货计划采购订单
-            <span class="munber">15</span>
+            <span class="munber">{{dataObj.submitMap.planQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/yingshoukuan.png" alt="">
               已提交销售订单
-            <span class="munber2">15</span>
+            <span class="munber2">{{dataObj.sellOrderSubmitQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/duizhangdan .png" alt="">
             待收货临时采购订单
-            <span class="munber">15</span>
+            <span class="munber">{{dataObj.submitMap.tempQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/caigouguanli .png" alt="">
             待受理调拨申请单
-            <span class="munber2">15</span>
+            <span class="munber2">{{dataObj.waitAcceptAllocateOrderQty}}</span>
             </a>
           </li>
           <li>
             <a>
             <img src="../../../assets/images/home/tuidanguanli.png" alt="">
             待收货外采订单
-            <span class="munber">15</span>
+            <span class="munber">{{dataObj.submitMap.outQty}}</span>
             </a>
           </li>
           <li>
             <a>
               <img src="../../../assets/images/home/tuidanguanli.png" alt="">
               草稿对账单
-              <span class="munber2">15</span>
+              <span class="munber2">{{dataObj.draftOrderQty}}</span>
             </a>
           </li>
 
@@ -131,6 +131,14 @@
                         content: '暂无权限!需联系管理员开启权限'
                     });
 
+                }
+            },
+        },
+        props:{
+            dataObj:{
+                type:Object,
+                default:function(){
+                    return {}
                 }
             }
         }

@@ -340,11 +340,11 @@
                 :footer-method="addFooter"
                 :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+                <vxe-table-column fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
                 <vxe-table-column field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
                 <vxe-table-column field="branchStockQty" title="门店库存" width="100"></vxe-table-column>
