@@ -37,8 +37,8 @@
       </div>
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">预收款认领</Button>
-        <Button class="ml10" @click="collectWirte">预收款核销</Button>
-        <Button class="ml10" @click="collectWPay">预收款支出</Button>
+        <Button class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">预收款核销</Button>
+        <Button class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
         <Button class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
         <Button class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
         <Button
@@ -71,8 +71,8 @@
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column field="claimAmt" title="预收款认领金额"></vxe-table-column>
-              <vxe-table-column field="writeOffReceiptNo" title="预收款核销收款单号"></vxe-table-column>
-              <vxe-table-column field="writeOffAmt" title="预收款核销收款金额"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="预收款核销单号"></vxe-table-column>
+              <vxe-table-column field="writeOffAmt" title="预收款核销金额"></vxe-table-column>
               <vxe-table-column field="expenditureNo" title="预收款支出单号"></vxe-table-column>
               <vxe-table-column field="expenditureAmt" title="预收款支出金额"></vxe-table-column>
               <vxe-table-column field="expenditureClaimAmt" title="预收款支出已认领金额"></vxe-table-column>

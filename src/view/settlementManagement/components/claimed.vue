@@ -146,6 +146,7 @@ export default {
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
+      console.log(this.$parent.$parent.$parent)
     }
   },
   watch: {
