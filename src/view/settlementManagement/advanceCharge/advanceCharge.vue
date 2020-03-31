@@ -12,7 +12,7 @@
             ></quickDate>
           </div>
           <div class="db ml20">
-            <span>对账期间：</span>
+            <span>查询日期：</span>
             <Date-picker
               v-model="value"
               type="daterange"
@@ -61,7 +61,7 @@
         <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
         <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
         <Button :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
-        <Button class="ml10">导出</Button>
+<!--        <Button class="ml10">导出</Button>-->
       </div>
     </section>
     <section class="con-box">
@@ -342,7 +342,7 @@ export default {
       modalShow: false,
       reTitle: "",
       revokeReason: "",
-      amount: 0, //认领-金额
+      amount: 123, //认领-金额
       reciprocalAccountName: "", // 认领-对方户名
       suppliers: "", // 认领-往来单位
       modal: false, //预收款弹框
@@ -420,7 +420,7 @@ export default {
     //查询接口
     async getQuery() {
       let obj = {}
-      if (this.value[0] instanceof Date) {
+
         obj = {
            startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
@@ -429,7 +429,6 @@ export default {
           ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         }
-      }
       obj = {
         ...obj,
         orgId: this.BranchstoreId,
@@ -569,7 +568,7 @@ export default {
         return this.$Message.error('预付款付款已认领')
       }
       this.claimedButtonType = name;
-      this.amount = 0
+      this.amount = null
       this.reciprocalAccountName = "";
       this.suppliers = "";
       this.queryClaimed();
