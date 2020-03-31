@@ -55,9 +55,9 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button :disabled="currRow == null && !currRow.paymentNo" class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
-        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
+        <Button :disabled="!currRow.id || !currRow.paymentNo " class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
+        <Button :disabled="!currRow.id" class="ml10" @click="openSettlement">预付款核销</Button>
+        <Button :disabled="!currRow.id" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
         <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
         <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
         <Button :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
@@ -361,7 +361,7 @@ export default {
         opts: [20, 50, 100, 200]
       },
       loading: false,
-      currRow: null,
+      currRow: {},
       serviceId: "",
       btnIsdisable: {
         one: true,
