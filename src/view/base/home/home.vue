@@ -41,10 +41,10 @@
         </div>
       </div>
       <!--      今日数据-->
-      <todat-date></todat-date>
+      <todat-date :data-obj="homeData"></todat-date>
       <!--      今日看板-->
       <div style="margin-top: 20px">
-        <board></board>
+        <board :data-obj="homeData"></board>
       </div>
     </div>
     <div class="box-right">
@@ -55,6 +55,7 @@
 
 <script>
 import * as api from "_api/lease/log";
+import {getHomeData} from '_api/base/home'
 import todatDate from "./todatDate";
 import newList from "./newList";
 import board from "./board";
@@ -68,10 +69,12 @@ export default {
   },
   data() {
     return {
+        homeData:{}
     };
   },
   mounted() {
     this.notice();
+    this.getData();
   },
   methods: {
     async notice() {
@@ -148,6 +151,16 @@ export default {
               });
 
           }
+      },
+      getData(){
+        getHomeData().then(res=>{
+            if(res.code==0){
+                this.homeData=res.data;
+                for(let i in this.homeData){
+                    this.homeData[i]=this.homeData[i]!==null?this.homeData[i]:0;
+                }
+            }
+        })
       }
   }
 };
