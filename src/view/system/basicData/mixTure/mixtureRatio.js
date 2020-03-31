@@ -160,9 +160,9 @@ const data = function() {
                 "on-blur": event => {
                   console.log(params.row.qty, "params.row.qty=?159");
                   let val = event.target.value;
-                  let reg = /^(?:0|[1-9][0-9]?|100)$/;
+                  let reg = /^[1-9][0-9]*([\.][0-9]{1,2})?$/;
                   if (!reg.test(val)) {
-                    this.$Message.error("请输入0-100的正整数");
+                    this.$Message.error("请输入数字");
                     this.flag = 1;
                     params.row.qty = "";
                     return;
