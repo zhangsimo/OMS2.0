@@ -125,7 +125,7 @@ export default {
       if (type) {
         this.getQuery();
         this.getOne();
-      }
+      } 
     },
     // 往来单位选择
     async getOne() {
