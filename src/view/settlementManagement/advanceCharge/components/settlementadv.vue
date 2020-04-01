@@ -403,9 +403,9 @@ export default {
           // 预付款核销
           let res = await api.addAll(data);
           if(res.code == 0) {
-            return this.$message.success("核销成功");
             this.Settlement = false
             this.$emit('getNewList', {})
+            return this.$message.success("核销成功");
           }
         }
         if (this.gettlementData.sign == 5) {
@@ -427,9 +427,9 @@ export default {
           })
           let res = await api.addAll(data);
           if(res.code == 0) {
-            return this.$message.success("收回认领成功");
             this.Settlement = false
             this.$emit('getNewList', {})
+            return this.$message.success("收回认领成功");
           }
         }
         if (this.gettlementData.sign == 9) {
@@ -451,9 +451,9 @@ export default {
           })
           let res = await api.addAll(data);
           if(res.code == 0) {
-            return this.$message.success("预付款认领成功");
             this.Settlement = false
             this.$emit('getNewList', {})
+            return this.$message.success("预付款认领成功");
           }
         }
       } else {
