@@ -285,7 +285,7 @@
                   ref="xTable"
                   height="500"
                   :data="formPlan.details"
-                  :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                  :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
                   <vxe-table-column type="index" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox"></vxe-table-column>

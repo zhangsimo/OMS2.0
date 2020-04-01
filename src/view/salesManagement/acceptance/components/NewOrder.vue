@@ -65,7 +65,7 @@
           :edit-rules="validRules"
           size="mini"
           :data="data.detailVOList"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
           highlight-current-row
         >
           <vxe-table-column

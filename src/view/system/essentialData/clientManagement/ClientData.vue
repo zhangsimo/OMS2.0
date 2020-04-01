@@ -337,7 +337,7 @@
               height="300px"
               :edit-rules="validRules"
               :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
-              :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+              :edit-config="{trigger: 'click', mode: 'cell'}"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="taxpayerName" title="开票名称" :edit-render="{name: 'input'}"></vxe-table-column>

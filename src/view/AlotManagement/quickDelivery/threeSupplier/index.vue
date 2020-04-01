@@ -134,7 +134,7 @@
           size="mini"
           height="auto"
           :data="BottomTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
 

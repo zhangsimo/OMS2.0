@@ -1544,7 +1544,7 @@ export default [
             meta: {
               // hideInMenu: true,
               icon: "arrow-graph-up-right",
-              title: "产品分配"
+              title: "产品权限管理"
             },
             component: () =>
               import("@/view/system/basicData/ProductLA/ProductLA.vue")

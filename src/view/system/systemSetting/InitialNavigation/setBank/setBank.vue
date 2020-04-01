@@ -33,7 +33,7 @@
           size="mini"
           show-overflow
           :data="tableData"
-          :edit-config="{trigger: 'dblclick', mode: 'row'}"
+          :edit-config="{trigger: 'click', mode: 'row'}"
         >
           <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
           <vxe-table-column field="code" title="账户编码"></vxe-table-column>

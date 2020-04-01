@@ -560,7 +560,7 @@ export default {
     },
     // 选中总表查询明细
     election(row) {
-      getReceiptsPaymentsList({ fno: row.fno }).then(res => {
+      getReceiptsPaymentsList({ accountNo: row.accountNo }).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.num = index + 1;
