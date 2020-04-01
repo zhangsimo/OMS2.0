@@ -242,6 +242,9 @@ export default {
         this.BusinessType = [];
         this.tableData = [];
         this.collectPayId = "";
+        if(this.$parent.paymentId === "YSKZC"){
+          this.$parent.claimModal=false
+        }
       } else {
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
@@ -250,6 +253,8 @@ export default {
           sign = 4;
         } else if (this.$parent.paymentId === "YJDZ") {
           sign = 1;
+        }else if (this.$parent.paymentId === "YSKZC") {
+          sign = 3;
         } else if (this.$parent.type === 0) {
           sign = 6;
         } else if (this.$parent.type === 1) {
