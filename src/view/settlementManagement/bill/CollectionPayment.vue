@@ -263,7 +263,7 @@ export default {
         },
         {
           title: "收款时间",
-          key: "rpDate",
+          key: "checkDate",
           className: "tc"
         },
         {
