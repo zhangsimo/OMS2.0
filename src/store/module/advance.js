@@ -11,7 +11,7 @@ export default {
      */
     claimedSelectionList: [],
     /**
-     * 标记(1 资金认领核销(选择的月结对账单) 2 预收款核销 3 预收款支出认领 4 预付款核销 5 预付款收回认领) 
+     * 标记(1 资金认领核销(选择的月结对账单) 2 预收款核销 3 预收款支出认领 4 预付款核销 5 预付款收回认领)
      * 注：资金认领核销页面选择的未核销对账单类型如果是预收款，对应预收款核销；如果是预付款，对应预付款核销
      */
     sign: "",
@@ -34,6 +34,7 @@ export default {
             amt: el.incomeMoney == 0 ? el.paidMoney : el.incomeMoney,
             account: el.accountCode,
             incomeMoney: el.incomeMoney,
+            id:el.id,
             paidMoney: el.paidMoney,
             ownStoreId: el.shopId,
             ownStoreName: el.shopName,
