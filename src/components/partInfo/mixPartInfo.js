@@ -139,10 +139,7 @@ export const mixPartInfo = {
         carBrand:"",
         carName:""
       },
-      carList:[{
-        carBrand:"",
-        carName:""
-      }]
+      carList:[]
     }
   },
   methods: {
@@ -154,6 +151,12 @@ export const mixPartInfo = {
     },
     //初始化
     init(setData) {
+      //清空数据重新赋值
+      this.$refs.proModalForm.resetFields();
+      this.carList = [];
+      this.carItemObj.carName = "";
+      this.carItemObj.carBrand = "";
+
       this.currRow = null
       this.btnIsLoadding = false;
       this.proModal = true;
@@ -176,6 +179,17 @@ export const mixPartInfo = {
       this.formValidate.fullName = ''
       if (setData) {
         this.formValidate = setData;
+        //赋值适用车型
+        let carModelName = setData.carModelName.split("|");//车系
+        let carBrandName = setData.carBrandName.split("|");//车品牌
+        let arrNew = carModelName.length>carBrandName.length?carModelName:carBrandName
+        arrNew.map((vItem,vindex) => {
+          this.carItemObj.carBrand = carBrandName[vindex];
+          this.carItemObj.carName = carModelName[vindex];
+          this.carList.push({...this.carItemObj});
+        });
+      }else{
+        this.carList.push({...this.carItemObj});
       }
       //添加自定义分类名称属性
       this.formValidate.customClassName = '';
@@ -439,15 +453,18 @@ export const mixPartInfo = {
               let carBrand = [];
               let carBrandName = [];
               let carModelName = [];
-              this.carList.map(item => {
-                let itemObj = item.carBrand?JSON.parse(item.carBrand):{};
-                carBrand.push(itemObj.nameCn);
-                carBrandName.push(itemObj.id);
-                carModelName.push(item.carName);
-              })
+              this.carList.map(vb => {
+                let selectBrandData = this.carObj.carBrandData.filter(item => item.id == vb.carBrand);
+                if (selectBrandData.length > 0) {
+                  carBrand.push(selectBrandData[0].nameCn);
+                  carBrandName.push(selectBrandData[0].id);
+                  carModelName.push(vb.carName);
+                }
+              });
               objReq.carBrand = carBrand.join("|");
               objReq.carBrandName = carBrandName.join("|");
               objReq.carModelName = carModelName.join("|");
+              console.log(objReq)
 
               objReq.commonId = this.formValidate.commonId
               objReq.manufacture = this.formValidate.manufacture

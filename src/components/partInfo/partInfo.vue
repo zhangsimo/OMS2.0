@@ -93,7 +93,7 @@
                     >
                       <Option
                         v-for="item in carObj.carBrandData"
-                        :value="JSON.stringify(item)"
+                        :value="item.id"
                         :key="item.id"
                       >{{item.nameCn}}</Option>
                     </Select>

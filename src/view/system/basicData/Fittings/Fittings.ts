@@ -545,6 +545,7 @@ export default class Fittings extends Vue {
     if (!this.isAdd) {
       row.id = this.currRow.id;
     }
+    console.log(row)
     let res: any = await api.approval(row);
     if (res.code == 0) {
       const child: any = this.$refs;
