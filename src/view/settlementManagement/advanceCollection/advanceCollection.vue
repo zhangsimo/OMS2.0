@@ -393,8 +393,7 @@ export default {
         this.currRow.remainingAmt
       ) {
         this.$refs.settlement.Settlement = true;
-        this.paymentId = "YSK";
-        this.claimModal = false;
+        this.paymentId = "YSKZC";
       } else {
         this.$message.error("金额大于预收款余额，无法认领");
       }
