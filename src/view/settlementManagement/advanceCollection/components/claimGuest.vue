@@ -120,6 +120,7 @@ export default {
             this.$message.success('认领成功')
             this.modal = false
             this.$parent.$parent.getQuery()
+            this.$parent.$parent.$refs.settlement.tableData=[]
           }
         })
       } else {

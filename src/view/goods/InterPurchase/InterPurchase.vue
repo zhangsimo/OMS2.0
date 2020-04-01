@@ -351,7 +351,7 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column
                   type="index"

@@ -26,7 +26,7 @@
       :edit-rules="validRules"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :data="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent"
     >
       <!-- 主表每一项 -->
@@ -112,7 +112,7 @@
       height="460"
       align="center"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
       :data="twoList"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent"

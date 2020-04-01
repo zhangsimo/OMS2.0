@@ -57,7 +57,7 @@
             highlight-hover-row
             highlight-current-row
             @current-change="selectTabelData"
-            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+            :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
             <vxe-table-column
               type="index"
@@ -152,7 +152,7 @@
             size="mini"
             height='400'
             :data="BottomTableData"
-            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+            :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
             <vxe-table-column
               type="index"

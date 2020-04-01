@@ -82,7 +82,7 @@
           highlight-hover-row
           @current-change="currentChangeEvent"
           :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
 
@@ -132,7 +132,7 @@
           highlight-current-row
           highlight-hover-row
           :data="BottomTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
 

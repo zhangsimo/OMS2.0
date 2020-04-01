@@ -216,7 +216,7 @@
             height="300"
             :data="formValidate.specVOS"
             :edit-rules="validRules"
-            :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            :edit-config="{trigger: 'click', mode: 'cell'}"
             @radio-change="selectChange"
           >
             <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
