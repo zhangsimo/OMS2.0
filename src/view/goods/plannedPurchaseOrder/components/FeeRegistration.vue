@@ -82,7 +82,7 @@
             :loading="loading2"
             highlight-current-row
             ref="xTable"
-            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+            :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
             >
             <vxe-table-column

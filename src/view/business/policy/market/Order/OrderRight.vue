@@ -205,7 +205,7 @@
           @select-all="selectAllTable"
           @edit-actived="editActivedEvent"
           style="width: 2000px"
-          :edit-config="{trigger: 'dblclick', mode: 'cell',activeMethod: activeRowMethod}"
+          :edit-config="{trigger: 'click', mode: 'cell',activeMethod: activeRowMethod}"
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
           <vxe-table-column type="checkbox" width="50"></vxe-table-column>

@@ -47,7 +47,7 @@
           height="420"
           size="mini"
           :data="tableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column
             type="index"

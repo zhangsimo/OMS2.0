@@ -32,7 +32,7 @@
             :data="level.tbdata"
             highlight-current-row
             @current-change="selectRow"
-            :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+            :edit-config="{ trigger: 'click', mode: 'cell' }"
           >
             <vxe-table-column type="index" width="80" title="序号"></vxe-table-column>
             <vxe-table-column
@@ -153,7 +153,7 @@
               :loading="part.loading"
               :data="part.tbdata"
               highlight-current-row
-              :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+              :edit-config="{ trigger: 'click', mode: 'cell' }"
             >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
               <!-- <vxe-table-column type="checkbox" width="60"></vxe-table-column> -->

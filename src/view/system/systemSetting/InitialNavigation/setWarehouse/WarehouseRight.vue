@@ -38,7 +38,7 @@
         @current-change="clOnewList"
         height="330"
         :data="warehouseList"
-        :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+        :edit-config="{trigger: 'click', mode: 'cell'}"
       >
         <vxe-table-column type="index" title="序号"></vxe-table-column>
         <vxe-table-column field="name" title="仓位" :edit-render="{name: 'input'}"></vxe-table-column>

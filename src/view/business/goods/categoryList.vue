@@ -180,7 +180,7 @@
                   size="mini"
                   :height="rightTableHeight"
                   :data="tableData"
-                  :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -357,7 +357,7 @@
               :data="tableData"
               height="auto"
               highlight-current-row
-              :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+              :edit-config="{trigger: 'click', mode: 'cell'}"
             >
               >
               <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
