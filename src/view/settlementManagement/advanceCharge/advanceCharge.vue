@@ -275,7 +275,7 @@
           ></Page>
         </div>
         <Button>收付款单记录</Button>
-        <Record ref="Record" :serviceId="serviceId" />
+        <Record ref="Record" :service="serviceId" />
       </div>
     </section>
     <Modal

@@ -11,7 +11,9 @@
 <script>
 import * as api from "_api/settlementManagement/advanceCharge";
 export default {
-  props: ["serviceId"],
+  props: {
+    service:''
+  },
   data() {
     return {
       columns1: [
@@ -134,14 +136,7 @@ export default {
   },
   methods: {
     async init() {
-      if(!this.serviceId) {
-        this.recordLists = []
-      } else {
-        let res = await api.findByAccountNo({ accountNo: this.serviceId });
-        if(res.code == 0) {
-          this.recordLists = res.data;
-        }
-      }
+
     },
     handleSummary({ columns, data }) {
       const sums = {};
@@ -178,6 +173,14 @@ export default {
         }
       });
       return sums;
+    }
+  },
+  watch:{
+    service: async function(val) {
+      let res = await api.findByAccountNo({ accountNo: val});
+      if(res.code == 0) {
+        this.recordLists = res.data;
+      }
     }
   }
 };
