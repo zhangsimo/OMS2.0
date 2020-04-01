@@ -177,7 +177,7 @@ import { getSupplierList } from "_api/purchasing/purchasePlan";
 import advance from "./components/Advance";
 import chargeAdvance from "./components/chargeAdvance";
 import expenditure from "./components/expenditure";
-import settlement from "../../bill/components/settlement";
+import settlement from "./components/settlement";
 import claim from "../../components/claimed";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import {
