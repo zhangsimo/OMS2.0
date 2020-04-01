@@ -34,6 +34,11 @@ export const mixSelectPartCom = {
           minWidth: 80
         },
         {
+          title: "配件内码",
+          key: "partInnerId",
+          minWidth: 120
+        },
+        {
           title: "配件编码",
           key: "partCode",
           minWidth: 120
@@ -44,13 +49,18 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "配件全称",
-          key: "fullName",
-          minWidth: 180
+          title: "品牌车型",
+          key: "carModelName",
+          minWidth: 120
         },
         {
-          title: "品牌",
-          key: "partBrand",
+          title: "规格",
+          key: "spec",
+          minWidth: 80
+        },
+        {
+          title: "型号",
+          key: "brandName",
           minWidth: 120
         },
         {
@@ -59,18 +69,8 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "单位",
-          key: "unit",
-          minWidth: 80
-        },
-        {
-          title: "规格",
-          key: "spec",
-          minWidth: 80
-        },
-        {
-          title: "品牌车型",
-          key: "carModelName",
+          title: "品牌",
+          key: "partBrand",
           minWidth: 120
         },
         {
@@ -78,7 +78,11 @@ export const mixSelectPartCom = {
           key: "oemCode",
           minWidth: 120
         },
-
+        {
+          title: "单位",
+          key: "unit",
+          minWidth: 80
+        },
         {
           title: "一级分类",
           key: "carTypef",
@@ -100,10 +104,11 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "配件内码",
-          key: "partInnerId",
-          minWidth: 120
-        }
+          title: "配件全称",
+          key: "fullName",
+          minWidth: 180
+        },
+
       ],
       //配件名称查询层配件数据
       partData: [],

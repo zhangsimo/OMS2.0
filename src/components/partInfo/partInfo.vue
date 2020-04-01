@@ -85,24 +85,40 @@
             <Row>
               <Col span="22">
                 <FormItem label="适用车型：" prop="applyCarbrandId">
-                  <Select
-                    @on-change="getCarModelFun"
-                    class="w140 mr5"
-                    v-model="formValidate.carBrandName"
-                  >
-                    <Option
-                      v-for="item in carObj.carBrandData"
-                      :value="item.id"
-                      :key="item.id"
-                    >{{item.nameCn}}</Option>
-                  </Select>
-                  <Select class="w350" @on-change="getFullName" v-model="formValidate.carModelName">
-                    <Option
-                      v-for="item in carObj.carModelData"
-                      :value="item.carModelName"
-                      :key="item.id"
-                    >{{item.carModelName}}</Option>
-                  </Select>
+                  <div class="car-con-item" v-for="(v,vi) in carList">
+                    <Select
+                      @on-change="getSelectCarBrand"
+                      class="w140 mr5"
+                      v-model="v.carBrand"
+                    >
+                      <Option
+                        v-for="item in carObj.carBrandData"
+                        :value="item.id"
+                        :key="item.id"
+                      >{{item.nameCn}}</Option>
+                    </Select>
+                    <Input class="w260" v-model="v.carName"></Input>
+                    <Button type="text" class="car-btn add" @click="addCarItem" v-if="vi==0"><Icon type="md-add" />添加车型</Button>
+                    <Button v-if="vi>0" @click="removeCarItem(vi)" type="text" class="car-btn del"><Icon type="md-close" />删除</Button>
+                  </div>
+                  <!--<Select-->
+                    <!--@on-change="getCarModelFun"-->
+                    <!--class="w140 mr5"-->
+                    <!--v-model="formValidate.carBrandName"-->
+                  <!--&gt;-->
+                    <!--<Option-->
+                      <!--v-for="item in carObj.carBrandData"-->
+                      <!--:value="item.id"-->
+                      <!--:key="item.id"-->
+                    <!--&gt;{{item.nameCn}}</Option>-->
+                  <!--</Select>-->
+                  <!--<Select class="w350" @on-change="getFullName" v-model="formValidate.carModelName">-->
+                    <!--<Option-->
+                      <!--v-for="item in carObj.carModelData"-->
+                      <!--:value="item.carModelName"-->
+                      <!--:key="item.id"-->
+                    <!--&gt;{{item.carModelName}}</Option>-->
+                  <!--</Select>-->
                   <!--<Input class="w350" v-model="formValidate.explain"></Input>-->
                 </FormItem>
               </Col>
@@ -200,7 +216,7 @@
             height="300"
             :data="formValidate.specVOS"
             :edit-rules="validRules"
-            :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+            :edit-config="{trigger: 'click', mode: 'cell'}"
             @radio-change="selectChange"
           >
             <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
@@ -335,4 +351,11 @@ export default {
     }
   }
 }
+  .car-btn{
+    font-size: 12px;
+    color: #40a6ff;
+    &.del{
+      color: #fd5c5c;
+    }
+  }
 </style>

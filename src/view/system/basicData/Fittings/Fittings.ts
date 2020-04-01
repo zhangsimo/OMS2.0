@@ -62,16 +62,6 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品质",
-          key: "quality",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
-        },
-        {
           title: "编码",
           key: "partCode",
           minWidth: 120
@@ -82,31 +72,13 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "全称",
-          key: "fullName",
-          minWidth: 240
+          title: "品牌车型",
+          minWidth: 120,
+          render: (h, p) => {
+            let text = p.row.adapterCarBrand + "  " + p.row.adapterCarModel;
+            return h("span", text);
+          }
         },
-        {
-          title: "OEM码",
-          key: "oeCode",
-          minWidth: 120
-        },
-        {
-          title: "产地",
-          key: "placeOfOrigin",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          key: "minUnit",
-          minWidth: 120
-        }
-      ]
-    },
-    {
-      title: " ",
-      key: "",
-      children: [
         {
           title: "规格",
           key: "specifications",
@@ -118,12 +90,24 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品牌车型",
-          minWidth: 120,
-          render: (h, p) => {
-            let text = p.row.adapterCarBrand + "  " + p.row.adapterCarModel;
-            return h("span", text);
-          }
+          title: "品质",
+          key: "quality",
+          minWidth: 120
+        },
+        {
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
+        },
+        {
+          title: "OEM码",
+          key: "oeCode",
+          minWidth: 120
+        },
+        {
+          title: "单位",
+          key: "minUnit",
+          minWidth: 120
         },
         {
           title: "一级分类",
@@ -157,13 +141,17 @@ export default class Fittings extends Vue {
             } catch (e) {}
             return h("span", text);
           }
-        }
-      ]
-    },
-    {
-      title: "辅助信息",
-      key: "",
-      children: [
+        },
+        {
+          title: "产地",
+          key: "placeOfOrigin",
+          minWidth: 120
+        },
+        {
+          title: "生产厂家",
+          key: "manufactor",
+          minWidth: 120
+        },
         {
           title: "备注",
           key: "remark",
@@ -186,12 +174,13 @@ export default class Fittings extends Vue {
           }
         },
         {
-          title: "生产厂家",
-          key: "manufactor",
-          minWidth: 120
-        }
+          title: "全称",
+          key: "fullName",
+          minWidth: 240
+        },
       ]
-    }
+    },
+
   ];
   // local表头字段
   latcolumns: Tableth = [
@@ -210,16 +199,6 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品质",
-          key: "qualityName",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrandName",
-          minWidth: 120
-        },
-        {
           title: "编码",
           key: "code",
           minWidth: 120
@@ -230,31 +209,19 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "全称",
-          key: "fullName",
-          minWidth: 240
+          title: "品牌车型",
+          minWidth: 120,
+          render: (h, p) => {
+            let brandArr = p.row.carBrand?p.row.carBrand.split("|"):[];
+            let carNameArr = p.row.carModelName?p.row.carModelName.split("|"):[];
+            let arrLength = brandArr.length>carNameArr.length?brandArr:carNameArr;
+            let textArr = arrLength.map((item,index) => {
+              return brandArr[index]+" "+carNameArr[index]
+            })
+            let text = textArr.length>1?textArr.join(" || "):textArr.join("");
+            return h("span", text);
+          }
         },
-        {
-          title: "OEM码",
-          key: "oemCode",
-          minWidth: 120
-        },
-        {
-          title: "产地",
-          key: "prdtPlace",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          key: "unitId",
-          minWidth: 120
-        }
-      ]
-    },
-    {
-      title: " ",
-      key: "",
-      children: [
         {
           title: "规格",
           key: "spec",
@@ -266,12 +233,24 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品牌车型",
-          minWidth: 120,
-          render: (h, p) => {
-            let text = p.row.carBrand + "  " + p.row.carModelName;
-            return h("span", text);
-          }
+          title: "品质",
+          key: "qualityName",
+          minWidth: 120
+        },
+        {
+          title: "品牌",
+          key: "partBrandName",
+          minWidth: 120
+        },
+        {
+          title: "OEM码",
+          key: "oemCode",
+          minWidth: 120
+        },
+        {
+          title: "单位",
+          key: "unitId",
+          minWidth: 120
         },
         {
           title: "一级分类",
@@ -287,13 +266,17 @@ export default class Fittings extends Vue {
           title: "三级分类",
           minWidth: 120,
           key: "carTypetName"
-        }
-      ]
-    },
-    {
-      title: "辅助信息",
-      key: "",
-      children: [
+        },
+        {
+          title: "产地",
+          key: "prdtPlace",
+          minWidth: 120
+        },
+        {
+          title: "生产厂家",
+          key: "manufacture",
+          minWidth: 120
+        },
         {
           title: "备注",
           key: "direction",
@@ -316,12 +299,12 @@ export default class Fittings extends Vue {
           }
         },
         {
-          title: "生产厂家",
-          key: "manufacture",
-          minWidth: 120
-        }
+          title: "全称",
+          key: "fullName",
+          minWidth: 240
+        },
       ]
-    }
+    },
   ];
   // local表格
   private local: any = {
@@ -562,6 +545,7 @@ export default class Fittings extends Vue {
     if (!this.isAdd) {
       row.id = this.currRow.id;
     }
+    console.log(row)
     let res: any = await api.approval(row);
     if (res.code == 0) {
       const child: any = this.$refs;

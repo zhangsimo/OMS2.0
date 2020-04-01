@@ -139,13 +139,13 @@
   </Modal>
 </template>
 <script>
-import accountSelette from "./accountWirte";
+import accountSelette from "../../../bill/components/accountWirte";
 import {
   wirteAccount,
   saveAccount
 } from "_api/settlementManagement/seleteAccount.js";
-import subjexts from "./subjects";
-import bus from "../Popup/Bus";
+import subjexts from "../../../bill/components/subjects";
+import bus from "../../../bill/Popup/Bus";
 import moment from "moment";
 export default {
   components: {
@@ -240,7 +240,7 @@ export default {
         this.remark = "";
         this.reconciliationStatement = {};
         this.BusinessType = [];
-        this.tableData = [];
+        // this.tableData = [];
         this.collectPayId = "";
       } else {
         let sign = 0;

@@ -147,7 +147,7 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{trigger: 'dblclick', mode: 'cell'}">
+                :edit-config="{trigger: 'click', mode: 'cell'}">
                 <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox" width="60"></vxe-table-column>
                 <vxe-table-column field="name" title="配件编码" width="100"></vxe-table-column>

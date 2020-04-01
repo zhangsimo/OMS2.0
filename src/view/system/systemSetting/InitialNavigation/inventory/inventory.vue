@@ -32,7 +32,7 @@
       :edit-rules="validRules"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :data="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent"
     >
       <!-- 主表每一项 -->
@@ -89,7 +89,7 @@
       align="center"
       :edit-rules="validRules"
       :columns="tableColumnTwo"
-      :edit-config="{trigger: 'dblclick', mode: 'row', showStatus: true}"
+      :edit-config="{trigger: 'click', mode: 'row', showStatus: true}"
       :data="twoList"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       @select-all="selectAllEvent"
