@@ -89,7 +89,7 @@
               ></vxe-table-column>
               <vxe-table-column
                 field="serviceId"
-                title="预付款对账单号"
+                title="预付款申请单号"
               ></vxe-table-column>
               <vxe-table-column
                 field="orderNo"
@@ -111,7 +111,7 @@
               ></vxe-table-column>
               <vxe-table-column
                 field="paymentNo"
-                title="预付款付款单号"
+                title="预付款认领单号"
               ></vxe-table-column>
               <vxe-table-column
                 field="claimAmt"
