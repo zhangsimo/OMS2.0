@@ -297,7 +297,7 @@ export default class InterPurchase extends Vue {
       orderMan: "", // 采购员
       orderManId: "",
       billTypeId: "", // 票据类型
-      settleTypeId: "",  // 结算方式
+      settleTypeId: "020501",  // 结算方式
       storeId: "", // 入库仓
       orderDate: "", // 订货日期
       planArriveDate: "", // 预计到货日期

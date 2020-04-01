@@ -250,9 +250,9 @@
         shopList: [
           {id:0 , name:'全部'}
         ], //门店列表
-        subjectCode:1001,//科目id
+        subjectCode:'1243107543071129600',//科目id
         subJectList:[
-          {id:1001 ,titleName:'库存现金'}
+          {id:'1243107543071129600' ,titleName:'库存现金'}
         ],//科目列表
         company: "", //往来单位
         companyId: "", //往来单位id

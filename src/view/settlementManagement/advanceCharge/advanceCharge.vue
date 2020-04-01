@@ -12,7 +12,7 @@
             ></quickDate>
           </div>
           <div class="db ml20">
-            <span>对账期间：</span>
+            <span>查询日期：</span>
             <Date-picker
               v-model="value"
               type="daterange"
@@ -55,13 +55,13 @@
         </div>
       </div>
       <div class="mt10 mb10">
-        <Button :disabled="!currRow.id || !currRow.paymentNo " class="ml10" @click="openModal('预付款认领')">预付款认领</Button>
-        <Button :disabled="!currRow.id" class="ml10" @click="openSettlement">预付款核销</Button>
-        <Button :disabled="!currRow.id" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
+        <Button :disabled="currRow == null" class="ml10" ref="payBtn" @click="openModal('预付款认领')">预付款认领</Button>
+        <Button :disabled="currRow == null" class="ml10" @click="openSettlement">预付款核销</Button>
+        <Button :disabled="currRow == null" class="ml10" @click="openModal('预付款收回认领')">预付款收回认领</Button>
         <Button :disabled="btnIsdisable.one" class="ml10" @click="openShow('预付款撤回')">预付款撤回</Button>
         <Button :disabled="btnIsdisable.two" class="ml10" @click="openShow('预付款核销撤回')">预付款核销撤回</Button>
         <Button :disabled="btnIsdisable.three" class="ml10" @click="openShow('预付款回收撤回')">预付款回收撤回</Button>
-        <Button class="ml10">导出</Button>
+<!--        <Button class="ml10">导出</Button>-->
       </div>
     </section>
     <section class="con-box">
@@ -342,7 +342,7 @@ export default {
       modalShow: false,
       reTitle: "",
       revokeReason: "",
-      amount: 0, //认领-金额
+      amount: 123, //认领-金额
       reciprocalAccountName: "", // 认领-对方户名
       suppliers: "", // 认领-往来单位
       modal: false, //预收款弹框
@@ -361,7 +361,7 @@ export default {
         opts: [20, 50, 100, 200]
       },
       loading: false,
-      currRow: {},
+      currRow: null,
       serviceId: "",
       btnIsdisable: {
         one: true,
@@ -372,7 +372,7 @@ export default {
   },
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
-    // this.value = arr[0];
+    this.value = arr[0];
     // this.BranchstoreId = arr[1];
     this.Branchstore = arr[2];
     this.getOne();
@@ -420,16 +420,15 @@ export default {
     //查询接口
     async getQuery() {
       let obj = {}
-      if (this.value[0] instanceof Date) {
+
         obj = {
-           startTime: this.value[0]
+           startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endTime: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        endDate: this.value[1]
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         }
-      }
       obj = {
         ...obj,
         orgId: this.BranchstoreId,
@@ -565,11 +564,11 @@ export default {
       this.getQuery();
     },
     openModal(name) {
-      if (name == '预付款认领' && !this.currRow.paymentNo){
+      if (name == '预付款认领' && this.currRow.paymentNo != ''){
         return this.$Message.error('预付款付款已认领')
       }
       this.claimedButtonType = name;
-      this.amount = 0
+      this.amount = null
       this.reciprocalAccountName = "";
       this.suppliers = "";
       this.queryClaimed();

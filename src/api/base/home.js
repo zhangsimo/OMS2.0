@@ -7,3 +7,10 @@ export const getAllList = () => {
     method: 'get'
   })
 }
+//获取首页数据
+export function getHomeData(){
+  return axios.request({
+    url:`${api.omsOrder}/index/getIndexApi`,
+    method:'post'
+  })
+}

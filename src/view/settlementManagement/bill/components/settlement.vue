@@ -5,33 +5,46 @@
       <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
+      <h4 class="mb10">基本信息</h4>
       <Row>
-        <Col span="8">
+        <Col span="2" class="tr">
           <span>门店：</span>
-          <Input class="w200" v-model="reconciliationStatement.orgName" />
         </Col>
-        <Col span="8">
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.orgName" readonly />
+        </Col>
+        <Col span="2" class="tr">
           <span>往来单位：</span>
-          <Input class="w200" v-model="reconciliationStatement.guestName" />
         </Col>
-        <Col span="8">
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.guestName" readonly />
+        </Col>
+        <Col span="2" class="tr">
           <span>收付类型：</span>
-          <Input class="w200" v-model="reconciliationStatement.sortName" />
+        </Col>
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.sortName" readonly />
         </Col>
       </Row>
       <Row class="mt10">
-        <Col span="8">
+        <Col span="2" class="tr">
           <span>对账单号：</span>
-          <Input class="w200" v-model="reconciliationStatement.accountNo" />
+        </Col>
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
-        <Col span="8">
+        <Col span="2" class="tr">
           <span>收付款单号：</span>
-          <Input class="w200" v-model="reconciliationStatement.serviceId" />
         </Col>
-        <Col span="8">
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.serviceId" readonly />
+        </Col>
+        <Col span="2" class="tr">
           <span>核销方式：</span>
-          <Input class="w200" v-model="reconciliationStatement.furposeName" />
+        </Col>
+        <Col span="6">
+          <Input class="w260" v-model="reconciliationStatement.furposeName" readonly />
         </Col>
       </Row>
     </div>
@@ -45,7 +58,7 @@
           auto-resize
           show-footer
           max-height="400"
-          align='center'
+          align="center"
           :data="BusinessType"
           :footer-method="offWrite"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -103,7 +116,7 @@
           auto-resize
           show-footer
           max-height="400"
-          align='center'
+          align="center"
           :footer-method="payCollection"
           :data="tableData"
           :edit-config="{trigger: 'click', mode: 'cell'}"
@@ -127,10 +140,13 @@
 </template>
 <script>
 import accountSelette from "./accountWirte";
-import { wirteAccount,saveAccount } from "_api/settlementManagement/seleteAccount.js";
+import {
+  wirteAccount,
+  saveAccount
+} from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./subjects";
 import bus from "../Popup/Bus";
-import moment from 'moment'
+import moment from "moment";
 export default {
   components: {
     accountSelette,
@@ -196,17 +212,15 @@ export default {
     //收付款信息
     bus.$on("paymentInfo", val => {
       val.map(item => {
-        item.createTime = moment(item.createTime).format(
-          "YYYY-MM-DD HH:mm:ss")
+        item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
         item.paidMoney = !item.paidMoney
           ? 0
           : item.paidMoney < 0
           ? item.paidMoney
           : -item.paidMoney;
-          delete item.businessType
+        delete item.businessType;
       });
-      console.log(val)
       this.tableData = val;
     });
   },
@@ -267,16 +281,16 @@ export default {
     conserve() {
       if (!Number(this.check)) {
         let obj = {
-          one:this.reconciliationStatement,
-          two:this.BusinessType,
-          three:this.tableData
-        }
-        saveAccount(obj).then(res=>{
-          if(res.code===0){
-            this.Settlement = false
-            this.$message.success('保存成功')
+          one: this.reconciliationStatement,
+          two: this.BusinessType,
+          three: this.tableData
+        };
+        saveAccount(obj).then(res => {
+          if (res.code === 0) {
+            this.Settlement = false;
+            this.$message.success("保存成功");
           }
-        })
+        });
       } else {
         this.$message.error("核对金额为0才能保存");
       }

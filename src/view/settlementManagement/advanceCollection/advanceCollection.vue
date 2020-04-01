@@ -8,12 +8,12 @@
             <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
           <div class="db ml20">
-            <span>对账期间：</span>
+            <span>查询日期：</span>
             <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150">
+            <Select v-model="BranchstoreId" class="w150" filterable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -37,8 +37,12 @@
       </div>
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">预收款认领</Button>
-        <Button class="ml10" @click="collectWirte">预收款核销</Button>
-        <Button class="ml10" @click="collectWPay">预收款支出</Button>
+        <Button
+          class="ml10"
+          @click="collectWirte"
+          :disabled="Boolean(currRow.writeOffReceiptNo)"
+        >预收款核销</Button>
+        <Button class="ml10" @click="collectWPay" :disabled="Boolean(currRow.expenditureNo)">预收款支出</Button>
         <Button class="ml10" @click="claimCollect(2)">预收款支出认领</Button>
         <Button class="ml10" @click="revokeCollection(0)">预收款撤回</Button>
         <Button
@@ -71,8 +75,8 @@
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column field="claimAmt" title="预收款认领金额"></vxe-table-column>
-              <vxe-table-column field="writeOffReceiptNo" title="预收款核销收款单号"></vxe-table-column>
-              <vxe-table-column field="writeOffAmt" title="预收款核销收款金额"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="预收款核销单号"></vxe-table-column>
+              <vxe-table-column field="writeOffAmt" title="预收款核销金额"></vxe-table-column>
               <vxe-table-column field="expenditureNo" title="预收款支出单号"></vxe-table-column>
               <vxe-table-column field="expenditureAmt" title="预收款支出金额"></vxe-table-column>
               <vxe-table-column field="expenditureClaimAmt" title="预收款支出已认领金额"></vxe-table-column>
@@ -167,7 +171,7 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
-    <Modal v-model="claimModal" :title="claimTit" width="800">
+    <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select v-model="companyId" class="w150" filterable>
         <Option v-for="item in company" :value="item.value" :key="item.value">
@@ -190,7 +194,7 @@
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
-    <Modal v-model="revoke" :title="revokeTit" @on-visible-change='visChange'>
+    <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
       <Input class="w200 ml10" v-model="reason" />
       <div slot="footer">
@@ -214,7 +218,7 @@ import {
 import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
 import settlement from "../bill/components/settlement";
 import { creat } from "./../components";
-import claim from "../components/claimed";
+import claim from "./components/claimed";
 import Record from "../components/Record";
 import claimGuest from "./components/claimGuest";
 import payApply from "./components/payApply";
@@ -235,7 +239,7 @@ export default {
       revoke: false, //撤销弹框
       reason: "", //撤销原因
       revokeTit: "", //撤销弹框标题
-      claimTit:'',//预收款弹框标题
+      claimTit: "", //预收款弹框标题
       claimModal: false, //预收款弹框
       value: [], //日期
       company: [], //往来单位
@@ -266,14 +270,23 @@ export default {
   },
   methods: {
     //撤回弹框是否打开
-    visChange(type){
-      if(!type){
-        this.reason = ''
+    visChange(type) {
+      if (!type) {
+        this.reason = "";
+      }
+    },
+    //预收款弹框是否打开
+    visChangeClaim(type) {
+      if (!type) {
+        this.companyId = "";
+        this.amt =null;
+        this.bankNameOthis = "";
+        this.claimSelection=[]
       }
     },
     // 往来单位选择
     async getOne() {
-      findGuest({}).then(res => {
+      findGuest({ size: 2000 }).then(res => {
         if (res.code === 0) {
           res.data.content.map(item => {
             this.company.push({
@@ -353,17 +366,17 @@ export default {
     //认领弹框
     claimCollect(type) {
       if (type === 1) {
-        this.claimModal=true
-        this.claimTit='预收款认领'
+        this.claimModal = true;
+        this.claimTit = "预收款认领";
         this.claimedList(1);
       } else {
-        this.claimTit='预收款支出认领'
+        this.claimTit = "预收款支出认领";
         if (
           Object.keys(this.currRow).length !== 0 &&
           this.currRow.expenditureNo &&
           !this.currRow.expenditureClaimAmt
         ) {
-          this.claimModal=true
+          this.claimModal = true;
           this.claimedList(2);
         } else {
           this.$message.error("请选择有预收款支出单号且未支出认领的数据");
@@ -372,19 +385,15 @@ export default {
     },
     //预收款支出认领
     claimPay() {
-      if (this.$refs.claim.currentClaimed.length === 1) {
-        if (
-          Math.abs(this.$refs.claim.currentClaimed[0].paidMoney) <=
-          this.currRow.remainingAmt
-        ) {
-          this.$refs.settlement.Settlement = true;
-          this.paymentId = "YSK";
-          this.claimModal = false;
-        } else {
-          this.$message.error("金额大于预收款余额，无法认领");
-        }
+      if (
+        Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
+        this.currRow.remainingAmt
+      ) {
+        this.$refs.settlement.Settlement = true;
+        this.paymentId = "YSK";
+        this.claimModal = false;
       } else {
-        this.$message.error("只能选择一条数据");
+        this.$message.error("金额大于预收款余额，无法认领");
       }
     },
     //查询接口
@@ -413,7 +422,7 @@ export default {
     },
     // 预收款认领查询
     queryClaimed() {
-      if(this.claimTit==='预收款认领'){
+      if (this.claimTit === "预收款认领") {
         this.claimedList(1);
       } else {
         this.claimedList(2);
@@ -429,7 +438,7 @@ export default {
     },
     //预收款认领
     claimCollection() {
-      if (this.$refs.claim.currentClaimed.length !== 0) {
+      if (this.claimSelection.length !== 0) {
         this.$refs.claimGuest.modal = true;
         this.claimModal = false;
       } else {
@@ -438,9 +447,8 @@ export default {
     },
     //传参数据
     selection(arr) {
-      arr.map(item => {
-        this.claimSelection.push({ id: item.id });
-      });
+      this.claimSelection=[]
+      this.claimSelection.push({ id: arr.id });
     },
     //预收款认领弹窗查询
     claimedList(type) {
