@@ -449,7 +449,7 @@ export default {
             }
             data.three.push(item);
           })
-          // let res = await api.addAll(data);
+          let res = await api.addAll(data);
           if(res.code == 0) {
             return this.$message.success("预付款认领成功");
             this.Settlement = false
