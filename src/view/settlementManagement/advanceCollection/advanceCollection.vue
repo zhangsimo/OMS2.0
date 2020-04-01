@@ -171,6 +171,7 @@
         <Record ref="Record" :serviceId="serviceId" />
       </div>
     </section>
+    <!-- 认领弹框 -->
     <Modal v-model="claimModal" :title="claimTit" width="800" @on-visible-change="visChangeClaim">
       <span>往来单位：</span>
       <Select v-model="companyId" class="w150" filterable>
@@ -194,6 +195,7 @@
       <claimGuest ref="claimGuest" />
       <div slot="footer"></div>
     </Modal>
+    <!-- 撤回弹框 -->
     <Modal v-model="revoke" :title="revokeTit" @on-visible-change="visChange">
       <span>撤销原因</span>
       <Input class="w200 ml10" v-model="reason" />
@@ -282,6 +284,7 @@ export default {
         this.amt =null;
         this.bankNameOthis = "";
         this.claimSelection=[]
+        this.$refs.settlement.tableData=[]
       }
     },
     // 往来单位选择
@@ -390,8 +393,7 @@ export default {
         this.currRow.remainingAmt
       ) {
         this.$refs.settlement.Settlement = true;
-        this.paymentId = "YSK";
-        this.claimModal = false;
+        this.paymentId = "YSKZC";
       } else {
         this.$message.error("金额大于预收款余额，无法认领");
       }

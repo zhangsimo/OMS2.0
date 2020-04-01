@@ -80,6 +80,8 @@
           height="314"
           border
           resizable
+          align="center"
+          size="mini"
           auto-resize
           show-footer
           :data="BusinessType"
@@ -163,6 +165,8 @@
           border
           resizable
           auto-resize
+          size="mini"
+          align="center"
           show-footer
           :footer-method="payCollection"
           :data="gettlementData.list"
@@ -333,6 +337,7 @@ export default {
         this.checkComputed(); // add new
       }
     },
+    //获取到对账单号下的数据
     selectAccountNo(row) {
       this.reconciliationStatement = {...this.reconciliationStatement};
       // 选择的对账类型
@@ -343,9 +348,8 @@ export default {
       if (row.two !== undefined) {
         two = row.two;
         Reflect.deleteProperty(row, "two");
-        two = [row, ...two];
+        two = [...two];
       } else {
-        two = [row];
       }
       two = two.map(el => {
         try {
@@ -356,6 +360,7 @@ export default {
         return el;
       });
       this.BusinessType.push(...two);
+      this.checkComputed()
     },
     // getSendData(row) {
     //   console.log("1", row);
@@ -378,7 +383,7 @@ export default {
             accountNo: this.accountNo,
             serviceId:this.reconciliationStatement.serviceId,
             furpose:this.reconciliationStatement.furpose,
-            receivePaymentType:this.reconciliationStatement.receivePaymentType,
+            // receivePaymentType:this.reconciliationStatement.receivePaymentType,
             remark: this.remark,
           },
           two: [],

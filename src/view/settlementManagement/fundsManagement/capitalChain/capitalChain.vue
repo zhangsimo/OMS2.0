@@ -509,7 +509,7 @@
       //撤销分配
        revocation(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
-        if(!this.oneList.allocation) return this.$Message.error('数据已分配')
+        if(!this.oneList.allocation) return this.$Message.error('请选择已分配的数据')
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否撤回分配</p>',

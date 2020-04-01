@@ -135,9 +135,9 @@
                 <span class="mr5">应付合计</span>
                 <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
                 <span class="mr5">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" :disabled="accountType"/>
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" disabled/>
                 <span class="mr5">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" :disabled="accountType"/>
+                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" disabled/>
                 <span class="mr5" style="color:#f66">实际应付合计</span>
                 <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
               </div>
@@ -509,19 +509,22 @@ export default {
     },
     // 对账单弹框出现加载数据
     hander() {
-      this.flag = false;
-      this.info = false;
-      this.store = this.parameter.orgId;
-      this.model1 = this.parameter.orgId;
-      this.Rebateid = "";
-      this.BadDebtid = "";
-      this.remark = "";
-      this.totalpayment = 0;
-      this.paymentBaddebt = 0;
-      this.paymentRebate = 0;
-      this.totalcollect = 0;
-      this.collectBaddebt = 0;
-      this.collectRebate = 0;
+      if(type){
+        this.flag = false;
+        this.info = false;
+        this.store = this.parameter.orgId;
+        this.model1 = this.parameter.orgId;
+        this.Rebateid = "";
+        this.BadDebtid = "";
+        this.remark = "";
+        this.totalpayment = 0;
+        this.paymentBaddebt = 0;
+        this.paymentRebate = 0;
+        this.totalcollect = 0;
+        this.collectBaddebt = 0;
+        this.collectRebate = 0;
+        this.Initialization()
+      }
       // this.storeAccount(this.parameter.orgId);
     },
     // 获取数据
