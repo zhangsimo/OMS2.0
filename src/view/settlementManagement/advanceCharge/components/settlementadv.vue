@@ -51,7 +51,7 @@
       <Row class="mt10">
         <Col span="8">
           <span>对账单号：</span>
-          <Input class="w200" v-model="accountNo" />
+          <Input   class="w200" v-model="accountNo" :disabled="accountDisabeld" />
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
@@ -225,7 +225,8 @@ export default {
       },
       BusinessType: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      accountDisabeld:true,//对账单号是否可选
     };
   },
   computed: {
@@ -281,6 +282,8 @@ export default {
   methods: {
     init() {
       this.Settlement = true;
+      this.accountDisabeld = this.gettlementData.sign == 9 ? true : false
+
     },
     // 选择科目弹框
     subject() {
@@ -288,6 +291,7 @@ export default {
     },
     // 对账单号选择
     accountNoClick() {
+      if (this.gettlementData.sign == 9) return false
       this.$refs.accountSelette.modal1 = true;
     },
     //弹框打开
@@ -353,12 +357,12 @@ export default {
       });
       this.BusinessType.push(...two);
     },
-    getSendData(row) {
-      console.log("1", row);
-    },
-    getChildContent(row) {
-      console.log("2", row);
-    },
+    // getSendData(row) {
+    //   console.log("1", row);
+    // },
+    // getChildContent(row) {
+    //   console.log("2", row);
+    // },
     //保存
     async conserve() {
       if (!this.check) {
@@ -368,11 +372,12 @@ export default {
         let data = {
           one: {
             orgId: this.reconciliationStatement.orgId,
+            orgName:this.reconciliationStatement.orgName,
             guestId: this.reconciliationStatement.guestId,
-            sort: this.reconciliationStatement.sort.enum,
+            sort: this.reconciliationStatement.sort,
             accountNo: this.accountNo,
             serviceId:this.reconciliationStatement.serviceId,
-            furpose:this.reconciliationStatement.furpose.enum,
+            furpose:this.reconciliationStatement.furpose,
             receivePaymentType:this.reconciliationStatement.receivePaymentType,
             remark: this.remark,
           },
@@ -381,9 +386,11 @@ export default {
         this.BusinessType.forEach(el => {
           let item = {
             orgId: el.orgId,
+            orgName:el.orgName,
             accountNo: el.accountNo,
             guestId: el.guestId,
-            businessType: (!el.businessType ? "" : el.businessType.enum),
+            guestName:el.guestName,
+            businessType: (!el.businessType ? "" : el.businessType),
             reconciliationAmt: el.reconciliationAmt,
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
@@ -394,8 +401,10 @@ export default {
         })
         if (this.gettlementData.sign == 4) {
           // 预付款核销
-          let res = await api.addWriteOff(data);
+          let res = await api.addAll(data);
           if(res.code == 0) {
+            this.Settlement = false
+            this.$emit('getNewList', {})
             return this.$message.success("核销成功");
           }
         }
@@ -405,18 +414,46 @@ export default {
           this.gettlementData.list.forEach(el => {
             let item = {
               accountName: el.accountName,
+              id:el.id,
               mateAccountCode: el.mateAccountCode,
               mateAccountName: el.subjectName,
               incomeMoney: el.incomeMoney,
               paidMoney: el.paidMoney,
               orgId: el.ownStoreId,
               orgName: el.ownStoreName,
+              amt:el.amt
             }
             data.three.push(item);
           })
-          let res = await api.addReturnClaim(data);
+          let res = await api.addAll(data);
           if(res.code == 0) {
+            this.Settlement = false
+            this.$emit('getNewList', {})
             return this.$message.success("收回认领成功");
+          }
+        }
+        if (this.gettlementData.sign == 9) {
+          // 预付款认领
+          data.three = [];
+          this.gettlementData.list.forEach(el => {
+            let item = {
+              accountName: el.accountName,
+              id:el.id,
+              mateAccountCode: el.mateAccountCode,
+              mateAccountName: el.subjectName,
+              incomeMoney: el.incomeMoney,
+              paidMoney: el.paidMoney,
+              orgId: el.ownStoreId,
+              orgName: el.ownStoreName,
+              amt:el.amt
+            }
+            data.three.push(item);
+          })
+          let res = await api.addAll(data);
+          if(res.code == 0) {
+            this.Settlement = false
+            this.$emit('getNewList', {})
+            return this.$message.success("预付款认领成功");
           }
         }
       } else {

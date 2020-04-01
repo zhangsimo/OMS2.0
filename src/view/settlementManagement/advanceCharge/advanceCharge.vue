@@ -316,7 +316,7 @@
       <claim ref="claim" @selection="selection" />
       <div slot="footer"></div>
     </Modal>
-    <settlementadv ref="settlementadv" />
+    <settlementadv ref="settlementadv" @getNewList="getNewQuery"/>
   </div>
 </template>
 <script>
@@ -644,6 +644,13 @@ export default {
         this.$refs.settlementadv.init();
       }
     },
+
+
+    //预收款认领完成刷新页面
+    getNewQuery(){
+      this.getQuery();
+    },
+
     // 核销
     openSettlement() {
       this.setClaimedSelectionList([]);
