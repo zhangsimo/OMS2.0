@@ -50,7 +50,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="往来单位" prop="guestName">
-            <Input v-model="payInfo.guestName" class="w100" />
+            <Input v-model="payInfo.guestName" class="w100" readonly/>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -75,7 +75,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="支付门店" prop="paymentShopName">
-            <Input v-model="info.paymentShopName" class="w100" />
+            <Input v-model="info.paymentShopName" class="w100" readonly/>
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -92,27 +92,33 @@
       </div>
     </Form>
     <h5 class="mt10 mb10">凭证图片</h5>
-    <div
-      class="tc"
-      style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
-      v-for="(item,index) in uploadList"
-      :key="index"
-    >
-      <img :src="item.url" />
-    </div>
-    <Upload
-      ref="upload"
-      :show-upload-list="false"
-      :action="getfile"
-      :format="['jpg','jpeg','png']"
-      :headers="headers"
-      :before-upload="handleBeforeUpload"
-      :on-success="handleSuccess"
-    >
-      <div class="tc" style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 ">
-        <Icon type="ios-camera" size="20"></Icon>
+    <div class="flex">
+      <div
+        class="tc mr5"
+        style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
+        v-for="(item,index) in uploadList"
+        :key="index"
+      >
+        <img :src="item" style="width: 58px;height:58px;line-height: 58px;"/>
       </div>
-    </Upload>
+      <Upload
+        ref="upload"
+        :show-upload-list="false"
+        :action="getfile"
+        :max-size="1024"
+        :format="['jpg','jpeg','png']"
+        :headers="headers"
+        :before-upload="handleBeforeUpload"
+        :on-success="handleSuccess"
+      >
+        <div
+          class="tc"
+          style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
+        >
+          <Icon type="ios-camera" size="20"></Icon>
+        </div>
+      </Upload>
+    </div>
     <div slot="footer"></div>
     <seleteNo ref="seleteNo" :orgId="info.orgId" @bill="bill" />
   </Modal>
@@ -126,7 +132,7 @@ import {
 import seleteNo from "./seleteNo";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
-import * as api from "_api/lease/customerSM";
+import * as api from "_api/lease/log.js";
 export default {
   components: { seleteNo },
   data() {
@@ -235,12 +241,9 @@ export default {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //获取token
-      getfile: api.getfile,
+      getfile: api.putImgUrl,
       uploadList: []
     };
-  },
-  mounted() {
-    this.uploadList = this.$refs.upload.fileList;
   },
   methods: {
     //弹框是否打开
@@ -252,7 +255,7 @@ export default {
             this.info = res.data;
           }
         });
-        this.find(this.$parent.currRow.serviceId)
+        this.find(this.$parent.currRow.serviceId);
       } else {
         this.payData = [];
         this.$refs.baseInfo.resetFields();
@@ -262,31 +265,41 @@ export default {
     },
     //传参
     bill(obj) {
-      this.find(obj.serviceId)
+      this.find(obj.serviceId);
     },
     //保存/提交
     save(type) {
-      let f1 = null;
-      this.$refs.baseInfo.validate(val => (f1 = val));
-      let f2 = null;
-      this.$refs.collectInfo.validate(val => (f2 = val));
-      let f3 = null;
-      this.$refs.paymentInfo.validate(val => (f3 = val));
-      if (f1 && f2 & f3) {
-        let obj = {
-          ...this.info,
-          ...this.payInfo,
-          theme: this.baseInfo.tit,
-          applyAmt: this.baseInfo.amt,
-          imageList: this.uploadList,
-          status: type,
-          receiveAccountName: this.payInfo.accountName,
-          serviceId: this.payData[0].serviceId,
-          paymentAccountName: this.info.paymentAccountNo
-        };
+      let obj = {
+        ...this.info,
+        ...this.payInfo,
+        theme: this.baseInfo.tit,
+        applyAmt: this.baseInfo.amt,
+        imageList: this.uploadList,
+        status: type,
+        receiveAccountName: this.payInfo.accountName,
+        serviceId: this.payData[0].serviceId,
+        paymentAccountName: this.info.paymentAccountNo
+      };
+      if (type) {
+        let f1 = null;
+        this.$refs.baseInfo.validate(val => (f1 = val));
+        let f2 = null;
+        this.$refs.collectInfo.validate(val => (f2 = val));
+        let f3 = null;
+        this.$refs.paymentInfo.validate(val => (f3 = val));
+        if (f1 && f2 & f3) {
+          savePay(obj).then(res => {
+            if (res.code === 0) {
+              this.$message.success("申请成功");
+              this.modal = false;
+              this.$parent.getQuery();
+            }
+          });
+        }
+      } else {
         savePay(obj).then(res => {
           if (res.code === 0) {
-            this.$message.success("申请成功");
+            this.$message.success("保存成功");
             this.modal = false;
             this.$parent.getQuery();
           }
@@ -308,14 +321,12 @@ export default {
     },
     find(serviceId) {
       //预收款单据和往来单位信息
-      findCollectionInfo({ serviceId }).then(
-        res => {
-          if (res.code === 0) {
-            this.payData.push(res.data.one);
-            this.payInfo = res.data.two;
-          }
+      findCollectionInfo({ serviceId }).then(res => {
+        if (res.code === 0) {
+          this.payData.push(res.data.one);
+          this.payInfo = res.data.two;
         }
-      );
+      });
     },
     //上传前
     handleBeforeUpload() {
@@ -323,7 +334,13 @@ export default {
     },
     // 上传成功
     handleSuccess(res, file) {
-      console.log(res, file);
+      if (res.code == 0) {
+        if(this.uploadList.length<6){
+          this.uploadList.push(api.getfile + res.data.url);
+        } else {
+          this.$message.error('只能上传6张图片')
+        }
+      }
     }
   }
 };
