@@ -258,6 +258,7 @@ export default {
         this.find(this.$parent.currRow.serviceId);
       } else {
         this.payData = [];
+        this.uploadList = []
         this.$refs.baseInfo.resetFields();
         this.$refs.collectInfo.resetFields();
         this.$refs.paymentInfo.resetFields();
