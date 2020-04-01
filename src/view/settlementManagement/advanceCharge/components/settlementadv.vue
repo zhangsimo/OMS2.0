@@ -383,7 +383,7 @@ export default {
             accountNo: this.accountNo,
             serviceId:this.reconciliationStatement.serviceId,
             furpose:this.reconciliationStatement.furpose,
-            receivePaymentType:this.reconciliationStatement.receivePaymentType,
+            // receivePaymentType:this.reconciliationStatement.receivePaymentType,
             remark: this.remark,
           },
           two: [],

@@ -109,7 +109,7 @@ export default {
         },
         {
           title: "智能匹配往来单位",
-          key: "guestName",
+          key: "supliers",
           align: "center"
         }
       ], //本店待认领款

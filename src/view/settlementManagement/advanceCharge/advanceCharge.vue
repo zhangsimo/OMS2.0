@@ -349,10 +349,14 @@ export default {
       claimedButtonType: "预付款认领", // claimed 用以判断弹窗按钮坐用
       claimedSelectData: [], // 认领弹窗选择的数据
       value: [], //日期
-      company: [], //往来单位
-      companyId: "", //往来单位
-      Branchstore: [], //分店名称
-      BranchstoreId: "", //分店名称
+      company: [
+        {value:0 ,label:'全部'}
+      ], //往来单位
+      companyId: 0, //往来单位
+      Branchstore: [
+        {value:0 ,label:'全部'}
+      ], //分店名称
+      BranchstoreId: 0, //分店名称
       tableData: [], //总表数据
       page: {
         num: 1,
@@ -373,8 +377,8 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    // this.BranchstoreId = arr[1];
-    this.Branchstore = arr[2];
+    this.BranchstoreId = arr[1];
+    this.Branchstore = [...this.Branchstore,...arr[2]];
     this.getOne();
   },
   methods: {
@@ -383,7 +387,6 @@ export default {
     async getOne() {
       const res = await getSupplierList({});
       const res1 = await getbayer({});
-      this.company = [];
       let data = [];
       let result = [];
       let obj = {};
