@@ -48,16 +48,6 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "品质",
-          key: "quality",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
-        },
-        {
           title: "编码",
           key: "partCode",
           minWidth: 120
@@ -68,23 +58,8 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "全称",
-          key: "fullName",
-          minWidth: 240
-        },
-        {
-          title: "OEM码",
-          key: "oeCode",
-          minWidth: 120
-        },
-        {
-          title: "产地",
-          key: "placeOfOrigin",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          key: "minUnit",
+          title: "品牌车型",
+          key: "adapterCarModel",
           minWidth: 120
         },
         {
@@ -98,8 +73,24 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "品牌车型",
-          key: "adapterCarModel",
+          title: "品质",
+          key: "quality",
+          minWidth: 120
+        },
+        {
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
+        },
+
+        {
+          title: "OEM码",
+          key: "oeCode",
+          minWidth: 120
+        },
+        {
+          title: "单位",
+          key: "minUnit",
           minWidth: 120
         },
         {
@@ -136,6 +127,16 @@ export const mixSelectPartCom = {
           }
         },
         {
+          title: "产地",
+          key: "placeOfOrigin",
+          minWidth: 120
+        },
+        {
+          title: "生产厂家",
+          key: "manufactor",
+          minWidth: 120
+        },
+        {
           title: "备注",
           key: "remark",
           minWidth: 120
@@ -157,10 +158,10 @@ export const mixSelectPartCom = {
           }
         },
         {
-          title: "生产厂家",
-          key: "manufactor",
-          minWidth: 120
-        }
+          title: "全称",
+          key: "fullName",
+          minWidth: 240
+        },
       ],
       //配件名称查询层配件数据
       partData: [],

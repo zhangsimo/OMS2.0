@@ -14,8 +14,6 @@ export const mixPartInfo = {
       let reg = /^[0-9a-zA-Z]*$/;
       if (!value) {
         callback(new Error('不能为空！'));
-      } else if (!reg.test(value)) {
-        callback(new Error('格式不正确!'));
       } else {
         callback()
       }
@@ -135,6 +133,16 @@ export const mixPartInfo = {
 
       //tab页控制
       tabsActive:'active1',
+
+      //适用车型
+      carItemObj:{
+        carBrand:"",
+        carName:""
+      },
+      carList:[{
+        carBrand:"",
+        carName:""
+      }]
     }
   },
   methods: {
@@ -193,7 +201,13 @@ export const mixPartInfo = {
       req.page = 1;
       req.pageSize = 500;
       getCarBrandAll(req).then(res => {
-        this.carObj.carBrandData = res.data.content || []
+        let arrData = res.data.content || []
+        this.carObj.carBrandData = arrData.map(item => {
+          let obj = {}
+          obj.id = item.id
+          obj.nameCn = item.nameCn
+          return obj
+        })
         if (this.formValidate.carBrandName) {
           this.getCarModelFun();
         }
@@ -415,12 +429,25 @@ export const mixPartInfo = {
               objReq.model = this.formValidate.model
 
               //使用车型品牌
-              let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
-              if (selectBrandData.length > 0) {
-                objReq.carBrand = selectBrandData[0].nameCn
-                objReq.carBrandName = selectBrandData[0].id
-              }
-              objReq.carModelName = this.formValidate.carModelName
+              // let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
+              // if (selectBrandData.length > 0) {
+              //   objReq.carBrand = selectBrandData[0].nameCn
+              //   objReq.carBrandName = selectBrandData[0].id
+              // }
+              // objReq.carModelName = this.formValidate.carModelName
+              // console.log(this.carList)
+              let carBrand = [];
+              let carBrandName = [];
+              let carModelName = [];
+              this.carList.map(item => {
+                let itemObj = item.carBrand?JSON.parse(item.carBrand):{};
+                carBrand.push(itemObj.nameCn);
+                carBrandName.push(itemObj.id);
+                carModelName.push(item.carName);
+              })
+              objReq.carBrand = carBrand.join("|");
+              objReq.carBrandName = carBrandName.join("|");
+              objReq.carModelName = carModelName.join("|");
 
               objReq.commonId = this.formValidate.commonId
               objReq.manufacture = this.formValidate.manufacture
@@ -461,5 +488,20 @@ export const mixPartInfo = {
         }
       })
     },
+    //添加车型
+    addCarItem(){
+      this.carList.push({...this.carItemObj});
+    },
+    //删除车型
+    removeCarItem(index){
+      this.carList.map((v,i) => {
+        if(i==index){
+          this.carList.splice(i,1)
+        }
+      })
+    },
+    getSelectCarBrand(v){
+      console.log(v)
+    }
   }
 }
