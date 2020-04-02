@@ -171,6 +171,7 @@
               :data="data2"
               max-height="400"
               show-summary
+              :summary-method="summary"
             ></Table>
           </div>
           <Tabs v-model="tab" class="ml20" style="flex:1" :animated="false" @click="tabName">
@@ -413,38 +414,6 @@ export default {
       modal1: false,
       text: "",
       nametext: "",
-      typelist: [
-        {
-          value: 0,
-          label: "华胜"
-        },
-        {
-          value: 1,
-          label: "内部"
-        },
-        {
-          value: 2,
-          label: "外部"
-        }
-      ],
-      business: [
-        {
-          value: 0,
-          label: "采购入库"
-        },
-        {
-          value: 1,
-          label: "采购退货"
-        },
-        {
-          value: 2,
-          label: "销售出库"
-        },
-        {
-          value: 3,
-          label: "销售退货"
-        }
-      ],
       Reconciliationlist: [
         {
           value: "",
@@ -743,7 +712,7 @@ export default {
         },
         {
           title: "收/付款账户",
-          key: "paymentAmtType",
+          key: "account",
           className: "tc"
         },
         {
@@ -1053,7 +1022,7 @@ export default {
         this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
     },
-    // 总表格合计方式
+    // 单据合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)
       const sums = {};
@@ -1068,6 +1037,45 @@ export default {
         }
         const values = data.map(item => Number(item[key]));
         if (index > 4) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 收付款单合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 5) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -1139,9 +1147,9 @@ export default {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
-            item.sortName = item.sort.name;
-            item.paymentAmtType = item.paymentAmtType.name;
-            item.startStatus = item.startStatus.name;
+            item.sortName = item.sort?item.sort.name:'';
+            item.paymentAmtType = item.paymentAmtType?item.paymentAmtType.name:'';
+            item.startStatus = item.startStatus?item.startStatus.name:'';
           });
           this.data2 = res.data;
         }
@@ -1246,14 +1254,14 @@ export default {
     // 查看对账单
     viewStatement() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
-        this.$refs.reconciliation.modal = true;
-        if (this.reconciliationStatement.statementStatusName === "草稿") {
-          this.$refs.Monthlyreconciliation.modal = true;
-          this.$refs.reconciliation.modal = false;
-        } else {
-          this.$refs.reconciliation.modal = true;
-          this.$refs.Monthlyreconciliation.modal = false;
-        }
+        this.$refs.reconciliation.accountModal = true;
+        // if (this.reconciliationStatement.statementStatusName === "草稿") {
+        //   this.$refs.Monthlyreconciliation.modal = true;
+        //   this.$refs.reconciliation.modal = false;
+        // } else {
+        //   this.$refs.reconciliation.modal = true;
+        //   this.$refs.Monthlyreconciliation.modal = false;
+        // }
       } else {
         this.$message({
           message: "请勾选要查看的对账单",

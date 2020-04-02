@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="BranchstoreId" class="w150" filterable>
+            <Select v-model="BranchstoreId" class="w150" filterable clearable >
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml20">
             <span>往来单位：</span>
-            <Select v-model="companyId" class="w150" filterable>
+            <Select v-model="companyId" class="w150" filterable clearable >
               <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </div>
@@ -87,7 +87,7 @@
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
-                      <span class="listChild">{{item.account}}</span>
+                      <span class="listChild">{{item.accountName}}</span>
                     </li>
                   </ul>
                 </template>
@@ -116,7 +116,7 @@
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
-                      <span class="listChild">{{item.account}}</span>
+                      <span class="listChild">{{item.accountName}}</span>
                     </li>
                   </ul>
                 </template>

@@ -7,7 +7,13 @@
             <div class="wlf">
               <div class="db ml20">
                 <span>对账门店：</span>
-                <Select filterable v-model="model1" class="w150" @on-change="storeAccount">
+                <Select
+                  filterable
+                  v-model="model1"
+                  class="w150"
+                  @on-change="storeAccount"
+                  clearable
+                >
                   <Option
                     v-for="item in Branchstore"
                     :value="item.value"
@@ -22,6 +28,7 @@
                   v-model="companyInfo"
                   style="width:200px"
                   @on-change="companySelect"
+                  clearable
                 >
                   <Option
                     v-for="item in companyList"
@@ -145,7 +152,7 @@
               </div>
               <div class="db">
                 <span class="mr5">计划结算类型</span>
-                <Select class="w100" v-model="totalvalue">
+                <Select class="w100" v-model="totalvalue" readonly>
                   <Option
                     v-for="item in SettlementType"
                     :value="item.value"
@@ -240,6 +247,7 @@ import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import index from "../../admin/roles";
+import render from "../../../components/message/base/render";
 export default {
   components: {
     selectDealings
@@ -248,17 +256,19 @@ export default {
     const roleValid = (rule, value, callback, { row }) => {
       if (value >= 0) {
         //如果金额是负数，说明是退货活
-        if(row.amount<0){
-          console.log(parseFloat(value) + parseFloat((row.amount + row.accountAmt)))
-          if(parseFloat(value) + parseFloat((row.amount + row.accountAmt))>0){
+        if (row.amount < 0) {
+          console.log(
+            parseFloat(value) + parseFloat(row.amount + row.accountAmt)
+          );
+          if (parseFloat(value) + parseFloat(row.amount + row.accountAmt) > 0) {
             callback(
               new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
             );
-            return
-          }else{
+            return;
+          } else {
             callback();
           }
-        }else{
+        } else {
           if (value > row.amount - row.accountAmt) {
             callback(
               new Error("配件本次不对账金额不能大于金额减掉前期已对账金额")
@@ -267,7 +277,6 @@ export default {
             callback();
           }
         }
-
       } else {
         callback(new Error("不能小于0"));
       }
@@ -284,11 +293,13 @@ export default {
       }
     };
     return {
+      summer: null, //计算费用合计
       validRules: {
         thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
         diffeReason: [{ validator: diffeReason }]
       },
       arrId: [],
+      accountData: [], //浅拷贝数据
       handervis: false,
       collectionAccountName: "",
       openingBank: "",
@@ -427,7 +438,7 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
-                    console.log(params.row)
+                    console.log(params.row);
                     const store = this.Branchstore.filter(
                       item => item.value === this.model1
                     );
@@ -531,7 +542,7 @@ export default {
               },
               on: {
                 "on-change": event => {
-                  console.log(1)
+                  console.log(1);
                   if (event > params.row.amount - params.row.accountAmt)
                     return this.$message.error(
                       "配件的本次不对账金额不能大于金额减前期已对账金额"
@@ -601,7 +612,9 @@ export default {
     Actualtotalpayment() {
       this.paymentBaddebt = this.paymentBaddebt ? this.paymentBaddebt : 0;
       this.totalpayment = this.totalpayment ? this.totalpayment : 0;
-      return this.totalpayment*1 + this.paymentBaddebt*1 + this.paymentRebate*1;
+      return (
+        this.totalpayment * 1 + this.paymentBaddebt * 1 + this.paymentRebate * 1
+      );
     },
     //实际应收合计
     Actualtotalcollect() {
@@ -620,14 +633,14 @@ export default {
         : 0;
       this.otherFees = this.otherFees ? this.otherFees : 0;
       return (
-        this.totalcollect*1 +
-        this.collectBaddebt*1 +
-        this.collectRebate*1 +
-        this.transportExpenses*1 +
-        this.insuranceExpenses*1 +
-        this.serviceCharge*1 +
-        this.partsManagementFee*1 +
-        this.otherFees*1
+        this.totalcollect * 1 +
+        this.collectBaddebt * 1 +
+        this.collectRebate * 1 +
+        this.transportExpenses * 1 +
+        this.insuranceExpenses * 1 +
+        this.serviceCharge * 1 +
+        this.partsManagementFee * 1 +
+        this.otherFees * 1
       );
     },
     //本次对账结算合计
@@ -659,13 +672,13 @@ export default {
       xTable.updateFooter();
     },
     countAmount(row) {
-      if(row.amount>0){
+      if (row.amount > 0) {
         return (
           this.$utils.toNumber(row.amount) -
           this.$utils.toNumber(row.accountAmt) -
           this.$utils.toNumber(row.thisNoAccountAmt)
         );
-      }else{
+      } else {
         return (
           this.$utils.toNumber(row.amount) +
           this.$utils.toNumber(row.accountAmt) +
@@ -840,43 +853,53 @@ export default {
     },
     // 已勾选结算类型计算
     getSettlementComputed() {
-      getSettlement({ one: this.collectlist, two: this.paymentlist }).then(
-        res => {
-          this.handervis = true;
-          this.data = [
-            {
-              Detailedstatistics: "对账单号",
-              Statementexcludingtax: res.data.hasOwnProperty("one")
-                ? this.arrId[0]
-                : "",
-              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
-                ? this.arrId[1]
-                : "",
-              Statementoilincludingtax: res.data.hasOwnProperty("three")
-                ? this.arrId[2]
-                : ""
-            },
-            {
-              Detailedstatistics: "对账金额",
-              Statementexcludingtax: res.data.hasOwnProperty("one")
-                ? res.data.one
-                : "",
-              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
-                ? res.data.two
-                : "",
-              Statementoilincludingtax: res.data.hasOwnProperty("three")
-                ? res.data.three
-                : ""
-            }
-          ];
-          // this.$set(this.data, 1, {
-          //   Detailedstatistics: "对账金额",
-          //   Statementexcludingtax: res.data.one,
-          //   Taxincludedpartsstatement: res.data.two,
-          //   Statementoilincludingtax: res.data.three
-          // });
-        }
-      );
+      let obj = {
+        one: this.collectlist,
+        two: this.paymentlist,
+        three: [
+          {
+            transportExpenses: this.transportExpenses,
+            insuranceExpenses: this.insuranceExpenses,
+            serviceCharge: this.serviceCharge,
+            partsManagementFee: this.partsManagementFee,
+            otherFees: this.otherFees,
+            payingBadDebts: this.paymentBaddebt,
+            dealingRebates: this.paymentRebate,
+            badDebtReceivable: this.collectBaddebt,
+            receivableRebate: this.collectRebate
+          }
+        ]
+      };
+      getSettlement(obj).then(res => {
+        this.handervis = true;
+        this.data = [
+          {
+            Detailedstatistics: "对账单号",
+            Statementexcludingtax: res.data.hasOwnProperty("one")
+              ? this.arrId[0]
+              : "",
+            Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+              ? this.arrId[1]
+              : "",
+            Statementoilincludingtax: res.data.hasOwnProperty("three")
+              ? this.arrId[2]
+              : ""
+          },
+          {
+            Detailedstatistics: "对账金额",
+            Statementexcludingtax: res.data.hasOwnProperty("one")
+              ? res.data.one
+              : "",
+            Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+              ? res.data.two
+              : "",
+            Statementoilincludingtax: res.data.hasOwnProperty("three")
+              ? res.data.three
+              : ""
+          }
+        ];
+        // this.accountData = JSON.parse(JSON.stringify(this.data));
+      });
     },
     // 应付选中
     paymentCheckout(selection, row) {
@@ -960,20 +983,23 @@ export default {
           const index = this.Reconciliationcontent[0].index;
           if (this.business === "销售退货" || this.business === "销售出库") {
             //金额为负数是退货
-            let sum1 = 0
-            if(this.data1[index].rpAmt>=0){
-
-              sum1 = this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
+            let sum1 = 0;
+            if (this.data1[index].rpAmt >= 0) {
+              sum1 =
+                this.data1[index].rpAmt - this.data1[index].accountAmt - sum;
 
               if (sum > this.data1[index].rpAmt - this.data1[index].accountAmt)
                 return this.$message.error(
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
-            }else{
+            } else {
+              sum1 =
+                this.data1[index].rpAmt + this.data1[index].accountAmt + sum;
 
-              sum1 = this.data1[index].rpAmt + this.data1[index].accountAmt + sum;
-
-              if ((sum + (this.data1[index].rpAmt + this.data1[index].accountAmt))>0)
+              if (
+                sum + (this.data1[index].rpAmt + this.data1[index].accountAmt) >
+                0
+              )
                 return this.$message.error(
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
@@ -984,14 +1010,16 @@ export default {
             const sum1 =
               this.data2[index].rpAmt - this.data2[index].accountAmt - sum;
 
-
-            if(this.data2[index].rpAmt>=0){
+            if (this.data2[index].rpAmt >= 0) {
               if (sum > this.data2[index].rpAmt - this.data2[index].accountAmt)
                 return this.$message.error(
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
-            }else{
-              if ((sum + (this.data2[index].rpAmt + this.data2[index].accountAmt))>0)
+            } else {
+              if (
+                sum + (this.data2[index].rpAmt + this.data2[index].accountAmt) >
+                0
+              )
                 return this.$message.error(
                   "本次不对账合计不能大于总金额减去前期已对账"
                 );
@@ -1185,6 +1213,80 @@ export default {
           type: "error",
           customClass: "zZindex"
         });
+      }
+    }
+  },
+  watch: {
+    //应收坏账
+    collectBaddebt: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应收返利
+    collectRebate: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //运费
+    transportExpenses: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //保险费
+    insuranceExpenses: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //手续费
+    serviceCharge: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //其他费用
+    otherFees: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应付坏账
+    paymentBaddebt: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应付返利
+    paymentRebate: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //配件管理费
+    partsManagementFee: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
       }
     }
   }

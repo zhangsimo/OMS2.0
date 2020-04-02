@@ -25,9 +25,9 @@
             <Select v-model="BranchstoreId" class="w150" filterable>
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
               >
             </Select>
           </div>
@@ -147,7 +147,7 @@
                       :key="index"
                       class="flex"
                     >
-                      <span class="listChild">{{ item.account }}</span>
+                      <span class="listChild">{{ item.accountName }}</span>
                     </li>
                   </ul>
                 </template>
@@ -188,7 +188,7 @@
                       :key="index"
                       class="flex"
                     >
-                      <span class="listChild">{{ item.account }}</span>
+                      <span class="listChild">{{ item.accountName }}</span>
                     </li>
                   </ul>
                 </template>
@@ -354,7 +354,7 @@ export default {
       ], //往来单位
       companyId: 0, //往来单位
       Branchstore: [
-        {value:0 ,label:'全部'}
+        {id:0 ,name:'全部'}
       ], //分店名称
       BranchstoreId: 0, //分店名称
       tableData: [], //总表数据
@@ -377,9 +377,10 @@ export default {
   async mounted() {
     let arr = await creat(this.$refs.quickDate.val, this.$store);
     this.value = arr[0];
-    this.BranchstoreId = arr[1];
-    this.Branchstore = [...this.Branchstore,...arr[2]];
+    // this.BranchstoreId = this.$store.state.user.userData.shopId
+    // this.Branchstore = [...this.Branchstore,...arr[2]];
     this.getOne();
+    this.getShop()
   },
   methods: {
     ...mapMutations(["setClaimedSearch", "setSign", "setClaimedSelectionList"]),
@@ -410,6 +411,27 @@ export default {
           value: item.id
         });
       });
+    },
+
+    //获取门店
+    async getShop(){
+      let data ={}
+      data.supplierTypeSecond = this.model1
+      this.Branchstore = [{id:0 , name:'全部'}]
+      let res = await api.goshop(data)
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore , ...res.data]
+        this.$nextTick( () => {
+          if (localStorage.getItem('oms2-userList')){
+            this.BranchstoreId = JSON.parse(localStorage.getItem("oms2-userList")).shopId
+          } else {
+            this.BranchstoreId = this.$store.state.user.userData.shopId
+          }
+        })
+        if (this.$store.state.user.userData.shopkeeper != 0){
+          this.getThisArea()//获取当前门店地址
+        }
+      }
     },
     // 快速查询
     quickDate(data) {
