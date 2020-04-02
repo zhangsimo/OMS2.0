@@ -38,6 +38,9 @@
             >
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
+            <Select class="w120 mr10" v-model="searchForm.orgid" placeholder="公司">
+              <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
+            </Select>
             <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
               <Option v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
             </Select>
@@ -86,6 +89,13 @@
               <!--                >{{ item.partBrandName}}-->
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
+            </Select>
+            <Select class="w120 mr10" v-model="searchForm1.orgid" placeholder="公司">
+              <Option
+                v-for="item in Branchstore"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
               <Option v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
@@ -163,6 +173,7 @@ import {
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
+import {creat} from "../../../settlementManagement/components";
 // import * as api from "_api/system/partManager";
 
 export default {
@@ -182,7 +193,8 @@ export default {
         storeId: "", //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "" //零库存
+        noStock: "", //零库存
+        orgid:""//仓库
       },
       //批次库存查询条件表单
       searchForm1: {
@@ -191,7 +203,8 @@ export default {
         storeId: "", //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "" //库存
+        noStock: "", //库存
+        orgid:""//仓库
       },
       curronly: false,
       storeName: "999",
@@ -559,15 +572,14 @@ export default {
           size: 10
         },
         //数据
-        dataTwo: []
-      }
+        dataTwo: [],
+      },
+      //分店
+      Branchstore: []
     };
   },
   created() {
-    this.getAllStocks(); //table请求
-    this.getStoreHoure();
-    this.getBand(); //获取品牌
-    this.getLotStocks(); //获取批次
+    this.getCommpany();
     if (this.shopkeeper != 0) {
       this.columns2.forEach((el, index, arr) => {
         if(el.key === "originGuestName") {
@@ -577,6 +589,17 @@ export default {
     }
   },
   methods: {
+    //获取风电
+    async getCommpany(){
+      let arr = await creat([], this.$store);
+      this.Branchstore = arr[2]||[];
+      this.searchForm.orgid = arr[1]||"";
+      this.searchForm1.orgid = arr[1]||"";
+      this.getAllStocks(); //table请求
+      this.getStoreHoure();
+      this.getBand(); //获取品牌
+      this.getLotStocks(); //获取批次
+    },
     //搜索
     serch() {
       this.contentOne.page.num = 1;
