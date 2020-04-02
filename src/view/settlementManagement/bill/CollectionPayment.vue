@@ -199,34 +199,34 @@ export default {
         },
         {
           title: "收付款金额",
-          key: "paymoney",
+          key: "rpAmt",
           className: "tc",
           render: (h, params) => {
             return h(
               "span",
-              params.row.paymoney ? params.row.paymoney.toFixed(2) : 0
+              params.row.rpAmt ? params.row.rpAmt.toFixed(2) : 0
             );
           }
         },
         {
           title: "已冲减/已审核",
-          key: "ycAmt",
+          key: "endAmt",
           className: "tc",
           render: (h, params) => {
             return h(
               "span",
-              params.row.ycAmt ? params.row.ycAmt.toFixed(2) : 0
+              params.row.endAmt ? params.row.endAmt.toFixed(2) : 0
             );
           }
         },
         {
           title: "未冲减/未审核",
-          key: "wcAmt",
+          key: "unAm",
           className: "tc",
           render: (h, params) => {
             return h(
               "span",
-              params.row.wcAmt ? params.row.wcAmt.toFixed(2) : 0
+              params.row.unAm ? params.row.unAm.toFixed(2) : 0
             );
           }
         },
@@ -285,14 +285,16 @@ export default {
         },
         {
           title: "收款方式",
-          key: "serviceTypeName",
           width: 120,
-          className: "tc"
+          className: "tc",
+          render:(h , params)=>{
+            return h('span' , params.row.sort.name)
+          }
         },
         {
           title: "收款账户",
-          key: "paymentAmtType",
-          className: "tc"
+          key: "account",
+          className: "tc",
         },
         {
           title: "收款金额",
@@ -337,18 +339,20 @@ export default {
         },
         {
           title: "付款时间",
-          key: "rpDate",
+          key: "checkDate",
           className: "tc"
         },
         {
           title: "付款方式",
-          key: "serviceTypeName",
           width: 120,
-          className: "tc"
+          className: "tc",
+          render:(h , params)=>{
+            return h('span' , params.row.sort.name)
+          }
         },
         {
           title: "付款账户",
-          key: "paymentAmtType",
+          key: "account",
           className: "tc"
         },
         {
@@ -584,8 +588,8 @@ export default {
             item.serviceTypeName = item.serviceType.name;
             item.startStatusName = item.startStatus.name;
           });
-          this.data1 = res.data;
-          this.data2 = res.data;
+          this.data1 = res.data.filter( item => item.documentType == 1)
+          this.data2 = res.data.filter( item => item.documentType == -1)
         } else {
           this.data1 = [];
           this.data2 = [];
