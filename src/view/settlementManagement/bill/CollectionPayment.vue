@@ -70,7 +70,15 @@
           :summary-method="handleSummary"
           @on-row-click="election"
           max-height="400"
-        ></Table>
+        >
+          <template slot-scope="{ row }" slot="fno">
+            <div class="boxFno">
+              <span class="ellipsis">{{ row.fno.split(';')[0] }};{{ row.fno.split(';')[1] }}</span>
+              <span class="ellipsis" v-if="row.fno.split(';')[1]">...</span>
+              <span class="hoverFno">{{row.fno}}</span>
+            </div>
+          </template>
+        </Table>
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
             <Table
@@ -171,15 +179,12 @@ export default {
         {
           title: "对账单号",
           key: "accountNo",
-          className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.accountNo.split(";")[1]);
-          }
+          className: "tc"
         },
         {
           title: "对账单收付款单号",
-          key: "fno",
           width: 120,
+          slot: "fno",
           className: "tc"
         },
         {
@@ -414,19 +419,18 @@ export default {
         }
         const values = data.map(item => Number(item[key]));
         if (index > 5 && index < 9) {
-            const v = values.reduce((prev, curr) => {
-              if (!isNaN(curr)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
-         else {
+          const v = values.reduce((prev, curr) => {
+            if (!isNaN(curr)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[key] = {
+            key,
+            value: v.toFixed(2)
+          };
+        } else {
           sums[key] = {
             key,
             value: " "
@@ -607,5 +611,14 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: right;
+}
+.hoverFno {
+  display: none;
+}
+.boxFno:hover .hoverFno{
+  display: inline-block;
+}
+.boxFno:hover .ellipsis {
+  display: none;
 }
 </style>
