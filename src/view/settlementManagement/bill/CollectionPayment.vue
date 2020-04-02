@@ -589,8 +589,6 @@ export default {
             item.serviceTypeName = item.serviceType.name;
             item.startStatusName = item.startStatus.name;
           });
-          console.log(res.data)
-
           this.data1 = res.data.filter( item => item.documentType == 1)
           this.data2 = res.data.filter( item => item.documentType == -1)
         } else {
