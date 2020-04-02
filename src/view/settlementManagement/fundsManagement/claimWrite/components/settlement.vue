@@ -287,7 +287,13 @@ export default {
         };
         saveAccount(obj).then(res => {
           if (res.code === 0) {
+            this.$parent.claimedList();
+            this.$parent.distributionList();
             this.Settlement = false;
+            this.$parent.accountNoWriteData = [];
+            this.$parent.claimedAmt = null;
+            this.$parent.difference = null;
+            this.$parent.currentAccount = {};
             this.$message.success("保存成功");
           }
         });

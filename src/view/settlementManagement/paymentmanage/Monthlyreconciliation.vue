@@ -122,68 +122,27 @@
                 <span class="mr5">对账应收</span>
                 <Input type="text" v-model="totalcollect" readonly class="w60 tc" />
                 <span class="mr5 ml10">应收坏账</span>
-                <InputNumber
-                  :min="0"
-                  v-model="collectBaddebt"
-                  class="w60 tc"
-                  @on-change="watchNumber"
-                />
+                <InputNumber :min="0" v-model="collectBaddebt" class="w60 tc" />
                 <span class="mr5 ml10">应收返利</span>
-                <InputNumber
-                  :min="0"
-                  v-model="collectRebate"
-                  class="w60 tc"
-                  @on-change="watchNumber"
-                />
+                <InputNumber :min="0" v-model="collectRebate" class="w60 tc" />
                 <span class="mr5 ml10">运费</span>
-                <InputNumber
-                  :min="0"
-                  v-model="transportExpenses"
-                  class="w60 tc"
-                  @on-change="watchNumber"
-                />
+                <InputNumber :min="0" v-model="transportExpenses" class="w60 tc" />
                 <span class="mr5 ml10">保险费</span>
-                <InputNumber
-                  :min="0"
-                  v-model="insuranceExpenses"
-                  class="w60 tc"
-                  @on-change="watchNumber"
-                />
+                <InputNumber :min="0" v-model="insuranceExpenses" class="w60 tc" />
                 <span class="mr5 ml10">手续费</span>
-                <InputNumber
-                  :min="0"
-                  v-model="serviceCharge"
-                  class="w60 tc"
-                  @on-change="watchNumber"
-                />
+                <InputNumber :min="0" v-model="serviceCharge" class="w60 tc" />
                 <span class="mr5 ml10">配件管理费</span>
-                <InputNumber
-                  :min="0"
-                  v-model="partsManagementFee"
-                  class="w60 tc"
-                  @on-change="watchNumber1"
-                />
+                <InputNumber :min="0" v-model="partsManagementFee" class="w60 tc" />
                 <span class="mr5 ml10">其他费用</span>
-                <InputNumber :min="0" v-model="otherFees" class="w60 tc" @on-change="watchNumber" />
+                <InputNumber :min="0" v-model="otherFees" class="w60 tc" />
               </div>
               <div class="db mt10 mb10">
                 <span class="mr5">对账应付</span>
                 <Input type="text" v-model="totalpayment" readonly class="w60 tc" />
                 <span class="mr5 ml10">应付坏账</span>
-                <InputNumber
-                  v-model="paymentBaddebt"
-                  type="text"
-                  class="w60 tc"
-                  :min="0"
-                  @on-change="watchNumber"
-                />
+                <InputNumber v-model="paymentBaddebt" type="text" class="w60 tc" :min="0" />
                 <span class="mr5 ml10">应付返利</span>
-                <InputNumber
-                  v-model="paymentRebate"
-                  class="w60 tc"
-                  :min="0"
-                  @on-change="watchNumber"
-                />
+                <InputNumber v-model="paymentRebate" class="w60 tc" :min="0" />
                 <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
                 <Input v-model="Actualtotalcollect" type="text" class="w60 tc" readonly />
                 <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
@@ -288,6 +247,7 @@ import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
 import index from "../../admin/roles";
+import render from "../../../components/message/base/render";
 export default {
   components: {
     selectDealings
@@ -333,12 +293,13 @@ export default {
       }
     };
     return {
+      summer: null, //计算费用合计
       validRules: {
         thisNoAccountAmt: [{ validator: roleValid, trigger: "change" }],
         diffeReason: [{ validator: diffeReason }]
       },
       arrId: [],
-      accountData:[],//浅拷贝数据
+      accountData: [], //浅拷贝数据
       handervis: false,
       collectionAccountName: "",
       openingBank: "",
@@ -705,47 +666,6 @@ export default {
     }
   },
   methods: {
-    //监听费用数值变化修改对账单金额
-    watchNumber(val) {
-      if (val==null) return;
-      let sum =
-        this.collectBaddebt * 1 +
-        this.otherFees * 1 +
-        this.collectRebate * 1 +
-        this.transportExpenses * 1 +
-        this.insuranceExpenses * 1 +
-        this.serviceCharge * 1 -
-        this.paymentBaddebt -
-        this.paymentRebate;
-      if (this.data[1].Taxincludedpartsstatement) {
-        this.data[1].Taxincludedpartsstatement = this.accountData[1].Taxincludedpartsstatement*1+ sum;
-      } else if(this.data[1].Statementoilincludingtax){
-        this.data[1].Statementoilincludingtax = this.accountData[1].Statementoilincludingtax*1+ sum;
-      } else if(this.data[1].Statementexcludingtax){
-        this.data[1].Statementexcludingtax = this.accountData[1].Statementexcludingtax*1+ sum;
-      }
-    },
-    //监听配件费用修改对账单金额
-    watchNumber1(val){
-      if (val==null) return;
-      let sum =
-        this.collectBaddebt * 1 +
-        this.otherFees * 1 +
-        this.collectRebate * 1 +
-        this.partsManagementFee * 1 +
-        this.transportExpenses * 1 +
-        this.insuranceExpenses * 1 +
-        this.serviceCharge * 1 -
-        this.paymentBaddebt -
-        this.paymentRebate;
-      if (this.data[1].Statementexcludingtax) {
-        this.data[1].Statementexcludingtax = this.accountData[1].Statementexcludingtax*1+ sum;
-      } else if(this.data[1].Taxincludedpartsstatement){
-        this.data[1].Taxincludedpartsstatement = this.accountData[1].Taxincludedpartsstatement*1+ sum;
-      } else if(this.data[1].Statementoilincludingtax){
-        this.data[1].Statementoilincludingtax = this.accountData[1].Statementoilincludingtax*1+ sum;
-      }
-    },
     // 在值发生改变时更新表尾合计
     updateFooterEvent(params) {
       let xTable = this.$refs.xTable;
@@ -933,38 +853,53 @@ export default {
     },
     // 已勾选结算类型计算
     getSettlementComputed() {
-      getSettlement({ one: this.collectlist, two: this.paymentlist }).then(
-        res => {
-          this.handervis = true;
-          this.data = [
-            {
-              Detailedstatistics: "对账单号",
-              Statementexcludingtax: res.data.hasOwnProperty("one")
-                ? this.arrId[0]
-                : "",
-              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
-                ? this.arrId[1]
-                : "",
-              Statementoilincludingtax: res.data.hasOwnProperty("three")
-                ? this.arrId[2]
-                : ""
-            },
-            {
-              Detailedstatistics: "对账金额",
-              Statementexcludingtax: res.data.hasOwnProperty("one")
-                ? res.data.one
-                : "",
-              Taxincludedpartsstatement: res.data.hasOwnProperty("two")
-                ? res.data.two
-                : "",
-              Statementoilincludingtax: res.data.hasOwnProperty("three")
-                ? res.data.three
-                : ""
-            }
-          ];
-          this.accountData = JSON.parse(JSON.stringify(this.data))
-        }
-      );
+      let obj = {
+        one: this.collectlist,
+        two: this.paymentlist,
+        three: [
+          {
+            transportExpenses: this.transportExpenses,
+            insuranceExpenses: this.insuranceExpenses,
+            serviceCharge: this.serviceCharge,
+            partsManagementFee: this.partsManagementFee,
+            otherFees: this.otherFees,
+            payingBadDebts: this.paymentBaddebt,
+            dealingRebates: this.paymentRebate,
+            badDebtReceivable: this.collectBaddebt,
+            receivableRebate: this.collectRebate
+          }
+        ]
+      };
+      getSettlement(obj).then(res => {
+        this.handervis = true;
+        this.data = [
+          {
+            Detailedstatistics: "对账单号",
+            Statementexcludingtax: res.data.hasOwnProperty("one")
+              ? this.arrId[0]
+              : "",
+            Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+              ? this.arrId[1]
+              : "",
+            Statementoilincludingtax: res.data.hasOwnProperty("three")
+              ? this.arrId[2]
+              : ""
+          },
+          {
+            Detailedstatistics: "对账金额",
+            Statementexcludingtax: res.data.hasOwnProperty("one")
+              ? res.data.one
+              : "",
+            Taxincludedpartsstatement: res.data.hasOwnProperty("two")
+              ? res.data.two
+              : "",
+            Statementoilincludingtax: res.data.hasOwnProperty("three")
+              ? res.data.three
+              : ""
+          }
+        ];
+        // this.accountData = JSON.parse(JSON.stringify(this.data));
+      });
     },
     // 应付选中
     paymentCheckout(selection, row) {
@@ -1278,6 +1213,80 @@ export default {
           type: "error",
           customClass: "zZindex"
         });
+      }
+    }
+  },
+  watch: {
+    //应收坏账
+    collectBaddebt: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应收返利
+    collectRebate: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //运费
+    transportExpenses: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //保险费
+    insuranceExpenses: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //手续费
+    serviceCharge: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //其他费用
+    otherFees: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应付坏账
+    paymentBaddebt: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //应付返利
+    paymentRebate: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
+      }
+    },
+    //配件管理费
+    partsManagementFee: {
+      handler(val, ov) {
+        if (val !== ov) {
+          this.getSettlementComputed(val);
+        }
       }
     }
   }
