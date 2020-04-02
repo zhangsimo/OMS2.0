@@ -617,8 +617,6 @@ export default class InterPurchase extends Vue {
       } else {
         this.adjustButtonDisable = true;
       }
-      console.log(v);
-      console.log(this.settleMethods)
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
       }
