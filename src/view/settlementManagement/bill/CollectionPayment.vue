@@ -546,7 +546,6 @@ export default {
     ok() {
       this.getGeneral();
     },
-    cancel() {},
     // 总表查询
     getGeneral() {
       let data = {

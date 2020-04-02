@@ -148,6 +148,14 @@ export function getReconciliation(params) {
         params
     })
 }
+// 月结对账
+export function getReconciliationNo(params) {
+    return axios.request({
+        url: `${api.omsSettle}/statement/master/queryMasterAndDetail`,
+        method: 'get',
+        params
+    })
+}
 // 月结对账选中结算
 export function getSettlement(data) {
     return axios.request({
@@ -261,7 +269,7 @@ export function accountRevoke(data) {
     })
 }
 // 导出配件明细
-export function reportParts(data){
+export function reportParts(data) {
     return axios.request({
         url: `${api.omsOrder}/pchsEnterMain/export/in/detail`,
         method: 'post',
@@ -269,7 +277,7 @@ export function reportParts(data){
     })
 }
 // 对账门店
-export function getStore(params){
+export function getStore(params) {
     return axios.request({
         url: `${api.wmsApi}/guest/get/by/orgId`,
         method: 'get',
@@ -277,7 +285,7 @@ export function getStore(params){
     })
 }
 // 根据条件查询供应商(分页)：/guest/queryAllSupplier
-export function typeSelect(params){
+export function typeSelect(params) {
     return axios.request({
         url: `${api.wmsApi}/guest/queryAllSupplier`,
         method: 'get',
@@ -285,10 +293,10 @@ export function typeSelect(params){
     })
 }
 // 对账单查看对账
-export function account(params){
+export function account(params) {
     return axios.request({
         url: `${api.omsSettle}/statement/master/query/statement`,
-        method:'get',
+        method: 'get',
         params
     })
 }
