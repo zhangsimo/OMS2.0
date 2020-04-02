@@ -8,7 +8,7 @@
               <div class="db ml20">
                 <span>对账门店：</span>
                 <Input class="w150" v-model="infoBase.orgName" readonly/>
-                <!-- <Select v-model="infoBase.orgId" disabled class="w150">
+                <!-- <Select v-model="infoBase.orgId" readonly class="w150">
                   <Option
                     v-for="item in Branchstore"
                     :value="item.value"
@@ -19,7 +19,7 @@
               <div class="db ml20">
                 <span>往来单位：</span>
                 <Input class="w150" v-model="infoBase.guestName" readonly/>
-                <!-- <Select v-model="infoBase.guestId" disabled style="width:200px">
+                <!-- <Select v-model="infoBase.guestId" readonly style="width:200px">
                   <Option
                     v-for="item in companyList"
                     :value="item.value"
@@ -108,11 +108,11 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" disabled />
+                <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" readonly />
                 <span>开户行：</span>
-                <Input v-model="infoBase.bankName" class="w140 mr10" disabled />
+                <Input v-model="infoBase.bankName" class="w140 mr10" readonly />
                 <span>收款账号：</span>
-                <Input v-model="infoBase.collectionAccount" class="w140 mr10" disabled />
+                <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly />
                 <span>本次申请付款账户：</span>
                 <Input v-model="infoBase.thisPaymentAccount" class="w140 mr10" />
               </div>
@@ -209,15 +209,15 @@
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="store" />
+        <input type="text" readonly class="w140 mr15 tc" :value="store" />
         <span class="mr5">单据编号</span>
-        <input type="text" disabled class="w180 mr15 tc" :value="bill" />
+        <input type="text" readonly class="w180 mr15 tc" :value="bill" />
         <span class="mr5">业务类型</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="business" />
+        <input type="text" readonly class="w140 mr15 tc" :value="business" />
         <span class="mr5">往来单位信息</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="thiscompanyInfo" />
+        <input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo" />
         <span class="mr5">单据日期</span>
-        <input type="text" disabled class="w140 mr15 tc" :value="billDate" />
+        <input type="text" readonly class="w140 mr15 tc" :value="billDate" />
       </div>
       <Table
         :columns="Reconciliationlist"
