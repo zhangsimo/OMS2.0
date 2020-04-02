@@ -339,7 +339,7 @@ export default {
         },
         {
           title: "付款时间",
-          key: "rpDate",
+          key: "checkDate",
           className: "tc"
         },
         {
