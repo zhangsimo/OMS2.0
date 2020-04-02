@@ -38,7 +38,7 @@
             >
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm.orgId" placeholder="公司">
+            <Select class="w120 mr10" v-model="searchForm.old" placeholder="公司">
               <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
             <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
@@ -90,7 +90,7 @@
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm1.orgId" placeholder="公司">
+            <Select class="w120 mr10" v-model="searchForm1.old" placeholder="公司">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -194,7 +194,7 @@ export default {
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //零库存
-        orgId:""//仓库
+        old:""//仓库
       },
       //批次库存查询条件表单
       searchForm1: {
@@ -204,7 +204,7 @@ export default {
         partName: "", //配件名称
         shelf: "", //仓位
         noStock: "", //库存
-        orgId:""//仓库
+        old:""//仓库
       },
       curronly: false,
       storeName: "999",
@@ -593,8 +593,8 @@ export default {
     async getCommpany(){
       let arr = await creat([], this.$store);
       this.Branchstore = arr[2]||[];
-      this.searchForm.orgId = arr[1]||"";
-      this.searchForm1.orgId = arr[1]||"";
+      this.searchForm.old = arr[1]||"";
+      this.searchForm1.old = arr[1]||"";
       this.getAllStocks(); //table请求
       this.getStoreHoure();
       this.getBand(); //获取品牌
