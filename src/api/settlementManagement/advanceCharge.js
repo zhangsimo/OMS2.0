@@ -90,3 +90,13 @@ export function addAll(data) {
     data,
   });
 }
+
+//获取门店接口
+export function goshop(data) {
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/findPointsShop`,
+    method: 'post',
+    data
+  });
+}
+

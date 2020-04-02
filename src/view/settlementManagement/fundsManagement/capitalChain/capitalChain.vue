@@ -467,7 +467,7 @@
             let res = await deleList(data)
             if (res.code === 0){
               this.getList()
-              this.$Message.success('删除成功')
+              this.$Message.success(res.message)
             }
           },
           onCancel: () => {
