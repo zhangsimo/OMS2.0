@@ -199,7 +199,7 @@ export default {
         },
         {
           title: "收付款金额",
-          key: "rpAmt",
+          key: "cpAmt",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -221,7 +221,7 @@ export default {
         },
         {
           title: "未冲减/未审核",
-          key: "unAm",
+          key: "unAmt",
           className: "tc",
           render: (h, params) => {
             return h(
