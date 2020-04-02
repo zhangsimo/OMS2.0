@@ -70,7 +70,15 @@
           :summary-method="handleSummary"
           @on-row-click="election"
           max-height="400"
-        ></Table>
+        >
+          <template slot-scope="{ row }" slot="fno">
+            <div class="boxFno">
+              <span class="ellipsis">{{ row.fno.split(';')[0] }};{{ row.fno.split(';')[1] }}</span>
+              <span class="ellipsis" v-if="row.fno.split(';')[1]">...</span>
+              <span class="hoverFno">{{row.fno}}</span>
+            </div>
+          </template>
+        </Table>
         <Tabs v-model="tab" class="mt10" @click="tabName">
           <Tab-pane label="收款单记录" name="key1">
             <Table
@@ -122,7 +130,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
-import { findGuest} from "_api/settlementManagement/advanceCollection.js";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { getbayer } from "@/api/AlotManagement/threeSupplier";
 // import selectDealings from "./components/selectCompany";
 import { getSupplierList } from "_api/purchasing/purchasePlan";
@@ -175,8 +183,8 @@ export default {
         },
         {
           title: "对账单收付款单号",
-          key: "fno",
           width: 120,
+          slot: "fno",
           className: "tc"
         },
         {
@@ -193,24 +201,33 @@ export default {
           title: "收付款金额",
           key: "paymoney",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.paymoney).toFixed(2))
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.paymoney ? params.row.paymoney.toFixed(2) : 0
+            );
           }
         },
         {
           title: "已冲减/已审核",
           key: "ycAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.ycAmt).toFixed(2))
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.ycAmt ? params.row.ycAmt.toFixed(2) : 0
+            );
           }
         },
         {
           title: "未冲减/未审核",
           key: "wcAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.wcAmt).toFixed(2))
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.wcAmt ? params.row.wcAmt.toFixed(2) : 0
+            );
           }
         },
         {
@@ -263,7 +280,7 @@ export default {
         },
         {
           title: "收款时间",
-          key: "rpDate",
+          key: "checkDate",
           className: "tc"
         },
         {
@@ -281,8 +298,8 @@ export default {
           title: "收款金额",
           key: "checkAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.checkAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.checkAmt.toFixed(2));
           }
         },
         {
@@ -338,8 +355,8 @@ export default {
           title: "付款金额",
           key: "checkAmt",
           className: "tc",
-          render: (h,params) =>{
-            return h('span',(params.row.checkAmt).toFixed(2))
+          render: (h, params) => {
+            return h("span", params.row.checkAmt.toFixed(2));
           }
         },
         {
@@ -380,7 +397,7 @@ export default {
     this.model1 = arr[1];
     this.Branchstore = arr[2];
     this.getGeneral();
-    this.getOne()
+    this.getOne();
   },
   methods: {
     // 日期选择
@@ -401,21 +418,18 @@ export default {
           return;
         }
         const values = data.map(item => Number(item[key]));
-        if (index > 5&&index<9) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[key] = {
-              key,
-              value: v.toFixed(2)
-            };
-          }
+        if (index > 5 && index < 9) {
+          const v = values.reduce((prev, curr) => {
+            if (!isNaN(curr)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+          sums[key] = {
+            key,
+            value: v.toFixed(2)
+          };
         } else {
           sums[key] = {
             key,
@@ -467,20 +481,20 @@ export default {
     },
     //查询
     query() {
-      this.data1 = []
-      this.data2 = []
+      this.data1 = [];
+      this.data2 = [];
       this.getGeneral();
     },
     // 往来单位选择
     async getOne() {
-      findGuest({size:2000}).then(res => {
+      findGuest({ size: 2000 }).then(res => {
         if (res.code === 0) {
-          res.data.content.map(item=>{
+          res.data.content.map(item => {
             this.company.push({
-              value:item.id,
-              label:item.fullName
-            })
-          })
+              value: item.id,
+              label: item.fullName
+            });
+          });
         }
       });
     },
@@ -536,8 +550,12 @@ export default {
     // 总表查询
     getGeneral() {
       let data = {
-        startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        startTime: this.value[0]
+          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
+        endTime: this.value[1]
+          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          : "",
         orgId: this.BranchstoreId,
         guestId: this.companyId,
         accountNo: this.accountNo,
@@ -593,5 +611,14 @@ export default {
   display: inline-block;
   width: 100px;
   text-align: right;
+}
+.hoverFno {
+  display: none;
+}
+.boxFno:hover .hoverFno{
+  display: inline-block;
+}
+.boxFno:hover .ellipsis {
+  display: none;
 }
 </style>

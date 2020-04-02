@@ -14,7 +14,6 @@ import {
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
-// import {purchaseTypeList} from "./goodsList";
 
 export const mixGoodsData = {
   data() {
@@ -194,13 +193,6 @@ export const mixGoodsData = {
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
-        // this.delArr.map(item => {
-        //   this.tableData.map((v2, i) => {
-        //     if (item.id == v2.id) {
-        //       this.tableData.splice(i, 1);
-        //     }
-        //   });
-        // });
         this.$Modal.confirm({
           title: "是否要删除配件",
           onOk: async () => {
@@ -310,12 +302,7 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      // this.tableData = this.tableData.concat(v);
       let oldArr = [...v,...this.tableData]
-      // console.log(this.tableData, "this.tableData  ==>267");
-      // console.log(this.tableData, "this.tableData.concat(v) =>267");
-      // var oldArr = this.tableData;
-      // console.log(oldArr, "oldArr =>269");
       var allArr = [];
       for (var i = 0; i < oldArr.length; i++) {
         var flag = true;
@@ -352,13 +339,8 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v) {
-      console.log(v);
       this.formPlan.planArriveDate = v;
     },
-    //获取订单状态
-    // returnOrderType(n){
-    //   return purchaseTypeList(n)
-    // },
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
@@ -588,7 +570,7 @@ export const mixGoodsData = {
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
-                      this.$Message.success("添加成功");
+                      this.$Message.success("保存成功");
                       this.getList();
                     }
                   });

@@ -190,7 +190,7 @@ export default class InterPurchase extends Vue {
     orderMan: "", // 采购员
     orderManId: "",
     billTypeId: "", // 票据类型
-    settleTypeId: "",  // 结算方式
+    settleTypeId: "020501",  // 结算方式
     storeId: "", // 入库仓
     orderDate: "", // 订货日期
     planArriveDate: "", // 预计到货日期
@@ -565,15 +565,6 @@ export default class InterPurchase extends Vue {
           for (let k in this.formPlanmain) {
             this.formPlanmain[k] = row[k];
           }
-          // for(let b of this.purchaseOrderTable.tbdata){
-          //   b._highlight = false
-          //   if(b.id==this.selectLeftItemId){
-          //     b._highlight = true;
-          //     this.setFormPlanmain(b);
-          //     break;
-          //   }
-          // }
-
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);

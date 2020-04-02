@@ -50,7 +50,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="往来单位" prop="guestName">
-            <Input v-model="payInfo.guestName" class="w100" readonly/>
+            <Input v-model="payInfo.guestName" class="w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -75,7 +75,7 @@
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="支付门店" prop="paymentShopName">
-            <Input v-model="info.paymentShopName" class="w100" readonly/>
+            <Input v-model="info.paymentShopName" class="w100" readonly />
           </FormItem>
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
@@ -93,33 +93,49 @@
     </Form>
     <h5 class="mt10 mb10">凭证图片</h5>
     <div class="flex">
-      <div
-        class="tc mr5"
-        style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
-        v-for="(item,index) in uploadList"
-        :key="index"
-      >
-        <img :src="item" style="width: 58px;height:58px;line-height: 58px;"/>
+      <div class="demo-upload-list" v-for="(item,index) in uploadList" :key="index">
+        <img :src="item" style="width: 58px;height:58px;line-height: 58px;" />
+        <div class="demo-upload-list-cover">
+          <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
+          <Icon type="ios-trash-outline" @click.native="handleRemove(index)"></Icon>
+        </div>
+      </div>
+      <div class="flex" style="align-items: flex-end;">
+        <span v-if="uploadListModal.length>5" class="mr5" @click="visible1=true" style="cursor: pointer;font-size:12px">查看全部</span>
       </div>
       <Upload
         ref="upload"
+        type="drag"
+        multiple
         :show-upload-list="false"
         :action="getfile"
         :max-size="1024"
         :format="['jpg','jpeg','png']"
+        :on-exceeded-size="handleMaxSize"
         :headers="headers"
         :before-upload="handleBeforeUpload"
         :on-success="handleSuccess"
       >
-        <div
-          class="tc"
-          style="width: 58px;height:58px;line-height: 58px;border:1px dashed #e4e4e4 "
-        >
+        <div class="tc" style="width: 58px;height:58px;line-height: 58px;">
           <Icon type="ios-camera" size="20"></Icon>
         </div>
       </Upload>
     </div>
     <div slot="footer"></div>
+    <Modal v-model="visible">
+      <img :src="imgName " style="width: 100%" />
+      <div slot="footer"></div>
+    </Modal>
+    <Modal v-model="visible1">
+      <div class="demo-upload-list" v-for="(item,index) in uploadListModal" :key="index">
+        <img :src="item" style="width: 58px;height:58px;line-height: 58px;" />
+        <div class="demo-upload-list-cover">
+          <Icon type="ios-eye-outline" @click.native="handleView(item)"></Icon>
+          <Icon type="ios-trash-outline" @click.native="handleRemove(index)"></Icon>
+        </div>
+      </div>
+      <div slot="footer"></div>
+    </Modal>
     <seleteNo ref="seleteNo" :orgId="info.orgId" @bill="bill" />
   </Modal>
 </template>
@@ -133,10 +149,14 @@ import seleteNo from "./seleteNo";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import * as api from "_api/lease/log.js";
+import index from "../../../admin/roles";
 export default {
   components: { seleteNo },
   data() {
     return {
+      visible: false, //图片弹框
+      visible1:false,//查看全部弹框
+      imgName: "", //看大图
       modal: false,
       payColumns: [
         {
@@ -242,10 +262,25 @@ export default {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       }, //获取token
       getfile: api.putImgUrl,
-      uploadList: []
+      uploadList: [],//5张图片
+      uploadListModal:[],//全部图片
     };
   },
   methods: {
+    //图片查看
+    handleView(name) {
+      this.imgName = name;
+      this.visible = true;
+    },
+    //图片删除
+    handleRemove(index) {
+      this.uploadList.splice(index, 1);
+      this.uploadListModal.splice(index, 1);
+    },
+    //上传出错
+    handleMaxSize(file) {
+      this.$message.error("图片不能超过1M");
+    },
     //弹框是否打开
     visChange(type) {
       if (type) {
@@ -258,7 +293,7 @@ export default {
         this.find(this.$parent.currRow.serviceId);
       } else {
         this.payData = [];
-        this.uploadList = []
+        this.uploadList = [];
         this.$refs.baseInfo.resetFields();
         this.$refs.collectInfo.resetFields();
         this.$refs.paymentInfo.resetFields();
@@ -336,10 +371,13 @@ export default {
     // 上传成功
     handleSuccess(res, file) {
       if (res.code == 0) {
-        if(this.uploadList.length<6){
-          this.uploadList.push(api.getfile + res.data.url);
+        if (this.uploadListModal.length < 50) {
+          if(this.uploadList.length<5){
+            this.uploadList.push(api.getfile + res.data.url);
+          }
+          this.uploadListModal.push(api.getfile + res.data.url);
         } else {
-          this.$message.error('只能上传6张图片')
+          this.$message.error("只能上传50张图片");
         }
       }
     }
@@ -350,5 +388,37 @@ export default {
 .tab {
   border: 1px solid #e4e4e4;
   height: 60px;
+}
+.demo-upload-list {
+  display: inline-block;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  margin-right: 4px;
+}
+.demo-upload-list-cover {
+  display: none;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+.demo-upload-list:hover .demo-upload-list-cover {
+  display: block;
+}
+.demo-upload-list-cover i {
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  margin: 0 2px;
 }
 </style>
