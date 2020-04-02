@@ -209,15 +209,15 @@
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="store" />
+        <Input type="text" readonly class="w140 mr15 tc" :value="store" />
         <span class="mr5">单据编号</span>
-        <input type="text" readonly class="w180 mr15 tc" :value="bill" />
+        <Input type="text" readonly class="w180 mr15 tc" :value="bill" />
         <span class="mr5">业务类型</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="business" />
+        <Input type="text" readonly class="w140 mr15 tc" :value="business" />
         <span class="mr5">往来单位信息</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo" />
+        <Input type="text" readonly class="w140 mr15 tc" :value="thiscompanyInfo" />
         <span class="mr5">单据日期</span>
-        <input type="text" readonly class="w140 mr15 tc" :value="billDate" />
+        <Input type="text" readonly class="w140 mr15 tc" :value="billDate" />
       </div>
       <Table
         :columns="Reconciliationlist"
@@ -365,7 +365,7 @@ export default {
                       item.index = params.index;
                     });
                     this.Reconciliationcontent = params.row.detailDtoList;
-                    this.store = params.row.orgId;
+                    this.store = params.row.orgName;
                     this.bill = params.row.serviceId;
                     this.business = params.row.serviceTypeName;
                     this.thiscompanyInfo = params.row.guestName;
