@@ -177,6 +177,7 @@ export default {
   },
   watch:{
     service: async function(val) {
+      if (!val)  return  this.recordLists =[]
       let res = await api.findByAccountNo({ accountNo: val});
       if(res.code == 0) {
         this.recordLists = res.data;
