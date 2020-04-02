@@ -145,7 +145,7 @@ export default {
           ? moment(this.dateQuery[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.dateQuery[1]
-          ? moment(this.dateQuery[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
         guestId: this.companyId

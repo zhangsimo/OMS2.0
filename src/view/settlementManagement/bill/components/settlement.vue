@@ -173,6 +173,7 @@ export default {
         item.businessTypeName = item.businessType.name;
       });
       this.BusinessType = [...this.BusinessType, ...val.two];
+      this.checkComputed()
     });
     //选择科目
     bus.$on("hedInfo", val => {
