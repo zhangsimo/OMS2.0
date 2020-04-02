@@ -530,6 +530,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
+        item.rpAnt = item.rpAnt == "" ? 0 : item.rpAnt
         sum1 += parseFloat(item.rpAnt);
       });
       this.gettlementData.list.map(item => {
