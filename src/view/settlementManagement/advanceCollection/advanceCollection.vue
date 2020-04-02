@@ -87,7 +87,7 @@
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
-                      <span class="listChild">{{item.account}}</span>
+                      <span class="listChild">{{item.accountName}}</span>
                     </li>
                   </ul>
                 </template>
@@ -116,7 +116,7 @@
                 <template v-slot="{row}">
                   <ul class="list">
                     <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
-                      <span class="listChild">{{item.account}}</span>
+                      <span class="listChild">{{item.accountName}}</span>
                     </li>
                   </ul>
                 </template>
