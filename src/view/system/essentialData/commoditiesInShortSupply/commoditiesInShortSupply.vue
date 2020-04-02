@@ -239,7 +239,7 @@ export default {
       this.Loading = true;
       data.size = this.page.page;
       data.page = this.page.num - 1;
-      if (this.band != "0") {
+      if (this.band != "0" && this.band) {
         data.partBrandCode = this.band;
       }
       switch (this.searchType) {
