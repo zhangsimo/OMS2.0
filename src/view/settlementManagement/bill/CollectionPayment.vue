@@ -204,7 +204,7 @@ export default {
           render: (h, params) => {
             return h(
               "span",
-              params.row.rpAmt ? params.row.rpAmt.toFixed(2) : 0
+              params.row.cpAmt ? params.row.cpAmt.toFixed(2) : 0
             );
           }
         },
