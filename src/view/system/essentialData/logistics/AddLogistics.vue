@@ -34,7 +34,7 @@
           <Input placeholder="请输入姓名" v-model="data.contactor" style="width: 150px"></Input>
         </FormItem>
         <FormItem label="省份:">
-          <Select v-model="data.provinceId" style="width:100px" class="mr10">
+          <Select v-model="data.provinceId" filterable style="width:100px" class="mr10">
             <Option
               v-for="item in provincearr"
               v-if="item.parentId==0"
@@ -49,7 +49,7 @@
           <Input placeholder="请输入电话" v-model="data.contactorTel" style="width: 150px"></Input>
         </FormItem>
         <FormItem label="城市:">
-          <Select v-model="data.cityId" style="width:100px" class="mr10">
+          <Select v-model="data.cityId" filterable style="width:100px" class="mr10">
             <Option
               v-for="item in provincearr"
               v-if="data.provinceId==item.parentId"
