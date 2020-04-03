@@ -199,9 +199,9 @@ export default {
           rpAnt: 0,
           unAmtLeft: 0
         });
-      } else if (value.loginName) {
+      } else if (value.userName) {
         this.BusinessType.push({
-          businessTypeName: this.obj.fullName + "-" + value.loginName,
+          businessTypeName: this.obj.fullName + "-" + value.userName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
