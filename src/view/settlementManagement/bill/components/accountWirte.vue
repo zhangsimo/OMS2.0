@@ -15,6 +15,7 @@
       class="mt10"
       :columns="account"
       :data="accountData"
+      ref="table"
       highlight-row
       @on-current-change="seleteDate"
     ></Table>
@@ -28,7 +29,7 @@
 </template>
 <script>
 import idDetailed from "./idDetailed";
-import { findGuest} from "_api/settlementManagement/advanceCollection.js";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../Popup/Bus";
@@ -103,21 +104,21 @@ export default {
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
       paymentId: "YJDZ", //收付类型
-      paymentList: [], //收付类型下拉框
+      paymentList: [] //收付类型下拉框
     };
   },
   methods: {
     // 往来单位选择
     async getOne() {
-      findGuest({size:2000}).then(res => {
+      findGuest({ size: 2000 }).then(res => {
         if (res.code === 0) {
-          this.company=[]
-          res.data.content.map(item=>{
+          this.company = [];
+          res.data.content.map(item => {
             this.company.push({
-              value:item.id,
-              label:item.fullName
-            })
-          })
+              value: item.id,
+              label: item.fullName
+            });
+          });
         }
       });
     },
@@ -127,6 +128,7 @@ export default {
         //收付类型数据字典
         getDataDictionaryTable({ dictCode: "RECEIVE_PAYMENT_TYPE" }).then(
           res => {
+            this.paymentList = [];
             res.data.map(item => {
               this.paymentList.push({
                 value: item.itemCode,
@@ -162,7 +164,7 @@ export default {
     },
     // 确认按钮
     determine() {
-      if (Object.keys(this.seleteData).length !== 0) {
+      if (this.seleteData&&Object.keys(this.seleteData).length !== 0) {
         bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {
@@ -171,7 +173,13 @@ export default {
     },
     // 单选数据
     seleteDate(currentRow) {
-      this.seleteData = currentRow;
+      let account = this.$parent.$parent.$parent.reconciliationStatement;
+      if (currentRow&&account && account.accountNo === currentRow.accountNo) {
+        this.$refs.table.clearCurrentRow()
+        return this.$message.error("对账单号已存在");
+      } else {
+        this.seleteData = currentRow;
+      }
     }
   }
 };
