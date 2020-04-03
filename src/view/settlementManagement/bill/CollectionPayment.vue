@@ -226,7 +226,7 @@ export default {
           render: (h, params) => {
             return h(
               "span",
-              params.row.unAm ? params.row.unAm.toFixed(2) : 0
+              params.row.unAmt ? params.row.unAmt.toFixed(2) : 0
             );
           }
         },
