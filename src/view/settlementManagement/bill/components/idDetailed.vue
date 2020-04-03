@@ -168,7 +168,7 @@ export default {
         },
         {
           title: "店号",
-          key: "orgId",
+          key: "code",
           className: "tc"
         },
         {
@@ -213,7 +213,7 @@ export default {
         },
         {
           title: "转单日期",
-          key: "createTime",
+          key: "transferDate",
           className: "tc"
         },
         {
