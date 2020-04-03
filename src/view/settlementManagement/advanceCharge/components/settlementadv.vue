@@ -1,74 +1,37 @@
 <template>
-  <Modal
-    v-model="Settlement"
-    title="对账单收付款结算"
-    width="1200"
-    @on-visible-change="hander"
-  >
+  <Modal v-model="Settlement" title="对账单收付款结算" width="1200" @on-visible-change="hander">
     <div class="db">
-      <button
-        class="ivu-btn ivu-btn-default mr10"
-        type="button"
-        @click="conserve"
-      >
-        保存
-      </button>
-      <button
-        class="ivu-btn ivu-btn-default mr10"
-        type="button"
-        @click="Settlement = false"
-      >
-        关闭
-      </button>
+      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
+      <button class="ivu-btn ivu-btn-default mr10" type="button" @click="Settlement = false">关闭</button>
     </div>
     <div class="db p15 mt10 mb10">
       <Row>
         <Col span="8">
           <span>门店：</span>
-          <Input
-            disabled
-            class="w200"
-            v-model="reconciliationStatement.orgName"
-          />
+          <Input disabled class="w200" v-model="reconciliationStatement.orgName" />
         </Col>
         <Col span="8">
           <span>往来单位：</span>
-          <Input
-            disabled
-            class="w200"
-            v-model="reconciliationStatement.guestName"
-          />
+          <Input disabled class="w200" v-model="reconciliationStatement.guestName" />
         </Col>
         <Col span="8">
           <span>收付类型：</span>
-          <Input
-            disabled
-            class="w200"
-            v-model="reconciliationStatement.sort.name"
-          />
+          <Input disabled class="w200" v-model="reconciliationStatement.sort.name" />
         </Col>
       </Row>
       <Row class="mt10">
         <Col span="8">
           <span>对账单号：</span>
-          <Input   class="w200" v-model="accountNo" :disabled="accountDisabeld" />
+          <Input class="w200" v-model="accountNo" :disabled="accountDisabeld" />
           <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="8">
           <span>收付款单号：</span>
-          <Input
-            disabled
-            class="w200"
-            v-model="reconciliationStatement.serviceId"
-          />
+          <Input disabled class="w200" v-model="reconciliationStatement.serviceId" />
         </Col>
         <Col span="8">
           <span>核销方式：</span>
-          <Input
-            disabled
-            class="w200"
-            v-model="reconciliationStatement.furpose.name"
-          />
+          <Input disabled class="w200" v-model="reconciliationStatement.furpose.name" />
         </Col>
       </Row>
     </div>
@@ -91,40 +54,19 @@
         >
           <vxe-table-column title="核销信息">
             <vxe-table-column field="orgName" title="门店"></vxe-table-column>
-            <vxe-table-column
-              field="accountNo"
-              title="对账单号"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="guestName"
-              title="往来单位"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="serviceTypeName"
-              title="业务类型"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="reconciliationAmt"
-              title="对账金额"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="hasAmt"
-              title="已收/付金额"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="unAmt"
-              title="未收/付金额"
-            ></vxe-table-column>
+            <vxe-table-column field="accountNo" title="对账单号"></vxe-table-column>
+            <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
+            <vxe-table-column field="serviceTypeName" title="业务类型"></vxe-table-column>
+            <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
+            <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
+            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
               field="rpAnt"
               title="本次核销金额"
               width="140"
               :edit-render="{ name: 'input', attrs: { type: 'number' } }"
             ></vxe-table-column>
-            <vxe-table-column
-              field="unAmtLeft"
-              title="剩余未收/未付"
-            ></vxe-table-column>
+            <vxe-table-column field="unAmtLeft" title="剩余未收/未付"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
         <div>
@@ -132,22 +74,17 @@
             <p
               class="w80 pl5 pr10"
               style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-            >
-              核对
-            </p>
+            >核对</p>
             <span
               class="w700 tc"
               style="display:inline-block;border:1px solid #ddd;border-top:none;line-height:40px"
-              >{{ check }}</span
-            >
+            >{{ check }}</span>
           </section>
           <section class="flex">
             <p
               class="w80 pl5 pr10"
               style="border:1px solid #ddd;border-top:0;border-right:0;line-height: 40px"
-            >
-              备注
-            </p>
+            >备注</p>
             <input
               type="text"
               size="large"
@@ -173,31 +110,12 @@
           :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column title="收/付款信息">
-            <vxe-table-column
-              type="index"
-              title="序号"
-              width="60"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="accountBankNo"
-              title="收/付款账户"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="subjectName"
-              title="科目名称"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="incomeMoney"
-              title="收入金额"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="paidMoney"
-              title="支出金额"
-            ></vxe-table-column>
-            <vxe-table-column
-              field="ownStoreName"
-              title="所属门店"
-            ></vxe-table-column>
+            <vxe-table-column type="index" title="序号" width="60"></vxe-table-column>
+            <vxe-table-column field="accountBankNo" title="收/付款账户"></vxe-table-column>
+            <vxe-table-column field="subjectName" title="科目名称"></vxe-table-column>
+            <vxe-table-column field="incomeMoney" title="收入金额"></vxe-table-column>
+            <vxe-table-column field="paidMoney" title="支出金额"></vxe-table-column>
+            <vxe-table-column field="ownStoreName" title="所属门店"></vxe-table-column>
           </vxe-table-column>
         </vxe-table>
       </Col>
@@ -230,20 +148,27 @@ export default {
       BusinessType: [],
       collectPayId: "",
       obj: {},
-      accountDisabeld:true,//对账单号是否可选
+      accountDisabeld: true //对账单号是否可选
     };
   },
   computed: {
     ...mapGetters(["gettlementData"]),
     accountNo() {
-      return this.reconciliationStatement.accountNo + ";" + (this.reconciliationStatement.accountNo2 == undefined ? " " : this.reconciliationStatement.accountNo2);
-    },
+      return (
+        this.reconciliationStatement.accountNo +
+        ";" +
+        (this.reconciliationStatement.accountNo2 == undefined
+          ? " "
+          : this.reconciliationStatement.accountNo2)
+      );
+    }
   },
   mounted() {
     // 对账单号
     // bus.$on("accountHedNo", val => {
     //   this.reconciliationStatement.accountNo = val.serviceId;
     // });
+    //选择科目
     bus.$on("hedInfo", val => {
       this.BusinessType.push({
         serviceTypeName: val.fullName,
@@ -251,7 +176,7 @@ export default {
         hasAmt: 0,
         unAmt: 0,
         rpAnt: 0,
-        unAmtLeft: 0,
+        unAmtLeft: 0
       });
     });
     bus.$on("content", val => {
@@ -267,9 +192,9 @@ export default {
           rpAnt: 0,
           unAmtLeft: 0
         });
-      } else if (value.loginName) {
+      } else if (value.userName) {
         this.BusinessType.push({
-          serviceTypeName: this.obj.fullName + "-" + value.loginName,
+          serviceTypeName: this.obj.fullName + "-" + value.userName,
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
@@ -286,8 +211,7 @@ export default {
   methods: {
     init() {
       this.Settlement = true;
-      this.accountDisabeld = this.gettlementData.sign == 9 ? true : false
-
+      this.accountDisabeld = this.gettlementData.sign == 9 ? true : false;
     },
     // 选择科目弹框
     subject() {
@@ -295,28 +219,23 @@ export default {
     },
     // 对账单号选择
     accountNoClick() {
-      if (this.gettlementData.sign == 9) return false
+      if (this.gettlementData.sign == 9) return false;
       this.$refs.accountSelette.modal1 = true;
     },
     //弹框打开
     hander(type) {
-      this.check = 0;
-      this.remark = "";
-      this.reconciliationStatement = {};
-      this.BusinessType = [];
-      this.tableData = [];
-      this.collectPayId = "";
-      //   if (!type) {
-      //     this.check = 0;
-      //     this.remark = "";
-      //     this.reconciliationStatement = {};
-      //     this.BusinessType = [];
-      //     this.tableData = [];
-      //     this.collectPayId = "";
-      //   } else {
-      //     this.checkComputed()
-      //   }
-      this.getList();
+      if (!type) {
+        this.check = 0;
+        this.remark = "";
+        this.reconciliationStatement = {sort: { name: "" },
+        furpose: { name: "" }};
+        this.BusinessType = [];
+        this.tableData = [];
+        this.collectPayId = "";
+      } else {
+        this.checkComputed();
+        this.getList();
+      }
     },
     async getList() {
       let params = {
@@ -327,11 +246,11 @@ export default {
       if (res.code == 0 && res.data != null) {
         this.reconciliationStatement = res.data.one;
         this.BusinessType = res.data.two.map(el => {
-            try {
-                el.serviceTypeName = el.businessType.name;
-            } catch(e) {
-                el.serviceTypeName = "";
-            }
+          try {
+            el.serviceTypeName = el.businessType.name;
+          } catch (e) {
+            el.serviceTypeName = "";
+          }
           return el;
         });
         this.checkComputed(); // add new
@@ -339,7 +258,7 @@ export default {
     },
     //获取到对账单号下的数据
     selectAccountNo(row) {
-      this.reconciliationStatement = {...this.reconciliationStatement};
+      this.reconciliationStatement = { ...this.reconciliationStatement };
       // 选择的对账类型
       this.reconciliationStatement.receivePaymentType = row.receivePaymentType;
       // 选择的对账单号
@@ -353,14 +272,14 @@ export default {
       }
       two = two.map(el => {
         try {
-            el.serviceTypeName = el.businessType.name;
-        } catch(e) {
-            el.serviceTypeName = "";
+          el.serviceTypeName = el.businessType.name;
+        } catch (e) {
+          el.serviceTypeName = "";
         }
         return el;
       });
       this.BusinessType.push(...two);
-      this.checkComputed()
+      this.checkComputed();
     },
     // getSendData(row) {
     //   console.log("1", row);
@@ -377,39 +296,39 @@ export default {
         let data = {
           one: {
             orgId: this.reconciliationStatement.orgId,
-            orgName:this.reconciliationStatement.orgName,
+            orgName: this.reconciliationStatement.orgName,
             guestId: this.reconciliationStatement.guestId,
             sort: this.reconciliationStatement.sort,
             accountNo: this.accountNo,
-            serviceId:this.reconciliationStatement.serviceId,
-            furpose:this.reconciliationStatement.furpose,
+            serviceId: this.reconciliationStatement.serviceId,
+            furpose: this.reconciliationStatement.furpose,
             // receivePaymentType:this.reconciliationStatement.receivePaymentType,
-            remark: this.remark,
+            remark: this.remark
           },
-          two: [],
-        }
+          two: []
+        };
         this.BusinessType.forEach(el => {
           let item = {
             orgId: el.orgId,
-            orgName:el.orgName,
+            orgName: el.orgName,
             accountNo: el.accountNo,
             guestId: el.guestId,
-            guestName:el.guestName,
-            businessType: (!el.businessType ? "" : el.businessType),
+            guestName: el.guestName,
+            businessType: !el.businessType ? "" : el.businessType,
             reconciliationAmt: el.reconciliationAmt,
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
             rpAnt: el.rpAnt,
-            unAmtLeft: el.unAmtLeft,
-          }
+            unAmtLeft: el.unAmtLeft
+          };
           data.two.push(item);
-        })
+        });
         if (this.gettlementData.sign == 4) {
           // 预付款核销
           let res = await api.addAll(data);
-          if(res.code == 0) {
-            this.Settlement = false
-            this.$emit('getNewList', {})
+          if (res.code == 0) {
+            this.Settlement = false;
+            this.$emit("getNewList", {});
             return this.$message.success("核销成功");
           }
         }
@@ -419,21 +338,21 @@ export default {
           this.gettlementData.list.forEach(el => {
             let item = {
               accountName: el.accountName,
-              id:el.id,
+              id: el.id,
               mateAccountCode: el.mateAccountCode,
               mateAccountName: el.subjectName,
               incomeMoney: el.incomeMoney,
               paidMoney: el.paidMoney,
               orgId: el.ownStoreId,
               orgName: el.ownStoreName,
-              amt:el.amt
-            }
+              amt: el.amt
+            };
             data.three.push(item);
-          })
+          });
           let res = await api.addAll(data);
-          if(res.code == 0) {
-            this.Settlement = false
-            this.$emit('getNewList', {})
+          if (res.code == 0) {
+            this.Settlement = false;
+            this.$emit("getNewList", {});
             return this.$message.success("收回认领成功");
           }
         }
@@ -443,21 +362,21 @@ export default {
           this.gettlementData.list.forEach(el => {
             let item = {
               accountName: el.accountName,
-              id:el.id,
+              id: el.id,
               mateAccountCode: el.mateAccountCode,
               mateAccountName: el.subjectName,
               incomeMoney: el.incomeMoney,
               paidMoney: el.paidMoney,
               orgId: el.ownStoreId,
               orgName: el.ownStoreName,
-              amt:el.amt
-            }
+              amt: el.amt
+            };
             data.three.push(item);
-          })
+          });
           let res = await api.addAll(data);
-          if(res.code == 0) {
-            this.Settlement = false
-            this.$emit('getNewList', {})
+          if (res.code == 0) {
+            this.Settlement = false;
+            this.$emit("getNewList", {});
             return this.$message.success("预付款认领成功");
           }
         }
@@ -467,19 +386,19 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      if(isNaN(row.reconciliationAmt)) {
+      if (isNaN(row.reconciliationAmt)) {
         row.reconciliationAmt = 0;
       }
-      if(isNaN(row.unAmtLeft)) {
+      if (isNaN(row.unAmtLeft)) {
         row.unAmtLeft = 0;
       }
-      if(isNaN(row.endAmt)) {
+      if (isNaN(row.endAmt)) {
         row.endAmt = 0;
       }
-      if(isNaN(row.rpAnt)) {
+      if (isNaN(row.rpAnt)) {
         row.rpAnt = 0;
       }
-      if(isNaN(row.uncollectedAmt)) {
+      if (isNaN(row.uncollectedAmt)) {
         row.uncollectedAmt = 0;
       }
       row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAnt * 1;
@@ -530,7 +449,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        item.rpAnt = item.rpAnt == "" ? 0 : item.rpAnt
+        item.rpAnt = item.rpAnt == "" ? 0 : item.rpAnt;
         sum1 += parseFloat(item.rpAnt);
       });
       this.gettlementData.list.map(item => {

@@ -7,25 +7,25 @@
             <div class="wlf">
               <div class="db ml20">
                 <span>对账门店：</span>
-                <Input class="w150" v-model="infoBase.orgName" readonly/>
+                <Input class="w150" v-model="infoBase.orgName" readonly />
                 <!-- <Select v-model="infoBase.orgId" readonly class="w150">
                   <Option
                     v-for="item in Branchstore"
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select> -->
+                </Select>-->
               </div>
               <div class="db ml20">
                 <span>往来单位：</span>
-                <Input class="w150" v-model="infoBase.guestName" readonly/>
+                <Input class="w150" v-model="infoBase.guestName" readonly />
                 <!-- <Select v-model="infoBase.guestId" readonly style="width:200px">
                   <Option
                     v-for="item in companyList"
                     :value="item.value"
                     :key="item.value"
                   >{{ item.label }}</Option>
-                </Select> -->
+                </Select>-->
               </div>
               <!-- <div class="db ml10">
                 <button
@@ -462,19 +462,7 @@ export default {
         {
           title: "差异原因",
           key: "diffeReason",
-          className: "tc",
-          render: (h, params) => {
-            let label = "";
-            label = this.accountType ? "span" : "Input";
-            return h(label, {
-              style: {
-                width: "60px"
-              },
-              props: {
-                value: ""
-              }
-            });
-          }
+          className: "tc"
         }
       ], //本次不对账弹窗配件
       data1: [], //应收数据

@@ -412,6 +412,7 @@
         data.subjectId = this.subjectCode
         data.accountName = this.accountName
         data.bankName = this.bankName
+        this.allMoneyList = {}
         let res = await goList(data)
         if(res.code === 0){
           if(res.data.content.length > 0){

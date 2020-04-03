@@ -318,6 +318,7 @@
         data.areaId = 0
         data.shopNumber = this.shopCode
         data.subjectId = this.subjectCode
+        this.allMoneyList = {}
         let res = await goList(data)
         if(res.code === 0){
           if(res.data.content.length > 0){
