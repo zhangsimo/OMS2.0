@@ -388,9 +388,17 @@
 
             //修改节点数据
             change(row){
+             // console.log(row)
                 this.ChangeData = row;
-                this.ChangeData.parentCodeTwo = row.titleCode + ' - ' + row.titleName;
-                this.ChangeData.titleTypeCode = row.titleTypeCode + ' - ' + row.titleTypeName
+             if(row.titleLevel == 1){
+               this.ChangeData.parentCodeTwo = row.parentCode + ' - ' + row.titleTypeName;
+               this.ChangeData.titleTypeCode = row.titleTypeCode + ' - ' + row.titleTypeName
+             }else {
+              let FindArr = this.tableData.filter(item => item.titleCode == row.parentCode);
+              // console.log(FindArr)
+               this.ChangeData.parentCodeTwo = row.parentCode + ' - ' + FindArr[0].titleName;
+               this.ChangeData.titleTypeCode = row.titleTypeCode + ' - ' + row.titleTypeName
+             }
               // console.log(row)
                 this.ChangeData.parentCode = row.parentCode;
                 // this.ChangeData.titleTypeCode = this.ChangeData.titleTypeName + this.ChangeData.titleTypeCode;
