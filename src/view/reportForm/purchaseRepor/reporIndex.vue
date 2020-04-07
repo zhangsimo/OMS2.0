@@ -1,6 +1,6 @@
 <template>
   <div class="content-oper" style="background: #fff">
-    <Tabs :animated="false">
+    <Tabs :animated="false" style="min-height: 500px">
       <TabPane label="采购订单明细表">
         <section class="oper-box">
           <div class="oper-top flex">

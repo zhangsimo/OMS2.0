@@ -694,10 +694,10 @@ export default {
                 { required: true, message: "申请额度说明必填！", trigger: "blur" }
             ];
             this.$refs.child.ruls.tempStart=[
-                { required: true, message: "临时额度开始时间", trigger: "blur" }
+                { required: true, type:'date', message: "临时额度开始时间", trigger: "blur" }
             ];
             this.$refs.child.ruls.tempEnd=[
-                { required: true, message: "临时额度结束时间", trigger: "blur" }
+                { required: true,type:'date', message: "临时额度结束时间", trigger: "blur" }
             ];
         } else {
             this.$refs.child.ruls.quotaReason = [
