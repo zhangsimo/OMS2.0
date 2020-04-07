@@ -16,7 +16,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>地址:{{onelist.guestVO.addr}}</span>
+              <span>地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
             </p>
             <p>
               <span>电话:{{onelist.guestVO.tel}}</span>
@@ -60,8 +60,8 @@
               <span>{{onelist.enterOrder.remark}}</span>
             </p>
             <p>
-              <span>入库仓库:</span>
-              <span>{{onelist.store.name}}</span>
+              <!-- <span>入库仓库:</span>
+              <span>{{onelist.store.name}}</span> -->
             </p>
           </Col>
         </Row>
