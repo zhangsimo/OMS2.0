@@ -888,6 +888,58 @@ export default [
       }
     ]
   },
+  {
+    path: "/documentApproval",
+    name: "documentApproval",
+    mark: "6",
+    redirect: "/reportForm",
+    meta: {
+      icon: "ios-paper",
+      title: "审批管理"
+    },
+    component: Main,
+    children: [
+      {
+        path:'/documentApproval/draftingOfApplication',
+        name:'documentApproval-draftingOfApplication',
+        // redirect: "/multilevel/level_2_1",
+        mark:'5100',
+        meta: {
+          title:'起草申请'
+        },
+        component: () =>
+          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
+      },
+      {
+        path: "/documentApproval/myApplication",
+        name: "documentApproval-myApplication",
+        mark: "5100",
+        meta: {
+          title: "我的申请"
+        },
+        component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
+      },
+      {
+        path: "/documentApproval/ForMyApproval",
+        name: "documentApproval-ForMyApproval",
+        mark: "5100",
+        meta: {
+          title: "待我审批"
+        },
+        component: () => import("@/view/documentApproval/ForMyApproval/ForMyApproval.vue")
+      },
+      {
+        path: "/documentApproval/myApproval",
+        name: "documentApproval-myApproval",
+        mark: "5100",
+        meta: {
+          title: "我的审批"
+        },
+        component: () => import("@/view/documentApproval/myApproval/myApproval.vue")
+      }
+
+    ]
+  },
 
   // {
   //   path:'/financial',

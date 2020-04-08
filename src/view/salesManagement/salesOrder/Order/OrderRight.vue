@@ -808,6 +808,7 @@ export default {
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
+          this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -829,6 +830,7 @@ export default {
                 ...this.formPlan.detailList,
                 ...conversionList(val)
             ]
+            this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -1050,6 +1052,7 @@ export default {
                  storeId:this.formPlan.storeId,
                  orderTypeValue:0,
                  orderManId:this.$store.state.user.userData.id,
+                 orderMan: this.$store.state.user.userData.staffName,
                  guestId:this.formPlan.guestId}
                  ) ;
           this.draftShow = 0;

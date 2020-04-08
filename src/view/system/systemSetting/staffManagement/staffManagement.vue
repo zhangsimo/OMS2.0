@@ -80,7 +80,7 @@
     <!--      添加的萌态框-->
     <Modal v-model="modalShow" :title="title" width="700px" :closable="false">
       <addStaff ref="child" :data="newStaff"></addStaff>
-      <div slot="footer">
+      <div slot="footer" style="padding: 10px 0">
         <Button type="primary" @click="submit('next')" v-if="isNextAdd">保存并继续</Button>
         <Button type="primary" @click="submit">保存退出</Button>
         <Button type="default" @click="modalShow = false">退出</Button>
