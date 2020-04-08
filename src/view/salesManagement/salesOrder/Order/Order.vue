@@ -249,7 +249,7 @@ export default {
       this.isAdd=true;
       this.$refs.right.WarehouseList.map(item=>{
           if(item.isDefault){
-              this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
+              this.$refs.right.formPlan=Object.assign({},{storeId:item.id});
           }
       })
     },
