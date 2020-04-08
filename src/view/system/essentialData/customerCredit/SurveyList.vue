@@ -188,7 +188,7 @@
       <Col span="8">
         <FormItem label="滚动借款周期:" prop="rollingDate">
           <!--<Input v-model='data.rollingDate' style="width: 180px" ></Input>-->
-          <InputNumber v-model="data.rollingDate" style="width: 180px"></InputNumber>
+          <InputNumber min="1" v-model="data.rollingDate" style="width: 180px"></InputNumber>
         </FormItem>
       </Col>
       <Col span="16">
@@ -409,7 +409,7 @@ export default {
           { required: true, validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
-          { required: true, validator: bigNumber, trigger: "blur"},
+          { required: true, validator: bigNumber, trigger: "change"},
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址

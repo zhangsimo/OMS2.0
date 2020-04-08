@@ -227,6 +227,8 @@ export default {
         arr = this.$parent.data3[0];
       } else if (this.title === "采购入库") {
         arr = this.$parent.data4[0];
+      }else{
+        arr = this.$parent.data4[0];
       }
       let data = {
         orderCode: arr.orderCode,
