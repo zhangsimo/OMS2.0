@@ -889,8 +889,8 @@ export default [
     ]
   },
   {
-    path: "/DocumentApproval",
-    name: "DocumentApproval",
+    path: "/documentApproval",
+    name: "documentApproval",
     mark: "6",
     redirect: "/reportForm",
     meta: {
@@ -900,42 +900,42 @@ export default [
     component: Main,
     children: [
       {
-        path:'/DocumentApproval/draftingOfApplication',
-        name:'DocumentApproval-draftingOfApplication',
+        path:'/documentApproval/draftingOfApplication',
+        name:'documentApproval-draftingOfApplication',
         // redirect: "/multilevel/level_2_1",
         mark:'5100',
         meta: {
           title:'起草申请'
         },
         component: () =>
-          import("@/view/DocumentApproval/draftingOfApplication/draftingOfApplication.vue")
+          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
       },
       {
-        path: "/DocumentApproval/myApplication",
-        name: "DocumentApproval-myApplication",
+        path: "/documentApproval/myApplication",
+        name: "documentApproval-myApplication",
         mark: "5100",
         meta: {
           title: "我的申请"
         },
-        component: () => import("@/view/DocumentApproval/myApplication/myApplication.vue")
+        component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
       {
-        path: "/DocumentApproval/ForMyApproval",
-        name: "DocumentApproval-ForMyApproval",
+        path: "/documentApproval/ForMyApproval",
+        name: "documentApproval-ForMyApproval",
         mark: "5100",
         meta: {
           title: "待我审批"
         },
-        component: () => import("@/view/DocumentApproval/ForMyApproval/ForMyApproval.vue")
+        component: () => import("@/view/documentApproval/ForMyApproval/ForMyApproval.vue")
       },
       {
-        path: "/DocumentApproval/myApproval",
-        name: "DocumentApproval-myApproval",
+        path: "/documentApproval/myApproval",
+        name: "documentApproval-myApproval",
         mark: "5100",
         meta: {
           title: "我的审批"
         },
-        component: () => import("@/view/DocumentApproval/myApproval/myApproval.vue")
+        component: () => import("@/view/documentApproval/myApproval/myApproval.vue")
       }
 
     ]
