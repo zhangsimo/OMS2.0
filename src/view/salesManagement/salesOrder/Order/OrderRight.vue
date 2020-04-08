@@ -1050,6 +1050,7 @@ export default {
                  storeId:this.formPlan.storeId,
                  orderTypeValue:0,
                  orderManId:this.$store.state.user.userData.id,
+                 orderMan: this.$store.state.user.userData.staffName,
                  guestId:this.formPlan.guestId}
                  ) ;
           this.draftShow = 0;
