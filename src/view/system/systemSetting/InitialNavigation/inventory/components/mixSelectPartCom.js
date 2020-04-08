@@ -303,6 +303,7 @@ export const mixSelectPartCom = {
     },//取消
     //添加
     async addAccessories() {
+      // console.log(this.selectTableItem);
       if(parseFloat(this.formInfo.enterQty)<0||parseFloat(this.formInfo.enterPrice)<0||parseFloat(this.formInfo.enterAmt)<0){
         this.$Message.error('数值不可小于0')
         return false
@@ -321,9 +322,11 @@ export const mixSelectPartCom = {
       this.selectTableItem.enterAmt = parseFloat(this.formInfo.enterAmt)
       this.selectTableItem.remark = this.formInfo.remark
       this.partInfo.details=[]
+      this.selectTableItem.carModelName = this.selectTableItem.adapterCarModel
       this.partInfo.details.push(this.selectTableItem)
 
       this.$refs.formInfo.resetFields()
+      // console.log(this.partInfo);
       let res = await saveList(this.partInfo)
       if (res.code === 0) {
         this.numberAmount=false
