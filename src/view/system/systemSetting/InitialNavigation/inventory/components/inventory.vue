@@ -122,8 +122,8 @@
         <vxe-table-column field="partId" width="auto" title="配件ID"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="brand" title="品牌"></vxe-table-column>
-        <vxe-table-column field="applyCarModel" title="品牌车型"></vxe-table-column>
+        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
         <vxe-table-column field="systemUnitId" title="单位"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="数量金额信息">
