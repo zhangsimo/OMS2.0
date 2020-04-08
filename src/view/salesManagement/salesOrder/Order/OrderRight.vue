@@ -808,6 +808,7 @@ export default {
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
+          this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -829,6 +830,7 @@ export default {
                 ...this.formPlan.detailList,
                 ...conversionList(val)
             ]
+            this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
