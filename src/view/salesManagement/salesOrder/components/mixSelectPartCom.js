@@ -44,7 +44,7 @@ export const mixSelectPartCom = {
         },
         {
           title: "内码",
-          key: "code",
+          key: "partInnerId",
           minWidth: 120
         },
         {
@@ -54,17 +54,17 @@ export const mixSelectPartCom = {
         },
         {
           title: "名称",
-          key: "partStandardName",
+          key: "partName",
           minWidth: 120
         },
         {
           title: "品牌车型",
-          key: "adapterCarModel",
+          key: "carModelName",
           minWidth: 120
         },
         {
           title: "规格",
-          key: "specifications",
+          key: "spec",
           minWidth: 120
         },
         {
@@ -90,41 +90,23 @@ export const mixSelectPartCom = {
         },
         {
           title: "单位",
-          key: "minUnit",
+          key: "unit",
           minWidth: 120
         },
         {
           title: "一级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.firstType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
+          key: "carTypef",
+          minWidth: 120
         },
         {
           title: "二级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.secondType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
+          key: "carTypes",
+          minWidth: 120
         },
         {
           title: "三级分类",
-          minWidth: 120,
-          render: (h, params) => {
-            let text = "";
-            try {
-              text = params.row.baseType.thirdType.typeName;
-            } catch (e) {}
-            return h("span", text);
-          }
+          key: "carTypet",
+          minWidth: 120
         },
         {
           title: "产地",
@@ -133,7 +115,7 @@ export const mixSelectPartCom = {
         },
         {
           title: "生产厂家",
-          key: "manufactor",
+          key: "carBrandName",
           minWidth: 120
         },
         {

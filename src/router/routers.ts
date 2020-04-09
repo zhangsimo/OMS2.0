@@ -832,6 +832,18 @@ export default [
           import("@/view/settlementManagement/advanceCharge/advanceCharge.vue")
       },
       {
+        path: "/settlementManagement/otherReceivables",
+        name: "settlementManagement-otherReceivables",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "其他应收款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/otherReceivables/otherReceivables.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",
@@ -850,6 +862,17 @@ export default [
             },
             component: () =>
               import("@/view/settlementManagement/fundsManagement/capitalChain/capitalChain.vue")
+          },
+          {
+            path: "accountRegistration ",
+            name: "accountRegistration",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "账户登记表"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/accountRegistration/accountRegistration.vue")
           },
           {
             path: "/fundsManagement/cashJournal",

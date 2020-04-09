@@ -17,7 +17,7 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
-              <span>{{onelist.OrgAddress || ' '}}</span>
+              <span>{{onelist.orgAddress || ' '}}</span>
             </p>
             <p>
               <span>电话:</span>
