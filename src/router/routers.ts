@@ -864,7 +864,7 @@ export default [
               import("@/view/settlementManagement/fundsManagement/capitalChain/capitalChain.vue")
           },
           {
-            path: "accountRegistration ",
+            path: "accountRegistration",
             name: "accountRegistration",
             redirect: "",
             // mark: "5101",
