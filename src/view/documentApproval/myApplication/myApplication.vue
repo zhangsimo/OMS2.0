@@ -212,7 +212,7 @@
         query(){},
         //起草申请
         TheApplication(){
-          this.$router.push({name: "DocumentApproval-draftingOfApplication"})
+          this.$router.push({name: "documentApproval-draftingOfApplication"})
         },
         //vxe表格计算和值
         addFooter ({ columns, data }) {

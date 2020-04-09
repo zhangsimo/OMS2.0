@@ -905,7 +905,7 @@ export default [
         // redirect: "/multilevel/level_2_1",
         mark:'5100',
         meta: {
-          title:'起草申请'
+          title:'申请流程'
         },
         component: () =>
           import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")

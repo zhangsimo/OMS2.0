@@ -94,13 +94,13 @@
       <div class="addForm">
         <FormItem label='工资卡信息' ></FormItem>
         <FormItem label='收款户名：' >
-          <Input placeholder='请输入收款户名' v-model='data.PaymentAccount' style="width: 400px" ></Input>
+          <Input placeholder='请输入收款户名' v-model='data.accountPayee' style="width: 400px" ></Input>
         </FormItem>
         <FormItem label='银行账号：' >
-          <Input type="number" placeholder='请输入银行账号' v-model='data.bankAccount' style="width: 400px" ></Input>
+          <Input type="number" placeholder='请输入银行账号' v-model='data.bankNumber' style="width: 400px" ></Input>
         </FormItem>
         <FormItem label='开户银行：' >
-          <Input placeholder='请输入开户银行' v-model='data.bankOfDeposit' style="width: 400px" ></Input>
+          <Input placeholder='请输入开户银行' v-model='data.bankName' style="width: 400px" ></Input>
         </FormItem>
       </div>
 
