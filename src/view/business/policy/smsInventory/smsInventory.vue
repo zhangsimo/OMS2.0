@@ -249,12 +249,12 @@
                 </vxe-table-column>
                 <vxe-table-column field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
-                    <span>{{ Math.abs(row.sysQty - row.trueQty) }}</span>
+                    <span>{{(Math.abs(row.sysQty - row.trueQty))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="exhibitAmt" title="盈亏金额" width="120">
                   <template v-slot="{ row, seq }">
-                    <span>{{ Math.abs(row.exhibitQty * row.truePrice) }}</span>
+                    <span>{{(Math.abs(row.exhibitQty * row.truePrice))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="sysAmt" title="系统成本" width="100"></vxe-table-column>
@@ -985,7 +985,7 @@ export default {
     purchaseType: {
       handler(newVal) {
         this.Left.page.num = 1;
-        this.Left.page.size = 10;
+        this.Left.page.size = 20;
         this.getList();
       },
       deep: true

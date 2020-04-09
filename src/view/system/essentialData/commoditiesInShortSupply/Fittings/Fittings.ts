@@ -406,7 +406,7 @@ export default class Fittings extends Vue {
   }
   // 查询
   private queryHandle() {
-    this.cloud.page.num = 1;
+    this.cloud.page.num = 0;
     if (this.tabIndex === 0) {
       this.initLocalPartInfo();
     } else {
