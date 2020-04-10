@@ -309,7 +309,7 @@ const methods = {
       item.partInnerId = el.partInnerId;
       item.oemCode = el.oemCode;
       item.fullName = el.fullName;
-      item.carModelName = el.carModelName;
+      item.carBrandModel = el.carModelName;
       data.push(item);
     });
     await partMatchingSave(data);
