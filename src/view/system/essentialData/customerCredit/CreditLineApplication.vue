@@ -239,22 +239,22 @@ export default {
         {
           title: "销售金额",
           align: "center",
-          key: "purchaseAmt"
+          key: "salesAmt"
         },
         {
           title: "已回款金额",
           align: "center",
-          key: "alreadyPaidAmt"
+          key: "paidAmt"
         },
         {
           title: "未回款金额",
           align: "center",
-          key: "paidAmt"
+          key: "uncollectedAmt"
         },
         {
           title: "采购金额",
           align: "center",
-          key: "salesAmt"
+          key: "purchaseAmt"
         },
         {
           title: "已付款金额",
@@ -264,7 +264,7 @@ export default {
         {
           title: "未付款金额",
           align: "center",
-          key: "uncollectedAmt"
+          key: "unpaidAmt"
         },
         {
           title: "往来净额",

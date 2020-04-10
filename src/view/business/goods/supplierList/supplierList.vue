@@ -139,9 +139,9 @@
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" fixed="left" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" fixed="left" width="60"></vxe-table-column>
-                  <vxe-table-column field="partCode" fixed="left" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" fixed="left" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" fixed="left" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column field="partCode" fixed="left" show-overflow title="配件编码" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" fixed="left" show-overflow title="配件名称" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" fixed="left" show-overflow title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">

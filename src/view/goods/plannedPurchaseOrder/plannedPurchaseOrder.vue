@@ -354,7 +354,7 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'click', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell',activeMethod: activeMethodFun }"
               >
                 <vxe-table-column
                   type="index"
@@ -389,7 +389,7 @@
                 <vxe-table-column
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input'}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

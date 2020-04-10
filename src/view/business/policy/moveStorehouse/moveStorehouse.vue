@@ -218,8 +218,7 @@
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
-                :checkbox-config="{checkMethod}"
-                @edit-actived="editActivedEvent"
+                @edit-actived="editActivedEvent">
               >
                 <vxe-table-column type="index" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox"></vxe-table-column>
@@ -545,7 +544,9 @@ export default {
     },
     // 禁用选中
     checkMethod({ row }) {
-      return this.Leftcurrentrow.status.value === 0;
+      if (this.Leftcurrentrow.status.value === 0) {
+        return true
+      }
     },
     numChangeEvent({ row }, evnt) {
       this.numberValue = evnt.target.value;
@@ -614,6 +615,7 @@ export default {
       let xTable = this.$refs.xTable1;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       orderQtyColumn.editRender.attrs.disabled = this.Leftcurrentrow.status.value !== 0;
+
     },
     //切换tab
     setTab(index) {

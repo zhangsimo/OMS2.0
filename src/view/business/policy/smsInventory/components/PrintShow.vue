@@ -61,7 +61,7 @@
             <span>{{onelist.orderMan}}</span>
           </Col>
         </Row>
-        <p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>
+        <!--<p style="border: 1px #000000 solid;border-top: none" class="pl10">备  注：<span>{{onelist.remark}}</span></p>-->
 
       </div>
 

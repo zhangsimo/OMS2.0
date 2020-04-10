@@ -171,7 +171,7 @@ export default class GoodsInfo extends Vue {
   private disabled: boolean = true;
 
   @Prop(String) readonly mainId;
-  @Prop(Object) readonly row;
+  @Prop(Object||String) readonly row;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [

@@ -169,7 +169,8 @@ import {
   getAllStock,
   getLotStock,
   getPartBrand,
-  getPartBrandNoWB
+  getPartBrandNoWB,
+  findMasterOrgId
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -580,15 +581,27 @@ export default {
   },
   created() {
     this.getCommpany();
-    if (this.shopkeeper != 0) {
-      this.columns2.forEach((el, index, arr) => {
-        if(el.key === "originGuestName") {
-          arr.splice(index, 1)
-        }
-      })
-    }
+    this.getMasterId();
+    // if (this.shopkeeper != 0) {
+    //   this.columns2.forEach((el, index, arr) => {
+    //     if(el.key === "originGuestName") {
+    //       arr.splice(index, 1)
+    //     }
+    //   })
+    // }
   },
   methods: {
+    //获取用户所属机构
+    async getMasterId(){
+      let reqData = await findMasterOrgId();
+      if(!reqData.data){
+        this.columns2.forEach((el, index, arr) => {
+          if(el.key === "originGuestName") {
+            arr.splice(index, 1)
+          }
+        })
+      }
+    },
     //获取风电
     async getCommpany(){
       let arr = await creat([], this.$store);

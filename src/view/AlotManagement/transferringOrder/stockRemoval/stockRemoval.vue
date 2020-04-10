@@ -64,7 +64,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="buttonDisable == 2"
+                :disabled="buttonDisable == 2 || buttonDisable == 3"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
@@ -199,7 +199,7 @@
                       <Button
                         v-has="'addMountings'"
                         size="small"
-                        :disabled="buttonDisable == 1"
+                        :disabled="buttonDisable == 1 || buttonDisable == 3"
                         class="mr10"
                         @click="addMountings"
                       >
@@ -207,7 +207,7 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" :disabled="buttonDisable == 1 || buttonDisable == 3" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -227,14 +227,12 @@
                   auto-resize
                   border
                   resizable
-                  show-footer
                   ref="xTable1"
                   size="mini"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
-                  :footer-method="addFooter"
                   :edit-rules="validRules"
                   showOverflow="true"
                   show-overflow
@@ -645,6 +643,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      var arr = []
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -652,17 +651,19 @@ export default {
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
         item.spec = item.specifications;
-        item.partId = item.id;
+        item.partId = item.orgid;
         item.partInnerId = item.code;
-        delete item.id;
-        delete item.orderPrice;
+        let el = Object.assign({}, item);
+        delete el.id;
+        delete el.orderPrice;
+        arr.push(el)
       });
 
       var allArr = []; //新数组
 
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
-        ...val
+        ...arr
       ];
       var allArr = [];
       var oldArr = this.Leftcurrentrow.detailVOS;
@@ -678,39 +679,23 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
-
-      // var arrSet = this.Leftcurrentrow.detailVOS;
-      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-      //   var flag = true;
-      //   for (var j = 0; j < allArr.length; j++) {
-      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
-      //       flag = false;
-      //     }
-      //   }
-      //   if (flag) {
-      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
-      //   }
-      // }
-      // this.$refs.formPlan.validate(async (valid) => {
-      //     if (valid) {
-      //         let data ={}
-      //         data = this.Leftcurrentrow
-      //         data.detailVOS = conversionList(val)
-      //         let res = await  baocun(data)
-      //         if(res.code === 0){
-      //             this.getList()
-      //         }
-      //     } else {
-      //         this.$Message.error('*为必填项');
-      //     }
-      // })
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
     //   this.Leftcurrentrow['sendWay'] = params
     //   this.GainInformation = false
     // },
-    selectAllEvent({ checked }) {},
+    selectAllEvent({ checked, selection }) {
+      if (checked) {
+        selection.forEach(el => {
+          this.idsId.push(el.id);
+        })
+        this.checkboxArr = selection;
+      } else {
+        this.idsId = [];
+        this.checkboxArr = [];
+      }
+    },
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
@@ -800,6 +785,7 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
+      this.Leftcurrentrow.status.value = 0;
       if(this.cangkuListall.length>0){
           this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
       }else{
@@ -1043,8 +1029,11 @@ export default {
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
       }
-      if (row.statuName == "已出库") {
+      if (row.statuName == "已出库" || row.statuName == "已作废") {
         this.buttonDisable = 2;
+      }
+      if (row.serviceId.length > 0) {
+        this.buttonDisable = 3;
       }
       if (row.id == undefined) {
         row.id = "";

@@ -93,7 +93,6 @@
           <Page
             v-else
             class-name="page-con"
-            :current="cloud.page.num"
             :total="cloud.page.total"
             :page-size="cloud.page.size"
             @on-change="changePageCloud"
