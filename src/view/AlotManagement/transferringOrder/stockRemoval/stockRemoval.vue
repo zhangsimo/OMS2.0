@@ -51,7 +51,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="this.buttonDisable !== 1"
+                :disabled="Leftcurrentrow.statuName != '待出库'"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
@@ -64,7 +64,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="buttonDisable == 2 || buttonDisable == 3"
+                :disabled="!(Leftcurrentrow.serviceId && Leftcurrentrow.statuName == '草稿')"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>

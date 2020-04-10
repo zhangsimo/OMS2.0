@@ -18,7 +18,7 @@
             <Row>
               <Col span="11">
                 <FormItem label="配件品质：" prop="qualityTypeId">
-                  <Select @on-change="qualityGetBrand" v-model="formValidate.qualityTypeId">
+                  <Select @on-change="qualityGetBrand" v-model="formValidate.qualityTypeId" filterable>
                     <Option
                       v-for="item in qualityArr"
                       :value="item.qualityCode"
@@ -29,7 +29,7 @@
               </Col>
               <Col span="11">
                 <FormItem label="配件品牌：" prop="partBrandId">
-                  <Select @on-change="getFullName" v-model="formValidate.partBrandId">
+                  <Select @on-change="getFullName" v-model="formValidate.partBrandId" filterable>
                     <Option v-for="item in brandArr" :value="item.id" :key="item.code">{{item.name}}</Option>
                   </Select>
                 </FormItem>
@@ -55,7 +55,7 @@
             <Row>
               <Col span="11">
                 <FormItem label="单位：" prop="unitId">
-                  <Select v-model="formValidate.unitId" @on-change="changeUnit">
+                  <Select v-model="formValidate.unitId" @on-change="changeUnit" filterable>
                     <Option
                       v-for="item in dictCodeAll"
                       :value="item.itemName"
@@ -90,6 +90,7 @@
                       @on-change="getSelectCarBrand"
                       class="w140 mr5"
                       v-model="v.carBrand"
+                      filterable
                     >
                       <Option
                         v-for="item in carObj.carBrandData"
@@ -224,7 +225,7 @@
             <vxe-table-column field="meterCompany" title="计量单位" width="102">
               <template v-slot="{ row,rowIndex }">
                 <span v-if="rowIndex==0">{{row.meterCompany}}</span>
-                <Select v-else class="w80" v-model="row.meterCompany">
+                <Select v-else class="w80" v-model="row.meterCompany" filterable>
                   <Option
                     v-for="item in dictCodeAll"
                     :value="item.itemName"
