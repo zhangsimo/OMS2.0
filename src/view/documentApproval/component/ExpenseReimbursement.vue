@@ -8,14 +8,15 @@
      <div class="fr">
        <Button class="mr10" >保存草稿</Button>
        <Button class="mr10">提交申请</Button>
-       <Button class="mr10">取消</Button>
+       <Button class="mr10" @click="model =false">取消</Button>
      </div>
    </div>
-    <Form ref="formInline" :model="formInline" :label-width="80"  :rules="ruleValidate">
-      <FormItem label="申请单号：">
+    <Form ref="formInline" :model="formInline" :label-width="100"  :rules="ruleValidate">
+      <div class="mb10">
+      <span class="mr5">申请单号：</span>
         <Input type="text" v-model="formInline.user" style="width: 200px" disabled="">
         </Input>
-      </FormItem>
+      </div>
       <Row class="tableBox">
         <Col class="inner" span="4">申请人</Col>
         <Col class="inner" span="4">{{formInline.staffName || ''}}</Col>
@@ -51,117 +52,139 @@
       <vxe-table
         border
         resizable
+        auto-resize
+        ref="xTable"
+        show-footer
+        show-overflow
         size="mine"
         align="center"
+        :footer-method="footerMethod"
         :data="expenditureTableData"
-        :edit-config="{trigger: 'click', mode: 'cell'}"
+        :edit-rules="validRules"
+        :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
         >
-        <vxe-table-column width="50">
+        <vxe-table-column title="操作" width="80">
           <template v-slot="item">
-            <a v-if="item.seq != item.data.length" @click="dele(row)">删除行</a>
-            <a v-else>添加行</a>
+            <a v-if="item.seq != item.data.length" @click="dele(item)">删除行</a>
+            <a v-else @click="addRow">添加行</a>
           </template>
         </vxe-table-column>
         <vxe-table-column field="name" title="摘要" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
         <vxe-table-column field="sex" title="费用类型" :edit-render="{name: 'select', options: moneyTypeList , optionProps: {value: 'id', label: 'name'}}"></vxe-table-column>
-        <vxe-table-column field="subjectType" title="入账科目" :edit-render="{name: 'input',events: {focus: getSubject}}">
-<!--          <template v-slot="{row}">-->
-<!--            <a></a>-->
-<!--          </template>-->
-        </vxe-table-column>
-        <vxe-table-column field="name" title="价税合计" >
-
-        </vxe-table-column>
-        <vxe-table-column field="name" title="税率" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-        <vxe-table-column field="name" title="税额" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-        <vxe-table-column field="name" title="不含税金额" :edit-render="{name: 'input', attrs: {type: 'text'}}"></vxe-table-column>
-        <vxe-table-column field="name" title="备注" :edit-render="{name: 'input', attrs: {type: 'text'}}" width="200"></vxe-table-column>
+        <vxe-table-column field="subjectType" title="入账科目" :edit-render="{name: 'input',events: {focus: getSubject}}"></vxe-table-column>
+        <vxe-table-column field="num" title="价税合计" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: gettotal}}"></vxe-table-column>
+        <vxe-table-column field="tax" title="税率" :edit-render="{name: 'select', options: taxRate , optionProps: {value: 'id', label: 'name'},events: {change: getTax}}"></vxe-table-column>
+        <vxe-table-column field="taxmoney" title="税额" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+        <vxe-table-column field="notax" title="不含税金额" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+        <vxe-table-column field="fd" title="备注" :edit-render="{name: 'input', attrs: {type: 'text'}}" width="200"></vxe-table-column>
       </vxe-table>
+
+      <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
+      <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
+      <vxe-table
+        class="mt10"
+        border
+        resizable
+        auto-resize
+        ref="documentTable"
+        show-footer
+        show-overflow
+        size="mine"
+        align="center"
+        :footer-method="documentFooterMethod"
+        :data="documentTableData"
+        :edit-rules="validRules"
+        :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
+      >
+        <vxe-table-column title="操作" width="80">
+          <template v-slot="item">
+            <a >删除行</a>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="name" title="因公借支单号"></vxe-table-column>
+        <vxe-table-column field="name" title="借支金额"></vxe-table-column>
+        <vxe-table-column field="money" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+        <vxe-table-column field="name" title="借支日期"></vxe-table-column>
+        <vxe-table-column field="name" title="主题"></vxe-table-column>
+      </vxe-table>
+      <vxe-table
+        class="mt10"
+        border
+        resizable
+        show-footer
+        auto-resize
+        show-overflow
+        size="mine"
+        align="center"
+        :data="moneyTableData"
+      >
+        <vxe-table-column field="name" title="费用总额"></vxe-table-column>
+        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>
+        <vxe-table-column field="money" title="公司应付"></vxe-table-column>
+        <vxe-table-column field="name" title="个人应还"></vxe-table-column>
+      </vxe-table>
+
+
+      <h5 class="mt20 mb10" style="font-size: 18px">收款人信息</h5>
+      <div class="proceeds">
+        <Row>
+          <Col span="8">
+            <FormItem label="收款人姓名" prop="payee" style="margin-bottom: 0px">
+              <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px">
+                <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="开户行名称" prop="bankName" style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" ></Input>
+            </FormItem>
+          </Col>
+          <Col span="8">
+            <FormItem label="银行账号" prop="BankNo" style="margin-bottom: 0px;border-right: none">
+              <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+
+
+      <h5 class="mt20 mb10" style="font-size: 18px">支付信息</h5>
+      <div class="proceeds">
+        <Row>
+          <Col span="12">
+            <FormItem label="支付门店" prop="payee" style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" disabled></Input>
+            </FormItem>
+          </Col>
+          <Col span="12">
+            <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" ></Input>
+            </FormItem>
+          </Col>
+        </Row>
+      </div>
+
+
+      <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
+      <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
     </Form>
 
 <!--    选择的模态框-->
     <requestCode ref="request" @backList = 'getBackList'></requestCode>
 
 <!--    入账科目模态框-->
+    <subject ref="subjectModel" @backList="getsubBack" :subjet="moneyType"></subject>
+
+<!--    选择单据模态框-->
+    <selectTheDocuments ref="documnets"></selectTheDocuments>
     <div slot='footer'></div>
   </Modal>
 </template>
 
 <script>
-  import  moment from 'moment'
-  import requestCode from './requestCode'
-    export default {
-        name: "ExpenseReimbursement",
-      components:{
-        requestCode,
-      },
-      props:{
-          list:''
-      },
-      data(){
-          return {
-            model: true, //模态框开关
-            formInline:{},//所有数据对象
-            //表单校验
-            ruleValidate: {
-              use: [
-                {required: true, message: '主题为必填', trigger: 'blur'}
-              ],
-            },
-            expenditureTableData:[
-              {name:'zs',sex:1,subjectType:'选择'},
-              {name:'ls',sex:1,subjectType:'选择'},
-              {name:'we',sex:1,subjectType:'选择'},
-              {name:'zz',sex:1,subjectType:'选择'},
-
-            ],//支出表格数据
-            //费用类型
-            moneyTypeList:[
-              {name:"买入",id:"1"},
-              {name:"支出",id:"3"},
-              {name:"赊账",id:"4"},
-            ],
-
-          }
-      },
-      methods:{
-          //模态框打开
-          open(){
-            console.log(this.list)
-            this.model = true
-            let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-                user = this.$store.state.user.userData
-            this.formInline.staffName = user.staffName
-            this.formInline.tenantCompanyName = user.tenantCompanyName|| ' 　　'
-            this.formInline.shopCode = user.shopCode || ' 　　'
-            this.formInline.shopName = user.shopName
-            this.formInline.type = '费用报销'
-            this.formInline.date = date
-          },
-
-        //打开选择模态框
-        openSelect(){
-          this.$refs.request.open()
-        },
-
-        //获取选择的信息
-        getBackList(row){
-            // console.log(row ,789)
-        },
-
-        //科目获取焦点
-        getSubject({column}){
-          console.log(column , 888)
-          // this.$refs.subjects.subjectModelShow = true
-        },
-
-        //删除行
-        dele(row){
-            console.log(row)
-        }
-
-      }
-    }
+ import index from './index/ExpenseReimbursement.js'
+  export default index
 </script>
 
 <style scoped lang="less">
@@ -194,11 +217,16 @@
   border-right: #cccccc 1px solid;
 }
 .applyTitle {
-  width: 80px;
+  width: 100px;
   border-right: #cccccc 1px solid;
   text-align: center;
   background-color: #f9f9f9;
   display: inline-block;
+}
+.proceeds {
+  border: #cccccc 1px solid;
+  line-height: 38px;
+
 }
 </style>
 <style scoped>
@@ -207,4 +235,11 @@
     border-right: #cccccc 1px solid;
     background-color: #f9f9f9;
   }
+ .proceeds >>> .ivu-form-item-label {
+   border-right: #cccccc 1px solid;
+ }
+  .proceeds >>>.ivu-form-item {
+    border-right: #cccccc 1px solid;
+  }
+
 </style>
