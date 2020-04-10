@@ -26,21 +26,21 @@
       <li class="dataOne">
         <img src="../../../assets/images/home/inventory.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>{{dataObj.partEnterCount}}</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.partEnterCount}}</span>
         </p>
         <p class="dataTitle">今日入库总数</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/kind.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>{{dataObj.outOrderCount}}</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.outOrderCount}}</span>
         </p>
         <p class="dataTitle">今日出库单量</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/supplier.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>{{dataObj.partOutCount}}</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.partOutCount}}</span>
         </p>
         <p class="dataTitle">今日出库总数</p>
       </li>

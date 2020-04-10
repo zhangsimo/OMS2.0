@@ -24,6 +24,7 @@
                   <Select
                     @on-change="seletBandAll"
                     v-model="formValidate.qualityTypeId"
+                    filterable
                   >
                     <Option
                       v-for="item in qualitites"
@@ -35,7 +36,7 @@
                 </FormItem>
               </Col>
               <Col span="11">
-                <FormItem label="配件品牌：" prop="partBrandId">
+                <FormItem label="配件品牌：" prop="partBrandId" filterable>
                   <Select 
                     v-if="brandAll.length > 0"
                     @on-change="selectPartBrand"
@@ -75,6 +76,7 @@
                   <Select
                     v-model="formValidate.unitId"
                     @on-change="changeSelectUnit"
+                    filterable
                   >
                     <Option
                       v-for="item in dictCodeAll"
@@ -111,6 +113,7 @@
                     class="w140 ml5 mr5"
                     v-model="formValidate.nameEn"
                     @on-change="changcarmodel"
+                    filterable
                   >
                     <Option
                       v-for="item in wbBansarr"
@@ -258,6 +261,7 @@
                   :transfer="true"
                   class="w80"
                   v-model="row.meterCompany"
+                  filterable
                 >
                   <!--formValidate.specVOList[index].meterCompany-->
                   <Option

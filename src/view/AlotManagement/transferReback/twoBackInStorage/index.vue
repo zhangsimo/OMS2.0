@@ -106,7 +106,7 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input disabled readonly class="w160" v-model="formPlan.auditor" placeholder></Input>
+                    <Input disabled readonly class="w160" v-model="formPlan.createUname" placeholder></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
                     <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>

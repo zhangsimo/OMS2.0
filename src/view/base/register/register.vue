@@ -430,7 +430,7 @@
         loading:false,
         type: [],//类型
         modell:'', //下拉框
-          canRegister:true,
+          canRegister:false,
           showP:false,//政策弹窗
           isAgree:1,
       }

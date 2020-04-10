@@ -779,10 +779,10 @@ export default {
           minWidth: 100,
           render: (h, params) => {
             let zi = "";
-            if (params.row.isPayment === 0) {
+            if (params.row.paymentType === 0) {
               zi = "支付宝";
             }
-            if (params.row.isPayment === 1) {
+            if (params.row.paymentType === 1) {
               zi = "微信";
             }
             return h("span", zi);

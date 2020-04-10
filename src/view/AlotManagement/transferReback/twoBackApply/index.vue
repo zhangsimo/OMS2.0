@@ -45,7 +45,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'delivery'" :disabled="newFlag" class="mr10" @click="chuku">
+              <Button v-has="'delivery'" :disabled="Leftcurrentrow.statuName != '待出库'" class="mr10" @click="chuku">
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
