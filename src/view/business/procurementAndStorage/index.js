@@ -31,19 +31,15 @@ export default {
   },
   data() {
     let changeNumber = (rule, value, callback, { rules, row, column, rowIndex, columnIndex }) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d{0,}$/;
-        if (reg.test(value)) {
-          if (value <= row.sourceEnterableQty) {
-            callback();
-          } else {
-            callback(new Error('配件数量不可大于可入库数量'))
-          }
+      const reg = /^[1-9]\d{0,}$/;
+      if (reg.test(value)) {
+        if (value <= row.sourceEnterableQty) {
+          callback();
         } else {
-          callback(new Error("请输入大于0的正整数"));
+          callback(new Error('配件数量不可大于可入库数量'))
         }
+      } else {
+        callback(new Error("请输入大于0的正整数"));
       }
     };
 
