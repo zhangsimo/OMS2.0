@@ -17,6 +17,7 @@ export default {
   data(){
     return {
       model: false, //模态框开关
+      modelType:0, //模态框打开模式 0-新增 1-编辑 3-查看
       formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
@@ -85,6 +86,10 @@ export default {
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
       this.model = true
+
+      //判断模态框状态
+      this.modelType = 1
+
       let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         user = this.$store.state.user.userData
       this.formInline.staffName = user.staffName
@@ -93,6 +98,18 @@ export default {
       this.formInline.shopName = user.shopName
       this.formInline.type = '费用报销'
       this.formInline.date = date
+    },
+
+    //判断表格是否可以编辑
+    editActivedEvent({row}){
+      let xTable = this.$refs.xTable
+      let isDisable = true
+      let nameColumn = xTable.getColumnByField('name')
+      let tax = xTable.getColumnByField('tax')
+      let subjectType = xTable.getColumnByField('subjectType')
+      nameColumn.editRender.attrs.disabled = isDisable
+      tax.editRender.attrs.disabled = isDisable
+      subjectType.editRender.attrs.disabled = isDisable
     },
 
     //打开选择模态框
