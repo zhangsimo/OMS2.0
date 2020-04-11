@@ -17,6 +17,7 @@ export default {
   data(){
     return {
       model: false, //模态框开关
+      modelType:0, //模态框打开模式 0-新增 1-编辑 3-查看
       formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
@@ -62,8 +63,13 @@ export default {
         sex:[
           { required: true, message: '必填' },
         ],
+        taxmoney:[
+          { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
+        ],
         notax:[
           { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ]
       },
       documentTableData:[],//借支核销表格数据
@@ -80,6 +86,10 @@ export default {
       this.$refs.upImg.uploadList = []
       this.$refs['formInline'].resetFields();
       this.model = true
+
+      //判断模态框状态
+      this.modelType = 1
+
       let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
         user = this.$store.state.user.userData
       this.formInline.staffName = user.staffName
@@ -88,6 +98,18 @@ export default {
       this.formInline.shopName = user.shopName
       this.formInline.type = '费用报销'
       this.formInline.date = date
+    },
+
+    //判断表格是否可以编辑
+    editActivedEvent({row}){
+      let xTable = this.$refs.xTable
+      let isDisable = true
+      let nameColumn = xTable.getColumnByField('name')
+      let tax = xTable.getColumnByField('tax')
+      let subjectType = xTable.getColumnByField('subjectType')
+      nameColumn.editRender.attrs.disabled = isDisable
+      tax.editRender.attrs.disabled = isDisable
+      subjectType.editRender.attrs.disabled = isDisable
     },
 
     //打开选择模态框
@@ -122,7 +144,7 @@ export default {
         str = tax[0].name.replace('%', '')
         str = str/100
       }
-      row.taxmoney = this.$utils.multiply(column.model.value ,(1 - str) )
+      row.taxmoney = this.$utils.multiply(column.model.value ,(1 - str) ).toFixed(2)
     },
 
     //税率变更计算
@@ -137,9 +159,34 @@ export default {
         str = str/100
       }
       //
-      row.taxmoney = this.$utils.multiply(row.num ,(1 - str) )
+      row.taxmoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
     },
 
+    //判断手动输入税额
+    taxCanuse(v){
+      let row = v.row,
+          column = v.column,
+          tax = this.taxRate.filter(item => item.id == row.sex)
+      let str = 0
+      if(tax[0].name != '0') {
+        str = tax[0].name.replace('%', '')
+        str = str/100
+      }
+      let taxMoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
+      let diff = this.$utils.subtract(column.model.value , taxMoney)
+      if (diff > 0.01) {
+        this.$Modal.confirm({
+          title: '警告',
+          content: '<p>税额有误差，是否确认提交</p>',
+          onOk: () => {
+
+          },
+          onCancel: () => {
+            row.taxmoney = taxMoney
+          }
+        });
+      }
+    },
 
 
     //删除行

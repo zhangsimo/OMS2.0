@@ -149,7 +149,6 @@
                     :data="Right.tbdata"
                     :footer-method="addFooter"
                     showOverflow="true"
-                    height="450"
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -170,7 +169,7 @@
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
                     <vxe-table-column title="紧销品" width="100">
-                      <template v-slot="{ row,rowIndex }">
+                      <template v-slot="{ row }">
                         <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
@@ -229,16 +228,10 @@
         PrintShow
       },
       data() {
-        let changeNumber = (rule, value, callback) => {
-          if (!value && value != "0") {
-            callback(new Error("请输入大于0的正整数"));
-          } else {
-            const reg = /^[1-9]\d*$/;
-            if (reg.test(value)) {
-              callback();
-            } else {
-              callback(new Error("请输入大于0的正整数"));
-            }
+        let changeNumber = ({cellValue }) => {
+          const reg = /^[1-9]\d{0,}$/;
+          if(!reg.test(cellValue)) {
+            return Promise.reject(new Error('角色输入不正确'))
           }
         };
         return {

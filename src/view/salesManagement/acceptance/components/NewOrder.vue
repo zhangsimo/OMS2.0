@@ -138,16 +138,10 @@
       //     }
       //   }
       // };
-      let changeNumber = (rule, value, callback) => {
-        if (!value && value != "0") {
-          callback(new Error("请输入大于0的正整数"));
-        } else {
-          const reg = /^[1-9]+\d?$/;
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("请输入大于0的正整数"));
-          }
+     let changeNumber = ({cellValue }) => {
+        const reg = /^[1-9]\d{0,}$/;
+        if(!reg.test(cellValue)) {
+          return Promise.reject(new Error('角色输入不正确'))
         }
       };
       return {
