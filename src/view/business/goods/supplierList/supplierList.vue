@@ -202,31 +202,19 @@
       PrintShow
     },
     data() {
-      let changeNumber = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("请输入大于或等于0的正整数"));
-        } else {
-          const reg = /^([0]|[1-9][0-9]*)$/
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("请输入大于或等于0的正整数"));
-          }
-        }
-      };
-      //价格（2位小数）
-      let money = (rule, value, callback) => {
-        if (!value && value != "0") {
-          callback(new Error("最多保留2位小数"));
-        } else {
-          const reg = /^\d+(\.\d{0,2})?$/i;
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("最多保留2位小数"));
-          }
-        }
-      };
+      let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
+      }
+    };
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
+      }
+    };
       return {
         ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中

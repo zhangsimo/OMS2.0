@@ -200,12 +200,10 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      const reg = /^([0]|[1-9][0-9]*)$/
-      if (reg.test(value)) {
-        callback();
-      } else {
-        callback(new Error("请输入大于或等于0的正整数"));
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
     return {
