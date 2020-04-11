@@ -4,6 +4,7 @@
     title="费用报销 申请单"
     width="1000px"
     >
+    <div class="bigbox">
    <div class="clearfix">
      <div class="fr">
        <Button class="mr10" >保存草稿</Button>
@@ -153,7 +154,7 @@
       <div class="proceeds">
         <Row>
           <Col span="12">
-            <FormItem label="支付门店" prop="payee" style="margin-bottom: 0px">
+            <FormItem label="支付门店"  style="margin-bottom: 0px">
               <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" disabled></Input>
             </FormItem>
           </Col>
@@ -169,7 +170,7 @@
       <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
       <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
     </Form>
-
+    </div>
 <!--    选择的模态框-->
     <requestCode ref="request" @backList = 'getBackList'></requestCode>
 
@@ -196,6 +197,9 @@
   .inner {
     border-right: #cccccc 1px solid;
     height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .inner:nth-child(2n-1) {
     background: #f9f9f9;
@@ -241,5 +245,11 @@
   .proceeds >>>.ivu-form-item {
     border-right: #cccccc 1px solid;
   }
-
+.bigbox {
+  height: 700px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+  /*滚动条是否隐藏*/
+  /*.bigbox::-webkit-scrollbar {display:none}*/
 </style>
