@@ -29,9 +29,9 @@ export default {
         bankName:[
           {required: true, message: '开户行名称必填', trigger: 'blur'}
         ],
-        BankNo:[
-          {required: true, message: '银行账号必填', trigger: 'blur'}
-        ]
+        // BankNo:[
+        //   {required: true, message: '银行账号必填', trigger: 'blur'}
+        // ]
       },
       expenditureTableData:[
         {name:'zs',sex:1,subjectType:'选择会计科目',num:12,tax:1},
@@ -62,9 +62,9 @@ export default {
         sex:[
           { required: true, message: '必填' },
         ],
-        // taxmoney:[
-        //   { required: true, message: '必填' },
-        // ]
+        notax:[
+          { required: true, message: '必填' },
+        ]
       },
       documentTableData:[],//借支核销表格数据
       moneyTableData:[],//费用明细表格数据
@@ -72,7 +72,7 @@ export default {
     }
   },
   methods:{
-    //模态框打开
+    //模态框打开111
     open(){
       // console.log(this.list)
       this.formInline = {}
