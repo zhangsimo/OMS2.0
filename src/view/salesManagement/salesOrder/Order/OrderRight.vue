@@ -994,6 +994,7 @@ export default {
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
+                        this.$parent.$parent.orderlistType.value = 1;
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();

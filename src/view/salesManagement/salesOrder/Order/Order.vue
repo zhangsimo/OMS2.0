@@ -23,9 +23,10 @@
       <Button
         class="mr10"
         @click="setStockOut"
-        :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"
+        :disabled="orderlistType.value != 1"
         v-has="'StockOut'"
       >
+      <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
       <Button class="mr10" @click="printTable"   v-has="'print'">
@@ -160,14 +161,10 @@ export default {
                     this.$Modal.confirm({
                         title: '是否确定提交',
                         onOk: async () => {
-                            let res = this.$refs.right.submitList();
-                            if(res.code==0){
-                                this.orderlistType.value=1;
-                            }
-
+                          await this.$refs.right.submitList();
                         },
                         onCancel: () => {
-                            this.$Message.info('取消提交');
+                          this.$Message.info('取消提交');
                         },
                     })
                 }else{
