@@ -131,7 +131,6 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" title="序号"></vxe-table-column>
@@ -202,15 +201,11 @@ export default {
   },
   data() {
     let changeNumber = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("请输入大于或等于0的正整数"));
+      const reg = /^([0]|[1-9][0-9]*)$/
+      if (reg.test(value)) {
+        callback();
       } else {
-        const reg = /^([0]|[1-9][0-9]*)$/
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于或等于0的正整数"));
-        }
+        callback(new Error("请输入大于或等于0的正整数"));
       }
     };
     return {
