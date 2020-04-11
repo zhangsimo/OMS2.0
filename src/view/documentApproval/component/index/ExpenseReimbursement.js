@@ -62,8 +62,13 @@ export default {
         sex:[
           { required: true, message: '必填' },
         ],
+        taxmoney:[
+          { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
+        ],
         notax:[
           { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ]
       },
       documentTableData:[],//借支核销表格数据
@@ -122,7 +127,7 @@ export default {
         str = tax[0].name.replace('%', '')
         str = str/100
       }
-      row.taxmoney = this.$utils.multiply(column.model.value ,(1 - str) )
+      row.taxmoney = this.$utils.multiply(column.model.value ,(1 - str) ).toFixed(2)
     },
 
     //税率变更计算
@@ -137,9 +142,34 @@ export default {
         str = str/100
       }
       //
-      row.taxmoney = this.$utils.multiply(row.num ,(1 - str) )
+      row.taxmoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
     },
 
+    //判断手动输入税额
+    taxCanuse(v){
+      let row = v.row,
+          column = v.column,
+          tax = this.taxRate.filter(item => item.id == row.sex)
+      let str = 0
+      if(tax[0].name != '0') {
+        str = tax[0].name.replace('%', '')
+        str = str/100
+      }
+      let taxMoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
+      let diff = this.$utils.subtract(column.model.value , taxMoney)
+      if (diff > 0.01) {
+        this.$Modal.confirm({
+          title: '警告',
+          content: '<p>税额有误差，是否确认提交</p>',
+          onOk: () => {
+
+          },
+          onCancel: () => {
+            row.taxmoney = taxMoney
+          }
+        });
+      }
+    },
 
 
     //删除行

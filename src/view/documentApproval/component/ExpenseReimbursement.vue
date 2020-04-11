@@ -74,8 +74,8 @@
         <vxe-table-column field="subjectType" title="入账科目" :edit-render="{name: 'input',events: {focus: getSubject}}"></vxe-table-column>
         <vxe-table-column field="num" title="价税合计" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: gettotal}}"></vxe-table-column>
         <vxe-table-column field="tax" title="税率" :edit-render="{name: 'select', options: taxRate , optionProps: {value: 'id', label: 'name'},events: {change: getTax}}"></vxe-table-column>
-        <vxe-table-column field="taxmoney" title="税额" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
-        <vxe-table-column field="notax" title="不含税金额" :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+        <vxe-table-column field="taxmoney" title="税额" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: taxCanuse}}"></vxe-table-column>
+        <vxe-table-column field="notax" title="不含税金额" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
         <vxe-table-column field="fd" title="备注" :edit-render="{name: 'input', attrs: {type: 'text'}}" width="200"></vxe-table-column>
       </vxe-table>
 
