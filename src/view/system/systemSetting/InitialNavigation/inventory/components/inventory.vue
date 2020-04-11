@@ -150,17 +150,17 @@
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="辅助信息">
-        <vxe-table-column type="storeShelf" width="仓位"></vxe-table-column>
+        <vxe-table-column type="storeShelf" title="仓位"></vxe-table-column>
         <vxe-table-column field="storeName" title="仓库"></vxe-table-column>
         <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column field="spec" title="规格/方向/颜色"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="不含税信息">
-        <vxe-table-column type="noTaxPrice" width="单价"></vxe-table-column>
+        <vxe-table-column type="noTaxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="noTaxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="含税信息">
-        <vxe-table-column type="taxRate" width="税率"></vxe-table-column>
+        <vxe-table-column type="taxRate" title="税率"></vxe-table-column>
         <vxe-table-column field="taxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="taxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
