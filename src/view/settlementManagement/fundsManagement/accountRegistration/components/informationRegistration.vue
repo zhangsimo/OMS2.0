@@ -3,15 +3,15 @@
     <Form :model="ChangeData"  :label-width="90"  ref="ModelValidate" :rules="ruleValidate">
       <Row>
         <Col span="12">
-          <FormItem label="所属区域：" prop="area">
-            <Select v-model="ChangeData.area" style="width:200px" @on-change = 'changeArea'>
+          <FormItem label="所属区域：" prop="areaId">
+            <Select v-model="ChangeData.areaId" style="width:200px" @on-change = 'changeArea'>
               <Option v-for="item in Branchstore" :value="item.id" :key="item.id">{{ item.companyName }}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="所属门店：" prop="shopName">
-            <Select v-model="ChangeData.shopName" style="width:200px">
+          <FormItem label="所属门店：" prop="shopId">
+            <Select v-model="ChangeData.shopId" style="width:200px" @on-change = 'changeShop'>
               <Option v-for="item in shopListArr" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </FormItem>
@@ -51,8 +51,8 @@
       </Row>
       <Row>
         <Col span="24">
-          <FormItem label="连锁待分配款项显示门店：" prop="aaa">
-            <Input class="w300 mr15" v-model="ChangeData.aaa" disabled></Input>
+          <FormItem label="连锁待分配款项显示门店：">
+            <Input class="w300 mr15" v-model="ChangeData.shopList" disabled></Input>
             <Button @click="openStoreModal">选择</Button>
           </FormItem>
         </Col>
@@ -60,7 +60,7 @@
     </Form>
     <div slot="footer">
       <Button type="primary" @click="informationSave" class="mr10">保存</Button>
-      <Button type="default" @click="information = false">返回</Button>
+      <Button type="default" @click="informationHidden">返回</Button>
     </div>
     <div>
       <!--会计科目弹框-->
@@ -93,21 +93,15 @@
         data(){
           return {
             ruleValidate:{
-              area:[{ required: true, message: "请选择", trigger: 'change' }],
-              shopName:[{ required: true, message: "请选择", trigger: 'change' }],
-              shopCode:[{ required: true, message: '必填', trigger: 'blur' }],
+              areaId:[{ required: true, message: "请选择", trigger: 'change' }],
+              shopId:[{ required: true, message: "请选择", trigger: 'change' }],
+              // shopCode:[{ required: true, message: '必填', trigger: 'blur' }],
               accountName:[{ required: true, message: '必填', trigger: 'blur' }],
               accountCode:[{ required: true, message: '必填', trigger: 'blur' }],
               bankName:[{ required: true, message: '必填', trigger: 'blur' }],
-              mateAccountName:[{ required: true, message: '必填', trigger: 'blur' }],
+              mateAccountName:[{ required: true, message: '必填', trigger: 'change' }],
             }, //表单校验
             information: false,
-            // ChangeData: {
-            //   area: 0,
-            //   shopName: 0,
-            //   mateAccountName: '',
-            //   aaa: '',
-            // }, //定义父组件的数据
             Branchstore: [{id:"0" ,companyName:'全部'}], //区域数组
             shopListArr: [{id: "0" , name:'全部'}], //门店数组
             subjectData: '', //保存子组件的内容
@@ -116,7 +110,26 @@
         methods: {
           //保存
           informationSave(){
-            this.information = true
+            this.$refs.ModelValidate.validate((valid) => {
+              if (valid) {
+                if(this.ChangeData.id){
+                  alert("编辑")
+                  this.information = true;
+                } else {
+                  alert("新增")
+                  let data = this.ChangeData;
+                  console.log(data)
+                  addData(data).then(res => {
+                    if(res.code == 0){
+                      this.$Message.success(' 保存成功! ');
+                    }
+                  })
+                  this.information = true;
+                }
+              } else {
+                this.$Message.error(' *为必填项! ');
+              }
+            })
           },
 
           //会计科目弹框
@@ -141,7 +154,7 @@
           let newArr = value.map(item => {
               return item.title
             })
-            this.ChangeData.aaa = newArr.toString().replace(",",";");
+            this.ChangeData.shopList = newArr.toString().replace(",",";");
             // console.log(newArr.toString().replace(",",";"))
           },
 
@@ -156,13 +169,13 @@
           //获取门店
           async getShop(){
             let data ={}
-            data.supplierTypeSecond = this.ChangeData.area;
+            data.supplierTypeSecond = this.ChangeData.areaId;
             this.shopListArr = [{id:"0" , name:'全部'}]
             let res = await goshop(data)
             if (res.code === 0) {
               this.shopListArr = [...this.shopListArr , ...res.data]
               this.$nextTick( () => {
-                this.ChangeData.shopName = this.$store.state.user.userData.shopId
+                this.ChangeData.shopId = this.$store.state.user.userData.shopId
               })
               if (this.$store.state.user.userData.shopkeeper != 0){
                 // this.getThisArea()//获取当前门店地址
@@ -174,9 +187,21 @@
           changeArea(val){
             // console.log(val)
             if (this.$store.state.user.userData.shopkeeper == 0) {
-              // this.changeData.shopName = 0
+              // this.ChangeData.shopId = "0";
               this.getShop()
             }
+          },
+
+          //所属门店改变
+          changeShop(val){
+            console.log(val)
+            console.log(this.shopListArr)
+          },
+
+          //返回
+          informationHidden(){
+            this.information = false;
+            this.$refs.ModelValidate.resetFields();
           },
         },
       mounted(){

@@ -844,6 +844,18 @@ export default [
           import("@/view/settlementManagement/otherReceivables/otherReceivables.vue")
       },
       {
+        path: "/settlementManagement/otherPayable",
+        name: "settlementManagement-otherPayable",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "其他应付款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/otherPayable/otherPayable.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",

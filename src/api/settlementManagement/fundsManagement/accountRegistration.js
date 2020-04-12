@@ -12,7 +12,8 @@ export function findListPageAll(params) {
 //新增接口
 export function addData(data) {
   return axios.request({
-    url: `${api.omsSettle}/omsFinanceAccountRegister/add`,
+      url: `https://rap.g-parts.cn/app/mock/19/omsFinanceAccountRegister/add`,
+    // url: `${api.omsSettle}/omsFinanceAccountRegister/add`,
     method: "post",
     data
   });

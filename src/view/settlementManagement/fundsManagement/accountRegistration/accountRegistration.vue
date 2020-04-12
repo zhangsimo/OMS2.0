@@ -17,7 +17,7 @@
             <span>门店：</span>
             <Select  v-model="shopCode" filterable class="w150">
               <Option
-                v-for="item in shopList"
+                v-for="item in shopListArr"
                 :value="item.id"
                 :key="item.id"
               >{{ item.name }}</Option>
@@ -113,12 +113,12 @@
             model1: 0,//区域
             Branchstore: [ {id:0 ,companyName:'全部'}], //区域数组
             shopCode: 0, //门店
-            shopList: [ {id:0 , name:'全部'}], //门店数组
+            shopListArr: [ {id:0 , name:'全部'}], //门店数组
             accountName: '', //账户
             bankName: '', //开户行
             subjectCode: 0, //对应科目
             subJectList: [{id:0 ,titleName:'全部'}], //对应科目数组
-            tableData: [{accountName: "1123"}], //表格数据
+            tableData: [{accountName: "1123",mateAccountName: '', shopList: '',}], //表格数据
             oneList: [], //当前表格数据
             ChangeData: {}, //给子组件传的当前行的数据
           }
@@ -134,10 +134,10 @@
         async getShop(){
           let data ={}
           data.supplierTypeSecond = this.model1
-          this.shopList = [{id:0 , name:'全部'}]
+          this.shopListArr = [{id:0 , name:'全部'}]
           let res = await goshop(data)
           if (res.code === 0) {
-            this.shopList = [...this.shopList , ...res.data]
+            this.shopListArr = [...this.shopListArr , ...res.data]
             this.$nextTick( () => {
               this.shopCode = this.$store.state.user.userData.shopId
             })
@@ -193,10 +193,10 @@
         //新增
         newlyIncreased(){
             this.ChangeData = {
-                area: "0",
-                shopName: '0',
+                areaId: "0",
+                shopId: '0',
                 mateAccountName: '',
-                aaa: '',
+                shopList: '',
             };
             this.$refs.informationShow.information = true;
         },
@@ -210,7 +210,7 @@
         compileEvent(row){
           this.ChangeData = row;
           // console.log(this.ChangeData ,111)
-          this.$refs.informationShow.informationSave();
+          this.$refs.informationShow.information = true;
         },
 
         //删除当前行
