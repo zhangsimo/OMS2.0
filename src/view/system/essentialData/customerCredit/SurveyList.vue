@@ -188,7 +188,7 @@
       <Col span="8">
         <FormItem label="滚动借款周期:" prop="rollingDate">
           <!--<Input v-model='data.rollingDate' style="width: 180px" ></Input>-->
-          <InputNumber min="1" v-model="data.rollingDate" style="width: 180px"></InputNumber>
+          <InputNumber :min="1" v-model="data.rollingDate" style="width: 180px"></InputNumber>
         </FormItem>
       </Col>
       <Col span="16">
@@ -406,7 +406,7 @@ export default {
           }
         ],
         rollingDate: [
-          { required: true, validator: smallNumber, trigger: "blur" }
+          { required: true, type:"number", validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
           { required: true, validator: bigNumber, trigger: "change"},
@@ -481,7 +481,7 @@ export default {
       }
       this.data.operationEnd = endTime
     }
-  }
+  },
 };
 </script>
 

@@ -6,6 +6,46 @@ import {saveList} from "@/api/system/systemSetting/inventory";
 export const mixSelectPartCom = {
   inject: ['reload'],
   data() {
+    const OnlyNumber = (rule, value, callback) => {
+      if(!value&&value!==0){
+        return callback(new Error("请输入数量！"));
+      }
+      if (/^(?:0|[1-9][0-9]*)$/.test(value)) {
+        if(this.formInfo.enterPrice){
+          this.formInfo.enterAmt = (this.formInfo.enterPrice*this.formInfo.enterQty).toFixed(2);
+        }
+        callback();
+      } else {
+        return callback(new Error("请输入正整数！"));
+      }
+    };
+    const OnlyNumber2 = (rule, value, callback) => {
+      if(!value&&value!==0){
+        return callback(new Error("请输入单价！"));
+      }
+      if (/((^[1-9]\d*)|^0)(\.\d{1,2}){0,1}$/.test(value)) {
+        if(this.formInfo.enterQty){
+          this.formInfo.enterAmt = (this.formInfo.enterPrice*this.formInfo.enterQty).toFixed(2);
+        }
+        callback();
+      } else {
+        return callback(new Error("请输入正确格式！"));
+      }
+    };
+    const OnlyNumber3 = (rule, value, callback) => {
+      if(!value&&value!==0){
+        return callback(new Error("请输入金额！"));
+      }
+      if (/((^[1-9]\d*)|^0)(\.\d{1,2}){0,1}$/.test(value)) {
+        if(this.formInfo.enterQty){
+          this.formInfo.enterPrice = (this.formInfo.enterAmt/this.formInfo.enterQty).toFixed(2)
+        }
+        callback();
+      } else {
+        return callback(new Error("请输入正确格式！"));
+      }
+    };
+
     return {
       loading: false,
       treeLoading: false,
@@ -30,13 +70,13 @@ export const mixSelectPartCom = {
       //表单校验
       ruleValidate: {
         enterQty: [
-          {required: true, message: '请输入数量', trigger: 'blur'},
+          {required: true, validator:OnlyNumber, trigger: 'blur'},
         ],
         enterPrice: [
-          {required: true, message: '请输入单价', trigger: 'blur'},
+          {required: true, validator:OnlyNumber2, trigger: 'blur'},
         ],
         enterAmt: [
-          {required: true, message: '请输入金额', trigger: 'blur'},
+          {required: true, validator:OnlyNumber3, trigger: 'blur'},
         ]
       },
 
@@ -294,46 +334,45 @@ export const mixSelectPartCom = {
       // console.log(this.selectTableItem, 4544)
     },
     throwData() {
-        this.$emit('selectPartName', this.selectTableItem);
-        this.numberAmount = true;
+      this.$emit('selectPartName', this.selectTableItem);
+      this.numberAmount = true;
+      this.$refs.formInfo.resetFields();
     },
     cancel(){
       this.numberAmount=false
-      this.formInfo={}
+      this.$refs.formInfo.resetFields();
     },//取消
     //添加
     async addAccessories() {
       // console.log(this.selectTableItem);
-      if(parseFloat(this.formInfo.enterQty)<0||parseFloat(this.formInfo.enterPrice)<0||parseFloat(this.formInfo.enterAmt)<0){
-        this.$Message.error('数值不可小于0')
-        return false
-      }
-      this.partInfo=this.mainData
-      this.selectTableItem.partId=this.selectTableItem.id
-      this.selectTableItem.id=''
-      this.selectTableItem.taxRate=0.07
-      this.selectTableItem.partName=this.selectTableItem.partStandardName
-      this.selectTableItem.enterUnitId=this.selectTableItem.minUnit
-      this.selectTableItem.systemUnitId=this.selectTableItem.minUnit
-      this.selectTableItem.brandCode=this.selectTableItem.partBrandCode
-      this.selectTableItem.partInnerId=this.selectTableItem.code
-      this.selectTableItem.enterQty = parseFloat(this.formInfo.enterQty)
-      this.selectTableItem.enterPrice = parseFloat(this.formInfo.enterPrice)
-      this.selectTableItem.enterAmt = parseFloat(this.formInfo.enterAmt)
-      this.selectTableItem.remark = this.formInfo.remark
-      this.partInfo.details=[]
-      this.selectTableItem.carModelName = this.selectTableItem.adapterCarModel
-      this.partInfo.details.push(this.selectTableItem)
-
-      this.$refs.formInfo.resetFields()
-      // console.log(this.partInfo);
-      let res = await saveList(this.partInfo)
-      if (res.code === 0) {
-        this.numberAmount=false
-        this.$Message.success('保存成功，入库单的配件添加成功')
-        this.$parent.getList()
-        // alert('成功')
-      }
+      this.$refs['formInfo'].validate(async (valid) => {
+        if(valid){
+          this.partInfo=this.mainData
+          this.selectTableItem.partId=this.selectTableItem.id
+          this.selectTableItem.id=''
+          this.selectTableItem.taxRate=0.07
+          this.selectTableItem.partName=this.selectTableItem.partStandardName
+          this.selectTableItem.enterUnitId=this.selectTableItem.minUnit
+          this.selectTableItem.systemUnitId=this.selectTableItem.minUnit
+          this.selectTableItem.brandCode=this.selectTableItem.partBrandCode
+          this.selectTableItem.partInnerId=this.selectTableItem.code
+          this.selectTableItem.enterQty = parseFloat(this.formInfo.enterQty)
+          this.selectTableItem.enterPrice = parseFloat(this.formInfo.enterPrice)
+          this.selectTableItem.enterAmt = parseFloat(this.formInfo.enterAmt)
+          this.selectTableItem.remark = this.formInfo.remark
+          this.partInfo.details=[]
+          this.selectTableItem.carModelName = this.selectTableItem.adapterCarModel
+          this.partInfo.details.push(this.selectTableItem)
+          // console.log(this.partInfo);
+          let res = await saveList(this.partInfo)
+          if (res.code === 0) {
+            this.numberAmount=false
+            this.$Message.success('保存成功，入库单的配件添加成功')
+            this.$parent.getList()
+            // alert('成功')
+          }
+        }
+      })
     },
     inputPrice() {
       console.log(1,'formInfo.enterPrice')

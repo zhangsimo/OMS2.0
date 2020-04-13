@@ -555,7 +555,7 @@ export default {
             } else {
               res.data.content.map((item, index) => {
                 item["index"] = index + 1;
-                item["statuName"] = item.billStatusId.name;
+                item["statuName"] = item.billStatusId?item.billStatusId.name:"";
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;

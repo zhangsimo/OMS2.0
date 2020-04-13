@@ -49,11 +49,15 @@
           :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"
         ></vxe-table-column>
         <vxe-table-column
-          field="marker"
+          field="remark"
           title="备注"
           :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"
         ></vxe-table-column>
-        <vxe-table-column field="taxAmt" title="总金额"></vxe-table-column>
+        <vxe-table-column field="enterAmt" title="总金额">
+          <template v-slot="{row}">
+            {{row.enterAmt|priceFilters}}
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="createUname" title="制单人"></vxe-table-column>
         <vxe-table-column field="createTime" title="制单日期"></vxe-table-column>
       </vxe-table-column>
@@ -150,17 +154,17 @@
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="辅助信息">
-        <vxe-table-column type="storeShelf" title="仓位"></vxe-table-column>
+        <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
         <vxe-table-column field="storeName" title="仓库"></vxe-table-column>
         <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column field="spec" title="规格/方向/颜色"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="不含税信息">
-        <vxe-table-column type="noTaxPrice" title="单价"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="noTaxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="含税信息">
-        <vxe-table-column type="taxRate" title="税率"></vxe-table-column>
+        <vxe-table-column field="taxRate" title="税率"></vxe-table-column>
         <vxe-table-column field="taxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="taxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
@@ -370,10 +374,10 @@ export default {
       this.getList();
 
       // console.log(res);
-      this.$Message.info("点击了确定");
+      // this.$Message.info("点击了确定");
     },
     cancel() {
-      this.$Message.info("点击了取消");
+      // this.$Message.info("点击了取消");
     },
     //删除
     async del() {

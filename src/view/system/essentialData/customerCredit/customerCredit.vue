@@ -475,7 +475,7 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
-      console.log(this.creaditList)
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
@@ -517,6 +517,7 @@ export default {
       if(this.creaditList.isGuestResearch === 0){
         this.$refs.SurveyList.$refs.formInline.resetFields();
       }
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.surveyShow = true;
     },
     //额度调用

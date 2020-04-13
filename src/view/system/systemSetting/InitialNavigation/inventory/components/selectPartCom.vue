@@ -62,7 +62,7 @@
         </div>
         <div class="formItem">
           <FormItem label="金额:" prop="enterAmt">
-            <Input v-model="inputMoney"></Input>
+            <Input v-model="formInfo.enterAmt"></Input>
           </FormItem>
           <FormItem label="备注:" prop="remark">
             <Input v-model="formInfo.remark"></Input>
@@ -95,17 +95,21 @@
       //       return this.formInfo.enterQty * this.formInfo.enterPrice
       //   }
       // },
-      inputMoney: {
-                get:function () {     //getter读取数据
-                    if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
-                        return this.formInfo.enterQty * this.formInfo.enterPrice
-                    }
-                },
-                set:function (val) {    //setter 需要时触发
-                    console.log(val,'val')
-                    this.formInfo.enterPrice = val / this.formInfo.enterQty
-                }
-            }
+      // inputMoney: {
+      //           get:function () {     //getter读取数据
+      //               if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
+      //                   return this.formInfo.enterQty * this.formInfo.enterPrice
+      //               }
+      //           },
+      //           set:function (val) {    //setter 需要时触发
+      //               console.log(val,'val')
+      //               this.formInfo.enterPrice = val / this.formInfo.enterQty
+      //           }
+      //       }
+
+      // enterAmt(){
+      //   return this.formInfo.enterQty * this.formInfo.enterPrice
+      // }
     },
   }
 
