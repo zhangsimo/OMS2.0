@@ -52,8 +52,6 @@
         border
         resizable
         ref="xTable"
-        show-footer
-        :footer-method="addFooter"
         stripe
         size="mini"
         align="center"
@@ -130,17 +128,20 @@
         </section>
       </div>
     </section>
+    <approval :approvalTit="approvalTit"></approval>
   </div>
 </template>
 
 <script>
   import moment from "moment";
   import quickDate from "@/components/getDate/dateget_bill.vue";
+  import approval from '@/view/settlementManagement/bill/Popup/approval'
 
     export default {
         name: "myApplication",
         components: {
           quickDate,
+          approval
         },
       data(){
         return {
@@ -185,6 +186,7 @@
             { name: "提交", status: "已提交" },
             { name: "产品总监审批", status: "已审批" }
           ], //进度数据
+          approvalTit:'流程节点',//审批流程
         }
       },
       mounted(){},
@@ -215,22 +217,6 @@
           this.$router.push({name: "documentApproval-draftingOfApplication"})
         },
         //vxe表格计算和值
-        addFooter ({ columns, data }) {
-          return [
-            columns.map((column, columnIndex) => {
-              if (columnIndex === 0) {
-                return '合计 :'
-              }
-              // if (['debitAmount'].includes(column.property)) {
-              //   return this.$utils.sum(data, column.property)
-              // }
-              // if (["lenderAmount"].includes(column.property)) {
-              //   return this.$utils.sum(data, column.property)
-              // }
-              return null
-            })
-          ]
-        },
       }
 
     }

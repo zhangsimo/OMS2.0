@@ -75,29 +75,29 @@ export default {
       documentTableData:[],//借支核销表格数据
       moneyTableData:[],//费用明细表格数据
       payeeList:[],//收款人列表
+      payUserList:[],//付款人列表
     }
   },
   methods:{
     //模态框打开111
     open(){
-      // console.log(this.list)
-      this.formInline = {}
-      this.$refs.upImg.uploadListModal =[]
-      this.$refs.upImg.uploadList = []
-      this.$refs['formInline'].resetFields();
-      this.model = true
-
-      //判断模态框状态
-      this.modelType = 1
-
-      let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-        user = this.$store.state.user.userData
-      this.formInline.staffName = user.staffName
-      this.formInline.tenantCompanyName = user.tenantCompanyName|| ' 　　'
-      this.formInline.shopCode = user.shopCode || ' 　　'
-      this.formInline.shopName = user.shopName
-      this.formInline.type = '费用报销'
-      this.formInline.date = date
+      if (this.list.type == 1) {
+        this.formInline = {}
+        this.$refs.upImg.uploadListModal = []
+        this.$refs.upImg.uploadList = []
+        this.$refs['formInline'].resetFields();
+        this.model = true
+        //判断模态框状态
+        this.modelType = 1
+        let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+          user = this.$store.state.user.userData
+        this.formInline.staffName = user.staffName
+        this.formInline.tenantCompanyName = user.groups[user.groups.length - 1].name || ' '
+        this.formInline.shopCode = user.shopCode || ' 　　'
+        this.formInline.shopName = user.shopName
+        this.formInline.type = '费用报销'
+        this.formInline.date = date
+      }
     },
 
     //判断表格是否可以编辑
@@ -193,7 +193,7 @@ export default {
     dele(row){
       // this.$refs.xTable.remove(this.expenditureTableData[row.seq - 1])
       this.expenditureTableData.splice((row.seq - 1) , 1)
-      console.log(this.expenditureTableData , 789)
+      // console.log(this.expenditureTableData , 789)
     },
 
     //添加行

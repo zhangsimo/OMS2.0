@@ -926,7 +926,7 @@ export default [
   {
     path: "/documentApproval",
     name: "documentApproval",
-    mark: "6",
+    // mark: "6",
     redirect: "/reportForm",
     meta: {
       icon: "ios-paper",
@@ -938,7 +938,7 @@ export default [
         path:'/documentApproval/draftingOfApplication',
         name:'documentApproval-draftingOfApplication',
         // redirect: "/multilevel/level_2_1",
-        mark:'5100',
+        // mark:'5100',
         meta: {
           title:'申请流程'
         },
@@ -948,7 +948,7 @@ export default [
       {
         path: "/documentApproval/myApplication",
         name: "documentApproval-myApplication",
-        mark: "5100",
+        // mark: "5100",
         meta: {
           title: "我的申请"
         },
@@ -957,7 +957,7 @@ export default [
       {
         path: "/documentApproval/ForMyApproval",
         name: "documentApproval-ForMyApproval",
-        mark: "5100",
+        // mark: "5100",
         meta: {
           title: "待我审批"
         },
@@ -966,7 +966,7 @@ export default [
       {
         path: "/documentApproval/myApproval",
         name: "documentApproval-myApproval",
-        mark: "5100",
+        // mark: "5100",
         meta: {
           title: "我的审批"
         },

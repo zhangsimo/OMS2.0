@@ -161,7 +161,9 @@
           </Col>
           <Col span="12">
             <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
-              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType == 3"></Input>
+              <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType == 3">
+                <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
             </FormItem>
           </Col>
         </Row>
