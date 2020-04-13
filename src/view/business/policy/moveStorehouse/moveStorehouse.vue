@@ -916,7 +916,7 @@ export default {
     //添加配件
     getPartNameList(val) {
       // console.log(conversionList(val),8888)
-      var datas = conversionList(val);
+      var datas = val // conversionList(val);
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
         // this.Right.tbdata=[]

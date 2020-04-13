@@ -54,18 +54,18 @@
         </div>
         <div class="formItem">
           <FormItem label="数量:" prop="enterQty">
-            <Input v-model="formInfo.enterQty"></Input>
+            <Input v-model="formInfo.enterQty" />
           </FormItem>
           <FormItem label="单价:" prop="enterPrice">
-            <Input v-model="formInfo.enterPrice"></Input>
+            <el-input-number :min="0" v-model="formInfo.enterPrice" size="mini" :controls="false" :precision="2" />
           </FormItem>
         </div>
         <div class="formItem">
           <FormItem label="金额:" prop="enterAmt">
-            <Input v-model="formInfo.enterAmt"></Input>
+            <el-input-number :min="0" v-model="inputMoney" size="mini" :controls="false" :precision="2" disabled />
           </FormItem>
           <FormItem label="备注:" prop="remark">
-            <Input v-model="formInfo.remark"></Input>
+            <Input v-model="formInfo.remark" />
           </FormItem>
         </div>
       </Form>
@@ -95,21 +95,17 @@
       //       return this.formInfo.enterQty * this.formInfo.enterPrice
       //   }
       // },
-      // inputMoney: {
-      //           get:function () {     //getter读取数据
-      //               if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
-      //                   return this.formInfo.enterQty * this.formInfo.enterPrice
-      //               }
-      //           },
-      //           set:function (val) {    //setter 需要时触发
-      //               console.log(val,'val')
-      //               this.formInfo.enterPrice = val / this.formInfo.enterQty
-      //           }
-      //       }
-
-      // enterAmt(){
-      //   return this.formInfo.enterQty * this.formInfo.enterPrice
-      // }
+      inputMoney: {
+                get:function () {     //getter读取数据
+                    if (this.formInfo.enterQty != ''&& this.formInfo.enterPrice !='') {
+                        return this.formInfo.enterQty * this.formInfo.enterPrice
+                    }
+                },
+                set:function (val) {    //setter 需要时触发
+                    console.log(val,'val')
+                    this.formInfo.enterPrice = val / this.formInfo.enterQty
+                }
+            }
     },
   }
 
