@@ -41,7 +41,7 @@
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.applyGuest.addr}}</span>
+              <span>{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">

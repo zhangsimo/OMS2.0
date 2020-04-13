@@ -370,10 +370,10 @@ export default {
       this.getList();
 
       // console.log(res);
-      this.$Message.info("点击了确定");
+      // this.$Message.info("点击了确定");
     },
     cancel() {
-      this.$Message.info("点击了取消");
+      this.$Message.info("取消删除");
     },
     //删除
     async del() {
