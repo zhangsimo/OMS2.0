@@ -45,6 +45,128 @@
           <Button class="ml10">导出</Button>
         </div>
       </section>
+      <section class="con-box">
+        <div class="inner-box">
+          <div class="box mb10">
+            <vxe-table
+              class="boxData"
+              auto-resize
+              resizable
+              border
+              highlight-hover-row
+              highlight-current-row
+              @current-change="currentChangeEvent"
+              max-height="400"
+              :data="tableData"
+              align="center"
+              show-footer
+              :footer-method="footerMethod"
+            >
+              <vxe-table-column title="基本信息">
+                <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
+                <vxe-table-column field="serviceId" title="其他付款申请单号"></vxe-table-column>
+                <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
+                <vxe-table-column field="" title="业务类型"></vxe-table-column>
+                <vxe-table-column field="" title="付款时间"></vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column title="金额信息">
+                <vxe-table-column field="payAmt" title="其他付款申请金额"></vxe-table-column>
+                <vxe-table-column field="" title="其他付款认领单号"></vxe-table-column>
+                <vxe-table-column field="" title="其他付款认领金额"></vxe-table-column>
+                <vxe-table-column field="" title="其他付款核销单号"></vxe-table-column>
+                <vxe-table-column field="" title="其他收款核销金额"></vxe-table-column>
+                <vxe-table-column field="" title="其他收款收回单号"></vxe-table-column>
+                <vxe-table-column field="remainingAmt" title="其他收款余额"></vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column title="收款方式">
+                <vxe-table-column field="role" title="账户">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                        <span class="listChild">{{item.accountName}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="sex" title="金额">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                        <span class="listChild">{{item.amt}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column title="付款方式">
+                <vxe-table-column field="age" title="收款所属门店">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
+                        <span class="listChild">{{item.ownStoreName}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="role" title="账户">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                        <span class="listChild">{{item.accountName}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="sex" title="金额">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                        <span class="listChild">{{item.amt}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+              </vxe-table-column>
+              <vxe-table-column title="其他信息">
+                <vxe-table-column field="age" title="付款所属门店">
+                  <template v-slot="{row}">
+                    <ul class="list">
+                      <li v-for="(item,index) of row.paymentType" :key="index" class="flex">
+                        <span class="listChild">{{item.ownStoreName}}</span>
+                      </li>
+                    </ul>
+                  </template>
+                </vxe-table-column>
+                <vxe-table-column field="receiver" title="收款人"></vxe-table-column>
+                <vxe-table-column field="receiveDate" title="收款日期"></vxe-table-column>
+                <vxe-table-column field="receiveRemark" title="收款备注"></vxe-table-column>
+                <vxe-table-column field="receiveAuditor" title="收款审核人"></vxe-table-column>
+                <vxe-table-column field="receiveAuditDate" title="收款审核日期"></vxe-table-column>
+                <vxe-table-column field="payer" title="付款人"></vxe-table-column>
+                <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
+                <vxe-table-column field="paymentRemark" title="付款备注"></vxe-table-column>
+                <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
+                <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
+              </vxe-table-column>
+            </vxe-table>
+            <div class="clearfix">
+              <Page
+                class-name="fr mb10 mt10"
+                size="small"
+                :current="page.num"
+                :total="page.total"
+                :page-size="page.size"
+                @on-change="changePage"
+                @on-page-size-change="changeSize"
+                show-sizer
+                show-total
+              ></Page>
+            </div>
+          </div>
+          <Button>收付款单记录</Button>
+          <Record ref="Record" :serviceId="serviceId" />
+        </div>
+      </section>
       <!-- 认领弹框 -->
       <Modal v-model="claimModal" :title="claimTit" width="1000" @on-visible-change="visChangeClaim">
         <span>往来单位：</span>
@@ -74,21 +196,25 @@
           <Button @click="revoke=false">取消</Button>
         </div>
       </Modal>
+      <!--其他收款核销-->
+      <settlement ref="settlement"></settlement>
     </div>
 </template>
 
 <script>
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import claim from "./components/claimed";
-  import settlement from "../bill/components/settlement";
+  import settlement from "./components/settlement";
   import { creat } from "./../components";
+  import Record from "../components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
     export default {
         name: "otherReceivables",
         components: {
           quickDate,
           claim,
-          settlement
+          settlement,
+          Record
         },
         data(){
           return{
@@ -105,6 +231,14 @@
             amt: null, //认领弹框金额
             bankNameO: '', //认领弹框对方户名
             reason: '', //撤销原因
+            tableData: [], //表格信息
+            page: {
+              num: 1,
+              size: 10,
+              total: 0,
+              opts: [20, 50, 100, 200]
+            }, //分页
+            serviceId: "", //给子组件传的值
           }
         },
         methods :{
@@ -163,7 +297,7 @@
           //其他收款核销
           collectWirte() {
             // if (Object.keys(this.currRow).length !== 0) {
-            //   this.$refs.settlement.Settlement = true;
+              this.$refs.settlement.Settlement = true;
             //   this.paymentId = "YSK";
             // } else {
             //   this.$message.error("请选择数据");
@@ -172,7 +306,17 @@
           //认领弹框查询
           queryClaimed(){},
           //认领弹框认领
-          claimPay(){},
+          claimPay(){
+            // if (
+            //   Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
+            //   this.currRow.remainingAmt
+            // ) {
+              this.$refs.settlement.Settlement = true;
+              // this.paymentId = "YSKZC";
+            // } else {
+            //   this.$message.error("金额大于预收款余额，无法认领");
+            // }
+          },
           //认领弹框传参数据
           selection(arr) {
             this.claimSelection=[]
@@ -201,6 +345,37 @@
               }
             });
           },
+          // 选中行
+          currentChangeEvent({ row }) {
+            // this.currRow = row;
+            // this.reconciliationStatement.accountNo = row.serviceId;
+            // this.serviceId = row.serviceId;
+            // this.$refs.Record.init();
+          },
+          //分页
+          changePage(p) {
+            this.page.num = p;
+            this.getQuery();
+          },
+          changeSize(size) {
+            this.page.num = 1;
+            this.page.size = size;
+            this.getQuery();
+          },
+          //表尾合计
+          footerMethod ({ columns, data }) {
+            return [
+              columns.map((column, columnIndex) => {
+                if (columnIndex === 0) {
+                  return '合计'
+                }
+                if (['payAmt', 'writeOffAmt','returnClaimAmt','remainingAmt'].includes(column.property)) {
+                  return this.$utils.sum(data, column.property)
+                }
+                return null
+              })
+            ]
+          },
         },
       async mounted() {
         let arr = await creat(this.$refs.quickDate.val, this.$store);
@@ -213,6 +388,29 @@
     }
 </script>
 
-<style scoped>
-
+<style>
+  .box {
+    overflow: auto;
+  }
+  .boxData {
+    width: 2500px;
+    /* overflow: auto; */
+  }
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .listChild {
+    display: inline-block;
+    border: 1px solid #e8eaec;
+    flex: 1;
+    padding: 5px;
+  }
+  .vxe-table .vxe-cell {
+    padding: 0;
+  }
+  .vxe-table .vxe-body--column:not(.col--ellipsis) {
+    padding: 0;
+  }
 </style>
