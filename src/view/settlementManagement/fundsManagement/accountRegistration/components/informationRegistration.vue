@@ -96,7 +96,7 @@
             ruleValidate:{
               areaId:[{ required: true, message: "请选择", trigger: 'change' }],
               shopNumber:[{ required: true, message: "请选择", trigger: 'change' }],
-              shopCode:[{ required: true, message: '必填', trigger: 'blur' }],
+              shopCode:[{ required: true, message: '必填', trigger: 'change' }],
               accountName:[{ required: true, message: '必填', trigger: 'blur' }],
               accountCode:[{ required: true, message: '必填', trigger: 'blur' }],
               bankName:[{ required: true, message: '必填', trigger: 'blur' }],
@@ -116,7 +116,7 @@
         methods: {
           //保存
           informationSave(){
-            console.log(this.ChangeData ,789)
+            // console.log(this.ChangeData ,789)
             this.$refs.ModelValidate.validate((valid) => {
               if (valid) {
                 if(this.ChangeData.id){
@@ -124,15 +124,21 @@
                   if(this.shopList.length > 0){
                     data.shopList = this.shopList;
                   }
-                  console.log(data)
                   updateData(data).then(res => {
                     if(res.code == 0){
-
+                      this.$Message.success('修改成功！')
+                      this.information = false;
+                      this.shopList = [];
+                      this.$parent.getList()
+                    }else {
+                      this.information = true;
+                      this.shopList = [];
                     }
                   })
                   this.information = true;
                 } else {
                   let data = this.ChangeData;
+                  console.log(this.changeData)
                   data.shopList = this.shopList;
                   data.shopNumber = data.shopNumber ? data.shopNumber : this.$store.state.user.userData.shopId;
                   // console.log(data)
@@ -142,6 +148,8 @@
                       this.information = false;
                       this.shopList = [];
                       this.$parent.getList()
+                    }else {
+                      this.shopList = [];
                     }
                   })
                   this.information = true;
@@ -179,6 +187,7 @@
             return item.id;
           })
             this.ChangeData.shopListName = newArr.toString().replace(",",";");
+            console.log(this.ChangeData.shopListName);
             // console.log(this.shopList)
           },
 
@@ -215,7 +224,8 @@
               this.$nextTick( () => {
                 this.ChangeData.shopNumber = this.$store.state.user.userData.shopId;
                 if(this.ChangeData.shopNumber){
-                  this.ChangeData.shopCode = this.shopListArr.filter(item => item.id == this.ChangeData.shopNumber)[0].code
+                  this.ChangeData.shopCode = this.shopListArr.filter(item => item.id == this.ChangeData.shopNumber)[0].code;
+                  this.ChangeData.shopName = this.shopListArr.filter(item => item.id == this.ChangeData.shopNumber)[0].name;
                 }
               })
               if (this.$store.state.user.userData.shopkeeper != 0){
@@ -227,6 +237,7 @@
           //切换地址重新调取门店接口
           changeArea(val){
             this.ChangeData.area = val.label;
+            console.log(val.value)
             if (this.$store.state.user.userData.shopkeeper == 0) {
               this.ChangeData.shopNumber = "0";
               this.getShop()
@@ -249,6 +260,7 @@
           //返回
           informationHidden(){
             this.information = false;
+            this.$parent.getList();
             // this.$refs.ModelValidate.resetFields();
           },
 
@@ -290,7 +302,6 @@
                 //     })
                 //   })
                 // })
-
                 // this.TreeData = treeArr
               }
             })

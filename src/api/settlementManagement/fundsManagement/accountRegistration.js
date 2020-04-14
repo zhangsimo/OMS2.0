@@ -5,6 +5,7 @@ import api from "_conf/url";
 export function findListPageAll(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/findListPageAll`,
+    // url: `${api.omsSettle2}/omsFinanceAccountRegister/findListPageAll`,
     method: "get",
     params
   });
@@ -13,6 +14,7 @@ export function findListPageAll(params) {
 export function addData(data) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/add`,
+    // url: `${api.omsSettle2}/omsFinanceAccountRegister/add`,
     method: "post",
     data
   });
@@ -21,6 +23,7 @@ export function addData(data) {
 export function updateData(data) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/update`,
+    // url: `${api.omsSettle2}/omsFinanceAccountRegister/update`,
     method: "post",
     data
   });
@@ -29,6 +32,7 @@ export function updateData(data) {
 export function deleterowData(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/deleteById`,
+    // url: `${api.omsSettle2}/omsFinanceAccountRegister/deleteById`,
     method: "get",
     params
   });
@@ -38,6 +42,7 @@ export function deleterowData(params) {
 export function findAreaShopList(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/findAreaShopList`,
+    // url: `${api.omsSettle2}/omsFinanceAccountRegister/findAreaShopList`,
     method: "get",
     params
   });

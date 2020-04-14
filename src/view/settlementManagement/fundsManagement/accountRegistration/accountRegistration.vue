@@ -81,7 +81,7 @@
           <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
           <vxe-table-column field="shopList" title="连锁待分配款项显示门店">
             <template v-slot="{ row }">
-              <span v-for="item in row.shopList">{{ item.shopName }},</span>
+              <span v-for="item in row.shopList"> {{ item.shopName }};</span>
             </template>
           </vxe-table-column>
           <vxe-table-column title="操作">
@@ -233,20 +233,34 @@
         //编辑当前行
         compileEvent(row){
           row.areaId = row.areaId.toString();
-          if(row.shopNumber){
-            row.shopNumber = row.shopNumber.toString();
-          }
+          row.shopNumber = row.shopNumber.toString();
           row.shopList = row.shopList.map(item => {
             return item.id;
           })
-          row.shopListName = JSON.parse(row.shopNameList).map(item => {
-            return item.shopName;
-          })
-          this.ChangeData = row;
-          // this.ChangeData = {
-          //   shopListName: '',
-          // };
-          console.log(row)
+          if(JSON.parse(row.shopNameList).length > 0){
+            row.shopListName = JSON.parse(row.shopNameList).map(item => {
+              return item.shopName;
+            })
+            row.shopListName = row.shopListName.toString();
+          } else {
+            row.shopListName = '';
+          }
+          // this.ChangeData = row;
+          this.ChangeData = {
+            id: row.id,
+            areaId: row.areaId,
+            shopNumber: row.shopNumber,
+            shopCode: row.shopCode,
+            accountName: row.accountName,
+            bankName: row.bankName,
+            accountCode: row.accountCode,
+            mateAccountName: row.mateAccountName,
+            shopListName: row.shopListName,
+            shopList: row.shopList,
+            area: row.area,
+            shopName: row.shopName,
+          };
+          console.log(this.ChangeData)
           this.$refs.informationShow.information = true;
         },
 
