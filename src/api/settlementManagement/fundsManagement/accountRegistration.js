@@ -12,8 +12,7 @@ export function findListPageAll(params) {
 //新增接口
 export function addData(data) {
   return axios.request({
-      url: `https://rap.g-parts.cn/app/mock/19/omsFinanceAccountRegister/add`,
-    // url: `${api.omsSettle}/omsFinanceAccountRegister/add`,
+    url: `${api.omsSettle}/omsFinanceAccountRegister/add`,
     method: "post",
     data
   });
@@ -30,6 +29,15 @@ export function updateData(data) {
 export function deleterowData(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/deleteById`,
+    method: "get",
+    params
+  });
+}
+
+//连锁待分配款项显示门店_Pass
+export function findAreaShopList(params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountRegister/findAreaShopList`,
     method: "get",
     params
   });
