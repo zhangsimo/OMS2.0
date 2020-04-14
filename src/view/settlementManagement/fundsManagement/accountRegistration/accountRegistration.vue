@@ -260,20 +260,28 @@
             area: row.area,
             shopName: row.shopName,
           };
-          console.log(this.ChangeData)
           this.$refs.informationShow.information = true;
         },
 
         //删除当前行
         removeEvent(row){
-          let params = {};
-          params.id = row.id
-          deleterowData(params).then(res => {
-            if(res.code == 0){
-              this.$Message.success('删除成功！');
-              this.getList();
+          this.$Modal.confirm({
+            title: '提示',
+            content: '<p>是否要删除该条数据？</p>',
+            onOk: async () => {
+              let params = {};
+              params.id = row.id
+              deleterowData(params).then(res => {
+                if(res.code == 0){
+                  this.$Message.success('删除成功！');
+                  this.getList();
+                }
+              })
+            },
+            onCancel: () => {
+              this.$Message.warning('删除取消！')
             }
-          })
+          });
         },
       },
       mounted(){

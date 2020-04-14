@@ -208,6 +208,7 @@
   import { creat } from "./../components";
   import Record from "../components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import moment from "moment";
     export default {
         name: "otherReceivables",
         components: {
@@ -248,7 +249,9 @@
             // this.getQuery();
           },
           //查询
-          query(){},
+          query(){
+            this.getQuery();
+          },
           //其他付款认领/其他收款收回
           claimCollect(type){
             if (type === 1) {
@@ -305,6 +308,32 @@
           },
           //认领弹框查询
           queryClaimed(){},
+
+          //初始化
+          getQuery(){
+            let obj = {
+              startDate: this.value[0]
+                ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+                : "",
+              endDate: this.value[1]
+                ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+                : "",
+              orgid: this.BranchstoreId,
+              guestId: this.companyId,
+              size: this.page.size,
+              page: this.page.num - 1
+            };
+            console.log(obj)
+            // findAdvance(obj).then(res => {
+            //   if (res.code === 0) {
+            //     this.tableData = res.data.content;
+            //     this.page.total = res.data.totalElements;
+            //   }
+            // });
+            this.serviceId = "";
+            // this.$refs.Record.init();
+            this.currRow = {};
+          },
           //认领弹框认领
           claimPay(){
             // if (

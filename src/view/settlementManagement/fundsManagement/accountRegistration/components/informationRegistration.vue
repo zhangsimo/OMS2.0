@@ -116,7 +116,6 @@
         methods: {
           //保存
           informationSave(){
-            // console.log(this.ChangeData ,789)
             this.$refs.ModelValidate.validate((valid) => {
               if (valid) {
                 if(this.ChangeData.id){
@@ -138,10 +137,8 @@
                   this.information = true;
                 } else {
                   let data = this.ChangeData;
-                  console.log(this.changeData)
                   data.shopList = this.shopList;
                   data.shopNumber = data.shopNumber ? data.shopNumber : this.$store.state.user.userData.shopId;
-                  // console.log(data)
                   addData(data).then(res => {
                     if(res.code == 0){
                       this.$Message.success('新增成功! ');
@@ -187,7 +184,6 @@
             return item.id;
           })
             this.ChangeData.shopListName = newArr.toString().replace(",",";");
-            console.log(this.ChangeData.shopListName);
             // console.log(this.shopList)
           },
 
@@ -237,7 +233,6 @@
           //切换地址重新调取门店接口
           changeArea(val){
             this.ChangeData.area = val.label;
-            console.log(val.value)
             if (this.$store.state.user.userData.shopkeeper == 0) {
               this.ChangeData.shopNumber = "0";
               this.getShop()
@@ -246,7 +241,7 @@
 
           //所属门店改变
           changeShop(val){
-            console.log(val)
+            // console.log(val)
             if(val){
               this.ChangeData.shopName = val.label;
               let arr = this.shopListArr.filter(item => item.id == val.value)
@@ -279,30 +274,6 @@
                     })
                   })
                 })
-                // console.log(this.TreeData)
-                // let treeArr = res.data;
-                // treeArr.map(item => {
-                //   item.children = item.childs;
-                //   item.title = item.name;
-                //   item.expand =  true;
-                //   delete item.childs;
-                //   delete item.name;
-                //   item.children.map(item => {
-                //     item.children = item.childs;
-                //     item.title = item.name;
-                //     item.expand =  true;
-                //     delete item.childs;
-                //     delete item.name;
-                //     item.children.map(item => {
-                //       item.children = item.childs;
-                //       item.title = item.name;
-                //       item.expand =  true;
-                //       delete item.childs;
-                //       delete item.name;
-                //     })
-                //   })
-                // })
-                // this.TreeData = treeArr
               }
             })
           }

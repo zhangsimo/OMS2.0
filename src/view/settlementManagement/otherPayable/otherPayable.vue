@@ -214,6 +214,7 @@
   import claimGuest from "./components/claimGuest";
 
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import moment from "moment";
   export default {
         name: "otherPayable",
     components: {
@@ -255,7 +256,35 @@
         // this.getQuery();
       },
       //查询
-      query(){},
+      query(){
+        this.getQuery();
+      },
+
+      //初始化
+      getQuery(){
+        let obj = {
+          startDate: this.value[0]
+            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+            : "",
+          endDate: this.value[1]
+            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+            : "",
+          orgid: this.BranchstoreId,
+          guestId: this.companyId,
+          size: this.page.size,
+          page: this.page.num - 1
+        };
+        console.log(obj)
+        // findAdvance(obj).then(res => {
+        //   if (res.code === 0) {
+        //     this.tableData = res.data.content;
+        //     this.page.total = res.data.totalElements;
+        //   }
+        // });
+        this.serviceId = "";
+        // this.$refs.Record.init();
+        this.currRow = {};
+      },
       //其他收款认领/其他付款支出认领
       claimCollect(type){
         if (type === 1) {

@@ -69,7 +69,6 @@
                   })
                 })
               })
-              // console.log(treeArr)
               this.TreeData = treeArr
             }
           })
