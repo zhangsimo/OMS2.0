@@ -466,6 +466,7 @@ export default {
     },
     //当前行
     selection(row) {
+      console.log(row)
       if(!row){
         return
       }

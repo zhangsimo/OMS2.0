@@ -24,7 +24,7 @@
               <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="presentrowMsg !== 1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
+              <Button class="mr10" :disabled="presentrowMsg !== 1||datadata.isWms===1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
             </div>
             <div class="db">
               <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
