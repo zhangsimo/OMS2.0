@@ -604,6 +604,7 @@ export default {
       } else {
         this.closeAcc = false;
       }
+      this.$refs.gopassword.open()
       this.setPasswordShow = true;
     },
     // 确认开通
