@@ -196,7 +196,6 @@ export const mixSelectPartCom = {
   methods: {
     //初始化数据
     getList() {
-      console.log("this.keyType %s", this.keyType)
       this.loading = true;
       let req = {};
       let params = {};
@@ -344,7 +343,11 @@ export const mixSelectPartCom = {
     //点击详情
     show(val) {
       let data = {};
-      data.partId = val.id;
+      if (val.partId) {
+        data.partId = val.partId;
+      } else {
+        data.partId = val.id;
+      }
       if(this.guestId){
         data.guestId = this.guestId
       }
