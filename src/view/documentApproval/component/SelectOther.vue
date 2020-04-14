@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="modelShow"
-    title="因公借支申请查询"
+    title="其他应付款单据"
     width="1000px"
   >
     <div class="clearfix">
@@ -30,18 +30,18 @@
         :data="tableData">
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="name" title="其他付款单号"></vxe-table-column>
-        <vxe-table-column field="sex" title="往来单位"></vxe-table-column>
-        <vxe-table-column field="age" title="业务类型"></vxe-table-column>
-        <vxe-table-column field="age" title="付款申请时间"></vxe-table-column>
-        <vxe-table-column field="age" title="其他收款金额"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款申请单号"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款申请金额"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款支出已认领金额"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款核销单号"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款核销金额"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
+        <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
+        <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
+        <vxe-table-column field="collectionTime" title="收款申请时间"></vxe-table-column>
+        <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
+        <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>
+        <vxe-table-column field="paymentApplicationAmount" title="其他付款申请金额"></vxe-table-column>
+        <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
+        <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
+        <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
         <vxe-table-column field="age" title="其他付款收回认领金额"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款金额"></vxe-table-column>
+        <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -55,6 +55,7 @@
 <script>
   import moment from 'moment'
   import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import {getpublicRequestList} from '@/api/documentApproval/OtherPayment.js'
 
   export default {
     name: "requestCode",
@@ -62,14 +63,12 @@
       return {
         modelShow: false,//模态框状态
         date:[],//时间
-        tableData:[
-          {name:'zs'},
-          {name:'ls'},
-          {name:'ww'},
-        ],//表格数据
+        tableData:[],//表格数据
         checkedList:{},//获取到的信息
-        company:[],//往来列表
-        companyId:'',//获取到往来单位id
+        company:[
+          {label:'全部' ,value: 0 }
+        ],//往来列表
+        companyId:0,//获取到往来单位id
         money:'',//金额
       }
     },
@@ -77,7 +76,6 @@
       //打开模态框
       open() {
         this.modelShow = true
-        console.log(this.$store.state)
         let date = []
         let weekOfday = parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
         let start = moment().subtract(weekOfday-1, 'days').format('YYYY-MM-DD') // 周一日期
@@ -86,13 +84,14 @@
         date.push(end)
         this.date = date
         this.getOne()
-        this.companyId = ''
+        this.companyId = 0
         this.checkedList = {}
         this.query()
       },
 
       // 往来单位选择
       async getOne() {
+        this.company = [{label:'全部' ,value: 0 }]
         findGuest({ size: 2000 }).then(res => {
           if (res.code === 0) {
             res.data.content.map(item => {
@@ -106,10 +105,18 @@
       },
 
       //查询
-      query(){
+     async query(){
         let data ={}
         data.startDate = moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.endDate = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+        data.amountCollected = this.money
+        data.guestId = this.companyId
+        let res = await getpublicRequestList(data)
+        if(res.code === 0) {
+          this.$Message.success('查询成功')
+          // this.tableData = res.data
+          console.log(res)
+        }
       },
 
       //选择

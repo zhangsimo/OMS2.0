@@ -111,7 +111,7 @@
                 console.log(index)
                 break
               case 4:
-                console.log(index)
+                this.$refs.OtherPayment.open()
                 break
               case 5:
                 console.log(index)
@@ -120,7 +120,7 @@
                 console.log(index)
                 break
               case 7:
-                this.$refs.OtherPayment.open()
+                console.log(index)
                 break
             }
 
