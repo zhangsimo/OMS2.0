@@ -178,7 +178,7 @@
                     window.location.reload()
                     document.body.innerHTML = oldstr
             },
-            openModal(id){
+            openModal(id, status){
                 //let order = this.$store.state.dataList.oneOrder
                 if(id){
                     let data ={}
@@ -195,6 +195,9 @@
                            this.orderQty += item.orderQty
                            this.orderAmt += item.orderAmt||0
                          })
+                         if (status == 0) {
+                           this.onelist['stockShift']['createUname'] = "";
+                         }
                       }
                     })
                 }else {
