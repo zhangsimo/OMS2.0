@@ -31,7 +31,6 @@
           <FormItem label="临时额度开始时间:" prop="tempStart">
             <DatePicker
               v-model="data.tempStart"
-              @on-change="dataChange"
               type="date"
               :options="startTimeOptions"
               style="width: 150px"
@@ -56,7 +55,6 @@
           <FormItem label="临时额度结束时间:" prop="tempEnd">
             <DatePicker
               v-model="data.tempEnd"
-              @on-change="dataChange1"
               type="date"
               format="yyyy-MM-dd"
               :options="endTimeOptions"
@@ -223,10 +221,10 @@ export default {
           { required: true, message: "申请额度说明必填！", trigger: "blur" }
         ],
         tempStart: [
-          { required: true, message: "临时额度开始时间必填！", trigger: "blur" }
+          { required: true, message: "临时额度开始时间必填！", trigger: "change" , type: 'date', }
         ],
         tempEnd: [
-          { required: true, message: "临时额度结束时间必填！", trigger: "blur" }
+          { required: true, message: "临时额度结束时间必填！", trigger: "change", type: 'date', }
         ]
       },
       columnsEarnings: [
@@ -356,24 +354,24 @@ export default {
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
   },
   methods: {
-    dataChange() {
-      if (this.data.tempStart) {
-        this.data.tempStart = moment(this.data.tempStart).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-      } else {
-        this.data.tempStart = "";
-      }
-    },
-    dataChange1() {
-      if (this.data.tempEnd) {
-        this.data.tempEnd = moment(this.data.tempEnd).format(
-          "YYYY-MM-DD HH:mm:ss"
-        );
-      } else {
-        this.data.tempEnd = "";
-      }
-    },
+    // dataChange() {
+    //   if (this.data.tempStart) {
+    //     this.data.tempStart = moment(this.data.tempStart).format(
+    //       "YYYY-MM-DD HH:mm:ss"
+    //     );
+    //   } else {
+    //     this.data.tempStart = "";
+    //   }
+    // },
+    // dataChange1() {
+    //   if (this.data.tempEnd) {
+    //     this.data.tempEnd = moment(this.data.tempEnd).format(
+    //       "YYYY-MM-DD HH:mm:ss"
+    //     );
+    //   } else {
+    //     this.data.tempEnd = "";
+    //   }
+    // },
     resetFields() {
       this.$refs.form.resetFields();
     },
