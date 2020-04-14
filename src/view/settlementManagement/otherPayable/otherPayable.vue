@@ -212,7 +212,7 @@
   import claim from "./components/claimed";
   import settlement from "./components/settlement";
   import { creat } from "./../components";
-  import Record from "../components/Record";
+  import Record from "./components/Record";
   import claimGuest from "./components/claimGuest";
   import OtherPayment from '../../documentApproval/component/OtherPayment'
 

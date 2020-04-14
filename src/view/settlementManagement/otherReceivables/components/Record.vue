@@ -41,14 +41,23 @@ export default {
           key: "rpDate",
           align: "center"
         },
+        // {
+        //   title: "收付款业务类型",
+        //   key: "furpose",
+        //   align: "center",
+        //   render: (h, p) => {
+        //     let val = p.row.furpose.name;
+        //     return h("span", val);
+        //   }
+        // },
         {
-          title: "收付款业务类型",
-          key: "furpose",
+          title: "核销方式",
+          key: "",
           align: "center",
-          render: (h, p) => {
-            let val = p.row.furpose.name;
-            return h("span", val);
-          }
+          // render: (h, p) => {
+          //   let val = p.row.furpose.name;
+          //   return h("span", val);
+          // }
         },
         {
           title: "往来单位",
@@ -56,7 +65,7 @@ export default {
           align: "center"
         },
         {
-          title: "收付款方式",
+          title: "收付款类型",
           key: "sort",
           align: "center",
           render: (h, p) => {

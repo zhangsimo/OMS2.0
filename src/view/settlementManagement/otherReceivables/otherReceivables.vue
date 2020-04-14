@@ -206,7 +206,7 @@
   import claim from "./components/claimed";
   import settlement from "./components/settlement";
   import { creat } from "./../components";
-  import Record from "../components/Record";
+  import Record from "./components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
   import { findByDynamicQuery , withdraw } from "_api/settlementManagement/otherReceivables/otherReceivables";
   // otherReceivables
@@ -248,7 +248,7 @@
           // 快速查询
           quickDate(data) {
             this.value = data;
-            // this.getQuery();
+            this.getQuery();
           },
           //查询
           query(){
@@ -409,7 +409,7 @@
         this.BranchstoreId = arr[1];
         this.Branchstore = arr[2];
         this.getOne();
-        // this.getQuery();
+        this.getQuery();
       },
     }
 </script>

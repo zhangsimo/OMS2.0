@@ -22,15 +22,20 @@ export default {
           width: 40
         },
         {
+          title: "因公借支申请单号",
+          key: "",
+          align: "center"
+        },
+        {
           title: "收付款单号",
           key: "fno",
           align: "center"
         },
-        {
-          title: "对账单号",
-          key: "accountNo",
-          align: "center"
-        },
+        // {
+        //   title: "对账单号",
+        //   key: "accountNo",
+        //   align: "center"
+        // },
         {
           title: "收款人/付款人",
           key: "createUname",
@@ -41,14 +46,23 @@ export default {
           key: "rpDate",
           align: "center"
         },
+        // {
+        //   title: "收付款业务类型",
+        //   key: "furpose",
+        //   align: "center",
+        //   render: (h, p) => {
+        //     let val = p.row.furpose.name;
+        //     return h("span", val);
+        //   }
+        // },
         {
-          title: "收付款业务类型",
-          key: "furpose",
+          title: "核销方式",
+          key: "",
           align: "center",
-          render: (h, p) => {
-            let val = p.row.furpose.name;
-            return h("span", val);
-          }
+          // render: (h, p) => {
+          //   let val = p.row.furpose.name;
+          //   return h("span", val);
+          // }
         },
         {
           title: "往来单位",
@@ -56,7 +70,7 @@ export default {
           align: "center"
         },
         {
-          title: "收付款方式",
+          title: "收付款类型",
           key: "sort",
           align: "center",
           render: (h, p) => {
@@ -123,11 +137,11 @@ export default {
           key: "auditorDate",
           align: "center"
         },
-        {
-          title: "备注",
-          key: "remark",
-          align: "center"
-        }
+        // {
+        //   title: "备注",
+        //   key: "remark",
+        //   align: "center"
+        // }
       ],
       recordLists: [],
     };
@@ -150,7 +164,7 @@ export default {
         if (index === 0) {
           sums[key] = {
             key,
-            value: "总价"
+            value: "合计 ： "
           };
           return;
         }
