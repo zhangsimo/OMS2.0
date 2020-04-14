@@ -281,7 +281,7 @@
     <!--      </Modal>-->
 
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId"></select-part-com>
     <!--      批次配件-->
     <barch ref="barch" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->

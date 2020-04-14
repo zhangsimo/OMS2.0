@@ -859,7 +859,7 @@ export default {
 
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.Leftcurrentrow.id);
+      this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
     },
     //添加配件
     addPro() {

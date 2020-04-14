@@ -266,7 +266,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId" ></Select-part-com>
     <!--更多弹框-->
     <More
       :getShowMore="showMore"

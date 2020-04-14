@@ -196,6 +196,7 @@ export const mixSelectPartCom = {
   methods: {
     //初始化数据
     getList() {
+      console.log("this.keyType %s", this.keyType)
       this.loading = true;
       let req = {};
       let params = {};
