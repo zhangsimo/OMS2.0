@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <main class="bigBox"
+    style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%">
       <div class="content-oper content-oper-flex">
         <section class="oper-box">
           <div class="oper-top flex">
@@ -35,8 +36,8 @@
         <section class="con-box">
           <div class="inner-box">
             <div class="con-split" ref="paneLeft" >
-              <Split v-model="split1" min="200" max="500">
-                <div slot="left" class="con-split-pane-left" >
+              <Split v-model="split1" min="200" @on-moving="getDomHeight">
+                <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                   <div class="pane-made-hd">
                     调拨申请列表
                   </div>
@@ -198,7 +199,7 @@
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
       <!--打印弹框-->
       <print-show ref="PrintModel" :orderId="mainId"></print-show>
-    </div>
+    </main>
 </template>
 
 <script>
@@ -931,19 +932,29 @@
               this.$Message.error('*为必填项！');
             }
           })
-        }
+        },
+        //获取表格高度
+        getDomHeight() {
+          this.$nextTick(() => {
+            let wrapH = this.$refs.paneLeft.offsetHeight;
+            let planFormH = this.$refs.planForm.offsetHeight;
+            let planBtnH = this.$refs.planBtn.offsetHeight;
+            // let planPageH = this.$refs.planPage.offsetHeight;
+            //获取左侧侧表格高度
+            this.leftTableHeight = wrapH - 144;
+            //获取右侧表格高度
+            this.rightTableHeight = wrapH - planFormH - planBtnH - 38 - 64;
+          });
+        },
       },
       mounted(){
-        this.$nextTick(()=>{
-          let wrapH = this.$refs.paneLeft.offsetHeight;
-          let planFormH = this.$refs.planForm.offsetHeight;
-          let planBtnH = this.$refs.planBtn.offsetHeight;
-          // let planPageH = this.$refs.planPage.offsetHeight;
-          //获取左侧侧表格高度
-          this.leftTableHeight = wrapH-70;
-          //获取右侧表格高度
-          this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-        });
+        setTimeout(() => {
+          this.getDomHeight();
+        }, 0);
+
+        window.onresize = () => {
+          this.getDomHeight();
+        };
           this.leftgetList();
           this.warehouse();
           // this.selecQuery();

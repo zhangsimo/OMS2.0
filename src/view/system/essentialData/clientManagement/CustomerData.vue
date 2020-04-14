@@ -405,6 +405,7 @@ export default {
       this.$refs.child.$refs.form.resetFields()
       this.$refs.pitchOneCoustomer.clearCurrentRow();
       this.clientList = {};
+      this.clientList.isNeedPack = false
       this.clientDataShow = true;
       this.$refs.child.getClienlist();
     },

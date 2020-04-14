@@ -219,6 +219,7 @@
             :edit-rules="validRules"
             :edit-config="{trigger: 'click', mode: 'cell'}"
             @radio-change="selectChange"
+            resizable
           >
             <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
             <vxe-table-column type="radio" width="60"></vxe-table-column>

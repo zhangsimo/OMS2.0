@@ -1026,6 +1026,7 @@ export default {
       params.size = this.page2.size;
       let data = {};
       data.tenantId = this.choose.tenantId;
+      data.isPayment = 1;
       Product({ data: data, params: params }).then(res => {
         if (res.code === 0) {
           this.loading2 = false;

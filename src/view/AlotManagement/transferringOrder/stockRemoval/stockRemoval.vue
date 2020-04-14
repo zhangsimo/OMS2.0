@@ -34,7 +34,7 @@
                 type="default"
                 class="mr10"
                 @click="baocun1"
-                :disabled="buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -43,7 +43,7 @@
               <Button
                 class="mr10"
                 v-has="'submit'"
-                :disabled="buttonDisable == 1 || buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
                 @click="tijiao1"
               >
                 <Icon type="md-checkmark" size="14" />提交
@@ -51,7 +51,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="Leftcurrentrow.statuName != '待出库'"
+                :disabled="![1].includes(buttonDisable)"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
@@ -64,7 +64,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="!(Leftcurrentrow.serviceId && Leftcurrentrow.statuName == '草稿')"
+                :disabled="![0].includes(buttonDisable)"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
@@ -199,7 +199,7 @@
                       <Button
                         v-has="'addMountings'"
                         size="small"
-                        :disabled="buttonDisable == 1 || buttonDisable == 3"
+                        :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)"
                         class="mr10"
                         @click="addMountings"
                       >
@@ -207,7 +207,7 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" :disabled="buttonDisable == 1 || buttonDisable == 3" size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -217,6 +217,7 @@
                         size="small"
                         class="mr10"
                         @click="GoodsInfoModal"
+                        :disabled="[2, 3].includes(buttonDisable)"
                       >
                         <i class="iconfont mr5 iconlajitongicon"></i> 编辑发货信息
                       </Button>
@@ -1017,16 +1018,16 @@ export default {
         });
         return;
       }
-      this.buttonDisable = 0;
+      this.buttonDisable = 0; // 草稿
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       if (row.statuName == "待出库") {
         this.buttonDisable = 1;
       }
-      if (row.statuName == "已出库" || row.statuName == "已作废") {
+      if (row.statuName == "已出库") {
         this.buttonDisable = 2;
       }
-      if (row.serviceId.length > 0) {
+      if (row.statuName == "已作废") {
         this.buttonDisable = 3;
       }
       if (row.id == undefined) {

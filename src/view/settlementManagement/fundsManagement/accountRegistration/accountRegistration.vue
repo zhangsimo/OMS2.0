@@ -17,7 +17,7 @@
             <span>门店：</span>
             <Select  v-model="shopCode" filterable class="w150">
               <Option
-                v-for="item in shopList"
+                v-for="item in shopListArr"
                 :value="item.id"
                 :key="item.id"
               >{{ item.name }}</Option>
@@ -79,7 +79,11 @@
           <vxe-table-column field="accountCode" title="账号"></vxe-table-column>
           <vxe-table-column field="bankName" title="开户行"></vxe-table-column>
           <vxe-table-column field="mateAccountName" title="对应科目"></vxe-table-column>
-          <vxe-table-column field="shopList" title="连锁待分配款项显示门店"></vxe-table-column>
+          <vxe-table-column field="shopList" title="连锁待分配款项显示门店">
+            <template v-slot="{ row }">
+              <span v-for="item in row.shopList"> {{ item.shopName }};</span>
+            </template>
+          </vxe-table-column>
           <vxe-table-column title="操作">
             <template v-slot="{ row }">
               <template>
@@ -113,12 +117,12 @@
             model1: 0,//区域
             Branchstore: [ {id:0 ,companyName:'全部'}], //区域数组
             shopCode: 0, //门店
-            shopList: [ {id:0 , name:'全部'}], //门店数组
+            shopListArr: [ {id:0 , name:'全部'}], //门店数组
             accountName: '', //账户
             bankName: '', //开户行
             subjectCode: 0, //对应科目
             subJectList: [{id:0 ,titleName:'全部'}], //对应科目数组
-            tableData: [{accountName: "1123"}], //表格数据
+            tableData: [], //表格数据
             oneList: [], //当前表格数据
             ChangeData: {}, //给子组件传的当前行的数据
           }
@@ -134,15 +138,15 @@
         async getShop(){
           let data ={}
           data.supplierTypeSecond = this.model1
-          this.shopList = [{id:0 , name:'全部'}]
+          this.shopListArr = [{id:0 , name:'全部'}]
           let res = await goshop(data)
           if (res.code === 0) {
-            this.shopList = [...this.shopList , ...res.data]
-            this.$nextTick( () => {
-              this.shopCode = this.$store.state.user.userData.shopId
-            })
+            this.shopListArr = [...this.shopListArr , ...res.data]
+            // this.$nextTick( () => {
+            //   this.shopCode = this.$store.state.user.userData.shopId
+            // })
             if (this.$store.state.user.userData.shopkeeper != 0){
-              // this.getThisArea()//获取当前门店地址
+              this.getThisArea()//获取当前门店地址
             }
           }
         },
@@ -162,9 +166,23 @@
             this.getShop()
           }
         },
+
           //查询
         query(){
           this.getList();
+        },
+
+        //当前非管理员状态情况下获取门店地址
+        async getThisArea(){
+          let data = {}
+          data.shopkeeper = 1
+          data.shopNumber = this.$store.state.user.userData.shopId
+          data.tenantId = this.$store.state.user.userData.tenantId
+          let res = await are(data)
+
+          if (res.code === 0){
+            this.model1 = res.data[0].id
+          }
         },
 
         //初始化数据
@@ -174,7 +192,7 @@
             params.areaId = this.model1;
           }
           if(this.shopCode != 0){
-            params.shopId = this.shopCode;
+            params.shopNumber = this.shopCode;
           }
           if(this.accountName){
             params.accountName = this.accountName;
@@ -186,19 +204,25 @@
             params.mateAccountCode = this.subjectCode;
           }
           findListPageAll(params).then(res => {
-            if(res.code == 0){}
+            if(res.code == 0){
+                this.tableData = res.data.content;
+                this.tableData.map(item => {
+                  item.shopList = JSON.parse(item.shopNameList)
+                })
+            }
           })
         },
 
         //新增
         newlyIncreased(){
             this.ChangeData = {
-                area: "0",
-                shopName: '0',
+                areaId: "0",
+                shopNumber: '0',
                 mateAccountName: '',
-                aaa: '',
+                shopListName: '',
             };
             this.$refs.informationShow.information = true;
+            this.$refs.informationShow.$refs.ModelValidate.resetFields();
         },
 
         //点击获取表格数据
@@ -208,18 +232,63 @@
 
         //编辑当前行
         compileEvent(row){
-          this.ChangeData = row;
-          // console.log(this.ChangeData ,111)
-          this.$refs.informationShow.informationSave();
+          row.areaId = row.areaId.toString();
+          row.shopNumber = row.shopNumber.toString();
+          row.shopList = row.shopList.map(item => {
+            return item.id;
+          })
+          if(JSON.parse(row.shopNameList).length > 0){
+            row.shopListName = JSON.parse(row.shopNameList).map(item => {
+              return item.shopName;
+            })
+            row.shopListName = row.shopListName.toString();
+          } else {
+            row.shopListName = '';
+          }
+          // this.ChangeData = row;
+          this.ChangeData = {
+            id: row.id,
+            areaId: row.areaId,
+            shopNumber: row.shopNumber,
+            shopCode: row.shopCode,
+            accountName: row.accountName,
+            bankName: row.bankName,
+            accountCode: row.accountCode,
+            mateAccountName: row.mateAccountName,
+            shopListName: row.shopListName,
+            shopList: row.shopList,
+            area: row.area,
+            shopName: row.shopName,
+          };
+          this.$refs.informationShow.information = true;
         },
 
         //删除当前行
-        removeEvent(row){},
+        removeEvent(row){
+          this.$Modal.confirm({
+            title: '提示',
+            content: '<p>是否要删除该条数据？</p>',
+            onOk: async () => {
+              let params = {};
+              params.id = row.id
+              deleterowData(params).then(res => {
+                if(res.code == 0){
+                  this.$Message.success('删除成功！');
+                  this.getList();
+                }
+              })
+            },
+            onCancel: () => {
+              this.$Message.warning('删除取消！')
+            }
+          });
+        },
       },
       mounted(){
         this.getAllAre() //获取区域
         this.getShop()  //获取门店
         this.getSubject()//获取科目
+        this.getList() //查询
       }
     }
 </script>

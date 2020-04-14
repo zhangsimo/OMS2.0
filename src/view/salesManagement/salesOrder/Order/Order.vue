@@ -23,7 +23,7 @@
       <Button
         class="mr10"
         @click="setStockOut"
-        :disabled="orderlistType.value != 1"
+        :disabled="orderlistType.value != 1||isWms"
         v-has="'StockOut'"
       >
       <!--orderlistType.isWms == 1 || ^-->
@@ -111,7 +111,8 @@ export default {
         value: 0
       }, //默认状态
       changeLeft: "" ,//发生改变数据调动左侧list
-      ispart:true
+      ispart:true,
+      isWms:false
     };
   },
   methods: {
@@ -138,8 +139,11 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-
+      this.isWms = false;
       this.orderlistType = data.billStatusId;
+      if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
+        this.isWms = true;
+      }
     },
     //保存
     setSave() {

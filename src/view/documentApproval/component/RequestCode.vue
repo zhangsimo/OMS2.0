@@ -35,7 +35,6 @@
       <Button type='default' @click='modelShow = false'>返回</Button>
     </div>
   </Modal>
-
 </template>
 
 <script>

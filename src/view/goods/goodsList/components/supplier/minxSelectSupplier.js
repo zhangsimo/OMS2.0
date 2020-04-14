@@ -44,8 +44,12 @@ export const mixSelectSupplier = {
         },
         {
           title: "状态",
-          key: "groupName",
-          minWidth: 70
+          key: "isDisable",
+          minWidth: 70,
+          render:(h,p) => {
+            let text = p.row.isDisable===1?"禁用":"有效"
+            return h('span',text)
+          }
         },
         {
           title: "联系人",
@@ -79,8 +83,12 @@ export const mixSelectSupplier = {
         },
         {
           title: "是否内部供应商",
-          key: "isSupplier",
-          minWidth: 120
+          key: "belongSystem",
+          minWidth: 120,
+          render:(h,p) => {
+            let belong = p.row.belongSystem?JSON.parse(p.row.belongSystem):"";
+            return h('span',belong.value===2?"是":"否")
+          }
         },
         {
           title: "优势品牌/产品",

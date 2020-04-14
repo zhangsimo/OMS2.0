@@ -59,23 +59,33 @@
       </Row>
 
 <!--      对应各个模态框-->
-<!--      给用报销-->
-      <ExpenseReimbursement ref="ExpenseReimbursement" :list="id"></ExpenseReimbursement>
+<!--      费用报销报销-->
+      <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType"></ExpenseReimbursement>
+<!--      其他付款申请-->
+      <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
+<!--      应公借支申请-->
+      <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
     </div>
 </template>
 
 <script>
   import ExpenseReimbursement from '../component/ExpenseReimbursement'
+  import OtherPayment from '../component/OtherPayment'
+  import PublicRequest from '../component/PublicRequest'
     export default {
         name: "draftingOfApplication",
       components:{
-        ExpenseReimbursement
+        ExpenseReimbursement,
+        OtherPayment,
+        PublicRequest
       },
       data(){
           return {
-            id:{
-              name:'zs'
-            }
+            //打开模态框状态 type 1 新增 2修改 3查看
+            modelType:{
+              type:1,
+              id:''
+            },
           }
       },
       methods:{
@@ -92,7 +102,7 @@
                 this.$refs.ExpenseReimbursement.open()
                 break;
               case 1:
-                console.log(index)
+                this.$refs.PublicRequest.open()
                 break
               case 2:
                 console.log(index)
@@ -101,7 +111,7 @@
                 console.log(index)
                 break
               case 4:
-                console.log(index)
+                this.$refs.OtherPayment.open()
                 break
               case 5:
                 console.log(index)

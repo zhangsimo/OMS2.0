@@ -266,7 +266,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId" ></Select-part-com>
     <!--更多弹框-->
     <More
       :getShowMore="showMore"
@@ -555,7 +555,7 @@ export default {
             } else {
               res.data.content.map((item, index) => {
                 item["index"] = index + 1;
-                item["statuName"] = item.billStatusId.name;
+                item["statuName"] = item.billStatusId?item.billStatusId.name:"";
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
