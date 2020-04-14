@@ -42,7 +42,7 @@
           <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
           <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
           <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
-          <Button class="ml10">导出</Button>
+          <!--<Button class="ml10">导出</Button>-->
         </div>
       </section>
       <section class="con-box">
@@ -208,6 +208,8 @@
   import { creat } from "./../components";
   import Record from "../components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import { findByDynamicQuery , withdraw } from "_api/settlementManagement/otherReceivables/otherReceivables";
+  // otherReceivables
   import moment from "moment";
     export default {
         name: "otherReceivables",
@@ -312,24 +314,19 @@
           //初始化
           getQuery(){
             let obj = {
-              startDate: this.value[0]
-                ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-                : "",
-              endDate: this.value[1]
-                ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-                : "",
+              startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
+              endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
               orgid: this.BranchstoreId,
               guestId: this.companyId,
               size: this.page.size,
               page: this.page.num - 1
             };
-            console.log(obj)
-            // findAdvance(obj).then(res => {
-            //   if (res.code === 0) {
-            //     this.tableData = res.data.content;
-            //     this.page.total = res.data.totalElements;
-            //   }
-            // });
+            findByDynamicQuery(obj).then(res => {
+              if (res.code === 0) {
+                this.tableData = res.data.content;
+                this.page.total = res.data.totalElements;
+              }
+            });
             this.serviceId = "";
             // this.$refs.Record.init();
             this.currRow = {};

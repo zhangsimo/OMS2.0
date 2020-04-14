@@ -856,6 +856,18 @@ export default [
           import("@/view/settlementManagement/otherPayable/otherPayable.vue")
       },
       {
+        path: "/settlementManagement/businessBorrowing",
+        name: "settlementManagement-businessBorrowing",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "因公借支管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/businessBorrowing/businessBorrowing.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",

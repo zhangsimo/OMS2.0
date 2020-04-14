@@ -37,7 +37,7 @@
       </div>
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">其他收款认领</Button>
-        <Button class="ml10">其他付款申请</Button>
+        <Button class="ml10" @click="applyForOther">其他付款申请</Button>
         <Button class="ml10" @click="claimCollect(2)">其他付款支出认领</Button>
         <Button class="ml10" @click="collectWirte">其他付款核销</Button>
         <Button class="ml10" @click="revokeCollection(0)">其他收款认领撤回</Button>
@@ -202,6 +202,8 @@
     </Modal>
     <!--其他收款核销-->
     <settlement ref="settlement"></settlement>
+    <!--其他付款申请-->
+    <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
   </div>
 </template>
 
@@ -212,6 +214,7 @@
   import { creat } from "./../components";
   import Record from "../components/Record";
   import claimGuest from "./components/claimGuest";
+  import OtherPayment from '../../documentApproval/component/OtherPayment'
 
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
   import moment from "moment";
@@ -222,10 +225,15 @@
       claim,
       settlement,
       Record,
-      claimGuest
+      claimGuest,
+      OtherPayment
     },
     data(){
       return{
+        modelType:{
+          type:1, //新增
+          id:''
+        },
         value: [], //查询日期数组
         BranchstoreId: '', //分店名称
         company: [], //往来单位数组
@@ -304,6 +312,10 @@
           //   this.$message.error("请选择有预收款支出单号且未支出认领的数据");
           // }
         }
+      },
+      // 其他付款申请
+      applyForOther(){
+        this.$refs.OtherPayment.open();
       },
       //预收款弹框是否打开
       visChangeClaim(type) {
