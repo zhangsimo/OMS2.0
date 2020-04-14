@@ -7,9 +7,9 @@
     <div class="bigbox">
    <div class="clearfix">
      <div class="fr">
-       <Button class="mr10" v-if="modelType != 3" >保存草稿</Button>
-       <Button class="mr10" v-if="modelType != 3" >提交申请</Button>
-       <Button class="mr10" @click="model =false" v-if="modelType != 3" >取消</Button>
+       <Button class="mr10" v-if="!modelType" >保存草稿</Button>
+       <Button class="mr10" v-if="!modelType" >提交申请</Button>
+       <Button class="mr10" @click="model =false" >取消</Button>
      </div>
    </div>
     <Form ref="formInline" :model="formInline" :label-width="100"  :rules="ruleValidate">
@@ -39,11 +39,11 @@
         <div class="tableline tableright">
           <div class="applyTitle">请示单号</div>
           <a>{{formInline.code || ''}}</a>
-          <a class="fr" @click="openSelect" v-if="modelType != 3">选择</a>
+          <a class="fr" @click="openSelect" v-if="!modelType">选择</a>
         </div>
         <div class="tableright">
           <FormItem label="主题" style="margin-bottom: 0px" prop="use">
-            <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType == 3">
+            <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType">
             </Input>
           </FormItem>
         </div>
@@ -132,19 +132,19 @@
         <Row>
           <Col span="8">
             <FormItem label="收款人姓名" prop="payee" style="margin-bottom: 0px">
-              <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px" :disabled="modelType == 3">
+              <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
                 <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="开户行名称" prop="bankName" style="margin-bottom: 0px">
-              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px"  :disabled="modelType == 3"></Input>
+              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
             </FormItem>
           </Col>
           <Col span="8">
             <FormItem label="银行账号" prop="BankNo" style="margin-bottom: 0px;border-right: none">
-              <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" :disabled="modelType == 3"></Input>
+              <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
             </FormItem>
           </Col>
         </Row>
@@ -161,7 +161,7 @@
           </Col>
           <Col span="12">
             <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
-              <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType == 3">
+              <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType">
                 <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
@@ -172,7 +172,9 @@
 
       <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
       <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
+      <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
     </Form>
+
     </div>
 <!--    选择的模态框-->
     <requestCode ref="request" @backList = 'getBackList'></requestCode>

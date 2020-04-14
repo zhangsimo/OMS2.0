@@ -3,13 +3,16 @@ import requestCode from '../RequestCode'
 import subject from '../Subject'
 import selectTheDocuments from '../SelectTheDocuments'
 import upphoto from '../Upphoto'
+import flowbox from '../Flow'
+
 export default {
   name: "ExpenseReimbursement",
   components:{
     requestCode,
     subject,
     selectTheDocuments,
-    upphoto
+    upphoto,
+    flowbox
   },
   props:{
     list:''
@@ -17,7 +20,7 @@ export default {
   data(){
     return {
       model: false, //模态框开关
-      modelType:0, //模态框打开模式 0-新增 1-编辑 3-查看
+      modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
       formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
@@ -88,7 +91,7 @@ export default {
         this.$refs['formInline'].resetFields();
         this.model = true
         //判断模态框状态
-        this.modelType = 1
+        this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.staffName = user.staffName
