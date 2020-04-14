@@ -4,19 +4,41 @@
       <div class="header">
         <Form ref="formOne" :model="formDateTop" inline>
           <FormItem>
-            <Input type="text" v-model="formDateTop.receiveCompName" placeholder="收货单位" />
+            <Input
+              type="text"
+              v-model="formDateTop.receiveCompName"
+              placeholder="收货单位"
+            />
           </FormItem>
           <FormItem>
-            <Input type="text" v-model="formDateTop.streetAddress" placeholder="收货地址" />
+            <Input
+              type="text"
+              v-model="formDateTop.streetAddress"
+              placeholder="收货地址"
+            />
           </FormItem>
           <FormItem>
-            <Input type="text" v-model="formDateTop.receiveMan" placeholder="收货人" />
+            <Input
+              type="text"
+              v-model="formDateTop.receiveMan"
+              placeholder="收货人"
+            />
           </FormItem>
           <FormItem>
-            <Input type="text" v-model="formDateTop.receiveManTel" placeholder="联系电话" />
+            <Input
+              type="text"
+              v-model="formDateTop.receiveManTel"
+              placeholder="联系电话"
+            />
           </FormItem>
           <Button type="primary" class="mr10" @click="searchInfo">查询</Button>
-          <Button type="primary" :disabled="disabled" class="mr10" @click="saveInfo">保存</Button>
+          <Button
+            type="primary"
+            :disabled="disabled"
+            class="mr10"
+            @click="saveInfo"
+            >保存</Button
+          >
           <Button @click="cancel">取消</Button>
         </Form>
       </div>
@@ -37,13 +59,37 @@
             highlight-current-row
             :radio-config="{ trigger: 'row' }"
           >
-            <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-            <vxe-table-column type="radio" width="60" title="选择"></vxe-table-column>
+            <vxe-table-column
+              type="index"
+              width="60"
+              title="序号"
+            ></vxe-table-column>
+            <vxe-table-column
+              type="radio"
+              width="60"
+              title="选择"
+            ></vxe-table-column>
             <!-- <vxe-table-column field="name" title="客户" width="100"></vxe-table-column> -->
-            <vxe-table-column field="receiveCompName" title="收货单位" width="100"></vxe-table-column>
-            <vxe-table-column field="streetAddress" title="收货地址" width="100"></vxe-table-column>
-            <vxe-table-column field="receiveMan" title="收货人" width="100"></vxe-table-column>
-            <vxe-table-column field="receiveManTel" title="联系电话" width="100"></vxe-table-column>
+            <vxe-table-column
+              field="receiveCompName"
+              title="收货单位"
+              width="100"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="streetAddress"
+              title="收货地址"
+              width="100"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="receiveMan"
+              title="收货人"
+              width="100"
+            ></vxe-table-column>
+            <vxe-table-column
+              field="receiveManTel"
+              title="联系电话"
+              width="100"
+            ></vxe-table-column>
           </vxe-table>
         </div>
         <!-- 收货信息 右 -->
@@ -57,16 +103,32 @@
             :rules="ruleValidate"
           >
             <FormItem label="收货单位：" prop="receiveCompName">
-              <Input v-model="formDateRight.receiveCompName" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.receiveCompName"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="收货地址：" prop="streetAddress">
-              <Input v-model="formDateRight.streetAddress" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.streetAddress"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="收货人：" prop="receiveMan">
-              <Input v-model="formDateRight.receiveMan" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.receiveMan"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="联系电话：" prop="receiveManTel">
-              <Input v-model="formDateRight.receiveManTel" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.receiveManTel"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <!-- 发货信息 右-->
             <div class="bgc p5 mb15 mt15">发货信息</div>
@@ -81,7 +143,8 @@
                   v-for="item in Delivery"
                   :value="item.value"
                   :key="item.value"
-                >{{ item.label }}</Option>
+                  >{{ item.label }}</Option
+                >
               </Select>
             </FormItem>
             <FormItem
@@ -96,9 +159,16 @@
                 filterable
                 @on-change="selectLogis"
               >
-                <Option v-for="item in logisArr" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+                <Option
+                  v-for="item in logisArr"
+                  :value="item.id"
+                  :key="item.id"
+                  >{{ item.fullName }}</Option
+                >
               </Select>
-              <div class="ivu-form-item-error-tip" v-show="logisRequired">发货物流未选择</div>
+              <div class="ivu-form-item-error-tip" v-show="logisRequired">
+                发货物流未选择
+              </div>
             </FormItem>
             <FormItem label="运输费用：">
               <el-input-number
@@ -112,7 +182,11 @@
               />
             </FormItem>
             <FormItem label="结算方式：" prop="settleType">
-              <Select v-model="formDateRight.settleType" class="w200" :disabled="disabled">
+              <Select
+                v-model="formDateRight.settleType"
+                class="w200"
+                :disabled="disabled"
+              >
                 <!--<Option value="0" label="0">到付</Option>-->
                 <!--<Option value="1" label="1">现结</Option>-->
                 <!--<Option value="2" label="2">月结</Option>-->
@@ -120,17 +194,31 @@
                   v-for="item in payment"
                   :value="item.value"
                   :key="item.value"
-                >{{ item.label }}</Option>
+                  >{{ item.label }}</Option
+                >
               </Select>
             </FormItem>
             <FormItem label="发货备注：">
-              <Input v-model="formDateRight.remark" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.remark"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
             <FormItem label="业务单号：">
-              <Input v-model="formDateRight.businessNum" class="w200" readonly disabled />
+              <Input
+                v-model="formDateRight.businessNum"
+                class="w200"
+                readonly
+                disabled
+              />
             </FormItem>
             <FormItem label="关联单号：">
-              <Input v-model="formDateRight.relationNum" class="w200" :disabled="disabled" />
+              <Input
+                v-model="formDateRight.relationNum"
+                class="w200"
+                :disabled="disabled"
+              />
             </FormItem>
           </Form>
         </div>
@@ -171,7 +259,7 @@ export default class GoodsInfo extends Vue {
   private disabled: boolean = true;
 
   @Prop(String) readonly mainId;
-  @Prop(Object||String) readonly row;
+  @Prop(Object || String) readonly row;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [
@@ -246,13 +334,24 @@ export default class GoodsInfo extends Vue {
   private async getLists() {
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
-    let res: any = await fapi.getGoodsInfos2({
-      mainId: this.mainId,
-      directCompanyId
+
+    let result: any = await fapi.getGoodsInfos3({
+      id: this.row.codeId
     });
-    if (res.code == 0) {
-      this.tableData = res.data;
+
+    if (result.code == 0 && result.data != null) {
+      this.tableData = [result.data];
       this.loading = false;
+    } else {
+      let res: any = await fapi.getGoodsInfos2({
+        orgid: this.row.guestOrgid,
+        mainId: this.mainId,
+        directCompanyId
+      });
+      if (res.code == 0) {
+        this.tableData = res.data;
+        this.loading = false;
+      }
     }
   }
 
@@ -385,11 +484,8 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
-    let res = await fapi.getGoodsInfos2(data);
-    if (res.code == 0) {
-      this.tableData = res.data;
-      this.loading = false;
-    }
+    data.orgid = this.row.guestOrgid;
+    this.getLists()
   }
   //快递下拉框
   private distribution(val) {
