@@ -331,6 +331,7 @@ export const mixSelectPartCom = {
 
     //点击详情
     show(val) {
+      console.log(val)
       let data = {};
       data.partId = val.id;
       getDetails(data).then(res => {
