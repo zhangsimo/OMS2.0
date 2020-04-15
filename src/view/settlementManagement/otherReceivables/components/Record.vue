@@ -149,6 +149,9 @@ export default {
         let res = await api.findByAccountNo({ accountNo: this.$parent.serviceId });
         if(res.code == 0) {
           this.recordLists = res.data;
+          if(this.recordLists.length > 0 ){
+            this.$emit('Message',this.recordLists)
+          }
         }
       }
     },

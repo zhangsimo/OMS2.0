@@ -36,11 +36,11 @@ export default {
         size: 10
       }, //本店待认领款分页
       claimed: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center'
-        },
+        // {
+        //   type: 'selection',
+        //   width: 60,
+        //   align: 'center'
+        // },
         {
           title: "序号",
           type: "index",

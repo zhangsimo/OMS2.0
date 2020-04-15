@@ -1,11 +1,11 @@
-//====================  其他应收款管理  ========================
+//====================  其他应付款管理  ========================
 import axios from "@/libs/api.request";
 import api from "_conf/url";
 
 // 获取主表
 export function findByDynamicQuery(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/findByDynamicQuery`,
+    url: `${api.omsSettle}/otherAccountsPayment/findByDynamicQuery`,
     method: "post",
     data
   });
@@ -15,7 +15,7 @@ export function findByDynamicQuery(data) {
 export function withdraw(data) {
   return axios.request({
     url: `${api.omsSettle}/otherCollectAmt/withdraw`,
-    method: "post",
+    method: "get",
     data
   });
 }

@@ -68,17 +68,17 @@
               <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
               <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
               <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-              <vxe-table-column field="" title="业务类型"></vxe-table-column>
-              <vxe-table-column field="" title="付款时间"></vxe-table-column>
+              <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款时间"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
-              <vxe-table-column field="payAmt" title="其他收款金额"></vxe-table-column>
-              <vxe-table-column field="" title="其他付款申请单号"></vxe-table-column>
-              <vxe-table-column field="" title="其他付款申请金额"></vxe-table-column>
-              <vxe-table-column field="" width="120" title="其他付款支出已认领金额"></vxe-table-column>
-              <vxe-table-column field="" title="其他收付款核销单号"></vxe-table-column>
-              <vxe-table-column field="" title="其他收付款核销金额"></vxe-table-column>
-              <vxe-table-column field="remainingAmt" title="其他付款余额"></vxe-table-column>
+              <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
+              <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>
+              <vxe-table-column field="paymentApplicationAmount" title="其他付款申请金额"></vxe-table-column>
+              <vxe-table-column field="expenseClaimAmount" width="120" title="其他付款支出已认领金额"></vxe-table-column>
+              <vxe-table-column field="writeOffReceiptNo" title="其他收付款核销单号"></vxe-table-column>
+              <vxe-table-column field="writeOffAmount" title="其他收付款核销金额"></vxe-table-column>
+              <vxe-table-column field="paymentBalance" title="其他付款余额"></vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="付款方式">
               <vxe-table-column field="role" title="账户">
@@ -139,15 +139,15 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="其他信息">
-              <vxe-table-column field="receiver" title="付款人"></vxe-table-column>
-              <vxe-table-column field="receiveDate" title="付款日期"></vxe-table-column>
+              <vxe-table-column field="payer" title="付款人"></vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
               <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
-              <vxe-table-column field="receiveAuditor" title="付款审核人"></vxe-table-column>
-              <vxe-table-column field="receiveAuditDate" title="付款审核日期"></vxe-table-column>
-              <vxe-table-column field="payer" title="收款人"></vxe-table-column>
-              <vxe-table-column field="paymentDate" title="收款日期"></vxe-table-column>
-              <vxe-table-column field="paymentRemark" title="收款备注"></vxe-table-column>
-              <vxe-table-column field="paymentAuditor" title="收款审核人"></vxe-table-column>
+              <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
+              <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
+              <vxe-table-column field="receiver" title="收款人"></vxe-table-column>
+              <vxe-table-column field="receiveDate" title="收款日期"></vxe-table-column>
+              <vxe-table-column field="receiveRemark" title="收款备注"></vxe-table-column>
+              <vxe-table-column field="receiveAuditor" title="收款审核人"></vxe-table-column>
               <!--<vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>-->
             </vxe-table-column>
           </vxe-table>
@@ -216,7 +216,9 @@
   import claimGuest from "./components/claimGuest";
   import OtherPayment from '../../documentApproval/component/OtherPayment'
 
-  import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection";
+  import { findByDynamicQuery  } from "_api/settlementManagement/otherPayable/otherPayable";
+
   import moment from "moment";
   export default {
         name: "otherPayable",
@@ -255,13 +257,14 @@
           opts: [20, 50, 100, 200]
         }, //分页
         serviceId: "", //给子组件传的值
+        reconciliationStatement: {},
       }
     },
     methods :{
       // 快速查询
       quickDate(data) {
         this.value = data;
-        // this.getQuery();
+        this.getQuery();
       },
       //查询
       query(){
@@ -271,47 +274,47 @@
       //初始化
       getQuery(){
         let obj = {
-          startDate: this.value[0]
-            ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-            : "",
-          endDate: this.value[1]
-            ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : "",
+          startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
+          endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
           orgid: this.BranchstoreId,
           guestId: this.companyId,
           size: this.page.size,
           page: this.page.num - 1
         };
-        console.log(obj)
-        // findAdvance(obj).then(res => {
-        //   if (res.code === 0) {
-        //     this.tableData = res.data.content;
-        //     this.page.total = res.data.totalElements;
-        //   }
-        // });
+        findByDynamicQuery(obj).then(res => {
+          if (res.code === 0) {
+            this.tableData = res.data.content;
+            this.page.total = res.data.totalElements;
+          }
+        });
         this.serviceId = "";
         // this.$refs.Record.init();
         this.currRow = {};
       },
       //其他收款认领/其他付款支出认领
       claimCollect(type){
-        if (type === 1) {
-          this.claimModal = true;
-          this.claimTit = "其他收款认领";
-          // this.claimedList(1);
+        if(Object.keys(this.currRow).length !== 0){
+          if (type === 1) {
+            this.claimModal = true;
+            this.claimTit = "其他收款认领";
+            // this.claimedList(1);
+          } else {
+            this.claimTit = "其他付款支出认领";
+            // if (
+            //   Object.keys(this.currRow).length !== 0 &&
+            //   this.currRow.expenditureNo &&
+            //   !this.currRow.expenditureClaimAmt
+            // ) {
+            this.claimModal = true;
+            // this.claimedList(2);
+            // } else {
+            //   this.$message.error("请选择有预收款支出单号且未支出认领的数据");
+            // }
+          }
         } else {
-          this.claimTit = "其他付款支出认领";
-          // if (
-          //   Object.keys(this.currRow).length !== 0 &&
-          //   this.currRow.expenditureNo &&
-          //   !this.currRow.expenditureClaimAmt
-          // ) {
-          this.claimModal = true;
-          // this.claimedList(2);
-          // } else {
-          //   this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-          // }
+          this.$message.error('请选择数据！')
         }
+
       },
       // 其他付款申请
       applyForOther(){
@@ -395,10 +398,10 @@
       },
       // 选中行
       currentChangeEvent({ row }) {
-        // this.currRow = row;
-        // this.reconciliationStatement.accountNo = row.serviceId;
-        // this.serviceId = row.serviceId;
-        // this.$refs.Record.init();
+        this.currRow = row;
+        this.reconciliationStatement.accountNo = row.serviceId;
+        this.serviceId = row.serviceId;
+        this.$refs.Record.init();
       },
       //分页
       changePage(p) {
@@ -435,7 +438,7 @@
       this.BranchstoreId = arr[1];
       this.Branchstore = arr[2];
       this.getOne();
-      // this.getQuery();
+      this.getQuery();
     },
     }
 </script>

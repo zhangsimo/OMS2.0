@@ -37,8 +37,8 @@
         </div>
         <div class="mt10 mb10">
           <Button class="ml10" @click="claimCollect(1)">其他付款认领</Button>
-          <Button class="ml10" @click="collectWirte">其他收款核销</Button>
-          <Button class="ml10" @click="claimCollect(2)">其他收款收回</Button>
+          <Button class="ml10" @click="collectWirte" :disabled="currRow.paymentBalance == 0">其他收款核销</Button>
+          <Button class="ml10" @click="claimCollect(2)" :disabled="currRow.paymentBalance == 0">其他收款收回</Button>
           <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
           <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
           <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
@@ -78,7 +78,7 @@
                 <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
                 <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
                 <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
-                <vxe-table-column field="" title="其他收款余额"></vxe-table-column>
+                <vxe-table-column field="paymentBalance" title="其他收款余额"></vxe-table-column>
               </vxe-table-column>
               <vxe-table-column title="收款方式">
                 <vxe-table-column field="account" title="账户">
@@ -166,7 +166,7 @@
             </div>
           </div>
           <Button>收付款单记录</Button>
-          <Record ref="Record" :serviceId="serviceId" />
+          <Record ref="Record" :serviceId="serviceId" @Message="getMessage"/>
         </div>
       </section>
       <!-- 认领弹框 -->
@@ -246,6 +246,7 @@
             }, //分页
             serviceId: "", //给子组件传的值
             reconciliationStatement: {},
+            MessageValue: '',
           }
         },
         methods :{
@@ -260,6 +261,11 @@
           },
           //其他付款认领/其他收款收回
           claimCollect(type){
+            // if(Object.keys(this.currRow).length !== 0){
+            //
+            // }else {
+            //   this.$message.error('请选择数据！')
+            // }
             if (type === 1) {
               if(Object.keys(this.currRow).length !== 0){
                 this.claimModal = true;
@@ -284,12 +290,14 @@
           },
           //预收款弹框是否打开
           visChangeClaim(type) {
+            this.$refs.claim.currentClaimed = {};
+            this.reason = '';
             if (!type) {
               this.companyId = "";
               this.amt = null;
               // this.bankNameOthis = "";
-              this.claimSelection = []
-              this.$refs.settlement.tableData = []
+              this.claimSelection = [];
+              this.$refs.settlement.tableData = [];
             }
           },
           //其他付款认领弹窗查询
@@ -311,18 +319,74 @@
           },
           //撤回按钮点击事件
           revokeCollection(type){
-            switch (type) {
-              case 0:
-                this.revokeTit = "其他付款认领撤回";
-                break;
-              case 1:
-                this.revokeTit = "其他收款核销撤回";
-                break;
-              case 2:
-                this.revokeTit = "其他收款收回撤回";
-                break;
+            if(Object.keys(this.currRow).length !== 0){
+              switch (type) {
+                case 0:
+                  this.revokeTit = "其他付款认领撤回";
+                  break;
+                case 1:
+                  this.revokeTit = "其他收款核销撤回";
+                  break;
+                case 2:
+                  this.revokeTit = "其他收款收回撤回";
+                  break;
+              }
+              this.revoke = true;
+              if(type == 0){
+                if(this.currRow.writeOffReceiptNo){
+                  this.$Message.error('其他付款申请单已核销，无法撤回！')
+                } else {
+                  if(this.currRow.paymentRegainNo){
+                    this.$Message.error('其他付款已收回，无法撤回！')
+                  } else {
+                    if(this.currRow.paymentClaimNo && this.MessageValue == '已审核'){
+                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                    }else {
+                      this.revoke = true;
+                    }
+                  }
+                }
+              } else if(type == 1){
+                if(this.currRow.paymentClaimNo){
+                  this.$Message.error('其他付款申请未认领，无法撤回！')
+                } else {
+                  if(this.currRow.writeOffReceiptNo){
+                    this.$Message.error('其他付款申请未核销，无法撤回！')
+                  } else {
+                    if(this.currRow.writeOffReceiptNo && this.MessageValue == '已审核'){
+                      this.$Message.error('其他付款核销单号已审核，无法撤销！')
+                    }else {
+                      this.revoke = true;
+                    }
+                  }
+                }
+              }else {
+                if(this.currRow.paymentClaimNo){
+                  this.$Message.error('其他付款申请未认领，无法撤回！')
+                } else {
+                  if(this.currRow.paymentRegainNo){
+                    this.$Message.error('其他付款申请未核销，无法撤回！')
+                  } else {
+                    if(this.currRow.paymentRegainNo && this.MessageValue != '已审核'){
+                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                    }else {
+                      this.revoke = true;
+                    }
+                  }
+                }
+              }
+
+            }else {
+              this.$message.error("请选择数据");
             }
-            this.revoke = true;
+          },
+          one(){
+
+          },
+          //子组件的数据
+          getMessage(value){
+            // console.log(value[0].startStatus.name)
+            this.MessageValue = value[0].startStatus.name;
           },
           //其他收款核销
           collectWirte() {
@@ -364,15 +428,17 @@
           },
           //认领弹框认领
           claimPay(){
-            // if (
-            //   Math.abs(this.$refs.claim.currentClaimed.paidMoney) <=
-            //   this.currRow.remainingAmt
-            // ) {
-              this.$refs.settlement.Settlement = true;
-              // this.paymentId = "YSKZC";
-            // } else {
-            //   this.$message.error("金额大于预收款余额，无法认领");
-            // }
+            if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
+              if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.applyAmt) {
+                this.$refs.settlement.Settlement = true;
+                this.paymentId = "YSKZC";
+              } else {
+                this.$message.error("金额大于其他付款申请金额，无法认领");
+              }
+            }else {
+              this.$message.error('请选择认领的数据')
+            }
+
           },
           //认领弹框传参数据
           selection(arr) {
@@ -388,7 +454,33 @@
             }
           },
           //撤销弹框确定按钮
-          revokeDetaim(){},
+          revokeDetaim(){
+            if (!this.reason) return this.$message.error("撤销原因必填");
+            let type = '';
+            if(this.revokeTit == '其他付款认领撤回'){
+              type =  1;
+            }else if(this.revokeTit == '其他收款核销撤回'){
+              type = 2;
+            }else {
+              type = 3;
+            }
+            let obj = {
+              id: this.currRow.id,
+              revokeReason: this.reason,
+              type: type
+            };
+            withdraw(obj).then(res => {
+              if (res.code === 0) {
+                this.$message.success("撤回成功");
+                this.revoke = false;
+                this.reason = ''
+                this.getQuery();
+              }else{
+                this.reason = '';
+                this.revoke = false;
+              }
+            });
+          },
           // 往来单位选择
           async getOne() {
             findGuest({ size: 2000 }).then(res => {
@@ -407,7 +499,7 @@
             this.currRow = row;
             this.reconciliationStatement.accountNo = row.serviceId;
             this.serviceId = row.serviceId;
-            // this.$refs.Record.init();
+            this.$refs.Record.init();
           },
           //分页
           changePage(p) {
