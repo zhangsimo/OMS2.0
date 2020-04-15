@@ -14,26 +14,27 @@
    </div>
     <Form ref="formInline" :model="formInline" :label-width="100"  :rules="ruleValidate">
       <div class="mb10">
-      <span class="mr5">申请单号：</span>
-        <Input type="text" v-model="formInline.user" style="width: 200px" disabled="">
+        <span class="mr5">申请单号：</span>
+        <Input type="text" v-model="formInline.applyNo" style="width: 200px" disabled>
         </Input>
       </div>
       <Row class="tableBox">
         <Col class="inner" span="4">申请人</Col>
-        <Col class="inner" span="4">{{formInline.staffName || ''}}</Col>
+        <Col class="inner" span="4">{{formInline.applicant || ''}}</Col>
         <Col class="inner" span="4">部门名称</Col>
-        <Col class="inner" span="4">{{formInline.tenantCompanyName || ' '}}</Col>
+        <Col class="inner" span="4">{{formInline.deptName || ' '}}</Col>
         <Col class="inner" span="4">门店店号</Col>
         <Col class="inner" span="4">{{formInline.shopCode || ' '}}</Col>
       </Row>
       <Row class="tableBox twoTable">
         <Col class="inner" span="4">门店名称</Col>
-        <Col class="inner" span="4">{{formInline.shopName || ' '}}</Col>
+        <Col class="inner" span="4">{{formInline.orgName || ' '}}</Col>
         <Col class="inner" span="4">申请类型</Col>
-        <Col class="inner" span="4">{{formInline.type || ' '}}</Col>
+        <Col class="inner" span="4">{{formInline.applyTypeName || ' '}}</Col>
         <Col class="inner" span="4">申请时间</Col>
-        <Col class="inner" span="4">{{formInline.date}}</Col>
+        <Col class="inner" span="4">{{formInline.applyTime}}</Col>
       </Row>
+
 
       <div class="tableBox2 mt20">
         <div class="tableline tableright">
@@ -156,7 +157,7 @@
         <Row>
           <Col span="12">
             <FormItem label="支付门店"  style="margin-bottom: 0px">
-              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" disabled></Input>
+              <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="12">

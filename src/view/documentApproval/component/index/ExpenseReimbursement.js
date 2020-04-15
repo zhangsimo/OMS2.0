@@ -95,12 +95,13 @@ export default {
         this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
-        this.formInline.staffName = user.staffName
-        this.formInline.tenantCompanyName = user.groups[user.groups.length - 1].name || ' '
+        this.formInline.applicant = user.staffName
+        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.shopName = user.shopName
-        this.formInline.type = '费用报销'
-        this.formInline.date = date
+        this.formInline.orgName = user.shopName
+        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTime = date
+        this.formInline.paymentOrgName = user.shopName
       }
     },
 
