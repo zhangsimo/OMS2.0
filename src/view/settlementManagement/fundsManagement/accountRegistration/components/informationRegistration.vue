@@ -25,14 +25,14 @@
         </Col>
         <Col span="12">
           <FormItem label="账户：" prop="accountName">
-            <Input class="w200" v-model="ChangeData.accountName" ></Input>
+            <Input class="w200" v-model="ChangeData.accountName"></Input>
           </FormItem>
         </Col>
       </Row>
       <Row>
         <Col span="12">
           <FormItem label="账号：" prop="accountCode">
-            <Input class="w200" v-model="ChangeData.accountCode" ></Input>
+            <Input class="w200" v-model="ChangeData.accountCode" type="number"></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -98,7 +98,7 @@
               shopNumber:[{ required: true, message: "请选择", trigger: 'change' }],
               shopCode:[{ required: true, message: '必填', trigger: 'change' }],
               accountName:[{ required: true, message: '必填', trigger: 'blur' }],
-              accountCode:[{ required: true, message: '必填', trigger: 'blur' }],
+              accountCode:[{ required: true, message: '必填',trigger: 'blur' }],
               bankName:[{ required: true, message: '必填', trigger: 'blur' }],
               mateAccountName:[{ required: true, message: '必填', trigger: 'change' }],
             }, //表单校验

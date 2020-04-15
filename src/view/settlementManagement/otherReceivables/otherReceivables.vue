@@ -66,29 +66,31 @@
                 <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
                 <vxe-table-column field="serviceId" title="其他付款申请单号"></vxe-table-column>
                 <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-                <vxe-table-column field="" title="业务类型"></vxe-table-column>
-                <vxe-table-column field="" title="付款时间"></vxe-table-column>
+                <vxe-table-column field="businessType" title="业务类型">
+                  <template v-slot="{row}">{{row.businessType.name}}</template>
+                </vxe-table-column>
+                <vxe-table-column field="payTime" title="付款时间"></vxe-table-column>
               </vxe-table-column>
               <vxe-table-column title="金额信息">
-                <vxe-table-column field="payAmt" title="其他付款申请金额"></vxe-table-column>
-                <vxe-table-column field="" title="其他付款认领单号"></vxe-table-column>
-                <vxe-table-column field="" title="其他付款认领金额"></vxe-table-column>
-                <vxe-table-column field="" title="其他付款核销单号"></vxe-table-column>
-                <vxe-table-column field="" title="其他收款核销金额"></vxe-table-column>
-                <vxe-table-column field="" title="其他收款收回单号"></vxe-table-column>
-                <vxe-table-column field="remainingAmt" title="其他收款余额"></vxe-table-column>
+                <vxe-table-column field="applyAmt" title="其他付款申请金额"></vxe-table-column>
+                <vxe-table-column field="paymentClaimNo" title="其他付款认领单号"></vxe-table-column>
+                <vxe-table-column field="paymentClaimAmt" title="其他付款认领金额"></vxe-table-column>
+                <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
+                <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
+                <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
+                <vxe-table-column field="" title="其他收款余额"></vxe-table-column>
               </vxe-table-column>
               <vxe-table-column title="收款方式">
-                <vxe-table-column field="role" title="账户">
+                <vxe-table-column field="account" title="账户">
                   <template v-slot="{row}">
                     <ul class="list">
                       <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
-                        <span class="listChild">{{item.accountName}}</span>
+                        <span class="listChild">{{item.account}}</span>
                       </li>
                     </ul>
                   </template>
                 </vxe-table-column>
-                <vxe-table-column field="sex" title="金额">
+                <vxe-table-column field="amt" title="金额">
                   <template v-slot="{row}">
                     <ul class="list">
                       <li v-for="(item,index) of row.receiveType" :key="index" class="flex">
@@ -208,6 +210,7 @@
   import { creat } from "./../components";
   import Record from "./components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
+  import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
   import { findByDynamicQuery , withdraw } from "_api/settlementManagement/otherReceivables/otherReceivables";
   // otherReceivables
   import moment from "moment";
@@ -242,6 +245,7 @@
               opts: [20, 50, 100, 200]
             }, //分页
             serviceId: "", //给子组件传的值
+            reconciliationStatement: {},
           }
         },
         methods :{
@@ -257,9 +261,13 @@
           //其他付款认领/其他收款收回
           claimCollect(type){
             if (type === 1) {
-              this.claimModal = true;
-              this.claimTit = "其他付款认领";
-              // this.claimedList(1);
+              if(Object.keys(this.currRow).length !== 0){
+                this.claimModal = true;
+                this.claimTit = "其他付款认领";
+                this.claimedList(1);
+              } else {
+                this.$message.error('请选择数据！')
+              }
             } else {
               this.claimTit = "其他收款收回";
               // if (
@@ -276,13 +284,30 @@
           },
           //预收款弹框是否打开
           visChangeClaim(type) {
-            // if (!type) {
-            //   this.companyId = "";
-            //   this.amt =null;
-            //   this.bankNameOthis = "";
-            //   this.claimSelection=[]
-            //   this.$refs.settlement.tableData=[]
-            // }
+            if (!type) {
+              this.companyId = "";
+              this.amt = null;
+              // this.bankNameOthis = "";
+              this.claimSelection = []
+              this.$refs.settlement.tableData = []
+            }
+          },
+          //其他付款认领弹窗查询
+          claimedList(type) {
+            let obj = {
+              amount: this.amt,
+              reciprocalAccountName: this.bankNameO,
+              page: this.$refs.claim.claimedPage.page - 1,
+              size: this.$refs.claim.claimedPage.size,
+              amountType: type,
+              guestId: this.companyId
+            };
+            claimedFund(obj).then(res => {
+              if (res.code === 0) {
+                this.$refs.claim.claimedData = res.data.content;
+                this.$refs.claim.claimedPage.total = res.data.totalElements;
+              }
+            });
           },
           //撤回按钮点击事件
           revokeCollection(type){
@@ -301,15 +326,21 @@
           },
           //其他收款核销
           collectWirte() {
-            // if (Object.keys(this.currRow).length !== 0) {
+            if (Object.keys(this.currRow).length !== 0) {
               this.$refs.settlement.Settlement = true;
             //   this.paymentId = "YSK";
-            // } else {
-            //   this.$message.error("请选择数据");
-            // }
+            } else {
+              this.$message.error("请选择数据");
+            }
           },
           //认领弹框查询
-          queryClaimed(){},
+          queryClaimed(){
+            if (this.claimTit === "其他付款认领") {
+              this.claimedList(1);
+            } else {
+              this.claimedList(2);
+            }
+          },
 
           //初始化
           getQuery(){
@@ -373,9 +404,9 @@
           },
           // 选中行
           currentChangeEvent({ row }) {
-            // this.currRow = row;
-            // this.reconciliationStatement.accountNo = row.serviceId;
-            // this.serviceId = row.serviceId;
+            this.currRow = row;
+            this.reconciliationStatement.accountNo = row.serviceId;
+            this.serviceId = row.serviceId;
             // this.$refs.Record.init();
           },
           //分页
