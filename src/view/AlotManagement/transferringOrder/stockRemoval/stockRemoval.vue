@@ -51,7 +51,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="![1].includes(buttonDisable)"
+                :disabled="![1].includes(buttonDisable)||isWms"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
@@ -599,7 +599,8 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
-      clickdelivery: false
+      clickdelivery: false,
+      isWms:false,//仓库是否启用wms
     };
   },
   watch: {
@@ -823,7 +824,7 @@ export default {
         item.index = index + 1;
       });
     },
-    tijiao1() {      
+    tijiao1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
         return;
@@ -1030,6 +1031,13 @@ export default {
       if (row.statuName == "已作废") {
         this.buttonDisable = 3;
       }
+
+      //判断仓库是否启用wms
+      this.isWms = false;
+      if(this.buttonDisable===1&&row.isWms===1){
+        this.isWms = true;
+      }
+
       if (row.id == undefined) {
         row.id = "";
       }

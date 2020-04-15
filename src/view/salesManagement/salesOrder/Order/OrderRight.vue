@@ -258,7 +258,7 @@
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
-          :checkbox-config="{labelField: 'name', checkMethod}"
+          :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
