@@ -40,7 +40,6 @@
         <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
         <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
         <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
-        <vxe-table-column field="age" title="其他付款收回认领金额"></vxe-table-column>
         <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
       </vxe-table>
     </div>
@@ -110,12 +109,11 @@
         data.startDate = moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.endDate = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.amountCollected = this.money
-        data.guestId = this.companyId
+        data.guestId = this.companyId == 0 ? '' : this.companyId
         let res = await getpublicRequestList(data)
         if(res.code === 0) {
           this.$Message.success('查询成功')
-          // this.tableData = res.data
-          console.log(res)
+          this.tableData = res.data
         }
       },
 
@@ -128,7 +126,7 @@
       //确定
       submit(){
         if (this.checkedList.length < 1) return this.$Message.error('请选择一条信息')
-        this.$emit('backList' ,this.checkedList)
+        this.$emit('backLists' ,this.checkedList)
         this.modelShow = false
       }
     }

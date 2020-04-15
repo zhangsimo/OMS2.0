@@ -79,6 +79,11 @@
         OtherPayment,
         PublicRequest
       },
+      // provide(){
+      //     return {
+      //
+      //     }
+      // },
       data(){
           return {
             //打开模态框状态 type 1 新增 2修改 3查看

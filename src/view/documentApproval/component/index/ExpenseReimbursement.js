@@ -14,6 +14,7 @@ export default {
     upphoto,
     flowbox
   },
+  // inject:['modelType'],
   props:{
     list:''
   },

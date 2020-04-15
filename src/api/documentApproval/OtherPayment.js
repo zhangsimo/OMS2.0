@@ -8,3 +8,12 @@ export function getpublicRequestList (params) {
     params
   })
 }
+
+
+export function getOtherSve (data) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/saveOrUpdate`,
+    method: 'post',
+    data
+  })
+}

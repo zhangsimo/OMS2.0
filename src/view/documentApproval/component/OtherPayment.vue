@@ -7,52 +7,52 @@
     <div class="bigbox">
       <div class="clearfix">
         <div class="fr">
-          <Button class="mr10" v-if="modelType != 3" >保存草稿</Button>
-          <Button class="mr10" v-if="modelType != 3" >提交申请</Button>
-          <Button class="mr10" @click="model =false" v-if="modelType != 3" >取消</Button>
+          <Button class="mr10" v-if="!modelType"@click="save(0)">保存草稿</Button>
+          <Button class="mr10" v-if="!modelType"@click="save(1)">提交申请</Button>
+          <Button class="mr10" @click="model =false" >取消</Button>
         </div>
       </div>
       <Form ref="formInline" :model="formInline" :label-width="100"  :rules="ruleValidate">
         <div class="mb10">
           <span class="mr5">申请单号：</span>
-          <Input type="text" v-model="formInline.user" style="width: 200px" disabled="">
+          <Input type="text" v-model="formInline.applyNo" style="width: 200px" disabled>
           </Input>
         </div>
         <Row class="tableBox">
           <Col class="inner" span="4">申请人</Col>
-          <Col class="inner" span="4">{{formInline.staffName || ''}}</Col>
+          <Col class="inner" span="4">{{formInline.applicant || ''}}</Col>
           <Col class="inner" span="4">部门名称</Col>
-          <Col class="inner" span="4">{{formInline.tenantCompanyName || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.deptName || ' '}}</Col>
           <Col class="inner" span="4">门店店号</Col>
           <Col class="inner" span="4">{{formInline.shopCode || ' '}}</Col>
         </Row>
         <Row class="tableBox twoTable">
           <Col class="inner" span="4">门店名称</Col>
-          <Col class="inner" span="4">{{formInline.shopName || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.orgName || ' '}}</Col>
           <Col class="inner" span="4">申请类型</Col>
-          <Col class="inner" span="4">{{formInline.type || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.applyTypeName || ' '}}</Col>
           <Col class="inner" span="4">申请时间</Col>
-          <Col class="inner" span="4">{{formInline.date}}</Col>
+          <Col class="inner" span="4">{{formInline.applyTime}}</Col>
         </Row>
 
         <div class="tableBox2 mt20">
           <div class="tableright" style="border-bottom: 1px #cccccc solid">
-            <FormItem label="主题" style="margin-bottom: 0px" prop="use">
-              <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType == 3">
+            <FormItem label="主题" style="margin-bottom: 0px" prop="topic">
+              <Input type="text"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
               </Input>
             </FormItem>
           </div>
             <div class="tableright">
               <Row>
                 <Col span="12">
-                  <FormItem label="申请金额" style="margin-bottom: 0px" prop="use">
-                    <Input type="text"  v-model="formInline.money" style="width: 100%" :disabled="modelType == 3">
+                  <FormItem label="申请金额" style="margin-bottom: 0px" prop="applyAmt">
+                    <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
                     </Input>
                   </FormItem>
                 </Col>
                 <Col span="12">
-                  <FormItem label="付款期限" style="margin-bottom: 0px" prop="payMoney">
-                      <DatePicker type="date" v-model="formInline.payMoney" style="width: 100%" :disabled="modelType == 3"></DatePicker>
+                  <FormItem label="付款期限" style="margin-bottom: 0px" prop="paymentTerm">
+                      <DatePicker type="date" v-model="formInline.paymentTerm" style="width: 100%" :disabled="modelType"></DatePicker>
                   </FormItem>
                 </Col>
               </Row>
@@ -72,7 +72,7 @@
           show-overflow
           size="mine"
           align="center"
-          :data="documentTableData"
+          :data="formInline.details"
           :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
         >
           <vxe-table-column title="操作" width="80">
@@ -80,17 +80,17 @@
               <a @click="dele(item)">删除行</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="name" title="其他收款单号"></vxe-table-column>
-          <vxe-table-column field="name" title="往来单位"></vxe-table-column>
-          <vxe-table-column field="name" title="业务类型"></vxe-table-column>
-          <vxe-table-column field="name" title="收款时间"></vxe-table-column>
-          <vxe-table-column field="name" title="其他收款金额"></vxe-table-column>
-          <vxe-table-column field="name" title="其他付款申请单号"></vxe-table-column>
-          <vxe-table-column field="name" title="其他付款申请金额"></vxe-table-column>
-          <vxe-table-column field="name" title="其他付款支出已认领金额"></vxe-table-column>
-          <vxe-table-column field="name" title="其他收付款核销单号"></vxe-table-column>
-          <vxe-table-column field="name" title="其他付款核销金额"></vxe-table-column>
-          <vxe-table-column field="name" title="其他付款余额"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
+          <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
+          <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
+          <vxe-table-column field="collectionTime" title="收款申请时间"></vxe-table-column>
+          <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
+          <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>
+          <vxe-table-column field="paymentApplicationAmount" title="其他付款申请金额"></vxe-table-column>
+          <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
+          <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
+          <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
+          <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
         </vxe-table>
 
 
@@ -98,26 +98,26 @@
         <div class="proceeds">
           <Row>
             <Col span="6">
-              <FormItem label="往来单位" prop="payee" style="margin-bottom: 0px">
-                <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px" :disabled="modelType == 3">
-                  <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <FormItem label="往来单位" style="margin-bottom: 0px">
+                <Select v-model="formInline.receiveGuestId" filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="收款人账户" prop="name" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.name" style="width: 90%;padding-left: 5px"  :disabled="modelType == 3"></Input>
+              <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.receiver" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="开户行名称" prop="bankName" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px"  :disabled="modelType == 3"></Input>
+              <FormItem label="开户行名称" prop="receiveBank" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
               </FormItem>
             </Col>
 
             <Col span="6">
-              <FormItem label="银行账号" prop="BankNo" style="margin-bottom: 0px;border-right: none">
-                <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" :disabled="modelType == 3"></Input>
+              <FormItem label="银行账号" prop="receiveBankNo" style="margin-bottom: 0px;border-right: none">
+                <Input type="text" v-model="formInline.receiveBankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -129,12 +129,12 @@
           <Row>
             <Col span="12">
               <FormItem label="支付门店"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" disabled></Input>
+                <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
             <Col span="12">
               <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
-                <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType == 3">
+                <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>
@@ -148,12 +148,11 @@
         <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
       </Form>
     </div>
-    <!--    选择的模态框-->
-    <requestCode ref="request" @backList = 'getBackList'></requestCode>
+
 
 
     <!--    选择单据模态框-->
-    <selectOther ref="documnets" @backList = 'otherPayList'></selectOther>
+    <selectOther ref="documnets" @backLists = 'otherPayList'></selectOther>
     <div slot='footer'></div>
   </Modal>
 </template>
