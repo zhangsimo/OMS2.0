@@ -78,6 +78,7 @@
                 <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
                 <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
                 <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
+                <vxe-table-column field="" title="其他收款收回金额"></vxe-table-column>
                 <vxe-table-column field="paymentBalance" title="其他收款余额"></vxe-table-column>
               </vxe-table-column>
               <vxe-table-column title="收款方式">
@@ -184,7 +185,7 @@
           <span>查询</span>
         </button>
         <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
-        <Button class="ml10" v-else @click="claimCollection">预收款认领</Button>
+        <Button class="ml10" v-else @click="claimCollection">认领</Button>
         <claim ref="claim" @selection="selection" />
         <!--<claimGuest ref="claimGuest" />-->
         <div slot="footer"></div>
@@ -380,7 +381,8 @@
               this.$message.error("请选择数据");
             }
           },
-          one(){
+         //收回认领
+          claimCollection(){
 
           },
           //子组件的数据
@@ -391,8 +393,13 @@
           //其他收款核销
           collectWirte() {
             if (Object.keys(this.currRow).length !== 0) {
-              this.$refs.settlement.Settlement = true;
-            //   this.paymentId = "YSK";
+              console.log(this.currRow.paymentBalance)
+              if(this.currRow.paymentBalance == 0 || this.currRow.paymentBalance == null) {
+                this.$Message.error('其余收款余额为0无法再核销!')
+              }else {
+                this.$refs.settlement.Settlement = true;
+                //   this.paymentId = "YSK";
+              }
             } else {
               this.$message.error("请选择数据");
             }
