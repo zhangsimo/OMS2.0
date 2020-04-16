@@ -100,7 +100,7 @@
                       </FormItem>
                       <FormItem class="formItem" label="调入仓库：" prop="storeId" >
                         <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
-                          <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                          <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">

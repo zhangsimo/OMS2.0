@@ -236,6 +236,7 @@
                     >
                       <Option
                         v-for="item in WareHouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -697,7 +698,7 @@ export default {
     },
     //选择销售出库单
     SalesOutboundShowModel() {
-      if(!this.formPlan.guestId) this.$message.error('请选择客户')
+      if(!this.formPlan.guestId) return this.$message.error('请选择客户')
       this.$refs.salesOutbound.openModal();
     },
     //选择更多

@@ -141,6 +141,7 @@
                             <Option
                               v-for="item in cangkuListall"
                               :value="item.id"
+                              :disabled="item.isDisabled"
                               :key="item.id"
                             >{{ item.name }}</Option>
                           </Select>
@@ -346,7 +347,7 @@ export default {
           label: "已拒绝",
           value: "REJECTED"
         },
-        
+
       ],
       advanced: false, //更多模块的弹框
       //左侧表格高度

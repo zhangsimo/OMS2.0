@@ -82,7 +82,7 @@
                   </FormItem>
                   <FormItem label="入库仓库：">
                     <Select disabled v-model="formPlan.storeId" class="w150">
-                      <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                     <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
