@@ -299,6 +299,7 @@
 import ClientData from "../../../../system/essentialData/clientManagement/ClientData";
 import goodsInfo from "../../../../goods/plannedPurchaseOrder/components/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
+// import selectPartCom from "@/view/salesManagement/salesOrder/components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
@@ -719,10 +720,11 @@ export default {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           let data = this.formPlan.details;
-          const form = conversionList(val);
+          const form = val;//conversionList(val);
           form.map(item => {
             data.push(item);
           });
+          console.log(data)
           this.$set(this.formPlan, "details", data);
         } else {
           this.$Message.error("*为必填项");
