@@ -11,12 +11,12 @@ export function findByDynamicQuery(data) {
   });
 }
 
-//认领核销
-export function withdraw(data) {
+//撤回
+export function paymentRevoke(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/withdraw`,
-    method: "get",
-    data
+    url: `${api.omsSettle}/otherAccountsPayment/paymentRevoke`,
+    method: "post",
+    data,
   });
 }
 
@@ -29,10 +29,10 @@ export function wirteAccount(params) {
   });
 }
 
-//资金认领款核销，核销对账单保存
-export function saveAccount(data) {
+//应付款认领
+export function addClaim(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/claim`,
+    url: `${api.omsSettle}/otherAccountsPayment/addClaim`,
     method: "post",
     data,
   });

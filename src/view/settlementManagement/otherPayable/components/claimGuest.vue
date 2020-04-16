@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="预收款认领" width="800" @on-visible-change='visChange'>
+  <Modal v-model="modal" title="其他收款认领" width="800" @on-visible-change='visChange'>
     <div class="db ml20">
       <span>往来单位：</span>
       <Input v-model="company" class="w100" />
@@ -38,7 +38,9 @@
   </Modal>
 </template>
 <script>
-import { findGuest,addClaim } from "_api/settlementManagement/advanceCollection.js";
+import { findGuest } from "_api/settlementManagement/advanceCollection";
+import { addClaim } from "_api/settlementManagement/otherPayable/otherPayable";
+
 import bus from '../../bill/Popup/Bus'
 export default {
   data() {
@@ -77,7 +79,7 @@ export default {
   mounted() {
     this.getOne();
     bus.$on("paymentInfo",val=>{
-      this.financeAccountCashList=[]
+      this.financeAccountCashList= []
       val.map(item=>{
         this.financeAccountCashList.push({id:item.id})
       })
@@ -113,16 +115,16 @@ export default {
     //确定
     detaim(){
       if(this.guestId){
-        let obj ={
-          guestId:this.guestId,
-          financeAccountCashList:this.financeAccountCashList
-        }
+        let obj = {};
+        obj.guestId = this.guestId;
+        obj.financeAccountCashList = this.financeAccountCashList
+        // console.log(obj)
         addClaim(obj).then(res=>{
           if(res.code===0){
             this.$Message.success('认领成功')
-            this.modal = false
-            this.$parent.$parent.getQuery()
-            this.$parent.$parent.$refs.settlement.tableData=[]
+            this.modal = false;
+            this.$parent.getQuery()
+            this.$parent.$refs.settlement.tableData = []
           }
         })
       } else {

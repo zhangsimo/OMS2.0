@@ -183,8 +183,8 @@
           <i class="iconfont iconchaxunicon"></i>
           <span>查询</span>
         </button>
-        <Button class="ml10" @click="claimPay">认领</Button>
-        <!--<Button class="ml10" v-else @click="claimCollection">预收款认领</Button>-->
+        <Button class="ml10" v-if="claimTit == '其他付款认领'" @click="claimPay">认领</Button>
+        <Button class="ml10" v-else @click="claimCollection">预收款认领</Button>
         <claim ref="claim" @selection="selection" />
         <!--<claimGuest ref="claimGuest" />-->
         <div slot="footer"></div>
@@ -331,7 +331,7 @@
                   this.revokeTit = "其他收款收回撤回";
                   break;
               }
-              this.revoke = true;
+              // this.revoke = true;
               if(type == 0){
                 if(this.currRow.writeOffReceiptNo){
                   this.$Message.error('其他付款申请单已核销，无法撤回！')
@@ -431,7 +431,7 @@
             if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
               if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.applyAmt) {
                 this.$refs.settlement.Settlement = true;
-                this.paymentId = "YSKZC";
+                this.paymentId = "YJDZ";
               } else {
                 this.$message.error("金额大于其他付款申请金额，无法认领");
               }
