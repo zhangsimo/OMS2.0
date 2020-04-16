@@ -2,8 +2,10 @@ import  moment from 'moment'
 import requestCode from '../RequestCode'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
+import {getPayList} from "../utils";
+
 export default {
-  name: "ExpenseReimbursement",
+  name: "PublicRequest",
   components:{
     requestCode,
     upphoto,
@@ -28,6 +30,9 @@ export default {
         bankName:[
           {required: true, message: '开户行名称必填', trigger: 'blur'}
         ],
+        paymentAccount:[
+          {required: true, message: '付款账户必选', trigger: 'change'}
+        ]
         // BankNo:[
         //   {required: true, message: '银行账号必填', trigger: 'blur'}
         // ]
@@ -42,6 +47,9 @@ export default {
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
     }
+  },
+  mounted(){
+    this.payUserList = getPayList()
   },
   methods:{
     //模态框打开111
