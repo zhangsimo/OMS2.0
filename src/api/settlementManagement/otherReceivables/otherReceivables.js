@@ -11,7 +11,7 @@ export function findByDynamicQuery(data) {
   });
 }
 
-//认领核销
+//其它付款认领撤回、核销撤回、收款收回撤回
 export function withdraw(data) {
   return axios.request({
     url: `${api.omsSettle}/otherCollectAmt/withdraw`,

@@ -157,6 +157,7 @@
                             <!--&gt;{{item.label}}</Option>-->
                             <Option
                               v-for="item in cangkuListall"
+                              :disabled="item.isDisabled"
                               :value="item.id"
                               :key="item.id"
                             >{{ item.name }}</Option>

@@ -144,7 +144,7 @@
             style="width:200px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
           >
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </div>

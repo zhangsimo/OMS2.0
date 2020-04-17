@@ -69,7 +69,7 @@ export default {
 
   methods:{
     //模态框打开111
-   open(){
+    open(){
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
@@ -90,25 +90,18 @@ export default {
       }
     },
 
-    // 获取往来单位
+    // 往来单位选择
     async getunltList() {
       findGuest({ size: 2000 }).then(res => {
         if (res.code === 0) {
           res.data.content.map(item => {
-            item.value = item.id
-            item.label = item.fullName
-            this.company.push(item);
+            this.company.push({
+              value: item.id,
+              label: item.fullName
+            });
           });
         }
       });
-    },
-
-    //获取往来单位
-    getCompany(row) {
-      let arr = this.company.filter( item => item.value == row.value)
-      this.formInline.receiver = arr[0].receiveName || ''
-      this.formInline.receiveBank = arr[0].accountBank || ''
-      this.formInline.receiveBankNo = arr[0].accountBankNo || ''
     },
 
 
@@ -143,24 +136,19 @@ export default {
     //保存提交
     save(type){
 
-     this.$refs.formInline.validate( async (valid) => {
-       if (valid) {
-         this.formInline.step = type
-         let res = await getOtherSve(this.formInline)
-         if (res.code == 0) {
-           this.$Message.success('操作成功')
-           this.model = false
-         }
-       } else {
-         this.$Message.error('带*必填');
-       }
-     })
-
-
-
+      this.$refs.formInline.validate( async (valid) => {
+        if (valid) {
+          this.formInline.step = type
+          let res = await getOtherSve(this.formInline)
+          if (res.code == 0) {
+            this.$Message.success('操作成功')
+            this.model = false
+          }
+        } else {
+          this.$Message.error('带*必填');
+        }
+      })
     }
-
-
 
   }
 }

@@ -132,20 +132,20 @@
       <div class="proceeds">
         <Row>
           <Col span="8">
-            <FormItem label="收款人姓名" prop="payee" style="margin-bottom: 0px">
-              <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+            <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
+              <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value @on-change="getCompany" :disabled="modelType">
                 <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="开户行名称" prop="bankName" style="margin-bottom: 0px">
-              <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+            <FormItem label="开户行名称" prop="receiveBank" style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
             </FormItem>
           </Col>
           <Col span="8">
-            <FormItem label="银行账号" prop="BankNo" style="margin-bottom: 0px;border-right: none">
-              <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
+            <FormItem label="银行账号" prop="receiveBankNo" style="margin-bottom: 0px;border-right: none">
+              <Input type="text" v-model="formInline.receiveBankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
             </FormItem>
           </Col>
         </Row>
@@ -161,8 +161,8 @@
             </FormItem>
           </Col>
           <Col span="12">
-            <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
-              <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType">
+            <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
+              <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" :disabled="modelType">
                 <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>

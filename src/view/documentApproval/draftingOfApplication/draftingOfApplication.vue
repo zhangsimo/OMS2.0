@@ -65,6 +65,10 @@
       <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
 <!--      应公借支申请-->
       <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
+<!--      请示单申请-->
+      <AskForInstrucions ref="AskForInstrucions" :list = 'modelType'></AskForInstrucions>
+<!--      预收款支出申请-->
+      <CreditSpending ref="CreditSpending" :list = 'modelType'></CreditSpending>
     </div>
 </template>
 
@@ -72,12 +76,16 @@
   import ExpenseReimbursement from '../component/ExpenseReimbursement'
   import OtherPayment from '../component/OtherPayment'
   import PublicRequest from '../component/PublicRequest'
+  import AskForInstrucions from  '../component/AskForInstructions'
+  import CreditSpending from'../component/CreditSpending'
     export default {
         name: "draftingOfApplication",
       components:{
         ExpenseReimbursement,
         OtherPayment,
-        PublicRequest
+        PublicRequest,
+        AskForInstrucions,
+        CreditSpending
       },
       // provide(){
       //     return {
@@ -110,7 +118,7 @@
                 this.$refs.PublicRequest.open()
                 break
               case 2:
-                console.log(index)
+                this.$refs.AskForInstrucions.open()
                 break
               case 3:
                 console.log(index)
@@ -119,7 +127,7 @@
                 this.$refs.OtherPayment.open()
                 break
               case 5:
-                console.log(index)
+                this.$refs.CreditSpending.open()
                 break
               case 6:
                 console.log(index)

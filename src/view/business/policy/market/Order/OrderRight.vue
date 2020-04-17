@@ -66,7 +66,7 @@
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
           <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
         <!-- <FormItem label="订单类型：" >
@@ -648,7 +648,7 @@ export default {
     changeShippingAddress() {},
     //打开添加配件模态框
     addMountings() {
-      this.$refs.selectPartCom.init();
+      this.$refs.selectPartCom.init(this.formPlan.guestId);
     },
     openBarchModal() {
       this.$refs.barch.init();

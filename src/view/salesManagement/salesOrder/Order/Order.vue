@@ -140,6 +140,7 @@ export default {
     //左侧点击数据
     getOrder(data) {
       this.isWms = false;
+      console.log(data)
       this.orderlistType = data.billStatusId;
       if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
         this.isWms = true;
