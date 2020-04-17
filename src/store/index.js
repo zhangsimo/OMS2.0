@@ -7,6 +7,7 @@ import common from './module/common'
 import getters from './getters.js'
 import dataList from './module/dataList'
 import advance from './module/advance'
+import businessBorrowing from './module/businessBorrowing'
 import createPersistedState from "vuex-persistedstate"
 
 Vue.use(Vuex)
@@ -29,6 +30,7 @@ export default new Vuex.Store({
     common,
     dataList,
     advance,
+    businessBorrowing,
     ...moduleStores,
   },
   getters,

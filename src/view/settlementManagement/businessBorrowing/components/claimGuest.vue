@@ -18,17 +18,19 @@
       highlight-row
       @on-current-change="currentChange"
     ></Table>
-    <Page
-      show-sizer
-      show-total
-      class-name="fr mb10 mt10"
-      size="small"
-      :current="page.page"
-      :total="page.total"
-      :page-size="page.size"
-      @on-change="changePage"
-      @on-page-size-change="changeSize"
-    ></Page>
+    <div class="clearfix">
+      <Page
+        show-sizer
+        show-total
+        class-name="fr mb10 mt10"
+        size="small"
+        :current="page.page"
+        :total="page.total"
+        :page-size="page.size"
+        @on-change="changePage"
+        @on-page-size-change="changeSize"
+      ></Page>
+    </div>
     <div slot="footer">
       <Button type="primary" @click="detaim">确认</Button>
       <Button @click="modal=false">取消</Button>
@@ -36,6 +38,7 @@
   </Modal>
 </template>
 <script>
+import * as api from "_api/settlementManagement/businessBorrowing";
 import { findGuest,addClaim } from "_api/settlementManagement/advanceCollection.js";
 import bus from '../../bill/Popup/Bus'
 export default {
@@ -87,7 +90,9 @@ export default {
       if(!type){
         this.guestId = ''
         this.company = ''
-        // this.$refs.table.clearCurrentRow()
+        this.$refs.table.clearCurrentRow()
+      } else {
+        this.getOne()
       }
     },
     // 往来单位选择
@@ -113,16 +118,25 @@ export default {
       if(this.guestId){
         let obj ={
           guestId:this.guestId,
-          financeAccountCashList:this.financeAccountCashList
+          financeAccountCashList:this.$store.state.businessBorrowing.financeAccountCashList,
+          loanId:this.$store.state.businessBorrowing.loanId,
+          claimType: this.$store.state.businessBorrowing.claimType,
         }
-        addClaim(obj).then(res=>{
+        api.addClaim(obj).then(res => {
           if(res.code===0){
             this.$message.success('认领成功')
             this.modal = false
-            this.$parent.$parent.getQuery()
-            this.$parent.$parent.$refs.settlement.tableData=[]
+            this.$parent.getQuery()
           }
         })
+        // addClaim(obj).then(res=>{
+        //   if(res.code===0){
+        //     this.$message.success('认领成功')
+        //     this.modal = false
+        //     this.$parent.$parent.getQuery()
+        //     this.$parent.$parent.$refs.settlement.tableData=[]
+        //   }
+        // })
       } else {
         this.$message.error('请选择一个往来单位');
       }
