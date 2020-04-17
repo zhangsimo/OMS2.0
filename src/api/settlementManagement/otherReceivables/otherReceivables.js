@@ -37,10 +37,21 @@ export function paymentRegain(data) {
     data,
   });
 }
+
 //资金认领款核销，核销对账单保存
 export function saveAccount(data) {
   return axios.request({
     url: `${api.omsSettle}/otherCollectAmt/claim`,
+    method: "post",
+    data,
+  });
+}
+
+//其他付款核销
+// /otherAccountsPayment/orderWriteOff
+export function orderWriteOff(data){
+  return axios.request({
+    url: `${api.omsSettle}/otherAccountsPayment/orderWriteOff`,
     method: "post",
     data,
   });

@@ -36,12 +36,12 @@
           </div>
         </div>
         <div class="mt10 mb10">
-          <Button class="ml10" @click="claimCollect(1)" :disabled="this.currRow.paymentClaimNo">其他付款认领</Button>
-          <Button class="ml10" @click="collectWirte" :disabled="this.currRow.writeOffReceiptNo">其他收款核销</Button>
-          <Button class="ml10" @click="claimCollect(2)" :disabled="this.currRow.paymentRegainNo">其他收款收回</Button>
-          <Button class="ml10" @click="revokeCollection(0)" :disabled="this.currRow">其他付款认领撤回</Button>
-          <Button class="ml10" @click="revokeCollection(1)" :disabled="this.currRow">其他收款核销撤回</Button>
-          <Button class="ml10" @click="revokeCollection(2)" :disabled="this.currRow">其他收款收回撤回</Button>
+          <Button class="ml10" @click="claimCollect(1)" >其他付款认领</Button>
+          <Button class="ml10" @click="collectWirte" >其他收款核销</Button>
+          <Button class="ml10" @click="claimCollect(2)" >其他收款收回</Button>
+          <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
+          <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
+          <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
           <!--<Button class="ml10">导出</Button>-->
         </div>
       </section>
@@ -452,7 +452,6 @@
                   }
                 }
               }
-
             }else {
               this.$message.error("请选择数据");
             }
@@ -483,7 +482,7 @@
                 this.$Message.error('其余收款余额为0无法再核销!')
               }else {
                 this.$refs.settlement.Settlement = true;
-                //   this.paymentId = "YSK";
+                  this.paymentId = "YSK";
               }
             } else {
               this.$message.error("请选择数据");
