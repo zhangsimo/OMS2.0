@@ -37,11 +37,6 @@ export default {
       }, //本店待认领款分页
       claimed: [
         {
-          type: 'selection',
-          width: 60,
-          align: 'center'
-        },
-        {
           title: "序号",
           type: "index",
           align: "center",
@@ -127,21 +122,43 @@ export default {
     //本店待认领款页码
     pageChangeAmt(val) {
       this.claimedPage.page = val;
-      this.$parent.$parent.$parent.claimedList()
+      let type = ""
+      switch (this.$store.state.businessBorrowing.claimType) {
+        case 2:
+          type = 2
+          break;
+        case 3:
+          type = 1
+          break;
+        default:
+          break;
+      }
+      this.$parent.$parent.claimedList(type)
     },
     //本店待认领款每页条数
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
-      this.$parent.$parent.$parent.claimedList()
+      let type = ""
+      switch (this.$store.state.businessBorrowing.claimType) {
+        case 2:
+          type = 2
+          break;
+        case 3:
+          type = 1
+          break;
+        default:
+          break;
+      }
+      this.$parent.$parent.claimedList(type)
     }
   },
   watch: {
     currentClaimed: {
       handler(val, od) {
         if (val !== od) {
-          if(this.$parent.$parent.$parent.difference!==undefined){
-            const that = this.$parent.$parent.$parent
+          if(this.$parent.difference!==undefined){
+            const that = this.$parent
             that.claimedAmt = 0;
             val.map(item => {
               if(item.paidMoney) {
