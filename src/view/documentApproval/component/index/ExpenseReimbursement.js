@@ -4,6 +4,8 @@ import subject from '../Subject'
 import selectTheDocuments from '../SelectTheDocuments'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
+import {getPayList , getAllSalesList} from "../utils";
+
 
 export default {
   name: "ExpenseReimbursement",
@@ -14,6 +16,7 @@ export default {
     upphoto,
     flowbox
   },
+  // inject:['modelType'],
   props:{
     list:''
   },
@@ -27,15 +30,18 @@ export default {
         use: [
           {required: true, message: '主题为必填', trigger: 'blur'}
         ],
-        payee:[
-          {required: true, message: '主题为必填', trigger: 'change'}
+        receiver:[
+          {required: true, message: '收款人账户为必填', trigger: 'change'}
         ],
-        bankName:[
+        receiveBank:[
           {required: true, message: '开户行名称必填', trigger: 'blur'}
         ],
-        // BankNo:[
-        //   {required: true, message: '银行账号必填', trigger: 'blur'}
-        // ]
+        paymentAccount:[
+          {required: true, message: '付款账户必选', trigger: 'change'}
+        ],
+        receiveBankNo:[
+          {required: true, message: '银行账号必填', trigger: 'blur'}
+        ]
       },
       expenditureTableData:[
         {name:'zs',sex:1,subjectType:'选择会计科目',num:12,tax:1},
@@ -81,9 +87,13 @@ export default {
       payUserList:[],//付款人列表
     }
   },
+  mounted(){
+    this.payUserList = getPayList()
+  },
   methods:{
     //模态框打开111
-    open(){
+   async open(){
+       this.payeeList = await getAllSalesList()
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
@@ -94,14 +104,23 @@ export default {
         this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
-        this.formInline.staffName = user.staffName
-        this.formInline.tenantCompanyName = user.groups[user.groups.length - 1].name || ' '
+        this.formInline.applicant = user.staffName
+        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
-        this.formInline.shopName = user.shopName
-        this.formInline.type = '费用报销'
-        this.formInline.date = date
+        this.formInline.orgName = user.shopName
+        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTime = date
+        this.formInline.paymentOrgName = user.shopName
       }
     },
+
+    //获取往来单位
+    getCompany(row) {
+      let arr = this.payeeList.filter( item => item.value == row.value)
+      this.formInline.receiveBank = arr[0].receiveBank || ''
+      this.formInline.receiveBankNo = arr[0].receiveBankNo || ''
+    },
+
 
     //判断表格是否可以编辑
     editActivedEvent({row}){

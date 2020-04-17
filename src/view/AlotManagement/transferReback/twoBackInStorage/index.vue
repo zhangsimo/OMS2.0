@@ -82,7 +82,7 @@
                   </FormItem>
                   <FormItem label="入库仓库：">
                     <Select disabled v-model="formPlan.storeId" class="w150">
-                      <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                     <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
@@ -149,7 +149,7 @@
     <More ref="more" :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 入库提示 -->
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
-      <p>是否定入库</p>
+      <p>是否确定入库</p>
     </Modal>
     <!-- 打印 -->
     <PrintShow ref="printBox" :curenrow="Leftcurrentrow"></PrintShow>
@@ -263,7 +263,7 @@ export default {
             minWidth: 100
           },
           {
-            title: "调出回退日期",
+            title: "调出退回日期",
             align: "center",
             key: "finishDate",
             minWidth: 170

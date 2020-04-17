@@ -35,7 +35,7 @@
       </div>
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">因公借支认领</Button>
-        <Button class="ml10" @click="collectWirte">因公借支核销</Button>
+        <Button class="ml10" @click="openWriteOffModel">因公借支核销</Button>
         <Button class="ml10" @click="claimCollect(2)">因公借支收回</Button>
         <Button class="ml10" @click="revokeCollection(3)">因公借支申请撤回</Button>
         <Button class="ml10" @click="revokeCollection(0)">因公借支认领撤回</Button>
@@ -148,19 +148,19 @@
               <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
             </vxe-table-column>
           </vxe-table>
-          <div class="clearfix">
-            <Page
-              class-name="fr mb10 mt10"
-              size="small"
-              :current="page.num"
-              :total="page.total"
-              :page-size="page.size"
-              @on-change="changePage"
-              @on-page-size-change="changeSize"
-              show-sizer
-              show-total
-            ></Page>
-          </div>
+        </div>
+        <div class="clearfix">
+          <Page
+            class-name="fr mb10 mt10"
+            size="small"
+            :current="page.num"
+            :total="page.total"
+            :page-size="page.size"
+            @on-change="changePage"
+            @on-page-size-change="changeSize"
+            show-sizer
+            show-total
+          ></Page>
         </div>
         <Button>收付款单记录</Button>
         <Record ref="Record" :serviceId="serviceId" />
@@ -198,7 +198,7 @@
     <!--其他收款核销-->
     <!--<settlement ref="settlement"></settlement>-->
     <!--因公借支核销-->
-    <verification ref="verification"></verification>
+    <write-off ref="writeOff"></write-off>
   </div>
 </template>
 
@@ -211,6 +211,7 @@
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
   import { findByDynamicQuery , withdraw } from "_api/settlementManagement/otherReceivables/otherReceivables";
   import verification from './components/verification'
+  import writeOff from './components/writeOff'
   // otherReceivables
   import moment from "moment";
 
@@ -221,7 +222,8 @@
         claim,
         // settlement,
         Record,
-        verification
+        verification,
+        writeOff
       },
       data(){
         return{
@@ -289,6 +291,9 @@
           //   this.$refs.settlement.tableData=[]
           // }
         },
+        openWriteOffModel() {
+          this.$refs.writeOff.open();
+        },
         //撤回按钮点击事件
         revokeCollection(type){
           switch (type) {
@@ -299,7 +304,7 @@
               this.revokeTit = "因公借支核销撤回";
               break;
             case 2:
-              this.revokeTit = "因公借支核销撤回";
+              this.revokeTit = "因公借支收回撤回";
               break;
             case 3:
               this.revokeTit = "因公借支申请撤回";
@@ -318,7 +323,6 @@
         },
         //认领弹框查询
         queryClaimed(){},
-
         //初始化
         getQuery(){
           let obj = {

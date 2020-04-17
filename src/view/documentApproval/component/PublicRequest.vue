@@ -88,8 +88,8 @@
               </FormItem>
             </Col>
             <Col span="12">
-              <FormItem label="付款账户" prop="bankName" style="margin-bottom: 0px">
-                <Select v-model="formInline.bankName" style="width: 90%;padding-left: 5px" :disabled="modelType">
+              <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
+                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>

@@ -1,15 +1,12 @@
 import  moment from 'moment'
-import selectOther from '../SelectOther'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-import {getPayList} from "../utils";
 
 export default {
-  name: "OtherPayment",
+  name: "AskForInstructions",
   components:{
-    selectOther,
     upphoto,
     flowbox
   },
@@ -47,29 +44,18 @@ export default {
           {required: true, message: '开户账号必填', trigger: 'blur'}
 
         ],
-        paymentAccount:[
-          {required: true, message: '付款账户必选', trigger: 'change'}
-
-        ]
         // BankNo:[
         //   {required: true, message: '银行账号必填', trigger: 'blur'}
         // ]
       },
-      //费用支出表格的数据校验
-      documentTableData:[],//借支核销表格数据
-      payeeList:[],//收款人列表
-      payUserList:[],//付款人列表
-      company:[],//往来单位
     }
   },
   mounted(){
-    this.payUserList = getPayList()
-    this.getunltList()
   },
 
   methods:{
     //模态框打开111
-   open(){
+    open(){
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
@@ -86,54 +72,9 @@ export default {
         this.formInline.orgName = user.shopName
         this.formInline.applyTypeName = '费用报销'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
       }
     },
 
-    // 获取往来单位
-    async getunltList() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            item.value = item.id
-            item.label = item.fullName
-            this.company.push(item);
-          });
-        }
-      });
-    },
-
-    //获取往来单位
-    getCompany(row) {
-      let arr = this.company.filter( item => item.value == row.value)
-      this.formInline.receiver = arr[0].receiveName || ''
-      this.formInline.receiveBank = arr[0].accountBank || ''
-      this.formInline.receiveBankNo = arr[0].accountBankNo || ''
-    },
-
-
-    //打开选择模态框
-    openSelect(){
-      this.$refs.request.open()
-    },
-
-
-    //删除行
-    dele(row){
-      // this.$refs.xTable.remove(this.expenditureTableData[row.seq - 1])
-      this.formInline.details.splice((row.seq - 1) , 1)
-    },
-
-    //获取其他付款单据信息
-    otherPayList(row){
-      delete row.id
-      this.$set(this.formInline, "details", [row]);
-    },
-
-    //选择单据
-    SelectTheDocuments(){
-      this.$refs.documnets.open()
-    },
 
     //获取到上传图片地址
     getImgList(row){
@@ -143,18 +84,18 @@ export default {
     //保存提交
     save(type){
 
-     this.$refs.formInline.validate( async (valid) => {
-       if (valid) {
-         this.formInline.step = type
-         let res = await getOtherSve(this.formInline)
-         if (res.code == 0) {
-           this.$Message.success('操作成功')
-           this.model = false
-         }
-       } else {
-         this.$Message.error('带*必填');
-       }
-     })
+      this.$refs.formInline.validate( async (valid) => {
+        if (valid) {
+          this.formInline.step = type
+          let res = await getOtherSve(this.formInline)
+          if (res.code == 0) {
+            this.$Message.success('操作成功')
+            this.model = false
+          }
+        } else {
+          this.$Message.error('带*必填');
+        }
+      })
 
 
 

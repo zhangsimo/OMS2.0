@@ -1,22 +1,22 @@
-//====================  其他应收款管理  ========================
+//====================  其他应付款管理  ========================
 import axios from "@/libs/api.request";
 import api from "_conf/url";
 
 // 获取主表
 export function findByDynamicQuery(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/findByDynamicQuery`,
+    url: `${api.omsSettle}/otherAccountsPayment/findByDynamicQuery`,
     method: "post",
     data
   });
 }
 
-//其它付款认领撤回、核销撤回、收款收回撤回
-export function withdraw(data) {
+//撤回
+export function paymentRevoke(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/withdraw`,
+    url: `${api.omsSettle}/otherAccountsPayment/paymentRevoke`,
     method: "post",
-    data
+    data,
   });
 }
 
@@ -29,10 +29,10 @@ export function wirteAccount(params) {
   });
 }
 
-//资金认领款核销，核销对账单保存
-export function saveAccount(data) {
+//应付款认领
+export function addClaim(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherCollectAmt/claim`,
+    url: `${api.omsSettle}/otherAccountsPayment/addClaim`,
     method: "post",
     data,
   });

@@ -1,6 +1,14 @@
-import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
-import {getwbParts} from "_api/system/partManager";
-import {getDetails} from '@/api/salesManagment/salesOrder'
+// import {getAllBrand,getCarClassifys,savePartInfo} from "_api/system/partsExamine/partsExamineApi";
+// import {getwbParts} from "_api/system/partManager";
+// import {getDetails} from '@/api/salesManagment/salesOrder'
+
+import {
+  getAllBrand,
+  getCarClassifys,
+  savePartInfo
+} from "_api/system/partsExamine/partsExamineApi";
+import { getwbParts,getAccessList,getWbList } from "_api/system/partManager";
+import { getDetails } from "@/api/salesManagment/salesOrder";
 
 export const mixSelectPartCom  = {
   inject:['reload'],
@@ -197,6 +205,7 @@ export const mixSelectPartCom  = {
       ],
       //获取点击的数据
       allList:{},
+      guestId:'',
     }
   },
   mounted(){
@@ -207,33 +216,78 @@ export const mixSelectPartCom  = {
     ChangeValue(val){
       this.Name = val.label
     },
+
     //初始化数据
-    getList(){
-      this.loading = true
-      let req = {}
-      if(this.selectTreeItem.id){
-        req.typeId = this.selectTreeItem.id
+    getList() {
+      this.loading = true;
+      let req = {};
+      let params = {};
+      if (this.selectTreeItem.id) {
+        req.typeId = this.selectTreeItem.id;
       }
-      if(this.selectBrand&&this.selectBrand!='9999'){
-        req.partCodes =[]
-        req.partBrandCodes = [this.selectBrand]
+      if (this.selectBrand && this.selectBrand != "9999") {
+        req.partCodes = [];
+        req.partBrandCodes = [this.selectBrand];
       }
 
-      if(this.partName.trim()){
-        if (this.searchType == 'adapterCarModels'){
-          req[this.searchType] = [this.partName]
+      if (this.partName.trim()) {
+        if (this.searchType == "adapterCarModels") {
+          req[this.searchType] = [this.partName];
         } else {
-          req[this.searchType] = this.partName.trim()
+          req[this.searchType] = this.partName.trim();
         }
       }
-      req.page = this.page.num
-      req.size = this.page.size
-      getwbParts({},req).then(res => {
-        this.loading = false;
-        this.partData = res.data.content||[];
-        this.page.total = res.data.totalElements
-      })
+      req.page = this.page.num;
+      req.size = this.page.size;
+      if(this.keyType!=1){
+        req.guestId=this.guestId;
+        req.storeId=this.storeId;
+        getAccessList(params, req).then(res => {
+          this.loading = false;
+          this.partData = res.data.content || [];
+          this.page.total = res.data.totalElements;
+        });
+      }else if(this.keyType==1){
+        req.storeId=this.storeId;
+        getWbList(params,req).then(res=>{
+          this.loading = false;
+          this.partData = res.data|| [];
+          this.page.total = this.partData.length;
+        })
+      }
+
+
     },
+
+
+
+    //初始化数据
+    // getList(){
+    //   this.loading = true
+    //   let req = {}
+    //   if(this.selectTreeItem.id){
+    //     req.typeId = this.selectTreeItem.id
+    //   }
+    //   if(this.selectBrand&&this.selectBrand!='9999'){
+    //     req.partCodes =[]
+    //     req.partBrandCodes = [this.selectBrand]
+    //   }
+    //
+    //   if(this.partName.trim()){
+    //     if (this.searchType == 'adapterCarModels'){
+    //       req[this.searchType] = [this.partName]
+    //     } else {
+    //       req[this.searchType] = this.partName.trim()
+    //     }
+    //   }
+    //   req.page = this.page.num
+    //   req.size = this.page.size
+    //   getwbParts({},req).then(res => {
+    //     this.loading = false;
+    //     this.partData = res.data.content||[];
+    //     this.page.total = res.data.totalElements
+    //   })
+    // },
 
     //获取配件品牌
     getPartBrandAll(){
@@ -282,8 +336,9 @@ export const mixSelectPartCom  = {
       }
     },
     //显示层
-    init(){
+    init(guestId){
       this.searchPartLayer = true;
+      this.guestId = guestId;
       this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
@@ -332,6 +387,9 @@ export const mixSelectPartCom  = {
     show(val){
       let data = {}
       data.partId = val.id
+      if(this.guestId){
+        data.guestId = this.guestId
+      }
       getDetails(data).then( res => {
         if(res.code  === 0){
           this.allList = res.data

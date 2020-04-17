@@ -68,3 +68,13 @@ export function findMasterOrgId(params = {}) {
   });
 }
 
+
+//获取仓库
+export function getStoreAll(params = {}) {
+  return axios.request({
+    url: `${api.wmsApi}/comStore/queryAllStore`,
+    method: "get",
+    params
+  });
+}
+

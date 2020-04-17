@@ -361,11 +361,11 @@ export default {
           })
           deleteit(dataaa).then(res => {
             if(res.code === 0){
-              console.log(res)
               this.$message.warning('删除成功！');
               this.leftgetList();
               let checkBoxArr = this.checkboxArr.map(item => item.id)
               this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+              this.checkboxArr = [];
             }
           })
         } else if(resultTwo){
@@ -405,6 +405,7 @@ export default {
                 this.$message.success('删除成功！')
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+                this.checkboxArr = [];
             }
           })
           },1000)

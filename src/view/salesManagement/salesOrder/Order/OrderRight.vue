@@ -144,7 +144,7 @@
             style="width:200px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
           >
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </div>
@@ -258,7 +258,7 @@
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
-          :checkbox-config="{labelField: 'name', checkMethod}"
+          :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>

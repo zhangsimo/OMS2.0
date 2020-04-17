@@ -650,7 +650,10 @@ export default {
           data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
           data.tempQuotaTotal = this.creaditList.tempCreditLimit;
           data.tempStart = tools.transTime(this.creaditList.tempStart);
-          data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          if(data.tempEnd){
+            data.tempEnd = data.tempEnd.split(" ")[0]+' 23:59:59'
+          }
           data.orgId = this.creaditList.orgid;
           data.adjustType = 1;
           data.afterAdjustQuota =

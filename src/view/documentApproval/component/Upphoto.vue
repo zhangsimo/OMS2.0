@@ -86,10 +86,16 @@
       },
       //上传前
       handleBeforeUpload() {
-        this.$refs.upload.clearFiles();
+        const check = this.uploadListModal.length < 50;
+        if (!check) {
+          this.$Notice.warning({
+            title: '最多上传50张图片'
+          });
+        }
+        return check;
       },
       // 上传成功
-      handleSuccess(res, file) {
+      handleSuccess(res, file , fileList) {
         if (res.code == 0) {
           if (this.uploadListModal.length < 50) {
             if(this.uploadList.length<5){

@@ -143,7 +143,7 @@ import accountSelette from "./components/accountWirte";
 import {
   wirteAccount,
   saveAccount
-} from "_api/settlementManagement/seleteAccount.js";
+} from "_api/settlementManagement/otherReceivables/otherReceivables";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";

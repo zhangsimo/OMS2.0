@@ -315,7 +315,7 @@
         tableData1:[],//已审核数据
         tableData2:[],//未审核数据
         impirtUrl:{
-          downId: '1200000000',
+          downId: '1600000000',
           upUrl:impUrl
         },//下载上传路径
         oneList:{},//点击获取到的信息
