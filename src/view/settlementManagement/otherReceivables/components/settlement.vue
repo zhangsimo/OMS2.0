@@ -32,7 +32,7 @@
         </Col>
         <Col span="6">
           <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
-          <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
+          <i class="iconfont iconcaidan input" v-if="showModalOne !== 1" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
@@ -142,7 +142,8 @@
 import accountSelette from "./components/accountWirte";
 import {
   wirteAccount,
-  saveAccount
+  saveAccount,
+  paymentRegain
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
@@ -161,19 +162,35 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      showModalOne: '',
     };
   },
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo =
-        this.reconciliationStatement.accountNo + "," + val.accountNo;
-      val.two.map(item => {
-        item.businessTypeName = item.businessType.name;
-      });
-      this.BusinessType = [...this.BusinessType, ...val.two];
-      this.checkComputed()
+      console.log(val);
+      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
+      // val.map(item => {
+      //   item.businessTypeName = item.businessType.name;
+      // });
+      // this.BusinessType = [...this.BusinessType, ...val];
+      let jsonArr = [val]
+      jsonArr.map(item => {
+        item.orgName = this.reconciliationStatement.orgName;
+        item.accountNo = item.serviceId;
+        // item.guestName = item.guestName;
+        item.businessTypeName = item.orderTypeName;
+        item.reconciliationAmt = item.amountCollected;
+        item.hasAmt = +item.amountCollected - +item.paymentBalance;
+        item.unAmt = item.paymentBalance;
+        item.rpAnt = item.paymentBalance;
+        item.unAmtLeft = item.unAmt - item.rpAnt;
+      })
+      console.log(jsonArr)
+      this.BusinessType.push(...jsonArr)
+      // console.log(this.BusinessType)
+      // this.checkComputed()
     });
     //选择科目
     bus.$on("hedInfo", val => {
@@ -250,11 +267,16 @@ export default {
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
           sign = 2;
+          this.showModalOne = 0;
         } else if (this.$parent.paymentId === "YFK") {
+          this.showModalOne = 0;
           sign = 4;
+          this.showModalOne = 0;
         } else if (this.$parent.paymentId === "YJDZ") {
           sign = 1;
+          this.showModalOne = 1;
         }else if (this.$parent.paymentId === "YSKZC") {
+          this.showModalOne = 0;
           sign = 3;
         } else if (this.$parent.type === 0) {
           sign = 6;
@@ -286,17 +308,33 @@ export default {
     //保存
     conserve() {
       if (!Number(this.check)) {
-        let obj = {
-          one: this.reconciliationStatement,
-          two: this.BusinessType,
-          three: this.tableData
-        };
-        saveAccount(obj).then(res => {
-          if (res.code === 0) {
-            this.Settlement = false;
-            this.$message.success("保存成功");
-          }
-        });
+        if(this.$parent.typeA === '收回'){
+          let obj = {
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
+          };
+          paymentRegain(obj).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("保存成功");
+            }
+          });
+        }else {
+          let obj2 = {
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
+          };
+          saveAccount(obj2).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("保存成功");
+            }
+          });
+        }
       } else {
         this.$message.error("核对金额为0才能保存");
       }

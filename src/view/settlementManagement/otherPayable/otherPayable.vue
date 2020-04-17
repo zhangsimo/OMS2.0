@@ -69,7 +69,13 @@
               <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
               <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
               <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
-              <vxe-table-column field="paymentDate" title="付款时间"></vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款时间">
+                <!--<ul class="list">-->
+                  <!--<li v-for="(item,index) of row.otherInfo" :key="index" class="flex">-->
+                    <!--<span class="listChild">{{item.paymentDate}}</span>-->
+                  <!--</li>-->
+                <!--</ul>-->
+              </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
@@ -374,31 +380,28 @@
             this.claimTit = "其他收款认领";
             this.claimedList(1);
           } else {
-            this.claimTit = "其他付款支出认领";
-            if (
-              Object.keys(this.currRow).length !== 0 &&
-              this.currRow.expenditureNo &&
-              !this.currRow.expenditureClaimAmt
-            ) {
             this.claimModal = true;
+            this.claimTit = "其他付款支出认领";
             this.claimedList(2);
-            } else {
-              this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-            }
           }
         } else {
           this.$message.error('请选择数据！')
         }
 
       },
-      //预收款认领
+      //其他付款支出认领
       claimCollection() {
-        // if (this.claimSelection.length !== 0) {
-          this.$refs.settlement.Settlement = true;
-          this.claimModal = false;
-        // } else {
-        //   this.$message.error("请先选择数据");
-        // }
+        if (this.claimSelection.length !== 0) {
+          if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.paymentBalance) {
+            this.$refs.settlement.Settlement = true;
+            this.claimModal = false;
+            this.paymentId = "YSK";
+          } else {
+            this.$message.error("金额大于其他其他收款余额，无法认领");
+          }
+        } else {
+          this.$message.error("请先选择数据");
+        }
       },
       //其他收款认领弹窗查询
       claimedList(type) {
@@ -508,12 +511,12 @@
       },
       //其他收款核销
       collectWirte() {
-        // if (Object.keys(this.currRow).length !== 0) {
+        if (Object.keys(this.currRow).length !== 0) {
         this.$refs.settlement.Settlement = true;
-        //   this.paymentId = "YSK";
-        // } else {
-        //   this.$message.error("请选择数据");
-        // }
+          this.paymentId = "YSK";
+        } else {
+          this.$message.error("请选择数据");
+        }
       },
       //认领弹框查询
       queryClaimed(){

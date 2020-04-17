@@ -36,12 +36,12 @@
           </div>
         </div>
         <div class="mt10 mb10">
-          <Button class="ml10" @click="claimCollect(1)">其他付款认领</Button>
-          <Button class="ml10" @click="collectWirte" :disabled="currRow.paymentBalance == 0">其他收款核销</Button>
-          <Button class="ml10" @click="claimCollect(2)" :disabled="currRow.paymentBalance == 0">其他收款收回</Button>
-          <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
-          <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
-          <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
+          <Button class="ml10" @click="claimCollect(1)" :disabled="this.currRow.paymentClaimNo">其他付款认领</Button>
+          <Button class="ml10" @click="collectWirte" :disabled="this.currRow.writeOffReceiptNo">其他收款核销</Button>
+          <Button class="ml10" @click="claimCollect(2)" :disabled="this.currRow.paymentRegainNo">其他收款收回</Button>
+          <Button class="ml10" @click="revokeCollection(0)" :disabled="this.currRow">其他付款认领撤回</Button>
+          <Button class="ml10" @click="revokeCollection(1)" :disabled="this.currRow">其他收款核销撤回</Button>
+          <Button class="ml10" @click="revokeCollection(2)" :disabled="this.currRow">其他收款收回撤回</Button>
           <!--<Button class="ml10">导出</Button>-->
         </div>
       </section>
@@ -78,7 +78,7 @@
                 <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
                 <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
                 <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
-                <vxe-table-column field="" title="其他收款收回金额"></vxe-table-column>
+                <vxe-table-column field="paymentRegainAmt" title="其他收款收回金额"></vxe-table-column>
                 <vxe-table-column field="paymentBalance" title="其他收款余额"></vxe-table-column>
               </vxe-table-column>
               <vxe-table-column title="收款方式">
@@ -292,6 +292,7 @@
   import Record from "./components/Record";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection.js";
   import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite.js";
+  // import claimGuest from "./components/claimGuest";
   import { findByDynamicQuery , withdraw } from "_api/settlementManagement/otherReceivables/otherReceivables";
   // otherReceivables
   import moment from "moment";
@@ -301,7 +302,8 @@
           quickDate,
           claim,
           settlement,
-          Record
+          Record,
+          // claimGuest
         },
         data(){
           return{
@@ -327,7 +329,9 @@
             }, //分页
             serviceId: "", //给子组件传的值
             reconciliationStatement: {},
-            MessageValue: '',
+            MessageValue: '', //收款记录单的数据
+            claimSelection: [] ,
+            typeA: '', //是否收回按钮
           }
         },
         methods :{
@@ -342,31 +346,23 @@
           },
           //其他付款认领/其他收款收回
           claimCollect(type){
-            // if(Object.keys(this.currRow).length !== 0){
-            //
-            // }else {
-            //   this.$message.error('请选择数据！')
-            // }
-            if (type === 1) {
-              if(Object.keys(this.currRow).length !== 0){
-                this.claimModal = true;
-                this.claimTit = "其他付款认领";
-                this.claimedList(1);
+            if(Object.keys(this.currRow).length !== 0){
+              if (type === 1) {
+                  this.claimModal = true;
+                  this.claimTit = "其他付款认领";
+                  this.claimedList(1);
               } else {
-                this.$message.error('请选择数据！')
+                if(this.currRow.paymentBalance == 0 ||  !this.currRow.paymentBalance) {
+                  this.$Message.error('他收款余额为0无法收回!')
+                }else {
+                  this.claimTit = "其他收款收回";
+                  this.claimModal = true;
+                  this.claimedList(2);
+                }
+
               }
-            } else {
-              this.claimTit = "其他收款收回";
-              // if (
-              //   Object.keys(this.currRow).length !== 0 &&
-              //   this.currRow.expenditureNo &&
-              //   !this.currRow.expenditureClaimAmt
-              // ) {
-                this.claimModal = true;
-                // this.claimedList(2);
-              // } else {
-              //   this.$message.error("请选择有预收款支出单号且未支出认领的数据");
-              // }
+            }else {
+              this.$message.error('请选择数据！')
             }
           },
           //预收款弹框是否打开
@@ -463,7 +459,17 @@
           },
          //收回认领
           claimCollection(){
-
+              if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
+                if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.paymentBalance) {
+                  this.$refs.settlement.Settlement = true;
+                  this.paymentId = "YSK";
+                  this.typeA = '收回';
+                } else {
+                  this.$message.error("金额大于其他其他收款余额，无法认领");
+                }
+              }else {
+                this.$message.error('请选择认领的数据')
+              }
           },
           //子组件的数据
           getMessage(value){
@@ -473,8 +479,7 @@
           //其他收款核销
           collectWirte() {
             if (Object.keys(this.currRow).length !== 0) {
-              console.log(this.currRow.paymentBalance)
-              if(this.currRow.paymentBalance == 0 || this.currRow.paymentBalance == null) {
+              if(this.currRow.paymentBalance == 0 || !this.currRow.paymentBalance) {
                 this.$Message.error('其余收款余额为0无法再核销!')
               }else {
                 this.$refs.settlement.Settlement = true;
@@ -525,7 +530,6 @@
             }else {
               this.$message.error('请选择认领的数据')
             }
-
           },
           //认领弹框传参数据
           selection(arr) {

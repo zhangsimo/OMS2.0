@@ -29,6 +29,14 @@ export function wirteAccount(params) {
   });
 }
 
+//收回保存
+export function paymentRegain(data) {
+  return axios.request({
+    url: `${api.omsSettle}/otherCollectAmt/paymentRegain`,
+    method: "post",
+    data,
+  });
+}
 //资金认领款核销，核销对账单保存
 export function saveAccount(data) {
   return axios.request({
