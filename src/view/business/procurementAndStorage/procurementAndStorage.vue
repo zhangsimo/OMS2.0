@@ -203,6 +203,7 @@
                     >
                       <Option
                         v-for="item in WarehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>

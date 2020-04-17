@@ -347,7 +347,7 @@ export default class PriceManage extends Vue {
     }
     data.addList.forEach(el => {
       el.strategyId = this.currRow.id;
-      el.guestId = el.id;
+      el.guestId = el.id||el.guestId;
       Reflect.deleteProperty(el, "id");
     });
     let res = await api.sellcussave(data);

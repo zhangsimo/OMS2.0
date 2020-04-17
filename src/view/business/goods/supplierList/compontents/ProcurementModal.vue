@@ -221,7 +221,7 @@ export default class ProcurementModal extends Vue {
       startTime: this.auditDate[0]?this.auditDate[0]+" 00:00:00":"",
       endTime: this.auditDate[1]?this.auditDate[1]+" 23:59:59":"",
     };
-    params.size = this.page.size;
+    params.pageSize = this.page.size;
     params.page = this.page.num - 1;
     let formData = {};
     for(let k in data) {

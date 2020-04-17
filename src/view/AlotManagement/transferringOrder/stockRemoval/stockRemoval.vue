@@ -357,7 +357,7 @@ export default {
     let changeNumber = ({cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return Promise.reject(new Error('受理数量输入不正确'))
       }
     };
     return {

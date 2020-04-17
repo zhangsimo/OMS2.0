@@ -21,7 +21,7 @@
       <Button
         class="mr10"
         v-has="'credit'"
-        v-show="this.state === 1 && this.researchStatus === 2"
+        v-show="this.state === 1 && (this.researchStatus === 2||this.researchStatus === 4)"
         @click="opensurveyShow"
       >
         <span class="center">修改信用调查</span>
