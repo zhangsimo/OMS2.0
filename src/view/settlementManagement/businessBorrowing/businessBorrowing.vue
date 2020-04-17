@@ -376,7 +376,7 @@ export default {
       companyId: "", //往来单位
       tableData: [], //表格信息
       claimSelection: [],
-      selection: {},
+      selectionData: {},
       claimCollectType: 1,
       page: {
         num: 1,
@@ -402,16 +402,21 @@ export default {
       if (!this.currRow.id) {
         return this.$message.error("请选择数据");
       }
+      this.$refs.claim.claimedPage = {
+        page: 1,
+        total: 0,
+        size: 10
+      }
       if (type === 1) {
         this.claimModal = true;
         this.claimTit = "因公借支认领";
-        this.claimCollectType == 1;
+        this.claimCollectType = 1;
         this.$store.commit("setClaimType", 2)
         this.claimedList(2);
       } else {
         this.claimModal = true;
         this.claimTit = "因公借支收回";
-        this.claimCollectType == 2;
+        this.claimCollectType = 2;
         this.$store.commit("setClaimType", 3)
         this.claimedList(1);
       }
@@ -516,17 +521,17 @@ export default {
     },
     //认领弹框认领
     claimPay() {
-      if (this.claimCollectType == 1) {
-        if (this.selection.incomeMoney > this.currRow.payAmt) {
-          return this.$message.error("金额大于因公借支金额金额，无法认领")
-        }
-      } else {
-        if (this.selection.incomeMoney > this.currRow.paymentReturnBalance) {
-          return this.$message.error("金额大于因公借支金额金额，无法认领")
-        }
-      }
       if (this.claimSelection.length !== 0) {
         // currRow
+        if (this.claimCollectType == 1) {
+          if (this.selectionData.paidMoney > this.currRow.payAmt) {
+            return this.$message.error("金额大于因公借支金额金额，无法认领")
+          }
+        } else {
+          if (this.selectionData.incomeMoney > this.currRow.paymentReturnBalance) {
+            return this.$message.error("金额大于因公借支金额金额，无法认领")
+          }
+        }
         this.$refs.claimGuest.modal = true;
         this.claimModal = false;
       } else {
@@ -536,7 +541,7 @@ export default {
     //认领弹框传参数据
     selection(selection) {
       this.claimSelection = [];
-      this.selection = selection;
+      this.selectionData = selection;
       this.$store.commit("setFinanceAccountCashList", [{ id: selection.id }])
       this.claimSelection.push({ id: selection.id });
     },
