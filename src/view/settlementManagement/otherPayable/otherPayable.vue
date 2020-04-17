@@ -139,15 +139,87 @@
               </vxe-table-column>
             </vxe-table-column>
             <vxe-table-column title="其他信息">
-              <vxe-table-column field="payer" title="付款人"></vxe-table-column>
-              <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
-              <vxe-table-column field="receiveRemark" title="付款备注"></vxe-table-column>
-              <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
-              <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
-              <vxe-table-column field="receiver" title="收款人"></vxe-table-column>
-              <vxe-table-column field="receiveDate" title="收款日期"></vxe-table-column>
-              <vxe-table-column field="receiveRemark" title="收款备注"></vxe-table-column>
-              <vxe-table-column field="receiveAuditor" title="收款审核人"></vxe-table-column>
+              <vxe-table-column field="payer" title="付款人">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.payer}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="paymentDate" title="付款日期">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentDate}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="receiveRemark" title="付款备注">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveRemark}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="paymentAuditor" title="付款审核人">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentAuditor}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="paymentAuditDate" title="付款审核日期">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.paymentAuditDate}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="receiver" title="收款人">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiver}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="receiveDate" title="收款日期">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveDate}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="receiveRemark" title="收款备注">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveRemark}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
+              <vxe-table-column field="receiveAuditor" title="收款审核人">
+                <template v-slot="{row}">
+                  <ul class="list">
+                    <li v-for="(item,index) of row.otherInfo" :key="index" class="flex">
+                      <span>{{item.receiveAuditor}}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <!--<vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>-->
             </vxe-table-column>
           </vxe-table>
