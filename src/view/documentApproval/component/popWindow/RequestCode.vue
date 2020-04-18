@@ -23,11 +23,11 @@
         :data="tableData">
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="name" title="申请单号"></vxe-table-column>
-        <vxe-table-column field="sex" title="申请费用"></vxe-table-column>
-        <vxe-table-column field="age" title="申请日期"></vxe-table-column>
-        <vxe-table-column field="age" title="申请人"></vxe-table-column>
-        <vxe-table-column field="age" title="摘要"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请单号"></vxe-table-column>
+        <vxe-table-column field="applyAmt" title="申请费用"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -39,6 +39,7 @@
 
 <script>
   import moment from 'moment'
+  import {getApplyList} from '_api/documentApproval/ExpenseReimbursement'
     export default {
         name: "requestCode",
       data(){
@@ -51,7 +52,7 @@
       },
       methods: {
           //打开模态框
-        open() {
+        async open() {
           this.modelShow = true
           let date = []
           let weekOfday = parseInt(moment().format('d')) // 计算今天是这周第几天 周日为一周中的第一天
@@ -64,16 +65,20 @@
         },
 
         //查询
-        query(){
+        async query(){
           let data ={}
-          data.startDate = moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-          data.endDate = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+          data.startTime = moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
+          data.endTime = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+          let res = await getApplyList(data)
+          if(res.code === 0) {
+            this.tableData = res.data
+            this.$Message.success('查询成功')
+          }
         },
 
         //选择
         getRaido({row}){
           this.oneapplet = row
-
         },
 
         //确定

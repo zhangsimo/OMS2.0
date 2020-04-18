@@ -43,14 +43,14 @@
             </FormItem>
           </div>
           <div class="tableright">
-            <FormItem label="申请费用" style="margin-bottom: 0px;border-bottom: 1px #cccccc solid" prop="topic">
-              <Input type="text"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
+            <FormItem label="申请费用" style="margin-bottom: 0px;border-bottom: 1px #cccccc solid" prop="applyAmt">
+              <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
               </Input>
             </FormItem>
           </div>
           <div class="tablebottom">
-            <FormItem label="申请费用" style="margin-bottom: 0px" prop="topic">
-              <Input type="textarea" :rows="5"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
+            <FormItem label="申请事项" style="margin-bottom: 0px" prop="applyMatters">
+              <Input type="textarea" :rows="5"  v-model="formInline.applyMatters" style="width: 100%" :disabled="modelType">
               </Input>
             </FormItem>
           </div>
