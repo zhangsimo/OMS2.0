@@ -920,10 +920,10 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      // this.$refs.form.resetFields()
-      // console.log(this.formPlan)
-      // var datas = this.conversionList(val);
         var datas=val;
+       datas.map(item=>{
+           item.id=''
+       })
       this.formPlan.detailVOList = datas;
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       // this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
