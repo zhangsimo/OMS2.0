@@ -169,7 +169,7 @@ export default {
               editRender: { name: "input" }
             },
             { field: "storeName", title: "仓库" },
-            { field: "rate3", title: "OE码" },
+            { field: "oemCode", title: "OE码" },
             { field: "rate4", title: "规格/方向/颜色" }
           ]
         },
