@@ -922,7 +922,7 @@ export default {
     getPartNameList(val) {
       // this.$refs.form.resetFields()
       // console.log(this.formPlan)
-      var datas = conversionList(val);
+      var datas = this.conversionList(val);
       this.formPlan.detailVOList = datas;
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       // this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
@@ -971,7 +971,36 @@ export default {
         }
       }
       return a;
+    },
+     conversionList(val){
+    if(val.length < 1){
+        return
+    }else {
+        let arr = []
+        val.forEach( data => {
+            arr.push({
+                partId: data.partId || '',
+                partInnerId: data.code || '',
+                partCode : data.partCode || '',
+                fullName : data.fullName || '',
+                oemCode : data.oeCode || '',
+                partBrand : data.partBrand || '',
+                carBrandName : data.adapterCarBrand || '',
+                carModelName : data.adapterCarModel|| '',
+                spec : data.specifications || '',
+                unit : data.minUnit || '',
+                carTypef : data.baseType ? data.baseType.firstType ? data.baseType.firstType.typeName ? data.baseType.firstType.typeName : '' : '' :'',
+                carTypes : data.baseType ? data.baseType.secondType ?data.baseType.secondType.typeName ? data.baseType.secondType.typeName : '':'':'',
+                carTypet : data.baseType ? data.baseType.thirdType ?data.baseType.thirdType.typeName ? data.baseType.thirdType.typeName : '' :'':'',
+                orderPrice:data.orderPrice,
+                averagePrice:data.averagePrice,
+                partName:data.partStandardName
+            })
+        })
+        return arr
+
     }
+}
   },
   mounted() {
     setTimeout(() => {
