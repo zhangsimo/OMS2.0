@@ -10,7 +10,7 @@
         </Col>
         <Col span="6">
           <div class="omnirange" @click="open(1)">
-            <span>应公借支申请</span>
+            <span>因公借支申请</span>
             <img src="@/assets/images/documentApproval/atStateExpense.png" alt="">
           </div>
         </Col>
@@ -69,6 +69,10 @@
       <AskForInstrucions ref="AskForInstrucions" :list = 'modelType'></AskForInstrucions>
 <!--      预收款支出申请-->
       <CreditSpending ref="CreditSpending" :list = 'modelType'></CreditSpending>
+<!--      预付款申请-->
+      <AdvanceApply ref="AdvanceApply" :list = 'modelType'></AdvanceApply>
+<!--      内部资金调拨-->
+      <InternalFinance ref="InternalFinance" :list = 'modelType'></InternalFinance>
     </div>
 </template>
 
@@ -78,14 +82,20 @@
   import PublicRequest from '../component/PublicRequest'
   import AskForInstrucions from  '../component/AskForInstructions'
   import CreditSpending from'../component/CreditSpending'
-    export default {
+  import AdvanceApply from '../component/AdvanceApply'
+  import InternalFinance from'../component/InternalFinance'
+  import {getComenAndGo , getAllSalesList} from "../component/utils";
+
+  export default {
         name: "draftingOfApplication",
       components:{
         ExpenseReimbursement,
         OtherPayment,
         PublicRequest,
         AskForInstrucions,
-        CreditSpending
+        CreditSpending,
+        AdvanceApply,
+        InternalFinance
       },
       // provide(){
       //     return {
@@ -100,6 +110,10 @@
               id:''
             },
           }
+      },
+     async mounted(){
+        this.modelType.allSalesList =  await getAllSalesList()
+        this.modelType.salesList = await getComenAndGo()
       },
       methods:{
           open(index){
@@ -121,7 +135,8 @@
                 this.$refs.AskForInstrucions.open()
                 break
               case 3:
-                console.log(index)
+                this.$refs.InternalFinance.open()
+
                 break
               case 4:
                 this.$refs.OtherPayment.open()
@@ -133,7 +148,7 @@
                 console.log(index)
                 break
               case 7:
-                console.log(index)
+                this.$refs.AdvanceApply.open()
                 break
             }
 

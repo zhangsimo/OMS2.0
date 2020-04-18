@@ -42,7 +42,7 @@
               <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
             <Select class="w120 mr10" @on-change="changeStore" v-model="searchForm.storeId" placeholder="仓库">
-              <Option v-show="item.orgid==searchForm.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Input placeholder="仓位" class="w120 mr10" v-model="searchForm.shelf"></Input>
             <span class="mr5">显示零库存:</span>
@@ -98,7 +98,7 @@
               >{{ item.label }}</Option>
             </Select>
             <Select @on-change="changeStore2" class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
-              <Option v-show="item.orgid==searchForm1.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm1.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
             </Select>
             <Input v-model="searchForm1.shelf" placeholder="仓位" class="w120 mr10"></Input>
             <span class="mr5">显示零库存:</span>

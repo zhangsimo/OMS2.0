@@ -31,6 +31,7 @@
 import idDetailed from "./idDetailed";
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import { findAccount } from "_api/settlementManagement/seleteAccount.js";
+import { findByDynamicQuery } from "_api/settlementManagement/otherPayable/otherPayable";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import bus from "../../../bill/Popup/Bus";
 import moment from "moment";
@@ -53,19 +54,25 @@ export default {
           width: 40,
           className: "tc"
         },
-        {
-          title: "门店",
-          key: "orgName",
-          className: "tc"
-        },
+        // {
+        //   title: "门店",
+        //   key: "",
+        //   className: "tc"
+        // },
         {
           title: "对账日期",
-          key: "createTime",
-          className: "tc"
+          key: "paymentDate",
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span",
+              params.row.otherInfo[0].paymentDate
+            );
+          }
         },
         {
           title: "对账单号",
-          key: "accountNo",
+          key: "serviceId",
           className: "tc",
           render: (h, params) => {
             return h(
@@ -86,7 +93,7 @@ export default {
                   }
                 }
               },
-              params.row.accountNo
+              params.row.serviceId
             );
           }
         },
@@ -97,12 +104,12 @@ export default {
         },
         {
           title: "收付类型",
-          key: "receivePaymentTypeName",
+          key: "orderTypeName",
           className: "tc"
         },
         {
           title: "实际收付款金额",
-          key: "actualCollectionOrPayment",
+          key: "amountCollected",
           className: "tc"
         }
       ], //选择不含税对账单单
@@ -157,7 +164,7 @@ export default {
         receivePaymentType: this.paymentId,
         guestId: this.companyId
       };
-      findAccount(obj).then(res => {
+      findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
           this.accountData = res.data.content;
         }
@@ -169,7 +176,7 @@ export default {
     },
     // 确认按钮
     determine() {
-      if (this.seleteData&&Object.keys(this.seleteData).length !== 0) {
+      if (this.seleteData && Object.keys(this.seleteData).length !== 0) {
         bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {

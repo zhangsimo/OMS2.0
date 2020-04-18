@@ -65,11 +65,11 @@
 
     <!-- 副表工具按钮 -->
     <div style="line-height:57px" class="flex">
-      <div class="db">
+     <!-- <div class="db">
         <Button class="mr10 w90" @click="AddAttention" v-show="oneWarehouse.auditSign == 0">
           <Icon type="md-add" />添加
         </Button>
-      </div>
+      </div>-->
       <div class="db">
         <!-- <Button type="md-delete" class="mr10 w90" v-show="oneWarehouse.auditSign == 0" @click="del">
           <i class="iconfont mr5 iconbaocunicon"></i>删除

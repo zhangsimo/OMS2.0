@@ -1,8 +1,8 @@
 <template>
   <Modal
     v-model="model"
-    title="因公借支 申请单"
-    width="1000px"
+    title="因公借支申请 申请单"
+    width="1200px"
   >
     <div class="bigbox">
       <div class="clearfix">
@@ -15,25 +15,26 @@
       <Form ref="formInline" :model="formInline" :label-width="100"  :rules="ruleValidate">
         <div class="mb10">
           <span class="mr5">申请单号：</span>
-          <Input type="text" v-model="formInline.user" style="width: 200px" disabled="">
+          <Input type="text" v-model="formInline.applyNo" style="width: 200px" disabled>
           </Input>
         </div>
         <Row class="tableBox">
           <Col class="inner" span="4">申请人</Col>
-          <Col class="inner" span="4">{{formInline.staffName || ''}}</Col>
+          <Col class="inner" span="4">{{formInline.applicant || ''}}</Col>
           <Col class="inner" span="4">部门名称</Col>
-          <Col class="inner" span="4">{{formInline.tenantCompanyName || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.deptName || ' '}}</Col>
           <Col class="inner" span="4">门店店号</Col>
           <Col class="inner" span="4">{{formInline.shopCode || ' '}}</Col>
         </Row>
         <Row class="tableBox twoTable">
           <Col class="inner" span="4">门店名称</Col>
-          <Col class="inner" span="4">{{formInline.shopName || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.orgName || ' '}}</Col>
           <Col class="inner" span="4">申请类型</Col>
-          <Col class="inner" span="4">{{formInline.type || ' '}}</Col>
+          <Col class="inner" span="4">{{formInline.applyTypeName || ' '}}</Col>
           <Col class="inner" span="4">申请时间</Col>
-          <Col class="inner" span="4">{{formInline.date}}</Col>
+          <Col class="inner" span="4">{{formInline.applyTime}}</Col>
         </Row>
+
 
         <div class="tableBox2 mt20">
           <div class="tableline tableright">
@@ -59,20 +60,20 @@
         <div class="proceeds">
           <Row>
             <Col span="8">
-              <FormItem label="收款人账户" prop="payee" style="margin-bottom: 0px">
-                <Select v-model="formInline.payee" filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+              <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
+                <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
                   <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="开户行名称" prop="bankName" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              <FormItem label="开户行名称" prop="receiveBank" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="银行账号" prop="BankNo" style="margin-bottom: 0px;border-right: none">
-                <Input type="text" v-model="formInline.BankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
+              <FormItem label="银行账号" prop="receiveBankNo" style="margin-bottom: 0px;border-right: none">
+                <Input type="text" v-model="formInline.receiveBankNo" style="width: 90%;padding-left: 5px" :disabled="modelType"></Input>
               </FormItem>
             </Col>
           </Row>
@@ -84,7 +85,7 @@
           <Row>
             <Col span="12">
               <FormItem label="支付门店"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.bankName" style="width: 90%;padding-left: 5px" disabled></Input>
+                <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
             <Col span="12">

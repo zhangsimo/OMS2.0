@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="model"
-    title="请示 申请单"
+    title="其他付款 申请单"
     width="1200px"
   >
     <div class="bigbox">
@@ -43,19 +43,67 @@
             </FormItem>
           </div>
           <div class="tableright">
-            <FormItem label="申请费用" style="margin-bottom: 0px;border-bottom: 1px #cccccc solid" prop="topic">
-              <Input type="text"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
-              </Input>
-            </FormItem>
-          </div>
-          <div class="tablebottom">
-            <FormItem label="申请费用" style="margin-bottom: 0px" prop="topic">
-              <Input type="textarea" :rows="5"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
-              </Input>
-            </FormItem>
+            <Row>
+              <Col span="12">
+                <FormItem label="申请金额" style="margin-bottom: 0px" prop="applyAmt">
+                  <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
+                  </Input>
+                </FormItem>
+              </Col>
+              <Col span="12">
+                <FormItem label="付款期限" style="margin-bottom: 0px" prop="paymentTerm">
+                  <DatePicker type="date" v-model="formInline.paymentTerm" style="width: 100%" :disabled="modelType"></DatePicker>
+                </FormItem>
+              </Col>
+            </Row>
+
           </div>
         </div>
 
+
+        <h5 class="mt20 mb10" style="font-size: 18px">调拨信息</h5>
+        <div class="proceeds mb20">
+          <Row>
+            <Col span="8">
+              <FormItem label="转出门店"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="转出账户" prop="paymentAccount" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="转出账号" prop="paymentAccount" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
+
+
+        <div class="proceeds">
+          <Row>
+            <Col span="8">
+              <FormItem label="转入门店" style="margin-bottom: 0px">
+                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="转入账户" prop="receiver" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.receiver" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              </FormItem>
+            </Col>
+            <Col span="8">
+              <FormItem label="转入账号" prop="receiveBank" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              </FormItem>
+            </Col>
+          </Row>
+        </div>
 
         <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
         <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
@@ -63,15 +111,12 @@
       </Form>
     </div>
 
-
-
-    <!--    选择单据模态框-->
     <div slot='footer'></div>
   </Modal>
 </template>
 
 <script>
-  import index from './index/AskForInstructions.js'
+  import index from './index/OtherPayment.js'
   export default index
 </script>
 
@@ -107,10 +152,6 @@
   .tableright {
     border-right: #cccccc 1px solid;
   }
-  .tablebottom {
-    border-right: #cccccc 1px solid;
-  }
-
   .applyTitle {
     width: 100px;
     border-right: #cccccc 1px solid;
@@ -125,12 +166,6 @@
   }
 </style>
 <style scoped>
-  .tablebottom >>> .ivu-form-item-label {
-    text-align: center;
-    border-right: #cccccc 1px solid;
-    background-color: #f9f9f9;
-    line-height: 70px;
-  }
   .tableright >>> .ivu-form-item-label {
     text-align: center;
     border-right: #cccccc 1px solid;

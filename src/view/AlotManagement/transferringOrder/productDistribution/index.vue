@@ -18,6 +18,7 @@
             <Select v-model="form.storeId" class="w100 mr10" clearable>
               <Option
                 v-for="item in storeArray"
+                :disabled="item.isDisabled"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
@@ -259,7 +260,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name });
+              this.storeArray.push({ value: element.id, label: element.name,isDisabled:element.isDisabled });
             });
             for (var i = 0; i < res.data.length; i++) {
               if (res.data[i].isDefault == true) {
@@ -267,6 +268,7 @@ export default {
                 // this.idValue = res.data[i].id;
               }
             }
+            console.log(res.data)
           }
         })
         .catch(e => {

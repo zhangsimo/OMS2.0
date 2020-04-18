@@ -119,6 +119,7 @@
                                 <Option
                                   v-for="item in cangkuListall"
                                   :value="item.value"
+                                  :disabled="item.isDisabled"
                                   :key="item.value"
                                 >{{item.label}}</Option>
                               </Select>
@@ -365,6 +366,7 @@
                                 <Option
                                   v-for="item in cangkuListall"
                                   :value="item.value"
+                                  :disabled="item.isDisabled"
                                   :key="item.value"
                                 >{{item.label}}</Option>
                               </Select>

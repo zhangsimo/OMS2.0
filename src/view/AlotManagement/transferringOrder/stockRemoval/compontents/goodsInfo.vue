@@ -74,22 +74,38 @@
               field="receiveCompName"
               title="收货单位"
               width="100"
-            ></vxe-table-column>
+            >
+              <template v-slot="{ row }">
+                {{row.receiveCompName||row.receiveComp}}
+              </template>
+            </vxe-table-column>
             <vxe-table-column
               field="streetAddress"
               title="收货地址"
               width="100"
-            ></vxe-table-column>
+            >
+              <template v-slot="{ row }">
+                {{row.streetAddress||row.receiveAddress}}
+              </template>
+            </vxe-table-column>
             <vxe-table-column
               field="receiveMan"
               title="收货人"
               width="100"
-            ></vxe-table-column>
+            >
+              <template v-slot="{ row }">
+                {{row.receiveMan||row.receiver}}
+              </template>
+            </vxe-table-column>
             <vxe-table-column
               field="receiveManTel"
               title="联系电话"
               width="100"
-            ></vxe-table-column>
+            >
+              <template v-slot="{ row }">
+                {{row.receiveManTel||row.receiverMobile}}
+              </template>
+            </vxe-table-column>
           </vxe-table>
         </div>
         <!-- 收货信息 右 -->
@@ -570,6 +586,7 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
+    console.log(row)
     // this.reset();
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
@@ -604,7 +621,10 @@ export default class GoodsInfo extends Vue {
       this.formDateRight = row;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
-      this.formDateRight.receiveComp = row.receiveCompName;
+      this.formDateRight.receiveCompName = row.receiveComp;
+      this.formDateRight.streetAddress = row.receiveAddress
+      this.formDateRight.receiveMan = row.receiver
+      this.formDateRight.receiveManTel = row.receiverMobile
       // this.formDateRight.streetAddress = row.streetAddress;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;
