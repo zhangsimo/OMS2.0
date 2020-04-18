@@ -461,6 +461,9 @@ export default {
       // }
     },
     openWriteOffModel() {
+      if (!this.currRow) {
+        return this.$message.error("请选择数据");
+      }
       this.$refs.writeOff.open();
     },
     //撤回按钮点击事件
