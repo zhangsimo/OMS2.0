@@ -1,8 +1,7 @@
 import  moment from 'moment'
-import selectOther from '../SelectOther'
+import selectOther from '../popWindow/SelectOther'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
 import {getPayList} from "../utils";
 
@@ -48,7 +47,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true, message: '付款账户必选', trigger: 'change'}
+          {required: true, type:'number', message: '付款账户必选', trigger: 'change'}
 
         ]
         // BankNo:[
@@ -64,12 +63,12 @@ export default {
   },
   mounted(){
     this.payUserList = getPayList()
-    this.getunltList()
   },
 
   methods:{
     //模态框打开111
    open(){
+    this.company = this.list.salesList
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
@@ -91,24 +90,24 @@ export default {
     },
 
     // 获取往来单位
-    async getunltList() {
-      findGuest({ size: 2000 }).then(res => {
-        if (res.code === 0) {
-          res.data.content.map(item => {
-            item.value = item.id
-            item.label = item.fullName
-            this.company.push(item);
-          });
-        }
-      });
-    },
+    // async getunltList() {
+    //   findGuest({ size: 2000 }).then(res => {
+    //     if (res.code === 0) {
+    //       res.data.content.map(item => {
+    //         item.value = item.id
+    //         item.label = item.fullName
+    //         this.company.push(item);
+    //       });
+    //     }
+    //   });
+    // },
 
     //获取往来单位
     getCompany(row) {
       let arr = this.company.filter( item => item.value == row.value)
-      this.formInline.receiver = arr[0].receiveName || ''
-      this.formInline.receiveBank = arr[0].accountBank || ''
-      this.formInline.receiveBankNo = arr[0].accountBankNo || ''
+      this.formInline.receiver = arr[0].receiver || ''
+      this.formInline.receiveBank = arr[0].receiveBank || ''
+      this.formInline.receiveBankNo = arr[0].receiveBankNo || ''
     },
 
 

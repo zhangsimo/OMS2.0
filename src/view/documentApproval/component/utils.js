@@ -15,9 +15,6 @@ export function getPayList() {
 
 
 export async function getAllSalesList() {
-    if (store.state.dataList.salseList.length != 0){
-      return  store.state.dataList.salseList
-    }
           let arr = [] //获取收款人列表
          let Salse = await getSales()
             if (Salse.code == 0) {
@@ -48,7 +45,24 @@ export async function getAllSalesList() {
               )
             })
           }
-      store.commit('setSalseList' , arr)
   return arr
 
+}
+
+
+export async function getComenAndGo() {
+        let arr = []
+        let res = await findGuest({ size: 2000 })
+        if (res.code == 0) {
+          res.data.content.map(item => {
+            arr.push({
+              value: item.id,
+              label: item.fullName,
+              receiver: item.receiveName || '',
+              receiveBank: item.accountBank || '',
+              receiveBankNo: item.accountBankNo || ''
+            });
+      })
+    }
+     return  arr
 }

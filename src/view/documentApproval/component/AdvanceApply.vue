@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="model"
-    title="其他付款 申请单"
+    title="预收款支出 申请单"
     width="1200px"
   >
     <div class="bigbox">
@@ -42,22 +42,12 @@
               </Input>
             </FormItem>
           </div>
-            <div class="tableright">
-              <Row>
-                <Col span="12">
-                  <FormItem label="申请金额" style="margin-bottom: 0px" prop="applyAmt">
-                    <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
-                    </Input>
-                  </FormItem>
-                </Col>
-                <Col span="12">
-                  <FormItem label="付款期限" style="margin-bottom: 0px" prop="paymentTerm">
-                      <DatePicker type="date" v-model="formInline.paymentTerm" style="width: 100%" :disabled="modelType"></DatePicker>
-                  </FormItem>
-                </Col>
-              </Row>
-
-            </div>
+          <div class="tableright">
+            <FormItem label="申请金额" style="margin-bottom: 0px" prop="applyAmt">
+              <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
+              </Input>
+            </FormItem>
+          </div>
         </div>
 
 
@@ -80,17 +70,14 @@
               <a @click="dele(item)">删除行</a>
             </template>
           </vxe-table-column>
-          <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
+          <vxe-table-column field="serviceId" title="预收款收款单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-          <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
-          <vxe-table-column field="collectionTime" title="收款申请时间"></vxe-table-column>
-          <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
-          <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>
-          <vxe-table-column field="paymentApplicationAmount" title="其他付款申请金额"></vxe-table-column>
-          <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
-          <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
-          <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
-          <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
+          <vxe-table-column field="orderTypeName" title="日期"></vxe-table-column>
+          <vxe-table-column field="collectionTime" title="预收款认领金额"></vxe-table-column>
+          <vxe-table-column field="amountCollected" title="预收款核销金额"></vxe-table-column>
+          <vxe-table-column field="paymentNo" title="预收款支出金额"></vxe-table-column>
+          <vxe-table-column field="paymentApplicationAmount" title="预收款支出已认领金额"></vxe-table-column>
+          <vxe-table-column field="expenseClaimAmount" title="预收款余额"></vxe-table-column>
         </vxe-table>
 
 
@@ -158,7 +145,7 @@
 </template>
 
 <script>
-  import index from './index/OtherPayment.js'
+  import index from './index/AdvanceApply.js'
   export default index
 </script>
 

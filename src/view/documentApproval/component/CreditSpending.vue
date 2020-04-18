@@ -2,7 +2,7 @@
   <Modal
     v-model="model"
     title="预收款支出 申请单"
-    width="1000px"
+    width="1200px"
   >
     <div class="bigbox">
       <div class="clearfix">
@@ -86,7 +86,7 @@
           <Row>
             <Col span="6">
               <FormItem label="往来单位" style="margin-bottom: 0px">
-                <Select v-model="formInline.receiveGuestId" filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
                   <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>

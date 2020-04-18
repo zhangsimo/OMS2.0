@@ -2,7 +2,7 @@
   <Modal
     v-model="model"
     title="费用报销 申请单"
-    width="1000px"
+    width="1200px"
     >
     <div class="bigbox">
    <div class="clearfix">
@@ -133,7 +133,7 @@
         <Row>
           <Col span="8">
             <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-              <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value @on-change="getCompany" :disabled="modelType">
+              <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
                 <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
@@ -162,7 +162,7 @@
           </Col>
           <Col span="12">
             <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
-              <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" :disabled="modelType">
+              <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" label-in-value :disabled="modelType">
                 <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>

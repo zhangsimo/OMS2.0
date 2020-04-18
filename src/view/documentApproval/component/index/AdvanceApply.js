@@ -1,5 +1,5 @@
 import  moment from 'moment'
-import selectOther from '../popWindow/SelectAdvancesReceived'
+import selectOther from '../popWindow/SelectAdvanceApply'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
@@ -47,7 +47,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true,type:'number',  message: '付款账户必选', trigger: 'change'}
+          {required: true, type:'number', message: '付款账户必选', trigger: 'change'}
 
         ]
         // BankNo:[
@@ -69,7 +69,6 @@ export default {
     //模态框打开111
     open(){
       this.company = this.list.salesList
-
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
@@ -90,6 +89,18 @@ export default {
       }
     },
 
+    // 获取往来单位
+    // async getunltList() {
+    //   findGuest({ size: 2000 }).then(res => {
+    //     if (res.code === 0) {
+    //       res.data.content.map(item => {
+    //         item.value = item.id
+    //         item.label = item.fullName
+    //         this.company.push(item);
+    //       });
+    //     }
+    //   });
+    // },
 
     //获取往来单位
     getCompany(row) {
@@ -143,7 +154,12 @@ export default {
           this.$Message.error('带*必填');
         }
       })
+
+
+
     }
+
+
 
   }
 }

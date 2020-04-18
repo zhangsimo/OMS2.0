@@ -1,7 +1,7 @@
 import  moment from 'moment'
 import requestCode from '../RequestCode'
 import subject from '../Subject'
-import selectTheDocuments from '../SelectTheDocuments'
+import selectTheDocuments from '../popWindow/SelectTheDocuments'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getPayList , getAllSalesList} from "../utils";
@@ -37,7 +37,7 @@ export default {
           {required: true, message: '开户行名称必填', trigger: 'blur'}
         ],
         paymentAccount:[
-          {required: true, message: '付款账户必选', trigger: 'change'}
+          {required: true,type:'number', message: '付款账户必选', trigger: 'change'}
         ],
         receiveBankNo:[
           {required: true, message: '银行账号必填', trigger: 'blur'}
@@ -93,7 +93,7 @@ export default {
   methods:{
     //模态框打开111
    async open(){
-       this.payeeList = await getAllSalesList()
+       this.payeeList = this.list.allSalesList
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []
