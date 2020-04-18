@@ -52,15 +52,19 @@
         <Button class="ml10" @click="openWriteOffModel">因公借支核销</Button>
         <Button class="ml10" @click="claimCollect(2)">因公借支收回</Button>
         <Button class="ml10" @click="revokeCollection(3)"
+          :disabled="currRow == null"
           >因公借支申请撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(0)"
+          :disabled="currRow == null"
           >因公借支认领撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(1)"
+          :disabled="currRow == null"
           >因公借支核销撤回</Button
         >
         <Button class="ml10" @click="revokeCollection(2)"
+          :disabled="currRow == null"
           >因公借支收回撤回</Button
         >
         <!--<Button class="ml10">导出</Button>-->
@@ -365,7 +369,7 @@ export default {
       company: [], //往来单位数组
       Branchstore: [], //分店名称
       requestCode: "", //申请单号
-      currRow: {}, //选中行
+      currRow: null, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
       claimTit: "", //认领弹框标题
@@ -378,6 +382,7 @@ export default {
       claimSelection: [],
       selectionData: {},
       claimCollectType: 1,
+      signType: 0,
       page: {
         num: 1,
         size: 10,
@@ -463,17 +468,22 @@ export default {
       switch (type) {
         case 0:
           this.revokeTit = "因公借支认领撤回";
+          this.signType = 2;
           break;
         case 1:
           this.revokeTit = "因公借支核销撤回";
+          this.signType = 3;
           break;
         case 2:
           this.revokeTit = "因公借支收回撤回";
+          this.signType = 4;
           break;
         case 3:
           this.revokeTit = "因公借支申请撤回";
+          this.signType = 1;
           break;
       }
+      this.reason = "";
       this.revoke = true;
     },
     //其他收款核销
@@ -516,8 +526,8 @@ export default {
         }
       });
       this.serviceId = "";
-      // this.$refs.Record.init();
-      this.currRow = {};
+      this.$refs.Record.init();
+      this.currRow = null;
     },
     //认领弹框认领
     claimPay() {
@@ -554,7 +564,22 @@ export default {
       }
     },
     //撤销弹框确定按钮
-    revokeDetaim() {},
+    revokeDetaim() {
+      if (this.reason.trim().length <= 0) {
+        return this.$message.error("请输入撤回原因")
+      }
+      let data = {
+        revokeReason: this.reason.trim(),
+        id: this.currRow.id,
+        sign: this.signType,
+      }
+      api.loanRevoke(data).then(res => {
+        if (res.code == 0) {
+          this.$message.success("撤销成功")
+          this.revoke = false;
+        }
+      })
+    },
     // 往来单位选择
     async getOne() {
       findGuest({ size: 2000 }).then(res => {

@@ -8,15 +8,24 @@ export function findListPageAll(params, data) {
     url: `${api.omsSettle}/omsFinanceLoanForBusiness/findByDynamicQuery`,
     method: "post",
     params,
-    data,
+    data
   });
 }
 
 //因公支出认领/借支收回
 export function addClaim(data) {
-    return axios.request({
-      url: `${api.omsSettle}/omsFinanceLoanForBusiness/addClaim`,
-      method: "post",
-      data,
-    });
-  }
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceLoanForBusiness/addClaim`,
+    method: "post",
+    data
+  });
+}
+
+// 因公借支撤回
+export function loanRevoke(data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceLoanForBusiness/loanRevoke`,
+    method: "post",
+    data
+  });
+}

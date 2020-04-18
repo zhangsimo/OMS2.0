@@ -932,6 +932,17 @@ export default [
         },
         component: () =>
           import("@/view/settlementManagement/DailyFundReview/index.vue")
+      },
+      {
+        path: "/settlementManagement/accounting",
+        name: "settlementManagement-accounting",
+        mark: "5300",
+        meta: {
+          // hideInMenu: true,
+          title: "会计审核"
+        },
+        component: () =>
+          import("@/view/settlementManagement/accounting/accounting.vue")
       }
     ]
   },
