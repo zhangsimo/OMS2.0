@@ -52,7 +52,7 @@ export default {
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '请示申请'
         this.formInline.applyTime = date
       }
     },

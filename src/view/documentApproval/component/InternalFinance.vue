@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="model"
-    title="其他付款 申请单"
+    title="内部资金调拨 申请单"
     width="1200px"
   >
     <div class="bigbox">
@@ -116,7 +116,7 @@
 </template>
 
 <script>
-  import index from './index/OtherPayment.js'
+  import index from './index/InternalFinance.js'
   export default index
 </script>
 
