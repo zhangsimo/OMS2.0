@@ -27,7 +27,7 @@ export default {
           {required: true, message: '主题为必填', trigger: 'blur'}
         ],
         applyAmt:[
-          {required: true, message: '金额为必填', trigger: 'blur'},
+          {required: true, message: '申请费用为必填', trigger: 'blur'},
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
         receiveGuestId:[
@@ -47,7 +47,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true, type:'number', message: '付款账户必选', trigger: 'change'}
+          {required: true, type:'string', message: '付款账户必选', trigger: 'change'}
 
         ]
         // BankNo:[

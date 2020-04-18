@@ -7,8 +7,8 @@
     <div class="bigbox">
       <div class="clearfix">
         <div class="fr">
-          <Button class="mr10" v-if="!modelType" >保存草稿</Button>
-          <Button class="mr10" v-if="!modelType" >提交申请</Button>
+          <Button class="mr10" v-if="!modelType"  @click="save(0)">保存草稿</Button>
+          <Button class="mr10" v-if="!modelType"  @click="save(1)">提交申请</Button>
           <Button class="mr10" @click="model =false" >取消</Button>
         </div>
       </div>
@@ -35,22 +35,21 @@
           <Col class="inner" span="4">{{formInline.applyTime}}</Col>
         </Row>
 
-
         <div class="tableBox2 mt20">
           <div class="tableline tableright">
             <div class="applyTitle">请示单号</div>
-            <a>{{formInline.code || ''}}</a>
+            <a class="ml10">{{formInline.requestInstructionNo || ''}}</a>
             <a class="fr" @click="openSelect" v-if="!modelType">选择</a>
           </div>
           <div class="tableright" style="border-bottom: 1px #cccccc solid">
-            <FormItem label="主题" style="margin-bottom: 0px" prop="use">
-              <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType">
+            <FormItem label="主题" style="margin-bottom: 0px" prop="topic">
+              <Input type="text"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
               </Input>
             </FormItem>
           </div>
           <div class="tableright">
-            <FormItem label="借支金额" style="margin-bottom: 0px" prop="use">
-              <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType">
+            <FormItem label="借支金额" style="margin-bottom: 0px" prop="applyAmt">
+              <Input type="number"  v-model="formInline.applyAmt" style="width: 100%" :disabled="modelType">
               </Input>
             </FormItem>
           </div>
