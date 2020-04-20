@@ -42,11 +42,11 @@
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>
-            <Input type="text" v-model="payOrderNo" size="mini" style="width: 120px" />
+            <Input type="text" v-model="payOrderNo" style="width: 120px" />
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>
-            <Input type="text" v-model="orderNo" size="mini" style="width: 120px" />
+            <Input type="text" v-model="orderNo" style="width: 120px" />
           </div>
           <div class="db ml15">
             <button

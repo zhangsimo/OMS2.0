@@ -404,7 +404,7 @@ export default {
     },
     //其他付款认领/其他收款收回
     claimCollect(type) {
-      if (!this.currRow.id) {
+      if (!this.currRow || !this.currRow.id) {
         return this.$message.error("请选择数据");
       }
       this.$refs.claim.claimedPage = {
@@ -412,7 +412,7 @@ export default {
         total: 0,
         size: 10
       }
-      if (type === 1) {
+      if (type == 1) {
         this.claimModal = true;
         this.claimTit = "因公借支认领";
         this.claimCollectType = 1;
@@ -499,7 +499,15 @@ export default {
       // }
     },
     //认领弹框查询
-    queryClaimed() {},
+    queryClaimed() {
+      let t = 0;
+      if (this.claimCollectType == 1) {
+        t = 2
+      } else {
+        t = 1
+      }
+      this.claimedList(t)
+    },
     //初始化
     getQuery() {
       let params = {
