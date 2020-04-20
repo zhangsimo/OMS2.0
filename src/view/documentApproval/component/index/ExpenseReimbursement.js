@@ -1,10 +1,12 @@
 import  moment from 'moment'
 import requestCode from '../popWindow/RequestCode'
-import subject from '../Subject'
+import subject from '../popWindow/Subject'
 import selectTheDocuments from '../popWindow/SelectTheDocuments'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getPayList , getAllSalesList} from "../utils";
+import {getPayList} from "../utils";
+import {getDictionary} from '_api/documentApproval/ExpenseReimbursement'
+
 
 
 export default {
@@ -21,13 +23,19 @@ export default {
     list:''
   },
   data(){
+    const roleValid = (rows) => {
+      if(rows.cellValue && rows.row.applyAmt < rows.cellValue)
+        return Promise.reject(new Error('核销金额不能大于借支金额'))
+    }
     return {
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
-      formInline:{},//所有数据对象
+      formInline:{
+
+      },//所有数据对象
       //表单校验
       ruleValidate: {
-        use: [
+        topic: [
           {required: true, message: '主题为必填', trigger: 'blur'}
         ],
         receiver:[
@@ -37,48 +45,44 @@ export default {
           {required: true, message: '开户行名称必填', trigger: 'blur'}
         ],
         paymentAccount:[
-          {required: true,type:'number', message: '付款账户必选', trigger: 'change'}
+          {required: true, type:'string', message: '付款账户必选', trigger: 'change'}
         ],
         receiveBankNo:[
           {required: true, message: '银行账号必填', trigger: 'blur'}
         ]
       },
-      expenditureTableData:[
-        {name:'zs',sex:1,subjectType:'选择会计科目',num:12,tax:1},
-        {name:'ls',sex:1,subjectType:'选择会计科目',num:12,tax:1},
-        {name:'we',sex:1,subjectType:'选择会计科目',num:12,tax:1},
-        {name:'zz',sex:1,subjectType:'选择会计科目',num:12,tax:1},
 
-      ],//支出表格数据
       //费用类型列表
-      moneyTypeList:[
-        {name:"买入",id:"1"},
-        {name:"支出",id:"3"},
-        {name:"赊账",id:"4"},
-      ],
-      moneyType:'123',//当前费用类型
-      taxRate:[
-        {name:'0' , id:0},
-        {name:'1%' , id:1},
-        {name:'3%' , id:2},
-        {name:'5%' , id:3},
-        {name:'6%' , id:4},
-      ],//税率
+      moneyTypeList:[],
+      subjectType:{},//当前费用类型
+      details:[],
+      taxRate:[],//税率
       //费用支出表格的数据校验
       validRules:{
-        name:[
+        summary:[
           { required: true, message: '必填' },
         ],
-        sex:[
+        taxRateCode:[
           { required: true, message: '必填' },
         ],
-        taxmoney:[
+        accountEntry:[
+          { required: true, message: '必填' },
+        ],
+        totalAmt:[
+          { required: true, message: '必填' },
+        ],
+        taxAmt:[
           { required: true, message: '必填' },
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
-        notax:[
+        noTaxAmt:[
           { required: true, message: '必填' },
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
+        ],
+        writeOffAmt:[
+          { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'},
+          { validator: roleValid }
         ]
       },
       documentTableData:[],//借支核销表格数据
@@ -94,8 +98,18 @@ export default {
     //模态框打开111
    async open(){
        this.payeeList = this.list.allSalesList
+        this.getRate()
+        this.getTaxList()
+
       if (this.list.type == 1) {
         this.formInline = {}
+        let arr = [
+          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
+          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
+          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
+          {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
+        ]
+        this.$set(this.formInline ,'expenseDetails' ,  arr )
         this.$refs.upImg.uploadListModal = []
         this.$refs.upImg.uploadList = []
         this.$refs['formInline'].resetFields();
@@ -114,6 +128,26 @@ export default {
       }
     },
 
+    //获取费用类型
+    async getRate(){
+     let data = {}
+     data.dictCode = 'FYLX'
+     let res = await getDictionary(data)
+      if(res.code === 0) {
+        this.moneyTypeList = res.data
+      }
+    },
+
+    //获取税率
+    async getTaxList(){
+      let data = {}
+      data.dictCode = 'TaxRate'
+      let res = await getDictionary(data)
+      if(res.code === 0) {
+        this.taxRate = res.data
+      }
+    },
+
     //获取往来单位
     getCompany(row) {
       let arr = this.payeeList.filter( item => item.value == row.value)
@@ -125,13 +159,13 @@ export default {
     //判断表格是否可以编辑
     editActivedEvent({row}){
       let xTable = this.$refs.xTable
-      let isDisable = true
-      let nameColumn = xTable.getColumnByField('name')
-      let tax = xTable.getColumnByField('tax')
-      let subjectType = xTable.getColumnByField('subjectType')
-      nameColumn.editRender.attrs.disabled = isDisable
-      tax.editRender.attrs.disabled = isDisable
-      subjectType.editRender.attrs.disabled = isDisable
+      let isDisable = false
+      // let nameColumn = xTable.getColumnByField('name')
+      // let tax = xTable.getColumnByField('tax')
+      // let subjectType = xTable.getColumnByField('subjectType')
+      // nameColumn.editRender.attrs.disabled = isDisable
+      // tax.editRender.attrs.disabled = isDisable
+      // subjectType.editRender.attrs.disabled = isDisable
     },
 
     //打开选择模态框
@@ -141,32 +175,38 @@ export default {
 
     //获取选择的信息
     getBackList(row){
-      // console.log(row ,789)
+      this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
     },
 
     //科目获取焦点
     getSubject({row}){
-      // console.log(row , 888)
-      this.moneyType = row.sex
+      this.subjectType = row
       this.$refs.subjectModel.open()
     },
 
     //获取科目返回的数据
     getsubBack(row){
-      // console.log(row ,789)
+     this.$set(this.subjectType , 'accountEntry', row.titleCode)
+      // this.subjectType.accountEntry = row.titleCode
+    },
+
+    //修改费用类型改变科目
+    changeExpenseType({row}){
+      row.accountEntry = ''
     },
 
     //价税合计变更计算
     gettotal(v){
       let row = v.row,
         column = v.column
-      let tax = this.taxRate.filter(item => item.id == row.sex)
+
+      let tax = this.taxRate.filter(item => item.itemCode == row.taxRateCode)
       let str = 0
-      if(tax[0].name != '0') {
-        str = tax[0].name.replace('%', '')
+      if(tax[0].itemName != '0%') {
+        str = tax[0].itemName.replace('%', '')
         str = str/100
       }
-      row.taxmoney = this.$utils.multiply(column.model.value ,(1 - str) ).toFixed(2)
+      row.taxAmt = this.$utils.multiply(column.model.value ,str ).toFixed(2)
     },
 
     //税率变更计算
@@ -174,27 +214,28 @@ export default {
       let row = v.row,
         column = v.column
       // editRender model
-      let tax = this.taxRate.filter(item => item.id == column.model.value)
+      let tax = this.taxRate.filter(item => item.itemCode == column.model.value)
       let str = 0
-      if(tax[0].name != '0') {
-        str = tax[0].name.replace('%', '')
+      if(tax[0].itemName != '0%') {
+        str = tax[0].itemName.replace('%', '')
         str = str/100
       }
+
       //
-      row.taxmoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
+      row.taxAmt = this.$utils.multiply(row.totalAmt , str ).toFixed(2)
     },
 
     //判断手动输入税额
     taxCanuse(v){
       let row = v.row,
           column = v.column,
-          tax = this.taxRate.filter(item => item.id == row.sex)
+          tax = this.taxRate.filter(item => item.itemCode == row.taxRateCode)
       let str = 0
-      if(tax[0].name != '0') {
-        str = tax[0].name.replace('%', '')
+      if(tax[0].itemName != '0%') {
+        str = tax[0].itemName.replace('%', '')
         str = str/100
       }
-      let taxMoney = this.$utils.multiply(row.num ,(1 - str) ).toFixed(2)
+      let taxMoney = this.$utils.multiply(row.totalAmt ,str ).toFixed(2)
       let diff = this.$utils.subtract(column.model.value , taxMoney)
       if (diff > 0.01) {
         this.$Modal.confirm({
@@ -204,7 +245,7 @@ export default {
 
           },
           onCancel: () => {
-            row.taxmoney = taxMoney
+            row.taxAmt = taxMoney
           }
         });
       }
@@ -213,18 +254,17 @@ export default {
 
     //删除行
     dele(row){
-      // this.$refs.xTable.remove(this.expenditureTableData[row.seq - 1])
-      this.expenditureTableData.splice((row.seq - 1) , 1)
-      // console.log(this.expenditureTableData , 789)
+      this.formInline.expenseDetails.splice((row.seq - 1) , 1)
     },
 
     //添加行
     addRow(){
       let data = {}
-      data.sex = 1
-      data.subjectType = '选择会计科目'
-      data.tax = 0
-      this.expenditureTableData.push(data)
+      data.expenseType = 'FY001'
+      data.totalAmt = 0
+      data.taxRateCode = 'TR001'
+      data.taxAmt = 0
+      this.formInline.expenseDetails.push(data)
     },
 
     // 表格尾部合计
@@ -234,12 +274,18 @@ export default {
           if (columnIndex === 0) {
             return '合计'
           }
-          if (['num','taxmoney','notax'].includes(column.property)) {
+          if (['totalAmt','taxAmt','notax'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
           return null
         })
       ]
+    },
+
+    //删除行借支核销
+    deleteDetails(row){
+      this.details.splice((row.seq - 1) , 1)
+
     },
 
     //借支核销尾部合计
@@ -249,7 +295,7 @@ export default {
           if (columnIndex === 0) {
             return '合计'
           }
-          if (['money'].includes(column.property)) {
+          if (['writeOffAmt','applyAmt'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
           return null
@@ -261,6 +307,16 @@ export default {
     SelectTheDocuments(){
       this.$refs.documnets.open()
     },
+
+    //获取到因公数据
+    getBusinessList(row){
+      row.map(item => {
+        delete item.id
+      })
+      this.details = row
+      // this.$set(this.formInline,'details' , row)
+    },
+
 
     //获取到上传图片地址
     getImgList(row){

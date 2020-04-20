@@ -14,10 +14,10 @@
       size="mini"
       :data="tableData">
       <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
-      <vxe-table-column field="name" title="科目分类"></vxe-table-column>
-      <vxe-table-column field="sex" title="科目编码"></vxe-table-column>
-      <vxe-table-column field="age" title="科目名称"></vxe-table-column>
-      <vxe-table-column field="age" title="层级"></vxe-table-column>
+      <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
+      <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
+      <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
+      <vxe-table-column field="titleLevel" title="层级"></vxe-table-column>
     </vxe-table>
 
     <div slot='footer'>
@@ -28,7 +28,8 @@
 </template>
 
 <script>
-    export default {
+  import {getSubjectList} from '_api/documentApproval/ExpenseReimbursement'
+  export default {
         name: "subject",
       props:{
         subjet:''
@@ -37,20 +38,41 @@
           return {
             subjectModelShow: false, //模态框展示
             oneSubject:{},//单选获取到的数据
-            tableData:[
-              {name:'zs'},
-              {name:'ls'},
-              {name:'ww'},
-            ],//表格数据
+            tableData:[],//表格数据
           }
       },
       methods:{
           // 打开模态框
           open(){
+            this.oneSubject = {}
             this.subjectModelShow = true
-            console.log(this.subjet)
           },
 
+        async getList(v){
+            let data = {},
+              type = v.expenseType
+            switch (type) {
+              case "FY001":
+                data.parentCode = 6002
+                break;
+              case "FY002":
+                data.parentCode = 6003
+                break;
+              case "FY003":
+                data.parentCode = 6001
+                break;
+              case "FY004":
+                data.parentCode = 6403
+                break;
+              case "FY005":
+                data.parentCode = 6711
+                break;
+            }
+            let res = await getSubjectList(data)
+          if (res.code === 0){
+            this.tableData = res.data
+          }
+        },
         //获取单选框
         getRaido({row}){
             this.oneSubject = row
@@ -63,7 +85,15 @@
             this.subjectModelShow = false
             this.$Message.success('添加成功')
         }
+      },
+    watch:{
+      subjet:{
+        handler(v,ov){
+          this.getList(v)
+        },
+        deep:true
       }
+    }
     }
 </script>
 

@@ -39,12 +39,12 @@
       <div class="tableBox2 mt20">
         <div class="tableline tableright">
           <div class="applyTitle">请示单号</div>
-          <a>{{formInline.code || ''}}</a>
+          <a class="pl10">{{formInline.requestInstructionNo || ''}}</a>
           <a class="fr" @click="openSelect" v-if="!modelType">选择</a>
         </div>
         <div class="tableright">
-          <FormItem label="主题" style="margin-bottom: 0px" prop="use">
-            <Input type="text"  v-model="formInline.use" style="width: 100%" :disabled="modelType">
+          <FormItem label="主题" style="margin-bottom: 0px" prop="topic">
+            <Input type="text"  v-model="formInline.topic" style="width: 100%" :disabled="modelType">
             </Input>
           </FormItem>
         </div>
@@ -61,7 +61,7 @@
         size="mine"
         align="center"
         :footer-method="footerMethod"
-        :data="expenditureTableData"
+        :data="formInline.expenseDetails"
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
         @edit-actived="editActivedEvent"
@@ -72,14 +72,14 @@
             <a v-else @click="addRow">添加行</a>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="name" title="摘要" :edit-render="{name: 'input', attrs: {type: 'text',disabled: false}}"></vxe-table-column>
-        <vxe-table-column field="sex" title="费用类型" :edit-render="{name: 'select', options: moneyTypeList , attrs: {disabled: false},optionProps: {value: 'id', label: 'name'}}"></vxe-table-column>
-        <vxe-table-column field="subjectType" title="入账科目" :edit-render="{name: 'input',attrs: {disabled: false},events: {focus: getSubject}}"></vxe-table-column>
-        <vxe-table-column field="num" title="价税合计" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: gettotal}}"></vxe-table-column>
-        <vxe-table-column field="tax" title="税率" :edit-render="{name: 'select', options: taxRate ,attrs: {disabled: false}, optionProps: {value: 'id', label: 'name'},events: {change: getTax}}"></vxe-table-column>
-        <vxe-table-column field="taxmoney" title="税额" :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: taxCanuse}}"></vxe-table-column>
-        <vxe-table-column field="notax" title="不含税金额" :edit-render="{name: 'input', attrs: {type: 'number',disabled: false}}"></vxe-table-column>
-        <vxe-table-column field="fd" title="备注" :edit-render="{name: 'input', attrs: {type: 'text',disabled: false}}" width="200"></vxe-table-column>
+        <vxe-table-column field="summary" title="摘要" :edit-render="{name: 'input', attrs: {type: 'text',disabled: false}}"></vxe-table-column>
+        <vxe-table-column field="expenseType" title="费用类型" :edit-render="{name: 'select', options: moneyTypeList , attrs: {disabled: false},optionProps: {value: 'itemCode', label: 'itemName'},events: {change: changeExpenseType}}"></vxe-table-column>
+        <vxe-table-column field="accountEntry" title="入账科目" :edit-render="{name: 'input', attrs: {disabled: false, placeholder:'选择会计科目'},events: {focus: getSubject}}"></vxe-table-column>
+        <vxe-table-column field="totalAmt" title="价税合计" :edit-render="{name: 'input', attrs: {type: 'number'},events: {change: gettotal}}"></vxe-table-column>
+        <vxe-table-column field="taxRateCode" title="税率" :edit-render="{name: 'select', options: taxRate ,attrs: {disabled: false}, optionProps: {value: 'itemCode', label: 'itemName'}, events: {change: getTax}}"></vxe-table-column>
+        <vxe-table-column field="taxAmt" title="税额" :edit-render="{name: 'input', attrs: {type: 'number',disabled: false},events: {change: taxCanuse}}"></vxe-table-column>
+        <vxe-table-column field="noTaxAmt" title="不含税金额" :edit-render="{name: 'input', attrs: {type: 'number',disabled: false}}"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input', attrs: {type: 'text',disabled: false}}" width="200"></vxe-table-column>
       </vxe-table>
 
       <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
@@ -95,37 +95,49 @@
         size="mine"
         align="center"
         :footer-method="documentFooterMethod"
-        :data="documentTableData"
+        :data="details"
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
       >
         <vxe-table-column title="操作" width="80">
           <template v-slot="item">
-            <a >删除行</a>
+            <a @click="deleteDetails(item)">删除行</a>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="name" title="因公借支单号"></vxe-table-column>
-        <vxe-table-column field="name" title="借支金额"></vxe-table-column>
-        <vxe-table-column field="money" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
-        <vxe-table-column field="name" title="借支日期"></vxe-table-column>
-        <vxe-table-column field="name" title="主题"></vxe-table-column>
+        <vxe-table-column field="applyNo" title="因公借支单号"></vxe-table-column>
+        <vxe-table-column field="applyAmt" title="借支金额"></vxe-table-column>
+        <vxe-table-column field="writeOffAmt" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="借支日期"></vxe-table-column>
+        <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
-      <vxe-table
-        class="mt10"
-        border
-        resizable
-        show-footer
-        auto-resize
-        show-overflow
-        size="mine"
-        align="center"
-        :data="moneyTableData"
-      >
-        <vxe-table-column field="name" title="费用总额"></vxe-table-column>
-        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>
-        <vxe-table-column field="money" title="公司应付"></vxe-table-column>
-        <vxe-table-column field="name" title="个人应还"></vxe-table-column>
-      </vxe-table>
+<!--      <vxe-table-->
+<!--        class="mt10"-->
+<!--        border-->
+<!--        resizable-->
+<!--        show-footer-->
+<!--        auto-resize-->
+<!--        show-overflow-->
+<!--        size="mine"-->
+<!--        align="center"-->
+<!--        :data="moneyTableData"-->
+<!--      >-->
+<!--        <vxe-table-column field="name" title="费用总额"></vxe-table-column>-->
+<!--        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>-->
+<!--        <vxe-table-column field="money" title="公司应付"></vxe-table-column>-->
+<!--        <vxe-table-column field="name" title="个人应还"></vxe-table-column>-->
+<!--      </vxe-table>-->
+      <div>
+        <Row class="tableBox mt10">
+          <Col span="6" class="businessbg">费用总额</Col>
+          <Col span="6" class="businessbg">因公借支总金额</Col>
+          <Col span="6" class="businessbg">公司应付</Col>
+          <Col span="6" class="businessbg">个人应还</Col>
+          <Col span="6" class="moneybd">0</Col>
+          <Col span="6" class="moneybd">0</Col>
+          <Col span="6" class="moneybd">0</Col>
+          <Col span="6" class="moneybd">0</Col>
+        </Row>
+      </div>
 
 
       <h5 class="mt20 mb10" style="font-size: 18px">收款人信息</h5>
@@ -181,10 +193,10 @@
     <requestCode ref="request" @backList = 'getBackList'></requestCode>
 
 <!--    入账科目模态框-->
-    <subject ref="subjectModel" @backList="getsubBack" :subjet="moneyType"></subject>
+    <subject ref="subjectModel" @backList="getsubBack" :subjet="subjectType"></subject>
 
-<!--    选择单据模态框-->
-    <selectTheDocuments ref="documnets"></selectTheDocuments>
+<!--    选择因公模态框-->
+    <selectTheDocuments ref="documnets" @backList="getBusinessList"></selectTheDocuments>
     <div slot='footer'></div>
   </Modal>
 </template>
@@ -238,6 +250,14 @@
   line-height: 38px;
 
 }
+  .businessbg {
+    background-color: #f9f9f9;
+    border-bottom: 1px #cccccc solid;
+    border-right: 1px #cccccc solid;
+  }
+  .moneybd {
+    border-right: 1px #cccccc solid;
+  }
 </style>
 <style scoped>
   .tableright >>> .ivu-form-item-label {
