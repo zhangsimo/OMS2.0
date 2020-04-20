@@ -6,6 +6,7 @@ import { TOKEN_KEY, REFRESH_TOKEN_KEY, isTokenExpired } from '@/libs/util'
 
 let lock = true;
 let isFailure = false;
+let is403 = 0
 
 class httpRequest {
   constructor () {
@@ -110,6 +111,7 @@ class httpRequest {
       let errtip = ''
       if(error.response){
         if(error.response.status === 401){
+          is403++;
           if(error.response.data.code===9401){
             errtip = '访问令牌无效!';
             isFailure=true;
@@ -117,7 +119,9 @@ class httpRequest {
           if(error.response.data.code===9403){
             errtip = '没有权限访问!'
           }
-          globalVue.$Message.error(errtip)
+          if(is403==1){
+            globalVue.$Message.error(errtip);
+          }
           setTimeout(function () {
             Cookies.remove(TOKEN_KEY)
             window.location.href = '/#/login'

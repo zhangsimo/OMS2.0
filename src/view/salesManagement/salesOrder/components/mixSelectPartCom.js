@@ -44,7 +44,7 @@ export const mixSelectPartCom = {
         },
         {
           title: "内码",
-          key: "partInnerId",
+          key: "code",
           minWidth: 120
         },
         {
@@ -54,12 +54,12 @@ export const mixSelectPartCom = {
         },
         {
           title: "名称",
-          key: "partName",
+          key: "partStandardName",
           minWidth: 120
         },
         {
           title: "品牌车型",
-          key: "carModelName",
+          key: "adapterCarModel",
           minWidth: 120
         },
         {
@@ -90,23 +90,35 @@ export const mixSelectPartCom = {
         },
         {
           title: "单位",
-          key: "unit",
+          key: "minUnit",
           minWidth: 120
         },
         {
           title: "一级分类",
           key: "carTypef",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.firstType.typeName)
+          }
         },
         {
           title: "二级分类",
           key: "carTypes",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.secondType.typeName)
+          }
         },
         {
           title: "三级分类",
           key: "carTypet",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.thirdType.typeName)
+          }
         },
         {
           title: "产地",

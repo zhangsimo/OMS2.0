@@ -1,50 +1,210 @@
 <template>
   <div class="content-oper" style="background: #fff">
-    <Tabs :animated="false" style="min-height: 500px">
+    <Tabs style="min-height: 500px">
       <TabPane label="采购订单明细表">
         <section class="oper-box">
           <div class="oper-top flex">
             <div class="wlf">
-              <div class="db">
-                <span>快速查询：</span>
+              <div class="db mr10">
                 <quick-date></quick-date>
               </div>
               <div class="db">
-                <span>出库日期：</span>
-                <DatePicker @on-change="selectDate" type="daterange" placement="bottom-start" placeholder="选择日期"
-                            class="w200 mr20">
+                <span>提交日期：</span>
+                <DatePicker @on-change="selectDate" type="date" placement="bottom-start" placeholder="选择日期"
+                            class="w140 mr10">
                 </DatePicker>
               </div>
               <div class="db">
-                <span>查询条件：</span>
+                <Input v-model="searchValue" placeholder="配件编码/名称" class="w200 mr10" clearable></Input>
+              </div>
+              <div class="db mr10">
                 <Select v-model="searchType" class="w120">
                   <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
                 </Select>
-                <Input v-model="searchValue" :placeholder="placeh" class="w200 mr20" clearable></Input>
-                <Checkbox v-show="searchType == 'fullname'" v-model="fullNameState" class="mr15">模糊匹配</Checkbox>
               </div>
               <div class="db">
-                <Input v-model="searchValue" placeholder="订单单号" class="w200 mr20" clearable></Input>
+                <Input v-model="searchValue" placeholder="选择供应商" class="w200 mr10" clearable></Input>
+              </div>
+              <div class="db mr10">
+                <Select v-model="searchType" class="w120">
+                  <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
+                </Select>
               </div>
               <div class="db">
-                <Input v-model="searchValue" placeholder="选择供应商" class="w200 mr20" clearable></Input>
-              </div>
-              <div class="db">
-                <Input v-model="searchValue" placeholder="仓库" class="w200 mr20" clearable></Input>
-                <Button type="warning" @click="search" class="mr20">查询</Button>
-                <Button type="warning" @click="search" class="mr20">更多</Button>
+                <Button type="warning" @click="search" class="mr10">查询</Button>
+                <Button @click="search" class="mr10">更多查询</Button>
+                <Button @click="search">导出</Button>
               </div>
             </div>
           </div>
         </section>
         <section class="con-box">
-          <Table size="small" :loading="loading" border :stripe="true" :columns="columns" :data="tbdata"></Table>
-          <Page class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
-                @on-page-size-change="changeSize" show-sizer show-total></Page>
+          <vxe-table
+            border
+            align="center"
+            size="mini"
+            ref="xTable"
+            height="400"
+            :data="tableData">
+            <vxe-table-column field="group0" title="">
+              <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group1" title="订单信息">
+              <vxe-table-column field="name" title="订单单号" width="180"></vxe-table-column>
+              <vxe-table-column field="age" title="供应商" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="采购员" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="票据类型" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="结算方式" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="订货日期" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="仓库" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="订单类型" width="120"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group2" title="配件信息">
+              <vxe-table-column field="role" title="配件编码" width="300"></vxe-table-column>
+              <vxe-table-column field="sex" title="配件名称" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="OE码" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="品牌" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="品牌车型" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="单位" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="规格" width="200"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group3" title="数量/价格">
+              <vxe-table-column field="sex" title="订单数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="采购单价" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="金额" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="调整数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="入库数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="备注" width="120"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="税率信息">
+              <vxe-table-column field="date3" title="是否含税" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="税率" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="国际采购各项费用">
+              <vxe-table-column field="date3" title="币种" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="汇率" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价外币" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价人民币" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价金额" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="关税费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="运杂费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="增值税费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="其他费用" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="其他">
+              <vxe-table-column field="date3" title="提交人" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="提交日期" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="订单备注" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table>
+          <!--<Table size="small" :loading="loading" border :stripe="true" :columns="columns" :data="tbdata"></Table>-->
+          <!--<Page class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
+                <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
         </section>
       </TabPane>
-      <TabPane label="采购入库明细表">标签二的内容</TabPane>
+      <TabPane label="采购入库明细表">
+        <section class="oper-box">
+          <div class="oper-top flex">
+            <div class="wlf">
+              <div class="db mr10">
+                <quick-date></quick-date>
+              </div>
+              <div class="db">
+                <span>提交日期：</span>
+                <DatePicker @on-change="selectDate" type="date" placement="bottom-start" placeholder="选择日期"
+                            class="w140 mr10">
+                </DatePicker>
+              </div>
+              <div class="db">
+                <Input v-model="searchValue" placeholder="配件编码/名称" class="w200 mr10" clearable></Input>
+              </div>
+              <div class="db mr10">
+                <Select v-model="searchType" class="w120">
+                  <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
+                </Select>
+              </div>
+              <div class="db">
+                <Input v-model="searchValue" placeholder="选择供应商" class="w200 mr10" clearable></Input>
+              </div>
+              <div class="db mr10">
+                <Select v-model="searchType" class="w120">
+                  <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{ item.name }}</Option>
+                </Select>
+              </div>
+              <div class="db">
+                <Button type="warning" @click="search" class="mr10">查询</Button>
+                <Button @click="search" class="mr10">更多查询</Button>
+                <Button @click="search">导出</Button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="con-box">
+          <vxe-table
+            border
+            align="center"
+            size="mini"
+            ref="xTable"
+            height="400"
+            :data="tableData">
+            <vxe-table-column field="group0" title="">
+              <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group1" title="订单信息">
+              <vxe-table-column field="name" title="订单单号" width="180"></vxe-table-column>
+              <vxe-table-column field="age" title="供应商" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="采购员" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="票据类型" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="结算方式" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="订货日期" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="仓库" width="120"></vxe-table-column>
+              <vxe-table-column field="age" title="订单类型" width="120"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group2" title="配件信息">
+              <vxe-table-column field="role" title="配件编码" width="300"></vxe-table-column>
+              <vxe-table-column field="sex" title="配件名称" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="OE码" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="品牌" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="品牌车型" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="单位" width="200"></vxe-table-column>
+              <vxe-table-column field="sex" title="规格" width="200"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group3" title="数量/价格">
+              <vxe-table-column field="sex" title="订单数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="采购单价" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="金额" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="调整数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="入库数量" width="120"></vxe-table-column>
+              <vxe-table-column field="sex" title="备注" width="120"></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="税率信息">
+              <vxe-table-column field="date3" title="是否含税" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="税率" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="国际采购各项费用">
+              <vxe-table-column field="date3" title="币种" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="汇率" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价外币" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价人民币" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="裸价金额" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="关税费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="运杂费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="增值税费" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="其他费用" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+            <vxe-table-column field="group4" title="其他">
+              <vxe-table-column field="date3" title="提交人" width="140"></vxe-table-column>
+              <vxe-table-column field="address" title="提交日期" width="200" show-overflow></vxe-table-column>
+              <vxe-table-column field="address" title="订单备注" width="200" show-overflow></vxe-table-column>
+            </vxe-table-column>
+          </vxe-table>
+          <!--<Table size="small" :loading="loading" border :stripe="true" :columns="columns" :data="tbdata"></Table>-->
+          <!--<Page class-name="page-con" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"-->
+          <!--@on-page-size-change="changeSize" show-sizer show-total></Page>-->
+        </section>
+      </TabPane>
       <TabPane label="采购退货明细表">标签三的内容</TabPane>
+      <TabPane label="采购计划明细表">采购计划明细表</TabPane>
     </Tabs>
 
 
@@ -62,7 +222,6 @@
         <Button type='primary' @click='submit'>确定</Button>
       </div>
     </Modal>
-
   </div>
 </template>
 <script>
