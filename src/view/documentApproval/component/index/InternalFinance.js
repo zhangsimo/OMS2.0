@@ -5,7 +5,7 @@ import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
 import {getPayList} from "../utils";
 
 export default {
-  name: "OtherPayment",
+  name: "Interna",
   components:{
     upphoto,
     flowbox

@@ -1,8 +1,9 @@
 import  moment from 'moment'
-import requestCode from '../RequestCode'
+import requestCode from '../popWindow/RequestCode'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getPayList} from "../utils";
+import {getPublicSave} from '_api/documentApproval/PublicRequest'
 
 export default {
   name: "PublicRequest",
@@ -21,8 +22,12 @@ export default {
       formInline:{},//所有数据对象
       //表单校验
       ruleValidate: {
-        use: [
+        topic: [
           {required: true, message: '主题为必填', trigger: 'blur'}
+        ],
+        applyAmt:[
+          {required: true, message: '金额为必填', trigger: 'blur'},
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
         receiver:[
           {required: true, message: '主题为必填', trigger: 'change'}
@@ -34,7 +39,7 @@ export default {
           {required: true, message: '付款账户必选', trigger: 'change'}
         ],
         paymentAccount:[
-          {required: true, type:'number', message: '银行账号必填', trigger: 'change'}
+          {required: true, type:'string', message: '银行账号必填', trigger: 'change'}
         ]
       },
       //费用类型列表
@@ -70,7 +75,7 @@ export default {
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '因公借支'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
       }
@@ -90,6 +95,8 @@ export default {
 
     //获取选择的信息
     getBackList(row){
+      this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
+      // this.formInline.requestInstructionNo = row.applyNo
       // console.log(row ,789)
     },
 
@@ -100,21 +107,27 @@ export default {
       this.$refs.subjectModel.open()
     },
 
-    //获取科目返回的数据
-    getsubBack(row){
-      // console.log(row ,789)
-    },
-
-
-
-
 
     //获取到上传图片地址
     getImgList(row){
-      // console.log(row.list ,789)
+      this.formInline.voucherPictures = row.list
+    },
+
+    //保存提交
+    save(type){
+      this.$refs.formInline.validate( async (valid) => {
+        if (valid) {
+          this.formInline.step = type
+          let res = await getPublicSave(this.formInline)
+          if (res.code == 0) {
+            this.$Message.success('操作成功')
+            this.model = false
+          }
+        } else {
+          this.$Message.error('带*必填');
+        }
+      })
     }
-
-
 
   }
 }

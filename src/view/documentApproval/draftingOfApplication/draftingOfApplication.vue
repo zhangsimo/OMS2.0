@@ -136,7 +136,6 @@
                 break
               case 3:
                 this.$refs.InternalFinance.open()
-
                 break
               case 4:
                 this.$refs.OtherPayment.open()

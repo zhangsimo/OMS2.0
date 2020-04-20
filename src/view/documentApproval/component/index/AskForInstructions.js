@@ -1,9 +1,7 @@
 import  moment from 'moment'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import { findGuest } from "_api/settlementManagement/advanceCollection.js";
-import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-
+import {getAskSave} from '_api/documentApproval/AskForInstructions.js'
 export default {
   name: "AskForInstructions",
   components:{
@@ -28,25 +26,9 @@ export default {
           {required: true, message: '金额为必填', trigger: 'blur'},
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
-        receiveGuestId:[
-          {required: true, message: '往来单位', trigger: 'change'}
+        applyMatters:[
+          {required: true, message: '申请事项为必填', trigger: 'blur'}
         ],
-        receiver:[
-          {required: true, message: '收款人账户必填', trigger: 'change'}
-        ],
-        receiveBank:[
-          {required: true, message: '开户行名称必填', trigger: 'blur'}
-        ],
-        paymentTerm:[
-          {required: true,type: 'date',  message: '付款期限必填', trigger: 'change'}
-        ],
-        receiveBankNo:[
-          {required: true, message: '开户账号必填', trigger: 'blur'}
-
-        ],
-        // BankNo:[
-        //   {required: true, message: '银行账号必填', trigger: 'blur'}
-        // ]
       },
     }
   },
@@ -70,7 +52,7 @@ export default {
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '请示申请'
         this.formInline.applyTime = date
       }
     },
@@ -87,7 +69,7 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
-          let res = await getOtherSve(this.formInline)
+          let res = await getAskSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false

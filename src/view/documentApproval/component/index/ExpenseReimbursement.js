@@ -1,5 +1,5 @@
 import  moment from 'moment'
-import requestCode from '../RequestCode'
+import requestCode from '../popWindow/RequestCode'
 import subject from '../Subject'
 import selectTheDocuments from '../popWindow/SelectTheDocuments'
 import upphoto from '../Upphoto'

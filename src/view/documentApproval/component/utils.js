@@ -7,7 +7,7 @@ export function getPayList() {
       let usedata = store.state.user.userData
       let data = {
           label: usedata.accountPayee,
-          value: 1
+          value: usedata.bankNumber
       }
       let  list = [data]
       return list

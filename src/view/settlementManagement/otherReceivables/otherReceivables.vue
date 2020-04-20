@@ -412,45 +412,51 @@
               if(type == 0){
                 if(this.currRow.writeOffReceiptNo){
                   this.$Message.error('其他付款申请单已核销，无法撤回！')
-                } else {
-                  if(this.currRow.paymentRegainNo){
-                    this.$Message.error('其他付款已收回，无法撤回！')
-                  } else {
-                    if(this.currRow.paymentClaimNo && this.MessageValue == '已审核'){
-                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
-                    }else {
-                      this.revoke = true;
-                    }
-                  }
                 }
+                // else {
+                if(this.currRow.paymentRegainNo){
+                    this.$Message.error('其他付款已收回，无法撤回！')
+                  }
+                // else {
+                if(this.currRow.paymentClaimNo && this.MessageValue == '已审核'){
+                   this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                 }else {
+                   this.revoke = true;
+                    }
+                  // }
+                // }
               } else if(type == 1){
                 if(this.currRow.paymentClaimNo){
                   this.$Message.error('其他付款申请未认领，无法撤回！')
-                } else {
-                  if(this.currRow.writeOffReceiptNo){
+                }
+                // else {
+               if(this.currRow.writeOffReceiptNo){
                     this.$Message.error('其他付款申请未核销，无法撤回！')
-                  } else {
-                    if(this.currRow.writeOffReceiptNo && this.MessageValue == '已审核'){
+                  }
+                  // else {
+                if(this.currRow.writeOffReceiptNo && this.MessageValue == '已审核'){
                       this.$Message.error('其他付款核销单号已审核，无法撤销！')
-                    }else {
+                }else {
                       this.revoke = true;
                     }
-                  }
-                }
+                  // }
+                // }
               }else {
                 if(this.currRow.paymentClaimNo){
                   this.$Message.error('其他付款申请未认领，无法撤回！')
-                } else {
-                  if(this.currRow.paymentRegainNo){
+                }
+                // else {
+                if(this.currRow.paymentRegainNo){
                     this.$Message.error('其他付款申请未核销，无法撤回！')
-                  } else {
-                    if(this.currRow.paymentRegainNo && this.MessageValue != '已审核'){
-                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
-                    }else {
+                  }
+                // else {
+                if(this.currRow.paymentRegainNo && this.MessageValue != '已审核'){
+                  this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                }else {
                       this.revoke = true;
                     }
-                  }
-                }
+                  // }
+                // }
               }
             }else {
               this.$message.error("请选择数据");

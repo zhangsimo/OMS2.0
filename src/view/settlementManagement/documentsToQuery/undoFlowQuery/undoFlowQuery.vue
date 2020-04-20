@@ -72,7 +72,7 @@
           {id:0 , name:'全部'}
         ],
         shopCode: 0,
-        tableData: [],//表格数据
+        tableData: [{revokeReason:'123'}],//表格数据
 
       };
     },
@@ -100,7 +100,7 @@
         data.startDate = moment(this.value[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.endDate = moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         let res = await runningWater(data)
-        if (res.code === 0) return  this.tableData = res.data.content
+        // if (res.code === 0) return  this.tableData = res.data.content
       },
       // 快速查询
       quickDate(data){
