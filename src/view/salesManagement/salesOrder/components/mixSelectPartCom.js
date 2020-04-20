@@ -44,7 +44,7 @@ export const mixSelectPartCom = {
         },
         {
           title: "内码",
-          key: "code",
+          key: "partInnerId",
           minWidth: 120
         },
         {
@@ -54,12 +54,12 @@ export const mixSelectPartCom = {
         },
         {
           title: "名称",
-          key: "partStandardName",
+          key: "partName",
           minWidth: 120
         },
         {
           title: "品牌车型",
-          key: "adapterCarModel",
+          key: "carModelName",
           minWidth: 120
         },
         {
@@ -220,11 +220,12 @@ export const mixSelectPartCom = {
       }
 
       if (this.partName.trim()) {
-        if (this.searchType == "adapterCarModels") {
-          req[this.searchType] = [this.partName];
-        } else {
-          req[this.searchType] = this.partName.trim();
-        }
+        // if (this.searchType == "adapterCarModels") {
+        //   req.adapterCarModels = [this.partName];
+        // } else {
+        //   req[this.searchType] = this.partName.trim();
+        // }
+        req.adapterCarModels = [this.partName]
       }
       req.page = this.page.num;
       req.size = this.page.size;

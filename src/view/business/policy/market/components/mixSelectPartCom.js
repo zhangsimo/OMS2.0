@@ -231,11 +231,12 @@ export const mixSelectPartCom  = {
       }
 
       if (this.partName.trim()) {
-        if (this.searchType == "adapterCarModels") {
-          req[this.searchType] = [this.partName];
-        } else {
-          req[this.searchType] = this.partName.trim();
-        }
+        // if (this.searchType == "adapterCarModels") {
+        //   req[this.searchType] = [this.partName];
+        // } else {
+        //   req[this.searchType] = this.partName.trim();
+        // }
+        req.adapterCarModels = [this.partName];
       }
       req.page = this.page.num;
       req.size = this.page.size;
