@@ -442,10 +442,10 @@
                   this.$Message.error('其他付款申请未认领，无法撤回！')
                 } else {
                   if(!this.currRow.paymentRegainNo){
-                    this.$Message.error('其他付款申请未核销，无法撤回！')
+                    this.$Message.error('不存在其他收款收回单号，无法撤回！')
                   } else {
                     if(this.currRow.paymentRegainNo && this.MessageValue == '已审核'){
-                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                      this.$Message.error('其他收款收回单号已审核，无法撤销！')
                     }else {
                       this.revoke = true;
                     }

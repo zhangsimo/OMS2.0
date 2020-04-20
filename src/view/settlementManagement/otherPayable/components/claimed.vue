@@ -127,13 +127,22 @@ export default {
     //本店待认领款页码
     pageChangeAmt(val) {
       this.claimedPage.page = val;
-      this.$parent.$parent.$parent.claimedList()
+      // console.log(this.$parent.$parent.claimTit)
+      if(this.$parent.claimTit == '其他收款认领'){
+        this.$parent.$parent.claimedList(1)
+      }else {
+        this.$parent.$parent.claimedList(2)
+      }
     },
     //本店待认领款每页条数
     sizeChangeAmt(val) {
       this.claimedPage.page = 1;
       this.claimedPage.size = val;
-      this.$parent.$parent.$parent.claimedList()
+      if(this.$parent.claimTit == '其他收款认领'){
+        this.$parent.$parent.claimedList(1)
+      }else {
+        this.$parent.$parent.claimedList(2)
+      }
     }
   },
   watch: {
