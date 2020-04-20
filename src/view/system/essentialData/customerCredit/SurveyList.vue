@@ -188,11 +188,11 @@
       <Col span="8">
         <FormItem label="滚动借款周期:" prop="rollingDate">
           <!--<Input v-model='data.rollingDate' style="width: 180px" ></Input>-->
-          <InputNumber v-model="data.rollingDate" style="width: 180px"></InputNumber>
+          <InputNumber :min="1" v-model="data.rollingDate" style="width: 180px"></InputNumber>
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem v-if="data.isGuestResearch == 0" label="申请授用额度:" prop="applyTrustMoney">
+        <FormItem v-if="data.isGuestResearch == 0" label="申请授信额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
         </FormItem>
         <FormItem v-else label="调整原因:" prop="adjustReason">
@@ -406,10 +406,10 @@ export default {
           }
         ],
         rollingDate: [
-          { required: true, validator: smallNumber, trigger: "blur" }
+          { required: true, type:"number", validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
-          { required: true, validator: bigNumber, trigger: "blur"},
+          { required: true, validator: bigNumber, trigger: "change"},
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址
@@ -481,7 +481,7 @@ export default {
       }
       this.data.operationEnd = endTime
     }
-  }
+  },
 };
 </script>
 

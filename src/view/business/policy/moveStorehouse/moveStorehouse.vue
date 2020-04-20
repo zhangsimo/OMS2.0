@@ -122,6 +122,7 @@
                     >
                       <Option
                         v-for="item in warehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -135,6 +136,7 @@
                     >
                       <Option
                         v-for="item in warehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -218,8 +220,7 @@
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
-                :checkbox-config="{checkMethod}"
-                @edit-actived="editActivedEvent"
+                @edit-actived="editActivedEvent">
               >
                 <vxe-table-column type="index" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox"></vxe-table-column>
@@ -545,7 +546,9 @@ export default {
     },
     // 禁用选中
     checkMethod({ row }) {
-      return this.Leftcurrentrow.status.value === 0;
+      if (this.Leftcurrentrow.status.value === 0) {
+        return true
+      }
     },
     numChangeEvent({ row }, evnt) {
       this.numberValue = evnt.target.value;
@@ -614,6 +617,7 @@ export default {
       let xTable = this.$refs.xTable1;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       orderQtyColumn.editRender.attrs.disabled = this.Leftcurrentrow.status.value !== 0;
+
     },
     //切换tab
     setTab(index) {
@@ -857,7 +861,7 @@ export default {
 
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.Leftcurrentrow.id);
+      this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
     },
     //添加配件
     addPro() {
@@ -914,24 +918,13 @@ export default {
     //添加配件
     getPartNameList(val) {
       // console.log(conversionList(val),8888)
-      var datas = conversionList(val);
+      var datas = [...val] // conversionList(val);
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
-        // this.Right.tbdata=[]
+        delete item.id;
         item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
       });
-      // console.log(this.Right.tbdata);
-      // console.log(this.Leftcurrentrow);
-      // getSubmitList(this.Leftcurrentrow)
-      //   .then(res => {
-      //     console.log(res);
-      //     this.getList()
-      //   })
-      //   .catch(err => {
-      //     this.showRemove = false;
-      //     this.$Message.info("添加失败");
-      //   });
     },
     //删除
     deletePar() {

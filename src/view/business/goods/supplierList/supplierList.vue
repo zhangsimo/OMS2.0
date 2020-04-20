@@ -24,7 +24,7 @@
               <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="presentrowMsg !== 1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
+              <Button class="mr10" :disabled="presentrowMsg !== 1||datadata.isWms===1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
             </div>
             <div class="db">
               <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
@@ -139,9 +139,9 @@
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" fixed="left" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox" fixed="left" width="60"></vxe-table-column>
-                  <vxe-table-column field="partCode" fixed="left" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" fixed="left" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" fixed="left" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column field="partCode" fixed="left" show-overflow title="配件编码" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" fixed="left" show-overflow title="配件名称" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" fixed="left" show-overflow title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
@@ -202,31 +202,19 @@
       PrintShow
     },
     data() {
-      let changeNumber = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("请输入大于或等于0的正整数"));
-        } else {
-          const reg = /^([0]|[1-9][0-9]*)$/
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("请输入大于或等于0的正整数"));
-          }
-        }
-      };
-      //价格（2位小数）
-      let money = (rule, value, callback) => {
-        if (!value && value != "0") {
-          callback(new Error("最多保留2位小数"));
-        } else {
-          const reg = /^\d+(\.\d{0,2})?$/i;
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("最多保留2位小数"));
-          }
-        }
-      };
+      let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
+      }
+    };
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
+      }
+    };
       return {
         ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中

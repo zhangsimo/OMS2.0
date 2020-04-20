@@ -66,7 +66,7 @@
         </FormItem>
         <FormItem label="交货仓库：" prop="storeId">
           <Select v-model="formPlan.storeId" style="width:200px" :disabled="draftShow != 0">
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
         <!-- <FormItem label="订单类型：" >
@@ -281,7 +281,7 @@
     <!--      </Modal>-->
 
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId"></select-part-com>
     <!--      批次配件-->
     <barch ref="barch" @selectPartName="getBarchList"></barch>
     <!--      选择客户-->
@@ -299,6 +299,7 @@
 import ClientData from "../../../../system/essentialData/clientManagement/ClientData";
 import goodsInfo from "../../../../goods/plannedPurchaseOrder/components/GoodsInfo";
 import selectPartCom from "../components/selectPartCom";
+// import selectPartCom from "@/view/salesManagement/salesOrder/components/selectPartCom";
 import SelectTheCustomer from "../../commonality/SelectTheCustomer";
 import GodownEntry from "../../commonality/GodownEntry";
 import Activity from "../../commonality/Activity";
@@ -342,28 +343,17 @@ export default {
     barch
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d{0,}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
-    let money = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("最多保留2位小数"));
-      } else {
-        const reg = /^\d+(\.\d{0,2})?$/i;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("最多保留2位小数"));
-        }
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
       }
     };
     return {
@@ -658,7 +648,7 @@ export default {
     changeShippingAddress() {},
     //打开添加配件模态框
     addMountings() {
-      this.$refs.selectPartCom.init();
+      this.$refs.selectPartCom.init(this.formPlan.guestId);
     },
     openBarchModal() {
       this.$refs.barch.init();
@@ -730,10 +720,11 @@ export default {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           let data = this.formPlan.details;
-          const form = conversionList(val);
+          const form = val;//conversionList(val);
           form.map(item => {
             data.push(item);
           });
+          console.log(data)
           this.$set(this.formPlan, "details", data);
         } else {
           this.$Message.error("*为必填项");

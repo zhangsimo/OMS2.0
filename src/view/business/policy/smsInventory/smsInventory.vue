@@ -115,6 +115,7 @@
                     >
                       <Option
                         v-for="item in warehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -249,12 +250,12 @@
                 </vxe-table-column>
                 <vxe-table-column field="exhibitQty" title="盈亏数量" width="100">
                   <template v-slot="{ row, seq }">
-                    <span>{{ Math.abs(row.sysQty - row.trueQty) }}</span>
+                    <span>{{(Math.abs(row.sysQty - row.trueQty))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="exhibitAmt" title="盈亏金额" width="120">
                   <template v-slot="{ row, seq }">
-                    <span>{{ Math.abs(row.exhibitQty * row.truePrice) }}</span>
+                    <span>{{(Math.abs(row.exhibitQty * row.truePrice))||0 }}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column field="sysAmt" title="系统成本" width="100"></vxe-table-column>
@@ -266,7 +267,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="formPlan.storeId" ></Select-part-com>
     <!--更多弹框-->
     <More
       :getShowMore="showMore"
@@ -555,7 +556,7 @@ export default {
             } else {
               res.data.content.map((item, index) => {
                 item["index"] = index + 1;
-                item["statuName"] = item.billStatusId.name;
+                item["statuName"] = item.billStatusId?item.billStatusId.name:"";
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
@@ -919,9 +920,10 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      // this.$refs.form.resetFields()
-      // console.log(this.formPlan)
-      var datas = conversionList(val);
+        var datas=val;
+       datas.map(item=>{
+           item.id=''
+       })
       this.formPlan.detailVOList = datas;
       this.Right.tbdata = [...this.Right.tbdata, ...datas];
       // this.formPlan.checkDate = moment(this.formPlan.checkDate).format(
@@ -970,7 +972,7 @@ export default {
         }
       }
       return a;
-    }
+    },
   },
   mounted() {
     setTimeout(() => {
@@ -985,7 +987,7 @@ export default {
     purchaseType: {
       handler(newVal) {
         this.Left.page.num = 1;
-        this.Left.page.size = 10;
+        this.Left.page.size = 20;
         this.getList();
       },
       deep: true

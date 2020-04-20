@@ -34,7 +34,7 @@
                 type="default"
                 class="mr10"
                 @click="baocun1"
-                :disabled="buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -43,7 +43,7 @@
               <Button
                 class="mr10"
                 v-has="'submit'"
-                :disabled="buttonDisable == 1 || buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
                 @click="tijiao1"
               >
                 <Icon type="md-checkmark" size="14" />提交
@@ -51,7 +51,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="this.buttonDisable !== 1"
+                :disabled="![1].includes(buttonDisable)||isWms"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
@@ -64,7 +64,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
@@ -157,6 +157,7 @@
                             <!--&gt;{{item.label}}</Option>-->
                             <Option
                               v-for="item in cangkuListall"
+                              :disabled="item.isDisabled"
                               :value="item.id"
                               :key="item.id"
                             >{{ item.name }}</Option>
@@ -199,7 +200,7 @@
                       <Button
                         v-has="'addMountings'"
                         size="small"
-                        :disabled="buttonDisable == 1"
+                        :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)"
                         class="mr10"
                         @click="addMountings"
                       >
@@ -207,7 +208,7 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -217,6 +218,7 @@
                         size="small"
                         class="mr10"
                         @click="GoodsInfoModal"
+                        :disabled="[2, 3].includes(buttonDisable)"
                       >
                         <i class="iconfont mr5 iconlajitongicon"></i> 编辑发货信息
                       </Button>
@@ -227,14 +229,12 @@
                   auto-resize
                   border
                   resizable
-                  show-footer
                   ref="xTable1"
                   size="mini"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
-                  :footer-method="addFooter"
                   :edit-rules="validRules"
                   showOverflow="true"
                   show-overflow
@@ -354,16 +354,10 @@ export default {
     selectPartCom
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d*$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('受理数量输入不正确'))
       }
     };
     return {
@@ -606,7 +600,8 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
-      clickdelivery: false
+      clickdelivery: false,
+      isWms:false,//仓库是否启用wms
     };
   },
   watch: {
@@ -645,6 +640,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      var arr = []
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -652,17 +648,19 @@ export default {
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
         item.spec = item.specifications;
-        item.partId = item.id;
+        item.partId = item.orgid;
         item.partInnerId = item.code;
-        delete item.id;
-        delete item.orderPrice;
+        let el = Object.assign({}, item);
+        delete el.id;
+        delete el.orderPrice;
+        arr.push(el)
       });
 
       var allArr = []; //新数组
 
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
-        ...val
+        ...arr
       ];
       var allArr = [];
       var oldArr = this.Leftcurrentrow.detailVOS;
@@ -678,39 +676,23 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
-
-      // var arrSet = this.Leftcurrentrow.detailVOS;
-      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-      //   var flag = true;
-      //   for (var j = 0; j < allArr.length; j++) {
-      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
-      //       flag = false;
-      //     }
-      //   }
-      //   if (flag) {
-      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
-      //   }
-      // }
-      // this.$refs.formPlan.validate(async (valid) => {
-      //     if (valid) {
-      //         let data ={}
-      //         data = this.Leftcurrentrow
-      //         data.detailVOS = conversionList(val)
-      //         let res = await  baocun(data)
-      //         if(res.code === 0){
-      //             this.getList()
-      //         }
-      //     } else {
-      //         this.$Message.error('*为必填项');
-      //     }
-      // })
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
     //   this.Leftcurrentrow['sendWay'] = params
     //   this.GainInformation = false
     // },
-    selectAllEvent({ checked }) {},
+    selectAllEvent({ checked, selection }) {
+      if (checked) {
+        selection.forEach(el => {
+          this.idsId.push(el.id);
+        })
+        this.checkboxArr = selection;
+      } else {
+        this.idsId = [];
+        this.checkboxArr = [];
+      }
+    },
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
@@ -800,6 +782,7 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
+      this.Leftcurrentrow.status.value = 0;
       if(this.cangkuListall.length>0){
           this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
       }else{
@@ -842,7 +825,7 @@ export default {
         item.index = index + 1;
       });
     },
-    tijiao1() {      
+    tijiao1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
         this.$Message.info("请先保存新增加工单");
         return;
@@ -1037,7 +1020,7 @@ export default {
         });
         return;
       }
-      this.buttonDisable = 0;
+      this.buttonDisable = 0; // 草稿
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       if (row.statuName == "待出库") {
@@ -1046,6 +1029,16 @@ export default {
       if (row.statuName == "已出库") {
         this.buttonDisable = 2;
       }
+      if (row.statuName == "已作废") {
+        this.buttonDisable = 3;
+      }
+
+      //判断仓库是否启用wms
+      this.isWms = false;
+      if(this.buttonDisable===1&&row.isWms===1){
+        this.isWms = true;
+      }
+
       if (row.id == undefined) {
         row.id = "";
       }

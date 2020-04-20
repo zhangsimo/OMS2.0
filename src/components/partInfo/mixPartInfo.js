@@ -394,7 +394,7 @@ export const mixPartInfo = {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$refs.vxeTable.validate(val => {
-            if (val) {
+            if (!val) {
               //判断包装规格计量单位是否为空
               let errorT = 0
               this.formValidate.specVOS.map(item => {
@@ -441,7 +441,7 @@ export const mixPartInfo = {
               objReq.spec = this.formValidate.spec
               //型号
               objReq.model = this.formValidate.model
-
+              console.log(objReq)
               //使用车型品牌
               // let selectBrandData = this.carObj.carBrandData.filter(item => item.id == this.formValidate.carBrandName)
               // if (selectBrandData.length > 0) {
@@ -495,12 +495,14 @@ export const mixPartInfo = {
               //this.$message.error('带*必填')
               this.tabsActive = 'active2'
               this.btnIsLoadding = false
+              this.changeTab()
             }
           })
         } else {
          // this.$Message.error('带*必填')
           this.tabsActive = 'active1'
           this.btnIsLoadding = false;
+          this.changeTab()
           return
         }
       })

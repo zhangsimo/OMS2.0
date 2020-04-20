@@ -236,6 +236,7 @@
                     >
                       <Option
                         v-for="item in WareHouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -381,28 +382,17 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d{0,}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
-    let money = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("最多保留2位小数"));
-      } else {
-        const reg = /^\d+(\.\d{0,2})?$/i;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("最多保留2位小数"));
-        }
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
       }
     };
     return {
@@ -708,7 +698,7 @@ export default {
     },
     //选择销售出库单
     SalesOutboundShowModel() {
-      if(!this.formPlan.guestId) this.$message.error('请选择客户')
+      if(!this.formPlan.guestId) return this.$message.error('请选择客户')
       this.$refs.salesOutbound.openModal();
     },
     //选择更多

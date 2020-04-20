@@ -246,21 +246,34 @@ export default class GoodsInfo extends Vue {
   }
 
   private async getLists() {
+    const parentD:any = this.$parent;
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
     let res: any = await fapi.getGoodsInfos2({
       mainId: this.mainId,
+      guestId:parentD.formPlan.guestId,
       directCompanyId
     });
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
+
+      for(let b of this.tableData){
+        if(b.isDefault===1){
+          this.echoDate({row:b});
+          let thisTable:any = this.$refs.xTable1;
+          thisTable.setRadioRow(b);
+          break;
+        }
+      }
     }
   }
 
   //获取物流下拉框
   private async inlogistics() {
-    let params: any = {};
+    const parentD:any = this.$parent;
+    let guestId = parentD.formPlan.guestId;
+    let params: any = {guestId:guestId};
     if (this.formDateRight.deliveryType == 2) {
       params.logisticsType = "020701";
     }
@@ -387,6 +400,8 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
+    const parentD:any = this.$parent;
+    data.guestId = parentD.formPlan.guestId;
     let res = await fapi.getGoodsInfos2(data);
     if (res.code == 0) {
       this.tableData = res.data;

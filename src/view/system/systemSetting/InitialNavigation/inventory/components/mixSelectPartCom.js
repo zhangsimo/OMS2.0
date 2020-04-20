@@ -294,8 +294,8 @@ export const mixSelectPartCom = {
       // console.log(this.selectTableItem, 4544)
     },
     throwData() {
-        this.$emit('selectPartName', this.selectTableItem);
-        this.numberAmount = true;
+      this.$emit('selectPartName', this.selectTableItem);
+      this.numberAmount = true;
     },
     cancel(){
       this.numberAmount=false

@@ -131,7 +131,6 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" title="序号"></vxe-table-column>
@@ -201,16 +200,10 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != '0') {
-        callback(new Error("请输入大于或等于0的正整数"));
-      } else {
-        const reg = /^([0]|[1-9][0-9]*)$/
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于或等于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
     return {
@@ -368,11 +361,11 @@ export default {
           })
           deleteit(dataaa).then(res => {
             if(res.code === 0){
-              console.log(res)
               this.$message.warning('删除成功！');
               this.leftgetList();
               let checkBoxArr = this.checkboxArr.map(item => item.id)
               this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+              this.checkboxArr = [];
             }
           })
         } else if(resultTwo){
@@ -412,6 +405,7 @@ export default {
                 this.$message.success('删除成功！')
                 let checkBoxArr = this.checkboxArr.map(item => item.id)
                 this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+                this.checkboxArr = [];
             }
           })
           },1000)

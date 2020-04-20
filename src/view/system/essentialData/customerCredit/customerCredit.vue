@@ -21,7 +21,7 @@
       <Button
         class="mr10"
         v-has="'credit'"
-        v-show="this.state === 1 && this.researchStatus === 2"
+        v-show="this.state === 1 && (this.researchStatus === 2||this.researchStatus === 4)"
         @click="opensurveyShow"
       >
         <span class="center">修改信用调查</span>
@@ -466,6 +466,7 @@ export default {
     },
     //当前行
     selection(row) {
+      console.log(row)
       if(!row){
         return
       }
@@ -475,7 +476,7 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
-      console.log(this.creaditList)
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.flag = row.isGuestResearch;
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
@@ -517,6 +518,7 @@ export default {
       if(this.creaditList.isGuestResearch === 0){
         this.$refs.SurveyList.$refs.formInline.resetFields();
       }
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.surveyShow = true;
     },
     //额度调用
@@ -648,7 +650,10 @@ export default {
           data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
           data.tempQuotaTotal = this.creaditList.tempCreditLimit;
           data.tempStart = tools.transTime(this.creaditList.tempStart);
-          data.tempEnd = tools.transTime(this.creaditList.tempEnd).substr(0,10)+' 23:59:59';
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          if(data.tempEnd){
+            data.tempEnd = data.tempEnd.split(" ")[0]+' 23:59:59'
+          }
           data.orgId = this.creaditList.orgid;
           data.adjustType = 1;
           data.afterAdjustQuota =
@@ -694,10 +699,10 @@ export default {
                 { required: true, message: "申请额度说明必填！", trigger: "blur" }
             ];
             this.$refs.child.ruls.tempStart=[
-                { required: true, message: "临时额度开始时间", trigger: "blur" }
+                { required: true, type:'date', message: "临时额度开始时间", trigger: "blur" }
             ];
             this.$refs.child.ruls.tempEnd=[
-                { required: true, message: "临时额度结束时间", trigger: "blur" }
+                { required: true,type:'date', message: "临时额度结束时间", trigger: "blur" }
             ];
         } else {
             this.$refs.child.ruls.quotaReason = [

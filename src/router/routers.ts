@@ -832,6 +832,42 @@ export default [
           import("@/view/settlementManagement/advanceCharge/advanceCharge.vue")
       },
       {
+        path: "/settlementManagement/otherReceivables",
+        name: "settlementManagement-otherReceivables",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "其他应收款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/otherReceivables/otherReceivables.vue")
+      },
+      {
+        path: "/settlementManagement/otherPayable",
+        name: "settlementManagement-otherPayable",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "其他应付款管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/otherPayable/otherPayable.vue")
+      },
+      {
+        path: "/settlementManagement/businessBorrowing",
+        name: "settlementManagement-businessBorrowing",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "因公借支管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/businessBorrowing/businessBorrowing.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",
@@ -850,6 +886,17 @@ export default [
             },
             component: () =>
               import("@/view/settlementManagement/fundsManagement/capitalChain/capitalChain.vue")
+          },
+          {
+            path: "accountRegistration",
+            name: "accountRegistration",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "账户登记表"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/accountRegistration/accountRegistration.vue")
           },
           {
             path: "/fundsManagement/cashJournal",
@@ -888,6 +935,58 @@ export default [
       }
     ]
   },
+  {
+    path: "/documentApproval",
+    name: "documentApproval",
+    // mark: "6",
+    redirect: "/reportForm",
+    meta: {
+      icon: "ios-paper",
+      title: "审批管理"
+    },
+    component: Main,
+    children: [
+      {
+        path:'/documentApproval/draftingOfApplication',
+        name:'documentApproval-draftingOfApplication',
+        // redirect: "/multilevel/level_2_1",
+        // mark:'5100',
+        meta: {
+          title:'申请流程'
+        },
+        component: () =>
+          import("@/view/documentApproval/draftingOfApplication/draftingOfApplication.vue")
+      },
+      {
+        path: "/documentApproval/myApplication",
+        name: "documentApproval-myApplication",
+        // mark: "5100",
+        meta: {
+          title: "我的申请"
+        },
+        component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
+      },
+      {
+        path: "/documentApproval/ForMyApproval",
+        name: "documentApproval-ForMyApproval",
+        // mark: "5100",
+        meta: {
+          title: "待我审批"
+        },
+        component: () => import("@/view/documentApproval/ForMyApproval/ForMyApproval.vue")
+      },
+      {
+        path: "/documentApproval/myApproval",
+        name: "documentApproval-myApproval",
+        // mark: "5100",
+        meta: {
+          title: "我的审批"
+        },
+        component: () => import("@/view/documentApproval/myApproval/myApproval.vue")
+      }
+
+    ]
+  },
 
   // {
   //   path:'/financial',
@@ -911,487 +1010,487 @@ export default [
   //     },
   //   ]
   // },
-  // {
-  //   path: "",
-  //   name: "reportForm",
-  //   mark: "7",
-  //   // hideInMenu: true,
-  //   redirect: "/reportForm",
-  //   meta: {
-  //     icon: "ios-paper",
-  //     title: "报表统计"
-  //   },
-  //   component: Main,
-  //   children: [
-  //     {
-  //       path: "",
-  //       name: "reportFormProcurement ",
-  //       redirect: "",
-  //       mark: "7100",
-  //       meta: {
-  //         title: "采购报表"
-  //       },
-  //       component: parentView,
-  //       children: [
-  //         {
-  //           path: "/reportFormProcurement/order",
-  //           name: "reportFormProcurement-order",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "采购订单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/inStorage",
-  //           name: "reportFormProcurement-inStorage",
-  //           // mark: '5106', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "采购入库明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/salesReturn ",
-  //           name: "reportFormProcurement-salesReturn",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "采购退货明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/ranking ",
-  //           name: "reportFormProcurement-ranking",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "采购排行明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/brand ",
-  //           name: "reportFormProcurement-brand",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "品牌采购明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/accessories ",
-  //           name: "reportFormProcurement-accessories",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "配件采购明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/accessoriesType ",
-  //           name: "reportFormProcurement-accessoriesType",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "配件类型采购分解表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/reportFormProcurement/supplier ",
-  //           name: "reportFormProcurement-supplier",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             icon: "arrow-graph-up-right",
-  //             title: "供应商采购分析表"
-  //           }
-  //           // component: () => import()
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: "",
-  //       name: "marketFrom",
-  //       redirect: "",
-  //       mark: '7101',
-  //       meta: {
-  //         title: "销售报表"
-  //       },
-  //       component: parentView,
-  //       children: [
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "预售单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "销售订单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "销售订单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "销售退货明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "销售排行分析表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "品牌销售分析表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "配件销售分析表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "配件类型销售分析表"
-  //           }
-  //           // component: () => import()
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: "",
-  //       name: "allotThree",
-  //       meta: {
-  //         title: "库存报表"
-  //       },
-  //       component: parentView,
-  //       children: [
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "移仓单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "盘点单明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "进销存汇总表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "分仓进销存明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "分仓进销存汇总表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "配件组装明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "配件拆分明细表"
-  //           }
-  //           // component: () => import()
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: "",
-  //       name: "allotThree",
-  //       meta: {
-  //         title: "财务报表"
-  //       },
-  //       component: parentView,
-  //       children: [
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "账户余额汇总表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: " 账户明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve', 空
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: " 收款明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "付款明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "总部收款明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "总部付款明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "客户欠款明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "供应商欠款明细表"
-  //           }
-  //           // component: () => import()
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: "",
-  //       name: "allotThree",
-  //       mark: '7102',
-  //       meta: {
-  //         title: "调拨报表"
-  //       },
-  //       component: parentView,
-  //       children: [
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: " 调拨申请明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: " 调拨受理明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: " 调入退回明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "调入退货明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "调出退回明细表"
-  //           }
-  //           // component: () => import()
-  //         },
-  //         {
-  //           path: "/",
-  //           name: "",
-  //           // mark: 'oms_orders_approve',
-  //           meta: {
-  //             // hideInMenu: true,
-  //             title: "调出退货明细表"
-  //           }
-  //           // component: () => import()
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       path: "",
-  //       name: "",
-  //       mark: '7104',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         icon: "arrow-graph-up-right",
-  //         title: "移仓报表"
-  //       }
-  //       // component: () => import()
-  //     },
-  //     {
-  //       path: "",
-  //       name: "",
-  //       mark: '7105',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         icon: "arrow-graph-up-right",
-  //         title: "盘点报表"
-  //       }
-  //       // component: () => import()
-  //     },
-  //     {
-  //       path: "",
-  //       name: "",
-  //       mark: '7106',
-  //       meta: {
-  //         // hideInMenu: true,
-  //         icon: "arrow-graph-up-right",
-  //         title: "加工报表"
-  //       }
-  //       // component: () => import()
-  //     },
-  //   ],
-  //
-  // },
+  {
+    path: "",
+    name: "reportForm",
+    mark: "7",
+    // hideInMenu: true,
+    redirect: "/reportForm",
+    meta: {
+      icon: "ios-paper",
+      title: "报表统计"
+    },
+    component: Main,
+    children: [
+      {
+        path: "/reportForm/purchaseRepor/reporIndex",
+        name: "reportFormProcurement ",
+        redirect: "",
+        mark: "7100",
+        meta: {
+          title: "采购报表"
+        },
+        component: () => import("@/view/reportForm/purchaseRepor/reporIndex.vue")
+        // children: [
+        //   {
+        //     path: "/reportFormProcurement/order",
+        //     name: "reportFormProcurement-order",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       // hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "采购订单明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/inStorage",
+        //     name: "reportFormProcurement-inStorage",
+        //     // mark: '5106', 空
+        //     meta: {
+        //       // hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "采购入库明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/salesReturn ",
+        //     name: "reportFormProcurement-salesReturn",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       // hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "采购退货明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/ranking ",
+        //     name: "reportFormProcurement-ranking",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "采购排行明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/brand ",
+        //     name: "reportFormProcurement-brand",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "品牌采购明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/accessories ",
+        //     name: "reportFormProcurement-accessories",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "配件采购明细表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/accessoriesType ",
+        //     name: "reportFormProcurement-accessoriesType",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "配件类型采购分解表"
+        //     }
+        //     // component: () => import()
+        //   },
+        //   {
+        //     path: "/reportFormProcurement/supplier ",
+        //     name: "reportFormProcurement-supplier",
+        //     // mark: 'oms_orders_approve', 空
+        //     meta: {
+        //       hideInMenu: true,
+        //       icon: "arrow-graph-up-right",
+        //       title: "供应商采购分析表"
+        //     }
+        //     // component: () => import()
+        //   }
+        // ]
+      },
+      // {
+      //   path: "",
+      //   name: "marketFrom",
+      //   redirect: "",
+      //   mark: '7101',
+      //   meta: {
+      //     title: "销售报表"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "预售单明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "销售订单明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "销售订单明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "销售退货明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "销售排行分析表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "品牌销售分析表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "配件销售分析表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "配件类型销售分析表"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: "",
+      //   name: "allotThree",
+      //   meta: {
+      //     title: "库存报表"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "移仓单明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "盘点单明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "进销存汇总表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "分仓进销存明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "分仓进销存汇总表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "配件组装明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "配件拆分明细表"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: "",
+      //   name: "allotThree",
+      //   meta: {
+      //     title: "财务报表"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "账户余额汇总表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: " 账户明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve', 空
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: " 收款明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "付款明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "总部收款明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "总部付款明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "客户欠款明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "供应商欠款明细表"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: "",
+      //   name: "allotThree",
+      //   mark: '7102',
+      //   meta: {
+      //     title: "调拨报表"
+      //   },
+      //   component: parentView,
+      //   children: [
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: " 调拨申请明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: " 调拨受理明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: " 调入退回明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "调入退货明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "调出退回明细表"
+      //       }
+      //       // component: () => import()
+      //     },
+      //     {
+      //       path: "/",
+      //       name: "",
+      //       // mark: 'oms_orders_approve',
+      //       meta: {
+      //         // hideInMenu: true,
+      //         title: "调出退货明细表"
+      //       }
+      //       // component: () => import()
+      //     }
+      //   ]
+      // },
+      // {
+      //   path: "",
+      //   name: "",
+      //   mark: '7104',
+      //   meta: {
+      //     // hideInMenu: true,
+      //     icon: "arrow-graph-up-right",
+      //     title: "移仓报表"
+      //   }
+      //   // component: () => import()
+      // },
+      // {
+      //   path: "",
+      //   name: "",
+      //   mark: '7105',
+      //   meta: {
+      //     // hideInMenu: true,
+      //     icon: "arrow-graph-up-right",
+      //     title: "盘点报表"
+      //   }
+      //   // component: () => import()
+      // },
+      // {
+      //   path: "",
+      //   name: "",
+      //   mark: '7106',
+      //   meta: {
+      //     // hideInMenu: true,
+      //     icon: "arrow-graph-up-right",
+      //     title: "加工报表"
+      //   }
+      //   // component: () => import()
+      // },
+    ],
+
+  },
   // {
   //   path: "",
   //   name: "baseSetting",

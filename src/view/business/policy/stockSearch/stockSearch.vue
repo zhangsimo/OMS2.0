@@ -38,11 +38,11 @@
             >
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm.old" placeholder="公司">
+            <Select class="w120 mr10" @on-change="changecompanyFun" v-model="searchForm.old" placeholder="公司">
               <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
-              <Option v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
+            <Select class="w120 mr10" @on-change="changeStore" v-model="searchForm.storeId" placeholder="仓库">
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Input placeholder="仓位" class="w120 mr10" v-model="searchForm.shelf"></Input>
             <span class="mr5">显示零库存:</span>
@@ -90,15 +90,15 @@
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm1.old" placeholder="公司">
+            <Select class="w120 mr10" @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
-              <Option v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
+            <Select @on-change="changeStore2" class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm1.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
             </Select>
             <Input v-model="searchForm1.shelf" placeholder="仓位" class="w120 mr10"></Input>
             <span class="mr5">显示零库存:</span>
@@ -169,7 +169,9 @@ import {
   getAllStock,
   getLotStock,
   getPartBrand,
-  getPartBrandNoWB
+  getPartBrandNoWB,
+  findMasterOrgId,
+  getStoreAll
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
@@ -185,7 +187,7 @@ export default {
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
-      storeList: [{ name: "全部", id: 1 }],
+      storeList: [{ name: "请选择", id: 1 }],
       //汇总库存查询条件表单
       searchForm: {
         partBrand: "", //品牌id
@@ -580,15 +582,39 @@ export default {
   },
   created() {
     this.getCommpany();
-    if (this.shopkeeper != 0) {
-      this.columns2.forEach((el, index, arr) => {
-        if(el.key === "originGuestName") {
-          arr.splice(index, 1)
-        }
-      })
-    }
+    this.getMasterId();
+    // if (this.shopkeeper != 0) {
+    //   this.columns2.forEach((el, index, arr) => {
+    //     if(el.key === "originGuestName") {
+    //       arr.splice(index, 1)
+    //     }
+    //   })
+    // }
   },
   methods: {
+    changecompanyFun(){
+      this.searchForm.storeId = "";
+    },
+    changecompanyFun2(){
+      this.searchForm1.storeId = "";
+    },
+    changeStore(){
+      this.serch();
+    },
+    changeStore2(){
+      this.queryBatch();
+    },
+    //获取用户所属机构
+    async getMasterId(){
+      let reqData = await findMasterOrgId();
+      if(!reqData.data){
+        this.columns2.forEach((el, index, arr) => {
+          if(el.key === "originGuestName") {
+            arr.splice(index, 1)
+          }
+        })
+      }
+    },
     //获取风电
     async getCommpany(){
       let arr = await creat([], this.$store);
@@ -676,7 +702,8 @@ export default {
     },
     //获取仓库下拉选择信息
     async getStoreHoure() {
-      let res = await getwarehouse({});
+      // let res = await getwarehouse({});
+      let res = await getStoreAll();
       if (res.code == 0) {
         // this.storeList = res.data;
         // console.log("222", res);

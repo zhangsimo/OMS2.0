@@ -559,7 +559,7 @@ export const mixGoodsData = {
           //配件详情
           objReq.details = this.tableData;
           let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
-          if(zerolength.length > 0) {
+          if(zerolength.length > 0&&subType==2) {
             this.$Modal.confirm({
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',

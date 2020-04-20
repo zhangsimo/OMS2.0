@@ -23,9 +23,10 @@
       <Button
         class="mr10"
         @click="setStockOut"
-        :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"
+        :disabled="orderlistType.value != 1||isWms"
         v-has="'StockOut'"
       >
+      <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
       <Button class="mr10" @click="printTable"   v-has="'print'">
@@ -110,7 +111,8 @@ export default {
         value: 0
       }, //默认状态
       changeLeft: "" ,//发生改变数据调动左侧list
-      ispart:true
+      ispart:true,
+      isWms:false
     };
   },
   methods: {
@@ -137,8 +139,12 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-
+      this.isWms = false;
+      console.log(data)
       this.orderlistType = data.billStatusId;
+      if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
+        this.isWms = true;
+      }
     },
     //保存
     setSave() {
@@ -160,14 +166,10 @@ export default {
                     this.$Modal.confirm({
                         title: '是否确定提交',
                         onOk: async () => {
-                            let res = this.$refs.right.submitList();
-                            if(res.code==0){
-                                this.orderlistType.value=1;
-                            }
-
+                          await this.$refs.right.submitList();
                         },
                         onCancel: () => {
-                            this.$Message.info('取消提交');
+                          this.$Message.info('取消提交');
                         },
                     })
                 }else{
@@ -249,7 +251,7 @@ export default {
       this.isAdd=true;
       this.$refs.right.WarehouseList.map(item=>{
           if(item.isDefault){
-              this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
+              this.$refs.right.formPlan=Object.assign({},{storeId:item.id});
           }
       })
     },

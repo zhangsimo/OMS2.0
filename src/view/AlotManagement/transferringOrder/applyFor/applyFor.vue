@@ -1,5 +1,6 @@
 <template>
-    <div>
+    <main class="bigBox"
+    style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%">
       <div class="content-oper content-oper-flex">
         <section class="oper-box">
           <div class="oper-top flex">
@@ -35,8 +36,8 @@
         <section class="con-box">
           <div class="inner-box">
             <div class="con-split" ref="paneLeft" >
-              <Split v-model="split1" min="200" max="500">
-                <div slot="left" class="con-split-pane-left" >
+              <Split v-model="split1" min="200" @on-moving="getDomHeight">
+                <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                   <div class="pane-made-hd">
                     调拨申请列表
                   </div>
@@ -99,7 +100,7 @@
                       </FormItem>
                       <FormItem class="formItem" label="调入仓库：" prop="storeId" >
                         <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
-                          <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                          <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
                         </Select>
                       </FormItem>
                       <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
@@ -149,7 +150,6 @@
                     :data="Right.tbdata"
                     :footer-method="addFooter"
                     showOverflow="true"
-                    height="450"
                     @select-all="selectAll"
                     @edit-actived="editActivedEvent"
                     :edit-config="{trigger: 'click', mode: 'cell'}">
@@ -170,7 +170,7 @@
                     <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                     <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
                     <vxe-table-column title="紧销品" width="100">
-                      <template v-slot="{ row,rowIndex }">
+                      <template v-slot="{ row }">
                         <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
                       </template>
                     </vxe-table-column>
@@ -199,7 +199,7 @@
       <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
       <!--打印弹框-->
       <print-show ref="PrintModel" :orderId="mainId"></print-show>
-    </div>
+    </main>
 </template>
 
 <script>
@@ -229,16 +229,10 @@
         PrintShow
       },
       data() {
-        let changeNumber = (rule, value, callback) => {
-          if (!value && value != "0") {
-            callback(new Error("请输入大于0的正整数"));
-          } else {
-            const reg = /^[1-9]\d*$/;
-            if (reg.test(value)) {
-              callback();
-            } else {
-              callback(new Error("请输入大于0的正整数"));
-            }
+        let changeNumber = ({cellValue }) => {
+          const reg = /^[1-9]\d{0,}$/;
+          if(!reg.test(cellValue)) {
+            return Promise.reject(new Error('角色输入不正确'))
           }
         };
         return {
@@ -938,19 +932,29 @@
               this.$Message.error('*为必填项！');
             }
           })
-        }
+        },
+        //获取表格高度
+        getDomHeight() {
+          this.$nextTick(() => {
+            let wrapH = this.$refs.paneLeft.offsetHeight;
+            let planFormH = this.$refs.planForm.offsetHeight;
+            let planBtnH = this.$refs.planBtn.offsetHeight;
+            // let planPageH = this.$refs.planPage.offsetHeight;
+            //获取左侧侧表格高度
+            this.leftTableHeight = wrapH - 144;
+            //获取右侧表格高度
+            this.rightTableHeight = wrapH - planFormH - planBtnH - 38 - 64;
+          });
+        },
       },
       mounted(){
-        this.$nextTick(()=>{
-          let wrapH = this.$refs.paneLeft.offsetHeight;
-          let planFormH = this.$refs.planForm.offsetHeight;
-          let planBtnH = this.$refs.planBtn.offsetHeight;
-          // let planPageH = this.$refs.planPage.offsetHeight;
-          //获取左侧侧表格高度
-          this.leftTableHeight = wrapH-70;
-          //获取右侧表格高度
-          this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-        });
+        setTimeout(() => {
+          this.getDomHeight();
+        }, 0);
+
+        window.onresize = () => {
+          this.getDomHeight();
+        };
           this.leftgetList();
           this.warehouse();
           // this.selecQuery();

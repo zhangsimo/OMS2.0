@@ -54,18 +54,18 @@
         </div>
         <div class="formItem">
           <FormItem label="数量:" prop="enterQty">
-            <Input v-model="formInfo.enterQty"></Input>
+            <Input v-model="formInfo.enterQty" />
           </FormItem>
           <FormItem label="单价:" prop="enterPrice">
-            <Input v-model="formInfo.enterPrice"></Input>
+            <el-input-number :min="0" v-model="formInfo.enterPrice" size="mini" :controls="false" :precision="2" />
           </FormItem>
         </div>
         <div class="formItem">
           <FormItem label="金额:" prop="enterAmt">
-            <Input v-model="inputMoney"></Input>
+            <el-input-number :min="0" v-model="inputMoney" size="mini" :controls="false" :precision="2" disabled />
           </FormItem>
           <FormItem label="备注:" prop="remark">
-            <Input v-model="formInfo.remark"></Input>
+            <Input v-model="formInfo.remark" />
           </FormItem>
         </div>
       </Form>

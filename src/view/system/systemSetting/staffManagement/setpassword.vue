@@ -4,7 +4,7 @@
       <Input placeholder='请输入姓名' v-model='data.userName' disabled style="width: 250px" ></Input>
     </FormItem>
     <FormItem label='登录账号：' prop="account">
-      <Input placeholder='请输入账号名称' v-model='data.account' style="width: 250px" ></Input>
+      <Input placeholder='请输入账号名称' v-model='data.account' style="width: 250px" :disabled="userShow" ></Input>
     </FormItem>
     <FormItem label='默认密码：'>
       <Input placeholder='000000'  style="width: 250px" :disabled="true" ></Input>
@@ -33,6 +33,7 @@
             }
           };
             return {
+              userShow:false,//
                 rules:{
                     userName:[
                         {required: true, message: '姓名不能为空', trigger: 'blur'}
@@ -46,6 +47,15 @@
 
         },
         methods:{
+          //打开的时候
+          open(){
+            this.userShow = false
+            if(this.data.openSystem == 0){
+              this.userShow = true
+              this.data.account = this.data.loginName
+            }
+
+          },
             resetFields() {
                 this.$refs.form.resetFields()
             },

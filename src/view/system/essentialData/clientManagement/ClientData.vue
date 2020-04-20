@@ -157,7 +157,7 @@
             </div>
           </div>
           <span style="margin-left: 100px">
-            <Checkbox v-if="data.isNeedPack" v-model="data.isNeedPack"></Checkbox>需求打包发货
+            <Checkbox v-model="data.isNeedPack"></Checkbox>需求打包发货
           </span>
         </TabPane>
         <TabPane label="其他信息" tab="clientBox">

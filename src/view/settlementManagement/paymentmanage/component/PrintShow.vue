@@ -17,7 +17,7 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
-              <span>{{onelist.OrgAddress || ' '}}</span>
+              <span>{{onelist.orgAddress || ' '}}</span>
             </p>
             <p>
               <span>电话:</span>
@@ -226,6 +226,8 @@ export default {
       if (this.title === "销售出库") {
         arr = this.$parent.data3[0];
       } else if (this.title === "采购入库") {
+        arr = this.$parent.data4[0];
+      }else{
         arr = this.$parent.data4[0];
       }
       let data = {

@@ -64,6 +64,9 @@ export default class PlannedPurchaseOrder extends Vue {
   private selectTableRow: any = null;
   private mainId: string | null = null;
 
+  //选中单据的状态
+  private activeMethod:number = 0;
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -357,6 +360,7 @@ export default class PlannedPurchaseOrder extends Vue {
     return obj;
   }
 
+
   // 保存
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
@@ -382,11 +386,32 @@ export default class PlannedPurchaseOrder extends Vue {
           data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
-        let res = await api.saveCommit(data);
-        if (res.code == 0) {
-          this.$Message.success('保存成功');
-          this.getListData();
-          this.isAdd = true;
+        let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(zerolength.length > 0) {
+          setTimeout(()=>{
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: async () => {
+                let res = await api.saveCommit(data);
+                if (res.code == 0) {
+                  this.$Message.success('提交成功');
+                  this.getListData();
+                  this.isAdd = true;
+                }
+              },
+              onCancel:() => {
+                this.isAdd = true;
+              }
+            })
+          },500)
+        }else{
+          let res = await api.saveCommit(data);
+          if (res.code == 0) {
+            this.$Message.success('提交成功');
+            this.getListData();
+            this.isAdd = true;
+          }
         }
       },
       onCancel: () => {
@@ -560,6 +585,7 @@ export default class PlannedPurchaseOrder extends Vue {
   private setFormPlanmain(v:any){
     if(v) {
       this.selectTableRow = v;
+      this.activeMethod = v.billStatusId.value;
       this.mainId = v.id;
       this.tableData = v.details || [];
       this.tableData.map(item => {
@@ -840,5 +866,11 @@ export default class PlannedPurchaseOrder extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+  private activeMethodFun({ column, columnIndex }){
+    if(columnIndex==6&&this.activeMethod==2){
+      return false
+    }
+    return true
   }
 }

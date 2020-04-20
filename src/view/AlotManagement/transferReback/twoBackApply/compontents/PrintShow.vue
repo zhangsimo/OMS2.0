@@ -37,21 +37,21 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调出方:</span>
-              <span>{{onelist.applyGuest.fullName}}</span>
+              <span>{{onelist.guest.fullName}}</span>
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.applyGuest.addr}}</span>
+              <span>{{onelist.guest.addr || onelist.guest.streetAddress}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>收货单位:</span>
-              <span>{{onelist.guest.fullName}}</span>
+              <span>{{onelist.applyGuest.fullName}}</span>
             </p>
             <p>
               <span>收货人:</span>
-              <span>{{onelist.guest.contactor}}</span>
+              <span>{{onelist.applyGuest.receiveName}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">

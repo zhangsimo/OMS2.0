@@ -144,7 +144,7 @@
             style="width:200px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
           >
-            <Option v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+            <Option :disabled="item.sellSign||item.isDisabled" v-for="item in WarehouseList" :value="item.id" :key="item.id">{{ item.name }}</Option>
           </Select>
         </FormItem>
       </div>
@@ -258,7 +258,7 @@
           @edit-actived="editActivedEvent"
           style="width: 2000px"
           :edit-config="{trigger: 'click', mode: 'cell'}"
-          :checkbox-config="{labelField: 'name', checkMethod}"
+          :checkbox-config="{labelField: 'name',strict:'true', checkMethod}"
           >
         >
           <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
@@ -405,29 +405,17 @@ export default {
     barch
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d{0,}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
 
-    let money = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("最多保留2位小数"));
-      } else {
-        const reg = /^\d+(\.\d{0,2})?$/i;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("最多保留2位小数"));
-        }
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
       }
     };
     let options2DisabledDate = date => {
@@ -808,6 +796,7 @@ export default {
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
+          this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -829,6 +818,7 @@ export default {
                 ...this.formPlan.detailList,
                 ...conversionList(val)
             ]
+            this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -996,6 +986,7 @@ export default {
                     if (res.code === 0) {
                       this.$Message.success("提交成功");
                         this.$parent.$parent.isAdd = false;
+                        this.$parent.$parent.orderlistType.value = 1;
                       this.limitList = {};
                       this.$store.commit("setleftList", res);
                         this.$refs.formPlan.resetFields();
@@ -1050,6 +1041,7 @@ export default {
                  storeId:this.formPlan.storeId,
                  orderTypeValue:0,
                  orderManId:this.$store.state.user.userData.id,
+                 orderMan: this.$store.state.user.userData.staffName,
                  guestId:this.formPlan.guestId}
                  ) ;
           this.draftShow = 0;

@@ -8,7 +8,7 @@
       <div class="titler">
         <Row style="border: 1px #000000 solid">
           <Col span="12" class="pl10">
-            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"><span>NOS</span>{{onelist.orgName}}</h5>
+            <h5 style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid">{{onelist['applyGuest'].fullName}}</h5>
           </Col>
           <Col span="12" class="pl10" >
             <p>移仓单</p>
@@ -37,29 +37,21 @@
         </Row>
          <Table resizable  size="small" style="margin: 0 auto" width="990"  border :columns="columns2" :data="onelist['stockShift'].detailVOList" class="ml10"></Table>
         <Row style="border: 1px #000000 solid">
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
+          <Col class="pl10 tr" span="17">
             <span>合计:</span>
-            <span>{{ orderAmt}}</span>
-          </Col>
-          <Col class="pl10" span="8" style="border-right: 1px #000000 solid">
-            <span>总数:</span>
             <span>{{orderQty}}</span>
-          </Col>
-          <Col class="pl10" span="8">
-            <span>合计:</span>
-            <span>{{orderAmt}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
             <span>{{onelist['stockShift'].orderMan}}</span>
           </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>提交人:</span>
             <span>{{onelist['stockShift'].createUname}}</span>
           </Col>
-          <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
+          <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>审核人:</span>
             <span>{{onelist['stockShift'].createUname}}</span>
           </Col>
@@ -101,7 +93,7 @@
                     },
                     {
                         title: '配件名称',
-                        key: 'partName',
+                        key: 'fullName',
                         align: 'center'
                     },
                     {
@@ -110,46 +102,59 @@
                         align: 'center'
 
                     },
-                    {
-                      title: '数量',
-                        key: 'orderQty',
-                        align: 'center'
-                    },
-                    {
-                        title: '规格',
-                        key: 'spec',
-                        align: 'center'
+                  {
+                    title: '品牌车型',
+                    key: 'carModelName',
+                    align: 'center'
 
-                    },
-                    {
-                        title: '单位',
-                        key: 'unit',
-                        align: 'center'
+                  },
+                  {
+                    title: '规格',
+                    key: 'spec',
+                    align: 'center'
 
-                    },
-                    {
-                        title: '单价',
-                        key: 'orderPrice',
-                        align: 'center'
+                  },
+                  {
+                    title: '单位',
+                    key: 'unit',
+                    align: 'center'
 
-                    },                    {
-                        title: '金额',
-                        key: 'orderAmt',
-                        align: 'center'
-
-                    },
-                    {
-                        title: '仓库',
-                        key: 'storeName',
-                        align: 'center'
-
-                    },
-                    {
-                        title: '仓位',
-                        key: 'storeShelf',
-                        align: 'center'
-
-                    },
+                  },
+                  {
+                    title: '数量',
+                    key: 'orderQty',
+                    align: 'center'
+                  },
+                  {
+                    title: 'OE码',
+                    key: 'oemCode',
+                    align: 'center'
+                  },
+                  // {
+                  //   title: '单价',
+                  //   key: 'orderPrice',
+                  //   align: 'center'
+                  //
+                  // },
+                  //
+                  //                      {
+                  //       title: '金额',
+                  //       key: 'orderAmt',
+                  //       align: 'center'
+                  //
+                  //   },
+                  //   {
+                  //       title: '仓库',
+                  //       key: 'storeName',
+                  //       align: 'center'
+                  //
+                  //   },
+                  //   {
+                  //       title: '仓位',
+                  //       key: 'storeShelf',
+                  //       align: 'center'
+                  //
+                  //   },
 
                 ],
                 onelist:{}, //打印数据
@@ -173,7 +178,7 @@
                     window.location.reload()
                     document.body.innerHTML = oldstr
             },
-            openModal(id){
+            openModal(id, status){
                 //let order = this.$store.state.dataList.oneOrder
                 if(id){
                     let data ={}
@@ -190,6 +195,9 @@
                            this.orderQty += item.orderQty
                            this.orderAmt += item.orderAmt||0
                          })
+                         if (status == 0) {
+                           this.onelist['stockShift']['createUname'] = "";
+                         }
                       }
                     })
                 }else {

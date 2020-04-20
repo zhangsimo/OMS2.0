@@ -350,26 +350,11 @@ export default class InterPurchase extends Vue {
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
-    if(zerolength.length > 0){
-      this.$Modal.confirm({
-        title: '',
-        content: '<p>存在配件价格为0，是否提交</p>',
-        onOk: async () => {
-          let res = await api.outsideSaveDraft(data);
-          if (res.code == 0) {
-            this.$Message.success('保存成功');
-            this.getListData();
-            this.isAdd = true;
-          }
-        }
-      })
-    }else{
-      let res = await api.outsideSaveDraft(data);
-      if (res.code == 0) {
-        this.$Message.success('保存成功');
-        this.getListData();
-        this.isAdd = true;
-      }
+    let res = await api.outsideSaveDraft(data);
+    if (res.code == 0) {
+      this.$Message.success('保存成功');
+      this.getListData();
+      this.isAdd = true;
     }
   }
 
@@ -384,11 +369,33 @@ export default class InterPurchase extends Vue {
           data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
-        let res = await api.outsideSaveCommit(data);
-        if (res.code == 0) {
-          this.$Message.success('保存成功');
-          this.getListData();
-          this.isAdd = true;
+
+        let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(zerolength.length > 0) {
+          setTimeout(()=>{
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: async () => {
+                let res = await api.outsideSaveCommit(data);
+                if (res.code == 0) {
+                  this.$Message.success('保存成功');
+                  this.getListData();
+                  this.isAdd = true;
+                }
+              },
+              onCancel:() => {
+                this.isAdd = true;
+              }
+            })
+          },500)
+        }else{
+          let res = await api.outsideSaveCommit(data);
+          if (res.code == 0) {
+            this.$Message.success('保存成功');
+            this.getListData();
+            this.isAdd = true;
+          }
         }
       },
       onCancel: () => {
@@ -477,6 +484,7 @@ export default class InterPurchase extends Vue {
         }
         if (delOk && delOk2) {
           this.$Message.success('删除成功');
+          this.deletePartArr = [];
           // if(isNetWork) {
           //   this.getListData();
           // }
@@ -574,7 +582,7 @@ export default class InterPurchase extends Vue {
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+      if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
         this.isInput = true;
