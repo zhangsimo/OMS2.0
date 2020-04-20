@@ -1,14 +1,14 @@
 import env from "./env";
 
 const dev = {
-  omsApi: "http://192.168.30.11:9240", //徐林烽
-  wmsApi: "http://192.168.30.11:9250", // 徐林烽
-  omsOrder: "http://192.168.30.11:9210", // 徐林烽
-  omsStore: "http://192.168.30.11:9280", // 库存查询 周伟健
-  omsProduct: "http://192.168.30.11:9200",
-  // omsOrder:'http://192.168.30.11:9210', //陈舒
-  // omsSettle: "http://192.168.30.11:9270",
-  omsSettle: "http://192.168.30.11:9270",
+  omsApi: "http://192.168.30.21:9240", //徐林烽
+  wmsApi: "http://192.168.30.21:9250", // 徐林烽
+  omsOrder: "http://192.168.30.21:9210", // 徐林烽
+  omsStore: "http://192.168.30.21:9280", // 库存查询 周伟健
+  omsProduct: "http://192.168.30.21:9200",
+  // omsOrder:'http://192.168.30.21:9210', //陈舒
+  omsSettle: "http://192.168.30.21:9270",
+  // omsSettle: "http://192.168.30.21:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
   // omsEdit: '', // 9220salesOrder
