@@ -9,7 +9,7 @@
           </div>
           <div class="db ml20">
             <span>查询日期：</span>
-            <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+            <Date-picker v-model="value" type="daterange" placeholder="选择日期" class="w200" @on-change="changeDate"></Date-picker>
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
@@ -351,7 +351,11 @@
       query(){
         this.getQuery();
       },
-
+      //日期组件改变时值
+      changeDate(val){
+        // console.log(val)
+        this.value = val
+      },
       //初始化
       getQuery(){
         let obj = {
@@ -424,7 +428,11 @@
       },
       // 其他付款申请
       applyForOther(){
-        this.$refs.OtherPayment.open();
+        if(Object.keys(this.currRow).length > 0){
+          this.$refs.OtherPayment.open();
+        }else {
+          this.$message.error('请选择数据！')
+        }
       },
       //子组件的数据
       getMessage(value){

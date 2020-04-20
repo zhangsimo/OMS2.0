@@ -9,7 +9,7 @@
             </div>
             <div class="db ml20">
               <span>查询日期：</span>
-              <Date-picker :value="value" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+              <Date-picker v-model="value" type="daterange" placeholder="选择日期" class="w200" @on-change="changeDate"></Date-picker>
             </div>
             <div class="db ml20">
               <span>分店名称：</span>
@@ -412,55 +412,54 @@
               if(type == 0){
                 if(this.currRow.writeOffReceiptNo){
                   this.$Message.error('其他付款申请单已核销，无法撤回！')
-                }
-                // else {
-                if(this.currRow.paymentRegainNo){
+                } else {
+                  if(this.currRow.paymentRegainNo){
                     this.$Message.error('其他付款已收回，无法撤回！')
-                  }
-                // else {
-                if(this.currRow.paymentClaimNo && this.MessageValue == '已审核'){
-                   this.$Message.error('其他付款认领单号已审核，无法撤销！')
-                 }else {
-                   this.revoke = true;
+                  } else {
+                    if(this.currRow.paymentClaimNo && this.MessageValue == '已审核'){
+                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                    }else {
+                      this.revoke = true;
                     }
-                  // }
-                // }
+                  }
+                }
               } else if(type == 1){
-                if(this.currRow.paymentClaimNo){
+                if(!this.currRow.paymentClaimNo){
                   this.$Message.error('其他付款申请未认领，无法撤回！')
-                }
-                // else {
-               if(this.currRow.writeOffReceiptNo){
+                } else {
+                  if(!this.currRow.writeOffReceiptNo){
                     this.$Message.error('其他付款申请未核销，无法撤回！')
-                  }
-                  // else {
-                if(this.currRow.writeOffReceiptNo && this.MessageValue == '已审核'){
+                  } else {
+                    if(this.currRow.writeOffReceiptNo && this.MessageValue == '已审核'){
                       this.$Message.error('其他付款核销单号已审核，无法撤销！')
-                }else {
+                    }else {
                       this.revoke = true;
                     }
-                  // }
-                // }
-              }else {
-                if(this.currRow.paymentClaimNo){
-                  this.$Message.error('其他付款申请未认领，无法撤回！')
-                }
-                // else {
-                if(this.currRow.paymentRegainNo){
-                    this.$Message.error('其他付款申请未核销，无法撤回！')
                   }
-                // else {
-                if(this.currRow.paymentRegainNo && this.MessageValue != '已审核'){
-                  this.$Message.error('其他付款认领单号已审核，无法撤销！')
-                }else {
+                }
+              }else {
+                if(!this.currRow.paymentClaimNo){
+                  this.$Message.error('其他付款申请未认领，无法撤回！')
+                } else {
+                  if(!this.currRow.paymentRegainNo){
+                    this.$Message.error('其他付款申请未核销，无法撤回！')
+                  } else {
+                    if(this.currRow.paymentRegainNo && this.MessageValue == '已审核'){
+                      this.$Message.error('其他付款认领单号已审核，无法撤销！')
+                    }else {
                       this.revoke = true;
                     }
-                  // }
-                // }
+                  }
+                }
               }
             }else {
               this.$message.error("请选择数据");
             }
+          },
+          //日期组件改变时值
+          changeDate(val){
+            // console.log(val)
+            this.value = val
           },
          //收回认领
           claimCollection(){
