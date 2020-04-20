@@ -140,10 +140,8 @@
 </template>
 <script>
 import accountSelette from "./components/accountWirte";
-import {
-  wirteAccount,
-  saveAccount
-} from "_api/settlementManagement/seleteAccount.js";
+import { wirteAccount, saveAccount} from "_api/settlementManagement/seleteAccount.js";
+import { expenditureClaim , orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
@@ -161,18 +159,33 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {}
+      obj: {},
+      showModalOne: '' //判断是否显示...
     };
   },
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      this.reconciliationStatement.accountNo =
-        this.reconciliationStatement.accountNo + "," + val.accountNo;
-      val.two.map(item => {
-        item.businessTypeName = item.businessType.name;
-      });
-      this.BusinessType = [...this.BusinessType, ...val.two];
+      console.log(val)
+      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
+      // val.two.map(item => {
+      //   item.businessTypeName = item.businessType.name;
+      // });
+      // this.BusinessType = [...this.BusinessType, ...val.two];
+      let jsonArr = [val]
+      jsonArr.map(item => {
+        item.orgName = this.reconciliationStatement.orgName;
+        item.accountNo = item.serviceId;
+        // item.guestName = item.guestName;
+        item.businessTypeName = item.orderTypeName;
+        item.reconciliationAmt = item.applyAmt;
+        // item.hasAmt = +item.amountCollected - +item.paymentBalance;
+        item.hasAmt = item.paymentClaimAmt;
+        item.unAmt = item.paymentBalance;
+        item.rpAnt = item.paymentBalance;
+        item.unAmtLeft = item.unAmt - item.rpAnt;
+      })
+      this.BusinessType.push(...jsonArr)
       this.checkComputed()
     });
     //选择科目
@@ -212,6 +225,7 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
+      console.log(val);
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
@@ -223,6 +237,7 @@ export default {
         delete item.businessType;
       });
       this.tableData = val;
+      console.log(this.tableData);
     });
   },
   methods: {
@@ -243,6 +258,7 @@ export default {
         this.BusinessType = [];
         this.tableData = [];
         this.collectPayId = "";
+        this.$parent.Types = '';
         if(this.$parent.paymentId === "YSKZC"){
           this.$parent.claimModal=false
         }
@@ -262,13 +278,15 @@ export default {
           sign = 7;
         } else if (this.$parent.type === 2) {
           sign = 8;
+        }else if(this.$parent.paymentId === 'QTYSK'){
+          sign = 11;
         }
-        let accountNo = this.$parent.reconciliationStatement
-          ? this.$parent.reconciliationStatement.accountNo
-          : this.$parent.currentAccount.accountNo;
+        let accountNo = this.$parent.reconciliationStatement ? this.$parent.reconciliationStatement.accountNo : this.$parent.currentAccount.accountNo;
+        let id = this.$parent.currRow.id;
         wirteAccount({
           accountNo,
-          sign
+          sign,
+          id
         }).then(res => {
           if (res.code === 0) {
             res.data.one.furposeName = res.data.one.furpose.name;
@@ -286,17 +304,31 @@ export default {
     //保存
     conserve() {
       if (!Number(this.check)) {
-        let obj = {
-          one: this.reconciliationStatement,
-          two: this.BusinessType,
-          three: this.tableData
-        };
-        saveAccount(obj).then(res => {
-          if (res.code === 0) {
-            this.Settlement = false;
-            this.$message.success("保存成功");
-          }
-        });
+        console.log(this.$parent.Types)
+        if(this.$parent.Types == '其他付款核销'){
+          let obj = {
+            wrtiteOffDtos: this.BusinessType,
+            sourceDtos: this.tableData
+          };
+          orderWriteOff(obj).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$message.success("保存成功");
+            }
+          });
+        } else {
+          let obj = {
+            wrtiteOffDtos: this.BusinessType,
+            sourceDtos: this.tableData
+          };
+          expenditureClaim(obj).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$message.success("保存成功");
+            }
+          });
+        }
+
       } else {
         this.$message.error("核对金额为0才能保存");
       }
