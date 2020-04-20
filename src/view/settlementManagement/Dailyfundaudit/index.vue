@@ -6,7 +6,7 @@
           <div class="db mr15">
             <span>快速查询：</span>
           </div>
-          <div class="db">
+          <div class="db mr15">
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db ml15">
@@ -42,11 +42,11 @@
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>
-            <input type="text" v-model="payOrderNo" />
+            <Input type="text" v-model="payOrderNo" size="mini" style="width: 120px" />
           </div>
           <div class="db ml15">
             <span>收付款单号：</span>
-            <input type="text" v-model="orderNo" />
+            <Input type="text" v-model="orderNo" size="mini" style="width: 120px" />
           </div>
           <div class="db ml15">
             <button
@@ -67,7 +67,6 @@
               <span>审核</span>
             </button>
           </div>
-
           <div class="db ml5">
             <button
               class="mr10 ivu-btn ivu-btn-default"
