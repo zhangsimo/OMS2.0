@@ -7,20 +7,19 @@
             <span>快速查询：</span>
           </div>
           <div class="db mr15">
-            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+            <quick-date
+              class="mr10"
+              ref="quickDate"
+              @quickDate="getDataQuick"
+            ></quick-date>
           </div>
           <div class="db ml15">
             <span>查询日期：</span>
-            <Date-picker
-              v-model="dates"
-              type="daterange"
-              placeholder="选择日期"
-              class="w200"
-            ></Date-picker>
+            <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
           </div>
           <div class="db ml15">
             <span>分店名称：</span>
-            <Select v-model="store" class="w150">
+            <Select v-model="BranchstoreId" class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -31,9 +30,9 @@
           </div>
           <div class="db ml15">
             <span>往来单位：</span>
-            <Select v-model="reciprocalId" class="w150">
+            <Select v-model="companyId" class="w150">
               <Option
-                v-for="item in Reciprocals"
+                v-for="item in company"
                 :value="item.value"
                 :key="item.value"
                 >{{ item.label }}</Option
@@ -83,19 +82,19 @@
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
         <TabPane label="应收审核" name="capitalChain1">
-          <table-one />
+          <table-one :tbdata="tableData1" />
         </TabPane>
         <TabPane label="应付审核" name="capitalChain2">
-          <table-two />
+          <table-two :tbdata="tableData2" />
         </TabPane>
         <TabPane label="费用报销审核" name="capitalChain3">
-          <table-three />
+          <table-three :tbdata="tableData3" />
         </TabPane>
         <TabPane label="预收款/核销支出" name="capitalChain4">
-          <table-four />
+          <table-four :tbdata="tableData4" />
         </TabPane>
         <TabPane label="其他审核" name="capitalChain5">
-          <table-five />
+          <table-five :tbdata="tableData5" />
         </TabPane>
       </Tabs>
     </div>
@@ -119,6 +118,10 @@ import TableTwo from "./components/TableTwo";
 import TableThree from "./components/TableThree";
 import TableFour from "./components/TableFour";
 import TableFive from "./components/TableFive";
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
+import { creat } from "./../components";
+import moment from "moment";
 export default {
   components: {
     QuickDate,
@@ -126,20 +129,22 @@ export default {
     TableTwo,
     TableThree,
     TableFour,
-    TableFive,
+    TableFive
   },
   data() {
     return {
       // 数据类
-      quickDate: [], // 快速查询
       oneList: null, // 表格选中
-      tableData: [], // 未审核
-      tableData1: [], // 已审核
-      dates: null, // 查询日期
-      store: "", // 分店id
+      tableData1: [], // 应收审核
+      tableData2: [], // 应付审核
+      tableData3: [], // 费用报销审核
+      tableData4: [], // 预收款/核销支出
+      tableData5: [], // 其他审核
+      dates: [], // 查询日期
+      BranchstoreId: "", // 分店id
       Branchstore: [], // 分店
-      reciprocalId: "", // 往来单位id
-      Reciprocals: [], // 往来单位
+      companyId: "", // 往来单位id
+      company: [], // 往来单位
       payOrderNo: "", // 收付款单号
       orderNo: "", // 对账单号
       content: "", // 撤销原因
@@ -147,21 +152,61 @@ export default {
       isShow: false // 撤销原因modal
     };
   },
-  async mounted() {},
+  async mounted() {
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
+    this.dates = arr[0];
+    this.BranchstoreId = arr[1];
+    this.Branchstore = arr[2];
+    this.getCompany();
+    this.query();
+  },
   methods: {
     // 快速查询
     getDataQuick(v) {
-      this.quickDate = v;
+      this.dates = v;
       this.query();
     },
-    // 获取门店列表
-    getStores() {},
-
+    // 往来单位
+    async getCompany() {
+      findGuest({ size: 2000 }).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
+            });
+          });
+        }
+      });
+    },
     // 查询
-    query() {},
-    //点击获取表格数据
-    getOneList(val) {
-      this.oneList = val.row;
+    async query() {
+      let params = {
+        startTime: this.dates[0],
+        endTime: this.dates[1],
+        guestSourceId: this.companyId,
+        businessNumbers: this.payOrderNo,
+        businessNumbersList: this.orderNo,
+      }
+
+      if (this.dates.length === 2) {
+        params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+        params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+      }
+
+      for (let key in params) {
+        if (!params[key]) {
+          Reflect.deleteProperty(params, key)
+        }
+      }
+
+      [
+        this.tableData1,
+        this.tableData2,
+        this.tableData3,
+        this.tableData4,
+        this.tableData5,
+      ] = await api.getTableData(params);
     },
     // 审核
     SubmitAudit() {

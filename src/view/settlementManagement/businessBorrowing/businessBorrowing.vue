@@ -324,7 +324,7 @@
     <!--其他收款核销-->
     <!--<settlement ref="settlement"></settlement>-->
     <!--因公借支核销-->
-    <write-off ref="writeOff"></write-off>
+    <write-off ref="writeOff" :table="currRow"></write-off>
   </div>
 </template>
 
