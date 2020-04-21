@@ -138,6 +138,7 @@ export default {
 
       if (this.list.type == 1) {
         this.formInline = {}
+        this.details = []
         let arr = [
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
@@ -369,6 +370,7 @@ export default {
             this.$Message.error('表格校验失败')
           } else {
             this.formInline.step = type
+            this.formInline.details = this.details
             let res = await getExpSve(this.formInline)
             if (res.code == 0) {
               this.$Message.success('操作成功')

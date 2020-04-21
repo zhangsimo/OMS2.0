@@ -111,7 +111,6 @@
         this.modelType.allSalesList =  await getAllSalesList()
         this.modelType.salesList = await getComenAndGo()
         this.modelType.payList = await getPayList()
-       console.log(this.modelType.payList)
       },
       methods:{
           open(index){
