@@ -44,6 +44,7 @@
                 highlight-hover-row
                 highlight-current-row
                 @current-change="getOneClinet"
+                @cell-dblclick="dblclick"
                 show-overflow
                 height="500"
                 style="width: 1500px"
@@ -276,6 +277,9 @@ export default {
       } else {
         this.$message.error("请选择客户");
       }
+    },
+    dblclick(){
+      this.select();
     }
   }
 };

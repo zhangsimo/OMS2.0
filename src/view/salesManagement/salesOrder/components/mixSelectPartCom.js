@@ -90,23 +90,35 @@ export const mixSelectPartCom = {
         },
         {
           title: "单位",
-          key: "unit",
+          key: "minUnit",
           minWidth: 120
         },
         {
           title: "一级分类",
           key: "carTypef",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.firstType.typeName)
+          }
         },
         {
           title: "二级分类",
           key: "carTypes",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.secondType.typeName)
+          }
         },
         {
           title: "三级分类",
           key: "carTypet",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) =>{
+            let baseType = p.row.baseType||{}
+            return h('span',baseType.thirdType.typeName)
+          }
         },
         {
           title: "产地",
@@ -208,11 +220,12 @@ export const mixSelectPartCom = {
       }
 
       if (this.partName.trim()) {
-        if (this.searchType == "adapterCarModels") {
-          req[this.searchType] = [this.partName];
-        } else {
-          req[this.searchType] = this.partName.trim();
-        }
+        // if (this.searchType == "adapterCarModels") {
+        //   req.adapterCarModels = [this.partName];
+        // } else {
+        //   req[this.searchType] = this.partName.trim();
+        // }
+        req.partName = this.partName
       }
       req.page = this.page.num;
       req.size = this.page.size;
@@ -302,6 +315,9 @@ export const mixSelectPartCom = {
         item.forEach(el => el.orderQty = 1);
         this.$emit("selectPartName", item);
         // this.searchPartLayer = false;
+        setTimeout(()=>{
+          this.$Message.success("已添加");
+        })
       } else {
         this.$Message.error("请选择数据");
       }

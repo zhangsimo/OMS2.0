@@ -601,7 +601,7 @@ export const mixGoodsData = {
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
-                  this.$Message.success("添加成功");
+                  this.$Message.success("保存成功");
                   this.getList();
                 }
               });

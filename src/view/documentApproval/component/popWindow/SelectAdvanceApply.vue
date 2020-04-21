@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="modelShow"
-    title="其他应付款单据"
+    title="预收款单据"
     width="1000px"
   >
     <div class="clearfix">
@@ -32,8 +32,8 @@
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-        <vxe-table-column field="expenseClaimAmount" title="预收款金额"></vxe-table-column>
-        <vxe-table-column field="paymentBalance" title="日期"></vxe-table-column>
+        <vxe-table-column field="payAmt" title="预收款金额"></vxe-table-column>
+        <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -47,7 +47,7 @@
 <script>
   import moment from 'moment'
   import { findGuest } from "_api/settlementManagement/advanceCollection.js";
-  import {getpublicRequestList} from '@/api/documentApproval/OtherPayment.js'
+  import {getPchsList} from '@/api/documentApproval/AdvanceApply.js'
 
   export default {
     name: "requestCode",
@@ -103,7 +103,7 @@
         data.endTime = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.amountCollected = this.money
         data.guestId = this.companyId == 0 ? '' : this.companyId
-        let res = await getpublicRequestList(data)
+        let res = await getPchsList(data)
         if(res.code === 0) {
           this.$Message.success('查询成功')
           this.tableData = res.data
@@ -113,7 +113,6 @@
       //选择
       selectChangeEvent({row}){
         this.checkedList = row
-
       },
 
       //确定

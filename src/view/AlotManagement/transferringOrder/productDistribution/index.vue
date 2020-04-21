@@ -4,8 +4,8 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10" />
-            <Input v-model="form.fullName" placeholder="配件名称" style="width: 160px" class="mr10" />
+            <!--<Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10" />-->
+            <Input v-model="form.fullName" placeholder="配件编码/名称" style="width: 160px" class="mr10" />
             <Select v-model="form.partBrandCode" class="w100 mr10" clearable placeholder="--品牌--">
               <Option
                 v-for="item in quickArray"
@@ -139,6 +139,7 @@
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
+              <Button type="text" @click="sureBaocunsave(row)">保存</Button>
               <Button type="text" @click="sureBaocunfenpei(row)">分配完成</Button>
             </template>
           </vxe-table-column>
@@ -173,7 +174,8 @@ import {
   jinqiaopinliebiao,
   baocun,
   shenqingdanliebiao,
-  daochu
+  daochu,
+  hotProductsSave,
 } from "../../../../api/AlotManagement/productDistribution.js";
 export default {
   name: "productDistribution",
@@ -296,6 +298,32 @@ export default {
       this.params.page = 1;
       this.params.size = s;
       this.search(this.form);
+    },
+    // save
+    sureBaocunsave(row) {
+      this.$Modal.confirm({
+              title: '提示',
+              content: '<p>是否保存</p>',
+              onOk: () => {
+                  this.baocunsave(row)
+              },
+          });
+    },
+    baocunsave(row) {
+      if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
+        this.$Message.info("请输入分配数");
+        return;
+      }
+      hotProductsSave(row)
+        .then(res => {
+          if (res.code == 0) {
+            this.BottomTableData = res.data || [];
+            this.BottomTableData = [];
+          }
+        })
+        .catch(e => {
+          this.$Message.info("保存失败");
+        });
     },
     //确认分配完成
       sureBaocunfenpei(row){

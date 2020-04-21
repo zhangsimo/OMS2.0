@@ -145,6 +145,7 @@ import {
   saveAccount,
   paymentRegain
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
+import { orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
@@ -267,7 +268,7 @@ export default {
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
           sign = 2;
-          this.showModalOne = 0;
+          this.showModalOne = 1;
         } else if (this.$parent.paymentId === "YFK") {
           this.showModalOne = 0;
           sign = 4;
@@ -284,6 +285,8 @@ export default {
           sign = 7;
         } else if (this.$parent.type === 2) {
           sign = 8;
+        }else if(this.$parent.paymentId === 'QTYSK'){
+          sign = 11;
         }
         let accountNo = this.$parent.reconciliationStatement
           ? this.$parent.reconciliationStatement.accountNo
@@ -319,9 +322,23 @@ export default {
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("保存成功");
+              this.$parent.getQuery();
             }
           });
-        }else {
+        } else if(this.$parent.Types === '其他收款核销'){
+          let obj3 = {
+            wrtiteOffDtos: this.BusinessType,
+            sourceDtos: this.tableData
+          };
+          orderWriteOff(obj3).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("核销成功");
+              this.$parent.getQuery();
+            }
+          });
+        } else {
           let obj2 = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
@@ -332,6 +349,7 @@ export default {
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("保存成功");
+              this.$parent.getQuery();
             }
           });
         }

@@ -1,7 +1,7 @@
 <template>
   <Modal
     v-model="model"
-    title="预收款支出 申请单"
+    title="采购预付款 申请单"
     width="1200px"
   >
     <div class="bigbox">
@@ -51,7 +51,7 @@
         </div>
 
 
-        <h5 class="mt20 mb10" style="font-size: 18px">其他应付款单据</h5>
+        <h5 class="mt20 mb10" style="font-size: 18px">预付款采购单据</h5>
         <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
         <vxe-table
           class="mt10"
@@ -59,7 +59,9 @@
           resizable
           auto-resize
           ref="documentTable"
+          show-footer
           show-overflow
+          :footer-method="documentFooterMethod"
           size="mine"
           align="center"
           :data="formInline.details"
@@ -72,12 +74,8 @@
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="预收款收款单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-          <vxe-table-column field="orderTypeName" title="日期"></vxe-table-column>
-          <vxe-table-column field="collectionTime" title="预收款认领金额"></vxe-table-column>
-          <vxe-table-column field="amountCollected" title="预收款核销金额"></vxe-table-column>
-          <vxe-table-column field="paymentNo" title="预收款支出金额"></vxe-table-column>
-          <vxe-table-column field="paymentApplicationAmount" title="预收款支出已认领金额"></vxe-table-column>
-          <vxe-table-column field="expenseClaimAmount" title="预收款余额"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
+          <vxe-table-column field="payAmt" title="预付款金额"></vxe-table-column>
         </vxe-table>
 
 
@@ -139,7 +137,7 @@
 
 
     <!--    选择单据模态框-->
-    <selectOther ref="documnets" @backLists = 'otherPayList'></selectOther>
+    <selectAdvanceApply ref="documnets" @backLists = 'otherPayList'></selectAdvanceApply>
     <div slot='footer'></div>
   </Modal>
 </template>

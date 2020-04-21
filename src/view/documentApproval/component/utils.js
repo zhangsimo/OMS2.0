@@ -1,16 +1,22 @@
 import store from '@/store/index.js'
 import {getSales} from  '_api/salesManagment/salesOrder.js'
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import {getPayAccount} from "_api/documentApproval/ExpenseReimbursement.js"
 
 //返回当前账号下银行账号名称数组
-export function getPayList() {
+export async function getPayList() {
       let usedata = store.state.user.userData
       let data = {
-          label: usedata.accountPayee,
-          value: usedata.bankNumber
+        shopNumber: usedata.shopId,
       }
-      let  list = [data]
-      return list
+      let res = await getPayAccount(data)
+      if (res.code === 0 ){
+          res.data.content.map( item => {
+            item.value = item.id
+            item.label = item.accountName
+          })
+        return  res.data.content
+      }
 }
 
 

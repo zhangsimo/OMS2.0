@@ -51,6 +51,15 @@ export function baocun(data) {
   });
 }
 
+// 
+export function hotProductsSave(data) {
+  return axios.request({
+    url: `${api.omsOrder}/allotApplyMain/hotProductsSave`,
+    method: 'post',
+    data
+  });
+}
+
 // 导出(未调)
 export function daochu(data) {
   return axios.request({

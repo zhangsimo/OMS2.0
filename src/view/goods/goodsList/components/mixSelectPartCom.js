@@ -171,22 +171,23 @@ export const mixSelectPartCom = {
       }
       const qurry = this.partName.trim();
       if(qurry.length > 0) {
-        switch (this.searchType) {
-          case "0":
-            data.partCode = qurry;
-            break;
-          case "1":
-            data.fullName = qurry;
-            break;
-          case "2":
-            data.adapterCarModels = [qurry];
-            break;
-          case "3":
-            data.pinyin = qurry;
-            break;
-          default:
-            break;
-        }
+        // switch (this.searchType) {
+        //   case "0":
+        //     data.partCode = qurry;
+        //     break;
+        //   case "1":
+        //     data.fullName = qurry;
+        //     break;
+        //   case "2":
+        //     data.adapterCarModels = [qurry];
+        //     break;
+        //   case "3":
+        //     data.pinyin = qurry;
+        //     break;
+        //   default:
+        //     break;
+        // }
+        data.adapterCarModels = [qurry];
       }
       if(this.formPlanmain&&this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
@@ -284,6 +285,7 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         this.searchPartLayer = false;
+        this.$Message.success("已添加");
       } else {
         this.$Message.error("请选择数据");
       }

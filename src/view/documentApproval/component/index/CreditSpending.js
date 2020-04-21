@@ -1,14 +1,13 @@
 import  moment from 'moment'
-import selectOther from '../popWindow/SelectAdvancesReceived'
+import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-import {getPayList} from "../utils";
 
 export default {
   name: "OtherPayment",
   components:{
-    selectOther,
+    selectCredit,
     upphoto,
     flowbox
   },
@@ -47,7 +46,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true,type:'number',  message: '付款账户必选', trigger: 'change'}
+          {required: true,type:'string',  message: '付款账户必选', trigger: 'change'}
 
         ]
         // BankNo:[
@@ -62,14 +61,13 @@ export default {
     }
   },
   mounted(){
-    this.payUserList = getPayList()
   },
 
   methods:{
     //模态框打开111
     open(){
       this.company = this.list.salesList
-
+      this.payUserList = this.list.payList
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []

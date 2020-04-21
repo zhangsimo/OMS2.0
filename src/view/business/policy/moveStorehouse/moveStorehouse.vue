@@ -575,6 +575,10 @@ export default {
         data.createEndDate = this.queryTime[1] || "";
       }
       data.status = "";
+      if(this.purchaseType!=99){
+        data.status = this.purchaseType;
+      }
+
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size).then(res => {

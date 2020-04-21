@@ -15,22 +15,26 @@
         align="center"
       >
         <vxe-table-column
-          field="temp"
+          field="serviceId"
           title="因公借支申请单号"
         ></vxe-table-column>
-        <vxe-table-column field="temp" title="申请时间"></vxe-table-column>
-        <vxe-table-column field="temp" title="申请人"></vxe-table-column>
-        <vxe-table-column field="temp" title="因公借支金额"></vxe-table-column>
-        <vxe-table-column field="temp" title="报销金额"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="申请时间"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="payAmt" title="因公借支金额"></vxe-table-column>
+        <vxe-table-column field="" title="报销金额">
+          <template>
+            <span>{{ totalPrice }}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
-          field="temp"
+          field="writeOffAmount"
           title="因公借支核销金额"
           :edit-render="{ name: 'input' }"
         >
           <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
-              v-model="row.temp"
+              v-model="row.writeOffAmount"
               :controls="false"
               size="medium"
               :precision="2"
@@ -100,14 +104,19 @@
 <script>
 export default {
   name: "writeOff",
-  props: {},
+  props: {
+    table: {
+      type: Object,
+      default: null,
+    }
+  },
   data() {
     return {
       show: false,
-      tableData: [],
       price: 0,
       date: null,
       tbdata: [],
+      totalPrice: 0, // 报销金额
       page: {
         num: 1,
         size: 10,
@@ -115,6 +124,11 @@ export default {
         opts: [20, 50, 100, 200]
       } //分页
     };
+  },
+  computed: {
+    tableData() {
+      return [this.table]
+    }
   },
   methods: {
     open() {

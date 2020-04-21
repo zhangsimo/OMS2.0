@@ -118,6 +118,7 @@ export default {
         let obj = {};
         obj.guestId = this.guestId;
         obj.financeAccountCashList = this.financeAccountCashList
+        obj.claimType = 0
         // console.log(obj)
         addClaim(obj).then(res=>{
           if(res.code===0){

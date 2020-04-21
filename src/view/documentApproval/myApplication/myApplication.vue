@@ -58,14 +58,15 @@
         :auto-resize="true"
         highlight-hover-row
         highlight-current-row
+        :height="500"
         show-overflow
         :data="tableData">
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
             <template>
-              <vxe-button>编辑</vxe-button>
-              <vxe-button>查看</vxe-button>
-              <vxe-button>删除</vxe-button>
+              <vxe-button>编 辑</vxe-button>
+              <vxe-button>查 看</vxe-button>
+              <vxe-button>删 除</vxe-button>
             </template>
           </template>
         </vxe-table-column>
@@ -128,7 +129,7 @@
         </section>
       </div>
     </section>
-    <approval :approvalTit="approvalTit"></approval>
+    <!--<approval :approvalTit="approvalTit"></approval>-->
   </div>
 </template>
 
@@ -180,8 +181,8 @@
               label: "对账单申请"
             },
           ], //申请类型数组
-          tableData:[], //表格内容
-          falg: false, //判断审批进度是否显示
+          tableData:[{index: 1}], //表格内容
+          falg: true, //判断审批进度是否显示
           statusData: [
             { name: "提交", status: "已提交" },
             { name: "产品总监审批", status: "已审批" }
@@ -217,8 +218,33 @@
           this.$router.push({name: "documentApproval-draftingOfApplication"})
         },
         //vxe表格计算和值
+      },
+      filters: {
+        date(value = 0) {
+          let date = new Date(value).toLocaleDateString();
+          let time = new Date(value).toLocaleTimeString();
+          value = date.split("/").join("-") + " " + time.substr(2);
+          return value;
+        },
+        status(value = "") {
+          value = value.toLowerCase();
+          switch (value) {
+            case "none":
+              value = "已提交";
+              break;
+            case "agree":
+              value = "已同意";
+              break;
+            case "refuse":
+              value = "已拒绝";
+              break;
+            case "redirected":
+              value = "已转交";
+              break;
+          }
+          return value;
+        }
       }
-
     }
 </script>
 

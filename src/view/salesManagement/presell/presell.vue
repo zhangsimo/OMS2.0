@@ -807,6 +807,7 @@ export default {
           datas.forEach(item => {
             this.formPlan.detailVOList.push(item);
           });
+          this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
 

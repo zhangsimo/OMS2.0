@@ -78,7 +78,7 @@
         <Row style="border: 1px #000000 solid">
           <Col class="pl10 marginLeft" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{onelist.apply.orderAmt|priceFilters}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">

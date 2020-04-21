@@ -868,6 +868,18 @@ export default [
           import("@/view/settlementManagement/businessBorrowing/businessBorrowing.vue")
       },
       {
+        path: "/settlementManagement/Dailyfundaudit",
+        name: "settlementManagement-Dailyfundaudit",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "每日资金审核",
+        },
+        component: () =>
+          import("@/view/settlementManagement/Dailyfundaudit/index.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",
@@ -932,6 +944,17 @@ export default [
         },
         component: () =>
           import("@/view/settlementManagement/DailyFundReview/index.vue")
+      },
+      {
+        path: "/settlementManagement/accounting",
+        name: "settlementManagement-accounting",
+        mark: "5300",
+        meta: {
+          // hideInMenu: true,
+          title: "会计审核"
+        },
+        component: () =>
+          import("@/view/settlementManagement/accounting/accounting.vue")
       }
     ]
   },

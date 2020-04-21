@@ -37,3 +37,22 @@ export function addClaim(data) {
     data,
   });
 }
+
+//其他付款支出认领
+export function expenditureClaim(data) {
+  return axios.request({
+    url: `${api.omsSettle}/otherAccountsPayment/expenditureClaim`,
+    method: "post",
+    data,
+  });
+}
+
+//其他付款核销
+// /otherAccountsPayment/orderWriteOff
+export function orderWriteOff(data) {
+  return axios.request({
+    url: `${api.omsSettle}/otherAccountsPayment/orderWriteOff`,
+    method: "post",
+    data,
+  });
+}

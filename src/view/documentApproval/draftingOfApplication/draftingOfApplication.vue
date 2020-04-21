@@ -84,7 +84,7 @@
   import CreditSpending from'../component/CreditSpending'
   import AdvanceApply from '../component/AdvanceApply'
   import InternalFinance from'../component/InternalFinance'
-  import {getComenAndGo , getAllSalesList} from "../component/utils";
+  import {getComenAndGo , getAllSalesList , getPayList} from "../component/utils";
 
   export default {
         name: "draftingOfApplication",
@@ -97,11 +97,7 @@
         AdvanceApply,
         InternalFinance
       },
-      // provide(){
-      //     return {
-      //
-      //     }
-      // },
+
       data(){
           return {
             //打开模态框状态 type 1 新增 2修改 3查看
@@ -114,6 +110,7 @@
      async mounted(){
         this.modelType.allSalesList =  await getAllSalesList()
         this.modelType.salesList = await getComenAndGo()
+        this.modelType.payList = await getPayList()
       },
       methods:{
           open(index){

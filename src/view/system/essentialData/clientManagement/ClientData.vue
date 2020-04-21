@@ -39,7 +39,7 @@
                 <Input v-model="data.contactor" style="width: 180px" maxlength="8" />
               </FormItem>
               <FormItem label="省份:" prop="provinceId">
-                <Select v-model="data.provinceId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
                     v-if="item.parentId==0"
@@ -81,7 +81,7 @@
                 <Input v-model="data.contactorTel" style="width: 180px" />
               </FormItem>
               <FormItem label="城市:" prop="cityId">
-                <Select v-model="data.cityId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
                     v-if="data.provinceId==item.parentId"

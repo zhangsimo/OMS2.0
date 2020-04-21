@@ -25,6 +25,7 @@
           <Table
             height="389"
             @on-current-change="selectTabelData"
+            @on-row-dblclick="dblclick"
             highlight-row
             :loading="loading"
             border
