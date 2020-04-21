@@ -337,7 +337,7 @@
         serviceId: "", //给子组件传的值
         reconciliationStatement: {},
         claimSelection: [],
-        MessageValue: '', //子组件传的数据审核状态
+        MessageValue: {}, //子组件传的数据审核状态
         MessageValueNumber: '', //其他付款支出认领单号
         Types: '', //给子组件的判定来调取的接口是哪个
       }
@@ -360,8 +360,8 @@
       //初始化
       getQuery(){
         let obj = {
-          startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
-          endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
+          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
+          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
           orgid: this.BranchstoreId,
           guestId: this.companyId,
           size: this.page.size,
@@ -627,7 +627,7 @@
             if (columnIndex === 0) {
               return '合计'
             }
-            if (['payAmt', 'writeOffAmt','returnClaimAmt','remainingAmt'].includes(column.property)) {
+            if (['amountCollected', 'paymentApplicationAmount','expenseClaimAmount','writeOffAmount', 'paymentBalance'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
             return null

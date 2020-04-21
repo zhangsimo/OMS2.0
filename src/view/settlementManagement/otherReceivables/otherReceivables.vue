@@ -614,7 +614,7 @@
                 if (columnIndex === 0) {
                   return '合计'
                 }
-                if (['payAmt', 'writeOffAmt','returnClaimAmt','remainingAmt'].includes(column.property)) {
+                if (['applyAmt', 'writeOffAmount','paymentRegainAmt','paymentBalance'].includes(column.property)) {
                   return this.$utils.sum(data, column.property)
                 }
                 return null

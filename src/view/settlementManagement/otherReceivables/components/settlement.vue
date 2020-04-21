@@ -326,8 +326,9 @@ export default {
           });
         }else {
           let obj2 = {
-            wrtiteOffDtos: this.BusinessType,
-            sourceDtos: this.tableData
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
           };
           orderWriteOff(obj2).then(res => {
             if (res.code === 0) {

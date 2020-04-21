@@ -140,7 +140,7 @@
 </template>
 <script>
 import accountSelette from "./components/accountWirte";
-import { wirteAccount, saveAccount} from "_api/settlementManagement/seleteAccount.js";
+import { wirteAccount, saveAccount} from "_api/settlementManagement/seleteAccount";
 import { expenditureClaim , orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
@@ -307,8 +307,9 @@ export default {
         console.log(this.$parent.Types)
         if(this.$parent.Types == '其他付款核销'){
           let obj = {
-            wrtiteOffDtos: this.BusinessType,
-            sourceDtos: this.tableData
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
           };
           orderWriteOff(obj).then(res => {
             if (res.code === 0) {
@@ -318,8 +319,9 @@ export default {
           });
         } else {
           let obj = {
-            wrtiteOffDtos: this.BusinessType,
-            sourceDtos: this.tableData
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
           };
           expenditureClaim(obj).then(res => {
             if (res.code === 0) {
@@ -328,7 +330,6 @@ export default {
             }
           });
         }
-
       } else {
         this.$message.error("核对金额为0才能保存");
       }
