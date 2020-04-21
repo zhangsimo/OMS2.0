@@ -332,6 +332,7 @@
             MessageValue: '', //收款记录单的数据
             claimSelection: [] ,
             typeA: '', //是否收回按钮
+            Types: '', //是否点击其他收款核销按钮
           }
         },
         methods :{
@@ -346,12 +347,12 @@
           },
           //其他付款认领/其他收款收回
           claimCollect(type){
-            if(Object.keys(this.currRow).length !== 0){
               if (type === 1) {
                   this.claimModal = true;
                   this.claimTit = "其他付款认领";
                   this.claimedList(1);
               } else {
+                if(Object.keys(this.currRow).length !== 0){
                 if(this.currRow.paymentBalance == 0 ||  !this.currRow.paymentBalance) {
                   this.$Message.error('他收款余额为0无法收回!')
                 }else {
@@ -359,10 +360,9 @@
                   this.claimModal = true;
                   this.claimedList(2);
                 }
-
-              }
-            }else {
-              this.$message.error('请选择数据！')
+              }else {
+                  this.$message.error('请选择数据！')
+                }
             }
           },
           //预收款弹框是否打开
@@ -487,7 +487,8 @@
                 this.$Message.error('其余收款余额为0无法再核销!')
               }else {
                 this.$refs.settlement.Settlement = true;
-                  this.paymentId = "YSK";
+                  this.paymentId = "QTYSK";
+                  this.Types = '其他收款核销'
               }
             } else {
               this.$message.error("请选择数据");
@@ -613,7 +614,7 @@
                 if (columnIndex === 0) {
                   return '合计'
                 }
-                if (['payAmt', 'writeOffAmt','returnClaimAmt','remainingAmt'].includes(column.property)) {
+                if (['applyAmt', 'writeOffAmount','paymentRegainAmt','paymentBalance'].includes(column.property)) {
                   return this.$utils.sum(data, column.property)
                 }
                 return null

@@ -312,7 +312,7 @@
       return{
         modelType:{
           type:1, //新增
-          id:''
+          id: ''
         },
         value: [], //查询日期数组
         BranchstoreId: '', //分店名称
@@ -337,8 +337,9 @@
         serviceId: "", //给子组件传的值
         reconciliationStatement: {},
         claimSelection: [],
-        MessageValue: '', //子组件传的数据审核状态
+        MessageValue: {}, //子组件传的数据审核状态
         MessageValueNumber: '', //其他付款支出认领单号
+        Types: '', //给子组件的判定来调取的接口是哪个
       }
     },
     methods :{
@@ -359,8 +360,8 @@
       //初始化
       getQuery(){
         let obj = {
-          startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
-          endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
+          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
+          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
           orgid: this.BranchstoreId,
           guestId: this.companyId,
           size: this.page.size,
@@ -378,18 +379,18 @@
       },
       //其他收款认领/其他付款支出认领
       claimCollect(type){
-        if(Object.keys(this.currRow).length !== 0){
           if (type === 1) {
             this.claimModal = true;
             this.claimTit = "其他收款认领";
             this.claimedList(1);
           } else {
-            this.claimModal = true;
-            this.claimTit = "其他付款支出认领";
-            this.claimedList(2);
-          }
-        } else {
-          this.$message.error('请选择数据！')
+            if(Object.keys(this.currRow).length !== 0){
+              this.claimModal = true;
+              this.claimTit = "其他付款支出认领";
+              this.claimedList(2);
+          } else {
+              this.$message.error('请选择数据！')
+            }
         }
 
       },
@@ -399,9 +400,9 @@
           if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.paymentBalance) {
             this.$refs.settlement.Settlement = true;
             this.claimModal = false;
-            this.paymentId = "YSK";
+            this.paymentId = "QTYSK";
           } else {
-            this.$message.error("金额大于其他其他收款余额，无法认领");
+            this.$message.error("支出金额大于其他其他收款余额，无法认领");
           }
         } else {
           this.$message.error("请先选择数据");
@@ -429,6 +430,7 @@
       // 其他付款申请
       applyForOther(){
         if(Object.keys(this.currRow).length > 0){
+          this.modelType.id = this.currRow.id
           this.$refs.OtherPayment.open();
         }else {
           this.$message.error('请选择数据！')
@@ -447,7 +449,7 @@
           this.amt =null;
           this.bankNameOthis = "";
           this.claimSelection = []
-          this.$refs.settlement.tableData=[]
+          // this.$refs.settlement.tableData = [];
         }
       },
       //撤回按钮点击事件
@@ -521,7 +523,8 @@
       collectWirte() {
         if (Object.keys(this.currRow).length !== 0) {
         this.$refs.settlement.Settlement = true;
-          this.paymentId = "YSK";
+          this.paymentId = "QTYSK";
+          this.Types = '其他付款核销'
         } else {
           this.$message.error("请选择数据");
         }
@@ -624,7 +627,7 @@
             if (columnIndex === 0) {
               return '合计'
             }
-            if (['payAmt', 'writeOffAmt','returnClaimAmt','remainingAmt'].includes(column.property)) {
+            if (['amountCollected', 'paymentApplicationAmount','expenseClaimAmount','writeOffAmount', 'paymentBalance'].includes(column.property)) {
               return this.$utils.sum(data, column.property)
             }
             return null

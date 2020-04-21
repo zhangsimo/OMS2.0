@@ -145,6 +145,7 @@ import {
   saveAccount,
   paymentRegain
 } from "_api/settlementManagement/otherReceivables/otherReceivables";
+import { orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
@@ -284,6 +285,8 @@ export default {
           sign = 7;
         } else if (this.$parent.type === 2) {
           sign = 8;
+        }else if(this.$parent.paymentId === 'QTYSK'){
+          sign = 11;
         }
         let accountNo = this.$parent.reconciliationStatement
           ? this.$parent.reconciliationStatement.accountNo
@@ -327,7 +330,7 @@ export default {
             two: this.BusinessType,
             three: this.tableData
           };
-          saveAccount(obj2).then(res => {
+          orderWriteOff(obj2).then(res => {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;

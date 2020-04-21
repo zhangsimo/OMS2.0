@@ -3,27 +3,26 @@
     <section class="oper-box">
       <div class="oper-top flex">
         <div class="wlf">
-          <div class="db mr10">
-            <Input
-              v-model="penSalesData.productCode"
-              placeholder="配件编码"
-              style="width: 160px"
-              class="mr10"
-            ></Input>
-          </div>
+          <!--<div class="db mr10">-->
+            <!--<Input-->
+              <!--v-model="penSalesData.productCode"-->
+              <!--placeholder="配件编码"-->
+              <!--style="width: 160px"-->
+              <!--class="mr10"-->
+            <!--&gt;</Input>-->
+          <!--</div>-->
           <div class="db mr10">
             <Input
               v-model="penSalesData.productName"
-              placeholder="配件名称"
+              placeholder="配件编码/名称"
               style="width: 160px"
-              class="mr10"
             ></Input>
           </div>
           <div class="db mr10">
-            <Button @click="search" type class="mr20">查询</Button>
+            <Button @click="search" type >查询</Button>
           </div>
           <div class="db mr10 btn">
-            <Button @click="ok" type="warning" class="mr20">选入</Button>
+            <Button @click="ok" type="warning" >选入</Button>
           </div>
         </div>
       </div>
