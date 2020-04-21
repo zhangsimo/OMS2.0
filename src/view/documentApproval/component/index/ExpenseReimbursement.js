@@ -4,8 +4,7 @@ import subject from '../popWindow/Subject'
 import selectTheDocuments from '../popWindow/SelectTheDocuments'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getPayList} from "../utils";
-import {getDictionary} from '_api/documentApproval/ExpenseReimbursement'
+import {getDictionary , getExpSve} from '_api/documentApproval/ExpenseReimbursement'
 
 
 
@@ -70,6 +69,7 @@ export default {
         ],
         totalAmt:[
           { required: true, message: '必填' },
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
         taxAmt:[
           { required: true, message: '必填' },
@@ -92,13 +92,48 @@ export default {
     }
   },
   mounted(){
-    this.payUserList = getPayList()
+  },
+  computed:{
+    aggregateCosts:function () {
+      if (this.formInline.expenseDetails && this.formInline.expenseDetails.length > 0){
+        return this.$utils.sum(this.formInline.expenseDetails , 'totalAmt')
+      }
+      return 0
+    },
+    businessMoney:function () {
+      if(this.details && this.details.length > 0){
+        return this.$utils.sum(this.details,'applyAmt')
+      }
+      return 0
+    },
+    company:function () {
+     let agg =  this.aggregateCosts,
+          bus = this.businessMoney,
+          sum = this.$utils.subtract(agg , bus)
+      if (sum < 0) {
+        return 0
+      } else {
+        return sum
+      }
+    },
+    personage: function () {
+      let agg =  this.aggregateCosts,
+        bus = this.businessMoney,
+        sum = this.$utils.subtract(agg , bus)
+      if (sum > 0) {
+        return 0
+      } else {
+        return this.$utils.subtract(bus , agg)
+      }
+}
   },
   methods:{
     //模态框打开111
    async open(){
        this.payeeList = this.list.allSalesList
-        this.getRate()
+       this.payUserList = this.list.payList
+
+     this.getRate()
         this.getTaxList()
 
       if (this.list.type == 1) {
@@ -274,7 +309,7 @@ export default {
           if (columnIndex === 0) {
             return '合计'
           }
-          if (['totalAmt','taxAmt','notax'].includes(column.property)) {
+          if (['totalAmt','taxAmt','noTaxAmt'].includes(column.property)) {
             return this.$utils.sum(data, column.property)
           }
           return null
@@ -320,10 +355,34 @@ export default {
 
     //获取到上传图片地址
     getImgList(row){
-      // console.log(row.list ,789)
+      this.formInline.voucherPictures = row.list
+    },
+
+    //保存审核
+    save(type){
+
+      this.$refs.formInline.validate( async (valid) => {
+        if (valid) {
+          const errMap = await this.$refs.xTable.fullValidate().catch(errMap => errMap)
+          const errTwo = await this.$refs.documentTable.fullValidate().catch(errTwo => errTwo)
+          if (errMap || errTwo){
+            this.$Message.error('表格校验失败')
+          } else {
+            this.formInline.step = type
+            let res = await getExpSve(this.formInline)
+            if (res.code == 0) {
+              this.$Message.success('操作成功')
+              this.model = false
+            }
+          }
+        } else {
+          this.$Message.error('带*必填');
+        }
+      })
+
+
+
     }
-
-
 
   }
 }

@@ -42,3 +42,20 @@ export function getOnBusiness (params) {
 
 
 
+export function getPayAccount (params) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceAccountRegister/findListPageAll`,
+    method: 'get',
+    params
+  })
+}
+
+//保存
+export function getExpSve (data) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/saveExpenseCliam`,
+    method: 'post',
+    data
+  })
+}
+

@@ -2,7 +2,6 @@ import  moment from 'moment'
 import requestCode from '../popWindow/RequestCode'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getPayList} from "../utils";
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
 
 export default {
@@ -54,13 +53,13 @@ export default {
     }
   },
   mounted(){
-    this.payUserList = getPayList()
   },
   methods:{
 
     //模态框打开111
     open(){
       this.payeeList = this.list.allSalesList
+      this.payUserList = this.list.payList
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []

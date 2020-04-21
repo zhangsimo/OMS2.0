@@ -3,7 +3,6 @@ import selectOther from '../popWindow/SelectAdvancesReceived'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
-import {getPayList} from "../utils";
 
 export default {
   name: "OtherPayment",
@@ -62,14 +61,13 @@ export default {
     }
   },
   mounted(){
-    this.payUserList = getPayList()
   },
 
   methods:{
     //模态框打开111
     open(){
       this.company = this.list.salesList
-
+      this.payUserList = this.list.payList
       if (this.list.type == 1) {
         this.formInline = {}
         this.$refs.upImg.uploadListModal = []

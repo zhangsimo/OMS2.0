@@ -7,8 +7,8 @@
     <div class="bigbox">
    <div class="clearfix">
      <div class="fr">
-       <Button class="mr10" v-if="!modelType" >保存草稿</Button>
-       <Button class="mr10" v-if="!modelType" >提交申请</Button>
+       <Button class="mr10" v-if="!modelType" @click="save(0)">保存草稿</Button>
+       <Button class="mr10" v-if="!modelType" @click="save(1)">提交申请</Button>
        <Button class="mr10" @click="model =false" >取消</Button>
      </div>
    </div>
@@ -106,7 +106,7 @@
         </vxe-table-column>
         <vxe-table-column field="applyNo" title="因公借支单号"></vxe-table-column>
         <vxe-table-column field="applyAmt" title="借支金额"></vxe-table-column>
-        <vxe-table-column field="writeOffAmt" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number'}}"></vxe-table-column>
+        <vxe-table-column field="writeOffAmt" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number' ,disabled: false}}"></vxe-table-column>
         <vxe-table-column field="applyTime" title="借支日期"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
@@ -132,10 +132,10 @@
           <Col span="6" class="businessbg">因公借支总金额</Col>
           <Col span="6" class="businessbg">公司应付</Col>
           <Col span="6" class="businessbg">个人应还</Col>
-          <Col span="6" class="moneybd">0</Col>
-          <Col span="6" class="moneybd">0</Col>
-          <Col span="6" class="moneybd">0</Col>
-          <Col span="6" class="moneybd">0</Col>
+          <Col span="6" class="moneybd">{{aggregateCosts}}</Col>
+          <Col span="6" class="moneybd">{{businessMoney}}</Col>
+          <Col span="6" class="moneybd">{{company}}</Col>
+          <Col span="6" class="moneybd">{{personage}}</Col>
         </Row>
       </div>
 
