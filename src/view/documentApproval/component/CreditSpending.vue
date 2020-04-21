@@ -139,7 +139,7 @@
 
 
     <!--    选择单据模态框-->
-    <selectOther ref="documnets" @backLists = 'otherPayList'></selectOther>
+    <selectCredit ref="documnets" @backLists = 'otherPayList'></selectCredit>
     <div slot='footer'></div>
   </Modal>
 </template>

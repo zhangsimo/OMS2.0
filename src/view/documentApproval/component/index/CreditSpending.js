@@ -1,5 +1,5 @@
 import  moment from 'moment'
-import selectOther from '../popWindow/SelectAdvancesReceived'
+import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
@@ -7,7 +7,7 @@ import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
 export default {
   name: "OtherPayment",
   components:{
-    selectOther,
+    selectCredit,
     upphoto,
     flowbox
   },
@@ -46,7 +46,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true,type:'number',  message: '付款账户必选', trigger: 'change'}
+          {required: true,type:'string',  message: '付款账户必选', trigger: 'change'}
 
         ]
         // BankNo:[

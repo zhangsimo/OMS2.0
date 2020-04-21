@@ -348,6 +348,8 @@ export default {
     getBusinessList(row){
       row.map(item => {
         delete item.id
+        item.borrowDate = item.applyTime || ''
+        item.serviceId = item.applyNo || ''
       })
       this.details = row
       // this.$set(this.formInline,'details' , row)

@@ -104,10 +104,10 @@
             <a @click="deleteDetails(item)">删除行</a>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="applyNo" title="因公借支单号"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
         <vxe-table-column field="applyAmt" title="借支金额"></vxe-table-column>
         <vxe-table-column field="writeOffAmt" title="因公借支核销金额" :edit-render="{name: 'input', attrs: {type: 'number' ,disabled: false}}"></vxe-table-column>
-        <vxe-table-column field="applyTime" title="借支日期"></vxe-table-column>
+        <vxe-table-column field="borrowDate" title="借支日期"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
 <!--      <vxe-table-->

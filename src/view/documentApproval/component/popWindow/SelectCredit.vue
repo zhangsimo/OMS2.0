@@ -30,10 +30,17 @@
         :data="tableData">
         <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
         <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="serviceId" title="采购单号"></vxe-table-column>
+        <vxe-table-column field="serviceId" title="其他收款单号"></vxe-table-column>
         <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-        <vxe-table-column field="payAmt" title="预收款金额"></vxe-table-column>
-        <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
+        <vxe-table-column field="orderTypeName" title="业务类型"></vxe-table-column>
+        <vxe-table-column field="collectionTime" title="收款申请时间"></vxe-table-column>
+        <vxe-table-column field="amountCollected" title="其他收款金额"></vxe-table-column>
+        <vxe-table-column field="paymentNo" title="其他付款申请单号"></vxe-table-column>
+        <vxe-table-column field="paymentApplicationAmount" title="其他付款申请金额"></vxe-table-column>
+        <vxe-table-column field="expenseClaimAmount" title="其他付款支出已认领金额"></vxe-table-column>
+        <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
+        <vxe-table-column field="writeOffAmount" title="其他付款核销金额"></vxe-table-column>
+        <vxe-table-column field="paymentBalance" title="其他付款金额"></vxe-table-column>
       </vxe-table>
     </div>
     <div slot='footer'>
@@ -47,7 +54,7 @@
 <script>
   import moment from 'moment'
   import { findGuest } from "_api/settlementManagement/advanceCollection.js";
-  import {getPchsList} from '@/api/documentApproval/AdvanceApply.js'
+  import {getpublicRequestList} from '@/api/documentApproval/OtherPayment.js'
 
   export default {
     name: "requestCode",
@@ -103,7 +110,7 @@
         data.endTime = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
         data.amountCollected = this.money
         data.guestId = this.companyId == 0 ? '' : this.companyId
-        let res = await getPchsList(data)
+        let res = await getpublicRequestList(data)
         if(res.code === 0) {
           this.$Message.success('查询成功')
           this.tableData = res.data
@@ -113,6 +120,7 @@
       //选择
       selectChangeEvent({row}){
         this.checkedList = row
+
       },
 
       //确定

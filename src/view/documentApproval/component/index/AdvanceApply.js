@@ -1,13 +1,13 @@
 import  moment from 'moment'
-import selectOther from '../popWindow/SelectAdvanceApply'
+import selectAdvanceApply from '../popWindow/SelectAdvanceApply'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
+import {getAdvanceSave} from '_api/documentApproval/AdvanceApply.js'
 
 export default {
-  name: "OtherPayment",
+  name: "AdvanceApply",
   components:{
-    selectOther,
+    selectAdvanceApply,
     upphoto,
     flowbox
   },
@@ -46,8 +46,7 @@ export default {
 
         ],
         paymentAccount:[
-          {required: true, type:'number', message: '付款账户必选', trigger: 'change'}
-
+          {required: true, type:'string', message: '付款账户必选', trigger: 'change'}
         ]
         // BankNo:[
         //   {required: true, message: '银行账号必填', trigger: 'blur'}
@@ -88,18 +87,6 @@ export default {
       }
     },
 
-    // 获取往来单位
-    // async getunltList() {
-    //   findGuest({ size: 2000 }).then(res => {
-    //     if (res.code === 0) {
-    //       res.data.content.map(item => {
-    //         item.value = item.id
-    //         item.label = item.fullName
-    //         this.company.push(item);
-    //       });
-    //     }
-    //   });
-    // },
 
     //获取往来单位
     getCompany(row) {
@@ -133,6 +120,21 @@ export default {
       this.$refs.documnets.open()
     },
 
+    //表格尾部合计
+    documentFooterMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '合计'
+          }
+          if (['payAmt'].includes(column.property)) {
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
+    },
+
     //获取到上传图片地址
     getImgList(row){
       this.formInline.voucherPictures = row.list
@@ -144,7 +146,7 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
-          let res = await getOtherSve(this.formInline)
+          let res = await getAdvanceSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false
@@ -153,12 +155,7 @@ export default {
           this.$Message.error('带*必填');
         }
       })
-
-
-
     }
-
-
 
   }
 }
