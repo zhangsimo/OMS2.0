@@ -4,6 +4,7 @@ node_modules
 /url.js
 *.json
 /config
+/env.js
 # local env files
 .env.local
 .env.*.local
