@@ -37,9 +37,9 @@
       </div>
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">其他收款认领</Button>
-        <Button class="ml10" @click="applyForOther">其他付款申请</Button>
+        <Button class="ml10" @click="applyForOther" :disabled="Boolean(currRow.paymentNo)">其他付款申请</Button>
         <Button class="ml10" @click="claimCollect(2)">其他付款支出认领</Button>
-        <Button class="ml10" @click="collectWirte">其他付款核销</Button>
+        <Button class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">其他付款核销</Button>
         <Button class="ml10" @click="revokeCollection(0)">其他收款认领撤回</Button>
         <Button class="ml10" @click="revokeCollection(3)">其他付款申请撤回</Button>
         <Button class="ml10" @click="revokeCollection(1)">其他付款支出认领撤回</Button>

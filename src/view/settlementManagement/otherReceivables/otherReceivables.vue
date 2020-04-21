@@ -36,9 +36,9 @@
           </div>
         </div>
         <div class="mt10 mb10">
-          <Button class="ml10" @click="claimCollect(1)" >其他付款认领</Button>
-          <Button class="ml10" @click="collectWirte" >其他收款核销</Button>
-          <Button class="ml10" @click="claimCollect(2)" >其他收款收回</Button>
+          <Button class="ml10" @click="claimCollect(1)" :disabled="Boolean(currRow.paymentClaimNo)">其他付款认领</Button>
+          <Button class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">其他收款核销</Button>
+          <Button class="ml10" @click="claimCollect(2)" :disabled="Boolean(currRow.paymentRegainNo)">其他收款收回</Button>
           <Button class="ml10" @click="revokeCollection(0)">其他付款认领撤回</Button>
           <Button class="ml10" @click="revokeCollection(1)">其他收款核销撤回</Button>
           <Button class="ml10" @click="revokeCollection(2)">其他收款收回撤回</Button>
@@ -75,7 +75,7 @@
                 <vxe-table-column field="applyAmt" title="其他付款申请金额"></vxe-table-column>
                 <vxe-table-column field="paymentClaimNo" title="其他付款认领单号"></vxe-table-column>
                 <vxe-table-column field="paymentClaimAmt" title="其他付款认领金额"></vxe-table-column>
-                <vxe-table-column field="writeOffReceiptNo" title="其他付款核销单号"></vxe-table-column>
+                <vxe-table-column field="writeOffReceiptNo" title="其他收付款核销单号"></vxe-table-column>
                 <vxe-table-column field="writeOffAmount" title="其他收款核销金额"></vxe-table-column>
                 <vxe-table-column field="paymentRegainNo" title="其他收款收回单号"></vxe-table-column>
                 <vxe-table-column field="paymentRegainAmt" title="其他收款收回金额"></vxe-table-column>

@@ -268,7 +268,7 @@ export default {
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
           sign = 2;
-          this.showModalOne = 0;
+          this.showModalOne = 1;
         } else if (this.$parent.paymentId === "YFK") {
           this.showModalOne = 0;
           sign = 4;
@@ -322,19 +322,34 @@ export default {
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("保存成功");
+              this.$parent.getQuery();
             }
           });
-        }else {
+        } else if(this.$parent.Types === '其他收款核销'){
+          let obj3 = {
+            wrtiteOffDtos: this.BusinessType,
+            sourceDtos: this.tableData
+          };
+          orderWriteOff(obj3).then(res => {
+            if (res.code === 0) {
+              this.Settlement = false;
+              this.$parent.claimModal = false;
+              this.$message.success("核销成功");
+              this.$parent.getQuery();
+            }
+          });
+        } else {
           let obj2 = {
             one: this.reconciliationStatement,
             two: this.BusinessType,
             three: this.tableData
           };
-          orderWriteOff(obj2).then(res => {
+          saveAccount(obj2).then(res => {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("保存成功");
+              this.$parent.getQuery();
             }
           });
         }
