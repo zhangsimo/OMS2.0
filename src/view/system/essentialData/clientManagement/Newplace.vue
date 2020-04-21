@@ -11,6 +11,7 @@
         <FormItem label="省份:" prop="provinceId">
           <Select
             v-model="data.provinceId"
+            filterable
             style="width:180px"
             class="mr10"
             @on-change="provinceName"
@@ -39,7 +40,7 @@
           <Input v-model="data.receiveManTel" style="width: 180px" />
         </FormItem>
         <FormItem label="城市:" prop="cityId">
-          <Select v-model="data.cityId" style="width:180px" class="mr10" @on-change="cityName">
+          <Select v-model="data.cityId" filterable style="width:180px" class="mr10" @on-change="cityName">
             <Option
               v-for="item in place"
               v-if="data.provinceId==item.parentId"

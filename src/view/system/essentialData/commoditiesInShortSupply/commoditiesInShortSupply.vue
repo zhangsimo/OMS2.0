@@ -2,10 +2,10 @@
   <div class="commodbigbox">
     <div class="oper-top">
       <span class="mr10">查询项：</span>
-      <Select v-model="searchType" class="w100 mr10">
-        <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-      <Input class="mr10" v-model="query" style="width: 150px" />
+      <!--<Select v-model="searchType" class="w100 mr10">-->
+        <!--<Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+      <!--</Select>-->
+      <Input class="mr10" v-model="query" placeholder="配件编码/名称/车型" style="width: 150px" />
       <span class="mr10">品牌:</span>
       <Select @on-change="brandSelect" v-model="band" filterable style="width:140px" class="mr20">
         <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -242,21 +242,24 @@ export default {
       if (this.band != "0" && this.band) {
         data.partBrandCode = this.band;
       }
-      switch (this.searchType) {
-        case "0":
-          data.queryCode = this.query;
-          break;
-        case "1":
-          data.fullName = this.query;
-          break;
-        case "2":
-          data.carBrandModel = this.query;
-          break;
-        case "3":
-          data.namePy = this.query;
-          break;
-        default:
-          break;
+      // switch (this.searchType) {
+      //   case "0":
+      //     data.queryCode = this.query;
+      //     break;
+      //   case "1":
+      //     data.fullName = this.query;
+      //     break;
+      //   case "2":
+      //     data.carBrandModel = this.query;
+      //     break;
+      //   case "3":
+      //     data.namePy = this.query;
+      //     break;
+      //   default:
+      //     break;
+      // }
+      if(this.query.trim()){
+        data.fullName = this.query
       }
       let res = await getTightProductList(data);
       if (res.code == 0) {
