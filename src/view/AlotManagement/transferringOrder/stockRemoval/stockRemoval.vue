@@ -676,6 +676,9 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
+      setTimeout(()=>{
+        this.$Message.success("已添加");
+      },0)
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()

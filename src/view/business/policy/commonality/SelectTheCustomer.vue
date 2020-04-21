@@ -32,6 +32,7 @@
                   highlight-hover-row
                   highlight-current-row
                   @current-change="getOneClinet"
+                  @cell-dblclick="dblclick"
                   show-overflow
                   height="500"
                   style="width: 1500px"
@@ -251,7 +252,10 @@
                     this.addressShow = false
                 }
 
-            }
+            },
+          dblclick(){
+              this.select();
+          }
         }
     }
 </script>

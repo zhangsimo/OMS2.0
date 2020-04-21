@@ -692,6 +692,7 @@
           })
           this.Right.tbdata = [...this.Right.tbdata,...parts]
           this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.$Message.success("已添加");
         },
         //编辑收货信息弹框显示
         GoodsInfoModal(){
@@ -707,7 +708,7 @@
         getSupplierName(a){
           // this.isInternalId = a.isInternalId
           // this.formPlan.guestName = a.id
-          this.formPlan.guestName = a.fullName
+          this.formPlan.guestName = a.id
           this.guestidId = a.id
           this.isInternalId = a.isInternalId
         },

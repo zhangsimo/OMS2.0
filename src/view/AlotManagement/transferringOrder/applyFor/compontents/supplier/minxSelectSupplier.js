@@ -176,6 +176,9 @@ export const mixSelectSupplier = {
       this.searchPartLayer = false;
       // console.log(this.selectTableItem)
     },
+    dblclick(){
+      this.throwData();
+    },
     //分页
     changePage(p) {
       this.page.num = p;

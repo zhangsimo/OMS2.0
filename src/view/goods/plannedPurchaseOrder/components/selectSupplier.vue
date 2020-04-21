@@ -34,6 +34,7 @@
           <Table
             height="389"
             @on-current-change="selectTabelData"
+            @on-row-dblclick="dblclick"
             highlight-row
             :loading="loading"
             border
@@ -258,6 +259,9 @@ export default class SelectSupplier extends Vue {
     }
     this.searchPartLayer = false;
     return this.selectTableItem;
+  }
+  dblclick(){
+    this.throwData();
   }
   // 取消
   private cancel() {

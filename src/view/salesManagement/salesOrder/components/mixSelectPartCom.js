@@ -315,6 +315,9 @@ export const mixSelectPartCom = {
         item.forEach(el => el.orderQty = 1);
         this.$emit("selectPartName", item);
         // this.searchPartLayer = false;
+        setTimeout(()=>{
+          this.$Message.success("已添加");
+        })
       } else {
         this.$Message.error("请选择数据");
       }
