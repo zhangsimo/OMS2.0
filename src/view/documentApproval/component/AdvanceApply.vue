@@ -51,7 +51,7 @@
         </div>
 
 
-        <h5 class="mt20 mb10" style="font-size: 18px">其他应付款单据</h5>
+        <h5 class="mt20 mb10" style="font-size: 18px">预付款采购单据</h5>
         <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
         <vxe-table
           class="mt10"
