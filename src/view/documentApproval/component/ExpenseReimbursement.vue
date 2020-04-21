@@ -50,7 +50,7 @@
         </div>
       </div>
 
-      <h5 class="mt20 mb10" style="font-size: 18px">费用支出明显</h5>
+      <h5 class="mt20 mb10" style="font-size: 18px">费用支出明细</h5>
       <vxe-table
         border
         resizable
