@@ -51,7 +51,7 @@
         </div>
 
 
-        <h5 class="mt20 mb10" style="font-size: 18px">其他应付款单据</h5>
+        <h5 class="mt20 mb10" style="font-size: 18px">预收款单据</h5>
         <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
         <vxe-table
           class="mt10"
@@ -72,12 +72,12 @@
           </vxe-table-column>
           <vxe-table-column field="serviceId" title="预收款收款单号"></vxe-table-column>
           <vxe-table-column field="guestName" title="往来单位"></vxe-table-column>
-          <vxe-table-column field="orderTypeName" title="日期"></vxe-table-column>
-          <vxe-table-column field="collectionTime" title="预收款认领金额"></vxe-table-column>
-          <vxe-table-column field="amountCollected" title="预收款核销金额"></vxe-table-column>
-          <vxe-table-column field="paymentNo" title="预收款支出金额"></vxe-table-column>
-          <vxe-table-column field="paymentApplicationAmount" title="预收款支出已认领金额"></vxe-table-column>
-          <vxe-table-column field="expenseClaimAmount" title="预收款余额"></vxe-table-column>
+          <vxe-table-column field="orderDate" title="日期"></vxe-table-column>
+          <vxe-table-column field="claimAmt" title="预收款认领金额"></vxe-table-column>
+          <vxe-table-column field="writeOffAmt" title="预收款核销金额"></vxe-table-column>
+          <vxe-table-column field="expenditureAmt" title="预收款支出金额"></vxe-table-column>
+          <vxe-table-column field="expenditureClaimAmt" title="预收款支出已认领金额"></vxe-table-column>
+          <vxe-table-column field="remainingAmt" title="预收款余额"></vxe-table-column>
         </vxe-table>
 
 

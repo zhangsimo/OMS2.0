@@ -100,7 +100,7 @@
 
       data(){
           return {
-            //打开模态框状态 type 1 新增 2修改 3查看
+            //打开模态框状态 type 0 新增 1修改 2查看 3审核
             modelType:{
               type:1,
               id:''

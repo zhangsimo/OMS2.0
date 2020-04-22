@@ -19,7 +19,7 @@ export async function getPayList() {
       }
 }
 
-
+//往来单位
 export async function getAllSalesList() {
           let arr = [] //获取收款人列表
          let Salse = await getSales()
