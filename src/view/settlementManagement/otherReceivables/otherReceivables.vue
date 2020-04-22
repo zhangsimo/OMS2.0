@@ -347,12 +347,12 @@
           },
           //其他付款认领/其他收款收回
           claimCollect(type){
+            if(Object.keys(this.currRow).length !== 0){
               if (type === 1) {
                   this.claimModal = true;
                   this.claimTit = "其他付款认领";
                   this.claimedList(1);
               } else {
-                if(Object.keys(this.currRow).length !== 0){
                 if(this.currRow.paymentBalance == 0 ||  !this.currRow.paymentBalance) {
                   this.$Message.error('他收款余额为0无法收回!')
                 }else {
@@ -360,9 +360,9 @@
                   this.claimModal = true;
                   this.claimedList(2);
                 }
-              }else {
-                  this.$message.error('请选择数据！')
-                }
+              }
+            }else{
+              this.$message.error('请选择数据！')
             }
           },
           //预收款弹框是否打开
@@ -506,8 +506,8 @@
           //初始化
           getQuery(){
             let obj = {
-              startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
-              endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
+              startDate: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+              endDate: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
               orgid: this.BranchstoreId,
               guestId: this.companyId,
               size: this.page.size,

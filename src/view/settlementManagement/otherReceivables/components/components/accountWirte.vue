@@ -66,7 +66,7 @@ export default {
           render: (h, params) => {
             return h(
               "span",
-              params.row.otherInfo[0].paymentDate
+              params.row.otherInfo[0].paymentDate !== null ? params.row.otherInfo[0].paymentDate : ''
             );
           }
         },

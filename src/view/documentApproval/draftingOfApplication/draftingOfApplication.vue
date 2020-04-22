@@ -102,9 +102,9 @@ export default {
 
   data() {
     return {
-      //打开模态框状态 type 1 新增 2修改 3查看
+      //打开模态框状态 type 0 新增 1修改 2查看 3审核
       modelType: {
-        type: 3,
+        type: 1,
         id: ""
       }
     };
@@ -113,7 +113,6 @@ export default {
     this.modelType.allSalesList = await getAllSalesList();
     this.modelType.salesList = await getComenAndGo();
     this.modelType.payList = await getPayList();
-    this.$refs.modal.modelShow = true
   },
   methods: {
     open(index) {
