@@ -73,7 +73,6 @@
     <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
-    <modal ref="modal" :modelType="modelType" />
   </div>
 </template>
 
@@ -86,7 +85,6 @@ import CreditSpending from "../component/CreditSpending";
 import AdvanceApply from "../component/AdvanceApply";
 import InternalFinance from "../component/InternalFinance";
 import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
-import modal from "../component/popWindow/modal";
 export default {
   name: "draftingOfApplication",
   components: {
