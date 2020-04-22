@@ -686,7 +686,6 @@ export default {
           }
         });
         if (this.modelType.type === 3) {
-          console.log(12)
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
           this.formInline.applicant = user.staffName;
@@ -694,7 +693,7 @@ export default {
             user.groups[user.groups.length - 1].name || " 　　";
           this.formInline.shopCode = user.shopCode || " 　　";
           this.formInline.orgName = user.shopName;
-          this.formInline.applyTypeName = "对账单申请";
+          this.formInline.applyTypeName = "销售开票申请";
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
         }

@@ -1,19 +1,19 @@
 <template>
-  <hedgingInvoice ref="hedgingInvoice" :modelType='modelType'/>
+  <noTax ref="noTax" :modelType='modelType'/>
 </template>
 <script>
-import hedgingInvoice from "./hedgingInvoice";
+import noTax from "./noTax";
 import moment from "moment";
 export default {
   props: ["modelType"],
   components: {
-    hedgingInvoice
+    noTax
   },
   data() {
     return{}
   },
   mounted(){
-    this.$refs.hedgingInvoice.modal1 = true
+    this.$refs.noTax.modal1 = true
   },
   methods: {
     // // 对账单弹框出现加载数据
