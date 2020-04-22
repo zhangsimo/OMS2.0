@@ -311,6 +311,7 @@ export default {
         // console.log(this.$parent.Types)
         if(this.$parent.Types == '其他付款核销'){
           let obj = {
+            type: 1,
             one: this.reconciliationStatement,
             two: this.BusinessType,
             three: this.tableData

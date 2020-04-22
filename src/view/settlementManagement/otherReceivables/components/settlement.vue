@@ -322,12 +322,14 @@ export default {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("保存成功");
+              this.$message.success("其他收款收回成功!");
               this.$parent.getQuery();
+              this.$parent.typeA = '';
             }
           });
         } else if(this.$parent.Types === '其他收款核销'){
           let obj3 = {
+            type: 2,
             one: this.reconciliationStatement,
             two: this.BusinessType,
             three: this.tableData
@@ -336,7 +338,7 @@ export default {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("核销成功");
+              this.$message.success("其他收款核销成功!");
               this.$parent.getQuery();
             }
           });
@@ -350,7 +352,7 @@ export default {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("保存成功");
+              this.$message.success("其他付款认领成功！");
               this.$parent.getQuery();
             }
           });
