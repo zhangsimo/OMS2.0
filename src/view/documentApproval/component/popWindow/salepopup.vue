@@ -122,7 +122,11 @@
             </Select>
           </FormItem>
           <FormItem label="收款方式" prop="collectionType">
-            <Select v-model="invoice.collectionType" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select
+              v-model="invoice.collectionType"
+              class="ml5 w200"
+              :disabled="modelType.type!==1"
+            >
               <Option
                 v-for="item in invoice.paymentMethodList"
                 :value="item.value"
@@ -183,7 +187,11 @@
             <Input v-model="invoice.applyMoney" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="欠票未全金额开具说明" prop="underTicketExplain">
-            <Input v-model="invoice.underTicketExplain" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input
+              v-model="invoice.underTicketExplain"
+              class="ml5 w200"
+              :disabled="modelType.type!==1"
+            />
           </FormItem>
         </div>
       </div>
@@ -214,8 +222,9 @@ import SeleteSale from "@/view/settlementManagement/bill/Popup/seleteSale";
 import noTax from "@/view/settlementManagement/bill/Popup/noTax";
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
-import flow from '../Flow.vue'
+import flow from "../Flow.vue";
 import { approvalStatus } from "_api/base/user";
+import moment from 'moment'
 import {
   noTaxApplyNo,
   ditInvoice,
@@ -676,13 +685,19 @@ export default {
             this.copyData = res.data;
           }
         });
-        approvalStatus({ instanceId: this.information.processInstance }).then(
-          res => {
-            if (res.code == 0) {
-              bus.$emit("approval", res.data.operationRecords);
-            }
-          }
-        );
+        if (this.modelType.type === 3) {
+          console.log(12)
+          let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+            user = this.$store.state.user.userData;
+          this.formInline.applicant = user.staffName;
+          this.formInline.deptName =
+            user.groups[user.groups.length - 1].name || " 　　";
+          this.formInline.shopCode = user.shopCode || " 　　";
+          this.formInline.orgName = user.shopName;
+          this.formInline.applyTypeName = "对账单申请";
+          this.formInline.applyTime = date;
+          this.formInline.paymentOrgName = user.shopName;
+        }
       }
     },
     // 增加不含税销售开票申请
@@ -843,3 +858,25 @@ export default {
   }
 };
 </script>
+<style scoped lang="less">
+.tableBox {
+  line-height: 38px;
+  text-align: center;
+  border: #cccccc 1px solid;
+  border-right: none;
+  .inner {
+    border-right: #cccccc 1px solid;
+    height: 38px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .inner:nth-child(2n-1) {
+    background: #f9f9f9;
+  }
+}
+
+.twoTable {
+  border-top: none;
+}
+</style>
