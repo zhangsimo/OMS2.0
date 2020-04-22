@@ -14,7 +14,7 @@
           <div class="db ml20">
             <span>查询日期：</span>
             <Date-picker
-              :value="value"
+              v-model="value"
               type="daterange"
               placeholder="选择日期"
               class="w200"
@@ -516,10 +516,10 @@ export default {
       };
       let data = {
         startTime: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
           : "",
         endTime: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
         orgid: this.BranchstoreId,
         serviceId: this.requestCode
