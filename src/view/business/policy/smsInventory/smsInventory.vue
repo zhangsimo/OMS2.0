@@ -930,6 +930,7 @@ export default {
       //   "YYYY-MM-DD HH:mm:ss"
       // );
       this.$refs.SelectPartRef.searchPartLayer = false;
+      this.$Message.success("已添加");
       // getSubmitList(this.formPlan)
       //   .then(res => {
       //

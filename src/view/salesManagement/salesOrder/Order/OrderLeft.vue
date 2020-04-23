@@ -100,6 +100,7 @@ export default {
       if (this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
+      this.selectItemId = "";
         for(let b of this.tableData){
             b._highlight = false
         }

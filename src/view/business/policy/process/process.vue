@@ -1021,7 +1021,9 @@ export default {
           if (res.code == 0) {
             this.tableData1 = res.data;
             this.$refs.addInCom.init();
-            this.$Message.success("获取成品列表成功");
+            setTimeout(()=>{
+              this.$Message.success("获取成品列表成功");
+            },0)
           }
         })
         .catch(e => {
