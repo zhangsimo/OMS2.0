@@ -190,6 +190,7 @@ export const mixGoodsData = {
     },
     //删除选中数据
     delTableData() {
+      console.log(this.delArr)
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
@@ -207,6 +208,19 @@ export const mixGoodsData = {
               this.delArr = [];
               this.$Message.success("删除成功");
             } else {
+              this.delArr.forEach((els,i,arrP) => {
+                this.tableData.forEach((el, index, arr) => {
+                  if(el.partCode == els.partCode&&!els.id) {
+                    arr.splice(index, 1);
+                  }
+                })
+                if(!els.id){
+                  arrP.splice(i,1);
+                }
+              })
+              if(this.delArr.length==0){
+                return this.$Message.success("删除成功");
+              }
               let res = await deleteparts(this.delArr);
               if (res.code == 0) {
                 this.$Message.success("删除成功");
@@ -315,6 +329,7 @@ export const mixGoodsData = {
           allArr.push(oldArr[i]);
         }
       }
+
       allArr.map(item => {
         item.orderPrice = item.recentPrice||0
       })
