@@ -74,10 +74,12 @@
       <vxe-table
         border
         resizable
-        height="300"
+        auto-resize
+        align="center"
         :span-method="mergeRowMethod"
         :data="tableData"
       >
+      <vxe-table-column title="《现金流量表》">
         <vxe-table-column title="项目信息">
           <vxe-table-column title="大项" filed="temp"></vxe-table-column>
           <vxe-table-column title="现金流科目" filed="temp"></vxe-table-column>
@@ -100,6 +102,7 @@
         <vxe-table-column title="其他信息">
           <vxe-table-column title="备注" filed="temp"></vxe-table-column>
         </vxe-table-column>
+      </vxe-table-column>
       </vxe-table>
     </div>
   </div>
