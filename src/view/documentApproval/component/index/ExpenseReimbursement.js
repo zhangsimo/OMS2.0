@@ -37,7 +37,7 @@ export default {
         topic: [
           {required: true, message: '主题为必填', trigger: 'blur'}
         ],
-        receiver:[
+        receiverId:[
           {required: true, message: '收款人账户为必填', trigger: 'change'}
         ],
         receiveBank:[
