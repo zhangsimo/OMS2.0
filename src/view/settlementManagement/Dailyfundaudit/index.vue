@@ -193,7 +193,6 @@ export default {
         businessNumbers: this.payOrderNo,
         businessNumbersList: this.orderNo,
         size: 10000,
-        page: 0,
       }
 
       if (this.dates.length === 2) {
@@ -206,6 +205,8 @@ export default {
           Reflect.deleteProperty(params, key)
         }
       }
+
+      params.page = 0;
 
       [
         this.tableData1,

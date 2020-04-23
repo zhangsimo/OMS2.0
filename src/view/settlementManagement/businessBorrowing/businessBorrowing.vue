@@ -80,6 +80,7 @@
             border
             highlight-hover-row
             highlight-current-row
+            ref="xTable"
             @current-change="currentChangeEvent"
             max-height="400"
             :data="tableData"
@@ -352,6 +353,7 @@ import writeOff from "./components/writeOff";
 import moment from "moment";
 
 export default {
+  inject:['reload'],
   name: "businessBorrowing",
   components: {
     quickDate,
@@ -539,6 +541,7 @@ export default {
       this.serviceId = "";
       this.$refs.Record.init();
       this.currRow = null;
+      this.$refs.xTable.clearCurrentRow();
     },
     //认领弹框认领
     claimPay() {
@@ -588,6 +591,7 @@ export default {
         if (res.code == 0) {
           this.$message.success("撤销成功")
           this.revoke = false;
+          // this.reload();
         }
       })
     },

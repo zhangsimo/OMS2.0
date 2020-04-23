@@ -922,6 +922,17 @@ export default [
               import("@/view/settlementManagement/Statistical/statistical.vue")
           },
           {
+            path: "/fundsManagement/cashflow",
+            name: "cashflow",
+            mark: "5300",
+            meta: {
+              // hideInMenu: true,
+              title: "现金流量表"
+            },
+            component: () =>
+              import("@/view/settlementManagement/Statistical/cashflow.vue")
+          },
+          {
             path: "/fundsManagement/accounting",
             name: "accounting",
             mark: "5300",

@@ -29,3 +29,22 @@ export function loanRevoke(data) {
     data
   });
 }
+
+// 因公借支核销查询
+export function findByDynamicQuery(params, data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceCostReimbursement/findByDynamicQuery`,
+    method: "post",
+    params,
+    data,
+  });
+}
+
+// 因公借支核销
+export function orderWriteOff(data, type = 1) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceLoanForBusiness/orderWriteOff?type=${type}`,
+    method: "post",
+    data,
+  });
+}
