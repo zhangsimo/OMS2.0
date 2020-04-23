@@ -37,7 +37,7 @@ export default {
         topic: [
           {required: true, message: '主题为必填', trigger: 'blur'}
         ],
-        receiver:[
+        receiverId:[
           {required: true, message: '收款人账户为必填', trigger: 'change'}
         ],
         receiveBank:[
@@ -134,7 +134,7 @@ export default {
        this.payUserList = this.list.payList
 
      this.getRate()
-        this.getTaxList()
+     this.getTaxList()
 
       if (this.list.type == 1) {
         this.formInline = {}
@@ -223,7 +223,8 @@ export default {
     //获取科目返回的数据
     getsubBack(row){
      this.$set(this.subjectType , 'accountEntry', row.titleCode)
-      // this.subjectType.accountEntry = row.titleCode
+      // 刷新列表方法
+      this.$refs.xTable.refreshColumn()
     },
 
     //修改费用类型改变科目

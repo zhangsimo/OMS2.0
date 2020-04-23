@@ -745,7 +745,7 @@ export default {
             return;
           }
           if (this.Leftcurrentrow.status.value !== 0) {
-            this.$Message.error("只有草稿状态加工单能进行作废操作");
+            this.$Message.error("只有草稿状态的单据才能进行作废操作");
             return;
           }
           const params = {

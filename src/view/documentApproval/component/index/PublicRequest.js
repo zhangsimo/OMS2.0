@@ -28,7 +28,7 @@ export default {
           {required: true, message: '金额为必填', trigger: 'blur'},
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
-        receiver:[
+        receiverId:[
           {required: true, message: '主题为必填', trigger: 'change'}
         ],
         receiveBank:[
@@ -42,12 +42,6 @@ export default {
         ]
       },
       //费用类型列表
-      moneyTypeList:[
-        {name:"买入",id:"1"},
-        {name:"支出",id:"3"},
-        {name:"赊账",id:"4"},
-      ],
-      moneyType:'123',//当前费用类型
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
     }
@@ -95,16 +89,8 @@ export default {
     //获取选择的信息
     getBackList(row){
       this.$set(this.formInline,'requestInstructionNo' ,row.applyNo  )
-      // this.formInline.requestInstructionNo = row.applyNo
-      // console.log(row ,789)
     },
 
-    //科目获取焦点
-    getSubject({row}){
-      // console.log(row , 888)
-      this.moneyType = row.sex
-      this.$refs.subjectModel.open()
-    },
 
 
     //获取到上传图片地址

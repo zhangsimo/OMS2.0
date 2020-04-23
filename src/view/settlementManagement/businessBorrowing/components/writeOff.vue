@@ -1,7 +1,7 @@
 <template>
   <Modal title="因公借支核销" width="1000" footer-hide v-model="show">
     <Row>
-      <Button>因公借支核销</Button>
+      <Button :disabled="disabled" @click="submit">因公借支核销</Button>
     </Row>
     <Row class="mt20">
       <vxe-table
@@ -21,11 +21,7 @@
         <vxe-table-column field="applyTime" title="申请时间"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
         <vxe-table-column field="payAmt" title="因公借支金额"></vxe-table-column>
-        <vxe-table-column field="" title="报销金额">
-          <template>
-            <span>{{ totalPrice }}</span>
-          </template>
-        </vxe-table-column>
+        <vxe-table-column field="totalPrice" title="报销金额"></vxe-table-column>
         <vxe-table-column
           field="writeOffAmount"
           title="因公借支核销金额"
@@ -47,7 +43,7 @@
       <Col span="8">
         <span>日期：</span>
         <DatePicker
-          type="date"
+          type="daterange"
           placeholder="请选择日期"
           v-model="date"
         ></DatePicker>
@@ -62,6 +58,16 @@
           :precision="2"
         />
       </Col>
+      <Col span="8">
+        <button
+        class="ivu-btn ivu-btn-default ml10"
+        type="button"
+        @click="query"
+      >
+        <i class="iconfont iconchaxunicon"></i>
+        <span>查询</span>
+      </button>
+      </Col>
     </Row>
     <Row>
       <vxe-table
@@ -73,17 +79,18 @@
         @radio-change="radioChangeEventCost"
         :data="tbdata"
         align="center"
+        ref="xTable1"
       >
         <vxe-table-column type="radio" title="选择"></vxe-table-column>
         <vxe-table-column type="seq" width="60"></vxe-table-column>
         <vxe-table-column
-          field="temp"
+          field="serviceId"
           title="费用报销申请单号"
         ></vxe-table-column>
-        <vxe-table-column field="temp" title="申请时间"></vxe-table-column>
-        <vxe-table-column field="temp" title="申请人"></vxe-table-column>
-        <vxe-table-column field="temp" title="报销金额"></vxe-table-column>
-        <vxe-table-column field="temp" title="摘要"></vxe-table-column>
+        <vxe-table-column field="applicationTime" title="申请时间"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="reimbursementAmount" title="报销金额"></vxe-table-column>
+        <vxe-table-column field="summary" title="摘要"></vxe-table-column>
       </vxe-table>
       <Page
         class-name="mb10 mt10 fr"
@@ -102,6 +109,8 @@
 </template>
 
 <script>
+import * as api from "_api/settlementManagement/businessBorrowing";
+import moment from "moment";
 export default {
   name: "writeOff",
   props: {
@@ -113,10 +122,12 @@ export default {
   data() {
     return {
       show: false,
+      disabled: true,
+      currRow: null,
       price: 0,
-      date: null,
+      date: [],
       tbdata: [],
-      totalPrice: 0, // 报销金额
+      totalPrice: 0,
       page: {
         num: 1,
         size: 10,
@@ -127,18 +138,35 @@ export default {
   },
   computed: {
     tableData() {
-      return [this.table]
-    }
+      return [{...this.table, totalPrice: this.totalPrice}]
+    },
   },
   methods: {
     open() {
       this.show = true;
+      this.init();
+      this.query();
+    },
+    init() {
+      this.date = [];
+      this.price = 0;
+      this.disabled = true;
+      this.page = {
+        num: 1,
+        size: 10,
+        total: 0,
+        opts: [20, 50, 100, 200]
+      }
     },
     cancel() {
       this.show = false;
     },
     currentChangeEvent({ row }) {},
-    radioChangeEventCost({ row }) {},
+    radioChangeEventCost({ row }) {
+      this.disabled = false;
+      this.currRow = row;
+      this.totalPrice = row.reimbursementAmount;
+    },
     //分页
     changePage(p) {
       this.page.num = p;
@@ -146,7 +174,54 @@ export default {
     changeSize(size) {
       this.page.num = 1;
       this.page.size = size;
-    }
+    },
+    async query() {
+      this.totalPrice = 0;
+      this.currRow = null;
+      this.$refs.xTable1.clearRadioRow()
+
+      let params = {
+        page: this.page.num - 1,
+        size: this.page.size,
+      }
+      let data = {
+        writeOffStatus: 0,
+      }
+      
+      if (this.date.length === 2) {
+        data.startTime = moment(this.date[0]).format("YYYY-MM-DD") + " 00:00:00";
+        data.endTime = moment(this.date[1]).format("YYYY-MM-DD") + " 23:59:59";
+      }
+
+      if (this.price > 0) {
+        data.reimbursementAmount = this.price;
+      }
+
+      let res = await api.findByDynamicQuery(params, data);
+
+      if(res.code == 0) {
+        this.tbdata = res.data.content;
+      }
+    },
+    async submit() {
+      let data = {
+        sourceDto: {
+          id: this.tableData[0].id,
+          rpAmt: this.tableData[0].totalPrice,
+        },
+        wrtiteOffDto: {
+          id: this.currRow.id,
+        },
+      }
+
+      let res = await api.orderWriteOff(data)
+      if (res.code == 0) {
+        this.$message.success(res.data);
+        this.$parent.getQuery();
+        this.query();
+        this.cancel();
+      }
+    },
   }
 };
 </script>

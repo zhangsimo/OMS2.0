@@ -110,22 +110,7 @@
         <vxe-table-column field="borrowDate" title="借支日期"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
-<!--      <vxe-table-->
-<!--        class="mt10"-->
-<!--        border-->
-<!--        resizable-->
-<!--        show-footer-->
-<!--        auto-resize-->
-<!--        show-overflow-->
-<!--        size="mine"-->
-<!--        align="center"-->
-<!--        :data="moneyTableData"-->
-<!--      >-->
-<!--        <vxe-table-column field="name" title="费用总额"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>-->
-<!--        <vxe-table-column field="money" title="公司应付"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="个人应还"></vxe-table-column>-->
-<!--      </vxe-table>-->
+
       <div>
         <Row class="tableBox mt10">
           <Col span="6" class="businessbg">费用总额</Col>
@@ -144,8 +129,8 @@
       <div class="proceeds">
         <Row>
           <Col span="8">
-            <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-              <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
+            <FormItem label="收款人账户" prop="receiverId" style="margin-bottom: 0px">
+              <Select v-model="formInline.receiverId" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
                 <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
