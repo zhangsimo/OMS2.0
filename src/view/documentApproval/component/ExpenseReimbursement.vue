@@ -63,7 +63,7 @@
         :footer-method="footerMethod"
         :data="formInline.expenseDetails"
         :edit-rules="validRules"
-        :edit-config="{trigger: 'click', mode: 'cell' }"
+        :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
         @edit-actived="editActivedEvent"
         >
         <vxe-table-column title="操作" width="80">
@@ -110,22 +110,7 @@
         <vxe-table-column field="borrowDate" title="借支日期"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
-<!--      <vxe-table-->
-<!--        class="mt10"-->
-<!--        border-->
-<!--        resizable-->
-<!--        show-footer-->
-<!--        auto-resize-->
-<!--        show-overflow-->
-<!--        size="mine"-->
-<!--        align="center"-->
-<!--        :data="moneyTableData"-->
-<!--      >-->
-<!--        <vxe-table-column field="name" title="费用总额"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>-->
-<!--        <vxe-table-column field="money" title="公司应付"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="个人应还"></vxe-table-column>-->
-<!--      </vxe-table>-->
+
       <div>
         <Row class="tableBox mt10">
           <Col span="6" class="businessbg">费用总额</Col>

@@ -134,7 +134,7 @@ export default {
        this.payUserList = this.list.payList
 
      this.getRate()
-        this.getTaxList()
+     this.getTaxList()
 
       if (this.list.type == 1) {
         this.formInline = {}

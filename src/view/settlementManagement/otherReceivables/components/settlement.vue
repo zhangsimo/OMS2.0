@@ -328,17 +328,17 @@ export default {
             }
           });
         } else if(this.$parent.Types === '其他收款核销'){
-          let obj3 = {
-            type: 2,
-            one: this.reconciliationStatement,
-            two: this.BusinessType,
-            three: this.tableData
-          };
+          let obj3 = {}
+            obj3.one = this.reconciliationStatement;
+            obj3.two = this.BusinessType;
+            obj3.three = this.tableData;
+            obj3.type= 2
           orderWriteOff(obj3).then(res => {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
               this.$message.success("其他收款核销成功!");
+              this.$parent.Types = '';
               this.$parent.getQuery();
             }
           });
