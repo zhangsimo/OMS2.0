@@ -51,8 +51,8 @@ export function expenditureClaim(data) {
 // /otherAccountsPayment/orderWriteOff
 export function orderWriteOff(data) {
   return axios.request({
-    url: `${api.omsSettle}/otherAccountsPayment/orderWriteOff`,
+    url: `${api.omsSettle}/otherAccountsPayment/orderWriteOff?type=${data.type}`,
     method: "post",
-    data,
+    data
   });
 }
