@@ -2,7 +2,7 @@ import  moment from 'moment'
 import selectCredit from '../popWindow/SelectCredit'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
-import {getOtherSve} from '_api/documentApproval/OtherPayment.js'
+import {getCreditSave} from '_api/documentApproval/CreditSpending.js'
 
 export default {
   name: "OtherPayment",
@@ -113,6 +113,7 @@ export default {
     //获取其他付款单据信息
     otherPayList(row){
       delete row.id
+      row.orderDate = row.createTime
       this.$set(this.formInline, "details", [row]);
     },
 
@@ -132,7 +133,7 @@ export default {
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type
-          let res = await getOtherSve(this.formInline)
+          let res = await getCreditSave(this.formInline)
           if (res.code == 0) {
             this.$Message.success('操作成功')
             this.model = false

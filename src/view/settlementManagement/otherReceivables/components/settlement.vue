@@ -182,7 +182,7 @@ export default {
         item.accountNo = item.serviceId;
         // item.guestName = item.guestName;
         item.businessTypeName = item.orderTypeName;
-        item.reconciliationAmt = item.amountCollected;
+        item.reconciliationAmt = item.paymentApplicationAmount;
         item.hasAmt = +item.amountCollected - +item.paymentBalance;
         item.unAmt = item.paymentBalance;
         item.rpAnt = item.paymentBalance;
@@ -287,6 +287,7 @@ export default {
           sign = 8;
         }else if(this.$parent.paymentId === 'QTYSK'){
           sign = 11;
+          this.showModalOne = 0;
         }
         let accountNo = this.$parent.reconciliationStatement
           ? this.$parent.reconciliationStatement.accountNo
@@ -321,20 +322,23 @@ export default {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("保存成功");
+              this.$message.success("其他收款收回成功!");
               this.$parent.getQuery();
+              this.$parent.typeA = '';
             }
           });
         } else if(this.$parent.Types === '其他收款核销'){
           let obj3 = {
-            wrtiteOffDtos: this.BusinessType,
-            sourceDtos: this.tableData
+            type: 2,
+            one: this.reconciliationStatement,
+            two: this.BusinessType,
+            three: this.tableData
           };
           orderWriteOff(obj3).then(res => {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("核销成功");
+              this.$message.success("其他收款核销成功!");
               this.$parent.getQuery();
             }
           });
@@ -348,7 +352,7 @@ export default {
             if (res.code === 0) {
               this.Settlement = false;
               this.$parent.claimModal = false;
-              this.$message.success("保存成功");
+              this.$message.success("其他付款认领成功！");
               this.$parent.getQuery();
             }
           });

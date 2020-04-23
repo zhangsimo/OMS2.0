@@ -106,8 +106,8 @@
       //查询
      async query(){
         let data ={}
-        data.startTime = moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss")
-        data.endTime = moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
+       data.startTime = this.date[0] ? moment(this.date[0]).startOf('day').format("YYYY-MM-DD HH:mm:ss") : ""
+       data.endTime = this.date[1] ? moment(this.date[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss") : ''
         data.amountCollected = this.money
         data.guestId = this.companyId == 0 ? '' : this.companyId
         let res = await getpublicRequestList(data)

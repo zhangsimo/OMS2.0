@@ -721,11 +721,18 @@ export default {
         if (valid) {
           let data = this.formPlan.details;
           const form = val;//conversionList(val);
-          form.map(item => {
-            data.push(item);
-          });
-          console.log(data)
+          // form.map(item => {
+          //   item.partId = item.id
+          //   Reflect.deleteProperty(item, "id");
+          //   data.push(item);
+          // });
+          data = [
+            ...data,
+            ...conversionList(val)
+          ];
+          data.forEach(el => el.orderQty = 1);
           this.$set(this.formPlan, "details", data);
+          // this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
         }

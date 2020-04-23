@@ -32,7 +32,7 @@
         </Col>
         <Col span="6">
           <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
-          <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
+          <i class="iconfont iconcaidan input" v-if="showModalOne == 0" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
@@ -160,13 +160,13 @@ export default {
       tableData: [],
       collectPayId: "",
       obj: {},
-      showModalOne: '' //判断是否显示...
+      showModalOne: 2 //判断是否显示...
     };
   },
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      console.log(val)
+      // console.log(val)
       this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
       // val.two.map(item => {
       //   item.businessTypeName = item.businessType.name;
@@ -177,13 +177,12 @@ export default {
         item.orgName = this.reconciliationStatement.orgName;
         item.accountNo = item.serviceId;
         // item.guestName = item.guestName;
-        item.businessTypeName = item.orderTypeName;
-        item.reconciliationAmt = item.applyAmt;
-        // item.hasAmt = +item.amountCollected - +item.paymentBalance;
-        item.hasAmt = item.paymentClaimAmt;
+        item.businessTypeName = item.businessType.name;
+        item.reconciliationAmt = item.paymentClaimAmt;
+        item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
         item.unAmt = item.paymentBalance;
         item.rpAnt = item.paymentBalance;
-        item.unAmtLeft = item.unAmt - item.rpAnt;
+        item.unAmtLeft = +item.rpAnt - +item.unAmt;
       })
       this.BusinessType.push(...jsonArr)
       this.checkComputed()
@@ -225,7 +224,7 @@ export default {
     });
     //收付款信息
     bus.$on("paymentInfo", val => {
-      console.log(val);
+      // console.log(val);
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
@@ -237,7 +236,7 @@ export default {
         delete item.businessType;
       });
       this.tableData = val;
-      console.log(this.tableData);
+      // console.log(this.tableData);
     });
   },
   methods: {
@@ -281,6 +280,11 @@ export default {
         }else if(this.$parent.paymentId === 'QTYSK'){
           sign = 11;
         }
+        if(this.$parent.Types === '其他付款核销'){
+          this.showModalOne = 0;
+        }else {
+          this.showModalOne = 1;
+        }
         let accountNo = this.$parent.reconciliationStatement ? this.$parent.reconciliationStatement.accountNo : this.$parent.currentAccount.accountNo;
         let id = this.$parent.currRow.id;
         wirteAccount({
@@ -307,6 +311,7 @@ export default {
         // console.log(this.$parent.Types)
         if(this.$parent.Types == '其他付款核销'){
           let obj = {
+            type: 1,
             one: this.reconciliationStatement,
             two: this.BusinessType,
             three: this.tableData

@@ -1,185 +1,177 @@
 <template>
   <div class="db">
-    <Modal v-model="accountModal" title="对账单" width="1200" @on-visible-change="hander">
-      <div class="content-oper content-oper-flex">
-        <section class="oper-box mb10">
-          <div class="oper-top flex">
-            <div class="wlf">
-              <div class="db ml20">
-                <span>对账门店：</span>
-                <Input class="w150" v-model="infoBase.orgName" readonly />
-              </div>
-              <div class="db ml20">
-                <span>往来单位：</span>
-                <Input class="w150" v-model="infoBase.guestName" readonly />
-              </div>
+    <div class="content-oper content-oper-flex">
+      <section class="oper-box mb10">
+        <div class="oper-top flex">
+          <div class="wlf">
+            <div class="db ml20">
+              <span>对账门店：</span>
+              <Input class="w150" v-model="infoBase.orgName" readonly />
+            </div>
+            <div class="db ml20">
+              <span>往来单位：</span>
+              <Input class="w150" v-model="infoBase.guestName" readonly />
             </div>
           </div>
-        </section>
-        <section class="con-box">
-          <div class="inner-box">
-            <Row>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
-              </Col>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
-              </Col>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
-              </Col>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[0].accountNo}}</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[1].accountNo}}</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[2].accountNo}}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="6">
-                <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[0].accountSumAmt}}</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[1].accountSumAmt}}</div>
-              </Col>
-              <Col span="6">
-                <div
-                  style="border:1px solid #dddddd;line-height:40px"
-                  class="tc h40"
-                >{{accountData[2].accountSumAmt}}</div>
-              </Col>
-            </Row>
-            <div class="db mt10 info" v-if="infoBase.billingType.value==0">
-              <h5 class="p10">付款信息</h5>
-              <div class="flex p10">
-                <span>收款户名：</span>
-                <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" readonly />
-                <span>开户行：</span>
-                <Input v-model="infoBase.bankName" class="w140 mr10" readonly />
-                <span>收款账号：</span>
-                <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly />
-                <span>本次申请付款账户：</span>
-                <Input v-model="infoBase.thisPaymentAccount" class="w140 mr10" />
-              </div>
-            </div>
-            <div class="db mt20">
-              <h5>应收业务销售出库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data1"
-                border
-                max-height="400"
-                show-summary
-                ref="receivable"
-              ></Table>
-            </div>
-            <div class="db mt20">
-              <h5>应付业务采购入库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data2"
-                border
-                max-height="400"
-                show-summary
-                ref="payable"
-              ></Table>
-            </div>
-            <div class="totalcollect p10 mt20">
-              <div class="db">
-                <span class="mr5">对账应收</span>
-                <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc" />
-                <span class="mr5 ml10">应收坏账</span>
-                <InputNumber :min="0" v-model="infoBase.badDebtReceivable" readonly class="w60 tc" />
-                <span class="mr5 ml10">应收返利</span>
-                <InputNumber :min="0" v-model="infoBase.receivableRebate" readonly class="w60 tc" />
-                <span class="mr5 ml10">运费</span>
-                <InputNumber :min="0" v-model="infoBase.transportExpenses" readonly class="w60 tc" />
-                <span class="mr5 ml10">保险费</span>
-                <InputNumber :min="0" v-model="infoBase.insuranceExpenses" readonly class="w60 tc" />
-                <span class="mr5 ml10">手续费</span>
-                <InputNumber :min="0" v-model="infoBase.serviceCharge" readonly class="w60 tc" />
-                <span class="mr5 ml10">配件管理费</span>
-                <InputNumber
-                  :min="0"
-                  v-model="infoBase.partsManagementFee"
-                  readonly
-                  class="w60 tc"
-                />
-                <span class="mr5 ml10">其他费用</span>
-                <InputNumber :min="0" v-model="infoBase.otherFees" readonly class="w60 tc" />
-              </div>
-              <div class="db mt10 mb10">
-                <span class="mr5">对账应付</span>
-                <Input type="text" v-model="infoBase.reconciliation" readonly class="w60 tc" />
-                <span class="mr5 ml10">应付坏账</span>
-                <InputNumber
-                  v-model="infoBase.payingBadDebts"
-                  readonly
-                  type="text"
-                  class="w60 tc"
-                  :min="0"
-                />
-                <span class="mr5 ml10">应付返利</span>
-                <InputNumber v-model="infoBase.dealingRebates" readonly class="w60 tc" :min="0" />
-                <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
-                <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" readonly />
-                <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
-                <Input :value="infoBase.actualPayment" class="w60 tc" readonly />
-                <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-                <Input type="text" v-model="infoBase.settlementTotal" readonly class="w60 tc" />
-              </div>
-              <div class="db">
-                <span class="mr5">计划结算类型</span>
-                <Select class="w100" v-model="infoBase.billingType.value" readonly>
-                  <Option
-                    v-for="item in SettlementType"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>
-                <span class="mr5 ml10">应收返利请示单号</span>
-                <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" />
-                <span class="mr5 ml10">应收坏账请示单号</span>
-                <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" />
-                <span class="ml10" style="color:red">*</span>
-                <span class="mr5">备注</span>
-                <Input type="text" v-model="infoBase.remark" class="w260 tc" />
-              </div>
+        </div>
+      </section>
+      <section class="con-box">
+        <div class="inner-box">
+          <Row>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">已勾选明细统计</div>
+            </Col>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">不含税对账单</div>
+            </Col>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税配件对账单</div>
+            </Col>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">含税油品对账单</div>
+            </Col>
+          </Row>
+          <Row>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账单号</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[0].accountNo}}</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[1].accountNo}}</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[2].accountNo}}</div>
+            </Col>
+          </Row>
+          <Row>
+            <Col span="6">
+              <div style="border:1px solid #dddddd;line-height:40px" class="tc h40">对账金额</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[0].accountSumAmt}}</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[1].accountSumAmt}}</div>
+            </Col>
+            <Col span="6">
+              <div
+                style="border:1px solid #dddddd;line-height:40px"
+                class="tc h40"
+              >{{accountData[2].accountSumAmt}}</div>
+            </Col>
+          </Row>
+          <div class="db mt10 info" v-if="infoBase.billingType.value==0">
+            <h5 class="p10">付款信息</h5>
+            <div class="flex p10">
+              <span>收款户名：</span>
+              <Input type="text" class="w140 mr10" v-model="infoBase.collectionName" readonly />
+              <span>开户行：</span>
+              <Input v-model="infoBase.bankName" class="w140 mr10" readonly />
+              <span>收款账号：</span>
+              <Input v-model="infoBase.collectionAccount" class="w140 mr10" readonly />
+              <span>本次申请付款账户：</span>
+              <Input v-model="infoBase.thisPaymentAccount" class="w140 mr10" />
             </div>
           </div>
-        </section>
-      </div>
-      <div slot="footer"></div>
-    </Modal>
+          <div class="db mt20">
+            <h5>应收业务销售出库/退货对账</h5>
+            <Table
+              :columns="columns1"
+              :data="data1"
+              border
+              max-height="400"
+              show-summary
+              ref="receivable"
+            ></Table>
+          </div>
+          <div class="db mt20">
+            <h5>应付业务采购入库/退货对账</h5>
+            <Table
+              :columns="columns1"
+              :data="data2"
+              border
+              max-height="400"
+              show-summary
+              ref="payable"
+            ></Table>
+          </div>
+          <div class="totalcollect p10 mt20">
+            <div class="db">
+              <span class="mr5">对账应收</span>
+              <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc" />
+              <span class="mr5 ml10">应收坏账</span>
+              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" readonly class="w60 tc" />
+              <span class="mr5 ml10">应收返利</span>
+              <InputNumber :min="0" v-model="infoBase.receivableRebate" readonly class="w60 tc" />
+              <span class="mr5 ml10">运费</span>
+              <InputNumber :min="0" v-model="infoBase.transportExpenses" readonly class="w60 tc" />
+              <span class="mr5 ml10">保险费</span>
+              <InputNumber :min="0" v-model="infoBase.insuranceExpenses" readonly class="w60 tc" />
+              <span class="mr5 ml10">手续费</span>
+              <InputNumber :min="0" v-model="infoBase.serviceCharge" readonly class="w60 tc" />
+              <span class="mr5 ml10">配件管理费</span>
+              <InputNumber :min="0" v-model="infoBase.partsManagementFee" readonly class="w60 tc" />
+              <span class="mr5 ml10">其他费用</span>
+              <InputNumber :min="0" v-model="infoBase.otherFees" readonly class="w60 tc" />
+            </div>
+            <div class="db mt10 mb10">
+              <span class="mr5">对账应付</span>
+              <Input type="text" v-model="infoBase.reconciliation" readonly class="w60 tc" />
+              <span class="mr5 ml10">应付坏账</span>
+              <InputNumber
+                v-model="infoBase.payingBadDebts"
+                readonly
+                type="text"
+                class="w60 tc"
+                :min="0"
+              />
+              <span class="mr5 ml10">应付返利</span>
+              <InputNumber v-model="infoBase.dealingRebates" readonly class="w60 tc" :min="0" />
+              <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
+              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" readonly />
+              <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
+              <Input :value="infoBase.actualPayment" class="w60 tc" readonly />
+              <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
+              <Input type="text" v-model="infoBase.settlementTotal" readonly class="w60 tc" />
+            </div>
+            <div class="db">
+              <span class="mr5">计划结算类型</span>
+              <Select class="w100" v-model="infoBase.billingType.value" readonly>
+                <Option
+                  v-for="item in SettlementType"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
+              </Select>
+              <span class="mr5 ml10">应收返利请示单号</span>
+              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" readonly/>
+              <span class="mr5 ml10">应收坏账请示单号</span>
+              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" readonly/>
+              <span class="ml10" style="color:red">*</span>
+              <span class="mr5">备注</span>
+              <Input type="text" v-model="infoBase.remark" class="w260 tc" readonly />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
@@ -206,17 +198,9 @@
 </template>
 
 <script>
-// import selectDealings from "./component/selectCompany";
-import { creat } from "../../components";
-import {
-  getReconciliationNo,
-  getSettlement,
-  Preservation,
-  getStore,
-  account
-} from "@/api/bill/saleOrder";
-import index from "@/view/admin/roles";
+import { getReconciliationNo } from "@/api/bill/saleOrder";
 export default {
+  props: ["id"],
   data() {
     return {
       accountData: [
@@ -441,16 +425,9 @@ export default {
     };
   },
   methods: {
-    // 对账单弹框出现加载数据
-    hander(type) {
-      if (type) {
-        this.Initialization();
-      }
-    },
     // 获取数据
     Initialization() {
-      let obj = { id: this.$parent.reconciliationStatement.id };
-      getReconciliationNo(obj).then(res => {
+      getReconciliationNo({ id: this.id }).then(res => {
         res.data.one.map(item => {
           if (item.number === 1) {
             this.accountData[0] = {

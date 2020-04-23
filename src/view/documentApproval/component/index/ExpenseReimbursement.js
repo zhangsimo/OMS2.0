@@ -28,7 +28,7 @@ export default {
     }
     return {
       model: false, //模态框开关
-      modelType:false, //模态框打开模式 0-新增false 1-编辑false 3-查看true 4-审核true
+      modelType:false, //模态框打开模式 0-新增false 1-编辑false 2-查看true 3-审核true
       formInline:{
 
       },//所有数据对象

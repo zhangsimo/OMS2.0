@@ -225,7 +225,7 @@ export const mixSelectPartCom = {
         // } else {
         //   req[this.searchType] = this.partName.trim();
         // }
-        req.partName = this.partName
+        req.adapterCarModels = [this.partName]
       }
       req.page = this.page.num;
       req.size = this.page.size;
@@ -315,9 +315,9 @@ export const mixSelectPartCom = {
         item.forEach(el => el.orderQty = 1);
         this.$emit("selectPartName", item);
         // this.searchPartLayer = false;
-        setTimeout(()=>{
-          this.$Message.success("已添加");
-        })
+        // setTimeout(()=>{
+        //   this.$Message.success("已添加");
+        // })
       } else {
         this.$Message.error("请选择数据");
       }

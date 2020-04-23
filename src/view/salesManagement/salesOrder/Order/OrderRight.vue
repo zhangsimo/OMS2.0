@@ -797,7 +797,7 @@ export default {
             ...conversionList(val)
           ];
           this.formPlan.detailList.forEach(el => el.orderQty = 1);
-          this.$message.success("已添加");
+          this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
         }
