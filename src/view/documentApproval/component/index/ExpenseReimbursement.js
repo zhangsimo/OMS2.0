@@ -223,7 +223,8 @@ export default {
     //获取科目返回的数据
     getsubBack(row){
      this.$set(this.subjectType , 'accountEntry', row.titleCode)
-      // this.subjectType.accountEntry = row.titleCode
+      // 刷新列表方法
+      this.$refs.xTable.refreshColumn()
     },
 
     //修改费用类型改变科目
