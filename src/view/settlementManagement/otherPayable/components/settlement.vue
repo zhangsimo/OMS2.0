@@ -73,7 +73,7 @@
             <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
             <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
-              field="rpAnt"
+              field="rpAmt"
               title="本次核销金额"
               width="140"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
@@ -181,8 +181,8 @@ export default {
         item.reconciliationAmt = item.paymentClaimAmt;
         item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
         item.unAmt = item.paymentBalance;
-        item.rpAnt = item.paymentBalance;
-        item.unAmtLeft = +item.rpAnt - +item.unAmt;
+        item.rpAmt = item.paymentBalance;
+        item.unAmtLeft = +item.rpAmt - +item.unAmt;
       })
       this.BusinessType.push(...jsonArr)
       this.checkComputed()
@@ -194,7 +194,7 @@ export default {
         reconciliationAmt: 0,
         hasAmt: 0,
         unAmt: 0,
-        rpAnt: 0,
+        rpAmt: 0,
         unAmtLeft: 0
       });
     });
@@ -208,7 +208,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAnt: 0,
+          rpAmt: 0,
           unAmtLeft: 0
         });
       } else if (value.userName) {
@@ -217,7 +217,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAnt: 0,
+          rpAmt: 0,
           unAmtLeft: 0
         });
       }
@@ -343,7 +343,7 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = (row.unAmt * 1 - row.rpAnt * 1).toFixed(2);
+      row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -359,7 +359,7 @@ export default {
               "reconciliationAmt",
               "hasAmt",
               "unAmt",
-              "rpAnt",
+              "rpAmt",
               "unAmtLeft"
             ].includes(column.property)
           ) {
@@ -389,7 +389,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.rpAnt * 1;
+        sum1 += item.rpAmt * 1;
       });
       this.tableData.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;

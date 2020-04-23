@@ -110,7 +110,7 @@
     <!-- 选择销售单据 -->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="invoice" />
     <!-- 选择对账单 -->
-    <saleAccount ref="saleAccount" :parameter="parameter" />
+    <saleAccount ref="saleAccount" :parameter="modelType" />
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -374,7 +374,7 @@ export default {
         this.$refs.formCustom.resetFields();
         // 开票配件
         partsInvoice({
-          accountNo: this.information.accountNo,
+          accountNo: this.modelType.accountNo,
           taxSign: 0
         }).then(res => {
           if (res.code === 0) {
