@@ -311,15 +311,15 @@ export default {
         // console.log(this.$parent.Types)
         if(this.$parent.Types == '其他付款核销'){
           let obj = {
-            type: 1,
             one: this.reconciliationStatement,
             two: this.BusinessType,
-            three: this.tableData
+            three: this.tableData,
+            type: 1
           };
           orderWriteOff(obj).then(res => {
             if (res.code === 0) {
               this.Settlement = false;
-              this.$message.success("核销成功");
+              this.$message.success("其他付款核销成功");
               this.$parent.getQuery();
             }
           });
