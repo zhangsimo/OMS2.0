@@ -127,16 +127,9 @@ export default {
             this.$message.success('认领成功')
             this.modal = false
             this.$parent.getQuery()
+            // this.$parent.reload();
           }
         })
-        // addClaim(obj).then(res=>{
-        //   if(res.code===0){
-        //     this.$message.success('认领成功')
-        //     this.modal = false
-        //     this.$parent.$parent.getQuery()
-        //     this.$parent.$parent.$refs.settlement.tableData=[]
-        //   }
-        // })
       } else {
         this.$message.error('请选择一个往来单位');
       }

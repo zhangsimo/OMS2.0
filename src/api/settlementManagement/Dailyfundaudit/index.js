@@ -49,7 +49,6 @@ function getResContent(res) {
     if (res!=null && res.code == 0) {
         if (res.data.content != null) {
             arr = res.data.content
-            console.log(arr)
         }
     }
     return arr;
@@ -93,4 +92,22 @@ export async function getTableData(params) {
   arr[3] = getResContent(t4);
   arr[4] = getResContent(t5);
   return arr;
+}
+
+// 提交审核 
+export function dailyFundAudit(data) {
+  return axios.request({
+  url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/dailyFundAudit`,
+  method: "post",
+  data,
+});
+}
+
+// 撤销审核
+export function dailyFundAuditRevocation(data) {
+  return axios.request({
+  url: `${api.omsSettle}/omsFinanceAccountEverydayAudit/dailyFundAuditRevocation`,
+  method: "post",
+  data,
+});
 }
