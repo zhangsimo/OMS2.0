@@ -38,7 +38,7 @@
       <div class="mt10 mb10">
         <Button class="ml10" @click="claimCollect(1)">其他收款认领</Button>
         <Button class="ml10" @click="applyForOther" :disabled="Boolean(currRow.paymentNo)">其他付款申请</Button>
-        <Button class="ml10" @click="claimCollect(2)">其他付款支出认领</Button>
+        <Button class="ml10" @click="claimCollect(2)" :disabled="Boolean(currRow.expenseClaimAmount)">其他付款支出认领</Button>
         <Button class="ml10" @click="collectWirte" :disabled="Boolean(currRow.writeOffReceiptNo)">其他付款核销</Button>
         <Button class="ml10" @click="revokeCollection(0)">其他收款认领撤回</Button>
         <Button class="ml10" @click="revokeCollection(3)">其他付款申请撤回</Button>
@@ -360,8 +360,8 @@
       //初始化
       getQuery(){
         let obj = {
-          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : "",
-          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : "",
+          startTime: this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+          endTime: this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59": "",
           orgid: this.BranchstoreId,
           guestId: this.companyId,
           size: this.page.size,
@@ -402,7 +402,7 @@
             this.claimModal = false;
             this.paymentId = "QTYSK";
           } else {
-            this.$message.error("支出金额大于其他其他收款余额，无法认领");
+            this.$message.error("支出金额大于其他其他付款余额，无法认领");
           }
         } else {
           this.$message.error("请先选择数据");

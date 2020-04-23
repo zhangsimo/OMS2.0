@@ -54,7 +54,7 @@
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
             <template>
-              <vxe-button @click="accraditation"> 审 批 </vxe-button>
+              <vxe-button @click="accraditation(row)"> 审 批 </vxe-button>
             </template>
           </template>
         </vxe-table-column>
@@ -66,6 +66,18 @@
         <vxe-table-column field="" title="总金额"></vxe-table-column>
         <vxe-table-column field="" title="当前审批人"></vxe-table-column>
       </vxe-table>
+      <Page
+        :current="page.num"
+        :total="page.total"
+        :page-size="page.size"
+        :page-size-opts="page.opts"
+        @on-change="changePage"
+        @on-page-size-change="changeSize"
+        class="mt10 tr"
+        show-elevator
+        show-sizer
+        show-total
+      ></Page>
       <div class="db mt10" v-if="falg">
         <h4 class="p10 mb10" style="background-color:#f8f8f8">审批进度</h4>
         <section class="data-container">
@@ -135,24 +147,70 @@
       data(){
         return {
           value: [], //日期控件的数组
-          ApplicationType: "9999", //申请类型
+          ApplicationType: "99", //申请类型
           ApplicationTypelist: [
             {
-              value: "9999",
+              value: "99",
               label: "全部"
             },
             {
+              value: "0",
+              label: "费用报销"
+            },
+            {
               value: "1",
-              label: "对账单申请"
+              label: "预收款支出"
+            },
+            {
+              value: "2",
+              label: "请示申请"
+            },
+            {
+              value: "3",
+              label: "采购预付款"
+            },
+            {
+              value: "4",
+              label: "因公借支"
+            },
+            {
+              value: "5",
+              label: "内部资金调拨"
+            },
+            {
+              value: "6",
+              label: "其他付款"
+            },
+            {
+              value: "7",
+              label: "对账单"
+            },
+            {
+              value: "8",
+              label: "销售开票"
+            },
+            {
+              value: "9",
+              label: "不含税开票"
+            },
+            {
+              value: "10",
+              label: "发票对冲"
             },
           ], //申请类型数组
           tableData:[{status: 0}], //表格内容
-          falg: true, //判断审批进度是否显示
+          falg: false, //判断审批进度是否显示
           statusData: [
             { name: "提交", status: "已提交" },
             { name: "产品总监审批", status: "已审批" }
           ], //进度数据
           approvalTit:'流程节点',//审批流程
+          page: {
+            num: 1,
+            size: 10,
+            total: 0,
+            opts: [10,20, 50, 100, 200]
+          } //分页
         }
       },
       mounted(){},
@@ -187,7 +245,16 @@
         query(){},
 
         //审批按钮
-        accraditation(){}
+        accraditation(row){},
+
+        //分页
+        changePage(p) {
+          this.page.num = p;
+        },
+        changeSize(size) {
+          this.page.num = 1;
+          this.page.size = size;
+        }
       },
       filters: {
         date(value = 0) {

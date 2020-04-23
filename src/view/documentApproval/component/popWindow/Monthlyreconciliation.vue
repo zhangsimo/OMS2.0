@@ -1,152 +1,149 @@
 <template>
   <div class="db">
-    <Modal v-model="modal" title="对账单" width="1200" @on-visible-change="hander">
-      <div class="content-oper content-oper-flex">
-        <section class="oper-box mb10">
-          <div class="oper-top flex">
-            <div class="wlf">
-              <div class="db ml20">
-                <span>对账门店：</span>
-                <Select v-model="model1" class="w150" @on-change="storeAccount">
-                  <Option
-                    v-for="item in Branchstore"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>
-              </div>
-              <div class="db ml20">
-                <span>往来单位：</span>
-                <Select v-model="companyInfo" style="width:200px" @on-change="companySelect">
-                  <Option
-                    v-for="item in companyList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>
-              </div>
-              <div class="db ml5">
-                <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
-                  <i class="iconfont iconchaxunicon"></i>
-                  <span>查询</span>
-                </button>
-              </div>
-              <div class="db ml10">
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="preservationDraft"
-                >保存草稿</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="preservationSubmission"
-                >保存并提交</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="getReportReconciliationt"
-                >导出对账清单</button>
-                <button
-                  class="mr10 ivu-btn ivu-btn-default"
-                  type="button"
-                  @click="getReportParts"
-                >导出配件明细</button>
-              </div>
-            </div>
-          </div>
-        </section>
-        <section class="con-box">
-          <div class="inner-box">
-            <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
-            <div class="db mt10 info" v-if="info">
-              <h5 class="p10">付款信息</h5>
-              <div class="flex p10">
-                <span>收款户名：</span>
-                <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
-                <span>开户行：</span>
-                <Input v-model="openingBank" class="w140 mr10" disabled />
-                <span>收款账号：</span>
-                <Input v-model="collectionAccount" class="w140 mr10" disabled />
-                <span>本次申请付款账户：</span>
-                <Input v-model="thisApplyAccount" class="w140 mr10" />
-              </div>
-            </div>
-            <div class="db mt20">
-              <h5>应收业务销售出库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data1"
-                border
-                max-height="400"
-                @on-select="collectCheckout"
-                @on-select-all="collectCheckoutAll"
-                @on-select-cancel="collectNoCheckout"
-                @on-select-all-cancel="collectNoCheckoutAll"
-                show-summary
-                ref="receivable"
-              ></Table>
-            </div>
-            <div class="db mt20">
-              <h5>应付业务采购入库/退货对账</h5>
-              <Table
-                :columns="columns1"
-                :data="data2"
-                border
-                max-height="400"
-                @on-select="paymentCheckout"
-                @on-select-all="paymentCheckoutAll"
-                @on-select-cancel="paymentNoCheckout"
-                @on-select-all-cancel="paymentNoCheckoutAll"
-                show-summary
-                ref="payable"
-              ></Table>
-            </div>
-            <div class="flex mt20">
-              <div class="totalcollect p10">
-                <span class="mr5">应收合计</span>
-                <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
-                <span class="mr5">应收坏账</span>
-                <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
-                <span class="mr5">应收返利</span>
-                <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
-                <span class="mr5" style="color:#f66">实际应收合计</span>
-                <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
-              </div>
-              <div class="totalpayment p10 ml10">
-                <span class="mr5">应付合计</span>
-                <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
-                <span class="mr5">应付坏账</span>
-                <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
-                <span class="mr5">应付返利</span>
-                <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
-                <span class="mr5" style="color:#f66">实际应付合计</span>
-                <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
-              </div>
-            </div>
-            <div class="db total mt20 p10">
-              <span class="mr5">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
-              <span class="mr5">计划结算类型</span>
-              <Select class="w100 mr10" v-model="totalvalue">
+    <div class="content-oper content-oper-flex">
+      <section class="oper-box mb10">
+        <div class="oper-top flex">
+          <div class="wlf">
+            <div class="db ml20">
+              <span>对账门店：</span>
+              <Select v-model="model1" class="w150" @on-change="storeAccount">
                 <Option
-                  v-for="item in SettlementType"
+                  v-for="item in Branchstore"
                   :value="item.value"
                   :key="item.value"
                 >{{ item.label }}</Option>
               </Select>
-              <span class="mr5">应收返利请示单号</span>
-              <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
-              <span class="mr5">应收坏账请示单号</span>
-              <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
-              <span class="mr5">备注</span>
-              <Input type="text" v-model="remark" class="w60 mr10 tc" />
+            </div>
+            <div class="db ml20">
+              <span>往来单位：</span>
+              <Select v-model="companyInfo" style="width:200px" @on-change="companySelect">
+                <Option
+                  v-for="item in companyList"
+                  :value="item.value"
+                  :key="item.value"
+                >{{ item.label }}</Option>
+              </Select>
+            </div>
+            <div class="db ml5">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+                <i class="iconfont iconchaxunicon"></i>
+                <span>查询</span>
+              </button>
+            </div>
+            <div class="db ml10">
+              <button
+                class="mr10 ivu-btn ivu-btn-default"
+                type="button"
+                @click="preservationDraft"
+              >保存草稿</button>
+              <button
+                class="mr10 ivu-btn ivu-btn-default"
+                type="button"
+                @click="preservationSubmission"
+              >保存并提交</button>
+              <button
+                class="mr10 ivu-btn ivu-btn-default"
+                type="button"
+                @click="getReportReconciliationt"
+              >导出对账清单</button>
+              <button
+                class="mr10 ivu-btn ivu-btn-default"
+                type="button"
+                @click="getReportParts"
+              >导出配件明细</button>
             </div>
           </div>
-        </section>
-      </div>
-      <div slot="footer"></div>
-    </Modal>
+        </div>
+      </section>
+      <section class="con-box">
+        <div class="inner-box">
+          <Table :columns="columns" :data="data" border max-height="400" v-if="handervis"></Table>
+          <div class="db mt10 info" v-if="info">
+            <h5 class="p10">付款信息</h5>
+            <div class="flex p10">
+              <span>收款户名：</span>
+              <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
+              <span>开户行：</span>
+              <Input v-model="openingBank" class="w140 mr10" disabled />
+              <span>收款账号：</span>
+              <Input v-model="collectionAccount" class="w140 mr10" disabled />
+              <span>本次申请付款账户：</span>
+              <Input v-model="thisApplyAccount" class="w140 mr10" />
+            </div>
+          </div>
+          <div class="db mt20">
+            <h5>应收业务销售出库/退货对账</h5>
+            <Table
+              :columns="columns1"
+              :data="data1"
+              border
+              max-height="400"
+              @on-select="collectCheckout"
+              @on-select-all="collectCheckoutAll"
+              @on-select-cancel="collectNoCheckout"
+              @on-select-all-cancel="collectNoCheckoutAll"
+              show-summary
+              ref="receivable"
+            ></Table>
+          </div>
+          <div class="db mt20">
+            <h5>应付业务采购入库/退货对账</h5>
+            <Table
+              :columns="columns1"
+              :data="data2"
+              border
+              max-height="400"
+              @on-select="paymentCheckout"
+              @on-select-all="paymentCheckoutAll"
+              @on-select-cancel="paymentNoCheckout"
+              @on-select-all-cancel="paymentNoCheckoutAll"
+              show-summary
+              ref="payable"
+            ></Table>
+          </div>
+          <div class="flex mt20">
+            <div class="totalcollect p10">
+              <span class="mr5">应收合计</span>
+              <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
+              <span class="mr5">应收坏账</span>
+              <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
+              <span class="mr5">应收返利</span>
+              <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
+              <span class="mr5" style="color:#f66">实际应收合计</span>
+              <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
+            </div>
+            <div class="totalpayment p10 ml10">
+              <span class="mr5">应付合计</span>
+              <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
+              <span class="mr5">应付坏账</span>
+              <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
+              <span class="mr5">应付返利</span>
+              <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
+              <span class="mr5" style="color:#f66">实际应付合计</span>
+              <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
+            </div>
+          </div>
+          <div class="db total mt20 p10">
+            <span class="mr5">本次对账结算合计(整数收款)</span>
+            <Input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
+            <span class="mr5">计划结算类型</span>
+            <Select class="w100 mr10" v-model="totalvalue">
+              <Option
+                v-for="item in SettlementType"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <span class="mr5">应收返利请示单号</span>
+            <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
+            <span class="mr5">应收坏账请示单号</span>
+            <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
+            <span class="mr5">备注</span>
+            <Input type="text" v-model="remark" class="w60 mr10 tc" />
+          </div>
+        </div>
+      </section>
+    </div>
     <Modal v-model="Reconciliation" title="本次不对账" width="1200">
       <div class="flex mb20">
         <span class="mr5">门店</span>
@@ -209,8 +206,7 @@
 </template>
 
 <script>
-// import selectDealings from "./component/selectCompany";
-import { creat } from "../../components";
+import { creat } from "@/view/settlementManagement/components";
 import {
   getReconciliation,
   getSettlement,
@@ -672,30 +668,6 @@ export default {
     },
     query() {
       this.Initialization();
-    },
-    // 对账单弹框出现加载数据
-    hander(type) {
-      if (type) {
-        this.handervis = false;
-        this.flag = false;
-        this.info = false;
-        this.store = this.parameter.orgName;
-        this.model1 = this.parameter.orgId;
-        this.companyInfo = this.parameter.guestId;
-        this.Rebateid = "";
-        this.BadDebtid = "";
-        this.remark = "";
-        this.totalpayment = 0;
-        this.paymentBaddebt = 0;
-        this.paymentRebate = 0;
-        this.totalcollect = 0;
-        this.collectBaddebt = 0;
-        this.collectRebate = 0;
-        this.collectlist = [];
-        this.paymentlist = [];
-        this.storeAccount(this.parameter.orgId);
-        this.Initialization();
-      }
     },
     // 获取数据
     Initialization() {
