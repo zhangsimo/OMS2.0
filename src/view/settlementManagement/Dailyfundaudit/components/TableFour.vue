@@ -12,13 +12,32 @@
       border="full"
       style="width: 3000px"
       :data="tableData"
+      @checkbox-all="selectAllEvent"
+      @checkbox-change="selectChangeEvent"
     >
       <vxe-table-column title="基本信息">
+        <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
         <vxe-table-column field="businessNumbers" title="预收款支出/核销单号"></vxe-table-column>
         <vxe-table-column field="businessNumbersList" title="预收款单号"></vxe-table-column>
-        <vxe-table-column field="guestSourceName" title="来源往来单位"></vxe-table-column>
-        <vxe-table-column field="guestTargetName" title="目标往来单位"></vxe-table-column>
+        <vxe-table-column field="tmp" title="来源往来单位">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
+                <span class="listChild">{{ item.guestSourceName }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="目标往来单位">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
+                <span class="listChild">{{ item.guestTargetName }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="tmp" title="收付类型">
           <template v-slot="{ row }">
             <span>{{ row.receiptPaymentType.name }}</span>
@@ -125,9 +144,21 @@ export default {
   },
   data() {
     return {
-      selectionData: []
     };
   },
-  methods: {}
+  methods: {
+    clear() {
+      this.$refs.xTable.clearCheckboxRow();
+      this.$emit("selection", []);
+    },
+    selectAllEvent({ checked, records }) {
+      // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
+      this.$emit("selection", records);
+    },
+    selectChangeEvent({ checked, records }) {
+      // console.log(checked ? "勾选事件" : "取消事件", records);
+      this.$emit("selection", records);
+    }
+  }
 };
 </script>
