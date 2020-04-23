@@ -88,7 +88,6 @@ import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 export default {
   name: "draftingOfApplication",
   components: {
-    modal,
     ExpenseReimbursement,
     OtherPayment,
     PublicRequest,
