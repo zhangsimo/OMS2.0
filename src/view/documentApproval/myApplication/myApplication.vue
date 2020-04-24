@@ -312,6 +312,7 @@
             statementStatus: this.Reconciliationtype
           };
           // this.getAccountStatement(obj);
+          this.getList();
         },
 
         // 选择日期
