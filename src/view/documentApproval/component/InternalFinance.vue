@@ -71,14 +71,14 @@
             </Col>
             <Col span="8">
               <FormItem label="转出账户" prop="outAccount" style="margin-bottom: 0px">
-                <Select v-model="formInline.outAccount" style="width: 90%;padding-left: 5px" label-in-value :disabled="modelType">
+                <Select v-model="formInline.outAccount" style="width: 90%;padding-left: 5px" @on-change="getOutApply" :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="8">
               <FormItem label="转出账号" prop="outAccountNo" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.outAccountNo" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+                <Input type="text" v-model="formInline.outAccountNo" style="width: 90%;padding-left: 5px"  disabled></Input>
               </FormItem>
             </Col>
           </Row>
@@ -88,20 +88,22 @@
         <div class="proceeds">
           <Row>
             <Col span="8">
-              <FormItem label="转入门店" style="margin-bottom: 0px">
-                <Select @on-change="getCompany" v-model="formInline.receiveGuestId"  label-in-value  filterable style="width: 90%;padding-left: 5px" :disabled="modelType">
-                  <Option v-for="item in company" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              <FormItem label="转入门店" style="margin-bottom: 0px" prop="enterOrgid">
+                <Select @on-change="getCompany" v-model="formInline.enterOrgid" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in company" :value="item.id" :key="item.id">{{ item.name }}</Option>
                 </Select>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="转入账户" prop="receiver" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.receiver" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              <FormItem label="转入账户"  prop="enterAccount" style="margin-bottom: 0px">
+                <Select  v-model="formInline.enterAccount" @on-change="getinto" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                  <Option v-for="item in IntoAccountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
+                </Select>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="转入账号" prop="receiveBank" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.receiveBank" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              <FormItem label="转入账号" prop="enterAccountNo" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.enterAccountNo" style="width: 90%;padding-left: 5px"  disabled></Input>
               </FormItem>
             </Col>
           </Row>

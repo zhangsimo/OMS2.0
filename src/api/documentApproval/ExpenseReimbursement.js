@@ -41,7 +41,7 @@ export function getOnBusiness (params) {
 }
 
 
-
+//获取付款账号名称
 export function getPayAccount (params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountRegister/findListPageAll`,
