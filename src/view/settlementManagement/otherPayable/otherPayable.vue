@@ -311,8 +311,9 @@
     data(){
       return{
         modelType:{
-          type:1, //新增
-          id: ''
+          type:5, //新增
+          id: '',
+          rowMessage: {} //当前行数据
         },
         value: [], //查询日期数组
         BranchstoreId: '', //分店名称
@@ -605,7 +606,9 @@
       },
       // 选中行
       currentChangeEvent({ row }) {
+        console.log(row)
         this.currRow = row;
+        this.modelType.rowMessage = row;
         this.reconciliationStatement.accountNo = row.serviceId;
         this.serviceId = row.serviceId;
         this.$refs.Record.init();
