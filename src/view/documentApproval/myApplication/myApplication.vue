@@ -165,6 +165,21 @@
     </section>
 
     <!--<approval :approvalTit="approvalTit"></approval>-->
+    <!--      对应各个模态框-->
+    <!--      费用报销报销-->
+    <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType"></ExpenseReimbursement>
+    <!--      其他付款申请-->
+    <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
+    <!--      应公借支申请-->
+    <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
+    <!--      请示单申请-->
+    <AskForInstrucions ref="AskForInstrucions" :list="modelType"></AskForInstrucions>
+    <!--      预收款支出申请-->
+    <CreditSpending ref="CreditSpending" :list="modelType"></CreditSpending>
+    <!--      预付款申请-->
+    <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
+    <!--      内部资金调拨-->
+    <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
   </div>
 </template>
 
@@ -173,6 +188,15 @@
   import quickDate from "@/components/getDate/dateget.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+
+  import ExpenseReimbursement from "../component/ExpenseReimbursement";
+  import OtherPayment from "../component/OtherPayment";
+  import PublicRequest from "../component/PublicRequest";
+  import AskForInstrucions from "../component/AskForInstructions";
+  import CreditSpending from "../component/CreditSpending";
+  import AdvanceApply from "../component/AdvanceApply";
+  import InternalFinance from "../component/InternalFinance";
+
   import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
 
 
@@ -180,7 +204,15 @@
         name: "myApplication",
         components: {
           quickDate,
-          approval
+          approval,
+          //11种类型
+          ExpenseReimbursement,
+          OtherPayment,
+          PublicRequest,
+          AskForInstrucions,
+          CreditSpending,
+          AdvanceApply,
+          InternalFinance
         },
       data(){
         return {
@@ -224,7 +256,7 @@
             },
             {
               value: "2",
-              label: "请示申请"
+              label: "请示单申请"
             },
             {
               value: "3",
@@ -291,6 +323,11 @@
           placeholderValue: '请输入申请单号', //动态改变placeholder
           shopCode: 0, //门店
           shopListArr: [ {id:0 , name:'全部'}], //门店数组
+          //打开模态框状态 type 1 新增 2修改 3查看 4审核
+          modelType: {
+            type: 1,
+            id: ""
+          }
         }
       },
       mounted(){
@@ -389,29 +426,40 @@
 
         //查看
         lookOver(row){
-          console.log(row.applyTypeName)
+          // console.log(row.applyTypeName)
           switch (row.applyTypeName) {
             case "费用报销":
+              this.$refs.ExpenseReimbursement.open();
               break;
             case "预收款支出":
+              this.$refs.CreditSpending.open();
               break;
-            case "请示申请":
+            case "请示单申请":
+              this.$refs.AskForInstrucions.open();
               break;
             case "采购预付款":
+              this.$refs.AdvanceApply.open();
               break;
             case "因公借支":
+              this.$refs.PublicRequest.open();
               break;
               case "内部资金调拨":
+                this.$refs.InternalFinance.open();
               break;
             case "其他付款":
+              this.$refs.OtherPayment.open();
               break;
             case "对账单":
+              // this.$refs.ExpenseReimbursement.open();
               break;
             case "销售开票":
+              // this.$refs.ExpenseReimbursement.open();
               break;
             case "不含税开票":
+              // this.$refs.ExpenseReimbursement.open();
               break;
             case "发票对冲":
+              // this.$refs.ExpenseReimbursement.open();
               break;
           }
         },
