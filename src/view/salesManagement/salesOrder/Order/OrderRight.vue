@@ -810,6 +810,7 @@ export default {
           // let data = {};
           val.map(item => {
             item.isMarkBatch = 1;
+            Reflect.deleteProperty(item, 'id');
           });
           // data = this.formPlan;
           // val.map(item=>{
@@ -817,7 +818,7 @@ export default {
           // })
             this.formPlan.detailList = [
                 ...this.formPlan.detailList,
-                ...conversionList(val)
+                ...val
             ]
             this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
