@@ -817,6 +817,7 @@ export default {
           if (res.code == 0) {
             this.getList();
             this.$Message.success("提交成功");
+            this.flag = 0;
           }
         })
         .catch(e => {
@@ -929,6 +930,7 @@ export default {
         item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
       });
+      this.$Message.success("已添加");
     },
     //删除
     deletePar() {

@@ -618,13 +618,13 @@ export default class GoodsInfo extends Vue {
         this.changeDeliveryType();
       }
     } else {
-      this.formDateRight = row;
+      this.formDateRight = {...row};
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
-      this.formDateRight.receiveCompName = row.receiveComp;
-      this.formDateRight.streetAddress = row.receiveAddress
-      this.formDateRight.receiveMan = row.receiver
-      this.formDateRight.receiveManTel = row.receiverMobile
+      this.formDateRight.receiveCompName = row.receiveComp||row.receiveCompName;
+      this.formDateRight.streetAddress = row.receiveAddress||row.streetAddress
+      this.formDateRight.receiveMan = row.receiver||row.receiveMan
+      this.formDateRight.receiveManTel = row.receiverMobile||row.receiveManTel
       // this.formDateRight.streetAddress = row.streetAddress;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;

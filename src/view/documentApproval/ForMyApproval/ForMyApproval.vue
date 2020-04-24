@@ -27,6 +27,16 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
+          <div class="db ml20">
+            <Select v-model="searchType" class="w100 mr10" @on-change="changeSelect">
+              <Option
+                v-for="item in searchTypeArr"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Input type="text" v-model="searchTypeValue" style="width: 180px" :placeholder="placeholderValue"/>
+          </div>
           <div class="db ml15">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon mr5"></i>
@@ -50,17 +60,18 @@
         show-overflow
         :height="500"
         :data="tableData">
-        <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
             <template>
-              <vxe-button @click="accraditation(row)"> 审 批 </vxe-button>
+              <a @click="accraditation(row)"> 查 看 </a>
             </template>
           </template>
         </vxe-table-column>
         <vxe-table-column field="" title="当前状态"></vxe-table-column>
+        <vxe-table-column field="" title="审批编号"></vxe-table-column>
         <vxe-table-column field="" title="申请单号"></vxe-table-column>
-        <vxe-table-column field="" title="申请时间"></vxe-table-column>
+        <vxe-table-column field="" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="" title="申请人"></vxe-table-column>
         <vxe-table-column field="" title="申请类型"></vxe-table-column>
         <vxe-table-column field="" title="主题"></vxe-table-column>
         <vxe-table-column field="" title="总金额"></vxe-table-column>
@@ -107,6 +118,16 @@
             </div>
           </div>
           <div class="modal-data">
+            <span class="data-name">审批状态:</span>
+            <div class="data-value flex-center">
+              <template v-for="(item,i) in statusData">
+                <div class="status-box flex-center" :key="i">
+                  <span class="remark">{{item.remark}}</span>
+                </div>
+              </template>
+            </div>
+          </div>
+          <div class="modal-data">
             <span class="data-name">审批意见:</span>
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
@@ -117,7 +138,7 @@
             </div>
           </div>
           <div class="modal-data">
-            <span class="data-name">审批时间:</span>
+            <span class="data-name">审批日期:</span>
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
@@ -210,7 +231,24 @@
             size: 10,
             total: 0,
             opts: [10,20, 50, 100, 200]
-          } //分页
+          }, //分页
+          searchTypeArr: [
+            {
+              value: "0",
+              label: "申请单号"
+            },
+            {
+              value: "1",
+              label: "审批编码"
+            },
+            {
+              value: "2",
+              label: "申请人"
+            }
+          ], //申请类型数组
+          searchType: '0', //申请类型
+          searchTypeValue: '', //申请类型的值
+          placeholderValue: '请输入申请单号', //动态改变placeholder
         }
       },
       mounted(){},
@@ -254,6 +292,20 @@
         changeSize(size) {
           this.page.num = 1;
           this.page.size = size;
+        },
+        //根据类型select改变事件
+        changeSelect(val){
+          switch(val) {
+            case "0":
+              this.placeholderValue = '请输入申请单号';
+              break;
+            case "1":
+              this.placeholderValue = '请输入审批编码';
+              break;
+            case "2":
+              this.placeholderValue = '请输入申请人';
+              break;
+          }
         }
       },
       filters: {
