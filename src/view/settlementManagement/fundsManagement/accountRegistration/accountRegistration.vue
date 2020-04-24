@@ -117,7 +117,7 @@
             model1: 0,//区域
             Branchstore: [ {id:0 ,companyName:'全部'}], //区域数组
             shopCode: 0, //门店
-            shopListArr: [ {id:0 , name:'全部'}], //门店数组
+            shopListArr: [ {id:"99" , name:'全部'}], //门店数组
             accountName: '', //账户
             bankName: '', //开户行
             subjectCode: 0, //对应科目
