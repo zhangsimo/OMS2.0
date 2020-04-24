@@ -317,9 +317,9 @@
         },
         value: [], //查询日期数组
         BranchstoreId: '', //分店名称
+        Branchstore: [], //分店名称
         company: [], //往来单位数组
         companyId: "", //往来单位
-        Branchstore: [], //分店名称
         currRow: {}, //选中行
         claimModal: false, //认领弹框
         revoke: false, //撤回弹框
