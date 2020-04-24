@@ -810,6 +810,7 @@ export default {
           // let data = {};
           val.map(item => {
             item.isMarkBatch = 1;
+            item.batchSourceId = item.id||item.batchSourceId
             Reflect.deleteProperty(item, 'id');
           });
           // data = this.formPlan;
