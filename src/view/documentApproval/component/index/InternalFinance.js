@@ -27,8 +27,12 @@ export default {
           {required: true, message: '金额为必填', trigger: 'blur'},
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
-        receiveGuestId:[
-          {required: true, message: '往来单位', trigger: 'change'}
+        outAccount:[
+          {required: true, message: '转出账户必填', trigger: 'blur'}
+        ],
+        outAccountNo:[
+          {required: true, message: '转出账号必填', trigger: 'blur'}
+
         ],
         receiver:[
           {required: true, message: '收款人账户必填', trigger: 'change'}
@@ -80,9 +84,9 @@ export default {
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '内部资金调拨'
         this.formInline.applyTime = date
-        this.formInline.paymentOrgName = user.shopName
+        this.formInline.outOrgName = user.shopName
       }
     },
 

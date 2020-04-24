@@ -66,17 +66,19 @@
           <Row>
             <Col span="8">
               <FormItem label="转出门店"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
+                <Input type="text" v-model="formInline.outOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="转出账户" prop="paymentAccount" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              <FormItem label="转出账户" prop="outAccount" style="margin-bottom: 0px">
+                <Select v-model="formInline.outAccount" style="width: 90%;padding-left: 5px" label-in-value :disabled="modelType">
+                  <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                </Select>
               </FormItem>
             </Col>
             <Col span="8">
-              <FormItem label="转出账号" prop="paymentAccount" style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
+              <FormItem label="转出账号" prop="outAccountNo" style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.outAccountNo" style="width: 90%;padding-left: 5px"  :disabled="modelType"></Input>
               </FormItem>
             </Col>
           </Row>
