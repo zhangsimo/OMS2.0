@@ -19,7 +19,7 @@
           </div>
           <div class="db ml10">
             <span>申请状态：</span>
-            <Select v-model="Reconciliationtype" class="w120" placeholder="全部">
+            <Select v-model="Reconciliationtype" class="w120" placeholder="全部" @on-change="SelectChange">
               <Option
                 v-for="item in Reconciliationlist"
                 :value="item.value"
@@ -29,7 +29,7 @@
           </div>
           <div class="db ml10">
             <span>申请类型：</span>
-            <Select v-model="ApplicationType" class="w120" placeholder="全部">
+            <Select v-model="ApplicationType" class="w120" placeholder="全部" @on-change="SelectChange">
               <Option
                 v-for="item in ApplicationTypelist"
                 :value="item.value"
@@ -39,7 +39,7 @@
           </div>
           <div class="db ml10">
             <span>门店：</span>
-            <Select v-model="shopCode" class="w150" filterable clearable >
+            <Select v-model="shopCode" class="w150" filterable clearable @on-change="SelectChange">
               <Option
                 v-for="item in shopListArr"
                 :value="item.id"
@@ -85,7 +85,7 @@
           <template v-slot="{ row }">
             <template>
               <!--<vxe-button @click="redact(row)">编辑</vxe-button>-->
-              <a @click="redact(row)" class="mr10">编 辑</a>
+              <!--<a @click="redact(row)" class="mr10">编 辑</a>-->
               <a @click="lookOver(row)">查 看</a>
               <!--<vxe-button @click="remove(row)">删除</vxe-button>-->
             </template>
@@ -170,7 +170,7 @@
 
 <script>
   import moment from "moment";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
   import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
@@ -312,6 +312,7 @@
             statementStatus: this.Reconciliationtype
           };
           // this.getAccountStatement(obj);
+          this.getList();
         },
 
         // 选择日期
@@ -349,7 +350,8 @@
           }
           let res = await findPageByDynamicQuery(params)
           if(res.code === 0){
-              this.tableData = res.data.content
+              this.tableData = res.data.content;
+              this.page.total = res.data.totalElements;
           }
         },
 
@@ -360,7 +362,12 @@
 
         //编辑
         redact(row){
-          console.log(row)
+          console.log(row.applyTypeName)
+        },
+
+        //下拉框改变
+        SelectChange(){
+        this.getList();
         },
 
         //获取门店
@@ -381,7 +388,33 @@
         },
 
         //查看
-        lookOver(row){},
+        lookOver(row){
+          console.log(row.applyTypeName)
+          switch (row.applyTypeName) {
+            case "费用报销":
+              break;
+            case "预收款支出":
+              break;
+            case "请示申请":
+              break;
+            case "采购预付款":
+              break;
+            case "因公借支":
+              break;
+              case "内部资金调拨":
+              break;
+            case "其他付款":
+              break;
+            case "对账单":
+              break;
+            case "销售开票":
+              break;
+            case "不含税开票":
+              break;
+            case "发票对冲":
+              break;
+          }
+        },
 
         //删除
         remove(row){},
@@ -389,10 +422,12 @@
         //分页
         changePage(p) {
           this.page.num = p;
+          this.getList()
         },
         changeSize(size) {
           this.page.num = 1;
           this.page.size = size;
+          this.getList();
         },
 
         //根据类型select改变事件
