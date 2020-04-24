@@ -188,7 +188,7 @@ export default {
         writeOffStatus: 0,
       }
       
-      if (this.date.length === 2) {
+      if (this.date.length === 2 && this.date[0]) {
         data.startTime = moment(this.date[0]).format("YYYY-MM-DD") + " 00:00:00";
         data.endTime = moment(this.date[1]).format("YYYY-MM-DD") + " 23:59:59";
       }

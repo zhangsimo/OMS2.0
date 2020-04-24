@@ -880,6 +880,18 @@ export default [
           import("@/view/settlementManagement/Dailyfundaudit/index.vue")
       },
       {
+        path: "/settlementManagement/Expensereimbursement",
+        name: "settlementManagement-Expensereimbursement",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "费用报销管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/Expensereimbursement/Expensereimbursement.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",
