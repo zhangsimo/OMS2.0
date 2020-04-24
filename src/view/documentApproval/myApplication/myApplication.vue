@@ -9,7 +9,7 @@
           </div>
           <div class="db ml10">
             <Date-picker
-              format="yyyy-MM-dd"
+              format="yyyy-MM-dd "
               :value="value"
               @on-change="changedate"
               type="daterange"
@@ -55,7 +55,7 @@
                 :key="item.value"
               >{{ item.label }}</Option>
             </Select>
-            <Input type="text" v-model="searchTypeValue" style="width: 180px" :placeholder="placeholderValue"/>
+            <Input type="text" v-model="searchTypeValue" style="width: 200px" :placeholder="placeholderValue"/>
           </div>
           <div class="db ml15">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
@@ -96,9 +96,9 @@
         <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
         <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
-        <vxe-table-column field="" title="主题"></vxe-table-column>
-        <vxe-table-column field="" title="总金额"></vxe-table-column>
-        <vxe-table-column field="" title="门店"></vxe-table-column>
+        <vxe-table-column field="topic" title="主题"></vxe-table-column>
+        <vxe-table-column field="amtTotal" title="总金额"></vxe-table-column>
+        <vxe-table-column field="orgName" title="门店"></vxe-table-column>
       </vxe-table>
       <Page
         :current="page.num"

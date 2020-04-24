@@ -304,6 +304,10 @@ export default {
               item.businessTypeName = item.businessType.name;
             });
             this.BusinessType = res.data.two;
+            if(this.tableData){
+              this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
+              this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
+            }
             this.checkComputed();
           }
         });
