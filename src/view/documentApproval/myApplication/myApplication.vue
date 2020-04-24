@@ -91,15 +91,14 @@
             </template>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="" title="当前状态"></vxe-table-column>
-        <vxe-table-column field="" title="审批编号"></vxe-table-column>
-        <vxe-table-column field="" title="申请单号"></vxe-table-column>
-        <vxe-table-column field="" title="申请日期"></vxe-table-column>
-        <vxe-table-column field="" title="申请人"></vxe-table-column>
-        <vxe-table-column field="" title="申请类型"></vxe-table-column>
+        <vxe-table-column field="billStatusName" title="当前状态"></vxe-table-column>
+        <vxe-table-column field="applyNo" title="申请单号"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
         <vxe-table-column field="" title="主题"></vxe-table-column>
         <vxe-table-column field="" title="总金额"></vxe-table-column>
-        <vxe-table-column field="" title="当前审批人"></vxe-table-column>
+        <vxe-table-column field="" title="门店"></vxe-table-column>
       </vxe-table>
       <Page
         :current="page.num"
@@ -174,6 +173,7 @@
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
 
 
   export default {
@@ -320,7 +320,38 @@
         },
 
         // 查询按钮
-        query(){},
+        query(){
+          this.getList()
+        },
+
+        //初始化数据
+        async getList(){
+          let params = {};
+          params.page = this.page.num - 1;
+          params.size = this.page.size;
+          if(this.value){
+            params.startTime = this.value[0];
+            params.endTime = this.value[1];
+          }
+          params.billStatus = this.Reconciliationtype;
+          params.applyType = this.ApplicationType;
+          params.orgid = this.shopCode;
+          switch (this.searchType) {
+            case '0':
+              params.applyNo = this.searchTypeValue;
+              break;
+            case '1':
+              params.applicant = this.searchTypeValue;
+              break;
+            case '2':
+              params.approveUname = this.searchTypeValue;
+              break;
+          }
+          let res = await findPageByDynamicQuery(params)
+          if(res.code === 0){
+              this.tableData = res.data.content
+          }
+        },
 
         //起草申请
         TheApplication(){

@@ -351,14 +351,14 @@
               if (type === 1) {
                   this.claimModal = true;
                   this.claimTit = "其他付款认领";
-                  this.claimedList(1);
+                  this.claimedList(2);
               } else {
                 if(this.currRow.paymentBalance == 0 ||  !this.currRow.paymentBalance) {
                   this.$Message.error('他收款余额为0无法收回!')
                 }else {
                   this.claimTit = "其他收款收回";
                   this.claimModal = true;
-                  this.claimedList(2);
+                  this.claimedList(1);
                 }
               }
             }else{
