@@ -82,7 +82,7 @@ export default {
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '预收款支出'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
       }

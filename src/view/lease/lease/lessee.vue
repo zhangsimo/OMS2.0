@@ -816,13 +816,13 @@ export default {
           title: "付款方式",
           align: "center",
           minWidth: 180,
-          key: "type",
+          key: "paymentType",
           render: (h, params) => {
             let zi = "";
-            if (params.row.type === 0) {
+            if (params.row.paymentType === 0) {
               zi = "支付宝";
             }
-            if (params.row.type === 1) {
+            if (params.row.paymentType === 1) {
               zi = "微信";
             }
             return h("span", zi);

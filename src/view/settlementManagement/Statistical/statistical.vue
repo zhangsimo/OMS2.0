@@ -24,13 +24,10 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select v-model="areaId" class="w150">
-              <Option
-                v-for="item in areas"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+            <Select v-model="areaId" class="w150" @on-change="changeArea">
+              <Option v-for="item in areas" :value="item.id" :key="item.id">{{
+                item.companyName
+              }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -38,9 +35,9 @@
             <Select v-model="BranchstoreId" class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
               >
             </Select>
           </div>
@@ -72,6 +69,11 @@
 </template>
 
 <script>
+import {
+  are,
+  goshop,
+} from "@/api/settlementManagement/fundsManagement/capitalChain";
+import * as api from "_api/settlementManagement/financialStatement.js";
 import QuickDate from "_c/getDate/dateget";
 import moment from "moment";
 export default {
@@ -91,193 +93,193 @@ export default {
         },
         {
           title: "区域",
-          key: "tmp",
+          key: "area",
           width: 100,
           fixed: "left"
         },
         {
           title: "门店",
-          key: "tmp",
+          key: "shopName",
           width: 100,
           fixed: "left"
         },
         {
           title: "店号",
-          key: "tmp",
+          key: "shopCode",
           width: 80,
           fixed: "left"
         },
         {
           title: "账户",
-          key: "tmp",
+          key: "accountName",
           width: 100,
           fixed: "left"
         },
         {
           title: "账号",
-          key: "tmp",
+          key: "accountCode",
           width: 100,
           fixed: "left"
         },
         {
           title: "开户行",
-          key: "tmp",
+          key: "bankName",
           width: 100,
           fixed: "left"
         },
         {
           title: "对应科目",
-          key: "tmp",
+          key: "mateAccountName",
           width: 120,
           fixed: "left"
         },
         {
           title: "期初余额",
-          key: "tmp",
+          key: "initialBalanceMoney",
           width: 100
         },
         {
           title: "收回应收",
-          key: "tmp",
+          key: "recoveryMoney",
           width: 100
         },
         {
           title: "管理费收入",
-          key: "tmp",
+          key: "administrativeFeeMoney",
           width: 100
         },
         {
           title: "销售收入小计",
-          key: "tmp",
+          key: "saleMoney",
           width: 100
         },
         {
           title: "税费返还等财政补助",
-          key: "tmp",
+          key: "refundMoney",
           width: 100
         },
         {
           title: "行政性收入",
-          key: "tmp",
+          key: "administrativeMoney",
           width: 100
         },
         {
           title: "其他收入",
-          key: "tmp",
+          key: "otherMoney",
           width: 100
         },
         {
           title: "走账",
-          key: "tmp",
+          key: "keepAccountsMoney",
           width: 100
         },
         {
           title: "利息收入",
-          key: "tmp",
+          key: "interestIncome_money",
           width: 100
         },
         {
           title: "本日经营活动收入小计",
-          key: "tmp",
+          key: "businessActivitiesMoney",
           width: 100
         },
         {
           title: "内部往来：拨入",
-          key: "tmp",
+          key: "dialingMoney",
           width: 100
         },
         {
           title: "投、融资活动产生的现金收入",
-          key: "tmp",
+          key: "financingActivitiesMoney",
           width: 100
         },
         {
           title: "本日资金收入小计",
-          key: "tmp",
+          key: "dayMoney",
           width: 100
         },
         {
           title: "付出应付",
-          key: "tmp",
+          key: "payCopeMoney",
           width: 100
         },
         {
           title: "付出应付（总部代付）",
-          key: "tmp",
+          key: "headPaycopeMoney",
           width: 100
         },
         {
           title: "采购支出合计",
-          key: "tmp",
+          key: "purchaseMoney",
           width: 100
         },
         {
           title: "人工费用支出",
-          key: "tmp",
+          key: "staffCostsMoney",
           width: 100
         },
         {
           title: "上缴税金支出",
-          key: "tmp",
+          key: "taxesMoney",
           width: 100
         },
         {
           title: "行政性费用支出",
-          key: "tmp",
+          key: "administrationExpendMoney",
           width: 100
         },
         {
           title: "厂车、运输费",
-          key: "tmp",
+          key: "factoryTransportationMoney",
           width: 100
         },
         {
           title: "其他支出",
-          key: "tmp",
+          key: "otherExpensesMoney",
           width: 100
         },
         {
           title: "走账款",
-          key: "tmp",
+          key: "takeAccountMoney",
           width: 100
         },
         {
           title: "手续费",
-          key: "tmp",
+          key: "procedureFeeMoney",
           width: 100
         },
         {
           title: "因公借支",
-          key: "tmp",
+          key: "deathMoney",
           width: 100
         },
         {
           title: "本日经营活动支出小计",
-          key: "tmp",
+          key: "activitiesExpendMoney",
           width: 100
         },
         {
           title: "内部往来：拨出",
-          key: "tmp",
+          key: "pulloutMoney",
           width: 100
         },
         {
           title: "投、融资活动产生的现金支",
-          key: "tmp",
+          key: "outActivitiesMoney",
           width: 100
         }
       ],
       tableData: [], // 主表
       dates: [], // 查询日期
       areaId: "", // 区域id
-      areas: [], // 区域
+      areas: [{ id: 0, companyName: "全部" }], // 区域
       BranchstoreId: "", // 门店id
-      Branchstore: [] // 门店
+      Branchstore: [{ id: 0, name: "全部" }] // 门店
     };
   },
   async mounted() {
     this.getArea();
-    this.getCompany();
+    this.getShop();
     this.query();
   },
   methods: {
@@ -287,11 +289,76 @@ export default {
       this.query();
     },
     // 区域
-    async getArea() {},
-    // 门店
-    async getCompany() {},
+    async getArea() {
+      let res = await are();
+      if (res.code === 0) return (this.areas = [...this.areas, ...res.data]);
+    },
+
+    //当前非管理员状态情况下获取门店地址
+    async getThisArea() {
+      let data = {};
+      data.shopkeeper = 1;
+      data.shopNumber = this.$store.state.user.userData.shopId;
+      data.tenantId = this.$store.state.user.userData.tenantId;
+      let res = await are(data);
+
+      if (res.code === 0) {
+        this.areaId = res.data[0].id;
+      }
+    },
+
+    //切换地址重新调取门店接口
+    changeArea() {
+      if (this.$store.state.user.userData.shopkeeper == 0) {
+        this.shopCode = 0;
+        this.getShop();
+      }
+    },
+
+    //获取门店
+    async getShop() {
+      let data = {};
+      data.supplierTypeSecond = this.areaId;
+      this.Branchstore = [{ id: 0, name: "全部" }];
+      let res = await goshop(data);
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore, ...res.data];
+        this.$nextTick(() => {
+          this.shopCode = this.$store.state.user.userData.shopId;
+        });
+        if (this.$store.state.user.userData.shopkeeper != 0) {
+          this.getThisArea(); //获取当前门店地址
+        }
+      }
+    },
+    
     // 查询
-    async query() {}
+    async query() {
+      let params = {
+        areaId: this.areaId,
+        shopNumber: this.BranchstoreId,
+        size: 10000,
+      }
+
+      if (this.dates.length === 2 && this.dates[0]) {
+        params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+        params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+      }
+
+      params.page = 0;
+
+      for (let key in params) {
+        if (!params[key]) {
+          Reflect.deleteProperty(params, key)
+        }
+      }
+
+      let res = await api.findListPageAllReport(params);
+
+      if (res.code == 0) {
+        this.tableData = res.data.content;
+      }
+    }
   }
 };
 </script>
@@ -315,6 +382,6 @@ export default {
   overflow-x: scroll;
 }
 .warp_table {
-    padding: 1px;
+  padding: 1px;
 }
 </style>

@@ -22,39 +22,25 @@ export default {
           width: 40
         },
         {
-          title: "因公借支申请单号",
-          key: "serviceId",
+          title: "报销申请单号",
+          key: "",
           align: "center"
         },
         {
-          title: "收付款单号",
+          title: "报销付款/核销单号",
           key: "fno",
           align: "center"
         },
-        // {
-        //   title: "对账单号",
-        //   key: "accountNo",
-        //   align: "center"
-        // },
         {
-          title: "收款人/付款人",
+          title: "付款时间",
           key: "createUname",
           align: "center"
         },
         {
-          title: "收付款时间",
+          title: "付款人",
           key: "rpDate",
           align: "center"
         },
-        // {
-        //   title: "收付款业务类型",
-        //   key: "furpose",
-        //   align: "center",
-        //   render: (h, p) => {
-        //     let val = p.row.furpose.name;
-        //     return h("span", val);
-        //   }
-        // },
         {
           title: "核销方式",
           key: "",
@@ -65,57 +51,48 @@ export default {
           // }
         },
         {
-          title: "往来单位",
+          title: "付款方式",
+          key: "rpDate",
+          align: "center"
+        },
+        {
+          title: "账户所属门店",
           key: "guestName",
           align: "center"
         },
         {
-          title: "收付款类型",
-          key: "sort",
-          align: "center",
-          render: (h, p) => {
-            let val = p.row.sort.name;
-            return h("span", val);
-          }
-        },
-        {
-          title: "账户所属门店",
+          title: "付款账户",
           key: "accountStoreName",
           align: "center"
         },
         {
-          title: "收付款账户",
+          title: "付款开户行",
           key: "account",
           align: "center"
         },
         {
-          title: "收付款开户行",
+          title: "付款账号",
           key: "accountBank",
           align: "center"
         },
         {
-          title: "收付款账号",
+          title: "对方收款户名",
           key: "accountBankNo",
           align: "center"
         },
         {
-          title: "对方户名",
+          title: "对方收款开户行",
           key: "otherAccountName",
           align: "center"
         },
         {
-          title: "对方开户行",
+          title: "对方收款账号",
           key: "otherAccountBank",
           align: "center"
         },
         {
-          title: "对方账号",
+          title: "付款金额",
           key: "otherAccountBankNo",
-          align: "center"
-        },
-        {
-          title: "收付款金额",
-          key: "checkAmt",
           align: "center"
         },
         {
@@ -137,11 +114,11 @@ export default {
           key: "auditorDate",
           align: "center"
         },
-        // {
-        //   title: "备注",
-        //   key: "remark",
-        //   align: "center"
-        // }
+        {
+          title: "备注",
+          key: "remark",
+          align: "center"
+        }
       ],
       recordLists: [],
     };

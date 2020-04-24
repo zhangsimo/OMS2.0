@@ -810,6 +810,8 @@ export default {
           // let data = {};
           val.map(item => {
             item.isMarkBatch = 1;
+            item.batchSourceId = item.id||item.batchSourceId
+            Reflect.deleteProperty(item, 'id');
           });
           // data = this.formPlan;
           // val.map(item=>{
@@ -817,7 +819,7 @@ export default {
           // })
             this.formPlan.detailList = [
                 ...this.formPlan.detailList,
-                ...conversionList(val)
+                ...val
             ]
             this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {

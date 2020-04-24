@@ -5,11 +5,11 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+            <quickDate ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <Date-picker
-              format="yyyy-MM-dd"
+              format="yyyy-MM-dd "
               :value="value"
               @on-change="changedate"
               type="daterange"
@@ -17,7 +17,7 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <span>申请状态：</span>
             <Select v-model="Reconciliationtype" class="w120" placeholder="全部">
               <Option
@@ -27,7 +27,7 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <span>申请类型：</span>
             <Select v-model="ApplicationType" class="w120" placeholder="全部">
               <Option
@@ -37,16 +37,25 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db ml20">
-            <!--<Select v-model="searchType" class="w100 mr10" @on-change="changeSelect">-->
-              <!--<Option-->
-                <!--v-for="item in searchTypeArr"-->
-                <!--:value="item.value"-->
-                <!--:key="item.value"-->
-              <!--&gt;{{ item.label }}</Option>-->
-            <!--</Select>-->
-            <span>申请单号：</span>
-            <Input type="text" v-model="searchTypeValue" style="width: 180px" :placeholder="placeholderValue"/>
+          <div class="db ml10">
+            <span>门店：</span>
+            <Select v-model="shopCode" class="w150" filterable clearable >
+              <Option
+                v-for="item in shopListArr"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option>
+            </Select>
+          </div>
+          <div class="db ml10">
+            <Select v-model="searchType" class="w100 mr5" @on-change="changeSelect">
+              <Option
+                v-for="item in searchTypeArr"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Input type="text" v-model="searchTypeValue" style="width: 200px" :placeholder="placeholderValue"/>
           </div>
           <div class="db ml15">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
@@ -76,20 +85,20 @@
           <template v-slot="{ row }">
             <template>
               <!--<vxe-button @click="redact(row)">编辑</vxe-button>-->
-              <a class="aBlue" @click="lookOver(row)">查 看</a>
+              <a @click="redact(row)" class="mr10">编 辑</a>
+              <a @click="lookOver(row)">查 看</a>
               <!--<vxe-button @click="remove(row)">删除</vxe-button>-->
             </template>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="" title="当前状态"></vxe-table-column>
-        <vxe-table-column field="" title="审批编号"></vxe-table-column>
-        <vxe-table-column field="" title="申请单号"></vxe-table-column>
-        <vxe-table-column field="" title="申请日期"></vxe-table-column>
-        <vxe-table-column field="" title="申请人"></vxe-table-column>
-        <vxe-table-column field="" title="申请类型"></vxe-table-column>
-        <vxe-table-column field="" title="主题"></vxe-table-column>
-        <vxe-table-column field="" title="总金额"></vxe-table-column>
-        <vxe-table-column field="" title="当前审批人"></vxe-table-column>
+        <vxe-table-column field="billStatusName" title="当前状态"></vxe-table-column>
+        <vxe-table-column field="applyNo" title="申请单号"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
+        <vxe-table-column field="topic" title="主题"></vxe-table-column>
+        <vxe-table-column field="amtTotal" title="总金额"></vxe-table-column>
+        <vxe-table-column field="orgName" title="门店"></vxe-table-column>
       </vxe-table>
       <Page
         :current="page.num"
@@ -117,16 +126,6 @@
                       <!--class="words"-->
                       <!--:class="{res:item.operationResult=='REFUSE'}"-->
                     <!--&gt;{{item.operationResult|status}}</span>-->
-                </div>
-              </template>
-            </div>
-          </div>
-          <div class="modal-data">
-            <span class="data-name">审批人:</span>
-            <div class="data-value flex-center">
-              <template v-for="(item,i) in statusData">
-                <div class="status-box flex-center" :key="i">
-
                 </div>
               </template>
             </div>
@@ -173,8 +172,11 @@
   import moment from "moment";
   import quickDate from "@/components/getDate/dateget_bill.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
+  import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
 
-    export default {
+
+  export default {
         name: "myApplication",
         components: {
           quickDate,
@@ -257,11 +259,11 @@
               label: "发票对冲"
             },
           ], //申请类型数组
-          tableData:[{index: 1}], //表格内容
+          tableData:[], //表格内容
           falg: true, //判断审批进度是否显示
           statusData: [
-            { name: "提交", status: "已提交" },
-            { name: "产品总监审批", status: "已审批" }
+            { userName: "张三", status: "已提交" },
+            { userName: "李四", status: "已审批" }
           ], //进度数据
           approvalTit:'流程节点',//审批流程
           page: {
@@ -277,15 +279,24 @@
             },
             {
               value: "1",
-              label: "审批编码"
+              label: "申请人"
+            },
+            {
+              value: "2",
+              label: "审批人"
             },
           ], //申请类型数组
           searchType: '0', //申请类型
           searchTypeValue: '', //申请类型的值
           placeholderValue: '请输入申请单号', //动态改变placeholder
+          shopCode: 0, //门店
+          shopListArr: [ {id:0 , name:'全部'}], //门店数组
         }
       },
-      mounted(){},
+      mounted(){
+          this.getShop();
+          console.log(this.$store.state.user.userData)
+      },
       methods: {
         // 快速查询日期
         quickDate(data) {
@@ -309,7 +320,38 @@
         },
 
         // 查询按钮
-        query(){},
+        query(){
+          this.getList()
+        },
+
+        //初始化数据
+        async getList(){
+          let params = {};
+          params.page = this.page.num - 1;
+          params.size = this.page.size;
+          if(this.value){
+            params.startTime = this.value[0];
+            params.endTime = this.value[1];
+          }
+          params.billStatus = this.Reconciliationtype;
+          params.applyType = this.ApplicationType;
+          params.orgid = this.shopCode;
+          switch (this.searchType) {
+            case '0':
+              params.applyNo = this.searchTypeValue;
+              break;
+            case '1':
+              params.applicant = this.searchTypeValue;
+              break;
+            case '2':
+              params.approveUname = this.searchTypeValue;
+              break;
+          }
+          let res = await findPageByDynamicQuery(params)
+          if(res.code === 0){
+              this.tableData = res.data.content
+          }
+        },
 
         //起草申请
         TheApplication(){
@@ -319,6 +361,23 @@
         //编辑
         redact(row){
           console.log(row)
+        },
+
+        //获取门店
+        async getShop(){
+          let data ={}
+          data.supplierTypeSecond = 0;
+          // this.shopListArr = [{id:0 , name:'全部'}]
+          let res = await goshop(data)
+          if (res.code === 0) {
+            this.shopListArr = [...this.shopListArr , ...res.data]
+            // this.$nextTick( () => {
+            //   this.shopCode = this.$store.state.user.userData.shopId
+            // })
+            if (this.$store.state.user.userData.shopkeeper != 0){
+              this.getThisArea()//获取当前门店地址
+            }
+          }
         },
 
         //查看
@@ -343,7 +402,10 @@
               this.placeholderValue = '请输入申请单号';
               break;
             case "1":
-              this.placeholderValue = '请输入审批编码';
+              this.placeholderValue = '请输入申请人';
+              break;
+            case "2":
+              this.placeholderValue = '请输入审批人';
               break;
           }
         }

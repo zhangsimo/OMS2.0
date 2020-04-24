@@ -79,6 +79,7 @@
           resizable
           size="mini"
           height="auto"
+          ref="topTable"
           highlight-current-row
           highlight-hover-row
           @current-change="currentChangeEvent"
@@ -319,6 +320,8 @@ export default {
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
             this.BottomTableData = [];
+            let item = this.$refs.topTable.getCurrentRecord();
+            this.currentChangeEvent({row:item});
           }
         })
         .catch(e => {
@@ -348,6 +351,8 @@ export default {
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
             this.BottomTableData = [];
+            let item = this.$refs.topTable.getCurrentRecord();
+            this.currentChangeEvent({row:item});
           }
         })
         .catch(e => {
@@ -407,7 +412,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("请求静悄品待分配列表失败");
+          this.$Message.info("请求紧悄品待分配列表失败");
         });
     }
   }

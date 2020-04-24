@@ -29,7 +29,7 @@ export default {
           {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
         ],
         receiverId:[
-          {required: true, message: '主题为必填', trigger: 'change'}
+          {required: true, message: '收款人账户必选', trigger: 'change'}
         ],
         receiveBank:[
           {required: true, message: '开户行名称必填', trigger: 'blur'}

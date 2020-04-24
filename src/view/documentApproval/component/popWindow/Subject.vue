@@ -7,13 +7,16 @@
     <vxe-table
       border
       align="center"
+      ref="xTable"
       highlight-hover-row
       auto-resize
       height="300"
       @radio-change="getRaido"
+      :radio-config="{labelField: 'name', checkMethod}"
       size="mini"
-      :data="tableData">
-      <vxe-table-column type="radio" title="选择" width="60"></vxe-table-column>
+      :data="tableData"
+    >
+      <vxe-table-column type="radio" disabled title="选择"  field="raido" :editRender="{attrs: { disabled: true } }" width="60"></vxe-table-column>
       <vxe-table-column field="titleTypeName" title="科目分类"></vxe-table-column>
       <vxe-table-column field="titleCode" title="科目编码"></vxe-table-column>
       <vxe-table-column field="titleName" title="科目名称"></vxe-table-column>
@@ -72,6 +75,10 @@
           if (res.code === 0){
             this.tableData = res.data
           }
+        },
+        //判断是否可选择
+        checkMethod({ row }){
+          return row.isDetailSubject == 0
         },
         //获取单选框
         getRaido({row}){

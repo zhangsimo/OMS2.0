@@ -32,7 +32,7 @@
         </Col>
         <Col span="6">
           <Input class="w260" v-model="reconciliationStatement.accountNo" readonly />
-          <i class="iconfont iconcaidan input" v-if="showModalOne !== 1" @click="accountNoClick"></i>
+          <i class="iconfont iconcaidan input" @click="accountNoClick"></i>
         </Col>
         <Col span="2" class="tr">
           <span>收付款单号：</span>
@@ -73,7 +73,7 @@
             <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
             <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
-              field="rpAmt"
+              field="rpAnt"
               title="本次核销金额"
               width="140"
               :edit-render="{name: 'input', attrs: {type: 'number'}}"
@@ -142,10 +142,8 @@
 import accountSelette from "./components/accountWirte";
 import {
   wirteAccount,
-  saveAccount,
-  paymentRegain
-} from "_api/settlementManagement/otherReceivables/otherReceivables";
-import { orderWriteOff } from "_api/settlementManagement/otherPayable/otherPayable";
+  saveAccount
+} from "_api/settlementManagement/seleteAccount.js";
 import subjexts from "./components/subjects";
 import bus from "../../bill/Popup/Bus";
 import moment from "moment";
@@ -163,35 +161,19 @@ export default {
       BusinessType: [],
       tableData: [],
       collectPayId: "",
-      obj: {},
-      showModalOne: '',
+      obj: {}
     };
   },
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      console.log(val);
-      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
-      // val.map(item => {
-      //   item.businessTypeName = item.businessType.name;
-      // });
-      // this.BusinessType = [...this.BusinessType, ...val];
-      let jsonArr = [val]
-      jsonArr.map(item => {
-        item.orgName = this.reconciliationStatement.orgName;
-        item.accountNo = item.serviceId;
-        // item.guestName = item.guestName;
-        item.businessTypeName = item.orderTypeName;
-        item.reconciliationAmt = item.paymentApplicationAmount;
-        item.hasAmt = +item.amountCollected - +item.paymentBalance;
-        item.unAmt = item.paymentBalance;
-        item.rpAmt = item.paymentBalance;
-        item.unAmtLeft = item.unAmt - item.rpAmt;
-      })
-      console.log(jsonArr)
-      this.BusinessType.push(...jsonArr)
-      // console.log(this.BusinessType)
-      // this.checkComputed()
+      this.reconciliationStatement.accountNo =
+        this.reconciliationStatement.accountNo + "," + val.accountNo;
+      val.two.map(item => {
+        item.businessTypeName = item.businessType.name;
+      });
+      this.BusinessType = [...this.BusinessType, ...val.two];
+      this.checkComputed()
     });
     //选择科目
     bus.$on("hedInfo", val => {
@@ -200,7 +182,7 @@ export default {
         reconciliationAmt: 0,
         hasAmt: 0,
         unAmt: 0,
-        rpAmt: 0,
+        rpAnt: 0,
         unAmtLeft: 0
       });
     });
@@ -214,7 +196,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAmt: 0,
+          rpAnt: 0,
           unAmtLeft: 0
         });
       } else if (value.userName) {
@@ -223,7 +205,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAmt: 0,
+          rpAnt: 0,
           unAmtLeft: 0
         });
       }
@@ -233,7 +215,11 @@ export default {
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
-        item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
+        item.paidMoney = !item.paidMoney
+          ? 0
+          : item.paidMoney < 0
+          ? item.paidMoney
+          : -item.paidMoney;
         delete item.businessType;
       });
       this.tableData = val;
@@ -264,16 +250,11 @@ export default {
         let sign = 0;
         if (this.$parent.paymentId === "YSK") {
           sign = 2;
-          this.showModalOne = 1;
         } else if (this.$parent.paymentId === "YFK") {
-          this.showModalOne = 0;
           sign = 4;
-          this.showModalOne = 0;
         } else if (this.$parent.paymentId === "YJDZ") {
           sign = 1;
-          this.showModalOne = 1;
         }else if (this.$parent.paymentId === "YSKZC") {
-          this.showModalOne = 0;
           sign = 3;
         } else if (this.$parent.type === 0) {
           sign = 6;
@@ -281,9 +262,6 @@ export default {
           sign = 7;
         } else if (this.$parent.type === 2) {
           sign = 8;
-        }else if(this.$parent.paymentId === 'QTYSK'){
-          sign = 11;
-          this.showModalOne = 0;
         }
         let accountNo = this.$parent.reconciliationStatement
           ? this.$parent.reconciliationStatement.accountNo
@@ -300,10 +278,6 @@ export default {
               item.businessTypeName = item.businessType.name;
             });
             this.BusinessType = res.data.two;
-            if(this.tableData){
-              this.BusinessType[0].rpAmt = this.tableData[0].paidMoney;
-              this.BusinessType[0].unAmtLeft = this.BusinessType[0].unAmt - this.BusinessType[0].rpAmt;
-            }
             this.checkComputed();
           }
         });
@@ -312,58 +286,24 @@ export default {
     //保存
     conserve() {
       if (!Number(this.check)) {
-        if(this.$parent.typeA === '收回'){
-          let obj = {
-            one: this.reconciliationStatement,
-            two: this.BusinessType,
-            three: this.tableData
-          };
-          paymentRegain(obj).then(res => {
-            if (res.code === 0) {
-              this.Settlement = false;
-              this.$parent.claimModal = false;
-              this.$message.success("其他收款收回成功!");
-              this.$parent.getQuery();
-              this.$parent.typeA = '';
-            }
-          });
-        } else if(this.$parent.Types === '其他收款核销'){
-          let obj3 = {}
-            obj3.one = this.reconciliationStatement;
-            obj3.two = this.BusinessType;
-            obj3.three = this.tableData;
-            obj3.type= 2
-          orderWriteOff(obj3).then(res => {
-            if (res.code === 0) {
-              this.Settlement = false;
-              this.$parent.claimModal = false;
-              this.$message.success("其他收款核销成功!");
-              this.$parent.Types = '';
-              this.$parent.getQuery();
-            }
-          });
-        } else {
-          let obj2 = {
-            one: this.reconciliationStatement,
-            two: this.BusinessType,
-            three: this.tableData
-          };
-          saveAccount(obj2).then(res => {
-            if (res.code === 0) {
-              this.Settlement = false;
-              this.$parent.claimModal = false;
-              this.$message.success("其他付款认领成功！");
-              this.$parent.getQuery();
-            }
-          });
-        }
+        let obj = {
+          one: this.reconciliationStatement,
+          two: this.BusinessType,
+          three: this.tableData
+        };
+        saveAccount(obj).then(res => {
+          if (res.code === 0) {
+            this.Settlement = false;
+            this.$message.success("保存成功");
+          }
+        });
       } else {
         this.$message.error("核对金额为0才能保存");
       }
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = (row.unAmt * 1 - row.rpAmt * 1).toFixed(2);
+      row.unAmtLeft = (row.unAmt * 1 - row.rpAnt * 1).toFixed(2);
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -379,7 +319,7 @@ export default {
               "reconciliationAmt",
               "hasAmt",
               "unAmt",
-              "rpAmt",
+              "rpAnt",
               "unAmtLeft"
             ].includes(column.property)
           ) {
@@ -409,7 +349,7 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.rpAmt * 1;
+        sum1 += item.rpAnt * 1;
       });
       this.tableData.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
