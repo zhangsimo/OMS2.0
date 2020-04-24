@@ -164,7 +164,7 @@
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="退回申请号：" prop="planOrderNum">
-                      <Input disabled class="w160" :value="Leftcurrentrow.serviceId"></Input>
+                      <Input disabled class="w160" :value="serviceId"></Input>
                     </FormItem>
                   </Form>
                 </div>
@@ -291,6 +291,7 @@ export default {
   },
   data() {
     return {
+      serviceId:"",
       newFlag: true,
       remarkStatus: true,
       flagStatus: false,
@@ -641,6 +642,7 @@ export default {
     },
     xinzeng() {
       this.newFlag = true;
+      this.serviceId = "";
       this.Leftcurrentrow = {
         status: {
           value: 1,
@@ -717,21 +719,21 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params["orderTypeId"] = "3";
-      tijiao(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("提交成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.error("提交失败");
-        });
-    },
+params.status = params.status.value;
+params.settleStatus = params.settleStatus.value;
+params["orderTypeId"] = "3";
+tijiao(params)
+  .then(res => {
+    // 点击列表行==>配件组装信息
+    if (res.code == 0) {
+      this.getList(this.form);
+      this.$Message.success("提交成功");
+    }
+  })
+  .catch(e => {
+    this.$Message.error("提交失败");
+  });
+},
     zuofei1() {
       this.$Modal.confirm({
         title: "是否确定作废订单!",
@@ -773,6 +775,7 @@ export default {
     selectAddlierName(row) {
       this.Left.tbdata = [...row];
       this.Right = row;
+
     },
     // 新增按钮
     addProoo() {
@@ -900,6 +903,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
       };

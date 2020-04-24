@@ -76,7 +76,8 @@
           <template v-slot="{ row }">
             <template>
               <!--<vxe-button @click="redact(row)">编辑</vxe-button>-->
-              <a class="aBlue" @click="lookOver(row)">查 看</a>
+              <a @click="redact(row)" class="mr10">编 辑</a>
+              <a @click="lookOver(row)">查 看</a>
               <!--<vxe-button @click="remove(row)">删除</vxe-button>-->
             </template>
           </template>
