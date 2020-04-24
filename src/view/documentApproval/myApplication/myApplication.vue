@@ -259,7 +259,7 @@
               label: "发票对冲"
             },
           ], //申请类型数组
-          tableData:[{index: 1}], //表格内容
+          tableData:[], //表格内容
           falg: true, //判断审批进度是否显示
           statusData: [
             { userName: "张三", status: "已提交" },

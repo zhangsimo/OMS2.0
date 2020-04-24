@@ -233,11 +233,7 @@ export default {
       val.map(item => {
         item.createTime = moment(item.createTime).format("YYYY-MM-DD HH:mm:ss");
         item.orgName = item.shopName;
-        item.paidMoney = !item.paidMoney
-          ? 0
-          : item.paidMoney < 0
-          ? item.paidMoney
-          : -item.paidMoney;
+        item.paidMoney = !item.paidMoney ? 0 : item.paidMoney < 0 ? -item.paidMoney : item.paidMoney;
         delete item.businessType;
       });
       this.tableData = val;
