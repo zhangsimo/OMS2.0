@@ -89,19 +89,6 @@ export default {
       }
     },
 
-    // 获取往来单位
-    // async getunltList() {
-    //   findGuest({ size: 2000 }).then(res => {
-    //     if (res.code === 0) {
-    //       res.data.content.map(item => {
-    //         item.value = item.id
-    //         item.label = item.fullName
-    //         this.company.push(item);
-    //       });
-    //     }
-    //   });
-    // },
-
     //获取往来单位
     getCompany(row) {
       let arr = this.company.filter( item => item.value == row.value)
@@ -132,6 +119,14 @@ export default {
     //选择单据
     SelectTheDocuments(){
       this.$refs.documnets.open()
+    },
+
+
+    //获取付款信息
+    getPayList(value){
+      let list = this.payUserList.filter(item => item.id == value)[0]
+      this.formInline.payName = list.bankName
+      this.formInline.pauUser = list.accountCode
     },
 
     //获取到上传图片地址

@@ -122,6 +122,13 @@ export default {
       this.$refs.documnets.open()
     },
 
+    //获取付款信息
+    getPayList(value){
+      let list = this.payUserList.filter(item => item.id == value)[0]
+      this.formInline.payName = list.bankName
+      this.formInline.pauUser = list.accountCode
+    },
+
     //获取到上传图片地址
     getImgList(row){
       this.formInline.voucherPictures = row.list
