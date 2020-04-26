@@ -66,6 +66,7 @@ export default {
   methods:{
     //模态框打开111
    open(){
+     console.log(this.list)
     this.company = this.list.salesList
      this.payUserList = this.list.payList
      this.formInline = {}
@@ -86,6 +87,19 @@ export default {
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
       }
+     if (this.list.type == 5){
+       this.modelType = false
+       let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+         user = this.$store.state.user.userData
+       this.formInline.applicant = user.staffName
+       this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+       this.formInline.shopCode = user.shopCode || ' 　　'
+       this.formInline.orgName = user.shopName
+       this.formInline.applyTypeName = '其他付款'
+       this.formInline.applyTime = date
+       this.formInline.paymentOrgName = user.shopName
+       this.$set(this.formInline,'details' ,[this.list.rowMessage])
+     }
     },
 
     //获取往来单位
