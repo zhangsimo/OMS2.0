@@ -80,6 +80,7 @@
         highlight-current-row
         :height="500"
         show-overflow
+        @current-change="currentChangeEvent"
         :data="tableData">
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
@@ -135,7 +136,9 @@
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
-                  <span class="remark">{{item.remark}}</span>
+                    <span class="words"
+                      :class="{res:item.operationResult == 'REFUSE'}"
+                    >{{item.operationResult|status}}</span>
                 </div>
               </template>
             </div>
@@ -196,6 +199,7 @@
   import quickDate from "@/components/getDate/dateget.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { approvalStatus } from "_api/base/user";
 
   import ExpenseReimbursement from "../component/ExpenseReimbursement";
   import OtherPayment from "../component/OtherPayment";
@@ -309,11 +313,8 @@
             },
           ], //申请类型数组
           tableData:[], //表格内容
-          falg: true, //判断审批进度是否显示
-          statusData: [
-            { userName: "张三", status: "已提交" },
-            { userName: "李四", status: "已审批" }
-          ], //进度数据
+          falg: false, //判断审批进度是否显示
+          statusData: [], //进度数据
           approvalTit:'流程节点',//审批流程
           page: {
             num: 1,
@@ -525,6 +526,22 @@
             case "2":
               this.placeholderValue = '请输入审批人';
               break;
+          }
+        },
+
+        //点击主列表本行数据
+        currentChangeEvent({row}){
+          // console.log(row.processInstance)
+          if (row.processInstance) {
+            approvalStatus({ instanceId: row.processInstance }).then(res => {
+              if (res.code == 0) {
+                this.falg = true;
+                this.statusData = res.data.operationRecords;
+              }
+            });
+          }else {
+            this.falg = false;
+            this.statusData = [];
           }
         }
       },
