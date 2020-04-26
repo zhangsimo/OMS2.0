@@ -349,14 +349,17 @@
       },
       async mounted(){
           this.getShop();
-          console.log(this.$store.state.user.userData)
+          // console.log(this.$store.state.user.userData)
         this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
         this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = false;
         this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = false;
         this.modelType.allSalesList = await getAllSalesList();
         this.modelType.salesList = await getComenAndGo();
         this.modelType.payList = await getPayList();
-        console.log(this.$route.path)
+        if(this.$route.query.applyNo !== undefined){
+          this.searchTypeValue = this.$route.query.applyNo;
+          this.getList();
+        }
       },
       methods: {
         // 快速查询日期
@@ -413,6 +416,7 @@
           if(res.code === 0){
               this.tableData = res.data.content;
               this.page.total = res.data.totalElements;
+            // console.log(this.$route)
           }
         },
 
