@@ -3,6 +3,7 @@ import requestCode from '../popWindow/RequestCode'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getPublicSave} from '_api/documentApproval/PublicRequest'
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 
 export default {
   name: "PublicRequest",
@@ -44,6 +45,8 @@ export default {
       //费用类型列表
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
+      Pictures:{},//请求回来的图片地址状态
+
     }
   },
   mounted(){
@@ -54,14 +57,14 @@ export default {
     open(){
       this.payeeList = this.list.allSalesList
       this.payUserList = this.list.payList
+      this.formInline = {}
+      this.$refs.upImg.uploadListModal = []
+      this.$refs.upImg.uploadList = []
+      this.$refs['formInline'].resetFields();
+      this.model = true
+      //判断模态框状态
+      this.modelType = false
       if (this.list.type == 1) {
-        this.formInline = {}
-        this.$refs.upImg.uploadListModal = []
-        this.$refs.upImg.uploadList = []
-        this.$refs['formInline'].resetFields();
-        this.model = true
-        //判断模态框状态
-        this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
@@ -71,6 +74,31 @@ export default {
         this.formInline.applyTypeName = '因公借支'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
+      }
+      if (this.list.type == 2){
+        this.getList()
+      }
+      if (this.list.type == 3 || this.list.type == 4){
+        this.getList()
+        this.modelType = true
+      }
+    },
+
+    //获取当前信息
+    async getList(){
+      let data ={}
+      data.id = this.list.id || ''
+      let res = await getThisAllList(data)
+      if(res.code === 0){
+        this.$nextTick( () => {
+          this.formInline = res.data
+          this.details = res.data.details || []
+          this.Pictures = {
+            voucherPictures :res.data.voucherPictures || [],
+            billStatus: res.data.billStatus
+          }
+        })
+
       }
     },
 
@@ -93,9 +121,10 @@ export default {
 
     //获取付款信息
     getPayList(value){
+      if (!value) return
       let list = this.payUserList.filter(item => item.id == value)[0]
-      this.formInline.payName = list.bankName
-      this.formInline.pauUser = list.accountCode
+      this.formInline.paymentBank  = list.bankName
+      this.formInline.paymentBankNo = list.accountCode
     },
 
     //获取到上传图片地址

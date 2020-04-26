@@ -110,7 +110,7 @@
         </div>
 
         <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
-        <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
+        <upphoto @backUpImgList="getImgList" ref="upImg" :list="Pictures"></upphoto>
         <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
       </Form>
     </div>

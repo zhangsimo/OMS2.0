@@ -11,3 +11,12 @@ export function findPageByDynamicQuery (params) {
   })
 }
 
+//查询当前点击列表内信息
+//主列表查询
+export function getThisAllList (params) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/findById`,
+    method: 'get',
+    params
+  })
+}

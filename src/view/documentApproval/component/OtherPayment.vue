@@ -140,13 +140,13 @@
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="支付名称"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.payName" style="width: 90%;padding-left: 5px" disabled></Input>
+              <FormItem label="支付银行"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentBank" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
             <Col span="6">
               <FormItem label="支付账号"  style="margin-bottom: 0px">
-                <Input type="text" v-model="formInline.pauUser" style="width: 90%;padding-left: 5px" disabled></Input>
+                <Input type="text" v-model="formInline.paymentBankNo" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
           </Row>
@@ -154,7 +154,7 @@
 
 
         <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
-        <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
+        <upphoto @backUpImgList="getImgList" ref="upImg" :list="Pictures"></upphoto>
         <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
       </Form>
     </div>
