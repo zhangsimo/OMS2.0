@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modal" title="预收款认领" width="800" @on-visible-change='visChange'>
+  <Modal v-model="modal" title="费用报销认领" width="800" @on-visible-change='visChange'>
     <div class="db ml20">
       <span>往来单位：</span>
       <Input v-model="company" class="w100" />
@@ -41,6 +41,7 @@
 import * as api from "_api/settlementManagement/businessBorrowing";
 import { findGuest,addClaim } from "_api/settlementManagement/advanceCollection.js";
 import bus from '../../bill/Popup/Bus'
+import * as restful from "_api/settlementManagement/financialStatement.js";
 export default {
   data() {
     return {
@@ -120,9 +121,9 @@ export default {
           guestId:this.guestId,
           financeAccountCashList:this.$store.state.businessBorrowing.financeAccountCashList,
           loanId:this.$store.state.businessBorrowing.loanId,
-          claimType: this.$store.state.businessBorrowing.claimType,
+          claimType: 4,
         }
-        api.addClaim(obj).then(res => {
+        restful.addClaim(obj).then(res => {
           if(res.code===0){
             this.$message.success('认领成功')
             this.modal = false

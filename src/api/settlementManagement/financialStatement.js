@@ -38,3 +38,31 @@ export function findListPageAllReport(params) {
     params
   });
 }
+
+// 费用报销管理 查询
+export function findByDynamicQuery(params, data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceCostReimbursement/findByDynamicQuery`,
+    method: "post",
+    params,
+    data,
+  });
+}
+
+// 费用报销管理 撤回
+export function paymentRevoke(data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceCostReimbursement/paymentRevoke`,
+    method: "post",
+    data,
+  });
+}
+
+// 费用报销管理 认领
+export function addClaim(data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceCostReimbursement/addClaim`,
+    method: "post",
+    data,
+  });
+}
