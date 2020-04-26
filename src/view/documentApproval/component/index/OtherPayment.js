@@ -66,6 +66,7 @@ export default {
   methods:{
     //模态框打开111
    open(){
+     // console.log(this.list)
     this.company = this.list.salesList
      this.payUserList = this.list.payList
      this.formInline = {}

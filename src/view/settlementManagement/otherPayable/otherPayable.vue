@@ -607,7 +607,7 @@
       },
       // 选中行
       currentChangeEvent({ row }) {
-        console.log(row)
+        // console.log(row)
         this.currRow = row;
         this.modelType.rowMessage = row;
         this.reconciliationStatement.accountNo = row.serviceId;
