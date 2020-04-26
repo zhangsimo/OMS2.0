@@ -945,8 +945,8 @@ export default [
               import("@/view/settlementManagement/Statistical/cashflow.vue")
           },
           {
-            path: "/fundsManagement/accounting",
-            name: "accounting",
+            path: "/fundsManagement/accountings",
+            name: "accountings",
             mark: "5300",
             meta: {
               // hideInMenu: true,

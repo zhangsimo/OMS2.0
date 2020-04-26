@@ -68,13 +68,12 @@ export default {
    open(){
     this.company = this.list.salesList
      this.payUserList = this.list.payList
-
+     this.formInline = {}
+     this.$refs.upImg.uploadListModal = []
+     this.$refs.upImg.uploadList = []
+     this.$refs['formInline'].resetFields();
+     this.model = true
      if (this.list.type == 1) {
-        this.formInline = {}
-        this.$refs.upImg.uploadListModal = []
-        this.$refs.upImg.uploadList = []
-        this.$refs['formInline'].resetFields();
-        this.model = true
         //判断模态框状态
         this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
