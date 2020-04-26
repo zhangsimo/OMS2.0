@@ -180,6 +180,14 @@
     <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
+    <!--      发票对冲申请-->
+    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
+    <!--      销售开票-->
+    <sales-invoice-application ref="salesInvoiceApplication" :modelType="modelType"></sales-invoice-application>
+    <!--      不含税开票-->
+    <tax-exclusive-application ref="taxExclusiveApplication" :modelType="modelType"></tax-exclusive-application>
+          <!--对账单申请-->
+    <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
   </div>
 </template>
 
@@ -196,8 +204,13 @@
   import CreditSpending from "../component/CreditSpending";
   import AdvanceApply from "../component/AdvanceApply";
   import InternalFinance from "../component/InternalFinance";
+  import invoiceOffsetRequest from "../component/popWindow/invoiceOffsetRequest"
+  import salesInvoiceApplication from "../component/popWindow/salesInvoiceApplication"
+  import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
+  import statementApplication from "../component/popWindow/statementApplication"
 
   import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
+  import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 
 
   export default {
@@ -212,7 +225,11 @@
           AskForInstrucions,
           CreditSpending,
           AdvanceApply,
-          InternalFinance
+          InternalFinance,
+          invoiceOffsetRequest,
+          salesInvoiceApplication,
+          taxExclusiveApplication,
+          statementApplication
         },
       data(){
         return {
@@ -330,9 +347,15 @@
           }
         }
       },
-      mounted(){
+      async mounted(){
           this.getShop();
           console.log(this.$store.state.user.userData)
+        this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
+        this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = false;
+        this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = false;
+        this.modelType.allSalesList = await getAllSalesList();
+        this.modelType.salesList = await getComenAndGo();
+        this.modelType.payList = await getPayList();
       },
       methods: {
         // 快速查询日期
@@ -426,7 +449,14 @@
 
         //查看
         lookOver(row){
-          // console.log(row.applyTypeName)
+          // console.log(row)
+          if(row.billStatusName == "草稿"){
+            this.modelType.type = 2;
+            this.modelType.id = row.id
+          }else {
+            this.modelType.type = 3;
+            this.modelType.id = row.id
+          }
           switch (row.applyTypeName) {
             case "费用报销":
               this.$refs.ExpenseReimbursement.open();
@@ -453,13 +483,13 @@
               // this.$refs.ExpenseReimbursement.open();
               break;
             case "销售开票":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
               break;
             case "不含税开票":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
               break;
             case "发票对冲":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
           }
         },
