@@ -33,6 +33,7 @@
               v-model="data.tempStart"
               type="date"
               :options="startTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>
@@ -58,6 +59,7 @@
               type="date"
               format="yyyy-MM-dd"
               :options="endTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>

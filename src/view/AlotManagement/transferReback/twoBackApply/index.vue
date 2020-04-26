@@ -583,6 +583,7 @@ export default {
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
+        console.log(this.Leftcurrentrow)
         if (this.Leftcurrentrow.xinzeng === "1") {
         } else {
           this.$Message.error("请先选择加工单");
@@ -654,7 +655,8 @@ export default {
         createUname: "",
         remark: "",
         serviceId: "",
-        detailVOS: []
+        detailVOS: [],
+        xinzeng: "1",
       };
       // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {
