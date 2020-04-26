@@ -80,6 +80,7 @@
         highlight-current-row
         :height="500"
         show-overflow
+        @current-change="currentChangeEvent"
         :data="tableData">
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
@@ -135,7 +136,9 @@
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
-                  <span class="remark">{{item.remark}}</span>
+                    <span class="words"
+                      :class="{res:item.operationResult == 'REFUSE'}"
+                    >{{item.operationResult|status}}</span>
                 </div>
               </template>
             </div>
@@ -180,6 +183,14 @@
     <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
+    <!--      发票对冲申请-->
+    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
+    <!--      销售开票-->
+    <sales-invoice-application ref="salesInvoiceApplication" :modelType="modelType"></sales-invoice-application>
+    <!--      不含税开票-->
+    <tax-exclusive-application ref="taxExclusiveApplication" :modelType="modelType"></tax-exclusive-application>
+          <!--对账单申请-->
+    <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
   </div>
 </template>
 
@@ -188,6 +199,7 @@
   import quickDate from "@/components/getDate/dateget.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
   import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { approvalStatus } from "_api/base/user";
 
   import ExpenseReimbursement from "../component/ExpenseReimbursement";
   import OtherPayment from "../component/OtherPayment";
@@ -196,8 +208,13 @@
   import CreditSpending from "../component/CreditSpending";
   import AdvanceApply from "../component/AdvanceApply";
   import InternalFinance from "../component/InternalFinance";
+  import invoiceOffsetRequest from "../component/popWindow/invoiceOffsetRequest"
+  import salesInvoiceApplication from "../component/popWindow/salesInvoiceApplication"
+  import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
+  import statementApplication from "../component/popWindow/statementApplication"
 
   import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
+  import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 
 
   export default {
@@ -212,7 +229,11 @@
           AskForInstrucions,
           CreditSpending,
           AdvanceApply,
-          InternalFinance
+          InternalFinance,
+          invoiceOffsetRequest,
+          salesInvoiceApplication,
+          taxExclusiveApplication,
+          statementApplication
         },
       data(){
         return {
@@ -292,11 +313,8 @@
             },
           ], //申请类型数组
           tableData:[], //表格内容
-          falg: true, //判断审批进度是否显示
-          statusData: [
-            { userName: "张三", status: "已提交" },
-            { userName: "李四", status: "已审批" }
-          ], //进度数据
+          falg: false, //判断审批进度是否显示
+          statusData: [], //进度数据
           approvalTit:'流程节点',//审批流程
           page: {
             num: 1,
@@ -330,9 +348,19 @@
           }
         }
       },
-      mounted(){
+      async mounted(){
           this.getShop();
-          console.log(this.$store.state.user.userData)
+          // console.log(this.$store.state.user.userData)
+        this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
+        this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = false;
+        this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = false;
+        this.modelType.allSalesList = await getAllSalesList();
+        this.modelType.salesList = await getComenAndGo();
+        this.modelType.payList = await getPayList();
+        if(this.$route.query.applyNo !== undefined){
+          this.searchTypeValue = this.$route.query.applyNo;
+          this.getList();
+        }
       },
       methods: {
         // 快速查询日期
@@ -389,6 +417,7 @@
           if(res.code === 0){
               this.tableData = res.data.content;
               this.page.total = res.data.totalElements;
+            // console.log(this.$route)
           }
         },
 
@@ -426,7 +455,14 @@
 
         //查看
         lookOver(row){
-          // console.log(row.applyTypeName)
+          // console.log(row)
+          if(row.billStatusName == "草稿"){
+            this.modelType.type = 2;
+            this.modelType.id = row.id
+          }else {
+            this.modelType.type = 3;
+            this.modelType.id = row.id
+          }
           switch (row.applyTypeName) {
             case "费用报销":
               this.$refs.ExpenseReimbursement.open();
@@ -453,13 +489,13 @@
               // this.$refs.ExpenseReimbursement.open();
               break;
             case "销售开票":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
               break;
             case "不含税开票":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
               break;
             case "发票对冲":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
           }
         },
@@ -490,6 +526,22 @@
             case "2":
               this.placeholderValue = '请输入审批人';
               break;
+          }
+        },
+
+        //点击主列表本行数据
+        currentChangeEvent({row}){
+          // console.log(row.processInstance)
+          if (row.processInstance) {
+            approvalStatus({ instanceId: row.processInstance }).then(res => {
+              if (res.code == 0) {
+                this.falg = true;
+                this.statusData = res.data.operationRecords;
+              }
+            });
+          }else {
+            this.falg = false;
+            this.statusData = [];
           }
         }
       },

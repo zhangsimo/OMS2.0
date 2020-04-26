@@ -225,7 +225,8 @@ export const mixSelectPartCom = {
         // } else {
         //   req[this.searchType] = this.partName.trim();
         // }
-        req.adapterCarModels = [this.partName]
+        // req.adapterCarModels = [this.partName]
+        req.partName = this.partName;
       }
       req.page = this.page.num;
       req.size = this.page.size;

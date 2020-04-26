@@ -114,16 +114,26 @@
         <h5 class="mt20 mb10" style="font-size: 18px">支付信息</h5>
         <div class="proceeds">
           <Row>
-            <Col span="12">
+            <Col span="6">
               <FormItem label="支付门店"  style="margin-bottom: 0px">
                 <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
-            <Col span="12">
+            <Col span="6">
               <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
-                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" @on-change="getPayList"  :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
+              </FormItem>
+            </Col>
+            <Col span="6">
+              <FormItem label="支付名称"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.payName" style="width: 90%;padding-left: 5px" disabled></Input>
+              </FormItem>
+            </Col>
+            <Col span="6">
+              <FormItem label="支付账号"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.pauUser" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
           </Row>

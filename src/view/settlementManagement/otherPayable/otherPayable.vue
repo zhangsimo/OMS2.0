@@ -296,6 +296,7 @@
   import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection";
   import { findByDynamicQuery , paymentRevoke } from "_api/settlementManagement/otherPayable/otherPayable";
+  import { getComenAndGo, getAllSalesList, getPayList } from "../../documentApproval/component/utils";
 
   import moment from "moment";
   export default {
@@ -606,7 +607,7 @@
       },
       // 选中行
       currentChangeEvent({ row }) {
-        console.log(row)
+        // console.log(row)
         this.currRow = row;
         this.modelType.rowMessage = row;
         this.reconciliationStatement.accountNo = row.serviceId;
@@ -649,6 +650,9 @@
       this.Branchstore = arr[2];
       this.getOne();
       this.getQuery();
+      this.modelType.allSalesList = await getAllSalesList();
+      this.modelType.salesList = await getComenAndGo();
+      this.modelType.payList = await getPayList();
     },
     }
 </script>

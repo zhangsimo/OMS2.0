@@ -1016,6 +1016,7 @@ tijiao(params)
     },
     getOkList(list, rowValue) {
       this.showit = false;
+      this.Leftcurrentrow.detailVOS = [];
       for (var i = 0; i < list.length; i++) {
         list[i].id = "";
         this.Leftcurrentrow.detailVOS.push(list[i]);
