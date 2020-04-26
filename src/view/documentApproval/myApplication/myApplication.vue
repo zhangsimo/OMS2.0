@@ -356,6 +356,7 @@
         this.modelType.allSalesList = await getAllSalesList();
         this.modelType.salesList = await getComenAndGo();
         this.modelType.payList = await getPayList();
+        console.log(this.$route.path)
       },
       methods: {
         // 快速查询日期
