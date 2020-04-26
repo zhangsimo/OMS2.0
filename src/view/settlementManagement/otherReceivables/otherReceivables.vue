@@ -464,7 +464,8 @@
          //收回认领
           claimCollection(){
               if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
-                if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) >= this.currRow.paymentBalance) {
+                // console.log(this.$refs.claim.currentClaimed.incomeMoney  + "    " + this.currRow.paymentBalance)
+                if (Math.abs(this.$refs.claim.currentClaimed.incomeMoney) < this.currRow.paymentBalance) {
                   this.$refs.settlement.Settlement = true;
                   this.paymentId = "YSK";
                   this.typeA = '收回';
