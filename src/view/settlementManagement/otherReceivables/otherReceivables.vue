@@ -464,12 +464,12 @@
          //收回认领
           claimCollection(){
               if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
-                if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.paymentBalance) {
+                if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) >= this.currRow.paymentBalance) {
                   this.$refs.settlement.Settlement = true;
                   this.paymentId = "YSK";
                   this.typeA = '收回';
                 } else {
-                  this.$message.error("金额大于其他其他收款余额，无法认领");
+                  this.$message.error("收入金额大于其他其他收款余额，无法认领");
                 }
               }else {
                 this.$message.error('请选择认领的数据')
