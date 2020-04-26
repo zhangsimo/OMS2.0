@@ -6,7 +6,7 @@
       ref="formPlan"
       :model="formPlan"
       :rules="ruleValidate"
-      :label-width="100"
+      :label-width="110"
     >
       <div class="pane-made-hd">
         <span class="titler mr5">固定额度:</span>
@@ -115,9 +115,10 @@
         <FormItem label="计划发货日期:" prop="planSendDate">
           <!-- @on-change="getplanSendDate" -->
           <DatePicker
-            :value="formPlan.planSendDate"
+            v-model="formPlan.planSendDate"
             :options="options1"
-            type="date"
+            type="datetime"
+            class="w180"
             @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
@@ -130,7 +131,8 @@
             :value="formPlan.planArriveDate"
             @on-change="getplanArriveDate"
             :options="options2"
-            type="date"
+            type="datetime"
+            class="w180"
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
@@ -420,7 +422,11 @@ export default {
     };
     let options2DisabledDate = date => {
       const orderDate = this.formPlan.planSendDate;
-      return date && orderDate && date.valueOf() < orderDate;
+      if(orderDate){
+        return date && orderDate && date.valueOf() < orderDate;
+      }else{
+        return true
+      }
     };
     return {
       options1: {
@@ -435,6 +441,7 @@ export default {
         detailList: [],
         storeId:'',
         orderManId: '',
+        planSendDate:''
         // orderTypeValue:'0'
       }, //获取到数据
       headers: {
@@ -480,7 +487,10 @@ export default {
         ],
         storeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
-        ]
+        ],
+        planSendDate: [
+          { required: true, type: "date", message: " ", trigger: "change" }
+        ],
       },
       //form表单校验
       validRules: {
@@ -776,17 +786,18 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      this.formPlan.planSendDate = tools.transTime(data);
+      // this.formPlan.planSendDate = new Date(data);
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
           return date && orderDate && date.valueOf() < new Date(orderDate);
         }
       };
+      this.formPlan.planArriveDate = this.formPlan.planSendDate;
     },
     //计划到货日期
     getplanArriveDate(data) {
-      this.formPlan.planArriveDate = tools.transTime(data);
+      this.formPlan.planArriveDate = data;
     },
     //配件返回的参数
     getPartNameList(val) {
@@ -864,6 +875,7 @@ export default {
     },
     //保存
     save() {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -872,6 +884,8 @@ export default {
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
+            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
@@ -962,6 +976,7 @@ export default {
     },
     //提交
     submitList() {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -969,6 +984,8 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
+            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
             let orderList = [];
             orderList = this.formPlan.detailList.filter(
               item => item.orderPrice*1 < item.averagePrice*1
