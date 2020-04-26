@@ -79,7 +79,7 @@
             highlight-current-row
             ref="xTable"
             @current-change="currentChangeEvent"
-            max-height="400"
+            height="300"
             :data="tableData"
             align="center"
             show-footer
@@ -96,7 +96,7 @@
                 title="费用报销申请单号"
               ></vxe-table-column>
               <vxe-table-column
-                field="applyTime"
+                field="applicationTime"
                 title="申请时间"
               ></vxe-table-column>
               <vxe-table-column
@@ -106,7 +106,7 @@
             </vxe-table-column>
             <vxe-table-column title="金额信息">
               <vxe-table-column
-                field="payAmt"
+                field="reimbursementAmount"
                 title="报销金额"
               ></vxe-table-column>
               <vxe-table-column
@@ -118,15 +118,26 @@
                 title="报销已认领金额"
               ></vxe-table-column>
               <vxe-table-column
-                field="writeOffReceiptNo"
                 title="因公借支核销单号"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.writeOffReceiptNos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <vxe-table-column
                 field="writeOffAmount"
                 title="因公借支核销金额"
               ></vxe-table-column>
               <vxe-table-column
-                field="paymentReturnNo"
+                field="paymentBalance"
                 title="报销未核销余额"
               ></vxe-table-column>
             </vxe-table-column>
@@ -135,11 +146,11 @@
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
-                      v-for="(item, index) of row.receiveType"
+                      v-for="(item, index) of row.paymentTypes"
                       :key="index"
                       class="flex"
                     >
-                      <span class="listChild">{{ item.accountName }}</span>
+                      <span class="listChild">{{ item.account }}</span>
                     </li>
                   </ul>
                 </template>
@@ -148,7 +159,7 @@
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
-                      v-for="(item, index) of row.receiveType"
+                      v-for="(item, index) of row.paymentTypes"
                       :key="index"
                       class="flex"
                     >
@@ -161,7 +172,7 @@
                 <template v-slot="{ row }">
                   <ul class="list">
                     <li
-                      v-for="(item, index) of row.receiveType"
+                      v-for="(item, index) of row.paymentTypes"
                       :key="index"
                       class="flex"
                     >
@@ -175,23 +186,83 @@
               <vxe-table-column
                 field="receiver"
                 title="付款人"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.otherInfos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item.payer }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <vxe-table-column
                 field="receiveDate"
                 title="付款日期"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.otherInfos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item.paymentDate }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <vxe-table-column
                 field="receiveRemark"
                 title="付款备注"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.otherInfos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item.paymentRemark }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <vxe-table-column
                 field="receiveAuditor"
                 title="付款审核人"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.otherInfos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item.paymentAuditor }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
               <vxe-table-column
                 field="receiveAuditDate"
                 title="付款审核日期"
-              ></vxe-table-column>
+              >
+                <template v-slot="{ row }">
+                  <ul class="list">
+                    <li
+                      v-for="(item, index) of row.otherInfos"
+                      :key="index"
+                      class="flex"
+                    >
+                      <span class="listChild">{{ item.paymentAuditDate }}</span>
+                    </li>
+                  </ul>
+                </template>
+              </vxe-table-column>
             </vxe-table-column>
           </vxe-table>
         </div>
@@ -280,6 +351,7 @@ import * as api from "_api/settlementManagement/businessBorrowing";
 import verification from "./components/verification";
 import claimGuest from "./components/claimGuest";
 import writeOff from "./components/writeOff";
+import * as restful from "_api/settlementManagement/financialStatement.js";
 // otherReceivables
 import moment from "moment";
 
@@ -301,7 +373,7 @@ export default {
       BranchstoreId: "", //分店名称
       company: [], //往来单位数组
       Branchstore: [], //分店名称
-      requestCode: "", //申请单号
+      requestCode: "", //费用报销申请单号
       currRow: null, //选中行
       claimModal: false, //认领弹框
       revoke: false, //撤回弹框
@@ -349,16 +421,16 @@ export default {
         this.claimTit = "预付款认领";
         this.claimCollectType = 1;
         this.$store.commit("setClaimType", 2)
-        this.claimedList(2);
+        this.claimedList();
     },
     //其他收款认领弹窗查询
-    claimedList(type) {
+    claimedList() {
       let obj = {
         loanId: this.currRow.id,
         amount: this.amt,
         page: this.$refs.claim.claimedPage.page - 1,
         size: this.$refs.claim.claimedPage.size,
-        amountType: type,
+        amountType: 2,
         guestId: this.companyId
       };
       if (this.bankNameO) {
@@ -396,15 +468,15 @@ export default {
       switch (type) {
         case 1:
           this.revokeTit = "报销申请撤回";
-          this.signType = 3;
+          this.signType = 1;
           break;
         case 2:
           this.revokeTit = "报销认领撤回";
-          this.signType = 4;
+          this.signType = 2;
           break;
         case 3:
           this.revokeTit = "因公借支核销撤回";
-          this.signType = 1;
+          this.signType = 3;
           break;
       }
       this.reason = "";
@@ -427,7 +499,7 @@ export default {
       } else {
         t = 1
       }
-      this.claimedList(t)
+      this.claimedList()
     },
     //初始化
     getQuery() {
@@ -451,7 +523,7 @@ export default {
           delete data[d];
         }
       }
-      api.findListPageAll(params, data).then(res => {
+      restful.findByDynamicQuery(params, data).then(res => {
         if (res.code == 0) {
           this.tableData = res.data.content;
           this.page.total = res.data.totalElements;
@@ -466,14 +538,8 @@ export default {
     claimPay() {
       if (this.claimSelection.length !== 0) {
         // currRow
-        if (this.claimCollectType == 1) {
-          if (this.selectionData.paidMoney > this.currRow.payAmt) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
-          }
-        } else {
-          if (this.selectionData.incomeMoney > this.currRow.paymentReturnBalance) {
-            return this.$message.error("金额大于因公借支金额金额，无法认领")
-          }
+        if (this.selectionData.paidMoney > (this.currRow.reimbursementAmount + this.currRow.expenseClaimAmount)) {
+          return this.$message.error("金额大于因公借支金额金额，无法认领")
         }
         this.$refs.claimGuest.modal = true;
         this.claimModal = false;
@@ -506,7 +572,7 @@ export default {
         id: this.currRow.id,
         sign: this.signType,
       }
-      api.loanRevoke(data).then(res => {
+      restful.paymentRevoke(data).then(res => {
         if (res.code == 0) {
           this.$message.success("撤销成功")
           this.revoke = false;

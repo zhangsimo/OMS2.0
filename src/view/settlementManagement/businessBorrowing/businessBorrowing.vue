@@ -82,7 +82,7 @@
             highlight-current-row
             ref="xTable"
             @current-change="currentChangeEvent"
-            max-height="400"
+            height="300"
             :data="tableData"
             align="center"
             show-footer
