@@ -114,13 +114,14 @@
       <vxe-table-column field="taxOil" title="剩余含税油品欠票"></vxe-table-column>
     </vxe-table>
     <saleSelete ref="saleSelete" :information="information" />
-    <flow v-if="modelType.type===3" />
+    <!--<flow v-if="modelType.type===3" />-->
     <div slot="footer"></div>
   </Modal>
 </template>
 <script>
 import saleSelete from "@/view/settlementManagement/bill/Popup/saleSelete";
 import { hedPreservation, hedSubmit } from "@/api/bill/popup";
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 import flow from "../Flow.vue";
 import moment from "moment";
@@ -193,10 +194,23 @@ export default {
       ];
     },
     // 对话框是否显示
-    visChange(flag) {
+   async visChange(flag) {
+      if(this.modelType.id){
+        let data ={}
+        data.id = this.modelType.id || ''
+        let res = await getThisAllList(data)
+           if(res.code == 0){
+             this.information = res.data;
+             this.remarks = res.data.applyReason
+           }
+      }
       if (flag) {
         this.accessoriesBillingData = [];
-        this.accessoriesBillingData.push(this.information);
+        if(this.modelType.id){
+          this.accessoriesBillingData = this.information.details;
+        }else {
+          this.accessoriesBillingData.push(this.information);
+        }
         if (this.modelType.type === 3) {
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
