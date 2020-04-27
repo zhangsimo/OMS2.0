@@ -216,7 +216,8 @@ export default {
       if (this.tableData[0].writeOffAmount < 0) {
         return this.$message.error("因公借支核销金额，不能小于0")
       }
-      if (this.tableData[0].writeOffAmount > this.max) {
+      let max = this.tableData[0].payAmt > this.tableData[0].totalPrice ? this.tableData[0].totalPrice : this.tableData[0].payAmt;
+      if (this.tableData[0].writeOffAmount > max) {
         return this.$message.error("因公借支核销金额，不能大于报销金额和因公借支金额中的较小值")
       }
       let data = {
