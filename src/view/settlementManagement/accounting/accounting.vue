@@ -474,11 +474,11 @@ export default {
     //点击获取表格数据
     selectAllEvent({ checked, records }) {
       // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
-      this.oneList = records;
+      this.oneList = records || [];
     },
     selectChangeEvent({ checked, records }) {
       // console.log(checked ? "勾选事件" : "取消事件", records);
-      this.oneList = records;
+      this.oneList = records || [];
     },
     // 审核
     SubmitAudit() {

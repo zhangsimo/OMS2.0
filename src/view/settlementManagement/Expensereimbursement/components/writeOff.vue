@@ -275,10 +275,10 @@ export default {
       });
     },
     selectAllEvent({ checked, records }) {
-      this.selectTmpArr = records;
+      this.selectTmpArr = records || [];
     },
     selectChangeEvent({ checked, records }) {
-      this.selectTmpArr = records;
+      this.selectTmpArr = records || [];
     },
     ok() {
       this.showChild = false;
