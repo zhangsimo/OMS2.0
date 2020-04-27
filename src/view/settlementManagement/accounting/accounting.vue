@@ -15,7 +15,12 @@
           <div class="db ml15">
             <span>门店：</span>
             <Select disabled class="w150" v-model="store">
-              <Option v-for="item in Branchstore" :value="item.id" :key="item.id" >{{ item.name }}</Option>
+              <Option
+                v-for="item in Branchstore"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
             </Select>
           </div>
           <div class="db ml15">
@@ -54,7 +59,7 @@
             <button
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
-              :disabled="status != 1|| oneList.length <= 0"
+              :disabled="status != 1 || oneList.length <= 0"
               @click="reAudit"
             >
               <span>撤销审核</span>
@@ -388,8 +393,8 @@
 </template>
 
 <script>
-import {getTableList} from '@/api/accountant/accountant'
-import * as api from '@/api/settlementManagement/financialStatement'
+import { getTableList } from "@/api/accountant/accountant";
+import * as api from "@/api/settlementManagement/financialStatement";
 import moment from "moment";
 import { creat } from "./../components";
 export default {
@@ -405,52 +410,52 @@ export default {
       store: "", // 门店id
       Branchstore: [], // 门店
       subjectId: "", // 对应科目id
-      subjecties: [{id:0 ,titleName:'全部'}], // 科目
+      subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
-      isShow: false, // 撤销原因modal
+      isShow: false // 撤销原因modal
     };
   },
   async mounted() {
     this.getSubjecties();
-    let arr = await creat('', this.$store);
+    let arr = await creat("", this.$store);
     this.Branchstore = arr[2];
     this.query();
   },
   methods: {
     // 获取科目列表
     async getSubjecties() {
-      let data = {}
-      data.parentCode = 101
-      let res = await getTableList(data)
-      if(res.code === 0) {
-        this.subjecties = [...this.subjecties , ...res.data]
+      let data = {};
+      data.parentCode = 101;
+      let res = await getTableList(data);
+      if (res.code === 0) {
+        this.subjecties = [...this.subjecties, ...res.data];
       }
     },
     // 获取列表
     async getTable() {
       let userdata = this.$store.state.user.userData;
       this.store = userdata.shopId;
-      this.Branchstore = [{id: this.store, name:  userdata.tenantCompanyName}]
+      this.Branchstore = [{ id: this.store, name: userdata.tenantCompanyName }];
       this.oneList = [];
       let params = {
         shopNumber: this.store,
         mateAccountCode: this.subjectId,
-        size: 10000,
-      }
+        size: 10000
+      };
       if (this.date) {
         params.occurTime = moment(this.date).format("YYYY-MM-DD");
       }
       for (let key in params) {
         if (!params[key]) {
-          Reflect.deleteProperty(params, key)
+          Reflect.deleteProperty(params, key);
         }
       }
       params.page = 0;
       // 未审核
-      let res1 = await api.findCertificationAudit({...params, auditState: 0});
+      let res1 = await api.findCertificationAudit({ ...params, auditState: 0 });
       // 已审核
-      let res2 = await api.findCertificationAudit({...params, auditState: 1});
+      let res2 = await api.findCertificationAudit({ ...params, auditState: 1 });
       if (res1.code == 0) {
         this.tableData = res1.data.content;
       }
@@ -482,38 +487,68 @@ export default {
     },
     // 审核
     SubmitAudit() {
-        this.$Modal.confirm({
-        title: '资金审核',
-        content: '<p>确认审核</p>',
+      let occurTime = "";
+      if (this.date) {
+        occurTime = moment(this.date).format("YYYY-MM-DD");
+      }
+      let mateAccountCode = this.subjectId;
+      if (!occurTime) {
+        return this.$message.error("发生日期必须选择！")
+      }
+      if (!mateAccountCode) {
+        return this.$message.error("对应科目必须选择！")
+      }
+      this.$Modal.confirm({
+        title: "资金审核",
+        content: "<p>确认审核</p>",
         onOk: async () => {
-          let ids = this.oneList.map(el => el.id)
-          let res = await api.certificationAudit({ ids })
+          let ids = this.oneList.map(el => el.id);
+          let res = await api.certificationAudit({
+            ids,
+            occurTime,
+            shopNumber: this.store,
+            mateAccountCode,
+          });
           if (res.code == 0) {
-            this.$message.success(res.data)
+            this.$message.success(res.data);
             this.query();
           }
         },
-        onCancel: () => {
-        }
+        onCancel: () => {}
       });
     },
     // 撤销审核
     reAudit() {
-        this.isShow = true;
-        this.content = "";
+      this.isShow = true;
+      this.content = "";
     },
     // 撤销审核 ok
     async reAuditOk() {
+      let occurTime = "";
+      if (this.date) {
+        occurTime = moment(this.date).format("YYYY-MM-DD");
+      }
+      let mateAccountCode = this.subjectId;
+      if (!occurTime) {
+        return this.$message.error("发生日期必须选择！")
+      }
+      if (!mateAccountCode) {
+        return this.$message.error("对应科目必须选择！")
+      }
       let remarks = this.content.trim();
       if (remarks.length <= 0) {
-        return this.$message.error("请输入撤销原因")
+        return this.$message.error("请输入撤销原因");
       }
-      let ids = this.oneList.map(el => el.id)
+      let ids = this.oneList.map(el => el.id);
       let res = await api.certificationAuditRevocation({
-        ids, remarks
-      })
+        ids,
+        remarks,
+        occurTime,
+        mateAccountCode,
+        shopNumber: this.store,
+      });
       if (res.code == 0) {
-        this.$message.success(res.data)
+        this.$message.success(res.data);
         this.isShow = false;
         this.query();
       }
