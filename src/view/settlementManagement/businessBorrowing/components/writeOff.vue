@@ -13,6 +13,7 @@
         @current-change="currentChangeEvent"
         :data="tableData"
         align="center"
+        :edit-config="{ trigger: 'click', mode: 'cell' }"
       >
         <vxe-table-column
           field="serviceId"
@@ -30,9 +31,10 @@
           <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
+              :max="max"
               v-model="row.writeOffAmount"
               :controls="false"
-              size="medium"
+              size="mini"
               :precision="2"
             />
           </template>
@@ -137,6 +139,12 @@ export default {
     };
   },
   computed: {
+    max() {
+      if(this.table) {
+        return 0
+      }
+      return this.table.payAmt > this.table.totalPrice ? this.table.totalPrice : this.table.payAmt
+    },
     tableData() {
       return [{...this.table, totalPrice: this.totalPrice}]
     },
@@ -204,6 +212,9 @@ export default {
       }
     },
     async submit() {
+      if (this.tableData[0].writeOffAmount > this.max) {
+        return this.$message.error("因公借支核销金额，不能大于报销金额和因公借支金额中的较小值")
+      }
       let data = {
         sourceDto: {
           id: this.tableData[0].id,

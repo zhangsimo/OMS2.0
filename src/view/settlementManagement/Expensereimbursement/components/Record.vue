@@ -23,7 +23,7 @@ export default {
         },
         {
           title: "报销申请单号",
-          key: "serviceId",
+          key: "accountNo",
           align: "center"
         },
         {

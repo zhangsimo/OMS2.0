@@ -14,13 +14,8 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select v-model="store" class="w150">
-              <Option
-                v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+            <Select disabled class="w150" v-model="store">
+              <Option v-for="item in Branchstore" :value="item.id" :key="item.id" >{{ item.name }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -406,7 +401,7 @@ export default {
       status: 0, // 当前tabs 0未审核， 1已审核
       tableData: [], // 未审核
       tableData1: [], // 已审核
-      date: null, // 发生日期
+      date: new Date(), // 发生日期
       store: "", // 门店id
       Branchstore: [], // 门店
       subjectId: "", // 对应科目id
@@ -434,6 +429,9 @@ export default {
     },
     // 获取列表
     async getTable() {
+      let userdata = this.$store.state.user.userData;
+      this.store = userdata.shopId;
+      this.Branchstore = [{id: this.store, name:  userdata.tenantCompanyName}]
       this.oneList = [];
       let params = {
         shopNumber: this.store,
@@ -449,7 +447,6 @@ export default {
         }
       }
       params.page = 0;
-      console.log(params)
       // 未审核
       let res1 = await api.findCertificationAudit({...params, auditState: 0});
       // 已审核

@@ -25,12 +25,9 @@
           <div class="db ml15">
             <span>区域：</span>
             <Select v-model="areaId" class="w150">
-              <Option
-                v-for="item in areas"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
-              >
+              <Option v-for="item in areas" :value="item.id" :key="item.id">{{
+                item.companyName
+              }}</Option>
             </Select>
           </div>
           <div class="db ml15">
@@ -38,9 +35,9 @@
             <Select v-model="BranchstoreId" class="w150">
               <Option
                 v-for="item in Branchstore"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.label }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
               >
             </Select>
           </div>
@@ -59,13 +56,13 @@
       <div>
         <div class="head">
           <span>昨日余额</span>
-          <span>{{ headData.o }}</span>
+          <span>{{ headData.yesterDayMoney }}</span>
           <span>本日收款</span>
-          <span>{{ headData.o }}</span>
+          <span>{{ headData.incomeMoney }}</span>
           <span>本日付款</span>
-          <span>{{ headData.o }}</span>
+          <span>{{ headData.paidMoney }}</span>
           <span>本日余额</span>
-          <span>{{ headData.o }}</span>
+          <span>{{ headData.balanceMoney }}</span>
         </div>
       </div>
     </section>
@@ -76,41 +73,60 @@
         resizable
         auto-resize
         align="center"
+        height="600"
         :span-method="mergeRowMethod"
         :data="tableData"
       >
-      <vxe-table-column title="《现金流量表》">
-        <vxe-table-column title="项目信息">
-          <vxe-table-column title="大项" filed="temp"></vxe-table-column>
-          <vxe-table-column title="现金流科目" filed="temp"></vxe-table-column>
-          <vxe-table-column title="行次" filed="temp"></vxe-table-column>
-          <vxe-table-column
-            title="具体项目类别"
-            filed="temp"
-          ></vxe-table-column>
-          <vxe-table-column
-            title="凭证对应会计科目"
-            filed="temp"
-          ></vxe-table-column>
+        <vxe-table-column title="《现金流量表》">
+          <vxe-table-column title="项目信息">
+            <vxe-table-column title="大项" field="maxterm"></vxe-table-column>
+            <vxe-table-column
+              title="现金流科目"
+              field="cashAccount"
+            ></vxe-table-column>
+            <vxe-table-column title="行次" field="rowNo"></vxe-table-column>
+            <vxe-table-column
+              title="具体项目类别"
+              field="accountType"
+            ></vxe-table-column>
+            <vxe-table-column
+              title="凭证对应会计科目"
+              field="voucherAccount"
+            ></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="金额信息">
+            <vxe-table-column title="现金" field="cashMoney"></vxe-table-column>
+            <vxe-table-column
+              title="银行卡"
+              field="cartoonMoney"
+            ></vxe-table-column>
+            <vxe-table-column
+              title="银行账户"
+              field="accountMoney"
+            ></vxe-table-column>
+            <vxe-table-column
+              title="资金合计"
+              field="totalMoney"
+            ></vxe-table-column>
+          </vxe-table-column>
+          <vxe-table-column title="其他信息">
+            <vxe-table-column title="备注" field="remarks"></vxe-table-column>
+          </vxe-table-column>
         </vxe-table-column>
-        <vxe-table-column title="金额信息">
-          <vxe-table-column title="现金" filed="temp"></vxe-table-column>
-          <vxe-table-column title="银行卡" filed="temp"></vxe-table-column>
-          <vxe-table-column title="银行账户" filed="temp"></vxe-table-column>
-          <vxe-table-column title="资金合计" filed="temp"></vxe-table-column>
-        </vxe-table-column>
-        <vxe-table-column title="其他信息">
-          <vxe-table-column title="备注" filed="temp"></vxe-table-column>
-        </vxe-table-column>
-      </vxe-table-column>
       </vxe-table>
     </div>
   </div>
 </template>
 
 <script>
-import QuickDate from "_c/getDate/dateget";
+import {
+  are,
+  goshop
+} from "@/api/settlementManagement/fundsManagement/capitalChain";
+import * as api from "_api/settlementManagement/financialStatement.js";
+import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
+import XEUtils from "xe-utils";
 export default {
   components: {
     QuickDate
@@ -119,7 +135,10 @@ export default {
     return {
       // 数据类
       headData: {
-        o: 0
+        balanceMoney: 0,
+        incomeMoney: 0,
+        paidMoney: 0,
+        yesterDayMoney: 0
       },
       tableData: [], // 主表
       dates: [], // 查询日期
@@ -130,13 +149,14 @@ export default {
     };
   },
   async mounted() {
+    this.dates = this.$refs.quickDate.val;
     this.getArea();
-    this.getCompany();
+    this.getShop();
     this.query();
   },
   methods: {
     mergeRowMethod({ row, $rowIndex, column, data }) {
-      const fields = ["key"];
+      const fields = ["maxterm"];
       const cellValue = XEUtils.get(row, column.property);
       if (cellValue && fields.includes(column.property)) {
         const prevRow = data[$rowIndex - 1];
@@ -163,11 +183,77 @@ export default {
       this.query();
     },
     // 区域
-    async getArea() {},
+    async getArea() {
+      let res = await are();
+      if (res.code === 0) return (this.areas = [...this.areas, ...res.data]);
+    },
     // 门店
-    async getCompany() {},
+    async getThisArea() {
+      let data = {};
+      data.shopkeeper = 1;
+      data.shopNumber = this.$store.state.user.userData.shopId;
+      data.tenantId = this.$store.state.user.userData.tenantId;
+      let res = await are(data);
+
+      if (res.code === 0) {
+        this.areaId = res.data[0].id;
+      }
+    },
+
+    //切换地址重新调取门店接口
+    changeArea() {
+      if (this.$store.state.user.userData.shopkeeper == 0) {
+        this.shopCode = 0;
+        this.getShop();
+      }
+    },
+
+    //获取门店
+    async getShop() {
+      let data = {};
+      data.supplierTypeSecond = this.areaId;
+      this.Branchstore = [{ id: 0, name: "全部" }];
+      let res = await goshop(data);
+      if (res.code === 0) {
+        this.Branchstore = [...this.Branchstore, ...res.data];
+        this.$nextTick(() => {
+          this.shopCode = this.$store.state.user.userData.shopId;
+        });
+        if (this.$store.state.user.userData.shopkeeper != 0) {
+          this.getThisArea(); //获取当前门店地址
+        }
+      }
+    },
     // 查询
-    async query() {}
+    async query() {
+      let params = {
+        areaId: this.areaId,
+        shopNumber: this.BranchstoreId,
+        size: 10000
+      };
+
+      if (this.dates.length === 2 && this.dates[0]) {
+        params.startTime =
+          moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+        params.endTime =
+          moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+      }
+
+      params.page = 0;
+
+      for (let key in params) {
+        if (!params[key]) {
+          Reflect.deleteProperty(params, key);
+        }
+      }
+
+      let res = await api.findListPageAllCashFlow(params);
+
+      if (res.code == 0) {
+        this.tableData = res.data.content;
+        this.headData = res.data.content[0]["heandMoney"];
+      }
+    }
   }
 };
 </script>
