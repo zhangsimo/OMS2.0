@@ -153,7 +153,7 @@
             </div>
             <div class="db">
               <span class="mr5">计划结算类型</span>
-              <Select class="w100" v-model="infoBase.billingType.value" readonly>
+              <Select class="w100" v-model="infoBase.billingType.value" disabled>
                 <Option
                   v-for="item in SettlementType"
                   :value="item.value"
@@ -199,8 +199,10 @@
 
 <script>
 import { getReconciliationNo } from "@/api/bill/saleOrder";
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 export default {
-  props: ["id"],
+  // props: ["id"],
+  props: ["modelType"],
   data() {
     return {
       accountData: [
@@ -426,40 +428,81 @@ export default {
   },
   methods: {
     // 获取数据
-    Initialization() {
-      getReconciliationNo({ id: this.id }).then(res => {
-        res.data.one.map(item => {
-          if (item.number === 1) {
-            this.accountData[0] = {
-              accountNo: item.accountNo,
-              accountSumAmt: item.accountSumAmt
-            };
-          } else if (item.number === 2) {
-            this.accountData[1] = {
-              accountNo: item.accountNo,
-              accountSumAmt: item.accountSumAmt
-            };
-          } else if (item.number === 3) {
-            this.accountData[2] = {
-              accountNo: item.accountNo,
-              accountSumAmt: item.accountSumAmt
-            };
-          }
+    async Initialization() {
+      if(this.modelType.id){
+        // console.log(this.modelType)
+        let data ={};
+        data.id = this.modelType.id || ''
+        let res = await getThisAllList(data)
+        if(res.code == 0){
+          res.data.one.map(item => {
+            if (item.number === 1) {
+              this.accountData[0] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            } else if (item.number === 2) {
+              this.accountData[1] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            } else if (item.number === 3) {
+              this.accountData[2] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            }
+          });
+          res.data.two.map((item, index) => {
+            item.index = index + 1;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data1 = res.data.two;
+          res.data.three.map((item, index) => {
+            item.index = index + 1;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data2 = res.data.three;
+          this.infoBase = res.data.four[0];
+        }
+      }else {
+        getReconciliationNo({ id: this.id }).then(res => {
+          res.data.one.map(item => {
+            if (item.number === 1) {
+              this.accountData[0] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            } else if (item.number === 2) {
+              this.accountData[1] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            } else if (item.number === 3) {
+              this.accountData[2] = {
+                accountNo: item.accountNo,
+                accountSumAmt: item.accountSumAmt
+              };
+            }
+          });
+          res.data.two.map((item, index) => {
+            item.index = index + 1;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data1 = res.data.two;
+          res.data.three.map((item, index) => {
+            item.index = index + 1;
+            item.serviceTypeName = item.serviceType.name;
+            item.speciesName = item.species.name;
+          });
+          this.data2 = res.data.three;
+          this.infoBase = res.data.four[0];
         });
-        res.data.two.map((item, index) => {
-          item.index = index + 1;
-          item.serviceTypeName = item.serviceType.name;
-          item.speciesName = item.species.name;
-        });
-        this.data1 = res.data.two;
-        res.data.three.map((item, index) => {
-          item.index = index + 1;
-          item.serviceTypeName = item.serviceType.name;
-          item.speciesName = item.species.name;
-        });
-        this.data2 = res.data.three;
-        this.infoBase = res.data.four[0];
-      });
+      }
+
     }
   }
 };

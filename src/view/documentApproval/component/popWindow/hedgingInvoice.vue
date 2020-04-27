@@ -70,7 +70,7 @@
       </Col>
       <Col span="12">
         <span>对冲申请原因说明：</span>
-        <Input v-model="remarks" class="ml5 w260" />
+        <Input v-model="remarks" class="ml5 w260" :disabled="Boolean(modelType !== 2)"/>
       </Col>
     </Row>
     <button
@@ -207,6 +207,11 @@ export default {
       if (flag) {
         this.accessoriesBillingData = [];
         if(this.modelType.id){
+          this.information.details.map(item => {
+            item.taxArrearsOfOil = item.taxArrearsOfOil ? item.taxArrearsOfOil : 0;
+            item.taxArrearsOfPart = item.taxArrearsOfPart ? item.taxArrearsOfPart : 0;
+
+          })
           this.accessoriesBillingData = this.information.details;
         }else {
           this.accessoriesBillingData.push(this.information);

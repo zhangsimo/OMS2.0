@@ -551,6 +551,8 @@
               if (res.code == 0) {
                 this.falg = true;
                 this.statusData = res.data.operationRecords;
+              } else {
+                this.statusData = [];
               }
             });
           }else {
