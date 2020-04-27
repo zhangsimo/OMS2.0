@@ -62,7 +62,7 @@
 
 
         <h5 class="mt20 mb10" style="font-size: 18px">其他应付款单据</h5>
-        <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
+        <Button class="mb10" @click="SelectTheDocuments" :disabled="modelType || list.type == 5">选择单据</Button>
         <vxe-table
           class="mt10"
           border
@@ -127,16 +127,26 @@
         <h5 class="mt20 mb10" style="font-size: 18px">支付信息</h5>
         <div class="proceeds">
           <Row>
-            <Col span="12">
+            <Col span="6">
               <FormItem label="支付门店"  style="margin-bottom: 0px">
                 <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
-            <Col span="12">
+            <Col span="6">
               <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
-                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" :disabled="modelType">
+                <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" @on-change="getPayList"  :disabled="modelType">
                   <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                 </Select>
+              </FormItem>
+            </Col>
+            <Col span="6">
+              <FormItem label="支付银行"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentBank" style="width: 90%;padding-left: 5px" disabled></Input>
+              </FormItem>
+            </Col>
+            <Col span="6">
+              <FormItem label="支付账号"  style="margin-bottom: 0px">
+                <Input type="text" v-model="formInline.paymentBankNo" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>
           </Row>
@@ -144,7 +154,7 @@
 
 
         <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
-        <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
+        <upphoto @backUpImgList="getImgList" ref="upImg" :list="Pictures"></upphoto>
         <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
       </Form>
     </div>

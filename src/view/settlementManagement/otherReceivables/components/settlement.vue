@@ -170,7 +170,7 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      console.log(val);
+      // console.log(val);
       this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
       // val.map(item => {
       //   item.businessTypeName = item.businessType.name;
@@ -188,10 +188,10 @@ export default {
         item.rpAmt = item.paymentBalance;
         item.unAmtLeft = item.unAmt - item.rpAmt;
       })
-      console.log(jsonArr)
+      // console.log(jsonArr)
       this.BusinessType.push(...jsonArr)
       // console.log(this.BusinessType)
-      // this.checkComputed()
+      this.checkComputed()
     });
     //选择科目
     bus.$on("hedInfo", val => {

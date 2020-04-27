@@ -23,7 +23,7 @@ export default {
         },
         {
           title: "报销申请单号",
-          key: "",
+          key: "serviceId",
           align: "center"
         },
         {
@@ -33,74 +33,87 @@ export default {
         },
         {
           title: "付款时间",
-          key: "createUname",
+          key: "rpDate",
           align: "center"
         },
         {
           title: "付款人",
-          key: "rpDate",
+          key: "createUname",
           align: "center"
         },
         {
           title: "核销方式",
           key: "",
           align: "center",
-          // render: (h, p) => {
-          //   let val = p.row.furpose.name;
-          //   return h("span", val);
-          // }
+          render: (h, p) => {
+            let val = "";
+            if (p.row.furpose) {
+              val = p.row.furpose.name;
+            }
+            return h("span", val);
+          }
         },
         {
           title: "付款方式",
-          key: "rpDate",
-          align: "center"
+          key: "",
+          align: "center",
+          render: (h, p) => {
+            let val = "";
+            if (p.row.sort) {
+              val = p.row.sort.name;
+            }
+            return h("span", val);
+          }
         },
         {
           title: "账户所属门店",
-          key: "guestName",
-          align: "center"
-        },
-        {
-          title: "付款账户",
           key: "accountStoreName",
           align: "center"
         },
         {
-          title: "付款开户行",
+          title: "付款账户",
           key: "account",
           align: "center"
         },
         {
-          title: "付款账号",
+          title: "付款开户行",
           key: "accountBank",
           align: "center"
         },
         {
-          title: "对方收款户名",
+          title: "付款账号",
           key: "accountBankNo",
           align: "center"
         },
         {
-          title: "对方收款开户行",
+          title: "对方收款户名",
           key: "otherAccountName",
           align: "center"
         },
         {
-          title: "对方收款账号",
+          title: "对方收款开户行",
           key: "otherAccountBank",
           align: "center"
         },
         {
-          title: "付款金额",
+          title: "对方收款账号",
           key: "otherAccountBankNo",
           align: "center"
         },
         {
+          title: "付款金额",
+          key: "checkAmt",
+          align: "center"
+        },
+        {
           title: "审核状态",
-          key: "startStatus",
+          key: "",
           align: "center",
           render: (h, p) => {
-            let val = p.row.startStatus.name;
+            let val = "";
+            if (p.row.documentStatus) {
+              val = p.row.documentStatus.name;
+            }
             return h("span", val);
           }
         },

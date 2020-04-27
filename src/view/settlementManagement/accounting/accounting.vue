@@ -449,10 +449,11 @@ export default {
         }
       }
       params.page = 0;
+      console.log(params)
       // 未审核
-      let res1 = await api.findCertificationAudit({...params, audit_state: 0});
+      let res1 = await api.findCertificationAudit({...params, auditState: 0});
       // 已审核
-      let res2 = await api.findCertificationAudit({...params, audit_state: 1});
+      let res2 = await api.findCertificationAudit({...params, auditState: 1});
       if (res1.code == 0) {
         this.tableData = res1.data.content;
       }

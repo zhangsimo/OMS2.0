@@ -5,8 +5,7 @@ import selectTheDocuments from '../popWindow/SelectTheDocuments'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getDictionary , getExpSve} from '_api/documentApproval/ExpenseReimbursement'
-
-
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 
 export default {
   name: "ExpenseReimbursement",
@@ -89,6 +88,7 @@ export default {
       moneyTableData:[],//费用明细表格数据
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
+      Pictures:{},//请求回来的图片地址状态
     }
   },
   mounted(){
@@ -130,14 +130,17 @@ export default {
   methods:{
     //模态框打开111
    async open(){
-       this.payeeList = this.list.allSalesList
-       this.payUserList = this.list.payList
-
+     this.payeeList = this.list.allSalesList
+     this.payUserList = this.list.payList
+     this.modelType = false
      this.getRate()
      this.getTaxList()
-
-      if (this.list.type == 1) {
-        this.formInline = {}
+     this.$refs['formInline'].resetFields();
+     this.formInline = {}
+     this.$refs.upImg.uploadListModal = []
+     this.$refs.upImg.uploadList = []
+     this.model = true
+     if (this.list.type == 1) {
         this.details = []
         let arr = [
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
@@ -146,10 +149,7 @@ export default {
           {expenseType:'FY001',totalAmt:0,taxRateCode:'TR001',taxAmt:0},
         ]
         this.$set(this.formInline ,'expenseDetails' ,  arr )
-        this.$refs.upImg.uploadListModal = []
-        this.$refs.upImg.uploadList = []
-        this.$refs['formInline'].resetFields();
-        this.model = true
+
         //判断模态框状态
         this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
@@ -161,6 +161,31 @@ export default {
         this.formInline.applyTypeName = '费用报销'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
+      }
+     if (this.list.type == 2){
+       this.getList()
+     }
+     if (this.list.type == 3 || this.list.type == 4){
+       this.getList()
+       this.modelType = true
+     }
+    },
+
+    //获取当前信息
+    async getList(){
+     let data ={}
+     data.id = this.list.id || ''
+     let res = await getThisAllList(data)
+      if(res.code === 0){
+        this.$nextTick( () => {
+          this.formInline = res.data
+          this.details = res.data.details || []
+          this.Pictures = {
+            voucherPictures :res.data.voucherPictures || [],
+            billStatus: res.data.billStatus
+          }
+        })
+
       }
     },
 
@@ -195,13 +220,32 @@ export default {
     //判断表格是否可以编辑
     editActivedEvent({row}){
       let xTable = this.$refs.xTable
-      let isDisable = false
-      // let nameColumn = xTable.getColumnByField('name')
-      // let tax = xTable.getColumnByField('tax')
-      // let subjectType = xTable.getColumnByField('subjectType')
-      // nameColumn.editRender.attrs.disabled = isDisable
-      // tax.editRender.attrs.disabled = isDisable
-      // subjectType.editRender.attrs.disabled = isDisable
+      let isDisable = this.modelType
+      let summary = xTable.getColumnByField('summary')
+      let expenseType = xTable.getColumnByField('expenseType')
+      let accountEntry = xTable.getColumnByField('accountEntry')
+      let taxRateCode = xTable.getColumnByField('taxRateCode')
+      let taxAmt = xTable.getColumnByField('taxAmt')
+      let noTaxAmt = xTable.getColumnByField('noTaxAmt')
+      let remark = xTable.getColumnByField('remark')
+      let totalAmt = xTable.getColumnByField('totalAmt')
+      summary.editRender.attrs.disabled = isDisable
+      expenseType.editRender.attrs.disabled = isDisable
+      accountEntry.editRender.attrs.disabled = isDisable
+      taxRateCode.editRender.attrs.disabled = isDisable
+      taxAmt.editRender.attrs.disabled = isDisable
+      noTaxAmt.editRender.attrs.disabled = isDisable
+      remark.editRender.attrs.disabled = isDisable
+      totalAmt.editRender.attrs.disabled = isDisable
+    },
+
+    //信息不可编辑
+    editisDisabled({row}){
+      let xTable = this.$refs.documentTable
+      let isDisable = this.modelType
+      let writeOffAmt = xTable.getColumnByField('writeOffAmt')
+      writeOffAmt.editRender.attrs.disabled = isDisable
+
     },
 
     //打开选择模态框
@@ -356,6 +400,14 @@ export default {
       // this.$set(this.formInline,'details' , row)
     },
 
+    //获取付款信息
+    getPayList(value){
+     if (!value) return
+      let list = this.payUserList.filter(item => item.id == value)[0]
+      this.formInline.paymentBank = list.bankName || ''
+      this.formInline.paymentBankNo = list.accountCode
+    },
+
 
     //获取到上传图片地址
     getImgList(row){
@@ -384,8 +436,6 @@ export default {
           this.$Message.error('带*必填');
         }
       })
-
-
 
     }
 
