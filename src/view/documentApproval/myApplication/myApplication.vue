@@ -37,7 +37,7 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db ml10">
+          <div class="db ml10" v-if="headquarters == 0">
             <span>门店：</span>
             <Select v-model="shopCode" class="w150" filterable clearable @on-change="SelectChange">
               <Option
@@ -184,7 +184,7 @@
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
     <!--      发票对冲申请-->
-    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
+    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelTypeTwo"></invoice-offset-request>
     <!--      销售开票-->
     <sales-invoice-application ref="salesInvoiceApplication" :modelType="modelType"></sales-invoice-application>
     <!--      不含税开票-->
@@ -213,7 +213,7 @@
   import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
   import statementApplication from "../component/popWindow/statementApplication"
 
-  import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
+  import { findPageByDynamicQuery , findUserShopKeeper} from '@/api/documentApproval/documentApproval/documentApproval'
   import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 
 
@@ -345,7 +345,12 @@
           modelType: {
             type: 1,
             id: ""
-          }
+          },
+          modelTypeTwo: {
+            type: 1,
+            rowMessage: {}
+          },
+          headquarters: 2
         }
       },
       async mounted(){
@@ -361,6 +366,7 @@
           this.searchTypeValue = this.$route.query.applyNo;
           this.getList();
         }
+        this.getUser();
       },
       methods: {
         // 快速查询日期
@@ -456,12 +462,20 @@
         //查看
         lookOver(row){
           // console.log(row)
+          // this.modelTypeTwo.rowMessage = row;
           if(row.billStatusName == "草稿"){
             this.modelType.type = 2;
             this.modelType.id = row.id
           }else {
             this.modelType.type = 3;
             this.modelType.id = row.id
+          };
+          if(row.billStatusName == "草稿"){
+            this.modelTypeTwo.type = 2;
+            this.modelTypeTwo.rowMessage = row
+          }else {
+            this.modelTypeTwo.type = 3;
+            this.modelTypeTwo.rowMessage = row
           }
           switch (row.applyTypeName) {
             case "费用报销":
@@ -495,7 +509,7 @@
               this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
               break;
             case "发票对冲":
-              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
+              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.visChange(1);
               break;
           }
         },
@@ -543,6 +557,16 @@
             this.falg = false;
             this.statusData = [];
           }
+        },
+
+        //获取是否为总部接口
+        getUser(){
+          let params = {};
+          findUserShopKeeper(params).then(res => {
+            if(res.code === 0){
+              this.headquarters = res.data.shopkeeperUser;
+            }
+          })
         }
       },
       filters: {
