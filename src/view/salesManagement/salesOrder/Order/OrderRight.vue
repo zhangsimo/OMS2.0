@@ -117,8 +117,8 @@
           <DatePicker
             v-model="formPlan.planSendDate"
             :options="options1"
-            type="datetime"
-            class="w180"
+            type="date"
+            class="w130"
             @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
@@ -131,8 +131,8 @@
             :value="formPlan.planArriveDate"
             @on-change="getplanArriveDate"
             :options="options2"
-            type="datetime"
-            class="w180"
+            type="date"
+            class="w130"
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
@@ -793,7 +793,7 @@ export default {
           return date && orderDate && date.valueOf() < new Date(orderDate);
         }
       };
-      this.formPlan.planArriveDate = this.formPlan.planSendDate;
+      this.formPlan.planArriveDate = "";
     },
     //计划到货日期
     getplanArriveDate(data) {
@@ -940,6 +940,7 @@ export default {
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
+                  this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {
@@ -947,6 +948,7 @@ export default {
                                 if (+this.totalMoney > +this.limitList.outOfAmt) {
                                     return this.$message.error("可用余额不足");
                                 }
+                              this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
                                 let res = await getStockOut(this.formPlan);
                                 if (res.code === 0) {
                                     this.$Message.success("出库成功");
@@ -976,7 +978,6 @@ export default {
     },
     //提交
     submitList() {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -1054,6 +1055,7 @@ export default {
   watch: {
     getOneOrder: {
       handler(old, ov) {
+        this.$parent.$parent.ispart=false;
         if (!old.id) {
              this.formPlan =Object.assign({},{
                  billStatusId: { name: "草稿", value: 0 },
