@@ -30,8 +30,8 @@
           field="totalPrice"
           title="因公借支总金额"
         ></vxe-table-column>
-        <vxe-table-column field="" title="公司应付"></vxe-table-column>
-        <vxe-table-column field="" title="个人应还"></vxe-table-column>
+        <vxe-table-column field="compay" title="公司应付"></vxe-table-column>
+        <vxe-table-column field="ownpay" title="个人应还"></vxe-table-column>
       </vxe-table>
     </Row>
     <Row class="mb20 mt20">
@@ -173,6 +173,8 @@ export default {
       currRow: null,
       tbdataChild: [],
       totalPrice: 0,
+      compay: 0,
+      ownpay: 0,
       selectTmpArr: [],
       selectArr: [],
       page: {
@@ -185,8 +187,19 @@ export default {
   },
   computed: {
     tableData() {
-      return [{ ...this.table, totalPrice: this.totalPrice }];
-    }
+      let pay = 0;
+      if (this.table != null) {
+        pay = this.table.reimbursementAmount - this.totalPrice;
+      }
+      if (pay >= 0) {
+        this.compay = pay;
+        this.ownpay = 0;
+      } else {
+        this.ownpay = pay;
+        this.compay = 0;
+      }
+      return [{ ...this.table, totalPrice: this.totalPrice, compay : this.compay, ownpay: this.ownpay }];
+    },
   },
   methods: {
     open() {
@@ -194,6 +207,11 @@ export default {
       this.init();
     },
     init() {
+      this.currRow = null;
+      this.dates = [];
+      this.tbdataChild = [];
+      this.selectTmpArr = [];
+      this.selectArr = [];
       this.page = {
         num: 1,
         size: 10,
@@ -207,6 +225,12 @@ export default {
     del(row) {
       this.selectArr.forEach((el, index, arr) => {
         if (el.id == row.id) {
+          let price = parseFloat(el.payAmt);
+          if (isNaN(price)) {
+            price = 0;
+          }
+          this.totalPrice -= price;
+          this.totalPrice = this.totalPrice.toFixed(2);
           arr.splice(index, 1);
         }
       });

@@ -74,7 +74,7 @@ import {
   goshop,
 } from "@/api/settlementManagement/fundsManagement/capitalChain";
 import * as api from "_api/settlementManagement/financialStatement.js";
-import QuickDate from "_c/getDate/dateget";
+import QuickDate from "@/components/getDate/dateget_bill.vue";
 import moment from "moment";
 export default {
   components: {
@@ -278,6 +278,7 @@ export default {
     };
   },
   async mounted() {
+    this.dates = this.$refs.quickDate.val;
     this.getArea();
     this.getShop();
     this.query();
