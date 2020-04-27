@@ -817,6 +817,7 @@ export default {
     },
     // 批次配件
     async getBarchList(val) {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = {};
