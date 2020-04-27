@@ -861,6 +861,8 @@ export default {
     async activiyList(val) {
       let data = {};
       val.isMarkActivity = 1;
+      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       data.detailList = [val];
       let res = await getAccessories(data);
@@ -951,6 +953,7 @@ export default {
                                     return this.$message.error("可用余额不足");
                                 }
                               this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+                              this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
                                 let res = await getStockOut(this.formPlan);
                                 if (res.code === 0) {
                                     this.$Message.success("出库成功");
@@ -1039,6 +1042,8 @@ export default {
     //获取选择入库单的信息
     async getGodown(val) {
       let data = {};
+      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       val.details.map(item => {
         item.isMarkBatch = 1;
