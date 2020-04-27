@@ -801,6 +801,7 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           this.formPlan.detailList = [
