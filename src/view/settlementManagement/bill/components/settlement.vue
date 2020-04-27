@@ -303,7 +303,7 @@ export default {
     },
     // 核销单元格编辑状态下被关闭时
     editClosedEvent({ row, rowIndex }) {
-      row.unAmtLeft = (row.unAmt * 1 - row.rpAnt * 1).toFixed(2);
+      row.unAmtLeft = row.unAmt ? (row.unAmt * 1 - row.rpAnt ? row.rpAnt * 1 : 0).toFixed(2) : 0;
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -349,13 +349,14 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        sum1 += item.rpAnt * 1;
+        sum1 += item.rpAnt ? item.rpAnt* 1 : 0;
       });
       this.tableData.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
         sum3 += item.paidMoney ? item.paidMoney * 1 : 0;
       });
       this.check = (sum1 - sum2 - sum3).toFixed(2);
+      console.log(this.check)
     }
   }
 };

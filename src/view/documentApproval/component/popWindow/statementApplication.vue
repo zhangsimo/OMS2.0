@@ -25,7 +25,7 @@
     </div>
     <Monthlyreconciliation ref="Monthlyreconciliation" v-if="modelType.type===1" />
     <reconcil ref="reconcil" v-if="modelType.type===2||modelType.type===3" />
-    <flow v-if="modelType.type===3" />
+    <flow v-if="modelType.type === 3" />
     <div slot="footer"></div>
   </Modal>
 </template>

@@ -184,7 +184,7 @@
     <!--      内部资金调拨-->
     <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
     <!--      发票对冲申请-->
-    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelTypeTwo"></invoice-offset-request>
+    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
     <!--      销售开票-->
     <sales-invoice-application ref="salesInvoiceApplication" :modelType="modelType"></sales-invoice-application>
     <!--      不含税开票-->
@@ -484,7 +484,7 @@
             case "预收款支出":
               this.$refs.CreditSpending.open();
               break;
-            case "请示单申请":
+            case "请示申请":
               this.$refs.AskForInstrucions.open();
               break;
             case "采购预付款":
@@ -500,7 +500,7 @@
               this.$refs.OtherPayment.open();
               break;
             case "对账单":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.statementApplication.modelShow = true;
               break;
             case "销售开票":
               this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
@@ -509,7 +509,7 @@
               this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
               break;
             case "发票对冲":
-              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.visChange(1);
+              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
           }
         },
