@@ -399,7 +399,7 @@
     <!--        打印-->
     <Print-show ref="printBox" :id="id"></Print-show>
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :store-id="formPlan.storeId"></select-part-com>
     <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
     <!--更多 搜索-->
