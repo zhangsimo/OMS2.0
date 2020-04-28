@@ -182,6 +182,11 @@ export default {
 
      this.$refs.formInline.validate( async (valid) => {
        if (valid) {
+         let valg = false
+         if (this.formInline.details && this.formInline.applyAmt && this.formInline.details.length > 0){
+           valg = this.formInline.details[0].paymentBalance < this.formInline.applyAmt ? true : false
+         }
+         if (valg) return  this.$Message.error('申请金额不能大于其他付款金额')
          this.formInline.step = type
          let res = await getOtherSve(this.formInline)
          if (res.code == 0) {
