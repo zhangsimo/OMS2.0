@@ -41,9 +41,18 @@ export function findByDynamicQuery(params, data) {
 }
 
 // 因公借支核销
-export function orderWriteOff(data, type = 1) {
+export function orderWriteOff(data) {
   return axios.request({
-    url: `${api.omsSettle}/omsFinanceLoanForBusiness/orderWriteOff?type=${type}`,
+    url: `${api.omsSettle}/omsFinanceLoanForBusiness/orderWriteOff`,
+    method: "post",
+    data,
+  });
+}
+
+// 费用报销管理 核销
+export function orderWriteOff2(data) {
+  return axios.request({
+    url: `${api.omsSettle}/omsFinanceCostReimbursement/orderWriteOff`,
     method: "post",
     data,
   });
