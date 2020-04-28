@@ -68,10 +68,10 @@ export function addClaim(data) {
 }
 
 // 现金流量表 查询
-export function findListPageAllCashFlow(data) {
+export function findListPageAllCashFlow(params) {
   return axios.request({
     url: `${api.omsSettle}/omsFinanceAccountCashFlow/findListPageAllReport`,
     method: "get",
-    data,
+    params,
   });
 }
