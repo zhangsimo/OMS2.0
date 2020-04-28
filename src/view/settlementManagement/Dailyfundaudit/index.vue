@@ -222,7 +222,7 @@ export default {
     },
     // 勾选的数据
     selection(arr) {
-      this.oneList = arr;
+      this.oneList = arr || [];
     },
     // 审核
     SubmitAudit() {

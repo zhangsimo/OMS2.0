@@ -24,8 +24,8 @@
       <h4 class="mb10 mt10">对账单明细</h4>
     </div>
     <Monthlyreconciliation ref="Monthlyreconciliation" v-if="modelType.type===1" />
-    <reconcil ref="reconcil" v-if="modelType.type===2||modelType.type===3" />
-    <flow v-if="modelType.type===3" />
+    <reconcil ref="reconcil" v-if="modelType.type === 2||modelType.type === 3" :modelType="modelType"/>
+    <!--<flow v-if="modelType.type === 3" />-->
     <div slot="footer"></div>
   </Modal>
 </template>
@@ -73,7 +73,10 @@ export default {
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
         }
-        this.$refs.reconcil.Initialization();
+        this.$nextTick( ()=> {
+          // console.log(this.$refs.reconcil)
+          this.$refs.reconcil.Initialization();
+        })
       }
     }
   }

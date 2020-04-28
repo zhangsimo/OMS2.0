@@ -503,7 +503,7 @@ export default {
         {
           title: "活动ID",
           align: "center",
-          key: "id"
+          key: "activityId"
         },
         {
           title: "备注",

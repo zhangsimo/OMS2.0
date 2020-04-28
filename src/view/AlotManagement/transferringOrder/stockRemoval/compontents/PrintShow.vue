@@ -16,10 +16,10 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>地址:{{onelist.logisticsRecord.receiveAddress}}</span>
+              <span>地址:{{onelist.logisticsRecord.receiveAddress||""}}</span>
             </p>
             <p>
-              <span>电话:{{onelist.guest.tel}}</span>
+              <span>电话:{{onelist.guest.tel||""}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
@@ -37,7 +37,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调入方:</span>
-              <span>{{onelist.applyGuest.fullName}}</span>
+              <span>{{onelist.applyGuest.fullName||""}}</span>
             </p>
             <p>
               <span>地址:</span>
@@ -47,21 +47,21 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>收货单位:</span>
-              <span>{{onelist.guest.fullName}}</span>
+              <span>{{onelist.guest.fullName||""}}</span>
             </p>
             <p>
               <span>收货人:</span>
-              <span>{{onelist.guest.contactor}}</span>
+              <span>{{onelist.guest.contactor||""}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.logisticsRecord.receiverMobile}}</span>
+              <span>{{onelist.logisticsRecord.receiverMobile||""}}</span>
             </p>
             <p>
               <span>出库仓库:</span>
-              <span>{{onelist.storeVO.name}}</span>
+              <span>{{onelist.storeVO.name||""}}</span>
             </p>
           </Col>
         </Row>
@@ -205,6 +205,11 @@ export default {
           this.printShow = true;
           this.onelist = res.data;
           let storeName = this.onelist.storeVO.name;
+          this.onelist.logisticsRecord = this.onelist.logisticsRecord||{}
+          this.onelist.apply = this.onelist.apply ||{}
+          this.onelist.applyGuest = this.onelist.applyGuest ||{}
+          this.onelist.guest = this.onelist.guest ||{}
+          this.onelist.storeVO = this.onelist.storeVO ||{}
           this.onelist.apply.detailVOS.forEach(el => {
             el.storeName = storeName;
           })

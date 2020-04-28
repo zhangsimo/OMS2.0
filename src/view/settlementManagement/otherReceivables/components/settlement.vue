@@ -184,8 +184,8 @@ export default {
         item.businessTypeName = item.orderTypeName;
         item.reconciliationAmt = item.paymentApplicationAmount;
         item.hasAmt = +item.amountCollected - +item.paymentBalance;
-        item.unAmt = item.paymentBalance;
-        item.rpAmt = item.paymentBalance;
+        item.unAmt = -item.paymentBalance;
+        item.rpAmt = -item.paymentBalance;
         item.unAmtLeft = item.unAmt - item.rpAmt;
       })
       // console.log(jsonArr)

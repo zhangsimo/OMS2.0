@@ -165,7 +165,6 @@ export default {
 
     //保存提交
     save(type){
-
       this.$refs.formInline.validate( async (valid) => {
         if (valid) {
           this.formInline.step = type

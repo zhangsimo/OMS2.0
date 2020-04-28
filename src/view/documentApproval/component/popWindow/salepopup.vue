@@ -211,7 +211,7 @@
       show-summary
       :summary-method="billSum"
     ></Table>
-    <flow v-if="modelType.type===3" />
+    <!--<flow v-if="modelType.type===3" />-->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
     <noTax ref="noTax" :information="information" :parameter="parameter" />
     <div slot="footer"></div>
@@ -224,6 +224,7 @@ import bus from "@/view/settlementManagement/bill/Popup/Bus";
 import { getDataDictionaryTable } from "@/api/system/dataDictionary/dataDictionaryApi";
 import flow from "../Flow.vue";
 import { approvalStatus } from "_api/base/user";
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import moment from 'moment'
 import {
   noTaxApplyNo,
@@ -651,40 +652,46 @@ export default {
       });
     },
     // 对话框是否显示
-    visChange(flag) {
+    async visChange(flag) {
       if (flag) {
-        this.$refs.formCustom.resetFields();
-        this.invoice.statementAmountOwed =
-          this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
-        this.invoice.applyTaxAmt = this.invoice.statementAmountOwed;
-        this.invoice.applyAmt =
-          this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
-        // 发票单位
-        ditInvoice({ guestId: this.information.guestId }).then(res => {
-          if (res.code === 0) {
-            res.data.map(item => {
-              item.label = item.taxpayerName;
-              item.value = item.id;
-            });
-            this.invoice.receiptUnitList = res.data;
+        if(this.modelType.id){
+          let data ={}
+          data.id = this.modelType.id || ''
+          let res = await getThisAllList(data)
+          if(res.code == 0){
+            this.information = res.data;
+            this.information.applicationDate = res.data.applyDate;
+            this.invoice = res.data;
+            this.invoice.statementAmountOwed = res.data.statementAmtOwed;
+            this.invoice.amountExcludingTax = res.data.notTaxAmt;
+            this.invoice.applyMoney = res.data.applyAmt;
+            this.accessoriesBillingData = res.data.partList;
+            console.log(this.invoice)
           }
-        });
-        // 开票配件
-        partsInvoice({
-          accountNo: this.information.accountNo,
-          taxSign: 1
-        }).then(res => {
-          if (res.code === 0) {
-            res.data.map(item => {
-              item.taxAmt = item.applyAmt + item.additionalTaxPoint;
-              item.taxPrice = item.taxAmt / item.orderQty;
-            });
-            this.invoice.invoiceType = "010103";
-            this.invoice.invoiceTax = "010103";
-            this.accessoriesBillingData = res.data;
-            this.copyData = res.data;
-          }
-        });
+        }else {
+          this.$refs.formCustom.resetFields();
+          this.invoice.statementAmountOwed =
+            this.information.taxArrearsOfPart + this.information.taxArrearsOfOil;
+          this.invoice.applyTaxAmt = this.invoice.statementAmountOwed;
+          this.invoice.applyAmt =
+            this.invoice.applyTaxAmt + this.invoice.amountExcludingTax;
+          // 开票配件
+          partsInvoice({
+            accountNo: this.information.accountNo,
+            taxSign: 1
+          }).then(res => {
+            if (res.code === 0) {
+              res.data.map(item => {
+                item.taxAmt = item.applyAmt + item.additionalTaxPoint;
+                item.taxPrice = item.taxAmt / item.orderQty;
+              });
+              this.invoice.invoiceType = "010103";
+              this.invoice.invoiceTax = "010103";
+              this.accessoriesBillingData = res.data;
+              this.copyData = res.data;
+            }
+          });
+        }
         if (this.modelType.type === 3) {
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
@@ -696,7 +703,17 @@ export default {
           this.formInline.applyTypeName = "销售开票申请";
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
-        }
+        };
+        // 发票单位
+        ditInvoice({ guestId: this.information.guestId }).then(res => {
+          if (res.code === 0) {
+            res.data.map(item => {
+              item.label = item.taxpayerName;
+              item.value = item.id;
+            });
+            this.invoice.receiptUnitList = res.data;
+          }
+        });
       }
     },
     // 增加不含税销售开票申请

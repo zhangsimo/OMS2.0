@@ -37,7 +37,7 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db ml10">
+          <div class="db ml10" v-if="headquarters == 0">
             <span>门店：</span>
             <Select v-model="shopCode" class="w150" filterable clearable @on-change="SelectChange">
               <Option
@@ -213,7 +213,7 @@
   import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
   import statementApplication from "../component/popWindow/statementApplication"
 
-  import { findPageByDynamicQuery } from '@/api/documentApproval/documentApproval/documentApproval'
+  import { findPageByDynamicQuery , findUserShopKeeper} from '@/api/documentApproval/documentApproval/documentApproval'
   import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
 
 
@@ -345,7 +345,12 @@
           modelType: {
             type: 1,
             id: ""
-          }
+          },
+          modelTypeTwo: {
+            type: 1,
+            rowMessage: {}
+          },
+          headquarters: 2
         }
       },
       async mounted(){
@@ -361,6 +366,7 @@
           this.searchTypeValue = this.$route.query.applyNo;
           this.getList();
         }
+        this.getUser();
       },
       methods: {
         // 快速查询日期
@@ -456,12 +462,20 @@
         //查看
         lookOver(row){
           // console.log(row)
+          // this.modelTypeTwo.rowMessage = row;
           if(row.billStatusName == "草稿"){
             this.modelType.type = 2;
             this.modelType.id = row.id
           }else {
             this.modelType.type = 3;
             this.modelType.id = row.id
+          };
+          if(row.billStatusName == "草稿"){
+            this.modelTypeTwo.type = 2;
+            this.modelTypeTwo.rowMessage = row
+          }else {
+            this.modelTypeTwo.type = 3;
+            this.modelTypeTwo.rowMessage = row
           }
           switch (row.applyTypeName) {
             case "费用报销":
@@ -470,7 +484,7 @@
             case "预收款支出":
               this.$refs.CreditSpending.open();
               break;
-            case "请示单申请":
+            case "请示申请":
               this.$refs.AskForInstrucions.open();
               break;
             case "采购预付款":
@@ -486,7 +500,7 @@
               this.$refs.OtherPayment.open();
               break;
             case "对账单":
-              // this.$refs.ExpenseReimbursement.open();
+              this.$refs.statementApplication.modelShow = true;
               break;
             case "销售开票":
               this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
@@ -537,12 +551,24 @@
               if (res.code == 0) {
                 this.falg = true;
                 this.statusData = res.data.operationRecords;
+              } else {
+                this.statusData = [];
               }
             });
           }else {
             this.falg = false;
             this.statusData = [];
           }
+        },
+
+        //获取是否为总部接口
+        getUser(){
+          let params = {};
+          findUserShopKeeper(params).then(res => {
+            if(res.code === 0){
+              this.headquarters = res.data.shopkeeperUser;
+            }
+          })
         }
       },
       filters: {

@@ -101,9 +101,9 @@ export default {
         return this.$Message.error('请先保存数据');
       }
       this.selectItemId = "";
-        for(let b of this.tableData){
-            b._highlight = false
-        }
+      for(let b of this.tableData){
+          b._highlight = false
+      }
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
@@ -155,7 +155,6 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      console.log(data)
       if(data){
           this.selectItemId=data.row.id;
       }
@@ -179,6 +178,8 @@ export default {
               for(let i in this.tableData){
                   if(this.tableData[i].id==this.selectItemId){
                       this.$refs.currentRowTable.setCurrentRow(this.tableData[i])
+                      this.$emit("getOneOrder", this.tableData[i]);
+                      this.$store.commit("setOneOrder", this.tableData[i]);
                       break;
                   }
               }
