@@ -101,6 +101,7 @@ export default {
        this.formInline.applyTypeName = '其他付款'
        this.formInline.applyTime = date
        this.formInline.paymentOrgName = user.shopName
+       delete this.list.rowMessage.id
        this.$set(this.formInline,'details' ,[this.list.rowMessage])
      }
      if (this.list.type == 2){
