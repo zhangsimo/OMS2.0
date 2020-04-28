@@ -54,10 +54,10 @@ export default {
           title: "核销方式",
           key: "",
           align: "center",
-          // render: (h, p) => {
-          //   let val = p.row.furpose.name;
-          //   return h("span", val);
-          // }
+          render: (h, p) => {
+            let val = p.row.furpose.name;
+            return h("span", val);
+          }
         },
         {
           title: "往来单位",
