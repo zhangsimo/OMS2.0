@@ -310,7 +310,7 @@ export default {
     getGeneral() {
       let data={
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59" : '',
         orgid:this.model1,
         code:this.fno,
         guestId:this.companyId
