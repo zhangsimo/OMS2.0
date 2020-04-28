@@ -533,47 +533,7 @@ export default {
     };
   },
   mounted() {
-    // 税率和开票类型数据字典
-    getDataDictionaryTable({ dictCode: "CS00107" }).then(res => {
-      res.data.map(item => {
-        this.invoice.typeBillingList.push({
-          value: item.itemCode,
-          label: item.itemName
-        });
-        this.invoice.rateBillingList.push({
-          value: item.itemCode,
-          label: (item.itemValueOne * 100).toFixed(0) + "%"
-        });
-      });
-    });
-    // 收款方式数据字典
-    getDataDictionaryTable({ dictCode: "RECEIVABLE_TYPE" }).then(res => {
-      res.data.map(item => {
-        this.invoice.paymentMethodList.push({
-          value: item.itemCode,
-          label: item.itemName
-        });
-      });
-    });
-    // 寄件方式数据字典
-    getDataDictionaryTable({ dictCode: "MAIL_TYPE" }).then(res => {
-      res.data.map(item => {
-        this.invoice.waySendingList.push({
-          value: item.itemCode,
-          label: item.itemName
-        });
-      });
-    });
-    // 开票单位数据字典
-    getDataDictionaryTable({ dictCode: "KPDW" }).then(res => {
-      res.data.map(item => {
-        this.invoice.issuingOfficeList.push({
-          value: item.itemCode,
-          label: item.itemName
-        });
-      });
-    });
-
+    this.getListOne();
     // 选择销售单
     bus.$on("partsData", val => {
       let data = [];
@@ -651,6 +611,50 @@ export default {
         }
       });
     },
+    //获取接口
+    getListOne(){
+      // 税率和开票类型数据字典
+      getDataDictionaryTable({ dictCode: "CS00107" }).then(res => {
+        res.data.map(item => {
+          this.invoice.typeBillingList.push({
+            value: item.itemCode,
+            label: item.itemName
+          });
+          this.invoice.rateBillingList.push({
+            value: item.itemCode,
+            label: (item.itemValueOne * 100).toFixed(0) + "%"
+          });
+        });
+      });
+      // 收款方式数据字典
+      getDataDictionaryTable({ dictCode: "RECEIVABLE_TYPE" }).then(res => {
+        res.data.map(item => {
+          this.invoice.paymentMethodList.push({
+            value: item.itemCode,
+            label: item.itemName
+          });
+        });
+      });
+      // 寄件方式数据字典
+      getDataDictionaryTable({ dictCode: "MAIL_TYPE" }).then(res => {
+        res.data.map(item => {
+          this.invoice.waySendingList.push({
+            value: item.itemCode,
+            label: item.itemName
+          });
+        });
+      });
+      // 开票单位数据字典
+      getDataDictionaryTable({ dictCode: "KPDW" }).then(res => {
+        res.data.map(item => {
+          this.invoice.issuingOfficeList.push({
+            value: item.itemCode,
+            label: item.itemName
+          });
+        });
+      });
+    },
+
     // 对话框是否显示
     async visChange(flag) {
       if (flag) {
@@ -659,12 +663,27 @@ export default {
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data)
           if(res.code == 0){
-            this.information = res.data;
+            this.information.code = res.data.orgCode;
+            this.information.orgId = res.data.orgid;
+            this.information.orgName = res.data.orgName;
+            this.information.guestId = res.data.guestId;
+            this.information.accountNo = res.data.accountNo;
+            this.information.applyNo = res.data.applyNo;
             this.information.applicationDate = res.data.applyDate;
+            this.information.guestName = res.data.guestName;
+
             this.invoice = res.data;
             this.invoice.statementAmountOwed = res.data.statementAmtOwed;
             this.invoice.amountExcludingTax = res.data.notTaxAmt;
             this.invoice.applyMoney = res.data.applyAmt;
+            this.invoice.typeBillingList = [];
+            this.invoice.rateBillingList = [];
+            this.invoice.paymentMethodList = [];
+            this.invoice.waySendingList = [];
+            this.invoice.issuingOfficeList = [];
+            // this.invoice.receiptUnit = res.data.receiptUnit
+            this.getListOne();
+
             this.accessoriesBillingData = res.data.partList;
             console.log(this.invoice)
           }
