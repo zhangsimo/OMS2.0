@@ -61,7 +61,7 @@
             <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
             <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
             <vxe-table-column
-              field="rpAnt"
+              field="rpAmt"
               title="本次核销金额"
               width="140"
               :edit-render="{ name: 'input', attrs: { type: 'number' } }"
@@ -175,7 +175,7 @@ export default {
         reconciliationAmt: 0,
         hasAmt: 0,
         unAmt: 0,
-        rpAnt: 0,
+        rpAmt: 0,
         unAmtLeft: 0
       });
     });
@@ -189,7 +189,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAnt: 0,
+          rpAmt: 0,
           unAmtLeft: 0
         });
       } else if (value.userName) {
@@ -198,7 +198,7 @@ export default {
           reconciliationAmt: 0,
           hasAmt: 0,
           unAmt: 0,
-          rpAnt: 0,
+          rpAmt: 0,
           unAmtLeft: 0
         });
       }
@@ -318,7 +318,7 @@ export default {
             reconciliationAmt: el.reconciliationAmt,
             hasAmt: el.hasAmt,
             unAmt: el.unAmt,
-            rpAnt: el.rpAnt,
+            rpAmt: el.rpAmt,
             unAmtLeft: el.unAmtLeft
           };
           data.two.push(item);
@@ -395,15 +395,15 @@ export default {
       if (isNaN(row.endAmt)) {
         row.endAmt = 0;
       }
-      if (isNaN(row.rpAnt)) {
-        row.rpAnt = 0;
+      if (isNaN(row.rpAmt)) {
+        row.rpAmt = 0;
       }
       if (isNaN(row.uncollectedAmt)) {
         row.uncollectedAmt = 0;
       }
-      row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAnt * 1;
-      row.endAmt = +row.rpAnt * 1;
-      row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAnt;
+      row.unAmtLeft = row.reconciliationAmt * 1 - row.rpAmt * 1;
+      row.endAmt = +row.rpAmt * 1;
+      row.uncollectedAmt = row.reconciliationAmt * 1 - row.rpAmt;
       this.$set(this.BusinessType, rowIndex, row);
       this.checkComputed();
     },
@@ -419,7 +419,7 @@ export default {
               "reconciliationAmt",
               "hasAmt",
               "unAmt",
-              "rpAnt",
+              "rpAmt",
               "unAmtLeft"
             ].includes(column.property)
           ) {
@@ -449,8 +449,8 @@ export default {
       let sum2 = 0;
       let sum3 = 0;
       this.BusinessType.map(item => {
-        item.rpAnt = item.rpAnt == "" ? 0 : item.rpAnt;
-        sum1 += parseFloat(item.rpAnt);
+        item.rpAmt = item.rpAmt == "" ? 0 : item.rpAmt;
+        sum1 += parseFloat(item.rpAmt);
       });
       this.gettlementData.list.map(item => {
         sum2 += item.incomeMoney ? item.incomeMoney * 1 : 0;
