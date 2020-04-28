@@ -53,6 +53,8 @@
       <Col span="16">
         <vxe-table
           style="flex:6"
+          ref="xTree"
+          :edit-rules="validRules"
           border
           resizable
           auto-resize
@@ -151,7 +153,20 @@ export default {
     subjexts
   },
   data() {
+    const amtValid = ({row}) => {
+      return new Promise((resolve, reject) => {
+        let trueValue = Math.abs(row.rpAmt) > Math.abs(row.unAmt);
+        if (trueValue) {
+          reject(new Error("本次核销金额绝对值不能大于未收/付金额"));
+        } else {
+          resolve(true);
+        }
+      });
+    };
     return {
+      validRules: {
+        rpAmt: [{ required: true, validator: amtValid}]
+      },
       Settlement: false, //弹框显示
       check: 0,
       remark: "",
@@ -180,8 +195,8 @@ export default {
         item.businessTypeName = item.businessType.name;
         item.reconciliationAmt = item.paymentClaimAmt;
         item.hasAmt = +item.paymentClaimAmt - +item.paymentBalance;
-        item.unAmt = item.paymentBalance;
-        item.rpAmt = item.paymentBalance;
+        item.unAmt = -item.paymentBalance;
+        item.rpAmt = -item.paymentBalance;
         item.unAmtLeft = +item.rpAmt - +item.unAmt;
       })
       this.BusinessType.push(...jsonArr)
@@ -292,8 +307,8 @@ export default {
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
-            console.log(this.reconciliationStatement);
-            console.log(this.showModalOne)
+            // console.log(this.reconciliationStatement);
+            // console.log(this.showModalOne)
             if(this.showModalOne !== 1){
               this.reconciliationStatement.accountNo = '';
             }
@@ -316,19 +331,26 @@ export default {
       if (!Number(this.check)) {
         // console.log(this.$parent.Types)
         if(this.$parent.Types == '其他付款核销'){
-          let obj = {
-            one: this.reconciliationStatement,
-            two: this.BusinessType,
-            three: this.tableData,
-            type: 1
-          };
-          orderWriteOff(obj).then(res => {
-            if (res.code === 0) {
-              this.Settlement = false;
-              this.$message.success("其他付款核销成功");
-              this.$parent.getQuery();
+          this.$refs.xTree.validate((errMap) => {
+            if (errMap) {
+              this.$XModal.Message({status: 'error', message: '校验不通过！'})
+            } else {
+              let obj = {
+                one: this.reconciliationStatement,
+                two: this.BusinessType,
+                three: this.tableData,
+                type: 1
+              };
+              orderWriteOff(obj).then(res => {
+                if (res.code === 0) {
+                  this.Settlement = false;
+                  this.$message.success("其他付款核销成功");
+                  this.$parent.getQuery();
+                }
+              });
+              // this.$XModal.message({ status: 'success', message: '校验成功！' })
             }
-          });
+          })
         } else {
           let obj = {
             one: this.reconciliationStatement,
