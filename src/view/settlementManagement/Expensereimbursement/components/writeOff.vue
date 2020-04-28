@@ -54,10 +54,12 @@
         highlight-hover-row
         highlight-current-row
         show-footer
+        ref="vxtable"
         :footer-method="footerMethod"
         :data="selectArr"
         align="center"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
+        :edit-rules="validRules"
+        :edit-config="{ trigger: 'click', mode: 'cell', showStatus: true }"
       >
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
@@ -68,7 +70,17 @@
           field="serviceId"
           title="因公借支单号"
         ></vxe-table-column>
-        <vxe-table-column field="payAmt" title="借支金额"></vxe-table-column>
+        <vxe-table-column title="借支金额">
+          <template v-slot="{ row }">
+            <span>
+              {{
+                row.paymentReturnBalance <= 0
+                  ? row.payAmt
+                  : row.paymentReturnBalance
+              }}
+            </span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
           field="writeOffAmount"
           title="因公借支核销金额"
@@ -166,13 +178,30 @@ export default {
     }
   },
   data() {
+    const amtValid = ({ row, cellValue }) => {
+      return new Promise((resolve, reject) => {
+        let max =
+          row.paymentReturnBalance <= 0 ? row.payAmt : row.paymentReturnBalance;
+        if (cellValue > max) {
+          reject(new Error("因公借支核销金额不能大于借支金额!"));
+        } else {
+          resolve(true);
+        }
+      });
+    };
     return {
+      validRules: {
+        writeOffAmount: [
+          { validator: amtValid } // message: "因公借支核销金额必填" ,
+        ]
+      },
       show: false,
       showChild: false,
       dates: [],
       currRow: null,
       tbdataChild: [],
       totalPrice: 0,
+      totalfooter: 0,
       compay: 0,
       ownpay: 0,
       selectTmpArr: [],
@@ -198,8 +227,15 @@ export default {
         this.ownpay = pay;
         this.compay = 0;
       }
-      return [{ ...this.table, totalPrice: this.totalPrice, compay : this.compay, ownpay: this.ownpay }];
-    },
+      return [
+        {
+          ...this.table,
+          totalPrice: this.totalPrice,
+          compay: this.compay,
+          ownpay: this.ownpay
+        }
+      ];
+    }
   },
   methods: {
     open() {
@@ -285,7 +321,11 @@ export default {
       this.selectArr = this.selectTmpArr;
       this.selectTmpArr = [];
       this.totalPrice = this.selectArr.reduce((total, next) => {
-        let price = parseFloat(next.payAmt);
+        let price = parseFloat(
+          next.paymentReturnBalance <= 0
+            ? next.payAmt
+            : next.paymentReturnBalance
+        );
         if (isNaN(price)) {
           price = 0;
         }
@@ -306,27 +346,45 @@ export default {
             return "合计";
           }
           if (["payAmt", "writeOffAmount"].includes(column.property)) {
-            return xeUtils.sum(data, column.property);
+            this.totalfooter = xeUtils.sum(data, column.property);
+            return this.totalfooter;
           }
           return null;
         })
       ];
     },
-    async submit() {
-      let data = {
-        sourceDto: {
-          id: this.tableData[0].id,
-          rpAmt: this.tableData[0].totalPrice,
-        },
-        wrtiteOffDtos: this.selectArr.map(el => { return {id: el.id} }),
+    submit() {
+      if (this.tableData[0].reimbursementAmount < this.totalPrice) {
+        if (this.totalfooter > this.tableData[0].reimbursementAmount) {
+          return this.$message.error(
+            "因公借支核销总金额不能大于费用报销总金额!"
+          );
+        }
       }
 
-      let res = await api.orderWriteOff(data, 2)
-      if (res.code == 0) {
-        this.$message.success(res.data);
-        this.$parent.getQuery();
-        this.cancel();
-      }
+      this.$refs.vxtable.validate(valid => {
+        if (valid == true || valid === undefined) {
+          let data = {
+            sourceDto: {
+              id: this.tableData[0].id,
+              rpAmt: this.totalfooter
+            },
+            wrtiteOffDtos: this.selectArr.map(el => {
+              return { id: el.id, rpAmt: el.writeOffAmount };
+            })
+          };
+
+          api.orderWriteOff2(data).then(res => {
+            if (res.code == 0) {
+              this.$message.success(res.data);
+              this.$parent.getQuery();
+              this.cancel();
+            }
+          });
+        } else {
+          return this.$message.error("因公借支核销金额不能大于借支金额");
+        }
+      });
     }
   }
 };

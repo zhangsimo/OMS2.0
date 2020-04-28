@@ -171,7 +171,7 @@ export default {
     // 对账单号
     bus.$on("accountHedNo", val => {
       // console.log(val);
-      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + "," + val.serviceId;
+      this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
       // val.map(item => {
       //   item.businessTypeName = item.businessType.name;
       // });
@@ -296,6 +296,11 @@ export default {
             res.data.one.furposeName = res.data.one.furpose.name;
             res.data.one.sortName = res.data.one.sort.name;
             this.reconciliationStatement = res.data.one;
+            console.log(this.reconciliationStatement);
+            console.log(this.showModalOne)
+            if(this.showModalOne !== 1){
+              this.reconciliationStatement.accountNo = '';
+            }
             res.data.two.map(item => {
               item.businessTypeName = item.businessType.name;
             });
