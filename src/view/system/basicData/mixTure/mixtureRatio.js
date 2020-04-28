@@ -7,6 +7,8 @@ const data = function() {
     // tab索引
     tabIndex: 0,
     flag: 0,
+    //数量-保存最后一次符合正则
+    oldNum:0,
     // 级别名称
     level: {
       loading: false,
@@ -158,14 +160,16 @@ const data = function() {
                   vm.customer.tbdata[params.index] = params.row;
                 },
                 "on-blur": event => {
-                  console.log(params.row.qty, "params.row.qty=?159");
                   let val = event.target.value;
-                  let reg = /^[1-9][0-9]*([\.][0-9]{1,2})?$/;
+                  let reg = /^[1-9][0-9]*([\.][0-9]{1,1})?$/;
                   if (!reg.test(val)) {
-                    this.$Message.error("请输入数字");
+                    this.$Message.error("请输入数字,且最多只能保留一位小数");
                     this.flag = 1;
-                    params.row.qty = "";
+                    params.row.qty = this.oldNum;
+                    vm.customer.tbdata[params.index] = params.row;
                     return;
+                  }else{
+                    this.oldNum = val
                   }
                 },
                 "on-enter": event => {

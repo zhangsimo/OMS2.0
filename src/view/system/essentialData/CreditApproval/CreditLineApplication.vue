@@ -94,7 +94,8 @@
             <Input :value="customerDetails.receivableAmt || 0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整前剩余额度:">
-            <Input :value="customerDetails.afterAdjustQuota || 0" style="width: 150px" disabled></Input>
+            <Input :value="customerDetails.creditLimit + customerDetails.beforeAdjustTempQuota-customerDetails.sumAmt || 0" style="width: 150px" disabled></Input>
+            <!--customerDetails.creditLimit + customerDetails.beforeAdjustTempQuota-customerDetails.sumAmt-->
           </FormItem>
         </Col>
         <Col span="8">
@@ -109,7 +110,8 @@
             <Input :value="customerDetails.sumAmt || 0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整后剩余额度:">
-            <Input :value="data.fullNmae ||0" style="width: 150px" disabled></Input>
+            <Input :value="(+customerDetails.applyQuota+customerDetails.creditLimit) + (+customerDetails.tempQuota + customerDetails.beforeAdjustTempQuota)-customerDetails.sumAmt ||0" style="width: 150px" disabled></Input>
+            <!--(+customerDetails.applyQuota+customerDetails.creditLimit) + (+customerDetails.tempQuota + customerDetails.beforeAdjustTempQuota)-->
           </FormItem>
         </Col>
       </Row>
