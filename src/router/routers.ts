@@ -979,17 +979,17 @@ export default [
           },
         ]
       },
-      {
-        path: "/settlementManagement/DailyFundReview",
-        name: "settlementManagement-DailyFundReview",
-        mark: "5300",
-        meta: {
-          // hideInMenu: true,
-          title: "资金审核"
-        },
-        component: () =>
-          import("@/view/settlementManagement/DailyFundReview/index.vue")
-      }
+      // {
+      //   path: "/settlementManagement/DailyFundReview",
+      //   name: "settlementManagement-DailyFundReview",
+      //   mark: "5300",
+      //   meta: {
+      //     // hideInMenu: true,
+      //     title: "资金审核"
+      //   },
+      //   component: () =>
+      //     import("@/view/settlementManagement/DailyFundReview/index.vue")
+      // }
     ]
   },
   {

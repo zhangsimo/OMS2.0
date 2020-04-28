@@ -234,9 +234,9 @@ export default {
 
       if (this.dates.length === 2 && this.dates[0]) {
         params.startTime =
-          moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+          moment(this.dates[0]).format("YYYY-MM-DD");
         params.endTime =
-          moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+          moment(this.dates[1]).format("YYYY-MM-DD");
       }
 
       params.page = 0;
