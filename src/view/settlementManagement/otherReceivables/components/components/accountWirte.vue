@@ -167,7 +167,8 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        writeOffStatus: "TO_WRITE_OFF"
       };
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {

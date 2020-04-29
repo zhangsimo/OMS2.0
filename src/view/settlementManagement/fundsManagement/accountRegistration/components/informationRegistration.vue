@@ -100,11 +100,19 @@
               callback();
             }
           };
+          let CodeValue = (rule ,value, callback) => {
+            console.log(value)
+            if(!value){
+              callback(new Error("不能为空！"))
+            }else {
+              callback()
+            }
+          }
           return {
             ruleValidate:{
               areaId:[{ required: true, message: "请选择", trigger: 'change' }],
               shopNumber:[{ required: true, message: "请选择", trigger: 'change' }],
-              shopCode:[{ required: true, message: '必填', trigger: 'change' }],
+              shopCode:[{ required: true, message: '必填',validator:CodeValue, trigger: 'change' }],
               accountName:[{ required: true, message: '必填', trigger: 'blur' }],
               accountCode:[{ required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }],
               bankName:[{ required: true, message: '必填', trigger: 'blur' }],
