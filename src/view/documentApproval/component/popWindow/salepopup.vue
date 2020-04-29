@@ -695,6 +695,7 @@ export default {
             data.id = this.modelType.id || ''
             let res = await getThisAllList(data)
             if (res.code == 0) {
+              this.formInline.applyNo = res.data.accountNo;
               this.information.code = res.data.orgCode;
               this.information.orgId = res.data.orgid;
               this.information.orgName = res.data.orgName;
