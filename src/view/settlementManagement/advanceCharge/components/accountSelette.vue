@@ -113,6 +113,11 @@ export default {
                 on: {
                   click: () => {
                     this.$refs.idDetailed.modal1 = true;
+                    this.$refs.idDetailed.infoData = {
+                      orgId:params.row.orgId,
+                      guestId:params.row.guestId,
+                      accountNo:params.row.accountNo
+                    }
                   }
                 }
               },

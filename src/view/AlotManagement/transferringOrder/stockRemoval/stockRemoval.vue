@@ -291,7 +291,7 @@
     <!--      </div>-->
     <!--    </Modal>-->
     <!--编辑收货信息-->
-    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata" :orgid="orgid"></goods-info>
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
@@ -376,6 +376,8 @@ export default {
       flagValue: 0,
       flagValue1: 0,
       ArrayValue: [],
+      ArrayKeyValue: [],
+      orgid: "",
       buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
@@ -631,6 +633,7 @@ export default {
         this.getArray = content;
         content.forEach(item => {
           this.ArrayValue.push(item.fullName);
+          this.ArrayKeyValue.push({ name: item.fullName, orgid: item.orgid })
         });
       });
     },
@@ -942,6 +945,11 @@ export default {
         this.$Message.info("请选择编辑项");
         return;
       }
+      this.ArrayKeyValue.forEach(el => {
+        if(el.name == this.Leftcurrentrow.guestName) {
+          this.orgid = el.orgid
+        }
+      })
       this.clickdelivery = true;
       this.$refs.goodsInfo.init();
     },

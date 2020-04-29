@@ -346,10 +346,6 @@
             type: 1,
             id: ""
           },
-          modelTypeTwo: {
-            type: 1,
-            rowMessage: {}
-          },
           headquarters: 2
         }
       },
@@ -462,7 +458,6 @@
         //查看
         lookOver(row){
           // console.log(row)
-          // this.modelTypeTwo.rowMessage = row;
           if(row.billStatusName == "草稿"){
             this.modelType.type = 2;
             this.modelType.id = row.id
@@ -470,13 +465,6 @@
             this.modelType.type = 3;
             this.modelType.id = row.id
           };
-          if(row.billStatusName == "草稿"){
-            this.modelTypeTwo.type = 2;
-            this.modelTypeTwo.rowMessage = row
-          }else {
-            this.modelTypeTwo.type = 3;
-            this.modelTypeTwo.rowMessage = row
-          }
           switch (row.applyTypeName) {
             case "费用报销":
               this.$refs.ExpenseReimbursement.open();
