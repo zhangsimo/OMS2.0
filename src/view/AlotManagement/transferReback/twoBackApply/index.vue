@@ -582,14 +582,14 @@ export default {
         this.$Message.error("调出仓库为必填项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        console.log(this.Leftcurrentrow)
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.error("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   console.log(this.Leftcurrentrow)
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.error("请先选择加工单");
+      //     return;
+      //   }
+      // }
       // if (this.Leftcurrentrow.status.value !== 0) {
       //   this.$Message.error("只有草稿状态才能进行保存操作");
       //   return;
@@ -966,7 +966,8 @@ tijiao(params)
         return;
       }
       // 组装删除
-      const seleList = this.$refs.xTable1.getSelectRecords();
+      const seleList = this.$refs.xTable1.getCheckboxRecords();
+      seleList.forEach(el => el.oid = el.id);
       this.Leftcurrentrow.detailVOS = this.array_diff(
         this.Leftcurrentrow.detailVOS,
         seleList
@@ -1020,18 +1021,19 @@ tijiao(params)
       this.showit = false;
       this.Leftcurrentrow.detailVOS = [];
       for (var i = 0; i < list.length; i++) {
+        list[i].oid = list[i].id;
         list[i].id = "";
         this.Leftcurrentrow.detailVOS.push(list[i]);
       }
-      var result = [];
-      var obj = {};
-      for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-        if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
-          result.push(this.Leftcurrentrow.detailVOS[i]);
-          obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
-        }
-      }
-      this.Leftcurrentrow.detailVOS = result;
+      // var result = [];
+      // var obj = {};
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
+      //     result.push(this.Leftcurrentrow.detailVOS[i]);
+      //     obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
+      //   }
+      // }
+      // this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
       this.Leftcurrentrow.guestName = rowValue.guestName;
@@ -1105,7 +1107,7 @@ tijiao(params)
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {
         for (var j = 0; j < a.length; j++) {
-          if (a[j].name === b[i].name) {
+          if (a[j].oid === b[i].oid) {
             a.splice(j, 1);
             j = j - 1;
           }
