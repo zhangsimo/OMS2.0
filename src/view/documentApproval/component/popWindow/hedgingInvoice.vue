@@ -200,6 +200,7 @@ export default {
         data.id = this.modelType.id || ''
         let res = await getThisAllList(data)
            if(res.code == 0){
+             this.formInline.applyNo = res.data.serviceId;
              this.information = res.data;
              this.remarks = res.data.applyReason
            }

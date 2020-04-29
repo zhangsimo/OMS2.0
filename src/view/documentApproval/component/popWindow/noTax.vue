@@ -406,6 +406,7 @@ export default {
           if(res.code == 0){
             // console.log(res.data)
             // this.information = res.data;
+            this.formInline.applyNo = res.data.accountNo;
             this.information.code = res.data.orgCode;
             this.information.orgId = res.data.orgid;
             this.information.orgName = res.data.orgName;
