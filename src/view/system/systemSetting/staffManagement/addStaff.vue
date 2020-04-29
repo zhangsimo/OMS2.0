@@ -34,9 +34,23 @@
       <FormItem label='身份证号码:' prop="cardId" >
         <Input placeholder='请输入身份证号码' v-model='data.cardId' style="width: 250px" ></Input>
       </FormItem>
-      <FormItem label='入职部门:' prop="groundIds" >
-        <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 250px" ></Cascader>
-      </FormItem>
+
+      <div style="display: flex">
+        <div style="flex-flow: row nowrap;width: 100%" >
+          <FormItem label='入职公司:' prop="shopNumber" >
+            <Select v-model="data.shopNumber" style="width:150px" >
+              <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            </Select>
+          </FormItem>
+        </div>
+        <div style="flex-flow: row nowrap;width: 100%" >
+          <FormItem label='入职部门:' prop="groundIds" >
+            <Cascader :data="list" v-model="data.groundIds" placeholder='选择部门' style="width: 150px" ></Cascader>
+          </FormItem>
+        </div>
+      </div>
+
+
       <div style="display: flex">
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='入职时间：' style="" prop="entryTime">
@@ -110,6 +124,7 @@
 
 <script>
   import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
+  import {findGuest} from '@/api/settlementManagement/advanceCollection'
     export default {
         name: "addStaff",
         props:{
@@ -159,7 +174,11 @@
                     ],
                     bankName:[
                       {required: true, message: '开户银行不能为空', trigger: 'blur'}
-                    ]
+                    ],
+                  shopNumber:[
+                    {required: true,type:'string', message: '请选择入职公司', trigger: 'change'}
+
+                  ]
 
                 },
                 costList:[
@@ -172,10 +191,12 @@
                 ],
                 business:0,
                 list:[], //公司信息
+              gusetList:[],//往来单位信息
             }
         },
     mounted(){
       this.getList()
+      this.getfindGuestList()
     },
     methods:{
             //获取公司
@@ -212,6 +233,19 @@
                this.list = list
            }
         },
+
+      //获取往来的单位
+     async getfindGuestList(){
+         let data = {}
+         data.page=0
+         data.size=10000
+       let res = await findGuest(data)
+       console.log(res , 7879)
+       if (res.code === 0){
+         this.gusetList = res.data.content || []
+       }
+
+      },
         resetFields() {
             this.$refs.form.resetFields()
         },
