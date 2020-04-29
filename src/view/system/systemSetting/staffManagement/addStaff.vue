@@ -39,7 +39,7 @@
         <div style="flex-flow: row nowrap;width: 100%" >
           <FormItem label='入职公司:' prop="shopNumber" >
             <Select v-model="data.shopNumber" style="width:150px" >
-              <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+              <Option v-for="item in gusetList" :value="item.id" :key="item.id">{{ item.name }}</Option>
             </Select>
           </FormItem>
         </div>
@@ -125,6 +125,7 @@
 <script>
   import {getcompany} from '@/api/system/systemSetting/staffManagenebt'
   import {findGuest} from '@/api/settlementManagement/advanceCollection'
+  import {goshop} from "@/api/settlementManagement/fundsManagement/capitalChain";
     export default {
         name: "addStaff",
         props:{
@@ -237,12 +238,10 @@
       //获取往来的单位
      async getfindGuestList(){
          let data = {}
-         data.page=0
-         data.size=10000
-       let res = await findGuest(data)
-       console.log(res , 7879)
+       data.supplierTypeSecond =''
+       let res = await goshop(data)
        if (res.code === 0){
-         this.gusetList = res.data.content || []
+         this.gusetList = res.data || []
        }
 
       },
