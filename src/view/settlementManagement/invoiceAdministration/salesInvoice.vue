@@ -624,6 +624,8 @@ export default {
     //查看详情
     getDetailInfor() {
       // await this.getSelectOptions()
+      console.log(this.formValidate);
+      console.log(this.proTypeList);
       for (let key in this.formValidate) {
         this.formValidate[key] = this.allTablist[0][key];
       }

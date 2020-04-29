@@ -643,30 +643,48 @@ export default {
       obj.claimAmt = 0;
       obj.financeAccountCashList = [];
       if(this.claimedButtonType == "预付款认领") {
-        this.setSign({type: "9", accountNo: this.currRow.serviceId});
-        this.modal = false;
-        this.$refs.settlementadv.init();
-        // this.claimedSelectData.forEach(el => {
-        //   let item = {
-        //     account: el.accountCode,
-        //     amt: el.incomeMoney,
-        //     ownStoreId: el.shopId,
-        //     ownStoreName: el.shopName,
-        //     accountName: el.accountName,
-        //   }
-        //   obj.claimAmt += el.paidMoney;
-        //   obj.paymentTypeList.push(item);
-        //   obj.financeAccountCashList.push({id: el.id});
-        // })
-        // let res = await api.addClaim(obj);
-        // if(res.code == 0) {
-        //   this.modal = false;
-        //   return this.$message.success("认领成功");
-        // }
+        let Numbers = 0;
+       this.claimedSelectData.map(item => {
+          Numbers += item.paidMoney;
+          return Numbers;
+        });
+        if(Numbers > this.currRow.payAmt){
+          this.$message.error("支出金额之和不能大于预付款金额")
+        }else {
+          this.setSign({type: "9", accountNo: this.currRow.serviceId});
+          this.modal = false;
+          this.$refs.settlementadv.init();
+          // this.claimedSelectData.forEach(el => {
+          //   let item = {
+          //     account: el.accountCode,
+          //     amt: el.incomeMoney,
+          //     ownStoreId: el.shopId,
+          //     ownStoreName: el.shopName,
+          //     accountName: el.accountName,
+          //   }
+          //   obj.claimAmt += el.paidMoney;
+          //   obj.paymentTypeList.push(item);
+          //   obj.financeAccountCashList.push({id: el.id});
+          // })
+          // let res = await api.addClaim(obj);
+          // if(res.code == 0) {
+          //   this.modal = false;
+          //   return this.$message.success("认领成功");
+          // }
+        }
       }else if(this.claimedButtonType == "预付款收回认领") {
-        this.setSign({type: "5", accountNo: this.currRow.serviceId});
-        this.modal = false;
-        this.$refs.settlementadv.init();
+        let Numbers = 0;
+        this.claimedSelectData.map(item => {
+          Numbers += item.incomeMoney;
+          return Numbers;
+        });
+        if(Numbers > this.currRow.remainingAmt){
+          this.$message.error("收入金额之和不能大于预付款余额")
+        }else {
+          this.setSign({type: "5", accountNo: this.currRow.serviceId});
+          this.modal = false;
+          this.$refs.settlementadv.init();
+        }
       }
     },
 
