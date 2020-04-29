@@ -289,6 +289,8 @@ export default {
         page: 0
       };
       let data = {
+        claimed: 1,
+        writeOffStatus: 0,
         startTime: this.dates[0]
           ? moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00"
           : "",
