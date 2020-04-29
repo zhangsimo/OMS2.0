@@ -482,7 +482,8 @@ export default {
   }
 };
 </script>
-<style>
+
+<style scoped>
 .box {
   overflow: auto;
 }

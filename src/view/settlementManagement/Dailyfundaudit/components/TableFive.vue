@@ -10,7 +10,8 @@
       height="500"
       @checkbox-all="selectAllEvent"
       @checkbox-change="selectChangeEvent"
-      size="mini"
+      auto-resize
+      resizable
       border="full"
       style="width: 3000px"
       :data="tableData"
@@ -178,3 +179,30 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.box {
+  overflow: auto;
+}
+.boxData {
+  width: 2200px;
+  /* overflow: auto; */
+}
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.listChild {
+  display: inline-block;
+  border: 1px solid #e8eaec;
+  flex: 1;
+  padding: 5px;
+}
+.vxe-table .vxe-cell {
+  padding: 0;
+}
+.vxe-table .vxe-body--column:not(.col--ellipsis) {
+  padding: 0;
+}
+</style>

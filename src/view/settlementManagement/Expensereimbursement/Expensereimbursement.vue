@@ -644,12 +644,12 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .box {
   overflow: auto;
 }
 .boxData {
-  width: 2500px;
+  width: 2200px;
   /* overflow: auto; */
 }
 .list {
