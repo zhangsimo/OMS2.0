@@ -64,7 +64,7 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="![0].includes(buttonDisable)"
+                :disabled="![0].includes(buttonDisable) || Leftcurrentrow.code != ''"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
@@ -355,7 +355,7 @@ export default {
   },
   data() {
     let changeNumber = ({cellValue }) => {
-      const reg = /^[1-9]\d{0,}$/;
+      const reg = /^[0-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
         return Promise.reject(new Error('受理数量输入不正确'))
       }
@@ -754,6 +754,7 @@ export default {
               this.$Message.success("保存成功");
               this.flag = 0;
               this.flag1 = false;
+              this.buttonDisable = null;
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -770,7 +771,7 @@ export default {
       } catch (errMap) {
         this.$XModal.message({
           status: "error",
-          message: "受理数量必须输入大于0的正整数！"
+          message: "受理数量输入错误！"
         });
       }
     },
@@ -787,7 +788,11 @@ export default {
       this.Leftcurrentrow.serviceId = "";
       this.Leftcurrentrow.status.value = 0;
       if(this.cangkuListall.length>0){
-          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+          this.cangkuListall.forEach(el => {
+            if (el.isDefault) {
+              this.Leftcurrentrow.storeId = el.id;
+            }
+          })
       }else{
           this.Leftcurrentrow.storeId = '';
       }
@@ -858,6 +863,7 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.flag = 0;
+            this.buttonDisable = null;
             this.getList();
             this.$Message.success("提交成功");
           }

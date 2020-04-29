@@ -409,6 +409,7 @@ export default {
       if (!this.currRow || !this.currRow.id) {
         return this.$message.error("请选择数据");
       }
+      this.currRow.payAmt = this.currRow.paymentReturnBalance <= 0 ? this.currRow.payAmt : this.currRow.paymentReturnBalance;
       this.$refs.claim.claimedPage = {
         page: 1,
         total: 0,
