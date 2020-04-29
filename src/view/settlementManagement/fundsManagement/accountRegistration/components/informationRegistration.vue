@@ -100,19 +100,11 @@
               callback();
             }
           };
-          let CodeValue = (rule ,value, callback) => {
-            console.log(value)
-            if(!value){
-              callback(new Error("不能为空！"))
-            }else {
-              callback()
-            }
-          }
           return {
             ruleValidate:{
               areaId:[{ required: true, message: "请选择", trigger: 'change' }],
               shopNumber:[{ required: true, message: "请选择", trigger: 'change' }],
-              shopCode:[{ required: true, message: '必填',validator:CodeValue, trigger: 'change' }],
+              shopCode:[{ required: true, message: '必填', trigger: 'change' }],
               accountName:[{ required: true, message: '必填', trigger: 'blur' }],
               accountCode:[{ required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }],
               bankName:[{ required: true, message: '必填', trigger: 'blur' }],
@@ -257,11 +249,12 @@
 
           //所属门店改变
           changeShop(val){
-            // console.log(val)
             if(val){
               this.ChangeData.shopName = val.label;
-              let arr = this.shopListArr.filter(item => item.id == val.value)
-              this.ChangeData.shopCode = arr[0].code
+                let arr = this.shopListArr.filter(item => item.id == val.value)
+              // console.log(arr)
+                this.ChangeData.shopCode = arr[0].code;
+                // console.log(this.ChangeData.shopCode)
             }else {
               this.ChangeData.shopCode = ''
             }
