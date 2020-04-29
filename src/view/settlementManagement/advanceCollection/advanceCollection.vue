@@ -148,7 +148,7 @@
               <vxe-table-column field="receiveAuditDate" title="收款审核日期"></vxe-table-column>
               <vxe-table-column field="payer" title="付款人"></vxe-table-column>
               <vxe-table-column field="paymentDate" title="付款日期"></vxe-table-column>
-              <vxe-table-column field="paymentRemark" title="付款备注"></vxe-table-column>
+<!--              <vxe-table-column field="paymentRemark" title="付款备注"></vxe-table-column>-->
               <vxe-table-column field="paymentAuditor" title="付款审核人"></vxe-table-column>
               <vxe-table-column field="paymentAuditDate" title="付款审核日期"></vxe-table-column>
             </vxe-table-column>
