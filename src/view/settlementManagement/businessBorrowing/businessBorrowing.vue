@@ -409,7 +409,6 @@ export default {
       if (!this.currRow || !this.currRow.id) {
         return this.$message.error("请选择数据");
       }
-      this.currRow.payAmt = this.currRow.paymentReturnBalance <= 0 ? this.currRow.payAmt : this.currRow.paymentReturnBalance;
       this.$refs.claim.claimedPage = {
         page: 1,
         total: 0,
@@ -466,6 +465,9 @@ export default {
     openWriteOffModel() {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
+      }
+      if(this.currRow.paymentReturnBalance == 0) {
+        return this.$message.error("未认领资金不能核销");
       }
       this.$refs.writeOff.open();
     },
