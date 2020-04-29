@@ -96,6 +96,21 @@ export default {
         this.getList()
         this.modelType = true
       }
+      if (this.list.type == 5){
+
+        this.modelType = false
+        let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+          user = this.$store.state.user.userData
+        this.formInline.applicant = user.staffName
+        this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
+        this.formInline.shopCode = user.shopCode || ' 　　'
+        this.formInline.orgName = user.shopName
+        this.formInline.applyTypeName = '其他付款'
+        this.formInline.applyTime = date
+        this.formInline.paymentOrgName = user.shopName
+        delete this.list.rowMessage.id
+        this.$set(this.formInline,'details' ,[this.list.rowMessage])
+      }
     },
 
     //获取当前信息

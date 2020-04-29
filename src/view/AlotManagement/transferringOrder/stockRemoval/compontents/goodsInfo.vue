@@ -276,6 +276,7 @@ export default class GoodsInfo extends Vue {
 
   @Prop(String) readonly mainId;
   @Prop(Object || String) readonly row;
+  @Prop(String) readonly orgid;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [
@@ -360,7 +361,7 @@ export default class GoodsInfo extends Vue {
       this.loading = false;
     } else {
       let res: any = await fapi.getGoodsInfos2({
-        orgid: this.row.guestOrgid,
+        orgid: this.orgid,
         mainId: this.mainId,
         directCompanyId
       });
@@ -691,7 +692,5 @@ export default class GoodsInfo extends Vue {
 .bgc {
   color: #000;
   background-color: #e8e8e8;
-}
-.c {
 }
 </style>

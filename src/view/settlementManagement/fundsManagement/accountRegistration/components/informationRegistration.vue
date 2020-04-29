@@ -249,11 +249,12 @@
 
           //所属门店改变
           changeShop(val){
-            // console.log(val)
             if(val){
               this.ChangeData.shopName = val.label;
-              let arr = this.shopListArr.filter(item => item.id == val.value)
-              this.ChangeData.shopCode = arr[0].code
+                let arr = this.shopListArr.filter(item => item.id == val.value)
+              // console.log(arr)
+                this.ChangeData.shopCode = arr[0].code;
+                // console.log(this.ChangeData.shopCode)
             }else {
               this.ChangeData.shopCode = ''
             }

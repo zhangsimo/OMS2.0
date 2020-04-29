@@ -31,9 +31,12 @@
 </template>
 <script>
 import { getSalelist } from "@/api/bill/saleOrder";
+import { detailsDocuments,getNumberList } from "@/api/bill/saleOrder";
+
 export default {
   data() {
     return {
+      infoData: {},
       guestId: "",
       modal1: false,
       columns1: [
@@ -280,7 +283,7 @@ export default {
     // 对话框是否显示
     visChange(flag) {
       if (flag) {
-        getSalelist({guestId:this.guestId}).then(res => {
+        detailsDocuments(this.infoData).then(res => {
           if(res.code===0){
             this.data1 = res.data.one
             this.data2 = res.data.two

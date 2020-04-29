@@ -32,6 +32,7 @@
 <script>
 import reconcil from "./reconciliation.vue";
 import Monthlyreconciliation from "./Monthlyreconciliation";
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import moment from "moment";
 import flow from "../Flow.vue";
 export default {
@@ -57,11 +58,18 @@ export default {
   },
   methods: {
     // 对账单弹框出现加载数据
-    hander(type) {
+    async hander(type) {
       if (type && this.modelType.type === 1) {
         this.$refs.Monthlyreconciliation.Initialization();
       } else {
         if (this.modelType.type === 3) {
+          let data ={};
+          data.id = this.modelType.id || ''
+          let res = await getThisAllList(data);
+          if(res.code == 0){
+            this.formInline.applyNo = res.data.one[0].accountNo;
+          }
+
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
           this.formInline.applicant = user.staffName;

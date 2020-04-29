@@ -125,7 +125,7 @@
               </FormItem>
             </Col>
             <Col span="6">
-              <FormItem label="支付一行"  style="margin-bottom: 0px">
+              <FormItem label="支付银行"  style="margin-bottom: 0px">
                 <Input type="text" v-model="formInline.paymentBank" style="width: 90%;padding-left: 5px" disabled></Input>
               </FormItem>
             </Col>

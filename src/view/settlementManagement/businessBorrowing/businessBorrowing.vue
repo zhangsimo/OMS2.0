@@ -82,7 +82,6 @@
             highlight-current-row
             ref="xTable"
             @current-change="currentChangeEvent"
-            height="300"
             :data="tableData"
             align="center"
             show-footer
@@ -466,6 +465,9 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
+      if(this.currRow.paymentReturnBalance == 0) {
+        return this.$message.error("未认领资金不能核销");
+      }
       this.$refs.writeOff.open();
     },
     //撤回按钮点击事件
@@ -659,12 +661,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.main .content-oper {
+  min-height: 100%;
+  height: auto;
+}
 .box {
   overflow: auto;
 }
 .boxData {
-  width: 2500px;
+  width: 2200px;
   /* overflow: auto; */
 }
 .list {

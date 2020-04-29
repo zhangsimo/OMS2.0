@@ -235,7 +235,7 @@ export default class SelectSupplier extends Vue {
   }
   //配件表格点击的行
   private selectTabelData(v) {
-    this.selectTableItem = v
+    this.selectTableItem = v.map(el => el.oid = el.id)
   }
   // 选择
   private throwData() {

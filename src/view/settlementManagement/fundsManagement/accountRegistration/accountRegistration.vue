@@ -220,6 +220,7 @@
                 shopNumber: '0',
                 mateAccountName: '',
                 shopListName: '',
+                shopCode: ''
             };
             this.$refs.informationShow.information = true;
             this.$refs.informationShow.$refs.ModelValidate.resetFields();

@@ -25,6 +25,12 @@ export default {
       if(rows.cellValue && rows.row.applyAmt < rows.cellValue)
         return Promise.reject(new Error('核销金额不能大于借支金额'))
     }
+    const notaxValid = (rows) => {
+      if (rows.cellValue && rows.row.totalAmt && rows.row.taxAmt && rows.cellValue != this.$utils.subtract(rows.row.totalAmt ,rows.row.taxAmt )){
+        return Promise.reject(new Error('不含税金额计算错误'))
+
+      }
+    }
     return {
       model: false, //模态框开关
       modelType:false, //模态框打开模式 0-新增false 1-编辑false 2-查看true 3-审核true
@@ -76,7 +82,8 @@ export default {
         ],
         noTaxAmt:[
           { required: true, message: '必填' },
-          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'}
+          {pattern:/^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/ , message:'最多保留2为小数'},
+          {validator:notaxValid}
         ],
         writeOffAmt:[
           { required: true, message: '必填' },

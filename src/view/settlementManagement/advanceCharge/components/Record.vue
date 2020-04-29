@@ -104,7 +104,11 @@ export default {
         {
           title: "收付款金额",
           key: "checkAmt",
-          align: "center"
+          align: "center",
+          // render: (h, p) => {
+          //   let val = p.row.sort.value == "0" ? -p.row.checkAmt : p.row.checkAmt;
+          //   return h("span", val);
+          // }
         },
         {
           title: "审核状态",
@@ -181,6 +185,9 @@ export default {
       let res = await api.findByAccountNo({ accountNo: val});
       if(res.code == 0) {
         this.recordLists = res.data;
+        this.recordLists.map(item => {
+          item.checkAmt = item.sort.value == 0 ? -item.checkAmt : item.checkAmt;
+        })
       }
     }
   }
