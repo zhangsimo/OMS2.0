@@ -204,6 +204,7 @@
         <Button @click="revoke=false">取消</Button>
       </div>
     </Modal>
+    <CreditSpending ref="credit"  :list="modelType" />
     <settlement ref="settlement" />
     <payApply ref="payApply" />
   </div>
@@ -224,6 +225,10 @@ import claim from "./components/claimed";
 import Record from "../components/Record";
 import claimGuest from "./components/claimGuest";
 import payApply from "./components/payApply";
+import CreditSpending from '@/view/documentApproval/component/CreditSpending'
+import { getComenAndGo, getAllSalesList, getPayList } from "@/view/documentApproval/component/utils";
+
+
 import moment from "moment";
 export default {
   components: {
@@ -232,7 +237,8 @@ export default {
     Record,
     claimGuest,
     settlement,
-    payApply
+    payApply,
+    CreditSpending
   },
   data() {
     return {
@@ -259,7 +265,12 @@ export default {
       serviceId: "",
       claimSelection: [],
       reconciliationStatement: {},
-      paymentId: ""
+      paymentId: "",
+      //打开模态框状态 type 1 新增 2修改 3查看 4审核
+      modelType: {
+        type: 5,
+        id: ""
+      }
     };
   },
   async mounted() {
@@ -269,6 +280,9 @@ export default {
     this.Branchstore = arr[2];
     this.getOne();
     this.getQuery();
+    this.modelType.allSalesList = await getAllSalesList();
+    this.modelType.salesList = await getComenAndGo();
+    this.modelType.payList = await getPayList();
   },
   methods: {
     //撤回弹框是否打开
@@ -433,7 +447,8 @@ export default {
     //预收款支出
     collectWPay() {
       if (Object.keys(this.currRow).length !== 0) {
-        this.$refs.payApply.modal = true;
+        this.modelType.rowMessage = this.currRow
+        this.$refs.credit.open()
       } else {
         this.$message.error("请先选择数据");
       }
