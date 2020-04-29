@@ -6,6 +6,7 @@
     :summary-method="handleSummary"
     :columns="columns1"
     :data="recordLists"
+    max-height="300px"
   ></Table>
 </template>
 <script>

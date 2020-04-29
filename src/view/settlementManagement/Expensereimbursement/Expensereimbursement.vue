@@ -79,7 +79,7 @@
             highlight-current-row
             ref="xTable"
             @current-change="currentChangeEvent"
-            height="300"
+            height="400"
             :data="tableData"
             align="center"
             show-footer
@@ -645,6 +645,10 @@ export default {
 </script>
 
 <style scoped>
+.main .content-oper {
+  min-height: 100%;
+  height: auto;
+}
 .box {
   overflow: auto;
 }
