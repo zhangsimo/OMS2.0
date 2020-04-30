@@ -14,7 +14,7 @@
           <div class="db ml20">
             <span>查询日期：</span>
             <Date-picker
-              :value="value"
+              v-model="value"
               type="daterange"
               placeholder="选择日期"
               class="w200"
@@ -80,8 +80,8 @@
             border
             highlight-hover-row
             highlight-current-row
+            ref="xTable"
             @current-change="currentChangeEvent"
-            max-height="400"
             :data="tableData"
             align="center"
             show-footer
@@ -352,6 +352,7 @@ import writeOff from "./components/writeOff";
 import moment from "moment";
 
 export default {
+  inject:['reload'],
   name: "businessBorrowing",
   components: {
     quickDate,
@@ -464,6 +465,9 @@ export default {
       if (!this.currRow) {
         return this.$message.error("请选择数据");
       }
+      if(this.currRow.paymentReturnBalance == 0) {
+        return this.$message.error("未认领资金不能核销");
+      }
       this.$refs.writeOff.open();
     },
     //撤回按钮点击事件
@@ -516,10 +520,10 @@ export default {
       };
       let data = {
         startTime: this.value[0]
-          ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[0]).format("YYYY-MM-DD") + " 00:00:00"
           : "",
         endTime: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).format("YYYY-MM-DD") + " 23:59:59"
           : "",
         orgid: this.BranchstoreId,
         serviceId: this.requestCode
@@ -539,6 +543,7 @@ export default {
       this.serviceId = "";
       this.$refs.Record.init();
       this.currRow = null;
+      this.$refs.xTable.clearCurrentRow();
     },
     //认领弹框认领
     claimPay() {
@@ -588,6 +593,7 @@ export default {
         if (res.code == 0) {
           this.$message.success("撤销成功")
           this.revoke = false;
+          // this.reload();
         }
       })
     },
@@ -655,12 +661,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.main .content-oper {
+  min-height: 100%;
+  height: auto;
+}
 .box {
   overflow: auto;
 }
 .boxData {
-  width: 2500px;
+  width: 2200px;
   /* overflow: auto; */
 }
 .list {

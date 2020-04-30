@@ -20,6 +20,8 @@ export const mixPartInfo = {
     };
     return {
       saveFlag:false,
+      //car
+      isCart:false,
       validRules: {
         companyNum: [{ required: true, message: "单位数量不能为空且只能是数字", trigger: "change", pattern: /^\d{1,}$/ }],
         longNum: [{ required: true, message: "长不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
@@ -450,6 +452,13 @@ export const mixPartInfo = {
               // }
               // objReq.carModelName = this.formValidate.carModelName
               // console.log(this.carList)
+              this.isCart = false;
+              if(!this.carList[0].carName&&!this.carList[0].id){
+                this.btnIsLoadding = false;
+                this.isCart = true;
+                return
+              }
+
               let carBrand = [];
               let carBrandName = [];
               let carModelName = [];

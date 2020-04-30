@@ -5,11 +5,11 @@
         <div class="wlf">
           <div class="db">
             <span>快速查询：</span>
-            <quickDate class="mr10" ref="quickDate" @quickDate="quickDate"></quickDate>
+            <quickDate ref="quickDate" @quickDate="quickDate"></quickDate>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <Date-picker
-              format="yyyy-MM-dd"
+              format="yyyy-MM-dd "
               :value="value"
               @on-change="changedate"
               type="daterange"
@@ -17,9 +17,9 @@
               class="w200"
             ></Date-picker>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <span>申请状态：</span>
-            <Select v-model="Reconciliationtype" class="w120" placeholder="全部">
+            <Select v-model="Reconciliationtype" class="w120" placeholder="全部" @on-change="SelectChange">
               <Option
                 v-for="item in Reconciliationlist"
                 :value="item.value"
@@ -27,9 +27,9 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
-          <div class="db ml20">
+          <div class="db ml10">
             <span>申请类型：</span>
-            <Select v-model="ApplicationType" class="w120" placeholder="全部">
+            <Select v-model="ApplicationType" class="w120" placeholder="全部" @on-change="SelectChange">
               <Option
                 v-for="item in ApplicationTypelist"
                 :value="item.value"
@@ -37,12 +37,32 @@
               >{{ item.label }}</Option>
             </Select>
           </div>
+          <div class="db ml10" v-if="headquarters == 0">
+            <span>门店：</span>
+            <Select v-model="shopCode" class="w150" filterable clearable @on-change="SelectChange">
+              <Option
+                v-for="item in shopListArr"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option>
+            </Select>
+          </div>
+          <div class="db ml10">
+            <Select v-model="searchType" class="w100 mr5" @on-change="changeSelect">
+              <Option
+                v-for="item in searchTypeArr"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Input type="text" v-model="searchTypeValue" style="width: 200px" :placeholder="placeholderValue"/>
+          </div>
           <div class="db ml15">
             <button class="ivu-btn ivu-btn-default" type="button" @click="query">
               <i class="iconfont iconchaxunicon mr5"></i>
               <span>查询</span>
             </button>
-            <button class="ivu-btn ivu-btn-default ml15" type="button" @click="TheApplication">起草申请</button>
+            <!--<button class="ivu-btn ivu-btn-default ml15" type="button" @click="TheApplication">起草申请</button>-->
           </div>
         </div>
       </div>
@@ -60,24 +80,26 @@
         highlight-current-row
         :height="500"
         show-overflow
+        @current-change="currentChangeEvent"
         :data="tableData">
-        <vxe-table-column type="seq" width="60" title="序号"></vxe-table-column>
         <vxe-table-column title="操作">
           <template v-slot="{ row }">
             <template>
-              <vxe-button @click="redact(row)">编辑</vxe-button>
-              <vxe-button @click="lookOver(row)">查看</vxe-button>
-              <vxe-button @click="remove(row)">删除</vxe-button>
+              <!--<vxe-button @click="redact(row)">编辑</vxe-button>-->
+              <!--<a @click="redact(row)" class="mr10">编 辑</a>-->
+              <a @click="lookOver(row)">查 看</a>
+              <!--<vxe-button @click="remove(row)">删除</vxe-button>-->
             </template>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="" title="当前状态"></vxe-table-column>
-        <vxe-table-column field="" title="申请单号"></vxe-table-column>
-        <vxe-table-column field="" title="申请时间"></vxe-table-column>
-        <vxe-table-column field="" title="申请类型"></vxe-table-column>
-        <vxe-table-column field="" title="主题"></vxe-table-column>
-        <vxe-table-column field="" title="总金额"></vxe-table-column>
-        <vxe-table-column field="" title="当前审批人"></vxe-table-column>
+        <vxe-table-column field="billStatusName" title="当前状态"></vxe-table-column>
+        <vxe-table-column field="applyNo" title="申请单号"></vxe-table-column>
+        <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
+        <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
+        <vxe-table-column field="applyTypeName" title="申请类型"></vxe-table-column>
+        <vxe-table-column field="topic" title="主题"></vxe-table-column>
+        <vxe-table-column field="amtTotal" title="总金额"></vxe-table-column>
+        <vxe-table-column field="orgName" title="门店"></vxe-table-column>
       </vxe-table>
       <Page
         :current="page.num"
@@ -110,11 +132,13 @@
             </div>
           </div>
           <div class="modal-data">
-            <span class="data-name">审批人:</span>
+            <span class="data-name">审批状态:</span>
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
-
+                    <span class="words"
+                      :class="{res:item.operationResult == 'REFUSE'}"
+                    >{{item.operationResult|status}}</span>
                 </div>
               </template>
             </div>
@@ -130,7 +154,7 @@
             </div>
           </div>
           <div class="modal-data">
-            <span class="data-name">审批时间:</span>
+            <span class="data-name">审批日期:</span>
             <div class="data-value flex-center">
               <template v-for="(item,i) in statusData">
                 <div class="status-box flex-center" :key="i">
@@ -144,19 +168,72 @@
     </section>
 
     <!--<approval :approvalTit="approvalTit"></approval>-->
+    <!--      对应各个模态框-->
+    <!--      费用报销报销-->
+    <ExpenseReimbursement ref="ExpenseReimbursement" :list="modelType"></ExpenseReimbursement>
+    <!--      其他付款申请-->
+    <OtherPayment ref="OtherPayment" :list="modelType"></OtherPayment>
+    <!--      应公借支申请-->
+    <PublicRequest ref="PublicRequest" :list="modelType"></PublicRequest>
+    <!--      请示单申请-->
+    <AskForInstrucions ref="AskForInstrucions" :list="modelType"></AskForInstrucions>
+    <!--      预收款支出申请-->
+    <CreditSpending ref="CreditSpending" :list="modelType"></CreditSpending>
+    <!--      预付款申请-->
+    <AdvanceApply ref="AdvanceApply" :list="modelType"></AdvanceApply>
+    <!--      内部资金调拨-->
+    <InternalFinance ref="InternalFinance" :list="modelType"></InternalFinance>
+    <!--      发票对冲申请-->
+    <invoice-offset-request ref="invoiceOffsetRequest" :modelType="modelType"></invoice-offset-request>
+    <!--      销售开票-->
+    <sales-invoice-application ref="salesInvoiceApplication" :modelType="modelType"></sales-invoice-application>
+    <!--      不含税开票-->
+    <tax-exclusive-application ref="taxExclusiveApplication" :modelType="modelType"></tax-exclusive-application>
+          <!--对账单申请-->
+    <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
   </div>
 </template>
 
 <script>
   import moment from "moment";
-  import quickDate from "@/components/getDate/dateget_bill.vue";
+  import quickDate from "@/components/getDate/dateget.vue";
   import approval from '@/view/settlementManagement/bill/Popup/approval'
+  import { goshop } from '@/api/settlementManagement/fundsManagement/capitalChain'
+  import { approvalStatus } from "_api/base/user";
 
-    export default {
+  import ExpenseReimbursement from "../component/ExpenseReimbursement";
+  import OtherPayment from "../component/OtherPayment";
+  import PublicRequest from "../component/PublicRequest";
+  import AskForInstrucions from "../component/AskForInstructions";
+  import CreditSpending from "../component/CreditSpending";
+  import AdvanceApply from "../component/AdvanceApply";
+  import InternalFinance from "../component/InternalFinance";
+  import invoiceOffsetRequest from "../component/popWindow/invoiceOffsetRequest"
+  import salesInvoiceApplication from "../component/popWindow/salesInvoiceApplication"
+  import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
+  import statementApplication from "../component/popWindow/statementApplication"
+
+  import { findPageByDynamicQuery , findUserShopKeeper} from '@/api/documentApproval/documentApproval/documentApproval'
+  import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
+
+
+  export default {
         name: "myApplication",
         components: {
           quickDate,
-          approval
+          approval,
+          //11种类型
+          ExpenseReimbursement,
+          OtherPayment,
+          PublicRequest,
+          AskForInstrucions,
+          CreditSpending,
+          AdvanceApply,
+          InternalFinance,
+          invoiceOffsetRequest,
+          salesInvoiceApplication,
+          taxExclusiveApplication,
+          statementApplication
         },
       data(){
         return {
@@ -200,7 +277,7 @@
             },
             {
               value: "2",
-              label: "请示申请"
+              label: "请示单申请"
             },
             {
               value: "3",
@@ -235,22 +312,58 @@
               label: "发票对冲"
             },
           ], //申请类型数组
-          tableData:[{index: 1}], //表格内容
+          tableData:[], //表格内容
           falg: false, //判断审批进度是否显示
-          statusData: [
-            { name: "提交", status: "已提交" },
-            { name: "产品总监审批", status: "已审批" }
-          ], //进度数据
+          statusData: [], //进度数据
           approvalTit:'流程节点',//审批流程
           page: {
             num: 1,
             size: 10,
             total: 0,
             opts: [10,20, 50, 100, 200]
-          } //分页
+          } ,//分页
+          searchTypeArr: [
+            {
+              value: "0",
+              label: "申请单号"
+            },
+            {
+              value: "1",
+              label: "申请人"
+            },
+            {
+              value: "2",
+              label: "审批人"
+            },
+          ], //申请类型数组
+          searchType: '0', //申请类型
+          searchTypeValue: '', //申请类型的值
+          placeholderValue: '请输入申请单号', //动态改变placeholder
+          shopCode: 0, //门店
+          shopListArr: [ {id:0 , name:'全部'}], //门店数组
+          //打开模态框状态 type 1 新增 2修改 3查看 4审核
+          modelType: {
+            type: 1,
+            id: ""
+          },
+          headquarters: 2
         }
       },
-      mounted(){},
+      async mounted(){
+          this.getShop();
+          // console.log(this.$store.state.user.userData)
+        this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = false;
+        this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = false;
+        this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = false;
+        this.modelType.allSalesList = await getAllSalesList();
+        this.modelType.salesList = await getComenAndGo();
+        this.modelType.payList = await getPayList();
+        if(this.$route.query.applyNo !== undefined){
+          this.searchTypeValue = this.$route.query.applyNo;
+          this.getList();
+        }
+        this.getUser();
+      },
       methods: {
         // 快速查询日期
         quickDate(data) {
@@ -266,6 +379,7 @@
             statementStatus: this.Reconciliationtype
           };
           // this.getAccountStatement(obj);
+          this.getList();
         },
 
         // 选择日期
@@ -274,7 +388,40 @@
         },
 
         // 查询按钮
-        query(){},
+        query(){
+          this.getList()
+        },
+
+        //初始化数据
+        async getList(){
+          let params = {};
+          params.page = this.page.num - 1;
+          params.size = this.page.size;
+          if(this.value){
+            params.startTime = this.value[0];
+            params.endTime = this.value[1];
+          }
+          params.billStatus = this.Reconciliationtype;
+          params.applyType = this.ApplicationType;
+          params.orgid = this.shopCode;
+          switch (this.searchType) {
+            case '0':
+              params.applyNo = this.searchTypeValue;
+              break;
+            case '1':
+              params.applicant = this.searchTypeValue;
+              break;
+            case '2':
+              params.approveUname = this.searchTypeValue;
+              break;
+          }
+          let res = await findPageByDynamicQuery(params)
+          if(res.code === 0){
+              this.tableData = res.data.content;
+              this.page.total = res.data.totalElements;
+            // console.log(this.$route)
+          }
+        },
 
         //起草申请
         TheApplication(){
@@ -283,11 +430,77 @@
 
         //编辑
         redact(row){
-          console.log(row)
+          console.log(row.applyTypeName)
+        },
+
+        //下拉框改变
+        SelectChange(){
+        this.getList();
+        },
+
+        //获取门店
+        async getShop(){
+          let data ={}
+          data.supplierTypeSecond = 0;
+          // this.shopListArr = [{id:0 , name:'全部'}]
+          let res = await goshop(data)
+          if (res.code === 0) {
+            this.shopListArr = [...this.shopListArr , ...res.data]
+            // this.$nextTick( () => {
+            //   this.shopCode = this.$store.state.user.userData.shopId
+            // })
+            if (this.$store.state.user.userData.shopkeeper != 0){
+              this.getThisArea()//获取当前门店地址
+            }
+          }
         },
 
         //查看
-        lookOver(row){},
+        lookOver(row){
+          // console.log(row)
+          if(row.billStatusName == "草稿"){
+            this.modelType.type = 2;
+            this.modelType.id = row.id
+          }else {
+            this.modelType.type = 3;
+            this.modelType.id = row.id
+          };
+          switch (row.applyTypeName) {
+            case "费用报销":
+              this.$refs.ExpenseReimbursement.open();
+              break;
+            case "预收款支出":
+              this.$refs.CreditSpending.open();
+              break;
+            case "请示申请":
+              this.$refs.AskForInstrucions.open();
+              break;
+            case "采购预付款":
+              this.$refs.AdvanceApply.open();
+              break;
+            case "因公借支":
+              this.$refs.PublicRequest.open();
+              break;
+              case "内部资金调拨":
+                this.$refs.InternalFinance.open();
+              break;
+            case "其他付款":
+              this.$refs.OtherPayment.open();
+              break;
+            case "对账单":
+              this.$refs.statementApplication.modelShow = true;
+              break;
+            case "销售开票":
+              this.$refs.salesInvoiceApplication.$refs.salepopup.modal1 = true;
+              break;
+            case "不含税开票":
+              this.$refs.taxExclusiveApplication.$refs.noTax.modal1 = true;
+              break;
+            case "发票对冲":
+              this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
+              break;
+          }
+        },
 
         //删除
         remove(row){},
@@ -295,10 +508,55 @@
         //分页
         changePage(p) {
           this.page.num = p;
+          this.getList()
         },
         changeSize(size) {
           this.page.num = 1;
           this.page.size = size;
+          this.getList();
+        },
+
+        //根据类型select改变事件
+        changeSelect(val){
+          switch(val) {
+            case "0":
+              this.placeholderValue = '请输入申请单号';
+              break;
+            case "1":
+              this.placeholderValue = '请输入申请人';
+              break;
+            case "2":
+              this.placeholderValue = '请输入审批人';
+              break;
+          }
+        },
+
+        //点击主列表本行数据
+        currentChangeEvent({row}){
+          // console.log(row.processInstance)
+          if (row.processInstance) {
+            approvalStatus({ instanceId: row.processInstance }).then(res => {
+              if (res.code == 0) {
+                this.falg = true;
+                this.statusData = res.data.operationRecords;
+              } else {
+                this.statusData = [];
+              }
+            });
+          }else {
+            this.falg = false;
+            this.statusData = [];
+          }
+        },
+
+        //获取是否为总部接口
+        getUser(){
+          let params = {};
+          findUserShopKeeper(params).then(res => {
+            if(res.code === 0){
+              this.headquarters = res.data.shopkeeperUser;
+            }
+          })
         }
       },
       filters: {
@@ -443,6 +701,9 @@
   .flexone{
     display: flex;
     justify-content: right;
+  }
+  .aBlue{
+    color: #2d8cf0!important;
   }
 </style>
 

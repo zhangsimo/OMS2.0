@@ -62,6 +62,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="SubmitAudit"
+              :disabled="oneList.length <= 0"
             >
               <span>审核</span>
             </button>
@@ -71,6 +72,7 @@
               class="mr10 ivu-btn ivu-btn-default"
               type="button"
               @click="reAudit"
+              :disabled="oneList.length <= 0"
             >
               <span>撤销</span>
             </button>
@@ -80,21 +82,21 @@
     </section>
 
     <div class="mt15">
-      <Tabs type="card" value="capitalChain1">
+      <Tabs type="card" v-model="tabName" @on-click="clickTabs">
         <TabPane label="应收审核" name="capitalChain1">
-          <table-one :tbdata="tableData1" />
+          <table-one ref="capitalChain1" :tbdata="tableData1" @selection="selection" />
         </TabPane>
         <TabPane label="应付审核" name="capitalChain2">
-          <table-two :tbdata="tableData2" />
+          <table-two ref="capitalChain2" :tbdata="tableData2" @selection="selection" />
         </TabPane>
         <TabPane label="费用报销审核" name="capitalChain3">
-          <table-three :tbdata="tableData3" />
+          <table-three ref="capitalChain3" :tbdata="tableData3" @selection="selection" />
         </TabPane>
         <TabPane label="预收款/核销支出" name="capitalChain4">
-          <table-four :tbdata="tableData4" />
+          <table-four ref="capitalChain4" :tbdata="tableData4" @selection="selection" />
         </TabPane>
         <TabPane label="其他审核" name="capitalChain5">
-          <table-five :tbdata="tableData5" />
+          <table-five ref="capitalChain5" :tbdata="tableData5" @selection="selection" />
         </TabPane>
       </Tabs>
     </div>
@@ -134,7 +136,8 @@ export default {
   data() {
     return {
       // 数据类
-      oneList: null, // 表格选中
+      tabName: "capitalChain1", // tabs栏
+      oneList: [], // 表格选中
       tableData1: [], // 应收审核
       tableData2: [], // 应付审核
       tableData3: [], // 费用报销审核
@@ -181,15 +184,18 @@ export default {
     },
     // 查询
     async query() {
+      this.oneList = [];
+      
       let params = {
         startTime: this.dates[0],
         endTime: this.dates[1],
         guestSourceId: this.companyId,
         businessNumbers: this.payOrderNo,
         businessNumbersList: this.orderNo,
+        size: 10000,
       }
 
-      if (this.dates.length === 2) {
+      if (this.dates.length === 2 && this.dates[0]) {
         params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
         params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
       }
@@ -200,6 +206,8 @@ export default {
         }
       }
 
+      params.page = 0;
+
       [
         this.tableData1,
         this.tableData2,
@@ -208,21 +216,52 @@ export default {
         this.tableData5,
       ] = await api.getTableData(params);
     },
+    // 切换tabs
+    clickTabs(data) {
+      this.$refs[data].clear();
+    },
+    // 勾选的数据
+    selection(arr) {
+      this.oneList = arr || [];
+    },
     // 审核
     SubmitAudit() {
       this.$Modal.confirm({
-        title: "资金审核",
-        content: "确认审核？",
-        onOk() {},
-        onCancel() {}
+        title: '资金审核',
+        content: '<p>确认审核</p>',
+        onOk: async () => {
+          let ids = this.oneList.map(el => el.id)
+          let res = await api.dailyFundAudit({ ids })
+          if (res.code == 0) {
+            this.$message.success(res.data)
+            this.query();
+          }
+        },
+        onCancel: () => {
+        }
       });
     },
     // 撤销审核
     reAudit() {
       this.isShow = true;
+      this.content = "";
     },
     // 撤销审核 ok
-    reAuditOk() {},
+    async reAuditOk() {
+      let remarks = this.content.trim();
+      if (remarks.length <= 0) {
+        return this.$message.error("请输入撤销原因")
+      }
+      let ids = this.oneList.map(el => el.id)
+      let res = await api.dailyFundAuditRevocation({
+        ids, remarks
+      })
+      if (res.code == 0) {
+        this.$message.success(res.data)
+        this.isShow = false;
+        this.query();
+      }
+    },
     // 修改凭证
     putVoucher() {}
   }

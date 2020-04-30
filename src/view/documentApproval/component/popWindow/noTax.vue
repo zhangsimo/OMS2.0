@@ -56,7 +56,7 @@
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="对账单号" prop="accountNo">
             <Input v-model="invoice.accountNo" class="ml5 w100" disabled />
-            <i class="iconfont iconcaidan input" @click="seleteAccount"></i>
+            <i class="iconfont iconcaidan input" v-if="Boolean(modelType.type != 3)" @click="seleteAccount"></i>
           </FormItem>
           <FormItem label="产生税费" prop="taxation">
             <Input v-model="invoice.taxation" class="ml5 w100" disabled />
@@ -106,7 +106,7 @@
       show-summary
       :summary-method="billSum"
     ></Table>
-    <flow v-if="modelType.type===3" />
+    <!--<flow v-if="modelType.type===3" />-->
     <!-- 选择销售单据 -->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="invoice" />
     <!-- 选择对账单 -->
@@ -117,6 +117,7 @@
 <script>
 import SeleteSale from "@/view/settlementManagement/bill/Popup/seleteSale";
 import saleAccount from "@/view/settlementManagement/bill/Popup/saleAccount";
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import { noTaxApplyNo, partsInvoice, submitNoTax } from "@/api/bill/popup";
 import bus from "@/view/settlementManagement/bill/Popup/Bus";
 import moment from "moment";
@@ -369,7 +370,7 @@ export default {
   },
   methods: {
     // 对话框是否显示
-    visChange(flag) {
+    async visChange(flag) {
       if (flag) {
         this.$refs.formCustom.resetFields();
         // 开票配件
@@ -397,6 +398,28 @@ export default {
           this.formInline.applyTypeName = "不含税开票申请";
           this.formInline.applyTime = date;
           this.formInline.paymentOrgName = user.shopName;
+        }
+        if(this.modelType.id){
+          let data ={}
+          data.id = this.modelType.id || ''
+          let res = await getThisAllList(data)
+          if(res.code == 0){
+            // console.log(res.data)
+            // this.information = res.data;
+            this.formInline.applyNo = res.data.accountNo;
+            this.information.code = res.data.orgCode;
+            this.information.orgId = res.data.orgid;
+            this.information.orgName = res.data.orgName;
+            this.information.guestId = res.data.guestId;
+            this.information.noTaxApply = res.data.applyNo;
+            this.information.guestName = res.data.guestName;
+            this.information.applicationDate = res.data.applyDate;
+            this.invoice = res.data;
+            this.invoice.taxApplicationList = [{value: "0.06", label: "6%"}, {value: "0.07", label: "7%"}];
+            console.log(this.invoice)
+              this.accessoriesBillingData = res.data.partList;
+            // this.remarks = res.data.applyReason
+          }
         }
       }
     },

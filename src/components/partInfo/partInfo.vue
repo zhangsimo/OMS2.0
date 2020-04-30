@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="proModal" title="配件资料" width="700" @on-visible-change="visible">
+    <Modal v-model="proModal" title="配件资料" width="700" :mask-closable="false" @on-visible-change="visible">
       <div class="pb10 tr" v-if="!isAddPart || isSellDis">
         <Checkbox v-model="prohibit">是否禁用</Checkbox>
         <Checkbox v-model="forbidsale">是否禁售</Checkbox>
@@ -84,7 +84,7 @@
             </Row>
             <Row>
               <Col span="22">
-                <FormItem label="适用车型：" prop="applyCarbrandId">
+                <FormItem label="适用车型：" class="car-item-w" prop="">
                   <div class="car-con-item" v-for="(v,vi) in carList">
                     <Select
                       @on-change="getSelectCarBrand"
@@ -102,6 +102,7 @@
                     <Button type="text" class="car-btn add" @click="addCarItem" v-if="vi==0"><Icon type="md-add" />添加车型</Button>
                     <Button v-if="vi>0" @click="removeCarItem(vi)" type="text" class="car-btn del"><Icon type="md-close" />删除</Button>
                   </div>
+                  <div v-show="isCart" class="ivu-form-item-error-tip">最少填入一个适用车型</div>
                   <!--<Select-->
                     <!--@on-change="getCarModelFun"-->
                     <!--class="w140 mr5"-->
@@ -359,5 +360,18 @@ export default {
     &.del{
       color: #fd5c5c;
     }
+  }
+</style>
+<style lang="less">
+  .car-item-w{
+  .ivu-form-item-label:before{
+    content: '*';
+    display: inline-block;
+    margin-right: 4px;
+    line-height: 1;
+    font-family: SimSun;
+    font-size: 14px;
+    color: #ed4014;
+  }
   }
 </style>

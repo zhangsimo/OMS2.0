@@ -296,6 +296,7 @@
   import { claimedFund } from "_api/settlementManagement/fundsManagement/claimWrite";
   import { findAdvance, revoke, findGuest } from "_api/settlementManagement/advanceCollection";
   import { findByDynamicQuery , paymentRevoke } from "_api/settlementManagement/otherPayable/otherPayable";
+  import { getComenAndGo, getAllSalesList, getPayList } from "../../documentApproval/component/utils";
 
   import moment from "moment";
   export default {
@@ -311,14 +312,15 @@
     data(){
       return{
         modelType:{
-          type:1, //新增
-          id: ''
+          type:5, //新增
+          id: '',
+          rowMessage: {} //当前行数据
         },
         value: [], //查询日期数组
         BranchstoreId: '', //分店名称
+        Branchstore: [], //分店名称
         company: [], //往来单位数组
         companyId: "", //往来单位
-        Branchstore: [], //分店名称
         currRow: {}, //选中行
         claimModal: false, //认领弹框
         revoke: false, //撤回弹框
@@ -605,7 +607,9 @@
       },
       // 选中行
       currentChangeEvent({ row }) {
+        // console.log(row)
         this.currRow = row;
+        this.modelType.rowMessage = row;
         this.reconciliationStatement.accountNo = row.serviceId;
         this.serviceId = row.serviceId;
         this.$refs.Record.init();
@@ -646,6 +650,9 @@
       this.Branchstore = arr[2];
       this.getOne();
       this.getQuery();
+      this.modelType.allSalesList = await getAllSalesList();
+      this.modelType.salesList = await getComenAndGo();
+      this.modelType.payList = await getPayList();
     },
     }
 </script>

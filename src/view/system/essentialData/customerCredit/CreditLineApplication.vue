@@ -33,6 +33,7 @@
               v-model="data.tempStart"
               type="date"
               :options="startTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>
@@ -58,6 +59,7 @@
               type="date"
               format="yyyy-MM-dd"
               :options="endTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>
@@ -525,13 +527,18 @@ export default {
     //调整前剩余额度
     sum2() {
       let sum =
-        +this.data.creditLimit + this.data.tempCreditLimi - this.payable.sumAmt;
+        +this.data.creditLimit + this.data.tempCreditLimit + this.payable.sumAmt;
       return isNaN(sum) ? 0 : sum;
     },
     //调整后剩余额度
     sum3() {
-      this.data.totalSum = this.sum + this.sum2;
+      // this.data.totalSum = this.sum + this.sum2;
+      // this.data.totalSum = ((+this.data.applyQuota+this.data.creditLimit)||0 + (+this.data.tempQuota + this.data.tempCreditLimit) ||0 +this.data.applyQuota + (+this.data.tempQuota) || 0) + this.payable.sumAmt||0;
+      this.data.totalSum = ( parseFloat(this.data.creditLimit|| 0) +  parseFloat(this.data.tempCreditLimit || 0) +  parseFloat(this.data.applyQuota || 0)  + parseFloat(this.data.tempQuota||0) )+  parseFloat(this.payable.sumAmt||0);
       return isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
+
+
+
     }
   }
 };

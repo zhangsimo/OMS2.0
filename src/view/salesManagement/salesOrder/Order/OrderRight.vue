@@ -6,7 +6,7 @@
       ref="formPlan"
       :model="formPlan"
       :rules="ruleValidate"
-      :label-width="100"
+      :label-width="110"
     >
       <div class="pane-made-hd">
         <span class="titler mr5">固定额度:</span>
@@ -115,9 +115,10 @@
         <FormItem label="计划发货日期:" prop="planSendDate">
           <!-- @on-change="getplanSendDate" -->
           <DatePicker
-            :value="formPlan.planSendDate"
+            v-model="formPlan.planSendDate"
             :options="options1"
             type="date"
+            class="w130"
             @on-change="getplanSendDate"
             placeholder="选择日期"
             style="width: 120px"
@@ -131,6 +132,7 @@
             @on-change="getplanArriveDate"
             :options="options2"
             type="date"
+            class="w130"
             placeholder="选择日期"
             style="width: 120px"
             :disabled="draftShow != 0|| this.$parent.$parent.ispart"
@@ -420,7 +422,11 @@ export default {
     };
     let options2DisabledDate = date => {
       const orderDate = this.formPlan.planSendDate;
-      return date && orderDate && date.valueOf() < orderDate;
+      if(orderDate){
+        return date && orderDate && date.valueOf() < orderDate;
+      }else{
+        return true
+      }
     };
     return {
       options1: {
@@ -435,6 +441,7 @@ export default {
         detailList: [],
         storeId:'',
         orderManId: '',
+        planSendDate:''
         // orderTypeValue:'0'
       }, //获取到数据
       headers: {
@@ -480,7 +487,10 @@ export default {
         ],
         storeId: [
           { required: true, type: "string", message: " ", trigger: "change" }
-        ]
+        ],
+        planSendDate: [
+          { required: true, type: "date", message: " ", trigger: "change" }
+        ],
       },
       //form表单校验
       validRules: {
@@ -776,20 +786,22 @@ export default {
     },
     //计划发货日期
     getplanSendDate(data) {
-      this.formPlan.planSendDate = tools.transTime(data);
+      // this.formPlan.planSendDate = new Date(data);
       const orderDate = this.formPlan.planSendDate;
       this.options2 = {
         disabledDate(date) {
           return date && orderDate && date.valueOf() < new Date(orderDate);
         }
       };
+      this.formPlan.planArriveDate = "";
     },
     //计划到货日期
     getplanArriveDate(data) {
-      this.formPlan.planArriveDate = tools.transTime(data);
+      this.formPlan.planArriveDate = data;
     },
     //配件返回的参数
     getPartNameList(val) {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           this.formPlan.detailList = [
@@ -805,11 +817,14 @@ export default {
     },
     // 批次配件
     async getBarchList(val) {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = {};
           val.map(item => {
             item.isMarkBatch = 1;
+            item.batchSourceId = item.id||item.batchSourceId
+            Reflect.deleteProperty(item, 'id');
           });
           // data = this.formPlan;
           // val.map(item=>{
@@ -817,7 +832,7 @@ export default {
           // })
             this.formPlan.detailList = [
                 ...this.formPlan.detailList,
-                ...conversionList(val)
+                ...val
             ]
             this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
@@ -846,6 +861,8 @@ export default {
     async activiyList(val) {
       let data = {};
       val.isMarkActivity = 1;
+      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       data.detailList = [val];
       let res = await getAccessories(data);
@@ -862,6 +879,7 @@ export default {
     },
     //保存
     save() {
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -870,6 +888,8 @@ export default {
             if (+this.totalMoney > +this.limitList.outOfAmt) {
               return this.$message.error("可用余额不足");
             }
+            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
             let res = await getSave(this.formPlan);
             if (res.code === 0) {
               this.$Message.success("保存成功");
@@ -924,6 +944,7 @@ export default {
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
+                  this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {
@@ -931,6 +952,8 @@ export default {
                                 if (+this.totalMoney > +this.limitList.outOfAmt) {
                                     return this.$message.error("可用余额不足");
                                 }
+                              this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+                              this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
                                 let res = await getStockOut(this.formPlan);
                                 if (res.code === 0) {
                                     this.$Message.success("出库成功");
@@ -967,6 +990,8 @@ export default {
             if (+this.totalMoney > +this.limitList.sumAmt) {
               return this.$message.error("可用余额不足");
             }
+            this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+            this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
             let orderList = [];
             orderList = this.formPlan.detailList.filter(
               item => item.orderPrice*1 < item.averagePrice*1
@@ -1017,6 +1042,8 @@ export default {
     //获取选择入库单的信息
     async getGodown(val) {
       let data = {};
+      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       val.details.map(item => {
         item.isMarkBatch = 1;
@@ -1035,6 +1062,7 @@ export default {
   watch: {
     getOneOrder: {
       handler(old, ov) {
+        this.$parent.$parent.ispart=false;
         if (!old.id) {
              this.formPlan =Object.assign({},{
                  billStatusId: { name: "草稿", value: 0 },

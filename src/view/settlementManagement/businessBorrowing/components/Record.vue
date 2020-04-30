@@ -6,6 +6,7 @@
     :summary-method="handleSummary"
     :columns="columns1"
     :data="recordLists"
+    max-height="300px"
   ></Table>
 </template>
 <script>
@@ -23,7 +24,7 @@ export default {
         },
         {
           title: "因公借支申请单号",
-          key: "",
+          key: "accountNo",
           align: "center"
         },
         {
@@ -59,10 +60,13 @@ export default {
           title: "核销方式",
           key: "",
           align: "center",
-          // render: (h, p) => {
-          //   let val = p.row.furpose.name;
-          //   return h("span", val);
-          // }
+          render: (h, p) => {
+            let val = "";
+            if (p.row.furpose) {
+              val = p.row.furpose.name;
+            }
+            return h("span", val);
+          }
         },
         {
           title: "往来单位",
@@ -116,7 +120,15 @@ export default {
         {
           title: "收付款金额",
           key: "checkAmt",
-          align: "center"
+          align: "center",
+          render: (h, p) => {
+            let val = p.row.checkAmt;
+            let value = p.row.sort.value;
+            if (value == 0) {
+              val = -val;
+            }
+            return h("span", val);
+          }
         },
         {
           title: "审核状态",
@@ -169,7 +181,13 @@ export default {
           return;
         }
         if (key == "checkAmt") {
-          const values = data.map(item => Number(item[key]));
+          const values = data.map(item => {
+            let val = Number(item[key]);
+            if(item.sort.value == 0) {
+              val = -val;
+            }
+            return val;
+          });
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);

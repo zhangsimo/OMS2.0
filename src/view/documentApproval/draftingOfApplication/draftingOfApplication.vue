@@ -85,10 +85,11 @@ import CreditSpending from "../component/CreditSpending";
 import AdvanceApply from "../component/AdvanceApply";
 import InternalFinance from "../component/InternalFinance";
 import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
+
+
 export default {
   name: "draftingOfApplication",
   components: {
-    modal,
     ExpenseReimbursement,
     OtherPayment,
     PublicRequest,
@@ -100,9 +101,9 @@ export default {
 
   data() {
     return {
-      //打开模态框状态 type 0 新增 1修改 2查看 3审核
+      //打开模态框状态 type 1 新增 2修改 3查看 4审核
       modelType: {
-        type: 3,
+        type: 1,
         id: ""
       }
     };

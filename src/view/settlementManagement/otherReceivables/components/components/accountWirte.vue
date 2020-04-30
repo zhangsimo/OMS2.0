@@ -105,7 +105,12 @@ export default {
         {
           title: "收付类型",
           key: "orderTypeName",
-          className: "tc"
+          className: "tc",
+          render: (h, params) => {
+            return h(
+              "span","其他应付款"
+            );
+          }
         },
         {
           title: "实际收付款金额",
@@ -115,7 +120,7 @@ export default {
       ], //选择不含税对账单单
       accountData: [], //选择不含税对账单单表格数据
       seleteData: {}, //单选数据
-      paymentId: "YJDZ", //收付类型
+      paymentId: "QTYFK", //收付类型
       paymentList: [] //收付类型下拉框
     };
   },
@@ -162,7 +167,8 @@ export default {
           ? moment(this.dateQuery[1]).format("YYYY-MM-DD 23:59:59")
           : "",
         receivePaymentType: this.paymentId,
-        guestId: this.companyId
+        guestId: this.companyId,
+        writeOffStatus: "TO_WRITE_OFF"
       };
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {

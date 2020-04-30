@@ -160,6 +160,7 @@ export default {
     //提交
     sumbit() {
       let list = this.$store.state.dataList.oneOrder;
+      this.$refs.right.formPlan.planSendDate = new Date(this.$refs.right.formPlan.planSendDate)
         this.$refs.right.$refs.formPlan.validate(async valid => {
             if(valid){
                 if (list.id||this.isAdd) {

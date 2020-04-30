@@ -66,7 +66,7 @@
         :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
         @edit-actived="editActivedEvent"
         >
-        <vxe-table-column title="操作" width="80">
+        <vxe-table-column title="操作" width="80" v-if="!modelType">
           <template v-slot="item">
             <a v-if="item.seq != item.data.length" @click="dele(item)">删除行</a>
             <a v-else @click="addRow">添加行</a>
@@ -83,7 +83,7 @@
       </vxe-table>
 
       <h5 class="mt20 mb10" style="font-size: 18px">借支核销</h5>
-      <Button class="mb10" @click="SelectTheDocuments">选择单据</Button>
+      <Button class="mb10" @click="SelectTheDocuments" v-if="!modelType">选择单据</Button>
       <vxe-table
         class="mt10"
         border
@@ -98,8 +98,9 @@
         :data="details"
         :edit-rules="validRules"
         :edit-config="{trigger: 'click', mode: 'cell' , showStatus: true}"
+        @edit-actived="editisDisabled"
       >
-        <vxe-table-column title="操作" width="80">
+        <vxe-table-column title="操作" width="80" v-if="!modelType">
           <template v-slot="item">
             <a @click="deleteDetails(item)">删除行</a>
           </template>
@@ -110,22 +111,7 @@
         <vxe-table-column field="borrowDate" title="借支日期"></vxe-table-column>
         <vxe-table-column field="topic" title="主题"></vxe-table-column>
       </vxe-table>
-<!--      <vxe-table-->
-<!--        class="mt10"-->
-<!--        border-->
-<!--        resizable-->
-<!--        show-footer-->
-<!--        auto-resize-->
-<!--        show-overflow-->
-<!--        size="mine"-->
-<!--        align="center"-->
-<!--        :data="moneyTableData"-->
-<!--      >-->
-<!--        <vxe-table-column field="name" title="费用总额"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="因公借支总金额"></vxe-table-column>-->
-<!--        <vxe-table-column field="money" title="公司应付"></vxe-table-column>-->
-<!--        <vxe-table-column field="name" title="个人应还"></vxe-table-column>-->
-<!--      </vxe-table>-->
+
       <div>
         <Row class="tableBox mt10">
           <Col span="6" class="businessbg">费用总额</Col>
@@ -144,8 +130,8 @@
       <div class="proceeds">
         <Row>
           <Col span="8">
-            <FormItem label="收款人账户" prop="receiver" style="margin-bottom: 0px">
-              <Select v-model="formInline.receiver" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
+            <FormItem label="收款人账户" prop="receiverId" style="margin-bottom: 0px">
+              <Select v-model="formInline.receiverId" filterable style="width: 90%;padding-left: 5px" label-in-value   @on-change="getCompany" :disabled="modelType">
                 <Option v-for="item in payeeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </FormItem>
@@ -167,16 +153,26 @@
       <h5 class="mt20 mb10" style="font-size: 18px">支付信息</h5>
       <div class="proceeds">
         <Row>
-          <Col span="12">
+          <Col span="6">
             <FormItem label="支付门店"  style="margin-bottom: 0px">
               <Input type="text" v-model="formInline.paymentOrgName" style="width: 90%;padding-left: 5px" disabled></Input>
             </FormItem>
           </Col>
-          <Col span="12">
+          <Col span="6">
             <FormItem label="付款账户" prop="paymentAccount" style="margin-bottom: 0px">
-              <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" label-in-value :disabled="modelType">
+              <Select v-model="formInline.paymentAccount" style="width: 90%;padding-left: 5px" @on-change="getPayList"  :disabled="modelType">
                 <Option v-for="item in payUserList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem label="支付银行"  style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.paymentBank" style="width: 90%;padding-left: 5px" disabled></Input>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem label="支付账号"  style="margin-bottom: 0px">
+              <Input type="text" v-model="formInline.paymentBankNo" style="width: 90%;padding-left: 5px" disabled></Input>
             </FormItem>
           </Col>
         </Row>
@@ -184,7 +180,7 @@
 
 
       <h5 class="mt20 mb10" style="font-size: 18px">凭证图片</h5>
-      <upphoto @backUpImgList="getImgList" ref="upImg"></upphoto>
+      <upphoto @backUpImgList="getImgList" ref="upImg" :list="Pictures"></upphoto>
       <flowbox :approvalTit="list" v-if="list.type == 4"></flowbox>
     </Form>
 

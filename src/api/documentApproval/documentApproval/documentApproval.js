@@ -1,34 +1,31 @@
-//===================== 我的申请 / 我的审批 / 待我审批 ===============================
+//===================== 申请单 ===============================
 import axios from '@/libs/api.request'
 import api from '_conf/url'
 
-// =================== 我的申请 =============
 //主列表查询
-export function getLsitone (params) {
+export function findPageByDynamicQuery (params) {
   return axios.request({
-    url: `${api.omsSettle}/financeApplyDetail/findAllPchsOrder`,
+    url: `${api.omsSettle}/financeApplyMain/findPageByDynamicQuery`,
     method: 'get',
     params
   })
 }
 
-
-// =================== 待我审批 =============
+//查询当前点击列表内信息
 //主列表查询
-export function getLsittwo (params) {
+export function getThisAllList (params) {
   return axios.request({
-    url: `${api.omsSettle}/financeApplyDetail/findAllPchsOrder`,
+    url: `${api.omsSettle}/financeApplyMain/findById`,
     method: 'get',
     params
   })
 }
 
-
-// =================== 我的审批 =============
-//主列表查询
-export function getLsitthree (params) {
+//判断是否为总部
+// http://192.168.2.48:5200/staff/findUserShopKeeper?tenantId=1217653291045625856&shopId=1242781690831372288
+export function findUserShopKeeper (params) {
   return axios.request({
-    url: `${api.omsSettle}/financeApplyDetail/findAllPchsOrder`,
+    url: `${api.authApi}/staff/findUserShopKeeper`,
     method: 'get',
     params
   })

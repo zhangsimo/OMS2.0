@@ -3,6 +3,7 @@ import selectAdvanceApply from '../popWindow/SelectAdvanceApply'
 import upphoto from '../Upphoto'
 import flowbox from '../Flow'
 import {getAdvanceSave} from '_api/documentApproval/AdvanceApply.js'
+import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 
 export default {
   name: "AdvanceApply",
@@ -57,6 +58,7 @@ export default {
       payeeList:[],//收款人列表
       payUserList:[],//付款人列表
       company:[],//往来单位
+      Pictures:{},//请求回来的图片地址状态
     }
   },
   mounted(){
@@ -67,23 +69,48 @@ export default {
     open(){
       this.company = this.list.salesList
       this.payUserList = this.list.payList
+      this.formInline = {}
+      this.$refs.upImg.uploadListModal = []
+      this.$refs.upImg.uploadList = []
+      this.$refs['formInline'].resetFields();
+      this.model = true
+      //判断模态框状态
+      this.modelType = false
+
       if (this.list.type == 1) {
-        this.formInline = {}
-        this.$refs.upImg.uploadListModal = []
-        this.$refs.upImg.uploadList = []
-        this.$refs['formInline'].resetFields();
-        this.model = true
-        //判断模态框状态
-        this.modelType = false
         let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
           user = this.$store.state.user.userData
         this.formInline.applicant = user.staffName
         this.formInline.deptName = user.groups[user.groups.length - 1].name || ' 　　'
         this.formInline.shopCode = user.shopCode || ' 　　'
         this.formInline.orgName = user.shopName
-        this.formInline.applyTypeName = '费用报销'
+        this.formInline.applyTypeName = '采购预付款'
         this.formInline.applyTime = date
         this.formInline.paymentOrgName = user.shopName
+      }
+      if (this.list.type == 2){
+        this.getList()
+      }
+      if (this.list.type == 3 || this.list.type == 4){
+        this.getList()
+        this.modelType = true
+      }
+    },
+
+    //获取当前信息
+    async getList(){
+      let data ={}
+      data.id = this.list.id || ''
+      let res = await getThisAllList(data)
+      if(res.code === 0){
+        this.$nextTick( () => {
+          this.formInline = res.data
+          this.Pictures = {
+            voucherPictures :res.data.voucherPictures,
+            billStatus: res.data.billStatus
+          }
+        })
+
       }
     },
 
@@ -133,6 +160,14 @@ export default {
           return null
         })
       ]
+    },
+
+    //获取付款信息
+    getPayList(value){
+      if (!value) return
+      let list = this.payUserList.filter(item => item.id == value)[0]
+      this.formInline.paymentBank = list.bankName
+      this.formInline.paymentBankNo = list.accountCode
     },
 
     //获取到上传图片地址

@@ -23,6 +23,7 @@
       :headers="headers"
       :before-upload="handleBeforeUpload"
       :on-success="handleSuccess"
+      v-if="status"
     >
       <div class="tc" style="width: 58px;height:58px;line-height: 58px;">
         <Icon type="ios-camera" size="20"></Icon>
@@ -54,6 +55,9 @@
 
   export default {
         name: "upphoto",
+    props:{
+          list:''
+    },
     data(){
           return {
             visible: false, //图片弹框
@@ -65,6 +69,7 @@
             getfile: api.putImgUrl,
             uploadList: [],//5张图片
             uploadListModal:[],//全部图片
+            status:true,//根据状态显示是否可以添加
           }
     },
     methods:{
@@ -112,6 +117,21 @@
       uploadListModal:{
         handler(val ,old){
           this.$emit('backUpImgList', {list: val})
+        },
+        deep:true
+      },
+      list:{
+        handler(val , old){
+          this.status = true
+          if (val.billStatus == 1 || val.billStatus == 2 || val.billStatus == 3  ){
+            this.status = false
+          }
+          if (val.voucherPictures.length < 5) {
+            this.uploadList = val.voucherPictures
+          }else {
+            this.uploadList = val.voucherPictures.slice(0, 5)
+            this.uploadListModal = val.voucherPictures
+          }
         },
         deep:true
       }

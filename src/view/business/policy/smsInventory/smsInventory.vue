@@ -673,7 +673,7 @@ export default {
     editPro() {
       //判断是否是新增状态
       if(this.flag){
-        return this.$Message.error("请先完善当前新增信息");
+        return this.$Message.error("提交前请先保存单据信息");
       }
       //判断是否为草稿状态
       if (this.Right.tbdata.length < 1) {
@@ -930,6 +930,7 @@ export default {
       //   "YYYY-MM-DD HH:mm:ss"
       // );
       this.$refs.SelectPartRef.searchPartLayer = false;
+      this.$Message.success("已添加");
       // getSubmitList(this.formPlan)
       //   .then(res => {
       //

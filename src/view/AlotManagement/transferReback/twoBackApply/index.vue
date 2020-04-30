@@ -164,7 +164,7 @@
                       <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
                     </FormItem>
                     <FormItem label="退回申请号：" prop="planOrderNum">
-                      <Input disabled class="w160" :value="Leftcurrentrow.serviceId"></Input>
+                      <Input disabled class="w160" :value="serviceId"></Input>
                     </FormItem>
                   </Form>
                 </div>
@@ -291,6 +291,7 @@ export default {
   },
   data() {
     return {
+      serviceId:"",
       newFlag: true,
       remarkStatus: true,
       flagStatus: false,
@@ -581,13 +582,14 @@ export default {
         this.$Message.error("调出仓库为必填项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.error("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   console.log(this.Leftcurrentrow)
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.error("请先选择加工单");
+      //     return;
+      //   }
+      // }
       // if (this.Leftcurrentrow.status.value !== 0) {
       //   this.$Message.error("只有草稿状态才能进行保存操作");
       //   return;
@@ -641,6 +643,7 @@ export default {
     },
     xinzeng() {
       this.newFlag = true;
+      this.serviceId = "";
       this.Leftcurrentrow = {
         status: {
           value: 1,
@@ -652,7 +655,8 @@ export default {
         createUname: "",
         remark: "",
         serviceId: "",
-        detailVOS: []
+        detailVOS: [],
+        xinzeng: "1",
       };
       // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {
@@ -717,21 +721,21 @@ export default {
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
-      params.status = params.status.value;
-      params.settleStatus = params.settleStatus.value;
-      params["orderTypeId"] = "3";
-      tijiao(params)
-        .then(res => {
-          // 点击列表行==>配件组装信息
-          if (res.code == 0) {
-            this.getList(this.form);
-            this.$Message.success("提交成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.error("提交失败");
-        });
-    },
+params.status = params.status.value;
+params.settleStatus = params.settleStatus.value;
+params["orderTypeId"] = "3";
+tijiao(params)
+  .then(res => {
+    // 点击列表行==>配件组装信息
+    if (res.code == 0) {
+      this.getList(this.form);
+      this.$Message.success("提交成功");
+    }
+  })
+  .catch(e => {
+    this.$Message.error("提交失败");
+  });
+},
     zuofei1() {
       this.$Modal.confirm({
         title: "是否确定作废订单!",
@@ -745,7 +749,7 @@ export default {
             return;
           }
           if (this.Leftcurrentrow.status.value !== 0) {
-            this.$Message.error("只有草稿状态加工单能进行作废操作");
+            this.$Message.error("只有草稿状态的单据才能进行作废操作");
             return;
           }
           const params = {
@@ -773,6 +777,7 @@ export default {
     selectAddlierName(row) {
       this.Left.tbdata = [...row];
       this.Right = row;
+
     },
     // 新增按钮
     addProoo() {
@@ -900,6 +905,7 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
       };
@@ -960,7 +966,8 @@ export default {
         return;
       }
       // 组装删除
-      const seleList = this.$refs.xTable1.getSelectRecords();
+      const seleList = this.$refs.xTable1.getCheckboxRecords();
+      seleList.forEach(el => el.oid = el.id);
       this.Leftcurrentrow.detailVOS = this.array_diff(
         this.Leftcurrentrow.detailVOS,
         seleList
@@ -1012,19 +1019,21 @@ export default {
     },
     getOkList(list, rowValue) {
       this.showit = false;
+      this.Leftcurrentrow.detailVOS = [];
       for (var i = 0; i < list.length; i++) {
+        list[i].oid = list[i].id;
         list[i].id = "";
         this.Leftcurrentrow.detailVOS.push(list[i]);
       }
-      var result = [];
-      var obj = {};
-      for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-        if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
-          result.push(this.Leftcurrentrow.detailVOS[i]);
-          obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
-        }
-      }
-      this.Leftcurrentrow.detailVOS = result;
+      // var result = [];
+      // var obj = {};
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
+      //     result.push(this.Leftcurrentrow.detailVOS[i]);
+      //     obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
+      //   }
+      // }
+      // this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
       this.Leftcurrentrow.guestName = rowValue.guestName;
@@ -1098,7 +1107,7 @@ export default {
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {
         for (var j = 0; j < a.length; j++) {
-          if (a[j].name === b[i].name) {
+          if (a[j].oid === b[i].oid) {
             a.splice(j, 1);
             j = j - 1;
           }

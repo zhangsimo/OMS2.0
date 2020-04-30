@@ -105,6 +105,11 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
+          title: "实物码",
+          key: "goodsCode",
+          minWidth: 120
+        },
+        {
           title: "单位",
           key: "minUnit",
           minWidth: 120
@@ -245,6 +250,11 @@ export default class Fittings extends Vue {
         {
           title: "OEM码",
           key: "oemCode",
+          minWidth: 120
+        },
+        {
+          title: "实物码",
+          key: "goodsCode",
           minWidth: 120
         },
         {

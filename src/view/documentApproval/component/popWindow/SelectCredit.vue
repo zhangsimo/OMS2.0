@@ -122,7 +122,7 @@
 
       //确定
       submit(){
-        if (this.checkedList.length < 1) return this.$Message.error('请选择一条信息')
+        if (Object.keys(this.checkedList).length < 1) return this.$Message.error('请选择一条信息')
         this.$emit('backLists' ,this.checkedList)
         this.modelShow = false
       }

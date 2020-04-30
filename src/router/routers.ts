@@ -880,6 +880,18 @@ export default [
           import("@/view/settlementManagement/Dailyfundaudit/index.vue")
       },
       {
+        path: "/settlementManagement/Expensereimbursement",
+        name: "settlementManagement-Expensereimbursement",
+        // mark: 'oms_orders_approve',
+        // mark: "5200",
+        meta: {
+          // hideInMenu: true,
+          title: "费用报销管理"
+        },
+        component: () =>
+          import("@/view/settlementManagement/Expensereimbursement/Expensereimbursement.vue")
+      },
+      {
         path: "/fundsManagement",
         name: "fundsManagement",
         // mark: "5100",
@@ -911,6 +923,39 @@ export default [
               import("@/view/settlementManagement/fundsManagement/accountRegistration/accountRegistration.vue")
           },
           {
+            path: "/fundsManagement/statistical",
+            name: "statistical",
+            mark: "5300",
+            meta: {
+              // hideInMenu: true,
+              title: "资金统计表"
+            },
+            component: () =>
+              import("@/view/settlementManagement/Statistical/statistical.vue")
+          },
+          {
+            path: "/fundsManagement/cashflow",
+            name: "cashflow",
+            mark: "5300",
+            meta: {
+              // hideInMenu: true,
+              title: "现金流量表"
+            },
+            component: () =>
+              import("@/view/settlementManagement/Statistical/cashflow.vue")
+          },
+          {
+            path: "/fundsManagement/accountings",
+            name: "accountings",
+            mark: "5300",
+            meta: {
+              // hideInMenu: true,
+              title: "会计审核"
+            },
+            component: () =>
+              import("@/view/settlementManagement/accounting/accounting.vue")
+          },
+          {
             path: "/fundsManagement/cashJournal",
             name: "cashJournal",
             redirect: "",
@@ -934,28 +979,17 @@ export default [
           },
         ]
       },
-      {
-        path: "/settlementManagement/DailyFundReview",
-        name: "settlementManagement-DailyFundReview",
-        mark: "5300",
-        meta: {
-          // hideInMenu: true,
-          title: "资金审核"
-        },
-        component: () =>
-          import("@/view/settlementManagement/DailyFundReview/index.vue")
-      },
-      {
-        path: "/settlementManagement/accounting",
-        name: "settlementManagement-accounting",
-        mark: "5300",
-        meta: {
-          // hideInMenu: true,
-          title: "会计审核"
-        },
-        component: () =>
-          import("@/view/settlementManagement/accounting/accounting.vue")
-      }
+      // {
+      //   path: "/settlementManagement/DailyFundReview",
+      //   name: "settlementManagement-DailyFundReview",
+      //   mark: "5300",
+      //   meta: {
+      //     // hideInMenu: true,
+      //     title: "资金审核"
+      //   },
+      //   component: () =>
+      //     import("@/view/settlementManagement/DailyFundReview/index.vue")
+      // }
     ]
   },
   {
@@ -985,29 +1019,10 @@ export default [
         name: "documentApproval-myApplication",
         // mark: "5100",
         meta: {
-          title: "我的申请"
+          title: "申请单"
         },
         component: () => import("@/view/documentApproval/myApplication/myApplication.vue")
       },
-      {
-        path: "/documentApproval/ForMyApproval",
-        name: "documentApproval-ForMyApproval",
-        // mark: "5100",
-        meta: {
-          title: "待我审批"
-        },
-        component: () => import("@/view/documentApproval/ForMyApproval/ForMyApproval.vue")
-      },
-      {
-        path: "/documentApproval/myApproval",
-        name: "documentApproval-myApproval",
-        // mark: "5100",
-        meta: {
-          title: "我的审批"
-        },
-        component: () => import("@/view/documentApproval/myApproval/myApproval.vue")
-      }
-
     ]
   },
 

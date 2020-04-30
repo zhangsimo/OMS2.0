@@ -351,14 +351,14 @@
               if (type === 1) {
                   this.claimModal = true;
                   this.claimTit = "其他付款认领";
-                  this.claimedList(1);
+                  this.claimedList(2);
               } else {
                 if(this.currRow.paymentBalance == 0 ||  !this.currRow.paymentBalance) {
                   this.$Message.error('他收款余额为0无法收回!')
                 }else {
                   this.claimTit = "其他收款收回";
                   this.claimModal = true;
-                  this.claimedList(2);
+                  this.claimedList(1);
                 }
               }
             }else{
@@ -464,12 +464,13 @@
          //收回认领
           claimCollection(){
               if(Object.keys(this.$refs.claim.currentClaimed).length !== 0){
-                if (Math.abs(this.$refs.claim.currentClaimed.paidMoney) <= this.currRow.paymentBalance) {
+                // console.log(this.$refs.claim.currentClaimed.incomeMoney  + "    " + this.currRow.paymentBalance)
+                if (Math.abs(this.$refs.claim.currentClaimed.incomeMoney) < this.currRow.paymentBalance) {
                   this.$refs.settlement.Settlement = true;
                   this.paymentId = "YSK";
                   this.typeA = '收回';
                 } else {
-                  this.$message.error("金额大于其他其他收款余额，无法认领");
+                  this.$message.error("收入金额大于其他其他收款余额，无法认领");
                 }
               }else {
                 this.$message.error('请选择认领的数据')

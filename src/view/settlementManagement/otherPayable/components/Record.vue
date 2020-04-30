@@ -54,10 +54,10 @@ export default {
           title: "核销方式",
           key: "",
           align: "center",
-          // render: (h, p) => {
-          //   let val = p.row.furpose.name;
-          //   return h("span", val);
-          // }
+          render: (h, p) => {
+            let val = p.row.furpose.name;
+            return h("span", val);
+          }
         },
         {
           title: "往来单位",
@@ -111,7 +111,15 @@ export default {
         {
           title: "收付款金额",
           key: "checkAmt",
-          align: "center"
+          align: "center",
+          render: (h, p) => {
+            let Number = p.row.checkAmt;
+            let val = p.row.sort.value;
+            if(val == 0){
+              Number = -Number
+            }
+            return h("span", Number);
+          }
         },
         {
           title: "审核状态",
@@ -166,12 +174,14 @@ export default {
           };
           return;
         }
-        if (key == "checkAmt") {
-          const values = data.map(item => Number(item[key]));
+        if (key === "checkAmt") {
+          const values = data.map(item => {
+            return item.sort.value === 0 ? -Number(item[key]) : Number(item[key]);
+          });
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
+              const valuea = Number(curr);
+              if (!isNaN(valuea)) {
                 return prev + curr;
               } else {
                 return prev;

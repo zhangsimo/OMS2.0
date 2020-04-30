@@ -33,26 +33,47 @@
             style="width: 450px"
             @on-change="getSupplierNamea"
           >
-            <Option v-for="item in ArrayValue" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+            <Option
+              v-for="item in ArrayValue"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.label }}</Option
+            >
           </Select>
           <!--<Input v-model="callout" placeholder="请选择调出方" style="width: 410px" disabled/>-->
           <!--<Button class="ml5" size="small" type="default" @click="addSuppler"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>-->
         </Row>
         <Row class="mt15">
           <span>申请单号：</span>
-          <Input v-model="numbers" placeholder="请输入申请单号" style="width: 450px" />
+          <Input
+            v-model="numbers"
+            placeholder="请输入申请单号"
+            style="width: 450px"
+          />
         </Row>
         <Row class="mt15">
           <span>配件编码：</span>
-          <Input v-model="coding" placeholder="请输入配件编码" style="width: 450px" />
+          <Input
+            v-model="coding"
+            placeholder="请输入配件编码"
+            style="width: 450px"
+          />
         </Row>
         <Row class="mt15">
           <span class="ml5">申 请 人：</span>
-          <Input v-model="Accessories" placeholder="请输入申请人" style="width: 450px" />
+          <Input
+            v-model="Accessories"
+            placeholder="请输入申请人"
+            style="width: 450px"
+          />
         </Row>
         <Row class="mt15">
           <span>配件名称：</span>
-          <Input v-model="Name" placeholder="请输入配件名称" style="width: 450px" />
+          <Input
+            v-model="Name"
+            placeholder="请输入配件名称"
+            style="width: 450px"
+          />
         </Row>
       </div>
       <div slot="footer">
@@ -61,7 +82,11 @@
       </div>
     </Modal>
 
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierNamea"></select-supplier>
+    <select-supplier
+      ref="selectSupplier"
+      header-tit="供应商资料"
+      @selectSupplierName="getSupplierNamea"
+    ></select-supplier>
   </div>
 </template>
 
@@ -102,7 +127,6 @@ export default {
       this.guestId = a;
     },
     init() {
-      this.ArrayValue = []; //调出方下拉框
       this.callout = ""; //调出方
       this.numbers = ""; //申请单号
       this.coding = ""; //编码
@@ -110,10 +134,9 @@ export default {
       this.Name = ""; //配件名称
       this.createData = ""; //创建日期
       this.submitData = ""; //提交日期
-      this.moreAndMore = false,
-      this.submita = "";
+      (this.moreAndMore = false), (this.submita = "");
       this.create = "";
-      this.guestId = "";      
+      this.guestId = "";
       this.moreAndMore = true;
     },
     sendMsg() {
@@ -154,9 +177,15 @@ export default {
       req.page = 1;
       req.size = 20;
       findForAllot(req).then(res => {
-        if (res.code === 0) {
-          this.ArrayValue = res.data.content;
-        }
+        var req = {};
+        req.page = 1;
+        req.size = 20;
+        findForAllot(req).then(res => {
+          const { content } = res.data;
+          content.forEach(item => {
+            this.ArrayValue.push({ value: item.id, label: item.fullName });
+          });
+        });
       });
     }
   },
@@ -170,4 +199,3 @@ export default {
   padding: 20px;
 }
 </style>
-
