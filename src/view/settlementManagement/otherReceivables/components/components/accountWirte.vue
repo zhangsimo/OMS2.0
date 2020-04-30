@@ -168,7 +168,7 @@ export default {
           : "",
         receivePaymentType: this.paymentId,
         guestId: this.companyId,
-        writeOffStatus: "TO_WRITE_OFF"
+        writeOffStatus: "0"
       };
       findByDynamicQuery(obj).then(res => {
         if (res.code === 0) {
