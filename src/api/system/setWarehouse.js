@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取左侧仓库
 export function getwarehouse (params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/findByOrgid`,
+    url: `${api.wmsApi}/comStore/findByShopid`,
     method: 'get',
     params
   })
