@@ -103,7 +103,8 @@ export default {
       accountTypeList: [
         { label: "oms", value: "oms" },
         { label: "wms", value: "wms" },
-        { label: "auth", value: "auth" }
+        { label: "auth", value: "auth" },
+        // { label: "tax", value: "tax" },
       ],
       form: {
         username: localStorage.getItem("username") || "",
