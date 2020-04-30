@@ -51,12 +51,8 @@ const dev = {
   authApi: "https://api2.g-parts.cn/gpart-passport-provider",
   omsBatch: "https://api2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.43:9270",
-<<<<<<< HEAD
-  // omsSettle: "https://api2.g-parts.cn/oms-settlement-provider",
-=======
   // omsSettle: "http://192.168.30.226:9271",
   omsSettle: "https://api2.g-parts.cn/oms-settlement-provider",
->>>>>>> 40a23243d2d9789644dacec00b4a9d3876c8f875
   omsSotck: "https://api2.g-parts.cn/oms-stock-provider",
   uploadApi:
     "https://api2.g-parts.cn/gpart-essential-provider/file/uploadFile",
