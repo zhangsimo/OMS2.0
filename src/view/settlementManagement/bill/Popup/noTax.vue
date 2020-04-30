@@ -364,6 +364,7 @@ export default {
     submission() {
       this.$refs.formCustom.validate(val => {
         if (val) {
+          console.log(this.information)
           let obj = {
             ...{
               orgCode: this.information.code,

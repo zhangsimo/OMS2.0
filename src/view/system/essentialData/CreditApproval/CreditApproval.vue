@@ -337,7 +337,6 @@ export default {
         this.CreditLineApplicationShow = true;
         viewDetails({id:this.creditData.id}).then(res => {
           if (res.code === 0) {
-            console.log(res)
             this.creaditList = this.creditData
             this.customerIfo = res.data.guestAdjustVOList
             this.customerDetails = res.data.guestAdjustVO;

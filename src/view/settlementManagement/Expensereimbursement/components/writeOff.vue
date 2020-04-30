@@ -13,34 +13,18 @@
         :data="tableData"
         align="center"
       >
-        <vxe-table-column
-          field="serviceId"
-          title="费用报销申请单号"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="applicationTime"
-          title="申请时间"
-        ></vxe-table-column>
+        <vxe-table-column field="serviceId" title="费用报销申请单号"></vxe-table-column>
+        <vxe-table-column field="applicationTime" title="申请时间"></vxe-table-column>
         <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
-        <vxe-table-column
-          field="reimbursementAmount"
-          title="费用报销总金额"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="totalPrice"
-          title="因公借支总金额"
-        ></vxe-table-column>
+        <vxe-table-column field="reimbursementAmount" title="费用报销总金额"></vxe-table-column>
+        <vxe-table-column field="totalPrice" title="因公借支总金额"></vxe-table-column>
         <vxe-table-column field="compay" title="公司应付"></vxe-table-column>
         <vxe-table-column field="ownpay" title="个人应还"></vxe-table-column>
       </vxe-table>
     </Row>
     <Row class="mb20 mt20">
       <Col span="8">
-        <button
-          class="ivu-btn ivu-btn-default ml10"
-          type="button"
-          @click="selectPage"
-        >
+        <button class="ivu-btn ivu-btn-default ml10" type="button" @click="selectPage">
           <i class="iconfont iconchaxunicon"></i>
           <span>选择单据</span>
         </button>
@@ -66,26 +50,19 @@
             <vxe-button type="text" @click="del(row)">删除</vxe-button>
           </template>
         </vxe-table-column>
-        <vxe-table-column
-          field="serviceId"
-          title="因公借支单号"
-        ></vxe-table-column>
+        <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
         <vxe-table-column title="借支金额">
           <template v-slot="{ row }">
             <span>
               {{
-                row.paymentReturnBalance <= 0
-                  ? row.payAmt
-                  : row.paymentReturnBalance
+              row.paymentReturnBalance <= 0
+              ? row.payAmt
+              : row.paymentReturnBalance
               }}
             </span>
           </template>
         </vxe-table-column>
-        <vxe-table-column
-          field="writeOffAmount"
-          title="因公借支核销金额"
-          :edit-render="{ name: 'input' }"
-        >
+        <vxe-table-column field="writeOffAmount" title="因公借支核销金额" :edit-render="{ name: 'input' }">
           <template v-slot:edit="{ row }">
             <el-input-number
               :min="0"
@@ -103,12 +80,7 @@
     <Modal title="因公借支申请查询" width="600" v-model="showChild">
       <Row>
         <span>申请日期：</span>
-        <Date-picker
-          v-model="dates"
-          type="daterange"
-          placeholder="选择日期"
-          class="w200"
-        ></Date-picker>
+        <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
         <Button @click="getQuery" class="ml10">
           <i class="iconfont iconchaxunicon"></i>
           <span>查询</span>
@@ -130,15 +102,9 @@
         >
           <vxe-table-column type="checkbox" width="60"></vxe-table-column>
           <vxe-table-column type="seq" width="60"></vxe-table-column>
-          <vxe-table-column
-            field="serviceId"
-            title="因公借支单号"
-          ></vxe-table-column>
+          <vxe-table-column field="serviceId" title="因公借支单号"></vxe-table-column>
           <vxe-table-column field="payAmt" title="借支金额"></vxe-table-column>
-          <vxe-table-column
-            field="applyTime"
-            title="申请日期"
-          ></vxe-table-column>
+          <vxe-table-column field="applyTime" title="申请日期"></vxe-table-column>
           <vxe-table-column field="applicant" title="申请人"></vxe-table-column>
           <vxe-table-column field="summary" title="摘要"></vxe-table-column>
         </vxe-table>
@@ -160,7 +126,7 @@
         show-elevator
         show-sizer
         show-total
-      ></Page> -->
+    ></Page>-->
     <br />
   </Modal>
 </template>
@@ -347,8 +313,19 @@ export default {
           if (columnIndex === 0) {
             return "合计";
           }
-          if (["payAmt", "writeOffAmount"].includes(column.property)) {
-            this.totalfooter = xeUtils.sum(data, column.property);
+          if (["writeOffAmount"].includes(column.property)) {
+            if (
+              this.tableData[0].reimbursementAmount <
+              this.tableData[0].totalPrice
+            ) {
+              this.totalfooter =
+                this.tableData[0].reimbursementAmount -
+                xeUtils.sum(data, column.property);
+            } else {
+              this.totalfooter =
+                this.tableData[0].totalPrice -
+                xeUtils.sum(data, column.property);
+            }
             return this.totalfooter;
           }
           return null;

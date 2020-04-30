@@ -252,7 +252,8 @@ export default class GoodsInfo extends Vue {
     let res: any = await fapi.getGoodsInfos2({
       mainId: this.mainId,
       guestId:parentD.formPlan.guestId,
-      directCompanyId
+      directCompanyId,
+      sign:"sign"
     });
     if (res.code == 0) {
       this.tableData = res.data;
