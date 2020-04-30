@@ -1137,6 +1137,7 @@ export default {
         );
         setTimeout(() => {
           this.Leftcurrentrow.detailVOS = NoRepeat;
+          this.$Message.success("删除成功");
         }, 1000);
 
         seleList.map(item => {
