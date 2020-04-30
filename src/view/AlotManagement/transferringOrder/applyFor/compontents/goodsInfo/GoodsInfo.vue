@@ -246,23 +246,29 @@ export default class GoodsInfo extends Vue {
   }
 
   private async getLists() {
-    const parentD:any = this.$parent;
+    const parentD: any = this.$parent;
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
-    let res: any = await fapi.getGoodsInfos2({
+    let obj = {
       mainId: this.mainId,
-      guestId:parentD.formPlan.guestId,
+      guestId: parentD.formPlan.guestId,
       directCompanyId,
-      sign:"sign"
-    });
+      sign: ""
+    };
+    if (this.$route.name == "salesOrder") {
+      obj.sign = "sign";
+    } else {
+      delete obj.sign;
+    }
+    let res: any = await fapi.getGoodsInfos2(obj);
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
 
-      for(let b of this.tableData){
-        if(b.isDefault===1){
-          this.echoDate({row:b});
-          let thisTable:any = this.$refs.xTable1;
+      for (let b of this.tableData) {
+        if (b.isDefault === 1) {
+          this.echoDate({ row: b });
+          let thisTable: any = this.$refs.xTable1;
           thisTable.setRadioRow(b);
           break;
         }
@@ -272,9 +278,9 @@ export default class GoodsInfo extends Vue {
 
   //获取物流下拉框
   private async inlogistics() {
-    const parentD:any = this.$parent;
+    const parentD: any = this.$parent;
     let guestId = parentD.formPlan.guestId;
-    let params: any = {guestId:guestId};
+    let params: any = { guestId: guestId };
     if (this.formDateRight.deliveryType == 2) {
       params.logisticsType = "020701";
     }
@@ -401,7 +407,7 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
-    const parentD:any = this.$parent;
+    const parentD: any = this.$parent;
     data.guestId = parentD.formPlan.guestId;
     let res = await fapi.getGoodsInfos2(data);
     if (res.code == 0) {
