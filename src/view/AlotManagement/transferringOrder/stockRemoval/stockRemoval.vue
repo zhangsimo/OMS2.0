@@ -1140,12 +1140,13 @@ export default {
         }, 1000);
 
         seleList.map(item => {
-          arr.push(item.id);
+          if(item.id)arr.push(item.id);
         });
         const params = {
           ids: arr,
           mainId: this.Leftcurrentrow.id
         };
+        if(params.ids.length===0) return
         shanqu(params)
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
