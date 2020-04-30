@@ -23,6 +23,9 @@
               disabled
             ></Input>
           </FormItem>
+          <FormItem label="预收款:">
+            <Input :value="customerDetails.preAmt || 0" style="width: 150px" disabled></Input>
+          </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="申请增加固定额度:">
