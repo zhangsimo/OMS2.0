@@ -19,6 +19,9 @@
           <FormItem label="调整前临时额度:">
             <Input :value="data.tempCreditLimit || 0" style="width: 150px" disabled></Input>
           </FormItem>
+          <FormItem label="预收款:">
+            <Input :value="payable.preAmt || 0" style="width: 150px" disabled></Input>
+          </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="申请增加固定额度:" prop="applyQuota">
@@ -356,24 +359,6 @@ export default {
     this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
   },
   methods: {
-    // dataChange() {
-    //   if (this.data.tempStart) {
-    //     this.data.tempStart = moment(this.data.tempStart).format(
-    //       "YYYY-MM-DD HH:mm:ss"
-    //     );
-    //   } else {
-    //     this.data.tempStart = "";
-    //   }
-    // },
-    // dataChange1() {
-    //   if (this.data.tempEnd) {
-    //     this.data.tempEnd = moment(this.data.tempEnd).format(
-    //       "YYYY-MM-DD HH:mm:ss"
-    //     );
-    //   } else {
-    //     this.data.tempEnd = "";
-    //   }
-    // },
     resetFields() {
       this.$refs.form.resetFields();
     },
@@ -526,8 +511,7 @@ export default {
     },
     //调整前剩余额度
     sum2() {
-      let sum =
-        +this.data.creditLimit + this.data.tempCreditLimit + this.payable.sumAmt;
+      let sum =this.data.creditLimit*1 + this.data.tempCreditLimit*1-this.payable.receivableAmt*1-this.payable.occupyAmt*1+this.payable.preAmt*1
       return isNaN(sum) ? 0 : sum;
     },
     //调整后剩余额度
