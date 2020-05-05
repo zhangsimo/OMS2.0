@@ -782,6 +782,8 @@ export default {
       //新加入字段
       data.beforeAdjustQuota = this.$refs.child.beforeAdjustQuota;
       data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.sumAmt = this.payable.sumAmt || 0;
       // console.log(data)
       // return
       save(data).then(res => {
