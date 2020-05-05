@@ -192,7 +192,7 @@
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem v-if="data.isGuestResearch == 0" label="申请授信额度:" prop="applyTrustMoney">
+        <FormItem class="ivu-form-item-required" v-if="data.isGuestResearch == 0" label="申请授信额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
         </FormItem>
         <FormItem v-else label="调整原因:" prop="adjustReason">
