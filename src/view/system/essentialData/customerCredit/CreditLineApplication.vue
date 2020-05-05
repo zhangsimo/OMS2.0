@@ -351,7 +351,9 @@ export default {
         }
       ],
       applyDate: "",
-        applyTotalAmt:0,
+      applyTotalAmt:0,
+      beforeAdjustQuota:0,//调整前剩余额度
+      afterAdjustQuota:0,//调整后剩余额度
     };
   },
   mounted() {
@@ -512,6 +514,7 @@ export default {
     //调整前剩余额度
     sum2() {
       let sum =this.data.creditLimit*1 + this.data.tempCreditLimit*1-this.payable.receivableAmt*1-this.payable.occupyAmt*1+this.payable.preAmt*1
+      this.beforeAdjustQuota = isNaN(sum) ? 0 : sum;
       return isNaN(sum) ? 0 : sum;
     },
     //调整后剩余额度
@@ -519,6 +522,7 @@ export default {
       // this.data.totalSum = this.sum + this.sum2;
       // this.data.totalSum = ((+this.data.applyQuota+this.data.creditLimit)||0 + (+this.data.tempQuota + this.data.tempCreditLimit) ||0 +this.data.applyQuota + (+this.data.tempQuota) || 0) + this.payable.sumAmt||0;
       this.data.totalSum = ( parseFloat(this.data.creditLimit|| 0) +  parseFloat(this.data.tempCreditLimit || 0) +  parseFloat(this.data.applyQuota || 0)  + parseFloat(this.data.tempQuota||0) )+  parseFloat(this.payable.sumAmt||0);
+      this.afterAdjustQuota = isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
       return isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
 
 
