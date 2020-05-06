@@ -44,14 +44,14 @@
         <Col span="8">
           <FormItem label="调整后固定额度:">
             <Input
-              :value="+data.applyQuota + data.creditLimit || 0 + (+data.applyQuota) || 0"
+              :value="(data.applyQuota*1||0) + (data.creditLimit*1||0)"
               style="width: 150px"
               disabled
             ></Input>
           </FormItem>
           <FormItem label="调整后临时额度:">
             <Input
-              :value="+data.tempQuota + data.tempCreditLimit || 0 + (+data.tempQuota) || 0"
+              :value="(data.tempCreditLimit*1 || 0)+(data.tempQuota*1||0)"
               style="width: 150px"
               disabled
             ></Input>
@@ -101,7 +101,7 @@
         <Col span="8">
           <FormItem label="调整后累计额度:">
             <Input
-              :value="(+data.applyQuota+data.creditLimit) + (+data.tempQuota + data.tempCreditLimit) || +data.applyQuota + (+data.tempQuota) || 0"
+              :value="(data.applyQuota*1||0) + (data.creditLimit*1||0)+(data.tempCreditLimit*1 || 0)+(data.tempQuota*1||0)"
               style="width: 150px"
               disabled
             ></Input>
@@ -351,7 +351,10 @@ export default {
         }
       ],
       applyDate: "",
-        applyTotalAmt:0,
+      applyTotalAmt:0,
+      beforeAdjustQuota:0,//调整前剩余额度
+      afterAdjustQuota:0,//调整后剩余额度
+      sumTotal:0,//申请增加额度合计
     };
   },
   mounted() {
@@ -512,13 +515,16 @@ export default {
     //调整前剩余额度
     sum2() {
       let sum =this.data.creditLimit*1 + this.data.tempCreditLimit*1-this.payable.receivableAmt*1-this.payable.occupyAmt*1+this.payable.preAmt*1
+      this.beforeAdjustQuota = isNaN(sum) ? 0 : sum;
       return isNaN(sum) ? 0 : sum;
     },
     //调整后剩余额度
     sum3() {
+      this.data.totalSum = this.sum2+this.sum
       // this.data.totalSum = this.sum + this.sum2;
       // this.data.totalSum = ((+this.data.applyQuota+this.data.creditLimit)||0 + (+this.data.tempQuota + this.data.tempCreditLimit) ||0 +this.data.applyQuota + (+this.data.tempQuota) || 0) + this.payable.sumAmt||0;
-      this.data.totalSum = ( parseFloat(this.data.creditLimit|| 0) +  parseFloat(this.data.tempCreditLimit || 0) +  parseFloat(this.data.applyQuota || 0)  + parseFloat(this.data.tempQuota||0) )+  parseFloat(this.payable.sumAmt||0);
+      // this.data.totalSum = ( parseFloat(this.data.creditLimit|| 0) +  parseFloat(this.data.tempCreditLimit || 0) +  parseFloat(this.data.applyQuota || 0)  + parseFloat(this.data.tempQuota||0) )+  parseFloat(this.payable.sumAmt||0);
+      this.afterAdjustQuota = isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
       return isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
 
 

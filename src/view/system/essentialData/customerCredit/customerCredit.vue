@@ -476,8 +476,12 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
+      this.creaditList.tempEnd = new Date(row.tempEnd)
+      this.creaditList.tempStart = new Date(row.tempStart)
       this.creaditList.rollingDate = this.creaditList.rollingDate||1;
+      this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
       this.flag = row.isGuestResearch;
+      console.log(this.creaditList)
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
         ? JSON.parse(row.researchStatus).value
@@ -777,6 +781,14 @@ export default {
         +this.creaditList.applyQuota + +this.creaditList.tempQuota;
       data.addTotalQuota = this.creaditList.tototo || 0;
       data.adjustType = 0;
+      //新加入字段
+      data.beforeAdjustQuota = this.$refs.child.beforeAdjustQuota;
+      data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.sumAmt = this.payable.sumAmt || 0;
+      data.preAmt = this.payable.preAmt;
+      // console.log(data)
+      // return
       save(data).then(res => {
         if (res.code === 0) {
           this.CreditLineApplicationShow = false;

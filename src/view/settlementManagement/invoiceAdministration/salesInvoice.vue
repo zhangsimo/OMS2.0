@@ -220,6 +220,7 @@ import {
   voidSalesList,
   writeSalesList
 } from "_api/salesManagment/salesInvoice";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -431,10 +432,7 @@ export default {
   methods: {
     //模板下载
     exportDown() {
-      location.href =
-        baseUrl.omsSettle +
-        "/salesInvoice/downloadTemplate?access_token=" +
-        Cookies.get(TOKEN_KEY);
+      down(1700000000)
     },
     handleBeforeUpload() {},
     onFormatError(file) {
