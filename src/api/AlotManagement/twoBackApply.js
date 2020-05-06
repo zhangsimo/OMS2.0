@@ -45,7 +45,7 @@ export function tijiao(data) {
 //删除
 export function shanqu(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyDetail/del`,
+    url: `${api.omsOrder}/allotAcceptDetail/del`,
     method: "post",
     data
   });
