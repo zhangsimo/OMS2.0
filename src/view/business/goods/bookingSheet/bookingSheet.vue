@@ -1,195 +1,342 @@
 <template>
-  <div>
-    <div class="content-oper content-oper-flex">
-      <section class="oper-box">
-        <div class="oper-top flex">
-          <div class="wlf">
-            <div class="db">
-              <span>快速查询：</span>
-              <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-              <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
-                <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
-              </Select>
-            </div>
-            <div class="db">
-              <Button type="default" @click="moreaa" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
-            </div>
-            <div class="db">
-              <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
-            </div>
-            <div class="db">
-              <Button type="default" @click='SaveMsg' v-has="'save'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
-            </div>
-            <div class="db">
-              <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
-            </div>
-            <div class="db">
-              <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
-            </div>
-            <div class="db">
-              <Button @click="derive" v-has="'export'" class="mr10"><i class="iconfont mr5 icondayinicon"></i> 导出</Button>
-            </div>
+  <div class="content-oper content-oper-flex">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf">
+          <div class="db">
+            <span>快速查询：</span>
+            <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+            <Select
+              v-model="purchaseType"
+              class="w90 mr10"
+              @on-change="SelectChange"
+            >
+              <Option
+                v-for="item in purchaseTypeArr"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.label }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db">
+            <Button type="default" @click="moreaa" class="mr10"
+              ><i class="iconfont mr5 iconchaxunicon"></i>更多</Button
+            >
+          </div>
+          <div class="db">
+            <Button class="mr10" @click="addProoo" v-has="'add'"
+              ><Icon type="md-add" /> 新增</Button
+            >
+          </div>
+          <div class="db">
+            <Button
+              type="default"
+              @click="SaveMsg"
+              v-has="'save'"
+              class="mr10"
+              :disabled="buttonDisable || presentrowMsg !== 0"
+              ><i class="iconfont mr5 iconbaocunicon"></i>保存</Button
+            >
+          </div>
+          <div class="db">
+            <Button
+              class="mr10"
+              @click="instance"
+              v-has="'submit'"
+              :disabled="buttonDisable || presentrowMsg !== 0"
+              ><i class="iconfont mr5 iconziyuan2"></i>提交</Button
+            >
+          </div>
+          <div class="db">
+            <Button
+              @click="cancellation"
+              v-has="'cancellation'"
+              class="mr10"
+              :disabled="buttonDisable || presentrowMsg !== 0"
+              ><Icon type="md-close" size="14" /> 作废</Button
+            >
+          </div>
+          <div class="db">
+            <Button @click="derive" v-has="'export'" class="mr10"
+              ><i class="iconfont mr5 icondayinicon"></i> 导出</Button
+            >
           </div>
         </div>
-      </section>
-      <section class="con-box">
-        <div class="inner-box">
-          <div class="con-split" ref="paneLeft" >
-            <Split v-model="split1" min="200" max="500">
-              <div slot="left" class="con-split-pane-left" >
-                <div class="pane-made-hd">
-                  预订单列表
-                </div>
-                <Table ref="currentRowTable" :height="leftTableHeight"  @on-current-change="selectTabelData" size="small" highlight-row  border :stripe="false" :columns="Left.columns" :data="Left.tbdata" @on-row-click="selection"></Table>
-                <Page
-                  :page-size-opts="[20, 50, 100, 200]"
-                  class-name="fl pt10"
-                  size="small"
-                  :current="Left.page.num"
-                  :total="Left.page.total"
-                  :page-size="Left.page.size"
-                  @on-change="changePageLeft"
-                  @on-page-size-change="changeSizeLeft"
-                  show-sizer
-                  show-total
-                >
-                </Page>
+      </div>
+    </section>
+    <section class="con-box">
+      <div class="inner-box">
+        <div class="con-split" ref="paneLeft">
+          <Split v-model="split1" min="200" max="500">
+            <div slot="left" class="con-split-pane-left">
+              <div class="pane-made-hd">
+                预订单列表
               </div>
-              <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-                <div class="pane-made-hd">
-                  预订单信息
-                </div>
-                <div class="clearfix purchase" ref="planForm">
-                  <Form inline
-                        :model="formPlan"
-                        :show-message="false"
-                        ref="formPlan"
-                        :rules="ruleValidate"
-                        :label-width="100">
-                    <FormItem label="业务员：" prop="salesman">
-                      <Input class="w160" :disabled="true" v-model="formPlan.salesman"></Input>
-                    </FormItem>
-                    <FormItem label="预订单号:" prop="Reservation" class="ml50">
-                      <Input class="w160" :disabled="true" v-model="formPlan.Reservation"></Input>
-                    </FormItem>
-                    <FormItem label="期望到货日期：" prop="orderDate" class="fs12 ml50">
-                      <DatePicker
-                        @on-change="changedate"
-                        style="width: 160px"
-                        type="date"
-                        placeholder="请选择期望到货日期"
-                        v-model="formPlan.orderDate"
-                        :disabled="presentrowMsg !== 0 || buttonDisable"
-                      ></DatePicker>
-                    </FormItem>
-                    <FormItem label="备注：" prop="remark">
-                      <Input class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
-                    </FormItem>
-                  </Form>
-                </div>
-                <div class="flex plan-cz-btn" ref="planBtn">
-                  <div class="clearfix">
-                    <div class="fl mb5">
-                      <Button size="small" class="mr10" @click="addPro" v-has="'AddAccessories'" :disabled="presentrowMsg !== 0 || buttonDisable"><Icon type="md-add"/> 添加配件</Button>
-                    </div>
-                    <div class="fl mb5">
-                      <Button size="small" class="mr10" :disabled="presentrowMsg !== 0 || buttonDisable" @click="Delete" v-has="'deletePart'"><i class="iconfont mr5 iconlajitongicon"></i> 删除配件</Button>
-                    </div>
-                    <div class="fl mb5">
-                      <Upload
-                        ref="upload"
-                        style="display: inline-block"
-                        :show-upload-list="false"
-                        :action="upurl"
-                        :headers="headers"
-                        :format="['xlsx','xls']"
-                        :on-format-error="onFormatError"
-                        :on-success="onSuccess"
-                        :before-upload ='beforeUpload'
+              <Table
+                ref="currentRowTable"
+                :height="leftTableHeight"
+                @on-current-change="selectTabelData"
+                size="small"
+                highlight-row
+                border
+                :stripe="false"
+                :columns="Left.columns"
+                :data="Left.tbdata"
+                @on-row-click="selection"
+              ></Table>
+              <Page
+                :page-size-opts="[20, 50, 100, 200]"
+                class-name="fl pt10"
+                size="small"
+                :current="Left.page.num"
+                :total="Left.page.total"
+                :page-size="Left.page.size"
+                @on-change="changePageLeft"
+                @on-page-size-change="changeSizeLeft"
+                show-sizer
+                show-total
+              >
+              </Page>
+            </div>
+            <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+              <div class="pane-made-hd">
+                预订单信息
+              </div>
+              <div class="clearfix purchase" ref="planForm">
+                <Form
+                  inline
+                  :model="formPlan"
+                  :show-message="false"
+                  ref="formPlan"
+                  :rules="ruleValidate"
+                  :label-width="100"
+                >
+                  <FormItem label="业务员：" prop="salesman">
+                    <Input
+                      class="w160"
+                      :disabled="true"
+                      v-model="formPlan.salesman"
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="预订单号:" prop="Reservation" class="ml50">
+                    <Input
+                      class="w160"
+                      :disabled="true"
+                      v-model="formPlan.Reservation"
+                    ></Input>
+                  </FormItem>
+                  <FormItem
+                    label="期望到货日期："
+                    prop="orderDate"
+                    class="fs12 ml50"
+                  >
+                    <DatePicker
+                      @on-change="changedate"
+                      style="width: 160px"
+                      type="date"
+                      placeholder="请选择期望到货日期"
+                      v-model="formPlan.orderDate"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                    ></DatePicker>
+                  </FormItem>
+                  <FormItem label="备注：" prop="remark">
+                    <Input
+                      class="w160"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      v-model="formPlan.remark"
+                      :maxlength="100"
+                    ></Input>
+                  </FormItem>
+                </Form>
+              </div>
+              <div class="flex plan-cz-btn" ref="planBtn">
+                <div class="clearfix">
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      @click="addPro"
+                      v-has="'AddAccessories'"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      ><Icon type="md-add" /> 添加配件</Button
+                    >
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      class="mr10"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      @click="Delete"
+                      v-has="'deletePart'"
+                      ><i class="iconfont mr5 iconlajitongicon"></i>
+                      删除配件</Button
+                    >
+                  </div>
+                  <div class="fl mb5">
+                    <Upload
+                      ref="upload"
+                      style="display: inline-block"
+                      :show-upload-list="false"
+                      :action="upurl"
+                      :headers="headers"
+                      :format="['xlsx', 'xls']"
+                      :on-format-error="onFormatError"
+                      :on-success="onSuccess"
+                      :before-upload="beforeUpload"
+                    >
+                      <Button
+                        size="small"
+                        class="mr10"
+                        @click="getRUl"
+                        v-has="'import'"
+                        :disabled="LeadIn || presentrowMsg !== 0"
+                        ><i class="iconfont mr5 iconbianjixiugaiicon"></i
+                        >导入配件</Button
                       >
-                    <Button size="small" class="mr10" @click="getRUl" v-has="'import'" :disabled="LeadIn || presentrowMsg !== 0"><i class="iconfont mr5 iconbianjixiugaiicon"></i>导入配件</Button>
-                   </Upload>
-                    </div>
-                    <div class="fl mb5">
-                      <Button size="small" @click="down" :disabled="presentrowMsg !== 0 || buttonDisable" v-has="'download'">
-                        <Icon custom="iconfont iconxiazaiicon icons" />下载模板
-                      </Button>
-                    </div>
+                    </Upload>
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
+                      @click="down"
+                      :disabled="presentrowMsg !== 0 || buttonDisable"
+                      v-has="'download'"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
                   </div>
                 </div>
-                <vxe-table
-                  ref="xTable"
-                  border
-                  resizable
-                  show-footer
-                  @select-change="selectChange"
-                  @edit-closed="editClosedEvent"
-                  @select-all="selectAll"
-                  size="mini"
-                  :edit-rules="validRules"
-                  :height="rightTableHeight"
-                  :data="Right.tbdata"
-                  :footer-method="addFooter"
-                  showOverflow="true"
-                  @edit-actived="editActivedEvent"
-                  :edit-config="{trigger: 'click', mode: 'cell'}">
-                  <vxe-table-column type="index" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" width="150"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column
-                    field="preQty"
-                    title="预定数量"
-                    :edit-render="{name: 'input',attrs: {disabled: false}}"
-                    width="100">
-                  </vxe-table-column>
-                  <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0},maxlength:100}" width="100"></vxe-table-column>
-                  <vxe-table-column field="acceptQty" title="受理数量" width="100"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                  <!--<vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>-->
-                  <vxe-table-column field="partInnerId" title="配件内码" width="150"></vxe-table-column>
-                </vxe-table>
-                <div ref="planPage">
-                </div>
               </div>
-            </Split>
-          </div>
+              <vxe-table
+                ref="xTable"
+                border
+                resizable
+                show-footer
+                @select-change="selectChange"
+                @edit-closed="editClosedEvent"
+                @select-all="selectAll"
+                size="mini"
+                :edit-rules="validRules"
+                :height="rightTableHeight"
+                :data="Right.tbdata"
+                :footer-method="addFooter"
+                showOverflow="true"
+                @edit-actived="editActivedEvent"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
+              >
+                <vxe-table-column type="index" title="序号"></vxe-table-column>
+                <vxe-table-column type="checkbox"></vxe-table-column>
+                <vxe-table-column
+                  field="partCode"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partName"
+                  title="配件名称"
+                  width="150"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partBrand"
+                  title="品牌"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="unit"
+                  title="单位"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="preQty"
+                  title="预定数量"
+                  :edit-render="{ name: 'input', attrs: { disabled: false } }"
+                  width="100"
+                >
+                </vxe-table-column>
+                <vxe-table-column
+                  field="remark"
+                  title="备注"
+                  :edit-render="{
+                    name: 'input',
+                    attrs: { disabled: presentrowMsg !== 0 },
+                    maxlength: 100
+                  }"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="acceptQty"
+                  title="受理数量"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="oemCode"
+                  title="OE码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="spec"
+                  title="规格"
+                  width="100"
+                ></vxe-table-column>
+                <!--<vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>-->
+                <vxe-table-column
+                  field="partInnerId"
+                  title="配件内码"
+                  width="150"
+                ></vxe-table-column>
+              </vxe-table>
+              <div ref="planPage"></div>
+            </div>
+          </Split>
         </div>
-      </section>
-      <!--更多弹框-->
-      <More @sendMsg="getMsg" ref="moremore"></More>
-      <!--选择配件-->
-      <Select-part-com ref="SelectPartCom" @selectPartName="getPartNameList" :is-show-add-part-btn="true" @isShow="false"></Select-part-com>
-      <!--编辑收货信息-->
-      <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
-
-    </div>
+      </div>
+    </section>
+    <!--更多弹框-->
+    <More @sendMsg="getMsg" ref="moremore"></More>
+    <!--选择配件-->
+    <Select-part-com
+      ref="SelectPartCom"
+      @selectPartName="getPartNameList"
+      :is-show-add-part-btn="true"
+      @isShow="false"
+    ></Select-part-com>
+    <!--编辑收货信息-->
+    <goods-info ref="goodsInfo" :mainId="mainId"></goods-info>
     <!--供应商资料-->
-    <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+    <select-supplier
+      ref="selectSupplier"
+      header-tit="供应商资料"
+      @selectSupplierName="getSupplierName"
+    ></select-supplier>
   </div>
 </template>
 
 <script>
-  import * as tools from "../../../../utils/tools";
+import * as tools from "../../../../utils/tools";
 
-  import QuickDate from '../../../../components/getDate/dateget'
-  import More from './compontents/More'
-  import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
-  import GoodsInfo from '../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo'
-  import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
-  import '../../../lease/product/lease.less';
-  import "../../../goods/goodsList/goodsList.less";
-  // import supplier from './compontents/supplier'
-  import PrintShow from "./compontents/PrintShow";
-  import Cookies from 'js-cookie'
-  import { optGroup ,deleteit, save, commitOrder, invalid, getup} from '../../../../api/business/advanceOrder';
-  import { TOKEN_KEY } from '@/libs/util'
-  import baseUrl from '_conf/url'
+import QuickDate from "../../../../components/getDate/dateget";
+import More from "./compontents/More";
+import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+import GoodsInfo from "../../../../view/goods/plannedPurchaseOrder/components/GoodsInfo";
+import SelectSupplier from "../../../goods/goodsList/components/supplier/selectSupplier";
+import "../../../lease/product/lease.less";
+import "../../../goods/goodsList/goodsList.less";
+// import supplier from './compontents/supplier'
+import PrintShow from "./compontents/PrintShow";
+import Cookies from "js-cookie";
+import {
+  optGroup,
+  deleteit,
+  save,
+  commitOrder,
+  invalid,
+  getup
+} from "../../../../api/business/advanceOrder";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
-    name: 'bookingSheet',
+  name: "bookingSheet",
   components: {
     QuickDate,
     More,
@@ -200,53 +347,54 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = ({cellValue }) => {
+    let changeNumber = ({ cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
-      if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+      if (!reg.test(cellValue)) {
+        return Promise.reject(new Error("角色输入不正确"));
       }
     };
     return {
       //校验输入框的值
       validRules: {
-        preQty: [
-          { required: true,validator:changeNumber },
-        ]
+        preQty: [{ required: true, validator: changeNumber }]
       },
       LeadIn: true, //判断导入配件的按钮是否启用
-      checkboxArr:[],// checkbox选中
+      checkboxArr: [], // checkbox选中
       disSave: false, // 保存按钮是否禁用
-      PTrow: {//新增当前行
+      PTrow: {
+        //新增当前行
         new: true,
         _highlight: true,
-        status: {"name":"草稿","value":0},
-        guestName: '',
-        createUname: '',
-        serviceId: '',
-        orderMan:'',
-        orderDate: '',
-        printing: '',
+        status: { name: "草稿", value: 0 },
+        guestName: "",
+        createUname: "",
+        serviceId: "",
+        orderMan: "",
+        orderDate: "",
+        printing: "",
         createTime: tools.transTime(new Date()),
-        detailVOS: [],
+        detailVOS: []
       },
       //表单验证
       ruleValidate: {
-        salesman: [{ required: true ,message: '调出方不能为空', trigger: 'blur' }]
+        salesman: [
+          { required: true, message: "调出方不能为空", trigger: "blur" }
+        ]
       },
       datadata: null,
-      rowId:'', //当前行的id
+      rowId: "", //当前行的id
       buttonDisable: true,
       buttonDisableTwo: true,
-      split1:0.2,
-      purchaseType: '99',
-      purchaseTypeArr:[
-        { label:'所有',value:'99' },
-        { label:'草稿',value:'0' },
-        { label:'待受理',value:'1' },
-        { label:'已受理',value:'3' },
-        { label:'已作废',value:'5' },
+      split1: 0.2,
+      purchaseType: "99",
+      purchaseTypeArr: [
+        { label: "所有", value: "99" },
+        { label: "草稿", value: "0" },
+        { label: "待受理", value: "1" },
+        { label: "已受理", value: "3" },
+        { label: "已作废", value: "5" }
       ],
-      List:[],
+      List: [],
       Left: {
         page: {
           num: 1,
@@ -256,58 +404,58 @@ export default {
         loading: false,
         columns: [
           {
-            title: '序号',
+            title: "序号",
             minWidth: 50,
-            type:'index'
+            type: "index"
           },
           {
-            title: '状态',
-            key: 'status',
+            title: "状态",
+            key: "status",
             minWidth: 70,
-            render:(h,params) => {
-              let name = params.row.status.name
-              return h('span',name)
+            render: (h, params) => {
+              let name = params.row.status.name;
+              return h("span", name);
             }
           },
           {
-            title: '公司',
-            key: 'company',
+            title: "公司",
+            key: "company",
             minWidth: 80
           },
           {
-            title: '创建日期',
-            key: 'createTime',
+            title: "创建日期",
+            key: "createTime",
             minWidth: 120
           },
           {
-            title: '业务员',
-            key: 'salesman',
+            title: "业务员",
+            key: "salesman",
             minWidth: 100
           },
           {
-            title: '预定单号',
-            key: 'orderNo',
+            title: "预定单号",
+            key: "orderNo",
             minWidth: 120
           },
           {
-            title: '提交人',
-            key: 'commitUname',
+            title: "提交人",
+            key: "commitUname",
             minWidth: 100
           },
           {
-            title: '提交日期',
-            align:'center',
-            key: 'commitTime',
+            title: "提交日期",
+            align: "center",
+            key: "commitTime",
             minWidth: 170
           }
         ],
         tbdata: []
       },
-      tableData:[],
+      tableData: [],
       //左侧表格高度
-      leftTableHeight:0,
+      leftTableHeight: 0,
       //右侧表格高度
-      rightTableHeight:0,
+      rightTableHeight: 0,
       Right: {
         page: {
           num: 1,
@@ -315,66 +463,70 @@ export default {
           total: 0
         },
         loading: false,
-        tbdata: [],
+        tbdata: []
       },
       advanced: false, //更多模块的弹框
       GainInformation: false, //编辑收获信息
-      rowData: '',  //声明一个数据，用于赋值右边内容
-      selectArr:[], //快速查询的数组 用于赋值,
+      rowData: "", //声明一个数据，用于赋值右边内容
+      selectArr: [], //快速查询的数组 用于赋值,
       moreArr: {},
       presentrowMsg: 0,
-      guestidId: '' ,//给后台传值保存调出方的id
-      isAdd:true, //判断是否能新增
+      guestidId: "", //给后台传值保存调出方的id
+      isAdd: true, //判断是否能新增
       formPlan: {
-        salesman: '', //业务员
-        Reservation: '', //预订单号
+        salesman: "", //业务员
+        Reservation: "", //预订单号
         orderDate: tools.transTime(new Date()), //期望到货日期
-        remark: '', //备注
+        remark: "" //备注
       },
       headers: {
-        Authorization:'Bearer ' + Cookies.get(TOKEN_KEY)
-      },//请求头
-      upurl: getup,//导入地址
+        Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
+      }, //请求头
+      upurl: getup, //导入地址
       mainId: null, //选中行的id
       clickdelivery: false,
       Flaga: false,
       successNOid: false,
       successHaveId: false,
-      selectLeftItemId:"",
-    }
+      selectLeftItemId: ""
+    };
   },
   methods: {
-      //改变日期
-    changedate(a){
-      this.formPlan.orderDate = a
+    //改变日期
+    changedate(a) {
+      this.formPlan.orderDate = a;
     },
     //删除配件
-    Delete(){
-      if(this.checkboxArr.length > 0){
-        var result = this.checkboxArr.every(item => item.id)
-        var resultTwo = this.checkboxArr.some(item => item.id)
-        if(result){
+    Delete() {
+      if (this.checkboxArr.length > 0) {
+        var result = this.checkboxArr.every(item => item.id);
+        var resultTwo = this.checkboxArr.some(item => item.id);
+        if (result) {
           let dataaa = this.checkboxArr.map(item => {
             return {
               id: item.id
-            }
-          })
+            };
+          });
           deleteit(dataaa).then(res => {
-            if(res.code === 0){
-              this.$message.warning('删除成功！');
+            if (res.code === 0) {
+              this.$message.warning("删除成功！");
               this.leftgetList();
-              let checkBoxArr = this.checkboxArr.map(item => item.id)
-              this.Right.tbdata = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+              let checkBoxArr = this.checkboxArr.map(item => item.id);
+              this.Right.tbdata = this.Right.tbdata.filter(
+                item => !checkBoxArr.includes(item.id)
+              );
               this.checkboxArr = [];
             }
-          })
-        } else if(resultTwo){
-           let haveId = this.checkboxArr.filter(item => item.id)
-           let NoId = this.checkboxArr.filter(item => !item.id)
-           let NoIdPartCode = NoId.map(item => item.partCode)
-           let AddNoId = this.Right.tbdata.filter(item => !item.id)
-           let NoRepeat = AddNoId.filter(item => !NoIdPartCode.includes(item.partCode))
-            //console.log(NoRepeat)
+          });
+        } else if (resultTwo) {
+          let haveId = this.checkboxArr.filter(item => item.id);
+          let NoId = this.checkboxArr.filter(item => !item.id);
+          let NoIdPartCode = NoId.map(item => item.partCode);
+          let AddNoId = this.Right.tbdata.filter(item => !item.id);
+          let NoRepeat = AddNoId.filter(
+            item => !NoIdPartCode.includes(item.partCode)
+          );
+          //console.log(NoRepeat)
           //  let dataOne = {}
           //  dataOne.id = this.rowId
           // dataOne.salesman =  this.formPlan.salesman
@@ -391,25 +543,27 @@ export default {
           let dataTwo = haveId.map(item => {
             return {
               id: item.id
-            }
-          })
+            };
+          });
           deleteit(dataTwo).then(res => {
-            if(res.code == 0){
-             this.successHaveId = true
+            if (res.code == 0) {
+              this.successHaveId = true;
             }
-          })
+          });
           setTimeout(() => {
-            this.$nextTick( () => {
+            this.$nextTick(() => {
               // if(this.successNOid && this.successHaveId){
-              if(this.successHaveId){
-                this.$message.success('删除成功！')
-                let checkBoxArr = this.checkboxArr.map(item => item.id)
-                this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.id))
+              if (this.successHaveId) {
+                this.$message.success("删除成功！");
+                let checkBoxArr = this.checkboxArr.map(item => item.id);
+                this.Right.tbdata = this.Right.tbdata.filter(
+                  item => !checkBoxArr.includes(item.id)
+                );
                 this.checkboxArr = [];
-            }
-          })
-          },1000)
-        }else {
+              }
+            });
+          }, 1000);
+        } else {
           // var set = this.checkboxArr.map(item => item.partCode)
           // var resArr = this.Right.tbdata.filter(item => !set.includes(item.partCode))
           // let data = {}
@@ -426,88 +580,92 @@ export default {
           //     this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
           //   }
           // })
-          let checkBoxArr = this.checkboxArr.map(item => item.partCode)
-          this.Right.tbdata  = this.Right.tbdata.filter(item => !checkBoxArr.includes(item.partCode))
-          this.$Message.warning('删除成功！')
+          let checkBoxArr = this.checkboxArr.map(item => item.partCode);
+          this.Right.tbdata = this.Right.tbdata.filter(
+            item => !checkBoxArr.includes(item.partCode)
+          );
+          this.$Message.warning("删除成功！");
         }
       } else {
-        this.$Message.warning('请选择要删除的配件!')
+        this.$Message.warning("请选择要删除的配件!");
       }
-
     },
     //更多按钮
-    moreaa(){
-      this.$refs.moremore.init()
+    moreaa() {
+      this.$refs.moremore.init();
     },
     //判断表格能不能编辑
-    editActivedEvent({row}){
+    editActivedEvent({ row }) {
       let xTable = this.$refs.xTable;
       let orderQtyColumn = xTable.getColumnByField("preQty");
       let remarkColumn = xTable.getColumnByField("remark");
-      let isDisabled = this.presentrowMsg !== 0
+      let isDisabled = this.presentrowMsg !== 0;
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       remarkColumn.editRender.attrs.disabled = isDisabled;
     },
     // 新增按钮
-    addProoo(){
-      this.buttonDisable = false
-      this.presentrowMsg = 0
-      this.rowId = ''
-      for(let b of this.Left.tbdata){
-        b._highlight = false
+    addProoo() {
+      this.buttonDisable = false;
+      this.presentrowMsg = 0;
+      this.rowId = "";
+      for (let b of this.Left.tbdata) {
+        b._highlight = false;
       }
       if (!this.isAdd) {
-        return this.$Message.error('请先保存数据');
+        return this.$Message.error("请先保存数据");
       }
-      this.Left.tbdata.unshift(this.PTrow)
+      this.Left.tbdata.unshift(this.PTrow);
       this.isAdd = false;
-      this.datadata = this.PTrow
-      this.formPlan.salesman = this.$store.state.user.userData.staffName
-      this.formPlan.Reservation =  '', //预订单号
-      this.formPlan.orderDate =  tools.transTime(new Date()), //期望到货日期
-      this.formPlan.remark =  '' //备注
-      this.Right.tbdata = []
+      this.datadata = this.PTrow;
+      this.formPlan.salesman = this.$store.state.user.userData.staffName;
+      (this.formPlan.Reservation = ""), //预订单号
+        (this.formPlan.orderDate = tools.transTime(new Date())), //期望到货日期
+        (this.formPlan.remark = ""); //备注
+      this.Right.tbdata = [];
     },
     //添加配件按钮
-    addPro(){
-      this.$refs.SelectPartCom.init()
+    addPro() {
+      this.$refs.SelectPartCom.init();
     },
     //下载模板
-    down(){
-      location.href = baseUrl.omsOrder + "/preOrderMain/template?access_token=" + Cookies.get(TOKEN_KEY);
+    down() {
+      location.href =
+        baseUrl.omsOrder +
+        "/preOrderMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
     },
     // 下拉框查询
-    SelectChange(){
-      this.leftgetList()
+    SelectChange() {
+      this.leftgetList();
     },
-    selectTabelData(){},
+    selectTabelData() {},
     //保存按钮
-    SaveMsg(){
+    SaveMsg() {
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // console.log(this.rowId)
           try {
             await this.$refs.xTable.validate();
-            let data = {}
-            data.id = this.rowId
-            data.salesman =  this.formPlan.salesman
-            data.orderNo =  this.formPlan.Reservation
-            data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-            data.remark = this.formPlan.remark
-            data.detailVOList = this.Right.tbdata
-            console.log(this.Right.tbdata)
+            let data = {};
+            data.id = this.rowId;
+            data.salesman = this.formPlan.salesman;
+            data.orderNo = this.formPlan.Reservation;
+            data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate);
+            data.remark = this.formPlan.remark;
+            data.detailVOList = this.Right.tbdata;
+            console.log(this.Right.tbdata);
             save(data).then(res => {
-              if(res.code === 0){
-                this.$message.success('保存成功！')
+              if (res.code === 0) {
+                this.$message.success("保存成功！");
                 this.leftgetList();
-                  this.formPlan.salesman =  '', //业务员
-                  this.formPlan.Reservation =  '',
-                  this.formPlan.remark =  '',
-                  this.Right.tbdata = []
-                this.isAdd = true
-                this.Flaga = true
+                (this.formPlan.salesman = ""), //业务员
+                  (this.formPlan.Reservation = ""),
+                  (this.formPlan.remark = ""),
+                  (this.Right.tbdata = []);
+                this.isAdd = true;
+                this.Flaga = true;
               }
-            })
+            });
           } catch (errMap) {
             this.$XModal.message({
               status: "error",
@@ -515,78 +673,83 @@ export default {
             });
           }
         } else {
-          this.$Message.error('*为必填！');
+          this.$Message.error("*为必填！");
         }
-      })
+      });
     },
     //checkbox全选
-    selectAll(a){
-      this.checkboxArr = a.selection
+    selectAll(a) {
+      this.checkboxArr = a.selection;
       // console.log(this.checkboxArr)
     },
     //作废
-    cancellation(){
-      this.$refs.formPlan.validate((valid) => {
+    cancellation() {
+      this.$refs.formPlan.validate(valid => {
         if (valid) {
           this.$Modal.confirm({
-            title: '是否作废',
+            title: "是否作废",
             onOk: async () => {
-              this.$refs.formPlan.validate((valid) => {
+              this.$refs.formPlan.validate(valid => {
                 if (valid) {
-                  let params = {}
-                  params.id = this.rowId
+                  let params = {};
+                  params.id = this.rowId;
                   invalid(params).then(res => {
-                    if(res.code === 0){
-                      this.$message.success('作废成功！')
+                    if (res.code === 0) {
+                      this.$message.success("作废成功！");
                       this.leftgetList(),
-                        this.formPlan.salesman =  '', //业务员
-                        this.formPlan.Reservation =  '',
-                        this.formPlan.remark =  '',
-                        this.Right.tbdata = []
+                        (this.formPlan.salesman = ""), //业务员
+                        (this.formPlan.Reservation = ""),
+                        (this.formPlan.remark = ""),
+                        (this.Right.tbdata = []);
                     }
-                  })
+                  });
                 } else {
-                  this.$Message.error('*为必填！');
+                  this.$Message.error("*为必填！");
                 }
-              })
+              });
             },
             onCancel: () => {
-              this.$Message.info('取消作废');
-            },
-          })
+              this.$Message.info("取消作废");
+            }
+          });
         } else {
-          this.$Message.error('*为必填！');
+          this.$Message.error("*为必填！");
         }
-      })
+      });
     },
     // 导出
-    derive(){
-      if(!this.mainId){
-        this.$message.error('请选择一条有效数据')
-        return false
-      }else {
-        location.href = baseUrl.omsOrder + '/preOrderMain/export?id='+ this.mainId +'&access_token=' + Cookies.get(TOKEN_KEY)
+    derive() {
+      if (!this.mainId) {
+        this.$message.error("请选择一条有效数据");
+        return false;
+      } else {
+        location.href =
+          baseUrl.omsOrder +
+          "/preOrderMain/export?id=" +
+          this.mainId +
+          "&access_token=" +
+          Cookies.get(TOKEN_KEY);
       }
-      },
+    },
     //导入配件
-    getRUl(){
-      this.upurl = getup +'id=' + this.mainId
+    getRUl() {
+      this.upurl = getup + "id=" + this.mainId;
     },
     //批量上传失败
     onFormatError(file) {
-      this.$Message.error('只支持xls xlsx后缀的文件')
+      this.$Message.error("只支持xls xlsx后缀的文件");
     },
     // 上传成功函数
-    onSuccess (response) {
-      if(response.code === 0 ){
-        if(response.data.length === 0){
-          this.$Message.warning('导入成功！')
+    onSuccess(response) {
+      if (response.code === 0) {
+        if (response.data.length === 0) {
+          this.$Message.warning("导入成功！");
           this.leftgetList();
-        }else {
-         this.$Message.error(response.data.join(';'))
-          }
-      }else {
-        this.$Message.error(response.message)
+        } else {
+          this.$Message.error(response.data.join(";"));
+        }
+      } else {
+        this.$Message.error(response.message);
       }
     },
     warning(nodesc) {
@@ -596,329 +759,334 @@ export default {
       });
     },
     //上传之前清空
-    beforeUpload(){
-      this.$refs.upload.clearFiles()
+    beforeUpload() {
+      this.$refs.upload.clearFiles();
     },
     //右侧表格复选框选中
-    selectChange(msg){
-      this.checkboxArr = msg.selection
+    selectChange(msg) {
+      this.checkboxArr = msg.selection;
       // console.log(this.checkboxArr)
     },
     //分页
     changePageLeft(p) {
-      this.Left.page.num = p
-      this.leftgetList()
+      this.Left.page.num = p;
+      this.leftgetList();
     },
     changeSizeLeft(size) {
-      this.Left.page.num = 1
-      this.Left.page.size = size
-      this.leftgetList()
+      this.Left.page.num = 1;
+      this.Left.page.size = size;
+      this.leftgetList();
     },
     //右部分分页
     changePage(p) {
-      this.Left.page.num = p
+      this.Left.page.num = p;
       // this.getList()
     },
     changeSize(size) {
-      this.Left.page.num = 1
-      this.Left.page.size = size
+      this.Left.page.num = 1;
+      this.Left.page.size = size;
       // this.getList()
     },
     // 查询下拉框
-    getDataQuick(v){
+    getDataQuick(v) {
       // console.log(v)
-      this.selectArr = v
-      this.leftgetList()
+      this.selectArr = v;
+      this.leftgetList();
     },
     //footer计算
-    addFooter ({ columns, data }) {
+    addFooter({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '和值'
+            return "和值";
           }
-          if (['preQty'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+          if (["preQty"].includes(column.property)) {
+            return this.$utils.sum(data, column.property);
           }
-          return null
+          return null;
         })
-      ]
+      ];
     },
     //表格编辑状态下被关闭的事件
-    editClosedEvent(){},
+    editClosedEvent() {},
 
     // 更多子组件的参数
-    getMsg(msg){
-      this.moreArr = msg
-      this.leftgetList()
+    getMsg(msg) {
+      this.moreArr = msg;
+      this.leftgetList();
       // console.log(msg)
     },
     //子组件的参数
-    getPartNameList(ChildMessage){
+    getPartNameList(ChildMessage) {
       // console.log(ChildMessage)
-      let parts = []
-      ChildMessage.map( item => {
+      let parts = [];
+      ChildMessage.map(item => {
         parts.push({
-          partCode : item.partCode, //编码
-          partName : item.partName, //名称
-          unit : item.unit, //单位
-          partBrand : item.partBrand, //品牌
-          spec : item.spec,  //规格
-          preQty : '', //预定数量
-          remark : '', //备注
+          partCode: item.partCode, //编码
+          partName: item.partName, //名称
+          unit: item.unit, //单位
+          partBrand: item.partBrand, //品牌
+          spec: item.spec, //规格
+          preQty: "", //预定数量
+          remark: "", //备注
           acceptQty: 0, //受理数量
-          oemCode : item.oemCode, //oe码
+          oemCode: item.oemCode, //oe码
           partInnerId: item.partInnerId, //配件内码
-          partId : item.partId,
-        })
-      })
-      if(this.Right.tbdata){
-        this.Right.tbdata = [...this.Right.tbdata,...parts]
-        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          partId: item.partId
+        });
+      });
+      if (this.Right.tbdata) {
+        this.Right.tbdata = [...this.Right.tbdata, ...parts];
+        this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, "oemCode");
       } else {
-        this.Right.tbdata = parts
+        this.Right.tbdata = parts;
       }
 
-      this.Right.tbdata.map(item => item.preQty = item.preQty > 0 ? item.preQty : 1);
+      this.Right.tbdata.map(
+        item => (item.preQty = item.preQty > 0 ? item.preQty : 1)
+      );
     },
     //编辑收货信息弹框显示
-    GoodsInfoModal(){
-      if(!this.datadata || this.datadata.new) return this.$Message.error('请先保存数据');
-      this.clickdelivery = true
-      this.$refs.goodsInfo.init()
+    GoodsInfoModal() {
+      if (!this.datadata || this.datadata.new)
+        return this.$Message.error("请先保存数据");
+      this.clickdelivery = true;
+      this.$refs.goodsInfo.init();
     },
     //供应商弹框
-    addSuppler(){
-      this.$refs.selectSupplier.init()
+    addSuppler() {
+      this.$refs.selectSupplier.init();
     },
     // 供应商子组件内容
-    getSupplierName(a){
+    getSupplierName(a) {
       // console.log(a)
-      this.formPlan.guestName = a.shortName
-      this.formPlan.guestidId = a.id
+      this.formPlan.guestName = a.shortName;
+      this.formPlan.guestidId = a.id;
     },
-    leftgetList(){
-      let params = {}
-      let data = {}
-      params.page = this.Left.page.num - 1
-      params.size = this.Left.page.size
-      if(this.selectArr !== '9999'){
-        data.createTimeStart = this.selectArr[0]
-        data.createTimeEnd = this.selectArr[1]
+    leftgetList() {
+      let params = {};
+      let data = {};
+      params.page = this.Left.page.num - 1;
+      params.size = this.Left.page.size;
+      if (this.selectArr !== "9999") {
+        data.createTimeStart = this.selectArr[0];
+        data.createTimeEnd = this.selectArr[1];
       }
-      if(this.moreArr.createData != null){
-        data.createTimeStart = this.moreArr.createData[0] + " 00:00:00"
-        data.createTimeEnd = this.moreArr.createData[1] + " 23:59:59"
+      if (this.moreArr.createData != null) {
+        data.createTimeStart = this.moreArr.createData[0] + " 00:00:00";
+        data.createTimeEnd = this.moreArr.createData[1] + " 23:59:59";
       }
-      if(this.purchaseType !== '99'){
-        data.status = this.purchaseType
+      if (this.purchaseType !== "99") {
+        data.status = this.purchaseType;
       }
-      if(this.moreArr.submitData != null){
-        data.commitTimeStart = this.moreArr.submitData[0] + " 00:00:00"
-        data.commitTimeEnd = this.moreArr.submitData[1] + " 23:59:59"
+      if (this.moreArr.submitData != null) {
+        data.commitTimeStart = this.moreArr.submitData[0] + " 00:00:00";
+        data.commitTimeEnd = this.moreArr.submitData[1] + " 23:59:59";
       }
-      if(this.moreArr.callout){
+      if (this.moreArr.callout) {
         // console.log(this.moreArr.callout)
-        data.salesman = this.moreArr.callout
+        data.salesman = this.moreArr.callout;
       }
-      if(this.moreArr.numbers){
-        data.orderNo = this.moreArr.numbers
+      if (this.moreArr.numbers) {
+        data.orderNo = this.moreArr.numbers;
       }
-      if(this.moreArr.coding){
-        data.partCode = this.moreArr.coding
+      if (this.moreArr.coding) {
+        data.partCode = this.moreArr.coding;
       }
-      if(this.moreArr.Name){
-        data.partName = this.moreArr.Name
+      if (this.moreArr.Name) {
+        data.partName = this.moreArr.Name;
       }
-      if(this.moreArr.brand){
-        data.partBrand = this.moreArr.brand
+      if (this.moreArr.brand) {
+        data.partBrand = this.moreArr.brand;
       }
-      if(this.moreArr.Accessories){
-        data.commitUname = this.moreArr.Accessories
+      if (this.moreArr.Accessories) {
+        data.commitUname = this.moreArr.Accessories;
       }
-      optGroup({params:params,data:data}).then(res => {
-        if(res.code === 0){
-          this.Left.tbdata = res.data.content
+      optGroup({ params: params, data: data }).then(res => {
+        if (res.code === 0) {
+          this.Left.tbdata = res.data.content;
           this.Left.page.total = res.data.totalElements;
 
-          for(let b of this.Left.tbdata){
-            b._highlight = false
-            if(b.id==this.selectLeftItemId){
+          for (let b of this.Left.tbdata) {
+            b._highlight = false;
+            if (b.id == this.selectLeftItemId) {
               b._highlight = true;
               this.setRightData(b);
               break;
             }
           }
         }
-      })
+      });
     },
     // 左边部分的当前行
-    selection(row){
+    selection(row) {
       if (row == null) return;
-      this.selectLeftItemId = row.id
+      this.selectLeftItemId = row.id;
       let currentRowTable = this.$refs["currentRowTable"];
       // console.log(currentRowTable.clearCurrentRow)
-      if(!this.Flaga && !this.isAdd && row.id){
+      if (!this.Flaga && !this.isAdd && row.id) {
         this.$Modal.confirm({
-          title: '您正在编辑单据，是否需要保存',
+          title: "您正在编辑单据，是否需要保存",
           onOk: () => {
             currentRowTable.clearCurrentRow();
-            this.$refs.formPlan.validate((valid) => {
+            this.$refs.formPlan.validate(valid => {
               if (valid) {
-                let data = {}
-                data.id = this.rowId
-                data.salesman =  this.formPlan.salesman
-                data.orderNo =  this.formPlan.Reservation
-                data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
-                data.remark = this.formPlan.remark
-                data.detailVOList = this.Right.tbdata
+                let data = {};
+                data.id = this.rowId;
+                data.salesman = this.formPlan.salesman;
+                data.orderNo = this.formPlan.Reservation;
+                data.expectedArrivalDate = tools.transDate(
+                  this.formPlan.orderDate
+                );
+                data.remark = this.formPlan.remark;
+                data.detailVOList = this.Right.tbdata;
                 // console.log(this.Right.tbdata)
                 save(data).then(res => {
-                  if(res.code === 0){
-                    this.$message.success('保存成功！')
+                  if (res.code === 0) {
+                    this.$message.success("保存成功！");
                     this.leftgetList(),
-                      this.formPlan.salesman =  '', //业务员
-                      this.formPlan.Reservation =  '',
-                      this.formPlan.remark =  '',
-                      this.Right.tbdata = []
-                    this.isAdd = true
-                    this.Flaga = true
+                      (this.formPlan.salesman = ""), //业务员
+                      (this.formPlan.Reservation = ""),
+                      (this.formPlan.remark = ""),
+                      (this.Right.tbdata = []);
+                    this.isAdd = true;
+                    this.Flaga = true;
                   }
-                })
+                });
               } else {
-                this.$Message.error('*为必填！');
+                this.$Message.error("*为必填！");
               }
-            })
+            });
           },
           onCancel: () => {
             this.Left.tbdata.splice(0, 1);
             currentRowTable.clearCurrentRow();
             this.isAdd = true;
-            this.formPlan.salesman =  '', //业务员
-              this.formPlan.Reservation =  '',
-              this.formPlan.remark =  '',
-              this.Right.tbdata = [];
+            (this.formPlan.salesman = ""), //业务员
+              (this.formPlan.Reservation = ""),
+              (this.formPlan.remark = ""),
+              (this.Right.tbdata = []);
 
-            for(let b of this.Left.tbdata){
-              b._highlight = false
-              if(b.id==this.selectLeftItemId){
+            for (let b of this.Left.tbdata) {
+              b._highlight = false;
+              if (b.id == this.selectLeftItemId) {
                 b._highlight = true;
-                this.setRightData(b)
+                this.setRightData(b);
                 break;
               }
             }
-          },
-        })
-      }else{
+          }
+        });
+      } else {
         this.setRightData(row);
       }
     },
-    Determined(){
-
-    },
+    Determined() {},
     //填充右侧数据
-    setRightData(row){
-      this.mainId = row.id
-      this.guestidId = row.guestId
-      this.datadata = row
-      if(row.id){
+    setRightData(row) {
+      this.mainId = row.id;
+      this.guestidId = row.guestId;
+      this.datadata = row;
+      if (row.id) {
         // this.leftgetList();
-        this.LeadIn = false
-        this.formPlan.salesman = this.datadata.salesman
-        this.formPlan.Reservation = this.datadata.orderNo
-        this.formPlan.orderDate = this.datadata.expectedArrivalDate
-        this.formPlan.remark = this.datadata.remark
-        this.Right.tbdata = this.datadata.detailVOList
-        console.log(this.datadata.detailVOList,"13456")
-        this.presentrowMsg = row.status.value
+        this.LeadIn = false;
+        this.formPlan.salesman = this.datadata.salesman;
+        this.formPlan.Reservation = this.datadata.orderNo;
+        this.formPlan.orderDate = this.datadata.expectedArrivalDate;
+        this.formPlan.remark = this.datadata.remark;
+        this.Right.tbdata = this.datadata.detailVOList;
+        console.log(this.datadata.detailVOList, "13456");
+        this.presentrowMsg = row.status.value;
         // console.log(this.presentrowMsg)
-        this.rowId = row.id
-        this.buttonDisable = false
-      }else {
-        this.formPlan.salesman = this.$store.state.user.userData.staffName
-        this.formPlan.Reservation = ''
-        this.formPlan.orderDate = ''
-        this.formPlan.remark = ''
-        this.rowId = ''
-        this.Right.tbdata = []
+        this.rowId = row.id;
+        this.buttonDisable = false;
+      } else {
+        this.formPlan.salesman = this.$store.state.user.userData.staffName;
+        this.formPlan.Reservation = "";
+        this.formPlan.orderDate = "";
+        this.formPlan.remark = "";
+        this.rowId = "";
+        this.Right.tbdata = [];
       }
     },
     // 提交按钮
-    instance () {
-      if(this.Right.tbdata !==  null){
-        this.$refs.formPlan.validate((valid) => {
+    instance() {
+      if (this.Right.tbdata !== null) {
+        this.$refs.formPlan.validate(valid => {
           if (valid) {
             this.$Modal.confirm({
-              title: '是否提交',
+              title: "是否提交",
               onOk: async () => {
-                this.$refs.formPlan.validate((valid) => {
+                this.$refs.formPlan.validate(valid => {
                   if (valid) {
-                    let data = {}
-                    data.id = this.rowId
-                    data.salesman =  this.formPlan.salesman
-                    data.orderNo =  this.formPlan.Reservation
-                    data.expectedArrivalDate = tools.transDate(this.formPlan.orderDate)
+                    let data = {};
+                    data.id = this.rowId;
+                    data.salesman = this.formPlan.salesman;
+                    data.orderNo = this.formPlan.Reservation;
+                    data.expectedArrivalDate = tools.transDate(
+                      this.formPlan.orderDate
+                    );
                     // console.log(tools.transDate(this.formPlan.orderDate))
-                    data.remark = this.formPlan.remark
-                    data.detailVOList = this.Right.tbdata
+                    data.remark = this.formPlan.remark;
+                    data.detailVOList = this.Right.tbdata;
                     commitOrder(data).then(res => {
-                      if(res.code === 0){
-                        this.$message.success('提交成功！')
+                      if (res.code === 0) {
+                        this.$message.success("提交成功！");
                         this.leftgetList(),
-                          this.formPlan.salesman =  '', //业务员
-                          this.formPlan.Reservation =  '',
-                          this.formPlan.remark =  '',
-                          this.Right.tbdata = []
-                        this.Flaga = true
+                          (this.formPlan.salesman = ""), //业务员
+                          (this.formPlan.Reservation = ""),
+                          (this.formPlan.remark = ""),
+                          (this.Right.tbdata = []);
+                        this.Flaga = true;
                       }
-                    })
+                    });
                   } else {
-                    this.$Message.error('*为必填！');
+                    this.$Message.error("*为必填！");
                   }
-                })
+                });
               },
               onCancel: () => {
-                this.$Message.info('取消提交');
-              },
-            })
+                this.$Message.info("取消提交");
+              }
+            });
           } else {
-            this.$Message.error('*为必填！');
+            this.$Message.error("*为必填！");
           }
-        })
-      }else {
-        this.$Message.warning('请添加配件或完善订单信息后再提交!')
+        });
+      } else {
+        this.$Message.warning("请添加配件或完善订单信息后再提交!");
       }
-    },
+    }
     // unique(arr) { // 根据唯一标识Id来对数组进行过滤
     //   const res = new Map();  //定义常量 res,值为一个Map对象实例
     //   //返回arr数组过滤后的结果，结果为一个数组   过滤条件是，如果res中没有某个键，就设置这个键的值为1
     //   return arr.filter((arr) => !res.has(arr.id) && res.set(arr.id, 1))
     // }
   },
-  mounted(){
-    this.$nextTick(()=>{
+  mounted() {
+    this.$nextTick(() => {
       let wrapH = this.$refs.paneLeft.offsetHeight;
       let planFormH = this.$refs.planForm.offsetHeight;
       let planBtnH = this.$refs.planBtn.offsetHeight;
       // let planPageH = this.$refs.planPage.offsetHeight;
       //获取左侧侧表格高度
-      this.leftTableHeight = wrapH-70;
+      this.leftTableHeight = wrapH - 70;
       //获取右侧表格高度
-      this.rightTableHeight = wrapH-planFormH-planBtnH-65;
+      this.rightTableHeight = wrapH - planFormH - planBtnH - 65;
     });
     this.leftgetList();
   }
-}
+};
 </script>
 
 <style scoped>
-  .con-box{
-    height: 700px;
-  }
-  .w550{
-    width: 580px;
-  }
-  .w490{
-    width: 480px;
-  }
+.con-box {
+  height: 700px;
+}
+.w550 {
+  width: 580px;
+}
+.w490 {
+  width: 480px;
+}
 </style>

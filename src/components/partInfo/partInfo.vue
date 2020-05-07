@@ -281,7 +281,7 @@
         </TabPane>
       </Tabs>
       <div slot="footer" v-if="isAddPart">
-        <Button :loading="this.btnIsLoadding" class="mr10" type="warning" @click="submit('proModalForm',1)">保存</Button>
+        <Button :loading="btnIsLoadding" class="mr10" type="warning" @click="submit('proModalForm',1)">保存</Button>
         <Button type="default" @click="proModal = false">取消</Button>
       </div>
       <div slot="footer" v-else>
@@ -325,6 +325,10 @@ import SearchPartName from "./searchPartName";
 
 export default {
   name: "partInfo",
+  data: {
+    // 按钮状态
+    btnIsLoadding: false,
+  },
   props: {
     isAddPart: false,
     isSellDis: false
