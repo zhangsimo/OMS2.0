@@ -23,7 +23,7 @@
           </div>
           <div class="db">
             <span>会计科目：</span>
-            <Select  v-model="subjectCode" filterable class="w150" disabled="">
+            <Select  v-model="subjectCode" filterable class="w150" disabled>
               <Option
                 v-for="item in subJectList"
                 :value="item.id"
@@ -71,6 +71,16 @@
             <span>资金认领核销</span>
           </button>
         </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openAddModal">
+            <span>新增</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openChangeModal">
+            <span>修改</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -82,6 +92,12 @@
 
     <!--    余额展示-->
     <amtData :moneyList='allMoneyList'></amtData>
+
+<!--    新增-->
+    <add ref="addModel" @getAllList="allList"></add>
+
+<!--    修改-->
+    <changeJournal :list='oneList' ref="changeModal" @getAllList="allList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
@@ -231,7 +247,8 @@
   import importXLS from '../../components/importXLS'
   import artificial from '../../components/artificial'
   import { goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
-  import {getTableList}from '@/api/accountant/accountant'
+  import changeJournal from '../components/changeJournal'
+  import add from '../components/addJournal'
   import amtData from '../../components/amtData'
 
 
@@ -241,7 +258,9 @@
       quickDate,
       importXLS,
       artificial,
-      amtData
+      amtData,
+      changeJournal,
+      add
     },
     data() {
       return {
@@ -403,7 +422,23 @@
         })
       },
 
-      //只能匹配
+      //打开新增模态框
+      openAddModal(){
+        this.oneList = {}
+        this.$refs.addModel.open()
+      },
+
+      //修改模态框
+      openChangeModal(){
+        if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
+        if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
+        this.$refs.changeModal.open()
+      },
+
+      //修改成功后刷新页面
+      allList(){
+        this.getList()
+      },
 
       //人工匹配
       artificialChange(){

@@ -101,3 +101,42 @@ export function isAdmin(data){
     data
   });
 }
+
+
+//业务类别
+export function gosubjectType (params){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/findBusinessType`,
+    method: 'get',
+    params
+  });
+}
+
+//账户
+export function goAccountList (params){
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/findAccountRegister`,
+    method: 'get',
+    params
+  });
+}
+
+
+//修改
+export function changeSave(data){
+  return axios.request({
+    url: `${api.authApi}/cashAccountServer/update`,
+    method: 'post',
+    data
+  });
+}
+
+
+//新增
+export function addSave(data){
+  return axios.request({
+    url: `${api.authApi}/cashAccountServer/add`,
+    method: 'post',
+    data
+  });
+}
