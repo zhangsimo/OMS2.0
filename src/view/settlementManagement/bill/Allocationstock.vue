@@ -215,6 +215,9 @@ export default {
           title: "是否含税",
           key: "taxSign",
           className: "tc",
+          render: (h,params) =>{
+            return h('span', ["否", "是"][params.row.taxSign])
+          }
         },
         {
           title: "不含税单价",
@@ -250,23 +253,23 @@ export default {
         },
         {
           title: "数量",
-          key: "hasOutQty",
+          key: "sellQty",
           className: "tc"
         },
         {
           title: "销售单价",
-          key: "orderPrice",
+          key: "sellPrice",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderPrice).toFixed(2))
+            return h('span',(params.row.sellPrice).toFixed(2))
           }
         },
         {
           title: "金额",
-          key: "orderAmt",
+          key: "sellAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
+            return h('span',(params.row.sellAmt).toFixed(2))
           }
         }
       ],
@@ -460,7 +463,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      stockParts({ mainId: row.id }).then(res => {
+      stockParts({ serviceId: row.serviceId }).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;

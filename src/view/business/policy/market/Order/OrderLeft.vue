@@ -113,10 +113,15 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         remark: "",
         guestId: "",
-        storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
+        // storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
         serviceId: "",
         details: []
       };
+      this.$parent.$parent.$refs.right.WarehouseList.forEach(el => {
+        if(el.isDefault && !el.isDisabled) {
+          item.storeId = el.id
+        }
+      })
       this.tableData.unshift(item);
       this.tableData.map((item, index) => {
         item.index = index + 1;
