@@ -164,7 +164,7 @@
             { required: true, message: '备注必填', trigger: 'blur' }
           ],
           businessCode:[
-            { required: true,type: 'number', message: '业务类别必选', trigger: 'change' }
+            { required: true,type: 'string', message: '业务类别必选', trigger: 'change' }
 
           ],
         },//表单校验
