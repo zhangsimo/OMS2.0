@@ -95,7 +95,7 @@ export function transferWarehousing(data) {
 // 调拨出库配件明细查询
 export function stockParts(params) {
     return axios.request({
-        url: `${api.omsOrder}/allotEnterDetail/findAllotOutDetail`,
+        url: `${api.omsOrder}/allotEnterDetail/findOutDetail`,
         method: 'get',
         params
     })
