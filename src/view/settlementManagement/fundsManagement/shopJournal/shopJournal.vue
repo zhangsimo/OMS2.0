@@ -89,6 +89,11 @@
             <span>资金认领核销</span>
           </button>
         </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="openChangeModal">
+            <span>修改</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -100,6 +105,9 @@
 
     <!--    余额展示-->
     <amtData :moneyList='allMoneyList'></amtData>
+
+    <!--    修改-->
+    <changeJournal :list='oneList' ref="changeModal" @getAllList="allList"></changeJournal>
 
     <div class="mt15">
       <Tabs type="card" value="capitalChain1">
@@ -281,6 +289,7 @@
   import {are , goshop , impUrl , goList , deleList , revocation , ait} from '@/api/settlementManagement/fundsManagement/capitalChain'
   import {getTableList}from '@/api/accountant/accountant'
   import amtData from '../../components/amtData'
+  import changeJournal from '../components/changeJournal'
 
 
   import moment from 'moment'
@@ -289,7 +298,8 @@
       quickDate,
       importXLS,
       artificial,
-      amtData
+      amtData,
+      changeJournal
     },
     data() {
       return {
@@ -440,6 +450,20 @@
       getOneList(val){
         this.oneList = val.row
       },
+
+
+      //修改模态框
+      openChangeModal(){
+        if (Object.keys(this.oneList).length < 1 ) return this.$Message.error('请至少选择一条数据')
+        if (this.oneList.collateState == 1) return this.$Message.error('只能修改未核销数据')
+        this.$refs.changeModal.open()
+      },
+
+      //修改成功后刷新页面
+      allList(){
+        this.getList()
+      },
+
 
       //打开导入模板下载
       importXSL(){
