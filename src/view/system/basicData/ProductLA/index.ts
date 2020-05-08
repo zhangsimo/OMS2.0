@@ -168,6 +168,59 @@ export default class ProductLA extends Vue {
             minWidth: 100
         },
     ]
+
+    private partListTableHead: Array<Tableth> = [
+        {
+            title: "序号",
+            minWidth: 50,
+            type: "index"
+        },
+        {
+            minWidth: 50,
+            type: "selection"
+        },
+        {
+            title: "品质",
+            key: "qualityName",
+            minWidth: 180
+        },
+        {
+            title: "品牌",
+            key: "partBrand",
+            minWidth: 120
+        },
+        {
+            title: "编码",
+            key: "partCode",
+            minWidth: 120
+        },
+        {
+            title: "名称",
+            key: "name",
+            minWidth: 100
+        },
+        {
+            title: "全称",
+            key: "fullName",
+            minWidth: 200
+        },
+        {
+            title: "单位",
+            key: "unitld",
+            minWidth: 80
+        },
+        {
+            title: "规格",
+            key: "spec",
+            minWidth: 80
+        },
+        {
+            title: "车型",
+            key: "carModelName",
+            minWidth: 100
+        },
+    ]
+
     /**待分配列表数据 */
     private waitPartListData = []
     /**待分配列表分页 */
