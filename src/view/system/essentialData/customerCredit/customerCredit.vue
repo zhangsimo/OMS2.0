@@ -476,8 +476,8 @@ export default {
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
-      this.creaditList.tempEnd = new Date(row.tempEnd)
-      this.creaditList.tempStart = new Date(row.tempStart)
+      // this.creaditList.tempEnd = new Date(row.tempEnd)
+      // this.creaditList.tempStart = new Date(row.tempStart)
       this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
       this.flag = row.isGuestResearch;
@@ -595,13 +595,23 @@ export default {
       this.$refs["SurveyList"].$refs["formInline"].validate(valid => {
         if (valid) {
           let data = this.creaditList;
-          data.registerDate = tools.transTime(this.creaditList.registerDate);
-          data.operationEnd = tools.transTime(this.creaditList.operationEnd);
-          data.operationStart = tools.transTime(
-            this.creaditList.operationStart
-          );
-          data.tempStart = tools.transTime(this.creaditList.tempStart);
-          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          if(this.creaditList.registerDate) {
+              data.registerDate = tools.transTime(this.creaditList.registerDate);
+          }
+          if(this.creaditList.operationEnd) {
+              data.operationEnd = tools.transTime(this.creaditList.operationEnd);
+          }
+          if(this.creaditList.operationStart) {
+              data.operationStart = tools.transTime(
+                this.creaditList.operationStart
+              );
+          }
+          if(this.creaditList.tempStart) {
+              data.tempStart = tools.transTime(this.creaditList.tempStart);
+          }
+          if(this.creaditList.tempEnd) {
+              data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          }
           data.guestId = this.ID;
           saveOrUpdate(data).then(res => {
             if (res.code === 0) {
