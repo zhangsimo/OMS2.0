@@ -98,6 +98,7 @@
                 </button>
                 <br />
                 <Button class="mt10 ml10" @click="distributionDelete">撤销分配</Button>
+                <Button class="mt10 ml10" @click="openSubjecMoadl">转当期损益</Button>
                 <!-- <Button class="mt10 ml10" @click="clim(0)">预收款认领</Button>
                 <Button class="mt10 ml10" @click="clim(1)">预收款支出认领</Button>
                 <Button class="mt10 ml10" @click="expenditureClim(0)">预付款认领</Button>
@@ -161,6 +162,8 @@
                 />
               </div>
             </Split>
+
+            <subject ref="subjecModal" :clime="claimedSubjectList"></subject>
           </div>
         </Split>
       </div>
@@ -191,8 +194,10 @@ import {are } from '@/api/settlementManagement/fundsManagement/capitalChain'
 import { findGuest} from "_api/settlementManagement/advanceCollection.js";
 import { creat } from "../../components";
 import bus from "../../bill/Popup/Bus";
+import subject from './components/Subject'
+
 export default {
-  components: { advance, expenditure, settlement, claim, chargeAdvance },
+  components: { advance, expenditure, settlement, claim, chargeAdvance ,subject},
   data() {
     return {
       title: "预付款认领", //弹框标题
@@ -204,6 +209,7 @@ export default {
       company: [], //往来单位下拉框
       orgId: "", //门店
       orgList: [], //门店
+      claimedSubjectList:{},//获取到点击到的本店认领数据
       areaId:0,//区域
       areaList:[{value:0 ,label:'全部'}],//区域
       bankNameOClaim: "", //对方户名
@@ -401,6 +407,20 @@ export default {
         return this.$message.error("至少选择一条本店待认领款");
       this.$refs.settlement.Settlement = true;
     },
+
+    //打开选择会计科目
+    openSubjecMoadl(){
+      if (this.$refs.claim.currentClaimed.length == 0) {
+        this.$message.error("请先选择数据")
+      } else if (this.$refs.claim.currentClaimed.length > 1) {
+        this.$message.error("只能为一条数据进行当前转益")
+      }else {
+        console.log(this.$refs.claim.currentClaimed)
+        this.claimedSubjectList = this.$refs.claim.currentClaimed[0]
+        this.$refs.subjecModal.open()
+      }
+    },
+
     //未核销对账单查询
     queryNoWrite() {
       this.noWrite();

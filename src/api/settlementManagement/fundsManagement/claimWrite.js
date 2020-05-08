@@ -42,3 +42,13 @@ export function distributionRevoke(data) {
     data
   });
 }
+
+
+//转当期损益
+export function TurnToTheProfitAndLoss(data) {
+  return axios.request({
+    url: `${api.omsSettle}/cashAccountServer/transferProfitsLosses`,
+    method: "post",
+    data
+  });
+}
