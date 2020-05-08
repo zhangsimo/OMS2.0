@@ -370,6 +370,12 @@ export default class ProductLA extends Vue {
                 partInnerId: el.code,
                 partBrand: el.partBrand,
                 empName: this.loginName,
+                qualityName : el.quality,
+                name : el.partStandardName,
+                fullName : el.fullName,
+                unitld : el.minUnit,
+                spec : el.spec,
+                carModelName : el.adapterCarModel,
             }
         })
         this.distPartListData = JSON.parse(JSON.stringify(this.selectionWaitPartArr))
