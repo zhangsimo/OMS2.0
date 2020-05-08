@@ -973,7 +973,7 @@ export default {
       }
       this.WareHouseList.map(item=>{
           if(item.isDefault){
-              this.formPlan.storeId = item.id;
+            this.formPlan.storeId = item.id;
           }
       })
         for(let b of this.preSellOrderTable.tbData){
