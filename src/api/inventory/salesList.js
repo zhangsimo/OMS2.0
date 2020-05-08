@@ -116,6 +116,25 @@ export function getSubmitList (data) {
   })
 }
 
+//保存
+export function saveVentory (data) {
+  return axios.request({
+    url: `${api.omsOrder}/StockCheckMain/saveDraft`,
+    method: 'post',
+    data
+  })
+}
+
+//提交
+export function submitVentory (data) {
+  return axios.request({
+    url: `${api.omsOrder}/StockCheckMain/submit`,
+    method: 'post',
+    data
+  })
+}
+
+
 //打印
 export function getprintList (data) {
   return axios.request({

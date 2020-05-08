@@ -21,19 +21,19 @@
             </Button>
           </div>
           <!--<div class="db">-->
-            <!--<Button class="mr10" @click="addProoo" v-has="'add'">-->
-              <!--<Icon type="md-add" />新增-->
-            <!--</Button>-->
+          <!--<Button class="mr10" @click="addProoo" v-has="'add'">-->
+          <!--<Icon type="md-add" />新增-->
+          <!--</Button>-->
           <!--</div>-->
-          <div class="db">
-            <Button
-              @click="baocun"
-              v-has="'save'"
-              type="default"
-              class="mr10"
-              :disabled="this.formPlan.statuName!== '草稿'"
-            >保存</Button>
-          </div>
+          <!--<div class="db">-->
+            <!--<Button-->
+              <!--@click="baocun"-->
+              <!--v-has="'save'"-->
+              <!--type="default"-->
+              <!--class="mr10"-->
+              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
+            <!--&gt;保存</Button>-->
+          <!--</div>-->
           <div class="db">
             <Button
               @click="editPro"
@@ -44,24 +44,24 @@
             >提交</Button>
           </div>
           <!--<div class="db">-->
-            <!--<Button-->
-              <!--class="mr10"-->
-              <!--v-has="'cancellation'"-->
-              <!--@click="cancellation"-->
-              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-            <!--&gt;-->
-              <!--<Icon type="md-close" size="14" />作废-->
-            <!--</Button>-->
+          <!--<Button-->
+          <!--class="mr10"-->
+          <!--v-has="'cancellation'"-->
+          <!--@click="cancellation"-->
+          <!--:disabled="this.formPlan.statuName!== '草稿'"-->
+          <!--&gt;-->
+          <!--<Icon type="md-close" size="14" />作废-->
+          <!--</Button>-->
           <!--</div>-->
           <!--<div class="db">-->
-            <!--<Button-->
-              <!--class="mr10"-->
-              <!--@click="printTable"-->
-              <!--v-has="'print'"-->
-              <!--:disabled="this.formPlan.statuName!== '草稿'"-->
-            <!--&gt;-->
-              <!--<i class="iconfont mr5 icondayinicon"></i> 打印-->
-            <!--</Button>-->
+          <!--<Button-->
+          <!--class="mr10"-->
+          <!--@click="printTable"-->
+          <!--v-has="'print'"-->
+          <!--:disabled="this.formPlan.statuName!== '草稿'"-->
+          <!--&gt;-->
+          <!--<i class="iconfont mr5 icondayinicon"></i> 打印-->
+          <!--</Button>-->
           <!--</div>-->
         </div>
       </div>
@@ -158,7 +158,7 @@
                       >{{ item.itemName }}</Option>
                     </Select>
                   </FormItem>
-                  <FormItem label="供应商：" prop="orderMan">
+                  <FormItem label="客户：" prop="orderMan">
                     <Input
                       v-model="formPlan.orderMan"
                       class="w160"
@@ -183,52 +183,52 @@
               </div>
               <div class="flex plan-cz-btn" ref="planBtn">
                 <!--<div class="clearfix">-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Button-->
-                      <!--size="small"-->
-                      <!--class="mr10"-->
-                      <!--@click="addPro"-->
-                      <!--v-has="'addPro'"-->
-                      <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                    <!--&gt;-->
-                      <!--<Icon type="md-add" />添加配件-->
-                    <!--</Button>-->
-                  <!--</div>-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Button-->
-                      <!--size="small"-->
-                      <!--class="mr10"-->
-                      <!--@click="shanchu"-->
-                      <!--v-has="'delete'"-->
-                      <!--:disabled="draftShow != 0"-->
-                    <!--&gt;-->
-                      <!--<i class="iconfont mr5 iconlajitongicon"></i> 删除-->
-                    <!--</Button>-->
-                  <!--</div>-->
-                  <!--<div class="fl mb5">-->
-                    <!--<Upload-->
-                      <!--ref="upload"-->
-                      <!--:show-upload-list="false"-->
-                      <!--:headers="headers"-->
-                      <!--:action="upurl"-->
-                      <!--:format="['xlsx', 'xls', 'csv']"-->
-                      <!--:before-upload="handleBeforeUpload"-->
-                      <!--:on-format-error="onFormatError"-->
-                      <!--:on-success="handleSuccess"-->
-                      <!--:disabled="draftShow != 0||!formPlan.serviceId"-->
-                    <!--&gt;-->
-                      <!--<Button-->
-                        <!--@click="importAss"-->
-                        <!--size="small"-->
-                        <!--class="mr10"-->
-                        <!--v-has="'import'"-->
-                        <!--:disabled="draftShow != 0||!formPlan.storeId"-->
-                      <!--&gt;导入</Button>-->
-                    <!--</Upload>-->
-                    <!--&lt;!&ndash; <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">-->
-                      <!--<i class="iconfont mr5 iconlajitongicon"></i> 导入-->
-                    <!--</Button>&ndash;&gt;-->
-                  <!--</div>-->
+                <!--<div class="fl mb5">-->
+                <!--<Button-->
+                <!--size="small"-->
+                <!--class="mr10"-->
+                <!--@click="addPro"-->
+                <!--v-has="'addPro'"-->
+                <!--:disabled="draftShow != 0||!formPlan.storeId"-->
+                <!--&gt;-->
+                <!--<Icon type="md-add" />添加配件-->
+                <!--</Button>-->
+                <!--</div>-->
+                <!--<div class="fl mb5">-->
+                <!--<Button-->
+                <!--size="small"-->
+                <!--class="mr10"-->
+                <!--@click="shanchu"-->
+                <!--v-has="'delete'"-->
+                <!--:disabled="draftShow != 0"-->
+                <!--&gt;-->
+                <!--<i class="iconfont mr5 iconlajitongicon"></i> 删除-->
+                <!--</Button>-->
+                <!--</div>-->
+                <!--<div class="fl mb5">-->
+                <!--<Upload-->
+                <!--ref="upload"-->
+                <!--:show-upload-list="false"-->
+                <!--:headers="headers"-->
+                <!--:action="upurl"-->
+                <!--:format="['xlsx', 'xls', 'csv']"-->
+                <!--:before-upload="handleBeforeUpload"-->
+                <!--:on-format-error="onFormatError"-->
+                <!--:on-success="handleSuccess"-->
+                <!--:disabled="draftShow != 0||!formPlan.serviceId"-->
+                <!--&gt;-->
+                <!--<Button-->
+                <!--@click="importAss"-->
+                <!--size="small"-->
+                <!--class="mr10"-->
+                <!--v-has="'import'"-->
+                <!--:disabled="draftShow != 0||!formPlan.storeId"-->
+                <!--&gt;导入</Button>-->
+                <!--</Upload>-->
+                <!--&lt;!&ndash; <Button size="small" @click="importAss" class="mr10" :disabled="draftShow != 0">-->
+                <!--<i class="iconfont mr5 iconlajitongicon"></i> 导入-->
+                <!--</Button>&ndash;&gt;-->
+                <!--</div>-->
                 <!--</div>-->
               </div>
               <vxe-table
@@ -265,7 +265,6 @@
                   field="exhibitPrice"
                   title="入库单价"
                   width="100"
-                  :edit-render="{name: '$input',props: {type: 'number',min:0},attrs:{disabled:dis}}"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="exhibitPrice"
@@ -417,7 +416,7 @@
               minWidth: 70
             },
             {
-              title: "供应商",
+              title: "客户",
               key: "orderMan",
               minWidth: 120
             },
@@ -558,7 +557,7 @@
         data.startTime = this.queryTime[0] || "";
         data.endTime = this.queryTime[1] || "";
         data.billStatusId = this.purchaseType;
-        data.source = 1;
+        data.source = 2;
         let page = this.Left.page.num - 1;
         let size = this.Left.page.size;
         getLeftList(data, page, size)

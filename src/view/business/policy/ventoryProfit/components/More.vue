@@ -3,39 +3,80 @@
     <div class="navbox">
       <Row class="mb15">
         <Col>
-          <span class="w40">创建日期：</span>
+          <span class="more-span">创建日期：</span>
           <DatePicker
             v-model="moreData.createTime"
             type="daterange"
             placeholder="请选择创建日期"
             @on-change="establish"
-            style="width: 450px"
+            style="width: 350px"
           ></DatePicker>
         </Col>
       </Row>
       <Row>
         <Col>
-          <span class="w40">提交日期：</span>
+          <span class="more-span">提交日期：</span>
           <DatePicker
             v-model="moreData.enterTime"
             type="daterange"
             placeholder="请选择提交日期"
             @on-change="submit"
-            style="width: 450px"
+            style="width: 350px"
           ></DatePicker>
         </Col>
       </Row>
       <row class="mt15">
-        <span>盘点单号：</span>
-        <Input placeholder="请输入盘点单号" v-model="moreData.serviceId" icon="ios-clock-outline" style="width: 450px" />
+        <span class="more-span">入库单号：</span>
+        <Input placeholder="请输入入库单号" v-model="moreData.serviceId" style="width: 350px" />
       </row>
       <row class="mt15">
-        <span>配件编码：</span>
-        <Input v-model="moreData.partCode" placeholder="请输入配件编码" style="width: 450px" />
+        <span class="more-span">关联单号：</span>
+        <Input placeholder="请输入关联单号" v-model="moreData.code"  style="width: 350px" />
       </row>
       <row class="mt15">
-        <span>配件名称：</span>
-        <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 450px" />
+        <span class="more-span">配件编码：</span>
+        <Input v-model="moreData.partCode" placeholder="请输入配件编码" style="width: 350px" />
+      </row>
+      <row class="mt15">
+        <span class="more-span">配件名称：</span>
+        <Input v-model="moreData.partName" placeholder="请输入配件名称" style="width: 350px" />
+      </row>
+      <row class="mt15">
+        <span class="more-span">品牌：</span>
+        <Select v-model="moreData.partBrand" style="width: 350px" label-in-value filterable>
+          <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
+        </Select>
+      </row>
+      <row class="mt15">
+        <span class="more-span">来源：</span>
+        <Select v-model="moreData.source" style="width: 350px" label-in-value filterable>
+          <Option v-for="(item, index) in sourceArr" :value="item.value" :key="index">{{ item.label }}</Option>
+        </Select>
+      </row>
+      <row class="mt15">
+        <span class="more-span">仓库：</span>
+        <Select
+          v-model="moreData.storeId"
+          style="width:350px"
+        >
+          <Option
+            v-for="item in warehouseList"
+            :value="item.id"
+            :key="item.id"
+          >{{ item.name }}</Option>
+        </Select>
+      </row>
+      <row class="mt15">
+        <span class="more-span">提交人：</span>
+        <Select v-model="moreData.auditor" class="w350" label-in-value filterable>
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        </Select>
+      </row>
+      <row class="mt15">
+        <span class="more-span">创建人：</span>
+        <Select v-model="moreData.createUname" class="w350" label-in-value filterable>
+          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        </Select>
       </row>
     </div>
   </Modal>
@@ -43,6 +84,10 @@
 
 <script>
 import { getLeftList } from "../../../../../api/inventory/salesList";
+getParamsBrand
+import {getParamsBrand} from "../../../../../api/purchasing/purchasePlan";
+import {getSales} from "../../../../../api/salesManagment/salesOrder";
+import {getstate} from "../../../../../api/inventory/salesList";
 import moment from "moment";
 export default {
   name: "More",
@@ -55,17 +100,77 @@ export default {
         endTime: "", //创建日期结束
         auditStartTime: "", //提交时间开始
         auditEndTime: "", //提交时间结束
-        serviceId: "", //移库仓号
+        serviceId: "", //入库单号
+        code:"",//关联单号
         partCode: "", //配件编码
-        partName: "" //配件名称
-      }
+        partName: "", //配件名称
+        partBrand:"",//配件品牌
+        auditor:"",//提交人
+        createUname:"",//创建人
+        storeId:"",
+        source:1
+      },
+      brandLists:[],//品牌
+      salesList:[],//提交人
+
+      warehouseList: {},//仓库
+      sourceArr:[
+        {
+          value:0,
+          label:"OMS盘点",
+        },
+        {
+          value:1,
+          label:"WMS盘点",
+        },
+        {
+          value:3,
+          label:"全部",
+        }
+      ]
     };
   },
   props: {
     getShowMore: Boolean,
     billStatusId: '',
   },
+  mounted(){
+    this.getBrand();
+    this.getAllSales();
+    this.getWouse();
+  },
   methods: {
+    getWouse(){
+      getstate()
+        .then(res => {
+          console.log(res)
+          if (res.code === 0) {
+            this.warehouseList = res.data;
+          }
+        })
+        .catch(err => {
+          this.$Message.info("获取仓库信息失败"); //获取仓库数据
+        });
+    },
+    //提交人
+    async getAllSales() {
+      let res = await getSales();
+      if (res.code === 0) {
+        this.salesList = res.data.content;
+        this.salesList.forEach((item) => {
+          item.label = item.userName;
+          item.value = item.id;
+        });
+      }
+    },
+    //品牌
+    async getBrand() {
+      let res = await getParamsBrand();
+      if (res.code == 0) {
+        this.brandLists = res.data;
+      }
+    },
+
     //选择创建日期
     establish(date) {
       // console.log(date);
@@ -94,7 +199,13 @@ export default {
         auditEndTime: this.moreData.auditEndTime,
         serviceId: this.moreData.serviceId,
         partCode: this.moreData.partCode,
-        partName: this.moreData.partName
+        partName: this.moreData.partName,
+        partBrand:this.moreData.partBrand,
+        auditor:this.moreData.auditor,
+        createUname:this.moreData.createUname,
+        storeId:this.moreData.storeId,
+        source:this.moreData.source,
+        inventoryOrderType:1,
       }
       if (this.billStatusId != '') {
         obj.billStatusId = this.billStatusId
@@ -130,7 +241,12 @@ export default {
         auditEndTime: "", //提交时间结束
         serviceId: "", //移库仓号
         partCode: "", //配件编码
-        partName: "" //配件名称
+        partName: "", //配件名称
+        partBrand:"",//配件品牌
+        auditor:"",//提交人
+        createUname:"",//创建人
+        storeId:"",
+        source:1
       };
     }
   }
@@ -140,5 +256,10 @@ export default {
 .navbox {
   padding: 20px;
 }
+  .more-span{
+    width: 120px;
+    display: inline-block;
+    text-align: right;
+  }
 </style>
 
