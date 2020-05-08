@@ -154,13 +154,8 @@ export default {
           align: "center"
         },
         {
-          title: "单价",
-          key: "orderPrice",
-          align: "center"
-        },
-        {
           title: "数量",
-          key: "applyQty",
+          key: "acceptQty",
           align: "center"
         },
         {
@@ -213,7 +208,7 @@ export default {
           this.onelist.apply.detailVOS.forEach(el => {
             el.storeName = storeName;
           })
-          this.totalQty = this.onelist.apply.detailVOS.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
+          this.totalQty = this.onelist.apply.detailVOS.reduce((total, curr) => total += parseInt(curr.acceptQty), 0);
         }
       } else {
         this.$message.error("至少选择一条信息");

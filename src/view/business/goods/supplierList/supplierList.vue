@@ -1,9 +1,8 @@
 <template>
-  <div>
     <div class="content-oper content-oper-flex">
       <section class="oper-box">
         <div class="oper-top flex">
-          <div class="wlf">
+          <div class="wlf wlf-center">
             <div class="db">
               <span>快速查询：</span>
               <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
@@ -38,8 +37,8 @@
       <section class="con-box">
         <div class="inner-box">
           <div class="con-split" ref="paneLeft" >
-            <Split v-model="split1" min="200" max="500">
-              <div slot="left" class="con-split-pane-left" >
+            <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+              <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                 <div class="pane-made-hd">
                   采购退货列表
                 </div>
@@ -134,7 +133,6 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
                   <vxe-table-column type="index" fixed="left" width="60" title="序号"></vxe-table-column>
@@ -171,12 +169,11 @@
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择采购计划弹窗-->
       <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder" @selectRow="selectRow"></procurement-modal>
-    </div>
-    <!--供应商资料-->
+      <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     <!--打印弹框-->
     <print-show ref="PrintModel" :orderId="mainId"></print-show>
-  </div>
+    </div>
 </template>
 <script>
   import * as tools from "../../../../utils/tools";
@@ -1175,19 +1172,24 @@
             }
           }
         })
-      }
+      },
+      getDomHeight() {
+        this.$nextTick(()=>{
+          let wrapH = this.$refs.paneLeft.offsetHeight;
+          let planFormH = this.$refs.planForm.offsetHeight;
+          let planBtnH = this.$refs.planBtn.offsetHeight;
+          // let planPageH = this.$refs.planPage.offsetHeight;
+          //获取左侧侧表格高度
+          this.leftTableHeight = wrapH-70;
+          //获取右侧表格高度
+          this.rightTableHeight = wrapH-planFormH-planBtnH-65;
+        });
+      },
     },
     mounted(){
-      this.$nextTick(()=>{
-        let wrapH = this.$refs.paneLeft.offsetHeight;
-        let planFormH = this.$refs.planForm.offsetHeight;
-        let planBtnH = this.$refs.planBtn.offsetHeight;
-        // let planPageH = this.$refs.planPage.offsetHeight;
-        //获取左侧侧表格高度
-        this.leftTableHeight = wrapH-70;
-        //获取右侧表格高度
-        this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-      });
+      setTimeout(() => {
+        this.getDomHeight();
+      }, 0);
       this.allSelect();
       this.leftgetList();
       this.selecQuery();
@@ -1195,6 +1197,11 @@
     }
   }
 </script>
+
+<style lang="less" scoped>
+  @import url("../../../lease/product/lease.less");
+  @import url("../../../goods/plannedPurchaseOrder/index");
+</style>
 
 <style scoped>
   .con-box{

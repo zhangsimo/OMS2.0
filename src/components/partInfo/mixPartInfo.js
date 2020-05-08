@@ -31,8 +31,6 @@ export const mixPartInfo = {
         weight: [{ required: true, message: "重量不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
         volumeRong: [{ required: true, message: "容积不能为空且最多保留两位小数", trigger: "change", pattern: /^\d{1,}(\.\d{1,2})?$/ }],
       },
-      // 按钮状态
-      btnIsLoadding: false,
       // 选中包装规格行
       currRow: null,
       //是否禁用

@@ -923,6 +923,17 @@ export default [
               import("@/view/settlementManagement/fundsManagement/capitalChain/capitalChain.vue")
           },
           {
+            path: "shopJournal",
+            name: "shopJournal",
+            redirect: "",
+            // mark: "5101",
+            meta: {
+              title: "门店资金日记账"
+            },
+            component: () =>
+              import("@/view/settlementManagement/fundsManagement/shopJournal/shopJournal.vue")
+          },
+          {
             path: "accountRegistration",
             name: "accountRegistration",
             redirect: "",
