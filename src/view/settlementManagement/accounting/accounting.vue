@@ -226,6 +226,17 @@
                 field="proofCode"
                 title="凭证号"
               ></vxe-table-column>
+              <vxe-table-column
+                title="凭证状态"
+              >
+                <template v-slot="{ row }">
+                  {{ row.proofState ? "成功" : "失败" }}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="proofMsg"
+                title="凭证信息"
+              ></vxe-table-column>
             </vxe-table>
           </div>
           <Page
@@ -236,6 +247,8 @@
             show-sizer
             show-total
             show-elevator
+            transfer
+            :page-size-opts="[20,40,60,80,100]"
             @on-change="selectNumpersonage"
             @on-page-size-change="selectPagepersonage"
             style="float: right;margin-top: 10px;margin-right: 10px"
@@ -386,6 +399,17 @@
                 field="proofCode"
                 title="凭证号"
               ></vxe-table-column>
+              <vxe-table-column
+                title="凭证状态"
+              >
+                <template v-slot="{ row }">
+                  {{ row.proofState ? "成功" : "失败" }}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="proofMsg"
+                title="凭证信息"
+              ></vxe-table-column>
             </vxe-table>
           </div>
         </TabPane>
@@ -428,7 +452,7 @@ export default {
       isShow: false, // 撤销原因modal
       page: {
         num: 1,
-        size: 100,
+        size: 20,
         total: 0,
       }
     };
