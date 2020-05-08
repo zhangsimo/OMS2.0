@@ -52,12 +52,12 @@
         </Col>
         <Col span="12">
           <FormItem label="收入金额" prop="incomeMoney">
-            <Input type="number" v-model="formCustom.incomeMoney" class="w150"></Input>
+            <Input  v-model="formCustom.incomeMoney" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="支出金额" prop="paidMoney">
-            <Input type="number" v-model="formCustom.paidMoney" class="w150"></Input>
+            <Input  v-model="formCustom.paidMoney" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -150,10 +150,10 @@
             { required: true, type: 'date', message: '日期为必选', trigger: 'change' }
           ],
           incomeMoney:[
-            { required: true, message: '收入金额必填', trigger: 'blur' }
+            { required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }
           ],
           paidMoney:[
-            { required: true, message: '支出金额必填', trigger: 'blur' }
+            { required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }
           ],
           reciprocalAccountName:[
             { required: true, message: '对方户名必填', trigger: 'blur' }
