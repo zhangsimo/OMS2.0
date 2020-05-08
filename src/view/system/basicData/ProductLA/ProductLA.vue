@@ -179,7 +179,7 @@
               size="small"
               :loading="distPartLoading"
               :stripe="true"
-              :columns="waitPartListTableHead"
+              :columns="partListTableHead"
               :data="distPartListData"
               height="280"
               @on-selection-change="selectDistPart"

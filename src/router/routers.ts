@@ -961,7 +961,7 @@ export default [
             mark: "5300",
             meta: {
               // hideInMenu: true,
-              title: "会计审核"
+              title: "资金日记账审核"
             },
             component: () =>
               import("@/view/settlementManagement/accounting/accounting.vue")

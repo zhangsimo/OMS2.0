@@ -245,7 +245,7 @@
                     <Select
                       class="w160"
                       v-model="formPlanmain.directCompanyId"
-                      :disabled="isInput"
+                      :disabled="isInput||isDirectCompanyId"
                     >
                       <Option
                         v-for="(item, index) in putStores"

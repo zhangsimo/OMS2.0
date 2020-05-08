@@ -179,10 +179,10 @@
                     <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
                     <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
                   </vxe-table>
-                  <div ref="planPage">
+                  <!-- <div ref="planPage">
                   <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
                   @on-page-size-change="changeSize" show-sizer show-total></Page>
-                  </div>
+                  </div> -->
                 </div>
               </Split>
             </div>
