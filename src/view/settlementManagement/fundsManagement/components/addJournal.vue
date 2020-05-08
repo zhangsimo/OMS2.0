@@ -83,7 +83,7 @@
         <Col span="12">
           <FormItem label="业务类别" prop="businessCode">
             <Select v-model="formCustom.businessCode" style="width:150px">
-              <Option v-for="item in businessList" :value="item.id" :key="item.value">{{ item.ItemName }}</Option>
+              <Option v-for="item in businessList" :value="item.ItemCode" :key="item.ItemCode">{{ item.ItemName }}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -164,7 +164,7 @@
             { required: true, message: '备注必填', trigger: 'blur' }
           ],
           businessCode:[
-            { required: true,type: 'number', message: '业务类别必选', trigger: 'change' }
+            { required: true,type: 'string', message: '业务类别必选', trigger: 'change' }
 
           ],
         },//表单校验
