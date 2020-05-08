@@ -488,6 +488,17 @@ export default [
           import("@/view/business/policy/smsInventory/smsInventory.vue")
       },
       {
+        path: "/policy/ventoryProfit",
+        name: "ventoryProfit",
+        mark: "4004",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "盘盈入库"
+        },
+        component: () =>
+          import("@/view/business/policy/ventoryProfit/ventory.vue")
+      },
+      {
         path: "/policy/process",
         name: "process",
         mark: "4005",
