@@ -129,22 +129,22 @@ export default class ProductLA extends Vue {
         },
         {
             title: "品质",
-            key: "qualityName",
+            key: "quality",
             minWidth: 180
         },
         {
             title: "品牌",
-            key: "partBrandName",
+            key: "partBrand",
             minWidth: 120
         },
         {
             title: "编码",
-            key: "code",
+            key: "partCode",
             minWidth: 120
         },
         {
             title: "名称",
-            key: "name",
+            key: "partStandardName",
             minWidth: 100
         },
         {
@@ -154,7 +154,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "单位",
-            key: "unitId",
+            key: "minUnit",
             minWidth: 80
         },
         {
@@ -164,7 +164,7 @@ export default class ProductLA extends Vue {
         },
         {
             title: "车型",
-            key: "carModelName",
+            key: "adapterCarModel",
             minWidth: 100
         },
     ]
