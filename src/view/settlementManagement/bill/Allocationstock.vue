@@ -214,7 +214,7 @@ export default {
         {
           title: "是否含税",
           key: "taxSign",
-          className: "tc"
+          className: "tc",
         },
         {
           title: "不含税单价",

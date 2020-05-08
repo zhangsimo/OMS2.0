@@ -8,6 +8,7 @@ import * as tools from "_utils/tools";
 // @ts-ignore
 // import accessories from './modal/Accessories';
 import PartInfo from "_c/partInfo/partInfo";
+import _ from 'lodash';
 @Component({
   components: {
     PartInfo
@@ -552,14 +553,14 @@ export default class Fittings extends Vue {
     ref.init(res.data || {});
   }
   private async submitSave(row) {
+    const ref: any = this.$refs.partInfo;
     if (!this.isAdd) {
       row.id = this.currRow.id;
     }
-    console.log(row)
     let res: any = await api.approval(row);
     if (res.code == 0) {
-      const child: any = this.$refs;
-      child.partInfo.saveFlag = false;
+      // const child: any = this.$refs;
+      // child.partInfo.saveFlag = false;
       this.$Message.success("保存成功");
       const ref: any = this.$refs.partInfo;
       ref.proModal = false;

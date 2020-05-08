@@ -243,6 +243,16 @@ export default class FeeRegistration extends Vue {
       size: 10,
       total: 0
     };
+    this.revenueTypes = [
+      { disabled: false, value: "8", label: "运杂费" },
+      { disabled: false, value: "9", label: "业务费" },
+      { disabled: false, value: "10", label: "预提费" },
+      { disabled: false, value: "11", label: "收支保费" },
+      { disabled: false, value: "12", label: "行政采购" },
+      { disabled: false, value: "13", label: "保险销售其他费用" },
+      { disabled: false, value: "14", label: "关税费" },
+      { disabled: false, value: "15", label: "增值税费" }
+    ];
     this.getList();
     this.getInfo();
   }

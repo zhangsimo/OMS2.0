@@ -13,7 +13,7 @@
           </div>
           <div class="db ml15">
             <span>区域：</span>
-            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea'>
+            <Select  v-model="model1" filterable class="w150" @on-change = 'changeArea' disabled>
               <Option
                 v-for="item in Branchstore"
                 :value="item.id"
@@ -23,7 +23,7 @@
           </div>
           <div class="db ml15">
             <span>门店：</span>
-            <Select  v-model="shopCode" filterable class="w150">
+            <Select  v-model="shopCode" filterable class="w150" disabled>
               <Option
                 v-for="item in shopList"
                 :value="item.id"
@@ -59,46 +59,46 @@
             <span>查询</span>
           </button>
         </div>
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="importXSL">-->
-<!--            <span>导入日记账</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele">-->
-<!--            <span>删除导入</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="intellect">-->
-<!--            <span>智能匹配</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="artificialChange">-->
-<!--            <span>人工分配</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation">-->
-<!--            <span>撤销分配</span>-->
-<!--          </button>-->
-<!--        </div>-->
-<!--        <div class="db ml5">-->
-<!--          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney">-->
-<!--            <span>资金认领核销</span>-->
-<!--          </button>-->
-<!--        </div>-->
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="importXSL">
+            <span>导入日记账</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="dele">
+            <span>删除导入</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="intellect">
+            <span>智能匹配</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="artificialChange">
+            <span>人工分配</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="revocation">
+            <span>撤销分配</span>
+          </button>
+        </div>
+        <div class="db ml5">
+          <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="goMoney">
+            <span>资金认领核销</span>
+          </button>
+        </div>
       </div>
     </section>
 
-<!-- 导入模板弹窗组件-->
+    <!-- 导入模板弹窗组件-->
     <importXLS :URL="impirtUrl" ref="imp" @getNewList="getNew"></importXLS>
 
-<!--    人工智能分配-->
+    <!--    人工智能分配-->
     <artificial ref="art" :list="oneList" @getNew = 'getNewList'></artificial>
 
-<!--    余额展示-->
+    <!--    余额展示-->
     <amtData :moneyList='allMoneyList'></amtData>
 
     <div class="mt15">
@@ -119,7 +119,7 @@
               size="mini"
               style="width: 3000px"
               :data="tableData"
-              >
+            >
               <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
               <vxe-table-column field="importTime" title="导入时间" ></vxe-table-column>
               <vxe-table-column field="area" title="所属区域" ></vxe-table-column>
@@ -156,7 +156,7 @@
               <vxe-table-column field="proofWords" title="凭证字"></vxe-table-column>
               <vxe-table-column field="proofCode" title="凭证号"></vxe-table-column>
             </vxe-table>
-        </div>
+          </div>
         </TabPane>
         <TabPane label="已核销" name="capitalChain2">
           <div style="overflow: hidden ;overflow-x: scroll">
@@ -347,8 +347,9 @@
         data.shopNumber = this.$store.state.user.userData.shopId
         data.tenantId = this.$store.state.user.userData.tenantId
         let res = await are(data)
+
         if (res.code === 0){
-        this.model1 = 0
+          this.model1 = res.data[0].id
         }
       },
 
@@ -361,20 +362,20 @@
       },
 
       //获取门店
-     async getShop(){
+      async getShop(){
         let data ={}
         data.supplierTypeSecond = this.model1
         this.shopList = [{id:0 , name:'全部'}]
-       let res = await goshop(data)
-       if (res.code === 0) {
-         this.shopList = [...this.shopList , ...res.data]
-         this.$nextTick( () => {
-           this.shopCode = 0
-         })
-         if (this.$store.state.user.userData.shopkeeper != 0){
-           this.getThisArea()//获取当前门店地址
-         }
-       }
+        let res = await goshop(data)
+        if (res.code === 0) {
+          this.shopList = [...this.shopList , ...res.data]
+          this.$nextTick( () => {
+            this.shopCode = this.$store.state.user.userData.shopId
+          })
+          if (this.$store.state.user.userData.shopkeeper != 0){
+            this.getThisArea()//获取当前门店地址
+          }
+        }
       },
 
       //获取科目
@@ -421,12 +422,12 @@
           this.tableData1 = []
           this.tableData2 = []
           res.data.content.forEach( item => {
-          if (item.collateState) {
-            this.tableData1.push(item)
-          } else {
-            this.tableData2.push(item)
-          }
-        })
+            if (item.collateState) {
+              this.tableData1.push(item)
+            } else {
+              this.tableData2.push(item)
+            }
+          })
         }
       },
 
@@ -476,19 +477,19 @@
       },
 
       //智能匹配
-       intellect(){
+      intellect(){
         this.$Modal.confirm({
           title: '提示',
           content: '<p>是否执行智能匹配</p>',
           onOk: async () => {
             let res = await ait()
             if (res.code ===0) {
-                this.$XModal.alert({
-                  title: '提示',
-                  message: res.data,
-                  status: 'success',
-                })
-                this.getList()
+              this.$XModal.alert({
+                title: '提示',
+                message: res.data,
+                status: 'success',
+              })
+              this.getList()
             }
           },
           onCancel: () => {
@@ -507,7 +508,7 @@
       },
 
       //撤销分配
-       revocation(){
+      revocation(){
         if(Object.keys(this.oneList).length == 0) return this.$Message.error('请至少选择一条数据')
         if(!this.oneList.allocation) return this.$Message.error('请选择已分配的数据')
         this.$Modal.confirm({

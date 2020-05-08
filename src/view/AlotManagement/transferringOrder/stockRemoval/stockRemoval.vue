@@ -368,7 +368,7 @@ export default {
       checkboxArr: [], // checkbox选中
       idsId: [],
       MainID: "",
-      datadata: "",
+      datadata: null,
       getArray: [],
       tuneOut: false,
       flag: 0,
@@ -941,7 +941,7 @@ export default {
     },
     //编辑收货信息弹框显示
     GoodsInfoModal() {
-      if (!this.currentrow) {
+      if (!this.currentrow.id) {
         this.$Message.info("请选择编辑项");
         return;
       }

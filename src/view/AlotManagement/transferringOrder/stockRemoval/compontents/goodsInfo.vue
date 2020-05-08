@@ -76,7 +76,7 @@
               width="100"
             >
               <template v-slot="{ row }">
-                {{row.receiveCompName||row.receiveComp}}
+                {{ row.receiveCompName || row.receiveComp }}
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -85,16 +85,12 @@
               width="100"
             >
               <template v-slot="{ row }">
-                {{row.streetAddress||row.receiveAddress}}
+                {{ row.streetAddress || row.receiveAddress }}
               </template>
             </vxe-table-column>
-            <vxe-table-column
-              field="receiveMan"
-              title="收货人"
-              width="100"
-            >
+            <vxe-table-column field="receiveMan" title="收货人" width="100">
               <template v-slot="{ row }">
-                {{row.receiveMan||row.receiver}}
+                {{ row.receiveMan || row.receiver }}
               </template>
             </vxe-table-column>
             <vxe-table-column
@@ -103,7 +99,7 @@
               width="100"
             >
               <template v-slot="{ row }">
-                {{row.receiveManTel||row.receiverMobile}}
+                {{ row.receiveManTel || row.receiverMobile }}
               </template>
             </vxe-table-column>
           </vxe-table>
@@ -275,7 +271,7 @@ export default class GoodsInfo extends Vue {
   private disabled: boolean = true;
 
   @Prop(String) readonly mainId;
-  @Prop(Object || String) readonly row;
+  @Prop(Object) readonly row;
   @Prop(String) readonly orgid;
 
   private ruleValidate: ruleValidate = {
@@ -348,9 +344,35 @@ export default class GoodsInfo extends Vue {
     this.inlogistics();
   }
 
-  private async getLists() {
+  private async getLists(data = {}) {
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
+    console.log(this.row.code);
+    if (!this.row.code) {
+      let res: any = await fapi.getGoodsInfos2({
+        orgid: this.orgid,
+        mainId: this.mainId,
+        directCompanyId,
+        ...data
+      });
+      if (res.code == 0) {
+        this.tableData = res.data;
+        this.loading = false;
+        const xtable: any = this.$refs["xTable1"];
+        let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+        if (arrData.length > 0) {
+          this.echoDate({ row: arrData[0] });
+          xtable.setRadioRow(arrData[0]);
+        } else {
+          let arrDefault = this.tableData.filter(item => item.isDefault);
+          if (arrDefault.length > 0) {
+            this.echoDate({ row: arrDefault[0] });
+            xtable.setRadioRow(arrDefault[0]);
+          }
+        }
+      }
+      return;
+    }
 
     let result: any = await fapi.getGoodsInfos3({
       id: this.row.codeId
@@ -359,6 +381,18 @@ export default class GoodsInfo extends Vue {
     if (result.code == 0 && result.data != null) {
       this.tableData = [result.data];
       this.loading = false;
+      const xtable: any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      if (arrData.length > 0) {
+        this.echoDate({ row: arrData[0] });
+        xtable.setRadioRow(arrData[0]);
+      } else {
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if (arrDefault.length > 0) {
+          this.echoDate({ row: arrDefault[0] });
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
     } else {
       let res: any = await fapi.getGoodsInfos2({
         orgid: this.orgid,
@@ -368,6 +402,18 @@ export default class GoodsInfo extends Vue {
       if (res.code == 0) {
         this.tableData = res.data;
         this.loading = false;
+        const xtable: any = this.$refs["xTable1"];
+        let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+        if (arrData.length > 0) {
+          this.echoDate({ row: arrData[0] });
+          xtable.setRadioRow(arrData[0]);
+        } else {
+          let arrDefault = this.tableData.filter(item => item.isDefault);
+          if (arrDefault.length > 0) {
+            this.echoDate({ row: arrDefault[0] });
+            xtable.setRadioRow(arrDefault[0]);
+          }
+        }
       }
     }
   }
@@ -501,8 +547,8 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
-    data.orgid = this.row.guestOrgid;
-    this.getLists()
+    data.orgid = this.orgid;
+    this.getLists(data);
   }
   //快递下拉框
   private distribution(val) {
@@ -587,7 +633,7 @@ export default class GoodsInfo extends Vue {
     });
   }
   private echoDate({ row }) {
-    console.log(row)
+    console.log(row);
     // this.reset();
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
@@ -619,13 +665,16 @@ export default class GoodsInfo extends Vue {
         this.changeDeliveryType();
       }
     } else {
-      this.formDateRight = {...row};
+      this.formDateRight = { ...row };
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
-      this.formDateRight.receiveCompName = row.receiveComp||row.receiveCompName;
-      this.formDateRight.streetAddress = row.receiveAddress||row.streetAddress
-      this.formDateRight.receiveMan = row.receiver||row.receiveMan
-      this.formDateRight.receiveManTel = row.receiverMobile||row.receiveManTel
+      this.formDateRight.receiveCompName =
+        row.receiveComp || row.receiveCompName;
+      this.formDateRight.streetAddress =
+        row.receiveAddress || row.streetAddress;
+      this.formDateRight.receiveMan = row.receiver || row.receiveMan;
+      this.formDateRight.receiveManTel =
+        row.receiverMobile || row.receiveManTel;
       // this.formDateRight.streetAddress = row.streetAddress;
       // this.formDateRight.receiver = row.receiveMan;
       // this.formDateRight.receiverMobile = row.receiveManTel;
