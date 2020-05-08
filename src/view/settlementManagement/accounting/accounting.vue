@@ -226,8 +226,33 @@
                 field="proofCode"
                 title="凭证号"
               ></vxe-table-column>
+              <vxe-table-column
+                title="凭证状态"
+              >
+                <template v-slot="{ row }">
+                  {{ row.proofState ? "成功" : "失败" }}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="proofMsg"
+                title="凭证信息"
+              ></vxe-table-column>
             </vxe-table>
           </div>
+          <Page
+            size="small"
+            :total="page.total"
+            :page-size="page.size"
+            :current="page.num"
+            show-sizer
+            show-total
+            show-elevator
+            transfer
+            :page-size-opts="[20,40,60,80,100]"
+            @on-change="selectNumpersonage"
+            @on-page-size-change="selectPagepersonage"
+            style="float: right;margin-top: 10px;margin-right: 10px"
+          />
         </TabPane>
         <TabPane label="已审核" name="capitalChain2">
           <div style="overflow: hidden ;overflow-x: scroll">
@@ -374,8 +399,33 @@
                 field="proofCode"
                 title="凭证号"
               ></vxe-table-column>
+              <vxe-table-column
+                title="凭证状态"
+              >
+                <template v-slot="{ row }">
+                  {{ row.proofState ? "成功" : "失败" }}
+                </template>
+              </vxe-table-column>
+              <vxe-table-column
+                field="proofMsg"
+                title="凭证信息"
+              ></vxe-table-column>
             </vxe-table>
           </div>
+          <Page
+            size="small"
+            :total="page.total"
+            :page-size="page.size"
+            :current="page.num"
+            show-sizer
+            show-total
+            show-elevator
+            transfer
+            :page-size-opts="[20,40,60,80,100]"
+            @on-change="selectNumpersonage1"
+            @on-page-size-change="selectPagepersonage1"
+            style="float: right;margin-top: 10px;margin-right: 10px"
+          />
         </TabPane>
       </Tabs>
     </div>
@@ -413,7 +463,17 @@ export default {
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
-      isShow: false // 撤销原因modal
+      isShow: false, // 撤销原因modal
+      page: {
+        num: 1,
+        size: 20,
+        total: 0,
+      },
+      page1: {
+        num: 1,
+        size: 20,
+        total: 0,
+      }
     };
   },
   async mounted() {
@@ -441,7 +501,6 @@ export default {
       let params = {
         shopNumber: this.store,
         mateAccountCode: this.subjectId,
-        size: 10000
       };
       if (this.date) {
         params.occurTime = moment(this.date).format("YYYY-MM-DD");
@@ -451,13 +510,13 @@ export default {
           Reflect.deleteProperty(params, key);
         }
       }
-      params.page = 0;
       // 未审核
-      let res1 = await api.findCertificationAudit({ ...params, auditState: 0 });
+      let res1 = await api.findCertificationAudit({ ...params, auditState: 0 , page:this.page.num - 1 , size: this.page.size});
       // 已审核
-      let res2 = await api.findCertificationAudit({ ...params, auditState: 1 });
+      let res2 = await api.findCertificationAudit({ ...params, auditState: 1,page:this.page1.num - 1 , size: this.page1.size });
       if (res1.code == 0) {
         this.tableData = res1.data.content;
+        this.page.total = res1.data.totalElements
       }
       if (res2.code == 0) {
         this.tableData1 = res2.data.content;
@@ -467,6 +526,35 @@ export default {
     query() {
       this.getTable();
     },
+
+    //未审核分页
+    //未审核分页切换页数
+    selectNumpersonage(page) {
+      this.page.num = page;
+      this.getTable();
+    },
+
+    //未审核分页分页条数
+    selectPagepersonage(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getTable();
+    },
+
+    //已审核分页
+    //已审核分页切换页数
+    selectNumpersonage1(page) {
+      this.page.num = page;
+      this.getTable();
+    },
+
+    //已审核分页分页条数
+    selectPagepersonage1(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getTable();
+    },
+
     changeTabs(data) {
       if (data === "capitalChain1") {
         this.status = 0;

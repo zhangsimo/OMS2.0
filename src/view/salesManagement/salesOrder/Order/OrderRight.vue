@@ -801,14 +801,19 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
+          let vals = conversionList(val);
           this.formPlan.detailList = [
             ...this.formPlan.detailList,
             ...conversionList(val)
           ];
-          this.formPlan.detailList.forEach(el => el.orderQty = 1);
+          this.formPlan.detailList.forEach(el => {
+            if(!el.orderQty) {
+              el.orderQty = 1
+            }
+          });
           this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
@@ -817,11 +822,12 @@ export default {
     },
     // 批次配件
     async getBarchList(val) {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = {};
           val.map(item => {
+            item.orderQty = 1;
             item.isMarkBatch = 1;
             item.batchSourceId = item.id||item.batchSourceId
             Reflect.deleteProperty(item, 'id');
@@ -834,7 +840,7 @@ export default {
                 ...this.formPlan.detailList,
                 ...val
             ]
-            this.formPlan.detailList.forEach(el => el.orderQty = 1);
+            // this.formPlan.detailList.forEach(el => el.orderQty = 1);
         } else {
           this.$Message.error("*为必填项");
         }
@@ -861,7 +867,7 @@ export default {
     async activiyList(val) {
       let data = {};
       val.isMarkActivity = 1;
-      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      // this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
       this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       data.detailList = [val];
@@ -879,7 +885,6 @@ export default {
     },
     //保存
     save() {
-      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           try {
@@ -944,7 +949,7 @@ export default {
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
-                  this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+                  // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {
@@ -1042,7 +1047,7 @@ export default {
     //获取选择入库单的信息
     async getGodown(val) {
       let data = {};
-      this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      // this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
       this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
       data = this.formPlan;
       val.details.map(item => {

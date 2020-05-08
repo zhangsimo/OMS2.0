@@ -23,14 +23,14 @@
         </Col>
         <Col span="12">
           <FormItem label="账户" prop="accountCode">
-            <Select v-model="formCustom.accountCode" style="width:150px">
-              <Option v-for="item in accountList" :value="item.id" :key="item.value">{{ item.accountName }}</Option>
+            <Select v-model="formCustom.accountCode" style="width:150px" @on-change= 'changeAccount'>
+              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="账号" prop="accountName">
-            <Input  v-model="formCustom.accountName" class="w150"></Input>
+            <Input  v-model="formCustom.accountName" class="w150" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -83,7 +83,7 @@
         <Col span="12">
           <FormItem label="业务类别" prop="businessCode">
             <Select v-model="formCustom.businessCode" style="width:150px">
-              <Option v-for="item in businessList" :value="item.id" :key="item.value">{{ item.ItemName }}</Option>
+              <Option v-for="item in businessList" :value="item.ItemCode" :key="item.ItemCode">{{ item.ItemName }}</Option>
             </Select>
           </FormItem>
         </Col>
@@ -116,6 +116,14 @@
       list:''
     },
     data() {
+      let NumberValue = (rule, value, callback) => {
+        let reg = /^[0-9]*$/;
+        if (!reg.test(value)) {
+          callback(new Error("只能输入数字且不能为空!"));
+        } else {
+          callback();
+        }
+      };
       return {
         modalShow: false, //模态框状态
         formCustom:{},//form表单数据
@@ -142,10 +150,10 @@
             { required: true, type: 'date', message: '日期为必选', trigger: 'change' }
           ],
           incomeMoney:[
-            { required: true, message: '收入金额必填', trigger: 'blur' }
+            { required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }
           ],
           paidMoney:[
-            { required: true, message: '支出金额必填', trigger: 'blur' }
+            { required: true, message: '只能输入数字且不能为空',validator:NumberValue, trigger: 'blur' }
           ],
           reciprocalAccountName:[
             { required: true, message: '对方户名必填', trigger: 'blur' }
@@ -160,7 +168,7 @@
             { required: true, message: '备注必填', trigger: 'blur' }
           ],
           businessCode:[
-            { required: true, type:'number', message: '业务类别必选', trigger: 'change' }
+            { required: true, type:'string', message: '业务类别必选', trigger: 'change' }
 
           ],
         },//表单校验
@@ -246,6 +254,14 @@
       let shopArr = this.shopList.filter(item => item.id == value)
         let code = shopArr[0].code
         this.$set(this.formCustom , 'shopCode' ,  code)
+      },
+
+      //切换账户
+      changeAccount(value){
+        if (!value) return
+        let shopArr = this.accountList.filter(item => item.id == value)
+        let code = shopArr[0].accountCode
+        this.$set(this.formCustom , 'accountName' ,  code)
       },
 
       //清空校验

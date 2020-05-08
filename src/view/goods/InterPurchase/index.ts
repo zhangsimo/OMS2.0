@@ -41,6 +41,7 @@ export default class InterPurchase extends Vue {
   private selectLeftItemId = '';
 
   private isInput: boolean = true;
+  private isDirectCompanyId:boolean = false
 
   //左侧表格高度
   private leftTableHeight: number = 0;
@@ -804,6 +805,10 @@ export default class InterPurchase extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
+    if(row.directCompanyId){
+      this.isDirectCompanyId = true
+      this.formPlanmain.directCompanyId = row.directCompanyId
+    }
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {

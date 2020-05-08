@@ -125,7 +125,7 @@ export function goAccountList (params){
 //修改
 export function changeSave(data){
   return axios.request({
-    url: `${api.authApi}/cashAccountServer/update`,
+    url: `${api.omsSettle}/cashAccountServer/update`,
     method: 'post',
     data
   });
@@ -135,7 +135,7 @@ export function changeSave(data){
 //新增
 export function addSave(data){
   return axios.request({
-    url: `${api.authApi}/cashAccountServer/add`,
+    url: `${api.omsSettle}/cashAccountServer/add`,
     method: 'post',
     data
   });

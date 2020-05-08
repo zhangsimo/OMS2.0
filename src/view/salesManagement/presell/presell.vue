@@ -381,7 +381,7 @@
                   </vxe-table-column>
 
                   <vxe-table-column title="品牌车型">
-                    <template v-slot="{row,rowIndex}">
+                    <template v-slot="{row, rowIndex}">
                       <span>{{row.carBrandName}} {{row.carModelName}}</span>
                     </template>
                   </vxe-table-column>
@@ -971,6 +971,11 @@ export default {
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
+      this.WareHouseList.map(item=>{
+          if(item.isDefault){
+            this.formPlan.storeId = item.id;
+          }
+      })
         for(let b of this.preSellOrderTable.tbData){
             b._highlight = false
         }
