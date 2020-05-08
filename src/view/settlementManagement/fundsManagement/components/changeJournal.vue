@@ -23,14 +23,14 @@
         </Col>
         <Col span="12">
           <FormItem label="账户" prop="accountCode">
-            <Select v-model="formCustom.accountCode" style="width:150px">
-              <Option v-for="item in accountList" :value="item.id" :key="item.value">{{ item.accountName }}</Option>
+            <Select v-model="formCustom.accountCode" style="width:150px" @on-change= 'changeAccount'>
+              <Option v-for="item in accountList" :value="item.id" :key="item.id">{{ item.accountName }}</Option>
             </Select>
           </FormItem>
         </Col>
         <Col span="12">
           <FormItem label="账号" prop="accountName">
-            <Input  v-model="formCustom.accountName" class="w150"></Input>
+            <Input  v-model="formCustom.accountName" class="w150" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">
@@ -142,10 +142,10 @@
             { required: true, type: 'date', message: '日期为必选', trigger: 'change' }
           ],
           incomeMoney:[
-            { required: true, message: '收入金额必填', trigger: 'blur' }
+            { required: true,type:'number', message: '收入金额必填', trigger: 'blur' }
           ],
           paidMoney:[
-            { required: true, message: '支出金额必填', trigger: 'blur' }
+            { required: true, type:'number',message: '支出金额必填', trigger: 'blur' }
           ],
           reciprocalAccountName:[
             { required: true, message: '对方户名必填', trigger: 'blur' }
@@ -246,6 +246,14 @@
       let shopArr = this.shopList.filter(item => item.id == value)
         let code = shopArr[0].code
         this.$set(this.formCustom , 'shopCode' ,  code)
+      },
+
+      //切换账户
+      changeAccount(value){
+        if (!value) return
+        let shopArr = this.accountList.filter(item => item.id == value)
+        let code = shopArr[0].accountCode
+        this.$set(this.formCustom , 'accountName' ,  code)
       },
 
       //清空校验

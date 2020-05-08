@@ -449,6 +449,7 @@
       //点击获取表格数据
       getOneList(val){
         this.oneList = val.row
+        console.log(this.oneList)
       },
 
 

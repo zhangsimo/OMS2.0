@@ -228,6 +228,18 @@
               ></vxe-table-column>
             </vxe-table>
           </div>
+          <Page
+            size="small"
+            :total="page.total"
+            :page-size="page.size"
+            :current="page.num"
+            show-sizer
+            show-total
+            show-elevator
+            @on-change="selectNumpersonage"
+            @on-page-size-change="selectPagepersonage"
+            style="float: right;margin-top: 10px;margin-right: 10px"
+          />
         </TabPane>
         <TabPane label="已审核" name="capitalChain2">
           <div style="overflow: hidden ;overflow-x: scroll">
@@ -413,7 +425,12 @@ export default {
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
-      isShow: false // 撤销原因modal
+      isShow: false, // 撤销原因modal
+      page: {
+        num: 1,
+        size: 100,
+        total: 0,
+      }
     };
   },
   async mounted() {
@@ -467,6 +484,20 @@ export default {
     query() {
       this.getTable();
     },
+
+    //未审核分页
+    //未审核分页切换页数
+    selectNumpersonage(page) {
+      this.page.num = page;
+      this.getTable();
+    },
+    //未审核分页分页条数
+    selectPagepersonage(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.getTable();
+    },
+
     changeTabs(data) {
       if (data === "capitalChain1") {
         this.status = 0;
