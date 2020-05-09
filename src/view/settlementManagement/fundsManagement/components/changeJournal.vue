@@ -260,8 +260,8 @@
       changeAccount(value){
         if (!value) return
         let shopArr = this.accountList.filter(item => item.id == value)
-        let code = shopArr[0].accountCode
-        this.$set(this.formCustom , 'accountName' ,  code)
+        this.$set(this.formCustom , 'accountName' ,  shopArr[0].accountCode)
+        this.$set(this.formCustom , 'bankName' , shopArr[0].bankName )
       },
 
       //清空校验
