@@ -544,6 +544,7 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.purchaseType;
+      data.source = 0;
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size)
