@@ -1058,7 +1058,7 @@ export default {
                   this.isNew = true;
                   this.isAdd = true;
                   this.formPlan = {};
-                  this.id = null;
+                  // this.id = null;
                   this.limitList = [];
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();

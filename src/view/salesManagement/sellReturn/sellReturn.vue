@@ -777,6 +777,7 @@ export default {
                 b._highlight = false
                 if(b.id==this.id){
                     b._highlight = true;
+                    this.selectTabelData(b)
                     break;
                 }
             }

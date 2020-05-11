@@ -113,7 +113,8 @@ export default {
         Authorization: 'Bearer ' + Cookies.get(TOKEN_KEY)
       },//请求头
       upurl: getup,//批量导入地址
-      flag: 0
+      flag: 0,
+      selectLeftItemId:'',
     }
   },
   mounted() {
@@ -195,6 +196,16 @@ export default {
       if (res.code === 0) {
         this.legtTableData = res.data.content
         this.leftPage.total = res.data.totalElements
+
+        if(this.selectLeftItemId){
+          for(let b of this.legtTableData){
+            if(b.id==this.selectLeftItemId){
+              this.clickOnesList({"row":b});
+              break;
+            }
+          }
+
+        }
       }
     },
     //选择状态
@@ -224,6 +235,10 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
+      console.log(data)
+      if(data.row.id){
+        this.selectLeftItemId = data.row.id;
+      }
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",

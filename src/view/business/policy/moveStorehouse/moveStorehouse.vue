@@ -507,6 +507,7 @@ export default {
       rightTableStatus: "", //右侧表格状态
 
       saveButClick:false,//点击保存临时屏蔽保存按钮功能
+      leftClickItemId:'',
 
     };
   },
@@ -595,6 +596,14 @@ export default {
             });
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            if(this.leftClickItemId){
+              for(let b of this.Left.tbdata){
+                if(b.id==this.leftClickItemId){
+                  b._highlight = true;
+                  this.selectTabelData(b);
+                }
+              }
+            }
           }
         }
       });
@@ -874,6 +883,9 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
+      if(row.id){
+        this.leftClickItemId = row.id;
+      }
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
