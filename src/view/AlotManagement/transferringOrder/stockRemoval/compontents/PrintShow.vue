@@ -6,7 +6,7 @@
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >{{onelist.guest.fullName}}</h5>
+            >{{onelist.applyGuest.fullName||""}}</h5>
           </Col>
           <Col span="12" class="pl10">
             <p>调拨出库单</p>
@@ -37,7 +37,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调入方:</span>
-              <span>{{onelist.applyGuest.fullName||""}}</span>
+              <span>{{onelist.guest.fullName}}</span>
             </p>
             <p>
               <span>地址:</span>
