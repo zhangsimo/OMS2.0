@@ -14,6 +14,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
+        <div style="overflow-x: scroll">
         <Table
           border
           :columns="columns"
@@ -21,8 +22,10 @@
           ref="summary"
           highlight-row
           @on-selection-change="requires"
-          max-height="400"
+          max-height="500"
+         style="width: 3200px;"
         ></Table>
+        </div>
         <Page
           :total="pagetotal"
           show-elevator
@@ -326,22 +329,22 @@ export default {
         },
         {
           title: "创建时间",
-          key: "invoiceUnitName",
+          key: "createTime",
           className: "tc"
         },
         {
-          title: "创建时间",
-          key: "orgName",
+          title: "开票时间",
+          key: "invoiceDate",
           className: "tc"
         },
         {
           title: "开票类型",
-          key: "orgCode",
+          key: "species",
           className: "tc"
         },
         {
           title: "发票种类",
-          key: "collectionTypeName",
+          key: "invoiceType",
           className: "tc"
         },
         {
@@ -351,22 +354,22 @@ export default {
         },
         {
           title: "发票号码",
-          key: "receiptUnit",
+          key: "invoiceNo",
           className: "tc"
         },
         {
           title: "购方名称",
-          key: "invoiceDate",
+          key: "receiptUnit",
           className: "tc"
         },
         {
           title: "购方税号",
-          key: "priceTaxTotal",
+          key: "customDuty",
           className: "tc"
         },
         {
           title: "购方手机号",
-          key: "invoiceAmount",
+          key: "customPhone",
           className: "tc"
           // render: (h,params) =>{
           //     return h('span',(params.row.invoiceAmount).toFixed(2))
@@ -374,37 +377,37 @@ export default {
         },
         {
           title: "购方邮箱",
-          key: "invoiceTaxAmount",
+          key: "customMail",
           className: "tc"
         },
         {
           title: "购方开户行及账号",
-          key: "guestName",
+          key: "customAccount",
           className: "tc"
         },
         {
           title: "购方地址、电话",
-          key: "speciesName",
+          key: "customAddress",
           className: "tc"
         },
         {
           title: "合计含税金额",
-          key: "invoiceServiceName",
+          key: "priceTaxTotal",
           className: "tc"
         },
         {
           title: "合计不含税金额",
-          key: "invoiceTax",
+          key: "invoiceAmount",
           className: "tc"
         },
         {
           title: "合计税额",
-          key: "remark",
+          key: "invoiceTaxAmount",
           className: "tc"
         },
         {
           title: "备注信息",
-          key: "createUname",
+          key: "remark",
           className: "tc"
         },
         {
@@ -414,53 +417,53 @@ export default {
         },
         {
           title: "开票方式",
-          key: "status",
+          key: "invoiceWay",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.status === 0 ? "否" : "是");
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.status === 0 ? "否" : "是");
+          // }
         },
         {
           title: "开票员",
-          key: "nullifyId",
+          key: "invoiceName",
           className: "tc"
         },
         {
           title: "收款人",
-          key: "nullifyDate",
+          key: "payeeName",
           className: "tc"
         },
         {
           title: "复核人",
-          key: "redRushStatus",
+          key: "reviewerName",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.redRushStatus === 0 ? "否" : "是");
-          }
+          // render: (h, params) => {
+          //   return h("span", params.row.redRushStatus === 0 ? "否" : "是");
+          // }
         },
         {
           title: "开票公司",
-          key: "redRushId",
+          key: "invoiceUnit",
           className: "tc"
         },
         {
           title: "分店",
-          key: "redRushDate",
+          key: "orgName",
           className: "tc"
         },
         {
           title: "店号",
-          key: "writeOffStatus",
+          key: "orgCode",
           className: "tc"
         },
         {
           title: "收款方式",
-          key: "writeOffStatus",
+          key: "collectionType",
           className: "tc"
         },
         {
           title: "往来单位",
-          key: "writeOffStatus",
+          key: "guestName",
           className: "tc"
         },
         {
@@ -475,47 +478,53 @@ export default {
         },
         {
           title: "导入人/修改人",
-          key: "writeOffStatus",
+          key: "createUname",
           className: "tc"
         },
         {
           title: "导入/修改时间",
-          key: "writeOffStatus",
+          key: "importTime",
           className: "tc"
         },
         {
           title: "是否作废",
           key: "writeOffStatus",
-          className: "tc"
+          className: "tc",
+          render:(h,params)=>{
+            return h("span", params.row.status === 0 ? "否" : "是");
+          }
         },
         {
           title: "作废经办人",
-          key: "writeOffStatus",
+          key: "nullifyDate",
           className: "tc"
         },
         {
           title: "作废时间",
-          key: "writeOffStatus",
+          key: "nullifyDate",
           className: "tc"
         },
         {
           title: "是否红冲核销",
           key: "writeOffStatus",
-          className: "tc"
+          className: "tc",
+          render:(h , params) => {
+            return h('span' ,params.row.redRushStatus === 0 ? "否" : "是")
+          }
         },
         {
           title: "红冲经办人",
-          key: "writeOffStatus",
+          key: "redRushId",
           className: "tc"
         },
         {
           title: "红冲时间",
-          key: "writeOffStatus",
+          key: "redRushDate",
           className: "tc"
         },
         {
           title: "核销开票申请单号",
-          key: "writeOffStatus",
+          key: "writeOffNo",
           className: "tc"
         },
         {
@@ -525,12 +534,12 @@ export default {
         },
         {
           title: "核销人",
-          key: "writeOffStatus",
+          key: "writeOff",
           className: "tc"
         },
         {
           title: "核销时间",
-          key: "writeOffStatus",
+          key: "writeOffDate",
           className: "tc"
         },
 
