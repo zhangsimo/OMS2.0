@@ -216,7 +216,13 @@ export default {
           key: "taxSign",
           className: "tc",
           render: (h,params) =>{
-            return h('span', ["否", "是"][params.row.taxSign])
+            let val = params.row.taxSign;
+            if (val == 1) {
+              val = "是";
+            } else if(val == 0) {
+              val = "否";
+            }
+            return h('span', val);
           }
         },
         {
