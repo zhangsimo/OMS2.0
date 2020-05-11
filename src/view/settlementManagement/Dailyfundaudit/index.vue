@@ -89,14 +89,23 @@
         <TabPane label="应付审核" name="capitalChain2">
           <table-two ref="capitalChain2" :tbdata="tableData2" @selection="selection" />
         </TabPane>
-        <TabPane label="费用报销审核" name="capitalChain3">
+        <TabPane label="预收款审核" name="capitalChain3">
           <table-three ref="capitalChain3" :tbdata="tableData3" @selection="selection" />
         </TabPane>
-        <TabPane label="预收款/核销支出" name="capitalChain4">
+        <TabPane label="预付款审核" name="capitalChain4">
           <table-four ref="capitalChain4" :tbdata="tableData4" @selection="selection" />
         </TabPane>
-        <TabPane label="其他审核" name="capitalChain5">
+        <TabPane label="其他应收款审核" name="capitalChain5">
           <table-five ref="capitalChain5" :tbdata="tableData5" @selection="selection" />
+        </TabPane>
+        <TabPane label="其他应付款审核" name="capitalChain6">
+          <table-six ref="capitalChain6" :tbdata="tableData6" @selection="selection" />
+        </TabPane>
+        <TabPane label="费用报销/因公借支审核" name="capitalChain7">
+          <table-seven ref="capitalChain7" :tbdata="tableData7" @selection="selection" />
+        </TabPane>
+        <TabPane label="转损益审核" name="capitalChain8">
+          <table-eight ref="capitalChain8" :tbdata="tableData8" @selection="selection" />
         </TabPane>
       </Tabs>
     </div>
@@ -120,6 +129,10 @@ import TableTwo from "./components/TableTwo";
 import TableThree from "./components/TableThree";
 import TableFour from "./components/TableFour";
 import TableFive from "./components/TableFive";
+import TableSix from "./components/TableSix";
+import TableSeven from "./components/TableSeven";
+import TableEight from "./components/TableEight";
+
 import { findGuest } from "_api/settlementManagement/advanceCollection.js";
 import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
 import { creat } from "./../components";
@@ -131,7 +144,10 @@ export default {
     TableTwo,
     TableThree,
     TableFour,
-    TableFive
+    TableFive,
+    TableSix,
+    TableSeven,
+    TableEight
   },
   data() {
     return {
@@ -140,9 +156,12 @@ export default {
       oneList: [], // 表格选中
       tableData1: [], // 应收审核
       tableData2: [], // 应付审核
-      tableData3: [], // 费用报销审核
-      tableData4: [], // 预收款/核销支出
-      tableData5: [], // 其他审核
+      tableData3: [], // 预收款审核
+      tableData4: [], // 预付款审核
+      tableData5: [], // 其他应收款审核
+      tableData6: [], // 其他应付款审核
+      tableData7: [], // 费用报销/因公借支审核
+      tableData8: [], // 转损益审核
       dates: [], // 查询日期
       BranchstoreId: "", // 分店id
       Branchstore: [], // 分店
@@ -185,7 +204,7 @@ export default {
     // 查询
     async query() {
       this.oneList = [];
-      
+
       let params = {
         startTime: this.dates[0],
         endTime: this.dates[1],
@@ -214,6 +233,9 @@ export default {
         this.tableData3,
         this.tableData4,
         this.tableData5,
+        this.tableData6,
+        this.tableData7,
+        this.tableData8,
       ] = await api.getTableData(params);
     },
     // 切换tabs

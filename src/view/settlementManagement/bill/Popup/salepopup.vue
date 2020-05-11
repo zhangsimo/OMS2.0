@@ -40,6 +40,12 @@
       <Col span="6">
         <span>申请时间：{{information.applicationDate}}</span>
       </Col>
+      <Col span="6">
+        <span>油品-开票申请单号：{{information.oilsListOrder}}</span>
+      </Col>
+      <Col span="6">
+        <span>配件-开票申请单号：{{information.partsListOrder}}</span>
+      </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
     <Form ref="formCustom" :model="invoice" :rules="invoiceRule" :label-width="160">
@@ -163,14 +169,31 @@
       @click="seleteSale"
       v-has="'examine'"
     >选择必开销售单</button>
+    <Tabs type="card" value="invoice1" class="mt10">
+      <TabPane label="配件清单" name="invoice1">
+        <Table
+          border
+          :columns="accessoriesBilling"
+          :data="accessoriesBillingData"
+          show-summary
+          :summary-method="billSum"
+        ></Table>
+      </TabPane>
+      <TabPane label="油品清单" name="invoice2">
+        <Table
+          border
+          :columns="accessoriesBilling"
+          :data="accessoriesBillingData"
+          show-summary
+          :summary-method="billSum"
+        ></Table>
+      </TabPane>
+    </Tabs>
+
     <h4 class="mt10">开票配件</h4>
-    <Table
-      border
-      :columns="accessoriesBilling"
-      :data="accessoriesBillingData"
-      show-summary
-      :summary-method="billSum"
-    ></Table>
+
+
+
     <div class="mt10">
       <h4>开票申请进度</h4>
       <approval :approvalTit="approvalTit" />

@@ -34,6 +34,10 @@
               >
             </Select>
           </div>
+          <div class="db ml15" style="line-height: 28px">
+            <Checkbox class="mr5" v-model="single" :true-value="1"  :false-value="0" />
+            <span>显示待修改凭证</span>
+          </div>
           <div class="db ml15">
             <button
               class="mr10 ivu-btn ivu-btn-default"
@@ -458,6 +462,7 @@ export default {
       tableData1: [], // 已审核
       date: new Date(), // 发生日期
       store: "", // 门店id
+      single:0,//复选框状态
       Branchstore: [], // 门店
       subjectId: "", // 对应科目id
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
