@@ -974,7 +974,17 @@ tijiao(params)
       );
       const idValue = seleList[0].id;
       idArr.push(idValue);
-      shanqu({ ids: idArr })
+      let idArr1 = [];
+      let idArr2 = [];
+      idArr.forEach(el => {
+        if(el.id) {
+          idArr1.push(el);
+        } else {
+          idArr2.push(el);
+        }
+      })
+      if (idArr1.length > 0) {
+        shanqu({ ids: idArr1 })
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
@@ -988,6 +998,7 @@ tijiao(params)
         .catch(e => {
           this.$Message.error("删除成品失败");
         });
+      }
     },
     //展示方
     showModel() {

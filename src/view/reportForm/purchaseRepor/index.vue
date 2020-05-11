@@ -26,7 +26,7 @@ import tabOne from "./components/tabOne";
 import tabTwo from "./components/tabTwo";
 import tabThree from "./components/tabThree";
 import tabFour from "./components/tabFour";
-
+import * as api from "_api/reportForm/index.js";
 export default {
   name: "reporIndex",
   components: { panne, tabOne, tabTwo, tabThree, tabFour },

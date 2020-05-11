@@ -1047,8 +1047,12 @@ export default {
     //获取选择入库单的信息
     async getGodown(val) {
       let data = {};
-      // this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
-      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
+      if (this.formPlan.planSendDate) {
+        this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
+      }
+      if (this.formPlan.planArriveDate) {
+        this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
+      }
       data = this.formPlan;
       val.details.map(item => {
         item.isMarkBatch = 1;

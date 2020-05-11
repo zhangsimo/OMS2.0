@@ -44,7 +44,7 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
+              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 2">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>

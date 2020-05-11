@@ -750,7 +750,10 @@ export default {
       cangkuListall: [],
       tableData1: [],
       currentNum: 1,
-      saveBtnClik:false
+      saveBtnClik:false,
+
+      //记录左侧点击的数据
+      leftClickItemId:'',
     };
   },
   watch: {
@@ -1156,6 +1159,9 @@ export default {
     stamp() {},
     //左边列表选中当前行
     selectTabelData(row) {
+      if(row.id){
+        this.leftClickItemId = row.id;
+      }
       this.Leftcurrentrow = row;
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -1366,6 +1372,16 @@ export default {
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
+
+              if(this.leftClickItemId){
+                for(let b of this.Left.tbdata){
+                  if(b.id==this.leftClickItemId){
+                    b._highlight = true;
+                    this.selectTabelData(b);
+                    break;
+                  }
+                }
+              }
             }
           }
         })

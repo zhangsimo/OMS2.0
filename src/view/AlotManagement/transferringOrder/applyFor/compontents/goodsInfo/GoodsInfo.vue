@@ -264,15 +264,26 @@ export default class GoodsInfo extends Vue {
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
-
-      for (let b of this.tableData) {
-        if (b.isDefault === 1) {
-          this.echoDate({ row: b });
-          let thisTable: any = this.$refs.xTable1;
-          thisTable.setRadioRow(b);
-          break;
+      const xtable: any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      if (arrData.length > 0) {
+        this.echoDate({ row: arrData[0] });
+        xtable.setRadioRow(arrData[0]);
+      } else {
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if (arrDefault.length > 0) {
+          this.echoDate({ row: arrDefault[0] });
+          xtable.setRadioRow(arrDefault[0]);
         }
       }
+      // for (let b of this.tableData) {
+      //   if (b.isDefault === 1) {
+      //     this.echoDate({ row: b });
+      //     let thisTable: any = this.$refs.xTable1;
+      //     thisTable.setRadioRow(b);
+      //     break;
+      //   }
+      // }
     }
   }
 
@@ -413,6 +424,18 @@ export default class GoodsInfo extends Vue {
     if (res.code == 0) {
       this.tableData = res.data;
       this.loading = false;
+      const xtable: any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      if (arrData.length > 0) {
+        this.echoDate({ row: arrData[0] });
+        xtable.setRadioRow(arrData[0]);
+      } else {
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if (arrDefault.length > 0) {
+          this.echoDate({ row: arrDefault[0] });
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
     }
   }
   //快递下拉框
@@ -467,7 +490,6 @@ export default class GoodsInfo extends Vue {
         params.relationNum = this.formDateRight.relationNum;
         params.guestId = this.formDateRight.guestId;
         if (this.SaveId) {
-          console.log(this.SaveId);
           params.id = this.SaveId;
           params = this.logisticsRecordVO;
           params.receiveComp = this.formDateRight.receiveCompName;
@@ -533,6 +555,7 @@ export default class GoodsInfo extends Vue {
         this.changeDeliveryType();
       }
     } else {
+      this.SaveId = "";
       this.formDateRight = row;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
@@ -549,13 +572,13 @@ export default class GoodsInfo extends Vue {
     this.changeDeliveryType();
   }
   //传入保存id
-  private saveId(row) {
-    row.forEach(item => {
-      if (item.logisticsRecord) {
-        this.formDateRight.id = item.logisticsRecord.id;
-      }
-    });
-  }
+  // private saveId(row) {
+  //   row.forEach(item => {
+  //     if (item.logisticsRecord) {
+  //       this.formDateRight.id = item.logisticsRecord.id;
+  //     }
+  //   });
+  // }
 
   private reset() {
     this.formDateTop = {

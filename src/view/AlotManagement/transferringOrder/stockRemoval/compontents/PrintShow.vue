@@ -16,7 +16,7 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>地址:{{onelist.logisticsRecord.receiveAddress||""}}</span>
+              <span>地址:{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
             </p>
             <p>
               <span>电话:{{onelist.guest.tel||""}}</span>
@@ -41,7 +41,7 @@
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
+              <span>{{onelist.logisticsRecord.receiveAddress }}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
@@ -51,7 +51,7 @@
             </p>
             <p>
               <span>收货人:</span>
-              <span>{{onelist.guest.contactor||""}}</span>
+              <span>{{onelist.logisticsRecord.receiver||""}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">

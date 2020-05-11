@@ -307,7 +307,7 @@ export const mixSelectPartCom = {
     //显示层
     init() {
       if(!this.storeId){
-        return this.$Message.warning("请选择移出仓库")
+        return this.$Message.warning("请选择交货仓库")
       }
       this.searchPartLayer = true;
       this.getList();
@@ -381,6 +381,10 @@ export const mixSelectPartCom = {
           this.allList = res.data;
         }
       });
+    },
+    //双击显示
+    dblclick(v){
+      this.$refs.selectPartInfo.init(v);
     }
   }
 };

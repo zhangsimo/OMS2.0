@@ -59,7 +59,7 @@
             <FormItem label="发票种类：" prop="priceTaxTotal">
               <Select v-model="formValidate.priceTaxTotal">
                 <Option
-                  v-for="item in invoiceTypeOption"
+                  v-for="item in invoiceTypeList"
                   :value="item.itemCode"
                   :key="item.itemCode"
                 >{{item.itemName}}</Option>
@@ -69,20 +69,20 @@
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="购方名称：" prop="invoiceUnit">
-              <Input v-model="formValidate.invoiceUnit"/>
+            <FormItem label="购方名称：" prop="receiptUnit">
+              <Input v-model="formValidate.receiptUnit"/>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票代码：" prop="invoiceAmount">
-              <Input v-model="formValidate.invoiceAmount" />
+            <FormItem label="发票代码：" prop="invoiceNo">
+              <Input v-model="formValidate.invoiceNo" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="发票号码：" prop="invoiceAmount">
-              <Input v-model="formValidate.invoiceAmount" />
+            <FormItem label="发票号码：" prop="invoiceNo">
+              <Input v-model="formValidate.invoiceNo" />
             </FormItem>
 
 <!--            <FormItem label="部门门店：" prop="orgBranchId">-->
@@ -92,27 +92,27 @@
 <!--            </FormItem>-->
           </Col>
           <Col span="11">
-            <FormItem label="购方税号：" prop="invoiceTaxAmount">
-              <Input v-model="formValidate.invoiceTaxAmount" />
+            <FormItem label="购方税号：" prop="customDuty">
+              <Input v-model="formValidate.customDuty" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="购方手机号：" prop="orgCode">
-              <Input v-model="formValidate.orgCode" />
+            <FormItem label="购方手机号：" prop="customPhone">
+              <Input v-model="formValidate.customPhone" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="购方邮箱：" prop="guestName">
-              <Input v-model="formValidate.guestName" />
+            <FormItem label="购方邮箱：" prop="customMail">
+              <Input v-model="formValidate.customMail" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="购方开户行及账号：" prop="guestName">
-              <Input v-model="formValidate.guestName" />
+            <FormItem label="购方开户行及账号：" prop="customAccount">
+              <Input v-model="formValidate.customAccount" />
             </FormItem>
 <!--            <FormItem label="开票清单类型：" prop="species">-->
 <!--              <Select v-model="formValidate.species" clearable>-->
@@ -125,8 +125,8 @@
 <!--            </FormItem>-->
           </Col>
           <Col span="11">
-            <FormItem label="购方地址、电话：" prop="guestName">
-              <Input v-model="formValidate.guestName" />
+            <FormItem label="购方地址、电话：" prop="customAddress">
+              <Input v-model="formValidate.customAddress" />
             </FormItem>
 <!--            <FormItem label="收款方式：" prop="collectionType">-->
 <!--              <Select v-model="formValidate.collectionType">-->
@@ -141,13 +141,13 @@
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="合计含税金额：" prop="invoiceNo">
-              <Input v-model="formValidate.invoiceNo" />
+            <FormItem label="合计含税金额：" prop="priceTaxTotal">
+              <Input v-model="formValidate.priceTaxTotal" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="合计不含税金额：" prop="invoiceNo">
-              <Input v-model="formValidate.invoiceNo" />
+            <FormItem label="合计不含税金额：" prop="invoiceAmount">
+              <Input v-model="formValidate.invoiceAmount" />
             </FormItem>
 <!--            <FormItem label="开票业务：" prop="invoiceService">-->
 <!--              <Select v-model="formValidate.invoiceService">-->
@@ -162,13 +162,13 @@
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="合计税额：" prop="invoiceUnit">
-              <Input v-model="formValidate.invoiceUnit" />
+            <FormItem label="合计税额：" prop="invoiceTaxAmount">
+              <Input v-model="formValidate.invoiceTaxAmount" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="复核人：" prop="invoiceUnit">
-              <Input v-model="formValidate.invoiceUnit" />
+            <FormItem label="复核人：" prop="reviewerName">
+              <Input v-model="formValidate.reviewerName" />
             </FormItem>
 <!--            <FormItem label="税率：" prop="invoiceTax">-->
 <!--              <Select v-model="formValidate.invoiceTax" clearable>-->
@@ -190,8 +190,8 @@
               </FormItem>
           </Col>
           <Col span="11">
-              <FormItem label="开票方式：" prop="orgCode">
-                <Input v-model="formValidate.orgCode" />
+              <FormItem label="开票方式：" prop="invoiceWay">
+                <Input v-model="formValidate.invoiceWay" />
               </FormItem>
           </Col>
         </Row>
@@ -207,15 +207,15 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="开票员：" prop="guestName">
-              <Input v-model="formValidate.guestName" />
+            <FormItem label="开票员：" prop="invoiceName">
+              <Input v-model="formValidate.invoiceName" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="收款人：" prop="orgCode">
-              <Input v-model="formValidate.orgCode" />
+            <FormItem label="收款人：" prop="payeeName">
+              <Input v-model="formValidate.payeeName" />
             </FormItem>
           </Col>
           <Col span="11">
@@ -267,7 +267,9 @@ import {
   getup,
   deletetSalesList,
   voidSalesList,
-  writeSalesList
+  writeSalesList,
+  getInvoiceType,
+  getTypeOfInvoice
 } from "_api/salesManagment/salesInvoice";
 import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import Cookies from "js-cookie";
@@ -557,6 +559,7 @@ export default {
       proType: [],
       allTablist: [],
       invoiceTypeOption: [], //发票类型
+      invoiceTypeList:[],//发票种类
       taxOptionList: [], //税率
       collectionTypeOption: [], //收款方式
       speciesOptionList: [], //开票清单类型
@@ -760,8 +763,6 @@ export default {
     //查看详情
     getDetailInfor() {
       // await this.getSelectOptions()
-      console.log(this.formValidate);
-      console.log(this.proTypeList);
       for (let key in this.formValidate) {
         this.formValidate[key] = this.allTablist[0][key];
       }
@@ -786,26 +787,33 @@ export default {
           this.taxOptionList = res.data;
         }
       });
-      await getOptionSalesList("INVOICE_TYPES").then(res => {
+      await getInvoiceType().then(res => {
         if (res.code === 0) {
+          console.log(res)
           this.invoiceTypeOption = res.data;
         }
       });
-      await getOptionSalesList("RECEIVABLE_TYPE").then(res => {
-        if (res.code === 0) {
-          this.collectionTypeOption = res.data;
+      await getTypeOfInvoice().then( res => {
+        console.log(res)
+        if (res.code === 0){
+          this.invoiceTypeList = res.data;
         }
-      });
-      await getOptionSalesList("BILL_LIST_TYPE").then(res => {
-        if (res.code === 0) {
-          this.speciesOptionList = res.data;
-        }
-      });
-      await getOptionSalesList("BILL_SERVICE").then(res => {
-        if (res.code === 0) {
-          this.invoiceServiceOption = res.data;
-        }
-      });
+      })
+      // await getOptionSalesList("RECEIVABLE_TYPE").then(res => {
+      //   if (res.code === 0) {
+      //     this.collectionTypeOption = res.data;
+      //   }
+      // });
+      // await getOptionSalesList("BILL_LIST_TYPE").then(res => {
+      //   if (res.code === 0) {
+      //     this.speciesOptionList = res.data;
+      //   }
+      // });
+      // await getOptionSalesList("BILL_SERVICE").then(res => {
+      //   if (res.code === 0) {
+      //     this.invoiceServiceOption = res.data;
+      //   }
+      // });
       await getOptionFdList().then(res => {
         if (res.code === 0) {
           this.proTypeList = res.data;
