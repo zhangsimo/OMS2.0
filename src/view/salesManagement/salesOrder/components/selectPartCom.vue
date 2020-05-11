@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData">
+          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData" @on-row-dblclick="dblclick">
             <template slot-scope="{ row, index }" slot="action">
               <a @click="show(row)">查看</a>
             </template>
@@ -126,17 +126,19 @@
       </div>
     </Modal>
     <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
+    <select-part-info ref="selectPartInfo"></select-part-info>
   </div>
 </template>
 
 <script>
   import PartInfo from "_c/partInfo/partInfo";
   import {mixSelectPartCom} from "./mixSelectPartCom";
+  import SelectPartInfo from "./selectPartInfo";
 
   export default {
     name: "selectPartCom",
     mixins:[mixSelectPartCom],
-    components: {PartInfo},
+    components: {SelectPartInfo, PartInfo},
     props:{
         guestId:'',
         storeId:'',
