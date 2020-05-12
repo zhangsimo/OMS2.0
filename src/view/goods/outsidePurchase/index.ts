@@ -3,6 +3,9 @@ import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
+
+import baseUrl from "../../../../config/url";
+
 import { orderState } from '../plannedPurchaseOrder/global';
 import { getSales } from "@/api/salesManagment/salesOrder";
 
@@ -20,6 +23,8 @@ import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.v
 import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
+
+
 @Component({
   components: {
     QuickDate,
@@ -171,6 +176,14 @@ export default class InterPurchase extends Vue {
     let upload : any=this.$refs.upload;
     upload.clearFiles()
   };
+  //下载模板
+  down(){
+    location.href =
+      baseUrl.omsOrder +
+      "/preOrderMain/template?access_token=" +
+      Cookies.get(TOKEN_KEY);
+  };
+
   // 合计采购金额
   private totalAmt: number = 0;
 

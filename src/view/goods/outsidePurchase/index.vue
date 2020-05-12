@@ -283,6 +283,15 @@
                   <div class="fl mb5">
                     <Button
                       size="small"
+                      @click="down"
+                      class="mr10"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
                       class="mr10"
                       :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"

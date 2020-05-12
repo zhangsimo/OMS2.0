@@ -410,6 +410,14 @@ export default {
         ],
         applyTrustMoney: [
           { required: true, validator: bigNumber, trigger: "change"},
+        ],
+        adjustReason:[
+          {
+            required: true,
+            type: "string",
+            message: "请填写调整原因",
+            trigger: "blur"
+          }
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址

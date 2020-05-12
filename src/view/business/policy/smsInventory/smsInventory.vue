@@ -206,6 +206,13 @@
                       <i class="iconfont mr5 iconlajitongicon"></i> 导入
                     </Button>-->
                   </div>
+                  <Button
+                    size="small"
+                    @click="down"
+                    class="mr10"
+                  >
+                    <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                  </Button>
                 </div>
               </div>
               <vxe-table
@@ -318,6 +325,7 @@ import More from "./components/More";
 import moment, { months } from "moment";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 import * as tools from "../../../../utils/tools";
 export default {
   name: "smsInventory",
@@ -918,6 +926,14 @@ export default {
       }
       let refs = this.$refs;
       refs.upload.clearFiles();
+    },
+
+    //下载模板
+    down(){
+      location.href =
+        baseUrl.omsOrder +
+        "/preOrderMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
     },
     //配件返回的参数
     getPartNameList(val) {
