@@ -34,6 +34,17 @@
               >
             </Select>
           </div>
+          <div class="db ml15">
+            <span>凭证生成状态：</span>
+            <Select v-model="proofState " class="w150">
+              <Option
+                v-for="item in proofStateList"
+                :value="item.id"
+                :key="item.id"
+              >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
           <div class="db ml15" style="line-height: 28px">
             <Checkbox class="mr5" v-model="single" :true-value="1"  :false-value="0" />
             <span>显示待修改凭证</span>
@@ -478,7 +489,13 @@ export default {
         num: 1,
         size: 20,
         total: 0,
-      }
+      },
+      proofState:0, //凭证生成状态
+      proofStateList:[
+        {name:'全部' , id: 0},
+        {name:'成功' , id: 1},
+        {name:'失败' , id: 2},
+      ]
     };
   },
   async mounted() {
@@ -515,6 +532,7 @@ export default {
           Reflect.deleteProperty(params, key);
         }
       }
+      params.proofState = this.proofState
       // 未审核
       let res1 = await api.findCertificationAudit({ ...params, auditState: 0 , page:this.page.num - 1 , size: this.page.size});
       // 已审核
