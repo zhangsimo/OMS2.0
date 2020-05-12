@@ -475,7 +475,7 @@ export default {
       store: "", // 门店id
       single:0,//复选框状态
       Branchstore: [], // 门店
-      subjectId: "", // 对应科目id
+      subjectId: 0 , // 对应科目id
       subjecties: [{ id: 0, titleName: "全部" }], // 科目
       content: "", // 撤销原因
       // 状态类
@@ -527,11 +527,11 @@ export default {
       if (this.date) {
         params.occurTime = moment(this.date).format("YYYY-MM-DD");
       }
-      for (let key in params) {
-        if (!params[key]) {
-          Reflect.deleteProperty(params, key);
-        }
-      }
+      // for (let key in params) {
+      //   if (!params[key]) {
+      //     Reflect.deleteProperty(params, key);
+      //   }
+      // }
       params.proofState = this.proofState
       // 未审核
       let res1 = await api.findCertificationAudit({ ...params, auditState: 0 , page:this.page.num - 1 , size: this.page.size});

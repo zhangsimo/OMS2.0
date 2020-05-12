@@ -328,6 +328,53 @@ export default {
           className: "tc"
         },
         {
+          title: "油品清单开票申请单号",
+          key: "oilsListOrder",
+          className: "tc"
+        },
+        {
+          title: "配件清单开票申请单号",
+          key: "partsListOrder",
+          className: "tc"
+        },
+        {
+          title: "发票种类",
+          className: "tc",
+          render: (h , params) => {
+            return h('span' , params.row.invoiceKind == 1 ? '增值税普通发票' : '增值税专用发票')
+          }
+        },
+        {
+          title: "购方税号",
+          key: "customDuty",
+          className: "tc"
+        },
+        {
+          title: "购方手机号",
+          key: "customPhone",
+          className: "tc"
+        },
+        {
+          title: "购方邮箱",
+          key: "customMail",
+          className: "tc"
+        },
+        {
+          title: "购方开户行及账号",
+          key: "customAccount",
+          className: "tc"
+        },
+        {
+          title: "购方开户行",
+          key: "customBank",
+          className: "tc"
+        },
+        {
+          title: "购方地址、电话",
+          key: "customAddress",
+          className: "tc"
+        },
+        {
           title: "开票申请单号",
           key: "applyNo",
           className: "tc"
@@ -587,7 +634,6 @@ export default {
     })
     getOptionGuesList().then(res=>{
       if(res.code===0){
-        console.log(res.data)
         this.guestNameList = res.data
       }
     })
