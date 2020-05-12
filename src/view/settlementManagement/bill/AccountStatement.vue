@@ -1013,6 +1013,8 @@ export default {
           if (res.code === 0) {
             this.$refs.salepopup.information.applyNo = res.data.applyNo;
             this.$refs.salepopup.information.code = res.data.orgCode;
+            this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+            this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
           }
         });
         setTimeout(() => {
@@ -1205,7 +1207,7 @@ export default {
       this.falg = false;
       this.getAccountStatement(obj);
     },
-   
+
     // 点击总表查询明细
     morevis(row, index) {
       this.reconciliationStatement = row;

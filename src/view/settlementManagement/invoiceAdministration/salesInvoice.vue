@@ -45,8 +45,8 @@
       <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="130">
         <Row>
           <Col span="11">
-            <FormItem label="发票类型：" prop="invoiceType">
-              <Select v-model="formValidate.invoiceType">
+            <FormItem label="发票类型：" prop="species">
+              <Select v-model="formValidate.species">
                 <Option
                   v-for="item in invoiceTypeOption"
                   :value="item.itemCode"
@@ -56,8 +56,8 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票种类：" prop="priceTaxTotal">
-              <Select v-model="formValidate.priceTaxTotal">
+            <FormItem label="发票种类：" prop="invoiceType  ">
+              <Select v-model="formValidate.invoiceType  ">
                 <Option
                   v-for="item in invoiceTypeList"
                   :value="item.itemCode"
@@ -789,12 +789,10 @@ export default {
       });
       await getInvoiceType().then(res => {
         if (res.code === 0) {
-          console.log(res)
           this.invoiceTypeOption = res.data;
         }
       });
       await getTypeOfInvoice().then( res => {
-        console.log(res)
         if (res.code === 0){
           this.invoiceTypeList = res.data;
         }
@@ -827,7 +825,8 @@ export default {
     },
     //分页
     pageNumChange(pageNum) {
-      this.form.page = pageNum;
+      this.form.page = page
+      +Num;
       this.getTabList();
     },
     pageSizeChange(pageSize) {
