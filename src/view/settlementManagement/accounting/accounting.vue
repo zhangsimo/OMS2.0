@@ -45,10 +45,10 @@
               >
             </Select>
           </div>
-          <div class="db ml15" style="line-height: 28px">
-            <Checkbox class="mr5" v-model="single" :true-value="1"  :false-value="0" />
-            <span>显示待修改凭证</span>
-          </div>
+<!--          <div class="db ml15" style="line-height: 28px">-->
+<!--            <Checkbox class="mr5" v-model="single" :true-value="1"  :false-value="0" />-->
+<!--            <span>显示待修改凭证</span>-->
+<!--          </div>-->
           <div class="db ml15">
             <button
               class="mr10 ivu-btn ivu-btn-default"
