@@ -35,7 +35,7 @@
         </Col>
         <Col span="12">
           <FormItem label="开户行" prop="bankName">
-            <Input  v-model="formCustom.bankName" class="w150"></Input>
+            <Input  v-model="formCustom.bankName" class="w150" disabled></Input>
           </FormItem>
         </Col>
         <Col span="12">

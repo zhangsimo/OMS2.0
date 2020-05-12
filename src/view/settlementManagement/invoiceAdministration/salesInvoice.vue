@@ -789,12 +789,10 @@ export default {
       });
       await getInvoiceType().then(res => {
         if (res.code === 0) {
-          console.log(res)
           this.invoiceTypeOption = res.data;
         }
       });
       await getTypeOfInvoice().then( res => {
-        console.log(res)
         if (res.code === 0){
           this.invoiceTypeList = res.data;
         }

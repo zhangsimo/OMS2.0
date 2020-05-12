@@ -743,7 +743,7 @@ export default [
             path: "/invoiceAdministration/salesInvoice",
             name: "invoiceAdministration-salesInvoice",
             redirect: "",
-            mark: "5200",
+            // mark: "5200",
             meta: {
               title: "销售发票导入"
             },

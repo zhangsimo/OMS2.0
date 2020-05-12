@@ -174,7 +174,7 @@
         <Table
           border
           :columns="accessoriesBilling"
-          :data="accessoriesBillingData"
+          :data="accessoriesBillingData1"
           show-summary
           :summary-method="billSum"
         ></Table>
@@ -183,7 +183,7 @@
         <Table
           border
           :columns="accessoriesBilling"
-          :data="accessoriesBillingData"
+          :data="accessoriesBillingData2"
           show-summary
           :summary-method="billSum"
         ></Table>
@@ -504,6 +504,8 @@ export default {
         }
       ], //开票配件
       accessoriesBillingData: [], //开票配件数据
+      accessoriesBillingData1:[],
+      accessoriesBillingData2:[],
       copyData: [] //开票配件复制数据
     };
   },
@@ -819,6 +821,18 @@ export default {
           }
         }
       }
+    },
+    accessoriesBillingData:{
+      handler(val){
+        if (val.length < 1) return
+        if (this.$parent.data1[0].isOilPart == 1){
+          this.accessoriesBillingData2 = val
+        } else {
+          this.accessoriesBillingData1 = val
+
+        }
+      },
+      deep:true
     }
   }
 };
