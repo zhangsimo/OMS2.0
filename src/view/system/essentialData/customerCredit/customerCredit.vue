@@ -527,6 +527,10 @@ export default {
     },
     //额度调用
     openAdjustment() {
+      if(this.Limitstate&&this.Limitstate===1){
+        this.$Message.warning("信用额度审批中，请等待审批完成！");
+        return
+      }
       this.adjustment = true;
       this.adjustmenttt();
     },
