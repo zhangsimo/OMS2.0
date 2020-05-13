@@ -69,7 +69,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="付款合计">
+        <vxe-table-column field="tmp" title="合计">
           <template v-slot="{ row }">
              <span>{{ row.moneyInfo[0].auditMoneyTotal }}</span>
           </template>
@@ -85,7 +85,16 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="金额">
+        <vxe-table-column title="收款金额">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
+                <span class="listChild">{{ item.incomeMoney }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="付款金额">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
@@ -94,7 +103,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="门店">
+        <vxe-table-column title="账户所属门店">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
@@ -119,6 +128,24 @@
             <ul class="list">
               <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.paymentTime }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款人">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentPersonNameIn }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款日期">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentTimeIn }}</span>
               </li>
             </ul>
           </template>

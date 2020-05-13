@@ -51,12 +51,12 @@
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="收入金额" prop="incomeMoney">
+          <FormItem label="收入金额" >
             <Input  v-model="formCustom.incomeMoney" class="w150"></Input>
           </FormItem>
         </Col>
         <Col span="12">
-          <FormItem label="支出金额" prop="paidMoney">
+          <FormItem label="支出金额" >
             <Input  v-model="formCustom.paidMoney" class="w150"></Input>
           </FormItem>
         </Col>
