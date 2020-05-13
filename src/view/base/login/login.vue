@@ -45,9 +45,10 @@ export default {
                 data.shopId = res.shopId;
                 data.shopkeeper = res.shopkeeper;
                 localStorage.setItem("oms2-userList", JSON.stringify(data));
-                this.$router.push({
-                  name: "home"
-                });
+                this.$router.go(-1)
+                // this.$router.push({
+                //   name: "home"
+                // });
               });
             })
             .catch(err => {
