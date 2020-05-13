@@ -968,17 +968,17 @@ tijiao(params)
       // 组装删除
       const seleList = this.$refs.xTable1.getCheckboxRecords();
       seleList.forEach(el => el.oid = el.id);
-      this.Leftcurrentrow.detailVOS = this.array_diff(
-        this.Leftcurrentrow.detailVOS,
-        seleList
-      );
-      const idValue = seleList[0].id;
-      idArr.push(idValue);
+      // this.Leftcurrentrow.detailVOS = this.array_diff(
+      //   this.Leftcurrentrow.detailVOS,
+      //   seleList
+      // );
+      // const idValue = seleList[0].id;
+      idArr = seleList;
       let idArr1 = [];
       let idArr2 = [];
       idArr.forEach(el => {
         if(el.id) {
-          idArr1.push(el);
+          idArr1.push(el.id);
         } else {
           idArr2.push(el);
         }
@@ -988,16 +988,29 @@ tijiao(params)
         .then(res => {
           // 导入成品, 并把成品覆盖掉当前配件组装信息list
           if (res.code == 0) {
-            this.Leftcurrentrow.detailVOS = this.array_diff(
-              this.Leftcurrentrow.detailVOS,
-              seleList
-            );
-            this.$Message.success("删除成功");
+            this.Leftcurrentrow.detailVOS.forEach((el, index) => {
+              idArr1.forEach(el2 => {
+                if(el.id == el2) {
+                    this.Leftcurrentrow.detailVOS.splice(index, 1)
+                  }
+                })
+              })
+              this.$Message.success("删除成功");
+            // this.getList();
           }
         })
         .catch(e => {
           this.$Message.error("删除成品失败");
         });
+      }
+      if (idArr2.length > 0) {
+          this.Leftcurrentrow.detailVOS.forEach((el, index) => {
+            idArr2.forEach(el2 => {
+              if(el.partName == el2.partName) {
+                this.Leftcurrentrow.detailVOS.splice(index, 1)
+              }
+            })
+          })
       }
     },
     //展示方

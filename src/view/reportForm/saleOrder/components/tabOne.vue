@@ -15,113 +15,113 @@
       </vxe-table-column>
       <vxe-table-column field="group1" title="订单信息">
         <vxe-table-column
-          field="name"
+          field="serviceId"
           title="订单单号"
           width="180"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="guestFullName"
           title="客户"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="orderMan"
           title="销售员"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="billTypeIdName"
           title="票据类型"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="settleTypeIdName"
           title="结算方式"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="storeName"
           title="仓库"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="age"
+          field="orderType"
           title="订单类型"
           width="120"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group2" title="配件信息">
         <vxe-table-column
-          field="role"
+          field="partCode"
           title="配件编码"
           width="300"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="partName"
           title="配件名称"
           width="200"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="oemCode"
           title="OE码"
           width="200"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="partBrand"
           title="品牌"
           width="200"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="carModelName"
           title="品牌车型"
           width="200"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="unit"
           title="单位"
           width="200"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="spec"
           title="规格"
           width="200"
         ></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group3" title="数量/价格">
         <vxe-table-column
-          field="sex"
+          field="orderQty"
           title="订单数量"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="orderPrice"
           title="订单单价"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="orderAmt"
           title="订单金额"
           width="120"
         ></vxe-table-column>
         <vxe-table-column
-          field="sex"
+          field="detailRemark"
           title="备注"
           width="120"
         ></vxe-table-column>
-        <vxe-table-column
-          field="sex"
-          title="活动"
-          width="120"
-        ></vxe-table-column>
+        <vxe-table-column field="isMakActivity" title="活动" width="120">
+          <template v-slot="{ row }">
+            <Checkbox v-model="row.isMakActivity"></Checkbox>
+          </template>
+        </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column field="group4" title="税率信息">
+        <vxe-table-column field="taxSign" title="是否含税" width="140">
+          <template v-slot="{ row }">
+            <Checkbox v-model="row.taxSign"></Checkbox>
+          </template>
+        </vxe-table-column>
         <vxe-table-column
-          field="date3"
-          title="是否含税"
-          width="140"
-        ></vxe-table-column>
-        <vxe-table-column
-          field="address"
+          field="taxRate"
           title="税率"
           width="200"
           show-overflow
@@ -129,35 +129,35 @@
       </vxe-table-column>
       <vxe-table-column field="group4" title="其他">
         <vxe-table-column
-          field="date3"
+          field="createUname"
           title="创建人"
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="address"
+          field="createTime"
           title="创建日期"
           width="200"
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="date3"
+          field="auditor"
           title="提交人"
           width="140"
         ></vxe-table-column>
         <vxe-table-column
-          field="address"
+          field="auditDate"
           title="提交日期"
           width="200"
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="address"
+          field="mainRemark"
           title="订单备注"
           width="200"
           show-overflow
         ></vxe-table-column>
         <vxe-table-column
-          field="address"
+          field="orderCode"
           title="往来单号"
           width="200"
           show-overflow
@@ -173,11 +173,13 @@
       @on-page-size-change="changeSize"
       show-sizer
       show-total
+      transfer
     ></Page>
   </section>
 </template>
 
 <script>
+import * as api from "_api/reportForm/index.js";
 export default {
   data() {
     return {
@@ -186,36 +188,82 @@ export default {
         size: 10,
         total: 0
       },
-      tableData: [],
+      tableDataAll: [],
+      tableData: []
     };
+  },
+  mounted() {
+    this.getList();
   },
   methods: {
     // 查询表
-    getList() {},
+    async getList(data = {}) {
+      let res = await api.getPjSellOrderMainDetailList(data);
+      if (res.code == 0) {
+        this.tableDataAll = (res.data || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          if ([1, "1", "是"].includes(el.isMakActivity)) {
+            el.isMakActivity = true;
+          }
+          if ([0, "0", "否"].includes(el.isMakActivity)) {
+            el.isMakActivity = false;
+          }
+          return el;
+        });
+
+        this.tableData = this.tableDataAll.slice(0, this.page.size);
+        this.page.total = this.tableDataAll.length;
+      }
+    },
     //分页
     changePage(p) {
-      this.page.num = p
-      this.getList()
+      this.page.num = p;
+      let start = (p - 1) * this.page.size;
+      let end = p * this.page.size;
+      this.tableData = this.tableDataAll.slice(start, end);
     },
     changeSize(size) {
-      this.page.num = 1
-      this.page.size = size
-      this.getList()
+      this.page.num = 1;
+      this.page.size = size;
+      this.tableData = this.tableDataAll.slice(
+        this.page.num - 1,
+        this.page.size
+      );
     },
     //表尾合计
-    footerMethod ({ columns, data }) {
+    footerMethod({ columns, data }) {
       return [
         columns.map((column, columnIndex) => {
           if (columnIndex === 0) {
-            return '合计'
+            return "合计";
           }
-          if (['applyAmt', 'writeOffAmount','paymentRegainAmt','paymentBalance'].includes(column.property)) {
-            return this.$utils.sum(data, column.property)
+          if (
+            [
+              "orderQty",
+              "orderPrice",
+              "orderAmt",
+              "adjustQty",
+              "trueEnterQty",
+              "fcPrice",
+              "rmbPrice",
+              "rmbAmt",
+              "tariffAmt",
+              "transportAmt",
+              "vatAmt",
+              "otherAmt"
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property);
           }
-          return null
+          return null;
         })
-      ]
-    },
-  },
+      ];
+    }
+  }
 };
 </script>
