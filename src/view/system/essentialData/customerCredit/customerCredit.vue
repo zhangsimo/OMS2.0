@@ -654,10 +654,7 @@ export default {
           data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
           data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
           data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-          this.creaditList.isForbid
-            ? (this.creaditList.isForbid = 1)
-            : (this.creaditList.isForbid = 0);
-          data.isForbid = this.creaditList.isForbid;
+          data.isForbid = this.adjustmentMsg.isForbid;
           data.quotaReason = this.creaditList.quotaReason;
           data.totalQuota =
             +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;

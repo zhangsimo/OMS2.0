@@ -32,7 +32,7 @@
         <Input v-model='data.fixationQuotaTotal' style="width: 180px" ></Input>
       </FormItem>
       <FormItem label='是否禁止额度调整申请:' >
-        <Checkbox v-model="data.isForbid"></Checkbox>是
+        <Checkbox v-model="dataMsg.isForbid"></Checkbox>是
       </FormItem>
       <FormItem label='额度调整/清零原因:' prop="quotaReason">
         <Input v-model='data.quotaReason' style="width: 180px" ></Input>
