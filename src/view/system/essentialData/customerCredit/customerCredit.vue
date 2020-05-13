@@ -527,6 +527,10 @@ export default {
     },
     //额度调用
     openAdjustment() {
+      if(this.Limitstate&&this.Limitstate===1){
+        this.$Message.warning("信用额度审批中，请等待审批完成！");
+        return
+      }
       this.adjustment = true;
       this.adjustmenttt();
     },
@@ -654,10 +658,7 @@ export default {
           data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
           data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
           data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-          this.creaditList.isForbid
-            ? (this.creaditList.isForbid = 1)
-            : (this.creaditList.isForbid = 0);
-          data.isForbid = this.creaditList.isForbid;
+          data.isForbid = this.adjustmentMsg.isForbid;
           data.quotaReason = this.creaditList.quotaReason;
           data.totalQuota =
             +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
