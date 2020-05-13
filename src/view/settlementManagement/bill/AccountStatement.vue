@@ -670,7 +670,11 @@ export default {
         {
           title: "含税配件欠票",
           key: "taxArrearsOfPart",
-          className: "tc"
+          className: "tc",
+          render:(h, params) => {
+            let tax = this.$utils.subtract(params.row.taxAmountOfPart , params.row.taxAmountOfPartOpend)
+            return h("span" , tax)
+          }
         },
         {
           title: "含税油品欠票",

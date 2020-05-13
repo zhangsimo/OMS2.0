@@ -606,9 +606,9 @@ export default {
       if (!occurTime) {
         return this.$message.error("发生日期必须选择！")
       }
-      if (!mateAccountCode) {
-        return this.$message.error("对应科目必须选择！")
-      }
+      // if (!mateAccountCode) {
+      //   return this.$message.error("对应科目必须选择！")
+      // }
       this.$Modal.confirm({
         title: "资金审核",
         content: "<p>确认审核</p>",

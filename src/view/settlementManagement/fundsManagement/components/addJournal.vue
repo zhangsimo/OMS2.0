@@ -40,7 +40,7 @@
         </Col>
         <Col span="12">
           <FormItem label="对应科目" prop="mateAccountCode">
-            <Select v-model="formCustom.mateAccountCode" style="width:150px">
+            <Select v-model="formCustom.mateAccountCode" style="width:150px" disabled>
               <Option v-for="item in subJectList" :value="item.id" :key="item.id">{{ item.titleName }}</Option>
             </Select>
           </FormItem>
@@ -122,7 +122,8 @@
       };
       return {
         modalShow: false, //模态框状态
-        formCustom:{},//form表单数据
+        formCustom:{
+        },//form表单数据
         ruleCustom:{
           areaId:[
             { required: true, message: '所属区域必选', trigger: 'change' }
@@ -187,7 +188,8 @@
       open(){
         this.handleReset()
         this.formCustom = {
-          shopCode:''
+          shopCode:'',
+          mateAccountCode :'1243469693836919001'
         }
         this.modalShow = true
         this.getShopList()
