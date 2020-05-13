@@ -182,7 +182,7 @@
       <TabPane label="油品清单" name="invoice2">
         <Table
           border
-          :columns="accessoriesBilling"
+          :columns="accessoriesBilling1"
           :data="accessoriesBillingData2"
           show-summary
           :summary-method="billSum"
@@ -419,6 +419,110 @@ export default {
         {
           title: "配件编码",
           key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "单位",
+          key: "unit",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "orderQty",
+          className: "tc"
+        },
+        {
+          title: "商品含税单价",
+          key: "taxPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxPrice.toFixed(2));
+          }
+        },
+        {
+          title: "商品含税金额",
+          key: "taxAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxAmt.toFixed(2));
+          }
+        },
+        {
+          title: "开票税率",
+          key: "invoiceTax",
+          className: "tc"
+        },
+        {
+          title: "出库单号",
+          key: "orderNo",
+          className: "tc"
+        },
+        {
+          title: "销售单价",
+          key: "salePrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.salePrice.toFixed(2));
+          }
+        },
+        {
+          title: "销售金额",
+          key: "saleAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.saleAmt.toFixed(2));
+          }
+        },
+        {
+          title: "已开票金额",
+          key: "invoiceAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceAmt.toFixed(2));
+          }
+        },
+        {
+          title: "未开票金额",
+          key: "invoiceNotAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceNotAmt.toFixed(2));
+          }
+        },
+        {
+          title: "申请开票金额",
+          key: "applyAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.applyAmt.toFixed(2));
+          }
+        },
+        {
+          title: "外加税点",
+          key: "additionalTaxPoint",
+          className: "tc"
+        }
+      ], //开票配件
+      accessoriesBilling1: [
+        {
+          title: "序号",
+          type: "index",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          className: "tc"
+        },
+        {
+          title: "配件编码",
+          key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "油品包装规格",
+          key: "oilsSpec",
           className: "tc"
         },
         {

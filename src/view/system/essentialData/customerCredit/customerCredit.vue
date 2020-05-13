@@ -289,8 +289,8 @@ export default {
             },
             {
               title: "信用积分",
-              align: "guestIntegrals",
-              key: ""
+              align: "center",
+              key: "guestIntegrals"
             },
             {
               title: "备注",
@@ -517,7 +517,7 @@ export default {
     //申请信用调查
     opensurveyShow() {
       if(this.researchStatus === 1){
-        return this.$Message.warning("信用调查正在审批中，请通过后再试！");
+        return this.$Message.warning("信用调查正在审批中");
       }
       if(this.creaditList.isGuestResearch === 0){
         this.$refs.SurveyList.$refs.formInline.resetFields();

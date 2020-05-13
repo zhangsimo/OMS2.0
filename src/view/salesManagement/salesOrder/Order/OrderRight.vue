@@ -209,7 +209,7 @@
             </Upload>
           </div>
           <div class="fl mr10">
-            <Button size="small" @click="down" v-has="'down'">
+            <Button size="small" @click="down">
               <Icon custom="iconfont iconxiazaiicon icons" />下载模板
             </Button>
           </div>

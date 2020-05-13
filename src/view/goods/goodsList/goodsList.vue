@@ -275,6 +275,14 @@
                       >导入</Button>
                     </Upload>
                   </div>
+                  <div class="fl mb5 mr10">
+                    <Button
+                      size="small"
+                      @click="down"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
+                  </div>
                   <div class="fl mb5">
                     <Button
                       size="small"
@@ -461,6 +469,8 @@ import SelectPartCom from "./components/selectPartCom";
 import SelectSupplier from "./components/supplier/selectSupplier";
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
 import { getSales } from "@/api/salesManagment/salesOrder";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   name: "goodsList",
   components: {
@@ -743,6 +753,14 @@ export default {
     //快速查询日期
     getDataQuick(v) {
       this.selectDate(v);
+    },
+
+    //下载模板
+    down(){
+      location.href =
+        baseUrl.omsOrder +
+        "/preOrderMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
     }
   }
 };

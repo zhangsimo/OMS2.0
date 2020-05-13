@@ -75,7 +75,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="收款方式">
+      <vxe-table-column title="收付款方式">
         <vxe-table-column title="账户">
           <template v-slot="{ row }">
             <ul class="list">
@@ -104,7 +104,7 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="收款信息">
+      <vxe-table-column title="收付款信息">
         <vxe-table-column field="tmp" title="付款人">
           <template v-slot="{ row }">
             <ul class="list">

@@ -29,7 +29,7 @@
       <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
-      <Button class="mr10" @click="printTable"   v-has="'print'">
+      <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0"  v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
       <Button class="mr10" @click="setBackOrder" :disabled="orderlistType.value != 1" v-has="'BackOrder'">
