@@ -25,9 +25,8 @@ router.beforeEach((to, from, next) => {
   const token = getToken()
   if (!token && to.name != LOGIN_PAGE_NAME&& to.name != REGISTER_PAGE_NAME ) {
     // 未登录且要跳转的页面不是登录页
-    //新需求跳转到指定页面
     next({
-      name: to.name // 跳转到需要跳转的页面
+      name: LOGIN_PAGE_NAME // 跳转到登录页
     })
   }
   else if (!token && to.name === LOGIN_PAGE_NAME||!token && to.name === REGISTER_PAGE_NAME) {
