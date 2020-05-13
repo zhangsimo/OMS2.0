@@ -250,6 +250,17 @@ export default [
         },
         component: () =>
           import("@/view/salesManagement/acceptance/acceptance.vue")
+      },
+      {
+        path: "/hsOrder/hsIndex",
+        name: "hsOrder",
+        mark: "2003",
+        meta: {
+          icon: "arrow-graph-up-right",
+          title: "华盛订单处理"
+        },
+        component: () =>
+          import("@/view/salesManagement/hsOrder/hsIndex.vue")
       }
     ]
   },

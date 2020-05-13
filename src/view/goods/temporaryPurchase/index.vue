@@ -260,11 +260,13 @@
                       class="w160"
                       v-model="formPlanmain.directCompanyId"
                       :disabled="isInput"
+                      clearable
                     >
                       <Option
                         v-for="(item, index) in putStores"
                         :key="index"
                         :value="item.value"
+                        v-show="item.value!=$store.state.user.userData.shopId"
                       >{{ item.label }}</Option
                       >
                     </Select>
