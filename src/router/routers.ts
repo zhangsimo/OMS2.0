@@ -257,7 +257,8 @@ export default [
         mark: "2003",
         meta: {
           icon: "arrow-graph-up-right",
-          title: "华盛订单处理"
+          title: "华胜订单处理",
+          hideInMenu:true
         },
         component: () =>
           import("@/view/salesManagement/hsOrder/hsIndex.vue")
