@@ -97,7 +97,7 @@
               ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">盘点信息</div>
+              <div class="pane-made-hd">出库信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -107,7 +107,7 @@
                   :label-width="100"
                   :rules="ruleValidate"
                 >
-                  <FormItem label="入库单号：" prop="serviceId">
+                  <FormItem label="出库单号：" prop="serviceId">
                     <Input
                       v-model="formPlan.serviceId"
                       class="w160"
@@ -131,7 +131,7 @@
                       disabled
                     />
                   </FormItem>
-                  <FormItem label="入库仓库：" prop="storeId">
+                  <FormItem label="出库仓库：" prop="storeId">
                     <Select
                       v-model="formPlan.storeId"
                       style="width:100px"
@@ -254,32 +254,24 @@
                   title="实盘数量"
                   width="100"
                 ></vxe-table-column>
-                <vxe-table-column field="exhibitQty" title="盈亏数量" width="100">
-                </vxe-table-column>
                 <vxe-table-column
                   field="exhibitQty"
-                  title="入库数量"
+                  title="出库数量"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="exhibitPrice"
-                  title="入库单价"
+                  title="出库单价"
                   width="100"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="exhibitPrice"
-                  title="入库金额"
+                  title="出库金额"
                   width="100"
                 >
                   <template v-slot="{ row, seq }">
                     <span>{{(Math.abs(row.exhibitPrice * row.exhibitQty))||0 }}</span>
                   </template>
-                </vxe-table-column>
-                <vxe-table-column
-                  field="taxRate"
-                  title="税率"
-                  width="100"
-                >
                 </vxe-table-column>
                 <vxe-table-column
                   field="oemCode"
@@ -421,7 +413,7 @@
               minWidth: 120
             },
             {
-              title: "入库单号",
+              title: "出库单号",
               key: "serviceId",
               minWidth: 170
             },
@@ -557,7 +549,7 @@
         data.startTime = this.queryTime[0] || "";
         data.endTime = this.queryTime[1] || "";
         data.billStatusId = this.purchaseType;
-        data.source = 2;
+        data.inventoryOrderType = 2;
         let page = this.Left.page.num - 1;
         let size = this.Left.page.size;
         getLeftList(data, page, size)

@@ -108,7 +108,7 @@
           auditor:"",//提交人
           createUname:"",//创建人
           storeId:"",
-          source:1
+          source:3
         },
         brandLists:[],//品牌
         salesList:[],//提交人
@@ -204,13 +204,13 @@
           auditor:this.moreData.auditor,
           createUname:this.moreData.createUname,
           storeId:this.moreData.storeId,
-          source:this.moreData.source,
+          source:this.moreData.source==3?'':this.moreData.source,
           inventoryOrderType:2,
         }
         if (this.billStatusId != '') {
           obj.billStatusId = this.billStatusId
         }
-        getLeftList(obj, 0, 10)
+        getLeftList(obj, 0, 20)
           .then(res => {
             if (res.code === 0) {
               //res传出去
@@ -246,7 +246,7 @@
           auditor:"",//提交人
           createUname:"",//创建人
           storeId:"",
-          source:2
+          source:3
         };
       }
     }

@@ -97,7 +97,7 @@
               ></Page>
             </div>
             <div slot="right" class="con-split-pane-right pl5 goods-list-form">
-              <div class="pane-made-hd">盘点信息</div>
+              <div class="pane-made-hd">入库信息</div>
               <div class="clearfix purchase" ref="planForm">
                 <Form
                   inline
@@ -558,7 +558,7 @@
         data.startTime = this.queryTime[0] || "";
         data.endTime = this.queryTime[1] || "";
         data.billStatusId = this.purchaseType;
-        data.source = 1;
+        data.inventoryOrderType = 1;
         let page = this.Left.page.num - 1;
         let size = this.Left.page.size;
         getLeftList(data, page, size)
