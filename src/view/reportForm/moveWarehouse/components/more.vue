@@ -25,23 +25,23 @@
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
       <FormItem label="品牌: ">
-        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
+        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="移出仓库: " v-if="type != 4">
-        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in warehouse" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item) in warehouse" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem label="移入仓库: " v-if="type != 4">
-        <Select v-model="warehouseId2" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in warehouse2" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="warehouseId2" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item) in warehouse2" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
-      <FormItem label="业务员">
-        <Select v-model="orderman" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+      <FormItem label="业务员: ">
+        <Select v-model="orderman" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
     </Form>
@@ -52,6 +52,7 @@
   </Modal>
 </template>
 <script lang="ts">
+import moment from "moment";
 // @ts-ignore
 import * as tools from "_utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
@@ -60,6 +61,8 @@ import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
+// @ts-ignore
+import { getWarehouse } from "_api/reportForm/index.js";
 
 @Component({
   components: {
@@ -93,7 +96,13 @@ export default class MoreSearch extends Vue {
   private orderTypeList: Array<any> = new Array();
   private warehouse: Array<any> = new Array();
   private warehouse2: Array<any> = new Array();
-
+  private async getWares() {
+    let res: any = await getWarehouse();
+    if(res.code == 0) {
+      this.warehouse = res.data;
+      this.warehouse2 = res.data;
+    }
+  }
 
   private salesList: Array<any> = new Array();
   private async getAllSales() {
@@ -170,6 +179,9 @@ export default class MoreSearch extends Vue {
     if (this.brandLists.length <= 0) {
       this.getBrand();
     }
+    if(this.warehouse.length <= 0) {
+      this.getWares();
+    }
     this.serchN = true;
   }
 
@@ -185,10 +197,8 @@ export default class MoreSearch extends Vue {
   @Emit("getmoreData")
   private ok() {
     let data = {
-      startTime: tools.transTime(this.createDate[0]),
-      endTime: tools.transTime(this.createDate[1]),
-      auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+      commitStartDate: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+      commitEndDate: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
       partBrand: this.partBrand,
@@ -204,12 +214,6 @@ export default class MoreSearch extends Vue {
       warehouseId2: this.warehouseId2,
       storeId: this.storeId,
     };
-    if(data.endTime) {
-      data.endTime = data.endTime.split(" ")[0] + " 23:59:59"
-    }
-    if(data.auditEndDate) {
-      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
-    }
     // console.log(data)
     let subdata: Map<string, string> = new Map();
     for (let key in data) {

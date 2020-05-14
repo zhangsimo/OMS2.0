@@ -32,7 +32,7 @@
               v-model="search.partBrandCode"
               class="w120"
               placeholder="请选择品牌"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="(item, index) in bandArr"
@@ -47,7 +47,7 @@
               v-model="search.guestId"
               class="w120"
               placeholder="请选择客户"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="item in supplityArr"
@@ -62,7 +62,7 @@
               v-model="search.storeId"
               class="w120"
               placeholder="请选择仓库"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="item in warehouse"
@@ -77,7 +77,7 @@
               v-model="search.orgid"
               class="w120"
               placeholder="请选择门店"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="item in stores"
@@ -130,7 +130,7 @@ export default {
       }
     };
   },
-    async mounted() {
+  async mounted() {
     let resS = await api.getClient();
     let resB = await api.getParamsBrand();
     let resE = await api.getStorelist();

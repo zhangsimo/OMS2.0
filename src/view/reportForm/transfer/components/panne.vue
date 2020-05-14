@@ -33,6 +33,7 @@
               v-model="search.guestId"
               class="w120"
               placeholder="请选择调出方"
+              filterable clearable
             >
               <Option
                 v-for="item in outArr"
@@ -47,6 +48,7 @@
               v-model="search.storeId"
               class="w120"
               placeholder="请选择仓库"
+              filterable clearable
             >
               <Option
                 v-for="item in warehouse"
@@ -61,6 +63,7 @@
               v-model="search.orgid"
               class="w120"
               placeholder="请选择门店"
+              filterable clearable
             >
               <Option
                 v-for="item in stores"

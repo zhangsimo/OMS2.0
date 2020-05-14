@@ -27,7 +27,7 @@
         <Select
           class="w300 ml5"
           v-model="guestId"
-          filterable
+          filterable clearable
           remote
           label-in-value
           :remote-method="remoteMethod"
@@ -54,7 +54,7 @@
         <Input type="text" class="w300 ml5" v-model="inCode" />
       </FormItem>
       <FormItem v-if="false" label="直发门店: ">
-        <Select v-model="storeId" class="w300 ml5" label-in-value filterable>
+        <Select v-model="storeId" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in stores" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
@@ -65,32 +65,32 @@
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
       <FormItem label="品牌: ">
-        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
+        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="采购订单类型: " v-if="[5].includes(type)">
-        <Select v-model="orderType" class="w300 ml5" label-in-value filterable>
+        <Select v-model="orderType" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in orderTypeList" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="仓库: ">
-        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable>
+        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item) in warehouse" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem :label="type == 3 ? '出库人: ': (type == 4 ? '入库人:' : (type == 2 ? '出库人:' : '入库人:'))">
-        <Select v-model="orderman" class="w300 ml5" label-in-value filterable>
+        <Select v-model="orderman" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem label="提交人: " v-if="[5].includes(type)">
-        <Select v-model="auditor" class="w300 ml5" label-in-value filterable>
+        <Select v-model="auditor" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem label="创建人: " v-if="[5].includes(type)">
-        <Select v-model="createUname" class="w300 ml5" label-in-value filterable>
+        <Select v-model="createUname" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
