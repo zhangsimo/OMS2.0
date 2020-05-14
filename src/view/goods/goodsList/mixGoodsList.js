@@ -557,7 +557,7 @@ export const mixGoodsData = {
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directCompanyId = this.formPlan.directCompanyId;
+          objReq.directCompanyId = this.formPlan.directCompanyId||"";
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
           objReq.processInstanceId = this.formPlan.processInstanceId;
