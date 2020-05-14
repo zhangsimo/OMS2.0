@@ -198,7 +198,7 @@ export default {
     submission() {
       let sum1 = 0;
       let sum2 = 0;
-      if (!this.remarks) return this.$message.error("对冲申请原因说明不能为空");
+      if ( this.information.hedgingInvoiceOfOil != 0 && !this.remarks) return this.$message.error("对冲申请原因说明不能为空");
       this.accessoriesBillingData.map(item => {
         sum1 += item.hedgingInvoiceOfPart * 1;
         sum2 += item.hedgingInvoiceOfOil * 1;
