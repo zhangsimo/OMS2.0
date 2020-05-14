@@ -457,8 +457,7 @@
 
         //查看
         lookOver(row){
-          // console.log(row)
-          if(row.billStatusName == "草稿"){
+          if(row.billStatus == 0 || row.billStatus == 3 ){
             this.modelType.type = 2;
             this.modelType.id = row.id
           }else {

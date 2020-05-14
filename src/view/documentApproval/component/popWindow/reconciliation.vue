@@ -117,19 +117,19 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc" />
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber :min="0" v-model="infoBase.receivableRebate" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">运费</span>
-              <InputNumber :min="0" v-model="infoBase.transportExpenses" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">保险费</span>
-              <InputNumber :min="0" v-model="infoBase.insuranceExpenses" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.insuranceExpenses" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">手续费</span>
-              <InputNumber :min="0" v-model="infoBase.serviceCharge" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.serviceCharge" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">配件管理费</span>
-              <InputNumber :min="0" v-model="infoBase.partsManagementFee" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.partsManagementFee" :disabled="modelType.type==3" class="w60 tc" />
               <span class="mr5 ml10">其他费用</span>
-              <InputNumber :min="0" v-model="infoBase.otherFees" readonly class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.otherFees" :disabled="modelType.type==3" class="w60 tc" />
             </div>
             <div class="db mt10 mb10">
               <span class="mr5">对账应付</span>
@@ -137,19 +137,19 @@
               <span class="mr5 ml10">应付坏账</span>
               <InputNumber
                 v-model="infoBase.payingBadDebts"
-                readonly
+                :disabled="modelType.type==3"
                 type="text"
                 class="w60 tc"
                 :min="0"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" readonly class="w60 tc" :min="0" />
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="modelType.type==3" class="w60 tc" :min="0" />
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
-              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" readonly />
+              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" :disabled="modelType.type==3" />
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
-              <Input :value="infoBase.actualPayment" class="w60 tc" readonly />
+              <Input :value="infoBase.actualPayment" class="w60 tc" :disabled="modelType.type==3" />
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="infoBase.settlementTotal" readonly class="w60 tc" />
+              <Input type="text" v-model="infoBase.settlementTotal" :disabled="modelType.type==3" class="w60 tc" />
             </div>
             <div class="db">
               <span class="mr5">计划结算类型</span>
@@ -161,12 +161,12 @@
                 >{{ item.label }}</Option>
               </Select>
               <span class="mr5 ml10">应收返利请示单号</span>
-              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" readonly/>
+              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" :disabled="modelType.type==3"/>
               <span class="mr5 ml10">应收坏账请示单号</span>
-              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" readonly/>
+              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" :disabled="modelType.type==3"/>
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
-              <Input type="text" v-model="infoBase.remark" class="w260 tc" readonly />
+              <Input type="text" v-model="infoBase.remark" class="w260 tc" :disabled="modelType.type==3" />
             </div>
           </div>
         </div>

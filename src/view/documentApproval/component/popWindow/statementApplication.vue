@@ -1,6 +1,6 @@
 <template>
   <Modal v-model="modelShow" title="对账单申请" width="1200px" @on-visible-change="hander">
-    <div v-if="modelType.type===3">
+    <div>
       <div class="mb10">
         <span class="mr5">申请单号：</span>
         <Input type="text" v-model="formInline.applyNo" style="width: 200px" disabled />
@@ -23,8 +23,8 @@
       </Row>
       <h4 class="mb10 mt10">对账单明细</h4>
     </div>
-    <Monthlyreconciliation ref="Monthlyreconciliation" v-if="modelType.type===1" />
-    <reconcil ref="reconcil" v-if="modelType.type === 2||modelType.type === 3" :modelType="modelType"/>
+    <Monthlyreconciliation ref="Monthlyreconciliation" :modelType="modelType"/>
+    <reconcil ref="reconcil" :modelType="modelType"/>
     <!--<flow v-if="modelType.type === 3" />-->
     <div slot="footer"></div>
   </Modal>
@@ -59,10 +59,8 @@ export default {
   methods: {
     // 对账单弹框出现加载数据
     async hander(type) {
-      if (type && this.modelType.type === 1) {
+      if (type ) {
         this.$refs.Monthlyreconciliation.Initialization();
-      } else {
-        if (this.modelType.type === 3) {
           let data ={};
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data);
@@ -86,7 +84,6 @@ export default {
           this.$refs.reconcil.Initialization();
         })
       }
-    }
   }
 };
 </script>

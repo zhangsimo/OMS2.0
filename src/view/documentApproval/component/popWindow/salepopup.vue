@@ -1,6 +1,6 @@
 <template>
   <Modal v-model="modal1" title="销售开票申请" width="1300" @on-visible-change="visChange">
-    <div v-if="modelType.type===3">
+    <div>
       <div class="mb10">
         <span class="mr5">申请单号：</span>
         <Input type="text" v-model="formInline.applyNo" style="width: 200px" disabled />
@@ -27,22 +27,19 @@
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="preservation"
-      v-has="'examine'"
-      :disabled="modelType.type!==1"
+      :disabled="modelType.type==3"
     >保存草稿</button>
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="submission"
-      v-has="'examine'"
-      :disabled="modelType.type!==1"
+      :disabled="modelType.type==3"
     >提交申请</button>
     <button
       class="ivu-btn ivu-btn-default mr10"
       type="button"
       @click="add"
-      v-has="'examine'"
-      :disabled="modelType.type!==1"
+      :disabled="modelType.type==3"
     >增加不含税销售开票申请</button>
     <h4 class="mt10 mb10">基本信息</h4>
     <Row>
@@ -76,7 +73,7 @@
               v-model="invoice.receiptUnit"
               class="ml5 w200"
               @on-change="invoiceChange"
-              :disabled="modelType.type!==1"
+              :disabled="modelType.type==3"
             >
               <Option
                 v-for="item in invoice.receiptUnitList"
@@ -86,16 +83,16 @@
             </Select>
           </FormItem>
           <FormItem label="税号" prop="taxNo">
-            <Input v-model="invoice.taxNo" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.taxNo" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="地址电话" prop="tel">
-            <Input v-model="invoice.tel" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.tel" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="开户行及账号" prop="bankName">
-            <Input v-model="invoice.bankName" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.bankName" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="开票单位" prop="invoiceUnit">
-            <Select v-model="invoice.invoiceUnit" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select v-model="invoice.invoiceUnit" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.issuingOfficeList"
                 :value="item.value"
@@ -104,7 +101,7 @@
             </Select>
           </FormItem>
           <FormItem label="开票税率" prop="invoiceTax">
-            <Select v-model="invoice.invoiceTax" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select v-model="invoice.invoiceTax" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.rateBillingList"
                 :value="item.value"
@@ -113,7 +110,7 @@
             </Select>
           </FormItem>
           <FormItem label="票据类型" prop="invoiceType">
-            <Select v-model="invoice.invoiceType" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select v-model="invoice.invoiceType" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.typeBillingList"
                 :value="item.value"
@@ -125,7 +122,7 @@
             <Select
               v-model="invoice.collectionType"
               class="ml5 w200"
-              :disabled="modelType.type!==1"
+              :disabled="modelType.type==3"
             >
               <Option
                 v-for="item in invoice.paymentMethodList"
@@ -137,16 +134,16 @@
         </div>
         <div style="flex-flow: row nowrap;width: 100%">
           <FormItem label="快递收件人" prop="consignee">
-            <Input v-model="invoice.consignee" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.consignee" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="收件地址" prop="address">
-            <Input v-model="invoice.address" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.address" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="电话" prop="phone">
-            <Input v-model="invoice.phone" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.phone" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="寄件方式" prop="sendingWay">
-            <Select v-model="invoice.sendingWay" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select v-model="invoice.sendingWay" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.waySendingList"
                 :value="item.value"
@@ -155,7 +152,7 @@
             </Select>
           </FormItem>
           <FormItem label="费用承担" prop="costBear">
-            <Select v-model="invoice.costBear" class="ml5 w200" :disabled="modelType.type!==1">
+            <Select v-model="invoice.costBear" class="ml5 w200" :disabled="modelType.type==3">
               <Option
                 v-for="item in invoice.bearingCostList"
                 :value="item.value"
@@ -164,7 +161,7 @@
             </Select>
           </FormItem>
           <FormItem label="备注">
-            <Input v-model="invoice.remark" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.remark" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem>
             <span style="color:#0099FF;cursor:pointer;" @click="quote">引用上次申请信息</span>
@@ -175,7 +172,7 @@
             <Input v-model="invoice.statementAmountOwed" class="ml5 w200" disabled />
           </FormItem>
           <FormItem label="本次申请开票含税金额" prop="applyTaxAmt">
-            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" :disabled="modelType.type!==1" />
+            <Input v-model="invoice.applyTaxAmt" class="ml5 w200" :disabled="modelType.type==3" />
           </FormItem>
           <FormItem label="不含税金额" prop="amountExcludingTax">
             <Input v-model="invoice.amountExcludingTax" class="ml5 w200" disabled />
@@ -190,7 +187,7 @@
             <Input
               v-model="invoice.underTicketExplain"
               class="ml5 w200"
-              :disabled="modelType.type!==1"
+              :disabled="modelType.type==3"
             />
           </FormItem>
         </div>
@@ -201,16 +198,29 @@
       type="button"
       @click="seleteSale"
       v-has="'examine'"
-      :disabled="modelType.type!==1"
+      :disabled="modelType.type==3"
     >选择必开销售单</button>
-    <h4 class="mt10">开票配件</h4>
-    <Table
-      border
-      :columns="accessoriesBilling"
-      :data="accessoriesBillingData"
-      show-summary
-      :summary-method="billSum"
-    ></Table>
+
+    <Tabs type="card" value="invoice1" class="mt10">
+      <TabPane label="配件清单" name="invoice1">
+        <Table
+          border
+          :columns="accessoriesBilling"
+          :data="accessoriesBillingData"
+          show-summary
+          :summary-method="billSum"
+        ></Table>
+      </TabPane>
+      <TabPane label="油品清单" name="invoice2">
+        <Table
+          border
+          :columns="accessoriesBilling1"
+          :data="accessoriesBillingData"
+          show-summary
+          :summary-method="billSum"
+        ></Table>
+      </TabPane>
+    </Tabs>
     <!--<flow v-if="modelType.type===3" />-->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
     <noTax ref="noTax" :information="information" :parameter="parameter" />
@@ -528,6 +538,110 @@ export default {
           className: "tc"
         }
       ], //开票配件
+      accessoriesBilling1: [
+        {
+          title: "序号",
+          type: "index",
+          width: 40,
+          className: "tc"
+        },
+        {
+          title: "配件名称",
+          key: "partName",
+          className: "tc"
+        },
+        {
+          title: "配件编码",
+          key: "partCode",
+          className: "tc"
+        },
+        {
+          title: "油品包装规格",
+          key: "oilsSpec",
+          className: "tc"
+        },
+        {
+          title: "单位",
+          key: "unit",
+          className: "tc"
+        },
+        {
+          title: "数量",
+          key: "orderQty",
+          className: "tc"
+        },
+        {
+          title: "商品含税单价",
+          key: "taxPrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxPrice.toFixed(2));
+          }
+        },
+        {
+          title: "商品含税金额",
+          key: "taxAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.taxAmt.toFixed(2));
+          }
+        },
+        {
+          title: "开票税率",
+          key: "invoiceTax",
+          className: "tc"
+        },
+        {
+          title: "出库单号",
+          key: "orderNo",
+          className: "tc"
+        },
+        {
+          title: "销售单价",
+          key: "salePrice",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.salePrice.toFixed(2));
+          }
+        },
+        {
+          title: "销售金额",
+          key: "saleAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.saleAmt.toFixed(2));
+          }
+        },
+        {
+          title: "已开票金额",
+          key: "invoiceAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceAmt.toFixed(2));
+          }
+        },
+        {
+          title: "未开票金额",
+          key: "invoiceNotAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.invoiceNotAmt.toFixed(2));
+          }
+        },
+        {
+          title: "申请开票金额",
+          key: "applyAmt",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.applyAmt.toFixed(2));
+          }
+        },
+        {
+          title: "外加税点",
+          key: "additionalTaxPoint",
+          className: "tc"
+        }
+      ], //开票配件
       accessoriesBillingData: [], //开票配件数据
       copyData: [] //开票配件复制数据
     };
@@ -679,7 +793,6 @@ export default {
               this.copyData = res.data;
             }
           });
-        if (this.modelType.type === 3) {
           let date = moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
             user = this.$store.state.user.userData;
           this.formInline.applicant = user.staffName;
@@ -704,7 +817,6 @@ export default {
               this.information.applyNo = res.data.applyNo;
               this.information.applicationDate = res.data.applyDate;
               this.information.guestName = res.data.guestName;
-
               this.invoice = res.data;
               this.invoice.statementAmountOwed = res.data.statementAmtOwed;
               this.invoice.amountExcludingTax = res.data.notTaxAmt;
@@ -717,20 +829,19 @@ export default {
               this.invoice.receiptUnit = Number(res.data.receiptUnit);
               await this.getListOne();
               this.accessoriesBillingData = res.data.partList;
-              console.log(this.invoice)
-            }
+              ditInvoice({ guestId: this.information.guestId }).then(res => {
+                if (res.code === 0) {
+                  res.data.map(item => {
+                    item.label = item.taxpayerName;
+                    item.value = item.id;
+                  });
+                  this.invoice.receiptUnitList = res.data;
+                }
+              });
+
           }
         };
         // 发票单位
-        ditInvoice({ guestId: this.information.guestId }).then(res => {
-          if (res.code === 0) {
-            res.data.map(item => {
-              item.label = item.taxpayerName;
-              item.value = item.id;
-            });
-            this.invoice.receiptUnitList = res.data;
-          }
-        });
       }
     },
     // 增加不含税销售开票申请
