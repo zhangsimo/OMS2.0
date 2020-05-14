@@ -708,6 +708,7 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList(this.form);
+            this.Status = 2;
             this.$Message.success("作废成功");
           }
         })
@@ -755,6 +756,7 @@ export default {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
             this.getList(this.form);
+            this.Status = 1;
             this.$Message.success("入库成功");
           }
         })

@@ -16,7 +16,9 @@ export default {
   },
   mounted() {},
   methods: {
-    search(data) {},
+    search(data) {
+      this.$refs.tabOne.getList(data);
+    },
     exportxls(refname) {
       this.$refs[refname].$refs.xTable.exportData({
         filename: '采购订单明细表',

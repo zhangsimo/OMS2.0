@@ -103,7 +103,7 @@ export default {
         data.warehouseId ? data2.storeId = data.warehouseId : "";
         data.orderman ? data2.orderManId = data.orderman : "";
       }
-      this.$refs.tabTwo.getList(data2);
+      this.$refs.tabThree.getList(data2);
     },
     exportxls(refname) {
       this.$refs[refname].$refs.xTable.exportData({

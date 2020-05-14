@@ -7,10 +7,10 @@
             <quick-date @quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">
-            <span v-if="type == 1">"提交日期：</span>
-            <span v-if="type == 2">"入库日期：</span>
-            <span v-if="type == 3">"出库日期：</span>
-            <span v-if="type == 4">"提交日期：</span>
+            <span v-if="type == 1">提交日期：</span>
+            <span v-if="type == 2">入库日期：</span>
+            <span v-if="type == 3">出库日期：</span>
+            <span v-if="type == 4">提交日期：</span>
             <DatePicker
               v-model="search.auditDate"
               type="date"
@@ -33,7 +33,7 @@
               v-model="search.partBrand"
               class="w120"
               placeholder="请选择品牌"
-              clearable 
+              filterable clearable 
             >
               <Option
                 v-for="(item, index) in bandArr"
@@ -48,7 +48,7 @@
               v-model="search.guestFullName"
               class="w120"
               placeholder="请选择供应商"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="item in supplityArr"
@@ -63,7 +63,7 @@
               v-model="search.orgid"
               class="w120"
               placeholder="请选择门店"
-              clearable
+              filterable clearable
             >
               <Option
                 v-for="item in stores"

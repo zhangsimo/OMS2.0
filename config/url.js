@@ -51,8 +51,8 @@ const test = {
   essentialApi: "https://tsapi2.g-parts.cn/oms-essential-provider",
   // authApi: "http://192.168.30.226:5200",
   authApi: "https://tsapi2.g-parts.cn/gpart-passport-provider",
-  omsBatch: 'http://192.168.30.179:9260', // 9260
-  // omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
+  // omsBatch: 'http://192.168.30.179:9260', // 9260
+  omsBatch: "https://tsapi2.g-parts.cn/oms-batch-provider",
   // omsSettle: "http://192.168.30.43:9270",
   omsSettle: "https://tsapi2.g-parts.cn/oms-settlement-provider",
   omsSotck: "https://tsapi2.g-parts.cn/oms-stock-provider",
