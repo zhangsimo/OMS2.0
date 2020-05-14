@@ -28,7 +28,7 @@
                 <Button @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
               </div>
               <div class="db">
-                <Button @click="stamp" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+                <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
               </div>
             </div>
           </div>
