@@ -143,3 +143,84 @@ export function getAllotApplyRtnDetails(data = {}) {
       data
   })
 }
+
+// 调出在途信息
+export function getOnOrderStock(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getOnOrderStock`,
+      method: 'post',
+      data
+  })
+}
+
+// 加工报表_配件组装明细表_入库
+export function getPartAssemblyEnter(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getPartAssemblyEnter`,
+      method: 'post',
+      data
+  })
+}
+
+// 加工报表_配件组装明细表_出库
+export function getPartAssemblyOut(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getPartAssemblyOut`,
+      method: 'post',
+      data
+  })
+}
+
+// 加工报表_配件拆分明细表_入库
+export function getPartSplitEnter(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getPartSplitEnter`,
+      method: 'post',
+      data
+  })
+}
+
+// 加工报表_配件拆分明细表_出库
+export function getPartSplitOut(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getPartSplitOut`,
+      method: 'post',
+      data
+  })
+}
+
+// 移仓报表_移仓入库明细表
+export function getStockShiftEnter(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getStockShiftEnter`,
+      method: 'post',
+      data
+  })
+}
+
+// 移仓报表_移仓出库明细表
+export function getStockShiftOut(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getStockShiftOut`,
+      method: 'post',
+      data
+  })
+}
+
+// 盘点报表_盘亏出库明细表
+export function getStockCheckLoss(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getStockCheckLoss`,
+      method: 'post',
+      data
+  })
+}
+
+// 盘点报表_盘盈入库明细表
+export function getStockCheckProfit(data = {}) {
+  return axios.request({
+      url: `${api.omsBatch}/batchEdi/getStockCheckProfit`,
+      method: 'post',
+      data
+  })
+}

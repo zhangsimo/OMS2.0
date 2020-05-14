@@ -330,7 +330,7 @@ export default class PlannedPurchaseOrder extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          directCompanyId: this.formPlanmain.directCompanyId,
+          directCompanyId: this.formPlanmain.directCompanyId||"",
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
@@ -365,6 +365,9 @@ export default class PlannedPurchaseOrder extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (Object.keys(data).length <= 0) return;
+    if(!data.directCompanyId){
+      this.selectTableRow.directCompanyId = 0;
+    }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.saveDraft(data);
@@ -382,6 +385,9 @@ export default class PlannedPurchaseOrder extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (Object.keys(data).length <= 0) return;
+        if(!data.directCompanyId){
+          this.selectTableRow.directCompanyId = 0;
+        }
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }

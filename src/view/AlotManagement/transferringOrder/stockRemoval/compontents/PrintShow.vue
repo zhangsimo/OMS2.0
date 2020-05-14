@@ -16,10 +16,13 @@
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>地址:{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
+              <span>地址:{{onelist.applyGuest.addr || 
+               ( (onelist.applyGuest.provinceName || "") + (onelist.applyGuest.cityName || "") + 
+                (onelist.applyGuest.district || "") + (onelist.applyGuest.streetAddress || ""))
+                }}</span>
             </p>
             <p>
-              <span>电话:{{onelist.guest.tel||""}}</span>
+              <span>电话:{{onelist.applyGuest.tel||""}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
@@ -37,7 +40,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调入方:</span>
-              <span>{{onelist.guest.fullName}}</span>
+              <span>{{onelist.logisticsRecord.guestName}}</span>
             </p>
             <p>
               <span>地址:</span>
@@ -47,7 +50,7 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>收货单位:</span>
-              <span>{{onelist.guest.fullName||""}}</span>
+              <span>{{onelist.logisticsRecord.receiveComp ||""}}</span>
             </p>
             <p>
               <span>收货人:</span>

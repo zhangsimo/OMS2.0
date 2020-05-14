@@ -14,7 +14,7 @@
       <Row class="mb30" v-if="[1, 4].includes(type)">
         <span>提交日期:</span>
         <DatePicker
-          type="daterange"
+          type="date"
           placement="bottom-end"
           style="width: 300px"
           v-model="auditDate"
@@ -35,23 +35,23 @@
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
       <FormItem label="品牌: ">
-        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
+        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="仓库: " v-if="type != 4">
-        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in warehouse" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item) in warehouse" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem label="来源: " v-if="type != 4">
-        <Select v-model="warehouseId2" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in warehouse2" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="warehouseId2" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item, index) in warehouse2" :value="item.value" :key="index">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem :label="type == 1 ? '盘点员:' : '提交人:'">
-        <Select v-model="orderman" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="orderman" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
     </Form>
@@ -62,6 +62,7 @@
   </Modal>
 </template>
 <script lang="ts">
+import moment from "moment";
 // @ts-ignore
 import * as tools from "_utils/tools";
 import { Vue, Component, Emit, Prop } from "vue-property-decorator";
@@ -70,6 +71,8 @@ import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
+// @ts-ignore
+import { getWarehouse } from "_api/reportForm/index.js";
 
 @Component({
   components: {
@@ -81,7 +84,7 @@ export default class MoreSearch extends Vue {
   private serchN: boolean = false;
 
   private createDate: Array<any> = new Array();
-  private auditDate: Array<any> = new Array();
+  private auditDate:string | Date = "";
   private serviceId: string = "";
   private partCode: string = "";
   private partBrand: string = "";
@@ -102,8 +105,16 @@ export default class MoreSearch extends Vue {
   private stores: Array<any> = new Array();
   private orderTypeList: Array<any> = new Array();
   private warehouse: Array<any> = new Array();
-  private warehouse2: Array<any> = new Array();
-
+  private warehouse2: Array<any> = [
+    {value: "0", label: "OMS盘点"},
+    {value: "1", label: "WMS盘点"},
+  ];
+  private async getWares() {
+    let res: any = await getWarehouse();
+    if(res.code == 0) {
+      this.warehouse = res.data;
+    }
+  }
 
   private salesList: Array<any> = new Array();
   private async getAllSales() {
@@ -123,7 +134,7 @@ export default class MoreSearch extends Vue {
   }
   private reset() {
     this.createDate = new Array();
-    this.auditDate = new Array();
+    this.auditDate = "";
     this.serviceId = "";
     this.partCode = "";
     this.partBrand = "";
@@ -180,6 +191,9 @@ export default class MoreSearch extends Vue {
     if (this.brandLists.length <= 0) {
       this.getBrand();
     }
+    if(this.warehouse.length <= 0) {
+      this.getWares();
+    }
     this.serchN = true;
   }
 
@@ -197,8 +211,7 @@ export default class MoreSearch extends Vue {
     let data = {
       startTime: tools.transTime(this.createDate[0]),
       endTime: tools.transTime(this.createDate[1]),
-      auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+      auditDate: this.auditDate ? moment(this.auditDate).format("YYYY-MM-DD") : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
       partBrand: this.partBrand,
@@ -216,9 +229,6 @@ export default class MoreSearch extends Vue {
     };
     if(data.endTime) {
       data.endTime = data.endTime.split(" ")[0] + " 23:59:59"
-    }
-    if(data.auditEndDate) {
-      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
     }
     // console.log(data)
     let subdata: Map<string, string> = new Map();

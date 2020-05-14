@@ -53,12 +53,6 @@
         生成调拨申请单
       </Button>
       <Button class="mr15 w90" @click="search">
-        全选
-      </Button>
-      <Button class="mr15 w90" @click="search">
-        全不选
-      </Button>
-      <Button class="mr15 w90" @click="search">
         导出
       </Button>
     </section>
@@ -67,90 +61,20 @@
       <div class="inner-box">
         <Tabs value="name1" :animated="false">
           <TabPane label="可处理信息" name="name1">
-            <div class="topTableDate">
-              <vxe-table
-                border
-                resizable
-                size="mini"
-                height='300'
-                :queryTime="queryTime"
-                :orderType="orderType"
-                :company="company"
-                :guestId="guestId"
-                :data="TopTableData"
-                highlight-hover-row
-                highlight-current-row
-                @current-change="selectTabelData"
-                :edit-config="{ trigger: 'click', mode: 'cell' }"
-              >
-                <vxe-table-column
-                  type="index"
-                  title="序号"
-                ></vxe-table-column>
-                <vxe-table-column title="操作" width="120">
-                  <template v-slot="{ row,rowIndex }">
-                    <vxe-button v-if="row.status.value == 1" type="text" @click="showNewOrder(row)">生成采购单</vxe-button>
-                  </template>
-                </vxe-table-column>
-
-                <vxe-table-column
-                  field="company"
-                  title="公司"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="guestName"
-                  title="客户"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="serviceId"
-                  title="预售单号"
-                ></vxe-table-column>
-
-                <vxe-table-column field="status" title="状态">
-                  <template v-slot="{ row }">
-                    <span>{{row.status.name}}</span>
-                  </template>
-                </vxe-table-column>
-                <vxe-table-column field="orderQty" title="订单数量">
-                </vxe-table-column>
-                <vxe-table-column title="订单金额" field="orderAmt">
-                </vxe-table-column>
-                <vxe-table-column
-                  field="commitTime"
-                  title="提交日期"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="planSendDate"
-                  title="预计发货日期"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="planArriveDate"
-                  title="预计到货日期"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="remark"
-                  title="备注"
-
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="pchsMainCode"
-                  title="采购单号"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="settleMan"
-                  title="受理人"
-                ></vxe-table-column>
-                <vxe-table-column
-                  field="settleDate"
-                  title="受理日期"
-                ></vxe-table-column>
-              </vxe-table>
-            </div>
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
           </TabPane>
-          <TabPane label="待处理" name="name2">标签二的内容</TabPane>
-          <TabPane label="已处理配件查询" name="name3">标签三的内容</TabPane>
-          <TabPane label="华盛历史订单" name="name4">标签三的内容</TabPane>
-          <TabPane label="华盛取消订单查询" name="name5">标签三的内容</TabPane>
+          <TabPane label="待处理" name="name2">
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          </TabPane>
+          <TabPane label="已处理配件查询" name="name3">
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          </TabPane>
+          <TabPane label="历史订单" name="name4">
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          </TabPane>
+          <TabPane label="取消订单查询" name="name5">
+            <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
+          </TabPane>
         </Tabs>
       </div>
     </section>
@@ -179,12 +103,6 @@
           {value: 4, name: '已完成'},
 
         ],
-        // 日期数据
-        options3: {
-          disabledDate(date) {
-            return date && date.valueOf() > Date.now();
-          }
-        },
         id:'',
         company: '', //公司选择
         companyListOptions: [],//选择公司下拉列表
@@ -203,6 +121,140 @@
         queryTime: '',//快速查询时间
         queryDate: '',//获取查询日期
         clickRow:'',//打开采购订单信息
+        //配件名称查询层表头
+        columnsPart: [
+          {
+            title: "序号",
+            width: 50,
+            type: "index"
+          },
+          {
+            title: "序号",
+            type: "selection",
+            minWidth: 80
+          },
+          {
+            title: "订单类型",
+            key: "partInnerId",
+            minWidth: 120
+          },
+          {
+            title: "订单单号",
+            key: "partCode",
+            minWidth: 120
+          },
+          {
+            title: "下单门店",
+            key: "partName",
+            minWidth: 120
+          },
+          {
+            title: "备注",
+            key: "carModelName",
+            minWidth: 120
+          },
+          {
+            title: "配件内码",
+            key: "spec",
+            minWidth: 120
+          },
+          {
+            title: "配件编码",
+            key: "brandName",
+            minWidth: 120
+          },
+          {
+            title: "配件名称",
+            key: "quality",
+            minWidth: 120
+          },
+          {
+            title: "规格",
+            key: "partBrand",
+            minWidth: 60
+          },
+          {
+            title: "OEM码",
+            key: "oemCode",
+            minWidth: 120
+          },
+          {
+            title: "实物码",
+            key: "unit",
+            minWidth: 80
+          },
+          {
+            title: "订单数量",
+            key: "carTypef",
+            minWidth: 80
+          },
+          {
+            title: "本店库存",
+            key: "carTypes",
+            minWidth: 80
+          },
+          {
+            title: "总部库存",
+            key: "carTypet",
+            minWidth: 80
+          },
+          {
+            title: "生产厂家",
+            key: "carBrandName",
+            minWidth: 80
+          },
+          {
+            title: "配件品质",
+            key: "fullName",
+            minWidth: 80
+          },
+          {
+            title: "品牌",
+            key: "fullName",
+            minWidth: 80
+          },
+          {
+            title: "厂牌",
+            key: "fullName",
+            minWidth: 80
+          },
+          {
+            title: "品牌车型",
+            key: "fullName",
+            minWidth: 120
+          },
+          {
+            title: "单位",
+            key: "fullName",
+            minWidth: 60
+          },
+          {
+            title: "一级分类",
+            key: "fullName",
+            minWidth: 180
+          },
+          {
+            title: "二级分类",
+            key: "fullName",
+            minWidth: 180
+          },
+          {
+            title: "订单来源",
+            key: "fullName",
+            minWidth: 180
+          },
+          {
+            title: "订单人",
+            key: "fullName",
+            minWidth: 180
+          },
+          {
+            title: "订单日期",
+            key: "fullName",
+            minWidth: 180
+          },
+
+        ],
       }
 
     },

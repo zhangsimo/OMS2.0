@@ -64,7 +64,7 @@
 
         async getList(){
             let data = {},
-              type = 'FY001'
+              type = 'FY003'
             switch (type) {
               case "FY001":
                 data.parentCode = 6002
@@ -100,7 +100,6 @@
        async save(){
             if(Object.keys(this.oneSubject).length < 1) return this.$Message.error('请至少选择一条数据')
           let  data ={}
-         console.log(this.oneSubject , 787987)
               data.remark = this.maker
               data.detailId = this.clime.id
          data.mateAccountName = this.oneSubject.titleName
