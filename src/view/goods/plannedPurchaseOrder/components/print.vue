@@ -41,7 +41,7 @@
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>联系人:</span> <span>{{ onelist.orderMan }}</span>
+              <span>联系人:</span> <span>{{ onelist.contactor }}</span>
             </p>
             <p>
               <span>票据类型:</span><span>{{ onelist.billTypeName }}</span>

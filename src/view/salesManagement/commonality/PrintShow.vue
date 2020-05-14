@@ -17,7 +17,7 @@
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>地址:</span>
-              <span>{{onelist.guestAddr}}</span>
+              <span>{{onelist.addr}}</span>
             </p>
             <p>
               <span>电话:</span>
@@ -157,6 +157,11 @@ export default {
           align: "center"
         },
         {
+          title: "品牌车型",
+          key: "carModelName",
+          align: "center"
+        },
+        {
           title: "规格",
           key: "spec",
           align: "center"
@@ -164,6 +169,11 @@ export default {
         {
           title: "单位",
           key: "unit",
+          align: "center"
+        },
+        {
+          title: "数量",
+          key: "orderQty",
           align: "center"
         },
         {

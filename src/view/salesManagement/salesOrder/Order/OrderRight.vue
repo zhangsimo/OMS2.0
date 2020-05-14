@@ -1061,7 +1061,8 @@ export default {
       data.sign = 1;
       let res = await getAccessories(data);
       if (res.code === 0) {
-        this.getList();
+        //this.getList();
+        this.$parent.$parent.parentGetleft();
       }
     },
     getRUl(val) {

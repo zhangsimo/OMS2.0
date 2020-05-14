@@ -290,6 +290,7 @@ export default class InterPurchase extends Vue {
     for(let b of this.purchaseOrderTable.tbdata){
       b._highlight = false
     }
+    this.selectLeftItemId = "";
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -371,6 +372,11 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
+
+    if(!data.directCompanyId){
+      this.selectTableRow.directCompanyId = 0;
+    }
+
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
 
@@ -389,6 +395,11 @@ export default class InterPurchase extends Vue {
       title: '是否提交',
       onOk: async () => {
         let data: any = this.formdata(refname);
+
+        if(!data.directCompanyId){
+          this.selectTableRow.directCompanyId = 0;
+        }
+
         if (!data) return;
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
