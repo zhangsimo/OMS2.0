@@ -119,8 +119,8 @@ export default {
     bus.$on("accountHedNo", val => {
       val.statementMasterId = val.id;
       this.accessoriesBillingData.push(val);
-      val.taxArrearsOfPart = -val.taxArrearsOfPart;
-      val.taxArrearsOfOil = -val.taxArrearsOfOil;
+      val.taxArrearsOfPart = val.taxArrearsOfPart;
+      val.taxArrearsOfOil = val.taxArrearsOfOil;
       this.accessoriesBillingData.map(item => {
         delete item.id;
       });
