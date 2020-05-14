@@ -41,10 +41,10 @@
         <span>申请时间：{{information.applicationDate}}</span>
       </Col>
       <Col span="6">
-        <span>油品-开票申请单号：{{information.oilsListOrder}}</span>
+        <span>油品-开票申请单号： <span v-if="$parent.data1[0].isOilPart == 1">{{information.oilsListOrder}}</span></span>
       </Col>
       <Col span="6">
-        <span>配件-开票申请单号：{{information.partsListOrder}}</span>
+        <span>配件-开票申请单号： <span  v-if="$parent.data1[0].isOilPart != 1">{{information.partsListOrder}}</span></span>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
