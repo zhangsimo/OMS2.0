@@ -6,7 +6,7 @@
         <span v-if="type == 2">入库日期:</span>
         <span v-if="type == 3">出库日期:</span>
         <DatePicker
-          type="daterange"
+          type="date"
           placement="bottom-end"
           style="width: 300px"
           v-model="createDate"
@@ -15,7 +15,7 @@
       <Row class="mb30" v-if="[1, 4].includes(type)">
         <span>提交日期:</span>
         <DatePicker
-          type="daterange"
+          type="date"
           placement="bottom-end"
           style="width: 300px"
           v-model="auditDate"
@@ -33,6 +33,7 @@
           :remote-method="remoteMethod"
           :loading="guseData.loading"
           @on-change="geseChange"
+          clearable
         >
           <Option
             v-for="option in guseData.lists"
@@ -48,8 +49,8 @@
         <Input type="text" class="w300 ml5" v-model="code" />
       </FormItem>
       <FormItem v-if="type == 4" label="直发门店: ">
-        <Select v-model="storeId" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in stores" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="storeId" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item) in stores" :value="item.value" :key="item.value">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem label="配件编码/名称: ">
@@ -59,33 +60,33 @@
         <Input type="text" class="w300 ml5" v-model="partName" />
       </FormItem> -->
       <FormItem label="品牌: ">
-        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable>
+        <Select v-model="partBrand" class="w300 ml5" label-in-value filterable clearable>
           <Option v-for="(item, index) in brandLists" :value="item" :key="index">{{ item }}</Option>
         </Select>
       </FormItem>
       <FormItem label="采购订单类型: " v-if="[1].includes(type)">
-        <Select v-model="orderType" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in orderTypeList" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="orderType" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item, index) in orderTypeList" :value="item.id" :key="index">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem label="仓库: " v-if="type != 4">
-        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable>
-          <Option v-for="(item, index) in warehouse" :value="item" :key="index">{{ item }}</Option>
+        <Select v-model="warehouseId" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="(item) in warehouse" :value="item.id" :key="item.id">{{ item.name }}</Option>
         </Select>
       </FormItem>
       <FormItem :label="type == 3 ? '退货员: ': (type == 4 ? '计划员' : '采购员: ')">
-        <Select v-model="orderman" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="orderman" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem label="提交人: " v-if="[1, 4].includes(type)">
-        <Select v-model="auditor" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="auditor" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
       <FormItem label="创建人: " v-if="[1, 4].includes(type)">
-        <Select v-model="createUname" class="w300 ml5" label-in-value filterable>
-          <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
+        <Select v-model="createUname" class="w300 ml5" label-in-value filterable clearable>
+          <Option v-for="item in salesList" :value="item.value" :key="item.value">{{ item.label }}</Option>
         </Select>
       </FormItem>
     </Form>
@@ -104,6 +105,8 @@ import * as api from "_api/procurement/plan";
 import { getSales } from "@/api/salesManagment/salesOrder";
 // @ts-ignore
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
+// @ts-ignore
+import { getWarehouse, getStorelist } from "_api/reportForm/index.js";
 
 @Component({
   components: {
@@ -114,8 +117,8 @@ export default class MoreSearch extends Vue {
 
   private serchN: boolean = false;
 
-  private createDate: Array<any> = new Array();
-  private auditDate: Array<any> = new Array();
+  private createDate: Date|string = "";
+  private auditDate: Date|string = "";
   private serviceId: string = "";
   private partCode: string = "";
   private partBrand: string = "";
@@ -133,8 +136,28 @@ export default class MoreSearch extends Vue {
   private storeId: string = "";
 
   private stores: Array<any> = new Array();
-  private orderTypeList: Array<any> = new Array();
+  private async getStore() {
+    let res: any = await getStorelist();
+    if(res.code == 0) {
+       let data = res.data;
+        Object.keys(data).forEach(key => {
+          this.stores.push({value: key, name: data[key]})
+        })
+    }
+  }
+
+  private orderTypeList: Array<any> = [
+    {id: "1", name: "常规订单"},
+    {id: "2", name: "备货订单"},
+    {id: "3", name: "急件订单"},
+  ];
   private warehouse: Array<any> = new Array();
+  private async getWares() {
+    let res: any = await getWarehouse();
+    if(res.code == 0) {
+      this.warehouse = res.data;
+    }
+  }
 
 
   private salesList: Array<any> = new Array();
@@ -154,8 +177,8 @@ export default class MoreSearch extends Vue {
     // console.log(this.getBrand);
   }
   private reset() {
-    this.createDate = new Array();
-    this.auditDate = new Array();
+    this.createDate = "";
+    this.auditDate = "";
     this.serviceId = "";
     this.partCode = "";
     this.partBrand = "";
@@ -211,6 +234,12 @@ export default class MoreSearch extends Vue {
     if (this.brandLists.length <= 0) {
       this.getBrand();
     }
+    if(this.warehouse.length <= 0) {
+      this.getWares();
+    }
+    if(this.stores.length <= 0) {
+      this.getStore();
+    }
     this.serchN = true;
   }
 
@@ -226,10 +255,8 @@ export default class MoreSearch extends Vue {
   @Emit("getmoreData")
   private ok() {
     let data = {
-      startTime: tools.transTime(this.createDate[0]),
-      endTime: tools.transTime(this.createDate[1]),
-      auditStartDate: tools.transTime(this.auditDate[0]),
-      auditEndDate: tools.transTime(this.auditDate[1]),
+      createDate: this.createDate ? tools.transTime(this.createDate) : "",
+      auditDate: this.auditDate ? tools.transTime(this.auditDate) : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
       partBrand: this.partBrand,
@@ -244,12 +271,6 @@ export default class MoreSearch extends Vue {
       warehouseId: this.warehouseId,
       storeId: this.storeId,
     };
-    if(data.endTime) {
-      data.endTime = data.endTime.split(" ")[0] + " 23:59:59"
-    }
-    if(data.auditEndDate) {
-      data.auditEndDate = data.auditEndDate.split(" ")[0] + " 23:59:59"
-    }
     // console.log(data)
     let subdata: Map<string, string> = new Map();
     for (let key in data) {

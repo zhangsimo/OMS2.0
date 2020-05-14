@@ -185,7 +185,7 @@
       @on-change="changePage"
       @on-page-size-change="changeSize"
       show-sizer
-      show-total
+      show-total transfer
     ></Page>
   </section>
 </template>
