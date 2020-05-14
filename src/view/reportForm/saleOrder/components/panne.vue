@@ -7,7 +7,9 @@
             <quick-date @quickDate="getDataQuick"></quick-date>
           </div>
           <div class="db mr10">
-            <span>入库日期：</span>
+            <span v-if="type == 1">入库日期：</span>
+            <span v-if="type == 2">出库日期：</span>
+            <span v-if="type == 3">入库日期：</span>
             <DatePicker
               v-model="search.submitDate"
               type="date"
@@ -27,15 +29,16 @@
           </div>
           <div class="db mr10">
             <Select
-              v-model="search.bandId"
+              v-model="search.partBrandCode"
               class="w120"
               placeholder="请选择品牌"
+              clearable
             >
               <Option
-                v-for="item in bandArr"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.name }}</Option
+                v-for="(item, index) in bandArr"
+                :value="item"
+                :key="index"
+                >{{ item }}</Option
               >
             </Select>
           </div>
@@ -44,26 +47,13 @@
               v-model="search.guestId"
               class="w120"
               placeholder="请选择客户"
+              clearable
             >
               <Option
                 v-for="item in supplityArr"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.name }}</Option
-              >
-            </Select>
-          </div>
-          <div class="db mr10">
-            <Select
-              v-model="search.warehouseId"
-              class="w120"
-              placeholder="请选择仓库"
-            >
-              <Option
-                v-for="item in warehouse"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.name }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.fullName }}</Option
               >
             </Select>
           </div>
@@ -71,7 +61,23 @@
             <Select
               v-model="search.storeId"
               class="w120"
+              placeholder="请选择仓库"
+              clearable
+            >
+              <Option
+                v-for="item in warehouse"
+                :value="item.id"
+                :key="item.id"
+                >{{ item.name }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db mr10">
+            <Select
+              v-model="search.orgid"
+              class="w120"
               placeholder="请选择门店"
+              clearable
             >
               <Option
                 v-for="item in stores"
@@ -97,6 +103,7 @@
 import moment from "moment";
 import QuickDate from "_c/getDate/dateget";
 import more from "./more";
+import * as api from "_api/reportForm/index.js";
 export default {
   components: { QuickDate, more },
   props: {
@@ -108,39 +115,76 @@ export default {
   data() {
     return {
       bandArr: [], // 品牌
-      supplityArr: [], // 供应商
+      supplityArr: [], // 客户
       stores: [], // 门店
       warehouse: [], // 仓库
+      quickDates: [], // 快速日期查询
       search: {
-        quickDates: [], // 快速日期查询
-        submitDate: null, // 提交日期
+        isPanne: true,
+        auditDate: null, // 提交日期
         content: "", // 编码名称
-        bandId: "", // 品牌
-        guestId: "", // 供应商
-        storeId: "", // 门店
-        warehouseId: "", // 仓库
+        partBrandCode: "", // 品牌
+        guestId: "", // 客户
+        orgid: "", // 门店
+        storeId: "", // 仓库
       }
     };
+  },
+    async mounted() {
+    let resS = await api.getClient();
+    let resB = await api.getParamsBrand();
+    let resE = await api.getStorelist();
+    let resW = await api.getWarehouse();
+    if(resW.code == 0) {
+      this.warehouse = resW.data;
+    }
+    if (resS.code == 0) {
+      this.supplityArr = resS.data;
+    }
+    if(resB.code == 0) {
+      this.bandArr = resB.data;
+    }
+    if(resE.code == 0) {
+       let data = resE.data;
+        Object.keys(data).forEach(key => {
+          this.stores.push({value: key, name: data[key]})
+        })
+    }
   },
   methods: {
     // 快速日期查询
     getDataQuick(v) {
-      this.search.quickDates = v;
+      this.quickDates = v;
+      if(v.length >= 2) {
+        this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] });
+      } else {
+        this.$emit("search", { isPanne: true });
+      }
     },
     // 查询
     query() {
       let data = {};
       for (let key in this.search) {
         if (this.search[key]) {
-          if (key == "submitDate") {
-            data.submitDate = moment(this.search.submitDate).format(
+          if (key == "auditDate") {
+            data.auditDate = moment(this.search.auditDate).format(
               "YYYY-MM-DD HH:mm:ss"
             );
+          }  else if (key == "content" && this.search.content) {
+            if(/[\u4e00-\u9fa5]/.test(this.search.content)) {
+              data.partName = this.search.content;
+            } else {
+              data.partCode = this.search.content;
+            }
           } else {
             data[key] = this.search[key];
           }
         }
       }
+      if(this.quickDates.length >= 2 && this.quickDates[0]) {
+        data.startTime = this.quickDates[0];
+        data.endTime = this.quickDates[1];
+      } 
       this.$emit("search", data);
     },
     // 更多
@@ -154,7 +198,9 @@ export default {
       }
     },
     // 导出
-    exportxls() {}
+    exportxls() {
+      this.$emit("export");
+    }
   }
 };
 </script>

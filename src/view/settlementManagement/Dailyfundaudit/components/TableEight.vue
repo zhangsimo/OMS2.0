@@ -8,19 +8,19 @@
       ref="xTable"
       align="center"
       height="500"
-      @checkbox-all="selectAllEvent"
-      @checkbox-change="selectChangeEvent"
       auto-resize
       resizable
       border="full"
       style="width: 3000px"
       :data="tableData"
+      @checkbox-all="selectAllEvent"
+      @checkbox-change="selectChangeEvent"
     >
       <vxe-table-column title="基本信息">
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column field="businessNumbers" title="收款单号"></vxe-table-column>
-        <vxe-table-column field="businessNumbersList" title="对账单单号"></vxe-table-column>
+        <vxe-table-column field="businessNumbers" title="预收款支出/核销单号"></vxe-table-column>
+        <vxe-table-column field="businessNumbersList" title="预收款单号"></vxe-table-column>
         <vxe-table-column field="tmp" title="来源往来单位">
           <template v-slot="{ row }">
             <ul class="list">
@@ -51,31 +51,6 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="金额信息">
-        <vxe-table-column title="业务类型">
-          <template v-slot="{ row }">
-            <ul class="list">
-              <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
-                <span class="listChild">{{ item.businessType.name }}</span>
-              </li>
-            </ul>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column title="金额">
-          <template v-slot="{ row }">
-            <ul class="list">
-              <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
-                <span class="listChild">{{ item.auditMoney }}</span>
-              </li>
-            </ul>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="tmp" title="收款合计">
-          <template v-slot="{ row }">
-            <span>{{ row.moneyInfo[0].auditMoneyTotal }}</span>
-          </template>
-        </vxe-table-column>
-      </vxe-table-column>
-      <vxe-table-column title="收款方式">
         <vxe-table-column title="账户">
           <template v-slot="{ row }">
             <ul class="list">
@@ -85,7 +60,16 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="金额">
+        <vxe-table-column title="收款金额">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
+                <span class="listChild">{{ item.incomeMoney }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="付款金额">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
@@ -94,7 +78,7 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="收款所属门店">
+        <vxe-table-column title="账户所属门店">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
@@ -104,8 +88,8 @@
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="收款信息">
-        <vxe-table-column field="tmp" title="收款人">
+      <vxe-table-column title="其他信息">
+        <vxe-table-column field="tmp" title="付款人">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
@@ -114,11 +98,29 @@
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="收款日期">
+        <vxe-table-column field="tmp" title="付款日期">
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.paymentTime }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款人">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentPersonNameIn }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款日期">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentTimeIn }}</span>
               </li>
             </ul>
           </template>

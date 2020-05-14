@@ -8,30 +8,33 @@
       ref="xTable"
       align="center"
       height="500"
-      @checkbox-all="selectAllEvent"
-      @checkbox-change="selectChangeEvent"
       auto-resize
       resizable
       border="full"
       style="width: 3000px"
       :data="tableData"
+      @checkbox-all="selectAllEvent"
+      @checkbox-change="selectChangeEvent"
     >
       <vxe-table-column title="基本信息">
         <vxe-table-column type="checkbox" width="60"></vxe-table-column>
         <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
-        <vxe-table-column
-          field="businessNumbers"
-          title="转损益单号"
-        ></vxe-table-column>
-        <vxe-table-column field="tmp" title="会计科目">
+        <vxe-table-column field="businessNumbers" title="预收款支出/核销单号"></vxe-table-column>
+        <vxe-table-column field="businessNumbersList" title="预收款单号"></vxe-table-column>
+        <vxe-table-column field="tmp" title="来源往来单位">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.payeeWay"
-                :key="index"
-                class="flex"
-              >
-                <span class="listChild">{{ item.mateAccountName }}</span>
+              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
+                <span class="listChild">{{ item.guestSourceName }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="目标往来单位">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.suppliers" :key="index" class="flex">
+                <span class="listChild">{{ item.guestTargetName }}</span>
               </li>
             </ul>
           </template>
@@ -48,93 +51,101 @@
         </vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="金额信息">
-        <vxe-table-column title="业务类型">
+        <vxe-table-column title="业务类型" field="tmp">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.moneyInfo"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.businessType.name }}</span>
               </li>
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="收款金额" field="tmp">
+        <vxe-table-column title="金额" field="tmp">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.moneyInfo"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.auditMoney }}</span>
               </li>
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="付款金额" field="tmp">
+        <vxe-table-column field="tmp" title="合计">
           <template v-slot="{ row }">
-            <li
-              v-for="(item, index) of row.moneyInfo"
-              :key="index"
-              class="flex"
-            >
-              <span class="listChild">{{ item.auditMoneyTotal }}</span>
-            </li>
+            <span>{{ row.moneyInfo[0].auditMoneyTotal }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="账户">
+      </vxe-table-column>
+      <vxe-table-column title="收付款方式">
+        <vxe-table-column title="账户">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.payeeWay"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
                 <span class="listChild">{{ item.accountName }}</span>
               </li>
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="tmp" title="账户所属门店">
+        <vxe-table-column title="收款金额">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.payeeWay"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
+                <span class="listChild">{{ item.incomeMoney }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="付款金额">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentMoney }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column title="账户所属门店">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeWay" :key="index" class="flex">
                 <span class="listChild">{{ item.shopName }}</span>
               </li>
             </ul>
           </template>
         </vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column title="金额信息">
-        <vxe-table-column title="收/付款人" field="tmp">
+      <vxe-table-column title="收付款信息">
+        <vxe-table-column field="tmp" title="付款人">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.payeeInfo"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.paymentPersonName }}</span>
               </li>
             </ul>
           </template>
         </vxe-table-column>
-        <vxe-table-column title="收/付款日期" field="tmp">
+        <vxe-table-column field="tmp" title="付款日期">
           <template v-slot="{ row }">
             <ul class="list">
-              <li
-                v-for="(item, index) of row.payeeInfo"
-                :key="index"
-                class="flex"
-              >
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
                 <span class="listChild">{{ item.paymentTime }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款人">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentPersonNameIn }}</span>
+              </li>
+            </ul>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="tmp" title="收款日期">
+          <template v-slot="{ row }">
+            <ul class="list">
+              <li v-for="(item, index) of row.payeeInfo" :key="index" class="flex">
+                <span class="listChild">{{ item.paymentTimeIn }}</span>
               </li>
             </ul>
           </template>
@@ -146,63 +157,63 @@
 </template>
 
 <script>
-export default {
-  name: "tableone",
-  props: {
-    tbdata: {
-      type: Array,
-      default: []
-    }
-  },
-  computed: {
-    tableData() {
-      return this.tbdata;
-    }
-  },
-  data() {
-    return {
-    };
-  },
-  methods: {
-    clear() {
-      this.$refs.xTable.clearCheckboxRow();
-      this.$emit("selection", []);
+  export default {
+    name: "tableone",
+    props: {
+      tbdata: {
+        type: Array,
+        default: [],
+      }
     },
-    selectAllEvent({ checked, records }) {
-      // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
-      this.$emit("selection", records);
+    computed: {
+      tableData() {
+        return this.tbdata;
+      }
     },
-    selectChangeEvent({ checked, records }) {
-      // console.log(checked ? "勾选事件" : "取消事件", records);
-      this.$emit("selection", records);
+    data() {
+      return {
+      };
+    },
+    methods: {
+      clear() {
+        this.$refs.xTable.clearCheckboxRow();
+        this.$emit("selection", []);
+      },
+      selectAllEvent({ checked, records }) {
+        // console.log(checked ? "所有勾选事件" : "所有取消事件", records);
+        this.$emit("selection", records);
+      },
+      selectChangeEvent({ checked, records }) {
+        // console.log(checked ? "勾选事件" : "取消事件", records);
+        this.$emit("selection", records);
+      }
     }
-  }
-};
+  };
 </script>
 
 <style scoped>
-.box {
-  overflow: auto;
-}
-.boxData {
-  width: 2200px;
-  /* overflow: auto; */
-}
-.list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.listChild {
-  display: inline-block;
-  border: 1px solid #e8eaec;
-  flex: 1;
-  padding: 5px;
-}
-.vxe-table .vxe-cell {
-  padding: 0;
-}
-.vxe-table .vxe-body--column:not(.col--ellipsis) {
-  padding: 0;
-}
+  .box {
+    overflow: auto;
+  }
+  .boxData {
+    width: 2200px;
+    /* overflow: auto; */
+  }
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .listChild {
+    display: inline-block;
+    border: 1px solid #e8eaec;
+    flex: 1;
+    padding: 5px;
+  }
+  .vxe-table .vxe-cell {
+    padding: 0;
+  }
+  .vxe-table .vxe-body--column:not(.col--ellipsis) {
+    padding: 0;
+  }
 </style>

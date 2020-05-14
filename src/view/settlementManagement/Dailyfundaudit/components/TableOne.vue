@@ -123,8 +123,17 @@
             </ul>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="remarks" title="备注"></vxe-table-column>
       </vxe-table-column>
-      <vxe-table-column field="remarks" title="备注"></vxe-table-column>
+
+      <vxe-table-column title="凭证生成信息">
+        <vxe-table-column  title="凭证生成状态">
+          <template v-slot = '{row}'>
+            {{row.proofState == 2 ? '否' : '是'}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="proofMSg" title="凭证生成失败原因"></vxe-table-column>
+      </vxe-table-column>
     </vxe-table>
   </div>
 </template>

@@ -28,7 +28,7 @@
       <FormItem label='客户当前额度:' >
         <Input v-model='+data.creditLimit + data.tempCreditLimit' style="width: 180px" disabled></Input>
       </FormItem>
-      <FormItem label='调整后额度:' prop="fixationQuotaTotal">
+      <FormItem label='调整后固定额度:' prop="fixationQuotaTotal">
         <Input v-model='data.fixationQuotaTotal' style="width: 180px" ></Input>
       </FormItem>
       <FormItem label='是否禁止额度调整申请:' >

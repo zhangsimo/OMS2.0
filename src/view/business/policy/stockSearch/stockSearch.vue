@@ -45,8 +45,8 @@
               <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Input placeholder="仓位" class="w120 mr10" v-model="searchForm.shelf"></Input>
-            <span class="mr5">显示零库存:</span>
-            <Checkbox v-model="searchForm.noStock"></Checkbox>
+            <!--<span class="mr5">显示零库存:</span>-->
+            <!--<Checkbox v-model="searchForm.noStock"></Checkbox>-->
             <Button type="warning" class="mr10 w90" @click="serch">
               <Icon type="ios-search" size="14" />查询
             </Button>

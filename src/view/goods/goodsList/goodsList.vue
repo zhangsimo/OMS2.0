@@ -199,11 +199,13 @@
                       class="w160"
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.directCompanyId"
+                      clearable
                     >
                       <Option
                         v-for="item in companyMap"
                         :value="item.value"
                         :key="item.value"
+                        v-show="item.value!=$store.state.user.userData.shopId"
                       >{{ item.label }}</Option>
                     </Select>
                   </FormItem>

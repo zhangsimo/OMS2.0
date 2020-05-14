@@ -1,7 +1,7 @@
 <template>
   <div class="content-oper" style="background: #fff">
-    <panne @search="search" />
-    <tabOne />
+    <panne @search="search" @export="exportxls('tabOne')" />
+    <tabOne ref="tabOne" />
   </div>
 </template>
 <script>
@@ -17,6 +17,14 @@ export default {
   mounted() {},
   methods: {
     search(data) {},
+    exportxls(refname) {
+      this.$refs[refname].$refs.xTable.exportData({
+        filename: '采购订单明细表',
+        isHeader: true,
+        isFooter: true,
+        data: this.$refs[refname].tableDataAll,
+      })
+    },
   }
 };
 </script>
