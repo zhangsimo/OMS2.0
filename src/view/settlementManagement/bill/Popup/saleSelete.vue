@@ -13,6 +13,7 @@
       :columns="account"
       :data="accountData"
       highlight-row
+      max-height="450"
       @on-current-change="seleteDate"
     ></Table>
     <div slot="footer">
@@ -128,6 +129,8 @@ export default {
         orgId: this.information.orgId,
         guestId:this.companyId
       };
+      obj.page = 0
+      obj.size = 9999
       seleteAccount(obj).then(res => {
         if (res.code === 0) {
           res.data.content.map(item => {

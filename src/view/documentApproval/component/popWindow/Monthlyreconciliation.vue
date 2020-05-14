@@ -6,7 +6,7 @@
           <div class="wlf">
             <div class="db ml20">
               <span>对账门店：</span>
-              <Select v-model="model1" class="w150" @on-change="storeAccount">
+              <Select v-model="model1" class="w150" @on-change="storeAccount" :disabled="modelType.type==3">
                 <Option
                   v-for="item in Branchstore"
                   :value="item.value"
@@ -16,7 +16,7 @@
             </div>
             <div class="db ml20">
               <span>往来单位：</span>
-              <Select v-model="companyInfo" style="width:200px" @on-change="companySelect">
+              <Select v-model="companyInfo" style="width:200px" @on-change="companySelect" :disabled="modelType.type==3">
                 <Option
                   v-for="item in companyList"
                   :value="item.value"
@@ -25,7 +25,7 @@
               </Select>
             </div>
             <div class="db ml5">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query" :disabled="modelType.type==3">
                 <i class="iconfont iconchaxunicon"></i>
                 <span>查询</span>
               </button>
@@ -35,21 +35,25 @@
                 class="mr10 ivu-btn ivu-btn-default"
                 type="button"
                 @click="preservationDraft"
+                v-if="modelType.type!=3"
               >保存草稿</button>
               <button
                 class="mr10 ivu-btn ivu-btn-default"
                 type="button"
                 @click="preservationSubmission"
+                v-if="modelType.type!=3"
               >保存并提交</button>
               <button
                 class="mr10 ivu-btn ivu-btn-default"
                 type="button"
                 @click="getReportReconciliationt"
+                v-if="false"
               >导出对账清单</button>
               <button
                 class="mr10 ivu-btn ivu-btn-default"
                 type="button"
                 @click="getReportParts"
+                v-if="false"
               >导出配件明细</button>
             </div>
           </div>
@@ -62,13 +66,13 @@
             <h5 class="p10">付款信息</h5>
             <div class="flex p10">
               <span>收款户名：</span>
-              <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
+              <Input type="text" class="w140 mr10" v-model="collectionAccountName" :disabled="modelType.type==3" />
               <span>开户行：</span>
-              <Input v-model="openingBank" class="w140 mr10" disabled />
+              <Input v-model="openingBank" class="w140 mr10" :disabled="modelType.type==3" />
               <span>收款账号：</span>
-              <Input v-model="collectionAccount" class="w140 mr10" disabled />
+              <Input v-model="collectionAccount" class="w140 mr10" :disabled="modelType.type==3" />
               <span>本次申请付款账户：</span>
-              <Input v-model="thisApplyAccount" class="w140 mr10" />
+              <Input v-model="thisApplyAccount" class="w140 mr10"  :disabled="modelType.type==3" />
             </div>
           </div>
           <div class="db mt20">
@@ -104,21 +108,21 @@
           <div class="flex mt20">
             <div class="totalcollect p10">
               <span class="mr5">应收合计</span>
-              <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" />
+              <Input type="text" v-model="totalcollect" disabled class="w60 mr10 tc" :disabled="modelType.type==3"/>
               <span class="mr5">应收坏账</span>
-              <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" />
+              <InputNumber :min="0" v-model="collectBaddebt" class="w60 mr10 tc" :disabled="modelType.type==3"/>
               <span class="mr5">应收返利</span>
-              <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" />
+              <InputNumber :min="0" v-model="collectRebate" class="w60 mr10 tc" :disabled="modelType.type==3"/>
               <span class="mr5" style="color:#f66">实际应收合计</span>
               <Input v-model="Actualtotalcollect" type="text" class="w60 mr10 tc" disabled />
             </div>
             <div class="totalpayment p10 ml10">
               <span class="mr5">应付合计</span>
-              <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" />
+              <Input type="text" v-model="totalpayment" disabled class="w60 mr10 tc" :disabled="modelType.type==3" />
               <span class="mr5">应付坏账</span>
-              <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" />
+              <InputNumber v-model="paymentBaddebt" type="text" class="w60 mr10 tc" :min="0" :disabled="modelType.type==3" />
               <span class="mr5">应付返利</span>
-              <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" />
+              <InputNumber v-model="paymentRebate" class="w60 mr10 tc" :min="0" :disabled="modelType.type==3"/>
               <span class="mr5" style="color:#f66">实际应付合计</span>
               <Input :value="Actualtotalpayment" class="w60 mr10 tc" disabled />
             </div>
@@ -127,7 +131,7 @@
             <span class="mr5">本次对账结算合计(整数收款)</span>
             <Input type="text" v-model="Reconciliationtotal" disabled class="w60 mr10 tc" />
             <span class="mr5">计划结算类型</span>
-            <Select class="w100 mr10" v-model="totalvalue">
+            <Select class="w100 mr10" v-model="totalvalue" :disabled="modelType.type==3">
               <Option
                 v-for="item in SettlementType"
                 :value="item.value"
@@ -135,11 +139,11 @@
               >{{ item.label }}</Option>
             </Select>
             <span class="mr5">应收返利请示单号</span>
-            <Input type="text" v-model="Rebateid" class="w60 mr10 tc" />
+            <Input type="text" v-model="Rebateid" class="w60 mr10 tc" :disabled="modelType.type==3"/>
             <span class="mr5">应收坏账请示单号</span>
-            <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" />
+            <Input type="text" v-model="BadDebtid" class="w60 mr10 tc" :disabled="modelType.type==3"/>
             <span class="mr5">备注</span>
-            <Input type="text" v-model="remark" class="w60 mr10 tc" />
+            <Input type="text" v-model="remark"  :disabled="modelType.type==3" class="w60 mr10 tc" />
           </div>
         </div>
       </section>

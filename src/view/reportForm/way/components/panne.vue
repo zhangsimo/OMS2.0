@@ -27,7 +27,7 @@
           </div>
           <div class="db mr10">
             <Input
-              v-model="search.orderCode"
+              v-model="search.serviceId"
               placeholder="出库单号"
               class="w200 mr10"
               clearable
@@ -38,12 +38,13 @@
               v-model="search.guestId"
               class="w120"
               placeholder="请选择供应商"
+              filterable clearable
             >
               <Option
                 v-for="item in supplityArr"
-                :value="item.value"
-                :key="item.value"
-                >{{ item.name }}</Option
+                :value="item.id"
+                :key="item.id"
+                >{{ item.fullName }}</Option
               >
             </Select>
           </div>
@@ -52,6 +53,7 @@
               v-model="search.storeId"
               class="w120"
               placeholder="请选择分店"
+              filterable clearable
             >
               <Option
                 v-for="item in stores"
@@ -74,6 +76,7 @@
 <script>
 import moment from "moment";
 import QuickDate from "_c/getDate/dateget";
+import * as api from "_api/reportForm/index.js";
 export default {
   components: { QuickDate },
   props: {
@@ -86,9 +89,9 @@ export default {
     return {
       supplityArr: [], // 供应商
       stores: [], // 门店
+      quickDates: [], // 快速日期查询
       search: {
-        orderCode: "", // 出库单号
-        quickDates: [], // 快速日期查询
+        serviceId: "", // 出库单号
         submitDate: [], // 提交日期
         content: "", // 编码名称
         guestId: "", // 供应商
@@ -96,25 +99,45 @@ export default {
       }
     };
   },
+  async mounted() {
+    let resS = await api.getClient();
+    let resE = await api.getStorelist();
+    if (resS.code == 0) {
+      this.supplityArr = resS.data;
+    }
+    if(resE.code == 0) {
+       let data = resE.data;
+        Object.keys(data).forEach(key => {
+          this.stores.push({value: key, name: data[key]})
+        })
+    }
+  },
   methods: {
     // 快速日期查询
     getDataQuick(v) {
-      this.search.quickDates = v;
+      this.quickDates = v;
+      if(v.length >= 2) {
+        this.$emit("search", { createTime: v[0], endTime: v[1] });
+      } else {
+        this.$emit("search", {});
+      }
     },
     // 查询
     query() {
-      let data = {
-        submitDate: [],
-      };
+      let data = {};
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "submitDate") {
-            data.submitDate[0] = moment(this.search.submitDate[0]).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
-            data.submitDate[1] = moment(this.search.submitDate[1]).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
+            if (this.search["submitDate"][0]) {
+              data.allotFinishedStartDate = moment(this.search["submitDate"][0]).format("YYYY-MM-DD") + " 00:00:00";
+              data.allotFinishedEndDate = moment(this.search["submitDate"][1]).format("YYYY-MM-DD") + " 23:59:59";
+            }
+          }  else if (key == "content" && this.search.content) {
+            if(/[\u4e00-\u9fa5]/.test(this.search.content)) {
+              data.partName = this.search.content;
+            } else {
+              data.partCode = this.search.content;
+            }
           } else {
             data[key] = this.search[key];
           }
@@ -129,7 +152,9 @@ export default {
       }
     },
     // 导出
-    exportxls() {}
+    exportxls() {
+      this.$emit("export");
+    }
   }
 };
 </script>
