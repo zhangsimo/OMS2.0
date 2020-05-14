@@ -6,7 +6,7 @@
           <div class="wlf">
             <div class="db ml20">
               <span>对账门店：</span>
-              <Select v-model="model1" class="w150" @on-change="storeAccount" disabled="modelType.type==3">
+              <Select v-model="model1" class="w150" @on-change="storeAccount" :disabled="modelType.type==3">
                 <Option
                   v-for="item in Branchstore"
                   :value="item.value"
@@ -16,7 +16,7 @@
             </div>
             <div class="db ml20">
               <span>往来单位：</span>
-              <Select v-model="companyInfo" style="width:200px" @on-change="companySelect" disabled="modelType.type==3">
+              <Select v-model="companyInfo" style="width:200px" @on-change="companySelect" :disabled="modelType.type==3">
                 <Option
                   v-for="item in companyList"
                   :value="item.value"
@@ -25,7 +25,7 @@
               </Select>
             </div>
             <div class="db ml5">
-              <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query" disabled="modelType.type==3">
+              <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query" :disabled="modelType.type==3">
                 <i class="iconfont iconchaxunicon"></i>
                 <span>查询</span>
               </button>
