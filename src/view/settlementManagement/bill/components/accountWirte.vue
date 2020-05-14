@@ -16,6 +16,7 @@
       :columns="account"
       :data="accountData"
       ref="table"
+      max-height="450"
       highlight-row
       @on-current-change="seleteDate"
     ></Table>
@@ -157,6 +158,8 @@ export default {
         receivePaymentType: this.paymentId,
         guestId: this.companyId
       };
+      obj.size = 9999
+      obj.page = 0
       findAccount(obj).then(res => {
         if (res.code === 0) {
           this.accountData = res.data.content;
