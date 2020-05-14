@@ -39,12 +39,12 @@
               </Button>
             </div>-->
             <div class="db">
-              <Button v-has="'godown'" class="mr10" @click="chuku">
+              <Button v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1">
                 <Icon type="md-checkmark" size="14" />入库
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 2">
+              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
