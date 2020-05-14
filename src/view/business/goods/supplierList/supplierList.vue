@@ -504,6 +504,7 @@
           return this.$Message.error('请先保存数据');
         }
         //置空左侧选中数据
+        this.selectLeftItemId = "";
         this.leftCurrentItem = null;
         for(let item of this.Left.tbdata){
           item._highlight = false
@@ -1031,7 +1032,7 @@
 
       //右侧填充数据
       setRightData(row){
-        this.selectLeftItemId = "";
+        // this.selectLeftItemId = "";
         this.mainId = row.id
         this.guestidId = row.guestId
         this.datadata = row
@@ -1133,6 +1134,9 @@
             let res = await returnPchs(data);
             if (res.code == 0) {
               this.$Message.success('退货成功');
+              this.leftgetList();
+              this.isAdd = true;
+            }else{
               this.leftgetList();
               this.isAdd = true;
             }

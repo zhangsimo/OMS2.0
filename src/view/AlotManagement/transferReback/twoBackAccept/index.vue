@@ -93,11 +93,13 @@
 
           <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
-            field="defaultValue"
-            title="受理仓库"
-            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>
+          <!--<vxe-table-column-->
+            <!--field="storeId"-->
+            <!--title="受理仓库"-->
+            <!--:edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"-->
+          <!--&gt;-->
+            <!---->
+          <!--</vxe-table-column>-->
 
           <!-- <vxe-table-column
             field="defaultValue"
@@ -105,17 +107,13 @@
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>-->
 
-          <!-- <vxe-table-column title="受理仓库">
+          <vxe-table-column title="受理仓库">
             <template v-slot="{ row,rowIndex }">
-              <select>
-                <option
-                  v-for="(item,index) in storeArray"
-                  :key="index"
-                  :value="item.value"
-                >{{item.label}}</option>
-              </select>
+              <vxe-select v-model="row.storeId">
+                <vxe-option v-for="(num,index) in storeArray" :key="index" :value="num.value" :label="`${num.label}`"></vxe-option>
+              </vxe-select>
             </template>
-          </vxe-table-column>-->
+          </vxe-table-column>
           <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
@@ -290,7 +288,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name });
+              this.storeArray.push({ value: element.id, label: element.name,isDefault:element.isDefault });
             });
           }
         })
@@ -325,9 +323,17 @@ export default {
           if (res.code == 0) {
             this.TopTableData = res.data.content || [];
             this.pageList.total = res.totalElements;
-            for (var i = 0; i < this.TopTableData.length; i++) {
-              this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
-            }
+
+            //
+            let defaultArr = this.storeArray.filter(item => item.isDefault)[0].value||'1212640757663424512';
+            this.TopTableData.map(item => {
+              if(!item.storeId){
+                item.storeId = defaultArr
+              }
+            })
+            // for (var i = 0; i < this.TopTableData.length; i++) {
+            //   this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
+            // }
           }
         })
         .catch(e => {
