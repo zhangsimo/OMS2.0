@@ -191,6 +191,8 @@
     <tax-exclusive-application ref="taxExclusiveApplication" :modelType="modelType"></tax-exclusive-application>
           <!--对账单申请-->
     <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
+    <!--其他查看-->
+    <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
   </div>
 </template>
 
@@ -213,13 +215,15 @@
   import taxExclusiveApplication from "../component/popWindow/taxExclusiveApplication"
   import statementApplication from "../component/popWindow/statementApplication"
 
-  import { findPageByDynamicQuery , findUserShopKeeper} from '@/api/documentApproval/documentApproval/documentApproval'
+  import { findPageByDynamicQuery , findUserShopKeeper,findByStore,getBillType} from '@/api/documentApproval/documentApproval/documentApproval'
   import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
-
+  import ViewOtherModel from "../component/viewOtherModel";
+  import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
 
   export default {
         name: "myApplication",
         components: {
+          ViewOtherModel,
           quickDate,
           approval,
           //11种类型
@@ -346,7 +350,10 @@
             type: 1,
             id: ""
           },
-          headquarters: 2
+          headquarters: 2,
+
+          mainStore:[],//仓库数据
+          settleTypeList:[],//票据类型
         }
       },
       async mounted(){
@@ -363,6 +370,9 @@
           this.getList();
         }
         this.getUser();
+
+        this.getStroe();
+        this.getType();
       },
       methods: {
         // 快速查询日期
@@ -390,6 +400,23 @@
         // 查询按钮
         query(){
           this.getList()
+        },
+        //获取仓库
+        async getStroe(){
+          let rep = await findByStore();
+          if(rep.code==0){
+            this.mainStore = rep.data||[];
+          }
+        },
+        async getType() {
+          let data = {}
+          //107票据类型`
+          //106结算方式
+          data = ['CS00106', 'CS00107']
+          let res = await getDigitalDictionary(data)
+          if (res.code == 0) {
+            this.settleTypeList = res.data.CS00107
+          }
         },
 
         //初始化数据
@@ -464,6 +491,7 @@
             this.modelType.type = 3;
             this.modelType.id = row.id
           };
+          console.log(row)
           switch (row.applyTypeName) {
             case "费用报销":
               this.$refs.ExpenseReimbursement.open();
@@ -498,6 +526,8 @@
             case "发票对冲":
               this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
+            default:
+              this.$refs.viewOtherModel.init(row);
           }
         },
 
@@ -556,7 +586,7 @@
               this.headquarters = res.data.shopkeeperUser;
             }
           })
-        }
+        },
       },
       filters: {
         date(value = 0) {

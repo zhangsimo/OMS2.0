@@ -801,7 +801,7 @@ export default {
     },
     //配件返回的参数
     getPartNameList(val) {
-      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           let vals = conversionList(val);
@@ -822,7 +822,7 @@ export default {
     },
     // 批次配件
     async getBarchList(val) {
-      // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+      this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
       this.$refs.formPlan.validate(async valid => {
         if (valid) {
           // let data = {};
@@ -949,7 +949,7 @@ export default {
             onOk: async () => {
                 if (this.door.outStockDoor) {
                     this.door.outStockDoor = false;
-                  // this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
+                    this.formPlan.planSendDate = new Date(this.formPlan.planSendDate)
                     this.$refs.formPlan.validate(async valid => {
                         if (valid) {
                             try {

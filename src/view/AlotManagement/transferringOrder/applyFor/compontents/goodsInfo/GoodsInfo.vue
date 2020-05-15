@@ -249,12 +249,16 @@ export default class GoodsInfo extends Vue {
     const parentD: any = this.$parent;
     this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
+
+    let clientArr = parentD.client.filter(item => item.id===parentD.formPlan.guestId)
+
     let obj = {
       mainId: this.mainId,
-      guestId: parentD.formPlan.guestId,
+      orgid: clientArr.length>0?clientArr[0].isInternalId:'',
       directCompanyId,
       sign: ""
     };
+    console.log(parentD.client)
     if (this.$route.name == "salesOrder") {
       obj.sign = "sign";
     } else {
@@ -419,7 +423,10 @@ export default class GoodsInfo extends Vue {
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
     const parentD: any = this.$parent;
-    data.guestId = parentD.formPlan.guestId;
+    data.orgid = parentD.formPlan.guestId;
+    if (this.$route.name == "salesOrder") {
+      data.sign = "sign";
+    }
     let res = await fapi.getGoodsInfos2(data);
     if (res.code == 0) {
       this.tableData = res.data;

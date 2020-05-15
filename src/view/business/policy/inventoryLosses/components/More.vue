@@ -68,7 +68,7 @@
       </row>
       <row class="mt15">
         <span class="more-span">提交人：</span>
-        <Select v-model="moreData.auditor" class="w350" label-in-value filterable>
+        <Select v-model="moreData.subMan" class="w350" label-in-value filterable>
           <Option v-for="item in salesList" :value="item.label" :key="item.value">{{ item.label }}</Option>
         </Select>
       </row>
@@ -106,6 +106,7 @@
           partName: "", //配件名称
           partBrand:"",//配件品牌
           auditor:"",//提交人
+          subMan:"",
           createUname:"",//创建人
           storeId:"",
           source:3
@@ -201,7 +202,9 @@
           partCode: this.moreData.partCode,
           partName: this.moreData.partName,
           partBrand:this.moreData.partBrand,
+          code:this.moreData.code,
           auditor:this.moreData.auditor,
+          subMan:this.moreData.subMan,
           createUname:this.moreData.createUname,
           storeId:this.moreData.storeId,
           source:this.moreData.source==3?'':this.moreData.source,
@@ -244,6 +247,7 @@
           partName: "", //配件名称
           partBrand:"",//配件品牌
           auditor:"",//提交人
+          subMan:"",
           createUname:"",//创建人
           storeId:"",
           source:3

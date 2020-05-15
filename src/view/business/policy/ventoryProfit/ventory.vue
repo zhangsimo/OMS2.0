@@ -265,15 +265,20 @@
                   field="exhibitPrice"
                   title="入库单价"
                   width="100"
-                  :edit-render="{name: '$input',props: {type: 'number',min:0},attrs:{disabled:dis}}"
-                ></vxe-table-column>
+                  :edit-render="{autofocus: '.vxe-input--inner'}"
+                >
+                  <template v-slot:edit="{ row }">
+                    <vxe-input type="number" v-model="row.exhibitPrice"></vxe-input>
+                  </template>
+                  <template v-slot="{ row }">{{ row.exhibitPrice|priceFilters}}</template>
+                </vxe-table-column>
                 <vxe-table-column
                   field="exhibitPrice"
                   title="入库金额"
                   width="100"
                 >
                   <template v-slot="{ row, seq }">
-                    <span>{{(Math.abs(row.exhibitPrice * row.exhibitQty))||0 }}</span>
+                    <span>{{((Math.abs(row.exhibitPrice * row.exhibitQty))||0 )|priceFilters}}</span>
                   </template>
                 </vxe-table-column>
                 <vxe-table-column
