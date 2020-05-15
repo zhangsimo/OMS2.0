@@ -73,7 +73,7 @@
             <vxe-table-column field="businessTypeName" title="业务类型"></vxe-table-column>
             <vxe-table-column field="reconciliationAmt" title="对账金额"></vxe-table-column>
             <vxe-table-column field="hasAmt" title="已收/付金额"></vxe-table-column>
-            <vxe-table-column field="unAmt" title="未收/付金额"></vxe-table-column>
+            <vxe-table-column field="unAmt"  title="未收/付金额"></vxe-table-column>
             <vxe-table-column
               field="rpAmt"
               title="本次核销金额"
