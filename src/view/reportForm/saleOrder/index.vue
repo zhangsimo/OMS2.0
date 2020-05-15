@@ -37,7 +37,7 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartTime = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndTime = data.atimeEnd : "";
