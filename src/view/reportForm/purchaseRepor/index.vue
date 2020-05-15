@@ -42,8 +42,10 @@ export default {
         data2 = data;
       } else {
         // 更多查询
-        data.createDate ? data2.enterTime = data.createDate : "";
-        data.auditDate ? data2.auditDate = data.auditDate : "";
+        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
+        data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
+        data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
@@ -70,7 +72,8 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.createDate ? data2.createTime = data.createDate : "";
+        data.ctimeStart ? data2.startEnterDate = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endEnterDate = data.ctimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.pchsServiceId = data.code : "";
@@ -95,7 +98,8 @@ export default {
         data2 = data;
       } else {
         // 更多查询
-        data.createDate ? data2.outDate = data.createDate : "";
+        data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
@@ -120,8 +124,10 @@ export default {
         data2 = data;
       } else {
         // 更多查询
-        data.createDate ? data2.orderDate = data.createDate : "";
-        data.auditDate ? data2.auditEndDate = data.auditDate : "";
+        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
+        data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
+        data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
         data.guestId ? data2.guestFullName = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.directCompanyId = data.code : "";

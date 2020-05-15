@@ -13,7 +13,7 @@
             <span v-if="type == 4">提交日期：</span>
             <DatePicker
               v-model="search.auditDate"
-              type="date"
+              type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
               class="w140 mr10"
@@ -33,7 +33,8 @@
               v-model="search.partBrand"
               class="w120"
               placeholder="请选择品牌"
-              filterable clearable 
+              filterable
+              clearable
             >
               <Option
                 v-for="(item, index) in bandArr"
@@ -48,7 +49,8 @@
               v-model="search.guestFullName"
               class="w120"
               placeholder="请选择供应商"
-              filterable clearable
+              filterable
+              clearable
             >
               <Option
                 v-for="item in supplityArr"
@@ -63,7 +65,8 @@
               v-model="search.orgid"
               class="w120"
               placeholder="请选择门店"
-              filterable clearable
+              filterable
+              clearable
             >
               <Option
                 v-for="item in stores"
@@ -95,7 +98,7 @@ export default {
   props: {
     type: {
       default: 0,
-      type: Number,
+      type: Number
     }
   },
   data() {
@@ -106,7 +109,7 @@ export default {
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
-        auditDate: null, // 提交日期
+        auditDate: [], // 提交日期
         content: "", // 编码名称
         partBrand: "", // 品牌
         guestFullName: "", // 供应商
@@ -121,21 +124,21 @@ export default {
     if (resS.code == 0) {
       this.supplityArr = resS.data;
     }
-    if(resB.code == 0) {
+    if (resB.code == 0) {
       this.bandArr = resB.data;
     }
-    if(resE.code == 0) {
-       let data = resE.data;
-        Object.keys(data).forEach(key => {
-          this.stores.push({value: key, name: data[key]})
-        })
+    if (resE.code == 0) {
+      let data = resE.data;
+      Object.keys(data).forEach(key => {
+        this.stores.push({ value: key, name: data[key] });
+      });
     }
   },
   methods: {
     // 快速日期查询
     getDataQuick(v) {
       this.quickDates = v;
-      if(v.length >= 2) {
+      if (v.length >= 2) {
         this.$emit("search", { isPanne: true, startTime: v[0], endTime: v[1] });
       } else {
         this.$emit("search", { isPanne: true });
@@ -147,11 +150,42 @@ export default {
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "auditDate") {
-            data.auditDate = moment(this.search.auditDate).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
-          }  else if (key == "content" && this.search.content) {
-            if(/[\u4e00-\u9fa5]/.test(this.search.content)) {
+            // data.auditDate = moment(this.search.auditDate).format(
+            //   "YYYY-MM-DD HH:mm:ss"
+            // );
+            if (this.search["auditDate"][0]) {
+              if (this.type == 1) {
+                data.auditStartDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.auditEndDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              } else if (this.type == 2) {
+                data.startEnterDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.endEnterDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              } else if (this.type == 3) {
+                data.startOutDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.endOutDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              } else if (this.type == 4) {
+                data.auditStartDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.auditEndDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              }
+            }
+          } else if (key == "content" && this.search.content) {
+            if (/[\u4e00-\u9fa5]/.test(this.search.content)) {
               data.partName = this.search.content;
             } else {
               data.partCode = this.search.content;
@@ -161,10 +195,10 @@ export default {
           }
         }
       }
-      if(this.quickDates.length >= 2 && this.quickDates[0]) {
+      if (this.quickDates.length >= 2 && this.quickDates[0]) {
         data.startTime = this.quickDates[0];
         data.endTime = this.quickDates[1];
-      } 
+      }
       this.$emit("search", data);
     },
     // 更多

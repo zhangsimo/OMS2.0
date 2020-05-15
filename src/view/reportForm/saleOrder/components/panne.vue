@@ -11,8 +11,8 @@
             <span v-if="type == 2">出库日期：</span>
             <span v-if="type == 3">入库日期：</span>
             <DatePicker
-              v-model="search.submitDate"
-              type="date"
+              v-model="search.auditDate"
+              type="daterange"
               placement="bottom-start"
               placeholder="选择日期"
               class="w140 mr10"
@@ -121,7 +121,7 @@ export default {
       quickDates: [], // 快速日期查询
       search: {
         isPanne: true,
-        auditDate: null, // 提交日期
+        auditDate: [], // 提交日期
         content: "", // 编码名称
         partBrandCode: "", // 品牌
         guestId: "", // 客户
@@ -167,9 +167,30 @@ export default {
       for (let key in this.search) {
         if (this.search[key]) {
           if (key == "auditDate") {
-            data.auditDate = moment(this.search.auditDate).format(
-              "YYYY-MM-DD HH:mm:ss"
-            );
+            if (this.search["auditDate"][0]) {
+              if (this.type == 1) {
+                data.auditStartTime =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.auditEndTime =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              } else if (this.type == 2) {
+                data.startOutDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.endOutDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              } else if (this.type == 3) {
+                data.auditStartDate =
+                  moment(this.search["auditDate"][0]).format("YYYY-MM-DD") +
+                  " 00:00:00";
+                data.auditEndDate =
+                  moment(this.search["auditDate"][1]).format("YYYY-MM-DD") +
+                  " 23:59:59";
+              }
+            }
           }  else if (key == "content" && this.search.content) {
             if(/[\u4e00-\u9fa5]/.test(this.search.content)) {
               data.partName = this.search.content;
