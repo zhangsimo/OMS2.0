@@ -14,7 +14,7 @@
       <Row class="mb30" v-if="[1, 4].includes(type)">
         <span>提交日期:</span>
         <DatePicker
-          type="date"
+          type="daterange"
           placement="bottom-end"
           style="width: 300px"
           v-model="auditDate"
@@ -84,7 +84,7 @@ export default class MoreSearch extends Vue {
   private serchN: boolean = false;
 
   private createDate: Array<any> = new Array();
-  private auditDate:string | Date = "";
+  private auditDate: Array<any> = new Array();
   private serviceId: string = "";
   private partCode: string = "";
   private partBrand: string = "";
@@ -134,7 +134,7 @@ export default class MoreSearch extends Vue {
   }
   private reset() {
     this.createDate = new Array();
-    this.auditDate = "";
+    this.auditDate = new Array();
     this.serviceId = "";
     this.partCode = "";
     this.partBrand = "";
@@ -209,9 +209,10 @@ export default class MoreSearch extends Vue {
   @Emit("getmoreData")
   private ok() {
     let data = {
-      startTime: tools.transTime(this.createDate[0]),
-      endTime: tools.transTime(this.createDate[1]),
-      auditDate: this.auditDate ? moment(this.auditDate).format("YYYY-MM-DD") : "",
+      startTime: this.createDate[0] ? moment(this.createDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+      endTime: this.createDate[1] ? moment(this.createDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
+      atimeStart: this.auditDate[0] ? moment(this.auditDate[0]).format("YYYY-MM-DD") + " 00:00:00" : "",
+      atimeEnd: this.auditDate[1] ? moment(this.auditDate[1]).format("YYYY-MM-DD") + " 23:59:59" : "",
       serviceId: this.serviceId,
       partCode: this.partCode.trim(),
       partBrand: this.partBrand,

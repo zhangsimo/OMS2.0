@@ -37,8 +37,10 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.createDate ? data2.createTime = data.createDate : "";
-        data.auditDate ? data2.auditDate = data.auditDate : "";
+        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
+        data.atimeStart ? data2.auditStartTime = data.atimeStart : "";
+        data.atimeEnd ? data2.auditEndTime = data.atimeEnd : "";
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
@@ -64,7 +66,8 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.createDate ? data2.outDate = data.createDate : "";
+        data.ctimeStart ? data2.startOutDate = data.ctimeStart : "";
+        data.ctimeEnd ? data2.endOutDate = data.ctimeEnd : "";
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
@@ -88,7 +91,8 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.createDate ? data2.enterTime = data.createDate : "";
+        data.ctimeStart ? data2.auditStartDate = data.ctimeStart : "";
+        data.ctimeEnd ? data2.auditEndDate = data.ctimeEnd : "";
         data.guestId ? data2.guestId = data.guestId : "";
         data.serviceId ? data2.outCode = data.serviceId : "";
         data.code ? data2.serviceId = data.code : "";
