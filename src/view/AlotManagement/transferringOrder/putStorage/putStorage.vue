@@ -39,7 +39,7 @@
               </Button>
             </div>-->
             <div class="db">
-              <Button v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1">
+              <Button v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-checkmark" size="14" />入库
               </Button>
             </div>

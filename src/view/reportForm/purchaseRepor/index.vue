@@ -42,7 +42,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
-        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
@@ -124,7 +124,7 @@ export default {
         data2 = data;
       } else {
         // 更多查询
-        data.ctimeStart ? data2.createTime = data.ctimeStart : "";
+        data.ctimeStart ? data2.startTime = data.ctimeStart : "";
         data.ctimeEnd ? data2.endTime = data.ctimeEnd : "";
         data.atimeStart ? data2.auditStartDate = data.atimeStart : "";
         data.atimeEnd ? data2.auditEndDate = data.atimeEnd : "";
