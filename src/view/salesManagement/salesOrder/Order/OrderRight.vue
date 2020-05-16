@@ -339,7 +339,7 @@
 
     <!--  编辑发货地址 -->
     <!--      <Modal v-model="addressShow" title="收货信息"  width="1000">-->
-    <goods-info ref="goodsInfo" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
+    <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="formPlan.id" :row='this.formPlan'></goods-info>
     <!--        <div slot='footer'>-->
     <!--          <Button type='primary' @click = changeShippingAddress>确定</Button>-->
     <!--          <Button type='default' @click='addressShow = false'>取消</Button>-->
