@@ -20,7 +20,7 @@ export function getSelectActApply(params) {
 // 活动申请页面第二个表格数据接口
 export function getActApplyTable(params) {
   return axios.request({
-    url: `${api.wmsApi}/activityDetail/queryAll`,
+    url: `${api.wmsApi}/activityDetail/queryDetail`,
     method: "get",
     params
   });
