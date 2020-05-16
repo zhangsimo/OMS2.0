@@ -614,7 +614,7 @@ export default {
           this.exportData = true;
           break;
         case 2:
-          this.modifyData();
+            this.modifyData();
           break;
         case 3:
           this.deleteList("delete");
@@ -655,6 +655,7 @@ export default {
           );
         } else {
           this.getDetailInfor();
+          console.log(this.formValidate)
           this.proModal = true;
         }
       }
@@ -769,6 +770,7 @@ export default {
     },
     //表格全选的时候
     requires(val) {
+      console.log(val , 78978)
       this.allTablist = val;
     },
     //获取列表数据
