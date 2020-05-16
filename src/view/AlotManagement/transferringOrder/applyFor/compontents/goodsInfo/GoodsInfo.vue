@@ -236,6 +236,7 @@ export default class GoodsInfo extends Vue {
   }
 
   private async init() {
+    this.showInfo = true;
     this.loading = true;
     this.isRequired = false;
     this.logisRequired = false;
@@ -248,7 +249,6 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     const parentD: any = this.$parent;
-    this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
 
     let clientArr = Array.isArray(parentD.client)  ? parentD.client.filter(item => item.id===parentD.formPlan.guestId) : []
@@ -260,11 +260,12 @@ export default class GoodsInfo extends Vue {
       guestId: this.guestId,
       sign: ""
     };
-    if (this.$route.name == "salesOrder") {
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
       obj.sign = "sign";
     } else {
       delete obj.sign;
     }
+    // console.log(obj);
     let res: any = await fapi.getGoodsInfos2(obj);
     if (res.code == 0) {
       this.tableData = res.data || [];
@@ -425,7 +426,9 @@ export default class GoodsInfo extends Vue {
     data.directCompanyId = directCompanyId;
     const parentD: any = this.$parent;
     data.orgid = parentD.formPlan.guestId;
-    if (this.$route.name == "salesOrder") {
+    data.guestId = this.guestId;
+
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
       data.sign = "sign";
     }
     let res = await fapi.getGoodsInfos2(data);
