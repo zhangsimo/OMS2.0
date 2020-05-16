@@ -45,7 +45,10 @@ export const mixSelectPartCom = {
         {
           title: "内码",
           key: "code",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.code||p.row.partInnerId)
+          }
         },
         {
           title: "品质",
@@ -65,7 +68,10 @@ export const mixSelectPartCom = {
         {
           title: "名称",
           key: "partStandardName",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.partStandardName||p.row.partName)
+          }
         },
         {
           title: "全称",
@@ -75,7 +81,10 @@ export const mixSelectPartCom = {
         {
           title: "OEM码",
           key: "oeCode",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.oeCode||p.row.oemCode)
+          }
         },
         {
           title: "产地",
@@ -85,22 +94,34 @@ export const mixSelectPartCom = {
         {
           title: "单位",
           key: "minUnit",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.minUnit||p.row.unit)
+          }
         },
         {
           title: "规格",
           key: "specifications",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.specifications||p.row.spec)
+          }
         },
         {
           title: "型号",
           key: "brandName",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.brandName||p.row.carModelName)
+          }
         },
         {
           title: "品牌车型",
           key: "adapterCarModel",
-          minWidth: 120
+          minWidth: 120,
+          render:(h,p) => {
+            return h('span',p.row.adapterCarModel||p.row.carBrandName)
+          }
         },
         {
           title: "一级分类",
@@ -110,7 +131,7 @@ export const mixSelectPartCom = {
             try {
               text = params.row.baseType.firstType.typeName
             } catch(e) {}
-            return h('span', text);
+            return h('span', text||params.row.carTypef);
           }
         },
         {
@@ -121,7 +142,7 @@ export const mixSelectPartCom = {
             try {
               text = params.row.baseType.secondType.typeName
             } catch(e) {}
-            return h('span', text);
+            return h('span', text||params.row.carTypes);
           }
         },
         {
@@ -132,7 +153,7 @@ export const mixSelectPartCom = {
             try {
               text = params.row.baseType.thirdType.typeName
             } catch(e) {}
-            return h('span', text);
+            return h('span', text||params.row.carTypet);
           }
         },
         {
@@ -223,21 +244,20 @@ export const mixSelectPartCom = {
         req.partCodes = [];
         req.partBrandCodes = [this.selectBrand];
       }
-
-      if (this.partName.trim()) {
-        // if (this.searchType == "adapterCarModels") {
-        //   req.adapterCarModels = [this.partName];
-        // } else {
-        //   req[this.searchType] = this.partName.trim();
-        // }
-        req.adapterCarModels = [this.partName.trim()]
-        // req.partName = this.partName;
-      }
       req.page = this.page.num;
       req.size = this.page.size;
       if(this.keyType!=1){
         req.guestId=this.guestId;
         req.storeId=this.storeId;
+        if (this.partName.trim()) {
+          // if (this.searchType == "adapterCarModels") {
+          //   req.adapterCarModels = [this.partName];
+          // } else {
+          //   req[this.searchType] = this.partName.trim();
+          // }
+          req.adapterCarModels = [this.partName.trim()]
+          // req.partName = this.partName;
+        }
         getAccessList(params, req).then(res => {
           this.loading = false;
           this.partData = res.data.content || [];
@@ -245,6 +265,15 @@ export const mixSelectPartCom = {
         });
       }else if(this.keyType==1){
         req.storeId=this.storeId;
+        if (this.partName.trim()) {
+          // if (this.searchType == "adapterCarModels") {
+          //   req.adapterCarModels = [this.partName];
+          // } else {
+          //   req[this.searchType] = this.partName.trim();
+          // }
+          // req.adapterCarModels = [this.partName.trim()]
+          req.partName = this.partName;
+        }
         getWbList(params,req).then(res=>{
           this.loading = false;
           this.partData = res.data|| [];

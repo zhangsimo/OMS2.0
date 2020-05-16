@@ -87,7 +87,7 @@
               >{{ item.label }}</Option>
             </Select>
           </FormItem>
-          <FormItem label="开票类型" prop="invoiceType">
+          <FormItem label="票据类型" prop="invoiceType">
             <Select v-model="invoice.invoiceType" class="ml5 w200">
               <Option
                 v-for="item in invoice.typeBillingList"

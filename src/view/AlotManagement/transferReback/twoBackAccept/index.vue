@@ -107,9 +107,9 @@
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>-->
 
-          <vxe-table-column title="受理仓库">
+          <vxe-table-column title="受理仓库" field="defaultValue">
             <template v-slot="{ row,rowIndex }">
-              <vxe-select v-model="row.storeId">
+              <vxe-select v-model="row.defaultValue">
                 <vxe-option v-for="(num,index) in storeArray" :key="index" :value="num.value" :label="`${num.label}`"></vxe-option>
               </vxe-select>
             </template>
@@ -321,16 +321,19 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            this.TopTableData = res.data.content || [];
-            this.pageList.total = res.totalElements;
+            let arrData = res.data.content || [];
 
             //
-            let defaultArr = this.storeArray.filter(item => item.isDefault)[0].value||'1212640757663424512';
-            this.TopTableData.map(item => {
-              if(!item.storeId){
-                item.storeId = defaultArr
+            let defaultArr = this.storeArray.filter(item => item.isDefault)[0].value||this.storeArray[0].value;
+            arrData.map(item => {
+              if(item.status){
+                item.defaultValue = item.status.value===4?item.storeId:defaultArr
               }
             })
+
+            this.TopTableData = arrData;
+            this.pageList.total = res.totalElements;
+
             // for (var i = 0; i < this.TopTableData.length; i++) {
             //   this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
             // }
@@ -416,6 +419,7 @@ export default {
     },
     shouli(row, index) {
       this.currentrow = row;
+      console.log(row)
       if (index === 2) {
         this.modal1 = true;
       } else {

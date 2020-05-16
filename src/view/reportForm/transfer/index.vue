@@ -42,7 +42,8 @@ export default {
         delete data.isPanne;
         data2 = data;
       } else {
-        data.createDate ? data2.createTime = data.createDate : "";
+        data.ctimeStart ? data2.createTimeStart = data.ctimeStart : "";
+        data.ctimeEnd ? data2.createTimeEnd = data.ctimeEnd : "";
         data.timeEnd ? data2.allotEnterTimeEnd = data.timeEnd : "";
         data.timeStart ? data2.allotEnterTimeStart = data.timeStart : "";
         data.guestId ? data2.guestId = data.guestId : "";

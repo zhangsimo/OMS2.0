@@ -30,3 +30,29 @@ export function findUserShopKeeper (params) {
     params
   })
 }
+
+//获取申请单盘亏出库
+export function findByCodeDetail (params) {
+  return axios.request({
+    url: `${api.omsOrder}/StockCheckMain/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
+//获取仓库
+export function findByStore(){
+  return axios.request({
+    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    method: 'get',
+  })
+}
+
+//获取票据类型
+export function getBillType(data){
+  return axios.request({
+    url: `${api.omsProduct}/dictionariesItem/findByDictCodeList`,
+    method: 'post',
+    data
+  })
+}

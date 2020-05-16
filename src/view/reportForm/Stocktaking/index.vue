@@ -41,7 +41,8 @@ export default {
         }
         data.startTime ? data2.enterDateStart = data.startTime : "";
         data.endTime ? data2.enterDateEnd = data.endTime : "";
-        data.auditDate ? data2.auditDate = data.auditDate : "";
+        data.atimeStart ? data2.createTimeStart = data.atimeStart : "";
+        data.atimeEnd ? data2.createTimeEnd = data.atimeEnd : "";
         data.serviceId ? data2.serviceId = data.serviceId : "";
         data.code ? data2.code = data.code : "";
         data.partBrand ? data2.partBrand = data.partBrand : "";
