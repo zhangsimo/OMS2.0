@@ -1037,11 +1037,11 @@ export default {
     },
     // 删除活动配件的一项
     deleteDate5() {
-      if(this.actIfoTableData.id == "") {
+      if(!this.actIfoTableData.activityId || this.actIfoTableData.activityId == "") {
         return this.$message.error("请选择一条记录");
       }
       let idx = this.data5.findIndex(
-        item => item.id === this.actIfoTableData.id
+        item => item.activityId === this.actIfoTableData.activityId
       );
       this.data5.splice(idx, 1);
     },
