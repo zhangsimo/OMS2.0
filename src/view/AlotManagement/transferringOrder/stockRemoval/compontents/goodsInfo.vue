@@ -269,10 +269,10 @@ export default class GoodsInfo extends Vue {
   private showInfo: boolean = false;
 
   private disabled: boolean = true;
-
+  @Prop(String) readonly orgid;
   @Prop(String) readonly mainId;
   @Prop(Object) readonly row;
-  @Prop(String) readonly orgid;
+
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [

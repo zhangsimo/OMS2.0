@@ -950,8 +950,11 @@ export default {
           this.orgid = el.orgid
         }
       })
-      this.clickdelivery = true;
-      this.$refs.goodsInfo.init();
+      setTimeout(() => {
+        this.clickdelivery = true;
+        this.$refs.goodsInfo.init();
+      },0)
+
     },
     //打印表格
     printTable() {
