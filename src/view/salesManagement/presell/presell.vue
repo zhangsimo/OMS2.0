@@ -406,7 +406,7 @@
     <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
-    <goods-info ref="goodsInfo" :mainId="id" :row="this.currentRow"></goods-info>
+    <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="id" :row="this.currentRow"></goods-info>
   </div>
 </template>
 

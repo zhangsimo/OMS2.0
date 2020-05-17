@@ -245,7 +245,7 @@
                 title="凭证状态"
               >
                 <template v-slot="{ row }">
-                  {{ row.proofState ? "成功" : "失败" }}
+                  {{ row.proofState == 1 ? "成功" : row.proofState == 2 ? "失败" : '' }}
                 </template>
               </vxe-table-column>
               <vxe-table-column

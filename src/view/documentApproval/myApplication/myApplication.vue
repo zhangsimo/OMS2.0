@@ -193,6 +193,8 @@
     <statement-application ref="statementApplication" :modelType="modelType"></statement-application>
     <!--其他查看-->
     <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
+    <!--供应商申请-->
+    <apply-model-view ref="clientApply"></apply-model-view>
   </div>
 </template>
 
@@ -219,10 +221,12 @@
   import { getComenAndGo, getAllSalesList, getPayList } from "../component/utils";
   import ViewOtherModel from "../component/viewOtherModel";
   import {getDigitalDictionary} from "../../../api/system/essentialData/clientManagement";
+  import ApplyModelView from "../component/viewApplyModel";
 
   export default {
         name: "myApplication",
         components: {
+          ApplyModelView,
           ViewOtherModel,
           quickDate,
           approval,
@@ -353,7 +357,7 @@
           headquarters: 2,
 
           mainStore:[],//仓库数据
-          settleTypeList:[],//票据类型
+          settleTypeList:{},//票据类型
         }
       },
       async mounted(){
@@ -415,7 +419,7 @@
           data = ['CS00106', 'CS00107']
           let res = await getDigitalDictionary(data)
           if (res.code == 0) {
-            this.settleTypeList = res.data.CS00107
+            this.settleTypeList = res.data
           }
         },
 
@@ -491,7 +495,6 @@
             this.modelType.type = 3;
             this.modelType.id = row.id
           };
-          console.log(row)
           switch (row.applyTypeName) {
             case "费用报销":
               this.$refs.ExpenseReimbursement.open();
@@ -526,7 +529,10 @@
             case "发票对冲":
               this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
-            default:
+            case "供应商申请":
+              this.$refs.clientApply.init();
+              break;
+            case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单":
               this.$refs.viewOtherModel.init(row);
           }
         },

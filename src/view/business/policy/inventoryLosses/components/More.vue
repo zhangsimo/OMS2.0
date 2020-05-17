@@ -26,7 +26,7 @@
         </Col>
       </Row>
       <row class="mt15">
-        <span class="more-span">入库单号：</span>
+        <span class="more-span">出库单号：</span>
         <Input placeholder="请输入入库单号" v-model="moreData.serviceId" style="width: 350px" />
       </row>
       <row class="mt15">

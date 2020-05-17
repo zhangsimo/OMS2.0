@@ -748,7 +748,8 @@ export default {
     chuku() {
       const params = {
         id: this.Leftcurrentrow.id,
-        voList: this.ArrayValue
+        voList: this.ArrayValue,
+        storeId:this.Leftcurrentrow.storeId
       };
       // 配件组装作废
       outDataList(params)

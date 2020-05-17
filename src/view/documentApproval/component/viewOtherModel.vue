@@ -4,7 +4,7 @@
     :title="modelTitle"
     width="1200px"
   >
-    <div v-if="modelTitle=='盘亏出库'">
+    <div v-show="modelTitle=='盘亏出库'">
       <p>申请单号：<Input disabled :value="mainData.serviceId" placeholder="申请单号" style="width: 300px" /></p>
       <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
         <tr>
@@ -37,18 +37,15 @@
         border
         resizable
         show-footer
-        @select-all="selectAll"
-        @select-change="selectVxeData"
         size="mini"
-        height="300"
+        height="200"
         :data="mainData.detailVOList"
         :footer-method="addFooter"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
       >
-        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-        <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
         <vxe-table-column field="trueQty" title="实盘数量" width="100"></vxe-table-column>
@@ -62,7 +59,7 @@
         <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
       </vxe-table>
     </div>
-    <div v-if="modelTitle=='盘盈入库'">
+    <div v-show="modelTitle=='盘盈入库'">
       <p>申请单号：<Input disabled :value="mainData.serviceId" placeholder="申请单号" style="width: 300px" /></p>
       <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
         <tr>
@@ -95,18 +92,15 @@
         border
         resizable
         show-footer
-        @select-all="selectAll"
-        @select-change="selectVxeData"
         size="mini"
-        height="300"
+        height="200"
         :data="mainData.detailVOList"
         :footer-method="addFooter"
-        :edit-config="{ trigger: 'click', mode: 'cell' }"
       >
-        <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-        <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-        <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
         <vxe-table-column field="trueQty" title="实盘数量" width="100"></vxe-table-column>
@@ -120,12 +114,219 @@
         <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
       </vxe-table>
     </div>
+    <div v-show="modelTitle=='采购计划单'">
+      <p>申请单号：<Input disabled :value="mainData.serviceId" placeholder="申请单号" style="width: 300px" /></p>
+      <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="table-th">供应商</td>
+          <td>{{mainData.guestName}}</td>
+          <td class="table-th">计划采购日期</td>
+          <td>{{mainData.orderDate}}</td>
+          <td class="table-th">计划员</td>
+          <td>{{mainData.orderMan}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">票据类型</td>
+          <td>{{getBillTypeName}}</td>
+          <td class="table-th">备注</td>
+          <td>{{mainData.remark}}</td>
+          <td class="table-th">直发门店</td>
+          <td>{{mainData.directCompanyName}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">其他费用</td>
+          <td>{{mainData.source===0?"OMS盘点":"WMS盘点"}}</td>
+          <td class="table-th">合计总金额</td>
+          <td>{{mainData.otherAmt}}</td>
+          <td class="table-th">单号</td>
+          <td>{{mainData.serviceId}}</td>
+        </tr>
+      </table>
+      <p class="p10 fs14">单据明细</p>
+      <vxe-table
+        border
+        resizable
+        show-footer
+        size="mini"
+        height="200"
+        :data="mainData.details"
+        :footer-method="addFooter2"
+      >
+        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
+
+        <vxe-table-column field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
+        <vxe-table-column field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
+        <vxe-table-column field="branchStockQty" title="门店库存" width="100"></vxe-table-column>
+        <vxe-table-column field="onWayQty" title="采购在途库存" width="100"></vxe-table-column>
+        <vxe-table-column field="unsalableQty" title="滞销库存" width="100">
+        </vxe-table-column>
+
+        <vxe-table-column field="orderQty" title="计划采购数量" width="100"></vxe-table-column>
+        <vxe-table-column field="orderPrice" title="计划采购单价" width="100"></vxe-table-column>
+        <vxe-table-column field="orderAmt" title="计划采购金额" width="100"></vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
+        <vxe-table-column field="recentPrice" title="最近采购单价" width="100"></vxe-table-column>
+        <vxe-table-column field="diffAmt" title="单价差" width="100"></vxe-table-column>
+        <vxe-table-column field="" title="库存上限" width="100"></vxe-table-column>
+        <vxe-table-column field="" title="库存下限" width="100"></vxe-table-column>
+        <vxe-table-column field="carModelName" title="品牌车型" width="100"></vxe-table-column>
+        <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+        <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+        <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+        <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
+      </vxe-table>
+    </div>
+    <div v-show="modelTitle=='临时采购订单'">
+      <p>申请单号：<Input disabled :value="mainData.serviceId" placeholder="申请单号" style="width: 300px" /></p>
+      <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="table-th">供应商</td>
+          <td>{{mainData.guestName}}</td>
+          <td class="table-th">预付款</td>
+          <td>{{mainData.advanceAmt}}</td>
+          <td class="table-th">采购员</td>
+          <td>{{mainData.orderMan}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">票据类型</td>
+          <td>{{getBillTypeName}}</td>
+          <td class="table-th">结算方式</td>
+          <td>{{getSettleTypeName}}</td>
+          <td class="table-th">入库仓库</td>
+          <td>{{mainData.storeName}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">订货日期</td>
+          <td>{{mainData.orderDate}}</td>
+          <td class="table-th">备注</td>
+          <td>{{mainData.remark}}</td>
+          <td class="table-th">直发门店</td>
+          <td>{{mainData.companyName}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">预计到货日期</td>
+          <td>{{mainData.planArriveDate}}</td>
+          <td class="table-th">合计总金额</td>
+          <td>{{mainData.totalAmt}}</td>
+          <td class="table-th">单号</td>
+          <td>{{mainData.serviceId}}</td>
+        </tr>
+      </table>
+      <p class="p10 fs14">单据明细</p>
+      <vxe-table
+        border
+        resizable
+        show-footer
+        size="mini"
+        height="200"
+        :data="mainData.details"
+        :footer-method="addFooter3"
+      >
+        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
+
+        <vxe-table-column field="orderQty" title="采购数量" width="100"></vxe-table-column>
+        <vxe-table-column field="orderPrice" title="采购单价" width="100">
+          <template v-slot="{row}">
+            {{row.orderPrice|priceFilters}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="orderAmt" title="采购金额" width="100">
+          <template v-slot="{row}">
+            {{row.orderAmt|priceFilters}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
+        <vxe-table-column field="carBrand" title="品牌车型" width="100"></vxe-table-column>
+        <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+        <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+        <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+        <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
+        <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
+        <vxe-table-column field="acceptQty" title="验收数量" width="100"></vxe-table-column>
+      </vxe-table>
+    </div>
+    <div v-show="modelTitle=='门店外采订单'">
+      <p>申请单号：<Input disabled :value="mainData.serviceId" placeholder="申请单号" style="width: 300px" /></p>
+      <table class="table-1" style="width: 100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="table-th">供应商</td>
+          <td>{{mainData.guestName}}</td>
+          <td class="table-th">预付款</td>
+          <td>{{mainData.advanceAmt}}</td>
+          <td class="table-th">采购员</td>
+          <td>{{mainData.orderMan}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">票据类型</td>
+          <td>{{getBillTypeName}}</td>
+          <td class="table-th">结算方式</td>
+          <td>{{getSettleTypeName}}</td>
+          <td class="table-th">入库仓库</td>
+          <td>{{mainData.storeName}}</td>
+        </tr>
+        <tr>
+          <td class="table-th">备注</td>
+          <td>{{mainData.remark}}</td>
+          <td class="table-th">合计总金额</td>
+          <td>{{mainData.totalAmt}}</td>
+          <td class="table-th">单号</td>
+          <td>{{mainData.serviceId}}</td>
+        </tr>
+      </table>
+      <p class="p10 fs14">单据明细</p>
+      <vxe-table
+        border
+        resizable
+        show-footer
+        size="mini"
+        height="200"
+        :data="mainData.details"
+        :footer-method="addFooter3"
+      >
+        <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
+
+        <vxe-table-column field="orderQty" title="采购数量" width="100"></vxe-table-column>
+        <vxe-table-column field="orderPrice" title="采购单价" width="100">
+          <template v-slot="{row}">
+            {{row.orderPrice|priceFilters}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="orderAmt" title="采购金额" width="100">
+          <template v-slot="{row}">
+            {{row.orderAmt|priceFilters}}
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="不含税单价" width="100"></vxe-table-column>
+        <vxe-table-column field="noTaxAmt" title="不含税金额" width="100"></vxe-table-column>
+        <vxe-table-column field="carBrand" title="品牌车型" width="100"></vxe-table-column>
+        <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+        <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+        <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+        <vxe-table-column field="direction" title="方向" width="100"></vxe-table-column>
+        <vxe-table-column field="planCancelQty" title="计划取消数量" width="100"></vxe-table-column>
+        <vxe-table-column field="acceptQty" title="验收数量" width="100"></vxe-table-column>
+      </vxe-table>
+    </div>
     <div slot='footer'></div>
   </Modal>
 </template>
 
 <script>
-  import {findByCodeDetail,findByStore} from "../../../api/documentApproval/documentApproval/documentApproval";
+  import {findByCodeDetail,findGoodsByCodeDetail,findLsOrWcDetail} from "../../../api/documentApproval/documentApproval/documentApproval";
 
   export default {
 		name: "viewOtherModel",
@@ -135,14 +336,14 @@
         default:[]
       },
       billTypeArr:{
-        type:Array,
-        default:[]
+        type:Object,
+        default:{}
       }
     },
     data(){
 		  return {
 		    model:false,
-        mainData:null,
+        mainData:{},
         modelTitle:''
       }
     },
@@ -152,21 +353,60 @@
         return storeName.length>0?storeName[0].name:"";
       },
       getBillTypeName(){
-        let storeName = this.billTypeArr.filter(item => item.id==this.mainData.billTypeId);
-        return storeName.length>0?storeName[0].itemName:"";
+		    if(this.billTypeArr.CS00107){
+          let storeName = this.billTypeArr.CS00107.filter(item => item.itemCode==this.mainData.billTypeId);
+          return storeName.length>0?storeName[0].itemName:"";
+        }
+      },
+
+      getSettleTypeName(){
+        if(this.billTypeArr.CS00106){
+          let storeName = this.billTypeArr.CS00106.filter(item => item.itemCode==this.mainData.settleTypeId);
+          return storeName.length>0?storeName[0].itemName:"";
+        }
+
       }
     },
     methods:{
 		  async init(row){
 		    this.model = true;
 		    this.modelTitle = row.applyTypeName||"";
-		    let rep = await findByCodeDetail({'code':row.applyNo});
+        this.mainData = {};
+
+		    if(this.modelTitle=="盘盈入库"||this.modelTitle=="盘亏出库"){
+		      this.panYK(row);
+        }
+		    if(this.modelTitle=="采购计划单"){
+		      this.getGoodsDetail(row);
+        }
+        if(this.modelTitle=="临时采购订单"||this.modelTitle=="门店外采订单"){
+          this.getLsOrWcDetail(row);
+        }
+      },
+      //盘盈、盘亏详情
+      async panYK(row){
+        let rep = await findByCodeDetail({'code':row.applyNo});
+        if(rep.code==0){
+          this.mainData = rep.data||{};
+        }
+      },
+      //采购计划详情
+      async getGoodsDetail(row){
+        let rep = await findGoodsByCodeDetail({'code':row.applyNo});
+        if(rep.code==0){
+          this.mainData = rep.data||{};
+        }
+      },
+      //获取临时采购、外采订单详情
+      async getLsOrWcDetail(row){
+        let rep = await findLsOrWcDetail({'code':row.applyNo});
         if(rep.code==0){
           this.mainData = rep.data||{};
         }
       },
 
       //计算合计
+      //盘盈盘亏
       addFooter({ columns, data }) {
         return [
           columns.map((column, columnIndex) => {
@@ -185,6 +425,52 @@
           })
         ];
       },
+      //采购计划
+      addFooter2({ columns, data }) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (
+              [
+                "orderQty",
+                "orderPrice",
+                "orderAmt",
+                "noTaxAmt",
+                "recentPrice",
+                "diffAmt"
+              ].includes(column.property)
+            ) {
+              return this.sum(data, column.property, columnIndex);
+            }
+            return null;
+          })
+        ];
+      },
+
+      //临时采购订单
+      addFooter3({ columns, data }) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (
+              [
+                "orderAmt",
+                "noTaxAmt",
+                "planCancelQty",
+                "acceptQty"
+              ].includes(column.property)
+            ) {
+              return this.sum(data, column.property, columnIndex);
+            }
+            return null;
+          })
+        ];
+      },
+
       sum(data, type, columnIndex) {
         let total = 0;
         data.map(item => {

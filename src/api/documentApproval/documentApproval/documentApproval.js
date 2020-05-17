@@ -40,6 +40,25 @@ export function findByCodeDetail (params) {
   })
 }
 
+//获取采购计划详情
+export function findGoodsByCodeDetail (params) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsPlanMain/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
+//获取临时采购，外采详情
+export function findLsOrWcDetail (params) {
+  return axios.request({
+    url: `${api.omsOrder}/pchsOrderTemporary/findByCode`,
+    method: 'get',
+    params
+  })
+}
+
+
 //获取仓库
 export function findByStore(){
   return axios.request({

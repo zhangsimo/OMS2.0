@@ -238,6 +238,7 @@
                 @edit-closed="editClosedEvent"
                 @edit-actived="editActivedEvent"
                 size="mini"
+                show-footer
                 :height="rightTableHeight"
                 :data="Right.tbdata"
                 :footer-method="addFooter"
@@ -961,7 +962,41 @@
         // console.log( this.formPlan.checkDate)
       },
       //footer计算
-      addFooter() {},
+      addFooter({ columns, data }) {
+        return [
+          columns.map((column, columnIndex) => {
+            if (columnIndex === 0) {
+              return "合计";
+            }
+            if (
+              [
+                "exhibitQty",
+              ].includes(column.property)||columnIndex==10
+            ) {
+              return this.sum(data, column.property, columnIndex);
+            }
+            return null;
+          })
+        ];
+      },
+
+      sum(data, type, columnIndex) {
+        let total = 0;
+        data.map(item => {
+          let value = 0
+          if(columnIndex===10){
+            value = item['exhibitQty']*item['exhibitPrice'];
+          }else{
+            let value = item[type];
+          }
+          if (!value) {
+            value = 0;
+          }
+          total += parseFloat(value);
+        });
+        return total.toFixed(2);
+      },
+
       // 确定
       Determined() {},
       array_diff(a, b) {

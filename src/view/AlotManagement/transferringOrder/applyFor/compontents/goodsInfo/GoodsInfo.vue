@@ -172,6 +172,7 @@ export default class GoodsInfo extends Vue {
 
   @Prop(String) readonly mainId;
   @Prop(Object) readonly row;
+  @Prop(String) readonly guestId;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [
@@ -235,6 +236,7 @@ export default class GoodsInfo extends Vue {
   }
 
   private async init() {
+    this.showInfo = true;
     this.loading = true;
     this.isRequired = false;
     this.logisRequired = false;
@@ -247,26 +249,26 @@ export default class GoodsInfo extends Vue {
 
   private async getLists() {
     const parentD: any = this.$parent;
-    this.showInfo = true;
     const directCompanyId = this.row.directCompanyId || null;
 
-    let clientArr = parentD.client.filter(item => item.id===parentD.formPlan.guestId)
+    let clientArr = Array.isArray(parentD.client)  ? parentD.client.filter(item => item.id===parentD.formPlan.guestId) : []
 
     let obj = {
       mainId: this.mainId,
       orgid: clientArr.length>0?clientArr[0].isInternalId:'',
       directCompanyId,
+      guestId: this.guestId,
       sign: ""
     };
-    console.log(parentD.client)
-    if (this.$route.name == "salesOrder") {
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
       obj.sign = "sign";
     } else {
       delete obj.sign;
     }
+    // console.log(obj);
     let res: any = await fapi.getGoodsInfos2(obj);
     if (res.code == 0) {
-      this.tableData = res.data;
+      this.tableData = res.data || [];
       this.loading = false;
       const xtable: any = this.$refs["xTable1"];
       let arrData = this.tableData.filter(item => item.logisticsRecordVO);
@@ -424,12 +426,14 @@ export default class GoodsInfo extends Vue {
     data.directCompanyId = directCompanyId;
     const parentD: any = this.$parent;
     data.orgid = parentD.formPlan.guestId;
-    if (this.$route.name == "salesOrder") {
+    data.guestId = this.guestId;
+
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
       data.sign = "sign";
     }
     let res = await fapi.getGoodsInfos2(data);
     if (res.code == 0) {
-      this.tableData = res.data;
+      this.tableData = res.data || [];
       this.loading = false;
       const xtable: any = this.$refs["xTable1"];
       let arrData = this.tableData.filter(item => item.logisticsRecordVO);

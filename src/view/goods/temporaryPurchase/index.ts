@@ -372,14 +372,12 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname)
     if (!data) return;
-
     if(!data.directCompanyId){
       this.selectTableRow.directCompanyId = 0;
     }
 
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
-
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
     let res = await api.temporarySaveDraft(data);
     if (res.code == 0) {
@@ -618,8 +616,6 @@ export default class InterPurchase extends Vue {
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
       if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -638,6 +634,8 @@ export default class InterPurchase extends Vue {
       for (let k in this.formPlanmain) {
         this.formPlanmain[k] = v[k];
       }
+      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
+      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
     }
   }
 

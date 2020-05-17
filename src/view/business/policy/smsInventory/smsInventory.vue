@@ -247,7 +247,9 @@
                   title="成本单价"
                   width="100"
                   :edit-render="{name: 'input',attrs:{disabled:dis}}"
-                ></vxe-table-column>
+                >
+                  <template v-slot="{ row }">{{ row.truePrice|priceFilters}}</template>
+                </vxe-table-column>
                 <vxe-table-column field="dc" title="盈亏状态" width="100">
                   <template v-slot="{ row, seq }">
                     <span v-show="row.sysQty- row.trueQty < 0">{{ "盈利" }}</span>
@@ -739,6 +741,7 @@ export default {
     baocun() {
       //判断是否为草稿状态
       if (this.formPlan.hasOwnProperty("billStatusId")) {
+        this.formPlan.checkDate = new Date(this.formPlan.checkDate);
         this.$refs.form.validate(valid => {
           // let preTime = "";
           if (valid) {
@@ -758,8 +761,8 @@ export default {
                 this.formPlan = {};
                 this.$Message.success("保存成功");
                 this.getList();
+                this.handleReset();
               }
-              this.handleReset();
               // else{
               //   this.formPlan.checkDate = preTime;
               // }

@@ -67,18 +67,21 @@
           type="button"
           @click="statementSettlement(0)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >对账单对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement(1)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >冲减预收</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="statementSettlement(2)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >冲减预付</button>
         <!-- <button
           class="ivu-btn ivu-btn-default mr10"
@@ -97,6 +100,7 @@
           type="button"
           @click="capitalWrite"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >认领款核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -109,6 +113,7 @@
           type="button"
           @click="saleApplication"
           v-has="'examine'"
+          :disabled="taxArrearsfalg"
         >销售开票申请</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -121,12 +126,14 @@
           type="button"
           @click="hedgingInvoice"
           v-has="'examine'"
+          :disabled="hedgingfalg"
         >发票对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="registrationEntry"
           v-has="'examine'"
+          :disabled="receivefalg"
         >进项登记及修改</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -888,7 +895,11 @@ export default {
       data2: [],
       data3: [],
       data4: [],
-      total: 0
+      total: 0,
+      statementStatusflag:false,//对账单状态是结算完成，不能点击对账单对冲、冲减预收、冲减预付、认领款核销
+      taxArrearsfalg: false,//含税配件欠票、含税油品欠票都是0 ，不能点击销售开票申请；
+      hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
+      receivefalg:false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
     };
   },
   async mounted() {
@@ -1214,6 +1225,14 @@ export default {
 
     // 点击总表查询明细
     morevis(row, index) {
+      this.taxArrearsfalg = false
+      this.statementStatusflag = false
+      this.hedgingfalg = false
+      this.receivefalg = false
+      if (row.statementStatus.value == 4){ this.statementStatusflag = true}
+      if (row.taxArrearsOfPart == 0 && row.taxArrearsOfOil == 0){this.taxArrearsfalg = true}
+      if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
+      if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       // console.log(row.id)
