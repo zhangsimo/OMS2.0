@@ -337,7 +337,7 @@ export default class InterPurchase extends Vue {
           settleTypeId: this.formPlanmain.settleTypeId,
           storeId: this.formPlanmain.storeId,
           orderDate: tools.transTime(this.formPlanmain.orderDate),
-          planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
+          planArriveDate: this.formPlanmain.planArriveDate ? tools.transTime(this.formPlanmain.planArriveDate) : "",
           remark: this.formPlanmain.remark,
           directCompanyId: this.formPlanmain.directCompanyId,
           serviceId: this.formPlanmain.serviceId,
@@ -619,7 +619,7 @@ export default class InterPurchase extends Vue {
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
       this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      this.formPlanmain.planArriveDate = this.formPlanmain.planArriveDate ? new Date(this.formPlanmain.planArriveDate) : "";
       if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {

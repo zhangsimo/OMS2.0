@@ -792,6 +792,9 @@ export default {
     },
     //打开收货地址
     openAddressShow() {
+      if(!this.currentRow.id) {
+        return this.$message.error("请选择保存过的预售单")
+      }
       this.$refs.goodsInfo.init();
     },
     //添加配件
@@ -968,6 +971,7 @@ export default {
       };
       this.limitList = [];
       this.draftShow = 0;
+      this.currentRow = {};
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
