@@ -1,5 +1,21 @@
 <template>
-  <div class="db">
+  <div class="db mt10 clearfix">
+    <div class="clearfix">
+    <div class="db ml10 fr">
+      <button
+        class="mr10 ivu-btn ivu-btn-default"
+        type="button"
+        @click="preservationDraft"
+        v-if="!disabletype"
+      >保存草稿</button>
+      <button
+        class="mr10 ivu-btn ivu-btn-default"
+        type="button"
+        @click="preservationSubmission"
+        v-if="!disabletype"
+      >提交</button>
+     </div>
+    </div>
     <div class="content-oper content-oper-flex">
       <section class="oper-box mb10">
         <div class="oper-top flex">
@@ -117,19 +133,19 @@
               <span class="mr5">对账应收</span>
               <Input type="text" v-model="infoBase.accountReceivable" readonly class="w60 tc" />
               <span class="mr5 ml10">应收坏账</span>
-              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.badDebtReceivable" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">应收返利</span>
-              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.receivableRebate" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">运费</span>
-              <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.transportExpenses" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">保险费</span>
-              <InputNumber :min="0" v-model="infoBase.insuranceExpenses" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.insuranceExpenses" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">手续费</span>
-              <InputNumber :min="0" v-model="infoBase.serviceCharge" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.serviceCharge" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">配件管理费</span>
-              <InputNumber :min="0" v-model="infoBase.partsManagementFee" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.partsManagementFee" :disabled="disabletype" class="w60 tc" />
               <span class="mr5 ml10">其他费用</span>
-              <InputNumber :min="0" v-model="infoBase.otherFees" :disabled="modelType.type==3" class="w60 tc" />
+              <InputNumber :min="0" v-model="infoBase.otherFees" :disabled="disabletype" class="w60 tc" />
             </div>
             <div class="db mt10 mb10">
               <span class="mr5">对账应付</span>
@@ -137,19 +153,19 @@
               <span class="mr5 ml10">应付坏账</span>
               <InputNumber
                 v-model="infoBase.payingBadDebts"
-                :disabled="modelType.type==3"
+                :disabled="disabletype"
                 type="text"
                 class="w60 tc"
                 :min="0"
               />
               <span class="mr5 ml10">应付返利</span>
-              <InputNumber v-model="infoBase.dealingRebates" :disabled="modelType.type==3" class="w60 tc" :min="0" />
+              <InputNumber v-model="infoBase.dealingRebates" :disabled="disabletype" class="w60 tc" :min="0" />
               <span class="mr5 ml10" style="color:#f66">实际应收合计</span>
-              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" :disabled="modelType.type==3" />
+              <Input v-model="infoBase.actualCollection" type="text" class="w60 tc" :disabled="disabletype" />
               <span class="mr5 ml10" style="color:#f66">实际应付合计</span>
-              <Input :value="infoBase.actualPayment" class="w60 tc" :disabled="modelType.type==3" />
+              <Input :value="infoBase.actualPayment" class="w60 tc" :disabled="disabletype" />
               <span class="mr5 ml10">本次对账结算合计(整数收款)</span>
-              <Input type="text" v-model="infoBase.settlementTotal" :disabled="modelType.type==3" class="w60 tc" />
+              <Input type="text" v-model="infoBase.settlementTotal" :disabled="disabletype" class="w60 tc" />
             </div>
             <div class="db">
               <span class="mr5">计划结算类型</span>
@@ -161,12 +177,12 @@
                 >{{ item.label }}</Option>
               </Select>
               <span class="mr5 ml10">应收返利请示单号</span>
-              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" :disabled="modelType.type==3"/>
+              <Input type="text" v-model="infoBase.rebateNo" class="w60 tc" :disabled="disabletype"/>
               <span class="mr5 ml10">应收坏账请示单号</span>
-              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" :disabled="modelType.type==3"/>
+              <Input type="text" v-model="infoBase.badDebNo" class="w60 tc" :disabled="disabletype"/>
               <span class="ml10" style="color:red">*</span>
               <span class="mr5">备注</span>
-              <Input type="text" v-model="infoBase.remark" class="w260 tc" :disabled="modelType.type==3" />
+              <Input type="text" v-model="infoBase.remark" class="w260 tc" :disabled="disabletype" />
             </div>
           </div>
         </div>
@@ -198,8 +214,8 @@
 </template>
 
 <script>
-import { getReconciliationNo } from "@/api/bill/saleOrder";
-import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
+import { getReconciliationNo ,CheckForSave} from "@/api/bill/saleOrder";
+import { getThisAllList} from '@/api/documentApproval/documentApproval/documentApproval'
 export default {
   // props: ["id"],
   props: ["modelType"],
@@ -423,12 +439,19 @@ export default {
       ], //本次不对账弹窗配件
       data1: [], //应收数据
       data2: [], //应付数据
-      Reconciliationcontent: [] //本次不对账弹窗配件
+      Reconciliationcontent: [], //本次不对账弹窗配件
+      disabletype:false,//编辑状态
     };
   },
   methods: {
     // 获取数据
     async Initialization() {
+      console.log(this.modelType , 999)
+      if (this.modelType.type == 3){
+        this.disabletype = true
+      }else {
+        this.disabletype = false
+      }
       if(this.modelType.id){
         // console.log(this.modelType)
         let data ={};
@@ -503,7 +526,133 @@ export default {
         });
       }
 
-    }
+    },
+
+    // 保存接口
+   async getPreservation(num) {
+      console.log(this.infoBase , 7789)
+      // if (this.totalvalue === "0") {
+      //   if (!this.collectionAccountName)
+      //     return this.$message.error("收款户名不能为空");
+      //   if (!this.openingBank) return this.$message.error("开户行不能为空");
+      //   if (!this.collectionAccount)
+      //     return this.$message.error("银行账号不能为空");
+      //   if (!this.thisApplyAccount)
+      //     return this.$message.error("付款账户不能为空");
+      // }
+      // if (this.collectBaddebt - this.paymentBaddebt > 100) {
+      //   if (!this.BadDebtid) {
+      //     // this.$message.error("请输入应收坏账请示单号");
+      //     this.$message({
+      //       message: "请输入应收坏账请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
+      // if (this.collectRebate - this.paymentRebate > 100) {
+      //   if (!this.Rebateid) {
+      //     // this.$message.error("请输入应收返利请示单号");
+      //     this.$message({
+      //       message: "请输入应收返利请示单号",
+      //       type: "error",
+      //       customClass: "zZindex"
+      //     });
+      //     return "";
+      //   }
+      // }
+      if (!this.infoBase.remark) {
+        // this.$message.error("请填写备注");
+        this.$message({
+          message: "请填写备注",
+          type: "error",
+          customClass: "zZindex"
+        });
+        return "";
+      }
+
+      let res = await CheckForSave(this.infoBase , this.modelType)
+      // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
+      //   let one = [
+      //     {
+      //       number: "3",
+      //       accountNo: this.data[0].Statementexcludingtax,
+      //       accountSumAmt: this.data[1].Statementexcludingtax
+      //     },
+      //     {
+      //       number: "1",
+      //       accountNo: this.data[0].Taxincludedpartsstatement,
+      //       accountSumAmt: this.data[1].Taxincludedpartsstatement
+      //     },
+      //     {
+      //       number: "2",
+      //       accountNo: this.data[0].Statementoilincludingtax,
+      //       accountSumAmt: this.data[1].Statementoilincludingtax
+      //     }
+      //   ];
+      //   let four = [
+      //     {
+      //       tenantId: this.$store.state.user.userData.tenantId,
+      //       orgId: this.model1,
+      //       orgName: this.store,
+      //       guestId: this.companyInfo,
+      //       serviceId: "XSCDS001-20191000071",
+      //       accountReceivable: this.totalcollect,
+      //       badDebtReceivable: this.collectBaddebt,
+      //       receivableRebate: this.collectRebate,
+      //       actualCollection: this.Actualtotalcollect,
+      //       reconciliation: this.totalpayment,
+      //       payingBadDebts: this.paymentBaddebt,
+      //       dealingRebates: this.paymentRebate,
+      //       actualPayment: this.Actualtotalpayment,
+      //       settlementTotal: this.Reconciliationtotal,
+      //       billingType: this.totalvalue,
+      //       rebateNo: this.Rebateid,
+      //       badDebNo: this.BadDebtid,
+      //       buttonStatus: num,
+      //       incomeType: this.totalvalue,
+      //       remark: this.remark,
+      //       collectionName: this.collectionAccountName,
+      //       bankName: this.openingBank,
+      //       collectionAccount: this.collectionAccount,
+      //       thisPaymentAccount: this.thisApplyAccount
+      //     }
+      //   ];
+      //   let obj = {
+      //     one,
+      //     two: this.collectlist,
+      //     three: this.paymentlist,
+      //     four
+      //   };
+      //   Preservation(obj).then(res => {
+      //     if (res.code === 0) {
+      //       // this.$message.success("保存成功");
+      //       this.$message({
+      //         message: "保存成功",
+      //         type: "success",
+      //         customClass: "zZindex"
+      //       });
+      //       this.modal = false;
+      //     }
+      //   });
+      // } else {
+      //   // this.$message.error("请选择要对账的数据");
+      //   this.$message({
+      //     message: "请选择要对账的数据",
+      //     type: "error",
+      //     customClass: "zZindex"
+      //   });
+      // }
+    },
+    // 保存草稿
+    preservationDraft() {
+      this.getPreservation(0);
+    },
+    // 保存并提交
+    preservationSubmission() {
+      this.getPreservation(1);
+    },
   }
 };
 </script>

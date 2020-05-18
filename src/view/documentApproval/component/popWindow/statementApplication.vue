@@ -21,9 +21,7 @@
         <Col class="inner" span="4">申请时间</Col>
         <Col class="inner" span="4">{{formInline.applyTime}}</Col>
       </Row>
-      <h4 class="mb10 mt10">对账单明细</h4>
     </div>
-    <Monthlyreconciliation ref="Monthlyreconciliation" :modelType="modelType"/>
     <reconcil ref="reconcil" :modelType="modelType"/>
     <!--<flow v-if="modelType.type === 3" />-->
     <div slot="footer"></div>
@@ -31,7 +29,6 @@
 </template>
 <script>
 import reconcil from "./reconciliation.vue";
-import Monthlyreconciliation from "./Monthlyreconciliation";
 import { getThisAllList } from '@/api/documentApproval/documentApproval/documentApproval'
 import moment from "moment";
 import flow from "../Flow.vue";
@@ -39,7 +36,6 @@ export default {
   props: ["modelType"],
   components: {
     reconcil,
-    Monthlyreconciliation,
     flow
   },
   data() {
@@ -60,7 +56,6 @@ export default {
     // 对账单弹框出现加载数据
     async hander(type) {
       if (type ) {
-        this.$refs.Monthlyreconciliation.Initialization();
           let data ={};
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data);
