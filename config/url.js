@@ -3,7 +3,7 @@ import env from "./env";
 const dev = {
   omsApi: "http://192.168.30.221:9240", //徐林烽
   wmsApi: "https://api2.g-parts.cn/oms-system-provider", // 徐林烽
-  omsOrder: "http://192.168.30.179:9210", // 徐林烽
+  omsOrder: "http://192.168.30.21:9210", // 徐林烽
   omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.11:9210', //陈舒
@@ -20,9 +20,9 @@ const dev = {
   omsSotck: "http://192.168.30.221:9280", //9280
 
   /**oms系统接口设定 */
-  tokenApi: "http://192.168.2.48:5600", // 登录接口API
-  authApi: "http://192.168.2.48:5200", // 系统资源 5200
-  passportApi: "http://192.168.2.48:5200", // passport微服务API
+  tokenApi: "http://192.168.2.47:5600", // 登录接口API
+  authApi: "http://192.168.2.47:5200", // 系统资源 5200
+  passportApi: "http://192.168.2.47:5200", // passport微服务API
   // tokenApi: "http://192.168.30.226:5600",
   // authApi: "http://192.168.30.226:5200",
   // passportApi: "http://192.168.30.226:5200",

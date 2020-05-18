@@ -143,8 +143,9 @@
               if( this.oneList.id==null){
                 return this.$message.error('请先选择一条数据')
               }
-                this.$emit('getActivity' , this.oneList)
-                this.showInfo = false
+              let arr = this.tableDataBottom.filter(el => el.activityId == this.oneList.activityId);
+              this.$emit('getActivity' , arr)
+              this.showInfo = false
             }
             //getActivity
         }

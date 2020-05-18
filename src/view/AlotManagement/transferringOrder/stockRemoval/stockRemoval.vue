@@ -831,6 +831,7 @@ export default {
         serviceId: "",
         detailVOS: []
       };
+      this.datadata = null;
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -941,6 +942,9 @@ export default {
     },
     //编辑收货信息弹框显示
     GoodsInfoModal() {
+      if(!this.datadata) {
+        return this.$Message.info("请选择保存过的调拨单");
+      }
       if (!this.currentrow.id) {
         this.$Message.info("请选择编辑项");
         return;
@@ -1081,6 +1085,8 @@ export default {
         };
         const res = await getListDetail(params);
         this.Leftcurrentrow.detailVOS = res.data;
+      } else {
+        this.datadata = null;
       }
       if (row.status.value === 0) {
         this.buttonShow = false;
