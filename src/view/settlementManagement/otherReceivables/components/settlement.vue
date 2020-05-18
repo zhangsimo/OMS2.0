@@ -185,7 +185,7 @@ export default {
   mounted() {
     // 对账单号
     bus.$on("accountHedNo", val => {
-      // console.log(val);
+      // console.log(val , 7879);
       this.reconciliationStatement.accountNo = this.reconciliationStatement.accountNo + val.serviceId;
       // val.map(item => {
       //   item.businessTypeName = item.businessType.name;
@@ -197,9 +197,9 @@ export default {
         item.accountNo = item.serviceId;
         // item.guestName = item.guestName;
         item.businessTypeName = item.orderTypeName;
-        item.reconciliationAmt = item.paymentApplicationAmount;
-        item.hasAmt = +item.amountCollected - +item.paymentBalance;
-        item.unAmt = -item.paymentBalance;
+        item.reconciliationAmt = - item.paymentApplicationAmount; //对账金额
+        item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
+        item.unAmt = -item.paymentBalance; //未收/付金额
         item.rpAmt = -item.paymentBalance;
         item.unAmtLeft = item.unAmt - item.rpAmt;
       })

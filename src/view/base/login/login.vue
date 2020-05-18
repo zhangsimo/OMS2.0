@@ -8,6 +8,7 @@ import { mapActions } from "vuex";
 import GpartLoginPage from "_c/login";
 import systemUri from "_conf/systemUri";
 import { loginSystem } from "_api/base/user";
+import secret from "../../../utils/secret"
 export default {
   data() {
     return {
@@ -25,9 +26,9 @@ export default {
             res => {
               if (res.code == 0) {
                 // systemUri.wms = 'http://192.168.30.129:8088'
+                let up = secret.encrypt(`username=${username}&password=${password}`);
                 const uri =
-                  systemUri.wms +
-                  encodeURI(`?username=${username}&password=${password}`);
+                  systemUri.wms + `?up=${up}`;
                 location.href = uri;
               }
             }
