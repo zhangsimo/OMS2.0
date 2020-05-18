@@ -529,8 +529,8 @@
             case "发票对冲":
               this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
-            case "供应商申请":
-              this.$refs.clientApply.init();
+            case "客户信用调查":
+              this.$refs.clientApply.init(row);
               break;
             case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单":
               this.$refs.viewOtherModel.init(row);
