@@ -41,10 +41,10 @@
         <span>申请时间：{{information.applicationDate}}</span>
       </Col>
       <Col span="6">
-        <span>油品-开票申请单号： <span v-if="$parent.data1[0].isOilPart == 1">{{information.oilsListOrder}}</span></span>
+        <span>油品-开票申请单号： <span v-if="OilPartShow">{{information.oilsListOrder}}</span></span>
       </Col>
       <Col span="6">
-        <span>配件-开票申请单号： <span  v-if="$parent.data1[0].isOilPart != 1">{{information.partsListOrder}}</span></span>
+        <span>配件-开票申请单号： <span  v-if="!OilPartShow">{{information.partsListOrder}}</span></span>
       </Col>
     </Row>
     <h4 class="mt10 mb10">发票数据</h4>
@@ -190,14 +190,14 @@
       </TabPane>
     </Tabs>
 
-    <h4 class="mt10">开票配件</h4>
+<!--    <h4 class="mt10">开票配件</h4>-->
 
 
 
-    <div class="mt10">
-      <h4>开票申请进度</h4>
-      <approval :approvalTit="approvalTit" />
-    </div>
+<!--    <div class="mt10">-->
+<!--      <h4>开票申请进度</h4>-->
+<!--      <approval :approvalTit="approvalTit" />-->
+<!--    </div>-->
     <SeleteSale ref="SeleteSale" :popupTit="popupTit" :parameter="parameter" />
     <noTax ref="noTax" :information="information" :parameter="parameter" />
     <div slot="footer"></div>
@@ -610,7 +610,8 @@ export default {
       accessoriesBillingData: [], //开票配件数据
       accessoriesBillingData1:[],
       accessoriesBillingData2:[],
-      copyData: [] //开票配件复制数据
+      copyData: [], //开票配件复制数据
+      OilPartShow:true, //油品展示
     };
   },
   mounted() {
@@ -931,9 +932,10 @@ export default {
         if (val.length < 1) return
         if (this.$parent.data1[0].isOilPart == 1){
           this.accessoriesBillingData2 = val
+          this.OilPartShow = true
         } else {
           this.accessoriesBillingData1 = val
-
+          this.OilPartShow = false
         }
       },
       deep:true
