@@ -867,13 +867,21 @@ export default {
       this.$refs.activity.openModal();
     },
     //获取活动内的数据
-    async activiyList(val) {
+    async activiyList(arr) {
       let data = {};
-      val.isMarkActivity = 1;
-      // this.formPlan.planSendDate = tools.transTime(this.formPlan.planSendDate)
-      this.formPlan.planArriveDate = tools.transTime(this.formPlan.planArriveDate)
-      data = this.formPlan;
-      data.detailList = [val];
+      arr = arr.map(el => {
+        el.isMarkActivity = 1;
+        el.orderPrice = el.price;
+        return el;
+      });
+      this.formPlan.planSendDate = this.formPlan.planSendDate ? tools.transTime(this.formPlan.planSendDate) : "";
+      this.formPlan.planArriveDate = this.formPlan.planArriveDate ? tools.transTime(this.formPlan.planArriveDate) : "";
+      for(let key in this.formPlan) {
+        if(this.formPlan[key]) {
+          data[key] = this.formPlan[key]
+        }
+      }
+      data.detailList = arr;
       let res = await getAccessories(data);
       if (res.code === 0) {
         this.getList();
@@ -936,7 +944,7 @@ export default {
       orderQtyColumn.editRender.attrs.disabled = isDisabled;
       orderPriceColumn.editRender.attrs.disabled = isDisabled;
         if(row.isMarkActivity==1){
-            orderQtyColumn.editRender.attrs.disabled=true;
+            orderQtyColumn.editRender.attrs.disabled=false;
             orderPriceColumn.editRender.attrs.disabled=true;
         }
       remarkColumn.editRender.attrs.disabled = isDisabled;

@@ -74,7 +74,7 @@
           ></vxe-table-column>
           <vxe-table-column
             title="出库金额"
-            field="orderAmt"
+            field="outAmt"
           >
           </vxe-table-column>
           <vxe-table-column
@@ -138,20 +138,20 @@
             title="OE码"
           ></vxe-table-column>
           <vxe-table-column
-            field="unit"
+            field="systemUnitId"
             title="单位"
           ></vxe-table-column>
           <vxe-table-column
-            field="trueOutQty"
+            field="sellQty"
             title="出库数量"
           ></vxe-table-column>
 
           <vxe-table-column
-            field="orderPrice"
+            field="sellPrice"
             title="出库单价"
           ></vxe-table-column>
           <vxe-table-column
-            field="trueOutAmt"
+            field="sellAmt"
             title="出库金额"
           ></vxe-table-column>
           <vxe-table-column

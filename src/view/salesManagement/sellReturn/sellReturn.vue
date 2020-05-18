@@ -901,11 +901,12 @@ export default {
 
     //选择销售出库单
     getOutList(val) {
-      console.log('val',val)
       if(this.formPlan.details==null){
         this.formPlan.details=[]
       }
       val.forEach(item => {
+        item.orderQty = item.rtnableQty;
+        item.orderPrice = item.sellPrice;
         this.formPlan.details.push(item);
       });
       // console.log('我是formplan',this.formPlan.details)

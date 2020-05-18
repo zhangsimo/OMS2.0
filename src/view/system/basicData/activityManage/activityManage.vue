@@ -1043,6 +1043,9 @@ export default {
       let idx = this.data5.findIndex(
         item => item.activityId === this.actIfoTableData.activityId
       );
+      this.actIfoTableData = {
+        id: ""
+      }
       this.data5.splice(idx, 1);
     },
     // 点击活动配件某一项
