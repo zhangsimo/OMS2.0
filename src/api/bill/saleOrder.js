@@ -115,7 +115,7 @@ export function getStorelist() {
         method: 'get'
     })
 }
-// 应收应付管理 
+// 应收应付管理
 export function getreceivable(params) {
     return axios.request({
         url: `${api.omsSettle}/receivable/payable/get`,
@@ -299,4 +299,13 @@ export function account(params) {
         method: 'get',
         params
     })
+}
+
+//对账单保存
+export function CheckForSave(data , modelType) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/updateOmsStatementMaster?id=${modelType.id}`,
+    method: 'post',
+    data
+  })
 }
