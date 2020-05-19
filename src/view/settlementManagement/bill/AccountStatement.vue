@@ -1211,7 +1211,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         orgId: this.model1,
         statementStatus: this.Reconciliationtype
@@ -1257,7 +1257,7 @@ export default {
         startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endDate: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        endDate: moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
       };
       // this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
       this.$refs.reconciliation.parameter = { ...row, ...date };
@@ -1267,7 +1267,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         guestId: row.guestId,
         accountNo: row.accountNo,
