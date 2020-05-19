@@ -194,7 +194,7 @@
     <!--其他查看-->
     <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
     <!--供应商申请-->
-    <apply-model-view ref="clientApply"></apply-model-view>
+    <apply-model-view ref="clientApply" :bill-type-arr="settleTypeList"></apply-model-view>
   </div>
 </template>
 
@@ -416,7 +416,7 @@
           let data = {}
           //107票据类型`
           //106结算方式
-          data = ['CS00106', 'CS00107']
+          data = ['CS00106', 'CS00107', 'CS00118','CS00117']
           let res = await getDigitalDictionary(data)
           if (res.code == 0) {
             this.settleTypeList = res.data

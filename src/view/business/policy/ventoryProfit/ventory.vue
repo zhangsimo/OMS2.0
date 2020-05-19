@@ -987,14 +987,16 @@
           if(columnIndex===10){
             value = item['exhibitQty']*item['exhibitPrice'];
           }else{
-            let value = item[type];
-          }
-          if (!value) {
-            value = 0;
+            value = item[type];
           }
           total += parseFloat(value);
         });
-        return total.toFixed(2);
+        if(columnIndex===10){
+          return total.toFixed(2);
+        }else{
+          return total;
+        }
+
       },
 
       // 确定
