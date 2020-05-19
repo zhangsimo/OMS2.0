@@ -9,11 +9,11 @@
       <Form :model="data" ref="form" :label-width="140">
         <div style="margin-bottom: 10px">
           <span>客户名称:</span>
-          <span class="mr20">{{ data.fullName }}</span>
+          <span class="mr20">{{ data.guestName }}</span>
           <span>申请人:</span>
-          <span class="mr20">{{ sendMsg.currentUser }}</span>
+          <span class="mr20">{{ data.applyMan }}</span>
           <span>申请时间:</span>
-          <span class="mr20">{{ localTime }}</span>
+          <span class="mr20">{{ data.applyDate }}</span>
           <span>最高授信固定额度:</span>
           <span>100W</span>
         </div>
@@ -31,14 +31,14 @@
           </Col>
           <Col span="8">
             <FormItem label="申请增加固定额度:" prop="applyQuota">
-              <Input v-model="data.applyQuota" style="width: 150px" ></Input>
+              <Input v-model="data.applyQuota" style="width: 150px" disabled></Input>
             </FormItem>
-            <FormItem label="申请增加临时额度:" prop="tempQuota">
+            <FormItem label="申请增加临时额度:" prop="tempQuota" disabled>
               <!--tempQuota-->
-              <Input v-model="data.tempQuota" style="width: 150px"></Input>
+              <Input v-model="data.tempQuota" style="width: 150px" disabled></Input>
             </FormItem>
             <FormItem label="临时额度开始时间:" prop="tempStart">
-              <Input v-model="data.tempStart" style="width: 150px"></Input>
+              <Input v-model="data.tempStart" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
           <Col span="8">
@@ -57,7 +57,7 @@
               ></Input>
             </FormItem>
             <FormItem label="临时额度结束时间:" prop="tempEnd">
-              <Input v-model="data.tempEnd" style="width: 150px"></Input>
+              <Input v-model="data.tempEnd" style="width: 150px" disabled></Input>
             </FormItem>
           </Col>
         </Row>
@@ -75,8 +75,8 @@
             </FormItem>
             <FormItem label="信用等级:">
               <!--&lt;!&ndash;<Input v-model='data.bizLicenseNo' style="width: 180px" ></Input>&ndash;&gt;nature-->
-              <Select style="width:150px" v-model="data.tgrade">
-                <Option v-for="item in quality" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
+              <Select style="width:150px" v-model="data.tgrade" disabled>
+                <Option v-for="item in billTypeArr.CS00112" :value="item.id" :key="item.id">{{ item.itemName }}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -125,7 +125,7 @@
           </Col>
         </Row>
         <FormItem label="申请额度说明:" prop="quotaReason">
-          <Input v-model="data.quotaReason" style="width: 650px"></Input>
+          <Input v-model="data.quotaReason" style="width: 650px" disabled></Input>
         </FormItem>
       </Form>
       <div>
@@ -185,6 +185,12 @@
   import {findQuotaDetail} from "../../../api/documentApproval/documentApproval/documentApproval";
 	export default {
 		name: "quotaApplyModel",
+    props:{
+      billTypeArr: {
+        type:Object,
+        default:{}
+      }
+    },
     data(){
       return {
         model:false,
@@ -344,6 +350,7 @@
     },
     methods:{
       init(row){
+        console.log(row)
         this.model = true;
         this.getCreditDetail(row)
       },

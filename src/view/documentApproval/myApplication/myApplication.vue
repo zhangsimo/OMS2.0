@@ -196,7 +196,7 @@
     <!--客户信用调查-->
     <apply-model-view ref="clientApply" :bill-type-arr="settleTypeList"></apply-model-view>
     <!--客户信用额度-->
-    <quota-apply-model ref="quotaApply"></quota-apply-model>
+    <quota-apply-model ref="quotaApply" :bill-type-arr="settleTypeList"></quota-apply-model>
   </div>
 </template>
 
@@ -420,7 +420,7 @@
           let data = {}
           //107票据类型`
           //106结算方式
-          data = ['CS00106', 'CS00107', 'CS00118','CS00117']
+          data = ['CS00106', 'CS00107', 'CS00118','CS00117','CS00112']
           let res = await getDigitalDictionary(data)
           if (res.code == 0) {
             this.settleTypeList = res.data
