@@ -75,3 +75,12 @@ export function getBillType(data){
     data
   })
 }
+
+//获取客户信用调查详情
+export function findCreditDetail (params) {
+  return axios.request({
+    url: `${api.wmsApi}/guest/findByCode`,
+    method: 'get',
+    params
+  })
+}

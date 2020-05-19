@@ -889,9 +889,6 @@
               }
           })
         },
-        Determined(){
-
-        },
         // 提交按钮
         instance (name) {
           if (this.rowId.length <= 3) {
@@ -962,7 +959,12 @@
       }
     }
 </script>
-
+<style>
+.ivu-form-item-error-tip {
+  display: none !important;
+  opacity: 0 !important;
+}
+</style>
 <style scoped>
   .con-box{
     height: 700px;

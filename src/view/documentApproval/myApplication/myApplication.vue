@@ -194,7 +194,7 @@
     <!--其他查看-->
     <view-other-model ref="viewOtherModel" :main-store="mainStore" :bill-type-arr="settleTypeList"></view-other-model>
     <!--供应商申请-->
-    <apply-model-view ref="clientApply"></apply-model-view>
+    <apply-model-view ref="clientApply" :bill-type-arr="settleTypeList"></apply-model-view>
   </div>
 </template>
 
@@ -416,7 +416,7 @@
           let data = {}
           //107票据类型`
           //106结算方式
-          data = ['CS00106', 'CS00107']
+          data = ['CS00106', 'CS00107', 'CS00118','CS00117']
           let res = await getDigitalDictionary(data)
           if (res.code == 0) {
             this.settleTypeList = res.data
@@ -529,8 +529,8 @@
             case "发票对冲":
               this.$refs.invoiceOffsetRequest.$refs.hedgingInvoice.modal1 = true;
               break;
-            case "供应商申请":
-              this.$refs.clientApply.init();
+            case "客户信用调查":
+              this.$refs.clientApply.init(row);
               break;
             case "盘亏出库": case "盘盈入库": case "采购计划单": case "临时采购订单": case "门店外采订单":
               this.$refs.viewOtherModel.init(row);

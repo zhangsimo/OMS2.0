@@ -22,7 +22,7 @@
         <Col class="inner" span="4">{{formInline.applyTime}}</Col>
       </Row>
     </div>
-    <reconcil ref="reconcil" :modelType="modelType"/>
+    <reconcil ref="reconcil" :modelType="modelType" :list="allList" @closeModal="colse"/>
     <!--<flow v-if="modelType.type === 3" />-->
     <div slot="footer"></div>
   </Modal>
@@ -49,7 +49,8 @@ export default {
         applyTime: "",
         paymentOrgName: ""
       }, //所有数据对象
-      modelShow: false
+      modelShow: false,
+      allList:{},//获取返回所有数据
     };
   },
   methods: {
@@ -60,6 +61,8 @@ export default {
           data.id = this.modelType.id || ''
           let res = await getThisAllList(data);
           if(res.code == 0){
+            // console.log(res , 99999)
+            this.allList = res.data
             this.formInline.applyNo = res.data.one[0].accountNo;
           }
 
@@ -78,7 +81,12 @@ export default {
           // console.log(this.$refs.reconcil)
           this.$refs.reconcil.Initialization();
         })
-      }
+      },
+
+    //保存提交关闭模态框
+    colse(){
+      this.modelShow = false
+    }
   }
 };
 </script>

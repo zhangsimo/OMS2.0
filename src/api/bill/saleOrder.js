@@ -309,3 +309,13 @@ export function CheckForSave(data , modelType) {
     data
   })
 }
+
+
+//对账单提交
+export function CheckForSubmit(data , modelType) {
+  return axios.request({
+    url: `${api.omsSettle}/accounts/receivable/add?id=${modelType.id}`,
+    method: 'post',
+    data
+  })
+}
