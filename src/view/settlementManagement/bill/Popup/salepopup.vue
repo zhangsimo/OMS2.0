@@ -707,6 +707,7 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
+            isOilPart: this.$parent.data1[0].isOilPart
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -745,6 +746,8 @@ export default {
             guestName: this.information.guestName,
             oilsListOrder:this.information.oilsListOrder,
             partsListOrder:this.information.partsListOrder,
+            isOilPart: this.$parent.data1[0].isOilPart
+
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -820,11 +823,9 @@ export default {
         if (val.length < 1) return
         if (this.$parent.data1[0].isOilPart == 1){
           this.accessoriesBillingData2 = val
-          this.accessoriesBillingData.isOilPart = this.$parent.data1[0].isOilPart
           this.OilPartShow = true
         } else {
           this.accessoriesBillingData1 = val
-          this.accessoriesBillingData.isOilPart = this.$parent.data1[0].isOilPart
           this.OilPartShow = false
         }
       },
