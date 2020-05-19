@@ -21,6 +21,7 @@
               highlight-current-row
               show-overflow
               height="500"
+              ref="one"
             >
               <vxe-table-column type="radio"  title="选择"></vxe-table-column>
               <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -44,6 +45,7 @@
             highlight-current-row
             show-overflow
             height="500"
+            ref="two"
           >
             <vxe-table-column type="radio"  title="选择"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -66,6 +68,8 @@
             highlight-current-row
             show-overflow
             height="500"
+            ref="three"
+
           >
             <vxe-table-column type="radio" title="选择"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -88,6 +92,8 @@
             highlight-current-row
             show-overflow
             height="500"
+            ref="four"
+
           >
             <vxe-table-column type="radio"  title="选择"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -110,6 +116,8 @@
             highlight-current-row
             show-overflow
             height="500"
+            ref="five"
+
           >
             <vxe-table-column type="radio"  title="选择"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -132,6 +140,8 @@
             highlight-current-row
             show-overflow
             height="500"
+            ref="six"
+
           >
             <vxe-table-column type="radio"  title="选择"></vxe-table-column>
             <vxe-table-column field="titleTypeName" title="科目分类" ></vxe-table-column>
@@ -235,36 +245,66 @@
           // console.log(row)
           this.accountingSubject = row
           this.SendData = this.subjectTableDataZiChan
+          this.$refs.two.clearRadioRow()
+          this.$refs.three.clearRadioRow()
+          this.$refs.four.clearRadioRow()
+          this.$refs.five.clearRadioRow()
+          this.$refs.six.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //点击单选框获取会计科目负债
         radioChangeEventLiabilities({row}){
           this.accountingSubject = row
           this.SendData = this.subjectTableDataFuZhai
+          this.$refs.one.clearRadioRow()
+          this.$refs.three.clearRadioRow()
+          this.$refs.four.clearRadioRow()
+          this.$refs.five.clearRadioRow()
+          this.$refs.six.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //点击单选框获取会计科目共同
         radioChangeEventCommon({row}){
           this.accountingSubject = row
           this.SendData = this.subjectTableDataGongTong
+          this.$refs.one.clearRadioRow()
+          this.$refs.two.clearRadioRow()
+          this.$refs.four.clearRadioRow()
+          this.$refs.five.clearRadioRow()
+          this.$refs.six.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //点击单选框获取会计科目权益
         radioChangeEventEquity({row}){
           this.accountingSubject = row
           this.SendData = this.subjectTableDataQuanYi
+          this.$refs.one.clearRadioRow()
+          this.$refs.two.clearRadioRow()
+          this.$refs.three.clearRadioRow()
+          this.$refs.five.clearRadioRow()
+          this.$refs.six.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //点击单选框获取会计科目成本
         radioChangeEventCost({row}){
           this.accountingSubject = row
           this.SendData = this.subjectTableDataChengBen
+          this.$refs.one.clearRadioRow()
+          this.$refs.two.clearRadioRow()
+          this.$refs.three.clearRadioRow()
+          this.$refs.four.clearRadioRow()
+          this.$refs.six.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //点击单选框获取会计科目损益
         radioChangeEventProfit({row}){
           this.accountingSubject = row
           this.SendData = this.subjectTableDataSunYi
+          this.$refs.one.clearRadioRow()
+          this.$refs.two.clearRadioRow()
+          this.$refs.three.clearRadioRow()
+          this.$refs.four.clearRadioRow()
+          this.$refs.five.clearRadioRow()
           // this.balanceDirection = row.balanceDirection;
         },
         //会计科目确定弹框
