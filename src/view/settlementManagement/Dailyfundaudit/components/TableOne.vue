@@ -149,8 +149,6 @@ export default {
   },
   computed: {
     tableData() {
-      console.log(this.tbdata)
-
       return this.tbdata;
     }
   },
