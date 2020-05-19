@@ -645,6 +645,11 @@ export default {
           className: "tc"
         },
         {
+            title: "不含税金额",
+            key: "noTaxAmount",
+            className: "tc"
+        },
+        {
           title: "含税配件已开",
           key: "taxAmountOfPartOpened",
           className: "tc"
@@ -653,6 +658,11 @@ export default {
           title: "含税油品已开",
           key: "taxAmountOfOilOpened",
           className: "tc"
+        },
+        {
+            title: "不含税增加税点",
+            key: "increasePointExcludingTax",
+            className: "tc"
         },
         {
           title: "收到配件进项发票",
@@ -687,6 +697,11 @@ export default {
           title: "含税油品欠票",
           key: "taxArrearsOfOil",
           className: "tc"
+        },
+        {
+            title: "不含税未开",
+            key: "taxNotIncluded",
+            className: "tc"
         },
         {
           title: "最近一次开票公司",
