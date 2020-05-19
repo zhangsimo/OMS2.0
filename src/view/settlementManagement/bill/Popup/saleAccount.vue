@@ -77,7 +77,7 @@ export default {
           key: "serviceAmt",
           className: "tc",
           render: (h, params) => {
-            return h("span", params.row.serviceAmt.toFixed(2));
+            return h("span", params.row.settlementTotal.toFixed(2));
           }
         }
       ], //选择不含税对账单单

@@ -793,7 +793,7 @@ export default {
     //打开收货地址
     openAddressShow() {
       if(!this.currentRow.id) {
-        return this.$message.error("请选择保存过的预售单")
+        return this.$message.error("请先保存预售单")
       }
       this.$refs.goodsInfo.init();
     },

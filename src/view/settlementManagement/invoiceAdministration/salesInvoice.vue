@@ -345,8 +345,18 @@ export default {
           className: "tc"
         },
         {
+          title: "开票名称",
+          key: "speciesName",
+          className: "tc"
+        },
+        {
           title: "发票种类",
           key: "invoiceType",
+          className: "tc"
+        },
+        {
+          title: "发票名称",
+          key: "invoiceTypeName",
           className: "tc"
         },
         {

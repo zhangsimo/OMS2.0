@@ -154,7 +154,8 @@
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100">
                     <template v-slot="{row}">
-                      {{(row.stockOutQty-(row.canReQty-row.orderQty))>=0?(row.stockOutQty-(row.canReQty-row.orderQty)):0}}
+                      <div v-if="presentrowMsg !== 1">{{(row.stockOutQty-(row.canReQty-row.orderQty))>=0?(row.stockOutQty-(row.canReQty-row.orderQty)):0}}</div>
+                      <div v-else>{{row.stockOutQty||0}}</div>
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
@@ -206,7 +207,7 @@
       let changeNumber = ({cellValue }) => {
       const reg = /^[1-9]\d{0,}$/;
       if(!reg.test(cellValue)) {
-        return Promise.reject(new Error('角色输入不正确'))
+        return Promise.reject(new Error('数量输入不正确'))
       }
     };
 
@@ -636,7 +637,7 @@
               data.guestId = this.formPlan.guestName   //调出方
               data.orderManId = this.formPlan.storeId     //退货员id
               data.orderMan = this.formPlan.orderMan //退货员
-              data.orderDate = tools.transTime(...this.formPlan.orderDate)  //退货日期
+              data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
               data.serviceId = this.formPlan.numbers  //采退单号
               data.rtnReasonId = this.formPlan.cause  //退货原因
               data.settleTypeId = this.formPlan.clearing  //结算方式
@@ -1136,11 +1137,11 @@
             data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata
 
-            let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
-            if(noBack.length>0){
-              this.$message.error('明细中存在缺货数量，请调整')
-              return
-            }
+            // let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+            // if(noBack.length>0){
+            //   this.$message.error('明细中存在缺货数量，请调整')
+            //   return
+            // }
 
             // data.details = this.Right.tbdata.map(item => {
             //   // return {
