@@ -297,7 +297,8 @@ export default {
             }else if(this.allSelectList.length>=2){
                 this.$Message.warning("请选择一条数据");
             }else{
-                this.hxOjb.salesInvoiceId=this.allSelectList[0]['id']
+                this.hxOjb.salesInvoiceId = this.allSelectList[0].id
+                this.hxOjb.invoiceApplyId = this.data[0].id
                 subManualList(this.hxOjb).then(res=>{
                     if(res.code===0){
                         this.$Message.warning("核销成功");
@@ -325,5 +326,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-    
+
 </style>

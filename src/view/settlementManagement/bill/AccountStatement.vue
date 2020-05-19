@@ -645,6 +645,11 @@ export default {
           className: "tc"
         },
         {
+            title: "不含税金额",
+            key: "noTaxAmount",
+            className: "tc"
+        },
+        {
           title: "含税配件已开",
           key: "taxAmountOfPartOpened",
           className: "tc"
@@ -653,6 +658,11 @@ export default {
           title: "含税油品已开",
           key: "taxAmountOfOilOpened",
           className: "tc"
+        },
+        {
+            title: "不含税增加税点",
+            key: "increasePointExcludingTax",
+            className: "tc"
         },
         {
           title: "收到配件进项发票",
@@ -687,6 +697,11 @@ export default {
           title: "含税油品欠票",
           key: "taxArrearsOfOil",
           className: "tc"
+        },
+        {
+            title: "不含税未开",
+            key: "taxNotIncluded",
+            className: "tc"
         },
         {
           title: "最近一次开票公司",
@@ -1211,7 +1226,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         orgId: this.model1,
         statementStatus: this.Reconciliationtype
@@ -1257,7 +1272,7 @@ export default {
         startDate: this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endDate: moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+        endDate: moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
       };
       // this.$refs.Monthlyreconciliation.parameter = { ...row, ...date };
       this.$refs.reconciliation.parameter = { ...row, ...date };
@@ -1267,7 +1282,7 @@ export default {
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
         endDate: this.value[1]
-          ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
+          ? moment(this.value[1]).endOf('day').format("YYYY-MM-DD HH:mm:ss")
           : "",
         guestId: row.guestId,
         accountNo: row.accountNo,

@@ -27,7 +27,7 @@
       </Row>
       <row class="mt15">
         <span class="more-span">出库单号：</span>
-        <Input placeholder="请输入入库单号" v-model="moreData.serviceId" style="width: 350px" />
+        <Input placeholder="请输入出库单号" v-model="moreData.serviceId" style="width: 350px" />
       </row>
       <row class="mt15">
         <span class="more-span">关联单号：</span>

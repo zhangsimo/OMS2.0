@@ -763,9 +763,6 @@ export default {
             this.Status = 1;
           }
         })
-        .catch(e => {
-          this.$Message.info("入库失败");
-        });
     },
     searchPro(params, size, page) {
       chengping({ ...params }, size, page)

@@ -177,11 +177,9 @@
 </template>
 
 <script>
-	import SurveyList from "../../system/essentialData/customerCredit/SurveyList";
   import {findCreditDetail} from "../../../api/documentApproval/documentApproval/documentApproval";
   export default {
 		name: "applyModelView",
-    components: {SurveyList},
     props:{
 		  billTypeArr: {
 		    type:Object,
@@ -191,7 +189,7 @@
     data(){
 		  return {
         model:false,
-        data: "", //父组件中当前行的数据
+        data: {},
         dataMsg: "", //父组件中数据字典的数据
         dataJudge: "",
         mainData:{}
