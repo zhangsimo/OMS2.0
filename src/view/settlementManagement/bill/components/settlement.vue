@@ -180,6 +180,8 @@ export default {
       this.BusinessType.push({
         businessTypeName: val.titleName,
         reconciliationAmt: 0,
+        mateAccountCode: val.titleCode,
+        mateAccountName: val.titleName,
         hasAmt: 0,
         unAmt: 0,
         rpAmt: 0,
