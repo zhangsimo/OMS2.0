@@ -171,22 +171,127 @@
     >选择必开销售单</button>
     <Tabs type="card" value="invoice1" class="mt10">
       <TabPane label="配件清单" name="invoice1">
-        <Table
+<!--        <Table-->
+<!--          border-->
+<!--          :columns="accessoriesBilling"-->
+<!--          :data="accessoriesBillingData1"-->
+<!--          show-summary-->
+<!--          :summary-method="billSum"-->
+<!--        ></Table>-->
+
+
+        <vxe-table
           border
-          :columns="accessoriesBilling"
+          resizable
+          show-footer
+          ref="xTable1"
+          :footer-method="footerMethod"
           :data="accessoriesBillingData1"
-          show-summary
-          :summary-method="billSum"
-        ></Table>
+          :edit-rules="validRules"
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+          >
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" ></vxe-table-column>
+          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="taxPrice" title="商品含税单价" >
+            <template v-slot="{row}">
+              {{row.taxPrice | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="taxAmt" title="商品含税金额" >
+            <template v-slot="{row}">
+              {{row.taxAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="salePrice" title="销售单价" >
+            <template v-slot="{row}">
+              {{row.salePrice | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="saleAmt" title="销售金额" >
+            <template v-slot="{row}">
+              {{row.saleAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceAmt" title="已开票金额" >
+            <template v-slot="{row}">
+              {{row.invoiceAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceNotAmt" title="未开票金额" >
+            <template v-slot="{row}">
+              {{row.invoiceNotAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+          <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
+        </vxe-table>
+
       </TabPane>
       <TabPane label="油品清单" name="invoice2">
-        <Table
+<!--        <Table-->
+<!--          border-->
+<!--          :columns="accessoriesBilling1"-->
+<!--          :data="accessoriesBillingData2"-->
+<!--          show-summary-->
+<!--          :summary-method="billSum"-->
+<!--        ></Table>-->
+        <vxe-table
           border
-          :columns="accessoriesBilling1"
+          resizable
+          ref="xTable2"
+          show-footer
+          :footer-method="footerMethod"
           :data="accessoriesBillingData2"
-          show-summary
-          :summary-method="billSum"
-        ></Table>
+          :edit-rules="validRules"
+          :edit-config="{trigger: 'click', mode: 'cell'}"
+        >
+          <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+          <vxe-table-column field="partName" title="配件名称" ></vxe-table-column>
+          <vxe-table-column field="partCode" title="配件编码" ></vxe-table-column>
+          <vxe-table-column field="oilsSpec" title="油品包装规格" ></vxe-table-column>
+          <vxe-table-column field="unit" title="单位" ></vxe-table-column>
+          <vxe-table-column field="orderQty" title="数量" ></vxe-table-column>
+          <vxe-table-column field="taxPrice" title="商品含税单价" >
+            <template v-slot="{row}">
+              {{row.taxPrice | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="taxAmt" title="商品含税金额" >
+            <template v-slot="{row}">
+              {{row.taxAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceTax" title="开票税率" ></vxe-table-column>
+          <vxe-table-column field="orderNo" title="出库单号" ></vxe-table-column>
+          <vxe-table-column field="salePrice" title="销售单价" >
+            <template v-slot="{row}">
+              {{row.salePrice | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="saleAmt" title="销售金额" >
+            <template v-slot="{row}">
+              {{row.saleAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceAmt" title="已开票金额" >
+            <template v-slot="{row}">
+              {{row.invoiceAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="invoiceNotAmt" title="未开票金额" >
+            <template v-slot="{row}">
+              {{row.invoiceNotAmt | priceFilters}}
+            </template>
+          </vxe-table-column>
+          <vxe-table-column field="applyAmt" title="申请开票金额"  :edit-render="{name: '$input', props: {type: 'float', digits: 2}}"></vxe-table-column>
+          <vxe-table-column field="additionalTaxPoint" title="外加税点" ></vxe-table-column>
+        </vxe-table>
+
       </TabPane>
     </Tabs>
 
@@ -247,6 +352,11 @@ export default {
         callback();
       }
     };
+    const applyAmtValid = ({ cellValue, rule, rules, row, }) => {
+      if(row.invoiceNotAmt < cellValue) {
+        return Promise.reject(new Error('申请开票金额不能大于未开票金额'))
+      }
+    }
     return {
       parameter: {}, //销售单参数
       information: {}, //基本信息数据
@@ -610,6 +720,11 @@ export default {
       accessoriesBillingData: [], //开票配件数据
       accessoriesBillingData1:[],
       accessoriesBillingData2:[],
+      validRules: {
+        applyAmt: [
+          { validator:applyAmtValid }
+        ],
+    },
       copyData: [], //开票配件复制数据
       OilPartShow:true, //油品展示
     };
@@ -786,7 +901,16 @@ export default {
       }, 500);
     },
     // 保存草稿
-    preservation() {
+   async preservation() {
+     const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
+     const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
+     if (errMap1){
+       return this.$Message.error('校验失败')
+     }
+     if (errMap2){
+       return this.$Message.error('校验失败')
+     }
+
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
@@ -814,7 +938,15 @@ export default {
       });
     },
     // 提交申请
-    submission() {
+   async submission() {
+     const errMap1 = await this.$refs.xTable1.validate().catch(errMap => errMap)
+     const errMap2 = await this.$refs.xTable2.validate().catch(errMap => errMap)
+          if (errMap1){
+            return this.$Message.error('校验失败')
+          }
+          if (errMap2){
+            return this.$Message.error('校验失败')
+          }
       this.$refs.formCustom.validate(vald => {
         if (vald) {
           let info = {
@@ -847,48 +979,18 @@ export default {
       this.$refs.SeleteSale.modal1 = true;
     },
     // 开票配件合计
-    billSum({ columns, data }) {
-      const sums = {};
-      columns.forEach((column, index) => {
-        const key = column.key;
-        if (index === 0) {
-          sums[key] = {
-            key,
-            value: "合计"
-          };
-          return;
-        }
-        const values = data.map(item => Number(item[key]));
-        if ((index > 3 && index < 7) || index > 12) {
-          if (!values.every(value => isNaN(value))) {
-            const v = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            if (index !== 4 && index !== 14) {
-              sums[key] = {
-                key,
-                value: v.toFixed(2)
-              };
-            } else {
-              sums[key] = {
-                key,
-                value: v
-              };
-            }
+    footerMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return '和值'
           }
-        } else {
-          sums[key] = {
-            key,
-            value: " "
-          };
-        }
-      });
-      return sums;
+          if (['orderQty', 'taxPrice','taxAmt','applyAmt','additionalTaxPoint'].includes(column.property)) {
+            return this.$utils.sum(data, column.property)
+          }
+          return null
+        })
+      ]
     }
   },
   computed: {
