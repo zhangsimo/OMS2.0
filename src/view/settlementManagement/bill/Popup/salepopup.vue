@@ -184,6 +184,7 @@
           border
           resizable
           show-footer
+          auto-resize
           ref="xTable1"
           :footer-method="footerMethod"
           :data="accessoriesBillingData1"
@@ -237,6 +238,7 @@
           border
           resizable
           ref="xTable2"
+          auto-resize
           show-footer
           :footer-method="footerMethod"
           :data="accessoriesBillingData2"
@@ -702,7 +704,9 @@ export default {
             accountNo: this.information.accountNo,
             applyNo: this.information.applyNo,
             applyDate: this.information.applicationDate,
-            guestName: this.information.guestName
+            guestName: this.information.guestName,
+            oilsListOrder:this.information.oilsListOrder,
+            partsListOrder:this.information.partsListOrder,
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
@@ -738,8 +742,9 @@ export default {
             accountNo: this.information.accountNo,
             applyNo: this.information.applyNo,
             applyDate: this.information.applicationDate,
-            guestName: this.information.guestName
-            // orgCode:this.information
+            guestName: this.information.guestName,
+            oilsListOrder:this.information.oilsListOrder,
+            partsListOrder:this.information.partsListOrder,
           };
           let obj = Object.assign(
             { partList: this.accessoriesBillingData },
