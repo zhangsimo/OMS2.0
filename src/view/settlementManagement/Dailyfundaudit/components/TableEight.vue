@@ -35,7 +35,7 @@
           <template v-slot="{ row }">
             <ul class="list">
               <li v-for="(item, index) of row.moneyInfo" :key="index" class="flex">
-                <span class="listChild">{{ item.businessType.name }}</span>
+                <span class="listChild">{{ item.businessTypeName? item.businessTypeName  : '' }}</span>
               </li>
             </ul>
           </template>
