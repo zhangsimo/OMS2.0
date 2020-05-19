@@ -7,8 +7,8 @@ const dev = {
   omsStore: "http://192.168.30.221:9280", // 库存查询 周伟健
   omsProduct: "http://192.168.30.221:9200",
   // omsOrder:'http://192.168.30.11:9210', //陈舒
-  // omsSettle: "http://192.168.30.11:9270",
-  omsSettle: "http://192.168.30.221:9270",
+  omsSettle: "http://192.168.30.226:9271",
+  // omsSettle: "http://192.168.30.221:9270",
   // omsProduct: '', // 9200
   // omsOrder: 'http://192.168.30.221:9210', // 9210
   // omsEdit: '', // 9220salesOrder
@@ -89,12 +89,12 @@ const audit = {
 };
 
 const pro = {
-  tokenApi: "https://api.g-parts.cn",
-  wmsApi: "https://api.g-parts.cn/wms-order-provider",
-  omsApi: "https://api.g-parts.cn/oms-product-provider",
-  omsOrderApi: "https://api.g-parts.cn/oms-order-provider",
-  passportApi: "https://api.g-parts.cn/gpart-passport-provider",
-  essentialApi: "https://api.g-parts.cn/gpart-essential-provider"
+  tokenApi: "https://api2.g-parts.cn",
+  wmsApi: "https://api2.g-parts.cn/wms-order-provider",
+  omsApi: "https://api2.g-parts.cn/oms-product-provider",
+  omsOrderApi: "https://api2.g-parts.cn/oms-order-provider",
+  passportApi: "https://api2.g-parts.cn/gpart-passport-provider",
+  essentialApi: "https://api2.g-parts.cn/gpart-essential-provider"
 };
 
 let urlObj = { dev, test, audit, pro };

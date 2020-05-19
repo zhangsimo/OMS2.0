@@ -214,11 +214,11 @@
 </template>
 
 <script>
-import { getReconciliationNo ,CheckForSave} from "@/api/bill/saleOrder";
+import { getReconciliationNo ,CheckForSave, CheckForSubmit} from "@/api/bill/saleOrder";
 import { getThisAllList} from '@/api/documentApproval/documentApproval/documentApproval'
 export default {
   // props: ["id"],
-  props: ["modelType"],
+  props: ["modelType" ,'list'],
   data() {
     return {
       accountData: [
@@ -446,7 +446,6 @@ export default {
   methods: {
     // 获取数据
     async Initialization() {
-      console.log(this.modelType , 999)
       if (this.modelType.type == 3){
         this.disabletype = true
       }else {
@@ -531,6 +530,7 @@ export default {
     // 保存接口
    async getPreservation(num) {
       console.log(this.infoBase , 7789)
+     console.log(this.list ,123)
       // if (this.totalvalue === "0") {
       //   if (!this.collectionAccountName)
       //     return this.$message.error("收款户名不能为空");
@@ -571,8 +571,19 @@ export default {
         });
         return "";
       }
-
-      let res = await CheckForSave(this.infoBase , this.modelType)
+     this.list.four = this.infoBase
+     if(num ==0) {
+       let res = await CheckForSave(this.list, this.modelType)
+       if (res.code === 0) {
+         this.$emit('closeModal', {})
+       }
+     }
+     if (num == 1){
+       let res = await CheckForSubmit(this.list, this.modelType)
+       if (res.code === 0) {
+         this.$emit('closeModal', {})
+       }
+     }
       // if (this.collectlist.length !== 0 || this.paymentlist.length !== 0) {
       //   let one = [
       //     {
