@@ -1,14 +1,29 @@
+# oms_2.0
 
+## Project setup
+```
+yarn install
+```
 
-## Install
-// install dependencies
-npm install
-// npm install chromedriver --chromedriver_cdnurl=http://cdn.npm.taobao.org/dist/chromedriver
+### Compiles and hot-reloads for development
+```
+yarn run serve
+```
 
-## Run
-### Development
-npm run dev
+### Compiles and minifies for production
+```
+yarn run build
+```
 
-### Production(Build)
-npm run build
+### Run your tests
+```
+yarn run test
+```
 
+### Lints and fixes files
+```
+yarn run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

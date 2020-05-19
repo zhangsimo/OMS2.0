@@ -1,0 +1,262 @@
+<template>
+  <section class="con-box">
+    <vxe-table
+      border
+      align="center"
+      size="mini"
+      ref="xTable"
+      height="400"
+      show-footer
+      :footer-method="footerMethod"
+      :data="tableData"
+    >
+      <vxe-table-column field="group0" title="">
+        <vxe-table-column type="seq" title="序号" width="60"></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group1" title="订单信息">
+        <vxe-table-column
+          field="serviceId"
+          title="调出退入单号"
+          width="180"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="guestFullName"
+          title="调入方"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="auditor"
+          title="入库人"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="enterDate"
+          title="入库日期"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="storeName"
+          title="仓库"
+          width="120"
+        ></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group2" title="配件信息">
+        <vxe-table-column
+          field="partCode"
+          title="配件编码"
+          width="300"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="partName"
+          title="配件名称"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="oemCode"
+          title="OE码"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="partBrand"
+          title="品牌"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="carModelName"
+          title="品牌车型"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="unit"
+          title="单位"
+          width="200"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="spec"
+          title="规格"
+          width="200"
+        ></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group3" title="数量/价格">
+        <vxe-table-column
+          field="orderQty"
+          title="入库数量"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="orderPrice"
+          title="单价"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="orderAmt"
+          title="金额"
+          width="120"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="detailRemark"
+          title="备注"
+          width="120"
+        ></vxe-table-column>
+      </vxe-table-column>
+       <vxe-table-column field="group4" title="成本信息">
+        <vxe-table-column
+          field="enterPrice"
+          title="成本单价"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="enterAmt"
+          title="成本金额"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column field="taxSign" title="是否含税" width="140">
+          <template v-slot="{ row }">
+            <Checkbox v-model="row.taxSign"></Checkbox>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column
+          field="taxRate"
+          title="税率"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="taxPrice"
+          title="含税单价"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="taxAmt"
+          title="含税金额"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="noTaxPrice"
+          title="不含税单价"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="noTaxAmt"
+          title="不含税金额"
+          width="140"
+        ></vxe-table-column>
+      </vxe-table-column>
+      <vxe-table-column field="group4" title="其他">
+        <vxe-table-column
+          field="acceptCode"
+          title="退回申请单号"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="auditor"
+          title="申请人"
+          width="200"
+          show-overflow
+        ></vxe-table-column>
+        <vxe-table-column
+          field="auditDate"
+          title="申请日期"
+          width="140"
+        ></vxe-table-column>
+        <vxe-table-column
+          field="mainRemark"
+          title="备注"
+          width="200"
+          show-overflow
+        ></vxe-table-column>
+      </vxe-table-column>
+    </vxe-table>
+    <Page
+      class-name="page-con"
+      :current="page.num"
+      :total="page.total"
+      :page-size="page.size"
+      @on-change="changePage"
+      @on-page-size-change="changeSize"
+      show-sizer
+      show-total transfer
+    ></Page>
+  </section>
+</template>
+
+<script>
+import * as api from "_api/reportForm/index.js";
+export default {
+  data() {
+    return {
+      page: {
+        num: 1,
+        size: 10,
+        total: 0
+      },
+      tableDataAll: [],
+      tableData: []
+    };
+  },
+  mounted() {
+    this.getList();
+  },
+  methods: {
+    // 查询表
+    async getList(data = {}) {
+      let res = await api.getAllotApplyRtnDetails(data);
+      if (res.code == 0) {
+        this.tableDataAll = (res.data || []).map(el => {
+          if ([1, "1", "是"].includes(el.taxSign)) {
+            el.taxSign = true;
+          }
+          if ([0, "0", "否"].includes(el.taxSign)) {
+            el.taxSign = false;
+          }
+          el.isMakActivity = false;
+          return el;
+        });
+
+        this.tableData = this.tableDataAll.slice(0, this.page.size);
+        this.page.total = this.tableDataAll.length;
+      }
+    },
+    //分页
+    changePage(p) {
+      this.page.num = p;
+      let start = (p - 1) * this.page.size;
+      let end = p * this.page.size;
+      this.tableData = this.tableDataAll.slice(start, end);
+    },
+    changeSize(size) {
+      this.page.num = 1;
+      this.page.size = size;
+      this.tableData = this.tableDataAll.slice(
+        this.page.num - 1,
+        this.page.size
+      );
+    },
+    //表尾合计
+    footerMethod({ columns, data }) {
+      return [
+        columns.map((column, columnIndex) => {
+          if (columnIndex === 0) {
+            return "合计";
+          }
+          if (
+            [
+              "orderQty",
+              "orderPrice",
+              "orderAmt",
+              "enterPrice",
+              "enterAmt",
+              "taxPrice",
+              "taxAmt",
+              "noTaxPrice",
+              "noTaxAmt"
+            ].includes(column.property)
+          ) {
+            return this.$utils.sum(data, column.property);
+          }
+          return null;
+        })
+      ];
+    }
+  }
+};
+</script>

@@ -1,0 +1,979 @@
+<template>
+    <main class="bigBox"
+    style="background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1); height:100%">
+      <div class="content-oper content-oper-flex">
+        <section class="oper-box">
+          <div class="oper-top flex">
+            <div class="wlf">
+              <div class="db">
+                <span>快速查询：</span>
+                <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
+                <Select v-model="purchaseType" class="w90 mr10" @on-change="SelectChange">
+                  <Option v-for="item in purchaseTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
+                </Select>
+              </div>
+              <div class="db">
+                <Button type="default" @click="moreaa" class="mr10"><i class="iconfont mr5 iconchaxunicon"></i>更多</Button>
+              </div>
+              <div class="db">
+                <Button class="mr10" @click="addProoo" v-has="'add'"><Icon type="md-add"/> 新增</Button>
+              </div>
+              <div class="db">
+                <Button type="default" @click='SaveMsg' class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconbaocunicon"></i>保存</Button>
+              </div>
+              <div class="db">
+                <Button class="mr10" @click="instance('formPlan')" v-has="'save'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
+              </div>
+              <div class="db">
+                <Button @click="cancellation" class="mr10" v-has="'Cancellation'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
+              </div>
+              <div class="db">
+                <Button @click="stamp" :disabled="presentrowMsg === 0||presentrowMsg === 7||presentrowMsg === 8" class="mr10" v-has="'print'"><i class="iconfont mr5 icondayinicon"></i> 打印</Button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="con-box">
+          <div class="inner-box">
+            <div class="con-split" ref="paneLeft" >
+              <Split v-model="split1" min="200" @on-moving="getDomHeight">
+                <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+                  <div class="pane-made-hd">
+                    调拨申请列表
+                  </div>
+                  <Table
+                    ref="currentRowTable"
+                    :height="leftTableHeight"
+                    @on-current-change="selectTabelData"
+                    size="small"
+                    highlight-row
+                    border
+                    :stripe="true"
+                    :columns="Left.columns"
+                    :data="Left.tbdata"
+                    @on-row-click="selection"></Table>
+                  <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="Left.page.num"
+                    :total="Left.page.total"
+                    :page-size="Left.page.size"
+                    :page-size-opts="Left.page.opts"
+                    @on-change="changePageLeft"
+                    @on-page-size-change="changeSizeLeft"
+                    show-sizer
+                    show-total>
+                  </Page>
+                  <!-- <Page
+                    class-name="fl pt10"
+                    size="small"
+                    :current="page.num"
+                    :total="page.total"
+                    :page-size="page.size"
+                    @on-change="changePage"
+                    @on-page-size-change="changeSize"
+                    show-sizer
+                    show-total
+                  ></Page> -->
+                </div>
+                <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+                  <div class="pane-made-hd">
+                    调拨申请信息
+                  </div>
+                  <div class="clearfix purchase" ref="planForm">
+                    <Form inline
+                          :model="formPlan"
+                          ref="formPlan"
+                          :rules="ruleValidate"
+                          :label-width="120">
+                      <FormItem label="调出方：" prop="guestName" class="fs12 formItem w640">
+                        <Row >
+                          <Col span="22">
+                            <Select placeholder="请选择调出方" @on-change="selectOption" v-model="formPlan.guestName" label-in-value filterable :disabled="presentrowMsg !== 0 || buttonDisable">
+                              <Option v-for="item in ArrayValue" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                          </Select>
+                          </Col>
+                          <Col span="2">
+                            <Button class="ml5" size="small" type="default" @click="addSuppler" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont iconxuanzetichengchengyuanicon"></i></Button>
+                          </Col>
+                        </Row>
+                      </FormItem>
+                      <FormItem class="formItem" label="调入仓库：" prop="storeId" >
+                        <Select class="w160" :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.storeId" @on-change="selectStoreId">
+                          <Option :disabled="item.isDisabled" v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                      </FormItem>
+                      <FormItem label="调拨申请日期：" prop="orderDate" class="fs12 formItem ml50">
+                        <DatePicker
+                          type="datetime"
+                          format="yyyy-MM-dd HH:mm:ss"
+                          style="width: 160px"
+                          placeholder="请选择调拨申请日期"
+                          v-model="formPlan.orderDate"
+                          :disabled="presentrowMsg !== 0 || buttonDisable"
+                        ></DatePicker>
+                      </FormItem>
+                      <FormItem class="formItem" label="备注：" prop="remark">
+                        <Input class="w500 " :disabled="presentrowMsg !== 0 || buttonDisable" v-model="formPlan.remark" :maxlength="100"></Input>
+                      </FormItem>
+                      <FormItem label="申请人：" prop="planner">
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.createUname"></Input>
+                      </FormItem>
+                      <FormItem label="申请单号:" prop="planOrderNum" class="ml50">
+                        <Input class="w160" :disabled="buttonDisableTwo" v-model="formPlan.serviceId"></Input>
+                      </FormItem>
+                    </Form>
+                  </div>
+                  <div class="flex plan-cz-btn" ref="planBtn">
+                    <div class="clearfix">
+                      <div class="fl mb5">
+                        <Button size="small" class="mr10" @click="addPro" v-has="'addAccessories'" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-add"/> 添加配件</Button>
+                      </div>
+                      <div class="fl mb5">
+                        <Button size="small" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'deleteAccessories'" @click="Delete"><i class="iconfont mr5 iconlaji调拨申请信息tongicon"></i> 删除配件</Button>
+                      </div>
+                      <div class="fl mb5">
+                        <Button size="small" class="mr10" @click="GoodsInfoModal" :disabled="buttonDisable || presentrowMsg !== 0" v-has="'EditAddress'"><i class="iconfont mr5 iconbianjixiugaiicon"></i> 编辑收货信息</Button>
+                      </div>
+                    </div>
+                  </div>
+                  <vxe-table
+                    ref="xTable"
+                    border
+                    resizable
+                    show-footer
+                    @select-change="selectChange"
+                    @edit-closed="editClosedEvent"
+                    size="mini"
+                    :edit-rules="validRules"
+                    :height="rightTableHeight"
+                    :data="Right.tbdata"
+                    :footer-method="addFooter"
+                    showOverflow="true"
+                    @select-all="selectAll"
+                    @edit-actived="editActivedEvent"
+                    :edit-config="{trigger: 'click', mode: 'cell'}">
+                    <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
+                    <vxe-table-column type="checkbox" width="60"></vxe-table-column>
+                    <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
+                    <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
+                    <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                     <vxe-table-column
+                       field="applyQty"
+                       title="申请数量"
+                       :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
+                    </vxe-table-column>
+                    <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0,maxlength:100}}" width="100"></vxe-table-column>
+                    <vxe-table-column field=`carBrandName + carModelName` title="品牌车型" width="100"></vxe-table-column>
+                    <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
+                    <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
+                    <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                    <vxe-table-column field="enterUnitId" title="方向" width="100"></vxe-table-column>
+                    <vxe-table-column title="紧销品" width="100">
+                      <template v-slot="{ row }">
+                        <Checkbox disabled :value="row.isTight == 1 ? true:false"></Checkbox>
+                      </template>
+                    </vxe-table-column>
+                    <vxe-table-column field="hasAcceptQty" title="受理数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasCancelQty" title="取消数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasOutQty" title="出库数量" width="100"></vxe-table-column>
+                    <vxe-table-column field="hasInQty" title="入库数量" width="100"></vxe-table-column>
+                  </vxe-table>
+                  <!-- <div ref="planPage">
+                  <Page size="small" class-name="page-con" :current="Right.page.num" :total="Right.page.total" :page-size="Right.page.size" @on-change="changePage"
+                  @on-page-size-change="changeSize" show-sizer show-total></Page>
+                  </div> -->
+                </div>
+              </Split>
+            </div>
+          </div>
+        </section>
+        <!--更多弹框-->
+              <More @sendMsg="getMsg" ref="moremore"></More>
+        <!--选择配件-->
+        <supplier ref="SelectPartCom" @selectPartName="getPartNameList"></supplier>
+        <!--编辑收货信息-->
+          <goods-info ref="goodsInfo" :mainId="mainId" :row="datadata"></goods-info>
+      </div>
+      <!--供应商资料-->
+      <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
+      <!--打印弹框-->
+      <print-show ref="PrintModel" :orderId="mainId"></print-show>
+    </main>
+</template>
+
+<script>
+  import * as tools from "../../../../utils/tools";
+
+  import QuickDate from '../../../../components/getDate/dateget'
+  import More from './compontents/More'
+  // import SelectPartCom from "../../../goods/goodsList/components/selectPartCom";
+  import GoodsInfo from './compontents/goodsInfo/GoodsInfo'
+  import SelectSupplier from "./compontents/supplier/selectSupplier";
+  import '../../../lease/product/lease.less';
+  import "../../../goods/goodsList/goodsList.less";
+  import supplier from './compontents/supplier'
+  import PrintShow from "./compontents/PrintShow";
+  import { queryAll,findById,queryByOrgid,save,commit} from '../../../../api/AlotManagement/transferringOrder';
+  import {findForAllot} from "_api/purchasing/purchasePlan";
+
+    export default {
+      name: "applyFor",
+      components: {
+        QuickDate,
+        More,
+        supplier,
+        // SelectPartCom,
+        GoodsInfo,
+        SelectSupplier,
+        PrintShow
+      },
+      data() {
+        let changeNumber = ({cellValue }) => {
+          const reg = /^[1-9]\d{0,}$/;
+          if(!reg.test(cellValue)) {
+            return Promise.reject(new Error('角色输入不正确'))
+          }
+        };
+        return {
+          selectRowId: '',
+          selectvalue: '',
+          //校验输入框的值
+          validRules: {
+            applyQty:[{ required: true, validator: changeNumber }]
+            // remark: [
+            //   { required: true, validator:changeNumber }
+            // ]
+          },
+          StoreId :'', //默认仓
+          ArraySelect: [], //供应商下拉框
+          isInternalId:'',//后端需要的供应商的一个id
+          rowOrgId: '',
+          checkboxArr:[],// checkbox选中
+          disSave: false, // 保存按钮是否禁用
+             PTrow: {//新增当前行
+                new: true,
+                _highlight: true,
+               status: {"name":"草稿","value":0},
+               guestName: '',
+               createUname: '',
+               serviceId: '',
+               orderMan:'',
+               // orderDate: tools.transTime(new Date()),
+               printing: '',
+               createTime: '',
+               detailVOS: [],
+          },
+          //表单验证
+          ruleValidate: {
+            guestName: [{ required: true, type:'string',message: '调出方不能为空', trigger: 'change' }],
+            storeId: [{ required: true,type:'string', message: '调入仓库不能为空', trigger: 'change' }],
+            orderDate: [{ required: true, type: 'date', message: '请选择', trigger: 'change' }],
+            remark:[{max: 100, message:'备注长度输入小于100个字符', trigger:'blur'}]
+          },
+          datadata: null,
+          rowId:'', //当前行的id
+          buttonDisable: true,
+          buttonDisableTwo: true,
+          split1:0.2,
+          purchaseType: '9999',
+          purchaseTypeArr:[
+            { label:'所有',value:'9999' },
+            { label:'草稿',value:'DRAFT' },
+            { label:'待受理',value:'UNACCEPTED' },
+            { label:'已受理',value:'ACCEPTED' },
+            { label:'待分拣',value:'SORTING' },
+            { label:'待发货',value:'SHIPPED' },
+            { label:'已出库',value:'STOCKING' },
+            { label:'已入库',value:'WAREHOUSING' },
+            { label:'已拒绝',value:'REJECTED' },
+            { label:'已作废',value:'INVALID' },
+          ],
+          List:[],
+          Left: {
+            page: {
+              num: 1,
+              size: 20,
+              total: 0,
+              opts: [20, 50, 100, 200]
+            },
+            loading: false,
+            columns: [
+              {
+                title: '序号',
+                minWidth: 50,
+                type:'index'
+              },
+              {
+                title: '状态',
+                key: 'status',
+                minWidth: 70,
+                render:(h,params) => {
+                  // let Identity = JSON.parse(params.row.status ||{})
+                  let name = params.row.status.name
+                  return h('span',name)
+                }
+              },
+              {
+                title: '调出方',
+                key: 'guestName',
+                minWidth: 80
+              },
+              {
+                title: '创建日期',
+                key: 'createTime',
+                minWidth: 120
+              },
+              {
+                title: '申请人',
+                key: 'createUname',
+                minWidth: 100
+              },
+              {
+                title: '申请单号',
+                key: 'serviceId',
+                minWidth: 120
+              },
+              {
+                title: '提交人',
+                key: 'commitUname',
+                minWidth: 100
+              },
+              {
+                title: '提交日期',
+                align:'center',
+                key: 'commitDate',
+                minWidth: 170
+              },
+              {
+                title: '打印次数',
+                key: 'printing',
+                minWidth: 70
+              }
+            ],
+            tbdata: []
+          },
+          tableData:[],
+          //左侧表格高度
+          leftTableHeight:0,
+          //右侧表格高度
+          rightTableHeight:0,
+          Right: {
+            page: {
+              num: 1,
+              size: 10,
+              total: 0
+            },
+            loading: false,
+            tbdata: [],
+          },
+          advanced: false, //更多模块的弹框
+          GainInformation: false, //编辑收获信息
+          rowData: '',  //声明一个数据，用于赋值右边内容
+          selectArr:[], //快速查询的数组 用于赋值,
+          moreArr: {},
+          presentrowMsg: 0,
+          guestidId: '' ,//给后台传值保存调出方的id
+           isAdd:true, //判断是否能新增
+          formPlan: {
+            guestName:'',//调出方
+            storeId: this.$store.state.user.userId, //调入仓库
+            orderDate: '', //申请调拨日期
+            remark: '', //备注
+            createUname: '', //申请人
+            serviceId: '', //申请单号
+          },
+          mainId: null, //选中行的id
+          clickdelivery: false,
+          Flaga: false,
+          ArrayValue: []
+        }
+      },
+      created() {
+        this.getArrayParams()
+      },
+      methods: {
+        selectOption(date) {
+          this.selectvalue = date.value
+        },
+        getArrayParams() {
+          var req = {};
+          req.page = 1;
+          req.size = 20;
+          findForAllot(req).then(res => {
+            const { content } = res.data;
+            this.getArray = content;
+            content.forEach(item => {
+              this.ArrayValue.push({value:item.id,label:item.fullName});
+            });
+          });
+        },
+        //删除配件
+        Delete(){
+          if (this.checkboxArr.length <= 0) {
+            return this.$Message.error("请先选择配件!")
+          }
+          var set = this.checkboxArr.map(item=>item.partId)
+          var resArr = this.Right.tbdata.filter(item => !set.includes(item.partId))
+          this.Right.tbdata = resArr
+          let data = {}
+           data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = resArr
+               save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('删除成功！！！')
+                      }
+                    })
+        },
+        //更多按钮
+        moreaa(){
+          this.$refs.moremore.init()
+        },
+        //调出方下拉框
+        selectGuestName(val){
+          this.formPlan.guestName = val.value
+        },
+        // 新增按钮
+        addProoo(){
+          let currentRowTable = this.$refs["currentRowTable"];
+          currentRowTable.clearCurrentRow();
+          this.Left.tbdata.forEach(el => {
+            el._highlight = false;
+          })
+          var date = new Date()
+          // date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+          var dataTime = tools.transTime(date)
+          this.buttonDisable = false
+          this.presentrowMsg = 0
+          if (!this.isAdd) {
+            return this.$Message.error('请先保存数据');
+          }
+          this.$refs.formPlan.resetFields();
+          this.Left.tbdata.unshift(this.PTrow)
+          this.isAdd = false;
+          this.datadata = this.PTrow
+          this.formPlan.guestName = '',//调出方
+            this.formPlan.storeId =  this.StoreId, //调入仓库
+            this.formPlan.orderDate =  dataTime, //申请调拨日期
+            this.formPlan.remark =  '', //备注
+            this.formPlan.createUname =  '', //申请人
+            this.formPlan.serviceId =  '' //申请单号
+            this.Right.tbdata = []
+            this.rowId = ''
+        },
+        // 调入仓库下拉改变事件
+        selectStoreId(val){
+          // console.log(val)
+        },
+        //判断表格能不能编辑
+        editActivedEvent({row}){
+          let xTable = this.$refs.xTable;
+          let orderQtyColumn = xTable.getColumnByField("applyQty");
+          let remarkColumn = xTable.getColumnByField("remark");
+          let isDisabled = this.presentrowMsg !== 0
+          orderQtyColumn.editRender.attrs.disabled = isDisabled;
+          remarkColumn.editRender.attrs.disabled = isDisabled;
+        },
+        //添加配件按钮
+        addPro(){
+          this.$refs.SelectPartCom.init()
+        },
+        // 下拉框查询
+        SelectChange(){
+          this.leftgetList()
+        },
+        selectTabelData(){},
+        //保存按钮
+        SaveMsg(){
+              this.$refs.formPlan.validate(async valid => {
+                if (valid) {
+                  try {
+                    await this.$refs.xTable.validate();
+                    let data = {}
+                    for (var i = 0; i < this.getArray.length; i++) {
+                      if (this.getArray[i].id == this.formPlan.guestName) {
+                        data.guestOrgid = this.getArray[i].isInternalId;
+                        data.guestId = this.getArray[i].id;
+                      }
+                    }
+                    data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    // data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.guestId = this.selectvalue
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+
+                    var date = new Date()
+                    var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                    var orderDateTime = this.formPlan.orderDate
+                    var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+                    if (orderTime < dataTime) {
+                      this.$Message.error('调拨申请日期不小于当前日期')
+                      return
+                    }
+                    var date = new Date()
+                    var dataTime = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+                    var orderDateTime = this.formPlan.orderDate
+                    var orderTime = orderDateTime.getFullYear() + '-' + (orderDateTime.getMonth() + 1) + '-' + orderDateTime.getDate()
+                    if (orderTime < dataTime) {
+                      this.$Message.error('调拨申请日期不小于当前日期')
+                      return
+                    }
+                    save(data).then(res => {
+                      if(res.code === 0){
+                        this.$message.success('保存成功！');
+                        this.leftgetList()
+                        this.formPlan.guestName = '',
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.isAdd = true
+                        this.$refs.formPlan.resetFields();
+                      }
+                    })
+                  } catch (errMap) {
+                    this.$XModal.message({
+                      status: "error",
+                      message: "申请数量必须输入大于0的正整数"
+                    });
+                  }
+                } else {
+                  if(!this.formPlan.guestName){
+                    this.$Message.warning('请选择调出方！')
+                  }
+                  if(!this.guestidId && !this.formPlan.storeId && !formPlan.orderDate){
+                    this.$Message.error('*为必填！');
+                  }
+                }
+              })
+        },
+        //作废
+        cancellation(){
+          this.$Modal.confirm({
+            title: '是否作废',
+            onOk: async () => {
+                let data = {}
+                data.status = 8
+                data.id = this.rowId
+                data.orgid = this.rowOrgId
+                data.guestId = this.guestidId
+                data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                data.storeId = this.formPlan.storeId
+                data.orderDate = tools.transTime(this.formPlan.orderDate)
+                data.remark = this.formPlan.remark
+                data.createUname  = this.formPlan.createUname
+                data.serviceId = this.formPlan.serviceId
+                data.detailVOS = this.Right.tbdata
+                let res = await save(data);
+                if (res.code == 0) {
+                  this.$Message.success('作废成功');
+                  this.leftgetList();
+                  this.isAdd = true;
+                }
+            },
+            onCancel: () => {
+              this.$Message.info('取消作废');
+            },
+          })
+        },
+        // 打印
+        stamp(){
+          const ref =  this.$refs.PrintModel;
+          ref.openModal();
+        },
+        //右侧表格复选框选中
+        selectChange(msg){
+          this.checkboxArr = msg.selection
+        },
+        // 全选
+        selectAll(val){
+          this.checkboxArr = val.selection
+        },
+        //分页
+        changePageLeft(p) {
+          this.Left.page.num = p
+          this.leftgetList()
+        },
+        changeSizeLeft(size) {
+          this.Left.page.num = 1
+          this.Left.page.size = size
+          this.leftgetList()
+        },
+        //右部分分页
+        changePage(p) {
+          this.Left.page.num = p
+          // this.getList()
+        },
+        changeSize(size) {
+          this.Left.page.num = 1
+          this.Left.page.size = size
+          // this.getList()
+        },
+        // 查询下拉框
+        getDataQuick(v){
+          this.selectArr = v
+          this.leftgetList()
+        },
+        //供应商下拉查询
+        // selecQuery(){
+        //   let req = {}
+        //   findForAllot(req).then(res => {
+        //     this.ArraySelect = res.data.content||[];
+        //   })
+        // },
+        //footer计算
+        addFooter ({ columns, data }) {
+          return [
+            columns.map((column, columnIndex) => {
+              if (columnIndex === 0) {
+                return '和值'
+              }
+              if (['applyQty'].includes(column.property)) {
+                return this.$utils.sum(data, column.property)
+              }
+              return null
+            })
+          ]
+        },
+        //表格编辑状态下被关闭的事件
+        editClosedEvent(){},
+
+        // 更多子组件的参数
+        getMsg(msg){
+          this.moreArr = msg
+          this.leftgetList()
+        },
+        //子组件的参数
+        getPartNameList(ChildMessage){
+          let parts = ChildMessage.map( item => {
+
+            return {
+              partName : item.partStandardName,
+              unit : item.minUnit,
+              // oemCode : item.brandPartCode,
+              // spec : item.specifications,
+              enterUnitId : item.direction,
+              applyQty : 1,
+              remark : '',
+              partInnerId : item.code,
+              partCode : item.partCode,
+              oemCode : item.oeCode,
+              partBrand : item.partBrand,
+              carBrandName : item.adapterCarBrand,
+              carModelName : item.adapterCarModel,
+              carTypef : item.baseType ? item.baseType.firstType ? item.baseType.firstType.typeName ? item.baseType.firstType.typeName : '' : '' : '',
+              cartypes : item.baseType ? item.baseType.secondType ? item.baseType.secondType.typeName ? item.baseType.secondType.typeName : '' : '': '',
+              carTypet : item.baseType ? item.baseType.thirdType ? item.baseType.thirdType.typeName ? item.baseType.thirdType.typeName : '': '': '',
+              spec : item.specifications,
+              partId : item.id,
+              fullName : item.fullName,
+              systemUnitId : item.minUnit,
+              isTight: !!item.isTightPart == true? 1:0,
+            }
+          })
+          this.Right.tbdata = [...this.Right.tbdata,...parts]
+          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata, 'oemCode')
+          this.$Message.success("已添加");
+        },
+        //编辑收货信息弹框显示
+        GoodsInfoModal(){
+          if(!this.datadata || this.datadata.new) return this.$Message.error('请先保存数据');
+          this.clickdelivery = true
+          this.$refs.goodsInfo.init()
+        },
+        //供应商弹框
+        addSuppler(){
+          this.$refs.selectSupplier.init()
+        },
+        // 供应商子组件内容
+        getSupplierName(a){
+          // this.isInternalId = a.isInternalId
+          // this.formPlan.guestName = a.id
+          this.formPlan.guestName = a.id
+          this.guestidId = a.id
+          this.isInternalId = a.isInternalId
+        },
+        leftgetList(){
+          let params = {}
+          params.page = this.Left.page.num - 1
+          params.size = this.Left.page.size
+          if(this.selectArr !== '9999'){
+            params.startTime = this.selectArr[0]
+            params.endTime = this.selectArr[1]
+          }
+          if(this.moreArr.createData){
+            params.startTime = this.moreArr.createData[0] + " 00:00:00"
+            params.endTime = this.moreArr.createData[1] + " 23:59:59"
+          }
+          if(this.purchaseType !== '9999'){
+            params.status = this.purchaseType
+          }
+          if(this.moreArr.submitData){
+            params.commitDateStart = this.moreArr.submitData[0] + " 00:00:00"
+            params.commitDateEnd = this.moreArr.submitData[1] + " 23:59:59"
+          }
+          if(this.moreArr.callout){
+            params.guestId = this.moreArr.guestId
+          }
+          if(this.moreArr.numbers){
+            params.serviceId = this.moreArr.numbers
+          }
+          if(this.moreArr.coding){
+            params.partCode = this.moreArr.coding
+          }
+          if(this.moreArr.Accessories){
+            params.createUname = this.moreArr.Accessories
+          }
+          if(this.moreArr.Name){
+            params.fullName = this.moreArr.Name
+          }
+          queryAll(params).then(res => {
+            if(res.code === 0){
+              this.Left.tbdata = res.data.content
+              this.Left.page.total = res.data.totalElements;
+              this.Left.tbdata.forEach(el => {
+                if (el.id == this.selectRowId) {
+                  el._highlight = true;
+                  this.isAdd = true;
+                  this.setRow(el)
+                }
+              })
+            }else {
+              this.Left.page.total = 0
+            }
+          })
+        },
+        roleChangeEvent({ row }, evnt) {
+          // 使用内置 select 需要手动更新，使用第三方组件如果是 v-model 就不需要手动赋值
+          // this.currentrow.storeId = evnt.target.value
+        },
+
+        // 左边部分的当前行
+        selection(row){
+          if (row == null) return;
+          this.selectRowId = row.id;
+          let currentRowTable = this.$refs["currentRowTable"];
+          if(!this.Flaga && !this.isAdd && row.id){
+            this.$Modal.confirm({
+              title: '您正在编辑单据，是否需要保存',
+              onOk: () => {
+                this.$refs.formPlan.validate((valid) => {
+                  if (valid) {
+                    let data = {};
+                    data.id = this.rowId;
+                    data.orgid = this.rowOrgId;
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid;
+                    data.guestId = this.selectvalue
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    // data.guestName = this.formPlan.guestName
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+                    save(data).then(res => {
+                      if(res.code === 0){
+                        currentRowTable.clearCurrentRow();
+                        this.isAdd = true;
+                        this.$message.success('保存成功！')
+                        this.formPlan.guestName = '',
+                        this.formPlan.storeId =  '',
+                        this.formPlan.remark =  '',
+                        this.formPlan.createUname =  '',
+                        this.formPlan.serviceId =  '',
+                        this.formPlan.orderDate = ''
+                        this.Right.tbdata = []
+                        this.$refs.formPlan.resetFields();
+                        this.leftgetList()
+                      }
+                    })
+                  } else {
+                    currentRowTable.clearCurrentRow();
+                    this.Left.tbdata.forEach(el => {
+                      el._highlight = false;
+                    })
+                    this.Left.tbdata[0]._highlight = true;
+                    this.$Message.error('*为必填！');
+                  }
+                })
+              },
+              onCancel: () => {
+                this.Left.tbdata.splice(0, 1);
+                currentRowTable.clearCurrentRow();
+                this.Left.tbdata.forEach(el => {
+                  if (el.id == row.id) {
+                    el._highlight = true;
+                    this.isAdd = true;
+                    this.$refs.formPlan.resetFields();
+                    this.setRow(row)
+                  }
+                })
+                // this.isAdd = true;
+                // this.formPlan.guestName = '',
+                // this.formPlan.storeId =  '',
+                // this.formPlan.remark =  '',
+                // this.formPlan.createUname =  '',
+                // this.formPlan.serviceId =  '',
+                // this.formPlan.orderDate = ''
+                // this.Right.tbdata = []
+                // this.$refs.formPlan.resetFields();
+              },
+            })
+          }else{
+            if(row.id){
+              this.setRow(row)
+            }
+          }
+
+        },
+        setRow(row) {
+          // this.leftgetList()
+          this.rowOrgId = row.orgid
+          this.mainId = row.id
+          this.guestidId = row.guestId
+          this.datadata = row
+          this.formPlan.guestName = this.datadata.guestId
+          this.formPlan.storeId = this.datadata.storeId
+          this.formPlan.orderDate = this.datadata.orderDate
+          this.formPlan.remark = this.datadata.remark
+          this.formPlan.createUname = this.datadata.createUname
+          this.formPlan.serviceId = this.datadata.serviceId
+          // this.guestidId = this
+          this.presentrowMsg = row.status.value
+          this.rowId = row.id
+          this.buttonDisable = false
+          this.getRightlist()
+        },
+        //右部分接口
+        getRightlist(){
+          let params = {}
+          params.id = this.rowId
+          findById(params).then(res => {
+            if(res.code === 0){
+              this.rowData = res.data
+              this.Right.tbdata = res.data.detailVOS
+            }
+          })
+        },
+        // 仓库下拉框
+        warehouse(){
+          queryByOrgid().then(res => {
+              if(res.code === 0){
+                this.List = res.data
+                 res.data.map(item => {
+                   if(item.isDefault == true){
+                     this.formPlan.storeId = item.id
+                     this.StoreId = item.id
+                   }
+                 })
+              }
+          })
+        },
+        // 提交按钮
+        instance (name) {
+          if (this.rowId.length <= 3) {
+            return this.$message.error("请先保存数据，再提交！")
+          }
+          this.$refs[name].validate((valid) => {
+            if (valid) {
+              this.$Modal.confirm({
+                title: '是否提交',
+                onOk: async () => {
+                  // if(this.clickdelivery){
+                    let data = {}
+                    data.guestOrgid = this.isInternalId || this.datadata.guestOrgid
+                    data.id = this.rowId
+                    data.orgid = this.rowOrgId
+                    data.guestId = this.guestidId
+                    // data.guestId = this.formPlan.guestName
+                    data.storeId = this.formPlan.storeId
+                    data.orderDate = tools.transTime(this.formPlan.orderDate)
+                    data.remark = this.formPlan.remark
+                    data.createUname  = this.formPlan.createUname
+                    data.serviceId = this.formPlan.serviceId
+                    data.detailVOS = this.Right.tbdata
+                    let res = await commit(data);
+                    if (res.code == 0) {
+                      this.$Message.success('提交成功');
+                      this.leftgetList();
+                      this.isAdd = true;
+                    }
+                  // }else{
+                  //   this.$Message.warning('请先编辑收货信息')
+                  // }
+                },
+                onCancel: () => {
+                  this.$Message.info('取消提交');
+                },
+              })
+            } else {
+              this.$Message.error('*为必填项！');
+            }
+          })
+        },
+        //获取表格高度
+        getDomHeight() {
+          this.$nextTick(() => {
+            let wrapH = this.$refs.paneLeft.offsetHeight;
+            let planFormH = this.$refs.planForm.offsetHeight;
+            let planBtnH = this.$refs.planBtn.offsetHeight;
+            // let planPageH = this.$refs.planPage.offsetHeight;
+            //获取左侧侧表格高度
+            this.leftTableHeight = wrapH - 144;
+            //获取右侧表格高度
+            this.rightTableHeight = wrapH - planFormH - planBtnH - 38 - 64;
+          });
+        },
+      },
+      mounted(){
+        setTimeout(() => {
+          this.getDomHeight();
+        }, 0);
+
+        window.onresize = () => {
+          this.getDomHeight();
+        };
+          this.leftgetList();
+          this.warehouse();
+          // this.selecQuery();
+      }
+    }
+</script>
+<style>
+.ivu-form-item-error-tip {
+  display: none !important;
+  opacity: 0 !important;
+}
+</style>
+<style scoped>
+  .con-box{
+    height: 700px;
+  }
+  .w640{
+    width: 620px;
+  }
+
+  /*.formItem {*/
+    /*margin-bottom: 15px;*/
+  /*}*/
+</style>

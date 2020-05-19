@@ -4,7 +4,9 @@ import baseURL from '_conf/url'
 import Cookies from 'js-cookie'
 import { TOKEN_KEY, REFRESH_TOKEN_KEY, isTokenExpired } from '@/libs/util'
 
-let lock = true
+let lock = true;
+let isFailure = false;
+let is403 = 0
 
 class httpRequest {
   constructor () {
@@ -30,7 +32,6 @@ class httpRequest {
     this.refreshSubscribers.map(cb => cb(token))
   }
 
-
   // 销毁请求实例
   destroy (url) {
     delete this.queue[url]
@@ -40,46 +41,36 @@ class httpRequest {
   // 请求拦截
   interceptors (instance, url) {
     let that = this
+    if(isFailure&&!url.includes('/uaa/token')){
+      return false;
+    }
     // 添加请求拦截器
     instance.interceptors.request.use(config => {
-      if(Cookies.get(TOKEN_KEY)){
-        // config.headers.Authorization = "Bearer "+Cookies.get(TOKEN_KEY)
-          // if(isTokenExpired()){
-          //   if(!this.isRefreshing){
-          //     this.isRefreshing = true
-          //     setTimeout(function () {
-          //       that.isRefreshing = false
-          //       let objLoginDate = JSON.parse(localStorage.loginDate)
-          //       objLoginDate.expires_in = 80000
-          //       objLoginDate.loginTime = new Date().getTime()
-          //       localStorage.loginDate = JSON.stringify(objLoginDate)
-          //       config.headers.Authorization = "Bearer "+Cookies.get(TOKEN_KEY)
-          //       that.onRrefreshed(Cookies.get(TOKEN_KEY))
-          //       /*执行onRefreshed函数后清空数组中保存的请求*/
-          //       that.refreshSubscribers = []
-          //     },1000)
-          //
-          //   }
-          //   let retry = new Promise((resolve) =>{
-          //     this.subscribeTokenRefresh((token) => {
-          //       console.log(token)
-          //       config.headers.Authorization = 'Bearer ' + token
-          //       resolve(config)
-          //     })
-          //   })
-          //   console.log(retry)
-          //   return retry
-          // }
-          // else{
+      isFailure=false;
+      if(Cookies.get(TOKEN_KEY) && !config.url.includes('/token')){
             config.headers['Authorization'] = "Bearer "+Cookies.get(TOKEN_KEY)
             config.params = config.params || {}
-          // }
+            if(localStorage.getItem("oms2-userList") != null) {
+              let res = JSON.parse(localStorage.getItem('oms2-userList'))
+              config.params.tenantId = res.tenantId || 0
+              config.params.shopId = res.shopId || 0
+              config.params.shopkeeper = res.shopkeeper || 0
+            }
+            if(config.params.scope == null) {
+              if(localStorage.getItem('userScope') != null){
+                let  scope = localStorage.getItem('userScope')
+                config.params.scope = scope || 'oms'
+              }else{
+                config.params.scope = 'oms'
+              }
+            }
       }else{
         if(config.url.includes('/token')){
           config.data = qs.stringify(config.data);
           config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
       }
+
       return config
     }, error => {
       // 对请求错误做些什么
@@ -106,6 +97,9 @@ class httpRequest {
           } else {
             if (data.message && this.showErrorQueue[url]) {
               delete this.showErrorQueue[url]
+              if(typeof data.message=='object'){
+                data.message=data.message[0]
+              }
               globalVue.$Message.error(data.message)
             }
           }
@@ -114,20 +108,20 @@ class httpRequest {
       }
       return data
     }, (error) => {
-      // Cookies.remove(TOKEN_KEY)
-      // window.location.href = '/#/login'
-      // console.log(error.response)
-      // console.log(this.showErrorQueue)
       let errtip = ''
       if(error.response){
         if(error.response.status === 401){
+          is403++;
           if(error.response.data.code===9401){
-            errtip = '访问令牌无效!'
+            errtip = '访问令牌无效!';
+            isFailure=true;
           }
           if(error.response.data.code===9403){
             errtip = '没有权限访问!'
           }
-          globalVue.$Message.error(errtip)
+          if(is403==1){
+            globalVue.$Message.error(errtip);
+          }
           setTimeout(function () {
             Cookies.remove(TOKEN_KEY)
             window.location.href = '/#/login'
@@ -136,7 +130,14 @@ class httpRequest {
         }
       }
       //Message.error('服务内部错误')
-      globalVue.$Message.error(error.message)
+
+      if(error.response.config.url.includes('/token')){
+        globalVue.$Message.error(error.response.data.data.errorMessage)
+      }else{
+        globalVue.$Message.error(error.message)
+      }
+
+
       // 对响应错误做点什么
       return Promise.reject(error)
     })
@@ -145,7 +146,7 @@ class httpRequest {
   create () {
     let conf = {
       baseURL: baseURL.omsApi,
-      // timeout: 2000,
+      timeout: 2000,
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         'X-URL-PATH': location.pathname

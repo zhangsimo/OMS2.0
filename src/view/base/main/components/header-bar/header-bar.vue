@@ -1,6 +1,6 @@
 <template>
   <div class="header-bar">
-    <sider-trigger :collapsed="collapsed" icon="navicon-round" @on-change="handleCollpasedChange"></sider-trigger>
+    <sider-trigger :collapsed="collapsed" icon="md-menu" @on-change="handleCollpasedChange"></sider-trigger>
     <div class="custom-content-con" style="width: 90%">
       <slot></slot>
     </div>

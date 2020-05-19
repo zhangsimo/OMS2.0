@@ -1,8 +1,8 @@
 <template>
   <div class="side-menu-wrapper">
     <slot></slot>
-    <div class="leftInner" id="leftInner" v-show="!collapsed">
-      <Menu ref="menu"  :active-name="activeName" :open-names="openMenuFun" :accordion="accordion"  width="auto" @on-select="handleSelect">
+    <div class="leftInner" id="leftInner" :class="{'leftActive':!collapsed}" >
+      <Menu ref="menu"  :active-name="activeName" :open-names="openMenuFun" :accordion="accordion" class="left-menu"  width="auto" @on-select="handleSelect">
         <template v-for="item in menuList">
           <template v-if="item.children && item.children.length === 1">
             <side-menu-item v-if="showChildren(item)" :key="`menu-${item.name}`" :parent-item="item"></side-menu-item>
@@ -17,11 +17,11 @@
         </template>
       </Menu>
     </div>
-      <div class="menu-collapsed" v-show="collapsed" :list="menuList" >
+      <div class="menu-collapsed" :class="{'leftActive':collapsed}" :list="menuList" >
         <template v-for="item in menuList">
-          <collapsed-menu  v-if="item.children && item.children.length > 1" @on-click="handleSelect" hide-title :root-icon-size="rootIconSize" :icon-size="iconSize" :theme="theme" :parent-item="item" :key="`drop-menu-${item.name}`"></collapsed-menu>
+          <collapsed-menu  v-if="item.children && item.children.length > 1" @on-click="handleSelect" hide-title :root-icon-size="rootIconSize" :icon-size="iconSize" :theme="theme" :parent-item="item" :key="`drop-menu-${item.name}`" :active-name="activeName"></collapsed-menu>
           <Tooltip v-else :content="item.meta.title || item.children[0].meta.title" placement="right" :key="`drop-menu-${item.name}`">
-            <a @click="handleSelect(getNameOrHref(item, true))" class="drop-menu-a" :style="{textAlign: 'center'}"><Icon :size="rootIconSize" :color="textColor" :type="item.icon || item.children[0].icon"/></a>
+            <a @click="handleSelect(getNameOrHref(item, true))" class="drop-menu-a" :style="{textAlign: 'center'}" :class="{'active':item.children[0].name == getThisName}"><Icon :size="rootIconSize" :type="item.icon || item.children[0].icon"/></a>
           </Tooltip>
         </template>
       </div>
@@ -58,7 +58,7 @@ export default {
     },
     rootIconSize: {
       type: Number,
-      default: 20
+      default: 23
     },
     iconSize: {
       type: Number,
@@ -76,7 +76,7 @@ export default {
   },
   data () {
     return {
-      openedNames: []
+      openedNames: [],
     }
   },
   methods: {
@@ -85,7 +85,7 @@ export default {
     },
     getOpenedNamesByActiveName (name) {
       return this.$route.matched.map(item => item.name).filter(item => item !== name)
-    }
+    },
   },
   computed: {
     openMenuFun(){
@@ -98,8 +98,11 @@ export default {
       return openName
     },
     textColor () {
-      return this.theme === 'dark' ? '#fff' : '#607d8b'
-    }
+      return this.theme === 'dark' ? '#fff' : '#ada5a5'
+    },
+    getThisName(){
+      return this.$route.name
+    },
   },
   watch: {
     activeName (name) {

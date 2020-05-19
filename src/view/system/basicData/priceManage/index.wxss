@@ -1,0 +1,76 @@
+.price-manage {
+  padding: 10px;
+  background-color: #fff;
+  position: relative;
+}
+.price-manage .riget {
+  flex: auto;
+}
+.price-manage .table {
+  margin-left: 5px;
+}
+.price-main,
+.price-top {
+  border: solid 1px #ddd;
+  display: flex;
+}
+.price-top {
+  border-bottom: none;
+  height: 50px;
+}
+.tabs-ulwarp {
+  padding-top: 17px;
+  border-bottom: solid 1px #ddd;
+}
+.tabs-warp {
+  overflow-y: auto;
+}
+.tabs-warp .btns-warp {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+}
+.tabs {
+  list-style: none;
+  display: flex;
+}
+.tabs li {
+  margin: 0;
+  margin-right: 4px;
+  height: 31px;
+  padding: 5px 16px 4px;
+  border: 1px solid #ddd;
+  border-bottom: 0;
+  border-radius: 2px 2px 0 0;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+.tabs li.tab-active {
+  height: 32px;
+  padding-bottom: 5px;
+  background: #fff;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  border-color: #ddd;
+  color: #fd5c5c;
+}
+.price-main {
+  height: 600px;
+}
+.price-main .left {
+  overflow: auto;
+}
+.price-main .tab-warp {
+  overflow-y: auto;
+}
+.page-warp {
+  padding-right: 20px;
+}
+.btn-title {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
