@@ -65,3 +65,21 @@ export function getOptionCpList(params) {
   });
 }
 export const getup = `${api.omsSettle}/salesInvoice/import?`;
+
+//发票类型
+export function getInvoiceType(params) {
+  return axios.request({
+    url: `${api.omsSettle}/salesInvoice/findSpeciesType`,
+    method: "get",
+    params
+  });
+}
+
+//发票种类
+export function getTypeOfInvoice(params) {
+  return axios.request({
+    url: `${api.omsSettle}/salesInvoice/findInvoiceType`,
+    method: "get",
+    params
+  });
+}

@@ -26,7 +26,7 @@
       :edit-rules="validRules"
       :keyboard-config="{isArrow: true, isDel: true, isTab: true, isEdit: true}"
       :data="tableData"
-      :edit-config="{trigger: 'dblclick', mode: 'row'}"
+      :edit-config="{trigger: 'click', mode: 'row'}"
       @edit-actived="editActivedEvent"
     >
       <!-- 主表每一项 -->
@@ -49,11 +49,15 @@
           :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"
         ></vxe-table-column>
         <vxe-table-column
-          field="marker"
+          field="remark"
           title="备注"
           :edit-render="{name: 'input', attrs: {disabled: isAgeDisabled}}"
         ></vxe-table-column>
-        <vxe-table-column field="taxAmt" title="总金额"></vxe-table-column>
+        <vxe-table-column field="enterAmt" title="总金额">
+          <template v-slot="{row}">
+            {{row.enterAmt|priceFilters}}
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="createUname" title="制单人"></vxe-table-column>
         <vxe-table-column field="createTime" title="制单日期"></vxe-table-column>
       </vxe-table-column>
@@ -61,11 +65,11 @@
 
     <!-- 副表工具按钮 -->
     <div style="line-height:57px" class="flex">
-      <div class="db">
+     <!-- <div class="db">
         <Button class="mr10 w90" @click="AddAttention" v-show="oneWarehouse.auditSign == 0">
           <Icon type="md-add" />添加
         </Button>
-      </div>
+      </div>-->
       <div class="db">
         <!-- <Button type="md-delete" class="mr10 w90" v-show="oneWarehouse.auditSign == 0" @click="del">
           <i class="iconfont mr5 iconbaocunicon"></i>删除
@@ -112,7 +116,7 @@
       height="460"
       align="center"
       :edit-rules="validRules"
-      :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+      :edit-config="{trigger: 'click', mode: 'cell'}"
       :data="twoList"
       @select-all="selectAllEvent"
       @select-change="selectChangeEvent"
@@ -122,8 +126,8 @@
         <vxe-table-column field="partId" width="auto" title="配件ID"></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
-        <vxe-table-column field="brand" title="品牌"></vxe-table-column>
-        <vxe-table-column field="applyCarModel" title="品牌车型"></vxe-table-column>
+        <vxe-table-column field="partBrand" title="品牌"></vxe-table-column>
+        <vxe-table-column field="carModelName" title="品牌车型"></vxe-table-column>
         <vxe-table-column field="systemUnitId" title="单位"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="数量金额信息">
@@ -150,17 +154,17 @@
         <vxe-table-column field="remark" title="备注"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="辅助信息">
-        <vxe-table-column type="storeShelf" width="仓位"></vxe-table-column>
+        <vxe-table-column field="storeShelf" title="仓位"></vxe-table-column>
         <vxe-table-column field="storeName" title="仓库"></vxe-table-column>
         <vxe-table-column field="oemCode" title="OE码"></vxe-table-column>
         <vxe-table-column field="spec" title="规格/方向/颜色"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="不含税信息">
-        <vxe-table-column type="noTaxPrice" width="单价"></vxe-table-column>
+        <vxe-table-column field="noTaxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="noTaxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
       <vxe-table-column title="含税信息">
-        <vxe-table-column type="taxRate" width="税率"></vxe-table-column>
+        <vxe-table-column field="taxRate" title="税率"></vxe-table-column>
         <vxe-table-column field="taxPrice" title="单价"></vxe-table-column>
         <vxe-table-column field="taxAmt" title="金额"></vxe-table-column>
       </vxe-table-column>
@@ -198,7 +202,7 @@ export default {
   },
   data() {
     return {
-      flag: false,//审核按钮是否展示
+      flag: false, //审核按钮是否展示
       //模态框默认隐藏
       modal: false,
       //加载图标显示
@@ -308,13 +312,13 @@ export default {
     //获取当前点击的信息
     clOnewList(data) {
       // let el = data
-      this.flag = data.row.auditSign ? false : true
+      this.flag = data.row.auditSign ? false : true;
       this.oneWarehouse = data.row;
       this.mid = data.row.id;
       // console.log(this.mid,77777)
       // console.log(this.oneWarehouse, "选择表一的数据");
-
       this.twoList = data.row.details;
+      console.log(1212);
       // console.log(this.twoList, "表二的信息 数组")  //新增为保存状态下是 undefinde
     },
     //获取仓库下拉选择信息
@@ -370,10 +374,10 @@ export default {
       this.getList();
 
       // console.log(res);
-      this.$Message.info("点击了确定");
+      // this.$Message.info("点击了确定");
     },
     cancel() {
-      this.$Message.info("点击了取消");
+      // this.$Message.info("点击了取消");
     },
     //删除
     async del() {
@@ -476,6 +480,9 @@ export default {
       let self = this;
       if (res.code == 0) {
         this.$message.success(res.message);
+        this.getList();
+        res.data.forEach(item => this.twoList.push(item));
+        console.log(this.twoList.length);
       } else {
         this.$message.error(res.message);
       }

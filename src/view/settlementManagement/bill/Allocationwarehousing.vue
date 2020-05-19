@@ -279,7 +279,13 @@ export default {
   methods: {
     // 日期选择
     dateChange(data){
-      this.value = data
+        if(data[0]){
+            data[0]=data[0]+' 00:00:00';
+        }
+        if(data[1]){
+            data[1]=data[1]+' 23:59:59';
+        }
+      this.value = data;
     },
     // 表格合计方式
     handleSummary({ columns, data }) {
@@ -441,7 +447,7 @@ export default {
       wouseParts({mainId: row.id}).then(res => {
         if(res.data.length !== 0){
           res.data.map((item,index)=>{
-            item.index = index +1 
+            item.index = index +1
             item.taxSign = item.taxSign ? '是' : '否'
           })
           this.data1 = res.data

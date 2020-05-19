@@ -20,7 +20,7 @@
             <span>问题描述</span>
           </div>
           <div class="navone_two">
-            <div>来源：{{ Msg.questionSource }}</div>
+            <div>来源：PC</div>
             <div>反馈日期：{{ Msg.createTime }}</div>
             <div>功能标题：{{ Msg.funcName}}</div>
           </div>

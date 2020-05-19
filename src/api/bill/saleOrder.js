@@ -95,7 +95,7 @@ export function transferWarehousing(data) {
 // 调拨出库配件明细查询
 export function stockParts(params) {
     return axios.request({
-        url: `${api.omsOrder}/allotEnterDetail/findAllotOutDetail`,
+        url: `${api.omsOrder}/allotEnterDetail/findOutDetail`,
         method: 'get',
         params
     })
@@ -115,7 +115,7 @@ export function getStorelist() {
         method: 'get'
     })
 }
-// 应收应付管理 
+// 应收应付管理
 export function getreceivable(params) {
     return axios.request({
         url: `${api.omsSettle}/receivable/payable/get`,
@@ -144,6 +144,14 @@ export function getNumberList(params) {
 export function getReconciliation(params) {
     return axios.request({
         url: `${api.omsSettle}/accounts/receivable/get/reconciliation/business`,
+        method: 'get',
+        params
+    })
+}
+// 月结对账
+export function getReconciliationNo(params) {
+    return axios.request({
+        url: `${api.omsSettle}/statement/master/queryMasterAndDetail`,
         method: 'get',
         params
     })
@@ -261,7 +269,7 @@ export function accountRevoke(data) {
     })
 }
 // 导出配件明细
-export function reportParts(data){
+export function reportParts(data) {
     return axios.request({
         url: `${api.omsOrder}/pchsEnterMain/export/in/detail`,
         method: 'post',
@@ -269,7 +277,7 @@ export function reportParts(data){
     })
 }
 // 对账门店
-export function getStore(params){
+export function getStore(params) {
     return axios.request({
         url: `${api.wmsApi}/guest/get/by/orgId`,
         method: 'get',
@@ -277,7 +285,7 @@ export function getStore(params){
     })
 }
 // 根据条件查询供应商(分页)：/guest/queryAllSupplier
-export function typeSelect(params){
+export function typeSelect(params) {
     return axios.request({
         url: `${api.wmsApi}/guest/queryAllSupplier`,
         method: 'get',
@@ -285,10 +293,29 @@ export function typeSelect(params){
     })
 }
 // 对账单查看对账
-export function account(params){
+export function account(params) {
     return axios.request({
         url: `${api.omsSettle}/statement/master/query/statement`,
-        method:'get',
+        method: 'get',
         params
     })
+}
+
+//对账单保存
+export function CheckForSave(data , modelType) {
+  return axios.request({
+    url: `${api.omsSettle}/financeApplyMain/updateOmsStatementMaster?id=${modelType.id}`,
+    method: 'post',
+    data
+  })
+}
+
+
+//对账单提交
+export function CheckForSubmit(data , modelType) {
+  return axios.request({
+    url: `${api.omsSettle}/accounts/receivable/add?id=${modelType.id}`,
+    method: 'post',
+    data
+  })
 }

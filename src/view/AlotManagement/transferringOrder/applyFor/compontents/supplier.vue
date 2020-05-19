@@ -2,10 +2,10 @@
   <div>
     <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
-        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
-          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
-        </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="名称"></Input>
+        <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10">-->
+          <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
+        <!--</Select>-->
+        <Input class="w250 mr10" v-model="partName" placeholder="配件编码/名称/车型"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>

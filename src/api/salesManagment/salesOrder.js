@@ -22,6 +22,15 @@ export function getClient () {
 //获取销售员
 export function getSales () {
   return axios.request({
+    url: `${api.authApi}/tenantUsers/findAllPlanner?&size=10000&page=0&userName=&phone=&office=0`,
+    method: 'get',
+
+  })
+}
+
+// 获取退货员和创建人
+export function getCRman () {
+  return axios.request({
     url: `${api.authApi}/tenantUsers/queryAll?&size=10000&page=0&userName=&phone=&office=0`,
     method: 'get',
 
@@ -164,7 +173,6 @@ export function getAccessories (data) {
     data
   })
 }
-
 //删除配件
 export function getDeleteList (data) {
   return axios.request({

@@ -34,6 +34,11 @@ export const mixSelectPartCom = {
           minWidth: 80
         },
         {
+          title: "配件内码",
+          key: "partInnerId",
+          minWidth: 120
+        },
+        {
           title: "配件编码",
           key: "partCode",
           minWidth: 120
@@ -44,8 +49,18 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "品牌",
-          key: "partBrand",
+          title: "品牌车型",
+          key: "carModelName",
+          minWidth: 120
+        },
+        {
+          title: "规格",
+          key: "spec",
+          minWidth: 80
+        },
+        {
+          title: "型号",
+          key: "brandName",
           minWidth: 120
         },
         {
@@ -54,18 +69,8 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "单位",
-          key: "unit",
-          minWidth: 80
-        },
-        {
-          title: "规格",
-          key: "spec",
-          minWidth: 80
-        },
-        {
-          title: "品牌车型",
-          key: "carModelName",
+          title: "品牌",
+          key: "partBrand",
           minWidth: 120
         },
         {
@@ -73,7 +78,11 @@ export const mixSelectPartCom = {
           key: "oemCode",
           minWidth: 120
         },
-
+        {
+          title: "单位",
+          key: "unit",
+          minWidth: 80
+        },
         {
           title: "一级分类",
           key: "carTypef",
@@ -95,10 +104,11 @@ export const mixSelectPartCom = {
           minWidth: 120
         },
         {
-          title: "配件内码",
-          key: "partInnerId",
-          minWidth: 120
-        }
+          title: "配件全称",
+          key: "fullName",
+          minWidth: 180
+        },
+
       ],
       //配件名称查询层配件数据
       partData: [],
@@ -134,8 +144,8 @@ export const mixSelectPartCom = {
       selectBrand: "9999",
       partBrandData: [
         {
-          label: "全部",
-          value: "9999"
+          name: "全部",
+          code: "9999"
         }
       ]
     };
@@ -161,22 +171,23 @@ export const mixSelectPartCom = {
       }
       const qurry = this.partName.trim();
       if(qurry.length > 0) {
-        switch (this.searchType) {
-          case "0":
-            data.partCode = qurry;
-            break;
-          case "1":
-            data.fullName = qurry;
-            break;
-          case "2":
-            data.adapterCarModels = [qurry];
-            break;
-          case "3":
-            data.pinyin = qurry;
-            break;
-          default:
-            break;
-        }
+        // switch (this.searchType) {
+        //   case "0":
+        //     data.partCode = qurry;
+        //     break;
+        //   case "1":
+        //     data.fullName = qurry;
+        //     break;
+        //   case "2":
+        //     data.adapterCarModels = [qurry];
+        //     break;
+        //   case "3":
+        //     data.pinyin = qurry;
+        //     break;
+        //   default:
+        //     break;
+        // }
+        data.adapterCarModels = [qurry];
       }
       if(this.formPlanmain&&this.formPlanmain.guestId) {
         params.guestId = this.formPlanmain.guestId
@@ -195,33 +206,41 @@ export const mixSelectPartCom = {
         if(!res.data){
           return
         }
-        let filterData = res.data.content.filter(
-          item => item.quality == "品牌件"
-        );
-        if (filterData.length > 0) {
-          if (filterData[0].children && filterData[0].children.length > 0) {
-            filterData[0].children.map(item => {
-              let objData = {};
-              objData.label = item.name;
-              objData.value = item.code;
-              this.partBrandData.push(objData);
-            });
-          }
-        }
+        let arrData = res.data.content||[]
+        arrData.map(item => {
+          this.partBrandData.push(...item.children);
+        })
+        // let filterData = res.data.content.filter(
+        //   item => item.quality == "品牌件"
+        // );
+        // if (filterData.length > 0) {
+        //   if (filterData[0].children && filterData[0].children.length > 0) {
+        //     filterData[0].children.map(item => {
+        //       let objData = {};
+        //       objData.label = item.name;
+        //       objData.value = item.code;
+        //       this.partBrandData.push(objData);
+        //     });
+        //   }
+        // }
       });
     },
     //获取系统分类
     getCarClassifysFun() {
       this.treeLoading = true;
-      getCarPartClass({}).then(res => {
+      let req = {
+        page:1,
+        pageSize:500
+      }
+      getCarPartClass(req).then(res => {
         this.treeLoading = false;
         if(res.code==0){
           this.treeData = this.resetData(res.data.content || []);
-          //默认选中第一个
-          if(this.treeData.length>0){
-            this.treeData[0].selected = true
-            this.selectTreeItem = this.treeData[0];
-          }
+          // //默认选中第一个
+          // if(this.treeData.length>0){
+          //   this.treeData[0].selected = true
+          //   this.selectTreeItem = this.treeData[0];
+          // }
           this.getList();
         }
       });
@@ -239,7 +258,7 @@ export const mixSelectPartCom = {
     },
 
     search() {
-      this.page.num = 1;
+      this.page.num = 0;
       this.getList();
     },
     //系统分类树形节点点击数据
@@ -252,6 +271,7 @@ export const mixSelectPartCom = {
     //显示层
     init() {
       this.searchPartLayer = true;
+      this.partName = "";
       // this.getList();
       this.getPartBrandAll();
       this.getCarClassifysFun();
@@ -265,6 +285,7 @@ export const mixSelectPartCom = {
       if (this.selectTableItem.length > 0) {
         this.$emit("selectPartName", this.selectTableItem);
         this.searchPartLayer = false;
+        this.$Message.success("已添加");
       } else {
         this.$Message.error("请选择数据");
       }

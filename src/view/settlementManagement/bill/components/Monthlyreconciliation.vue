@@ -24,8 +24,6 @@
                     :key="item.value"
                   >{{ item.label }}</Option>
                 </Select>
-                <!-- <input type="text" class="h30" :value="companyInfo" />
-                <i class="iconfont iconcaidan input" @click="Dealings"></i>-->
               </div>
               <div class="db ml5">
                 <button class="mr10 ivu-btn ivu-btn-default" type="button" @click="query">
@@ -65,15 +63,7 @@
               <h5 class="p10">付款信息</h5>
               <div class="flex p10">
                 <span>收款户名：</span>
-                <!-- <Select v-model="collectionAccountName" style="width:200px" class="mr10">
-                  <Option
-                    v-for="item in collectionAccountList"
-                    :value="item.value"
-                    :key="item.value"
-                  >{{ item.label }}</Option>
-                </Select>-->
                 <Input type="text" class="w140 mr10" v-model="collectionAccountName" disabled />
-                <!-- <i class="iconfont iconcaidan input" @click="Dealings"></i> -->
                 <span>开户行：</span>
                 <Input v-model="openingBank" class="w140 mr10" disabled />
                 <span>收款账号：</span>
@@ -210,14 +200,6 @@
           align="center"
         ></vxe-table-column>
       </vxe-table>
-      <!-- <Table
-        :columns="Reconciliationlist"
-        :data="Reconciliationcontent"
-        border
-        max-height="400"
-        show-summary
-        :summary-method="handleSummary"
-      ></Table>-->
       <div slot="footer">
         <Button class="mr10" type="primary" @click="noReconciliation">确认</Button>
         <Button class="mr10" type="default" @click="Reconciliation = false">取消</Button>
@@ -1113,10 +1095,10 @@ export default {
         let str1 = "";
         let str2 = "";
         this.paymentlist.map(item => {
-          str1 += `${item.serviceId}*${1*item.serviceType.value +1},`;
+          str1 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
         });
         this.collectlist.map(item => {
-          str2 += `${item.serviceId}*${1*item.serviceType.value +1},`;
+          str2 += `${item.serviceId}*${1 * item.serviceType.value + 1},`;
         });
         str1 = str1.substring(0, str1.length - 1);
         str2 = str2.substring(0, str2.length - 1);

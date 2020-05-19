@@ -41,6 +41,7 @@ export default class InterPurchase extends Vue {
   private selectLeftItemId = '';
 
   private isInput: boolean = true;
+  private isDirectCompanyId:boolean = false
 
   //左侧表格高度
   private leftTableHeight: number = 0;
@@ -256,6 +257,7 @@ export default class InterPurchase extends Vue {
     for(let b of this.purchaseOrderTable.tbdata){
       b._highlight = false
     }
+    this.selectLeftItemId = "";
     this.formPlanmain = {
       guestId: "", // 供应商id
       guestName: "", // 供应商
@@ -288,6 +290,7 @@ export default class InterPurchase extends Vue {
 
   // 保存/修改/提交用数据
   private formdata(refname: string) {
+    this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {
@@ -342,6 +345,10 @@ export default class InterPurchase extends Vue {
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (!data) return;
+
+    if(!data.directCompanyId){
+      this.selectTableRow.directCompanyId = 0;
+    }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.saveInterDraft(data);
@@ -359,15 +366,42 @@ export default class InterPurchase extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (!data) return;
+
+        if(!data.directCompanyId){
+          this.selectTableRow.directCompanyId = 0;
+        }
+
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
-        let res = await api.saveInterCommit(data);
-        if (res.code == 0) {
-          this.$Message.success('保存成功');
-          this.getListData();
-          this.isAdd = true;
+
+        let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(zerolength.length > 0) {
+          setTimeout(()=>{
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: async () => {
+                let res = await api.saveInterCommit(data);
+                if (res.code == 0) {
+                  this.$Message.success('保存成功');
+                  this.getListData();
+                  this.isAdd = true;
+                }
+              },
+              onCancel:() => {
+                this.isAdd = true;
+              }
+            })
+          },500)
+        }else{
+          let res = await api.saveInterCommit(data);
+          if (res.code == 0) {
+            this.$Message.success('保存成功');
+            this.getListData();
+            this.isAdd = true;
+          }
         }
       },
       onCancel: () => {
@@ -510,15 +544,6 @@ export default class InterPurchase extends Vue {
             this.formPlanmain[k] = row[k];
           }
 
-          // for(let b of this.purchaseOrderTable.tbdata){
-          //   b._highlight = false;
-          //   if(b.id==this.selectLeftItemId){
-          //     b._highlight = true;
-          //     this.setFormPlanmain(b);
-          //     break;
-          //   }
-          // }
-
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -556,8 +581,8 @@ export default class InterPurchase extends Vue {
       // orderState['草稿'], orderState['退回']
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      this.formPlanmain.orderDate = v.orderDate;
+      this.formPlanmain.planArriveDate = v.planArriveDate;
       if (['草稿', '退回'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -763,6 +788,14 @@ export default class InterPurchase extends Vue {
           d.isOldFlag = true;
         })
       })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false;
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
     }
   }
 
@@ -782,6 +815,10 @@ export default class InterPurchase extends Vue {
   private getPlanOrder(row: any) {
     if (!row) return;
     this.formPlanmain.code = row.serviceId;
+    if(row.directCompanyId){
+      this.isDirectCompanyId = true
+      this.formPlanmain.directCompanyId = row.directCompanyId
+    }
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
       el.details.forEach((d: any, index: number, arr: Array<any>) => {
         if (!d.isOldFlag) {

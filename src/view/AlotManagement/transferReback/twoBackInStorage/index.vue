@@ -6,12 +6,17 @@
           <div class="db">
             <span>快速查询：</span>
             <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-            <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
+            <Select
+              v-model="form.status"
+              @on-change="getDataType"
+              class="w90 mr10"
+            >
               <Option
                 v-for="item in purchaseTypeArr"
                 :value="item.value"
                 :key="item.value"
-              >{{item.label}}</Option>
+                >{{ item.label }}</Option
+              >
             </Select>
           </div>
           <div class="db">
@@ -20,7 +25,13 @@
             </Button>
           </div>
           <div class="db">
-            <Button v-has="'godown'" :disabled="btnIn" type="default" @click="inPro" class="mr10">
+            <Button
+              v-has="'godown'"
+              :disabled="btnIn || isWms"
+              type="default"
+              @click="inPro"
+              class="mr10"
+            >
               <i class="iconfont mr5 iconbaocunicon"></i>入库
             </Button>
           </div>
@@ -30,7 +41,7 @@
             </Button>
           </div>
           <!-- 状态定义 -->
-          <div class="status">{{inStatus}}</div>
+          <div class="status">{{ inStatus }}</div>
         </div>
       </div>
     </section>
@@ -76,13 +87,24 @@
                   <FormItem label="申请方：" class="fs12">
                     <Row class="w500">
                       <Col span="22">
-                        <Input disabled readonly v-model="formPlan.guestName" placeholder></Input>
+                        <Input
+                          disabled
+                          readonly
+                          v-model="formPlan.guestName"
+                          placeholder
+                        ></Input>
                       </Col>
                     </Row>
                   </FormItem>
                   <FormItem label="入库仓库：">
                     <Select disabled v-model="formPlan.storeId" class="w150">
-                      <Option v-for="item in List" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                      <Option
+                        :disabled="item.isDisabled"
+                        v-for="item in List"
+                        :value="item.id"
+                        :key="item.id"
+                        >{{ item.name }}</Option
+                      >
                     </Select>
                     <!--<Input readonly v-model="formPlan.storeId" placeholder></Input>-->
                   </FormItem>
@@ -106,13 +128,31 @@
                     ></Input>
                   </FormItem>
                   <FormItem label="处理人：">
-                    <Input disabled readonly class="w160" v-model="formPlan.auditor" placeholder></Input>
+                    <Input
+                      disabled
+                      readonly
+                      class="w160"
+                      v-model="formPlan.createUname"
+                      placeholder
+                    ></Input>
                   </FormItem>
                   <FormItem label="申请单号：" class="ml50">
-                    <Input disabled readonly class="w160" v-model="formPlan.code" placeholder></Input>
+                    <Input
+                      disabled
+                      readonly
+                      class="w160"
+                      v-model="formPlan.code"
+                      placeholder
+                    ></Input>
                   </FormItem>
                   <FormItem label="退回单号：" class="ml50">
-                    <Input disabled readonly class="w160" v-model="formPlan.serviceId" placeholder></Input>
+                    <Input
+                      disabled
+                      readonly
+                      class="w160"
+                      v-model="formPlan.serviceId"
+                      placeholder
+                    ></Input>
                   </FormItem>
                 </Form>
               </div>
@@ -128,17 +168,61 @@
                 :height="rightTableHeight"
                 :data="tableData"
               >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
-                <vxe-table-column field="applyQty" title="退回数量" width="100"></vxe-table-column>
-                <vxe-table-column field="remark" title="备注" width="100"></vxe-table-column>
-                <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
-                <vxe-table-column field="hasCancelQty" title="统计退回数量" width="100"></vxe-table-column>
+                <vxe-table-column
+                  type="index"
+                  width="60"
+                  title="序号"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partCode"
+                  title="配件编码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partName"
+                  title="配件名称"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="partBrand"
+                  title="品牌"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="applyQty"
+                  title="退回数量"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="remark"
+                  title="备注"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="unit"
+                  title="单位"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="carBrandName"
+                  title="品牌车型"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="oemCode"
+                  title="OE码"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="spec"
+                  title="规格"
+                  width="100"
+                ></vxe-table-column>
+                <vxe-table-column
+                  field="hasCancelQty"
+                  title="统计退回数量"
+                  width="100"
+                ></vxe-table-column>
               </vxe-table>
             </div>
           </Split>
@@ -146,10 +230,15 @@
       </div>
     </section>
     <!--更多弹框-->
-    <More ref="more" :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
+    <More
+      ref="more"
+      :getShowMore="showMore"
+      @getMoreStatus="getMoreStatus"
+      @getMoreData="getMoreData"
+    ></More>
     <!-- 入库提示 -->
     <Modal v-model="showIn" title="提示" @on-ok="inOk" @on-cancel="inCancel">
-      <p>是否定入库</p>
+      <p>是否确定入库</p>
     </Modal>
     <!-- 打印 -->
     <PrintShow ref="printBox" :curenrow="Leftcurrentrow"></PrintShow>
@@ -182,6 +271,7 @@ export default {
       flag: false,
       Leftcurrentrow: {},
       dayinCureen: {},
+      isWms: false,
       List: [],
       form: {
         createTimeStart: "",
@@ -263,7 +353,7 @@ export default {
             minWidth: 100
           },
           {
-            title: "调出回退日期",
+            title: "调出退回日期",
             align: "center",
             key: "finishDate",
             minWidth: 170
@@ -439,6 +529,12 @@ export default {
     },
     //左边列表选中事件
     async selectTabelData(currentRow) {
+      this.isWms =
+        this.List.filter(({ id }) => id === currentRow.storeId).find(
+          ({ isWms }) => isWms
+        ) === undefined
+          ? false
+          : true;
       if (currentRow.status.name != "已入库") {
         this.flag = false;
       } else {

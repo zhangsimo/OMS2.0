@@ -18,8 +18,8 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex">
           <div class="wlf" style="line-height: 54px">
-            <Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>
-            <Input v-model="searchForm.partName" placeholder="配件名称" class="w200 mr10"></Input>
+            <!--<Input v-model="searchForm.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
+            <Input v-model="searchForm.partName" placeholder="配件编码/名称" class="w200 mr10"></Input>
             <!--              <Select class="w120 mr10" v-model="searchForm.partBrandValue" placeholder="品牌" filterable>-->
             <!--                &lt;!&ndash; <Option value="9999" v-for="item in partBrandList">品牌</Option> &ndash;&gt;-->
             <!--                <Option-->
@@ -36,16 +36,13 @@
               v-model="searchForm.partBrand"
               placeholder="品牌"
             >
-              <!--                <Option-->
-              <!--                  v-for="item in partBrandList"-->
-              <!--                  :value="item.partBrandValue"-->
-              <!--                  :key="item.partBrandValue"-->
-              <!--                >{{ item.partBrandName}}-->
-              <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm.storeId" placeholder="仓库">
-              <Option v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
+            <Select class="w120 mr10" @on-change="changecompanyFun" v-model="searchForm.old" placeholder="公司">
+              <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label}}</Option>
+            </Select>
+            <Select class="w120 mr10" @on-change="changeStore" v-model="searchForm.storeId" placeholder="仓库">
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.id">{{ item.name}}</Option>
             </Select>
             <Input placeholder="仓位" class="w120 mr10" v-model="searchForm.shelf"></Input>
             <span class="mr5">显示零库存:</span>
@@ -76,8 +73,8 @@
         <!--      搜索工具栏-->
         <div class="oper-top flex">
           <div class="wlf" style="line-height: 54px">
-            <Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>
-            <Input v-model="searchForm1.partName" placeholder="配件名称" class="w200 mr10"></Input>
+            <!--<Input v-model="searchForm1.partCode" placeholder="配件编码" class="w200 mr10"></Input>-->
+            <Input v-model="searchForm1.partName" placeholder="配件编码/名称" class="w200 mr10"></Input>
             <Select
               filterable
               clearable
@@ -93,12 +90,19 @@
               <!--                </Option>-->
               <Option v-for="item in partBrandList" :value="item.name" :key="item.id">{{ item.name}}</Option>
             </Select>
-            <Select class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
-              <Option v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
+            <Select class="w120 mr10" @on-change="changecompanyFun2" v-model="searchForm1.old" placeholder="公司">
+              <Option
+                v-for="item in Branchstore"
+                :value="item.value"
+                :key="item.value"
+              >{{ item.label }}</Option>
+            </Select>
+            <Select @on-change="changeStore2" class="w120 mr10" v-model="searchForm1.storeId" placeholder="仓库">
+              <Option :disabled="item.isDisabled" v-show="item.orgid==searchForm1.old||item.id==1" v-for="item in storeList" :value="item.id" :key="item.storeId">{{ item.name}}</Option>
             </Select>
             <Input v-model="searchForm1.shelf" placeholder="仓位" class="w120 mr10"></Input>
-            <span class="mr5">显示零库存:</span>
-            <Checkbox v-model="searchForm1.noStock"></Checkbox>
+            <!--<span class="mr5">显示零库存:</span>-->
+            <!--<Checkbox v-model="searchForm1.noStock"></Checkbox>-->
             <Button type="warning" class="mr10 w90" @click="queryBatch">
               <Icon type="ios-search" size="14" />查询
             </Button>
@@ -165,10 +169,13 @@ import {
   getAllStock,
   getLotStock,
   getPartBrand,
-  getPartBrandNoWB
+  getPartBrandNoWB,
+  findMasterOrgId,
+  getStoreAll
 } from "@/api/business/stockSearch";
 import EnterStock from "./enterStock";
 import { getwarehouse } from "@/api/system/setWarehouse";
+import {creat} from "../../../settlementManagement/components";
 // import * as api from "_api/system/partManager";
 
 export default {
@@ -176,10 +183,11 @@ export default {
   components: { EnterStock },
   data() {
     return {
+      shopkeeper: JSON.parse(sessionStorage.getItem("vuex")).user.userData.shopkeeper,
       // 品牌选项
       partBrandList: [],
       //默认仓库选项
-      storeList: [{ name: "全部", id: 1 }],
+      storeList: [{ name: "请选择", id: 1 }],
       //汇总库存查询条件表单
       searchForm: {
         partBrand: "", //品牌id
@@ -187,7 +195,8 @@ export default {
         storeId: "", //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "" //零库存
+        noStock: "", //零库存
+        old:""//仓库
       },
       //批次库存查询条件表单
       searchForm1: {
@@ -196,7 +205,8 @@ export default {
         storeId: "", //仓库id
         partName: "", //配件名称
         shelf: "", //仓位
-        noStock: "" //库存
+        noStock: "", //库存
+        old:""//仓库
       },
       curronly: false,
       storeName: "999",
@@ -564,17 +574,58 @@ export default {
           size: 10
         },
         //数据
-        dataTwo: []
-      }
+        dataTwo: [],
+      },
+      //分店
+      Branchstore: []
     };
   },
   created() {
-    this.getAllStocks(); //table请求
-    this.getStoreHoure();
-    this.getBand(); //获取品牌
-    this.getLotStocks(); //获取批次
+    this.getCommpany();
+    this.getMasterId();
+    // if (this.shopkeeper != 0) {
+    //   this.columns2.forEach((el, index, arr) => {
+    //     if(el.key === "originGuestName") {
+    //       arr.splice(index, 1)
+    //     }
+    //   })
+    // }
   },
   methods: {
+    changecompanyFun(){
+      this.searchForm.storeId = "";
+    },
+    changecompanyFun2(){
+      this.searchForm1.storeId = "";
+    },
+    changeStore(){
+      this.serch();
+    },
+    changeStore2(){
+      this.queryBatch();
+    },
+    //获取用户所属机构
+    async getMasterId(){
+      let reqData = await findMasterOrgId();
+      if(!reqData.data){
+        this.columns2.forEach((el, index, arr) => {
+          if(el.key === "originGuestName") {
+            arr.splice(index, 1)
+          }
+        })
+      }
+    },
+    //获取风电
+    async getCommpany(){
+      let arr = await creat([], this.$store);
+      this.Branchstore = arr[2]||[];
+      this.searchForm.old = arr[1]||"";
+      this.searchForm1.old = arr[1]||"";
+      this.getAllStocks(); //table请求
+      this.getStoreHoure();
+      this.getBand(); //获取品牌
+      this.getLotStocks(); //获取批次
+    },
     //搜索
     serch() {
       this.contentOne.page.num = 1;
@@ -651,7 +702,8 @@ export default {
     },
     //获取仓库下拉选择信息
     async getStoreHoure() {
-      let res = await getwarehouse({});
+      // let res = await getwarehouse({});
+      let res = await getStoreAll();
       if (res.code == 0) {
         // this.storeList = res.data;
         // console.log("222", res);
@@ -679,19 +731,20 @@ export default {
     //     }
     // },
     async getBand() {
-      let res = await getPartBrandNoWB({ pageSize: 10000 });
+      let res = await getPartBrand({ pageSize: 10000 });
       if (res.code === 0) {
         let arr = [];
-        for(let v in res.data){
-          let obj = {}
-          obj.code = v;
-          obj.id = v;
-          obj.name = res.data[v]
-          arr.push(obj)
-        }
-        // res.data.forEach(item => {
-        //   arr.push(...item.children);
-        // });
+        let arrData = res.data.content || []
+        // for(let v in res.data){
+        //   let obj = {}
+        //   obj.code = v;
+        //   obj.id = v;
+        //   obj.name = res.data[v]
+        //   arr.push(obj)
+        // }
+        arrData.forEach(item => {
+          arr.push(...item.children);
+        });
         this.partBrandList = arr;
       }
     },

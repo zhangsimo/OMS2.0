@@ -1,14 +1,14 @@
 <template>
   <div style="height: 475px;overflow: hidden;overflow-y: scroll">
-    <Form :model="data" ref="form" :label-width="130" :rules="ruls">
+    <Form :model="data" ref="form" :label-width="140" :rules="ruls">
       <div style="margin-bottom: 10px">
         <span>客户名称:</span>
         <span class="mr20">{{ data.fullName }}</span>
         <span>申请人:</span>
         <span class="mr20">{{ sendMsg.currentUser }}</span>
         <span>申请时间:</span>
-        <span class="mr20">{{ data.applyDate }}</span>
-        <span>最高受信固定额度:</span>
+        <span class="mr20">{{ localTime }}</span>
+        <span>最高授信固定额度:</span>
         <span>100W</span>
       </div>
       <Row>
@@ -19,6 +19,9 @@
           <FormItem label="调整前临时额度:">
             <Input :value="data.tempCreditLimit || 0" style="width: 150px" disabled></Input>
           </FormItem>
+          <FormItem label="预收款:">
+            <Input :value="payable.preAmt || 0" style="width: 150px" disabled></Input>
+          </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="申请增加固定额度:" prop="applyQuota">
@@ -28,11 +31,12 @@
             <!--tempQuota-->
             <Input v-model="data.tempQuota" style="width: 150px" @on-blur="increaseBlur22"></Input>
           </FormItem>
-          <FormItem label="临时额度开始时间:">
+          <FormItem label="临时额度开始时间:" prop="tempStart">
             <DatePicker
               v-model="data.tempStart"
               type="date"
               :options="startTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>
@@ -40,24 +44,25 @@
         <Col span="8">
           <FormItem label="调整后固定额度:">
             <Input
-              :value="+data.applyQuota + data.creditLimit || 0 + (+data.applyQuota) || 0"
+              :value="(data.applyQuota*1||0) + (data.creditLimit*1||0)"
               style="width: 150px"
               disabled
             ></Input>
           </FormItem>
           <FormItem label="调整后临时额度:">
             <Input
-              :value="+data.tempQuota + data.tempCreditLimit || 0 + (+data.tempQuota) || 0"
+              :value="(data.tempCreditLimit*1 || 0)+(data.tempQuota*1||0)"
               style="width: 150px"
               disabled
             ></Input>
           </FormItem>
-          <FormItem label="临时额度结束时间:">
+          <FormItem label="临时额度结束时间:" prop="tempEnd">
             <DatePicker
               v-model="data.tempEnd"
               type="date"
               format="yyyy-MM-dd"
               :options="endTimeOptions"
+              :editable="false"
               style="width: 150px"
             ></DatePicker>
           </FormItem>
@@ -96,7 +101,7 @@
         <Col span="8">
           <FormItem label="调整后累计额度:">
             <Input
-              :value="(+data.applyQuota+data.creditLimit) + (+data.tempQuota + data.tempCreditLimit) || +data.applyQuota + (+data.tempQuota) || 0"
+              :value="(data.applyQuota*1||0) + (data.creditLimit*1||0)+(data.tempCreditLimit*1 || 0)+(data.tempQuota*1||0)"
               style="width: 150px"
               disabled
             ></Input>
@@ -160,7 +165,7 @@
           style="width: 100%;height: 40px;border: 1px solid lightgray;border-top: none!important;display: flex;align-items: center;padding-left: 50px"
         >
           合计：
-          <span>{{ sendMsg.applyTotalAmt }} 元</span>
+          <span>{{ applyTotalAmt }} 元</span>
         </div>
       </div>
     </div>
@@ -186,6 +191,7 @@
 // guestAdjustadjustInfo
 import { guestAdjustadjustInfo } from "../../../../api/system/CustomerManagement/CustomerManagement";
 import * as tools from "../../../../utils/tools";
+import moment from "moment";
 
 export default {
   name: "CreditLineApplication",
@@ -194,6 +200,7 @@ export default {
     sendMsg: "",
     payable: "",
     quality: "",
+    localTime: "",
     nowDate: tools.transTime(new Date())
   },
   data() {
@@ -205,13 +212,6 @@ export default {
       return date && end && date.valueOf() < new Date(end);
     };
     return {
-      // increase: 0, //申请增加额度
-      // temporary:0, //申请临时额度
-      //   dateOptions: {
-      //       disabledDate (date) {
-      //           return   Date.now()-86400* 1000 > date || date.valueOf() > Date.now() +86400* 1000*29
-      //       }
-      //   },
       startTimeOptions: {
         disabledDate: disabledDateS
       },
@@ -222,23 +222,15 @@ export default {
       value1: new Date(),
       value2: new Date(),
       ruls: {
-        quotaReason:[
-          { required: true, message: '申请额度说明必填！', trigger: 'blur' }
+        quotaReason: [
+          { required: true, message: "申请额度说明必填！", trigger: "blur" }
         ],
-        // applyQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ],
-        // tempQuota: [
-        //   {
-        //     message: "请输入大于0的正整数",
-        //     trigger: "blur",
-        //     type: "string"
-        //   }
-        // ]
+        tempStart: [
+          { required: true, message: "临时额度开始时间必填！", trigger: "change" , type: 'date', }
+        ],
+        tempEnd: [
+          { required: true, message: "临时额度结束时间必填！", trigger: "change", type: 'date', }
+        ]
       },
       columnsEarnings: [
         {
@@ -357,8 +349,17 @@ export default {
           align: "center",
           key: "orderAmt"
         }
-      ]
+      ],
+      applyDate: "",
+      applyTotalAmt:0,
+      beforeAdjustQuota:0,//调整前剩余额度
+      afterAdjustQuota:0,//调整后剩余额度
+      sumTotal:0,//申请增加额度合计
     };
+  },
+  mounted() {
+    let date = new Date();
+    this.applyDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
   },
   methods: {
     resetFields() {
@@ -491,29 +492,43 @@ export default {
         this.$Message.error("不能超过最高授信额度100万!");
         this.data.tempQuota = 0;
       }
-    }
-  },
-  mounted() {
-    // this.data.applyQuota = ''
-    // this.data.tempQuota = ''
+    },
+    init(){
+        this.applyTotalAmt=0;
+        this.$nextTick(()=>{
+            if(this.sendMsg.guestAdjustVOList){
+                this.sendMsg.guestAdjustVOList.map(item=>{
+                    this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
+                })
+            }
+        })
+
+      }
   },
   computed: {
     sum() {
-      this.data.tototo = +this.data.applyQuota + +this.data.tempQuota;
-      return isNaN(+this.data.applyQuota + +this.data.tempQuota)
+      this.data.tototo = +(this.data.applyQuota||0) + +(this.data.tempQuota||0);
+      return isNaN(+(this.data.applyQuota||0) + +(this.data.tempQuota||0))
         ? 0
-        : +this.data.applyQuota + +this.data.tempQuota;
+        : +(this.data.applyQuota||0) + +(this.data.tempQuota||0);
     },
     //调整前剩余额度
     sum2() {
-      let sum =
-        +this.data.creditLimit + this.data.tempCreditLimi - this.payable.sumAmt;
+      let sum =this.data.creditLimit*1 + this.data.tempCreditLimit*1-this.payable.receivableAmt*1-this.payable.occupyAmt*1+this.payable.preAmt*1
+      this.beforeAdjustQuota = isNaN(sum) ? 0 : sum;
       return isNaN(sum) ? 0 : sum;
     },
     //调整后剩余额度
     sum3() {
-      this.data.totalSum = this.sum + this.sum2;
+      this.data.totalSum = this.sum2+this.sum
+      // this.data.totalSum = this.sum + this.sum2;
+      // this.data.totalSum = ((+this.data.applyQuota+this.data.creditLimit)||0 + (+this.data.tempQuota + this.data.tempCreditLimit) ||0 +this.data.applyQuota + (+this.data.tempQuota) || 0) + this.payable.sumAmt||0;
+      // this.data.totalSum = ( parseFloat(this.data.creditLimit|| 0) +  parseFloat(this.data.tempCreditLimit || 0) +  parseFloat(this.data.applyQuota || 0)  + parseFloat(this.data.tempQuota||0) )+  parseFloat(this.payable.sumAmt||0);
+      this.afterAdjustQuota = isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
       return isNaN(this.data.totalSum) ? 0 : this.data.totalSum;
+
+
+
     }
   }
 };

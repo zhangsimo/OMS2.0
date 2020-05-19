@@ -1,0 +1,311 @@
+<template>
+  <div class="content-oper content-oper-flex" style="background-color: #fff;">
+    <section class="oper-box">
+      <div class="oper-top flex">
+        <div class="wlf">
+          <div class="db mr15">
+            <span>快速查询：</span>
+          </div>
+          <div class="db mr15">
+            <quick-date
+              class="mr10"
+              ref="quickDate"
+              @quickDate="getDataQuick"
+            ></quick-date>
+          </div>
+          <div class="db ml15">
+            <span>查询日期：</span>
+            <Date-picker v-model="dates" type="daterange" placeholder="选择日期" class="w200"></Date-picker>
+          </div>
+          <div class="db ml15">
+            <span>分店名称：</span>
+            <Select v-model="BranchstoreId" class="w150">
+              <Option
+                v-for="item in Branchstore"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.label }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db ml15">
+            <span>往来单位：</span>
+            <Select v-model="companyId" class="w150">
+              <Option
+                v-for="item in company"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.label }}</Option
+              >
+            </Select>
+          </div>
+          <div class="db ml15">
+            <span>收付款单号：</span>
+            <Input type="text" v-model="payOrderNo" style="width: 120px" />
+          </div>
+          <div class="db ml15">
+            <span>收付款单号：</span>
+            <Input type="text" v-model="orderNo" style="width: 120px" />
+          </div>
+          <div class="db ml15">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="query"
+            >
+              <i class="iconfont iconchaxunicon"></i>
+              <span>查询</span>
+            </button>
+          </div>
+          <div class="db ml5">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="SubmitAudit"
+              :disabled="oneList.length <= 0"
+            >
+              <span>审核</span>
+            </button>
+          </div>
+          <div class="db ml5">
+            <button
+              class="mr10 ivu-btn ivu-btn-default"
+              type="button"
+              @click="reAudit"
+              :disabled="oneList.length <= 0"
+            >
+              <span>撤销</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="mt15">
+      <Tabs type="card" v-model="tabName" @on-click="clickTabs">
+        <TabPane label="应收审核" name="capitalChain1">
+          <table-one ref="capitalChain1" :tbdata="tableData1" @selection="selection" />
+        </TabPane>
+        <TabPane label="应付审核" name="capitalChain2">
+          <table-two ref="capitalChain2" :tbdata="tableData2" @selection="selection" />
+        </TabPane>
+        <TabPane label="预收款审核" name="capitalChain3">
+          <table-three ref="capitalChain3" :tbdata="tableData3" @selection="selection" />
+        </TabPane>
+        <TabPane label="预付款审核" name="capitalChain4">
+          <table-four ref="capitalChain4" :tbdata="tableData4" @selection="selection" />
+        </TabPane>
+        <TabPane label="其他应收款审核" name="capitalChain5">
+          <table-five ref="capitalChain5" :tbdata="tableData5" @selection="selection" />
+        </TabPane>
+        <TabPane label="其他应付款审核" name="capitalChain6">
+          <table-six ref="capitalChain6" :tbdata="tableData6" @selection="selection" />
+        </TabPane>
+        <TabPane label="费用报销/因公借支审核" name="capitalChain7">
+          <table-seven ref="capitalChain7" :tbdata="tableData7" @selection="selection" />
+        </TabPane>
+        <TabPane label="转损益审核" name="capitalChain8">
+          <table-eight ref="capitalChain8" :tbdata="tableData8" @selection="selection" />
+        </TabPane>
+      </Tabs>
+    </div>
+
+    <!-- 资金审核撤销 -->
+    <Modal v-model="isShow" title="资金审核撤销">
+      <span>撤销原因：</span>
+      <Input class="w200 ml10" v-model="content" />
+      <div slot="footer">
+        <Button type="primary" @click="reAuditOk">确认</Button>
+        <Button @click="isShow = false">取消</Button>
+      </div>
+    </Modal>
+  </div>
+</template>
+
+<script>
+import QuickDate from "_c/getDate/dateget";
+import TableOne from "./components/TableOne";
+import TableTwo from "./components/TableTwo";
+import TableThree from "./components/TableThree";
+import TableFour from "./components/TableFour";
+import TableFive from "./components/TableFive";
+import TableSix from "./components/TableSix";
+import TableSeven from "./components/TableSeven";
+import TableEight from "./components/TableEight";
+
+import { findGuest } from "_api/settlementManagement/advanceCollection.js";
+import * as api from "_api/settlementManagement/Dailyfundaudit/index.js";
+import { creat } from "./../components";
+import moment from "moment";
+export default {
+  components: {
+    QuickDate,
+    TableOne,
+    TableTwo,
+    TableThree,
+    TableFour,
+    TableFive,
+    TableSix,
+    TableSeven,
+    TableEight
+  },
+  data() {
+    return {
+      // 数据类
+      tabName: "capitalChain1", // tabs栏
+      oneList: [], // 表格选中
+      tableData1: [], // 应收审核
+      tableData2: [], // 应付审核
+      tableData3: [], // 预收款审核
+      tableData4: [], // 预付款审核
+      tableData5: [], // 其他应收款审核
+      tableData6: [], // 其他应付款审核
+      tableData7: [], // 费用报销/因公借支审核
+      tableData8: [], // 转损益审核
+      dates: [], // 查询日期
+      BranchstoreId: "", // 分店id
+      Branchstore: [], // 分店
+      companyId: "", // 往来单位id
+      company: [], // 往来单位
+      payOrderNo: "", // 收付款单号
+      orderNo: "", // 对账单号
+      content: "", // 撤销原因
+      // 状态类
+      isShow: false // 撤销原因modal
+    };
+  },
+  async mounted() {
+    let arr = await creat(this.$refs.quickDate.val, this.$store);
+    this.dates = arr[0];
+    this.BranchstoreId = arr[1];
+    this.Branchstore = arr[2];
+    this.getCompany();
+    this.query();
+  },
+  methods: {
+    // 快速查询
+    getDataQuick(v) {
+      this.dates = v;
+      this.query();
+    },
+    // 往来单位
+    async getCompany() {
+      findGuest({ size: 2000 }).then(res => {
+        if (res.code === 0) {
+          res.data.content.map(item => {
+            this.company.push({
+              value: item.id,
+              label: item.fullName
+            });
+          });
+        }
+      });
+    },
+    // 查询
+    async query() {
+      this.oneList = [];
+
+      let params = {
+        startTime: this.dates[0],
+        endTime: this.dates[1],
+        guestSourceId: this.companyId,
+        businessNumbers: this.payOrderNo,
+        businessNumbersList: this.orderNo,
+        size: 10000,
+      }
+
+      if (this.dates.length === 2 && this.dates[0]) {
+        params.startTime = moment(this.dates[0]).format("YYYY-MM-DD") + " 00:00:00";
+        params.endTime = moment(this.dates[1]).format("YYYY-MM-DD") + " 23:59:59";
+      }
+
+      for (let key in params) {
+        if (!params[key]) {
+          Reflect.deleteProperty(params, key)
+        }
+      }
+
+      params.page = 0;
+
+      [
+        this.tableData1,
+        this.tableData2,
+        this.tableData3,
+        this.tableData4,
+        this.tableData5,
+        this.tableData6,
+        this.tableData7,
+        this.tableData8,
+      ] = await api.getTableData(params);
+    },
+    // 切换tabs
+    clickTabs(data) {
+      this.$refs[data].clear();
+    },
+    // 勾选的数据
+    selection(arr) {
+      this.oneList = arr || [];
+    },
+    // 审核
+    SubmitAudit() {
+      this.$Modal.confirm({
+        title: '资金审核',
+        content: '<p>确认审核</p>',
+        onOk: async () => {
+          let ids = this.oneList.map(el => el.id)
+          let res = await api.dailyFundAudit({ ids })
+          if (res.code == 0) {
+            this.$message.success(res.data)
+            this.query();
+          }
+        },
+        onCancel: () => {
+        }
+      });
+    },
+    // 撤销审核
+    reAudit() {
+      this.isShow = true;
+      this.content = "";
+    },
+    // 撤销审核 ok
+    async reAuditOk() {
+      let remarks = this.content.trim();
+      if (remarks.length <= 0) {
+        return this.$message.error("请输入撤销原因")
+      }
+      let ids = this.oneList.map(el => el.id)
+      let res = await api.dailyFundAuditRevocation({
+        ids, remarks
+      })
+      if (res.code == 0) {
+        this.$message.success(res.data)
+        this.isShow = false;
+        this.query();
+      }
+    },
+    // 修改凭证
+    putVoucher() {}
+  }
+};
+</script>
+
+<style lang="less" scoped>
+.oper-top input {
+  border: 1px solid #dddddd;
+  text-indent: 4px;
+}
+.oper-top .input {
+  position: relative;
+  left: -26px;
+  bottom: -5px;
+}
+.pro span {
+  display: inline-block;
+  width: 100px;
+  text-align: right;
+}
+.inner-box {
+  overflow-x: scroll;
+}
+</style>

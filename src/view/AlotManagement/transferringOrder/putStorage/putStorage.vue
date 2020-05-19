@@ -39,18 +39,18 @@
               </Button>
             </div>-->
             <div class="db">
-              <Button v-has="'godown'" class="mr10" @click="chuku">
+              <Button v-has="'godown'" class="mr10" @click="chuku" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-checkmark" size="14" />入库
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'cancellation'" class="mr10" @click="zuofei1">
+              <Button v-has="'cancellation'" class="mr10" @click="zuofei1" :disabled="Status == 1 || Status == 2">
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
             <div class="db">
               <Button v-has="'print'" class="mr10" @click="printTable">
-                <Icon type="md-close" size="14" />打印
+                <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
           </div>
@@ -125,6 +125,7 @@
                             <Option
                               v-for="item in cangkuListall"
                               :value="item.id"
+                              :disabled="item.isDisabled"
                               :key="item.id"
                             >{{ item.name }}</Option>
                           </Select>
@@ -181,7 +182,7 @@
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="ArrayValue"
-                  :edit-config="{trigger: 'dblclick', mode: 'cell'}"
+                  :edit-config="{trigger: 'click', mode: 'cell'}"
                 >
                   <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                   <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
@@ -318,15 +319,15 @@ export default {
         },
         {
           label: "草稿",
-          value: 0
+          value: "DRAFT"
         },
         {
           label: "已入库",
-          value: 1
+          value: "HAS_ENTER"
         },
         {
           label: "已作废",
-          value: 2
+          value: "INVALID"
         }
       ],
       advanced: false, //更多模块的弹框
@@ -705,6 +706,7 @@ export default {
       zuofei(params)
         .then(res => {
           // 点击列表行==>配件组装信息
+          this.Status = 2;
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("作废成功");
@@ -746,7 +748,8 @@ export default {
     chuku() {
       const params = {
         id: this.Leftcurrentrow.id,
-        voList: this.ArrayValue
+        voList: this.ArrayValue,
+        storeId:this.Leftcurrentrow.storeId
       };
       // 配件组装作废
       outDataList(params)
@@ -755,6 +758,9 @@ export default {
           if (res.code == 0) {
             this.getList(this.form);
             this.$Message.success("入库成功");
+          }
+          if(res.message.indexOf("成功") > -1) {
+            this.Status = 1;
           }
         })
         .catch(e => {

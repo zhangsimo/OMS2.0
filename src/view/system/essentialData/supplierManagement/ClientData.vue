@@ -58,7 +58,7 @@
                 <Input v-model="data.contactor" style="width: 180px" />
               </FormItem>
               <FormItem label="省份:" prop="provinceId" class="h50">
-                <Select v-model="data.provinceId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.provinceId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
                     v-if="item.parentId==0"
@@ -82,7 +82,7 @@
                 <Input v-model="data.contactorTel" style="width: 180px" />
               </FormItem>
               <FormItem label="城市:" prop="cityId" class="h50">
-                <Select v-model="data.cityId" style="width:180px" class="mr10">
+                <Select filterable v-model="data.cityId" style="width:180px" class="mr10">
                   <Option
                     v-for="item in provincearr"
                     v-if="data.provinceId==item.parentId"
@@ -248,6 +248,15 @@ export default {
   },
   data() {
     // v-if="data.supplierTypeFirst == item.parentId"
+    const validateTel = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error("手机号不能为空"));
+      } else if (!/^\d{1,}$/.test(value)) {
+        callback(new Error("手机号格式不正确"));
+      } else {
+        callback();
+      }
+    };
     const validatePhone = (rule, value, callback) => {
       if (!value) {
         return callback(new Error("手机号不能为空"));
@@ -353,7 +362,7 @@ export default {
         contactor: [{ required: true, message: " ", trigger: "blur" }],
         provinceId: [{ required: true, message: " ", trigger: "change" }],
         contactorTel: [
-          { required: true, validator: validatePhone, trigger: "blur" }
+          { required: true, validator: validateTel, trigger: "blur" }
         ],
         tel: [{ required: true, validator: validatePhone, trigger: "blur" }],
         salesmanTel: [

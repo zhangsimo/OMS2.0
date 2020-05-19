@@ -34,7 +34,7 @@
                 type="default"
                 class="mr10"
                 @click="baocun1"
-                :disabled="buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
               >
                 <i class="iconfont mr5 iconbaocunicon"></i>保存
               </Button>
@@ -43,7 +43,7 @@
               <Button
                 class="mr10"
                 v-has="'submit'"
-                :disabled="buttonDisable == 1 || buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable)"
                 @click="tijiao1"
               >
                 <Icon type="md-checkmark" size="14" />提交
@@ -51,7 +51,7 @@
             </div>
             <div class="db">
               <Button
-                :disabled="this.buttonDisable !== 1"
+                :disabled="![1].includes(buttonDisable)||isWms"
                 v-has="'delivery'"
                 class="mr10"
                 @click="chuku"
@@ -64,14 +64,14 @@
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
-                :disabled="buttonDisable == 2"
+                :disabled="![0].includes(buttonDisable) || Leftcurrentrow.code != ''"
               >
                 <Icon type="md-close" size="14" />作废
               </Button>
             </div>
             <div class="db">
               <Button v-has="'print'" class="mr10" @click="printTable">
-                <Icon type="md-close" size="14" />打印
+                <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
           </div>
@@ -157,6 +157,7 @@
                             <!--&gt;{{item.label}}</Option>-->
                             <Option
                               v-for="item in cangkuListall"
+                              :disabled="item.isDisabled"
                               :value="item.id"
                               :key="item.id"
                             >{{ item.name }}</Option>
@@ -199,7 +200,7 @@
                       <Button
                         v-has="'addMountings'"
                         size="small"
-                        :disabled="buttonDisable == 1"
+                        :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)"
                         class="mr10"
                         @click="addMountings"
                       >
@@ -207,7 +208,7 @@
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
+                      <Button v-has="'delete'" :disabled="!(!Leftcurrentrow.code && buttonDisable == 0)" size="small" class="mr10" @click="shanchu">
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -217,6 +218,7 @@
                         size="small"
                         class="mr10"
                         @click="GoodsInfoModal"
+                        :disabled="[2, 3].includes(buttonDisable)"
                       >
                         <i class="iconfont mr5 iconlajitongicon"></i> 编辑发货信息
                       </Button>
@@ -227,14 +229,12 @@
                   auto-resize
                   border
                   resizable
-                  show-footer
                   ref="xTable1"
                   size="mini"
                   @select-all="selectAllEvent"
                   @select-change="selectChangeEvent"
                   :height="rightTableHeight"
                   :data="Leftcurrentrow.detailVOS"
-                  :footer-method="addFooter"
                   :edit-rules="validRules"
                   showOverflow="true"
                   show-overflow
@@ -291,7 +291,7 @@
     <!--      </div>-->
     <!--    </Modal>-->
     <!--编辑收货信息-->
-    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata"></goods-info>
+    <goods-info ref="goodsInfo" :mainId="MainID" :row="datadata" :orgid="orgid"></goods-info>
     <!-- 选择调出方 -->
     <!--<select-supplier @selectSearchName="selectSupplierName" ref="selectSupplier" headerTit="调出方资料"></select-supplier>-->
     <select-supplier
@@ -354,16 +354,10 @@ export default {
     selectPartCom
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d*$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[0-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('受理数量输入不正确'))
       }
     };
     return {
@@ -374,7 +368,7 @@ export default {
       checkboxArr: [], // checkbox选中
       idsId: [],
       MainID: "",
-      datadata: "",
+      datadata: null,
       getArray: [],
       tuneOut: false,
       flag: 0,
@@ -382,6 +376,8 @@ export default {
       flagValue: 0,
       flagValue1: 0,
       ArrayValue: [],
+      ArrayKeyValue: [],
+      orgid: "",
       buttonDisable: 0,
       buttonShow: true, //按钮是否禁用
       guestOrgid: "", //保存调出方的id
@@ -606,7 +602,8 @@ export default {
       val: "0",
       diaochuName: "",
       diaochuID: "",
-      clickdelivery: false
+      clickdelivery: false,
+      isWms:false,//仓库是否启用wms
     };
   },
   watch: {
@@ -625,9 +622,7 @@ export default {
   methods: {
     // 高级查询弹框
     moreChange(type) {
-      if (!type) {
-        this.$refs.naform.reset();
-      }
+      this.$refs.naform.reset();
     },
     getArrayParams() {
       var req = {};
@@ -638,6 +633,7 @@ export default {
         this.getArray = content;
         content.forEach(item => {
           this.ArrayValue.push(item.fullName);
+          this.ArrayKeyValue.push({ name: item.fullName, orgid: item.orgid })
         });
       });
     },
@@ -647,6 +643,7 @@ export default {
     // },
     //配件返回的参数
     getPartNameList(val) {
+      var arr = []
       val.forEach(item => {
         item.partName = item.partStandardName;
         item.hasAcceptQty = "1";
@@ -654,17 +651,19 @@ export default {
         item.orderPrice = item.minUnit;
         item.oemCode = item.oeCode;
         item.spec = item.specifications;
-        item.partId = item.id;
+        item.partId = item.orgid;
         item.partInnerId = item.code;
-        delete item.id;
-        delete item.orderPrice;
+        let el = Object.assign({}, item);
+        delete el.id;
+        delete el.orderPrice;
+        arr.push(el)
       });
 
       var allArr = []; //新数组
 
       this.Leftcurrentrow.detailVOS = [
         ...this.Leftcurrentrow.detailVOS,
-        ...val
+        ...arr
       ];
       var allArr = [];
       var oldArr = this.Leftcurrentrow.detailVOS;
@@ -680,39 +679,26 @@ export default {
         }
       }
       this.Leftcurrentrow.detailVOS = allArr;
-
-      // var arrSet = this.Leftcurrentrow.detailVOS;
-      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-      //   var flag = true;
-      //   for (var j = 0; j < allArr.length; j++) {
-      //     if (this.Leftcurrentrow.detailVOS[i].id == allArr[j].id) {
-      //       flag = false;
-      //     }
-      //   }
-      //   if (flag) {
-      //     allArr.push(this.Leftcurrentrow.detailVOS[i]);
-      //   }
-      // }
-      // this.$refs.formPlan.validate(async (valid) => {
-      //     if (valid) {
-      //         let data ={}
-      //         data = this.Leftcurrentrow
-      //         data.detailVOS = conversionList(val)
-      //         let res = await  baocun(data)
-      //         if(res.code === 0){
-      //             this.getList()
-      //         }
-      //     } else {
-      //         this.$Message.error('*为必填项');
-      //     }
-      // })
+      setTimeout(()=>{
+        this.$Message.success("已添加");
+      },0)
     },
     // getMessage() {
     //   const params = this.$refs.goodI.getParams()
     //   this.Leftcurrentrow['sendWay'] = params
     //   this.GainInformation = false
     // },
-    selectAllEvent({ checked }) {},
+    selectAllEvent({ checked, selection }) {
+      if (checked) {
+        selection.forEach(el => {
+          this.idsId.push(el.id);
+        })
+        this.checkboxArr = selection;
+      } else {
+        this.idsId = [];
+        this.checkboxArr = [];
+      }
+    },
     selectChangeEvent(msg) {
       this.idsId.push(msg.row.id);
       this.checkboxArr = msg.selection;
@@ -733,17 +719,6 @@ export default {
         this.$Message.info("仓库和创建时间以及调出方为必输项");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   if (this.Leftcurrentrow.xinzeng === "1") {
-      //   } else {
-      //     this.$Message.info("请先选择加工单");
-      //     return;
-      //   }
-      // }
-      // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态才能进行保存操作");
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       if (params.xinzeng) {
         delete params.status;
@@ -782,6 +757,7 @@ export default {
               this.$Message.success("保存成功");
               this.flag = 0;
               this.flag1 = false;
+              this.buttonDisable = null;
               // this.Leftcurrentrow.storeId = ""
               // this.Leftcurrentrow.guestName = ""
               // this.Leftcurrentrow.storeName =  "",
@@ -798,7 +774,7 @@ export default {
       } catch (errMap) {
         this.$XModal.message({
           status: "error",
-          message: "受理数量必须输入大于0的正整数！"
+          message: "受理数量输入错误！"
         });
       }
     },
@@ -813,8 +789,13 @@ export default {
       this.Leftcurrentrow.code = "";
       this.Leftcurrentrow.remark = "";
       this.Leftcurrentrow.serviceId = "";
+      this.Leftcurrentrow.status.value = 0;
       if(this.cangkuListall.length>0){
-          this.Leftcurrentrow.storeId = this.cangkuListall[0].id;
+          this.cangkuListall.forEach(el => {
+            if (el.isDefault) {
+              this.Leftcurrentrow.storeId = el.id;
+            }
+          })
       }else{
           this.Leftcurrentrow.storeId = '';
       }
@@ -850,6 +831,7 @@ export default {
         serviceId: "",
         detailVOS: []
       };
+      this.datadata = null;
       this.Left.tbdata.unshift(item);
       this.Left.tbdata.map((item, index) => {
         item.index = index + 1;
@@ -860,14 +842,6 @@ export default {
         this.$Message.info("请先保存新增加工单");
         return;
       }
-      // if (!this.Leftcurrentrow.serviceId) {
-      //   this.$Message.info("请先选择加工单");
-      //   return;
-      // }
-      // if (this.Leftcurrentrow.status.value === 1) {
-      //   this.$Message.info("当前加工单号已提交审核!无需重复操作");
-      //   return;
-      // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
         if(params.status.value!=undefined){
             params.status = params.status.value
@@ -892,6 +866,8 @@ export default {
         .then(res => {
           // 点击列表行==>配件组装信息
           if (res.code == 0) {
+            this.flag = 0;
+            this.buttonDisable = null;
             this.getList();
             this.$Message.success("提交成功");
           }
@@ -966,12 +942,23 @@ export default {
     },
     //编辑收货信息弹框显示
     GoodsInfoModal() {
-      if (!this.currentrow) {
+      if(!this.datadata) {
+        return this.$Message.info("请选择保存过的调拨单");
+      }
+      if (!this.currentrow.id) {
         this.$Message.info("请选择编辑项");
         return;
       }
-      this.clickdelivery = true;
-      this.$refs.goodsInfo.init();
+      this.ArrayKeyValue.forEach(el => {
+        if(el.name == this.Leftcurrentrow.guestName) {
+          this.orgid = el.orgid
+        }
+      })
+      setTimeout(() => {
+        this.clickdelivery = true;
+        this.$refs.goodsInfo.init();
+      },0)
+
     },
     //打印表格
     printTable() {
@@ -1035,6 +1022,7 @@ export default {
     },
     //更多按钮
     more() {
+      this.$refs.naform.reset();
       this.advanced = true;
     },
     //左边列表选中当前行
@@ -1044,18 +1032,19 @@ export default {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
           onOk: () => {
-            this.baocun1();
-            this.flagState = 0;
-          },
-          onCancel: () => {
-            this.getList();
             this.flag = 0;
             this.flagState = 0;
+            this.baocun1();
+          },
+          onCancel: () => {
+            this.flag = 0;
+            this.flagState = 0;
+            this.getList();
           }
         });
         return;
       }
-      this.buttonDisable = 0;
+      this.buttonDisable = 0; // 草稿
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
       if (row.statuName == "待出库") {
@@ -1064,6 +1053,16 @@ export default {
       if (row.statuName == "已出库") {
         this.buttonDisable = 2;
       }
+      if (row.statuName == "已作废") {
+        this.buttonDisable = 3;
+      }
+
+      //判断仓库是否启用wms
+      this.isWms = false;
+      if(this.buttonDisable===1&&row.isWms===1){
+        this.isWms = true;
+      }
+
       if (row.id == undefined) {
         row.id = "";
       }
@@ -1086,6 +1085,8 @@ export default {
         };
         const res = await getListDetail(params);
         this.Leftcurrentrow.detailVOS = res.data;
+      } else {
+        this.datadata = null;
       }
       if (row.status.value === 0) {
         this.buttonShow = false;
@@ -1125,6 +1126,7 @@ export default {
       }
       this.advanced = false;
       this.getList();
+      this.form = {};
       this.$refs.naform.reset();
     },
     ok() {},
@@ -1144,15 +1146,17 @@ export default {
         );
         setTimeout(() => {
           this.Leftcurrentrow.detailVOS = NoRepeat;
+          this.$Message.success("删除成功");
         }, 1000);
 
         seleList.map(item => {
-          arr.push(item.id);
+          if(item.id)arr.push(item.id);
         });
         const params = {
           ids: arr,
           mainId: this.Leftcurrentrow.id
         };
+        if(params.ids.length===0) return
         shanqu(params)
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list

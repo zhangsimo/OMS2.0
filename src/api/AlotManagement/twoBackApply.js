@@ -45,7 +45,7 @@ export function tijiao(data) {
 //删除
 export function shanqu(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyDetail/del`,
+    url: `${api.omsOrder}/allotAcceptDetail/del`,
     method: "post",
     data
   });
@@ -61,7 +61,7 @@ export function outDataList(data) {
 //作废
 export function zuofei(data) {
   return axios.request({
-    url: `${api.omsOrder}/allotApplyMain/invalid`,
+    url: `${api.omsOrder}/allotOutMain/invalid`,
     method: "post",
     data
   });

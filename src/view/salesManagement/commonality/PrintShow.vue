@@ -157,6 +157,11 @@ export default {
           align: "center"
         },
         {
+          title: "品牌车型",
+          key: "carModelName",
+          align: "center"
+        },
+        {
           title: "规格",
           key: "spec",
           align: "center"
@@ -164,6 +169,11 @@ export default {
         {
           title: "单位",
           key: "unit",
+          align: "center"
+        },
+        {
+          title: "数量",
+          key: "orderQty",
           align: "center"
         },
         {

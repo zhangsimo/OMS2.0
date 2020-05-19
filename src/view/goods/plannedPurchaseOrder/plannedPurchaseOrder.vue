@@ -259,11 +259,13 @@
                       class="w160"
                       v-model="formPlanmain.directCompanyId"
                       :disabled="isInput||isDirectCompanyId"
+                      clearable
                     >
                       <Option
                         v-for="(item, index) in putStores"
                         :key="index"
                         :value="item.value"
+                        v-show="item.value!=$store.state.user.userData.shopId"
                         >{{ item.label }}</Option
                       >
                     </Select>
@@ -354,15 +356,16 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell',activeMethod: activeMethodFun }"
               >
                 <vxe-table-column
                   type="index"
                   width="60"
                   title="序号"
+                  fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column title="操作" width="80">
+                <vxe-table-column fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column fixed="left" title="操作" width="80">
                   <template v-slot="{ row }">
                     <Button type="text" @click="watch(row.partId)">查看</Button>
                   </template>
@@ -371,21 +374,24 @@
                   field="partCode"
                   title="配件编码"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
                   title="配件名称"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partBrand"
                   title="品牌"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"
                   title="采购数量"
-                  :edit-render="{ name: 'input' }"
+                  :edit-render="{ name: 'input'}"
                   width="160"
                 >
                   <template v-slot:edit="{ row }">

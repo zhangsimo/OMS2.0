@@ -9,13 +9,21 @@
           <div class="wlf">
             <div class="db">
               <span>快速查询：</span>
-              <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
-              <Select v-model="form.status" @on-change="getDataType" class="w90 mr10">
+              <quick-date
+                class="mr10"
+                v-on:quickDate="getDataQuick"
+              ></quick-date>
+              <Select
+                v-model="form.status"
+                @on-change="getDataType"
+                class="w90 mr10"
+              >
                 <Option
                   v-for="item in purchaseTypeArr"
                   :value="item.value"
                   :key="item.value"
-                >{{item.label}}</Option>
+                  >{{ item.label }}</Option
+                >
               </Select>
             </div>
             <div class="db">
@@ -40,18 +48,28 @@
               </Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="this.remarkStatus" v-has="'submit'" @click="tijiao1">
+              <Button
+                class="mr10"
+                :disabled="this.remarkStatus"
+                v-has="'submit'"
+                @click="tijiao1"
+              >
                 <Icon type="md-checkmark" size="14" />提交
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'delivery'" :disabled="this.flagStatus" class="mr10" @click="chuku">
+              <Button
+                v-has="'delivery'"
+                :disabled="Leftcurrentrow.statuName != '已受理'"
+                class="mr10"
+                @click="chuku"
+              >
                 <Icon type="md-checkmark" size="14" />出库
               </Button>
             </div>
             <div class="db">
               <Button
-                :disabled="this.remarkStatus"
+                :disabled="newFlag"
                 v-has="'cancellation'"
                 class="mr10"
                 @click="zuofei1"
@@ -60,8 +78,13 @@
               </Button>
             </div>
             <div class="db">
-              <Button v-has="'print'" class="mr10" @click="printTable">
-                <Icon type="md-close" size="14" />打印
+              <Button
+                v-has="'print'"
+                :disabled="newFlag"
+                class="mr10"
+                @click="printTable"
+              >
+                <i class="iconfont mr5 icondayinicon"></i> 打印
               </Button>
             </div>
           </div>
@@ -71,7 +94,11 @@
         <div class="inner-box">
           <div class="con-split" ref="paneLeft">
             <Split v-model="split1" min="200" @on-moving="getDomHeight">
-              <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
+              <div
+                slot="left"
+                class="con-split-pane-left"
+                style="overflow-y: auto; height: 100%;"
+              >
                 <div class="pane-made-hd">退回申请列表</div>
                 <Table
                   :height="leftTableHeight"
@@ -98,10 +125,18 @@
                   class="mr10"
                 ></Page>
               </div>
-              <div slot="right" class="con-split-pane-right pl5 goods-list-form">
+              <div
+                slot="right"
+                class="con-split-pane-right pl5 goods-list-form"
+              >
                 <div class="pane-made-hd">调入退回信息</div>
                 <div v-if="showit" class="clearfix purchase" ref="planForm">
-                  <Form inline :show-message="false" ref="formPlan" :label-width="120">
+                  <Form
+                    inline
+                    :show-message="false"
+                    ref="formPlan"
+                    :label-width="120"
+                  >
                     <FormItem label="调出方：" prop="supplyName" class="redIT">
                       <Row>
                         <Col span="22">
@@ -114,7 +149,11 @@
                           <!-- <Select v-model="Leftcurrentrow.guestName" label-in-value filterable>
                             <Option v-for="item in ArrayValue" :value="item" :key="item">{{ item }}</Option>
                           </Select>-->
-                          <Input disabled :value="Leftcurrentrow.guestName" class="w160"></Input>
+                          <Input
+                            disabled
+                            :value="Leftcurrentrow.guestName"
+                            class="w160"
+                          ></Input>
                         </Col>
                         <Col span="2">
                           <Button
@@ -124,15 +163,24 @@
                             size="small"
                             type="default"
                           >
-                            <i class="iconfont iconxuanzetichengchengyuanicon"></i>
+                            <i
+                              class="iconfont iconxuanzetichengchengyuanicon"
+                            ></i>
                           </Button>
                         </Col>
                       </Row>
                     </FormItem>
-                    <FormItem label="调出仓库：" prop="supplyName" class="redIT">
+                    <FormItem
+                      label="调出仓库："
+                      prop="supplyName"
+                      class="redIT"
+                    >
                       <Row class="w160">
                         <Col span="24">
-                          <Select :disabled="this.remarkStatus" v-model="Leftcurrentrow.storeId">
+                          <Select
+                            :disabled="this.remarkStatus"
+                            v-model="Leftcurrentrow.storeId"
+                          >
                             <!--<Option-->
                             <!--v-for="item in cangkuListall"-->
                             <!--:value="item.value"-->
@@ -141,13 +189,19 @@
                             <Option
                               v-for="item in cangkuListall"
                               :value="item.id"
+                              :disabled="item.isDisabled"
                               :key="item.id"
-                            >{{ item.name }}</Option>
+                              >{{ item.name }}</Option
+                            >
                           </Select>
                         </Col>
                       </Row>
                     </FormItem>
-                    <FormItem label="退回申请日期：" prop="billType" class="redIT">
+                    <FormItem
+                      label="退回申请日期："
+                      prop="billType"
+                      class="redIT"
+                    >
                       <DatePicker
                         :value="Leftcurrentrow.createTime"
                         disabled
@@ -157,25 +211,45 @@
                       ></DatePicker>
                     </FormItem>
                     <FormItem label="备注：" prop="remark">
-                      <Input :disabled="this.remarkStatus" class="w160"></Input>
+                      <Input
+                        :disabled="this.remarkStatus"
+                        v-model="Leftcurrentrow.remark"
+                        class="w160"
+                      ></Input>
                     </FormItem>
                     <FormItem label="申请人：" prop="planDate">
-                      <Input disabled class="w160" :value="Leftcurrentrow.createUname"></Input>
+                      <Input
+                        disabled
+                        class="w160"
+                        :value="Leftcurrentrow.createUname"
+                      ></Input>
                     </FormItem>
                     <FormItem label="退回申请号：" prop="planOrderNum">
-                      <Input disabled class="w160" :value="Leftcurrentrow.serviceId"></Input>
+                      <Input disabled class="w160" :value="serviceId"></Input>
                     </FormItem>
                   </Form>
                 </div>
                 <div class="flex plan-cz-btn" ref="planBtn">
                   <div class="clearfix">
                     <div class="fl mb5">
-                      <Button v-has="'addProoo'" size="small" class="mr10" @click="addProoo">
+                      <Button
+                        :disabled="this.remarkStatus"
+                        v-has="'addProoo'"
+                        size="small"
+                        class="mr10"
+                        @click="addProoo"
+                      >
                         <Icon type="md-add" />选择调拨入库单
                       </Button>
                     </div>
                     <div class="fl mb5">
-                      <Button v-has="'delete'" size="small" class="mr10" @click="shanchu">
+                      <Button
+                        :disabled="this.remarkStatus"
+                        v-has="'delete'"
+                        size="small"
+                        class="mr10"
+                        @click="shanchu"
+                      >
                         <i class="iconfont mr5 iconlajitongicon"></i> 删除配件
                       </Button>
                     </div>
@@ -196,24 +270,68 @@
                   :data="Leftcurrentrow.detailVOS"
                   :stripe="true"
                   :footer-method="addFooter"
-                  :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
+                  :edit-config="
+                    Leftcurrentrow.status.value === 0
+                      ? { trigger: 'click', mode: 'cell' }
+                      : {}
+                  "
                 >
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column
+                    type="index"
+                    width="60"
+                    title="序号"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    type="checkbox"
+                    width="60"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partCode"
+                    title="配件编码"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partName"
+                    title="配件名称"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="partBrand"
+                    title="品牌"
+                    width="100"
+                  ></vxe-table-column>
                   <vxe-table-column
                     field="applyQty"
-                    :edit-render="{name: 'input'}"
+                    :edit-render="{ name: 'input' }"
                     title="申请退回数量"
                     width="100"
                   ></vxe-table-column>
-                  <vxe-table-column field :edit-render="{name: 'input'}" title="备注" width="100"></vxe-table-column>
-                  <vxe-table-column field="carBrandName" title="品牌车型" width="100"></vxe-table-column>
-                  <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
-                  <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
-                  <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
+                  <vxe-table-column
+                    field="remark"
+                    :edit-render="{ name: 'input' }"
+                    title="备注"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="carBrandName"
+                    title="品牌车型"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="unit"
+                    title="单位"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="oemCode"
+                    title="OE码"
+                    width="100"
+                  ></vxe-table-column>
+                  <vxe-table-column
+                    field="spec"
+                    title="规格"
+                    width="100"
+                  ></vxe-table-column>
                 </vxe-table>
               </div>
             </Split>
@@ -222,7 +340,12 @@
       </section>
       <!--更多弹框-->
       <Modal v-model="advanced" title="高级查询" width="600px">
-        <More ref="naform" @getName="showModel2" :dcName="diaochuName" :dcId="diaochuID"></More>
+        <More
+          ref="naform"
+          @getName="showModel2"
+          :dcName="diaochuName"
+          :dcId="diaochuID"
+        ></More>
         <div slot="footer">
           <Button type="primary" @click="Determined">确定</Button>
           <Button type="default" @click="advanced = false">取消</Button>
@@ -290,7 +413,9 @@ export default {
   },
   data() {
     return {
-      remarkStatus: false,
+      serviceId: "",
+      newFlag: true,
+      remarkStatus: true,
       flagStatus: false,
       flagValue: [],
       flag: 0,
@@ -307,7 +432,7 @@ export default {
       split1: 0.2,
       tabIndex: 0,
       curronly: false,
-      purchaseType: 1, //查询选项
+      purchaseType: "0", //查询选项
       purchaseTypeArr: [
         {
           label: "所有",
@@ -315,27 +440,35 @@ export default {
         },
         {
           label: "草稿",
-          value: "DRAFT"
+          value: "ALLOT_DRAFT"
         },
         {
-          label: "待受理",
-          value: "UNACCEPTED"
+          label: "待出库",
+          value: "ALLOT_WAIT_OUT"
+        },
+        {
+          label: "已出库",
+          value: "ALLOT_OUT_ALL"
+        },
+        {
+          label: "已作废",
+          value: "ALLOT_INVALID"
         },
         {
           label: "已受理",
           value: "ACCEPTED"
         },
         {
-          label: "已出库",
-          value: "STOCKING"
+          label: "待受理",
+          value: "UNACCEPTED"
+        },
+        {
+          label: "已入库",
+          value: "WAREHOUSING"
         },
         {
           label: "已拒绝",
           value: "REJECTED"
-        },
-        {
-          label: "已作废",
-          value: "INVALID"
         }
       ],
       advanced: false, //更多模块的弹框
@@ -567,18 +700,19 @@ export default {
         !this.Leftcurrentrow.createTime ||
         !this.Leftcurrentrow.guestName
       ) {
-        this.$Message.info("仓库和创建时间以及调出方为必输项");
+        this.$Message.error("调出仓库为必填项");
         return;
       }
-      if (!this.Leftcurrentrow.serviceId) {
-        if (this.Leftcurrentrow.xinzeng === "1") {
-        } else {
-          this.$Message.info("请先选择加工单");
-          return;
-        }
-      }
+      // if (!this.Leftcurrentrow.serviceId) {
+      //   console.log(this.Leftcurrentrow)
+      //   if (this.Leftcurrentrow.xinzeng === "1") {
+      //   } else {
+      //     this.$Message.error("请先选择加工单");
+      //     return;
+      //   }
+      // }
       // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态才能进行保存操作");
+      //   this.$Message.error("只有草稿状态才能进行保存操作");
       //   return;
       // }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -625,15 +759,31 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("保存配件组装信息失败");
+          this.$Message.error("保存配件组装信息失败");
         });
     },
     xinzeng() {
+      this.newFlag = true;
+      this.serviceId = "";
+      this.Leftcurrentrow = {
+        status: {
+          value: 1,
+          name: ""
+        },
+        storeName: "",
+        createTime: "",
+        orderMan: "",
+        createUname: "",
+        remark: "",
+        serviceId: "",
+        detailVOS: [],
+        xinzeng: "1"
+      };
       // console.log(this.$store);
       if (this.Left.tbdata.length === 0) {
       } else {
         if (this.Left.tbdata[0]["xinzeng"] === "1") {
-          this.$Message.info("请先保存数据");
+          this.$Message.error("请先保存数据");
           return;
         }
       }
@@ -680,15 +830,15 @@ export default {
     },
     tijiao1() {
       if (this.Leftcurrentrow.xinzeng === "1") {
-        this.$Message.info("请先保存新增加工单");
+        this.$Message.error("请先保存该单据");
         return;
       }
       if (!this.Leftcurrentrow.serviceId) {
-        this.$Message.info("请先选择保存申请单");
+        this.$Message.error("请先选择保存申请单");
         return;
       }
       if (this.Leftcurrentrow.status.value === 1) {
-        this.$Message.info("当前申请单已提交审核!无需重复操作");
+        this.$Message.error("当前申请单已提交审核!无需重复操作");
         return;
       }
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
@@ -704,7 +854,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("提交失败");
+          this.$Message.error("提交失败");
         });
     },
     zuofei1() {
@@ -712,15 +862,15 @@ export default {
         title: "是否确定作废订单!",
         onOk: () => {
           if (this.Leftcurrentrow.xinzeng === "1") {
-            this.$Message.info("请先保存新增加工单");
+            this.$Message.error("请先保存新增加工单");
             return;
           }
           if (!this.Leftcurrentrow.serviceId) {
-            this.$Message.info("请先选择加工单");
+            this.$Message.error("请先选择加工单");
             return;
           }
           if (this.Leftcurrentrow.status.value !== 0) {
-            this.$Message.info("只有草稿状态加工单能进行作废操作");
+            this.$Message.error("只有草稿状态的单据才能进行作废操作");
             return;
           }
           const params = {
@@ -736,7 +886,7 @@ export default {
               }
             })
             .catch(e => {
-              this.$Message.info("作废失败");
+              this.$Message.error("作废失败");
             });
         },
         onCancel: () => {
@@ -754,12 +904,12 @@ export default {
       // if (!this.Leftcurrentrow.serviceId) {
       //   if (this.Leftcurrentrow.xinzeng) {
       //   } else {
-      //     this.$Message.info("请先选择申请单");
+      //     this.$Message.error("请先选择申请单");
       //     return;
       //   }
       // }
       // if (this.Leftcurrentrow.status.value !== 0) {
-      //   this.$Message.info("只有草稿状态申请单能进行添加操作");
+      //   this.$Message.error("只有草稿状态申请单能进行添加操作");
       //   return;
       // }
       const params = {
@@ -775,7 +925,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("数据加载失败");
+          this.$Message.error("数据加载失败");
         });
       // 获取成品列表把data赋值给子组件中
       // this.getListPro()
@@ -783,7 +933,7 @@ export default {
     //打印表格
     printTable() {
       if (!this.dayinCureen.id) {
-        this.$Message.info("请选择打印项");
+        this.$Message.error("请选择打印项");
         return;
       }
       this.$refs.printBox.openModal();
@@ -802,7 +952,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("出库失败");
+          this.$Message.error("出库失败");
         });
     },
     searchPro(params, size, page) {
@@ -833,8 +983,8 @@ export default {
     //快速查询日期
     getDataQuick(v) {
       const params = {
-        startTime: v[0],
-        endTime: v[1]
+        createTimeStart: v[0],
+        createTimeEnd: v[1]
       };
       this.getList(params);
     },
@@ -844,6 +994,9 @@ export default {
     },
     //左边列表选中当前行
     async selectTabelData(row) {
+      if (row.id) {
+        this.newFlag = false;
+      }
       if (row.status.name != "草稿") {
         this.remarkStatus = true;
       } else {
@@ -872,13 +1025,14 @@ export default {
       }
       this.dayinCureen = row;
       this.Leftcurrentrow = row;
+      this.serviceId = this.Leftcurrentrow.serviceId;
       const params = {
         mainId: row.id
       };
       let res = {};
-        if(this.Leftcurrentrow.xinzeng!=1){
-            res=await getListDetail(params);
-        }
+      if (this.Leftcurrentrow.xinzeng != 1) {
+        res = await getListDetail(params);
+      }
       this.flagValue = res.data;
       this.showit = false;
       this.Leftcurrentrow.detailVOS = res.data;
@@ -887,20 +1041,20 @@ export default {
         that.showit = true;
       }, 100);
 
-        cangkulist2(this.$store.state.user.userData.groupId)
-            .then(res => {
-                if (res.code == 0) {
-                    res.data.map(item => {
-                        item["label"] = item.name;
-                        item["value"] = item.id;
-                    });
-                    // this.cangkuListall = res.data
-                    this.dcData = res.data;
-                }
-            })
-            .catch(e => {
-                this.$Message.info("获取仓库列表失败");
+      cangkulist2(this.$store.state.user.userData.groupId)
+        .then(res => {
+          if (res.code == 0) {
+            res.data.map(item => {
+              item["label"] = item.name;
+              item["value"] = item.id;
             });
+            // this.cangkuListall = res.data
+            this.dcData = res.data;
+          }
+        })
+        .catch(e => {
+          this.$Message.error("获取仓库列表失败");
+        });
     },
     //分页
     changePage(p) {
@@ -928,31 +1082,56 @@ export default {
       var idArr = [];
 
       if (this.Leftcurrentrow.status.value !== 0) {
-        this.$Message.info("只有草稿状态才能进行删除操作");
+        this.$Message.error("只有草稿状态才能进行删除操作");
         return;
       }
       // 组装删除
-      const seleList = this.$refs.xTable1.getSelectRecords();
-      this.Leftcurrentrow.detailVOS = this.array_diff(
-        this.Leftcurrentrow.detailVOS,
-        seleList
-      );
-      const idValue = seleList[0].id;
-      idArr.push(idValue);
-      shanqu({ ids: idArr })
-        .then(res => {
-          // 导入成品, 并把成品覆盖掉当前配件组装信息list
-          if (res.code == 0) {
-            this.Leftcurrentrow.detailVOS = this.array_diff(
-              this.Leftcurrentrow.detailVOS,
-              seleList
-            );
-            this.$Message.success("删除成功");
-          }
-        })
-        .catch(e => {
-          this.$Message.info("删除成品失败");
+      const seleList = this.$refs.xTable1.getCheckboxRecords();
+      seleList.forEach(el => (el.oid = el.id));
+      // this.Leftcurrentrow.detailVOS = this.array_diff(
+      //   this.Leftcurrentrow.detailVOS,
+      //   seleList
+      // );
+      // const idValue = seleList[0].id;
+      idArr = seleList;
+      let idArr1 = [];
+      let idArr2 = [];
+      idArr.forEach(el => {
+        if (el.id) {
+          idArr1.push(el.id);
+        } else {
+          idArr2.push(el);
+        }
+      });
+      if (idArr1.length > 0) {
+        shanqu({ ids: idArr1 })
+          .then(res => {
+            // 导入成品, 并把成品覆盖掉当前配件组装信息list
+            if (res.code == 0) {
+              idArr1.forEach(el => {
+                this.Leftcurrentrow.detailVOS.forEach((el2, index) => {
+                  if (el2.id == el) {
+                    this.Leftcurrentrow.detailVOS.splice(index, 1);
+                  }
+                });
+              });
+              this.$Message.success("删除成功");
+              // this.getList();
+            }
+          })
+          .catch(e => {
+            this.$Message.error("删除成品失败");
+          });
+      }
+      if (idArr2.length > 0) {
+        idArr2.forEach(el => {
+          this.Leftcurrentrow.detailVOS.forEach((el2, index) => {
+            if (el2.partName == el.partName) {
+              this.Leftcurrentrow.detailVOS.splice(index, 1);
+            }
+          });
         });
+      }
     },
     //展示方
     showModel() {
@@ -984,19 +1163,21 @@ export default {
     },
     getOkList(list, rowValue) {
       this.showit = false;
+      this.Leftcurrentrow.detailVOS = [];
       for (var i = 0; i < list.length; i++) {
+        list[i].oid = list[i].id;
         list[i].id = "";
         this.Leftcurrentrow.detailVOS.push(list[i]);
       }
-      var result = [];
-      var obj = {};
-      for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
-        if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
-          result.push(this.Leftcurrentrow.detailVOS[i]);
-          obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
-        }
-      }
-      this.Leftcurrentrow.detailVOS = result;
+      // var result = [];
+      // var obj = {};
+      // for (var i = 0; i < this.Leftcurrentrow.detailVOS.length; i++) {
+      //   if (!obj[this.Leftcurrentrow.detailVOS[i].partCode]) {
+      //     result.push(this.Leftcurrentrow.detailVOS[i]);
+      //     obj[this.Leftcurrentrow.detailVOS[i].partCode] = true;
+      //   }
+      // }
+      // this.Leftcurrentrow.detailVOS = result;
       this.Leftcurrentrow.remark = list[0].remark;
 
       this.Leftcurrentrow.guestName = rowValue.guestName;
@@ -1052,7 +1233,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取配件组装列表失败");
+          this.$Message.error("获取配件组装列表失败");
         });
     },
     getListPro() {
@@ -1064,13 +1245,13 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("获取成品列表失败");
+          this.$Message.error("获取成品列表失败");
         });
     },
     array_diff(a, b) {
       for (var i = 0; i < b.length; i++) {
         for (var j = 0; j < a.length; j++) {
-          if (a[j].name === b[i].name) {
+          if (a[j].oid === b[i].oid) {
             a.splice(j, 1);
             j = j - 1;
           }

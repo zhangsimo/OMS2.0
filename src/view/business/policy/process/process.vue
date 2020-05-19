@@ -119,6 +119,7 @@
                                 <Option
                                   v-for="item in cangkuListall"
                                   :value="item.value"
+                                  :disabled="item.isDisabled"
                                   :key="item.value"
                                 >{{item.label}}</Option>
                               </Select>
@@ -179,7 +180,7 @@
                       :height="rightTableHeight"
                       :data="Leftcurrentrow.processProductVO"
                       :footer-method="addFooter"
-                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
+                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
                       <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -365,6 +366,7 @@
                                 <Option
                                   v-for="item in cangkuListall"
                                   :value="item.value"
+                                  :disabled="item.isDisabled"
                                   :key="item.value"
                                 >{{item.label}}</Option>
                               </Select>
@@ -424,7 +426,7 @@
                       @select-change="selectChangeEvent"
                       :height="rightTableHeight"
                       :data="Leftcurrentrow.processProductVO"
-                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'dblclick', mode: 'cell'} : {}"
+                      :edit-config="Leftcurrentrow.status.value === 0 ? {trigger: 'click', mode: 'cell'} : {}"
                     >
                       <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
                       <vxe-table-column type="checkbox" width="60"></vxe-table-column>
@@ -748,7 +750,10 @@ export default {
       cangkuListall: [],
       tableData1: [],
       currentNum: 1,
-      saveBtnClik:false
+      saveBtnClik:false,
+
+      //记录左侧点击的数据
+      leftClickItemId:'',
     };
   },
   watch: {
@@ -778,9 +783,19 @@ export default {
       // if (currentNum)
       this.currentNum = parseInt(event.target.value)||1;
     },
-    selectAllEvent({ checked }) {},
+    selectAllEvent({ checked }) {
+      if (checked) {
+        this.rowId = this.Leftcurrentrow.processProductVO[0].id;
+      } else {
+        this.rowId = '';
+      }
+    },
     selectChangeEvent({ checked, row }) {
-      this.rowId = row.id;
+      if (checked) {
+        this.rowId = row.id;
+      } else {
+        this.rowId = '';
+      }
     },
     tabChange(key) {
       this.tabKey = key;
@@ -1009,7 +1024,9 @@ export default {
           if (res.code == 0) {
             this.tableData1 = res.data;
             this.$refs.addInCom.init();
-            this.$Message.success("获取成品列表成功");
+            setTimeout(()=>{
+              this.$Message.success("获取成品列表成功");
+            },0)
           }
         })
         .catch(e => {
@@ -1142,6 +1159,9 @@ export default {
     stamp() {},
     //左边列表选中当前行
     selectTabelData(row) {
+      if(row.id){
+        this.leftClickItemId = row.id;
+      }
       this.Leftcurrentrow = row;
       if (this.flag === 1) {
         this.$Modal.confirm({
@@ -1269,17 +1289,17 @@ export default {
         // 组装删除
         const seleList = this.$refs.xTable1.getSelectRecords();
         const id = seleList[0].id;
-
         shanqu(id)
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
-              this.Leftcurrentrow.processProductVO = this.array_diff(
-                this.Leftcurrentrow.processProductVO,
-                seleList
-              );
+              // this.Leftcurrentrow.processProductVO = this.array_diff(
+              //   this.Leftcurrentrow.processProductVO,
+              //   seleList
+              // );
+              this.Leftcurrentrow.processProductVO = []
               this.currentData = [];
-              this.getListzu(this.form);
+              // this.getListzu(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
@@ -1296,12 +1316,13 @@ export default {
           .then(res => {
             // 导入成品, 并把成品覆盖掉当前配件组装信息list
             if (res.code == 0) {
-              this.Leftcurrentrow.processProductVO = this.array_diff(
-                this.Leftcurrentrow.processProductVO,
-                seleList
-              );
+              // this.Leftcurrentrow.processProductVO = this.array_diff(
+              //   this.Leftcurrentrow.processProductVO,
+              //   seleList
+              // );
+              this.Leftcurrentrow.processProductVO = []
               this.currentData = [];
-              this.getListchai(this.form);
+              // this.getListchai(this.form);
               this.rowId = "";
               this.$Message.success("删除成功");
             }
@@ -1351,6 +1372,16 @@ export default {
               });
               this.Left.tbdata = res.data.content || [];
               this.Left.page.total = res.data.totalElements;
+
+              if(this.leftClickItemId){
+                for(let b of this.Left.tbdata){
+                  if(b.id==this.leftClickItemId){
+                    b._highlight = true;
+                    this.selectTabelData(b);
+                    break;
+                  }
+                }
+              }
             }
           }
         })

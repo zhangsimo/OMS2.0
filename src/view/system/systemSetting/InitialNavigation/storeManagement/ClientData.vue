@@ -220,8 +220,10 @@ export default {
       }
     };
     const valiiBank = (rule, value, callback) => {
-      const regExp = /^([1-9]{1})(\d{15}|\d{18})$/; 
-      if (value && !regExp.test(value)) {
+      const regExp = /^\d{1,}$/;
+      if(!value) {
+        callback();
+      } else if (!regExp.test(value)) {
         callback(new Error("银行账户填写错误"));
       } else {
         callback();
@@ -235,7 +237,7 @@ export default {
       visible: false,
       clientDisable: true,
       rules: {
-        bankAccountNumber: [{validator: valiiBank, trigger: "blur" }],
+        bankAccountNumber: [{required: false, validator: valiiBank, trigger: "blur" }],
         firm: [{ required: true, message: "不能为空", trigger: "blur" }],
         name: [{ required: true, message: "不能为空", trigger: "blur" }],
         shortName: [{ required: true, message: "不能为空", trigger: "change" }],
@@ -299,6 +301,10 @@ export default {
     resetFields() {
       this.$refs.form.resetFields();
       this.uploadSrc = "";
+      this.province='';
+      this.city='';
+      this.county='';
+      this.address='';
     },
     //校验表单
     handleSubmit(callback) {

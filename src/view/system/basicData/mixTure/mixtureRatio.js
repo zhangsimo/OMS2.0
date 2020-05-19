@@ -7,6 +7,8 @@ const data = function() {
     // tab索引
     tabIndex: 0,
     flag: 0,
+    //数量-保存最后一次符合正则
+    oldNum:0,
     // 级别名称
     level: {
       loading: false,
@@ -62,7 +64,7 @@ const data = function() {
               "Select",
               {
                 props: {
-                  value: 0
+                  value: params.row.isDisabled
                 },
                 style: {
                   width: "100%"
@@ -158,14 +160,16 @@ const data = function() {
                   vm.customer.tbdata[params.index] = params.row;
                 },
                 "on-blur": event => {
-                  console.log(params.row.qty, "params.row.qty=?159");
                   let val = event.target.value;
-                  let reg = /^(?:0|[1-9][0-9]?|100)$/;
+                  let reg = /^[1-9][0-9]*([\.][0-9]{1,1})?$/;
                   if (!reg.test(val)) {
-                    this.$Message.error("请输入0-100的正整数");
+                    this.$Message.error("请输入数字,且最多只能保留一位小数");
                     this.flag = 1;
-                    params.row.qty = "";
+                    params.row.qty = this.oldNum;
+                    vm.customer.tbdata[params.index] = params.row;
                     return;
+                  }else{
+                    this.oldNum = val
                   }
                 },
                 "on-enter": event => {
@@ -309,9 +313,9 @@ const methods = {
       item.partInnerId = el.partInnerId;
       item.oemCode = el.oemCode;
       item.fullName = el.fullName;
+      item.carBrandModel = el.carModelName;
       data.push(item);
     });
-    // console.log(data)
     await partMatchingSave(data);
     this.leftgetList();
     this.$Message.success("保存成功");
@@ -375,7 +379,7 @@ const methods = {
       item.parentId = this.levelId;
       sum += item.ratio *1
     });
-    if(sum!==1) {
+    if(parseInt(sum.toFixed(0))!==1) {
       this.$Message.error('成本比例合计必须等于1')
       return
     }
@@ -396,6 +400,7 @@ const methods = {
         deleteIds: newArr
       }).then(res => {
         this.$Message.success("保存成功");
+        this.leftgetList();
       });
     }
     this.rightgetList();
@@ -424,6 +429,10 @@ const methods = {
         this.level.tbdata = res.data.map(el => {
           el.oid = el.id;
           el.isEdit = false;
+          if(this.levelId&&this.levelId==el.id){
+            this.selction(el)
+            el._highlight = true
+          }
           return el;
         });
       }
@@ -459,6 +468,7 @@ const methods = {
   },
   //子组件的参数
   selectPartName(a) {
+    console.log(a)
     let newA = a.map(item => {
       return {
         partCode: item.partCode,
@@ -466,7 +476,8 @@ const methods = {
         partId: item.id,
         partInnerId: item.code,
         oemCode: item.oeCode,
-        fullName: item.fullName
+        fullName: item.fullName,
+        carModelName: item.adapterCarModel
       };
     });
     this.level.tbdata = [ ...newA,...this.level.tbdata];

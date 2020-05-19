@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" class="w150" filterable>
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"

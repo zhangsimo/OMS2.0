@@ -2,12 +2,12 @@
   <div class="commodbigbox">
     <div class="oper-top">
       <span class="mr10">查询项：</span>
-      <Select v-model="searchType" class="w100 mr10">
-        <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-      <Input class="mr10" v-model="query" style="width: 150px" />
+      <!--<Select v-model="searchType" class="w100 mr10">-->
+        <!--<Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+      <!--</Select>-->
+      <Input class="mr10" v-model="query" placeholder="配件编码/名称/车型" style="width: 150px" />
       <span class="mr10">品牌:</span>
-      <Select v-model="band" style="width:140px" class="mr20">
+      <Select @on-change="brandSelect" v-model="band" filterable style="width:140px" class="mr20">
         <Option v-for="item in bands" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <Button type="warning" class="mr20" @click="queryTight">
@@ -78,9 +78,7 @@ import {
   down
 } from "@/api/system/essentialData/commoditiesInShortSupply.js";
 import * as api from "_api/system/partManager";
-import {
-  getPartBrand
-} from "@/api/business/stockSearch";
+import { getPartBrand } from "@/api/business/stockSearch";
 import Fittings from "./Fittings/Fittings.vue";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
@@ -205,7 +203,7 @@ export default {
         {
           value: "2",
           label: "车型"
-        },
+        }
         // {
         //   value: "3",
         //   label: "拼音"
@@ -231,30 +229,37 @@ export default {
     this.getBand();
   },
   methods: {
+    brandSelect() {
+      // console.log(this.band);
+      this.getList();
+    },
     //获取全部紧俏品
     async getList() {
       let data = {};
       this.Loading = true;
       data.size = this.page.page;
       data.page = this.page.num - 1;
-      if (this.band != "0") {
-        data.partBrandId = this.band;
+      if (this.band != "0" && this.band) {
+        data.partBrandCode = this.band;
       }
-      switch (this.searchType) {
-        case "0":
-          data.queryCode = this.query;
-          break;
-        case "1":
-          data.fullName = this.query;
-          break;
-        case "2":
-          data.carBrandModel = this.query;
-          break;
-        case "3":
-          data.namePy = this.query;
-          break;
-        default:
-          break;
+      // switch (this.searchType) {
+      //   case "0":
+      //     data.queryCode = this.query;
+      //     break;
+      //   case "1":
+      //     data.fullName = this.query;
+      //     break;
+      //   case "2":
+      //     data.carBrandModel = this.query;
+      //     break;
+      //   case "3":
+      //     data.namePy = this.query;
+      //     break;
+      //   default:
+      //     break;
+      // }
+      if(this.query.trim()){
+        data.fullName = this.query
       }
       let res = await getTightProductList(data);
       if (res.code == 0) {
@@ -276,12 +281,13 @@ export default {
         res.data.content.forEach(item => {
           arr.push(...item.children);
         });
-        arr.map(item=>{
+        // console.log(arr, "arr1212");
+        arr.map(item => {
           this.bands.push({
-            value:item.id,
-            label:item.name
-          })
-        })
+            value: item.code,
+            label: item.name
+          });
+        });
       }
       // console.log(res)
       // if (res.code == 0) {

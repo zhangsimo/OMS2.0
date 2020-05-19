@@ -43,7 +43,9 @@
               @click="showApplication('apply')"
               v-has="'apply'"
             >申请活动</Button>
-            <Button @click="cancelApply" type="warning" class="mr10 w90" v-has="'noApply'">取消申请</Button>
+            <Button @click="cancelApply" type="warning" class="mr10 w90" v-has="'noApply'"
+              v-if="checkedData[0] && checkedData[0].state != '待审核'"
+            >取消申请</Button>
             <Button
               type="warning"
               class="mr10"
@@ -367,7 +369,7 @@ export default {
               key: "isVender",
               render: (h, params) => {
                 // console.log(params)
-                let text = params.row.isCancelFlow ? "是" : "否";
+                let text = params.row.isBelowCost ? "是" : "否";
                 return h("span", {}, text);
               }
             },
@@ -503,7 +505,7 @@ export default {
         {
           title: "活动ID",
           align: "center",
-          key: "id"
+          key: "activityId"
         },
         {
           title: "备注",
@@ -593,7 +595,7 @@ export default {
         {
           title: "活动ID",
           align: "center",
-          key: "id"
+          key: "activityId"
         },
         {
           title: "开始日期",
@@ -696,7 +698,7 @@ export default {
         {
           title: "活动ID",
           align: "center",
-          key: "id"
+          key: "activityId"
         },
         {
           title: "备注",
@@ -808,7 +810,15 @@ export default {
     },
     // 根据条件查询活动申请
     selectActApply() {
-      getSelectActApply(this.getDataObj).then(res => {
+      let data = {}
+      this.getDataObj.beginDate = this.getDataObj.beginDate ? this.getDataObj.beginDate + " 00:00:00" : "";
+      this.getDataObj.endDate = this.getDataObj.endDate ? this.getDataObj.endDate + " 23:59:59" : "";
+      for (let key in this.getDataObj) {
+        if(this.getDataObj[key]) {
+          data[key] = this.getDataObj[key];
+        }
+      }
+      getSelectActApply(data).then(res => {
         this.data1 = res.data;
         this.data4 = [];
       });
@@ -935,15 +945,10 @@ export default {
       let item = this.checkedData[0];
       this.tableFormDate.id = item.id;
       this.tableFormDate.applyId = item.applyId;
-      if (item.state == "已取消") {
-        this.data4 = [];
-        return;
-      } else {
-        getActApplyTable({ applyId: this.tableFormDate.applyId }).then(res => {
-          // console.log(res)
-          this.data4 = res.data;
-        });
-      }
+      getActApplyTable({ applyId: this.tableFormDate.applyId }).then(res => {
+        // console.log(res)
+        this.data4 = res.data;
+      });
     },
     // 取消申请
     cancelApply() {
@@ -986,6 +991,9 @@ export default {
     },
     // 弹出申请活动窗口
     showApplication(status) {
+      this.actIfoTableData = {
+        id: ""
+      };
       if (status == "edit") {
         this.applicationDialog = true;
         let item = this.checkedData[0];
@@ -1029,9 +1037,15 @@ export default {
     },
     // 删除活动配件的一项
     deleteDate5() {
+      if(!this.actIfoTableData.activityId || this.actIfoTableData.activityId == "") {
+        return this.$message.error("请选择一条记录");
+      }
       let idx = this.data5.findIndex(
-        item => item.id === this.actIfoTableData.id
+        item => item.activityId === this.actIfoTableData.activityId
       );
+      this.actIfoTableData = {
+        id: ""
+      }
       this.data5.splice(idx, 1);
     },
     // 点击活动配件某一项

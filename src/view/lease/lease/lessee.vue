@@ -665,7 +665,7 @@ export default {
           title: "产品名称",
           align: "center",
           width: 168,
-          key: "name"
+          key: "productName"
         },
         {
           title: "产品类型",
@@ -673,7 +673,6 @@ export default {
           minWidth: 168,
           key: "type",
           render: (h, params) => {
-            console.log(params.row);
             let zi = "";
             if (params.row.type === 0) {
               zi = "功能模块";
@@ -681,7 +680,6 @@ export default {
             if (params.row.type === 1) {
               zi = "接口调用";
             }
-            // console.log(paymentType.name)
             return h("span", zi);
           }
         },
@@ -689,7 +687,7 @@ export default {
           title: "开通时间",
           align: "center",
           minWidth: 168,
-          key: "createTime"
+          key: "paymentDate"
         },
         {
           title: "结束时间",
@@ -781,10 +779,10 @@ export default {
           minWidth: 100,
           render: (h, params) => {
             let zi = "";
-            if (params.row.isPayment === 0) {
+            if (params.row.paymentType === 0) {
               zi = "支付宝";
             }
-            if (params.row.isPayment === 1) {
+            if (params.row.paymentType === 1) {
               zi = "微信";
             }
             return h("span", zi);
@@ -818,13 +816,13 @@ export default {
           title: "付款方式",
           align: "center",
           minWidth: 180,
-          key: "type",
+          key: "paymentType",
           render: (h, params) => {
             let zi = "";
-            if (params.row.type === 0) {
+            if (params.row.paymentType === 0) {
               zi = "支付宝";
             }
-            if (params.row.type === 1) {
+            if (params.row.paymentType === 1) {
               zi = "微信";
             }
             return h("span", zi);
@@ -1028,6 +1026,7 @@ export default {
       params.size = this.page2.size;
       let data = {};
       data.tenantId = this.choose.tenantId;
+      data.isPayment = 1;
       Product({ data: data, params: params }).then(res => {
         if (res.code === 0) {
           this.loading2 = false;

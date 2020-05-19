@@ -132,3 +132,12 @@ export function findRootResWms () {
     method: 'get'
   })
 }
+
+// 获取仓库
+export function getWarehouse () {
+  return axios.request({
+    url: `${api.passportApi}/warehouse/queryWarehouse?page=0&size=1000`,
+    method: 'post',
+    data: {},
+  })
+}

@@ -227,9 +227,20 @@ export default {
     },
     init() {
       this.searchPartLayer = true;
+      this.reset()
     },
     init1() {
       this.searchPartLayer = false;
+    },
+    reset() {
+      this.penSalesData = {
+        endTime: "", //申请单号
+        startTime: "",
+        guestName: "",
+        guestId: "",
+        serviceId: ""
+      }
+      this.currentData = [];
     },
     //选中的日期
     selectDate(date) {
@@ -284,6 +295,9 @@ export default {
     },
     ok() {
       // 将选好的成品传父组件
+      if(!this.currentData || this.currentData.length <= 0) {
+        return this.$message.error("请选择调拨申请单!");
+      }
       this.checkRow.detailVOS = this.currentData;
       this.$emit("ok", this.checkRow);
     },

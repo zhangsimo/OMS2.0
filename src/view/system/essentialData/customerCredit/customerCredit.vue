@@ -21,7 +21,7 @@
       <Button
         class="mr10"
         v-has="'credit'"
-        v-show="this.state === 1 && this.researchStatus === 2"
+        v-show="this.state === 1 && (this.researchStatus === 2||this.researchStatus === 4)"
         @click="opensurveyShow"
       >
         <span class="center">修改信用调查</span>
@@ -67,13 +67,29 @@
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信用额度记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns1" border highlight-row stripe size="small" height="200" :data="creditArr"></Table>
+              <Table
+                :columns="columns1"
+                border
+                highlight-row
+                stripe
+                size="small"
+                height="200"
+                :data="creditArr"
+              ></Table>
             </div>
           </Col>
           <Col span="12" style="padding-top: 10px">
             <div style="margin-bottom: 10px">客户信息变更记录表</div>
             <div style="overflow: auto">
-              <Table :columns="columns2" highlight-row border stripe size="small" height="200" :data="alterArr"></Table>
+              <Table
+                :columns="columns2"
+                highlight-row
+                border
+                stripe
+                size="small"
+                height="200"
+                :data="alterArr"
+              ></Table>
             </div>
           </Col>
         </Row>
@@ -86,6 +102,7 @@
         ref="child"
         :data="creaditList"
         :sendMsg="applicationArr"
+        :localTime="date12"
         :payable="payable"
         :quality="quality"
       ></CreditLineApplication>
@@ -107,7 +124,7 @@
 
     <!--      修改信用调查-->
     <Modal v-model="surveyShow" title="信用调查表" width="1000">
-      <SurveyList :data="creaditList" :dataMsg="costList" ref="SurveyList"></SurveyList>
+      <SurveyList :data="creaditList" :dataMsg="costList" :dataJudge="creditArr" ref="SurveyList"></SurveyList>
       <div slot="footer">
         <Button type="primary" @click="confirm">确定</Button>
         <Button type="default" @click="cancel">取消</Button>
@@ -115,7 +132,12 @@
     </Modal>
     <!--      额度调整-->
     <Modal v-model="adjustment" title="客户信用额度调整表">
-      <QuotaAdjustment :data="creaditList" :dataMsg="adjustmentMsg" :datetoday="today" ref="formRule"></QuotaAdjustment>
+      <QuotaAdjustment
+        :data="creaditList"
+        :dataMsg="adjustmentMsg"
+        :datetoday="today"
+        ref="formRule"
+      ></QuotaAdjustment>
       <div slot="footer">
         <Button type="primary" @click="adjustmentconfirm">确定</Button>
         <Button type="default" @click="cancelChange">取消</Button>
@@ -138,6 +160,8 @@ import {
 } from "../../../../api/system/CustomerManagement/CustomerManagement";
 import { getDigitalDictionary } from "@/api/system/essentialData/clientManagement";
 import * as tools from "../../../../utils/tools";
+import moment from "moment";
+
 export default {
   name: "customerCredit",
   components: {
@@ -147,6 +171,7 @@ export default {
   },
   data() {
     return {
+      date12: "",
       creditArr: [],
       alterArr: [],
       Name: "", //客户名称
@@ -190,7 +215,11 @@ export default {
             {
               title: "信用额度",
               align: "center",
-              key: "creditLimit"
+              key: "creditLimit",
+              render: (h, params) => {
+                let state = params.row.creditLimit + params.row.tempCreditLimit;
+                return h("span", state);
+              }
             },
             {
               title: "客户分类",
@@ -228,7 +257,7 @@ export default {
               key: "registMoney"
             },
             {
-              title: "授权采购",
+              title: "授权采购员",
               align: "center",
               key: "salesman"
             },
@@ -260,8 +289,8 @@ export default {
             },
             {
               title: "信用积分",
-              align: "guestIntegrals",
-              key: ""
+              align: "center",
+              key: "guestIntegrals"
             },
             {
               title: "备注",
@@ -410,7 +439,10 @@ export default {
       payable: "", //传给子组件的应收应付
       quality: "", //某个值
       total: "", //调整后剩余额度
-      totalSuma: ""
+      totalSuma: "",
+      flag: "",
+
+      editTopItemId:""//记录操作的是第几条数据
     };
   },
   methods: {
@@ -434,11 +466,22 @@ export default {
     },
     //当前行
     selection(row) {
+      console.log(row)
+      if(!row){
+        return
+      }
+      this.editTopItemId = row.id
       this.rowMessage = row;
       this.state = row.isGuestResearch;
       this.ID = row.guestId;
       this.Limitstate = row.auditSign ? JSON.parse(row.auditSign).value : "";
       this.creaditList = row;
+      // this.creaditList.tempEnd = new Date(row.tempEnd)
+      // this.creaditList.tempStart = new Date(row.tempStart)
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
+      this.creaditList.applyTrustMoney = this.creaditList.applyTrustMoney||1;
+      this.flag = row.isGuestResearch;
+      console.log(this.creaditList)
       // this.creaditList.nature = this.costList.CS00117[0].id;
       this.researchStatus = row.researchStatus
         ? JSON.parse(row.researchStatus).value
@@ -453,25 +496,41 @@ export default {
     //申请信用额度
     addLimit() {
       if (this.ID) {
-        if (this.Limitstate === 1) {
-          this.$Message.warning("正在审批中，请等待审批完成!");
-        } else if (this.Limitstate === 3) {
-          this.$Message.warning("禁止额度申请中，请联系管理员!");
-        } else {
-          this.CreditLineApplicationShow = true;
-          this.alertBox();
+        if(this.Limitstate&&this.Limitstate===1){
+          this.$Message.warning("正在审批中，请等待审批完成！");
+          return
         }
+        if(this.Limitstate&&this.Limitstate===3){
+          this.$Message.warning("禁止额度申请中，请联系管理员!");
+          return
+        }
+
+        this.date12 = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+        this.CreditLineApplicationShow = true;
+        // this.creaditList.tempStart='';
+        // this.creaditList.tempEnd='';
+        this.alertBox();
       } else {
         this.$Message.warning("请选择要申请的客户！");
       }
     },
     //申请信用调查
     opensurveyShow() {
-      // this.$refs.SurveyList.handleReset();
+      if(this.researchStatus === 1){
+        return this.$Message.warning("信用调查正在审批中");
+      }
+      if(this.creaditList.isGuestResearch === 0){
+        this.$refs.SurveyList.$refs.formInline.resetFields();
+      }
+      this.creaditList.rollingDate = this.creaditList.rollingDate||1;
       this.surveyShow = true;
     },
     //额度调用
     openAdjustment() {
+      if(this.Limitstate&&this.Limitstate===1){
+        this.$Message.warning("信用额度审批中，请等待审批完成！");
+        return
+      }
       this.adjustment = true;
       this.adjustmenttt();
     },
@@ -495,6 +554,14 @@ export default {
         if (res.code === 0) {
           this.creditList = res.data.content || [];
           this.page.total = res.data.totalElements;
+          for(let b of this.creditList){
+            b._highlight = false;
+            if(b.id == this.editTopItemId){
+              b._highlight = true;
+              this.selection(b);
+              break;
+            }
+          }
         }
       });
     },
@@ -532,12 +599,23 @@ export default {
       this.$refs["SurveyList"].$refs["formInline"].validate(valid => {
         if (valid) {
           let data = this.creaditList;
-          data.registerDate = tools.transTime(this.creaditList.registerDate);
-          data.operationEnd = tools.transTime(this.creaditList.operationEnd);
-          data.operationStart = tools.transTime(
-            this.creaditList.operationStart
-          );
-          data.tempStart = tools.transTime(this.creaditList.tempStart);
+          if(this.creaditList.registerDate) {
+              data.registerDate = tools.transTime(this.creaditList.registerDate);
+          }
+          if(this.creaditList.operationEnd) {
+              data.operationEnd = tools.transTime(this.creaditList.operationEnd);
+          }
+          if(this.creaditList.operationStart) {
+              data.operationStart = tools.transTime(
+                this.creaditList.operationStart
+              );
+          }
+          if(this.creaditList.tempStart) {
+              data.tempStart = tools.transTime(this.creaditList.tempStart);
+          }
+          if(this.creaditList.tempEnd) {
+              data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          }
           data.guestId = this.ID;
           saveOrUpdate(data).then(res => {
             if (res.code === 0) {
@@ -568,45 +646,45 @@ export default {
     },
     //调整信用额度的确定
     adjustmentconfirm() {
-        this.$refs["formRule"].$refs["formRule"].validate(valid=>{
-            if(valid){
-                let data = {};
-                data.guestId = this.creaditList.guestId;
-                // data.applyDate = this.today
-                data.payableAmt = this.adjustmentMsg.payableAmt;
-                data.receivableAmt = this.adjustmentMsg.receivableAmt;
-                data.sumAmt = this.adjustmentMsg.sumAmt;
-                data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
-                data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
-                data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
-                data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
-                this.creaditList.isForbid
-                    ? (this.creaditList.isForbid = 1)
-                    : (this.creaditList.isForbid = 0);
-                data.isForbid = this.creaditList.isForbid;
-                data.quotaReason = this.creaditList.quotaReason;
-                data.totalQuota =
-                    +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
-                data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
-                data.tempQuotaTotal = this.creaditList.tempCreditLimit;
-                data.tempStart = this.creaditList.tempStart;
-                data.tempEnd = this.creaditList.tempEnd;
-                data.orgId = this.creaditList.orgid;
-                data.adjustType = 1;
-                data.afterAdjustQuota =
-                    this.adjustmentMsg.payableAmt - this.adjustmentMsg.fixationQuotaTotal;
-                save(data).then(res => {
-                    if (res.code === 0) {
-                        this.adjustment = false;
-                        this.$Message.warning("保存成功");
-                        this.getListTop();
-                    }
-                });
-            }else {
-                this.$message.warning("* 为必填！");
+      this.$refs["formRule"].$refs["formRule"].validate(valid => {
+        if (valid) {
+          let data = {};
+          data.guestId = this.creaditList.guestId;
+          // data.applyDate = this.today
+          data.payableAmt = this.adjustmentMsg.payableAmt;
+          data.receivableAmt = this.adjustmentMsg.receivableAmt;
+          data.sumAmt = this.adjustmentMsg.sumAmt;
+          data.thirtyAmt = this.adjustmentMsg.thirtyAmt;
+          data.sixtyAmt = this.adjustmentMsg.sixtyAmt;
+          data.moreSixtyAmt = this.adjustmentMsg.moreSixtyAmt;
+          data.fixationQuotaTotal = this.creaditList.fixationQuotaTotal;
+          data.isForbid = this.adjustmentMsg.isForbid;
+          data.quotaReason = this.creaditList.quotaReason;
+          data.totalQuota =
+            +this.creaditList.creditLimit + this.creaditList.tempCreditLimit;
+          data.beforeAdjustTempQuota = this.creaditList.tempCreditLimit;
+          data.tempQuotaTotal = this.creaditList.tempCreditLimit;
+          data.tempStart = tools.transTime(this.creaditList.tempStart);
+          data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+          if(data.tempEnd){
+            data.tempEnd = data.tempEnd.split(" ")[0]+' 23:59:59'
+          }
+          data.orgId = this.creaditList.orgid;
+          data.adjustType = 1;
+          data.afterAdjustQuota =
+            this.adjustmentMsg.payableAmt -
+            this.adjustmentMsg.fixationQuotaTotal;
+          save(data).then(res => {
+            if (res.code === 0) {
+              this.adjustment = false;
+              this.$Message.warning("保存成功");
+              this.getListTop();
             }
-        })
-
+          });
+        } else {
+          this.$message.warning("* 为必填！");
+        }
+      });
     },
     //调整取消框
     cancelChange() {
@@ -625,24 +703,80 @@ export default {
         if (res.code === 0) {
           this.applicationArr = res.data;
           this.payable = res.data.payable || {};
+            this.$refs.child.init();
         }
       });
     },
     //确定申请
     Determined() {
-      this.$refs.child.$refs.form.validate((valid) => {
-              if (valid) {
+        if(this.$refs.child.data.tempQuota){
+            this.$refs.child.ruls.quotaReason=[
+                { required: true, message: "申请额度说明必填！", trigger: "blur" }
+            ];
+            this.$refs.child.ruls.tempStart=[
+                { required: true, type:'date', message: "临时额度开始时间", trigger: "blur" }
+            ];
+            this.$refs.child.ruls.tempEnd=[
+                { required: true,type:'date', message: "临时额度结束时间", trigger: "blur" }
+            ];
+        } else {
+            this.$refs.child.ruls.quotaReason = [
+                {required: true, message: "申请额度说明必填！", trigger: "blur"}
+            ];
+            this.$refs.child.ruls.tempStart=[
+                { required: false}
+            ];
+            this.$refs.child.ruls.tempEnd=[
+                { required: false}
+            ];
+        }
+      this.$refs.child.$refs.form.validate(valid => {
+        if (valid) {
+          if (this.$refs.child.data.applyQuota && this.flag == 0) {
+            this.$Message.error("请先完成信用调查");
+            return;
+          }
+          if (Number(this.$refs.child.data.tempQuota) > 5000) {
+            if (this.flag == 0) {
+              this.$Message.error("请先完成信用调查");
+            } else {
+              this.confirmFn();
+            }
+          } else {
+            this.confirmFn();
+          }
+        } else {
+          this.$Message.error("必填项必须填!");
+        }
+      });
+    },
+    //确定取消
+    cancel2() {
+      this.CreditLineApplicationShow = false;
+    },
+    confirmFn() {
       let data = {};
       data.guestId = this.rowMessage.guestId;
       data.orgId = this.rowMessage.orgid;
-      this.creaditList.applyQuota=this.creaditList.applyQuota?this.creaditList.applyQuota:0;
-      this.creaditList.tempQuota=this.creaditList.tempQuota?this.creaditList.tempQuota:0;
-      data.fixationQuotaTotal = this.creaditList.applyQuota*1 + this.creaditList.creditLimit*1 || 0 +this.creaditList.applyQuota*1;
-      data.tempQuotaTotal = this.creaditList.tempQuota*1 + this.creaditList.tempCreditLimit*1 || 0 +this.creaditList.tempQuota*1;
+      this.creaditList.applyQuota = this.creaditList.applyQuota
+        ? this.creaditList.applyQuota
+        : 0;
+      this.creaditList.tempQuota = this.creaditList.tempQuota
+        ? this.creaditList.tempQuota
+        : 0;
+      data.fixationQuotaTotal =
+        this.creaditList.applyQuota * 1 + this.creaditList.creditLimit * 1 ||
+        0 + this.creaditList.applyQuota * 1;
+      data.tempQuotaTotal =
+        this.creaditList.tempQuota * 1 + this.creaditList.tempCreditLimit * 1 ||
+        0 + this.creaditList.tempQuota * 1;
       data.applyQuota = this.creaditList.applyQuota || 0;
       data.tempQuota = this.creaditList.tempQuota || 0;
-      data.tempStart = tools.transTime(this.creaditList.tempStart);
-      data.tempEnd = tools.transTime(this.creaditList.tempEnd);
+      //如果临时额度大于零，添加开始结束时间参数
+      if(data.tempQuota>0){
+        data.tempStart = tools.transTime(this.creaditList.tempStart);
+        data.tempEnd = tools.transTime(this.creaditList.tempEnd)?tools.transTime(this.creaditList.tempEnd).split(" ")[0]+' 23:59:59':"";
+      }
       data.payableAmt = +this.payable.payableAmt || 0;
       data.tgrade = this.creaditList.tgrade || "";
       data.thirtyAmt = +this.payable.thirtyAmt || 0;
@@ -658,6 +792,14 @@ export default {
         +this.creaditList.applyQuota + +this.creaditList.tempQuota;
       data.addTotalQuota = this.creaditList.tototo || 0;
       data.adjustType = 0;
+      //新加入字段
+      data.beforeAdjustQuota = this.$refs.child.beforeAdjustQuota;
+      data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.afterAdjustQuota = this.$refs.child.afterAdjustQuota;
+      data.sumAmt = this.payable.sumAmt || 0;
+      data.preAmt = this.payable.preAmt;
+      // console.log(data)
+      // return
       save(data).then(res => {
         if (res.code === 0) {
           this.CreditLineApplicationShow = false;
@@ -665,14 +807,6 @@ export default {
           this.getListTop();
         }
       });
-          } else {
-              this.$Message.error('必填项必须填!');
-          }
-      })
-    },
-    //确定取消
-    cancel2() {
-      this.CreditLineApplicationShow = false;
     }
   },
   mounted() {

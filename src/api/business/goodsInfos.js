@@ -46,6 +46,14 @@ export function getGoodsInfos2(data = {}) {
     url: `${api.omsOrder}/logisticsRecord/findByGuestLog`,
     method: "post",
     data
+  }); 
+}
+// 获取(调拨申请收获地址所需接口)
+export function getGoodsInfos3(params = {}) {
+  return axios.request({
+    url: `${api.omsOrder}/logisticsRecord/findByParam`,
+    method: "get",
+    params
   });
 }
 //保存

@@ -106,7 +106,7 @@ export function Confirm(data) {
 //查看产品
 export function Product(data) {
   return axios.request({
-    url: `${api.omsApi}/tenantProduct/findPageByDynamicQuery`,
+    url: `${api.omsApi}/tenantOrder/findPageByDynamicQuery`,
     method: 'post',
     data:data.data,
     params:data.params

@@ -113,10 +113,15 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         remark: "",
         guestId: "",
-        storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
+        // storeId: this.$parent.$parent.$refs.right.WarehouseList[0].id||"",
         serviceId: "",
         details: []
       };
+      this.$parent.$parent.$refs.right.WarehouseList.forEach(el => {
+        if(el.isDefault && !el.isDisabled) {
+          item.storeId = el.id
+        }
+      })
       this.tableData.unshift(item);
       this.tableData.map((item, index) => {
         item.index = index + 1;
@@ -129,6 +134,8 @@ export default {
     getData(data) {
       // console.log(data, '该值')
       this.tableData = data.content;
+      this.page.size = 20;
+      this.page.num = 0;
       this.page.total = data.totalElements;
     },
     //获取表格数据
@@ -225,25 +232,26 @@ export default {
       this.getList();
     },
     //更多搜索
-    queryall: {
-      handler(v, ov) {
-        v.showPerson = v.showPerson ? 1 : 0;
-        this.page.num = 1;
-        this.page.size = 20;
-        let page = this.page.num - 1;
-        let size = this.page.size;
-        getLeftList(page, size, v).then(res => {
-          if (res.code === 0) {
-            res.data.content.map(
-              item => (item.billStatusId = JSON.parse(item.billStatusId))
-            );
-            this.tableData = res.data.content;
-            this.page.total = res.data.totalElements;
-          }
-        });
-      },
-      deep: true
-    },
+    // queryall: {
+    //   handler(v, ov) {
+    //     v.showPerson = v.showPerson ? 1 : 0;
+    //     this.page.num = 1;
+    //     this.page.size = 20;
+    //     let page = this.page.num - 1;
+    //     let size = this.page.size;
+    //     getList1(page, size, v).then(res => {
+    //       console.log(v)
+    //       if (res.code === 0) {
+    //         res.data.content.map(
+    //           item => (item.billStatusId = JSON.parse(item.billStatusId))
+    //         );
+    //         this.tableData = res.data.content;
+    //         this.page.total = res.data.totalElements;
+    //       }
+    //     });
+    //   },
+    //   deep: true
+    // },
     //改变左侧list
     changeLeftList: {
       handler(v, ov) {

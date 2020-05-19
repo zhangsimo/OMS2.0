@@ -165,18 +165,18 @@ export default {
         },
         {
           title: '调拨单价',
-          key: 'orderPrice',
+          key: 'taxPrice',
           className: 'tc',
           render: (h,params) =>{
-            return h('span',params.row.orderPrice ? (params.row.orderPrice).toFixed(2):'')
+            return h('span',params.row.taxPrice ? (params.row.taxPrice).toFixed(2):'')
           }
         },
         {
           title: '调拨金额',
-          key: 'orderAmt',
+          key: 'taxAmt',
           className: 'tc',
           render: (h,params) =>{
-            return h('span',params.row.orderAmt?  (params.row.orderAmt).toFixed(2):'')
+            return h('span',params.row.taxAmt?  (params.row.taxAmt).toFixed(2):'')
           }
         },
         {
@@ -310,7 +310,7 @@ export default {
     getGeneral() {
       let data={
         startTime:this.value[0] ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss") : '',
-        endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss") : '',
+        endTime:this.value[1] ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59" : '',
         orgid:this.model1,
         code:this.fno,
         guestId:this.companyId

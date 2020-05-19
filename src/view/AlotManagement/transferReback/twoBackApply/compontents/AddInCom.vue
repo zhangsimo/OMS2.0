@@ -8,11 +8,7 @@
           </div>
           <div class="db mr10">
             <span class>入库日期从：</span>
-            <DatePicker v-model="penSalesData.allotEnterTimeStart" type="date" style="width:120px"></DatePicker>
-          </div>
-          <div class="db mr10">
-            <span class="ml10">至：</span>
-            <DatePicker v-model="penSalesData.allotEnterTimeEnd" type="date" style="width:120px"></DatePicker>
+            <DatePicker v-model="penSalesData.allotEnterTime" type="daterange" style="width:120px"></DatePicker>
           </div>
           <div class="db mr10">
             <span>调 出 方 ：</span>
@@ -129,8 +125,9 @@ export default {
       tabList: [],
       // 调出方查询
       penSalesData: {
-        allotEnterTimeEnd: "", //申请单号
+        allotEnterTime: [], //申请单号
         allotEnterTimeStart: "",
+        allotEnterTimeEnd: "",
         guestName: "",
         guestId: "",
         serviceId: ""
@@ -229,8 +226,9 @@ export default {
     },
     init() {
       this.searchPartLayer = true;
-      this.penSalesData.allotEnterTimeEnd = "";
+      this.penSalesData.allotEnterTime = [];
       this.penSalesData.allotEnterTimeStart = "";
+      this.penSalesData.allotEnterTimeEnd = "";
       this.penSalesData.guestName = "";
       this.penSalesData.guestId = "";
       this.penSalesData.serviceId = "";
@@ -245,14 +243,12 @@ export default {
     },
     //搜索
     search(size, num) {
-      if (this.penSalesData.allotEnterTimeStart) {
+      if (this.penSalesData.allotEnterTime[0]) {
         this.penSalesData.allotEnterTimeStart = moment(
-          this.penSalesData.allotEnterTimeStart
+          this.penSalesData.allotEnterTime[0]
         ).format("YYYY-MM-DD HH:mm:ss");
-      }
-      if (this.penSalesData.allotEnterTimeEnd) {
         this.penSalesData.allotEnterTimeEnd = moment(
-          this.penSalesData.allotEnterTimeEnd
+          this.penSalesData.allotEnterTime[1]
         ).format("YYYY-MM-DD 23:59:59");
       }
       for (var k in this.penSalesData) {
@@ -260,6 +256,7 @@ export default {
           delete this.penSalesData[k];
         }
       }
+      delete this.penSalesData.allotEnterTime;
       this.$emit("search21", this.penSalesData, size, num);
     },
     getParams() {
@@ -281,7 +278,6 @@ export default {
       };
       const res = await chengpingDetail(params);
       this.currentData = res.data;
-      this.currentData[0].remark = this.checkRow.remark;
     },
     selectTabelData1() {
       console.log(122);

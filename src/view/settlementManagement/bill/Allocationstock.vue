@@ -13,7 +13,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -214,7 +214,16 @@ export default {
         {
           title: "是否含税",
           key: "taxSign",
-          className: "tc"
+          className: "tc",
+          render: (h,params) =>{
+            let val = params.row.taxSign;
+            if (val == 1) {
+              val = "是";
+            } else if(val == 0) {
+              val = "否";
+            }
+            return h('span', val);
+          }
         },
         {
           title: "不含税单价",
@@ -250,23 +259,23 @@ export default {
         },
         {
           title: "数量",
-          key: "hasOutQty",
+          key: "sellQty",
           className: "tc"
         },
         {
           title: "销售单价",
-          key: "orderPrice",
+          key: "sellPrice",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderPrice).toFixed(2))
+            return h('span',(params.row.sellPrice).toFixed(2))
           }
         },
         {
           title: "金额",
-          key: "orderAmt",
+          key: "sellAmt",
           className: "tc",
           render: (h,params) =>{
-            return h('span',(params.row.orderAmt).toFixed(2))
+            return h('span',(params.row.sellAmt).toFixed(2))
           }
         }
       ],
@@ -404,7 +413,7 @@ export default {
     // 快速查询
     quickDate(data) {
       this.value = data;
-      this.model1 = this.$store.state.user.userData.shopId
+      // this.model1 = this.$store.state.user.userData.shopId
       this.getTransferStock()
     },
     // 主表查询
@@ -416,6 +425,9 @@ export default {
         guestId: this.companyId,
         orderTypeId:this.type
       };
+      if (obj.endTime) {
+        obj.endTime = obj.endTime.split(' ')[0] + " 23:59:59"
+      }
       transferStock(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
@@ -457,7 +469,7 @@ export default {
     },
     // 选中数据
     election(row) {
-      stockParts({ mainId: row.id }).then(res => {
+      stockParts({ serviceId: row.serviceId }).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;

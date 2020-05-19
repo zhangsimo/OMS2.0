@@ -13,7 +13,7 @@
             ></DatePicker>
           </FormItem>
           <FormItem>
-            <Select v-model="Outform.enterTypeId" filterable style="width:200px">
+            <Select v-model="Outform.guestId" filterable style="width:200px">
               <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
             </Select>
           </FormItem>
@@ -26,7 +26,7 @@
             />
           </FormItem>
           <FormItem>
-            <Select v-model="Outform.guestId" style="width:100px" placeholder="请选择供应商">
+            <Select v-model="Outform.enterTypeId" style="width:100px" placeholder="请选择供应商">
               <Option v-for="item in enterTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
             </Select>
           </FormItem>
@@ -181,6 +181,7 @@
                     placement:[20,40,60,80,100]
                 },
                 Loading: true,//状态
+                storeId:''//参考id
             }
 
         },
@@ -205,6 +206,7 @@
             //打开模态框
             openModal(v) {
                 this.showInfo = true;
+                this.storeId = v;
                 this.getList(v)
             },
             //获取入库数据
@@ -213,7 +215,7 @@
                     data = this.Outform
                     data.page = this.page.num -1
                     data.size = this.page.size;
-                    data.storeId=v;
+                    data.storeId=v||this.storeId;
                this.Loading = true
                let res = await getGodown(data)
                if(res.code === 0){

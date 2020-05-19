@@ -91,6 +91,7 @@
                       <Option
                         v-for="item in warehouseList"
                         :value="item.id"
+                        :disabled="item.isDisabled"
                         :key="item.id"
                       >{{ item.name }}</Option>
                     </Select>
@@ -194,7 +195,8 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :storeId="Leftcurrentrow.storeId"></Select-part-com>
+
     <!--更多弹框-->
     <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 作废提示 -->

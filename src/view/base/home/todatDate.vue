@@ -5,42 +5,42 @@
       <li class="dataOne">
         <img src="../../../assets/images/home/income.png" alt="" style="margin: 0 auto">
         <p class="moneyColer" style="color: #e61414">
-         <span style="position: relative"><span class="money">￥</span>22.5500</span>
+         <span style="position: relative"><span class="money">￥</span>{{dataObj.sellOrderAmount}}</span>
         </p>
         <p class="dataTitle">今日营业额</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/expend.png" alt="" style="margin: 0 auto">
         <p class="moneyColer"  style="color: #02b9af;">
-          <span style="position: relative"><span class="money">￥</span>22.5500</span>
+          <span style="position: relative"><span class="money">￥</span>{{dataObj.pchsOrderAmount}}</span>
         </p>
         <p class="dataTitle">今日采购金额</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/debit.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money"></span>22</span> <span style="font-size: 20px">单</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.enterOrderCount}}</span> <span style="font-size: 20px">单</span>
         </p>
         <p class="dataTitle">今日入库单量</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/inventory.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>22.5500</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.partEnterCount}}</span>
         </p>
         <p class="dataTitle">今日入库总数</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/kind.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>22.5500</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.outOrderCount}}</span>
         </p>
         <p class="dataTitle">今日出库单量</p>
       </li>
       <li class="dataOne">
         <img src="../../../assets/images/home/supplier.png" alt="" style="margin: 0 auto">
         <p class="moneyColer">
-          <span style="position: relative"><span class="money">￥</span>22.5500</span>
+          <span style="position: relative"><span class="money"></span>{{dataObj.partOutCount}}</span>
         </p>
         <p class="dataTitle">今日出库总数</p>
       </li>
@@ -50,7 +50,15 @@
 
 <script>
     export default {
-        name: "todatDate"
+        name: "todatDate",
+        props:{
+            dataObj:{
+                type:Object,
+                default:function(){
+                    return {}
+                }
+            }
+        }
     }
 </script>
 

@@ -6,30 +6,30 @@
           <Col span="12" class="pl10">
             <h5
               style="font-size: 20px;line-height: 44px;border-right: 1px #000000 solid"
-            >{{onelist.userCompany}}</h5>
+            >{{onelist.guestVO.fullName}}</h5>
           </Col>
           <Col span="12" class="pl10">
-            <p>调拨入库单:</p>
-            <p>No: {{onelist.serviceId}}</p>
+            <p>调拨入库单</p>
+            <p>No: {{onelist.enterOrder.serviceId}}</p>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="12" class="pl10" style="border-right: 1px #000000 solid">
             <p>
-              <span>地址:</span>
+              <span>地址:{{onelist.guestVO.addr || onelist.guestVO.streetAddress}}</span>
             </p>
             <p>
-              <span>电话:</span>
+              <span>电话:{{onelist.guestVO.tel}}</span>
             </p>
           </Col>
           <Col span="12" class="pl10">
             <p>
               <span>订单日期:</span>
-              <span>{{onelist.orderDate}}</span>
+              <span>{{onelist.enterOrder.orderDate}}</span>
             </p>
             <p>
               <span>打印日期:</span>
-              <span>{{onelist.printDate}}</span>
+              <span>{{printDate}}</span>
             </p>
           </Col>
         </Row>
@@ -37,31 +37,31 @@
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>调出方:</span>
-              <span>{{onelist.guestName}}</span>
+              <span>{{onelist.applyGuest.fullName}}</span>
             </p>
             <p>
               <span>地址:</span>
-              <span>{{onelist.addr}}</span>
+              <span>{{onelist.applyGuest.addr || onelist.applyGuest.streetAddress}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <p>
               <span>联系人:</span>
-              <span>{{onelist.orderMan}}</span>
+              <span>{{onelist.applyGuest.contactor}}</span>
             </p>
             <p>
-              <span>票据类型:</span>
-              <span>{{onelist.billTypeName}}</span>
+              <span>入库仓库:</span>
+              <span>{{onelist.store.name}}</span>
             </p>
           </Col>
           <Col span="8" class="pl10">
             <p>
               <span>联系电话:</span>
-              <span>{{onelist.tel}}</span>
+              <span>{{onelist.applyGuest.tel}}</span>
             </p>
             <p>
               <span>备注:</span>
-              <span>{{onelist.remark}}</span>
+              <span>{{onelist.enterOrder.remark}}</span>
             </p>
           </Col>
         </Row>
@@ -72,27 +72,27 @@
           width="990"
           border
           :columns="columns2"
-          :data="onelist.detailList"
+          :data="onelist.enterOrder.voList"
           class="ml10"
         ></Table>
         <Row style="border: 1px #000000 solid">
           <Col class="marginLeft" span="8">
             <span>合计:</span>
-            <span>{{onelist.orderAmt}}</span>
+            <span>{{totalQty}}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{onelist.orderMan}}</span>
+            <span>{{username}}</span>
           </Col>
           <Col span="8" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
-            <span>{{onelist.deliverer}}</span>
+            <span></span>
           </Col>
           <Col span="8" class="pl10">
             <span>收货人:</span>
-            <span>{{onelist.receiver}}</span>
+            <span></span>
           </Col>
         </Row>
       </div>
@@ -106,11 +106,15 @@
 </template>
 
 <script>
+import * as tools from "_utils/tools";
 import { getprintList } from "@/api/AlotManagement/putStorage.js";
 export default {
   name: "PrintShow",
   data() {
     return {
+      username: JSON.parse(sessionStorage.getItem("vuex")).user.userData.staffName,
+      totalQty: 0,
+      printDate: tools.transTime(new Date()),
       printShow: false, //模态框隐藏
       columns2: [
         {
@@ -134,6 +138,11 @@ export default {
           align: "center"
         },
         {
+          title: "品牌车型",
+          key: "carBrandName",
+          align: "center"
+        },
+        {
           title: "规格",
           key: "spec",
           align: "center"
@@ -144,29 +153,19 @@ export default {
           align: "center"
         },
         {
-          title: "单价",
-          key: "orderPrice",
+          title: "数量",
+          key: "applyQty",
           align: "center"
         },
         {
-          title: "金额",
-          key: "orderAmt",
-          align: "center"
-        },
-        {
-          title: "仓库",
-          key: "storeName",
-          align: "center"
-        },
-        {
-          title: "仓位",
-          key: "storeShelf",
+          title: "备注",
+          key: "remark",
           align: "center"
         }
       ],
       onelist: {}, //打印数据
-      num: "12323.09",
-      num2: 78723
+      num: "0",
+      num2: 0
     };
   },
   props: {
@@ -199,6 +198,8 @@ export default {
         if (res.code == 0) {
           this.printShow = true;
           this.onelist = res.data;
+          console.log(this.onelist)
+          this.totalQty = this.onelist.enterOrder.voList.reduce((total, curr) => total += parseInt(curr.applyQty), 0);
         }
       } else {
         this.$message.error("至少选择一条信息");

@@ -380,10 +380,36 @@
 
                     },
                     {
+                      title: '含税标记',
+                      align: 'center',
+                      key: 'taxRate',
+                      minWidth: 120,
+                      render:(h,params) => {
+                       return h("Checkbox",{
+                         props:{
+                           value:true,
+                           disabled:true
+                         }
+                       })
+                      }
+                    },
+                    {
                         title: '税率',
                         align: 'center',
                         key: 'taxRate',
                         minWidth: 120
+                    },
+                    {
+                      title: '含税单价',
+                      align: 'center',
+                      key: 'taxPrice',
+                      minWidth: 120
+                    },
+                    {
+                      title: '含税金额',
+                      align: 'center',
+                      key: 'taxAmt',
+                      minWidth: 120
                     },
                     {
                         title: '不含税单价',
@@ -589,6 +615,7 @@
                 let data ={}
                   data = this.searchForm2
                   data.partId = this.mainData.partId
+                  data.orgid = this.mainData.orgid
                   data.page =  this.contentOne.page.num -1
                   data.size =  this.contentOne.page.size
 
@@ -603,6 +630,7 @@
                 let data ={}
                 data = this.searchForm3
                 data.partId = this.mainData.partId
+                data.orgid = this.mainData.orgid
                 data.page =  this.contentTwo.page.num -1
                 data.size =  this.contentTwo.page.size
                 let res = await getOut(data)
@@ -615,6 +643,7 @@
             async getHold() {
                 let data ={}
                 data.partId = this.mainData.partId
+                data.orgid = this.mainData.orgid
                 data.page =  this.contentThree.page.num -1
                 data.size =  this.contentThree.page.size
                 let res = await getOccupy(data)

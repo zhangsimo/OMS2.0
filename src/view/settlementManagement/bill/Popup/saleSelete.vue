@@ -13,6 +13,7 @@
       :columns="account"
       :data="accountData"
       highlight-row
+      max-height="450"
       @on-current-change="seleteDate"
     ></Table>
     <div slot="footer">
@@ -104,7 +105,6 @@ export default {
   methods: {
     // 往来单位
     Dealings() {
-      console.log(this.$refs.selectDealings)
       this.$refs.selectDealings.init();
     },
     // 往来单位选择
@@ -129,6 +129,8 @@ export default {
         orgId: this.information.orgId,
         guestId:this.companyId
       };
+      obj.page = 0
+      obj.size = 9999
       seleteAccount(obj).then(res => {
         if (res.code === 0) {
           res.data.content.map(item => {
@@ -145,6 +147,7 @@ export default {
     // 确认按钮
     determine() {
       if (Object.keys(this.seleteData).length !== 0) {
+        this.seleteData.statementMasterId = this.seleteData.id
         bus.$emit("accountHedNo", this.seleteData);
         this.modal1 = false;
       } else {

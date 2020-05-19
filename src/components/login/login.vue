@@ -103,7 +103,8 @@ export default {
       accountTypeList: [
         { label: "oms", value: "oms" },
         { label: "wms", value: "wms" },
-        { label: "auth", value: "auth" }
+        { label: "auth", value: "auth" },
+        // { label: "tax", value: "tax" },
       ],
       form: {
         username: localStorage.getItem("username") || "",
@@ -151,25 +152,21 @@ export default {
         var url = window.location;
         var title = document.title;
         var ua = navigator.userAgent.toLowerCase();
-        if (ua.indexOf("360se") > -1) {
-            alert("由于360浏览器功能限制，请按 Ctrl+D 手动收藏！");
+      try
+      {
+        window.external.addFavorite(url, title);
+      }
+      catch (e)
+      {
+        try
+        {
+          window.sidebar.addPanel(title, url, "");
         }
-        else if (ua.indexOf("msie 8") > -1) {
-            window.external.AddToFavoritesBar(url, title); //IE8
+        catch (e)
+        {
+          alert("收藏失败，此操作被浏览器拒绝！\n请使用Ctrl+D进行收藏！");
         }
-        else if (document.all) {
-            try {
-                window.external.addFavorite(url, title);
-            } catch (e) {
-                alert('您的浏览器不支持,请按 Ctrl+D 手动收藏!');
-            }
-        }
-        else if (window.sidebar) {
-            window.sidebar.addPanel(title, url, "");
-        }
-        else {
-            alert('您的浏览器不支持,请按 Ctrl+D 手动收藏!');
-        }
+      }
     },
     setHomePage() {
         var url = window.location.href;

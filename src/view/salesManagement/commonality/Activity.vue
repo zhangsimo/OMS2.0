@@ -3,24 +3,14 @@
     <div class="OutboundInfo">
       <div class="header">
         <Form ref="formOne" :model="Outform" inline>
-          <span>配件编码：</span>
           <FormItem>
             <Input
               type="text"
-              placeholder="配件编码"
-              style="width: 150px"
+              placeholder="配件编码/名称"
+              style="width: 250px"
               v-model="Outform.partCode"
             />
           </FormItem>
-            <span>名称：</span>
-            <FormItem>
-              <Input
-                type="text"
-                placeholder="名称"
-                style="width: 150px"
-                v-model="Outform.partName"
-              />
-            </FormItem>
           <Button class="mr10" type='warning' @click="query"><Icon type="ios-search" size="14" /> 查询</Button>
           <Button class="mr10" type='default' @click="add"><Icon type="md-checkmark" /> 确定</Button>
         </Form>
@@ -118,7 +108,6 @@
                 showInfo: false, // 销售出库订单信息——表单
                 Outform :{
                     partCode: "",
-                    partName: "",
                 },
                 tableDataBottom:[], //下面表格数据
                 oneList:{},//获取点击到的信息
@@ -134,7 +123,7 @@
             //获取活动内容
            async getList(){
                 let data ={}
-                data = this.Outform
+                data.partName = this.Outform.partCode
                let res = await getActivity(data)
                   if(res.code === 0){
                       console.log(res)
@@ -154,8 +143,9 @@
               if( this.oneList.id==null){
                 return this.$message.error('请先选择一条数据')
               }
-                this.$emit('getActivity' , this.oneList)
-                this.showInfo = false
+              let arr = this.tableDataBottom.filter(el => el.activityId == this.oneList.activityId);
+              this.$emit('getActivity' , arr)
+              this.showInfo = false
             }
             //getActivity
         }

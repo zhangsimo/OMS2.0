@@ -65,20 +65,23 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(0)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >对账单对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(1)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >冲减预收</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="statementSettlement(2)"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >冲减预付</button>
         <!-- <button
           class="ivu-btn ivu-btn-default mr10"
@@ -95,8 +98,9 @@
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
-          @click="statementSettlement"
+          @click="capitalWrite"
           v-has="'examine'"
+          :disabled="statementStatusflag"
         >认领款核销</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -109,6 +113,7 @@
           type="button"
           @click="saleApplication"
           v-has="'examine'"
+          :disabled="taxArrearsfalg"
         >销售开票申请</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -121,12 +126,14 @@
           type="button"
           @click="hedgingInvoice"
           v-has="'examine'"
+          :disabled="hedgingfalg"
         >发票对冲</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
           type="button"
           @click="registrationEntry"
           v-has="'examine'"
+          :disabled="receivefalg"
         >进项登记及修改</button>
         <button
           class="ivu-btn ivu-btn-default mr10"
@@ -171,6 +178,7 @@
               :data="data2"
               max-height="400"
               show-summary
+              :summary-method="summary"
             ></Table>
           </div>
           <Tabs v-model="tab" class="ml20" style="flex:1" :animated="false" @click="tabName">
@@ -249,45 +257,6 @@
         </div>
       </div>
     </section>
-    <!-- <Modal v-model="modal1" title="高级查询" @on-ok="senior">
-      <div class="db pro mt20">
-        <span>转单日期：</span>
-        <Date-picker
-          :value="value"
-          format="yyyy-MM-dd"
-          type="daterange"
-          placeholder="选择日期"
-          class="w200"
-          @on-change="changedate"
-        ></Date-picker>
-      </div>
-      <div class="db pro mt20">
-        <span>客户类型：</span>
-        <Select v-model="model2" style="width:200px">
-          <Option v-for="item in typelist" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>客户名称：</span>
-        <input type="text" class="w200" v-model="nametext" />
-      </div>
-      <div class="db pro mt20">
-        <span>分店名称：</span>
-        <Select v-model="model1" style="width:200px">
-          <Option v-for="item in Branchstore" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>业务类型：</span>
-        <Select v-model="model3" style="width:200px">
-          <Option v-for="item in business" :value="item.value" :key="item.value">{{ item.label }}</Option>
-        </Select>
-      </div>
-      <div class="db pro mt20">
-        <span>业务单号：</span>
-        <input type="text" class="w200" v-model="text" />
-      </div>
-    </Modal>-->
     <Modal v-model="Settlement" title="收付款结算" width="1200" @on-visible-change="hander">
       <div class="db">
         <button class="ivu-btn ivu-btn-default mr10" type="button" @click="conserve">保存</button>
@@ -386,9 +355,11 @@
     <salepopup ref="salepopup" />
     <hedgingInvoice ref="hedgingInvoice" />
     <registrationEntry ref="registrationEntry" />
+    <settlementMoadl ref="settlementMoadl" />
   </div>
 </template>
 <script>
+import settlementMoadl from "./components/settlement";
 import hedgingInvoice from "./Popup/hedgingInvoice";
 import registrationEntry from "./Popup/registrationEntry";
 import quickDate from "@/components/getDate/dateget_bill.vue";
@@ -406,10 +377,11 @@ import {
   accountRevoke,
   account
 } from "@/api/bill/saleOrder";
-import { hedgingApplyNo,applyNo } from "@/api/bill/popup";
+import { hedgingApplyNo, applyNo } from "@/api/bill/popup";
 import { approvalStatus } from "_api/base/user";
 import reconciliation from "./components/reconciliation.vue";
 import Monthlyreconciliation from "./components/Monthlyreconciliation";
+import bus from './Popup/Bus'
 export default {
   components: {
     registrationEntry,
@@ -417,11 +389,12 @@ export default {
     reconciliation,
     Monthlyreconciliation,
     salepopup,
-    hedgingInvoice
-    // sale
+    hedgingInvoice,
+    settlementMoadl
   },
   data() {
     return {
+      type:0,//对冲，冲减标识
       accountType: false,
       statusData: [
         { name: "提交", status: "已提交" },
@@ -448,50 +421,10 @@ export default {
       modal1: false,
       text: "",
       nametext: "",
-      typelist: [
-        {
-          value: 0,
-          label: "华胜"
-        },
-        {
-          value: 1,
-          label: "内部"
-        },
-        {
-          value: 2,
-          label: "外部"
-        }
-      ],
-      business: [
-        {
-          value: 0,
-          label: "采购入库"
-        },
-        {
-          value: 1,
-          label: "采购退货"
-        },
-        {
-          value: 2,
-          label: "销售出库"
-        },
-        {
-          value: 3,
-          label: "销售退货"
-        }
-      ],
       Reconciliationlist: [
         {
           value: "",
           label: "全部"
-        },
-        {
-          value: "CG",
-          label: "草稿"
-        },
-        {
-          value: "SHZ",
-          label: "审核中"
         },
         {
           value: "SHTG",
@@ -579,6 +512,46 @@ export default {
           className: "tc",
           render: (h, params) => {
             return h("span", params.row.payingBadDebts.toFixed(2));
+          }
+        },
+        {
+          title: "运费",
+          key: "transportExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.transportExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "保险费",
+          key: "insuranceExpenses",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.insuranceExpenses.toFixed(2));
+          }
+        },
+        {
+          title: "手续费",
+          key: "serviceCharge",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.serviceCharge.toFixed(2));
+          }
+        },
+        {
+          title: "配件管理费",
+          key: "partsManagementFee",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.partsManagementFee.toFixed(2));
+          }
+        },
+        {
+          title: "其他费用",
+          key: "otherFees",
+          className: "tc",
+          render: (h, params) => {
+            return h("span", params.row.otherFees.toFixed(2));
           }
         },
         {
@@ -704,7 +677,11 @@ export default {
         {
           title: "含税配件欠票",
           key: "taxArrearsOfPart",
-          className: "tc"
+          className: "tc",
+          // render:(h, params) => {
+          //   let tax = this.$utils.subtract(params.row.taxAmountOfPart , params.row.taxAmountOfPartOpend)
+          //   return h("span" , tax)
+          // }
         },
         {
           title: "含税油品欠票",
@@ -746,7 +723,7 @@ export default {
         },
         {
           title: "收/付款账户",
-          key: "paymentAmtType",
+          key: "account",
           className: "tc"
         },
         {
@@ -918,7 +895,11 @@ export default {
       data2: [],
       data3: [],
       data4: [],
-      total: 0
+      total: 0,
+      statementStatusflag:false,//对账单状态是结算完成，不能点击对账单对冲、冲减预收、冲减预付、认领款核销
+      taxArrearsfalg: false,//含税配件欠票、含税油品欠票都是0 ，不能点击销售开票申请；
+      hedgingfalg:false,//对冲配件发票/对冲油品发票=含税配件/油品金额，不能点击发票对冲;
+      receivefalg:false,//收到配件/油品进项发票=含税配件/油品金额，不能点击进项登记及修改
     };
   },
   async mounted() {
@@ -969,6 +950,16 @@ export default {
     }
   },
   methods: {
+    //资金认领核销
+    capitalWrite() {
+      if (Object.keys(this.reconciliationStatement).length !== 0) {
+        // bus.$emit('account',this.reconciliationStatement)
+        this.$router.push({ name: "claimWrite",params: {data:this.reconciliationStatement} });
+        // console.log(this.$cookies)
+      } else {
+        this.$message.error("请选择一条对账单");
+      }
+    },
     // 进项发票登记及修改
     registrationEntry() {
       if (
@@ -979,7 +970,7 @@ export default {
         this.$refs.registrationEntry.accountData.push(
           this.reconciliationStatement
         );
-        this.$refs.registrationEntry.arrId = []
+        this.$refs.registrationEntry.arrId = [];
         this.$refs.registrationEntry.arrId.push(
           this.reconciliationStatement.orgId,
           this.reconciliationStatement.guestId,
@@ -1005,10 +996,12 @@ export default {
         this.reconciliationStatement.applyTime = moment(new Date()).format(
           "YYYY-MM-DD HH:mm:ss"
         );
-        this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id
+        this.reconciliationStatement.statementMasterId = this.reconciliationStatement.id;
         this.reconciliationStatement.applicant = this.$store.state.user.username;
-        this.$refs.hedgingInvoice.information = JSON.parse(JSON.stringify(this.reconciliationStatement));
-        delete this.$refs.hedgingInvoice.information.id
+        this.$refs.hedgingInvoice.information = JSON.parse(
+          JSON.stringify(this.reconciliationStatement)
+        );
+        delete this.$refs.hedgingInvoice.information.id;
         hedgingApplyNo().then(res => {
           this.$refs.hedgingInvoice.information.serviceId = res.data;
         });
@@ -1035,16 +1028,18 @@ export default {
           if (res.code === 0) {
             this.$refs.salepopup.information.applyNo = res.data.applyNo;
             this.$refs.salepopup.information.code = res.data.orgCode;
+            this.$refs.salepopup.information.oilsListOrder = res.data.oilsListOrder;
+            this.$refs.salepopup.information.partsListOrder = res.data.partsListOrder;
           }
         });
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$refs.salepopup.modal1 = true;
-        },500)
+        }, 500);
       } else {
         this.$message.error("只能勾选计划对账类型为收款的对账单");
       }
     },
-    // 总表格合计方式
+    // 单据合计方式
     handleSummary({ columns, data }) {
       //   console.log(columns,data)
       const sums = {};
@@ -1059,6 +1054,45 @@ export default {
         }
         const values = data.map(item => Number(item[key]));
         if (index > 4) {
+          if (!values.every(value => isNaN(value))) {
+            const v = values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return prev + curr;
+              } else {
+                return prev;
+              }
+            }, 0);
+            sums[key] = {
+              key,
+              value: v.toFixed(2)
+            };
+          }
+        } else {
+          sums[key] = {
+            key,
+            value: " "
+          };
+        }
+      });
+      return sums;
+      //
+    },
+    // 收付款单合计方式
+    summary({ columns, data }) {
+      //   console.log(columns,data)
+      const sums = {};
+      columns.forEach((column, index) => {
+        const key = column.key;
+        if (index === 0) {
+          sums[key] = {
+            key,
+            value: "合计"
+          };
+          return;
+        }
+        const values = data.map(item => Number(item[key]));
+        if (index === 5) {
           if (!values.every(value => isNaN(value))) {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
@@ -1130,9 +1164,9 @@ export default {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
             item.index = index + 1;
-            item.sortName = item.sort.name;
-            item.paymentAmtType = item.paymentAmtType.name;
-            item.startStatus = item.startStatus.name;
+            item.sortName = item.sort?item.sort.name:'';
+            item.paymentAmtType = item.paymentAmtType?item.paymentAmtType.name:'';
+            item.startStatus = item.startStatus?item.startStatus.name:'';
           });
           this.data2 = res.data;
         }
@@ -1188,26 +1222,17 @@ export default {
       this.falg = false;
       this.getAccountStatement(obj);
     },
-    // 更多查询
-    // senior() {
-    //   let obj = {
-    //     startDate: this.value[0]
-    //       ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-    //       : "",
-    //     endDate: this.value[1]
-    //       ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-    //       : "",
-    //     orgId: this.model1,
-    //     statementStatus: this.Reconciliationtype,
-    //     guestType: this.model2,
-    //     guestName: this.nametext,
-    //     serviceType: this.model3,
-    //     serviceId: this.text
-    //   };
-    //   this.getAccountStatement(obj);
-    // },
+
     // 点击总表查询明细
     morevis(row, index) {
+      this.taxArrearsfalg = false
+      this.statementStatusflag = false
+      this.hedgingfalg = false
+      this.receivefalg = false
+      if (row.statementStatus.value == 4){ this.statementStatusflag = true}
+      if (row.taxArrearsOfPart == 0 && row.taxArrearsOfOil == 0){this.taxArrearsfalg = true}
+      if (row.hedgingInvoiceOfPart == row.taxAmountOfPart && row.hedgingInvoiceOfOil == row.taxAmountOfOil){this.hedgingfalg = true}
+      if (row.receiveInputInvoiceAmount == row.taxAmountOfPart && row.receiveTaxOfOilAmount == row.taxAmountOfOil ) {this.receivefalg = true}
       this.reconciliationStatement = row;
       this.reconciliationStatement.index = index;
       // console.log(row.id)
@@ -1254,14 +1279,14 @@ export default {
     // 查看对账单
     viewStatement() {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
-        this.$refs.reconciliation.modal = true;
-        if (this.reconciliationStatement.statementStatusName === "草稿") {
-          this.$refs.Monthlyreconciliation.modal = true;
-          this.$refs.reconciliation.modal = false;
-        } else {
-          this.$refs.reconciliation.modal = true;
-          this.$refs.Monthlyreconciliation.modal = false;
-        }
+        this.$refs.reconciliation.accountModal = true;
+        // if (this.reconciliationStatement.statementStatusName === "草稿") {
+        //   this.$refs.Monthlyreconciliation.modal = true;
+        //   this.$refs.reconciliation.modal = false;
+        // } else {
+        //   this.$refs.reconciliation.modal = true;
+        //   this.$refs.Monthlyreconciliation.modal = false;
+        // }
       } else {
         this.$message({
           message: "请勾选要查看的对账单",
@@ -1270,15 +1295,16 @@ export default {
         });
       }
     },
-    // 对账单结算
-    statementSettlement() {
+    // 对账单收付款结算
+    statementSettlement(type) {
       if (Object.keys(this.reconciliationStatement).length !== 0) {
         if (
           this.reconciliationStatement.pass &&
           (this.reconciliationStatement.statementStatusName === "审批通过" ||
             this.reconciliationStatement.statementStatusName === "结算中")
         ) {
-          this.Settlement = true;
+          this.$refs.settlementMoadl.Settlement = true;
+          this.type = !type ? 0: type === 1 ? 1:2
         } else {
           this.$message({
             message: "请勾选流程通过且对账单状态为审核通过或结算中的数据",

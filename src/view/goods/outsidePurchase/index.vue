@@ -283,6 +283,15 @@
                   <div class="fl mb5">
                     <Button
                       size="small"
+                      @click="down"
+                      class="mr10"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
+                  </div>
+                  <div class="fl mb5">
+                    <Button
+                      size="small"
                       class="mr10"
                       :disabled="adjustButtonDisable"
                       @click="showModel('adjustModel')"
@@ -323,15 +332,16 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
                 <vxe-table-column
                   type="index"
                   width="60"
                   title="序号"
+                  fixed="left"
                 ></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column title="操作" width="80">
+                <vxe-table-column fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column fixed="left" title="操作" width="80">
                   <template v-slot="{ row }">
                     <Button type="text" @click="watch(row.partId)">查看</Button>
                   </template>
@@ -340,16 +350,19 @@
                   field="partCode"
                   title="配件编码"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partName"
                   title="配件名称"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="partBrand"
                   title="品牌"
                   width="100"
+                  fixed="left"
                 ></vxe-table-column>
                 <vxe-table-column
                   field="orderQty"

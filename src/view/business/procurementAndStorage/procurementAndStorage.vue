@@ -203,6 +203,7 @@
                     >
                       <Option
                         v-for="item in WarehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -272,7 +273,7 @@
                     <vxe-table-column
                       field="orderQty"
                       title="数量"
-                      :edit-render="{name: 'input',immediate: true,attrs: {disabled: formPlan.billStatusValue === 4}, events: {input: updateFooterEvent}}"
+                      :edit-render="{name: 'input',immediate: true,attrs: {disabled: true}, events: {input: updateFooterEvent}}"
                     ></vxe-table-column>
                     <vxe-table-column
                       field="orderPrice"
@@ -321,7 +322,7 @@
       <fee-registration
         ref="feeRegistration"
         :state="selectRowState"
-        :serviceId="formPlan.serviceId"
+        :serviceId="formPlan.code"
       ></fee-registration>
       <!-- 选择采购计划单 -->
       <procurement-modal

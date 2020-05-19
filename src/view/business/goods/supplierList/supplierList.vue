@@ -1,9 +1,8 @@
 <template>
-  <div>
     <div class="content-oper content-oper-flex">
       <section class="oper-box">
         <div class="oper-top flex">
-          <div class="wlf">
+          <div class="wlf wlf-center">
             <div class="db">
               <span>快速查询：</span>
               <quick-date class="mr10" v-on:quickDate="getDataQuick"></quick-date>
@@ -24,7 +23,7 @@
               <Button class="mr10" @click="instance" v-has="'submit'" :disabled="buttonDisable || presentrowMsg !== 0"><i class="iconfont mr5 iconziyuan2"></i>提交</Button>
             </div>
             <div class="db">
-              <Button class="mr10" :disabled="presentrowMsg !== 1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
+              <Button class="mr10" :disabled="presentrowMsg !== 1||datadata.isWms===1" @click="salesReturn" v-has="'return'"><i class="iconfont mr5 iconziyuan2"></i>退货</Button>
             </div>
             <div class="db">
               <Button @click="cancellation" v-has="'cancellation'" class="mr10" :disabled="buttonDisable || presentrowMsg !== 0"><Icon type="md-close" size="14" /> 作废</Button>
@@ -38,8 +37,8 @@
       <section class="con-box">
         <div class="inner-box">
           <div class="con-split" ref="paneLeft" >
-            <Split v-model="split1" min="200" max="500">
-              <div slot="left" class="con-split-pane-left" >
+            <Split v-model="split1" min="200" max="500" @on-moving="getDomHeight">
+              <div slot="left" class="con-split-pane-left" style="overflow-y: auto; height: 100%;">
                 <div class="pane-made-hd">
                   采购退货列表
                 </div>
@@ -134,14 +133,13 @@
                   :data="Right.tbdata"
                   :footer-method="addFooter"
                   showOverflow="true"
-                  height="500"
                   @edit-actived="editActivedEvent"
                   :edit-config="{trigger: 'click', mode: 'cell'}">
-                  <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                  <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                  <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                  <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                  <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                  <vxe-table-column type="index" fixed="left" width="60" title="序号"></vxe-table-column>
+                  <vxe-table-column type="checkbox" fixed="left" width="60"></vxe-table-column>
+                  <vxe-table-column field="partCode" fixed="left" show-overflow title="配件编码" width="100"></vxe-table-column>
+                  <vxe-table-column field="partName" fixed="left" show-overflow title="配件名称" width="100"></vxe-table-column>
+                  <vxe-table-column field="partBrand" fixed="left" show-overflow title="品牌" width="100"></vxe-table-column>
                   <vxe-table-column field="outUnitId" title="单位" width="100"></vxe-table-column>
                   <vxe-table-column field="canReQty" title="可退数量" width="100"></vxe-table-column>
                   <vxe-table-column field="orderQty" title="退货数量" :edit-render="{name: 'input',attrs: {disabled: false}}" width="100">
@@ -154,7 +152,11 @@
                     </template>
                   </vxe-table-column>
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
-                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100"></vxe-table-column>
+                  <vxe-table-column field="stockOutQty" title="缺货数量" width="100">
+                    <template v-slot="{row}">
+                      {{(row.stockOutQty-(row.canReQty-row.orderQty))>=0?(row.stockOutQty-(row.canReQty-row.orderQty)):0}}
+                    </template>
+                  </vxe-table-column>
                   <vxe-table-column field="oemCode" title="OE码" width="100"></vxe-table-column>
                   <vxe-table-column field="spec" title="规格" width="100"></vxe-table-column>
                 </vxe-table>
@@ -171,12 +173,11 @@
       <More @sendMsg="getMsg" ref="moremore"></More>
       <!--选择采购计划弹窗-->
       <procurement-modal ref="procurementModal" :guestId="guestidId" @getPlanOrder="getPlanOrder" @selectRow="selectRow"></procurement-modal>
-    </div>
-    <!--供应商资料-->
+      <!--供应商资料-->
     <select-supplier ref="selectSupplier" header-tit="供应商资料" @selectSupplierName="getSupplierName"></select-supplier>
     <!--打印弹框-->
     <print-show ref="PrintModel" :orderId="mainId"></print-show>
-  </div>
+    </div>
 </template>
 <script>
   import * as tools from "../../../../utils/tools";
@@ -202,31 +203,19 @@
       PrintShow
     },
     data() {
-      let changeNumber = (rule, value, callback) => {
-        if (!value && value != '0') {
-          callback(new Error("请输入大于或等于0的正整数"));
-        } else {
-          const reg = /^([0]|[1-9][0-9]*)$/
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("请输入大于或等于0的正整数"));
-          }
-        }
-      };
-      //价格（2位小数）
-      let money = (rule, value, callback) => {
-        if (!value && value != "0") {
-          callback(new Error("最多保留2位小数"));
-        } else {
-          const reg = /^\d+(\.\d{0,2})?$/i;
-          if (reg.test(value)) {
-            callback();
-          } else {
-            callback(new Error("最多保留2位小数"));
-          }
-        }
-      };
+      let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
+      }
+    };
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
+      }
+    };
       return {
         ArraySelect: [], //供应商下拉框
         checkboxArr:[],// checkbox选中
@@ -378,6 +367,7 @@
         successNOid: '', //没有id
         successHaveId: '', //有id,
         selectLeftItemId:'',//左侧点击的id
+        leftCurrentItem:null,//记录左侧点击的数据
       }
     },
     methods: {
@@ -517,6 +507,9 @@
         if (!this.isAdd) {
           return this.$Message.error('请先保存数据');
         }
+        //置空左侧选中数据
+        this.selectLeftItemId = "";
+        this.leftCurrentItem = null;
         for(let item of this.Left.tbdata){
           item._highlight = false
         }
@@ -577,24 +570,51 @@
         this.guestidId = val
         let SameId = this.ArraySelect.filter(item => item.id === val)
         // console.log(SameId[0].settTypeId)
-        this.formPlan.clearing = SameId[0].settTypeId
+        if(SameId&&SameId.length>0){
+          this.formPlan.clearing = SameId[0].settTypeId
+        }
       },
       //选择采购入库单
       getPlanOrder(Msg){
-        // console.log(Msg);
         this.formPlan.warehouse = Msg.storeId
-        console.log(this.formPlan.warehouse)
         let arr = Msg.details || []
         arr.map(item => {
           item.outUnitId = item.unit
-          item.stockOutQty = item.totalStockQty
+          // item.stockOutQty = item.totalStockQty
         })
-        if(this.Right.tbdata){
-          this.Right.tbdata = [...this.Right.tbdata,...arr];
-          this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
-        } else {
-          this.Right.tbdata = arr
+
+        if(this.leftCurrentItem){
+          if(Msg.code != this.leftCurrentItem.code){
+            this.leftCurrentItem = Msg;
+            this.Right.tbdata = arr
+          }else{
+            let filterIdArr = this.leftCurrentItem.details.filter(item => item.sourceMainId==Msg.details[0].sourceMainId)
+            if(filterIdArr.length==0){
+              this.leftCurrentItem = Msg;
+              this.Right.tbdata = [...this.Right.tbdata,...arr];
+              this.leftCurrentItem.details = this.Right.tbdata;
+            }
+            //console.log(Msg.details,this.leftCurrentItem.details)
+            // if(Msg.details[0].sourceMainId != this.leftCurrentItem.details[0].sourceMainId){
+            //   this.leftCurrentItem = Msg;
+            //   this.Right.tbdata = [...this.Right.tbdata,...arr];
+            //   // this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+            // }else{
+            //   return
+            // }
+          }
+        }else{
+          this.leftCurrentItem = Msg;
+          this.Right.tbdata = arr;
         }
+
+        //this.Right.tbdata = arr
+        // if(this.Right.tbdata){
+        //   this.Right.tbdata = [...this.Right.tbdata,...arr];
+        //   this.Right.tbdata = tools.arrRemoval(this.Right.tbdata,'oemCode');
+        // } else {
+        //   this.Right.tbdata = arr
+        // }
       },
       //选择采购入库单的主表code
       selectRow(val){
@@ -616,7 +636,7 @@
               data.guestId = this.formPlan.guestName   //调出方
               data.orderManId = this.formPlan.storeId     //退货员id
               data.orderMan = this.formPlan.orderMan //退货员
-              data.orderDate = tools.transTime(this.formPlan.orderDate)  //退货日期
+              data.orderDate = tools.transTime(...this.formPlan.orderDate)  //退货日期
               data.serviceId = this.formPlan.numbers  //采退单号
               data.rtnReasonId = this.formPlan.cause  //退货原因
               data.settleTypeId = this.formPlan.clearing  //结算方式
@@ -624,7 +644,11 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
-              // console.log(data.code)
+              let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+              if(noBack.length>0){
+                this.$message.error('明细中存在缺货数量，请调整')
+                return
+              }
               saveDraft(data).then(res => {
                 if(res.code === 0){
                   this.$message.success('保存成功！')
@@ -899,8 +923,9 @@
       },
       // 左边部分的当前行
       selection(row){
-        if (row == null) return;
+        if (row == null||!row.id) return;
         this.selectLeftItemId = row.id;
+        this.leftCurrentItem = row;
         let currentRowTable = this.$refs["currentRowTable"];
         if(!this.Flaga && !this.isAdd && row.id){
           this.$Modal.confirm({
@@ -923,6 +948,13 @@
                   data.storeId = this.formPlan.warehouse  //退货仓库
                   data.code = this.formPlan.serviceId //采购订单
                   data.details = this.Right.tbdata
+
+                  let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+                  if(noBack.length>0){
+                    this.$message.error('明细中存在缺货数量，请调整')
+                    return
+                  }
+
                   // data.details = this.Right.tbdata.map(item => {
                   //   return {
                   //     partId : item.partId,
@@ -1015,7 +1047,7 @@
 
       //右侧填充数据
       setRightData(row){
-        this.selectLeftItemId = "";
+        // this.selectLeftItemId = "";
         this.mainId = row.id
         this.guestidId = row.guestId
         this.datadata = row
@@ -1063,6 +1095,13 @@
               data.storeId = this.formPlan.warehouse  //退货仓库
               // data.code = this.formPlan.serviceId //采购订单
               data.details = this.Right.tbdata
+
+              let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+              if(noBack.length>0){
+                this.$message.error('明细中存在缺货数量，请调整')
+                return
+              }
+
               let res = await saveCommit(data);
               if (res.code == 0) {
                 this.$Message.success('提交成功');
@@ -1096,6 +1135,13 @@
             data.storeId = this.formPlan.warehouse  //退货仓库
             data.code = this.formPlan.serviceId //采购订单
             data.details = this.Right.tbdata
+
+            let noBack = data.details.filter(item => item.canReQty-item.stockOutQty<item.orderQty)
+            if(noBack.length>0){
+              this.$message.error('明细中存在缺货数量，请调整')
+              return
+            }
+
             // data.details = this.Right.tbdata.map(item => {
             //   // return {
             //   //   id: item.id,
@@ -1117,6 +1163,9 @@
             let res = await returnPchs(data);
             if (res.code == 0) {
               this.$Message.success('退货成功');
+              this.leftgetList();
+              this.isAdd = true;
+            }else{
               this.leftgetList();
               this.isAdd = true;
             }
@@ -1156,19 +1205,24 @@
             }
           }
         })
-      }
+      },
+      getDomHeight() {
+        this.$nextTick(()=>{
+          let wrapH = this.$refs.paneLeft.offsetHeight;
+          let planFormH = this.$refs.planForm.offsetHeight;
+          let planBtnH = this.$refs.planBtn.offsetHeight;
+          // let planPageH = this.$refs.planPage.offsetHeight;
+          //获取左侧侧表格高度
+          this.leftTableHeight = wrapH-70;
+          //获取右侧表格高度
+          this.rightTableHeight = wrapH-planFormH-planBtnH-65;
+        });
+      },
     },
     mounted(){
-      this.$nextTick(()=>{
-        let wrapH = this.$refs.paneLeft.offsetHeight;
-        let planFormH = this.$refs.planForm.offsetHeight;
-        let planBtnH = this.$refs.planBtn.offsetHeight;
-        // let planPageH = this.$refs.planPage.offsetHeight;
-        //获取左侧侧表格高度
-        this.leftTableHeight = wrapH-70;
-        //获取右侧表格高度
-        this.rightTableHeight = wrapH-planFormH-planBtnH-65;
-      });
+      setTimeout(() => {
+        this.getDomHeight();
+      }, 0);
       this.allSelect();
       this.leftgetList();
       this.selecQuery();
@@ -1176,6 +1230,11 @@
     }
   }
 </script>
+
+<style lang="less" scoped>
+  @import url("../../../lease/product/lease.less");
+  @import url("../../../goods/plannedPurchaseOrder/index");
+</style>
 
 <style scoped>
   .con-box{

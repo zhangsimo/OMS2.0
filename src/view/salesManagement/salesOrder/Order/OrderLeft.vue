@@ -66,7 +66,8 @@ export default {
         orderManId: this.$store.state.user.userData.id,
         new: true,
         detailList:[],
-        guestId: ''
+        guestId: '',
+          _highlight: true,
       },
       page: {
         total: 0,
@@ -77,7 +78,8 @@ export default {
       query: {
         showPerson: 1
       }, //更多搜索信息
-      Flaga: true
+      Flaga: true,
+      selectItemId:'',
     };
   },
   mounted() {
@@ -98,15 +100,14 @@ export default {
       if (this.$parent.$parent.isAdd) {
         return this.$Message.error('请先保存数据');
       }
+      this.selectItemId = "";
+      for(let b of this.tableData){
+          b._highlight = false
+      }
       this.tableData.unshift(this.PtRow);
       this.$refs.currentRowTable.setCurrentRow(this.tableData[0])
       this.$parent.$parent.isAdd = false
       this.$parent.$parent.isNew=false
-      // this.tableData.unshift({
-      //   billStatusId: { enum: "", value: "0", name: "草稿" },
-      //   orderMan: this.$store.state.user.userData.staffName,
-      //   orderManId:  this.$store.state.user.userData.id
-      // });
     },
     change(){
       this.Flaga = false
@@ -117,15 +118,28 @@ export default {
       data.startTime = this.queryTime[0] || "";
       data.endTime = this.queryTime[1] || "";
       data.billStatusId = this.orderType;
-      // data = this.query
       let page = this.page.num - 1;
       let size = this.page.size;
       let res = await getLeftList(page, size, data);
       if (res.code === 0) {
-        // res.data.content.map( item => item.billStatusId = JSON.parse(item.billStatusId))
         this.tableData = res.data.content;
         this.page.total = res.data.totalElements;
         this.$store.commit("setOneOrder", {});
+        //筛选出当前操作的是第几条并选中
+        for(let i in this.tableData){
+            if(this.tableData[i].id==this.selectItemId){
+                this.$refs.currentRowTable.setCurrentRow(this.tableData[i]);
+                this.$emit("getOneOrder", this.tableData[i]);
+                this.$store.commit("setOneOrder", this.tableData[i]);
+                break;
+            }
+        }
+        //如果没有保存过的数据取第一条选中
+        if(!this.selectItemId){
+          this.$refs.currentRowTable.setCurrentRow(this.tableData[0]);
+          this.$emit("getOneOrder", this.tableData[0]);
+          this.$store.commit("setOneOrder", this.tableData[0]);
+        }
       }
     },
     //切换页面
@@ -141,28 +155,10 @@ export default {
     },
     //点击获取当前信息
     clickOnesList(data) {
-      // if(!this.isEdit){
-      //   return false
-      // }
-      // let list = this.$store.state.dataList.oneOrder;
-      // if(!list.id){
-      //   this.$Modal.confirm({
-      //     title: '当前有数据未保存,请确定是否离开',
-      //     onOk: async () => {
-      //       this.$emit("getOneOrder", data.row);
-      //       this.$store.commit("setOneOrder", data.row);
-      //       this.tableData={}
-      //       this.isEdit=false
-      //     },
-      //     onCancel: () => {
-      //       // this.$Message.info('');
-      //     },
-      //   })
-      // }
-      // else{
-      //
-      // }
-      this.$parent.$parent.ispart=false
+      if(data){
+          this.selectItemId=data.row.id;
+      }
+      this.$parent.$parent.ispart=false;
       if(data.row == null) return;
       let currentRowTable = this.$refs["currentRowTable"];
       if(!this.Flaga && this.$parent.$parent.isAdd){
@@ -171,19 +167,28 @@ export default {
           onOk: () => {
             currentRowTable.clearCurrentRow();
             this.$emit('refresh','你好！');
-            this.Flaga = false
+            this.Flaga = false;
             this.$parent.$parent.isAdd = false
-
           },
           onCancel: () => {
-            this.$parent.$parent.isAdd = false
-            this.$parent.$parent.isNew=true
-              this.$parent.right.isAdd=false;
+            this.$parent.$parent.isAdd = false;
+            this.$parent.$parent.isNew=true;
             this.tableData.splice(0, 1);
             currentRowTable.clearCurrentRow();
+              for(let i in this.tableData){
+                  if(this.tableData[i].id==this.selectItemId){
+                      this.$refs.currentRowTable.setCurrentRow(this.tableData[i])
+                      this.$emit("getOneOrder", this.tableData[i]);
+                      this.$store.commit("setOneOrder", this.tableData[i]);
+                      break;
+                  }
+              }
           },
         })
       }else {
+          if(data.row.id){
+              this.selectItemId=data.row.id;
+          }
         this.$emit("getOneOrder", data.row);
         this.$store.commit("setOneOrder", data.row);
       }
@@ -193,13 +198,13 @@ export default {
     //监听时间
     queryTime: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      // this.page.size = 10;
       this.gitlistValue();
     },
     //监听状态
     orderType: function(val, old) {
       this.page.num = 1;
-      this.page.size = 10;
+      // this.page.size = 10;
       this.gitlistValue();
     },
     //更多搜索
@@ -234,7 +239,7 @@ export default {
       handler(v, ov) {
         if (v.code === 0) {
           this.page.num = 1;
-          this.page.size = 10;
+          // this.page.size = 10;
           this.gitlistValue();
         }
       },

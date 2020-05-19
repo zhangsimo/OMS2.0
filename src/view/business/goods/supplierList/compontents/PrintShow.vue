@@ -67,7 +67,7 @@
         <Row style="border: 1px #000000 solid">
           <Col class="pl10" span="12" style="border-right: 1px #000000 solid">
             <span>合计:</span>
-            <span>{{ onelist.totalAmt | toChies }}</span>
+            <span>{{ totalsPrice | toChies }}</span>
           </Col>
           <!--<Col class="pl10" span="8" style="border-right: 1px #000000 solid">-->
             <!--<span>总数:</span>-->
@@ -75,13 +75,13 @@
           <!--</Col>-->
           <Col class="pl10" span="12">
             <span>合计:</span>
-            <span>{{ onelist.totalAmt }}</span>
+            <span>{{ totalsPrice|priceFilters }}</span>
           </Col>
         </Row>
         <Row style="border: 1px #000000 solid;border-top: none">
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>制单人:</span>
-            <span>{{ onelist.creator }}</span>
+            <span>{{ onelist.orderMan }}</span>
           </Col>
           <Col span="6" class="pl10" style="border-right: 1px #000000 solid">
             <span>送货人:</span>
@@ -163,7 +163,10 @@
           {
             title: "金额",
             key: "orderAmt",
-            align: "center"
+            align: "center",
+            render:(h,p) => {
+              return h('span',(p.row.orderQty*p.row.orderPrice).toFixed(2))
+            }
           },
           {
             title: "仓库",
@@ -181,6 +184,16 @@
         num: "12323.09",
         num2: 78723
       };
+    },
+    computed:{
+      totalsPrice(){
+        let arrData = this.details||[]
+        let total = arrData.reduce((total, num)=> {
+            return total+(num.orderQty*num.orderPrice)
+          },0
+        )
+        return total
+      }
     },
     methods: {
       //打印

@@ -14,7 +14,6 @@ import {
 import * as tools from "../../../utils/tools";
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
-// import {purchaseTypeList} from "./goodsList";
 
 export const mixGoodsData = {
   data() {
@@ -81,7 +80,8 @@ export const mixGoodsData = {
       headers: {
         Authorization: "Bearer " + Cookies.get(TOKEN_KEY)
       },
-      selectLeftItemId:""
+      selectLeftItemId:"",//左侧选中的id
+      saveAndSubmitClik:false,//保存或提交按钮是否点击
     };
   },
   mounted() {
@@ -104,11 +104,13 @@ export const mixGoodsData = {
       let companyMap = res.data.companyMap || {};
       if (companyMap) {
         for (let v in companyMap) {
-          let objData = {
-            label: v,
-            value: companyMap[v]
-          };
-          this.companyMap.push(objData);
+          if(companyMap[v]!=this.$store.state.user.userData.shopId){
+            let objData = {
+              label: v,
+              value: companyMap[v]
+            };
+            this.companyMap.push(objData);
+          }
         }
       }
     });
@@ -188,16 +190,10 @@ export const mixGoodsData = {
     },
     //删除选中数据
     delTableData() {
+      console.log(this.delArr)
       if (this.delArr.length == 0) {
         this.$message.error("选择要删除的数据");
       } else {
-        // this.delArr.map(item => {
-        //   this.tableData.map((v2, i) => {
-        //     if (item.id == v2.id) {
-        //       this.tableData.splice(i, 1);
-        //     }
-        //   });
-        // });
         this.$Modal.confirm({
           title: "是否要删除配件",
           onOk: async () => {
@@ -212,6 +208,19 @@ export const mixGoodsData = {
               this.delArr = [];
               this.$Message.success("删除成功");
             } else {
+              this.delArr.forEach((els,i,arrP) => {
+                this.tableData.forEach((el, index, arr) => {
+                  if(el.partCode == els.partCode&&!els.id) {
+                    arr.splice(index, 1);
+                  }
+                })
+                if(!els.id){
+                  arrP.splice(i,1);
+                }
+              })
+              if(this.delArr.length==0){
+                return this.$Message.success("删除成功");
+              }
               let res = await deleteparts(this.delArr);
               if (res.code == 0) {
                 this.$Message.success("删除成功");
@@ -307,12 +316,7 @@ export const mixGoodsData = {
     },
     //添加配件数据
     getPartNameList(v) {
-      // this.tableData = this.tableData.concat(v);
       let oldArr = [...v,...this.tableData]
-      // console.log(this.tableData, "this.tableData  ==>267");
-      // console.log(this.tableData, "this.tableData.concat(v) =>267");
-      // var oldArr = this.tableData;
-      // console.log(oldArr, "oldArr =>269");
       var allArr = [];
       for (var i = 0; i < oldArr.length; i++) {
         var flag = true;
@@ -325,7 +329,10 @@ export const mixGoodsData = {
           allArr.push(oldArr[i]);
         }
       }
-      console.log(allArr)
+
+      allArr.map(item => {
+        item.orderPrice = item.recentPrice||0
+      })
       this.tableData = allArr;
     },
 
@@ -347,13 +354,8 @@ export const mixGoodsData = {
     },
     //选择日期
     setDataFun(v) {
-      // console.log(v);
       this.formPlan.planArriveDate = v;
     },
-    //获取订单状态
-    // returnOrderType(n){
-    //   return purchaseTypeList(n)
-    // },
     //采购计划单选中
     selectTabelData(v, oldv) {
       this.delArr = [];
@@ -529,10 +531,12 @@ export const mixGoodsData = {
     },
     //保存采购计划信息
     submit(subType) {
+      //保存或提交按钮点击后临时禁用
+      if(this.submitloading){
+        return
+      }
       this.submitloading = true;
-      console.log(this.formPlan)
       this.$refs["formPlan"].validate(valid => {
-        console.log(valid)
         if (valid) {
           let objReq = {};
           if (this.selectPlanOrderItem.id) {
@@ -553,7 +557,7 @@ export const mixGoodsData = {
           //票据类型
           objReq.billTypeId = this.formPlan.billType;
           //直发门店
-          objReq.directCompanyId = this.formPlan.directCompanyId;
+          objReq.directCompanyId = this.formPlan.directCompanyId||0;
           //计划单号
           // objReq.settleTypeId = this.formPlan.settleTypeId;
           objReq.processInstanceId = this.formPlan.processInstanceId;
@@ -569,28 +573,29 @@ export const mixGoodsData = {
           objReq.totalAmt = parseFloat(this.formPlan.totalPrice);
           //配件详情
           objReq.details = this.tableData;
-          // console.log(objReq)
-          // return
           let zerolength = objReq.details.filter(el => el.orderPrice <= 0)
-          if(zerolength.length > 0) {
+          if(zerolength.length > 0&&subType==2) {
             this.$Modal.confirm({
               title: '',
               content: '<p>存在配件价格为0，是否提交</p>',
               onOk: () => {
                 if (subType === 1) {
                   saveDraft(objReq).then(res => {
+                    this.submitloading = false
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
-                      this.$Message.success("添加成功");
+                      this.$Message.success("保存成功");
                       this.getList();
                     }
                   });
                 } else if (subType === 2) {
                   if (this.tableData.length <= 0) {
+                    this.submitloading = false
                     return this.$Message.error("请添加配件后再提交");
                   }
                   saveCommit(objReq).then(res => {
+                    this.submitloading = false
                     if (res.code == 0) {
                       this.newadd = false;
                       this.proModal = false;
@@ -599,23 +604,29 @@ export const mixGoodsData = {
                     }
                   });
                 }
+              },
+              onCancel:() => {
+                this.submitloading = false
               }
             })
           } else {
             if (subType === 1) {
               saveDraft(objReq).then(res => {
+                this.submitloading = false
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
-                  this.$Message.success("添加成功");
+                  this.$Message.success("保存成功");
                   this.getList();
                 }
               });
             } else if (subType === 2) {
               if (this.tableData.length <= 0) {
+                this.submitloading = false
                 return this.$Message.error("请添加配件后再提交");
               }
               saveCommit(objReq).then(res => {
+                this.submitloading = false
                 if (res.code == 0) {
                   this.newadd = false;
                   this.proModal = false;
@@ -625,7 +636,6 @@ export const mixGoodsData = {
               });
             }
           }
-          this.submitloading = false;
         } else {
           this.submitloading = false;
           this.$Message.error("必填数据未填写");

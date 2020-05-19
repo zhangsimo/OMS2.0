@@ -73,16 +73,6 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品质",
-          key: "quality",
-          minWidth: 120
-        },
-        {
-          title: "品牌",
-          key: "partBrand",
-          minWidth: 120
-        },
-        {
           title: "编码",
           key: "partCode",
           minWidth: 120
@@ -93,31 +83,10 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "全称",
-          key: "fullName",
-          minWidth: 240
-        },
-        {
-          title: "OEM码",
-          key: "oeCode",
+          title: "品牌车型",
+          key: "adapterCarModel",
           minWidth: 120
         },
-        {
-          title: "产地",
-          key: "placeOfOrigin",
-          minWidth: 120
-        },
-        {
-          title: "单位",
-          key: "minUnit",
-          minWidth: 120
-        }
-      ]
-    },
-    {
-      title: " ",
-      key: "",
-      children: [
         {
           title: "规格",
           key: "specifications",
@@ -129,8 +98,23 @@ export default class Fittings extends Vue {
           minWidth: 120
         },
         {
-          title: "品牌车型",
-          key: "adapterCarModel",
+          title: "品质",
+          key: "quality",
+          minWidth: 120
+        },
+        {
+          title: "品牌",
+          key: "partBrand",
+          minWidth: 120
+        },
+        {
+          title: "OEM码",
+          key: "oeCode",
+          minWidth: 120
+        },
+        {
+          title: "单位",
+          key: "minUnit",
           minWidth: 120
         },
         {
@@ -165,13 +149,17 @@ export default class Fittings extends Vue {
             } catch (e) {}
             return h("span", text);
           }
-        }
-      ]
-    },
-    {
-      title: "辅助信息",
-      key: "",
-      children: [
+        },
+        {
+          title: "产地",
+          key: "placeOfOrigin",
+          minWidth: 120
+        },
+        {
+          title: "生产厂家",
+          key: "manufactor",
+          minWidth: 120
+        },
         {
           title: "备注",
           key: "remark",
@@ -194,12 +182,12 @@ export default class Fittings extends Vue {
           }
         },
         {
-          title: "生产厂家",
-          key: "manufactor",
-          minWidth: 120
-        }
+          title: "全称",
+          key: "fullName",
+          minWidth: 240
+        },
       ]
-    }
+    },
   ];
   //日期控件不可选择
   private options3: any = {
@@ -418,7 +406,7 @@ export default class Fittings extends Vue {
   }
   // 查询
   private queryHandle() {
-    this.cloud.page.num = 1;
+    this.cloud.page.num = 0;
     if (this.tabIndex === 0) {
       this.initLocalPartInfo();
     } else {

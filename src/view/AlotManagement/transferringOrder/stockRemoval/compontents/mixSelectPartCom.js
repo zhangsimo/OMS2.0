@@ -216,11 +216,12 @@ export const mixSelectPartCom = {
       }
 
       if (this.partName.trim()) {
-        if (this.searchType == "adapterCarModels") {
-          req[this.searchType] = [this.partName];
-        } else {
-          req[this.searchType] = this.partName.trim();
-        }
+        // if (this.searchType == "adapterCarModels") {
+        //   req[this.searchType] = [this.partName];
+        // } else {
+        //   req[this.searchType] = this.partName.trim();
+        // }
+        req.adapterCarModels = [this.partName];
       }
       req.page = this.page.num;
       req.size = this.page.size;
@@ -292,6 +293,10 @@ export const mixSelectPartCom = {
     },
     throwData() {
       if (this.selectTableItem.length > 0) {
+        this.selectTableItem = this.selectTableItem.map(el => {
+          el.orgid = el.id;
+          return el;
+        })
         this.$emit("selectPartName", this.selectTableItem);
       } else {
         this.$Message.error("请选择数据");
@@ -327,6 +332,7 @@ export const mixSelectPartCom = {
 
     //点击详情
     show(val) {
+      console.log(val)
       let data = {};
       data.partId = val.id;
       getDetails(data).then(res => {

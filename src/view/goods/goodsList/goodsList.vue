@@ -199,11 +199,13 @@
                       class="w160"
                       :disabled="![0, 4].includes(selectPlanOrderItem.billStatusId)"
                       v-model="formPlan.directCompanyId"
+                      clearable
                     >
                       <Option
                         v-for="item in companyMap"
                         :value="item.value"
                         :key="item.value"
+                        v-show="item.value!=$store.state.user.userData.shopId"
                       >{{ item.label }}</Option>
                     </Select>
                   </FormItem>
@@ -275,6 +277,14 @@
                       >导入</Button>
                     </Upload>
                   </div>
+                  <div class="fl mb5 mr10">
+                    <Button
+                      size="small"
+                      @click="down"
+                    >
+                      <Icon custom="iconfont iconxiazaiicon icons" />下载模板
+                    </Button>
+                  </div>
                   <div class="fl mb5">
                     <Button
                       size="small"
@@ -338,13 +348,13 @@
                 :height="rightTableHeight"
                 :data="tableData"
                 :footer-method="addFooter"
-                :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                :edit-config="{ trigger: 'click', mode: 'cell' }"
               >
-                <vxe-table-column type="index" width="60" title="序号"></vxe-table-column>
-                <vxe-table-column type="checkbox" width="60"></vxe-table-column>
-                <vxe-table-column field="partCode" title="配件编码" width="100"></vxe-table-column>
-                <vxe-table-column field="partName" title="配件名称" width="100"></vxe-table-column>
-                <vxe-table-column field="partBrand" title="品牌" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
+                <vxe-table-column fixed="left" type="checkbox" width="60"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+                <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
                 <vxe-table-column field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
                 <vxe-table-column field="masterStockQty" title="总部库存" width="100"></vxe-table-column>
                 <vxe-table-column field="branchStockQty" title="门店库存" width="100"></vxe-table-column>
@@ -461,6 +471,8 @@ import SelectPartCom from "./components/selectPartCom";
 import SelectSupplier from "./components/supplier/selectSupplier";
 import { getParamsBrand } from "_api/purchasing/purchasePlan";
 import { getSales } from "@/api/salesManagment/salesOrder";
+import { TOKEN_KEY } from "@/libs/util";
+import baseUrl from "_conf/url";
 export default {
   name: "goodsList",
   components: {
@@ -636,9 +648,7 @@ export default {
       this.getDomHeight();
     }, 0);
 
-    window.onresize = () => {
-      this.getDomHeight();
-    };
+
 
     getPurchaseInit({}).then(res => {
       //票据类型
@@ -670,9 +680,9 @@ export default {
         let planBtnH = this.$refs.planBtn.offsetHeight;
         // let planPageH = this.$refs.planPage.offsetHeight;
         //获取左侧侧表格高度
-        this.leftTableHeight = wrapH - 70;
+        this.leftTableHeight = wrapH - 100;
         //获取右侧表格高度
-        this.rightTableHeight = wrapH - planFormH - planBtnH - 38;
+        this.rightTableHeight = wrapH - planFormH - planBtnH - 20;
       });
     },
     initStart() {
@@ -745,6 +755,14 @@ export default {
     //快速查询日期
     getDataQuick(v) {
       this.selectDate(v);
+    },
+
+    //下载模板
+    down(){
+      location.href =
+        baseUrl.omsOrder +
+        "/preOrderMain/template?access_token=" +
+        Cookies.get(TOKEN_KEY);
     }
   }
 };

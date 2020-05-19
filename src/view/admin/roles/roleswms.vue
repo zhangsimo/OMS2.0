@@ -79,6 +79,10 @@
               <div>
                 <div class="treeHeader">
                   <div class="">
+                    <!-- <span>仓库: </span>
+                    <Select v-model="selectHouse" filterable multiple style="width:120px">
+                        <Option v-for="item in wareHouse" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select> -->
                     <Button class="ml10 w90" @click="saveStaff">
                       <span class="center">
                         <Icon custom="iconfont iconbaocunicon icons" />保存

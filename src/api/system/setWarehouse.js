@@ -4,7 +4,7 @@ import axios from '@/libs/api.request'
 //获取左侧仓库
 export function getwarehouse (params) {
   return axios.request({
-    url: `${api.wmsApi}/comStore/stores/queryByOrgid`,
+    url: `${api.wmsApi}/comStore/findByShopid`,
     method: 'get',
     params
   })
@@ -74,7 +74,7 @@ export function getdeleSaffect (data) {
 
 //获取全部员工
 export function getAllseffactList (params) {
-  console.log(params, 999)
+  // console.log(params, 999)
   return axios.request({
     url: `${api.authApi}/tenantUsers/queryAll?`,
     method: 'get',

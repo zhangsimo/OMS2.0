@@ -3,6 +3,9 @@ import { State } from 'vuex-class';
 // @ts-ignore
 import * as api from "_api/procurement/plan";
 import * as tools from "../../../utils/tools";
+
+import baseUrl from "../../../../config/url";
+
 import { orderState } from '../plannedPurchaseOrder/global';
 import { getSales } from "@/api/salesManagment/salesOrder";
 
@@ -20,6 +23,8 @@ import StatusModel from '../plannedPurchaseOrder/components/checkApprovalModal.v
 import SelectPartCom from "../goodsList/components/selectPartCom.vue";
 import Cookies from 'js-cookie'
 import { TOKEN_KEY } from '@/libs/util'
+
+
 @Component({
   components: {
     QuickDate,
@@ -171,6 +176,14 @@ export default class InterPurchase extends Vue {
     let upload : any=this.$refs.upload;
     upload.clearFiles()
   };
+  //下载模板
+  down(){
+    location.href =
+      baseUrl.omsOrder +
+      "/preOrderMain/template?access_token=" +
+      Cookies.get(TOKEN_KEY);
+  };
+
   // 合计采购金额
   private totalAmt: number = 0;
 
@@ -350,26 +363,11 @@ export default class InterPurchase extends Vue {
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let zerolength = data.details.filter(el => el.orderPrice <= 0)
-    if(zerolength.length > 0){
-      this.$Modal.confirm({
-        title: '',
-        content: '<p>存在配件价格为0，是否提交</p>',
-        onOk: async () => {
-          let res = await api.outsideSaveDraft(data);
-          if (res.code == 0) {
-            this.$Message.success('保存成功');
-            this.getListData();
-            this.isAdd = true;
-          }
-        }
-      })
-    }else{
-      let res = await api.outsideSaveDraft(data);
-      if (res.code == 0) {
-        this.$Message.success('保存成功');
-        this.getListData();
-        this.isAdd = true;
-      }
+    let res = await api.outsideSaveDraft(data);
+    if (res.code == 0) {
+      this.$Message.success('保存成功');
+      this.getListData();
+      this.isAdd = true;
     }
   }
 
@@ -384,11 +382,33 @@ export default class InterPurchase extends Vue {
           data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
-        let res = await api.outsideSaveCommit(data);
-        if (res.code == 0) {
-          this.$Message.success('保存成功');
-          this.getListData();
-          this.isAdd = true;
+
+        let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(zerolength.length > 0) {
+          setTimeout(()=>{
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: async () => {
+                let res = await api.outsideSaveCommit(data);
+                if (res.code == 0) {
+                  this.$Message.success('保存成功');
+                  this.getListData();
+                  this.isAdd = true;
+                }
+              },
+              onCancel:() => {
+                this.isAdd = true;
+              }
+            })
+          },500)
+        }else{
+          let res = await api.outsideSaveCommit(data);
+          if (res.code == 0) {
+            this.$Message.success('保存成功');
+            this.getListData();
+            this.isAdd = true;
+          }
         }
       },
       onCancel: () => {
@@ -477,6 +497,7 @@ export default class InterPurchase extends Vue {
         }
         if (delOk && delOk2) {
           this.$Message.success('删除成功');
+          this.deletePartArr = [];
           // if(isNetWork) {
           //   this.getListData();
           // }
@@ -574,7 +595,7 @@ export default class InterPurchase extends Vue {
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      if (['草稿', '退回'].includes(v.billStatusId.name)) {
+      if (['草稿', '退回','不通过'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
         this.isInput = true;
@@ -670,7 +691,11 @@ export default class InterPurchase extends Vue {
   }
   //添加配件数据
   private getPartNameList(v){
-    this.tableData = this.tableData.concat(v);
+    let arrData = v||[]
+    arrData.map(item => {
+      item.orderPrice = item.recentPrice
+    })
+    this.tableData = this.tableData.concat(arrData);
     this.tableData = tools.arrRemoval(this.tableData, 'partCode');
   }
   // 显示和初始化弹窗(选择供应商 采购金额填写 收货信息 更多)
@@ -785,6 +810,14 @@ export default class InterPurchase extends Vue {
           d.isOldFlag = true;
         })
       })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
     }
   }
 

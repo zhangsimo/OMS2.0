@@ -172,6 +172,7 @@ export default class GoodsInfo extends Vue {
 
   @Prop(String) readonly mainId;
   @Prop(Object) readonly row;
+  @Prop(String) readonly guestId;
 
   private ruleValidate: ruleValidate = {
     receiveCompName: [
@@ -235,30 +236,68 @@ export default class GoodsInfo extends Vue {
   }
 
   private async init() {
+    this.showInfo = true;
     this.loading = true;
     this.isRequired = false;
     this.logisRequired = false;
     this.reset();
     this.getLists();
     this.inlogistics();
+    const ref: any = this.$refs["formTwo"];
+    ref.resetFields();
   }
 
   private async getLists() {
-    this.showInfo = true;
+    const parentD: any = this.$parent;
     const directCompanyId = this.row.directCompanyId || null;
-    let res: any = await fapi.getGoodsInfos2({
+
+    let clientArr = Array.isArray(parentD.client)  ? parentD.client.filter(item => item.id===parentD.formPlan.guestId) : []
+
+    let obj = {
       mainId: this.mainId,
-      directCompanyId
-    });
+      orgid: clientArr.length>0?clientArr[0].isInternalId:'',
+      directCompanyId,
+      guestId: this.guestId,
+      sign: ""
+    };
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
+      obj.sign = "sign";
+    } else {
+      delete obj.sign;
+    }
+    // console.log(obj);
+    let res: any = await fapi.getGoodsInfos2(obj);
     if (res.code == 0) {
-      this.tableData = res.data;
+      this.tableData = res.data || [];
       this.loading = false;
+      const xtable: any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      if (arrData.length > 0) {
+        this.echoDate({ row: arrData[0] });
+        xtable.setRadioRow(arrData[0]);
+      } else {
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if (arrDefault.length > 0) {
+          this.echoDate({ row: arrDefault[0] });
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
+      // for (let b of this.tableData) {
+      //   if (b.isDefault === 1) {
+      //     this.echoDate({ row: b });
+      //     let thisTable: any = this.$refs.xTable1;
+      //     thisTable.setRadioRow(b);
+      //     break;
+      //   }
+      // }
     }
   }
 
   //获取物流下拉框
   private async inlogistics() {
-    let params: any = {};
+    const parentD: any = this.$parent;
+    let guestId = parentD.formPlan.guestId;
+    let params: any = { guestId: guestId };
     if (this.formDateRight.deliveryType == 2) {
       params.logisticsType = "020701";
     }
@@ -385,10 +424,29 @@ export default class GoodsInfo extends Vue {
     }
     const directCompanyId = this.row.directCompanyId || null;
     data.directCompanyId = directCompanyId;
+    const parentD: any = this.$parent;
+    data.orgid = parentD.formPlan.guestId;
+    data.guestId = this.guestId;
+
+    if (this.$route.name == "salesOrder" || this.$route.name == "presell") {
+      data.sign = "sign";
+    }
     let res = await fapi.getGoodsInfos2(data);
     if (res.code == 0) {
-      this.tableData = res.data;
+      this.tableData = res.data || [];
       this.loading = false;
+      const xtable: any = this.$refs["xTable1"];
+      let arrData = this.tableData.filter(item => item.logisticsRecordVO);
+      if (arrData.length > 0) {
+        this.echoDate({ row: arrData[0] });
+        xtable.setRadioRow(arrData[0]);
+      } else {
+        let arrDefault = this.tableData.filter(item => item.isDefault);
+        if (arrDefault.length > 0) {
+          this.echoDate({ row: arrDefault[0] });
+          xtable.setRadioRow(arrDefault[0]);
+        }
+      }
     }
   }
   //快递下拉框
@@ -443,7 +501,6 @@ export default class GoodsInfo extends Vue {
         params.relationNum = this.formDateRight.relationNum;
         params.guestId = this.formDateRight.guestId;
         if (this.SaveId) {
-          console.log(this.SaveId);
           params.id = this.SaveId;
           params = this.logisticsRecordVO;
           params.receiveComp = this.formDateRight.receiveCompName;
@@ -465,6 +522,7 @@ export default class GoodsInfo extends Vue {
           mainId: this.mainId
         });
         if (res.code == 0) {
+          ref.resetFields();
           this.$Message.success("保存成功");
           this.reset();
           this.searchInfo();
@@ -480,6 +538,7 @@ export default class GoodsInfo extends Vue {
     // let ref: any = this.$refs.formTwo;
     // ref.resetFields();
     this.disabled = false;
+    this.formDateRight = {};
     this.formDateRight.businessNum = this.row.serviceId;
     if (row.logisticsRecordVO) {
       this.logisticsRecordVO = row.logisticsRecordVO;
@@ -507,6 +566,7 @@ export default class GoodsInfo extends Vue {
         this.changeDeliveryType();
       }
     } else {
+      this.SaveId = "";
       this.formDateRight = row;
       this.formDateRight.businessNum = this.row.serviceId;
       this.formDateRight.logisticsId = row.id;
@@ -523,13 +583,13 @@ export default class GoodsInfo extends Vue {
     this.changeDeliveryType();
   }
   //传入保存id
-  private saveId(row) {
-    row.forEach(item => {
-      if (item.logisticsRecord) {
-        this.formDateRight.id = item.logisticsRecord.id;
-      }
-    });
-  }
+  // private saveId(row) {
+  //   row.forEach(item => {
+  //     if (item.logisticsRecord) {
+  //       this.formDateRight.id = item.logisticsRecord.id;
+  //     }
+  //   });
+  // }
 
   private reset() {
     this.formDateTop = {
@@ -577,7 +637,5 @@ export default class GoodsInfo extends Vue {
 .bgc {
   color: #000;
   background-color: #e8e8e8;
-}
-.c {
 }
 </style>

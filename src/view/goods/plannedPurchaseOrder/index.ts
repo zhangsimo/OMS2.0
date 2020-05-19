@@ -64,6 +64,9 @@ export default class PlannedPurchaseOrder extends Vue {
   private selectTableRow: any = null;
   private mainId: string | null = null;
 
+  //选中单据的状态
+  private activeMethod:number = 0;
+
   // 采购订单列表
   private purchaseOrderTable = {
     loading: false,
@@ -311,6 +314,7 @@ export default class PlannedPurchaseOrder extends Vue {
 
   // 保存/修改/提交用数据
   private formdata(refname: string) {
+    this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate)
     const ref: any = this.$refs[refname];
     let data: any = {};
     ref.validate((valid: any) => {
@@ -326,7 +330,7 @@ export default class PlannedPurchaseOrder extends Vue {
           orderDate: tools.transTime(this.formPlanmain.orderDate),
           planArriveDate: tools.transTime(this.formPlanmain.planArriveDate),
           remark: this.formPlanmain.remark,
-          directCompanyId: this.formPlanmain.directCompanyId,
+          directCompanyId: this.formPlanmain.directCompanyId||"",
           serviceId: this.formPlanmain.serviceId,
           code: this.formPlanmain.code,
           codeId: this.formPlanmain.codeId,
@@ -356,10 +360,14 @@ export default class PlannedPurchaseOrder extends Vue {
     return obj;
   }
 
+
   // 保存
   private async saveHandle(refname: string) {
     let data: any = this.formdata(refname);
     if (Object.keys(data).length <= 0) return;
+    if(!data.directCompanyId){
+      this.selectTableRow.directCompanyId = 0;
+    }
     data = Object.assign({}, this.selectTableRow, data);
     data.details = this.tableData;
     let res = await api.saveDraft(data);
@@ -377,15 +385,39 @@ export default class PlannedPurchaseOrder extends Vue {
       onOk: async () => {
         let data: any = this.formdata(refname);
         if (Object.keys(data).length <= 0) return;
+        if(!data.directCompanyId){
+          this.selectTableRow.directCompanyId = 0;
+        }
         if (this.selectTableRow.id) {
           data = { ...this.selectTableRow, ...data };
         }
         data.details = this.tableData;
-        let res = await api.saveCommit(data);
-        if (res.code == 0) {
-          this.$Message.success('保存成功');
-          this.getListData();
-          this.isAdd = true;
+        let zerolength = data.details.filter(el => el.orderPrice <= 0)
+        if(zerolength.length > 0) {
+          setTimeout(()=>{
+            this.$Modal.confirm({
+              title: '',
+              content: '<p>存在配件价格为0，是否提交</p>',
+              onOk: async () => {
+                let res = await api.saveCommit(data);
+                if (res.code == 0) {
+                  this.$Message.success('提交成功');
+                  this.getListData();
+                  this.isAdd = true;
+                }
+              },
+              onCancel:() => {
+                this.isAdd = true;
+              }
+            })
+          },500)
+        }else{
+          let res = await api.saveCommit(data);
+          if (res.code == 0) {
+            this.$Message.success('提交成功');
+            this.getListData();
+            this.isAdd = true;
+          }
         }
       },
       onCancel: () => {
@@ -528,15 +560,6 @@ export default class PlannedPurchaseOrder extends Vue {
             this.formPlanmain[k] = row[k];
           }
 
-          // for(let b of this.purchaseOrderTable.tbdata){
-          //   b._highlight = false
-          //   if(b.id==this.selectLeftItemId){
-          //     b._highlight = true;
-          //     this.setFormPlanmain(b);
-          //     break;
-          //   }
-          // }
-
         },
         onCancel: () => {
           this.purchaseOrderTable.tbdata.splice(0, 1);
@@ -568,14 +591,18 @@ export default class PlannedPurchaseOrder extends Vue {
   private setFormPlanmain(v:any){
     if(v) {
       this.selectTableRow = v;
+      this.activeMethod = v.billStatusId.value;
       this.mainId = v.id;
       this.tableData = v.details || [];
+      this.tableData.map(item => {
+        item.orderPrice = parseFloat((item.orderPrice||0)).toFixed(2);
+      })
       this.selectRowState = v.billStatusId.name;
       this.serviceId = v.serviceId;
       this.formPlanmain.createUid = v.createUid;
       this.formPlanmain.processInstanceId = v.processInstanceId;
-      this.formPlanmain.orderDate = new Date(this.formPlanmain.orderDate);
-      this.formPlanmain.planArriveDate = new Date(this.formPlanmain.planArriveDate);
+      this.formPlanmain.orderDate = v.orderDate;
+      this.formPlanmain.planArriveDate = v.planArriveDate;
       if (['草稿', '退回'].includes(v.billStatusId.name)) {
         this.isInput = false;
       } else {
@@ -769,6 +796,14 @@ export default class PlannedPurchaseOrder extends Vue {
           d.isOldFlag = true;
         })
       })
+      for(let b of this.purchaseOrderTable.tbdata){
+        b._highlight = false
+        if(b.id==this.selectLeftItemId){
+          b._highlight = true;
+          this.setFormPlanmain(b);
+          break;
+        }
+      }
     }
   }
 
@@ -802,7 +837,7 @@ export default class PlannedPurchaseOrder extends Vue {
     })
     this.tableData = row.details;
     this.tableData.map(item => {
-      item.orderQty = item.canQty
+      item.orderQty = item.canQty;
     })
     // this.selectTableRow.details = this.tableData;
     this.purchaseOrderTable.tbdata.forEach((el: any) => {
@@ -837,5 +872,11 @@ export default class PlannedPurchaseOrder extends Vue {
     this.init();
     this.getListData();
     this.getAllSales();
+  }
+  private activeMethodFun({ column, columnIndex }){
+    if(columnIndex==6&&this.activeMethod==2){
+      return false
+    }
+    return true
   }
 }

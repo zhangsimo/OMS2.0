@@ -162,8 +162,8 @@ export default class ProcurementModal extends Vue {
   @Emit('getPlanOrder')
   @Emit('selectRow')
   private ok() {
-    if(!this.selectRow) {this.$Message.error('请选择采购计划'); return null};
-    // this.shows = false;
+    if(!this.selectRow) {this.$Message.error('请选择采购入库单'); return};
+    this.shows = false;
     this.selectRow.details.forEach((el:any) => {
       Reflect.deleteProperty(el, 'id');
     })
@@ -221,7 +221,7 @@ export default class ProcurementModal extends Vue {
       startTime: this.auditDate[0]?this.auditDate[0]+" 00:00:00":"",
       endTime: this.auditDate[1]?this.auditDate[1]+" 23:59:59":"",
     };
-    params.size = this.page.size;
+    params.pageSize = this.page.size;
     params.page = this.page.num - 1;
     let formData = {};
     for(let k in data) {

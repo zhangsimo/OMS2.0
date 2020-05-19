@@ -14,6 +14,7 @@
     </section>
     <section class="con-box">
       <div class="inner-box">
+        <div style="overflow-x: scroll">
         <Table
           border
           :columns="columns"
@@ -21,8 +22,10 @@
           ref="summary"
           highlight-row
           @on-selection-change="requires"
-          max-height="400"
+          max-height="500"
+         style="width: 3200px;"
         ></Table>
+        </div>
         <Page
           :total="pagetotal"
           show-elevator
@@ -35,13 +38,15 @@
         />
       </div>
     </section>
+
+
     <!-- 弹出框 -->
     <Modal v-model="proModal" title="销售发票修改" width="650">
       <Form ref="proModal" :model="formValidate" :rules="ruleValidate" :label-width="130">
         <Row>
           <Col span="11">
-            <FormItem label="发票类型：" prop="invoiceType">
-              <Select v-model="formValidate.invoiceType">
+            <FormItem label="发票类型：" prop="species">
+              <Select v-model="formValidate.species">
                 <Option
                   v-for="item in invoiceTypeOption"
                   :value="item.itemCode"
@@ -51,76 +56,26 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="价税合计：" prop="priceTaxTotal">
-              <Input v-model="formValidate.priceTaxTotal" />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="开票公司：" prop="invoiceUnit">
-              <Select v-model="formValidate.invoiceUnit">
+            <FormItem label="发票种类：" prop="invoiceType  ">
+              <Select v-model="formValidate.invoiceType  ">
                 <Option
-                  v-for="item in invoiceUnitOption"
+                  v-for="item in invoiceTypeList"
                   :value="item.itemCode"
                   :key="item.itemCode"
                 >{{item.itemName}}</Option>
               </Select>
             </FormItem>
           </Col>
-          <Col span="11">
-            <FormItem label="发票金额：" prop="invoiceAmount">
-              <Input v-model="formValidate.invoiceAmount" />
-            </FormItem>
-          </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="分店：" prop="orgBranchId">
-              <Select v-model="formValidate.orgBranchId">
-                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
-              </Select>
+            <FormItem label="购方名称：" prop="receiptUnit">
+              <Input v-model="formValidate.receiptUnit"/>
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="发票税额：" prop="invoiceTaxAmount">
-              <Input v-model="formValidate.invoiceTaxAmount" />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="店号：" prop="orgCode">
-              <Input v-model="formValidate.orgCode" />
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="往来单位：" prop="guestName">
-              <Input v-model="formValidate.guestName" />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row>
-          <Col span="11">
-            <FormItem label="开票清单类型：" prop="species">
-              <Select v-model="formValidate.species" clearable>
-                <Option
-                  v-for="item in speciesOptionList"
-                  :value="item.itemCode"
-                  :key="item.itemCode"
-                >{{item.itemName}}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="11">
-            <FormItem label="收款方式：" prop="collectionType">
-              <Select v-model="formValidate.collectionType">
-                <Option
-                  v-for="item in collectionTypeOption"
-                  :value="item.itemCode"
-                  :key="item.itemCode"
-                >{{item.itemName}}</Option>
-              </Select>
+            <FormItem label="发票代码：" prop="invoiceNo">
+              <Input v-model="formValidate.invoiceNo" />
             </FormItem>
           </Col>
         </Row>
@@ -129,40 +84,120 @@
             <FormItem label="发票号码：" prop="invoiceNo">
               <Input v-model="formValidate.invoiceNo" />
             </FormItem>
+
+<!--            <FormItem label="部门门店：" prop="orgBranchId">-->
+<!--              <Select v-model="formValidate.orgBranchId">-->
+<!--                <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
           </Col>
           <Col span="11">
-            <FormItem label="开票业务：" prop="invoiceService">
-              <Select v-model="formValidate.invoiceService">
-                <Option
-                  v-for="item in invoiceServiceOption"
-                  :value="item.itemCode"
-                  :key="item.itemCode"
-                >{{item.itemName}}</Option>
-              </Select>
+            <FormItem label="购方税号：" prop="customDuty">
+              <Input v-model="formValidate.customDuty" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票单位：" prop="invoiceUnit">
-              <Input v-model="formValidate.invoiceUnit" />
+            <FormItem label="购方手机号：" prop="customPhone">
+              <Input v-model="formValidate.customPhone" />
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="税率：" prop="invoiceTax">
-              <Select v-model="formValidate.invoiceTax" clearable>
-                <Option
-                  v-for="item in taxOptionList"
-                  :value="item.itemValueOne"
-                  :key="item.value"
-                >{{Math.floor(item.itemValueOne * 100)}} %</Option>
-              </Select>
+            <FormItem label="购方邮箱：" prop="customMail">
+              <Input v-model="formValidate.customMail" />
             </FormItem>
           </Col>
         </Row>
         <Row>
           <Col span="11">
-            <FormItem label="开票日期：" prop="invoiceDate">
+            <FormItem label="购方开户行及账号：" prop="customAccount">
+              <Input v-model="formValidate.customAccount" />
+            </FormItem>
+<!--            <FormItem label="开票清单类型：" prop="species">-->
+<!--              <Select v-model="formValidate.species" clearable>-->
+<!--                <Option-->
+<!--                  v-for="item in speciesOptionList"-->
+<!--                  :value="item.itemCode"-->
+<!--                  :key="item.itemCode"-->
+<!--                >{{item.itemName}}</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
+          </Col>
+          <Col span="11">
+            <FormItem label="购方地址、电话：" prop="customAddress">
+              <Input v-model="formValidate.customAddress" />
+            </FormItem>
+<!--            <FormItem label="收款方式：" prop="collectionType">-->
+<!--              <Select v-model="formValidate.collectionType">-->
+<!--                <Option-->
+<!--                  v-for="item in collectionTypeOption"-->
+<!--                  :value="item.itemCode"-->
+<!--                  :key="item.itemCode"-->
+<!--                >{{item.itemName}}</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="合计含税金额：" prop="priceTaxTotal">
+              <Input v-model="formValidate.priceTaxTotal" />
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="合计不含税金额：" prop="invoiceAmount">
+              <Input v-model="formValidate.invoiceAmount" />
+            </FormItem>
+<!--            <FormItem label="开票业务：" prop="invoiceService">-->
+<!--              <Select v-model="formValidate.invoiceService">-->
+<!--                <Option-->
+<!--                  v-for="item in invoiceServiceOption"-->
+<!--                  :value="item.itemCode"-->
+<!--                  :key="item.itemCode"-->
+<!--                >{{item.itemName}}</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="合计税额：" prop="invoiceTaxAmount">
+              <Input v-model="formValidate.invoiceTaxAmount" />
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="复核人：" prop="reviewerName">
+              <Input v-model="formValidate.reviewerName" />
+            </FormItem>
+<!--            <FormItem label="税率：" prop="invoiceTax">-->
+<!--              <Select v-model="formValidate.invoiceTax" clearable>-->
+<!--                <Option-->
+<!--                  v-for="item in taxOptionList"-->
+<!--                  :value="item.itemValueOne"-->
+<!--                  :key="item.value"-->
+<!--                >{{Math.floor(item.itemValueOne * 100)}} %</Option>-->
+<!--              </Select>-->
+<!--            </FormItem>-->
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+              <FormItem label="部门门店：" prop="orgBranchId">
+                <Select v-model="formValidate.orgBranchId">
+                  <Option v-for="item in proTypeList" :value="item.id" :key="item.id">{{item.name}}</Option>
+                </Select>
+              </FormItem>
+          </Col>
+          <Col span="11">
+              <FormItem label="开票方式：" prop="invoiceWay">
+                <Input v-model="formValidate.invoiceWay" />
+              </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="开票时间：" prop="invoiceDate">
               <DatePicker
                 type="date"
                 :value="formValidate.invoiceDate"
@@ -172,7 +207,19 @@
             </FormItem>
           </Col>
           <Col span="11">
-            <FormItem label="备注：" prop="remark">
+            <FormItem label="开票员：" prop="invoiceName">
+              <Input v-model="formValidate.invoiceName" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row>
+          <Col span="11">
+            <FormItem label="收款人：" prop="payeeName">
+              <Input v-model="formValidate.payeeName" />
+            </FormItem>
+          </Col>
+          <Col span="11">
+            <FormItem label="备注信息：" prop="remark">
               <Input
                 v-model="formValidate.remark"
                 type="textarea"
@@ -187,6 +234,8 @@
         <Button type="default" @click="proModal = false">返回</Button>
       </div>
     </Modal>
+
+
     <Modal v-model="exportData" title="发票导入" width="400">
       <p class="mt20 mb20">导入前请先下载模板</p>
       <div slot="footer" class="exportBtn">
@@ -218,8 +267,11 @@ import {
   getup,
   deletetSalesList,
   voidSalesList,
-  writeSalesList
+  writeSalesList,
+  getInvoiceType,
+  getTypeOfInvoice
 } from "_api/salesManagment/salesInvoice";
+import {down } from "@/api/system/essentialData/commoditiesInShortSupply.js"
 import Cookies from "js-cookie";
 import { TOKEN_KEY } from "@/libs/util";
 import baseUrl from "_conf/url";
@@ -237,6 +289,8 @@ export default {
         writeOffStatus: 0
       },
       formValidate: {
+        invoiceDate: '',
+        id: '',
         invoiceType: "",
         priceTaxTotal: "",
         invoiceUnit: "",
@@ -271,13 +325,127 @@ export default {
           }
         },
         {
-          title: "发票类型",
-          key: "invoiceTypeName",
+          title: "开票申请单号",
+          key: "requestCode",
           className: "tc"
         },
         {
+          title: "创建时间",
+          key: "createTime",
+          className: "tc"
+        },
+        {
+          title: "开票时间",
+          key: "invoiceDate",
+          className: "tc"
+        },
+        {
+          title: "开票类型",
+          key: "species",
+          className: "tc"
+        },
+        {
+          title: "发票种类",
+          key: "invoiceType",
+          className: "tc"
+        },
+        {
+          title: "发票代码",
+          key: "invoiceNo",
+          className: "tc"
+        },
+        {
+          title: "发票号码",
+          key: "invoiceNo",
+          className: "tc"
+        },
+        {
+          title: "购方名称",
+          key: "receiptUnit",
+          className: "tc"
+        },
+        {
+          title: "购方税号",
+          key: "customDuty",
+          className: "tc"
+        },
+        {
+          title: "购方手机号",
+          key: "customPhone",
+          className: "tc"
+          // render: (h,params) =>{
+          //     return h('span',(params.row.invoiceAmount).toFixed(2))
+          // }
+        },
+        {
+          title: "购方邮箱",
+          key: "customMail",
+          className: "tc"
+        },
+        {
+          title: "购方开户行及账号",
+          key: "customAccount",
+          className: "tc"
+        },
+        {
+          title: "购方地址、电话",
+          key: "customAddress",
+          className: "tc"
+        },
+        {
+          title: "合计含税金额",
+          key: "priceTaxTotal",
+          className: "tc"
+        },
+        {
+          title: "合计不含税金额",
+          key: "invoiceAmount",
+          className: "tc"
+        },
+        {
+          title: "合计税额",
+          key: "invoiceTaxAmount",
+          className: "tc"
+        },
+        {
+          title: "备注信息",
+          key: "remark",
+          className: "tc"
+        },
+        {
+          title: "部门门店",
+          key: "createTime",
+          className: "tc"
+        },
+        {
+          title: "开票方式",
+          key: "invoiceWay",
+          className: "tc",
+          // render: (h, params) => {
+          //   return h("span", params.row.status === 0 ? "否" : "是");
+          // }
+        },
+        {
+          title: "开票员",
+          key: "invoiceName",
+          className: "tc"
+        },
+        {
+          title: "收款人",
+          key: "payeeName",
+          className: "tc"
+        },
+        {
+          title: "复核人",
+          key: "reviewerName",
+          className: "tc",
+          // render: (h, params) => {
+          //   return h("span", params.row.redRushStatus === 0 ? "否" : "是");
+          // }
+        },
+        {
           title: "开票公司",
-          key: "invoiceUnitName",
+          key: "invoiceUnit",
           className: "tc"
         },
         {
@@ -292,40 +460,7 @@ export default {
         },
         {
           title: "收款方式",
-          key: "collectionTypeName",
-          className: "tc"
-        },
-        {
-          title: "发票号码",
-          key: "invoiceNo",
-          className: "tc"
-        },
-        {
-          title: "开票单位",
-          key: "receiptUnit",
-          className: "tc"
-        },
-        {
-          title: "开票日期",
-          key: "invoiceDate",
-          className: "tc"
-        },
-        {
-          title: "价税合计",
-          key: "priceTaxTotal",
-          className: "tc"
-        },
-        {
-          title: "发票金额",
-          key: "invoiceAmount",
-          className: "tc"
-          // render: (h,params) =>{
-          //     return h('span',(params.row.invoiceAmount).toFixed(2))
-          // }
-        },
-        {
-          title: "发票税额",
-          key: "invoiceTaxAmount",
+          key: "collectionType",
           className: "tc"
         },
         {
@@ -334,46 +469,36 @@ export default {
           className: "tc"
         },
         {
-          title: "开票清单类型",
-          key: "speciesName",
+          title: "开票清单类型（配件/油品）",
+          key: "writeOffStatus",
           className: "tc"
         },
         {
-          title: "开票业务",
-          key: "invoiceServiceName",
+          title: "开票业务（销售、房租、会议费、推广费）",
+          key: "writeOffStatus",
           className: "tc"
         },
         {
-          title: "税率",
-          key: "invoiceTax",
-          className: "tc"
-        },
-        {
-          title: "备注",
-          key: "remark",
-          className: "tc"
-        },
-        {
-          title: "导入人",
+          title: "导入人/修改人",
           key: "createUname",
           className: "tc"
         },
         {
-          title: "导入时间",
-          key: "createTime",
+          title: "导入/修改时间",
+          key: "importTime",
           className: "tc"
         },
         {
           title: "是否作废",
-          key: "status",
+          key: "writeOffStatus",
           className: "tc",
-          render: (h, params) => {
+          render:(h,params)=>{
             return h("span", params.row.status === 0 ? "否" : "是");
           }
         },
         {
           title: "作废经办人",
-          key: "nullifyId",
+          key: "nullifyDate",
           className: "tc"
         },
         {
@@ -383,10 +508,10 @@ export default {
         },
         {
           title: "是否红冲核销",
-          key: "redRushStatus",
+          key: "writeOffStatus",
           className: "tc",
-          render: (h, params) => {
-            return h("span", params.row.redRushStatus === 0 ? "否" : "是");
+          render:(h , params) => {
+            return h('span' ,params.row.redRushStatus === 0 ? "否" : "是")
           }
         },
         {
@@ -401,9 +526,25 @@ export default {
         },
         {
           title: "核销开票申请单号",
+          key: "writeOffNo",
+          className: "tc"
+        },
+        {
+          title: "所属对账单号",
           key: "writeOffStatus",
           className: "tc"
-        }
+        },
+        {
+          title: "核销人",
+          key: "writeOff",
+          className: "tc"
+        },
+        {
+          title: "核销时间",
+          key: "writeOffDate",
+          className: "tc"
+        },
+
       ],
       data: [],
       pagetotal: 0,
@@ -418,6 +559,7 @@ export default {
       proType: [],
       allTablist: [],
       invoiceTypeOption: [], //发票类型
+      invoiceTypeList:[],//发票种类
       taxOptionList: [], //税率
       collectionTypeOption: [], //收款方式
       speciesOptionList: [], //开票清单类型
@@ -429,10 +571,7 @@ export default {
   methods: {
     //模板下载
     exportDown() {
-      location.href =
-        baseUrl.omsSettle +
-        "/salesInvoice/downloadTemplate?access_token=" +
-        Cookies.get(TOKEN_KEY);
+      down(1700000000)
     },
     handleBeforeUpload() {},
     onFormatError(file) {
@@ -475,7 +614,7 @@ export default {
           this.exportData = true;
           break;
         case 2:
-          this.modifyData();
+            this.modifyData();
           break;
         case 3:
           this.deleteList("delete");
@@ -516,6 +655,7 @@ export default {
           );
         } else {
           this.getDetailInfor();
+          console.log(this.formValidate)
           this.proModal = true;
         }
       }
@@ -630,6 +770,7 @@ export default {
     },
     //表格全选的时候
     requires(val) {
+      console.log(val , 78978)
       this.allTablist = val;
     },
     //获取列表数据
@@ -648,26 +789,31 @@ export default {
           this.taxOptionList = res.data;
         }
       });
-      await getOptionSalesList("INVOICE_TYPES").then(res => {
+      await getInvoiceType().then(res => {
         if (res.code === 0) {
           this.invoiceTypeOption = res.data;
         }
       });
-      await getOptionSalesList("RECEIVABLE_TYPE").then(res => {
-        if (res.code === 0) {
-          this.collectionTypeOption = res.data;
+      await getTypeOfInvoice().then( res => {
+        if (res.code === 0){
+          this.invoiceTypeList = res.data;
         }
-      });
-      await getOptionSalesList("BILL_LIST_TYPE").then(res => {
-        if (res.code === 0) {
-          this.speciesOptionList = res.data;
-        }
-      });
-      await getOptionSalesList("BILL_SERVICE").then(res => {
-        if (res.code === 0) {
-          this.invoiceServiceOption = res.data;
-        }
-      });
+      })
+      // await getOptionSalesList("RECEIVABLE_TYPE").then(res => {
+      //   if (res.code === 0) {
+      //     this.collectionTypeOption = res.data;
+      //   }
+      // });
+      // await getOptionSalesList("BILL_LIST_TYPE").then(res => {
+      //   if (res.code === 0) {
+      //     this.speciesOptionList = res.data;
+      //   }
+      // });
+      // await getOptionSalesList("BILL_SERVICE").then(res => {
+      //   if (res.code === 0) {
+      //     this.invoiceServiceOption = res.data;
+      //   }
+      // });
       await getOptionFdList().then(res => {
         if (res.code === 0) {
           this.proTypeList = res.data;
@@ -681,7 +827,8 @@ export default {
     },
     //分页
     pageNumChange(pageNum) {
-      this.form.page = pageNum;
+      this.form.page = page
+      +Num;
       this.getTabList();
     },
     pageSizeChange(pageSize) {

@@ -100,6 +100,7 @@
         ></vxe-table-column>
         <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
         <vxe-table-column field="partName" title="配件名称"></vxe-table-column>
+          <vxe-table-column width="180" field="fullName" title="配件全称"></vxe-table-column>
         <vxe-table-column field="canQty" title="计划采购数量"></vxe-table-column>
         <vxe-table-column field="notEnterQty" title="调整数量"></vxe-table-column>
         <vxe-table-column field="trueEnterQty" title="已转订单数量"></vxe-table-column>

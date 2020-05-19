@@ -24,63 +24,62 @@
           <Icon type="md-close" />取消
         </Button>
       </header>
-      <div class="clientBody">
+      <div class="clientBody pt10">
         <div class="demo-split">
-          <Split v-model="split1">
-            <div slot="left" class="demo-split-pane" style="width: 100px;">
-              <div class="tableBox">
-                <Tree :data="treeData" @on-select-change="clickTree"></Tree>
-              </div>
+          <div class="demo-split-pane fl" style="width: 30%">
+            <div class="tableBox">
+              <Tree :data="treeData" @on-select-change="clickTree"></Tree>
             </div>
-            <div slot="right" class="demo-split-pane">
-              <div style="overflow: hidden;overflow-x: scroll">
-                <vxe-table
-                  border
-                  resizable
-                  :data="tableData"
-                  stripe
-                  size="mini"
-                  align="center"
-                  :auto-resize="true"
-                  highlight-hover-row
-                  highlight-current-row
-                  @current-change="getOneClinet"
-                  show-overflow
-                  height="500"
-                  style="width: 1500px"
-                >
-                  <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
-                  <vxe-table-column field="fullName" title="名称" show-overflow></vxe-table-column>
-                  <vxe-table-column field="code" title="编码"></vxe-table-column>
-                  <vxe-table-column title="状态">
-                    <template v-slot="{ row }">{{ row.isDisabled == 1 ? '无效' : '有效' }}</template>
-                  </vxe-table-column>
-                  <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
-                  <vxe-table-column field="settTypeName" title="结算方式"></vxe-table-column>
-                  <vxe-table-column field="contactor" title="联系人"></vxe-table-column>
-                  <vxe-table-column field="contactorTel" title="联系人手机号"></vxe-table-column>
-                  <vxe-table-column field="salesman" title="业务员"></vxe-table-column>
-                  <vxe-table-column field="salesmanTel" title="业务员电话"></vxe-table-column>
-                  <vxe-table-column title="是否内部供应商">
-                    <template v-slot="{ row }">{{ row.isSupplier == 1 ? '是' : '否' }}</template>
-                  </vxe-table-column>
-                  <vxe-table-column field="advantageCarbrandId" title="优势品牌/产品"></vxe-table-column>
-                </vxe-table>
-              </div>
-              <Page
-                size="small"
-                :total="page1.total"
-                :page-size="page1.size"
-                :current="page1.num"
-                :page-size-opts="page1.sizeOpts"
-                show-sizer
-                show-total
-                @on-change="selectNum"
-                @on-page-size-change="selectPage"
-                style="float: right;margin-top: 10px"
-              />
+          </div>
+          <div class="demo-split-pane fr" style="width: 70%">
+            <div style="overflow: hidden;overflow-x: scroll">
+              <vxe-table
+                border
+                resizable
+                :data="tableData"
+                stripe
+                size="mini"
+                align="center"
+                :auto-resize="true"
+                highlight-hover-row
+                highlight-current-row
+                @current-change="getOneClinet"
+                @cell-dblclick="dblclick"
+                show-overflow
+                height="500"
+                style="width: 1500px"
+              >
+                <vxe-table-column type="index" width="50" title="序号"></vxe-table-column>
+                <vxe-table-column field="fullName" title="名称" show-overflow></vxe-table-column>
+                <vxe-table-column field="code" title="编码"></vxe-table-column>
+                <vxe-table-column title="状态">
+                  <template v-slot="{ row }">{{ row.isDisabled == 1 ? '无效' : '有效' }}</template>
+                </vxe-table-column>
+                <vxe-table-column field="billTypeName" title="票据类型"></vxe-table-column>
+                <vxe-table-column field="settTypeName" title="结算方式"></vxe-table-column>
+                <vxe-table-column field="contactor" title="联系人"></vxe-table-column>
+                <vxe-table-column field="contactorTel" title="联系人手机号"></vxe-table-column>
+                <vxe-table-column field="salesman" title="业务员"></vxe-table-column>
+                <vxe-table-column field="salesmanTel" title="业务员电话"></vxe-table-column>
+                <vxe-table-column title="是否内部供应商">
+                  <template v-slot="{ row }">{{ row.isSupplier == 1 ? '是' : '否' }}</template>
+                </vxe-table-column>
+                <vxe-table-column field="advantageCarbrandId" title="优势品牌/产品"></vxe-table-column>
+              </vxe-table>
             </div>
-          </Split>
+            <Page
+              size="small"
+              :total="page1.total"
+              :page-size="page1.size"
+              :current="page1.num"
+              :page-size-opts="page1.sizeOpts"
+              show-sizer
+              show-total
+              @on-change="selectNum"
+              @on-page-size-change="selectPage"
+              style="float: right;margin-top: 10px"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -278,6 +277,9 @@ export default {
       } else {
         this.$message.error("请选择客户");
       }
+    },
+    dblclick(){
+      this.select();
     }
   }
 };

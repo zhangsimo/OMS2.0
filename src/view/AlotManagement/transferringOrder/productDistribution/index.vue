@@ -4,8 +4,8 @@
       <div class="oper-top flex">
         <div class="wlf">
           <div class="db mr10">
-            <Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10" />
-            <Input v-model="form.fullName" placeholder="配件名称" style="width: 160px" class="mr10" />
+            <!--<Input v-model="form.queryCode" placeholder="配件编码" style="width: 160px" class="mr10" />-->
+            <Input v-model="form.fullName" placeholder="配件编码/名称" style="width: 160px" class="mr10" />
             <Select v-model="form.partBrandCode" class="w100 mr10" clearable placeholder="--品牌--">
               <Option
                 v-for="item in quickArray"
@@ -18,6 +18,7 @@
             <Select v-model="form.storeId" class="w100 mr10" clearable>
               <Option
                 v-for="item in storeArray"
+                :disabled="item.isDisabled"
                 :value="item.value"
                 :key="item.value"
               >{{ item.label }}</Option>
@@ -78,11 +79,12 @@
           resizable
           size="mini"
           height="auto"
+          ref="topTable"
           highlight-current-row
           highlight-hover-row
           @current-change="currentChangeEvent"
           :data="TopTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
 
@@ -98,7 +100,7 @@
           <vxe-table-column field="stockQty" title="库存数量"></vxe-table-column>
           <vxe-table-column field="outableQty" title="可售数量"></vxe-table-column>
           <vxe-table-column field="lockQty" title="锁定数量"></vxe-table-column>
-          <vxe-table-column field="onRoadQty" title="采购在途数量"></vxe-table-column>
+          <vxe-table-column field="pchRoadQty" title="采购在途数量"></vxe-table-column>
           <vxe-table-column title="最后订货日期"></vxe-table-column>
           <vxe-table-column title="最新预计到货日期" width="140"></vxe-table-column>
           <vxe-table-column field="createTime" title="创建日期"></vxe-table-column>
@@ -132,12 +134,13 @@
           highlight-current-row
           highlight-hover-row
           :data="BottomTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
 
           <vxe-table-column title="操作" width="180">
             <template v-slot="{ row }">
+              <Button type="text" @click="sureBaocunsave(row)">保存</Button>
               <Button type="text" @click="sureBaocunfenpei(row)">分配完成</Button>
             </template>
           </vxe-table-column>
@@ -164,13 +167,16 @@
 import "../../../lease/product/lease.less";
 import "../../../goods/goodsList/goodsList.less";
 import {
+  getPartBrand
+} from "@/api/business/stockSearch";
+import {
   getcangku,
-  getPartBrand,
   genxin,
   jinqiaopinliebiao,
   baocun,
   shenqingdanliebiao,
-  daochu
+  daochu,
+  hotProductsSave,
 } from "../../../../api/AlotManagement/productDistribution.js";
 export default {
   name: "productDistribution",
@@ -237,10 +243,15 @@ export default {
       getPartBrand(data)
         .then(res => {
           if (res.code == 0) {
-            res.data.content.forEach(element => {
+            let arr = [];
+            let arrData = res.data.content || [];
+            arrData.forEach(item => {
+              arr.push(...item.children);
+            });
+            arr.forEach(element => {
               this.quickArray.push({
-                value: element.qualityCode,
-                label: element.quality
+                value: element.id,
+                label: element.name
               });
             });
           }
@@ -252,7 +263,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name });
+              this.storeArray.push({ value: element.id, label: element.name,isDisabled:element.isDisabled });
             });
             for (var i = 0; i < res.data.length; i++) {
               if (res.data[i].isDefault == true) {
@@ -260,6 +271,7 @@ export default {
                 // this.idValue = res.data[i].id;
               }
             }
+            console.log(res.data)
           }
         })
         .catch(e => {
@@ -288,6 +300,34 @@ export default {
       this.params.size = s;
       this.search(this.form);
     },
+    // save
+    sureBaocunsave(row) {
+      this.$Modal.confirm({
+              title: '提示',
+              content: '<p>是否保存</p>',
+              onOk: () => {
+                  this.baocunsave(row)
+              },
+          });
+    },
+    baocunsave(row) {
+      if (row.hasAcceptQty === "" || row.hasAcceptQty === "0") {
+        this.$Message.info("请输入分配数");
+        return;
+      }
+      hotProductsSave(row)
+        .then(res => {
+          if (res.code == 0) {
+            this.BottomTableData = res.data || [];
+            this.BottomTableData = [];
+            let item = this.$refs.topTable.getCurrentRecord();
+            this.currentChangeEvent({row:item});
+          }
+        })
+        .catch(e => {
+          this.$Message.info("保存失败");
+        });
+    },
     //确认分配完成
       sureBaocunfenpei(row){
           this.$Modal.confirm({
@@ -311,6 +351,8 @@ export default {
           if (res.code == 0) {
             this.BottomTableData = res.data || [];
             this.BottomTableData = [];
+            let item = this.$refs.topTable.getCurrentRecord();
+            this.currentChangeEvent({row:item});
           }
         })
         .catch(e => {
@@ -370,7 +412,7 @@ export default {
           }
         })
         .catch(e => {
-          this.$Message.info("请求静悄品待分配列表失败");
+          this.$Message.info("请求紧悄品待分配列表失败");
         });
     }
   }

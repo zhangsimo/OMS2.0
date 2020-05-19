@@ -368,7 +368,7 @@ export default {
             const v = values.reduce((prev, curr) => {
               const value = Number(curr);
               if (!isNaN(value)) {
-                return prev + curr;
+                return parseFloat(prev.toFixed(2)) + parseFloat(curr.toFixed(2))
               } else {
                 return prev;
               }
@@ -455,17 +455,20 @@ export default {
         enterTypeId: this.typeName
       };
       if (this.typeName === "050202") {
-        (obj.outDateStart = this.value[0]
+        obj.outDateStart = this.value[0]
           ? moment(this.value[0]).format("YYYY-MM-DD HH:mm:ss")
-          : ""),
-          (obj.outDateEnd = this.value[1]
+          : ""
+        obj.outDateEnd = this.value[1]
             ? moment(this.value[1]).format("YYYY-MM-DD HH:mm:ss")
-            : ""),
+            : ""
+        if (obj.outDateEnd) {
+          obj.outDateEnd = obj.outDateEnd.split(' ')[0] + " 23:59:59"
+        }
           getOutStockList(obj).then(res => {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
                 item.index = index + 1;
-                item.accountSign = item.billStatusId ? "已提交" : "草稿";
+                item.accountSign = item.billStatusId ? "已出库" : "草稿";
                 item.orderType = item.orderType
                   ? item.orderType === 1
                     ? "电商订单"
@@ -488,7 +491,7 @@ export default {
             if (res.data.length !== 0) {
               res.data.map((item, index) => {
                 item.index = index + 1;
-                item.accountSign = item.billStatusId ? "已提交" : "草稿";
+                item.accountSign = item.billStatusId ? "已入库" : "草稿";
                 item.orderType = item.orderType
                   ? item.orderType === 1
                     ? "电商订单"

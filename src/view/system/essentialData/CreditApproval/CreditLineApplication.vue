@@ -23,6 +23,9 @@
               disabled
             ></Input>
           </FormItem>
+          <FormItem label="预收款:">
+            <Input :value="customerDetails.preAmt || 0" style="width: 150px" disabled></Input>
+          </FormItem>
         </Col>
         <Col span="8">
           <FormItem label="申请增加固定额度:">
@@ -58,7 +61,7 @@
           </FormItem>
           <FormItem label="临时额度结束时间:">
             <DatePicker
-              :value="value2"
+              :value="customerDetails.tempEnd"
               format="yyyy/MM/dd"
               :options="dateOptions"
               style="width: 150px"
@@ -94,7 +97,8 @@
             <Input :value="customerDetails.receivableAmt || 0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整前剩余额度:">
-            <Input :value="customerDetails.afterAdjustQuota || 0" style="width: 150px" disabled></Input>
+            <Input :value="customerDetails.beforeAdjustQuota" style="width: 150px" disabled></Input>
+            <!--customerDetails.creditLimit + customerDetails.beforeAdjustTempQuota-customerDetails.sumAmt-->
           </FormItem>
         </Col>
         <Col span="8">
@@ -109,7 +113,8 @@
             <Input :value="customerDetails.sumAmt || 0" style="width: 150px" disabled></Input>
           </FormItem>
           <FormItem label="调整后剩余额度:">
-            <Input :value="data.fullNmae ||0" style="width: 150px" disabled></Input>
+            <Input :value="customerDetails.afterAdjustQuota||0" style="width: 150px" disabled></Input>
+            <!--(+customerDetails.applyQuota+customerDetails.creditLimit) + (+customerDetails.tempQuota + customerDetails.beforeAdjustTempQuota)-->
           </FormItem>
         </Col>
       </Row>
@@ -131,7 +136,7 @@
         </Col>
       </Row>
       <FormItem label="申请额度说明:" prop="fullName">
-        <Input v-model="customerDetails.adjustReason" style="width: 650px" disabled></Input>
+        <Input v-model="customerDetails.quotaReason" style="width: 650px" disabled></Input>
       </FormItem>
     </Form>
     <div>
@@ -158,9 +163,13 @@
           stripe
           size="small"
           height="200"
-          show-summary
-          :summary-method="handleSummary"
         ></Table>
+        <div
+          style="width: 100%;height: 40px;border: 1px solid lightgray;border-top: none!important;display: flex;align-items: center;padding-left: 50px"
+        >
+          合计：
+          <span>{{ applyTotalAmt }} 元</span>
+        </div>
       </div>
     </div>
     <div>
@@ -203,7 +212,6 @@ export default {
         }
       },
       value1: new Date(),
-      value2: new Date(),
       ruls: {
         fullName: [
           { required: true, message: "申请额度说明必填", trigger: "change" }
@@ -320,8 +328,12 @@ export default {
           align: "center",
           key: "orderAmt"
         }
-      ]
+      ],
+      applyTotalAmt:0,
     };
+  },
+  mounted(){
+
   },
   methods: {
     resetFields() {
@@ -360,6 +372,17 @@ export default {
         };
       });
       return sums;
+    },
+    init(){
+      this.applyTotalAmt=0;
+      this.$nextTick(()=>{
+        if(this.customerIfo){
+          this.customerIfo.map(item=>{
+            this.applyTotalAmt+=item.applyQuota*1+item.tempQuota*1;
+          })
+        }
+      })
+
     }
   }
 };

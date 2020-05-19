@@ -185,6 +185,7 @@
                       <Option
                         v-for="item in WareHouseList"
                         :value="item.id"
+                        :disabled="item.sellSign||item.isDisabled"
                         :key="item.id"
                       >{{ item.name }}</Option>
                     </Select>
@@ -335,7 +336,7 @@
                   @select-all="selectAllTable"
                   @edit-actived="editActivedEvent"
                   :data="formPlan.detailVOList"
-                  :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+                  :edit-config="{ trigger: 'click', mode: 'cell' }"
                 >
                   <vxe-table-column type="index" title="序号"></vxe-table-column>
                   <vxe-table-column type="checkbox"></vxe-table-column>
@@ -380,7 +381,7 @@
                   </vxe-table-column>
 
                   <vxe-table-column title="品牌车型">
-                    <template v-slot="{row,rowIndex}">
+                    <template v-slot="{row, rowIndex}">
                       <span>{{row.carBrandName}} {{row.carModelName}}</span>
                     </template>
                   </vxe-table-column>
@@ -398,14 +399,14 @@
     <!--        打印-->
     <Print-show ref="printBox" :id="id"></Print-show>
     <!--      添加配件-->
-    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList"></select-part-com>
+    <select-part-com ref="selectPartCom" @selectPartName="getPartNameList" :store-id="formPlan.storeId"></select-part-com>
     <!--    选择客户-->
     <select-the-customer ref="selectTheCustomer" @getOne="setOneClient"></select-the-customer>
     <!--更多 搜索-->
     <More-search :data="moreQueryList" ref="morequeryModal" @moreQuery="queryList"></More-search>
     <!--      查看详情-->
     <See-file ref="fileList" :data="oneRow"></See-file>
-    <goods-info ref="goodsInfo" :mainId="id" :row="this.currentRow"></goods-info>
+    <goods-info ref="goodsInfo" :guestId="formPlan.guestId" :mainId="id" :row="this.currentRow"></goods-info>
   </div>
 </template>
 
@@ -448,28 +449,17 @@ export default {
     PrintShow
   },
   data() {
-    let changeNumber = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("请输入大于0的正整数"));
-      } else {
-        const reg = /^[1-9]\d{0,}$/;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("请输入大于0的正整数"));
-        }
+    let changeNumber = ({cellValue }) => {
+      const reg = /^[1-9]\d{0,}$/;
+      if(!reg.test(cellValue)) {
+        return Promise.reject(new Error('角色输入不正确'))
       }
     };
-    let money = (rule, value, callback) => {
-      if (!value && value != "0") {
-        callback(new Error("最多保留2位小数"));
-      } else {
-        const reg = /^\d+(\.\d{0,2})?$/i;
-        if (reg.test(value)) {
-          callback();
-        } else {
-          callback(new Error("最多保留2位小数"));
-        }
+
+    let money = ({cellValue}) => {
+      const reg = /^\d+(\.\d{0,2})?$/i;
+      if (!reg.test(cellValue)) {
+          return Promise.reject(new Error('最多保留2位小数'))
       }
     };
     return {
@@ -802,6 +792,9 @@ export default {
     },
     //打开收货地址
     openAddressShow() {
+      if(!this.currentRow.id) {
+        return this.$message.error("请选择保存过的预售单")
+      }
       this.$refs.goodsInfo.init();
     },
     //添加配件
@@ -817,6 +810,7 @@ export default {
           datas.forEach(item => {
             this.formPlan.detailVOList.push(item);
           });
+          this.$Message.success("已添加");
         } else {
           this.$Message.error("*为必填项");
 
@@ -844,13 +838,15 @@ export default {
           // this.draftShow = value
           this.preSellOrderTable.tbData = res.data.content || [];
           this.page.total = res.data.totalElements;
-            for(let b of this.preSellOrderTable.tbData){
-                b._highlight = false
-                if(b.id==this.id){
-                    b._highlight = true;
-                    break;
-                }
+          for(let b of this.preSellOrderTable.tbData){
+            b._highlight = false
+            if(b.id==this.id){
+              b._highlight = true;
+              this.setRightData(b);
+              break;
             }
+          }
+
         }
       });
     },
@@ -876,13 +872,13 @@ export default {
             this.draftShow = v.status.value;
             this.selectTableList = [];
             this.$refs.formPlan.resetFields();
-              for(let b of this.preSellOrderTable.tbData){
-                  b._highlight = false
-                  if(b.id==this.id){
-                      b._highlight = true;
-                      break;
-                  }
-              }
+            for(let b of this.preSellOrderTable.tbData){
+                b._highlight = false
+                if(b.id==this.id){
+                    b._highlight = true;
+                    break;
+                }
+            }
           }
         });
         {
@@ -975,9 +971,15 @@ export default {
       };
       this.limitList = [];
       this.draftShow = 0;
+      this.currentRow = {};
       if (!this.isAdd) {
         return this.$Message.error("请先保存数据");
       }
+      this.WareHouseList.map(item=>{
+          if(item.isDefault){
+            this.formPlan.storeId = item.id;
+          }
+      })
         for(let b of this.preSellOrderTable.tbData){
             b._highlight = false
         }
@@ -1060,7 +1062,7 @@ export default {
                   this.isNew = true;
                   this.isAdd = true;
                   this.formPlan = {};
-                  this.id = null;
+                  // this.id = null;
                   this.limitList = [];
                   this.$refs.formPlan.resetFields();
                   this.getLeftList();
@@ -1155,6 +1157,20 @@ export default {
       }
       this.getLeftList();
     },
+
+    setRightData(v){
+      if (v.id) {
+        this.isNew = false;
+        this.currentRow = v;
+        this.id = v.id;
+        this.tableData = v.detailVOList;
+        this.formPlan = v;
+        this.draftShow = v.status.value;
+        this.selectTableList = [];
+        this.limitList = {};
+      }
+    },
+
     //上传之前清空
     beforeUpload() {
       this.$refs.upload.clearFiles();

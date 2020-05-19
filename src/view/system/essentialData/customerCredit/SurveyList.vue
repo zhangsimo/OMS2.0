@@ -188,12 +188,15 @@
       <Col span="8">
         <FormItem label="滚动借款周期:" prop="rollingDate">
           <!--<Input v-model='data.rollingDate' style="width: 180px" ></Input>-->
-          <InputNumber v-model="data.rollingDate" style="width: 180px"></InputNumber>
+          <InputNumber :min="1" v-model="data.rollingDate" style="width: 180px"></InputNumber>
         </FormItem>
       </Col>
       <Col span="16">
-        <FormItem label="申请受用额度:" prop="applyTrustMoney">
+        <FormItem class="ivu-form-item-required" v-if="data.isGuestResearch == 0" label="申请授信额度:" prop="applyTrustMoney">
           <Input v-model="data.applyTrustMoney" style="width: 380px"></Input>
+        </FormItem>
+        <FormItem v-else label="调整原因:" prop="adjustReason">
+          <Input v-model="data.adjustReason" style="width: 380px"></Input>
         </FormItem>
       </Col>
     </Row>
@@ -210,7 +213,8 @@ export default {
   name: "SurveyList",
   props: {
     data: "", //父组件中当前行的数据
-    dataMsg: "" //父组件中数据字典的数据
+    dataMsg: "", //父组件中数据字典的数据
+    dataJudge: ""
   },
   data() {
     //手机号
@@ -234,7 +238,7 @@ export default {
       }
     };
     const smallNumber = (rule, value, callback) => {
-      if (value < 0) {
+      if (value < 0||!value) {
         return callback(new Error("请输入大于0的正整数"));
       } else {
         callback();
@@ -242,14 +246,27 @@ export default {
     };
     //注册号
     const Number = (rule, value, callback) => {
-      if (/^[0-9]+$/.test(value)) {
+        if(!value){
+            return callback(new Error("请输入正确注册号!"));
+        }
+      if (/^[0-9a-zA-Z]*$/.test(value)) {
         callback();
       } else {
         return callback(new Error("请输入正确注册号!"));
       }
     };
+      const OnlyNumber = (rule, value, callback) => {
+          if(!value){
+              return callback(new Error("请输入正确注册资本！"));
+          }
+          if (/^[0-9]*$/.test(value)) {
+              callback();
+          } else {
+              return callback(new Error("请输入正确注册资本！"));
+          }
+      };
     const NumberDate = (rule, value, callback) => {
-      if (value>=1&&value<=31) {
+      if (value >= 1 && value <= 31) {
         callback();
       } else {
         return callback(new Error("只能输入1-31之间的数字"));
@@ -263,7 +280,7 @@ export default {
     };
     return {
       formInline: {
-        bizLicenseNo: [{ required: true, validator: Number, trigger: "blur" }],
+        bizLicenseNo: [{ required: true, validator: Number,  trigger: "blur"}],
         nature: [
           {
             required: true,
@@ -292,7 +309,7 @@ export default {
           {
             required: true,
             type: "number",
-            validator: Number,
+            validator: OnlyNumber,
             message: "请输入正确注册资本！",
             trigger: "change"
           }
@@ -376,25 +393,31 @@ export default {
           {
             required: true,
             type: "number",
-            message: "请输入约定对账日期！",
             validator: NumberDate,
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         cashDate: [
           {
             required: true,
             type: "number",
-            message: "请输入回款日期！",
             validator: NumberDate,
-            trigger: "change"
+            trigger: "blur"
           }
         ],
         rollingDate: [
-          { required: true, validator: smallNumber, trigger: "blur" }
+          { required: true, type:"number", validator: smallNumber, trigger: "blur" }
         ],
         applyTrustMoney: [
-          { required: true, validator: bigNumber, trigger: "blur" }
+          { required: true, validator: bigNumber, trigger: "change"},
+        ],
+        adjustReason:[
+          {
+            required: true,
+            type: "string",
+            message: "请填写调整原因",
+            trigger: "blur"
+          }
         ]
       },
       wxImgUrl: api.wxImgUrl, //图片地址
@@ -447,25 +470,25 @@ export default {
       if (res.code == 0) {
         this.data.purchaseName = api.getfile + res.data.url;
       }
+    },
+    onStartTimeChange(startTime,type) {
+      this.endTimeOptions = {
+        // 设置结束时间不能选的范围
+        disabledDate(endTime) {
+          return endTime < startTime
+        }
+      }
+      this.data.operationStart = startTime
+    },
+    onEndTimeChange(endTime,type) {
+      this.startTimeOptions = {
+        // 设置开始时间不能选的范围
+        disabledDate(startTime) {
+          return startTime > endTime
+        }
+      }
+      this.data.operationEnd = endTime
     }
-    // onStartTimeChange(startTime,type) {
-    //   this.endTimeOptions = {
-    //     // 设置结束时间不能选的范围
-    //     disabledDate(endTime) {
-    //       return endTime < startTime
-    //     }
-    //   }
-    //   this.data.operationStart = startTime
-    // },
-    // onEndTimeChange(endTime,type) {
-    //   this.startTimeOptions = {
-    //     // 设置开始时间不能选的范围
-    //     disabledDate(startTime) {
-    //       return startTime > endTime
-    //     }
-    //   }
-    //   this.data.operationEnd = endTime
-    // }
   },
 };
 </script>
@@ -495,7 +518,6 @@ export default {
   line-height: 1;
   padding-top: 2px !important;
   color: #ed4014;
-  font-size: 1px !important;
 }
 </style>
 

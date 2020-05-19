@@ -59,3 +59,22 @@ export function getPartBrandNoWB(data = {}) {
   });
 }
 
+//获取用户所属机构
+export function findMasterOrgId(params = {}) {
+  return axios.request({
+    url: `${api.wmsApi}/company/findMasterId`,
+    method: "get",
+    params
+  });
+}
+
+
+//获取仓库
+export function getStoreAll(params = {}) {
+  return axios.request({
+    url: `${api.wmsApi}/comStore/queryAllStore`,
+    method: "get",
+    params
+  });
+}
+

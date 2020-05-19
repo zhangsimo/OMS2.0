@@ -135,7 +135,7 @@ export default class TabsModel extends Vue {
     },
     {
       title: "订单占用",
-      key: "orderQty",
+      key: "occupyQty",
       minWidth: 80
     },
     {
@@ -217,7 +217,10 @@ export default class TabsModel extends Vue {
     {
       title: "不含税单价",
       key: "noTaxPrice",
-      minWidth: 120
+      minWidth: 120,
+      render:(h,params) => {
+        return h("span",params.row.noTaxPrice?(params.row.noTaxPrice).toFixed(2):"0.00")
+      }
     },
     {
       title: "供应商",

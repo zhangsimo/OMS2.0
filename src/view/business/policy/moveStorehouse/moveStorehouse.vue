@@ -122,6 +122,7 @@
                     >
                       <Option
                         v-for="item in warehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -135,6 +136,7 @@
                     >
                       <Option
                         v-for="item in warehouseList"
+                        :disabled="item.isDisabled"
                         :value="item.id"
                         :key="item.id"
                       >{{ item.name }}</Option>
@@ -218,8 +220,7 @@
                 :data="Right.tbdata"
                 :footer-method="addFooter"
                 :edit-config="{trigger: 'click', mode: 'cell'}"
-                :checkbox-config="{checkMethod}"
-                @edit-actived="editActivedEvent"
+                @edit-actived="editActivedEvent">
               >
                 <vxe-table-column type="index" title="序号"></vxe-table-column>
                 <vxe-table-column type="checkbox"></vxe-table-column>
@@ -244,7 +245,7 @@
       </div>
     </section>
     <!--添加配件-->
-    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList"></Select-part-com>
+    <Select-part-com ref="SelectPartRef" @selectPartName="getPartNameList" :keyType="1" :storeId="Leftcurrentrow.storeId"></Select-part-com>
     <!--更多弹框-->
     <More :getShowMore="showMore" @getMoreStatus="getMoreStatus" @getMoreData="getMoreData"></More>
     <!-- 作废提示 -->
@@ -385,7 +386,7 @@ export default {
           },
           {
             title: "提交人",
-            key: "createUname",
+            key: "commitUname",
             minWidth: 170
           },
           {
@@ -506,6 +507,7 @@ export default {
       rightTableStatus: "", //右侧表格状态
 
       saveButClick:false,//点击保存临时屏蔽保存按钮功能
+      leftClickItemId:'',
 
     };
   },
@@ -545,7 +547,9 @@ export default {
     },
     // 禁用选中
     checkMethod({ row }) {
-      return this.Leftcurrentrow.status.value === 0;
+      if (this.Leftcurrentrow.status.value === 0) {
+        return true
+      }
     },
     numChangeEvent({ row }, evnt) {
       this.numberValue = evnt.target.value;
@@ -572,6 +576,10 @@ export default {
         data.createEndDate = this.queryTime[1] || "";
       }
       data.status = "";
+      if(this.purchaseType!=99){
+        data.status = this.purchaseType;
+      }
+
       let page = this.Left.page.num - 1;
       let size = this.Left.page.size;
       getLeftList(data, page, size).then(res => {
@@ -581,12 +589,21 @@ export default {
             this.Left.tbdata = [];
             this.Left.page.total = 0;
           } else {
+              console.log(res.data)
             res.data.content.map((item, index) => {
               item["index"] = index + 1;
               item["statuName"] = item.status.name;
             });
             this.Left.tbdata = res.data.content || [];
             this.Left.page.total = res.data.totalElements;
+            if(this.leftClickItemId){
+              for(let b of this.Left.tbdata){
+                if(b.id==this.leftClickItemId){
+                  b._highlight = true;
+                  this.selectTabelData(b);
+                }
+              }
+            }
           }
         }
       });
@@ -613,6 +630,7 @@ export default {
       let xTable = this.$refs.xTable1;
       let orderQtyColumn = xTable.getColumnByField("orderQty");
       orderQtyColumn.editRender.attrs.disabled = this.Leftcurrentrow.status.value !== 0;
+
     },
     //切换tab
     setTab(index) {
@@ -731,6 +749,9 @@ export default {
       // this.Leftcurrentrow.auditDate = this.Leftcurrentrow.commitDate;
       this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
+      if(params.xinzeng==1){
+          params.commitUname='';
+      }
       this.$refs.Leftcurrentrow.validate(valid => {
         if (valid) {
           //成功
@@ -777,19 +798,19 @@ export default {
       //     return;
       //   }
       // });
-      if (!this.Leftcurrentrow.id) {
-        this.$Message.error("请选择数据");
-        return;
-      }
-      if (
-        !this.Leftcurrentrow.receiveStoreId ||
-        !this.Leftcurrentrow.storeId ||
-        !this.Leftcurrentrow.createUname ||
-        !this.Leftcurrentrow.serviceId
-      ) {
-        this.$Message.error("请填写移仓信息");
-        return;
-      }
+      // if (!this.Leftcurrentrow.id) {
+      //   this.$Message.error("请选择数据");
+      //   return;
+      // }
+      // if (
+      //   !this.Leftcurrentrow.receiveStoreId ||
+      //   !this.Leftcurrentrow.storeId ||
+      //   !this.Leftcurrentrow.createUname ||
+      //   !this.Leftcurrentrow.serviceId
+      // ) {
+      //   this.$Message.error("请填写移仓信息");
+      //   return;
+      // }
       if (
         this.Leftcurrentrow.status.value &&
         this.this.Leftcurrentrow.status.value !== 0
@@ -798,12 +819,14 @@ export default {
         return;
       }
       this.Leftcurrentrow.billStatusId = 1;
+      this.Leftcurrentrow.detailVOList = [...this.Right.tbdata];
       const params = JSON.parse(JSON.stringify(this.Leftcurrentrow));
       getSubmitList(params)
         .then(res => {
           if (res.code == 0) {
             this.getList();
             this.$Message.success("提交成功");
+            this.flag = 0;
           }
         })
         .catch(e => {
@@ -852,7 +875,7 @@ export default {
 
     // 打印
     printTable() {
-      this.$refs.printBox.openModal(this.Leftcurrentrow.id);
+      this.$refs.printBox.openModal(this.Leftcurrentrow.id, this.Leftcurrentrow.status.value);
     },
     //添加配件
     addPro() {
@@ -860,6 +883,9 @@ export default {
     },
     //左边列表选中当前行
     selectTabelData(row) {
+      if(row.id){
+        this.leftClickItemId = row.id;
+      }
       if (this.flag === 1) {
         this.$Modal.confirm({
           title: "您正在编辑单据，是否需要保存",
@@ -909,24 +935,14 @@ export default {
     //添加配件
     getPartNameList(val) {
       // console.log(conversionList(val),8888)
-      var datas = conversionList(val);
+      var datas = [...val] // conversionList(val);
       // console.log(datas, "datas=>738");
       datas.forEach(item => {
-        // this.Right.tbdata=[]
+        delete item.id;
         item.orderQty = item.orderQty||1
         this.Right.tbdata.unshift(item);
       });
-      // console.log(this.Right.tbdata);
-      // console.log(this.Leftcurrentrow);
-      // getSubmitList(this.Leftcurrentrow)
-      //   .then(res => {
-      //     console.log(res);
-      //     this.getList()
-      //   })
-      //   .catch(err => {
-      //     this.showRemove = false;
-      //     this.$Message.info("添加失败");
-      //   });
+      this.$Message.success("已添加");
     },
     //删除
     deletePar() {

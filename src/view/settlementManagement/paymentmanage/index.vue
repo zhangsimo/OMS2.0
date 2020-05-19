@@ -20,7 +20,7 @@
           </div>
           <div class="db ml20">
             <span>分店名称：</span>
-            <Select v-model="model1" class="w150">
+            <Select v-model="model1" filterable class="w150">
               <Option
                 v-for="item in Branchstore"
                 :value="item.value"
@@ -121,7 +121,9 @@
       </div>
       <div class="db pro mt20">
         <span>客户名称：</span>
-        <input type="text" class="w200" v-model="nametext" />
+        <Select v-model="guestId" filterable class="w200">
+          <Option v-for="item in clientList" :value="item.id" :key="item.id">{{ item.fullName }}</Option>
+        </Select>
       </div>
       <div class="db pro mt20">
         <span>分店名称：</span>
@@ -140,7 +142,7 @@
         <input type="text" class="w200" v-model="text" />
       </div>
     </Modal>
-    <Modal v-model="outStock" title="出库明细" width="1200">
+    <Modal v-model="outStock" :title="title" width="1200">
       <div class="db">
         <button
           class="mr10 ivu-btn ivu-btn-default"
@@ -201,6 +203,7 @@
 
 <script>
 import quickDate from "@/components/getDate/dateget_bill.vue";
+import {getClient} from '@/api/salesManagment/salesOrder'
 // import selectDealings from "./../bill/components/selectCompany";
 import Monthlyreconciliation from "./Monthlyreconciliation.vue";
 import PrintShow from "./component/PrintShow";
@@ -221,6 +224,7 @@ export default {
   },
   data() {
     return {
+      title: "出库明细",
       tit: "",
       detailedList: "key1",
       value: [],
@@ -233,6 +237,8 @@ export default {
       outStock: false,
       onStock: false,
       flag: false,
+      clientList:[],//客户下拉数据
+      guestId:"",//客户选中id
       columns: [
         {
           title: "序号",
@@ -325,6 +331,7 @@ export default {
         {
           title: "序号",
           type: "index",
+          key:"index",
           width: 40,
           className: "tc"
         },
@@ -367,6 +374,11 @@ export default {
                 },
                 on: {
                   click: async () => {
+                    if (params.row.serviceTypeName == "销售出库") {
+                      this.title = "出库明细";
+                    } else {
+                      this.title = "退货明细";
+                    }
                     this.outStock = true;
                     let obj = {
                       orderCode: params.row.serviceId,
@@ -472,6 +484,7 @@ export default {
         {
           title: "序号",
           type: "index",
+          key:"index",
           width: 40,
           className: "tc"
         },
@@ -773,22 +786,38 @@ export default {
         {
           title: "不含税价格",
           key: "noTaxPrice",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.noTaxPrice||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "不含税金额",
           key: "noTaxAmt",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.noTaxAmt||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "含税单价",
           key: "taxPrice",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.taxPrice||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         },
         {
           title: "含税金额",
           key: "taxAmt",
-          className: "tc"
+          className: "tc",
+          render:(h,params) => {
+            let noTaxPrice = parseFloat(params.row.taxAmt||0).toFixed(2)
+            return h('span',noTaxPrice)
+          }
         }
       ],
       data: [],
@@ -997,6 +1026,7 @@ export default {
       this.model1 = ''
       this.model3 = ''
       this.text = ''
+      this.getAllClient();
       this.modal1 = true
     },
     // 更多条件查询
@@ -1014,7 +1044,8 @@ export default {
         guestType: this.model2,
         tenantName: this.nametext,
         serviceType: this.model3,
-        serviceId: this.text
+        serviceId: this.text,
+        guestId:this.guestId
       };
       this.getGeneral(obj);
     },
@@ -1035,6 +1066,9 @@ export default {
     },
     // 应收应付接口
     getGeneral(obj) {
+      if (obj.endDate) {
+        obj.endDate = obj.endDate.split(' ')[0] + " 23:59:59"
+      }
       getreceivable(obj).then(res => {
         if (res.data.length !== 0) {
           res.data.map((item, index) => {
@@ -1051,11 +1085,11 @@ export default {
       getSalelist({
         tenantId: data.tenantId,
         orgId: data.orgId,
-        startDate: obj.startDate
-          ? moment(obj.startDate).format("YYYY-MM-DD HH:mm:ss")
+        startDate: obj[0]
+          ? moment(obj[0]).format("YYYY-MM-DD HH:mm:ss")
           : "",
-        endDate: obj.endDate
-          ? moment(obj.endDate).format("YYYY-MM-DD HH:mm:ss")
+        endDate: obj[1]
+          ? moment(obj[1]).format("YYYY-MM-DD HH:mm:ss").split(' ')[0]+" 23:59:59"
           : "",
         guestId: data.guestId
       }).then(res => {
@@ -1123,8 +1157,15 @@ export default {
     // 导出汇总
     exportSummary() {
       if (this.data.length !== 0) {
+        let arrData = [...this.data]
+        arrData.map(item=>{
+          item.orgId = "\t"+item.orgId
+        })
         this.$refs.summary.exportCsv({
-          filename: "应收应付汇总表"
+          filename: "应收应付汇总表",
+          original:false,
+          columns:this.columns,
+          data:arrData
         });
       } else {
         this.$message.error("应收应付汇总表暂无数据");
@@ -1138,16 +1179,32 @@ export default {
     exportBill() {
       if (this.detailedList === "key1") {
         if (this.data1.length !== 0) {
+          let arrData = [...this.data1]
+          arrData.map((item,index) => {
+            item.orgId = "\t"+item.orgId
+            item.index = index+1
+          })
           this.$refs.sale.exportCsv({
-            filename: "销售清单"
+            filename: "销售清单",
+            original:false,
+            columns:this.columns1,
+            data:arrData
           });
         } else {
           this.$message.error("销售清单暂无数据");
         }
       } else if (this.detailedList === "key2") {
         if (this.data2.length !== 0) {
+          let arrData = [...this.data2]
+          arrData.map((item,index) => {
+            item.orgId = "\t"+item.orgId
+            item.index = index+1
+          })
           this.$refs.purchase.exportCsv({
-            filename: "采购清单"
+            filename: "采购清单",
+            original:false,
+            columns:this.columns2,
+            data:arrData
           });
         } else {
           this.$message.error("销售清单暂无数据");
@@ -1170,7 +1227,14 @@ export default {
     print(type) {
       type ? (this.tit = "采购入库") : (this.tit = "销售出库");
       this.$refs.PrintShow.openModal();
-    }
+    },
+    //获取公司
+    async getAllClient(){
+      let res = await getClient()
+      if(res.code === 0 ){
+        this.clientList = res.data
+      }
+    },
   }
 };
 </script>

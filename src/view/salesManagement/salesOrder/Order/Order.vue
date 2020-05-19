@@ -23,12 +23,13 @@
       <Button
         class="mr10"
         @click="setStockOut"
-        :disabled="orderlistType.isWms == 1 || orderlistType.value != 1"
+        :disabled="orderlistType.value != 1||isWms"
         v-has="'StockOut'"
       >
+      <!--orderlistType.isWms == 1 || ^-->
         <i class="iconfont mr5 iconxuanzetichengchengyuanicon"></i>出库
       </Button>
-      <Button class="mr10" @click="printTable"   v-has="'print'">
+      <Button class="mr10" @click="printTable" :disabled="orderlistType.value == 0"  v-has="'print'">
         <i class="iconfont mr5 icondayinicon"></i> 打印
       </Button>
       <Button class="mr10" @click="setBackOrder" :disabled="orderlistType.value != 1" v-has="'BackOrder'">
@@ -110,13 +111,14 @@ export default {
         value: 0
       }, //默认状态
       changeLeft: "" ,//发生改变数据调动左侧list
-      ispart:true
+      ispart:true,
+      isWms:false
     };
   },
   methods: {
     //用于父子组件之间的方法通信
     getDutyInfo(){
-      this.setSave()
+      this.setSave();
     },
     //  调用left方法
     parentGetleft() {
@@ -137,8 +139,11 @@ export default {
     },
     //左侧点击数据
     getOrder(data) {
-
+      this.isWms = false;
       this.orderlistType = data.billStatusId;
+      if(this.orderlistType&&this.orderlistType.value===1&&data.isWms===1){
+        this.isWms = true;
+      }
     },
     //保存
     setSave() {
@@ -153,23 +158,18 @@ export default {
     },
     //提交
     sumbit() {
-      // let list = this.$store.state.dataList.oneOrder;
-      // if (!list.id) {
-      //   this.$message.error("请选择一条有效数据");
-      //   return false;
-      // }
-      // let res = this.$refs.right.submitList();
       let list = this.$store.state.dataList.oneOrder;
+      this.$refs.right.formPlan.planSendDate = new Date(this.$refs.right.formPlan.planSendDate)
         this.$refs.right.$refs.formPlan.validate(async valid => {
             if(valid){
                 if (list.id||this.isAdd) {
                     this.$Modal.confirm({
                         title: '是否确定提交',
                         onOk: async () => {
-                            let res = this.$refs.right.submitList();
+                          await this.$refs.right.submitList();
                         },
                         onCancel: () => {
-                            this.$Message.info('取消提交');
+                          this.$Message.info('取消提交');
                         },
                     })
                 }else{
@@ -179,9 +179,6 @@ export default {
                 this.$Message.error("*为必填项");
             }
         })
-
-
-
     },
     //返单
     async setBackOrder() {
@@ -201,19 +198,6 @@ export default {
     },
     //作废
     async setCancellation() {
-      // let list = this.$store.state.dataList.oneOrder;
-      // if (!list.id) {
-      //   this.$message.error("请选择一条有效数据");
-      //   return false;
-      // }
-      // let data = {};
-      // data.id = list.id;
-      // let res = await getCancellation(data);
-      // if (res.code === 0) {
-      //   this.changeLeft = res;
-      //   let data = {};
-      //   this.$store.commit("setOneOrder", data);
-      // }
       let list = this.$store.state.dataList.oneOrder;
       if (list.id) {
         this.$Modal.confirm({
@@ -235,8 +219,6 @@ export default {
       } else {
         this.$Message.warning('请选择一条有效数据')
       }
-
-
     },
     //导出
     async setDerive() {
@@ -269,7 +251,7 @@ export default {
       this.isAdd=true;
       this.$refs.right.WarehouseList.map(item=>{
           if(item.isDefault){
-              this.$refs.right.formPlan=Object.assign({},this.$refs.right.formPlan,{storeId:item.id});
+              this.$refs.right.formPlan=Object.assign({},{storeId:item.id});
           }
       })
     },

@@ -93,11 +93,13 @@
 
           <vxe-table-column field="commitDate" title="提交日期"></vxe-table-column>
           <vxe-table-column field="remark" title="备注"></vxe-table-column>
-          <vxe-table-column
-            field="defaultValue"
-            title="受理仓库"
-            :edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"
-          ></vxe-table-column>
+          <!--<vxe-table-column-->
+            <!--field="storeId"-->
+            <!--title="受理仓库"-->
+            <!--:edit-render="{name: 'select', options: storeArray,events: {change: roleChangeEvent}}"-->
+          <!--&gt;-->
+            <!---->
+          <!--</vxe-table-column>-->
 
           <!-- <vxe-table-column
             field="defaultValue"
@@ -105,17 +107,13 @@
             :edit-render="{name: 'select', options: storeArray}"
           ></vxe-table-column>-->
 
-          <!-- <vxe-table-column title="受理仓库">
+          <vxe-table-column title="受理仓库" field="defaultValue">
             <template v-slot="{ row,rowIndex }">
-              <select>
-                <option
-                  v-for="(item,index) in storeArray"
-                  :key="index"
-                  :value="item.value"
-                >{{item.label}}</option>
-              </select>
+              <vxe-select v-model="row.defaultValue">
+                <vxe-option v-for="(num,index) in storeArray" :key="index" :value="num.value" :label="`${num.label}`"></vxe-option>
+              </vxe-select>
             </template>
-          </vxe-table-column>-->
+          </vxe-table-column>
           <vxe-table-column field="auditDate" title="受理日期" width="100"></vxe-table-column>
           <vxe-table-column field="auditor" title="受理人" width="100"></vxe-table-column>
         </vxe-table>
@@ -138,7 +136,7 @@
             style="border:none;background-color: #ffff;width:200px"
           />
         </span>
-        <span class="sp1" @click="copy">复制单号</span>
+        <span class="sp1" @click="copy(danhao)">复制单号</span>
       </Modal>
       <Modal v-model="modal2" title="提示" @on-ok="ok1" @on-cancel="cancel">
         <span>
@@ -171,7 +169,7 @@
           highlight-current-row
           highlight-hover-row
           :data="BottomTableData"
-          :edit-config="{ trigger: 'dblclick', mode: 'cell' }"
+          :edit-config="{ trigger: 'click', mode: 'cell' }"
         >
           <vxe-table-column type="index" title="序号"></vxe-table-column>
           <vxe-table-column field="partCode" title="配件编码"></vxe-table-column>
@@ -290,7 +288,7 @@ export default {
         .then(res => {
           if (res.code == 0) {
             res.data.forEach(element => {
-              this.storeArray.push({ value: element.id, label: element.name });
+              this.storeArray.push({ value: element.id, label: element.name,isDefault:element.isDefault });
             });
           }
         })
@@ -323,11 +321,22 @@ export default {
       tuihuishouliliebiao(this.form, this.pageList.pageSize, this.pageList.page)
         .then(res => {
           if (res.code == 0) {
-            this.TopTableData = res.data.content || [];
+            let arrData = res.data.content || [];
+
+            //
+            let defaultArr = this.storeArray.filter(item => item.isDefault)[0].value||this.storeArray[0].value;
+            arrData.map(item => {
+              if(item.status){
+                item.defaultValue = item.status.value===4?item.storeId:defaultArr
+              }
+            })
+
+            this.TopTableData = arrData;
             this.pageList.total = res.totalElements;
-            for (var i = 0; i < this.TopTableData.length; i++) {
-              this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
-            }
+
+            // for (var i = 0; i < this.TopTableData.length; i++) {
+            //   this.TopTableData[i]["defaultValue"] = this.storeArray[0].value;
+            // }
           }
         })
         .catch(e => {
@@ -342,10 +351,15 @@ export default {
       const res = await tuihuishouliliebiaomingxi(params);
       this.BottomTableData = res.data;
     },
-    copy() {
-      var number = document.getElementById("danhao").value; //获取需要复制的值(innerHTML)
-      document.getElementById("danhao").select(); // 选择对象
-      document.execCommand("Copy"); // 执行浏览器复制命令
+    copy(str) {
+      var save = function(e) {
+        e.clipboardData.setData('text/plain', str);
+        e.preventDefault();
+      };
+      document.querySelector(".sp1").addEventListener('copy', save);
+      document.execCommand('copy');
+      document.removeEventListener('copy', save);
+      console.log(str)
     },
     ok() {
       const params = {
@@ -405,6 +419,7 @@ export default {
     },
     shouli(row, index) {
       this.currentrow = row;
+      console.log(row)
       if (index === 2) {
         this.modal1 = true;
       } else {
@@ -420,6 +435,9 @@ export default {
 </script>
 
 <style scoped>
+.sp1 {
+  cursor: pointer;
+}
 </style>
 
 

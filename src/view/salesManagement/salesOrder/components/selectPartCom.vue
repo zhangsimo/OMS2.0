@@ -2,10 +2,10 @@
   <div>
     <Modal v-model="searchPartLayer" title="配件选择" width="1000">
       <div class="partCheck-hd">
-        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">
-          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
-        </Select>
-        <Input class="w150 mr10" v-model="partName" :placeholder="Name"></Input>
+        <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10" label-in-value @on-change="ChangeValue">-->
+          <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
+        <!--</Select>-->
+        <Input class="w250 mr10" v-model="partName" placeholder="请输入编码/名称/车型的查询内容"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
           <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
@@ -23,7 +23,7 @@
           </div>
         </div>
         <div class="fr partCheck-right" style="width: 758px">
-          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData">
+          <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData" @on-row-dblclick="dblclick">
             <template slot-scope="{ row, index }" slot="action">
               <a @click="show(row)">查看</a>
             </template>
@@ -126,18 +126,22 @@
       </div>
     </Modal>
     <part-info ref="partInfo" :is-add-part="true" @throwData="addPartFun"></part-info>
+    <select-part-info ref="selectPartInfo"></select-part-info>
   </div>
 </template>
 
 <script>
   import PartInfo from "_c/partInfo/partInfo";
   import {mixSelectPartCom} from "./mixSelectPartCom";
+  import SelectPartInfo from "./selectPartInfo";
 
   export default {
     name: "selectPartCom",
     mixins:[mixSelectPartCom],
-    components: {PartInfo},
+    components: {SelectPartInfo, PartInfo},
     props:{
+        guestId:'',
+        storeId:'',
     },
 
   }

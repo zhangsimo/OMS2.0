@@ -2,13 +2,13 @@
   <div>
     <Modal v-model="searchPartLayer" title="配件选择" width="1000" @on-cancel="CancelModal">
       <div class="partCheck-hd">
-        <Select style="z-index: 9999" v-model="searchType" class="w100 mr10">
-          <Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>
-        </Select>
-        <Input class="w150 mr10" v-model="partName" placeholder="请输入查询的内容"></Input>
+        <!--<Select style="z-index: 9999" v-model="searchType" class="w100 mr10">-->
+          <!--<Option v-for="item in searchTypeArr" :value="item.value" :key="item.value">{{item.label}}</Option>-->
+        <!--</Select>-->
+        <Input class="w250 mr10" v-model="partName" placeholder="请输入编码/名称/车型的查询内容"></Input>
 
         <Select placeholder="选择品牌" filterable v-model="selectBrand" class="w150 mr10">
-          <Option v-for="item in partBrandData" :value="item.value" :key="item.value">{{item.label}}</Option>
+          <Option v-for="item in partBrandData" :value="item.code" :key="item.code">{{item.name}}</Option>
         </Select>
         <Button @click="search" class="mr10" type='primary'><Icon type="ios-search" size="14" /> 查询</Button>
         <Button class="mr10" type='default' @click="throwData"><Icon type="md-checkmark" /> 选择</Button>
@@ -24,7 +24,7 @@
         </div>
         <div class="fr partCheck-right" style="width: 758px">
           <Table height="389" @on-selection-change="selectTabelData" :loading="loading" border :stripe="true" :columns="columnsPart" :data="partData"></Table>
-          <Page size="small" class-name="page-con fr pt10" :current="page.num" :total="page.total" :page-size="page.size" @on-change="changePage"
+          <Page size="small" class-name="page-con fr pt10" :total="page.total" :page-size="page.size" @on-change="changePage"
                 @on-page-size-change="changeSize" show-sizer show-total
                 :page-size-opts="[10,20,30]"
                 ></Page>
