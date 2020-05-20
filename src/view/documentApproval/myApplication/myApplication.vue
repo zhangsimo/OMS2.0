@@ -323,6 +323,34 @@
               value: "10",
               label: "发票对冲"
             },
+            {
+              value: "11",
+              label: "采购计划单"
+            },
+            {
+              value: "12",
+              label: "临时采购订单"
+            },
+            {
+              value: "13",
+              label: "门店外采订单"
+            },
+            {
+              value: "14",
+              label: "盘亏出库"
+            },
+            {
+              value: "15",
+              label: "盘盈入库"
+            },
+            {
+              value: "16",
+              label: "客户信用调查"
+            },
+            {
+              value: "17",
+              label: "客户信用额度"
+            },
           ], //申请类型数组
           tableData:[], //表格内容
           falg: false, //判断审批进度是否显示
