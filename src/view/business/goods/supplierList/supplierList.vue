@@ -154,7 +154,7 @@
                   <vxe-table-column field="remark" title="备注" :edit-render="{name: 'input',attrs: {disabled: presentrowMsg !== 0}}" width="100"></vxe-table-column>
                   <vxe-table-column field="stockOutQty" title="缺货数量" width="100">
                     <template v-slot="{row}">
-                      <div v-if="presentrowMsg !== 1">{{(row.stockOutQty-(row.canReQty-row.orderQty))>=0?(row.stockOutQty-(row.canReQty-row.orderQty)):0}}</div>
+                      <div v-if="presentrowMsg !== 1">{{(row.stockOutQty-(row.orginOrderQty-row.orderQty))>=0?(row.stockOutQty-(row.orginOrderQty-row.orderQty)):0}}</div>
                       <div v-else>{{row.stockOutQty||0}}</div>
                     </template>
                   </vxe-table-column>
@@ -609,6 +609,10 @@
           this.Right.tbdata = arr;
         }
 
+        this.Right.tbdata.forEach(el => {
+          el.orginOrderQty = el.orderQty;
+        })
+
         //this.Right.tbdata = arr
         // if(this.Right.tbdata){
         //   this.Right.tbdata = [...this.Right.tbdata,...arr];
@@ -853,6 +857,9 @@
             this.Left.page.total = res.data.totalElements
 
             for(let item of this.Left.tbdata){
+              item.details.forEach(el => {
+                el.orginOrderQty = el.orderQty;
+              })
               item._highlight = false
               if(item.id==this.selectLeftItemId){
                 item._highlight = true;
