@@ -38,13 +38,13 @@
         resizable
         show-footer
         size="mini"
-        height="200"
+        height="300"
         :data="mainData.detailVOList"
         :footer-method="addFooter"
       >
         <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
@@ -93,13 +93,13 @@
         resizable
         show-footer
         size="mini"
-        height="200"
+        height="300"
         :data="mainData.detailVOList"
         :footer-method="addFooter"
       >
         <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
         <vxe-table-column field="unit" title="单位" width="100"></vxe-table-column>
         <vxe-table-column field="sysQty" title="系统数量" width="100"></vxe-table-column>
@@ -135,7 +135,7 @@
         </tr>
         <tr>
           <td class="table-th">其他费用</td>
-          <td>{{mainData.source===0?"OMS盘点":"WMS盘点"}}</td>
+          <td>{{mainData.otherAmt}}</td>
           <td class="table-th">合计总金额</td>
           <td>{{mainData.otherAmt}}</td>
           <td class="table-th">单号</td>
@@ -148,13 +148,13 @@
         resizable
         show-footer
         size="mini"
-        height="200"
+        height="300"
         :data="mainData.details"
         :footer-method="addFooter2"
       >
         <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
 
         <vxe-table-column field="totalStockQty" title="连锁库存" width="100"></vxe-table-column>
@@ -223,13 +223,13 @@
         resizable
         show-footer
         size="mini"
-        height="200"
+        height="300"
         :data="mainData.details"
         :footer-method="addFooter3"
       >
         <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
 
         <vxe-table-column field="orderQty" title="采购数量" width="100"></vxe-table-column>
@@ -289,13 +289,13 @@
         resizable
         show-footer
         size="mini"
-        height="200"
+        height="300"
         :data="mainData.details"
         :footer-method="addFooter3"
       >
         <vxe-table-column fixed="left" type="index" width="60" title="序号"></vxe-table-column>
         <vxe-table-column fixed="left" field="partCode" title="配件编码" width="100"></vxe-table-column>
-        <vxe-table-column fixed="left" field="partName" title="配件名称" width="100"></vxe-table-column>
+        <vxe-table-column fixed="left" field="partName" title="配件名称" width="150"></vxe-table-column>
         <vxe-table-column fixed="left" field="partBrand" title="品牌" width="100"></vxe-table-column>
 
         <vxe-table-column field="orderQty" title="采购数量" width="100"></vxe-table-column>

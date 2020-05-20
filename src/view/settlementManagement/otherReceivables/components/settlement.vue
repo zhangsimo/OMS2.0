@@ -191,13 +191,14 @@ export default {
       //   item.businessTypeName = item.businessType.name;
       // });
       // this.BusinessType = [...this.BusinessType, ...val];
+      console.log(val)
       let jsonArr = [val]
       jsonArr.map(item => {
         item.orgName = this.reconciliationStatement.orgName;
         item.accountNo = item.serviceId;
         // item.guestName = item.guestName;
         item.businessTypeName = item.orderTypeName;
-        item.reconciliationAmt = - item.paymentApplicationAmount; //对账金额
+        item.reconciliationAmt = - item.amountCollected; //对账金额
         item.hasAmt = +item.amountCollected - +item.paymentBalance; //已收/付金额
         item.unAmt = -item.paymentBalance; //未收/付金额
         item.rpAmt = -item.paymentBalance;

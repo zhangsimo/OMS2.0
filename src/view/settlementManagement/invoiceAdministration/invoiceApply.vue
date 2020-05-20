@@ -216,7 +216,7 @@ export default {
         },
         {
           title: "快递单号",
-          key: "sending_number",
+          key: "sendingNumber",
           className: "tc",
           render: (h, params) => {
             return h("Input", {

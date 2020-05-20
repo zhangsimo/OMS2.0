@@ -339,21 +339,21 @@ export default {
           key: "invoiceDate",
           className: "tc"
         },
-        {
-          title: "开票类型",
-          key: "species",
-          className: "tc"
-        },
+        // {
+        //   title: "开票类型",
+        //   key: "species",
+        //   className: "tc"
+        // },
         {
           title: "开票名称",
           key: "speciesName",
           className: "tc"
         },
-        {
-          title: "发票种类",
-          key: "invoiceType",
-          className: "tc"
-        },
+        // {
+        //   title: "发票种类",
+        //   key: "invoiceType",
+        //   className: "tc"
+        // },
         {
           title: "发票名称",
           key: "invoiceTypeName",
@@ -601,7 +601,17 @@ export default {
         this.exportData = false;
         this.getTabList();
       } else {
-        this.$Message.error(response.message);
+        let txt = "上传成功";
+        if (response.data) {
+          txt = response.data;
+        }
+        this.$Notice.success({
+          title: "导入成功",
+          desc: txt,
+          duration: 0
+        });
+        this.exportData = false;
+        this.getTabList();
       }
     },
     uploading() {

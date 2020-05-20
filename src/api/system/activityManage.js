@@ -17,6 +17,7 @@ export function getSelectActApply(params) {
     params
   });
 }
+
 // 活动申请页面第二个表格数据接口
 export function getActApplyTable(params) {
   return axios.request({
